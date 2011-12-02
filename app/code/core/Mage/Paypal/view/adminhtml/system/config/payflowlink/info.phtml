@@ -1,0 +1,121 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Mage_Paypal_Block_Adminhtml_System_Config_Payflowlink_Info
+ */
+?>
+<div style="padding-bottom: 1em;max-width: 800px;">
+    <strong style="color:red"><?php echo $this->__('Important: ') ?></strong>
+    <?php echo $this->__('To use PayPal Payflow Link you must configure some settings in your Payflow account by logging into') ?> <a href="https://manager.paypal.com/"><?php echo $this->__('PayPal Manager'); ?></a>.
+    <?php echo $this->__(' You will need to navigate to your ') ?>
+    <span style="text-decoration: underline"><?php echo $this->__('Service Settings') ?></span>
+    <?php echo $this->__(' and go to the ') ?>
+    <span style="text-decoration: underline"><?php echo $this->__('Set up & Customize') ?></span>
+    <?php echo $this->__(' sections for your Hosted Checkout Pages.') ?>
+    <div style="border: 1px solid black;margin:2em;">
+        <ul style="list-style:none;padding:0 2em;">
+            <li>
+                <strong style="text-transform: capitalize"><?php echo $this->__('1. set up') ?></strong> Please copy and paste the following required values to your PayPal Payflow Link Set Up section:
+                <ul style="list-style:lower-latin;padding:0 2em;">
+                    <li>
+                        Under Display <span style="text-decoration: underline">Options on Payment Page</span>, enter the following:
+                        <ul style="list-style:lower-roman;padding:0 2em;">
+                            <li>
+                                <span style="text-decoration: underline">Error URL</span>:<br />
+                                <a href="<?php echo $this->getFrontendUrl('paypal/payflow/returnUrl') ?>" onclick="return false;">
+                                    <?php echo $this->getFrontendUrl('paypal/payflow/returnUrl') ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Under <span style="text-decoration: underline">Use Silent Post for Data Transfer</span>, please set as the following:
+                        <ul style="list-style:lower-roman;padding:0 2em;">
+                            <li><span style="text-decoration: underline">Use Silent Post</span>: select <strong>YES</strong></li>
+                            <li>
+                                Enter the following for <span style="text-decoration: underline">Silent Post URL</span>:<br />
+                                <a href="<?php echo $this->getFrontendUrl('paypal/payflow/silentPost') ?>" onclick="return false;">
+                                    <?php echo $this->getFrontendUrl('paypal/payflow/silentPost') ?>
+                                </a>
+                            </li>
+                            <li>
+                                Enter the following for <span style="text-decoration: underline">Return URL when Silent Post fails</span>:<br />
+                                <a href="<?php echo $this->getFrontendUrl('paypal/payflow/returnUrl') ?>" onclick="return false;">
+                                    <?php echo $this->getFrontendUrl('paypal/payflow/returnUrl') ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Under <span style="text-decoration: underline">Security Options</span>, please set as the following:
+                        <ul style="list-style:lower-roman;padding:0 2em;">
+                            <li><span style="text-decoration: underline">AVS</span>: Select <strong>NO</strong></li>
+                            <li><span style="text-decoration: underline">CSC</span>: Select <strong>NO</strong></li>
+                            <li><span style="text-decoration: underline">Enable Secure Token</span>: select <strong>YES</strong></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div style="border: 1px solid black;margin:2em;">
+        <ul style="list-style:none;padding:0 2em;">
+            <li>
+                <strong style="text-transform: capitalize"><?php echo $this->__('2. customize') ?></strong> Please set the following required values in the Customize section of your Hosted Checkout Page settings:
+                <ul style="list-style:lower-latin;padding:0 2em;">
+                <li>
+                    Select <span style="text-decoration: underline">Layout C</span>
+                </li>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="PayFlowLinkLearnMoreText" style="display:none">
+    <?php echo $this->__('When using Payflow Link in Magento, a payment authorization transaction must be performed after the shopper enters their credit card information on the Payment page of checkout.  If a full authorization is performed for the entire dollar amount of the transaction, then in some cases, the transaction amount might be reserved on the shopper\'s credit card for up to 30 days, even if they abandon their cart.  This is not an ideal customer experience.  Using this advanced setting in Magento, you can configure key details of this authorization.') ?>
+
+    <ul style="list-style:disc; padding-left:2em;">
+        <li>
+            <?php echo $this->__('Select $0 Auth if your credit card processor supports $0 Auth capability and Reference Transactions, or if you are unsure what to select.  This setting provides the best experience for shoppers.') ?>
+        </li>
+        <li>
+            <?php echo $this->__('Select Full Auth if you want to minimize your credit card processing fees, or if your credit card processor does not permit reference transactions.  Please note that in some cases, shoppers who abandon your cart late in the process may find that there is a payment authorization outstanding from your company, which will go away on its own in a few days/weeks. This authorization can be reversal by voiding it, however, there is no guarantee the card-issuing bank will accept this request.') ?>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    document.observe("dom:loaded", function() {
+        $('row_paypal_payflow_link_authorization_amount').insert({after:'<tr id="PayFlowLinkLearnMoreRow"><td colspan="4"><tr>'});
+        $('PayFlowLinkLearnMoreRow').down().insert({top:$('PayFlowLinkLearnMoreText')});
+        $('PayFlowLinkLearnMore').observe('click', function(event){
+            $('PayFlowLinkLearnMoreText').toggle();
+            event.stop();
+        });
+    });
+//]]>
+</script>

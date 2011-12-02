@@ -1,0 +1,132 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+//<![CDATA[
+var CountryModel = Class.create();
+CountryModel.prototype = {
+    initialize : function()
+    {
+        this.reload = false;
+        this.bindSpecificCountryRelation();
+    },
+    bindSpecificCountryRelation : function(parentId)
+    {
+        if(parentId) {
+            // todo: fix bug in IE
+            var applyCountryElements = $$('#'+parentId+' .shipping-applicable-country');
+        } else {
+            var applyCountryElements = $$('.shipping-applicable-country');
+        }
+        for(var i=0;i<applyCountryElements.length; i++) {
+            Event.observe(applyCountryElements[i], 'change', this.checkSpecificCountry.bind(this));
+            this.initSpecificCountry(applyCountryElements[i]);
+        }
+
+    },
+    initSpecificCountry : function(element){
+        var applyCountryElement = element;
+        if (applyCountryElement && applyCountryElement.id) {
+            var specifCountryElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificcountry'));
+            var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
+            //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
+            if (specifCountryElement) {
+                if (applyCountryElement.value == 1) {
+                   //if specific country element selected
+                   specifCountryElement.enable();
+                   if (showMethodElement) {
+                       this.showElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).show();
+                 } else {
+                   specifCountryElement.disable();
+                   if (showMethodElement) {
+                       this.hideElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).hide();
+                }
+            }
+        }
+    },
+
+    checkSpecificCountry : function(event)
+    {
+        var applyCountryElement = Event.element(event);
+        if (applyCountryElement && applyCountryElement.id) {
+            var specifCountryElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificcountry'));
+            var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
+            //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
+            if (specifCountryElement) {
+                if (applyCountryElement.value == 1) {
+                   //if specific country element selected
+                   specifCountryElement.enable();
+                   if (showMethodElement) {
+                       this.showElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).show();
+                 } else {
+                    this.unselectSpecificCountry(specifCountryElement);
+                    specifCountryElement.disable();
+                    if (showMethodElement) {
+                        this.hideElement(showMethodElement.up(1));
+                    }
+                    //specifErrMsgElement.up(1).hide();
+                }
+            }
+        }
+    },
+
+    unselectSpecificCountry : function(element)
+    {
+        for (var i=0; i<element.options.length; i++) {
+            if (element.options[i].selected) {
+              element.options[i].selected=false;;
+            }
+        }
+    },
+
+    showElement : function(elm)
+    {
+        if (elm) {
+            if (!elm.down('.shipping-skip-show')) {
+                elm.show();
+            }
+        }
+    },
+
+    hideElement : function(elm)
+    {
+        if (elm) {
+            if (!elm.down('.shipping-skip-hide')) {
+                elm.hide();
+            }
+        }
+    }
+
+}
+countryApply = new CountryModel();
+//]]>
+</script>

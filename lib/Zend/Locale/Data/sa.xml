@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.52 $"/>
+		<generation date="$Date: 2009/06/15 04:15:33 $"/>
+		<language type="sa"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="aa">अफर</language>
+			<language type="ab">अब्खासियन्</language>
+			<language type="ace">अचिनीस्</language>
+			<language type="ach">अचोलि</language>
+			<language type="ada">अडङ्गमे</language>
+			<language type="af">अफ्रिक्कान्स्</language>
+			<language type="afa">आफ्रो एष्यन् भाषा</language>
+			<language type="afh">अफ्रिहिलि</language>
+			<language type="ain">अयिनु</language>
+			<language type="ak">अकन्</language>
+			<language type="akk">अक्काटियान्</language>
+			<language type="ale">अलियुट्</language>
+			<language type="alg">अल्गोण्क्यन् भाषा</language>
+			<language type="am">अंहाऱिक्</language>
+			<language type="anp">अङ्गिक</language>
+			<language type="apa">अपाचे भाषा</language>
+			<language type="ar">अऱबिक्</language>
+			<language type="egy">प्राचीन ईजिप्त्यन्</language>
+			<language type="grc">पुरातन यवन भाषा</language>
+			<language type="nb">नोर्वीजियन् बॊकामल्</language>
+			<language type="sa">संस्कृत भाषा</language>
+			<language type="sq">अल्बेनियन्</language>
+			<language type="tut">आळटिक् भाषा</language>
+			<language type="und">अज्ञात भाषा</language>
+		</languages>
+		<scripts>
+			<script type="Arab">अरबिक्</script>
+			<script type="Armi">अर्मि</script>
+			<script type="Armn">अर्मेनियन्</script>
+			<script type="Avst">अवेस्थन्</script>
+			<script type="Bali">बालिनीस्</script>
+			<script type="Batk">बट्टक्</script>
+			<script type="Beng">बंगालि</script>
+		</scripts>
+		<territories>
+			<territory type="IN">भारतम्</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[़ ँ-ः ॑-॔ ॐ अ-ऋ ॠ ऌ ॡ ए ऐ ओ-न र ल ळ व-ह ऽ-ॄ ॢ ॣ े ै ो-्]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D ०-९ ऍ ऑ ॅ ॉ]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>dd-MM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d-MM-yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>hh:mm:ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>hh:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>hh:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>hh:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd">dd-MM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMM">MM-yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM y</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<defaultNumberingSystem>deva</defaultNumberingSystem>
+		<symbols>
+			<nativeZeroDigit>0</nativeZeroDigit>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<percentFormats>
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤#,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="INR">
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

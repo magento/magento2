@@ -1,0 +1,205 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+body { margin: 0; padding: 0 }
+
+.main-block 
+{
+	width: 320px;
+	height: 490px;
+}
+.header-sign-1
+{
+	position:relative;
+	left:6px;
+	top:3px;
+	font: bold 12px arial;
+	color: #e9e9e9;
+	float: left;	
+	vertical-align: baseline;
+	height: 16px;
+}
+.top-header 
+{
+	height: 20px	
+}
+
+.battery 
+{
+	height: 16px;
+	width: 25px;
+	float: right;
+	margin-right: 5px;
+}
+
+.volume 
+{
+	height: 16px; 
+	width: 23px; 	
+	float: left;
+}
+
+.antenna 
+{
+	height: 16px; 
+	width: 18px; 	
+	float: left;
+	padding-left: 10px;	
+}
+.time 
+{	 
+	width: 50%;
+	position:relative;
+	top:3px;
+	text-align: center;
+	font: bold 12px arial;
+	color: #e9e9e9;
+	float: left;
+}
+
+.main-header 
+{
+	height: 44px;
+	text-align: center;
+}
+.clearB 
+{
+	clear: both; 
+	height: 1px;
+}
+
+.info 
+{
+	position: relative;
+	top: 10px;
+	left: 10px;
+	float: left;
+}
+.logo-small 
+{
+	display: inline;
+	position: relative;
+	top: 10px;
+}
+
+.login-btn
+{
+	float: right;
+	height: 28px;
+	font: bold 13px arial;
+	color: #e9e9e9;
+	padding: 7px 15px 0 0;
+	
+}
+.login-body
+{
+	float: left;
+	width: 50px;
+	height: 100%;
+	background:url('../img/login-btn.png') center center repeat-x;
+}
+.login-body span 
+{
+	position: relative;
+	top: 5px;
+	left: 0px;
+}
+.login-left
+{
+	float: left;
+	height: 100%;
+	font: bold 3px arial;
+	background:url('../img/login-btn-left.png') center center no-repeat;
+}
+.login-right
+{
+	float: left;
+	height: 100%;
+	font: bold 3px arial;
+	background:url('../img/login-btn-right.png') center center no-repeat;
+}
+.title 
+{
+	position:relative;
+	top:10px;
+	font: bold 19px arial;
+	color: #e9e9e9;	
+}
+.main-header-text 
+{
+	width: 10px;
+}
+
+.big-logo 
+{
+	text-align: center;
+	padding: 5px 0 0 0;
+}
+.catalog 
+{
+	height: 210px;
+}
+.item 
+{
+	float: left;
+	padding: 5px 0 0 5px;
+	text-align: center;
+	margin:  25px 7px 0 7px;
+	width: 82px;
+	height: 108;
+}
+.item-image 
+{
+		padding: 10px 0 10px 0;
+		text-align: center;
+}
+
+.item-text 
+{
+	height: 18px;
+	width: 82px;
+	text-align: center;
+}
+.bottom-buttons 
+{
+	height: 50px;	
+	position: relative;
+	bottom: 50px;
+	left: 0px;
+}
+.bottom-button 
+{
+	width: 64px;
+	height: 26px;
+	margin-top: 5px;
+	float: left;
+}
+.bottom-button p 
+{
+	position:relative;
+	top:20px;
+	text-align: center;
+	font: bold 11px arial;
+	color: #e9e9e9;
+}

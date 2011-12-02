@@ -1,0 +1,355 @@
+/*
+ * Ext JS Library 1.1 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-panel-header {
+    overflow:hidden;
+    zoom:1;
+    color:#15428b;
+	font:bold 11px tahoma,arial,verdana,sans-serif;
+    padding:5px 3px 4px 5px;
+    border:1px solid #99bbe8;
+    background: transparent url(../images/default/panel/white-top-bottom.gif) repeat-x 0 -1px;
+}
+
+.x-panel-body {
+    border:1px solid #99bbe8;
+    border-top:0 none;
+    overflow:hidden;
+    background:white;
+}
+.x-panel-body-noheader {
+    border-top:1px solid #99bbe8;
+}
+
+.x-panel-header {
+    overflow:hidden;
+    zoom:1;
+}
+.x-panel-tl .x-panel-header {
+    color:#15428b;
+	 font:bold 11px tahoma,arial,verdana,sans-serif;
+    padding:5px 0 4px 0;
+    border:0 none;
+    background:transparent;
+}
+.x-panel-tl .x-panel-icon, .x-window-tl .x-panel-icon {
+    padding-left:20px !important;
+    background-repeat:no-repeat;
+    background-position:0 4px;
+    zoom:1;
+}
+.x-panel-inline-icon {
+    width:16px;
+	 height:16px;
+    background-repeat:no-repeat;
+    background-position:0 0;
+	 vertical-align:middle;
+	 margin-right:4px;
+	 margin-top:-1px;
+	 margin-bottom:-1px;
+}
+.x-panel-tc {
+	background: transparent url(../images/default/panel/white-top-bottom.gif) repeat-x 0 0;
+	overflow:hidden;
+}
+.x-panel-tl {
+	background: transparent url(../images/default/panel/white-corners-sprite.gif) no-repeat 0 0;
+	padding-left:6px;
+    zoom:1;
+    border-bottom:1px solid #99bbe8;
+}
+.x-panel-tr {
+	background: transparent url(../images/default/panel/white-corners-sprite.gif) no-repeat right 0;
+	padding-right:6px;
+}
+.x-panel-bc {
+	background: transparent url(../images/default/panel/white-top-bottom.gif) repeat-x 0 bottom;
+    zoom:1;
+}
+.x-panel-bc .x-panel-footer {
+    padding-bottom:1px;
+    zoom:1;
+}
+
+.x-panel-nofooter .x-panel-bc {
+	height:1px;
+}
+.x-panel-bl {
+	background: transparent url(../images/default/panel/white-corners-sprite.gif) no-repeat 0 bottom;
+	padding-left:1px;
+    zoom:1;
+}
+.x-panel-br {
+	background: transparent url(../images/default/panel/white-corners-sprite.gif) no-repeat right bottom;
+	padding-right:1px;
+    zoom:1;
+}
+.x-panel-mc {
+    border:0 none;
+    padding:0;
+    margin:0;
+    font: normal 11px tahoma,arial,helvetica,sans-serif;
+    background:white;
+}
+.x-panel-mc .x-panel-body {
+    background:transparent;
+    border:0 none;
+}
+.x-panel-ml {
+	background: #fff url(../images/default/panel/white-left-right.gif) repeat-y 0 0;
+	padding-left:1px;
+    zoom:1;
+}
+.x-panel-mr {
+	background: transparent url(../images/default/panel/white-left-right.gif) repeat-y right 0;
+	padding-right:1px;
+    zoom:1;
+}
+.x-panel-blue .x-panel-tl, .x-panel-blue .x-panel-tr, .x-panel-blue .x-panel-bl, .x-panel-blue .x-panel-br {
+    background-image:url(../images/default/panel/corners-sprite.gif);
+}
+.x-panel-blue .x-panel-tc, .x-panel-blue .x-panel-bc {
+    background-image:url(../images/default/panel/top-bottom.gif);
+}
+.x-panel-blue .x-panel-ml, .x-panel-blue .x-panel-mr {
+	background-image:url(../images/default/panel/left-right.gif);
+}
+.x-panel-blue .x-panel-mc{
+    padding-top:6px;
+    background:#dfe8f6;
+}
+
+.x-panel-blue .x-panel-tl {
+	padding-left:6px;
+}
+.x-panel-blue .x-panel-tr {
+	padding-right:6px;
+}
+.x-panel-blue .x-panel-bc .x-panel-footer {
+    padding-bottom:6px;
+}
+.x-panel-blue .x-panel-nofooter .x-panel-bc {
+	height:6px;
+}
+.x-panel-blue .x-panel-bl {
+	padding-left:6px;
+}
+.x-panel-blue .x-panel-br {
+	padding-right:6px;
+}
+
+.x-panel-blue .x-panel-ml {
+	padding-left:6px;
+}
+.x-panel-blue .x-panel-mr {
+	padding-right:6px;
+}
+
+.x-panel-bwrap {
+    overflow:hidden;
+}
+.x-panel-body {
+    overflow:hidden;
+}
+
+.x-panel-collapsed .x-resizable-handle{
+    display:none;
+}
+
+/* Tools */
+.x-tool {
+    overflow:hidden;
+    width:15px;
+    height:15px;
+    float:right;
+    cursor:pointer;
+    background:transparent url(../images/default/panel/tool-sprites.gif) no-repeat;
+    margin-left:2px;
+}
+
+
+/* expand / collapse tools */
+.x-tool-toggle {
+    background-position:0 -60px;
+}
+.x-tool-toggle-over {
+    background-position:-15px -60px;
+}
+.x-panel-collapsed .x-tool-toggle {
+    background-position:0 -75px;
+}
+.x-panel-collapsed .x-tool-toggle-over {
+    background-position:-15px -75px;
+}
+
+.x-tool-close {
+    background-position:0 -0;
+}
+.x-tool-close-over {
+    background-position:-15px 0;
+}
+
+.x-tool-minimize {
+    background-position:0 -15px;
+}
+.x-tool-minimize-over {
+    background-position:-15px -15px;
+}
+
+.x-tool-maximize {
+    background-position:0 -30px;
+}
+.x-tool-maximize-over {
+    background-position:-15px -30px;
+}
+
+.x-tool-restore {
+    background-position:0 -45px;
+}
+.x-tool-restore-over {
+    background-position:-15px -45px;
+}
+
+.x-tool-gear {
+    background-position:0 -90px;
+}
+.x-tool-gear-over {
+    background-position:-15px -90px;
+}
+
+.x-tool-pin {
+    background-position:0 -135px;
+}
+.x-tool-pin-over {
+    background-position:-15px -135px;
+}
+.x-tool-unpin {
+    background-position:0 -150px;
+}
+.x-tool-unpin-over {
+    background-position:-15px -150px;
+}
+.x-tool-right {
+    background-position:0 -165px;
+}
+.x-tool-right-over {
+    background-position:-15px -165px;
+}
+.x-tool-left {
+    background-position:0 -180px;
+}
+.x-tool-left-over {
+    background-position:-15px -180px;
+}
+.x-tool-up {
+    background-position:0 -210px;
+}
+.x-tool-up-over {
+    background-position:-15px -210px;
+}
+.x-tool-down {
+    background-position:0 -195px;
+}
+.x-tool-down-over {
+    background-position:-15px -195px;
+}
+.x-tool-refresh {
+    background-position:0 -225px;
+}
+.x-tool-refresh-over {
+    background-position:-15px -225px;
+}
+/* Ghosting */
+.x-panel-ghost {
+    background:#cbddf3;
+    z-index:12000;
+    overflow:hidden;
+    position:absolute;
+    left:0;top:0;
+    opacity:.65;
+    -moz-opacity:.65;
+    filter:alpha(opacity=65);
+}
+
+.x-panel-ghost ul {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-size:0;
+    line-height:0;
+    border:1px solid #84a0c4;
+    border-top:0 none;
+    display:block;
+}
+
+.x-panel-ghost * {
+    cursor:move !important;
+}
+
+
+/* Buttons */
+
+.x-panel-btns-ct {
+    padding:5px;
+}
+
+.x-panel-btns-ct .x-btn{
+	float:right;
+	clear:none;
+}
+.x-panel-btns-ct .x-panel-btns td {
+	border:0;
+	padding:0;
+}
+.x-panel-btns-ct .x-panel-btns-right table{
+	float:right;
+	clear:none;
+}
+.x-panel-btns-ct .x-panel-btns-left table{
+	float:left;
+	clear:none;
+}
+.x-panel-btns-ct .x-panel-btns-center{
+	text-align:center; /*ie*/
+}
+.x-panel-btns-ct .x-panel-btns-center table{
+	margin:0 auto; /*everyone else*/
+}
+.x-panel-btns-ct table td.x-panel-btn-td{
+	padding:3px;
+}
+
+.x-panel-btns-ct .x-btn-focus .x-btn-left{
+	background-position:0 -147px;
+}
+.x-panel-btns-ct .x-btn-focus .x-btn-right{
+	background-position:0 -168px;
+}
+.x-panel-btns-ct .x-btn-focus .x-btn-center{
+	background-position:0 -189px;
+}
+
+.x-panel-btns-ct .x-btn-over .x-btn-left{
+	background-position:0 -63px;
+}
+.x-panel-btns-ct .x-btn-over .x-btn-right{
+	background-position:0 -84px;
+}
+.x-panel-btns-ct .x-btn-over .x-btn-center{
+	background-position:0 -105px;
+}
+
+.x-panel-btns-ct .x-btn-click .x-btn-center{
+	background-position:0 -126px;
+}
+.x-panel-btns-ct .x-btn-click  .x-btn-right{
+	background-position:0 -84px;
+}
+.x-panel-btns-ct .x-btn-click .x-btn-left{
+	background-position:0 -63px;
+}

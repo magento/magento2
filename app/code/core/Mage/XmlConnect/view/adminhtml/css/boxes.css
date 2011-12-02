@@ -1,0 +1,50 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+.mm_ctrl .m-arrows { width:42px; height:17px; text-indent:-2000em; background:url(../images/r-arrow.gif) no-repeat 0 0; border:0; float:left; cursor:pointer; }
+.mm_ctrl .l-arrow { background:url(../images/l-arrow.gif) no-repeat 0 0; margin:0 0 0 5px; }
+.mm_ctrl .full-arrow { width:84px; background:url(../images/full-arrow.gif) no-repeat 0 0; margin:0 0 0 5px; }
+.mm_ctrl .full-arrow-left { background:url(../images/full-arrow-left.gif) no-repeat 0 0; width:84px; }
+.mm_name span { border:1px solid #bdbdbd; display:block; padding:2px 0; text-align:center; margin:0 7px 5px 7px; }
+.mm_img { background: url(../images/xmlconnect_tab.png) 50% 50% no-repeat; width: 84px; height: 60px; text-align: center; vertical-align: middle }
+.mm-edit-form { border:1px solid red; }
+.mm-box-blue { border:1px solid #cadcdc; background:#e6eef0; padding:10px 20px; }
+.mm-pager { margin:10px 0 0 50px; }
+.mm-pager ul, .mm-pager strong, .mm-pager ul li { float:left; }
+.mm-pager ul li a { float:left; margin:0 0 0 5px; text-decoration:none; display:block; padding:0 5px; color:#303030; border:1px solid #aaa; }
+.mm-pager ul li a.active { border:1px solid #6c8991; background:#6c8991; color:#fff; }
+#field_tabs { padding:0 !important; }
+#field_tabs .mm-tabs-title { background:#ececec; padding:4px 10px; margin:0 -10px 15px; font-weight:bold; }
+#field_tabs table { width:500px !important; margin:0 10px 20px 10px; }
+
+.preview-loading,
+.ipad-portrait-loading,
+.ipad-landscape-loading { background:url(../images/loading.gif) no-repeat 50% 40%; color:#d4d4d4; font-size:18px; line-height:467px; text-align:center; }
+
+.preview-loading { line-height:488px; text-align:center; margin:0 0 10px; height:488px; width:328px; }
+.ipad-portrait-loading { line-height:467px; }
+.ipad-landscape-loading { line-height:350px; }
+
+.ipad-portrait { margin:0 0 5px; overflow:hidden; }
+.ipad-landscape { margin:0 0 5px; }
+.ipad-tab-landscape { width:425px; }

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.26 $"/>
+		<generation date="$Date: 2009/05/05 23:06:40 $"/>
+		<language type="se"/>
+		<territory type="FI"/>
+	</identity>
+	<fallback>fi_FI</fallback>
+	<localeDisplayNames>
+		<languages>
+			<language type="ang">ang</language>
+			<language type="apa">apa</language>
+			<language type="be">be</language>
+			<language type="cs">cs</language>
+			<language type="da">da</language>
+			<language type="de">de</language>
+			<language type="el">el</language>
+			<language type="en">en</language>
+			<language type="es">es</language>
+			<language type="et">et</language>
+			<language type="fi">fi</language>
+			<language type="fiu">fiu</language>
+			<language type="fo">fo</language>
+			<language type="fr">fr</language>
+			<language type="gem">gem</language>
+			<language type="is">is</language>
+			<language type="nb">nb</language>
+			<language type="nn">nn</language>
+			<language type="no">no</language>
+			<language type="ru">ru</language>
+			<language type="se">se</language>
+			<language type="sma">sma</language>
+			<language type="smi">smi</language>
+			<language type="smj">smj</language>
+			<language type="smn">smn</language>
+			<language type="sms">sms</language>
+			<language type="sv">sv</language>
+		</languages>
+		<territories>
+			<territory type="002">Afrihká</territory>
+			<territory type="005">Mátta-Amerihká</territory>
+			<territory type="011">Oarji-Afrihká</territory>
+			<territory type="014">014</territory>
+			<territory type="015">Davvi-Afrihká</territory>
+			<territory type="017">Gaska-Afrihká</territory>
+			<territory type="021">Davvi-Amerihká</territory>
+			<territory type="030">Nuorta-Ásia</territory>
+			<territory type="034">Mátta-Ásia</territory>
+			<territory type="039">Mátta-Eurohpa</territory>
+			<territory type="143">Gaska-Ásia</territory>
+			<territory type="145">Oarji-Ásia</territory>
+			<territory type="150">Eurohpa</territory>
+			<territory type="151">Nuorta-Eurohpá</territory>
+			<territory type="154">Davvi-Eurohpa</territory>
+			<territory type="155">Oarji-Eurohpa</territory>
+			<territory type="AT">AT</territory>
+			<territory type="AU">AU</territory>
+			<territory type="AX">AX</territory>
+			<territory type="BE">BE</territory>
+			<territory type="BG">BG</territory>
+			<territory type="BR">BR</territory>
+			<territory type="BY">BY</territory>
+			<territory type="CH">CH</territory>
+			<territory type="CM">CM</territory>
+			<territory type="CN">CN</territory>
+			<territory type="CZ">CZ</territory>
+			<territory type="DE">DE</territory>
+			<territory type="DK">DK</territory>
+			<territory type="EE">EE</territory>
+			<territory type="ES">ES</territory>
+			<territory type="FI">FI</territory>
+			<territory type="FO">FO</territory>
+			<territory type="FR">FR</territory>
+			<territory type="GL">GL</territory>
+			<territory type="GR">GR</territory>
+			<territory type="HR">HR</territory>
+			<territory type="HU">HU</territory>
+			<territory type="IE">IE</territory>
+			<territory type="IQ">IQ</territory>
+			<territory type="IR">IR</territory>
+			<territory type="IS">IS</territory>
+			<territory type="IT">IT</territory>
+			<territory type="JP">JP</territory>
+			<territory type="KP">KP</territory>
+			<territory type="KR">KR</territory>
+			<territory type="LB">LB</territory>
+			<territory type="LT">LT</territory>
+			<territory type="LV">LV</territory>
+			<territory type="MA">MA</territory>
+			<territory type="MG">MG</territory>
+			<territory type="MH">MH</territory>
+			<territory type="MK">MK</territory>
+			<territory type="MP">MP</territory>
+			<territory type="MR">MR</territory>
+			<territory type="MV">MV</territory>
+			<territory type="MY">MY</territory>
+			<territory type="NL">NL</territory>
+			<territory type="NO">NO</territory>
+			<territory type="NZ">NZ</territory>
+			<territory type="PH">PH</territory>
+			<territory type="PL">PL</territory>
+			<territory type="PS">PS</territory>
+			<territory type="RU">RU</territory>
+			<territory type="SE">SE</territory>
+			<territory type="SI">SI</territory>
+			<territory type="SJ">SJ</territory>
+			<territory type="SK">SK</territory>
+			<territory type="SR">SR</territory>
+			<territory type="TD">TD</territory>
+			<territory type="TL">TL</territory>
+			<territory type="TR">TR</territory>
+			<territory type="US">US</territory>
+			<territory type="ZA">ZA</territory>
+		</territories>
+		<keys>
+			<key type="calendar">calendar</key>
+			<key type="currency">currency</key>
+		</keys>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">Metric</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ođđajage</month>
+							<month type="2">guovva</month>
+							<month type="3">njukča</month>
+							<month type="4">cuoŋo</month>
+							<month type="5">miesse</month>
+							<month type="6">geasse</month>
+							<month type="7">suoidne</month>
+							<month type="8">borge</month>
+							<month type="9">čakča</month>
+							<month type="10">golggot</month>
+							<month type="11">skábma</month>
+							<month type="12">juovla</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">aejlege</day>
+							<day type="mon">måanta</day>
+							<day type="tue">däjsta</day>
+							<day type="wed">gaskevahkoe</day>
+							<day type="thu">dåarsta</day>
+							<day type="fri">bearjadahke</day>
+							<day type="sat">laavadahke</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">D</day>
+							<day type="wed">G</day>
+							<day type="thu">D</day>
+							<day type="fri">B</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<eras>
+					<eraNames>
+						<era type="0">BCE</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">BCE</era>
+					</eraAbbr>
+				</eras>
+				<fields>
+					<field type="year">
+						<displayName>Year</displayName>
+					</field>
+					<field type="month">
+						<displayName>Month</displayName>
+					</field>
+					<field type="week">
+						<displayName>Week</displayName>
+					</field>
+					<field type="day">
+						<displayName>Day</displayName>
+					</field>
+					<field type="weekday">
+						<displayName>Day of the Week</displayName>
+					</field>
+					<field type="hour">
+						<displayName>Hour</displayName>
+					</field>
+					<field type="minute">
+						<displayName>Minute</displayName>
+					</field>
+					<field type="second">
+						<displayName>Second</displayName>
+					</field>
+					<field type="zone">
+						<displayName>Zone</displayName>
+					</field>
+				</fields>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="FIM">
+				<displayName>FIM</displayName>
+			</currency>
+			<currency type="NOK">
+				<displayName>NOK</displayName>
+			</currency>
+			<currency type="SEK">
+				<displayName>SEK</displayName>
+			</currency>
+			<currency type="XAG">
+				<displayName>XAG</displayName>
+			</currency>
+			<currency type="XAU">
+				<displayName>XAU</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<posix>
+		<messages>
+			<yesstr>yes:y</yesstr>
+			<nostr>no:n</nostr>
+		</messages>
+	</posix>
+</ldml>
+

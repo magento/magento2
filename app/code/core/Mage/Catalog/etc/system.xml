@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Catalog
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <tabs>
+        <catalog translate="label" module="Mage_Catalog">
+            <label>Catalog</label>
+            <sort_order>200</sort_order>
+        </catalog>
+    </tabs>
+    <sections>
+        <catalog translate="label" module="Mage_Catalog">
+            <class>separator-top</class>
+            <label>Catalog</label>
+            <tab>catalog</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>40</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <frontend translate="label">
+                    <label>Frontend</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <list_mode translate="label">
+                            <label>List Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_ListMode</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list_mode>
+                        <grid_per_page_values translate="label comment">
+                            <label>Products per Page on Grid Allowed Values</label>
+                            <comment>Comma-separated.</comment>
+                            <frontend_type>text</frontend_type>
+                            <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </grid_per_page_values>
+                        <grid_per_page translate="label comment">
+                            <label>Products per Page on Grid Default Value</label>
+                            <comment>Must be in the allowed values list.</comment>
+                            <frontend_type>text</frontend_type>
+                            <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </grid_per_page>
+                        <list_per_page_values translate="label comment">
+                            <label>Products per Page on List Allowed Values</label>
+                            <comment>Comma-separated.</comment>
+                            <frontend_type>text</frontend_type>
+                            <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list_per_page_values>
+                        <list_per_page translate="label comment">
+                            <label>Products per Page on List Default Value</label>
+                            <comment>Must be in the allowed values list.</comment>
+                            <frontend_type>text</frontend_type>
+                            <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_ListPerPage</source_model>-->
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list_per_page>
+                        <flat_catalog_category translate="label">
+                            <label>Use Flat Catalog Category</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatcatalog</frontend_model>
+                            <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Category_Flat</backend_model>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </flat_catalog_category>
+
+                        <flat_catalog_product translate="label">
+                            <label>Use Flat Catalog Product</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatproduct</frontend_model>
+                            <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Product_Flat</backend_model>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </flat_catalog_product>
+                        <default_sort_by translate="label comment">
+                            <label>Product Listing Sort by</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_ListSort</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_sort_by>
+                        <list_allow_all translate="label comment">
+                            <label>Allow All Products per Page</label>
+                            <comment>Whether to show "All" option in the "Show X Per Page" dropdown.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </list_allow_all>
+                        <parse_url_directives translate="label comment">
+                            <label>Allow Dynamic Media URLs in Products and Categories</label>
+                            <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parse_url_directives>
+                    </fields>
+                </frontend>
+                <sitemap translate="label">
+                    <label>Sitemap</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <tree_mode translate="label">
+                            <label>Use Tree Like Category Sitemap</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tree_mode>
+                        <lines_perpage translate="label">
+                            <label>Minimum Lines per Page</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </lines_perpage>
+                    </fields>
+                </sitemap>
+                <placeholder translate="label">
+                    <label>Product Image Placeholders</label>
+                    <clone_fields>1</clone_fields>
+                    <clone_model>Mage_Adminhtml_Model_System_Config_Clone_Media_Image</clone_model>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <placeholder>
+                            <label></label>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Image</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/placeholder</upload_dir>
+                            <base_url type="media" scope_info="1">catalog/product/placeholder</base_url>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </placeholder>
+                    </fields>
+                </placeholder>
+
+                <seo translate="label">
+                    <label>Search Engine Optimizations</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <category_url_suffix translate="label comment">
+                            <label>Category URL Suffix</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Url_Rewrite_Suffix</backend_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Cache refresh needed.</comment>
+                        </category_url_suffix>
+                        <product_url_suffix translate="label comment">
+                            <label>Product URL Suffix</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Catalog_Model_System_Config_Backend_Catalog_Url_Rewrite_Suffix</backend_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Cache refresh needed.</comment>
+                        </product_url_suffix>
+                        <product_use_categories translate="label">
+                            <label>Use Categories Path for Product URLs</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Seo_Product</backend_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </product_use_categories>
+                        <save_rewrites_history translate="label">
+                            <label>Create Permanent Redirect for URLs if URL Key Changed</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </save_rewrites_history>
+                        <title_separator translate="label">
+                            <label>Page Title Separator</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_separator>
+                        <category_canonical_tag translate="label">
+                            <label>Use Canonical Link Meta Tag For Categories</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </category_canonical_tag>
+                        <product_canonical_tag translate="label">
+                            <label>Use Canonical Link Meta Tag For Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </product_canonical_tag>
+                    </fields>
+                </seo>
+
+                <price translate="label">
+                    <label>Price</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <scope translate="label comment">
+                            <label>Catalog Price Scope</label>
+                            <comment><![CDATA[Defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency")]]>.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Price_Scope</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Price_Scope</backend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </scope>
+                    </fields>
+                </price>
+                <layered_navigation translate="label">
+                    <label>Layered Navigation</label>
+                    <sort_order>490</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <price_range_calculation translate="label">
+                            <label>Price Navigation Step Calculation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Price_Step</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </price_range_calculation>
+                        <price_range_step translate="label">
+                            <label>Default Price Navigation Step</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><price_range_calculation>manual</price_range_calculation></depends>
+                        </price_range_step>
+                    </fields>
+                </layered_navigation>
+                <navigation translate="label">
+                    <label>Category Top Navigation</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <max_depth translate="label">
+                            <label>Maximal Depth</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </max_depth>
+                    </fields>
+                </navigation>
+                <custom_options translate="label">
+                    <label>Date &amp; Time Custom Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>700</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <use_calendar translate="label">
+                            <label>Use JavaScript Calendar</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_calendar>
+                        <date_fields_order translate="label">
+                            <label>Date Fields Order</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_DateFieldsOrder</frontend_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </date_fields_order>
+                        <time_format translate="label">
+                            <label>Time Format</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_TimeFormat</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </time_format>
+                        <year_range translate="label comment">
+                            <label>Year Range</label>
+                            <comment>Use four-digit year format.</comment>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_YearRange</frontend_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </year_range>
+                    </fields>
+                </custom_options>
+            </groups>
+        </catalog>
+        <design>
+            <groups>
+                <watermark translate="label">
+                    <label>Product Image Watermarks</label>
+                    <clone_fields>1</clone_fields>
+                    <clone_model>Mage_Adminhtml_Model_System_Config_Clone_Media_Image</clone_model>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <size translate="label">
+                            <label>Watermark Default Size</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Example format: 200x300.</comment>
+                        </size>
+                        <imageOpacity translate="label">
+                            <label>Watermark Opacity, Percent</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </imageOpacity>
+                        <image translate="label">
+                            <label>Watermark</label>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Image</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/watermark</upload_dir>
+                            <base_url type="media" scope_info="1">catalog/product/watermark</base_url>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Allowed file types: jpeg, gif, png.</comment>
+                        </image>
+                        <position translate="label">
+                            <label>Watermark Position</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Watermark_Position</source_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </position>
+                    </fields>
+                </watermark>
+            </groups>
+        </design>
+        <cms>
+            <groups>
+                <wysiwyg>
+                    <fields>
+                        <use_static_urls_in_catalog translate="label comment">
+                            <label>Use Static URLs for Media Content in WYSIWYG for Catalog</label>
+                            <comment>Applicable to catalog products and categories only. Any media content will be inserted into editor as a static URL. It is not updated if the system configuration base URL changes.</comment>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_static_urls_in_catalog>
+                    </fields>
+                </wysiwyg>
+            </groups>
+        </cms>
+        <sales>
+            <groups>
+                <msrp translate="label">
+                    <label>Minimum Advertised Price</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>110</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enable MAP</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <apply_for_all translate="label comment">
+                            <label>Apply MAP (Default Value)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[<strong style="color:red">Warning!</strong> Applying MAP by default will hide all product prices on the frontend.]]></comment>
+                        </apply_for_all>
+                        <display_price_type translate="label">
+                            <label>Display Actual Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </display_price_type>
+                        <explanation_message translate="label">
+                            <label>Default Popup Text Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </explanation_message>
+                        <explanation_message_whats_this translate="label">
+                            <label>Default "What's This" Text Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </explanation_message_whats_this>
+                    </fields>
+                </msrp>
+            </groups>
+        </sales>
+    </sections>
+</config>

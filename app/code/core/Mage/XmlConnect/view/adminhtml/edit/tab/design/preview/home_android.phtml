@@ -1,0 +1,81 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $previewModel Mage_XmlConnect_Model_Preview_Android */
+$previewModel = Mage::helper('Mage_XmlConnect_Helper_Data')->getPreviewModel();
+
+$title1color = $previewModel->getConfigFontInfo('Title1/color');
+$categoryItemTintColor = $previewModel->getCategoryItemTintColor();
+$categoryItemBackgroundColor = $previewModel->getData('conf/categoryItem/backgroundColor');
+$categoryItemTintColor = $previewModel->getData('conf/categoryItem/tintColor');
+$title1color = $previewModel->getConfigFontInfo('Title1/color');
+$title9size = $previewModel->getConfigFontInfo('Title9/size');
+$productImage = $previewModel->getPreviewImagesUrl('android/product_image.png');
+$bannerImageAndroid = $previewModel->getBannerImage();
+?>
+<div class="main-frame main-frame-home" style="background-color:<?php echo $previewModel->getData('conf/body/backgroundColor'); ?>;">
+    <div class="phone home-page" style="">
+        <div class="status-bar"></div>
+        <div class="header-wrap" style="background-color:<?php echo $previewModel->getData('conf/navigationBar/tintColor'); ?>">
+            <div class="app-header" style="color:<?php echo $title1color; ?>;">
+                <div class="icon icon-home">A</div>
+                <?php echo $this->getChildHtml('tab_items'); ?>
+                <div class="app-logo">
+                    <img src="<?php echo $previewModel->getLogoUrl(); ?>" alt="logo" /><span style="color:<?php echo $title1color; ?>;"><?php echo $this->__("Home"); ?></span>
+                </div>
+            </div>
+        </div>
+        <div class="content" style="background-image:url(<?php echo $bannerImageAndroid; ?>)"></div>
+        <div class="items-list-wrap" style="background-color:<?php echo $previewModel->getData('conf/body/scrollBackgroundColor'); ?>">
+            <div class="items-list">
+                <ul>
+                    <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                        <div class="product-image"><img src="<?php echo $productImage; ?>" alt="Chair" /></div>
+                        <span class="link" style="border-color:<?php echo $categoryItemTintColor; ?>"><a href="#" style="font-size:<?php echo $title9size; ?>px; color:<?php echo $previewModel->getData('conf/fonts/Title9/color'); ?>; background-color:<?php echo $categoryItemTintColor; ?>; text-shadow:0 -1px 1px <?php echo $categoryItemTintColor; ?>;">Chairs</a></span>
+                    </li>
+                    <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                        <div class="product-image"><img src="<?php echo $productImage; ?>" alt="Table" /></div>
+                        <span class="link" style="border-color:<?php echo $categoryItemTintColor; ?>"><a href="#" style="font-size:<?php echo $title9size; ?>px; color:<?php echo $previewModel->getData('conf/fonts/Title9/color'); ?>; background-color:<?php echo $categoryItemTintColor; ?>; text-shadow:0 -1px 1px <?php echo $categoryItemTintColor; ?>;">Tables</a></span>
+                    </li>
+                    <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                        <div class="product-image"><img src="<?php echo $productImage; ?>" alt="Sofa" /></div>
+                        <span class="link" style="border-color:<?php echo $categoryItemTintColor; ?>"><a href="#" style="font-size:<?php echo $title9size; ?>px; color:<?php echo $previewModel->getData('conf/fonts/Title9/color'); ?>; background-color:<?php echo $categoryItemTintColor; ?>; text-shadow:0 -1px 1px <?php echo $categoryItemTintColor; ?>;">Sofas</a></span>
+                    </li>
+                    <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                        <div class="product-image"><img src="<?php echo $productImage; ?>" alt="Shelve" /></div>
+                        <span class="link" style="border-color:<?php echo $categoryItemTintColor; ?>"><a href="#" style="font-size:<?php echo $title9size; ?>px; color:<?php echo $previewModel->getData('conf/fonts/Title9/color'); ?>; background-color:<?php echo $categoryItemTintColor; ?>; text-shadow:0 -1px 1px <?php echo $categoryItemTintColor; ?>;">Shelve</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if ($this->getJsErrorMessage()) : ?>
+<script type="text/javascript">
+    alert('<?php echo $this->getJsErrorMessage(); ?>');
+</script>
+<?php endif; ?>

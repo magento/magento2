@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<span class="field-row grid" id="shipment_tracking_info">
+<?php if($this->getTrackingInfo()): ?>
+    <?php if ($this->getTrackingInfo()->getErrorMessage()): ?>
+        <?php echo $this->getTrackingInfo()->getErrorMessage() ?>
+    <?php else: ?>
+        <?php if ($this->getTrackingInfo()->getUrl()): ?>
+            Please, visit for more info: <a href="<?php echo $this->getTrackingInfo()->getUrl() ?>" target="_blank"><?php echo $this->trackingInfo->getCarrierTitle() ?></a><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getStatus()): ?>
+            Status: <?php echo $this->getTrackingInfo()->getStatus() ?><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getDeliverydate()): ?>
+            Delivery Date: <?php echo $this->getTrackingInfo()->getDeliverydate() ?><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getDeliverytime()): ?>
+            Delivery Time: <?php echo $this->getTrackingInfo()->getDeliverytime() ?><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getDeliverylocation()): ?>
+            Delivery Location: <?php echo $this->getTrackingInfo()->getDeliverylocation() ?><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getSignedby()): ?>
+            Signed by: <?php echo $this->getTrackingInfo()->getSignedby() ?><br/>
+        <?php endif; ?>
+
+        <?php if ($this->getTrackingInfo()->getTrackSummary()): ?>
+            Tracking summary: <?php echo $this->getTrackingInfo()->getTrackSummary() ?><br/>
+        <?php endif; ?>
+
+    <?php endif; ?>
+<?php endif; ?>
+</span>

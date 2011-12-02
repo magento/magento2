@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Api
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <api>
+        <adapters>
+            <soap>
+                <model>Mage_Api_Model_Server_Adapter_Soap</model>
+                <handler>default</handler>
+                <active>1</active>
+                <required>
+                    <extensions>
+                        <soap />
+                    </extensions>
+                </required>
+            </soap>
+            <soap_v2>
+                <model>Mage_Api_Model_Server_V2_Adapter_Soap</model>
+                <handler>soap_v2</handler>
+                <active>1</active>
+                <required>
+                    <extensions>
+                        <soap />
+                    </extensions>
+                </required>
+            </soap_v2>
+            <soap_wsi>
+                <model>Mage_Api_Model_Server_Wsi_Adapter_Soap</model>
+                <handler>soap_wsi</handler>
+                <active>1</active>
+                <required>
+                    <extensions>
+                        <soap />
+                    </extensions>
+                </required>
+            </soap_wsi>
+            <xmlrpc>
+                <model>Mage_Api_Model_Server_Adapter_Xmlrpc</model>
+                <handler>default</handler>
+                <active>1</active>
+            </xmlrpc>
+            <default>
+                <use>soap</use>
+            </default>
+        </adapters>
+        <handlers>
+            <default>
+                <model>Mage_Api_Model_Server_Handler</model>
+            </default>
+            <soap_v2>
+                <model>Mage_Api_Model_Server_V2_Handler</model>
+            </soap_v2>
+            <soap_wsi>
+                <model>Mage_Api_Model_Server_Wsi_Handler</model>
+            </soap_wsi>
+        </handlers>
+        <resources>
+        </resources>
+        <resources_alias>
+        </resources_alias>
+        <v2>
+            <wsdl>
+                <prefix>
+                    <wsdl>http://schemas.xmlsoap.org/wsdl/</wsdl>
+                </prefix>
+            </wsdl>
+        </v2>
+        <faults>
+            <unknown>
+                <code>0</code>
+                <message>Unknown Error</message>
+            </unknown>
+            <internal>
+                <code>1</code>
+                <message>Internal Error. Please see log for details.</message>
+            </internal>
+            <access_denied>
+                <code>2</code>
+                <message>Access denied.</message>
+            </access_denied>
+            <resource_path_invalid>
+                <code>3</code>
+                <message>Invalid api path.</message>
+            </resource_path_invalid>
+            <resource_path_not_callable>
+                <code>4</code>
+                <message>Resource path is not callable.</message>
+            </resource_path_not_callable>
+            <session_expired>
+                <code>5</code>
+                <message>Session expired. Try to relogin.</message>
+            </session_expired>
+            <invalid_request_param>
+                <code>6</code>
+                <message>Required parameter is missing, for more details see "exception.log".</message>
+            </invalid_request_param>
+        </faults>
+        <acl>
+            <resources>
+                <all>
+                </all>
+            </resources>
+
+            <privilegeSets>
+                <default>
+                    <view descr="View entity"/>
+                    <edit descr="Edit entity"/>
+                    <delete descr="Delete entity"/>
+                    <create descr="Create entity"/>
+                </default>
+            </privilegeSets>
+        </acl>
+    </api>
+</config>

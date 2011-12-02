@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.41 $"/>
+		<generation date="$Date: 2009/05/05 23:06:33 $"/>
+		<language type="aa"/>
+		<territory type="DJ"/>
+	</identity>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="2">Naharsi Kudo</month>
+							<month type="4">Agda Baxisso</month>
+							<month type="8">Leqeeni</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+		</calendars>
+	</dates>
+</ldml>
+

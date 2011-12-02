@@ -1,0 +1,44 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $previewModel Mage_XmlConnect_Model_Preview_Ipad */
+$previewModel = Mage::helper('Mage_XmlConnect_Helper_Data')->getPreviewModel();
+$title1color = $previewModel->getData('conf/fonts/Title1/color');
+?>
+<?php if ($previewModel->isItemExists('Cart')) :?>
+    <span class="cart" style="color:<?php echo $title1color; ?>;"><img src="<?php echo $previewModel->getPreviewImagesUrl('ipad/i_cart.png') ?>" alt="" /></span>
+<?php endif; ?>
+<?php if ($previewModel->isItemExists('Account')) :?>
+    <span class="login" style="color:<?php echo $title1color; ?>;"><img src="<?php echo $previewModel->getPreviewImagesUrl('ipad/i_login.png') ?>" alt="" /></span>
+<?php endif; ?>
+
+<span class="info"><img src="<?php echo $previewModel->getPreviewImagesUrl('ipad/i_info.png') ?>" alt="" /></span>
+
+<span class="app-logo"><img src="<?php echo $previewModel->getLogoUrl(); ?>" height="14" width="12" alt="" /></span><span class="store-name" style="color:<?php echo $title1color; ?>;">Magento</span>
+<?php if ($previewModel->isItemExists('Search')) :?>
+    <span class="search"><img src="<?php echo $previewModel->getPreviewImagesUrl('ipad/bg_search.png') ?>" alt="" /></span>
+<?php endif; ?>

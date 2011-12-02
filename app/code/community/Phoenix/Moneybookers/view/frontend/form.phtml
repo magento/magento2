@@ -1,0 +1,48 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Phoenix Medien GmbH & Co. KG (http://www.phoenix-medien.de)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php $_code = $this->getMethodCode(); ?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none">
+    <li>
+        <?php echo Mage::helper('Phoenix_Moneybookers_Helper_Data')->__('You will be redirected to our secure payment page when you place an order.') ?>
+    </li>
+    <?php if ($_img = $this->getPaymentImageSrc($_code)): ?>
+    <li>
+        <div style="padding:10px 15px 15px;">
+            <img src="<?php echo $_img ?>" alt="" /><br />
+            <?php if ($_code == 'moneybookers_wlt'): ?>
+                <a href="<?php echo $this->getWltInfoUrl() ?>" target="_blank"><?php echo Mage::helper('Phoenix_Moneybookers_Helper_Data')->__('More information about Moneybookers') ?></a>
+            <?php elseif ($_code == 'moneybookers_obt'): ?>
+                <?php $_locale = $this->getInfoLocale(); ?>
+                <a onclick="window.open(this.href, 'http://www.nextgenerationpayments.com/<?php echo $_locale ?>/customerinfo/', 'width=1000,height=760,scrollbars=auto'); return false;" href="http://www.nextgenerationpayments.com/<?php echo $_locale ?>/customerinfo/" target="_blank">
+                    <?php echo Mage::helper('Phoenix_Moneybookers_Helper_Data')->__('Find out more about Online Bank Transfer') ?>
+                </a>
+            <?php endif; ?>
+        </div>
+    </li>
+    <?php endif; ?>
+</ul>
+

@@ -1,0 +1,94 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Calendar localization script. Should be put into page header.
+ *
+ * @see Mage_Core_Block_Html_Calendar
+ */
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+enUS = <?php echo $enUS?>; // en_US locale reference
+Calendar._DN = <?php echo $days['wide']?>; // full day names
+Calendar._SDN = <?php echo $days['abbreviated']?>; // short day names
+Calendar._FD = <?php echo $firstDay?>; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
+Calendar._MN = <?php echo $months['wide']?>; // full month names
+Calendar._SMN = <?php echo $months['abbreviated']?>; // short month names
+Calendar._am = <?php echo $am ?>; // am/pm
+Calendar._pm = <?php echo $pm ?>;
+
+// tooltips
+Calendar._TT = {};
+Calendar._TT["INFO"] = "<?php echo $this->jsQuoteEscape( $this->__('About the calendar') );?>";
+
+Calendar._TT["ABOUT"] =
+"<?php echo $this->jsQuoteEscape( $this->__('DHTML Date/Time Selector') )?>\n" +
+"(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('For latest version visit: %s', 'http://www.dynarch.com/projects/calendar/') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('Distributed under GNU LGPL. See %s for details.', 'http://gnu.org/licenses/lgpl.html') )?>" +
+"\n\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('Date selection:') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- Use the %s, %s buttons to select year', '\\xab', '\xbb') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- Use the %s buttons to select month', '" + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + "') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- Hold mouse button on any of the above buttons for faster selection.') )?>";
+Calendar._TT["ABOUT_TIME"] = "\n\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('Time selection:') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- Click on any of the time parts to increase it') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- or Shift-click to decrease it') )?>\n" +
+"<?php echo $this->jsQuoteEscape( $this->__('- or click and drag for faster selection.') )?>";
+
+Calendar._TT["PREV_YEAR"] = "<?php echo $this->jsQuoteEscape( $this->__('Prev. year (hold for menu)') );?>";
+Calendar._TT["PREV_MONTH"] = "<?php echo $this->jsQuoteEscape( $this->__('Prev. month (hold for menu)') );?>";
+Calendar._TT["GO_TODAY"] = "<?php echo $this->jsQuoteEscape( $this->__('Go Today') );?>";
+Calendar._TT["NEXT_MONTH"] = "<?php echo $this->jsQuoteEscape( $this->__('Next month (hold for menu)') );?>";
+Calendar._TT["NEXT_YEAR"] = "<?php echo $this->jsQuoteEscape( $this->__('Next year (hold for menu)') );?>";
+Calendar._TT["SEL_DATE"] = "<?php echo $this->jsQuoteEscape( $this->__('Select date') );?>";
+Calendar._TT["DRAG_TO_MOVE"] = "<?php echo $this->jsQuoteEscape( $this->__('Drag to move') );?>";
+Calendar._TT["PART_TODAY"] = ' (' + <?php echo $today ?> + ')';
+
+// the following is to inform that "%s" is to be the first day of week
+Calendar._TT["DAY_FIRST"] = "<?php echo $this->jsQuoteEscape( $this->__('Display %s first', '%s') );?>";
+
+// This may be locale-dependent. It specifies the week-end days, as an array
+// of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
+// means Monday, etc.
+Calendar._TT["WEEKEND"] = <?php echo $weekendDays?>;
+
+Calendar._TT["CLOSE"] = "<?php echo $this->jsQuoteEscape( $this->__('Close') );?>";
+Calendar._TT["TODAY"] = <?php echo $today ?>;
+Calendar._TT["TIME_PART"] = "<?php echo $this->jsQuoteEscape( $this->__('(Shift-)Click or drag to change value') );?>";
+
+// date formats
+Calendar._TT["DEF_DATE_FORMAT"] = <?php echo $defaultFormat?>;
+Calendar._TT["TT_DATE_FORMAT"] = <?php echo $toolTipFormat?>;
+
+Calendar._TT["WK"] = <?php echo $week ?>;
+Calendar._TT["TIME"] = "<?php echo $this->jsQuoteEscape( $this->__('Time:') );?>";
+//]]>
+</script>

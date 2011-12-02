@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Adminhtml
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_Adminhtml>
+            <version>0.7.1</version>
+        </Mage_Adminhtml>
+    </modules>
+    <global>
+        <template>
+            <email>
+                <admin_emails_forgot_email_template translate="label" module="Mage_Adminhtml">
+                    <label>Forgot Admin Password</label>
+                    <file>email/password_reset_confirmation.html</file>
+                    <type>html</type>
+                </admin_emails_forgot_email_template>
+            </email>
+        </template>
+        <events>
+            <adminhtml_controller_action_predispatch_start>
+                <observers>
+                    <store>
+                        <class>Mage_Adminhtml_Model_Observer</class>
+                        <method>bindStore</method>
+                    </store>
+                    <massaction>
+                        <class>Mage_Adminhtml_Model_Observer</class>
+                        <method>massactionPrepareKey</method>
+                    </massaction>
+                </observers>
+            </adminhtml_controller_action_predispatch_start>
+            <admin_user_authenticate_after>
+                <observers>
+                    <configuration_files_access_level_verification>
+                        <class>Mage_Adminhtml_Model_Observer</class>
+                        <method>clearCacheConfigurationFilesAccessLevelVerification</method>
+                    </configuration_files_access_level_verification>
+                </observers>
+            </admin_user_authenticate_after>
+        </events>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Mage_Adminhtml</module>
+                    <frontName>admin</frontName>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <auth>
+                        <class>Mage_Admin_Model_Observer</class>
+                        <method>actionPreDispatchAdmin</method>
+                    </auth>
+                </observers>
+            </controller_action_predispatch>
+            <core_locale_set_locale>
+                <observers>
+                    <bind_locale>
+                        <class>Mage_Adminhtml_Model_Observer</class>
+                        <method>bindLocale</method>
+                    </bind_locale>
+                </observers>
+            </core_locale_set_locale>
+            <admin_system_config_changed_section_admin>
+                <observers>
+                    <bind_locale>
+                        <class>Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer</class>
+                        <method>afterCustomUrlChanged</method>
+                    </bind_locale>
+                </observers>
+            </admin_system_config_changed_section_admin>
+        </events>
+        <global_search>
+            <products>
+                <class>Mage_Adminhtml_Model_Search_Catalog</class>
+                <acl>catalog</acl>
+            </products>
+            <customers>
+                <class>Mage_Adminhtml_Model_Search_Customer</class>
+                <acl>customer</acl>
+            </customers>
+            <sales>
+                <class>Mage_Adminhtml_Model_Search_Order</class>
+                <acl>sales</acl>
+            </sales>
+        </global_search>
+        <translate>
+            <modules>
+                <Mage_Adminhtml>
+                    <files>
+                        <default>Mage_Adminhtml.csv</default>
+                    </files>
+                </Mage_Adminhtml>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <admin module="Mage_Adminhtml">
+                    <file>admin.xml</file>
+                </admin>
+                <adminhtml module="Mage_Adminhtml">
+                    <file>main.xml</file>
+                </adminhtml>
+                <adminnotification module="Mage_Adminhtml">
+                    <file>adminnotification.xml</file>
+                </adminnotification>
+                <catalog module="Mage_Adminhtml">
+                    <file>catalog.xml</file>
+                </catalog>
+                <catalogsearch module="Mage_Adminhtml">
+                    <file>catalogsearch.xml</file>
+                </catalogsearch>
+                <cms module="Mage_Adminhtml">
+                    <file>cms.xml</file>
+                </cms>
+                <customer module="Mage_Adminhtml">
+                    <file>customer.xml</file>
+                </customer>
+                <dataflow module="Mage_Adminhtml">
+                    <file>dataflow.xml</file>
+                </dataflow>
+                <newsletter module="Mage_Adminhtml">
+                    <file>newsletter.xml</file>
+                </newsletter>
+                <promo module="Mage_Adminhtml">
+                    <file>promo.xml</file>
+                </promo>
+                <report module="Mage_Adminhtml">
+                    <file>report.xml</file>
+                </report>
+                <sales module="Mage_Adminhtml">
+                    <file>sales.xml</file>
+                </sales>
+                <tag module="Mage_Adminhtml">
+                    <file>tag.xml</file>
+                </tag>
+            </updates>
+        </layout>
+        <sales>
+            <order>
+                <create>
+                    <available_product_types>
+                        <simple/>
+                        <virtual/>
+                        <configurable/>
+                        <grouped/>
+                    </available_product_types>
+                </create>
+            </order>
+        </sales>
+    </adminhtml>
+    <default>
+        <system>
+            <emails>
+                <forgot_email_template>system_emails_forgot_email_template</forgot_email_template>
+                <forgot_email_identity>general</forgot_email_identity>
+            </emails>
+            <dashboard>
+                <enable_charts>1</enable_charts>
+            </dashboard>
+        </system>
+        <general>
+            <file>
+                <sitemap_generate_valid_paths>
+                    <available>
+                        <any_path>/*/sitemap.xml</any_path>
+                    </available>
+                </sitemap_generate_valid_paths>
+            </file>
+            <validator_data>
+                <input_types>
+                    <price>price</price>
+                    <media_image>media_image</media_image>
+                    <gallery>gallery</gallery>
+                </input_types>
+            </validator_data>
+        </general>
+    </default>
+    <stores>
+        <admin>
+            <design>
+                <package>
+                    <name>default</name>
+                </package>
+                <theme>
+                    <default>default</default>
+                </theme>
+            </design>
+        </admin>
+    </stores>
+    <websites>
+        <admin>
+            <web>
+                <routers>
+                    <frontend>
+                        <disabled>true</disabled>
+                    </frontend>
+                </routers>
+                <default>
+                    <no_route>admin/index/noRoute</no_route>
+                </default>
+            </web>
+        </admin>
+    </websites>
+</config>

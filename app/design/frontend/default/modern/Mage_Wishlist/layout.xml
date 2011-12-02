@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_modern
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+-->
+<layout version="0.1.0">
+
+<!--
+Default layout, loads most of the pages
+-->
+
+    <default>
+
+        <reference name="top.links">
+            <block type="Mage_Wishlist_Block_Links" name="wishlist_link"/>
+            <action method="addLinkBlock"><blockName>wishlist_link</blockName></action>
+        </reference>
+
+        <!-- Mage_Wishlist -->
+        <reference name="left">
+            <block type="Mage_Wishlist_Block_Customer_Sidebar" name="wishlist_sidebar" as="wishlist" after="cart_sidebar" template="sidebar.phtml"/>
+        </reference>
+
+    </default>
+
+<!--
+Customer account pages, rendered for all tabs in dashboard
+-->
+
+    <customer_account>
+        <!-- Mage_Wishlist -->
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="Mage_Wishlist" ifconfig="wishlist/general/active"><name>wishlist</name><path>wishlist/</path><label>My Wishlist</label></action>
+        </reference>
+    </customer_account>
+
+<!--
+Customer account home dashboard layout
+-->
+
+    <customer_account_index>
+
+        <reference name="right">
+            <action method="unsetChild"><name>wishlist</name></action>
+        </reference>
+    </customer_account_index>
+
+<!--
+Wishlist pages
+-->
+
+    <wishlist_index_index translate="label">
+        <label>Customer My Account My Wishlist</label>
+        <!-- Mage_Wishlist -->
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="Mage_Wishlist_Block_Customer_Wishlist" name="customer.wishlist" template="view.phtml"/>
+        </reference>
+        <reference name="right">
+            <action method="unsetChild"><name>wishlist_customer_sidebar</name></action>
+        </reference>
+    </wishlist_index_index>
+
+    <wishlist_index_share translate="label">
+        <label>Customer My Account Wishlist Sharing Form</label>
+        <!-- Mage_Wishlist -->
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="Mage_Wishlist_Block_Customer_Sharing" name="wishlist.sharing" template="sharing.phtml"/>
+        </reference>
+        <reference name="right">
+            <action method="unsetChild"><name>wishlist_customer_sidebar</name></action>
+        </reference>
+    </wishlist_index_share>
+
+    <wishlist_index_configure translate="label">
+        <label>Configure Wishlist Item</label>
+        <update handle="catalog_product_view"/>
+        <reference name="product.info">
+            <block type="Mage_Wishlist_Block_Item_Configure" name="product.info.addto" as="addto" template="item/configure/addto.phtml"/>
+        </reference>
+        <reference name="product.info.options.wrapper.bottom">
+            <action method="unsetChild"><name>product.info.addto</name></action>
+            <action method="append"><block>product.info.addto</block></action>
+        </reference>
+    </wishlist_index_configure>
+
+    <wishlist_shared_index translate="label">
+        <label>Customer Shared Wishlist View</label>
+        <!-- Mage_Wishlist -->
+        <reference name="content">
+            <block type="Mage_Wishlist_Block_Share_Wishlist" name="customer.wishlist" template="shared.phtml"/>
+        </reference>
+    </wishlist_shared_index>
+</layout>

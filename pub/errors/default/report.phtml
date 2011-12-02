@@ -1,0 +1,111 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Errors
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="col-main">
+    <div class="page-title">
+        <h1>There has been an error processing your request</h1>
+    </div>
+    <?php if ($this->showSentMsg): ?>
+    <ul class="messages">
+        <li class="success-msg">
+            <ul>
+                <li>Your message was submitted and will be responded as soon as possible. Thank you for reporting.</li>
+            </ul>
+        </li>
+    </ul>
+    <?php endif; ?>
+    <?php if ($this->showSendForm): ?>
+    <ul class="messages">
+        <li class="note-msg">
+            <ul>
+                <li>We are currently experiencing some technical issues. We apologize for the inconvenience and will contact you shortly to resolve the issue. To help us serve you please fill in the form below.</li>
+            </ul>
+        </li>
+    </ul>
+        <?php if ($this->showErrorMsg): ?>
+    <ul class="messages">
+        <li class="error-msg">
+            <ul>
+                <li>Please fill all required fields with valid information</li>
+            </ul>
+        </li>
+    </ul>
+        <?php endif; ?>
+    <form action="<?php echo "{$this->getBaseUrl(true)}errors/report.php?id={$this->reportId}" ?>" method="post" id="form-validate">
+        <fieldset class="fieldset">
+            <h2>Personal Information</h2>
+            <ul class="form-list group-select">
+                <li class="fields">
+                    <div class="field">
+                        <label for="firstname" class="required"><em>*</em>First Name</label>
+                        <span class="input-box"><input type="text" name="firstname" id="firstname" value="<?php echo $this->postData['firstName'] ?>" title="First Name" class="required-entry input-text" /></span>
+                    </div>
+                    <div class="field">
+                        <label for="lastname" class="required"><em>*</em>Last Name </label>
+                        <span class="input-box"><input type="text" name="lastname" id="lastname" value="<?php echo $this->postData['lastName'] ?>" title="Last Name" class="required-entry input-text" /></span>
+                    </div>
+                </li>
+                <li class="fields">
+                    <div class="field">
+                        <label for="firstname" class="required"><em>*</em>Email Address</label>
+                        <span class="input-box"><input type="text" name="email" id="email_address" value="<?php echo $this->postData['email'] ?>" title="Email Address" class="validate-email required-entry input-text" /></span>
+                    </div>
+                    <div class="field">
+                        <label for="firstname">Telephone</label>
+                        <span class="input-box"><input type="text" name="telephone" id="telephone" value="<?php echo $this->postData['telephone'] ?>" title="Telephone" class="input-text" /></span>
+                    </div>
+                </li>
+                <li>
+                    <div class="input-box">
+                        <label for="firstname">Comment</label>
+                        <span class="input-box"><textarea name="comment" cols="5" rows="3"><?php echo $this->postData['comment'] ?></textarea></span>
+                    </div>
+                </li>
+            </ul>
+        </fieldset>
+        <div class="buttons-set form-buttons btn-only">
+            <button name="submit" class="button" type="submit"><span><span>Submit</span></span></button>
+        </div>
+        <p class="required">* Required Fields</p>
+    </form>
+    <?php elseif ('' == $this->reportAction): ?>
+        <p><em>Exception printing is disabled by default for security reasons.</em></p>
+    <?php endif; ?>
+
+    <?php if ($this->reportAction == 'print'): ?>
+    <div class="trace-container">
+        <div class="trace">
+            <pre><?php echo $this->reportData[0] ?><br />
+<strong>Trace:</strong>
+<?php echo htmlspecialchars($this->reportData[1]) ?><br />
+</pre>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php if ($this->reportId && $this->reportUrl): ?>
+        <p>Error log record number: <a href="<?php echo htmlspecialchars($this->reportUrl) ?>"><?php echo $this->reportId ?></a></p>
+    <?php endif; ?>
+</div>

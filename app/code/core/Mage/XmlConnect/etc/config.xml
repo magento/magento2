@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_XmlConnect
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_XmlConnect>
+            <version>1.6.0.0</version>
+            <innerVersion>22.0</innerVersion>
+        </Mage_XmlConnect>
+    </modules>
+    <global>
+        <resources>
+            <xmlconnect_setup>
+                <setup>
+                    <module>Mage_XmlConnect</module>
+                    <class>Mage_XmlConnect_Model_Resource_Setup</class>
+                </setup>
+            </xmlconnect_setup>
+        </resources>
+        <request>
+            <direct_front_name>
+                <xmlconnect/>
+            </direct_front_name>
+        </request>
+        <events>
+            <websiterestriction_frontend>
+                <observers>
+                    <xmlconnect>
+                        <class>Mage_XmlConnect_Model_Observer</class>
+                        <method>restrictWebsite</method>
+                    </xmlconnect>
+                </observers>
+            </websiterestriction_frontend>
+        </events>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <xmlconnect before="Mage_Adminhtml">Mage_XmlConnect_Adminhtml</xmlconnect>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <mage_xmlconnect module="Mage_XmlConnect">
+                    <file>layout.xml</file>
+                </mage_xmlconnect>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Mage_XmlConnect>
+                    <files>
+                        <default>Mage_XmlConnect.csv</default>
+                    </files>
+                </Mage_XmlConnect>
+            </modules>
+        </translate>
+        <events>
+            <core_config_data_save_after>
+                <observers>
+                    <xmlconnect>
+                        <class>Mage_XmlConnect_Model_Observer</class>
+                        <method>changeUpdatedAtParamOnConfigSave</method>
+                    </xmlconnect>
+                </observers>
+            </core_config_data_save_after>
+            <before_save_message_queue>
+                <observers>
+                    <xmlconnect>
+                        <class>Mage_XmlConnect_Model_Observer</class>
+                        <method>sendMessageImmediately</method>
+                    </xmlconnect>
+                </observers>
+            </before_save_message_queue>
+        </events>
+    </adminhtml>
+    <frontend>
+        <routers>
+            <xmlconnect>
+                <use>standard</use>
+                <args>
+                    <module>Mage_XmlConnect</module>
+                    <frontName>xmlconnect</frontName>
+                </args>
+            </xmlconnect>
+        </routers>
+        <layout>
+            <updates>
+                <xmlconnect module="Mage_XmlConnect">
+                    <file>layout.xml</file>
+                </xmlconnect>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Mage_XmlConnect>
+                    <files>
+                        <default>Mage_XmlConnect.csv</default>
+                    </files>
+                </Mage_XmlConnect>
+            </modules>
+        </translate>
+    </frontend>
+    <default>
+        <payment>
+            <paypal_mep>
+                <active>1</active>
+                <model>Mage_XmlConnect_Model_Payment_Method_Paypal_Mep</model>
+                <title>PayPal Mobile Payments Library</title>
+                <allowspecific>0</allowspecific>
+                <group>paypal</group>
+            </paypal_mep>
+            <paypal_mecl>
+                <active>1</active>
+                <model>Mage_XmlConnect_Model_Payment_Method_Paypal_Mecl</model>
+                <title>PayPal Mobile Express Checkout Library</title>
+                <allowspecific>0</allowspecific>
+                <group>paypal</group>
+            </paypal_mecl>
+        </payment>
+        <screen_size>
+            <!-- WARNING !!!!!  ALL IMAGE NODES MUST END ON "icon"|"Icon"|"Image"  !!!!!  -->
+            <default>
+                <content>
+                        <product_small>70</product_small>
+                        <product_big>130</product_big>
+                        <category>80</category>
+                        <product_gallery_big>280</product_gallery_big>
+                        <product_gallery_small>40</product_gallery_small>
+                </content>
+                <interface>
+                    <native>
+                        <navigationBar>
+                            <icon> <widthMax>35</widthMax> <heightMax>35</heightMax> </icon>
+                        </navigationBar>
+                        <sortingBar>
+                            <backgroundImage> <width>320</width> <height>40</height> </backgroundImage>
+                        </sortingBar>
+                        <tabBar>
+                            <home> <icon> <heightMax>35</heightMax> </icon> </home>
+                            <shop> <icon> <heightMax>35</heightMax> </icon> </shop>
+                            <search> <icon> <heightMax>35</heightMax> </icon> </search>
+                            <cart> <icon> <heightMax>35</heightMax> </icon> </cart>
+                            <more> <icon> <heightMax>35</heightMax> </icon> </more>
+                        </tabBar>
+                        <body>
+                            <!-- iphone images -->
+                            <bannerImage> <width>320</width> <height>230</height> </bannerImage>
+                            <backgroundImage> <width>320</width> <height>367</height> </backgroundImage>
+
+                            <!-- ipad images -->
+                            <bannerIpadLandscapeImage> <width>1024</width> <height>344</height> </bannerIpadLandscapeImage>
+                            <bannerIpadImage> <width>768</width> <height>294</height> </bannerIpadImage>
+                            <backgroundIpadLandscapeImage> <width>1024</width> <height>704</height> </backgroundIpadLandscapeImage>
+                            <backgroundIpadPortraitImage> <width>768</width> <height>960</height> </backgroundIpadPortraitImage>
+
+                            <!-- andriod images -->
+                            <bannerAndroidImage> <width>320</width> <height>258</height> </bannerAndroidImage>
+
+                            <!-- images that are the same for all type of devices -->
+                            <itemBackgroundIcon> <width>90</width> <height>120</height> </itemBackgroundIcon>
+                            <rowBackgroundIcon> <width>320</width> <height>90</height> </rowBackgroundIcon>
+                            <rowAttributeIcon> <widthMax>30</widthMax> <heightMax>90</heightMax> </rowAttributeIcon>
+                            <addToCartBackgroundIcon> <width>136</width> <height>28</height> </addToCartBackgroundIcon>
+                            <actionsBackgroundIcon> <width>107</width> <height>37</height> </actionsBackgroundIcon>
+                            <reviewsBackgroundIcon> <width>320</width> <height>37</height> </reviewsBackgroundIcon>
+                        </body>
+                        <appliedFilters>
+                            <backgroundImage> <width>320</width> <height>20</height> </backgroundImage>
+                        </appliedFilters>
+                        <itemActions>
+                            <backgroundImage> <width>320</width> <height>90</height> </backgroundImage>
+                            <viewGalleryIcon> <widthMax>40</widthMax> <heightMax>40</heightMax> </viewGalleryIcon>
+                            <tellAFriendIcon> <widthMax>40</widthMax> <heightMax>40</heightMax> </tellAFriendIcon>
+                            <addToWishlistIcon> <widthMax>40</widthMax> <heightMax>40</heightMax> </addToWishlistIcon>
+                            <addToCartIcon> <widthMax>40</widthMax> <heightMax>40</heightMax> </addToCartIcon>
+                            <viewDetailsIcon> <widthMax>40</widthMax> <heightMax>40</heightMax> </viewDetailsIcon>
+                            <radioEnabledIcon> <widthMax>20</widthMax> <heightMax>20</heightMax> </radioEnabledIcon>
+                            <radioDisabledIcon> <widthMax>20</widthMax> <heightMax>20</heightMax> </radioDisabledIcon>
+                            <checkBoxEnabledIcon> <widthMax>20</widthMax> <heightMax>20</heightMax> </checkBoxEnabledIcon>
+                            <checkBoxDisabledIcon> <widthMax>20</widthMax> <heightMax>20</heightMax> </checkBoxDisabledIcon>
+                        </itemActions>
+                    </native>
+                    <submit>
+                        <!-- images that are the same for all type of devices -->
+                        <icon></icon>
+                        <big_logo></big_logo>
+
+                        <!-- iphone images -->
+                        <loader_image></loader_image>
+                        <loader_image_i4></loader_image_i4>
+                        <logo></logo>
+                        <logo_i4></logo_i4>
+                        <big_logo_i4></big_logo_i4>
+
+                        <!-- ipad images -->
+                        <ipad_loader_portrait_image></ipad_loader_portrait_image>
+                        <ipad_loader_landscape_image></ipad_loader_landscape_image>
+                        <ipad_logo></ipad_logo>
+
+                        <!-- andriod images -->
+                        <android_loader_image></android_loader_image>
+                        <android_logo></android_logo>
+                    </submit>
+                </interface>
+            </default>
+            <_320x480>
+                <default>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>content/product_gallery_big</path>
+                            <function>update</function>
+                            <data>560</data>
+                        </u1>
+                    </updates>
+                </default>
+                <a>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>interface/native/tabBar</path>
+                            <function>zoom</function>
+                            <data>1.02857</data>
+                        </u1>
+                    </updates>
+                </a>
+                <b>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>interface/native/tabBar</path>
+                            <!-- 48px -->
+                            <function>zoom</function>
+                            <data>1.31428</data>
+                        </u1>
+                    </updates>
+                </b>
+                <c>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>interface/native/tabBar</path>
+                            <!-- 72px -->
+                            <function>zoom</function>
+                            <data>2.05714</data>
+                        </u1>
+                    </updates>
+                </c>
+            </_320x480>
+            <_480x800>
+                <default>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>/</path>
+                            <function>zoom</function>
+                            <data>1.5</data>
+                        </u1>
+                        <u2>
+                            <path>content/product_gallery_big</path>
+                            <function>update</function>
+                            <data>840</data>
+                        </u2>
+                    </updates>
+                </default>
+            </_480x800>
+            <_480x854>
+                <default>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>/</path>
+                            <function>zoom</function>
+                            <data>1.5</data>
+                        </u1>
+                         <u2>
+                            <path>content/product_gallery_big</path>
+                            <function>update</function>
+                            <data>840</data>
+                        </u2>
+                    </updates>
+                </default>
+            </_480x854>
+            <_640x960>
+                <default>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>/</path>
+                            <function>zoom</function>
+                            <data>2.0</data>
+                        </u1>
+                        <u2>
+                            <path>content/product_gallery_big</path>
+                            <function>update</function>
+                            <data>1120</data>
+                        </u2>
+                    </updates>
+                </default>
+            </_640x960>
+            <_768x1024>
+                <default>
+                    <source>default</source>
+                    <updates>
+                        <u1>
+                            <path>content/product_small</path>
+                            <function>update</function>
+                            <data>210</data>
+                        </u1>
+                        <u2>
+                            <path>content/product_big</path>
+                            <function>update</function>
+                            <data>400</data>
+                        </u2>
+                        <u3>
+                            <path>content/category</path>
+                            <function>update</function>
+                            <data>243</data>
+                        </u3>
+                        <u4>
+                            <path>content/product_gallery_big</path>
+                            <function>update</function>
+                            <data>1288</data>
+                        </u4>
+                    </updates>
+                </default>
+            </_768x1024>
+        </screen_size>
+        <xmlconnect>
+            <mobile_application>
+                <magentocommerce_url>www.magentocommerce.com/products/index.php/mobile/activate/index/key/</magentocommerce_url>
+                <activation_key_url>http://www.magentocommerce.com/product/mobile</activation_key_url>
+                <resubmission_key_url>http://www.magentocommerce.com/product/mobile#resubmission</resubmission_key_url>
+                <urbanairship_push_url>http://urbanairship.com/products/push-notifications/</urbanairship_push_url>
+                <urbanairship_rich_push_url>http://urbanairship.com/products/rich-push/</urbanairship_rich_push_url>
+                <urbanairship_terms_of_service_url>http://urbanairship.com/terms-of-service/</urbanairship_terms_of_service_url>
+                <urbanairship_login_url>https://go.urbanairship.com/partners/magento/</urbanairship_login_url>
+                <urbanairship_credentials_email>magentomobile@magento.com</urbanairship_credentials_email>
+                <cron_send_messages_count>3</cron_send_messages_count>
+                <nodes_excluded_from_config_xml>
+                    <master_secret>notifications/applicationMasterSecret</master_secret>
+                </nodes_excluded_from_config_xml>
+                <cache_lifetime>86400</cache_lifetime>
+            </mobile_application>
+            <devices>
+                <iphone>
+                    <tab_limit>5</tab_limit>
+                    <notification_type>aps</notification_type>
+                </iphone>
+                <ipad>
+                    <tab_limit>10</tab_limit>
+                    <notification_type>aps</notification_type>
+                </ipad>
+                <android>
+                    <tab_limit>10</tab_limit>
+                    <notification_type>android</notification_type>
+                </android>
+            </devices>
+            <flurry_analytics>
+                <statistics_url>http://www.flurry.com/product/analytics/index.html</statistics_url>
+            </flurry_analytics>
+            <social_networking>
+                <howto_twitter_url>http://www.magentocommerce.com/product/mobile-social-networking-setup#twitter</howto_twitter_url>
+                <howto_facebook_url>http://www.magentocommerce.com/product/mobile-social-networking-setup#facebook</howto_facebook_url>
+                <howto_linkedin_url>http://www.magentocommerce.com/product/mobile-social-networking-setup#linkedin</howto_linkedin_url>
+            </social_networking>
+            <push>
+                <broadcast_url>https://go.urbanairship.com/api/push/broadcast/</broadcast_url>
+            </push>
+            <airmail>
+                <broadcast_url>https://go.urbanairship.com/api/airmail/send/broadcast/</broadcast_url>
+            </airmail>
+        </xmlconnect>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <xmlconnect_images_folder>xmlconnect</xmlconnect_images_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+    </default>
+    <crontab>
+        <jobs>
+            <xmlconnect_notification_send_all>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run><model>Mage_XmlConnect_Model_Observer::scheduledSend</model></run>
+            </xmlconnect_notification_send_all>
+        </jobs>
+    </crontab>
+</config>

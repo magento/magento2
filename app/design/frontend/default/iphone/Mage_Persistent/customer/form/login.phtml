@@ -1,0 +1,81 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_iphone
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Customer login form template
+ *
+ * @see app/design/frontend/default/iphone/template/customer/form/login.phtml
+ */
+/** @var $this Mage_Customer_Block_Form_Login */
+?>
+<div class="breadcrumbs">
+    <ul>
+        <li class="home">
+            <a href="#" onclick="javascript:history.back(1); return false;" title="Continue Shopping">Back</a>
+        </li>
+        <li><strong>Log In</strong></li>
+    </ul>
+</div>
+<div class="login-box">
+    <div class="registered-users">
+        <h1><?php echo $this->__('Log In') ?></h1>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+            <h2><?php echo $this->__('Registered Users') ?></h2>
+            <ul class="form-list">
+                <li>
+                    <label for="email" class="required"><?php echo $this->__('Email Address') ?></label>
+                    <input type="email" name="login[username]" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+                </li>
+                <li>
+                    <label for="pass" class="required"><?php echo $this->__('Password') ?></label>
+                    <input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+                </li>
+                <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+            </ul>
+            <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?><a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot your password?') ?></a>
+            <div class="login-button">
+                <input type="submit" value="<?php echo $this->__('Log In') ?>" />
+            </div>
+            <?php if (Mage::helper('Mage_Checkout_Helper_Data')->isContextCheckout()): ?>
+                <input name="context" type="hidden" value="checkout" />
+            <?php endif; ?>
+        </form>
+    </div>
+    <div class="new-users">
+        <div class="new-users-box">
+            <h2><?php echo $this->__('New Customers') ?></h2>
+            <a href="<?php echo Mage::helper('Mage_Persistent_Helper_Data')->getCreateAccountUrl($this->getCreateAccountUrl()) ?>"><input type="submit" value="<?php echo $this->__('Create an Account') ?>" /></a>
+            <p><?php echo $this->__('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
+        </div>
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
+</div>

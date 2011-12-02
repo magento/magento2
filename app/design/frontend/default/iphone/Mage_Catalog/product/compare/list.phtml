@@ -1,0 +1,186 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Mage_Catalog_Block_Product_Compare_List */
+?>
+<?php
+$_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
+?>
+<?php $_total=$this->getItems()->getSize() ?>
+<?php if($_total): ?>
+    <div class="compare-back-link">
+        <a href="javascript:history.back(1);">Back</a>
+    </div>
+    <table class="data-table compare-table" id="product_comparison">
+    <?php $_i=0 ?>
+    <?php foreach($this->getItems() as $_item): ?>
+        <?php if($_i++%10==0): ?>
+            <col width="1" />
+        <?php endif; ?>
+            <col width="<?php echo floor(100/$_total); ?>%" />
+    <?php endforeach; ?>
+        <tbody>
+            <tr class="product-shop-row">
+            <?php $_i=0 ?>
+            <?php foreach($this->getItems() as $_item): ?>
+                <?php if($_i++%10==0): ?>
+                    <th>&nbsp;</th>
+                <?php endif; ?>
+                <td>
+                    <a class="product-image" href="#" onclick="setLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>">
+                        <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_item, 'small_image')->resize($_imageSize); ?>" width="<?php echo $_imageSize ?>" height="<?php echo $_imageSize ?>" alt="<?php echo $this->stripTags($_item->getName(), null, true) ?>" />
+                    </a>
+                    <span class="loader" style="display:none;"></span>
+                    <a href="#" class="btn-remove" onclick="removeItem('<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getRemoveUrl($_item) ?>', this);"><img src="<?php echo $this->getSkinUrl('images/btn_trash.png') ?>" height="10" width="10" /></a>
+                    <h2 class="product-name"><a href="#" onclick="setLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $_item->getName(), 'name') ?></a></h2>
+                    <?php echo $this->getReviewsSummaryHtml($_item, 'short') ?>
+                    <?php echo $this->getPriceHtml($_item, true, '-compare-list-top') ?>
+                    <?php if($_item->isSaleable()): ?>
+                        <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getAddToCartUrl($_item) ?>', true)"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
+                        <ul class="add-to-links">
+                            <li><a href="#" class="link-wishlist" onclick="setLocation('<?php echo $this->getAddToWishlistUrl($_item) ?>', true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                        </ul>
+                    <?php endif; ?>
+                </td>
+            <?php endforeach; ?>
+            </tr>
+        </tbody>
+        <tbody>
+        <?php foreach ($this->getAttributes() as $_attribute): ?>
+            <tr>
+                <?php $_i=0 ?>
+                <?php foreach($this->getItems() as $_item): ?>
+                <?php if($_i++%10==0): ?>
+                <th><span class="nobr"><?php echo $_attribute->getStoreLabel() ?></span></th>
+                <?php endif; ?>
+                <td>
+                    <div class="content">
+                        <?php switch ($_attribute->getAttributeCode()) {
+                            case "price": ?>
+                                <?php echo $this->getPriceHtml($_item, true, '-compare-list-' . $_attribute->getCode()) ?>
+                                <?php break;
+                            case "small_image": ?>
+                                <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_item, 'small_image')->resize($_imageSize); ?>" width="<?php echo $_imageSize ?>" height="<?php echo $_imageSize ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" />
+                                <?php break;
+                            case "date":
+                                  echo substr($this->getProductAttributeValue($_item, $_attribute),0,10);
+                                  break;
+                            default: ?>
+                                <?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $this->getProductAttributeValue($_item, $_attribute), $_attribute->getAttributeCode()) ?>
+                                <?php break;
+                        } ?>
+                    </div>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+        <tbody>
+                <tr class="add-to-row">
+                <?php $_i=0 ?>
+                <?php foreach($this->getItems() as $_item): ?>
+                <?php if($_i++%10==0): ?>
+                <th>&nbsp;</th>
+                <?php endif; ?>
+                <td>
+                    <?php echo $this->getPriceHtml($_item, true, '-compare-list-bottom') ?>
+                    <?php if($_item->isSaleable()): ?>
+                        <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getAddToCartUrl($_item) ?>', true)"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
+                        <ul class="add-to-links">
+                            <li><a href="#" class="link-wishlist" onclick="setLocation('<?php echo $this->getAddToWishlistUrl($_item) ?>', true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                        </ul>
+                    <?php endif; ?>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+        </tbody>
+    </table>
+    <div class="buttons-set">
+        <span class="please-wait" id="compare-list-please-wait" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Please wait...') ?>" title="<?php echo $this->__('Please wait...') ?>" class="v-middle" /> <?php echo $this->__('Please wait...') ?>
+        </span>
+    </div>
+    <script type="text/javascript">
+        document.observe("dom:loaded", function() {
+            $('product_comparison').on('click', 'th', function (e, elem) {
+                if ( elem.hasClassName('collapsible') ) {
+                    elem.toggleClassName('collapsed');
+                }
+                elem.nextSiblings().each(function (td) {
+                    td.toggleClassName('collapsed');
+                });
+            });
+            $('product_comparison').select('th').each(function(th) {
+                if ( th.getDimensions().height > 30 && th.down('span') ) {
+                    th.addClassName('collapsible');
+                }
+            });
+        });
+
+
+        function _removeColumn (item) {
+            var tdIndex = item.up('td').cellIndex - 1,
+                tbl = $('product_comparison');
+
+            if ( tbl.rows[0].cells.length - 1 > 1 ) {
+                tbl.select('tr').each(function (tr) {
+                    tr.select('td')[tdIndex].remove();
+                });
+            } else {
+                window.location.href = document.referrer;
+            }
+        }
+
+        /**
+         * Send remove item request, after that reload windows
+         */
+        function removeItem (url, item)
+        {
+            new Ajax.Request(url, {
+                parameters: {isAjax: 1, method: 'POST'},
+                onLoading: function() {
+                    item.hide().up('td').select('.loader')[0].show();
+                },
+                onSuccess: function() {
+                    _removeColumn(item)
+                },
+                onFailure: item.show()
+            });
+
+        }
+    </script>
+<?php else: ?>
+    <script type="text/javascript">
+        window.location.href = document.referrer;
+    </script>
+<?php endif; ?>

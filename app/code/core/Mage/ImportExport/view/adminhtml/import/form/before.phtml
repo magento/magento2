@@ -1,0 +1,137 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+//<![CDATA[
+    /**
+     * Name and ID for iframe for data POST-ing.
+     *
+     * @var string
+     */
+    varienForm.prototype.ifrElemName = 'import_post_target_frame';
+
+    /**
+     * Post form data to dynamic iframe.
+     *
+     * @param string newActionUrl OPTIONAL Change form action to this if specified
+     * @return void
+     */
+    varienForm.prototype.postToFrame = function(newActionUrl)
+    {
+        if(this.validate()){
+            // create dynamic frame
+            if (!$(this.ifrElemName)) {
+                $('html-body').insert({
+                    bottom:'<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName + '" style="display:none;"/>'
+                });
+            }
+
+            // show mask, temporary set new target and submit form
+            var loadingMask = $('loading-mask');
+            var formElem    = $(this.formId);
+            var oldTarget   = formElem.target;
+            var oldAction   = formElem.action;
+
+            Element.clonePosition(loadingMask, $$('#html-body .wrapper')[0], {offsetLeft:-2})
+            toggleSelectsUnderBlock(loadingMask, false);
+            loadingMask.show();
+            setLoaderPosition();
+            formElem.target = this.ifrElemName;
+
+            if (newActionUrl) {
+                formElem.action = newActionUrl;
+            }
+            formElem.action += (formElem.action.lastIndexOf('?') != -1 ? '&' : '?')
+                + 'form_key=' + encodeURIComponent(formElem.form_key.value);
+            this._submit();
+            formElem.target = oldTarget;
+            formElem.action = oldAction;
+        }
+    };
+
+    /**
+     * Actions after data post complete. Hide load mask, remove iframe, run response processing method.
+     *
+     * @param object response
+     * @return void
+     */
+    varienForm.prototype.postToFrameComplete = function(response)
+    {
+        var loadingMask = $('loading-mask');
+        $(this.ifrElemName).remove();
+        toggleSelectsUnderBlock(loadingMask, true);
+        loadingMask.hide();
+        this.postToFrameProcessResponse(response);
+    };
+
+    /**
+     * Process response JSON.
+     *
+     * @param object response
+     * @return void
+     */
+    varienForm.prototype.postToFrameProcessResponse = function(response)
+    {
+        if ('object' != typeof(response)) {
+            return alert('Invalid response');
+        }
+        $H(response).each(function(pair) {
+            switch (pair.key) {
+                case 'show':
+                case 'clear':
+                case 'hide':
+                    $H(pair.value).each(function(val) {if ($(val.value)) $(val.value)[pair.key]();});
+                    break;
+                case 'innerHTML':
+                case 'value':
+                    $H(pair.value).each(function(val) {if ($(val.key)) $(val.key)[pair.key] = val.value;});
+                    break;
+                case 'removeClassName':
+                case 'addClassName':
+                    $H(pair.value).each(function(val) {if ($(val.key)) $(val.key)[pair.key](val.value);});
+                    break;
+                default:
+                    alert(pair.key + ': ' + pair.value);
+                    break;
+            }
+        });
+    };
+
+    /**
+     * Send form data to Start action when file is validated.
+     *
+     * @param string newActionUrl
+     * @param string sourceFileField
+     * @return void
+     */
+    varienForm.prototype.startImport = function(newActionUrl, sourceFileField)
+    {
+        $(sourceFileField).removeClassName('required-entry');
+        this.postToFrame(newActionUrl);
+        $(sourceFileField).addClassName('required-entry');
+    };
+//]]>
+</script>

@@ -1,0 +1,221 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->template('header.phtml') ?>
+<?php if ($this->get('writable_warning')) echo $this->template('writable.phtml');?>
+<div class="bar-head">
+    <h4>Settings</h4>
+</div>
+<ul class="bare-list">
+<li><input type="checkbox" id="maintenance" value="1" checked="checked" /> &nbsp;
+<label for="maintenance">Put store on the maintenance mode while installing/upgrading</label>
+</li>
+</ul>
+
+<div class="bar-head">
+    <h4>Install New Extensions</h4>
+</div>
+<script type="text/javascript">
+<!--
+ function connectPrepare(form) {
+    new Ajax.Request(form.action, {
+      method:'post',
+      parameters: {install_package_id: form.install_package_id.value},
+      onCreate: function() {
+          $('prepare_package_result').update(
+                '<div class="loading-mask" id="loading_mask_loader">'+
+                ' <p class="loader">'+
+                ' <img src="<?php echo $this->baseUrl()?>/skin/images/ajax-loader-tr.gif" alt="Loading..."/><br/>Please wait...'+
+                ' </p>'+
+                '</div>'
+          );
+          $('loading_mask_loader').style.position = 'relative';
+          $('loading_mask_loader').top = 0;
+          $('prepare_package_result').show();
+      },
+      onSuccess: function(transport) {
+          // @TODO: check transport.status to show errors
+          $('prepare_package_result').update(transport.responseText);
+          $('prepare_package_result').show();
+      },
+      onFailure: function() {
+          $('prepare_package_result').update(
+              '<div id="packages_failure">' +
+              ' <ul class="msgs"> ' +
+              '  <li>' +
+              '   <ul class="error-msg">' +
+              '     <li>Connection Error try again later.</li>' +
+              '   </ul>' +
+              '  </li>' +
+              ' </ul>' +
+              '</div> '
+          );
+      }
+    });
+    return(false);
+ }
+//-->
+</script>
+<form action="<?php echo $this->url('connectPreparePackagePost')?>" method="post" onsubmit="return connectPrepare(this)">
+    <ul class="bare-list">
+        <li>
+            <span class="step-count">1</span> &nbsp; Search for modules via <a href="http://connect.magentocommerce.com/" target="Magento_Connect">Magento Connect</a>.
+        </li>
+        <li>
+            <span class="step-count">2</span> &nbsp;
+            <label for="install_package_id">Paste extension key to install:</label> <input type="text" id="install_package_id" name="install_package_id" style="width:300px"/>
+            <button type="submit">Install</button>
+        </li>
+    </ul>
+</form>
+
+<br/>
+
+<div class="connect-packages" id="prepare_package_result" style="display:none;"></div>
+<br/>
+
+<div class="bar-head">
+    <h4>Direct package file upload</h4>
+</div>
+<form action="<?php echo $this->url('connectInstallPackageUpload')?>" method="post" target="connect_iframe" onsubmit="onSubmit(this)" enctype="multipart/form-data">
+    <ul class="bare-list">
+        <li><span class="step-count">1</span> &nbsp; Download or build package file.</li>
+        <li>
+            <span class="step-count">2</span> &nbsp; Upload package file:
+            <label for="file"></label>
+            <input type="file" id="file" name="file"/>
+            <button type="submit">Upload</button>
+        </li>
+    </ul>
+</form>
+
+<br/><br/>
+<div class="bar-head">
+    <h4>Manage Existing Extensions</h4>
+    <?php if (empty($_GET['updates'])): ?>
+        <span class="bar-head-btn f-right"><button type="button" class="f-right" onclick="checkForUpdateClick()">Check for Upgrades</button></span>
+    <?php endif; ?>
+</div>
+<?php $packages = $this->get('connect')->getAllInstalledPackages(); $i = 0; $cnt = count($packages); ?>
+<?php $channelConfig=$this->get('channel_config');?>
+<script type="text/javascript">
+    function formSubmit(id)
+    {
+        var formObj = $(id);
+        if (onSubmit(formObj)) {
+            formObj.submit();
+        }
+    }
+</script>
+<?php foreach ($packages as $channel=>$pkgs): ?>
+
+<form id="connect_packages_<?php echo $i ?>" class="connect-packages" action="<?php echo $this->url('connectPackagesPost')?>" method="post" target="connect_iframe">
+    <div class="no-display">
+        <input type="hidden" id="ignore_local_modification" name="ignore_local_modification" value=""/>
+        <input type="hidden" name="form_id" value="connect_packages_<?php echo $i ?>"/>
+    </div>
+    <p class="nm"><button type="button" onclick="formSubmit('connect_packages_<?php echo $i ?>')" class="f-right">Commit Changes</button></p>
+    <h2 class="page-head">Channel: <?php echo $channelConfig->getChannelLabel($channel); ?></h2>
+    <p class="f-right"><label for="clean_sessions">Clear all sessions after successfull install or upgrade: <input type="checkbox" id="clean_sessions"/></label></p>
+    <div class="clear"></div>
+
+    <table cellspacing="0" cellpadding="0" width="100%">
+        <?php if (!empty($_GET['updates'])): ?>
+            <col width="190" />
+            <col width="60" />
+            <col width="60" />
+            <col width="160"  />
+            <col width="170" />
+        <?php else: ?>
+            <col width="200" />
+            <col width="100" />
+            <col width="70"  />
+            <col width="180" />
+        <?php endif; ?>
+        <thead>
+            <tr>
+                <th class="first">Package Name</th>
+                <th class="a-center">Installed</th>
+                <?php if (!empty($_GET['updates'])): ?><th class="a-center">Available</th><?php endif; ?>
+                <th>Actions</th>
+                <th class="last">Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($pkgs as $pkgName=>$pkg): ?>
+            <tr class="<?php echo $pkg['status']?>">
+                <td class="first"><?php echo $pkgName?></td>
+                <td class="a-center"><?php echo $pkg['version'].' ('.$pkg['stability'].')'?>&nbsp;</td>
+                <?php if (!empty($_GET['updates'])): ?><td class="a-center"><?php echo $pkg['upgrade_latest']?>&nbsp;</td><?php endif; ?>
+                <td><select class="select" name="actions[<?php echo $channel.'|'.$pkgName ?>]">
+                    <option selected="selected"></option>
+                    <?php if(isset($pkg['actions']) && is_array($pkg['actions'])): ?>
+                        <?php foreach ($pkg['actions'] as $k=>$v): ?>
+                        <option value="<?php echo $k ?>"><?php echo $v ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+                </td>
+                <td class="last"><?php echo $pkg['summary']?></td>
+            </tr>
+        <?php endforeach; /*channel*/ ?>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+
+    <div class="form-btn-set">
+        <button type="button" onclick="formSubmit('connect_packages_<?php echo $i ?>')" class="f-right">Commit Changes</button>
+        <?php if (!empty($_GET['updates'])): ?>
+        <p class="f-left a-left">
+            <span style="background:#f6f6f6;padding:0 5px;">&nbsp;</span> &nbsp;Installed<br/>
+            <span style="background:#fcfbbb;padding:0 5px;">&nbsp;</span> &nbsp;Upgrade Available<br/>
+        </p>
+        <?php endif; ?>
+    </div>
+</form>
+<script type="text/javascript">
+$$('#connect_packages_' + <?php echo $i?> + ' select').each(function(el){el.value=''});
+</script>
+<?php if (++$i != $cnt): ?><div class="divider"></div><?php endif ?>
+<br/>
+<?php endforeach; /*all packages*/ ?>
+
+
+<?php echo $this->template('connect/iframe.phtml') ?>
+
+<a name="connect_iframe_result"></a>
+<div id="connect_iframe_success" style="display:none">
+    <?php $this->set('messages', array('success'=>array('Procedure completed. Please check the output frame for useful information and refresh the page to see changes.'))) ?>
+    <?php echo $this->template('messages.phtml') ?>
+    <button onclick="location.href='<?php echo $this->baseUrl() ?>'">Refresh</button>
+</div>
+<div id="connect_iframe_failure" style="display:none">
+    <?php $this->set('messages', array('error'=>array('Please check the output frame for errors and refresh the page to retry changes.'))) ?>
+    <?php echo $this->template('messages.phtml') ?>
+    <button onclick="location.href='<?php echo $this->baseUrl() ?>'">Refresh</button>
+</div>
+
+<?php echo $this->template('footer.phtml') ?>

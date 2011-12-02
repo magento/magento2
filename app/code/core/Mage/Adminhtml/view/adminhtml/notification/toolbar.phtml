@@ -1,0 +1,91 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var $this Mage_Adminhtml_Block_Notification_Toolbar
+ */
+?>
+<?php if ($this->isShow()): ?>
+<div class="notification-global">
+    <?php
+        $sParts = array();
+
+        if ($this->getCriticalCount()):
+            $sParts[] = '<span class="critical"><strong>'.$this->getCriticalCount().'</strong> '.$this->__('critical').'</span>';
+        endif;
+
+        if ($this->getMajorCount()):
+            $sParts[] = '<strong>'.$this->getMajorCount().'</strong> '.$this->__('major');
+        endif;
+
+        if ($this->getMinorCount()):
+            $sParts[] = '<strong>'.$this->getMinorCount().'</strong> '.$this->__('minor');
+        endif;
+
+        if ($this->getNoticeCount()):
+            $sParts[] = '<strong>'.$this->getNoticeCount().'</strong> '.$this->__('notice');
+        endif;
+
+        $msgStats = '';
+        $c = count($sParts);
+        for ($i = 0; $i < $c; $i++) {
+            $msgStats .= $sParts[$i] . ($i == $c-1 ? '' : ($i == $c-2 ? $this->__(' and ') : ', '));
+        }
+
+        $latestNoticeUrl = $this->getLatestNoticeUrl();
+    ?>
+    <?php /*
+    <span class="f-right"><?php echo $this->__('You have %s unread message(s). <a href="%s">Go to messages inbox</a>.',
+        $msgStats,
+        $this->getNoticesInboxUrl()
+    );?></span>
+    */?>
+
+    <span class="f-right">
+        <?php $goToBoxMessage = (!empty($latestNoticeUrl)) ? $this->__('Go to messages inbox') : $this->__('Go to notifications') ?>
+        <?php echo $this->__('You have %s unread message(s).', $msgStats) ?> <a href="<?php echo $this->getNoticesInboxUrl() ?>"><?php echo $goToBoxMessage ?></a>
+    </span>
+<?php /* ********** temporary commented
+    <span class="f-right"><?php echo $this->__('You have %s, %s and %s unread messages. <a href="%s">Go to messages inbox</a>.',
+        '<span class="critical"><strong>'.$this->getCriticalCount().'</strong> '.$this->__('critical').'</span>',
+        '<strong>'.$this->getMajorCount().'</strong> '.$this->__('major'),
+        '<strong>'.$this->getMinorCount().'</strong> '.$this->__('minor'),
+        $this->getNoticesInboxUrl()
+    );?></span>
+******** */?>
+    <?php if ($this->isMessageWindowAvailable()): ?>
+        <strong class="label clickable" onclick="openMessagePopup()">
+    <?php else: ?>
+        <strong class="label">
+    <?php endif; ?>
+
+    <?php echo $this->__('Latest Message:') ?></strong> <?php echo $this->getLatestNotice() ?>
+    <?php if (!empty($latestNoticeUrl)): ?>
+        <a href="<?php echo $latestNoticeUrl ?>" onclick="this.target='_blank';"><?php echo $this->__('Read details') ?></a>
+    <?php endif; ?>
+</div>
+<?php endif; ?>

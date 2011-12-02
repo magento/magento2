@@ -1,0 +1,1328 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <tabs>
+        <general translate="label" module="Mage_Core">
+            <label>General</label>
+            <sort_order>100</sort_order>
+        </general>
+        <service translate="label" module="Mage_Core">
+            <label>Services</label>
+            <sort_order>99999</sort_order>
+        </service>
+        <advanced translate="label" module="Mage_Core">
+            <label>Advanced</label>
+            <sort_order>999999</sort_order>
+        </advanced>
+    </tabs>
+    <sections>
+        <!--<web_track translate="label" module="Mage_Core">
+            <label>Web Tracking</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>180</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+        </web_track>-->
+        <advanced translate="label" module="Mage_Core">
+            <label>Advanced</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>910</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <!--datashare translate="label">
+                    <label>Datasharing</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <default translate="label">
+                            <label>Default</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Datashare</backend_model>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Store</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default>
+                        <default translate="label">
+                            <label>Default</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Datashare</backend_model>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Store</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default>
+                    </fields>
+                </datashare-->
+                <modules_disable_output translate="label">
+                    <label>Disable Modules Output</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput</frontend_model>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </modules_disable_output>
+            </groups>
+        </advanced>
+        <trans_email translate="label" module="Mage_Core">
+            <class>separator-top</class>
+            <label>Store Email Addresses</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>90</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <ident_custom1 translate="label">
+                    <label>Custom Email 1</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>4</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <email translate="label">
+                            <label>Sender Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <name translate="label">
+                            <label>Sender Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Sender</backend_model>
+                            <validate>validate-emailSender</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                    </fields>
+                </ident_custom1>
+                <ident_custom2 translate="label">
+                    <label>Custom Email 2</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <email translate="label">
+                            <label>Sender Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <name translate="label">
+                            <label>Sender Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Sender</backend_model>
+                            <validate>validate-emailSender</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                    </fields>
+                </ident_custom2>
+                <ident_general translate="label">
+                    <label>General Contact</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <email translate="label">
+                            <label>Sender Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <name translate="label">
+                            <label>Sender Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Sender</backend_model>
+                            <validate>validate-emailSender</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                    </fields>
+                </ident_general>
+                <ident_sales translate="label">
+                    <label>Sales Representative</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <email translate="label">
+                            <label>Sender Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <name translate="label">
+                            <label>Sender Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Sender</backend_model>
+                            <validate>validate-emailSender</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                    </fields>
+                </ident_sales>
+                <ident_support translate="label">
+                    <label>Customer Support</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <email translate="label">
+                            <label>Sender Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email>
+                        <name translate="label">
+                            <label>Sender Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Sender</backend_model>
+                            <validate>validate-emailSender</validate>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                    </fields>
+                </ident_support>
+            </groups>
+        </trans_email>
+
+        <design translate="label" module="Mage_Core">
+            <label>Design</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>30</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <theme translate="label">
+                    <label>Design Theme</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <full_name translate="label">
+                            <label>Design Theme</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Core_Model_Design_Source_Design::getOptions</source_model>
+                            <backend_model>Mage_Core_Model_Design_Backend_Theme</backend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </full_name>
+                        <ua_regexp translate="label comment tooltip">
+                            <label>User-Agent Exceptions</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Regexceptions</frontend_model>
+                            <backend_model>Mage_Core_Model_Design_Backend_Exceptions</backend_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]></comment>
+                            <tooltip>Find a string in client user-agent header and switch to specific design theme for that browser.</tooltip>
+                        </ua_regexp>
+                    </fields>
+                </theme>
+                <pagination translate="label">
+                    <label>Pagination</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <pagination_frame translate="label comment">
+                            <label>Pagination Frame</label>
+                            <comment>How many links to display at once.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pagination_frame>
+                        <pagination_frame_skip translate="label comment">
+                            <label>Pagination Frame Skip</label>
+                            <comment>If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pagination_frame_skip>
+                        <anchor_text_for_previous translate="label comment">
+                            <label>Anchor Text for Previous</label>
+                            <comment>Alternative text for previous link in pagination menu. If empty, default arrow image will used.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </anchor_text_for_previous>
+                        <anchor_text_for_next translate="label comment">
+                            <label>Anchor Text for Next</label>
+                            <comment>Alternative text for next link in pagination menu. If empty, default arrow image will used.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </anchor_text_for_next>
+                    </fields>
+                </pagination>
+            </groups>
+        </design>
+        <dev translate="label" module="Mage_Core">
+            <label>Developer</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>920</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <restrict translate="label">
+                    <label>Developer Client Restrictions</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <allow_ips translate="label comment">
+                            <label>Allowed IPs (comma separated)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Leave empty for access from any location.</comment>
+                        </allow_ips>
+                    </fields>
+                </restrict>
+                <debug translate="label">
+                    <label>Debug</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <template_hints translate="label">
+                            <label>Template Path Hints</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template_hints>
+                        <template_hints_blocks translate="label">
+                            <label>Add Block Names to Hints</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template_hints_blocks>
+                    </fields>
+                </debug>
+                <template translate="label">
+                    <label>Template Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>25</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <allow_symlink translate="label comment">
+                            <label>Allow Symlinks</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
+                        </allow_symlink>
+                    </fields>
+                </template>
+                <translate_inline translate="label">
+                    <label>Translate Inline</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled for Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Translate</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <active_admin translate="label comment">
+                            <label>Enabled for Admin</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Translate</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.</comment>
+                        </active_admin>
+                    </fields>
+                </translate_inline>
+                <log translate="label">
+                    <label>Log Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <file translate="label comment">
+                            <label>System Log File Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Filename</backend_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Logging from Mage::log(). File is located in {{base_dir}}/var/log</comment>
+                        </file>
+                        <exception_file translate="label comment">
+                            <label>Exceptions Log File Name</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Filename</backend_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Logging from Mage::logException(). File is located in {{base_dir}}/var/log</comment>
+                        </exception_file>
+                    </fields>
+                </log>
+                <js translate="label">
+                    <label>JavaScript Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <merge_files translate="label">
+                            <label>Merge JavaScript Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merge_files>
+                    </fields>
+                </js>
+                <css translate="label">
+                    <label>CSS Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>110</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <merge_css_files translate="label">
+                            <label>Merge CSS Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merge_css_files>
+                    </fields>
+                </css>
+            </groups>
+        </dev>
+        <general translate="label" module="Mage_Core">
+            <label>General</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <country translate="label">
+                    <label>Countries Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <allow translate="label">
+                            <label>Allow Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Country</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </allow>
+                        <default translate="label">
+                            <label>Default Country</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Country</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default>
+                    </fields>
+                </country>
+                <locale translate="label">
+                    <label>Locale Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>8</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <timezone translate="label">
+                            <label>Timezone</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Locale_Timezone</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Locale_Timezone</backend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </timezone>
+                        <code translate="label">
+                            <label>Locale</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Locale</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </code>
+                        <firstday translate="label">
+                            <label>First Day of Week</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Locale_Weekdays</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </firstday>
+                        <weekend translate="label">
+                            <label>Weekend Days</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Locale_Weekdays</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </weekend>
+                    </fields>
+                </locale>
+                <store_information translate="label">
+                    <label>Store Information</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Store Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <phone translate="label">
+                            <label>Store Contact Telephone</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </phone>
+                        <address translate="label">
+                            <label>Store Contact Address</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </address>
+                    </fields>
+                </store_information>
+            </groups>
+        </general>
+        <system translate="label" module="Mage_Core">
+            <class>separator-top</class>
+            <label>System</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>900</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <smtp translate="label">
+                    <label>Mail Sending Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <disable translate="label">
+                            <label>Disable Email Communications</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </disable>
+                        <host translate="label">
+                            <label>Host</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>For Windows server only.</comment>
+                        </host>
+                        <port translate="label">
+                            <label>Port (25)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>For Windows server only.</comment>
+                        </port>
+                        <!--
+                        <auth translate="label">
+                            <label>Authentication method</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Email_Smtpauth</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </auth>
+                        <username translate="label">
+                            <label>Username</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </username>
+                        <password translate="label">
+                            <label>Password</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </password>
+                        -->
+                        <set_return_path translate="label">
+                            <label>Set Return-Path</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesnocustom</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </set_return_path>
+                        <return_path_email translate="label">
+                            <label>Return-Path Email</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
+                            <validate>validate-email</validate>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><set_return_path>2</set_return_path></depends>
+                        </return_path_email>
+                    </fields>
+                </smtp>
+                <media_storage_configuration translate="label" module="Mage_Core">
+                    <label>Storage Configuration for Media</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>900</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <media_storage translate="label">
+                            <label>Media Storage</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </media_storage>
+                        <media_database translate="label">
+                            <label>Select Media Database</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database</backend_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><media_storage>1</media_storage></depends>
+                        </media_database>
+                        <synchronize translate="label comment">
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize</frontend_model>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>After selecting a new media storage location, press the Synchronize button
+                                to transfer all media to that location. Media will not be available in the new
+                                location until the synchronization process is complete.</comment>
+                        </synchronize>
+                        <configuration_update_time translate="label">
+                            <label>Environment Update Time</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </configuration_update_time>
+                    </fields>
+                </media_storage_configuration>
+            </groups>
+        </system>
+        <admin translate="label" module="Mage_Core">
+            <label>Admin</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>20</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <emails translate="label">
+                    <label>Admin User Emails</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <forgot_email_template translate="label">
+                            <label>Forgot Password Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Email_Template</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </forgot_email_template>
+                        <forgot_email_identity translate="label">
+                            <label>Forgot Password Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Email_Identity</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </forgot_email_identity>
+                        <password_reset_link_expiration_period translate="label comment">
+                            <label>Recovery Link Expiration Period (days)</label>
+                            <comment>This value must be greater than 0.</comment>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password_reset_link_expiration_period>
+                    </fields>
+                </emails>
+                <startup translate="label">
+                    <label>Startup Page</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <page translate="label">
+                            <label>Startup Page</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Admin_Page</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </page>
+                    </fields>
+                </startup>
+                <url translate="label">
+                    <label>Admin Base URL</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <use_custom translate="label">
+                            <label>Use Custom Admin URL</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustom</backend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_custom>
+                        <custom translate="label comment">
+                            <label>Custom Admin URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Custom</backend_model>
+                            <depends><use_custom>1</use_custom></depends>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
+                        </custom>
+                        <use_custom_path translate="label">
+                            <label>Use Custom Admin Path</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustompath</backend_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_custom_path>
+                        <custom_path translate="label comment">
+                            <label>Custom Admin Path</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-alphanum</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Custompath</backend_model>
+                            <depends><use_custom_path>1</use_custom_path></depends>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>You will have to log in after you save your custom admin path.</comment>
+                        </custom_path>
+                    </fields>
+                </url>
+                <security translate="label">
+                    <label>Security</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>35</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <use_form_key translate="label">
+                            <label>Add Secret Key to URLs</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Usesecretkey</backend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_form_key>
+                        <use_case_sensitive_login translate="label">
+                            <label>Login is Case Sensitive</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_case_sensitive_login>
+                        <session_cookie_lifetime translate="label comment">
+                            <label>Session Lifetime (seconds)</label>
+                            <comment>Values less than 60 are ignored. Note that changes will apply after logout.</comment>
+                            <validate>validate-digits</validate>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </session_cookie_lifetime>
+                    </fields>
+                </security>
+                <dashboard translate="label">
+                    <label>Dashboard</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enable_charts translate="label">
+                            <label>Enable Charts</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enable_charts>
+                    </fields>
+                </dashboard>
+            </groups>
+        </admin>
+        <web translate="label" module="Mage_Core">
+            <label>Web</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>20</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <url translate="label">
+                    <label>Url Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <use_store translate="label">
+                            <label>Add Store Code to Urls</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Store</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_store>
+                        <redirect_to_base translate="label">
+                            <label>Auto-redirect to Base URL</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Web_Redirect</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>
+                        </redirect_to_base>
+                    </fields>
+                </url>
+                <seo translate="label">
+                    <label>Search Engines Optimization</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <use_rewrites translate="label">
+                            <label>Use Web Server Rewrites</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_rewrites>
+                    </fields>
+                </seo>
+                <unsecure translate="label">
+                    <label>Unsecure</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <base_url translate="label">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </base_url>
+                        <base_link_url translate="label">
+                            <label>Base Link URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </base_link_url>
+                        <base_public_url translate="label comment">
+                            <label>Base URL for Public Static Files</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>&lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
+                        </base_public_url>
+                        <base_media_url translate="label">
+                            <label>Base Media URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </base_media_url>
+                    </fields>
+                </unsecure>
+                <secure translate="label">
+                    <label>Secure</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <base_url translate="label comment">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
+                        </base_url>
+                        <base_link_url translate="label comment">
+                            <label>Base Link URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
+                        </base_link_url>
+                        <base_public_url translate="label comment">
+                            <label>Base URL for Public Static Files</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>&lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
+                        </base_public_url>
+                        <base_media_url translate="label">
+                            <label>Base Media URL</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Baseurl</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </base_media_url>
+                        <use_in_frontend translate="label">
+                            <label>Use Secure URLs in Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Secure</backend_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_in_frontend>
+                        <use_in_adminhtml translate="label">
+                            <label>Use Secure URLs in Admin</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Secure</backend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_in_adminhtml>
+                        <offloader_header translate="label">
+                            <label>Offloader header</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </offloader_header>
+                    </fields>
+                </secure>
+                <default translate="label">
+                    <label>Default Pages</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <front translate="label">
+                            <label>Default Web URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </front>
+                        <no_route translate="label">
+                            <label>Default No-route URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </no_route>
+                    </fields>
+                </default>
+                <polls translate="label">
+                    <label>Polls</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </polls>
+                <cookie translate="label">
+                    <label>Session Cookie Management</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <cookie_lifetime translate="label">
+                            <label>Cookie Lifetime</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cookie_lifetime>
+                        <cookie_path translate="label">
+                            <label>Cookie Path</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cookie_path>
+                        <cookie_domain translate="label">
+                            <label>Cookie Domain</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cookie_domain>
+                        <cookie_httponly translate="label">
+                            <label>Use HTTP Only</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cookie_httponly>
+                    </fields>
+                </cookie>
+                <session translate="label">
+                    <label>Session Validation Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <use_remote_addr translate="label">
+                            <label>Validate REMOTE_ADDR</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_remote_addr>
+                        <use_http_via translate="label">
+                            <label>Validate HTTP_VIA</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_http_via>
+                        <use_http_x_forwarded_for translate="label">
+                            <label>Validate HTTP_X_FORWARDED_FOR</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_http_x_forwarded_for>
+                        <use_http_user_agent translate="label">
+                            <label>Validate HTTP_USER_AGENT</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_http_user_agent>
+                        <use_frontend_sid translate="label comment">
+                            <label>Use SID on Frontend</label>
+                            <comment>Allows customers to stay logged in when switching between different stores.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_frontend_sid>
+                    </fields>
+                </session>
+                <browser_capabilities translate="label">
+                    <label>Browser Capabilities Detection</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <cookies translate="label" module="Mage_Cms">
+                            <label>Redirect to CMS-page if Cookies are Disabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cookies>
+                        <javascript translate="label" module="Mage_Cms">
+                            <label>Show Notice if JavaScript is Disabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </javascript>
+                    </fields>
+                </browser_capabilities>
+            </groups>
+        </web>
+    </sections>
+</config>

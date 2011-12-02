@@ -1,0 +1,71 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $previewModel Mage_XmlConnect_Model_Preview_Ipad */
+$previewModel = Mage::helper('Mage_XmlConnect_Helper_Data')->getPreviewModel();
+
+$title1color = $previewModel->getConfigFontInfo('Title1/color');
+$categoryItemTintColor = $previewModel->getCategoryItemTintColor();
+$categoryItemBackgroundColor = $previewModel->getData('conf/categoryItem/backgroundColor');
+
+$productImage = $previewModel->getPreviewImagesUrl('ipad/product_image.jpg');
+$backgroundIpadLandscapeImage = $previewModel->setOrientation(Mage_XmlConnect_Helper_Ipad::ORIENTATION_LANDSCAPE)->getBackgroundImage();
+$bannerImageIpad = $previewModel->getBannerImage();
+?>
+<div class="ipad ipad-landscape" style="background: <?php echo $previewModel->getData('conf/body/backgroundColor'); ?>;">
+    <div class="status-bar"></div>
+    <div class="header-wrap" style="background-color:<?php echo $previewModel->getData('conf/navigationBar/tintColor'); ?>;">
+        <div class="app-header">
+            <?php echo $this->getChildHtml('tab_items'); ?>
+        </div>
+    </div>
+    <div class="shadow"></div>
+    <div class="content" style="background-image:url(<?php echo $backgroundIpadLandscapeImage; ?>)">
+        <div class="app-logo" style="background-image:url(<?php echo $bannerImageIpad; ?>)"></div>
+        <div class="products-list-wrap">
+            <ul class="products-list">
+                <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                    <div class="product-image"><img src="<?php echo $productImage; ?>" alt="" /></div>
+                    <h4>CLOTHING</h4>
+                </li>
+                <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                    <div class="product-image"><img src="<?php echo $productImage; ?>" alt="" /></div>
+                    <h4>CLOTHING</h4>
+                </li>
+                <li style="background-color:<?php echo $categoryItemBackgroundColor; ?>">
+                    <div class="product-image"><img src="<?php echo $productImage; ?>" alt="" /></div>
+                    <h4>CLOTHING</h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<?php if ($this->getJsErrorMessage()) : ?>
+<script type="text/javascript">
+    alert('<?php echo $this->getJsErrorMessage(); ?>');
+</script>
+<?php endif; ?>

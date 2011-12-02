@@ -1,0 +1,53 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* @var $this Mage_Sales_Block_Adminhtml_Recurring_Profile_View_Tab_Info */ ?>
+
+<?php for ($i = 1; $i <= 5; $i++):?>
+    <?php $infoBlocks = $this->getChildGroup("info_blocks_row_{$i}"); ?>
+    <?php if ($infoBlocks):?>
+<div>
+        <?php for ($j = 1; $j <= 2; $j++):?>
+            <?php foreach ($infoBlocks as $alias => $block):?>
+<?php if ($j == $this->getObjectData($block, 'view_column')):?>
+    <div class="box-<?php echo $j == 1 ? 'left' : 'right'?>">
+        <div class="entry-edit">
+            <div class="entry-edit-head">
+                <h4 class="icon-head"><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></h4>
+            </div>
+            <div class="fieldset">
+                <?php $html = $this->getChildHtml($alias) ?>
+                <?php echo ($html ? $html : $this->__('No information available.')) ; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+            <?php endforeach;?>
+        <?php endfor;?>
+    <div class="clear"></div>
+</div>
+    <?php endif; ?>
+<?php endfor;?>

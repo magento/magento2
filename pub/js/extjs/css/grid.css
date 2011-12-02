@@ -1,0 +1,449 @@
+/*
+ * Ext JS Library 2.0
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+/* Grid2 styles */
+.x-grid3 {
+	position:relative;
+	overflow:hidden;
+    background-color:#fff;
+}
+.ext-ie .x-grid3 table {
+    table-layout:fixed;
+}
+.x-grid3-viewport{
+	overflow:hidden;
+}
+.x-grid3-hd-row td, .x-grid3-row td{
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+    -moz-outline: none;
+	-moz-user-focus: normal;
+}
+.x-grid3-row td {
+    line-height:13px;
+    vertical-align: top;
+	padding-left:1px;
+    padding-right:1px;
+    -moz-user-select: none;
+}
+.x-grid3-hd-row td {
+    line-height:15px;
+    vertical-align:middle;
+    border-left:1px solid #eee;
+    border-right:1px solid #d0d0d0;
+}
+
+.x-grid3-hd-row .x-grid3-marker-hd {
+    padding:3px;
+}
+
+.x-grid3-row .x-grid3-marker {
+    padding:3px;
+}
+
+.x-grid3-cell-inner, .x-grid3-hd-inner{
+	overflow:hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+    padding:3px 3px 3px 5px;
+    white-space: nowrap;
+}
+
+.x-grid3-hd-inner {
+    position:relative;
+	 cursor:inherit;
+	 padding:4px 3px 4px 5px;
+}
+
+.x-grid3-row-body {
+    white-space:normal;
+}
+
+/* IE Quirks to clip */
+.ext-ie .x-grid3-cell-inner, .ext-ie .x-grid3-hd-inner{
+	width:100%;
+}
+/* reverse above in strict mode */
+.ext-strict .x-grid3-cell-inner, .ext-strict .x-grid3-hd-inner{
+	width:auto;
+}
+
+.x-grid3-col {
+	
+}
+
+.x-grid3-row {
+	cursor: default;
+    border:1px solid #ededed;
+    border-top-color:#fff;
+    /*border-bottom: 1px solid #ededed;*/
+    width:100%;
+}
+.x-grid3-row-alt{
+	/*background-color:#f1f2f4;*/
+}
+
+.x-grid3-row-over {
+	border:1px solid #dddddd;
+    background: #efefef url(../images/default/grid/row-over.gif) repeat-x left top;
+}
+
+.x-grid3-resize-proxy {
+	width:3px;
+	background-color:#cccccc;
+	cursor: e-resize;
+	cursor: col-resize;
+	position:absolute;
+	top:0;
+	height:100px;
+	overflow:hidden;
+	visibility:hidden;
+	border:0 none;
+	z-index:7;
+}
+.x-grid3-focus {
+	position:absolute;
+	top:0;
+	-moz-outline:0 none;
+    outline:0 none;
+    -moz-user-select: normal;
+    -khtml-user-select: normal;
+}
+
+/* header styles */
+.x-grid3-header{
+	background: #f9f9f9 url(../images/default/grid/grid3-hrow.gif) repeat-x 0 bottom;
+	cursor:default;
+    zoom:1;
+    padding:1px 0 0 0;
+}
+
+.x-grid3-header-pop {
+    border-left:1px solid #d0d0d0;
+    float:right;
+    clear:none;
+}
+.x-grid3-header-pop-inner {
+    border-left:1px solid #eee;
+    width:14px;
+    height:19px;
+    background: transparent url(../images/default/grid/hd-pop.gif) no-repeat center center;
+}
+.ext-ie .x-grid3-header-pop-inner {
+    width:15px;
+}
+.ext-strict .x-grid3-header-pop-inner {
+    width:14px; 
+}
+.x-grid3-header-inner {
+    overflow:hidden;
+    zoom:1;
+    float:left;
+}
+.x-grid3-header-offset {
+    padding-left:1px;
+	 width:10000px;
+}
+
+/*
+.x-grid3-hd-over .x-grid3-hd-inner {
+    padding-bottom:2px;
+    border-bottom: 1px solid #c3daf9;
+    background-color: #fafafa;
+}
+td.x-grid3-hd-over .x-grid3-hd-text {
+	border-bottom: 1px solid #b3cae9;
+}*/
+
+td.x-grid3-hd-over, td.sort-desc, td.sort-asc, td.x-grid3-hd-menu-open {
+    border-left:1px solid #aaccf6;
+    border-right:1px solid #aaccf6;
+}
+td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-menu-open .x-grid3-hd-inner {
+    background: #ebf3fd url(../images/default/grid/grid3-hrow-over.gif) repeat-x left bottom;
+
+}
+.x-grid3-sort-icon{
+	background-repeat: no-repeat;
+	display: none;
+	height: 4px;
+	width: 13px;
+	margin-left:3px;
+	vertical-align: middle;
+}
+.sort-asc .x-grid3-sort-icon {
+	background-image: url(../images/aero/grid/sort_asc.gif);
+	display: inline;
+}
+.sort-desc .x-grid3-sort-icon {
+	background-image: url(../images/aero/grid/sort_desc.gif);
+	display: inline;
+}
+
+/* Body Styles */
+.x-grid3-body {
+	overflow:auto;
+}
+.x-grid3-body-inner {
+	overflow:auto;
+}
+.x-grid3-cell-text, .x-grid3-hd-text {
+	display: block;
+	padding: 3px 5px 3px 5px;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	color:black;
+}
+.x-grid3-split {
+	background-image: url(../images/default/grid/grid-split.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: e-resize;
+	cursor: col-resize;
+	display: block;
+	font-size: 1px;
+	height: 16px;
+	overflow: hidden;
+	position: absolute;
+	top: 2px;
+	width: 6px;
+	z-index: 3;
+}
+
+.x-grid3-hd-text {
+	color:#15428b;
+}
+/* Column Reorder DD */
+.x-dd-drag-proxy .x-grid3-hd-inner{
+	background: #ebf3fd url(../images/default/grid/grid3-hrow-over.gif) repeat-x left bottom;
+	width:120px;
+	padding:3px;
+	border:1px solid #aaccf6;
+	overflow:hidden;
+}
+
+.col-move-top, .col-move-bottom{
+	width:9px;
+	height:9px;
+	position:absolute;
+	top:0;
+	line-height:1px;
+	font-size:1px;
+	overflow:hidden;
+	visibility:hidden;
+	z-index:20000;
+}
+.col-move-top{
+	background:transparent url(../images/default/grid/col-move-top.gif) no-repeat left top;
+}
+.col-move-bottom{
+	background:transparent url(../images/default/grid/col-move-bottom.gif) no-repeat left top;
+}
+
+/* Selection Styles */
+.x-grid3-row-selected {
+	background: #d9e8fb url(../images/default/grid/row-sel.gif) repeat-x left top;
+	border:1px solid #99bbe8;
+}/*
+.x-grid3-row-selected td {
+	border-left:1px solid #c3daf9;
+    border-right:1px solid #719ad5;
+}*/
+.x-grid3-row-selected span, .x-grid3-row-selected b, .x-grid3-row-selected div, .x-grid3-row-selected strong, .x-grid3-row-selected i{
+
+}
+.x-grid3-cell-selected{
+	background-color: #316ac5 !important;
+	color: white;
+}
+.x-grid3-cell-selected span{
+	color: white !important;
+}
+.x-grid3-cell-selected .x-grid3-cell-text{
+	color: white;
+}
+
+.x-grid3-locked td.x-grid3-row-marker, .x-grid3-locked .x-grid3-row-selected td.x-grid3-row-marker{
+    background: #ebeadb url(../images/default/grid/grid-hrow.gif) repeat-x 0 bottom !important;
+    vertical-align:middle !important;
+    color:black;
+    padding:0;
+    border-top:1px solid white;
+    border-bottom:none !important;
+    border-right:1px solid #6fa0df !important;
+    text-align:center;
+}
+.x-grid3-locked td.x-grid3-row-marker div, .x-grid3-locked .x-grid3-row-selected td.x-grid3-row-marker div{
+    padding:0 4px;
+    color:#15428b !important;
+    text-align:center;
+}
+
+/* dirty cells */
+.x-grid3-dirty-cell {
+    background: transparent url(../images/default/grid/dirty.gif) no-repeat 0 0;
+}
+
+/* Grid Toolbars */
+.x-grid3-topbar, .x-grid3-bottombar{
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+    overflow:hidden;
+	display:none;
+	zoom:1;
+    position:relative;
+}
+.x-grid3-topbar .x-toolbar{
+	border-right:0 none;
+}
+.x-grid3-bottombar .x-toolbar{
+	border-right:0 none;
+	border-bottom:0 none;
+	border-top:1px solid #a9bfd3;
+}
+/* Props Grid Styles */
+.x-props-grid .x-grid3-cell-selected .x-grid3-cell-text{
+	 background-color: #316ac5 !important;
+}
+.x-props-grid .x-grid3-col-value .x-grid3-cell-text{
+	background-color: white;
+}
+.x-props-grid .x-grid3-col-name{
+	 background-color: #c3daf9;
+}
+.x-props-grid .x-grid3-col-name .x-grid3-cell-text{
+	background-color: white;
+    margin-left:10px;
+}
+.x-props-grid .x-grid3-split-value {
+    visibility:hidden;
+}
+
+/* header menu */
+.xg-hmenu-sort-asc .x-menu-item-icon{
+	background-image: url(../images/default/grid/hmenu-asc.gif);
+}
+.xg-hmenu-sort-desc .x-menu-item-icon{
+	background-image: url(../images/default/grid/hmenu-desc.gif);
+}
+.xg-hmenu-lock .x-menu-item-icon{
+	background-image: url(../images/default/grid/hmenu-lock.gif);
+}
+.xg-hmenu-unlock .x-menu-item-icon{
+	background-image: url(../images/default/grid/hmenu-unlock.gif);
+}
+
+/* dd */
+.x-grid3-col-dd {
+    border:0 none;
+    padding:0;
+    background:transparent;
+}
+
+.x-dd-drag-ghost .x-grid3-dd-wrap {
+    padding:1px 3px 3px 1px;
+}
+
+.x-grid3-hd-btn {
+    display:none;
+    position:absolute;
+    width:14px;
+    background:#c3daf9 url(../images/default/grid/grid3-hd-btn.gif) no-repeat left center;
+    right:0;
+    top:0;
+    z-index:2;
+	 cursor:pointer;
+}
+
+.x-grid3-hd-over .x-grid3-hd-btn, .x-grid3-hd-menu-open .x-grid3-hd-btn {
+    display:block;
+}
+
+a.x-grid3-hd-btn:hover {
+    background-position:-14px center;
+}
+
+/* Expanders */
+
+.x-grid3-body .x-grid3-td-expander {
+    background:transparent url(../images/default/grid/grid3-special-col-bg.gif) repeat-y right;
+}
+.x-grid3-body .x-grid3-td-expander .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-expander {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	 background-image:url(../images/default/grid/row-expand-sprite.gif);
+}
+.x-grid3-row-collapsed .x-grid3-row-expander {
+    background-position:4px 2px;
+}
+.x-grid3-row-expanded .x-grid3-row-expander {
+    background-position:-21px 2px;
+}
+.x-grid3-row-collapsed .x-grid3-row-body {
+    display:none !important;
+}
+.x-grid3-row-expanded .x-grid3-row-body {
+    display:block !important;
+}
+
+/* Checkers */
+
+.x-grid3-body .x-grid3-td-checker {
+    background:transparent url(../images/default/grid/grid3-special-col-bg.gif) repeat-y right;
+}
+
+.x-grid3-body .x-grid3-td-checker .x-grid3-cell-inner, .x-grid3-header .x-grid3-td-checker .x-grid3-hd-inner {
+    padding:0 !important;
+    height:100%;
+}
+
+.x-grid3-row-checker, .x-grid3-hd-checker {
+    width:100%;
+    height:18px;
+    background-position:2px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	 background-image:url(../images/default/grid/row-check-sprite.gif);
+}
+.x-grid3-row .x-grid3-row-checker {
+    background-position:2px 2px;
+}
+.x-grid3-row-selected .x-grid3-row-checker, .x-grid3-hd-checker-on .x-grid3-hd-checker {
+    background-position:-23px 2px;
+}
+.x-grid3-hd-checker {
+    background-position:2px 3px;
+}
+.x-grid3-hd-checker-on .x-grid3-hd-checker {
+    background-position:-23px 3px;
+}
+
+/* Numberer */
+
+.x-grid3-body .x-grid3-td-numberer {
+    background:transparent url(../images/default/grid/grid3-special-col-bg.gif) repeat-y right;
+}
+.x-grid3-body .x-grid3-td-numberer .x-grid3-cell-inner {
+    padding:3px 5px 0 0 !important;
+    text-align:right;
+	 color:#444;
+}
+
+/* All specials */
+
+.x-grid3-body .x-grid3-row-selected .x-grid3-td-numberer,
+.x-grid3-body .x-grid3-row-selected .x-grid3-td-checker,
+.x-grid3-body .x-grid3-row-selected .x-grid3-td-expander {
+	background:transparent url(../images/default/grid/grid3-special-col-sel-bg.gif) repeat-y right;
+}
+

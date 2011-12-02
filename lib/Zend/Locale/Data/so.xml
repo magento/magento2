@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.68 $"/>
+		<generation date="$Date: 2009/06/15 03:46:25 $"/>
+		<language type="so"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">Afrikaanays</language>
+			<language type="am">Amhari</language>
+			<language type="ar">Carabi</language>
+			<language type="as">Asaamiis</language>
+			<language type="az">Azerbaijan</language>
+			<language type="be">Beleruusiyaan</language>
+			<language type="bg">Bulgeeriyaan</language>
+			<language type="bh">Bixaari</language>
+			<language type="bn">Bangaali</language>
+			<language type="br">Bereton</language>
+			<language type="bs">Boosniya</language>
+			<language type="ca">Katalaan</language>
+			<language type="cs">Jeeg</language>
+			<language type="cy">Welsh</language>
+			<language type="da">Danmarkays</language>
+			<language type="de">Jarmal</language>
+			<language type="de_CH">Jarmal (Iswiiserlaand)</language>
+			<language type="el">Giriik</language>
+			<language type="en">Ingiriisi</language>
+			<language type="en_GB">Ingiriisi (Boqortooyada Midowday)</language>
+			<language type="en_US">Ingiriisi (Maraykan)</language>
+			<language type="eo">Isberento</language>
+			<language type="es">Isbaanish</language>
+			<language type="es_419">Isbaanishka Laatiin Ameerika</language>
+			<language type="es_ES">Isbaanish (Isbayn)</language>
+			<language type="et">Istooniyaan</language>
+			<language type="eu">Basquu</language>
+			<language type="fa">Faarisi</language>
+			<language type="fi">Fiinlaandees</language>
+			<language type="fil">Tagalog</language>
+			<language type="fo">Farowsi</language>
+			<language type="fr">Faransiis</language>
+			<language type="fr_CH">Faransiis (Iswiiserlaand)</language>
+			<language type="fy">Firiisiyan Galbeed</language>
+			<language type="ga">Ayrish</language>
+			<language type="gd">Iskot Giilik</language>
+			<language type="gl">Galiisiyaan</language>
+			<language type="gn">Guraani</language>
+			<language type="gu">Gujaraati</language>
+			<language type="he">Cibri</language>
+			<language type="hi">Hindi</language>
+			<language type="hr">Koro'eeshiyaan</language>
+			<language type="hu">Hangariyaan</language>
+			<language type="hy">Armeeniyaan</language>
+			<language type="ia">Interlinguwa</language>
+			<language type="id">Indunuusiyaan</language>
+			<language type="ie">Interlingue</language>
+			<language type="is">Ayslandays</language>
+			<language type="it">Talyaani</language>
+			<language type="ja">Jabbaaniis</language>
+			<language type="jv">Jafaaniis</language>
+			<language type="ka">Joorijiyaan</language>
+			<language type="km">Kamboodhian</language>
+			<language type="kn">Kannadays</language>
+			<language type="ko">Kuuriyaan</language>
+			<language type="ku">Kurdishka</language>
+			<language type="ky">Kirgiis</language>
+			<language type="la">Laatiin</language>
+			<language type="ln">Lingala</language>
+			<language type="lo">Laothian</language>
+			<language type="lt">Lituwaanays</language>
+			<language type="lv">Laatfiyaan</language>
+			<language type="mk">Masadooniyaan</language>
+			<language type="ml">Malayalam</language>
+			<language type="mn">Mangooli</language>
+			<language type="mr">Maarati</language>
+			<language type="ms">Malaay</language>
+			<language type="mt">Maltiis</language>
+			<language type="ne">Nebaali</language>
+			<language type="nl">Holandays</language>
+			<language type="nn">Nowrwejiyan (naynoroski)</language>
+			<language type="no">Af Noorwiijiyaan</language>
+			<language type="oc">Okitaan</language>
+			<language type="or">Oriya</language>
+			<language type="pa">Bunjaabi</language>
+			<language type="pl">Boolish</language>
+			<language type="ps">Bashtuu</language>
+			<language type="pt">Boortaqiis</language>
+			<language type="pt_BR">Boortaqiiska Baraasiil</language>
+			<language type="pt_PT">Boortaqiis (Boortuqaal)</language>
+			<language type="ro">Romanka</language>
+			<language type="ru">Ruush</language>
+			<language type="sa">Sanskrit</language>
+			<language type="sd">SINDHI</language>
+			<language type="sh">Serbiyaan</language>
+			<language type="si">Sinhaleys</language>
+			<language type="sk">Isloofaak</language>
+			<language type="sl">Islofeeniyaan</language>
+			<language type="so">Soomaali</language>
+			<language type="sq">Albaaniyaan</language>
+			<language type="sr">Seerbiyaan</language>
+			<language type="st">Sesooto</language>
+			<language type="su">Suudaaniis</language>
+			<language type="sv">Swiidhis</language>
+			<language type="sw">Sawaaxili</language>
+			<language type="ta">Tamiil</language>
+			<language type="te">Teluugu</language>
+			<language type="th">Taaylandays</language>
+			<language type="ti">Tigrinya</language>
+			<language type="tk">Turkumaanish</language>
+			<language type="tlh">Kiligoon</language>
+			<language type="tr">Turkish</language>
+			<language type="tw">Tiwiyan</language>
+			<language type="ug">UIGHUR</language>
+			<language type="uk">Yukreeniyaan</language>
+			<language type="und">Af aan la aqoon ama aan sax ahayn</language>
+			<language type="ur">Urduu</language>
+			<language type="uz">Usbakis</language>
+			<language type="vi">Fiitnaamays</language>
+			<language type="xh">Hoosta</language>
+			<language type="yi">Yadhish</language>
+			<language type="zh">Jayniis</language>
+			<language type="zu">Zuulu</language>
+		</languages>
+		<scripts>
+			<script type="Latn">Laatiin</script>
+			<script type="Zxxx">Aan la qorin</script>
+			<script type="Zzzz">Far aan la aqoon amase aan saxnayn</script>
+		</scripts>
+		<territories>
+			<territory type="014">Afrikada Bari</territory>
+			<territory type="030">Aasiyada Bari</territory>
+			<territory type="151">Yurubta Bari</territory>
+			<territory type="AE">Imaaraadka Carabta ee Midoobay</territory>
+			<territory type="AF">Afgaanistaan</territory>
+			<territory type="AM">Armeeniya</territory>
+			<territory type="AO">Angoola</territory>
+			<territory type="AT">Osteeriya</territory>
+			<territory type="AU">Awstraaliya</territory>
+			<territory type="BA">Boosniya Heersigoviina</territory>
+			<territory type="BB">Baarbadoos</territory>
+			<territory type="BD">Bangaala-Deesh</territory>
+			<territory type="BE">Beljiyam</territory>
+			<territory type="BH">Baxrayn</territory>
+			<territory type="BJ">Beniin</territory>
+			<territory type="BR">Braasiil</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CH">Swiiserlaand</territory>
+			<territory type="CL">Jili</territory>
+			<territory type="CM">Kameruun</territory>
+			<territory type="CN">Shiinaha</territory>
+			<territory type="CU">Kuuba</territory>
+			<territory type="CZ">Jekoslafaakiya</territory>
+			<territory type="DE">Jarmal</territory>
+			<territory type="DJ">Jabuuti</territory>
+			<territory type="DK">Danmaark</territory>
+			<territory type="EC">Ikwadoor</territory>
+			<territory type="EG">Masar</territory>
+			<territory type="ES">Isbeyn</territory>
+			<territory type="ET">Itoobiya</territory>
+			<territory type="FI">Fiinlaand</territory>
+			<territory type="FR">Faransiis</territory>
+			<territory type="GB">United Kingdom</territory>
+			<territory type="GD">Giriinaada</territory>
+			<territory type="GN">Gini</territory>
+			<territory type="GR">Giriigga</territory>
+			<territory type="HR">Korweeshiya</territory>
+			<territory type="HU">Hangeri</territory>
+			<territory type="ID">Indoneesiya</territory>
+			<territory type="IE">Ayrlaanda</territory>
+			<territory type="IL">Israaʼiil</territory>
+			<territory type="IN">Hindiya</territory>
+			<territory type="IQ">Ciraaq</territory>
+			<territory type="IR">Iiraan</territory>
+			<territory type="IS">Iislaand</territory>
+			<territory type="IT">Talyaani</territory>
+			<territory type="JM">Jameyka</territory>
+			<territory type="JO">Urdun</territory>
+			<territory type="JP">Jabbaan</territory>
+			<territory type="KE">Kiiniya</territory>
+			<territory type="KH">Kamboodiya</territory>
+			<territory type="KP">Kuuriyada Waqooyi</territory>
+			<territory type="KR">Kuuriyada Koonfureed</territory>
+			<territory type="KW">Kuwayt</territory>
+			<territory type="KZ">Kasaakhistaan</territory>
+			<territory type="LB">Lubnaan</territory>
+			<territory type="LK">Siirilaanka</territory>
+			<territory type="LR">Laybeeriya</territory>
+			<territory type="LS">Losooto</territory>
+			<territory type="LU">Luksemboorg</territory>
+			<territory type="LV">Laatfiya</territory>
+			<territory type="LY">Liibiya</territory>
+			<territory type="MA">Marooko</territory>
+			<territory type="MC">Moonako</territory>
+			<territory type="MK">Makadooniya</territory>
+			<territory type="ML">Maali</territory>
+			<territory type="MR">Muritaaniya</territory>
+			<territory type="MT">Maalda</territory>
+			<territory type="MV">Maaldiqeen</territory>
+			<territory type="MW">Malaawi</territory>
+			<territory type="MX">Meksiko</territory>
+			<territory type="MZ">Musambiig</territory>
+			<territory type="NA">Namiibiya</territory>
+			<territory type="NG">Nayjeeriya</territory>
+			<territory type="NI">Nikaraaguwa</territory>
+			<territory type="NO">Noorweey</territory>
+			<territory type="NZ">Neyuusilaand</territory>
+			<territory type="OM">Cumaan</territory>
+			<territory type="PH">Filibiin</territory>
+			<territory type="PK">Bakistaan</territory>
+			<territory type="PL">Booland</territory>
+			<territory type="PT">Bortuqaal</territory>
+			<territory type="QA">Qadar</territory>
+			<territory type="RO">Rumaaniya</territory>
+			<territory type="RU">Ruush</territory>
+			<territory type="SA">Sacuudi Carabiya</territory>
+			<territory type="SD">Sudaan</territory>
+			<territory type="SE">Iswidhan</territory>
+			<territory type="SL">Siraaliyoon</territory>
+			<territory type="SO">Soomaaliya</territory>
+			<territory type="SY">Suuriya</territory>
+			<territory type="TD">Jaad</territory>
+			<territory type="TG">Toogo</territory>
+			<territory type="TH">Taylaand</territory>
+			<territory type="TN">Tuniisiya</territory>
+			<territory type="TO">Tonga</territory>
+			<territory type="TR">Turki</territory>
+			<territory type="TZ">Tansaaniya</territory>
+			<territory type="UG">Ugaanda</territory>
+			<territory type="US">Qaramada Midoobey ee Maraykanka</territory>
+			<territory type="VA">Faatikaan</territory>
+			<territory type="VE">Fenisuweela</territory>
+			<territory type="VN">Fiyetnaam</territory>
+			<territory type="YE">Yaman</territory>
+			<territory type="ZA">Koonfur Afrika</territory>
+			<territory type="ZM">Saambiya</territory>
+			<territory type="ZW">Simbaabwe</territory>
+			<territory type="ZZ">Far aan la aqoon amase aan saxnayn</territory>
+		</territories>
+		<keys>
+			<key type="calendar">Habeentiris</key>
+			<key type="currency">Lacag</key>
+		</keys>
+		<types>
+			<type type="hebrew" key="calendar">Habeentiriska yuhuudda</type>
+			<type type="islamic" key="calendar">Habeentiriska islaamka</type>
+			<type type="japanese" key="calendar">Habeentiriska jabbaanka</type>
+		</types>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Kob</month>
+							<month type="2">Lab</month>
+							<month type="3">Sad</month>
+							<month type="4">Afr</month>
+							<month type="5">Sha</month>
+							<month type="6">Lix</month>
+							<month type="7">Tod</month>
+							<month type="8">Sid</month>
+							<month type="9">Sag</month>
+							<month type="10">Tob</month>
+							<month type="11">KIT</month>
+							<month type="12">LIT</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Bisha Koobaad</month>
+							<month type="2">Bisha Labaad</month>
+							<month type="3">Bisha Saddexaad</month>
+							<month type="4">Bisha Afraad</month>
+							<month type="5">Bisha Shanaad</month>
+							<month type="6">Bisha Lixaad</month>
+							<month type="7">Bisha Todobaad</month>
+							<month type="8">Bisha Sideedaad</month>
+							<month type="9">Bisha Sagaalaad</month>
+							<month type="10">Bisha Tobnaad</month>
+							<month type="11">Bisha Kow iyo Tobnaad</month>
+							<month type="12">Bisha Laba iyo Tobnaad</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">K</month>
+							<month type="2">L</month>
+							<month type="3">S</month>
+							<month type="4">A</month>
+							<month type="5">S</month>
+							<month type="6">L</month>
+							<month type="7">T</month>
+							<month type="8">S</month>
+							<month type="9">S</month>
+							<month type="10">T</month>
+							<month type="11">K</month>
+							<month type="12">L</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Axa</day>
+							<day type="mon">Isn</day>
+							<day type="tue">Sal</day>
+							<day type="wed">Arb</day>
+							<day type="thu">Kha</day>
+							<day type="fri">Jim</day>
+							<day type="sat">Sab</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Axad</day>
+							<day type="mon">Isniin</day>
+							<day type="tue">Salaaso</day>
+							<day type="wed">Arbaco</day>
+							<day type="thu">Khamiis</day>
+							<day type="fri">Jimco</day>
+							<day type="sat">Sabti</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">A</day>
+							<day type="mon">I</day>
+							<day type="tue">S</day>
+							<day type="wed">A</day>
+							<day type="thu">K</day>
+							<day type="fri">J</day>
+							<day type="sat">S</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>sn</am>
+				<pm>gn</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">Ciise ka hor</era>
+						<era type="1">Ciise ka dib</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, MMMM dd, y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>dd MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>dd-MMM-y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h:mm:ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd">dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMMdd">dd MMMM</dateFormatItem>
+						<dateFormatItem id="yyMM">MM/yy</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM y</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0} - {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h a - h a</greatestDifference>
+							<greatestDifference id="h">h-h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h:mm a - h:mm a</greatestDifference>
+							<greatestDifference id="h">h:mm-h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm-h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">h:mm a - h:mm a v</greatestDifference>
+							<greatestDifference id="h">h:mm-h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm-h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">h a - h a v</greatestDifference>
+							<greatestDifference id="h">h-h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M-M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">dd/MM - dd/MM</greatestDifference>
+							<greatestDifference id="M">dd/MM - dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, dd/MM - E, dd/MM</greatestDifference>
+							<greatestDifference id="M">E, dd/MM - E, dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM-MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">dd-dd MMM</greatestDifference>
+							<greatestDifference id="M">dd MMM - dd MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E, dd - E, dd MMM</greatestDifference>
+							<greatestDifference id="M">E, dd MMM - E, dd MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">MM/yy - MM/yy</greatestDifference>
+							<greatestDifference id="y">MM/yy - MM/yy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">dd/MM/yy - dd/MM/yy</greatestDifference>
+							<greatestDifference id="M">dd/MM/yy - dd/MM/yy</greatestDifference>
+							<greatestDifference id="y">dd/MM/yy - dd/MM/yy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, dd/MM/yy - E, dd/MM/yy</greatestDifference>
+							<greatestDifference id="M">E, dd/MM/yy - E, dd/MM/yy</greatestDifference>
+							<greatestDifference id="y">E, dd/MM/yy - E, dd/MM/yy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM-MMM y</greatestDifference>
+							<greatestDifference id="y">MMM y - MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">dd-dd MMM y</greatestDifference>
+							<greatestDifference id="M">dd MMM - dd MMM y</greatestDifference>
+							<greatestDifference id="y">dd MMM y - dd MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, MMM dd - E, MMM dd, y</greatestDifference>
+							<greatestDifference id="M">E, MMM dd - E, MMM dd, y</greatestDifference>
+							<greatestDifference id="y">E, MMM dd, y - E, MMM dd, y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>Far aan la aqoon amase aan saxnayn</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>,</group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="BRL">
+				<displayName>Brazilian Real</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>Chinese Yuan Renminbi</displayName>
+			</currency>
+			<currency type="DJF">
+				<displayName>Faran Jabbuuti</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName>Birta Itoobbiya</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>Yuuroo</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>British Pound Sterling</displayName>
+			</currency>
+			<currency type="INR">
+				<displayName>Indian Rupee</displayName>
+			</currency>
+			<currency type="JPY">
+				<displayName>Japanese Yen</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>Russian Ruble</displayName>
+			</currency>
+			<currency type="SOS">
+				<displayName>Shilin soomaali</displayName>
+			</currency>
+			<currency type="USD">
+				<displayName>Doollar maraykan</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>Lacag aan la qoon ama aan saxnayn</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<posix>
+		<messages>
+			<yesstr>haa:h</yesstr>
+			<nostr>maya:m</nostr>
+		</messages>
+	</posix>
+</ldml>
+

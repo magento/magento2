@@ -1,0 +1,397 @@
+/*
+ * Ext JS Library 1.1 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+/* all fields */
+.x-form-field{
+    margin: 0 0 0 0;
+    font:normal 12px tahoma, arial, helvetica, sans-serif;
+}
+
+/* ---- text fields ---- */
+.x-form-text, textarea.x-form-field{
+    padding: 1px 3px;
+    background:#fff url(../images/default/form/text-bg.gif) repeat-x 0 0;
+    border: 1px solid #B5B8C8;
+}
+.x-form-text {
+    height:22px;
+    line-height:18px;
+    vertical-align:middle;
+}
+.ext-ie .x-form-text {
+    margin-top:-1px; /* ie bogus margin bug */
+    margin-bottom:-1px;
+    height:22px; /* ie quirks */
+    line-height:18px;
+}
+.ext-strict .x-form-text {
+    height:18px;
+}
+.ext-safari .x-form-text {
+    height:20px; /* safari always same size */
+}
+.ext-gecko .x-form-text {
+    padding-top:2px; /* FF won't center the text vertically */
+    padding-bottom:0;
+}
+/* select boxes */
+
+.x-form-select-one {
+    height:20px;
+    line-height:18px;
+    vertical-align:middle;
+    background-color:#fff; /* opera */
+    border: 1px solid #B5B8C8;
+}
+
+/* multi select boxes */
+
+/* --- TODO --- */
+
+/* checkboxes */
+
+/* --- TODO --- */
+
+/* radios */
+
+/* --- TODO --- */
+
+
+/* wrapped fields and triggers */
+
+.x-form-field-wrap {
+    position:relative;
+    zoom:1;
+    white-space: nowrap;
+}
+
+.x-editor .x-form-check-wrap {
+    background:#fff;
+}
+.x-form-field-wrap .x-form-trigger{
+    width:17px;
+    height:21px;
+    border:0;
+    background:transparent url(../images/default/form/trigger.gif) no-repeat 0 0;
+    cursor:pointer;
+    border-bottom: 1px solid #B5B8C8;
+    position:absolute;
+    top:0;
+}
+.ext-safari .x-form-field-wrap .x-form-trigger{
+    height:19px; /* safari doesn't allow height adjustments to the fields, so adjust trigger */
+}
+
+.x-form-field-wrap .x-form-clear-trigger{
+    background-image: url(../images/default/form/clear-trigger.gif);
+    cursor:pointer;
+}
+.x-form-field-wrap .x-form-search-trigger{
+    background-image: url(../images/default/form/search-trigger.gif);
+    cursor:pointer;
+}
+.ext-safari .x-form-field-wrap .x-form-trigger{
+    right:0;
+}
+.x-form-field-wrap .x-form-twin-triggers{
+    
+}
+.x-form-field-wrap .x-form-twin-triggers .x-form-trigger{
+    position:static;
+    top:auto;
+    vertical-align:top;
+}
+
+
+.x-form-field-wrap .x-form-trigger-over{
+    background-position:-17px 0;
+}
+.x-form-field-wrap .x-form-trigger-click{
+    background-position:-34px 0;
+}
+
+.x-trigger-wrap-focus .x-form-trigger{
+    background-position:-51px 0;
+}
+.x-trigger-wrap-focus .x-form-trigger-over{
+    background-position:-68px 0;
+}
+.x-trigger-wrap-focus .x-form-trigger-click{
+    background-position:-85px 0;
+}
+.x-trigger-wrap-focus .x-form-trigger{
+    border-bottom: 1px solid #7eadd9;
+}
+
+.x-item-disabled .x-form-trigger-over{
+    background-position:0 0 !important;
+    border-bottom: 1px solid #B5B8C8;
+}
+.x-item-disabled .x-form-trigger-click{
+    background-position:0 0 !important;
+    border-bottom: 1px solid #B5B8C8;
+}
+
+/* field focus style */
+.x-form-focus, textarea.x-form-focus{
+	border: 1px solid #7eadd9;
+}
+
+/* invalid fields */
+.x-form-invalid, textarea.x-form-invalid{
+	background:#fff url(../images/default/grid/invalid_line.gif) repeat-x bottom;
+	border: 1px solid #dd7870;
+}
+.ext-safari .x-form-invalid{
+	background-color:#ffeeee;
+	border: 1px solid #ff7870;
+}
+
+/* editors */
+
+.x-editor {
+    visibility:hidden;
+    padding:0;
+    margin:0;
+}
+.x-form-check-wrap {
+    line-height:18px;
+}
+.ext-ie .x-form-check-wrap input {
+    width:15px;
+    height:15px;
+}
+.x-editor .x-form-check-wrap {
+    padding:3px;
+}
+.x-editor .x-form-checkbox {
+    height:13px;
+    border: 0 none;
+}
+/* If you override the default field font above, you would need to change this font as well */
+.x-form-grow-sizer {
+	font:normal 12px tahoma, arial, helvetica, sans-serif;
+    left: -10000px;
+	padding: 8px 3px;
+    position: absolute;
+    visibility:hidden;
+    top: -10000px;
+	white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    zoom:1;
+}
+.x-form-grow-sizer p {
+    margin:0 !important;
+    border:0 none !important;
+    padding:0 !important;
+}
+/* Form Items CSS */
+
+.x-form-item {
+    font:normal 12px tahoma, arial, helvetica, sans-serif;
+    display:block;
+    margin-bottom:4px;
+}
+
+.x-form-item label {
+    display:block;
+    float:left;
+    width:100px;
+    padding:3px;
+    padding-left:0;
+    clear:left;
+    z-index:2;
+    position:relative;
+}
+
+.x-form-element {
+    padding-left:105px;
+    position:relative;
+}
+
+.x-form-invalid-msg {
+    color:#ee0000;
+    padding:2px;
+    padding-left:18px;
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    background: transparent url(../images/default/shared/warning.gif) no-repeat 0 2px;
+    line-height:16px;
+    width:200px;
+}
+
+.x-form-label-right label {
+   text-align:right;
+}
+
+.x-form-label-top .x-form-item label {
+    width:auto;
+    float:none;
+    clear:none;
+    display:inline;
+    margin-bottom:4px;
+    position:static;
+}
+.x-form-label-top .x-form-element {
+    padding-left:0;
+    padding-top:4px;
+}
+.x-form-label-top .x-form-item {
+    padding-bottom:4px;
+}
+.x-form fieldset {
+    border:1px solid #B5B8C8;
+    padding:10px 10px 5px 10px;
+    margin-bottom:10px;
+}
+.x-form fieldset legend {
+    font:bold 11px tahoma, arial, helvetica, sans-serif;
+    color:#15428b;
+}
+.ext-ie .x-form fieldset legend {
+    margin-bottom:10px;
+}
+.ext-ie .x-form fieldset {
+    padding-top: 0;
+}
+.x-form-empty-field {
+    color:gray;
+}
+/* Editor small font for grid, toolbar and tree */
+.x-small-editor .x-form-field {
+    font:normal 11px arial, tahoma, helvetica, sans-serif;
+}
+.x-small-editor .x-form-text {
+    height:20px;
+    line-height:16px;
+    vertical-align:middle;
+}
+.ext-ie .x-small-editor .x-form-text {
+    margin-top:-1px !important; /* ie bogus margin bug */
+    margin-bottom:-1px !important;
+    height:20px !important; /* ie quirks */
+    line-height:16px !important;
+}
+.ext-strict .x-small-editor .x-form-text {
+    height:16px !important;
+}
+.ext-safari .x-small-editor .x-form-field {
+    /* safari text field will not size so needs bigger font */
+    font:normal 12px arial, tahoma, helvetica, sans-serif;
+}
+.ext-ie .x-small-editor .x-form-text {
+    height:20px;
+    line-height:16px;
+}
+.ext-border-box .x-small-editor .x-form-text {
+    height:20px;
+}
+
+.x-small-editor .x-form-select-one {
+    height:20px;
+    line-height:16px;
+    vertical-align:middle;
+}
+.x-small-editor .x-form-num-field {
+    text-align:right;
+}
+.x-small-editor .x-form-field-wrap .x-form-trigger{
+    height:19px;
+}
+
+
+.x-form-clear {
+    clear:both;
+    height:0;
+    overflow:hidden;
+    line-height:0;
+    font-size:0;
+}
+.x-form-clear-left {
+    clear:left;
+    height:0;
+    overflow:hidden;
+    line-height:0;
+    font-size:0;
+}
+
+.x-form-cb-label {
+    width:'auto' !important;
+    float:none !important;
+    clear:none !important;
+    display:inline !important;
+    margin-left:4px;
+}
+
+.x-form-column {
+    float:left;
+    padding:0;
+    margin:0;
+    width:48%;
+    overflow:hidden;
+    zoom:1;
+}
+
+/* buttons */
+.x-form .x-form-btns-ct .x-btn{
+	float:right;
+	clear:none;
+}
+.x-form .x-form-btns-ct .x-form-btns td {
+	border:0;
+	padding:0;
+}
+.x-form .x-form-btns-ct .x-form-btns-right table{
+	float:right;
+	clear:none;
+}
+.x-form .x-form-btns-ct .x-form-btns-left table{
+	float:left;
+	clear:none;
+}
+.x-form .x-form-btns-ct .x-form-btns-center{
+	text-align:center; /*ie*/
+}
+.x-form .x-form-btns-ct .x-form-btns-center table{
+	margin:0 auto; /*everyone else*/
+}
+.x-form .x-form-btns-ct table td.x-form-btn-td{
+	padding:3px;
+}
+
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-left{
+	background-position:0 -147px;
+}
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-right{
+	background-position:0 -168px;
+}
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-center{
+	background-position:0 -189px;
+}
+
+.x-form .x-form-btns-ct .x-btn-click .x-btn-center{
+	background-position:0 -126px;
+}
+.x-form .x-form-btns-ct .x-btn-click  .x-btn-right{
+	background-position:0 -84px;
+}
+.x-form .x-form-btns-ct .x-btn-click .x-btn-left{
+	background-position:0 -63px;
+}
+.x-form-invalid-icon {
+    width:16px;
+    height:18px;
+    visibility:hidden;
+    position:absolute;
+    left:0;
+    top:0;
+    display:block;
+    background:transparent url(../images/default/form/exclamation.gif) no-repeat 0 2px;
+}

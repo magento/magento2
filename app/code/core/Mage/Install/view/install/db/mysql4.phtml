@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Install mysql database configuration template
+ *
+ * @see Mage_Install_Block_Config
+ * @var $this Mage_Install_Block_Config
+ */
+?>
+<li>
+    <div class="input-box">
+        <label for="host"><?php echo $this->__('Host') ?> <span class="required">*</span></label><br />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_host]" id="host" value="<?php echo $this->getFormData()->getDbHost() ?>" title="<?php echo $this->__('Database host') ?>" class="required-entry input-text" />
+        <p style="margin-top:4px; line-height:1.3em; color:#666;">
+            <small><?php echo $this->__('You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock') ?></small>
+        </p>
+    </div>
+    <div class="input-box">
+        <label for="dbname"><?php echo $this->__('Database Name') ?> <span class="required">*</span></label><br />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_name]" id="dbname" value="<?php echo $this->getFormData()->getDbName() ?>" title="<?php echo $this->__('Database Name') ?>" class="required-entry input-text" />
+    </div>
+</li>
+<li>
+    <div class="input-box">
+        <label for="user"><?php echo $this->__('User Name') ?> <span class="required">*</span></label><br />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_user]" id="user" value="<?php echo $this->getFormData()->getDbUser() ?>" title="<?php echo $this->__('Database user name') ?>" class="required-entry input-text" />
+    </div>
+    <div class="input-box">
+        <label for="password"><?php echo $this->__('User Password') ?></label><br />
+        <input type="password" name="connection[<?php echo $this->getIdPrefix()?>][db_pass]" id="password" value="" title="<?php echo $this->__('Database user password') ?>" class="input-text" />
+    </div>
+</li>
+<li>
+    <div class="input-box">
+        <label for="prefix"><?php echo $this->__('Tables Prefix') ?></label><br />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_prefix]" id="prefix" value="<?php echo $this->getFormData()->getDbPrefix() ?>" title="<?php echo $this->__('Tables Prefix') ?>" class="validate-data input-text" />
+        <p style="margin-top:4px; line-height:1.3em; color:#666;">
+            <small><?php echo $this->__('(Optional. Leave blank for no prefix)') ?></small>
+        </p>
+    </div>
+</li>

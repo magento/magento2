@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://odg.tonline.de/ODGBaseUserService/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ODGBaseUserService"
+	targetNamespace="http://odg.tonline.de/ODGBaseUserService/">
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://odg.tonline.de/ODGBaseUserService/"
+			elementFormDefault="unqualified"
+			attributeFormDefault="unqualified">
+			<xsd:include schemaLocation="ODGBaseUserService.xsd" />			
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="changeQuotaPool">
+		<wsdl:part name="request" element="tns:changeQuotaPool"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="changeQuotaPoolResponse">
+		<wsdl:part name="response" 
+			element="tns:changeQuotaPoolResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQuotaInformation">
+		<wsdl:part name="request" element="tns:getQuotaInformation"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getQuotaInformationResponse">
+		<wsdl:part name="response" 
+			element="tns:getQuotaInformationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAccountBalance">
+		<wsdl:part name="request" element="tns:getAccountBalance"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAccountBalanceResponse">
+		<wsdl:part name="response" element="tns:getAccountBalanceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ODGBaseUserService">
+		<wsdl:operation name="changeQuotaPool">
+			<wsdl:input message="tns:changeQuotaPool"></wsdl:input>
+			<wsdl:output message="tns:changeQuotaPoolResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getQuotaInformation">
+			<wsdl:input message="tns:getQuotaInformation"></wsdl:input>
+			<wsdl:output message="tns:getQuotaInformationResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAccountBalance">
+			<wsdl:input message="tns:getAccountBalance"></wsdl:input>
+			<wsdl:output message="tns:getAccountBalanceResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ODGBaseUserServiceSOAP" 
+		type="tns:ODGBaseUserService">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="changeQuotaPool">
+
+			<soap:operation
+				soapAction="http://odg.tonline.de/ODGBaseUserService/changeQuotaPool" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getQuotaInformation">
+
+			<soap:operation
+				soapAction="http://odg.tonline.de/ODGBaseUserService/getQuotaInformation" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAccountBalance">
+
+			<soap:operation
+				soapAction="http://odg.tonline.de/ODGBaseUserService/getAccountBalance" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="ODGBaseUserService">
+		<wsdl:port name="ODGBaseUserService"
+			binding="tns:ODGBaseUserServiceSOAP">
+			<soap:address
+				location="https://gateway.developer.telekom.com/p3gw-mod-odg-admin/services/ODGBaseUserService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

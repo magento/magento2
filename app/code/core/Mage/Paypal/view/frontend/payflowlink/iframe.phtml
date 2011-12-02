@@ -1,0 +1,119 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/** @var $this Mage_Paypal_Block_Payflow_Link_Form */
+?>
+<?php $_code=$this->getMethodCode() ?>
+<div id="payment_form_<?php echo $_code ?>" style="display:none;">
+<div id="iframe-warning" class="warning-message" style="display:none;">
+    <?php echo $this->__('Please do not refresh the page until you complete payment.') ?>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var PayflowLink = Class.create();
+PayflowLink.prototype = {
+    stepName: 'payment',
+    loadingText: ' <?php echo $this->__('Loading payment information...') ?> ',
+    loadingDefaultText: '',
+    buttonContinue: '',
+    pleaseWaitBox: '',
+    pleaseWaitBoxTextNode: '',
+    initialize: function(){
+        this.buttonContinue = $(this.stepName + '-buttons-container').select('button').first();
+        this.pleaseWaitBox = $(this.stepName + '-please-wait');
+
+        if (Prototype.Browser.IE) {
+            this.pleaseWaitBoxTextNode = this.pleaseWaitBox.childNodes[1];
+        } else {
+            this.pleaseWaitBoxTextNode = this.pleaseWaitBox.childNodes[2];
+        }
+
+        this.loadingDefaultText = this.pleaseWaitBoxTextNode.nodeValue;
+    },
+    showFrame: function(){
+        if (!$('payflow-link-iframe')) {
+            this.showLoading();
+            checkout.setLoadWaiting(this.stepName);
+            var payflowLinkIframe = '<iframe id="payflow-link-iframe" style="display:none;" scrolling="no" frameborder="0" border="0" '
+                    + 'src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>';
+            $('payment_form_<?php echo $_code ?>').insert({bottom:payflowLinkIframe});
+            $('payflow-link-iframe').observe('load', function(){
+                if (!$('payflow-link-iframe').visible()) {
+                    $('payflow-link-iframe').show();
+                    $('iframe-warning').show();
+                }
+                payflowLink.setSpinnerDefaultText();
+                checkout.setLoadWaiting(false, true);
+                $(payflowLink.buttonContinue).addClassName('disabled');
+
+                window.name = '<?php echo Mage::getBaseUrl(); ?>';
+            });
+        } else {
+            $(this.buttonContinue).addClassName('disabled');
+            checkout.setLoadWaiting(this.stepName);
+            checkout.setLoadWaiting(false, true);
+        }
+    },
+    hideFrame: function(){
+        checkout.setLoadWaiting(this.stepName);
+        checkout.setLoadWaiting(false);
+        $(this.buttonContinue).removeClassName('disabled');
+    },
+    setSpinnerText: function(text){
+        if (!text) {
+            text = this.loadingText;
+        }
+        this.pleaseWaitBoxTextNode.nodeValue = text;
+    },
+    setSpinnerDefaultText: function(){
+        this.pleaseWaitBoxTextNode.nodeValue = this.loadingDefaultText;
+    },
+    showLoading: function(){
+        this.setSpinnerText();
+        $(this.buttonContinue).addClassName('disabled');
+        checkout.setLoadWaiting(this.stepName);
+    }
+}
+var payflowLink;
+
+Event.observe($('payment_form_<?php echo $_code ?>'), 'payment-method:switched', function(event){
+    if (!window.payflowLink) {
+        window.payflowLink = new PayflowLink();
+    }
+    if (!payflowLink) {
+        payflowLink = window.payflowLink;
+    }
+    payflowLink.showFrame();
+});
+Event.observe($('payment_form_<?php echo $_code ?>'), 'payment-method:switched-off', function(event){
+    payflowLink.hideFrame();
+});
+if ($('p_method_payflow_link').checked) {
+    $('payment_form_<?php echo $_code ?>').fire('payment-method:switched', {method_code : '<?php echo $_code ?>'});
+}
+//]]>
+</script>
+</div>

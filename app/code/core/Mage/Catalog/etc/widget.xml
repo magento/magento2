@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Catalog
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<widgets>
+    <new_products type="Mage_Catalog_Block_Product_Widget_New" translate="name description" module="Mage_Catalog">
+        <name>Catalog New Products List</name>
+        <description>List of Products that are set as New</description>
+        <is_email_compatible>1</is_email_compatible>
+        <placeholder_image>Mage_Catalog::images/product_widget_new.gif</placeholder_image>
+        <parameters>
+            <products_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>5</value>
+                <label>Number of Products to Display</label>
+                <type>text</type>
+            </products_count>
+            <template>
+                <required>1</required>
+                <visible>1</visible>
+                <label>Template</label>
+                <type>select</type>
+                <value>product/widget/new/content/new_grid.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>product/widget/new/content/new_grid.phtml</value>
+                        <label>New Products Grid Template</label>
+                    </default>
+                    <list translate="label">
+                        <value>product/widget/new/content/new_list.phtml</value>
+                        <label>New Products List Template</label>
+                    </list>
+                    <list_default translate="label">
+                        <value>product/widget/new/column/new_default_list.phtml</value>
+                        <label>New Products Images and Names Template</label>
+                    </list_default>
+                    <list_names translate="label">
+                        <value>product/widget/new/column/new_names_list.phtml</value>
+                        <label>New Products Names Only Template</label>
+                    </list_names>
+                    <list_images translate="label">
+                        <value>product/widget/new/column/new_images_list.phtml</value>
+                        <label>New Products Images Only Template</label>
+                    </list_images>
+                </values>
+            </template>
+            <cache_lifetime translate="label description">
+                <label>Cache Lifetime (Seconds)</label>
+                <description>86400 by default, if not set. To refresh instantly, Clear the Blocks HTML Output Cache.</description>
+                <visible>1</visible>
+                <type>text</type>
+            </cache_lifetime>
+        </parameters>
+        <supported_blocks>
+            <left_column>
+                <block_name>left</block_name>
+                <template>
+                    <default>list_default</default>
+                    <names_only>list_names</names_only>
+                    <images_only>list_images</images_only>
+                </template>
+            </left_column>
+            <main_content>
+                <block_name>content</block_name>
+                <template>
+                    <grid>default</grid>
+                    <list>list</list>
+                </template>
+            </main_content>
+            <right_column>
+                <block_name>right</block_name>
+                <template>
+                    <default>list_default</default>
+                    <names_only>list_names</names_only>
+                    <images_only>list_images</images_only>
+                </template>
+            </right_column>
+        </supported_blocks>
+    </new_products>
+
+    <catalog_product_link type="Mage_Catalog_Block_Product_Widget_Link" translate="name description" module="Mage_Catalog">
+        <name>Catalog Product Link</name>
+        <description>Link to a Specified Product</description>
+        <is_email_compatible>1</is_email_compatible>
+        <placeholder_image>Mage_Catalog::images/product_widget_link.gif</placeholder_image>
+        <parameters>
+            <id_path translate="label">
+                <visible>1</visible>
+                <required>1</required>
+                <label>Product</label>
+                <type>label</type>
+                <helper_block>
+                    <type>Mage_Adminhtml_Block_Catalog_Product_Widget_Chooser</type>
+                    <data>
+                        <button translate="open">
+                            <open>Select Product...</open>
+                        </button>
+                    </data>
+                </helper_block>
+                <sort_order>10</sort_order>
+            </id_path>
+            <anchor_text translate="label description">
+                <visible>1</visible>
+                <label>Anchor Custom Text</label>
+                <description>If empty, the Product Name will be used</description>
+                <type>text</type>
+            </anchor_text>
+            <title translate="label">
+                <visible>1</visible>
+                <label>Anchor Custom Title</label>
+                <type>text</type>
+            </title>
+            <template translate="label">
+                <label>Template</label>
+                <visible>1</visible>
+                <type>select</type>
+                <value>product/widget/link/link_block.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>product/widget/link/link_block.phtml</value>
+                        <label>Product Link Block Template</label>
+                    </default>
+                    <link_inline translate="label">
+                        <value>product/widget/link/link_inline.phtml</value>
+                        <label>Product Link Inline Template</label>
+                    </link_inline>
+                </values>
+            </template>
+        </parameters>
+    </catalog_product_link>
+
+    <catalog_category_link type="Mage_Catalog_Block_Category_Widget_Link" translate="name description" module="Mage_Catalog">
+        <name>Catalog Category Link</name>
+        <description>Link to a Specified Category</description>
+        <is_email_compatible>1</is_email_compatible>
+        <placeholder_image>Mage_Catalog::images/category_widget_link.gif</placeholder_image>
+        <parameters>
+            <id_path translate="label">
+                <visible>1</visible>
+                <required>1</required>
+                <label>Category</label>
+                <type>label</type>
+                <helper_block>
+                    <type>Mage_Adminhtml_Block_Catalog_Category_Widget_Chooser</type>
+                    <data>
+                        <button translate="open">
+                            <open>Select Category...</open>
+                        </button>
+                    </data>
+                </helper_block>
+                <sort_order>10</sort_order>
+            </id_path>
+            <anchor_text translate="label description">
+                <visible>1</visible>
+                <label>Anchor Custom Text</label>
+                <description>If empty, the Category Name will be used</description>
+                <type>text</type>
+            </anchor_text>
+            <title translate="label">
+                <visible>1</visible>
+                <label>Anchor Custom Title</label>
+                <type>text</type>
+            </title>
+            <template translate="label">
+                <label>Template</label>
+                <visible>1</visible>
+                <type>select</type>
+                <value>category/widget/link/link_block.phtml</value>
+                <values>
+                    <default translate="label">
+                        <value>category/widget/link/link_block.phtml</value>
+                        <label>Category Link Block Template</label>
+                    </default>
+                    <link_inline translate="label">
+                        <value>category/widget/link/link_inline.phtml</value>
+                        <label>Category Link Inline Template</label>
+                    </link_inline>
+                </values>
+            </template>
+        </parameters>
+    </catalog_category_link>
+</widgets>

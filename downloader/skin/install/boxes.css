@@ -1,0 +1,414 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/****************************************************/
+/***********[ Mage_CSS_B Common Elements ]***********/
+/****************************************************/
+
+
+/********************** Columns */
+
+/* All */
+.col2-set, .col3-set, .col4-set, .col5-set { clear:both; }
+
+/* Col2 */
+.col2-set .col-1, .col2-set .col-2 { width:48.5%; }
+.col2-set .col-1 { float:left; }
+.col2-set .col-2 { float:right;}
+
+/* Col2-alt */
+.col2-alt-set .col-1 { width:32%; }
+.col2-alt-set .col-2 { width:65%; }
+.col2-alt-set .col-1 { float:left; }
+.col2-alt-set .col-2 { float:right;}
+
+/* Col3 */
+.col3-set .col-1, .col3-set .col-2, .col3-set .col-3 { float:left; width:31.3%; }
+.col3-set .col-1, .col3-set .col-2 { margin-right:3%; }
+
+/* Col4 */
+.col4-set .col-1, .col4-set .col-2, .col4-set .col-3, .col4-set .col-4 { float:left; width:22%; }
+.col4-set .col-1, .col4-set .col-2, .col4-set .col-3 { margin-right:4%; }
+
+/* Table Columns */
+table .col-1, table .col-2, table .col-3, table .col-4 { float:none !important; margin:0 !important; }
+.col3-set td.spacer { width:3%; }
+.col4-set td.spacer { width:4%; }
+
+
+
+/********************** Form */
+
+/* Form Elements */
+input.input-text, select, textarea { border:1px solid #b6b6b6; font:12px arial, helvetica, sans-serif; }
+option, optgroup { font:12px arial, helvetica, sans-serif; }
+optgroup { font-weight:bold; }
+input.input-text, textarea { padding:2px; }
+input.form-radio { margin-right:3px;}
+.qty { width:2.5em; }
+.group-select label, .form-list label, .payment-methods label { font-weight:bold;}
+.button-set { /* Container for form buttons*/
+    clear:both;
+    margin-top:4em;
+    border-top:1px solid #e4e4e4;
+    padding-top:8px;
+    text-align:right;
+    }
+.form-button, .form-button-alt {
+    overflow:visible;
+    width:auto;
+    background-color:transparent;
+    border:0;
+    padding:1px 8px;
+    background:#f18200;
+    color:#fff;
+    border:1px solid #de5400;
+    font:bold 12px arial, sans-serif !important;
+    cursor:pointer;
+    text-align:center;
+    vertical-align:middle;
+    }
+.form-button span, .form-button-alt span {
+    white-space:nowrap;
+    }
+.form-button-alt {
+    border:1px solid #406a83;
+    background-color:#618499;
+    }
+
+.fieldset-download .form-button { margin:0.8em 0 0; }
+    
+
+/* Form lists */
+.form-list li { margin-bottom:6px; }
+.form-list li .input-box .input-text, .form-list li .input-box textarea { width:250px; }
+.form-list li .input-box select { width:256px;}
+
+table.form-list td { padding:2px 5px 2px 0; width:225px; }
+table.form-list input { width:248px; }
+table.form-list select { width:254px; }
+
+.group-select {
+    margin:28px 0;
+    border:1px solid #bbafa0;
+    padding:22px 25px 12px 25px;
+    background:#fbfaf6;
+    }
+.group-select .legend {
+    margin-top:-33px;
+    float:left;
+    border:1px solid #f19900;
+    background:#F9F3E3;
+    padding:0 8px;
+    color:#E76200;
+    font-weight:bold;
+    font-size:1.1em;
+    }
+.group-select li { padding:4px 8px !important; }
+.group-select li .input-box { float:left; width:275px; }
+.group-select li .input-text, .group-select li select, .group-select li textarea { width:525px; }
+.group-select li .input-box .input-text, .group-select li .input-box textarea { width:250px; }
+.group-select li .input-box select { width:256px;}
+
+
+/* Form Messages */
+.validation-advice, .required { color:#EB340A; }
+.validation-advice {
+    clear:both;
+    min-height:15px;
+    margin-top:3px;
+    background:url(images/validation_advice_bg.gif) no-repeat 2px 1px;
+    padding-left:17px;
+    font-size:.95em;
+    font-weight:bold;
+    line-height:1.25em;
+    }
+.validation-failed {
+    border:1px dashed #EB340A !important;
+    background:#faebe7 !important;
+    }
+label.required {
+    font-weight:bold;
+    }
+p.required {
+    font-size:.95em;
+    text-align:right;
+    }
+
+
+
+/********************** Messages  */
+.success { color:#3d6611; }
+.error { color:#df280a; }
+.success, .error { font-weight:bold; }
+.error-msg, .success-msg, .notice-msg, .note-msg {
+    min-height:23px !important;
+    margin-bottom:1em !important;
+    border-style:solid !important;
+    border-width:1px !important;
+    background-repeat:no-repeat !important;
+    background-position:10px 10px !important;
+    padding:8px 8px 8px 32px !important;
+    font-size:.95em !important;
+    font-weight:bold !important;
+    }
+.error-msg li, .success-msg li, .notice-msg li {margin-bottom:.2em; }
+.error-msg {
+    border-color:#f16048;
+    color:#df280a;
+    background-color:#faebe7;
+    background-image:url(images/error_msg_icon.gif);
+    }
+.success-msg {
+    border-color:#446423;
+    color:#3d6611;
+    background-color:#eff5ea;
+    background-image:url(images/success_msg_icon.gif);
+    }
+.notice-msg, .note-msg {
+    border-color:#fcd344;
+    color:#3d6611;
+    background-color:#fafaec;
+    background-image:url(images/note_msg_icon.gif);
+    }
+
+
+
+/********************** Headings */
+
+.head, .inner-head { line-height:1.25em; text-align:right; }
+.head h1,.head h2, .head h3, .head h4, .head h5,
+.inner-head h1,.inner-head h2, .inner-head h3, .inner-head h4, .inner-head h5{ margin:0; float:left; }
+
+
+/* Page heading */
+.page-head { margin:0 0 25px 0; border-bottom:1px solid #ccc; }
+.page-head-alt { margin:0 0 12px 0; }
+.page-head, .page-head-alt { text-align:right; }
+.page-head h3, .page-head-alt h3 {
+    margin:0;
+    font-size:1.7em !important;
+    font-weight:normal !important;
+    text-transform:none  !important;
+    text-align:left;
+    }
+.button-level h3 { /* heading level with buttons */
+    float:left;
+    width:60%;
+    }
+
+
+/* Category list heading */
+.category-head {
+    margin-bottom:7px;
+    }
+.category-head h2 {
+    margin:0;
+    padding:3px 0;
+    color:#0a263c;
+    font-size:1.6em;
+    line-height:1.3em;
+    font-weight:normal;
+    }
+
+
+
+
+/********************** Lists */
+.disc { margin-bottom:10px; }
+.disc li { margin-left:20px; list-style:disc; }
+
+
+/* Bare List */ /* Unstyled list */
+.bare-list { margin:5px 0; }
+.bare-list li { margin:3px 0; }
+
+
+
+/********************** Space Creators */
+
+.no-show { display:none; }
+.no-wrap { white-space:nowrap; }
+.content-box { min-height:250px; } /* Set minimum height for visual presentation */
+.content { padding:12px 12px 12px 15px; } /* Sets default padding */
+.actions { line-height:1.3em; }
+.separator { padding:0 5px;}
+.pipe { padding:0 4px; font-size:.95em; }
+.divider {
+    margin:10px 0;
+    height:1px;
+    background:url(images/dotted_divider.gif) repeat-x;
+    font-size:1px;
+    line-height:1em;
+    overflow:hidden;
+    }
+
+
+
+
+/************************************************************/
+/********************[ Mage_CSS_C Layout]********************/
+/************************************************************/
+
+
+/********************** Base Layout */
+
+/* Structure */
+.header {
+    z-index:999;
+    text-align:left;
+    }
+.header-top {
+    position:relative;
+    width:930px;
+    margin:0 auto;
+    }
+.header-nav {
+    width:950px;
+    margin:0 auto;
+    }
+.middle {
+    min-height:400px;
+    width:900px;
+    margin:0 auto;
+    text-align:left;
+    position:relative;
+    }
+.side-col { width:195px; }
+.col-left { float:left; }
+.col-main { float:left; }
+.col-right { float:right; }
+.col-1-layout .col-main { float:none; margin:0; }
+.col-2-right-layout .col-main { float:left; width:685px;  }
+.col-2-left-layout .col-main { float:right; width:685px; }
+.col-3-layout .col-main { width:475px; margin-left:17px; }
+
+/* Style */
+.header { border-top:5px solid #0d2131; }
+.header-top-container { border-bottom:1px solid #415966; background:url(images/header_top_container_bg.jpg) repeat-x 50% 0; }
+.header-top { padding:10px; }
+.header-nav-container { background:url(images/nav_bg.jpg) repeat-y 50% 0 #0a263d; }
+.middle-container { background:url(images/main_container_bg.gif) no-repeat 50% 0 #fbfaf6; }
+.middle { background:url(images/main_bg.gif) no-repeat #fffffe;  padding:25px 25px 80px 25px; }
+
+
+
+/********************** Header */
+
+/* Logo */
+h1#logo {
+    float:left;
+    width:202px;
+    margin:3px 0 10px 12px;
+    }
+.page-popup h1#logo { display:none; }
+
+
+/* Quick Access*/
+.quick-access {
+    width:390px;
+    float:right;
+    margin-top:28px;
+    text-align:right;
+    padding:0 10px;
+    color:#fff;
+    }
+.quick-access p { margin-bottom:4px; }
+.quick-access li {
+    display:inline;
+    background:url(images/shop_access_pipe.gif) no-repeat 100% .35em;
+    padding-right:7px;
+    padding-left:3px;
+    }
+.quick-access li.first { padding-left:0;}
+.quick-access li.last { padding-right:0; background:none;}
+.account-access p, .account-access ul, .account-access li { display:inline; color:#fff; }
+.account-access a, .account-access a:hover { color:#e1f1fb; }
+.account-access ul { padding-left:10px; font-size:.95em; }
+.shop-access a, .shop-access a:hover { color:#ebbc58; font-size:.95em; }
+
+
+/* Breadcrumbs */
+.breadcrumbs {  margin-bottom:13px; font-size:.95em; line-height:1.25em; }
+.breadcrumbs li { display:inline; }
+
+
+
+/********************** Footer */
+.footer-container { border-top:15px solid #B6D1E2; }
+.footer {
+    width:930px;
+    margin:0 auto;
+    padding:1em 1em 4em 1em;
+    position:relative;
+    }
+.footer .store-switcher { display:inline; padding:0 10px 0 0; vertical-align:middle; }
+.footer .informational label { color:#fff; font-weight:bold; padding-right:3px; }
+.footer .informational ul {
+    display:inline;
+    }
+.footer .informational li {
+    display:inline;
+    background:url(images/footer_info_separator.gif) no-repeat 100% 50%;
+    padding-right:8px;
+    padding-left:4px;
+    }
+.footer .informational li.last { background:none; padding-right:0; }
+.footer .informational a, .footer .informational a:hover { color:#fff; }
+.footer .informational a { text-decoration:none; }
+.footer .legality {
+    padding:13px 0;
+    color:#ecf3f6;
+    text-align:center;
+    }
+.footer .legality a, .footer .legality a:hover { color:#ecf3f6; }
+
+
+/************************************************************/
+/******************[ Mage_CSS_F Overrides]*******************/
+/************************************************************/
+
+
+/* Alignment */
+.v-top { vertical-align:top; }
+.v-middle { vertical-align:middle; }
+.v-bottom { vertical-align:bottom; }
+.a-left { text-align:left; }
+.a-center { text-align:center; }
+.a-right { text-align:right; }
+.left { float:left; }
+.right { float:right !important; }
+
+.normal-weight { font-weight:normal; }
+.auto-width { width:auto;}
+
+/* Link highlights */
+.link-cart { color:#DC6809 !important; font-weight:bold !important;}
+.link-remove { color:#646464 !important;}
+.link-print { background:url(images/icon_printer.gif) no-repeat 0 2px; padding-left:23px; }
+
+
+/* For Demo store only */
+.demo-notice { margin:0; background:#d75f07; padding:5px 10px 6px 10px; color:#fff; line-height:1em; text-align:center; }

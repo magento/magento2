@@ -1,0 +1,1865 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.85 $"/>
+		<generation date="$Date: 2009/06/15 03:46:25 $"/>
+		<language type="pt"/>
+		<territory type="PT"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">afrikaans</language>
+			<language type="art">idioma artifical</language>
+			<language type="awa">Awadhi</language>
+			<language type="bai">bamileke Languages</language>
+			<language type="bug">Buginese</language>
+			<language type="ce">chechene</language>
+			<language type="cel">idioma céltico</language>
+			<language type="chn">jargão chinook</language>
+			<language type="cpe">crioulo ou pidgin do inglês</language>
+			<language type="cpf">crioulo ou pidgin do francês</language>
+			<language type="cpp">crioulo ou pidgin do português</language>
+			<language type="cs">checo</language>
+			<language type="cus">idioma cuchita</language>
+			<language type="de_CH">alemão alto (Suíça)</language>
+			<language type="dra">idioma dravítico</language>
+			<language type="dyu">diula</language>
+			<language type="egy">egípcio clássico</language>
+			<language type="en">Inglês</language>
+			<language type="enm">inglês medieval</language>
+			<language type="et">estónio</language>
+			<language type="fiu">idioma ugro-finês</language>
+			<language type="frm">francês medieval</language>
+			<language type="frs">frísio oriental</language>
+			<language type="gmh">alemão medieval alto</language>
+			<language type="grc">grego clássico</language>
+			<language type="gsw">alemão da Suíça</language>
+			<language type="hsb">sorbiano superior</language>
+			<language type="hy">arménio</language>
+			<language type="iba">Iban</language>
+			<language type="ig">igbo</language>
+			<language type="ik">Inupiaq</language>
+			<language type="jv">jv</language>
+			<language type="khi">khoisan</language>
+			<language type="lez">lezghiano</language>
+			<language type="mga">irlandês, medieval (900-1200)</language>
+			<language type="mk">macedónio</language>
+			<language type="nah">Nauatle</language>
+			<language type="nds">baixo alemão</language>
+			<language type="nic">nigeriano - cordofano</language>
+			<language type="nl_BE">flamengo (Bélgica)</language>
+			<language type="non">norse, old</language>
+			<language type="oc">provençal</language>
+			<language type="os">ossético</language>
+			<language type="peo">persa arcaico (aprox. 600-400 a.C.)</language>
+			<language type="pl">polaco</language>
+			<language type="pra">idioma prácito</language>
+			<language type="pro">provençal, arcaico (até 1500)</language>
+			<language type="pt_PT">português europeu</language>
+			<language type="rm">reto-romance</language>
+			<language type="rom">romanês</language>
+			<language type="sai">idioma indígeno sul-americano</language>
+			<language type="sal">salishan languages</language>
+			<language type="sgn">linguages de sinais</language>
+			<language type="ssa">idioma nilo-sariano</language>
+			<language type="ta">tamil</language>
+			<language type="tai">idioma tailândes</language>
+			<language type="tet">tetum</language>
+			<language type="tg">tajique</language>
+			<language type="tl">tagalogue</language>
+			<language type="to">tonga</language>
+			<language type="tog">toganês</language>
+			<language type="tyv">tuviniano</language>
+			<language type="wen">idioma sórbio</language>
+			<language type="zza">zazaki</language>
+		</languages>
+		<scripts>
+			<script type="Armn">arménio</script>
+			<script type="Blis">símbolos Bliss</script>
+			<script type="Brah">Brahmi</script>
+			<script type="Cans">símbolos aborígenes canadianos</script>
+			<script type="Cyrs">cirílico (eslavónico sacro antigo)</script>
+			<script type="Egyd">egípcio demótico</script>
+			<script type="Egyh">egípcio hierático</script>
+			<script type="Geok">georgiano khutsuri</script>
+			<script type="Inds">indus</script>
+			<script type="Latf">latim (fraktur)</script>
+			<script type="Lina">linear A</script>
+			<script type="Linb">linear B</script>
+			<script type="Mand">mandaeano</script>
+			<script type="Mlym">malaialam</script>
+			<script type="Nkoo">n’ko</script>
+			<script type="Plrd">Pollard fonético</script>
+			<script type="Sgnw">escrita gestual</script>
+			<script type="Sylo">siloti nagri</script>
+			<script type="Tale">tai le</script>
+			<script type="Talu">tai lue moderno</script>
+			<script type="Taml">tamil</script>
+			<script type="Telu">telugu</script>
+			<script type="Teng">tenguar</script>
+			<script type="Xsux">cuneiforme sumero-acadiano</script>
+			<script type="Zxxx">não escrito</script>
+			<script type="Zzzz">inválido ou desconhecido</script>
+		</scripts>
+		<territories>
+			<territory type="009">Oceânia</territory>
+			<territory type="015">Norte de África</territory>
+			<territory type="017">África Interior</territory>
+			<territory type="018">África Meridional</territory>
+			<territory type="035">Sudeste Asiático</territory>
+			<territory type="057">Micronésia</territory>
+			<territory type="062">Ásia Sul-Central</territory>
+			<territory type="151">Europa de Leste</territory>
+			<territory type="154">Europa do Norte</territory>
+			<territory type="172">172</territory>
+			<territory type="AE">Emiratos Árabes Unidos</territory>
+			<territory type="AI">Anguilha</territory>
+			<territory type="AM">Arménia</territory>
+			<territory type="AQ">Antárctica</territory>
+			<territory type="AX">Ilhas Alanda</territory>
+			<territory type="AZ">Azerbeijão</territory>
+			<territory type="BD">Bangladeche</territory>
+			<territory type="BF">Burkina-Faso</territory>
+			<territory type="BH">Bahrein</territory>
+			<territory type="BJ">Benim</territory>
+			<territory type="BS">Baamas</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Bielorrússia</territory>
+			<territory type="CC">Ilhas Cocos</territory>
+			<territory type="CD">República Democrática do Congo</territory>
+			<territory type="CG">Congo-Brazzaville</territory>
+			<territory type="CX">Ilha do Natal</territory>
+			<territory type="CZ">República Checa</territory>
+			<territory type="EE">Estónia</territory>
+			<territory type="EG">Egipto</territory>
+			<territory type="EH">Sara Ocidental</territory>
+			<territory type="FK">Ilhas Falkland ou Malvinas</territory>
+			<territory type="FM">Estados Federados da Micronésia</territory>
+			<territory type="FO">Ilhas Faroé</territory>
+			<territory type="GL">Gronelândia</territory>
+			<territory type="GW">Guiné-Bissau</territory>
+			<territory type="HK">Hong Kong - Região Administrativa Especial da China</territory>
+			<territory type="IR">Irão</territory>
+			<territory type="KE">Quénia</territory>
+			<territory type="KG">Quirguizistão</territory>
+			<territory type="KN">Saint Kitts e Nevis</territory>
+			<territory type="KW">Cuaite</territory>
+			<territory type="KY">Ilhas Caimão</territory>
+			<territory type="KZ">Cazaquistão</territory>
+			<territory type="LA">Laos, República Popular Democrática do</territory>
+			<territory type="LV">Letónia</territory>
+			<territory type="MC">Mónaco</territory>
+			<territory type="MD">Moldávia, República da</territory>
+			<territory type="MG">Madagáscar</territory>
+			<territory type="MK">Macedónia, República da</territory>
+			<territory type="MO">Macau - Região Administrativa Especial da China</territory>
+			<territory type="MP">Ilhas Mariana do Norte</territory>
+			<territory type="MS">Monserrate</territory>
+			<territory type="MU">Maurícias</territory>
+			<territory type="MW">Malaui</territory>
+			<territory type="NC">Nova Caledónia</territory>
+			<territory type="NF">Ilha Norfolque</territory>
+			<territory type="NL">Países Baixos</territory>
+			<territory type="PG">Papua Nova Guiné</territory>
+			<territory type="PL">Polónia</territory>
+			<territory type="PS">Território Palestiniano</territory>
+			<territory type="QA">Qatar</territory>
+			<territory type="QO">Oceânia Insular</territory>
+			<territory type="RO">Roménia</territory>
+			<territory type="SC">Seicheles</territory>
+			<territory type="SG">Singapura</territory>
+			<territory type="SI">Eslovénia</territory>
+			<territory type="SJ">Esvalbarda e Jan Mayen</territory>
+			<territory type="SM">São Marino</territory>
+			<territory type="TC">Ilhas Turcas e Caicos</territory>
+			<territory type="TJ">Tajiquistão</territory>
+			<territory type="TK">Toquelau</territory>
+			<territory type="TM">Turquemenistão</territory>
+			<territory type="TT">Trindade e Tobago</territory>
+			<territory type="UM">Ilhas Minor Outlying (E.U.A)</territory>
+			<territory type="UZ">Usbequistão</territory>
+			<territory type="VI">Ilhas Virgin E.U.A.</territory>
+			<territory type="VN">Vietname</territory>
+			<territory type="YE">Iémen</territory>
+			<territory type="ZW">Zimbabwe</territory>
+		</territories>
+		<variants>
+			<variant type="1901">Alemão Tradicional</variant>
+			<variant type="1996">Alemão Moderno</variant>
+			<variant type="AREVELA">arménio oriental</variant>
+			<variant type="AREVMDA">arménio ocidental</variant>
+			<variant type="BISKE">dialecto san giorgio/bila</variant>
+			<variant type="BOONT">buntlingue</variant>
+			<variant type="FONIPA">Alfabeto Fonético Internacional</variant>
+			<variant type="FONUPA">Alfabeto Fonético Urálico</variant>
+			<variant type="LIPAW">dialecto lipovaz de Resian</variant>
+			<variant type="MONOTON">monotónico</variant>
+			<variant type="NEDIS">dialecto natisone</variant>
+			<variant type="NJIVA">dialecto gniva/njiva</variant>
+			<variant type="OSOJS">dialecto oseacco/osojane</variant>
+			<variant type="POLYTON">politónico</variant>
+			<variant type="POSIX">Computador</variant>
+			<variant type="REVISED">Revisão Ortográfica</variant>
+			<variant type="SAAHO">Saho</variant>
+			<variant type="SCOUSE">Scouse</variant>
+			<variant type="SOLBA">dialecto stolvizza/solbica</variant>
+		</variants>
+		<keys>
+			<key type="collation">Ordem</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation">Ordem de Chinês Tradicional - Big5</type>
+			<type type="direct" key="collation">Ordem Directa</type>
+			<type type="gb2312han" key="collation">Ordem de Chinês Simplificado - GB2312</type>
+			<type type="phonebook" key="collation">Ordem da Lista Telefónica</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">Métrico</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters type="auxiliary">[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ß ù ŭ û ü ū ÿ]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="buddhist">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>MMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>M/d/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">d-M</dateFormatItem>
+						<dateFormatItem id="MMMMd">d de MMMM</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Jan</month>
+							<month type="2">Fev</month>
+							<month type="3">Mar</month>
+							<month type="4">Abr</month>
+							<month type="5">Mai</month>
+							<month type="6">Jun</month>
+							<month type="7">Jul</month>
+							<month type="8">Ago</month>
+							<month type="9">Set</month>
+							<month type="10">Out</month>
+							<month type="11">Nov</month>
+							<month type="12">Dez</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Janeiro</month>
+							<month type="2">Fevereiro</month>
+							<month type="3">Março</month>
+							<month type="4">Abril</month>
+							<month type="5">Maio</month>
+							<month type="6">Junho</month>
+							<month type="7">Julho</month>
+							<month type="8">Agosto</month>
+							<month type="9">Setembro</month>
+							<month type="10">Outubro</month>
+							<month type="11">Novembro</month>
+							<month type="12">Dezembro</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="wide">
+							<quarter type="1">1.º trimestre</quarter>
+							<quarter type="2">2.º trimestre</quarter>
+							<quarter type="3">3.º trimestre</quarter>
+							<quarter type="4">4.º trimestre</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>Antes do meio-dia</am>
+				<pm>Depois do meio-dia</pm>
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d 'de' MMM 'de' yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="yQ">QQQ 'de' yyyy</dateFormatItem>
+						<dateFormatItem id="yQQQ">QQQ 'de' y</dateFormatItem>
+						<dateFormatItem id="yyQ">QQQ 'de' yy</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">H'h' - H'h'</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM-MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MM-MM 'de' yyyy</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="japanese">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>MMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>M/d/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="America/Argentina/Tucuman">
+				<exemplarCity>Tucumán</exemplarCity>
+			</zone>
+			<zone type="America/Cuiaba">
+				<exemplarCity>Cuibá</exemplarCity>
+			</zone>
+			<zone type="America/Araguaina">
+				<exemplarCity>Araguaina</exemplarCity>
+			</zone>
+			<zone type="America/Bahia">
+				<exemplarCity>Baía</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>St.John's</exemplarCity>
+			</zone>
+			<zone type="Pacific/Easter">
+				<exemplarCity>Páscoa</exemplarCity>
+			</zone>
+			<zone type="Europe/Madrid">
+				<exemplarCity>Madrid</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<exemplarCity>Marrocos</exemplarCity>
+			</zone>
+			<zone type="Asia/Ulaanbaatar">
+				<exemplarCity>Ulan Bator</exemplarCity>
+			</zone>
+			<zone type="America/Cancun">
+				<exemplarCity>Cancun</exemplarCity>
+			</zone>
+			<zone type="Europe/Kaliningrad">
+				<exemplarCity>Kaliningrado</exemplarCity>
+			</zone>
+			<zone type="Europe/Moscow">
+				<exemplarCity>Moscovo</exemplarCity>
+			</zone>
+			<zone type="Asia/Sakhalin">
+				<exemplarCity>Sacalina</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>Center</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>Petersburgo</exemplarCity>
+			</zone>
+			<metazone type="Acre">
+				<long>
+					<standard>Hora do Acre</standard>
+					<daylight>Hora de Verão do Acre</daylight>
+				</long>
+				<commonlyUsed>false</commonlyUsed>
+			</metazone>
+			<metazone type="Afghanistan">
+				<long>
+					<standard>Hora do Afeganistão</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Africa_Central">
+				<long>
+					<standard>Hora da África Central</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Africa_Eastern">
+				<long>
+					<standard>Hora da África Oriental</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Africa_FarWestern">
+				<long>
+					<generic>Hora do Sara Ocidental</generic>
+				</long>
+				<short>
+					<generic>Hora do Sara Ocidental</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Africa_Southern">
+				<long>
+					<generic>Hora da África do Sul</generic>
+					<standard>Hora Padrão da África do Sul</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Africa_Western">
+				<long>
+					<generic>Hora da Nigéria</generic>
+					<standard>Hora da África Ocidental</standard>
+					<daylight>Hora de Verão da África Ocidental</daylight>
+				</long>
+				<short>
+					<generic>Hora da Nigéria</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Aktyubinsk">
+				<long>
+					<standard>Hora de Aktyubinsk</standard>
+					<daylight>Hora de Verão de Aktyubinsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Alaska">
+				<long>
+					<generic>Hora do Alaska</generic>
+					<standard>Hora Padrão do Alaska</standard>
+					<daylight>Hora de Verão do Alaska</daylight>
+				</long>
+			</metazone>
+			<metazone type="Alaska_Hawaii">
+				<long>
+					<generic>Hora do Alaska- Havai</generic>
+					<standard>Hora Padrão do Alaska-Havai</standard>
+					<daylight>Hora de Verão do Alaska-Havai</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Almaty">
+				<long>
+					<standard>Hora de Almaty</standard>
+					<daylight>Hora de Verão de Almaty</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Amazon">
+				<long>
+					<standard>Hora do Amazonas</standard>
+					<daylight>Hora de Verão do Amazonas</daylight>
+				</long>
+				<commonlyUsed>false</commonlyUsed>
+			</metazone>
+			<metazone type="America_Central">
+				<long>
+					<generic>Hora Central</generic>
+					<standard>Hora Padrão Central</standard>
+					<daylight>Hora de Verão Central</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic>Hora Oriental</generic>
+					<standard>Hora Padrão Oriental</standard>
+					<daylight>Hora de Verão Oriental</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="America_Mountain">
+				<long>
+					<generic>Hora da Montanha</generic>
+					<standard>Hora Padrão da Montanha</standard>
+					<daylight>Hora de Verão da Montanha</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic>Hora do Pacífico</generic>
+					<standard>Hora Padrão do Pacífico</standard>
+					<daylight>Hora de Verão do Pacífico</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Anadyr">
+				<long>
+					<standard>Hora de Anadyr</standard>
+					<daylight>Hora de Verão de Anadyr</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Aqtau">
+				<long>
+					<standard>Hora de Aqtau</standard>
+					<daylight>Hora de Verão de Aqtau</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Aqtobe">
+				<long>
+					<standard>Hora de Aqtobe</standard>
+					<daylight>Hora de Verão de Aqtobe</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Arabian">
+				<long>
+					<generic>Hora da Arábia</generic>
+					<standard>Hora Padrão da Arábia</standard>
+					<daylight>Hora de Verão da Arábia</daylight>
+				</long>
+			</metazone>
+			<metazone type="Argentina">
+				<long>
+					<standard>Hora da Argentina</standard>
+					<daylight>Hora de Verão da Argentina</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Argentina_Western">
+				<long>
+					<standard>Hora da Argentina Ocidental</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Armenia">
+				<long>
+					<generic>Hora da Arménia</generic>
+					<standard>Hora da Arménia</standard>
+					<daylight>Hora de Verão da Arménia</daylight>
+				</long>
+				<short>
+					<generic>Hora da Arménia</generic>
+					<standard>AMT (Arménia)</standard>
+					<daylight>AMST (Arménia)</daylight>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Ashkhabad">
+				<long>
+					<generic>Hora do Turquemenistão</generic>
+					<standard>Hora de Ashkhabad</standard>
+					<daylight>Hora de Verão de Ashkhabad</daylight>
+				</long>
+				<short>
+					<generic>Hora do Turquemenistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Atlantic">
+				<long>
+					<generic>Hora do Atlântico</generic>
+					<standard>Hora Padrão do Atlântico</standard>
+					<daylight>Hora de Verão do Atlântico</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Australia_Central">
+				<long>
+					<generic>Hora da Austrália Central</generic>
+					<standard>Hora Padrão da Austrália Central</standard>
+					<daylight>Hora de Verão da Austrália Central</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Australia_CentralWestern">
+				<long>
+					<generic>Hora da Austrália Central Ocidental</generic>
+					<standard>Hora Padrão da Austrália Central Ocidental</standard>
+					<daylight>Hora de Verão da Austrália Central Ocidental</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Australia_Eastern">
+				<long>
+					<generic>Hora da Austrália Oriental</generic>
+					<standard>Hora Padrão da Austrália Oriental</standard>
+					<daylight>Hora de Verão da Austrália Oriental</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Australia_Western">
+				<long>
+					<generic>Hora da Austrália Ocidental</generic>
+					<standard>Hora Padrão da Austrália Ocidental</standard>
+					<daylight>Hora de Verão da Austrália Ocidental</daylight>
+				</long>
+			</metazone>
+			<metazone type="Azerbaijan">
+				<long>
+					<generic>Hora do Azerbeijão</generic>
+					<standard>Hora do Azerbeijão</standard>
+					<daylight>Hora de Verão do Azerbeijão</daylight>
+				</long>
+				<short>
+					<generic>Hora do Azerbeijão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Azores">
+				<long>
+					<standard>Hora dos Açores</standard>
+					<daylight>Hora de Verão dos Açores</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Baku">
+				<long>
+					<generic>Hora do Azerbeijão</generic>
+					<standard>Hora de Baku</standard>
+					<daylight>Hora de Verão de Baku</daylight>
+				</long>
+				<short>
+					<generic>Hora do Azerbeijão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Bangladesh">
+				<long>
+					<generic>Hora do Bangladesh</generic>
+					<standard>Hora do Bangladesh</standard>
+				</long>
+				<short>
+					<generic>Hora do Bangladesh</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Bering">
+				<long>
+					<generic>Hora de Bering</generic>
+					<standard>Hora Padrão de Bering</standard>
+					<daylight>Hora de Verão de Bring</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Bhutan">
+				<long>
+					<generic>Hora do Botão</generic>
+					<standard>Hora do Botão</standard>
+				</long>
+				<short>
+					<generic>Hora do Botão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Bolivia">
+				<long>
+					<standard>Hora da Bolívia</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Borneo">
+				<long>
+					<standard>Hora do Bornéu</standard>
+					<daylight>Hora de Verão do Bornéu</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Brasilia">
+				<long>
+					<standard>Hora de Brasília</standard>
+					<daylight>Hora de Verão de Brasília</daylight>
+				</long>
+				<commonlyUsed>false</commonlyUsed>
+			</metazone>
+			<metazone type="British">
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Brunei">
+				<long>
+					<generic>Hora do Brunei</generic>
+					<standard>Hora do Brunei Darussalam</standard>
+				</long>
+				<short>
+					<generic>Hora do Brunei</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Cape_Verde">
+				<long>
+					<standard>Hora de Cabo Verde</standard>
+					<daylight>Hora de Verão de Cabo Verde</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Chamorro">
+				<long>
+					<generic>Hora de Chamarro</generic>
+					<standard>Hora Padrão de Chamarro</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Changbai">
+				<long>
+					<standard>Hora de Changbai</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Chatham">
+				<long>
+					<standard>Hora Padrão de Chatham</standard>
+					<daylight>Hora de Verão de Chatham</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Chile">
+				<long>
+					<standard>Hora do Chile</standard>
+					<daylight>Hora de Verão do Chile</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="China">
+				<long>
+					<generic>Hora da China</generic>
+					<standard>Hora Padrão da China</standard>
+					<daylight>Hora de Verão da China</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Choibalsan">
+				<long>
+					<standard>Hora de Choibalsan</standard>
+					<daylight>Hora de Verão de Choibalsan</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Christmas">
+				<long>
+					<standard>Hora da Ilha de Natal</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Cocos">
+				<long>
+					<standard>Hora das Ilhas Cocos</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Colombia">
+				<long>
+					<standard>Hora da Colômbia</standard>
+					<daylight>Hora de Verão da Colômbia</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Cook">
+				<long>
+					<generic>Hora das Ilhas Cook</generic>
+					<standard>Hora das Ilhas Cook</standard>
+					<daylight>Hora Intermédia de Verão das Ilhas Cook</daylight>
+				</long>
+				<short>
+					<generic>Hora das Ilhas Cook</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Cuba">
+				<long>
+					<generic>Hora de Cuba</generic>
+					<standard>Hora Padrão de Cuba</standard>
+					<daylight>Hora de Verão de Cuba</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Dacca">
+				<long>
+					<generic>Hora do Bangladesh</generic>
+					<standard>Hora de Dacca</standard>
+				</long>
+				<short>
+					<generic>Hora do Bangladesh</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Davis">
+				<long>
+					<standard>Hora de Davis</standard>
+				</long>
+			</metazone>
+			<metazone type="Dominican">
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="DumontDUrville">
+				<long>
+					<standard>Hora de Dumont-d'Urville</standard>
+				</long>
+			</metazone>
+			<metazone type="Dushanbe">
+				<long>
+					<generic>Hora do Tajiquistão</generic>
+					<standard>Hora de Dushanbe</standard>
+					<daylight>Hora de Verão de Dushanbe</daylight>
+				</long>
+				<short>
+					<generic>Hora do Tajiquistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Dutch_Guiana">
+				<long>
+					<standard>Hora da Guiana Holandesa</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="East_Timor">
+				<long>
+					<generic>Hora de Timor Leste</generic>
+					<standard>Hora de Timor Leste</standard>
+				</long>
+				<short>
+					<generic>Hora de Timor Leste</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Easter">
+				<long>
+					<standard>Hora da Ilha de Páscoa</standard>
+					<daylight>Hora de Verão da Ilha de Páscoa</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Ecuador">
+				<long>
+					<standard>Hora do Equador</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Europe_Central">
+				<long>
+					<standard>Horário Padrão da Europa Central</standard>
+					<daylight>Hora de Verão da Europa Central</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<long>
+					<standard>Hora da Europa Oriental</standard>
+					<daylight>Hora de Verão da Europa Oriental</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Europe_Western">
+				<long>
+					<standard>Hora da Europa Ocidental</standard>
+					<daylight>Hora de Verão da Europa Ocidental</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Falkland">
+				<long>
+					<standard>Hora das Ilhas Malvinas</standard>
+					<daylight>Hora de Verão das Ilhas Malvinas</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Fiji">
+				<long>
+					<generic>Hora das Ilhas Fiji</generic>
+					<standard>Hora das Ilhas Fiji</standard>
+					<daylight>Hora de Verão das Ilhas Fiji</daylight>
+				</long>
+				<short>
+					<generic>Hora das Ilhas Fiji</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="French_Guiana">
+				<long>
+					<standard>Hora da Guiana Francesa</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="French_Southern">
+				<long>
+					<standard>Hora da Antártida e dos Territórios Franceses do Sul</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Frunze">
+				<long>
+					<generic>Hora do Quirguizistão</generic>
+					<standard>Hora de Frunze</standard>
+					<daylight>Hora de Verão de Frunze</daylight>
+				</long>
+				<short>
+					<generic>Hora do Quirguizistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Galapagos">
+				<long>
+					<standard>Hora de Galápagos</standard>
+				</long>
+			</metazone>
+			<metazone type="Gambier">
+				<long>
+					<standard>Hora de Gambier</standard>
+				</long>
+			</metazone>
+			<metazone type="Georgia">
+				<long>
+					<generic>Hora da Geórgia</generic>
+					<standard>Hora da Georgia</standard>
+					<daylight>Hora de Verão da Georgia</daylight>
+				</long>
+				<short>
+					<generic>Hora da Geórgia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Gilbert_Islands">
+				<long>
+					<standard>Hora das Ilhas Gilbert</standard>
+				</long>
+			</metazone>
+			<metazone type="GMT">
+				<long>
+					<standard>Hora do Meridiano de Greenwich</standard>
+				</long>
+			</metazone>
+			<metazone type="Goose_Bay">
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Greenland_Central">
+				<long>
+					<standard>Hora da Gronelândia Central</standard>
+					<daylight>Hora de Verão da Gronelândia Central</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Guam">
+				<long>
+					<standard>Hora Padrão de Guam</standard>
+				</long>
+			</metazone>
+			<metazone type="Gulf">
+				<long>
+					<standard>Hora Padrão do Golfo</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Hawaii_Aleutian">
+				<long>
+					<standard>Hora Padrão do Havai</standard>
+				</long>
+			</metazone>
+			<metazone type="Hong_Kong">
+				<long>
+					<generic>Hora de Hong Kong - Região Administrativa Especial da China</generic>
+					<standard>Hora de Hong Kong</standard>
+					<daylight>Hora de Verão de Hong Kong</daylight>
+				</long>
+				<short>
+					<generic>Hora de Hong Kong - Região Administrativa Especial da China</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Hovd">
+				<long>
+					<standard>Hora de Hovd</standard>
+					<daylight>Hora de Verão de Hovd</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="India">
+				<long>
+					<generic>Hora da Índia</generic>
+					<standard>Hora Padrão da Índia</standard>
+				</long>
+				<short>
+					<generic>Hora da Índia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Indian_Ocean">
+				<long>
+					<standard>Hora do Oceano Índico</standard>
+				</long>
+			</metazone>
+			<metazone type="Indochina">
+				<long>
+					<generic>Hora do Vietname</generic>
+				</long>
+				<short>
+					<generic>Hora do Vietname</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<long>
+					<standard>Hora da Indonésia Central</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<long>
+					<standard>Hora da Indonésia Oriental</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<long>
+					<standard>Hora da Indonésia Ocidental</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Iran">
+				<long>
+					<generic>Hora do Irão</generic>
+					<standard>Hora Padrão do Irão</standard>
+					<daylight>Hora de Verão do Irão</daylight>
+				</long>
+				<short>
+					<generic>Hora do Irão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Irish">
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Irkutsk">
+				<long>
+					<standard>Hora de Irkutsk</standard>
+					<daylight>Hora de Verão de Irkutsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Israel">
+				<long>
+					<generic>Hora de Israel</generic>
+					<standard>Hora Padrão de Israel</standard>
+					<daylight>Hora de Verão de Israel</daylight>
+				</long>
+				<short>
+					<generic>Hora de Israel</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Japan">
+				<long>
+					<generic>Hora do Japão</generic>
+					<standard>Hora Padrão do Japão</standard>
+					<daylight>Hora de Verão do Japão</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kamchatka">
+				<long>
+					<standard>Hora de Petropavlovsk-Kamchatski</standard>
+					<daylight>Hora de Verão de Petropavlovsk-Kamchatski</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Karachi">
+				<long>
+					<generic>Hora do Paquistão</generic>
+					<standard>Hora de Carachi</standard>
+				</long>
+				<short>
+					<generic>Hora do Paquistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kashgar">
+				<long>
+					<standard>Hora de Kashgar</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kazakhstan_Eastern">
+				<long>
+					<generic>Hora do Casaquistão do Leste</generic>
+					<standard>Hora Padrão do Cazaquistão do Leste</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kazakhstan_Western">
+				<long>
+					<generic>Hora do Casaquistão do Oeste</generic>
+					<standard>Hora Padrão do Casaquistão do Oeste</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kizilorda">
+				<long>
+					<standard>Hora de Kizilorda</standard>
+					<daylight>Hora de Verão de Kizilorda</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Korea">
+				<long>
+					<generic>Hora da Coreia</generic>
+					<standard>Hora Padrão da Coreia</standard>
+					<daylight>Hora de Verão da Coreia</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kosrae">
+				<long>
+					<standard>Hora de Kosrae</standard>
+				</long>
+			</metazone>
+			<metazone type="Krasnoyarsk">
+				<long>
+					<standard>Hora de Krasnoyarsk</standard>
+					<daylight>Hora de Verão de Krasnoyarsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kuybyshev">
+				<long>
+					<standard>Hora de Kuybyshev</standard>
+					<daylight>Hora de Verão de Kuybyshev</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Kwajalein">
+				<long>
+					<standard>Hora de Kwajalein</standard>
+				</long>
+			</metazone>
+			<metazone type="Kyrgystan">
+				<long>
+					<generic>Hora do Quirguizistão</generic>
+					<standard>Hora do Quirguizistão</standard>
+				</long>
+				<short>
+					<generic>Hora do Quirguizistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Lanka">
+				<long>
+					<generic>Hora do Sri Lanka</generic>
+					<standard>Hora do Sri Lanka</standard>
+				</long>
+				<short>
+					<generic>Hora do Sri Lanka</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Liberia">
+				<long>
+					<generic>Hora da Libéria</generic>
+				</long>
+				<short>
+					<generic>Hora da Libéria</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Line_Islands">
+				<long>
+					<standard>Hora das Ilhas Line</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Long_Shu">
+				<long>
+					<standard>Hora de Long-Shu</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Lord_Howe">
+				<long>
+					<generic>Hora de Lord Howe</generic>
+					<standard>Hora Padrão de Lord Howe</standard>
+					<daylight>Hora de Verão de Lord Howe</daylight>
+				</long>
+			</metazone>
+			<metazone type="Macau">
+				<long>
+					<generic>Hora de Macau - Região Administrativa Especial da China</generic>
+					<standard>Hora de Macau</standard>
+					<daylight>Hora de Verão de Macau</daylight>
+				</long>
+				<short>
+					<generic>Hora de Macau - Região Administrativa Especial da China</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Magadan">
+				<long>
+					<standard>Hora de Magadan</standard>
+					<daylight>Hora de Verão de Magadan</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Malaya">
+				<long>
+					<generic>Hora da Malásia</generic>
+					<standard>Hora de Malaia</standard>
+				</long>
+				<short>
+					<generic>Hora da Malásia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Malaysia">
+				<long>
+					<standard>Hora da Malásia</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Maldives">
+				<long>
+					<standard>Hora das Ilhas Maldivas</standard>
+				</long>
+			</metazone>
+			<metazone type="Marquesas">
+				<long>
+					<standard>Hora das Marquesas</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Marshall_Islands">
+				<long>
+					<standard>Hora das Ilhas Marshall</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Mauritius">
+				<long>
+					<standard>Hora das Ilhas Maurícias</standard>
+				</long>
+			</metazone>
+			<metazone type="Mawson">
+				<long>
+					<standard>Hora de Mawson</standard>
+				</long>
+			</metazone>
+			<metazone type="Mongolia">
+				<long>
+					<standard>Hora de Ulan Bator</standard>
+					<daylight>Hora de Verão de Ulan Bator</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Moscow">
+				<long>
+					<generic>Hora de Moscovo</generic>
+					<standard>Hora Padrão de Moscovo</standard>
+					<daylight>Hora de Verão de Moscovo</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Myanmar">
+				<long>
+					<generic>Hora de Mianmar</generic>
+				</long>
+				<short>
+					<generic>Hora de Mianmar</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Nauru">
+				<long>
+					<standard>Hora de Nauru</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Nepal">
+				<long>
+					<generic>Hora do Nepal</generic>
+					<standard>Hora do Nepal</standard>
+				</long>
+				<short>
+					<generic>Hora do Nepal</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="New_Caledonia">
+				<long>
+					<generic>Hora da Nova Caledónia</generic>
+					<standard>Hora da Nova Caledónia</standard>
+					<daylight>Hora de Verão da Nova Caledónia</daylight>
+				</long>
+				<short>
+					<generic>Hora da Nova Caledónia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="New_Zealand">
+				<long>
+					<generic>Hora da Nova Zelândia</generic>
+					<standard>Hora Padrão da Nova Zelândia</standard>
+					<daylight>Hora de Verão da Nova Zelândia</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Newfoundland">
+				<long>
+					<standard>Horário Padrão da Terra Nova</standard>
+					<daylight>Horário de Verão da Terra Nova</daylight>
+				</long>
+			</metazone>
+			<metazone type="Niue">
+				<long>
+					<generic>Hora de Niue</generic>
+					<standard>Hora de Niue</standard>
+				</long>
+				<short>
+					<generic>Hora de Niue</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Norfolk">
+				<long>
+					<generic>Hora da Ilha Norfolque</generic>
+				</long>
+				<short>
+					<generic>Hora da Ilha Norfolque</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="North_Mariana">
+				<long>
+					<generic>Hora das Ilhas Mariana do Norte</generic>
+					<standard>Hora das Ilhas Mariana do Norte</standard>
+				</long>
+				<short>
+					<generic>Hora das Ilhas Mariana do Norte</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Novosibirsk">
+				<long>
+					<standard>Hora de Novosibirsk</standard>
+					<daylight>Hora de Verão de Novosibirsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Omsk">
+				<long>
+					<standard>Hora de Omsk</standard>
+					<daylight>Hora de Verão de Omsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Oral">
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Pakistan">
+				<long>
+					<standard>Hora do Paquistão</standard>
+					<daylight>Hora de Verão do Paquistão</daylight>
+				</long>
+				<short>
+					<generic>Hora do Paquistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Palau">
+				<long>
+					<generic>Hora de Palau</generic>
+					<standard>Hora de Palau</standard>
+				</long>
+				<short>
+					<generic>Hora de Palau</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Papua_New_Guinea">
+				<long>
+					<generic>Hora da Papua Nova Guiné</generic>
+					<standard>Hora da Papua Nova Guiné</standard>
+				</long>
+				<short>
+					<generic>Hora da Papua Nova Guiné</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Philippines">
+				<long>
+					<generic>Hora das Filipinas</generic>
+					<standard>Hora das Filipinas</standard>
+					<daylight>Hora de Verão das Filipinas</daylight>
+				</long>
+				<short>
+					<generic>Hora das Filipinas</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Phoenix_Islands">
+				<long>
+					<standard>Hora das Ilhas Fénix</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Pitcairn">
+				<long>
+					<generic>Hora de Pitcairn</generic>
+					<standard>Hora de Pitcairn</standard>
+				</long>
+				<short>
+					<generic>Hora de Pitcairn</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Ponape">
+				<long>
+					<standard>Hora de Ponape</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Qyzylorda">
+				<long>
+					<standard>Hora de Qyzylorda</standard>
+					<daylight>Hora de Verão de Qyzylorda</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Reunion">
+				<long>
+					<standard>Hora das Ilhas de Reunião</standard>
+				</long>
+			</metazone>
+			<metazone type="Rothera">
+				<long>
+					<standard>Hora de Rothera</standard>
+				</long>
+			</metazone>
+			<metazone type="Sakhalin">
+				<long>
+					<standard>Hora de Sakhalin</standard>
+					<daylight>Hora de Verão de Sakhalin</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Samara">
+				<long>
+					<standard>Hora de Samara</standard>
+					<daylight>Hora de Verão de Samara</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Samarkand">
+				<long>
+					<standard>Hora de Samarkand</standard>
+					<daylight>Hora de Verão de Samarkand</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Samoa">
+				<long>
+					<generic>Hora da Samoa</generic>
+					<standard>Hora Padrão da Samoa</standard>
+				</long>
+				<short>
+					<generic>Hora da Samoa</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Seychelles">
+				<long>
+					<standard>Hora das Ilhas Seicheles</standard>
+				</long>
+			</metazone>
+			<metazone type="Shevchenko">
+				<long>
+					<standard>Hora de Shevchenko</standard>
+					<daylight>Hora de Verão de Shevchenko</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Singapore">
+				<long>
+					<generic>Hora de Singapura</generic>
+					<standard>Hora Padrão de Singapura</standard>
+				</long>
+				<short>
+					<generic>Hora de Singapura</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Solomon">
+				<long>
+					<generic>Hora das Ilhas Salomão</generic>
+				</long>
+				<short>
+					<generic>Hora das Ilhas Salomão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="South_Georgia">
+				<long>
+					<standard>Hora da Georgia do Sul</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Sverdlovsk">
+				<long>
+					<standard>Hora de Sverdlovsk</standard>
+					<daylight>Hora de Verão de Sverdlovsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Syowa">
+				<long>
+					<standard>Hora de Syowa</standard>
+				</long>
+			</metazone>
+			<metazone type="Tahiti">
+				<long>
+					<generic>Hora da Polinésia Francesa</generic>
+					<standard>Hora do Tahiti</standard>
+				</long>
+				<short>
+					<generic>Hora da Polinésia Francesa</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tajikistan">
+				<long>
+					<generic>Hora do Tajiquistão</generic>
+					<standard>Hora do Tajiquistão</standard>
+				</long>
+				<short>
+					<generic>Hora do Tajiquistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tashkent">
+				<long>
+					<generic>Hora de Tashkent</generic>
+					<standard>Hora de Tashkent</standard>
+					<daylight>Hora de Verão de Tashkent</daylight>
+				</long>
+				<short>
+					<generic>Hora do Uzbequistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tbilisi">
+				<long>
+					<generic>Hora da Geórgia</generic>
+					<standard>Hora de Tbilisi</standard>
+					<daylight>Hora de Verão de Tbilisi</daylight>
+				</long>
+				<short>
+					<generic>Hora de Geórgia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tokelau">
+				<long>
+					<generic>Hora de Toquelau</generic>
+					<standard>Hora de Toquelau</standard>
+				</long>
+				<short>
+					<generic>Hora de Toquelau</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tonga">
+				<long>
+					<generic>Hora de Tonga</generic>
+					<daylight>Hora de Verão de Tonga</daylight>
+				</long>
+				<short>
+					<generic>Hora de Tonga</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Truk">
+				<long>
+					<standard>Hora de Truk</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Turkey">
+				<long>
+					<standard>Hora da Turquia</standard>
+					<daylight>Hora de Verão da Turquia</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Turkmenistan">
+				<long>
+					<generic>Hora do Turquemenistão</generic>
+					<standard>Hora do Turquemenistão</standard>
+					<daylight>Hora de Verão do Turquemenistão</daylight>
+				</long>
+				<short>
+					<generic>Hora do Turquemenistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Tuvalu">
+				<long>
+					<generic>Hora de Tuvalu</generic>
+				</long>
+				<short>
+					<generic>Hora de Tuvalu</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Uralsk">
+				<long>
+					<standard>Hora de Ural'sk</standard>
+					<daylight>Hora de Verão de Ural'sk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Urumqi">
+				<long>
+					<standard>Hora de Urumqi</standard>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Uzbekistan">
+				<long>
+					<generic>Hora do Uzbequistão</generic>
+					<standard>Hora do Uzbequistão</standard>
+					<daylight>Hora de Verão do Uzbequistão</daylight>
+				</long>
+				<short>
+					<generic>Hora do Uzbequistão</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Vanuatu">
+				<long>
+					<generic>Hora de Vanuatu</generic>
+					<standard>Hora de Vanuatu</standard>
+				</long>
+				<short>
+					<generic>Hora de Vanuatu</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Vladivostok">
+				<long>
+					<standard>Hora de Vladivostok</standard>
+					<daylight>Hora de Verão de Vladivostok</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Volgograd">
+				<long>
+					<standard>Hora de Volvograd</standard>
+					<daylight>Hora de Verão de Volgograd</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Vostok">
+				<long>
+					<standard>Hora de Vostok</standard>
+				</long>
+			</metazone>
+			<metazone type="Wake">
+				<long>
+					<standard>Hora das Ilhas Wake</standard>
+				</long>
+			</metazone>
+			<metazone type="Wallis">
+				<long>
+					<generic>Hora de Wallis e Futuna</generic>
+					<standard>Hora de Wallis e Futuna</standard>
+				</long>
+				<short>
+					<generic>Hora de Wallis e Futuna</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Yakutsk">
+				<long>
+					<standard>Hora de Yakutsk</standard>
+					<daylight>Hora de Verão de Yakutsk</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Yekaterinburg">
+				<long>
+					<standard>Hora de Yekaterinburg</standard>
+					<daylight>Hora de Verão de Yekaterinburg</daylight>
+				</long>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+			<metazone type="Yerevan">
+				<long>
+					<generic>Hora da Arménia</generic>
+					<standard>Hora de Yerevan</standard>
+					<daylight>Hora de Verão de Yerevan</daylight>
+				</long>
+				<short>
+					<generic>Hora da Arménia</generic>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<group> </group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>#,##0.00 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="AED">
+				<displayName>Dirham dos Emirados Árabes Unidos</displayName>
+			</currency>
+			<currency type="AFA">
+				<displayName>Afeghani (1927-2002)</displayName>
+			</currency>
+			<currency type="AFN">
+				<displayName>Afeghani</displayName>
+			</currency>
+			<currency type="ANG">
+				<displayName>Florim das Antilhas Holandesa</displayName>
+			</currency>
+			<currency type="AWG">
+				<displayName>Florim de Aruba</displayName>
+			</currency>
+			<currency type="BAD">
+				<displayName>Dinar da Bósnia-Herzegóvina</displayName>
+			</currency>
+			<currency type="BAM">
+				<displayName>Marco bósnio-herzegóvino conversível</displayName>
+			</currency>
+			<currency type="BEC">
+				<displayName>Franco belga (convertível)</displayName>
+			</currency>
+			<currency type="BYB">
+				<displayName>Rublo novo bielorusso (1994-1999)</displayName>
+			</currency>
+			<currency type="CYP">
+				<displayName>Libra de Chipre</displayName>
+			</currency>
+			<currency type="CZK">
+				<displayName>Coroa da República Checa</displayName>
+			</currency>
+			<currency type="ECV">
+				<displayName>Unidad de Valor Constante (UVC) do Equador</displayName>
+			</currency>
+			<currency type="FJD">
+				<displayName>Dólar das Fiji</displayName>
+			</currency>
+			<currency type="GHC">
+				<displayName>Cedi do Gana</displayName>
+			</currency>
+			<currency type="GMD">
+				<displayName>Dalasi da Gâmbia</displayName>
+			</currency>
+			<currency type="GNF">
+				<displayName>Franco da Guiné</displayName>
+			</currency>
+			<currency type="GTQ">
+				<displayName>Quetzal da Guatemala</displayName>
+			</currency>
+			<currency type="HNL">
+				<displayName>Lempira das Honduras</displayName>
+			</currency>
+			<currency type="KWD">
+				<displayName>Dinar koweitiano</displayName>
+			</currency>
+			<currency type="KYD">
+				<displayName>Dólar das Ilhas Caimão</displayName>
+			</currency>
+			<currency type="MKD">
+				<displayName>Dinar macedónio</displayName>
+			</currency>
+			<currency type="MLF">
+				<displayName>Franco do Mali</displayName>
+			</currency>
+			<currency type="MWK">
+				<displayName>Cuacha do Malawi</displayName>
+			</currency>
+			<currency type="MXP">
+				<displayName>Peso Plata mexicano (1861-1992)</displayName>
+			</currency>
+			<currency type="MXV">
+				<displayName>Unidad de Inversion (UDI) mexicana</displayName>
+			</currency>
+			<currency type="NIC">
+				<displayName>Córdoba nicaraguano</displayName>
+			</currency>
+			<currency type="NIO">
+				<displayName>Córdoba Ouro nicaraguano</displayName>
+			</currency>
+			<currency type="PLN">
+				<displayName>Zloti polaco</displayName>
+			</currency>
+			<currency type="PLZ">
+				<displayName>Zloti polaco (1950-1995)</displayName>
+			</currency>
+			<currency type="PTE">
+				<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				<decimal>$</decimal>
+				<group>,</group>
+			</currency>
+			<currency type="QAR">
+				<displayName>Rial do Qatar</displayName>
+			</currency>
+			<currency type="SGD">
+				<displayName>Dólar de Singapura</displayName>
+			</currency>
+			<currency type="TZS">
+				<displayName>Xelim de Tanzânia</displayName>
+			</currency>
+			<currency type="WST">
+				<displayName>Tala de Samoa Ocidental</displayName>
+			</currency>
+			<currency type="XEU">
+				<displayName>Unidade da Moeda Europeia</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>Moeda inválida ou desconhecida</displayName>
+			</currency>
+			<currency type="YUD">
+				<displayName>Dinar forte jugoslavo</displayName>
+			</currency>
+			<currency type="YUM">
+				<displayName>Super Dinar jugoslavo</displayName>
+			</currency>
+			<currency type="YUN">
+				<displayName>Dinar conversível jugoslavo</displayName>
+			</currency>
+			<currency type="ZWD">
+				<displayName>Dólar do Zimbabwe</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

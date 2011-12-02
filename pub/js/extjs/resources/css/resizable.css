@@ -1,0 +1,143 @@
+/*
+ * Ext JS Library 1.1 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-resizable-handle {
+    position:absolute;
+    z-index:100;
+    /* ie needs these */
+    font-size:1px;
+    line-height:6px;
+    overflow:hidden;
+	 background:white;
+	 filter:alpha(opacity=0);
+	 opacity:0;
+	 zoom:1;
+}
+.x-resizable-handle-east{
+    width:6px;
+    cursor:e-resize;
+    right:0;
+    top:0;
+    height:100%;
+}
+.ext-ie .x-resizable-handle-east {
+      margin-right:-1px; /*IE rounding error*/
+}
+.x-resizable-handle-south{
+    width:100%;
+    cursor:s-resize;
+    left:0;
+    bottom:0;
+    height:6px;
+}
+.ext-ie .x-resizable-handle-south {
+     margin-bottom:-1px; /*IE rounding error*/
+}
+.x-resizable-handle-west{
+    width:6px;
+    cursor:w-resize;
+    left:0;
+    top:0;
+    height:100%;
+}
+.x-resizable-handle-north{
+    width:100%;
+    cursor:n-resize;
+    left:0;
+    top:0;
+    height:6px;
+}
+.x-resizable-handle-southeast{
+    width:6px;
+    cursor:se-resize;
+    right:0;
+    bottom:0;
+    height:6px;
+    z-index:101;
+}
+.x-resizable-handle-northwest{
+    width:6px;
+    cursor:nw-resize;
+    left:0;
+    top:0;
+    height:6px;
+    z-index:101;
+}
+.x-resizable-handle-northeast{
+    width:6px;
+    cursor:ne-resize;
+    right:0;
+    top:0;
+    height:6px;
+    z-index:101;
+}
+.x-resizable-handle-southwest{
+    width:6px;
+    cursor:sw-resize;
+    left:0;
+    bottom:0;
+    height:6px;
+    z-index:101;
+}
+.x-resizable-over .x-resizable-handle, .x-resizable-pinned .x-resizable-handle{
+    filter:alpha(opacity=100);
+	 opacity:1;
+}
+.x-resizable-over .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-east{
+    background:url(../images/default/sizer/e-handle.gif);
+	 background-position: left;
+}
+.x-resizable-over .x-resizable-handle-west, .x-resizable-pinned .x-resizable-handle-west{
+    background:url(../images/default/sizer/e-handle.gif);
+	 background-position: left;
+}
+.x-resizable-over .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-south{
+    background:url(../images/default/sizer/s-handle.gif);
+    background-position: top;
+}
+.x-resizable-over .x-resizable-handle-north, .x-resizable-pinned .x-resizable-handle-north{
+    background:url(../images/default/sizer/s-handle.gif);
+    background-position: top;
+}
+.x-resizable-over .x-resizable-handle-southeast, .x-resizable-pinned .x-resizable-handle-southeast{
+    background:url(../images/default/sizer/se-handle.gif);
+    background-position: top left;
+}
+.x-resizable-over .x-resizable-handle-northwest, .x-resizable-pinned .x-resizable-handle-northwest{
+    background:url(../images/default/sizer/nw-handle.gif);
+    background-position:bottom right;
+}
+.x-resizable-over .x-resizable-handle-northeast, .x-resizable-pinned .x-resizable-handle-northeast{
+    background:url(../images/default/sizer/ne-handle.gif);
+    background-position: bottom left;
+}
+.x-resizable-over .x-resizable-handle-southwest, .x-resizable-pinned .x-resizable-handle-southwest{
+    background:url(../images/default/sizer/sw-handle.gif);
+    background-position: top right;
+}
+.x-resizable-proxy{
+    border: 1px dashed #6593cf;
+    position:absolute;
+    overflow:hidden;
+    display:none;
+	 left:0;top:0;
+    z-index:50000;
+}
+.x-resizable-overlay{
+    width:100%;
+	 height:100%;
+	 display:none;
+	 position:absolute;
+	 left:0;
+	 top:0;
+	 background:white;
+	 z-index:200000;
+	 -moz-opacity: 0;
+    opacity:0;
+    filter: alpha(opacity=0);
+}

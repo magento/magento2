@@ -1,0 +1,332 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+
+<layout>
+    <adminhtml_catalog_product_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Catalog</title></action>
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>catalog/products</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product" name="products_list">
+                <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_index>
+
+    <adminhtml_catalog_product_new>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"></block>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
+            <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
+        </reference>
+    </adminhtml_catalog_product_new>
+
+    <adminhtml_catalog_product_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" before="-"></block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"></block>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
+            <block type="Mage_Core_Block_Template" name="catalog.wysiwyg.js" template="MAge_Adminhtml::catalog/wysiwyg/js.phtml"/>
+        </reference>
+    </adminhtml_catalog_product_edit>
+
+    <adminhtml_catalog_product_categories>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Categories" name="catalog.product.edit.tab.categories"/>
+        </block>
+    </adminhtml_catalog_product_categories>
+    
+    <adminhtml_catalog_product_reviews>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Reviews" name="admin.product.reviews"/>
+        </block>
+    </adminhtml_catalog_product_reviews>
+
+    <adminhtml_catalog_product_taggrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Tag" name="admin.product.tags"/>
+        </block>
+    </adminhtml_catalog_product_taggrid>
+
+    <adminhtml_catalog_product_tagcustomergrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Tag_Customer" name="admin.product.tags.customers"/>
+        </block>
+    </adminhtml_catalog_product_tagcustomergrid>
+
+    <adminhtml_catalog_product_options>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options" name="admin.product.options"/>
+        </block>
+    </adminhtml_catalog_product_options>
+
+    <adminhtml_catalog_product_grid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Grid" name="admin.product.grid"/>
+        </block>
+    </adminhtml_catalog_product_grid>
+
+    <adminhtml_catalog_product_related>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related" name="catalog.product.edit.tab.related"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="related_grid_serializer">
+                <reference name="related_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.related</grid_block_name>
+                        <data_callback>getSelectedRelatedProducts</data_callback>
+                        <hidden_input_name>links[related]</hidden_input_name>
+                        <reload_param_name>products_related</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_catalog_product_related>
+
+    <adminhtml_catalog_product_relatedgrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Related" name="catalog.product.edit.tab.related"/>
+        </block>
+    </adminhtml_catalog_product_relatedgrid>
+
+    <adminhtml_catalog_product_superconfig>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Grid" name="admin.product.edit.tab.super.config.grid" output="toHtml" />
+    </adminhtml_catalog_product_superconfig>
+
+    <adminhtml_catalog_product_alertspricegrid>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Price" name="admin.product.edit.tab.alerts.price" output="toHtml" />
+    </adminhtml_catalog_product_alertspricegrid>
+
+    <adminhtml_catalog_product_alertsstockgrid>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts_Stock" name="admin.product.edit.tab.alerts.stock" output="toHtml" />
+    </adminhtml_catalog_product_alertsstockgrid>
+
+    <adminhtml_catalog_product_upsell>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell" name="catalog.product.edit.tab.upsell"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="upsell_grid_serializer">
+                <reference name="upsell_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.upsell</grid_block_name>
+                        <data_callback>getSelectedUpsellProducts</data_callback>
+                        <hidden_input_name>links[upsell]</hidden_input_name>
+                        <reload_param_name>products_upsell</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_catalog_product_upsell>
+
+    <adminhtml_catalog_product_upsellgrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Upsell" name="catalog.product.edit.tab.upsell"/>
+        </block>
+    </adminhtml_catalog_product_upsellgrid>
+
+    <adminhtml_catalog_product_crosssell>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell" name="catalog.product.edit.tab.crosssell"/>
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="crosssell_grid_serializer">
+                <reference name="crosssell_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.crosssell</grid_block_name>
+                        <data_callback>getSelectedCrossSellProducts</data_callback>
+                        <hidden_input_name>links[crosssell]</hidden_input_name>
+                        <reload_param_name>products_crosssell</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_catalog_product_crosssell>
+
+    <adminhtml_catalog_product_crosssellgrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Crosssell" name="catalog.product.edit.tab.crosssell"/>
+        </block>
+    </adminhtml_catalog_product_crosssellgrid>
+<!--
+Layout handle for simple products
+-->
+
+    <adminhtml_catalog_product_simple />
+
+<!--
+Layout handle for grouped products
+-->
+    <adminhtml_catalog_product_grouped>
+        <reference name="product_tabs">
+            <action method="addTab"><name>super</name><block>Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group</block></action>
+        </reference>
+    </adminhtml_catalog_product_grouped>
+
+    <adminhtml_catalog_product_supergroup>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group" name="catalog.product.edit.tab.super.group" />
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="grouped_grid_serializer">
+                <reference name="grouped_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>catalog.product.edit.tab.super.group</grid_block_name>
+                        <data_callback>getSelectedGroupedProducts</data_callback>
+                        <hidden_input_name>links[grouped]</hidden_input_name>
+                        <reload_param_name>products_grouped</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>qty</input_name>
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_catalog_product_supergroup>
+
+    <adminhtml_catalog_product_supergroupgridonly>
+        <block type="Mage_Core_Block_Text_List" name="root">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group" name="catalog.product.edit.tab.super.group" />
+        </block>
+    </adminhtml_catalog_product_supergroupgridonly>
+<!--
+Layout handle for configurable products
+-->
+
+    <adminhtml_catalog_product_configurable_new>
+        <remove name="product_tabs"/>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs_Configurable" name="configurable_product_tabs"></block>
+        </reference>
+    </adminhtml_catalog_product_configurable_new>
+
+    <adminhtml_catalog_product_configurable>
+        <reference name="product_tabs">
+            <action method="addTab"><name>configurable</name><block>Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config</block></action>
+            <action method="bindShadowTabs"><first>configurable</first><second>customer_options</second></action>
+        </reference>
+    </adminhtml_catalog_product_configurable>
+
+    <adminhtml_catalog_product_action_attribute_edit>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" template="store/switcher.phtml" />
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tabs" name="attributes_tabs">
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes" name="tab_attributes"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Inventory" name="tab_inventory" template="catalog/product/edit/action/inventory.phtml" />
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Websites" name="tab_websites" template="catalog/product/edit/action/websites.phtml" />
+                <action method="addTab"><name>attributes</name><block>tab_attributes</block></action>
+                <action method="addTab"><name>inventory</name><block>tab_inventory</block></action>
+                <action method="addTab"><name>websites</name><block>tab_websites</block></action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute" name="attribute" template="catalog/product/edit/action/attribute.phtml" />
+        </reference>
+    </adminhtml_catalog_product_action_attribute_edit>
+
+    <adminhtml_catalog_product_attribute_edit>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tabs" name="attribute_edit_tabs"></block>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit" name="attribute_edit_content"></block>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Template" name="attribute_edit_js" template="catalog/product/attribute/js.phtml"></block>
+        </reference>
+    </adminhtml_catalog_product_attribute_edit>
+
+    <adminhtml_catalog_category_edit>
+        <update handle="editor"/>
+        <reference name="left">
+            <block name="category.tree" type="Mage_Adminhtml_Block_Catalog_Category_Tree" template="catalog/category/tree.phtml" />
+        </reference>
+        <reference name="content">
+            <block name="category.edit"  type="Mage_Adminhtml_Block_Catalog_Category_Edit" template="catalog/category/edit.phtml" />
+        </reference>
+        <reference name="js">
+            <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js" />
+        </reference>
+    </adminhtml_catalog_category_edit>
+
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset" name="product.composite.fieldset" output="toHtml">
+            <block name="product.composite.fieldset.options" type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Options" template="catalog/product/composite/fieldset/options.phtml">
+                <action method="addOptionRenderer"><type>text</type><block>Mage_Catalog_Block_Product_View_Options_Type_Text</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/text.phtml</template></action>
+                <action method="addOptionRenderer"><type>file</type><block>Mage_Catalog_Block_Product_View_Options_Type_File</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/file.phtml</template></action>
+                <action method="addOptionRenderer"><type>select</type><block>Mage_Catalog_Block_Product_View_Options_Type_Select</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/select.phtml</template></action>
+                <action method="addOptionRenderer"><type>date</type><block>Mage_Catalog_Block_Product_View_Options_Type_Date</block><template>Mage_Adminhtml::catalog/product/composite/fieldset/options/type/date.phtml</template></action>
+                <block type="Mage_Core_Block_Template" name="product.composite.fieldset.options.js" as="options_js" template="Mage_Adminhtml::catalog/product/composite/fieldset/options/js.phtml"/>
+            </block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Qty" name="product.composite.fieldset.qty" template="catalog/product/composite/fieldset/qty.phtml"/>
+        </block>
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE>
+    
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Error" name="product.composite.error" output="toHtml" />
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR>
+    
+    <ADMINHTML_CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT>
+        <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Update_Result" name="product.composite.update.result" output="toHtml" />
+    </ADMINHTML_CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT>
+<!--
+Additional block in composite_fieldset block dependant on product type
+-->
+    <PRODUCT_TYPE_configurable>
+        <reference name="product.composite.fieldset">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Configurable" name="product.composite.fieldset.configurable" before="product.composite.fieldset.options" template="catalog/product/composite/fieldset/configurable.phtml" />
+        </reference>
+    </PRODUCT_TYPE_configurable>
+    <PRODUCT_TYPE_grouped>
+        <reference name="product.composite.fieldset">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Grouped" name="product.composite.fieldset.grouped" before="product.composite.fieldset.options" template="catalog/product/composite/fieldset/grouped.phtml"/>
+            <remove name="product.composite.fieldset.qty"/>
+        </reference>
+    </PRODUCT_TYPE_grouped>
+
+</layout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.30 $"/>
+		<generation date="$Date: 2009/05/05 23:06:41 $"/>
+		<language type="ug"/>
+	</identity>
+	<localeDisplayNames>
+		<variants>
+			<variant type="REVISED">Uyghur</variant>
+		</variants>
+	</localeDisplayNames>
+	<layout>
+		<orientation characters="right-to-left"/>
+	</layout>
+	<characters>
+		<exemplarCharacters>[ئ-ب پ ت ج چ خ د ر ز ژ س ش غ ف-ك ڭ گ ل-ه ە و ۆ-ۈ ۋ ى ي ې]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+</ldml>

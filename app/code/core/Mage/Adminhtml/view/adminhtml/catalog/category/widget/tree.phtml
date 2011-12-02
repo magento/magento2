@@ -1,0 +1,202 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php $_divId = 'tree' . $this->getId() ?>
+<div id="<?php echo $_divId ?>" class="tree"></div>
+
+<script type="text/javascript">
+//<![CDATA[
+
+var tree<?php echo $this->getId() ?>;
+
+var useMassaction = <?php echo $this->getUseMassaction()?1:0; ?>;
+
+var isAnchorOnly = <?php echo $this->getIsAnchorOnly()?1:0; ?>;
+
+Ext.tree.TreePanel.Enhanced = function(el, config)
+{
+    Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
+};
+
+Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
+
+    loadTree : function(config, firstLoad)
+    {
+        var parameters = config['parameters'];
+        var data = config['data'];
+
+        if ((typeof parameters['root_visible']) != 'undefined') {
+            this.rootVisible = parameters['root_visible']*1;
+        }
+
+        var root = new Ext.tree.TreeNode(parameters);
+
+        this.nodeHash = {};
+        this.setRootNode(root);
+
+        if (firstLoad) {
+            <?php if ($this->getNodeClickListener()): ?>
+                this.addListener('click', <?php echo $this->getNodeClickListener() ?>.createDelegate(this));
+            <?php endif; ?>
+        }
+
+        this.loader.buildCategoryTree(root, data);
+        this.el.dom.innerHTML = '';
+        // render the tree
+        this.render();
+    }
+});
+
+Ext.onReady(function()
+{
+    var emptyNodeAdded = <?php echo ($this->getWithEmptyNode() ? 'false' : 'true') ?>;
+
+    var categoryLoader = new Ext.tree.TreeLoader({
+       dataUrl: '<?php echo $this->getLoadTreeUrl() ?>'
+    });
+
+    categoryLoader.buildCategoryTree = function(parent, config)
+    {
+        if (!config) return null;
+
+
+        if (parent && config && config.length){
+            for (var i = 0; i < config.length; i++) {
+                var node;
+                if (useMassaction && config[i].is_anchor == isAnchorOnly) {
+                    config[i].uiProvider = Ext.tree.CheckboxNodeUI;
+                }
+                var _node = Object.clone(config[i]);
+
+                // Add empty node to reset category filter
+                if(!emptyNodeAdded) {
+                    var empty = Object.clone(_node);
+                    empty.text = '<?php echo $this->__('None') ?>';
+                    empty.children = [];
+                    empty.id = 'none';
+                    empty.path = '1/none';
+                    empty.cls = 'leaf';
+                    parent.appendChild(new Ext.tree.TreeNode(empty));
+                    emptyNodeAdded = true;
+                }
+
+                if (_node.children && !_node.children.length) {
+                    delete(_node.children);
+                    node = new Ext.tree.AsyncTreeNode(_node);
+                } else {
+                    node = new Ext.tree.TreeNode(config[i]);
+                }
+                parent.appendChild(node);
+                node.loader = node.getOwnerTree().loader;
+                node.loader = node.getOwnerTree().loader;
+                if (_node.children) {
+                    this.buildCategoryTree(node, _node.children);
+                }
+            }
+        }
+    };
+
+    categoryLoader.createNode = function(config) {
+        var node;
+        if (useMassaction && config.is_anchor == isAnchorOnly) {
+            config.uiProvider = Ext.tree.CheckboxNodeUI;
+        }
+        var _node = Object.clone(config);
+        if (config.children && !config.children.length) {
+            delete(config.children);
+            node = new Ext.tree.AsyncTreeNode(config);
+        } else {
+            node = new Ext.tree.TreeNode(config);
+        }
+        return node;
+    };
+
+    categoryLoader.buildHash = function(node)
+    {
+        var hash = {};
+
+        hash = this.toArray(node.attributes);
+
+        if (node.childNodes.length>0 || (node.loaded==false && node.loading==false)) {
+            hash['children'] = new Array;
+
+            for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                if (!hash['children']) {
+                    hash['children'] = new Array;
+                }
+                hash['children'].push(this.buildHash(node.childNodes[i]));
+            }
+        }
+
+        return hash;
+    };
+
+    categoryLoader.toArray = function(attributes) {
+        var data = {};
+        for (var key in attributes) {
+            var value = attributes[key];
+            data[key] = value;
+        }
+
+        return data;
+    };
+
+    categoryLoader.on("beforeload", function(treeLoader, node) {
+        treeLoader.baseParams.id = node.attributes.id;
+    });
+
+    tree<?php echo $this->getId() ?> = new Ext.tree.TreePanel.Enhanced('<?php echo $_divId ?>', {
+        animate:          false,
+        loader:           categoryLoader,
+        enableDD:         false,
+        containerScroll:  true,
+        rootVisible:      '<?php echo $this->getRoot()->getIsVisible() ?>',
+        useAjax:          true,
+        currentNodeId:    <?php echo (int) $this->getCategoryId() ?>,
+        addNodeTo:        false
+    });
+
+    if (useMassaction) {
+        tree<?php echo $this->getId() ?>.on('check', function(node) {
+            $('<?php echo $_divId; ?>').fire('node:changed', {node:node});
+        }, tree<?php echo $this->getId() ?>);
+    }
+
+    // set the root node
+    var parameters = {
+        text:        'Psw',
+        draggable:   false,
+        id:          <?php echo (int) $this->getRoot()->getId() ?>,
+        expanded:    <?php echo (int) $this->getIsWasExpanded() ?>,
+        category_id: <?php echo (int) $this->getCategoryId() ?>
+    };
+
+    tree<?php echo $this->getId() ?>.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
+
+});
+//]]>
+</script>

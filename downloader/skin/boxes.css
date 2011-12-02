@@ -1,0 +1,217 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/*
+RESET
+******************************************************/
+*                       { margin:0; padding:0; }
+body                    { background:#f6f6f6; color:#2f2f2f; font:12px/1.55em arial, helvetica; }
+a                       { color:#ea7601; }
+a:hover                 { color:#d56b00; }
+p                       { margin-bottom:1em; }
+th                      { font-weight:bold; }
+fieldset                { border:none; }
+form                    { display:inline; }
+input, select, button   { vertical-align:middle; }
+li                      { list-style:none; }
+
+/* COMMON ELEMENTS
+******************************************************/
+
+/* Messages */
+.msgs ul            { margin-bottom:14px; padding:4px 10px 3px 10px; }
+.msgs li {
+    list-style:none;
+    margin:0 0 3px 0;
+    border:0;
+    padding:0;
+    font-size:.95em;
+    font-weight:bold;
+    }
+.error-msg          { color:#df280a !important; background:#faebe7; }
+.success-msg        { color:#3d6611; background:#eff5ea; }
+.notice-msg         { background:#fffbf0; color:#3d6611 !important; }
+.warning-msg        { background:#e6e6e6; color:#000000 !important; }
+
+
+
+/* Forms */
+.form-list          { margin-bottom:10px; }
+.form-list td.label { padding:2px 8px 2px 0; }
+.form-list td.value { padding:2px 0 2px 8px; }
+.form-btn-set       { margin-top:10px; text-align:right; }
+button, .form-btn {
+    border-width:1px;
+    border-style:solid;
+    border-color:#ed6502 #a04300 #a04300 #ed6502;
+    background:url(images/btn_bg.gif) #ffac47 repeat-x 0 100%;
+    padding:0 7px 1px 7px;
+    color:#fff;
+    font:bold 12px arial, helvetica, sans-serif;
+    cursor:pointer;
+    white-space:nowrap;
+    }
+a.form-btn,
+a.form-btn:hover    { color:#fff; padding-top:1px; padding-bottom:2px; text-decoration:none; }
+
+
+/* Heading */
+.bar-head           { margin-bottom:12px; background:#6f8992; padding:2px 8px; }
+.bar-head h4        { float:left; margin:0; color:#fff; font-size:1em; }
+.bar-head
+.bar-head-btn       { margin-right:-6px; position:relative; }
+
+
+/* Lists */
+.bare-list li       { margin-bottom:8px; }
+.disc               { margin-bottom:12px; }
+.disc li            { margin-left:22px; list-style-type:disc; }
+.divider            { height:1px; margin:15px 0; background:#bbb; overflow:hidden;  font-size:1px; line-height:0em; }
+
+
+/*
+BOXES
+******************************************************/
+
+/* Base structure */
+.container          { width:750px; margin:35px auto 0 auto; }
+.header-top         { background:url(images/header_bg.gif) repeat-x #415d65; padding:25px 25px 10px 25px; }
+.main {
+    min-height:400px;
+    border-width:0 1px 2px 1px;
+    border-color:#aeaeae #aeaeae #6a6a6a #aeaeae;
+    border-style:solid;
+    background:#fff;
+    }
+.content            { padding:10px 25px 35px 25px; }
+.footer             { width:710px; margin:0 auto 35px auto; padding:10px 20px; text-align:center; }
+
+
+/* Header */
+#logo {
+    width:329px;
+    height:31px;
+    background:url(images/logo.gif) no-repeat;
+    text-indent:-6000px;
+    }
+.nav {
+    margin-bottom:20px;
+    padding:8px 15px 0 20px;
+    background:url(images/nav_bg.gif) repeat-x 0 100% #f6f6f6;
+    }
+.nav li             { list-style:none; float:left; }
+.nav li a, .nav .nav li a:hover {
+    float:left;
+    margin-right:4px;
+    border:1px solid #ccc;
+    border-right-color:#999;
+    border-bottom:none;
+    background:#ccc;
+    padding:2px 11px;
+    color:#222;
+    text-decoration:none;
+    }
+.nav li a.active, .nav li a.active:hover {
+    background:#fff;
+    color:#2f2f2f;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:default;
+    }
+.page-head          { margin-bottom:14px; font-size:1.7em; font-weight:normal; }
+
+
+/* Footer */
+.footer .copyright  { font-size:.95em; color:#444; }
+
+
+
+
+/* SECTION-SPECIFIC
+******************************************************/
+
+/* Connect Package */
+.connect-packages table    { table-layout:fixed; margin:6px 0; }
+.connect-packages td,.connect-packages th {
+    padding:3px 5px;
+    border-right:solid 1px #ccc;
+    border-bottom:solid 1px #ccc;
+    background:#f6f6f6;
+    vertical-align:top;
+    word-wrap:break-word;
+    }
+.connect-packages th       { border-top:solid 1px #bbb; background:#ccc; text-align:left; }
+.connect-packages td.first { border-left:solid 1px #bbb; }
+.connect-packages td.last  { border-right:solid 1px #bbb; }
+.connect-packages tr.installed-latest td   { background:#dbf1d7; }
+.connect-packages tr.upgrade-available td  { background:#fcfbbb; }
+.connect-packages tr.stand-alone td        { background:#cbe8fb; }
+.connect-packages td .select               { word-wrap:normal; width:100%; }
+.step-count             { background:#f77312; color:#fff; font-weight:bold; padding:0 4px; }
+
+
+
+
+/* MISC
+******************************************************/
+
+/* Clearing */
+.bar-head:after,
+.form-btn-set:after,
+.nav:after,
+.clear:after {
+    clear:both;
+    content:".";
+    display:block;
+    height:0;
+    font-size:0;
+    line-height:0;
+    visibility:hidden;
+    }
+
+
+/* Directional and spacial */
+.f-left             { float:left; }
+.f-right            { float:right; }
+.v-top              { vertical-align:top; }
+.v-middle           { vertical-align:middle; }
+.v-bottom           { vertical-align:bottom; }
+.a-left             { text-align:left; }
+.a-center           { text-align:center !important; }
+.a-right            { text-align:right; }
+.nm                 { margin:0 !important; }
+.np                 { padding:0 !important; }
+.no-display         { display:none; }
+.no-show            { display:none; }
+.no-br              { white-space:nowrap; }
+.no-float           { float:none !important; }
+.big                { font-size:1.2em !important; }
+
+.loading-mask { color:#d85909; font-size:1.1em; font-weight:bold; text-align:center; opacity:0.80; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"; z-index:500; }
+.loading-mask .loader { position:absolute; /* position:absolute; top:143px; */ left:50%; width:120px; margin-left:-120px; padding:15px 60px; background:#fff4e9; border:2px solid #f1af73; color:#d85909; font-weight:bold; text-align:center; z-index:1000; }
+
+/* Settings Page */
+.settings-page .form-list td { width:200px; }
+.settings-page .form-list select { width:254px; }
+.settings-page .form-list .input-text { width:250px; }

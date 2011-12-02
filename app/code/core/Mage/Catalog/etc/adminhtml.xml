@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Catalog
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <menu>
+        <catalog translate="title" module="Mage_Catalog">
+            <title>Catalog</title>
+            <sort_order>30</sort_order>
+            <!--action>adminhtml/catalog</action-->
+            <depends>
+                <module>Mage_Catalog</module>
+            </depends>
+            <children>
+                <products translate="title" module="Mage_Catalog">
+                    <title>Manage Products</title>
+                    <action>adminhtml/catalog_product/</action>
+                    <sort_order>0</sort_order>
+                </products>
+                <categories translate="title" module="Mage_Catalog">
+                    <title>Manage Categories</title>
+                    <action>adminhtml/catalog_category/</action>
+                    <sort_order>10</sort_order>
+                </categories>
+                <attributes translate="title" module="Mage_Catalog">
+                    <title>Attributes</title>
+                    <children>
+                        <attributes translate="title" module="Mage_Catalog">
+                            <title>Manage Attributes</title>
+                            <action>adminhtml/catalog_product_attribute/</action>
+                        </attributes>
+                        <sets translate="title" module="Mage_Catalog">
+                            <title>Manage Attribute Sets</title>
+                            <action>adminhtml/catalog_product_set/</action>
+                        </sets>
+                    </children>
+                    <sort_order>20</sort_order>
+                </attributes>
+                <urlrewrite translate="title" module="Mage_Catalog">
+                    <title>URL Rewrite Management</title>
+                    <action>adminhtml/urlrewrite/index</action>
+                    <sort_order>30</sort_order>
+                </urlrewrite>
+            </children>
+        </catalog>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <catalog translate="title" module="Mage_Catalog">
+                                        <title>Catalog Section</title>
+                                    </catalog>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <catalog translate="title" module="Mage_Catalog">
+                        <title>Catalog</title>
+                        <sort_order>30</sort_order>
+                        <children>
+                            <attributes translate="title">
+                                <title>Attributes</title>
+                                <children>
+                                    <attributes translate="title">
+                                        <title>Manage Attributes</title>
+                                    </attributes>
+                                    <sets translate="title">
+                                        <title>Manage Attribute Sets</title>
+                                    </sets>
+                                </children>
+                            </attributes>
+                            <categories translate="title">
+                                <title>Manage Categories</title>
+                            </categories>
+                            <products translate="title">
+                                <title>Manage Products</title>
+                            </products>
+                            <update_attributes translate="title">
+                                <title>Update Attributes</title>
+                            </update_attributes>
+                            <urlrewrite translate="title">
+                                <title>Url Rewrite Management</title>
+                            </urlrewrite>
+                        </children>
+                    </catalog>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

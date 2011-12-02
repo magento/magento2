@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.45 $"/>
+		<generation date="$Date: 2009/05/05 23:06:38 $"/>
+		<language type="ky"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">африкаанча</language>
+			<language type="ar">арабча</language>
+			<language type="az">азербайжанча</language>
+			<language type="be">беларусча</language>
+			<language type="bg">болгарияча</language>
+			<language type="bh">бихариче</language>
+			<language type="bn">бангладешче</language>
+			<language type="br">бретон</language>
+			<language type="bs">боснияча</language>
+			<language type="ca">каталанча</language>
+			<language type="cs">чех тили</language>
+			<language type="da">датча</language>
+			<language type="de">немисче</language>
+			<language type="el">грекче</language>
+			<language type="en">англисче</language>
+			<language type="es">испанча</language>
+			<language type="et">эстончо</language>
+			<language type="fa">фарзча</language>
+			<language type="fi">финче</language>
+			<language type="fil">тагалча</language>
+			<language type="fr">французча</language>
+			<language type="ga">ирландча</language>
+			<language type="gn">гуараш</language>
+			<language type="gu">гужаратча</language>
+			<language type="he">еврейче</language>
+			<language type="hi">индусча</language>
+			<language type="hr">хорватча</language>
+			<language type="hu">венгрияча</language>
+			<language type="id">индонезияча</language>
+			<language type="is">исландча</language>
+			<language type="it">италиянча</language>
+			<language type="ja">япончо</language>
+			<language type="jv">жаванизче</language>
+			<language type="ka">грузинче</language>
+			<language type="kn">каннадача</language>
+			<language type="ko">корейче</language>
+			<language type="ku">курт</language>
+			<language type="ky">Кыргыз</language>
+			<language type="la">латынча</language>
+			<language type="lt">литвача</language>
+			<language type="lv">латвияча</language>
+			<language type="mk">македонияча</language>
+			<language type="ml">малайаламча</language>
+			<language type="mr">маратиче</language>
+			<language type="ms">малайча</language>
+			<language type="mt">малтизче</language>
+			<language type="ne">непалча</language>
+			<language type="nl">голландча</language>
+			<language type="nn">норвегияча</language>
+			<language type="no">норвежче</language>
+			<language type="or">ория</language>
+			<language type="pa">пунжабиче</language>
+			<language type="pl">полякча</language>
+			<language type="ps">пашто</language>
+			<language type="pt">португалча</language>
+			<language type="ro">румынияча</language>
+			<language type="ru">орусча</language>
+			<language type="sh">серб-хорват</language>
+			<language type="si">сингалача</language>
+			<language type="sk">словакча</language>
+			<language type="sl">словенче</language>
+			<language type="sq">албанча</language>
+			<language type="sr">сербче</language>
+			<language type="st">сесото</language>
+			<language type="su">сунданча</language>
+			<language type="sv">шведче</language>
+			<language type="sw">суахиличе</language>
+			<language type="ta">тамилче</language>
+			<language type="te">телугуча</language>
+			<language type="th">тайча</language>
+			<language type="tk">түркмөн</language>
+			<language type="tlh">клингончо</language>
+			<language type="tr">туркчо</language>
+			<language type="tw">тви</language>
+			<language type="uk">украинче</language>
+			<language type="ur">урдуча</language>
+			<language type="uz">озбекче</language>
+			<language type="vi">вьетнамча</language>
+			<language type="yi">еврей</language>
+			<language type="zh">кытайча</language>
+		</languages>
+		<territories>
+			<territory type="KG">Кыргызстан</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[а б г-е ё ж-н ӊ о ө п-у ү х ч ш ъ ы э-я]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[в ф ц щ ь]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">BCE</era>
+						<era type="1">CE</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, y MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y MMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+		</symbols>
+		<currencies>
+			<currency type="KGS">
+				<symbol>сом</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

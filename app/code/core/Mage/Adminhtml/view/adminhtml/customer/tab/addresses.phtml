@@ -1,0 +1,560 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<!-- Addresses list -->
+<table cellspacing="0" class="form-edit">
+<tr>
+<td class="address-list">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-customer-address-list"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Customer Addresses') ?></h4>
+    </div>
+    <div class="sub-btn-set"><?php echo $this->getAddNewButtonHtml() ?></div>
+    <ul id="address_list">
+    <?php $_iterator = 0; ?>
+    <?php if(count($addressCollection)): ?>
+        <?php foreach ($addressCollection as $_address): ?>
+        <li id="address_item_<?php echo $_address->getId() ?>">
+            <?php if (!$this->isReadonly()): ?>
+            <a href="#" class="btn-remove-address">
+                <img src="<?php echo $this->getSkinUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
+            </a>
+            <a href="#" id="select_button_<?php echo $_address->getId() ?>" class="select_button btn-edit-address">
+                <img src="<?php echo $this->getSkinUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
+            </a>
+            <?php endif;?>
+            <address>
+                <?php echo $_address->format('html') ?>
+            </address>
+            <div class="address-type">
+                <span class="address-type-line">
+                    <input type="radio" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_billing<?php echo $_address->getId() ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>"<?php if($_address->getId()==$customer->getDefaultBilling()): ?> checked="checked"<?php endif; ?>/>
+                    &nbsp;<label for="address_item_billing<?php echo $_address->getId() ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></label>
+                </span>
+                <span class="address-type-line">
+                    <input type="radio"  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_shipping<?php echo $_address->getId() ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"<?php if($_address->getId()==$customer->getDefaultShipping()): ?> checked="checked"<?php endif; ?>/>
+                    &nbsp;<label for="address_item_shipping<?php echo $_address->getId() ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></label>
+                </span>
+            </div>
+        </li>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </ul>
+</td>
+<td>
+    <!-- Template for adding address item to list -->
+    <?php $_templatePrefix = $this->getTemplatePrefix() ?>
+    <div id="address_item_template" class="no-display template">
+        <?php if (!$this->isReadonly()): ?>
+        <a href="#" class="btn-remove-address">
+            <img src="<?php echo $this->getSkinUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
+        </a>
+        <a href="#" id="select_button_" class="select_button btn-edit-address">
+            <img src="<?php echo $this->getSkinUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
+        </a>
+        <?php endif;?>
+        <address><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('New Customer Address') ?></address>
+        <div class="address-type">
+            <span class="address-type-line">
+                <input  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> type="radio" value="<?php echo $_templatePrefix ?>" id="address_item_billing<?php echo $_templatePrefix ?>" name="account[default_billing]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Billing Address') ?>"/>
+                &nbsp;<label for="address_item_billing<?php echo $_templatePrefix ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Billing Address') ?></label>
+            </span>
+            <span class="address-type-line">
+                <input  <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> type="radio" value="<?php echo $_templatePrefix ?>" id="address_item_shipping<?php echo $_templatePrefix ?>" name="account[default_shipping]" title="<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Set as Default Shipping Address') ?>"/>
+                &nbsp;<label for="address_item_shipping<?php echo $_templatePrefix ?>"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Default Shipping Address') ?></label>
+            </span>
+        </div>
+    </div>
+
+    <!-- Address form template -->
+    <div id="address_form_template" class="no-display template">
+    <?php
+        // Set form template elements prefix
+        $this->getForm()->setHtmlIdPrefix($_templatePrefix)
+                ->setFieldNameSuffix('address['.$_templatePrefix.']');
+    ?>
+    <?php echo $this->getForm()->getHtml() ?>
+    <?php echo $this->getCancelButtonHtml() ?>
+    </div>
+<!-- -->
+
+<!-- Addresses forms -->
+    <div class="entry-edit" id="address_form_container">
+        <?php if(count($addressCollection)): ?>
+            <?php foreach ($addressCollection as $_address): ?>
+            <div id="form_address_item_<?php echo $_address->getId() ?>" style="display:none">
+            <?php
+                    $this->getForm()->addValues($_address->getData())
+                            ->setHtmlIdPrefix("_item{$_address->getId()}")
+                            ->setFieldNameSuffix('address['.$_address->getId().']');
+                    $this->addValuesToNamePrefixElement($_address->getPrefix())
+                        ->addValuesToNameSuffixElement($_address->getSuffix());
+            ?>
+            <?php echo $this->getForm()->getHtml() ?>
+            <input type="hidden" name="address[<?php echo $_address->getId() ?>][_deleted]" id="deleted_address_item_<?php echo $_address->getId() ?>" />
+            </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div id="no_address_message"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('This customer has no saved addresses.') ?></div>
+        <?php endif; ?>
+    </div>
+
+<script type="text/javascript">
+//<![CDATA[
+var deleteButtonId = <?php echo $_iterator ?>;
+
+var addressesModel = Class.create();
+addressesModel.prototype = {
+    initialize : function() {
+        this.activeItem   = null;
+        this.itemTemplate = $('address_item_template');
+        this.formTemplate = $('address_form_template');
+        this.itemContainer= $('address_list');
+        this.formContainer= $('address_form_container');
+        this.baseItemId   = 'new_item';
+
+        this.defaultCountries = <?php echo $this->getDefaultCountriesJson(); ?>;
+        this.itemContentTemplate = new Template('<?php echo $this->helper('Mage_Customer_Helper_Address')->getFormat('js_template')?>');
+
+        this.onNewAddressClick  = this.addNewAddress.bindAsEventListener(this);
+        this.onItemMouseOver    = this.itemMouseOver.bindAsEventListener(this);
+        this.onItemMouseOut     = this.itemMouseOut.bindAsEventListener(this);
+        this.onItemMouseClick   = this.itemMouseClick.bindAsEventListener(this);
+        this.onItemFormFieldChange = this.syncFormData.bindAsEventListener(this);
+
+        this.loader = new varienLoader(true);
+        this.regionsUrl = '<?php echo $this->getRegionsUrl() ?>';
+
+        this.reloadItemList(1);
+
+        for(var i=0,n=this.itemList.length; i<n; i++){
+            if(this.itemList[i].id){
+                this.addItemObservers(this.itemList[i]);
+                this.initItem(this.itemList[i]);
+            }
+        }
+        if($('add_new_address_button')){
+            Event.observe('add_new_address_button', 'click', this.onNewAddressClick)
+        }
+
+        this.setActiveItem(this.itemList[0]);
+        this.setAddressAsDefault();
+        this.bindCountryRegionRelation();
+    },
+
+    reloadItemList : function(initial){
+        this.itemList = $$('#address_list li');
+        if( initial ) {
+            this.itemCount = this.itemList.length;
+        }
+        if(!this.itemList.length){
+            if($('no_address_message')){
+                $('no_address_message').show();
+            }
+            else {
+                this.formContainer.innerHTML+= '<div id="no_address_message"><?php echo addslashes(Mage::helper('Mage_Customer_Helper_Data')->__('This customer has no saved addresses.')) ?></div>'
+            }
+        }
+    },
+
+    initItem : function(item){
+        if(item && $('form_'+item.id)){
+            item.formBlock = $('form_'+item.id);
+            Element.hide($('form_'+item.id));
+            $('form_'+item.id).statusBar = item;
+            $('form_'+item.id).addressItem = item;
+
+            // set Zip optional/required
+            var countryElement = $('_item' + item.id.replace(/address_item_/, '') + 'country_id');
+            varienGlobalEvents.fireEvent("address_country_changed", countryElement);
+        }
+    },
+
+    addItemObservers : function(item){
+        if(item.id){
+            Event.observe(item, 'mouseover', this.onItemMouseOver);
+            Event.observe(item, 'mouseout', this.onItemMouseOut);
+            Event.observe(item, 'click', this.onItemMouseClick);
+        }
+    },
+
+    addNewAddress : function(event){
+        if(this.canCreateNewAddress){
+            this.itemCount++;
+            if($('no_address_message')){
+                $('no_address_message').hide();
+            }
+
+            // create new form elements
+            Element.insert(this.formContainer, {bottom:
+                '<div id="' + 'form_' + this.baseItemId + this.itemCount + '">'
+                + this.prepareTemplate(this.formTemplate.innerHTML)
+                + '</div>'
+            });
+
+            var newForm = $('form_' + this.baseItemId + this.itemCount);
+
+            $('_item'+this.itemCount+'firstname').value = $('_accountfirstname').value;
+            $('_item'+this.itemCount+'lastname').value = $('_accountlastname').value;
+
+            if ($('_accountwebsite_id').value !== '' && undefined !== this.defaultCountries[$('_accountwebsite_id').value]) {
+                $('_item'+this.itemCount+'country_id').value = this.defaultCountries[$('_accountwebsite_id').value];
+            }
+
+            Element.hide(newForm);
+            var template = '<li id="' + this.baseItemId+this.itemCount + '">';
+            deleteButtonId ++;
+            template    += this.prepareTemplate(this.itemTemplate.innerHTML).replace('delete_button', 'delete_button'+ deleteButtonId);
+            template    += '</li>';
+            Element.insert(this.itemContainer, {bottom: template});
+            var newItem = $(this.baseItemId+this.itemCount);
+            newItem.isNewAddress = true;
+            newItem.formBlock = newForm;
+
+
+            newForm.statusBar = newItem;
+            newForm.addressItem = newItem;
+
+            this.addItemObservers(newItem);
+            this.setActiveItem(newItem);
+            this.bindCountryRegionRelation(newForm.id);
+
+            if( $('_item'+this.itemCount+'firstname').value ) this.syncFormData($('_item'+this.itemCount+'firstname'));
+            if( $('_item'+this.itemCount+'lastname').value ) this.syncFormData($('_item'+this.itemCount+'lastname'));
+        }
+        this.reloadItemList();
+        //Event.stop(event);
+    },
+
+    prepareTemplate : function(template){
+        return template
+            .replace(/<?php echo $_templatePrefix ?>/g, '_item'+this.itemCount)
+            .replace(/_counted="undefined"/g, '')
+            .replace(/"select_button_"/g, 'select_button_' + this.itemCount)
+            ;
+    },
+
+    canCreateNewAddress : function(){
+        return true;
+    },
+
+    itemMouseOver : function(event){
+        var element = Event.findElement(event, 'li');
+        Element.addClassName(element, 'over');
+    },
+
+    itemMouseOut : function(event){
+        var element = Event.findElement(event, 'li');
+        Element.removeClassName(element, 'over');
+    },
+
+    itemMouseClick : function(event){
+        if (!Event) {
+            return;
+        }
+        var element = Event.findElement(event, 'li'); // find top item
+        var elem = Event.element(event); // exact element clicked
+
+        if ( ((elem.tagName.toUpperCase() == 'A') && elem.id.match(/^delete_button([0-9]*?)$/)) || ((elem.tagName.toUpperCase() == 'IMG') && elem.id.match(/^delete_button([0-9]*?)$/)) ) {
+            this.deleteAddress(element);
+            Event.stop(event);
+        }
+        else if(elem.tagName.toUpperCase() == 'INPUT') {
+            this.setAddressAsDefault(element);
+        }
+        else {
+            this.setActiveItem(element);
+        }
+    },
+
+     setAddressAsDefault : function(){
+        for(var i=0; i<this.itemList.length;i++){
+            if(this.itemList[i].id){
+                var inputs = $(this.itemList[i].id).getElementsBySelector('input');
+                var isActive = false;
+                for(var j in inputs){
+                    if(inputs[j].type=='radio' && inputs[j].checked && this.itemList.length > 1){
+                        isActive = true;
+                    }
+                }
+                this.toggleDeleteButton(this.itemList[i], !isActive);
+            }
+        }
+    },
+
+    toggleDeleteButton : function(item, flag){
+        if(flag){
+            $(item).select('.btn-remove-address').each(Element.show);
+            $(item.formBlock).getElementsBySelector('.delete-address').each(Element.show);
+        } else {
+            $(item).select('.btn-remove-address').each(Element.hide);
+            $(item.formBlock).getElementsBySelector('.delete-address').each(Element.hide);
+        }
+    },
+
+    setActiveItem : function(item){
+        if(this.activeItem){
+            Element.removeClassName(this.activeItem, 'on');
+            if($('form_'+this.activeItem.id)){
+                Element.hide($('form_'+this.activeItem.id));
+            }
+        }
+        Element.addClassName(item, 'on');
+
+        if(item && $('form_'+item.id)){
+            $('form_'+item.id).changeRelation = item;
+            $('form_'+item.id).addressItem = item;
+            Element.show($('form_'+item.id));
+            //new Effect.Appear($('form_'+item.id), {duration : 0.3 });
+            //$('form_'+item.id).focus();
+            this.addFieldChangeObserver($('form_'+item.id));
+        }
+
+        this.activeItem = item;
+    },
+
+    getFormContainerFields : function(container){
+        var fields = $$( '#' + container.id + ' input','#' + container.id + ' select','#' + container.id + ' textarea');
+        return fields;
+    },
+
+    addFieldChangeObserver : function(container){
+        var fields = this.getFormContainerFields(container);
+        for (var i = 0; i < fields.length; i++) {
+            Event.observe(fields[i], 'change', this.onItemFormFieldChange);
+        }
+
+    },
+
+    syncFormData : function(evt){
+        var container = false;
+
+        if(!evt.addClassName) {
+            var elm = Event.element(evt);
+        } else {
+            var elm = evt;
+        }
+
+        elm = $(elm);
+        while(elm.tagName.toUpperCase() != 'BODY') {
+            if(elm.addressItem){
+                container = elm;
+            }
+            elm = $(elm.parentNode);
+        }
+
+        if(container){
+            var data = {};
+            var fields = this.getFormContainerFields(container);
+            for(var i=0; i < fields.size(); i++){
+                if(fields[i].id){
+                    var id = fields[i].id.replace(/^(_item)?[0-9]+/, '');
+                    var id = id.replace(/^(id)?[0-9]+/, '');
+                    var value = fields[i].getValue();
+                    var tagName = fields[i].tagName.toLowerCase();
+                    if (tagName == 'select') {
+                        if (fields[i].multiple) {
+                            var values = $([]);
+                            var l = fields[i].options.length;
+                            for (j=0; j<l; j++) {
+                                var o = fields[i].options[j];
+                                if (o.selected === true) {
+                                    values[values.length] = o.text.escapeHTML();
+                                }
+                            }
+                            data[id] = values.join(', ');
+                        } else {
+                            data[id] = fields[i].options[fields[i].selectedIndex].text.escapeHTML();
+                        }
+                    } else if (value !== null) {
+                        data[id] = value.escapeHTML();
+                    }
+                }
+            }
+
+            // Set name of state to 'region' if list of states are in 'region_id' selectbox
+            if (!data['region'] && data['region_id']) {
+                data['region'] = data['region_id'];
+                delete data['region_id'];
+            }
+
+            // Set data to html
+            var itemContainer = container.addressItem.getElementsBySelector('address');
+            if(itemContainer[0]){
+                var html = this.itemContentTemplate.evaluate(data);
+                html = html.replace(new RegExp('(<br\\s*/?>\\s*){2,}','img'),'<br/>');
+                html = html.replace(new RegExp('<br\\s*/?>(\\s*,){1,}\\s*<br\\s*/?>','ig'),'<br/>');
+                html = html.replace(new RegExp('t:\\s*<br\\s*/?>','ig'),'');
+                html = html.replace(new RegExp('f:\\s*$','ig'),'');
+                itemContainer[0].innerHTML = html;
+            }
+        }
+    },
+
+    deleteAddress : function(item){
+        if(confirm('<?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Are you sure you want to delete this address?') ?>')){
+            if (!item.isNewAddress && $('deleted_'+item.id)){
+                $('deleted_'+item.id).value = 1;
+                if (item.formBlock){
+                    item.formBlock.addClassName('ignore-validation');
+                }
+            }
+            if (this.activeItem == item && item != this.itemList[0]) this.setActiveItem(this.itemList[0]);
+            if (item == this.itemList[0] && (this.itemList[1])) this.setActiveItem(this.itemList[1]);
+
+            this.formContainer.removeChild(item.formBlock);
+            this.itemContainer.removeChild(item);
+            this.reloadItemList();
+            this.setAddressAsDefault();
+        }
+    },
+
+    cancelAdd : function(button){
+        if(confirm('<?php echo addslashes(Mage::helper('Mage_Customer_Helper_Data')->__('Are you sure you want to cancel adding of this address?')) ?>')){
+            var item = $(this.baseItemId + button.id.replace(new RegExp('[a-z_]*',''), ''));
+
+            if( item.isNewAddress){
+                if ( this.activeItem == item ) this.formContainer.removeChild(item.formBlock);
+            }
+            if ( this.activeItem == item && item != this.itemList[0] ) this.setActiveItem(this.itemList[0]);
+            if ( item == this.itemList[0] && (this.itemList[1]) ) this.setActiveItem(this.itemList[1]);
+
+            this.itemContainer.removeChild(item);
+
+            this.reloadItemList();
+            this.setAddressAsDefault();
+        }
+    },
+
+    bindCountryRegionRelation : function(parentId){
+        //alert('OK');
+        if(parentId){
+            var countryElements = $(parentId).getElementsByClassName('countries');
+        }
+        else{
+            var countryElements = $$('.countries');
+        }
+
+        for(var i=0;i<=countryElements.length;i++){
+            if(countryElements[i]){
+                if(!countryElements[i].bindRegions || !countryElements[i].parentBindId || countryElements[i].parentBindId!=parentId){
+                //if(!countryElements[i].bindRegions || !countryElements[i].parentBindId){
+                    Event.observe(countryElements[i], 'change', this.reloadRegionField.bind(this));
+
+                    countryElements[i].bindRegions = true;
+                    countryElements[i].parentBindId = parentId;
+                }
+            }
+        }
+    },
+
+    reloadRegionField : function(event){
+        var countryElement = Event.element(event);
+        if(countryElement.id){
+            var regionElement  = $(countryElement.id.replace(/country_id/, 'region'));
+            if(regionElement){
+                this.regionElement = regionElement;
+                if (countryElement.value) {
+                    var url = this.regionsUrl + 'parent/' + countryElement.value;
+                    this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                } else {
+                    // Set empty text field in region
+                    this.refreshRegionField('[]');
+                }
+            }
+            // set Zip optional/required
+            varienGlobalEvents.fireEvent("address_country_changed", countryElement);
+        }
+    },
+
+    // serverResponse is either string with server response, or object to force some paricular data setting
+    refreshRegionField : function(serverResponse){
+        if (!serverResponse)
+            return;
+        var data = eval('(' + serverResponse + ')');
+
+        var row = Element.previous(this.regionElement.parentNode,0);
+        var reqLabel = Element.select(row, '.required');
+
+        // Set regions and refresh controls
+        // We use a pair of 'region' and 'region_id' to properly submit data:
+        // manually entered text goes in 'region' and selected option id goes in 'region_id'
+        var regionHtmlName = this.regionElement.name;
+        var regionIdHtmlName = regionHtmlName.replace(/region/, 'region_id');
+        var regionHtmlId = this.regionElement.id;
+        var regionIdHtmlId = regionHtmlId.replace(/region/, 'region_id');
+        var newInputId = null; // id of imput that was added to a page - filled below
+
+        if (data.length) {
+            // Create visible selectbox 'region_id' and hidden 'region'
+            var html = '<select name="' + regionIdHtmlName + '" id="' + regionIdHtmlId + '" class="required-entry select" title="' + this.regionElement.title + '">';
+            html+= '<option value=""></option>';
+            for (var i in data){
+                if(data[i].label) {
+                    html+= '<option value="'+data[i].value+'"';
+                    if(this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)){
+                        html+= ' selected="selected"';
+                    }
+                    html+='>'+data[i].label+'</option>';
+                }
+            }
+            html += '</select>';
+
+            html += '<input type="hidden" name="' + regionHtmlName + '" id="' + regionHtmlId + '"/>';
+
+            if (reqLabel) {
+                reqLabel.each(function(item){Element.show(item)});
+            }
+
+            newInputId = regionIdHtmlId;
+        } else {
+            // Create visible text input 'region' and hidden 'region_id'
+            var html = '<input type="text" name="' + regionHtmlName + '" id="' + regionHtmlId + '" class="input-text" title="' + this.regionElement.title + '" />';
+            html += '<input type="hidden" name="' + regionIdHtmlName + '" id="' + regionIdHtmlId + '"/>';
+
+            if (reqLabel) {
+                reqLabel.each(function(item){Element.hide(item)});
+            }
+
+            newInputId = regionHtmlId;
+        }
+
+        var parentNode = this.regionElement.parentNode;
+        parentNode.innerHTML = html;
+        this.regionElement = $(regionHtmlId);
+
+        // Updating in address info
+        var newInput = $(newInputId);
+        Event.observe(newInput, 'change', this.onItemFormFieldChange); // Restore observing to update address info
+        this.syncFormData(newInput); // Update address info now
+    }
+}
+
+customerAddresses = new addressesModel();
+//]]>
+</script>
+</td>
+</tr>
+</table>

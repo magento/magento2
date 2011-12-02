@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Adminhtml
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <menu>
+        <dashboard translate="title" module="Mage_Adminhtml">
+            <title>Dashboard</title>
+            <sort_order>10</sort_order>
+            <action>adminhtml/dashboard</action>
+        </dashboard>
+        <system translate="title" module="Mage_Adminhtml">
+            <title>System</title>
+            <sort_order>90</sort_order>
+            <!-- action>adminhtml/system</action -->
+            <children>
+                <myaccount translate="title">
+                    <title>My Account</title>
+                    <action>adminhtml/system_account</action>
+                    <sort_order>10</sort_order>
+                </myaccount>
+                <tools translate="title">
+                    <title>Tools</title>
+                    <sort_order>20</sort_order>
+                </tools>
+                <design translate="title">
+                    <title>Design</title>
+                    <action>adminhtml/system_design</action>
+                    <sort_order>30</sort_order>
+                </design>
+                <convert translate="title">
+                    <title>Import/Export</title>
+                    <sort_order>40</sort_order>
+                    <children>
+                        <gui translate="title">
+                            <title>Dataflow - Profiles</title>
+                            <action>adminhtml/system_convert_gui</action>
+                            <sort_order>30</sort_order>
+                        </gui>
+                        <profiles translate="title">
+                            <title>Dataflow - Advanced Profiles</title>
+                            <action>adminhtml/system_convert_profile</action>
+                            <sort_order>40</sort_order>
+                        </profiles>
+                    </children>
+                </convert>
+                <currency translate="title">
+                    <title>Manage Currency Rates</title>
+                    <action>adminhtml/system_currency</action>
+                    <sort_order>50</sort_order>
+                </currency>
+                <email_template translate="title">
+                    <title>Transactional Emails</title>
+                    <action>adminhtml/system_email_template</action>
+                    <sort_order>60</sort_order>
+                </email_template>
+                <variable translate="title">
+                    <title>Custom Variables</title>
+                    <action>adminhtml/system_variable</action>
+                    <sort_order>65</sort_order>
+                </variable>
+                <acl translate="title">
+                    <title>Permissions</title>
+                    <sort_order>70</sort_order>
+                    <children>
+                        <users translate="title">
+                            <title>Users</title>
+                            <action>adminhtml/permissions_user</action>
+                        </users>
+                        <roles translate="title">
+                            <title>Roles</title>
+                            <action>adminhtml/permissions_role</action>
+                        </roles>
+                    </children>
+                </acl>
+                <cache translate="title">
+                    <title>Cache Management</title>
+                    <action>adminhtml/cache</action>
+                    <sort_order>90</sort_order>
+                </cache>
+                <store translate="title" module="Mage_Core">
+                    <title>Manage Stores</title>
+                    <action>adminhtml/system_store/</action>
+                    <sort_order>100</sort_order>
+                </store>
+                <config translate="title">
+                    <title>Configuration</title>
+                    <action>adminhtml/system_config</action>
+                    <sort_order>110</sort_order>
+                </config>
+            </children>
+        </system>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow everything</title>
+            </all>
+            <admin translate="title" module="Mage_Adminhtml">
+                <title>Magento Admin</title>
+                <children>
+                    <dashboard translate="title">
+                        <title>Dashboard</title>
+                        <sort_order>0</sort_order>
+                    </dashboard>
+                    <system translate="title">
+                        <title>System</title>
+                        <sort_order>90</sort_order>
+                        <children>
+                            <acl translate="title">
+                                <title>Permissions</title>
+                                <sort_order>0</sort_order>
+                                <children>
+                                    <roles translate="title">
+                                        <title>Roles</title>
+                                        <sort_order>10</sort_order>
+                                    </roles>
+                                    <users translate="title">
+                                        <title>Users</title>
+                                        <sort_order>20</sort_order>
+                                    </users>
+                                </children>
+                            </acl>
+                            <store translate="title">
+                                <title>Manage Stores</title>
+                            </store>
+                            <design translate="title">
+                                <title>Design</title>
+                                <sort_order>25</sort_order>
+                            </design>
+                            <config translate="title">
+                                <title>Configuration</title>
+                                <sort_order>20</sort_order>
+                                <children>
+                                    <general translate="title">
+                                        <title>General Section</title>
+                                        <sort_order>20</sort_order>
+                                    </general>
+                                    <web translate="title">
+                                        <title>Web Section</title>
+                                        <sort_order>30</sort_order>
+                                    </web>
+                                    <design translate="title">
+                                        <title>Design Section</title>
+                                        <sort_order>40</sort_order>
+                                    </design>
+                                    <system translate="title">
+                                        <title>System Section</title>
+                                        <sort_order>80</sort_order>
+                                    </system>
+                                    <advanced translate="title">
+                                        <title>Advanced Section</title>
+                                        <sort_order>90</sort_order>
+                                    </advanced>
+                                    <trans_email translate="title">
+                                        <title>Store Email Addresses Section</title>
+                                        <sort_order>100</sort_order>
+                                    </trans_email>
+                                    <dev translate="title">
+                                        <title>Developer Section</title>
+                                        <sort_order>110</sort_order>
+                                    </dev>
+                                    <currency translate="title">
+                                        <title>Currency Setup Section</title>
+                                        <sort_order>120</sort_order>
+                                    </currency>
+                                    <sendfriend translate="title">
+                                        <title>Email to a Friend</title>
+                                        <sort_order>140</sort_order>
+                                    </sendfriend>
+                                    <admin translate="title">
+                                        <title>Advanced Admin Section</title>
+                                        <sort_order>100</sort_order>
+                                    </admin>
+                                </children>
+                            </config>
+                            <currency translate="title">
+                                <title>Manage Currency Rates</title>
+                                <sort_order>30</sort_order>
+                            </currency>
+                            <email_template translate="title">
+                                <title>Transactional Emails</title>
+                                <sort_order>40</sort_order>
+                            </email_template>
+                            <variable translate="title">
+                                <title>Custom Variables</title>
+                                <sort_order>45</sort_order>
+                            </variable>
+                            <myaccount translate="title">
+                                <title>My Account</title>
+                                <sort_order>50</sort_order>
+                            </myaccount>
+                            <tools translate="title">
+                                <title>Tools</title>
+                                <sort_order>60</sort_order>
+                            </tools>
+                            <convert translate="title">
+                                <title>Import/Export</title>
+                                <children>
+                                    <gui translate="title">
+                                        <title>Dataflow - Profiles</title>
+                                    </gui>
+                                    <profiles translate="title">
+                                        <title>Dataflow - Advanced Profiles</title>
+                                    </profiles>
+                                </children>
+                            </convert>
+                            <cache translate="title">
+                                <title>Cache Management</title>
+                            </cache>
+                            <extensions translate="title">
+                                <title>Magento Connect</title>
+                                <children>
+                                    <local translate="title">
+                                        <title>Magento Connect Manager</title>
+                                        <sort_order>0</sort_order>
+                                    </local>
+                                    <custom translate="title">
+                                        <title>Package Extensions</title>
+                                        <sort_order>5</sort_order>
+                                    </custom>
+                                </children>
+                            </extensions>
+                        </children>
+                    </system>
+                    <global_search translate="title">
+                        <title>Global Search</title>
+                        <sort_order>100</sort_order>
+                    </global_search>
+                </children>
+            </admin>
+        </resources>
+        <privilegeSets>
+            <default>
+                <view>
+                    <descr>View entity</descr>
+                </view>
+                <edit>
+                    <descr>Edit entity</descr>
+                </edit>
+                <delete>
+                    <descr/>
+                </delete>
+                <create>
+                    <descr/>
+                </create>
+            </default>
+        </privilegeSets>
+    </acl>
+</config>

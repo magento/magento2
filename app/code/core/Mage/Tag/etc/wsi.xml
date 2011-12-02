@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:typens="urn:{{var wsdl.name}}"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             name="{{var wsdl.name}}"
+             targetNamespace="urn:{{var wsdl.name}}">
+
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:{{var wsdl.name}}">
+            <xsd:complexType name="catalogProductTagListEntity">
+                <xsd:sequence>
+                    <xsd:element name="tag_id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="catalogProductTagListEntityArray">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:catalogProductTagListEntity" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="catalogProductTagAddEntity">
+                <xsd:sequence>
+                    <xsd:element name="tag" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="product_id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="customer_id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="store" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="catalogProductTagUpdateEntity">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="status" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="base_popularity" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="catalogProductTagInfoEntity">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="status" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="base_popularity" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    <xsd:element name="products" type="typens:associativeArray" minOccurs="1" maxOccurs="1" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="catalogProductTagListRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sessionId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="productId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="store" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagListResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="result" type="typens:catalogProductTagListEntityArray" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagInfoRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sessionId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="tagId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="store" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagInfoResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="result" type="typens:catalogProductTagInfoEntity" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagAddRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sessionId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="data" type="typens:catalogProductTagAddEntity" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagAddResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="result" type="typens:associativeArray" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagUpdateRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sessionId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="tagId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="data" type="typens:catalogProductTagUpdateEntity" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="store" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagUpdateResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="result" type="xsd:int" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagRemoveRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sessionId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                        <xsd:element name="tagId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="catalogProductTagRemoveResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="result" type="xsd:int" minOccurs="1" maxOccurs="1" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="catalogProductTagListRequest">
+        <wsdl:part name="parameters" element="typens:catalogProductTagListRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagListResponse">
+        <wsdl:part name="parameters" element="typens:catalogProductTagListResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagInfoRequest">
+        <wsdl:part name="parameters" element="typens:catalogProductTagInfoRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagInfoResponse">
+        <wsdl:part name="parameters" element="typens:catalogProductTagInfoResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagAddRequest">
+        <wsdl:part name="parameters" element="typens:catalogProductTagAddRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagAddResponse">
+        <wsdl:part name="parameters" element="typens:catalogProductTagAddResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagUpdateRequest">
+        <wsdl:part name="parameters" element="typens:catalogProductTagUpdateRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagUpdateResponse">
+        <wsdl:part name="parameters" element="typens:catalogProductTagUpdateResponseParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagRemoveRequest">
+        <wsdl:part name="parameters" element="typens:catalogProductTagRemoveRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="catalogProductTagRemoveResponse">
+        <wsdl:part name="parameters" element="typens:catalogProductTagRemoveResponseParam" />
+    </wsdl:message>
+
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="catalogProductTagList">
+            <wsdl:documentation>Retrieve list of tags by product</wsdl:documentation>
+            <wsdl:input message="typens:catalogProductTagListRequest" />
+            <wsdl:output message="typens:catalogProductTagListResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="catalogProductTagInfo">
+            <wsdl:documentation>Retrieve product tag info</wsdl:documentation>
+            <wsdl:input message="typens:catalogProductTagInfoRequest" />
+            <wsdl:output message="typens:catalogProductTagInfoResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="catalogProductTagAdd">
+            <wsdl:documentation>Add tag(s) to product</wsdl:documentation>
+            <wsdl:input message="typens:catalogProductTagAddRequest" />
+            <wsdl:output message="typens:catalogProductTagAddResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="catalogProductTagUpdate">
+            <wsdl:documentation>Update product tag</wsdl:documentation>
+            <wsdl:input message="typens:catalogProductTagUpdateRequest" />
+            <wsdl:output message="typens:catalogProductTagUpdateResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="{{var wsdl.handler}}PortType">
+        <wsdl:operation name="catalogProductTagRemove">
+            <wsdl:documentation>Remove product tag</wsdl:documentation>
+            <wsdl:input message="typens:catalogProductTagRemoveRequest" />
+            <wsdl:output message="typens:catalogProductTagRemoveResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="catalogProductTagList">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="catalogProductTagInfo">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="catalogProductTagAdd">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="catalogProductTagUpdate">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="catalogProductTagRemove">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="{{var wsdl.name}}Service">
+        <wsdl:port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

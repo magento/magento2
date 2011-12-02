@@ -1,0 +1,66 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_iphone
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Customer login form template
+ *
+ * @see Mage_Customer_Block_Form_Login
+ */
+?>
+<div class="login-box">
+    <div class="registered-users">
+        <h1><?php echo $this->__('Log in') ?></h1>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+            <h2><?php echo $this->__('Registered Users') ?></h2>
+            <ul class="form-list">
+                <li>
+                    <label for="email"><?php echo $this->__('Enter your email') ?>:</label>
+                    <input type="email" class="required-entry validate-email" name="login[username]" id="email" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" placeholder="<?php echo $this->__('Email Address') ?>" />
+                </li>
+                <li>
+                    <label for="pass"><?php echo $this->__('Enter your password') ?>:</label>
+                    <input type="password" class="required-entry validate-password" name="login[password]" id="pass" placeholder="<?php echo $this->__('Password') ?>" />
+                </li>
+            </ul>
+            <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot your password?') ?></a>
+            <div class="login-button">
+                <input type="submit" value="<?php echo $this->__('Log In') ?>" />
+            </div>
+        </form>
+    </div>
+    <div class="new-users">
+        <h2><?php echo $this->__('New Customers') ?></h2>
+        <a href="<?php echo $this->getCreateAccountUrl() ?>"><input type="submit" value="<?php echo $this->__('Create an Account') ?>" /></a>
+        <p><?php echo $this->__('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
+    </div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('login-form', true);
+//]]>
+</script>

@@ -1,0 +1,184 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->template('install/header.phtml') ?>
+
+<div class="page-head">
+    <h3>Welcome to Magento's Installation Wizard!</h3>
+</div>
+
+<?php if (!$this->controller()->isDownloaded()): ?>
+    <p>You are now ready to continue the installation process by downloading the most up-to-date copy of the Magento software.</p>
+  <?php echo($this->get('channel_notice')); ?>
+    <form id="install_all" method="post" action="<?php echo $this->url('connectInstallAll') ?>" target="connect_iframe" onsubmit="return installAll()">
+        <fieldset class="fieldset-download">
+<?php else: ?>
+    <p>There's an indication that Magento files already have been downloaded.</p>
+    <p>If you feel that you have arrived to this page by mistake, please continue installation:</p>
+    <button class="form-button" type="button" onclick="location.href='<?php echo $this->mageUrl() ?>'"><span>Continue Magento installation</span></button>
+    <br/><br/><br/>
+    <p>Alternatively, you could proceed with Re-Downloading all packages</p>
+  <?php echo($this->get('channel_notice')); ?>
+    <form id="reinstall_all" method="post" action="<?php echo $this->url('connectInstallAll') ?>&force=1" target="connect_iframe" onsubmit="return installAll(true)">
+        <fieldset class="fieldset-download">
+<?php endif; ?>
+
+            <table cellspacing="0" class="form-list">
+              <tr>
+                    <td class="label">Magento Connect Channel Protocol:</td>
+                    <td class="value">
+                        <select id="protocol" name="protocol">
+                            <option value="http" <?php if ($this->get('protocol')=='http'):?>selected="selected"<?php endif ?>>Http</option>
+                            <option value="ftp" <?php if ($this->get('protocol')=='ftp'):?>selected="selected"<?php endif ?>>Ftp</option>
+                        </select>
+                    </td>
+              </tr>
+              <?php echo($this->get('channel_protocol_fields')); ?>
+                <tr>
+                    <td class="label">Use Custom Permissions:</td>
+                    <td class="value">
+                        <select onchange="togglePanel(this)" id="use_custom_permissions_mode" name="use_custom_permissions_mode">
+                            <option value="1" <?php if ($this->get('use_custom_permissions_mode')=='1'):?>selected="selected"<?php endif ?>>Yes</option>
+                            <option value="0" <?php if ($this->get('use_custom_permissions_mode')=='0'):?>selected="selected"<?php endif ?>>No</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" cellpadding="0" class="form-list" id="use_custom_permissions_mode_panel" <?php if ($this->get('use_custom_permissions_mode')=='0'):?>style="display:none;"<?php endif ?> >
+                <tr>
+                    <td class="label">Folders:</td>
+                    <td class="value">
+                        <input id="mkdir_mode" name="mkdir_mode" value="<?php echo($this->get('mkdir_mode'));?>" type="text" class="input-text"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Files:</td>
+                    <td class="value">
+                        <input id="chmod_file_mode" name="chmod_file_mode" value="<?php echo($this->get('chmod_file_mode'));?>" type="text" class="input-text"></input>
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" cellpadding="0" class="form-list">
+                <tr>
+                    <td class="label">Deployment Type:</td>
+                    <td class="value">
+                        <select id="inst_protocol" onchange="togglePanel(this)" name="inst_protocol">
+                            <option value="0">Local Filesystem</option>
+                            <option value="1">FTP Connection</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" cellpadding="0" class="form-list" id="inst_protocol_panel">
+                <tr>
+                    <td class="label">Host:</td>
+                    <td class="value">
+                        <input type="text" class="input-text" id="ftp_host" value="" name="ftp_host" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">User:</td>
+                    <td class="value">
+                        <input type="text" class="input-text" id="ftp_login" value="" name="ftp_login" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">Password:</td>
+                    <td class="value">
+                        <input type="password" id="ftp_password" value="" name="ftp_password" class="input-text" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">Installation Path:</td>
+                    <td class="value">
+                        <input id="ftp_path" name="ftp_path" value="" type="text" class="input-text" />
+                    </td>
+                </tr>
+            </table>
+
+<?php if (!$this->controller()->isDownloaded()): ?>
+            <button class="form-button" type="submit">Start the download process</button>
+        </fieldset>
+    </form>
+<?php else: ?>
+            <button class="form-button" type="submit">Re-Download All Magento Core Packages</button>
+        </fieldset>
+    </form>
+<?php endif; ?>
+
+<br/>
+<?php echo $this->template('connect/iframe.phtml') ?>
+
+<a name="connect_iframe_result"></a>
+<div id="connect_iframe_success" style="display:none">
+    <?php $this->set('messages', array('success'=>array(
+       'Download completed. You can proceed with installation',
+    ))) ?>
+    <?php echo $this->template('messages.phtml') ?>
+
+    <button class="form-button" type="button" onclick="location.href='<?php echo $this->mageUrl() ?>'"><span>Continue Magento installation</span></button>
+</div>
+
+<div id="connect_iframe_failure" style="display:none">
+    <?php $this->set('messages', array('error'=>array('There was a problem during downloading of Magento packages. Please check the output frame for errors information and refresh the page to retry again.'))) ?>
+    <?php echo $this->template('messages.phtml') ?>
+    <button class="form-button" type="button" onclick="location.reload()"><span>Refresh</span></button>
+</div>
+
+<script type="text/javascript">
+function togglePanel (element)
+{
+    if (element.value == '1') {
+        disabledMode = '';
+    } else {
+        disabledMode = 'none';
+    }
+    document.getElementById(element.id+'_panel').style.display = disabledMode;
+}
+togglePanel(document.getElementById('use_custom_permissions_mode'));
+togglePanel(document.getElementById('inst_protocol'));
+</script>
+
+<script type="text/javascript">
+function installAll(force)
+{
+    if (force) {
+        if (!confirm("This will delete all files from core packages.\n\nAre you sure you wish to force re-install all Magento files?")) {
+            return false;
+        }
+    }
+    /**
+     * @TODO: create validation of directory/file permission fields
+     */
+
+    return onSubmit();
+}
+</script>
+
+<?php echo $this->template('install/footer.phtml') ?>

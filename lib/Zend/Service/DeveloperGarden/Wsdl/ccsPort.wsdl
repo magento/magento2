@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/" xmlns:schema="http://ccs.developer.telekom.com/schema/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://ccs.developer.telekom.com/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ccs" targetNamespace="http://ccs.developer.telekom.com/wsdl/">
+	<wsdl:documentation>
+CCS </wsdl:documentation>
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://ccs.developer.telekom.com/wsdl/">
+			<xsd:import namespace="http://ccs.developer.telekom.com/schema/" schemaLocation="ccsPort.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="createConferenceIn">
+		<wsdl:part name="parameters" element="schema:createConference"/>
+	</wsdl:message>
+	<wsdl:message name="createConferenceOut">
+		<wsdl:part name="parameters" element="schema:createConferenceResponse"/>
+	</wsdl:message>
+	<wsdl:message name="commitConferenceIn">
+		<wsdl:part name="parameters" element="schema:commitConference"/>
+	</wsdl:message>
+	<wsdl:message name="commitConferenceOut">
+		<wsdl:part name="parameters" element="schema:commitConferenceResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceStatusIn">
+		<wsdl:part name="parameters" element="schema:getConferenceStatus"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceStatusOut">
+		<wsdl:part name="parameters" element="schema:getConferenceStatusResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getRunningConferenceIn">
+		<wsdl:part name="parameters" element="schema:getRunningConference"/>
+	</wsdl:message>
+	<wsdl:message name="getRunningConferenceOut">
+		<wsdl:part name="parameters" element="schema:getRunningConferenceResponse"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceIn">
+		<wsdl:part name="parameters" element="schema:removeConference"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceOut">
+		<wsdl:part name="parameters" element="schema:removeConferenceResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceListIn">
+		<wsdl:part name="parameters" element="schema:getConferenceList"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceListOut">
+		<wsdl:part name="parameters" element="schema:getConferenceListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceIn">
+		<wsdl:part name="parameters" element="schema:updateConference"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceOut">
+		<wsdl:part name="parameters" element="schema:updateConferenceResponse"/>
+	</wsdl:message>
+	<wsdl:message name="newParticipantIn">
+		<wsdl:part name="parameters" element="schema:newParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="newParticipantOut">
+		<wsdl:part name="parameters" element="schema:newParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="removeParticipantIn">
+		<wsdl:part name="parameters" element="schema:removeParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="removeParticipantOut">
+		<wsdl:part name="parameters" element="schema:removeParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="updateParticipantIn">
+		<wsdl:part name="parameters" element="schema:updateParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="updateParticipantOut">
+		<wsdl:part name="parameters" element="schema:updateParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getParticipantStatusIn">
+		<wsdl:part name="parameters" element="schema:getParticipantStatus"/>
+	</wsdl:message>
+	<wsdl:message name="getParticipantStatusOut">
+		<wsdl:part name="parameters" element="schema:getParticipantStatusResponse"/>
+	</wsdl:message>
+	<wsdl:message name="createConferenceTemplateIn">
+		<wsdl:part name="parameters" element="schema:createConferenceTemplate"/>
+	</wsdl:message>
+	<wsdl:message name="createConferenceTemplateOut">
+		<wsdl:part name="parameters" element="schema:createConferenceTemplateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateIn">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplate"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateOut">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceTemplateIn">
+		<wsdl:part name="parameters" element="schema:updateConferenceTemplate"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceTemplateOut">
+		<wsdl:part name="parameters" element="schema:updateConferenceTemplateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceTemplateIn">
+		<wsdl:part name="parameters" element="schema:removeConferenceTemplate"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceTemplateOut">
+		<wsdl:part name="parameters" element="schema:removeConferenceTemplateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateListIn">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplateList"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateListOut">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplateListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addConferenceTemplateParticipantIn">
+		<wsdl:part name="parameters" element="schema:addConferenceTemplateParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="addConferenceTemplateParticipantOut">
+		<wsdl:part name="parameters" element="schema:addConferenceTemplateParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateParticipantIn">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplateParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="getConferenceTemplateParticipantOut">
+		<wsdl:part name="parameters" element="schema:getConferenceTemplateParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceTemplateParticipantIn">
+		<wsdl:part name="parameters" element="schema:updateConferenceTemplateParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="updateConferenceTemplateParticipantOut">
+		<wsdl:part name="parameters" element="schema:updateConferenceTemplateParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceTemplateParticipantIn">
+		<wsdl:part name="parameters" element="schema:removeConferenceTemplateParticipant"/>
+	</wsdl:message>
+	<wsdl:message name="removeConferenceTemplateParticipantOut">
+		<wsdl:part name="parameters" element="schema:removeConferenceTemplateParticipantResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="ccsPortType">
+		<wsdl:operation name="createConference">
+			<wsdl:input message="tns:createConferenceIn"/>
+			<wsdl:output message="tns:createConferenceOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="commitConference">
+			<wsdl:input message="tns:commitConferenceIn"/>
+			<wsdl:output message="tns:commitConferenceOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="updateConference">
+			<wsdl:input message="tns:updateConferenceIn"/>
+			<wsdl:output message="tns:updateConferenceOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceStatus">
+			<wsdl:input message="tns:getConferenceStatusIn"/>
+			<wsdl:output message="tns:getConferenceStatusOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getRunningConference">
+			<wsdl:input message="tns:getRunningConferenceIn"/>
+			<wsdl:output message="tns:getRunningConferenceOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getParticipantStatus">
+			<wsdl:input message="tns:getParticipantStatusIn"/>
+			<wsdl:output message="tns:getParticipantStatusOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="newParticipant">
+			<wsdl:input message="tns:newParticipantIn"/>
+			<wsdl:output message="tns:newParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="removeParticipant">
+			<wsdl:input message="tns:removeParticipantIn"/>
+			<wsdl:output message="tns:removeParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="updateParticipant">
+			<wsdl:input message="tns:updateParticipantIn"/>
+			<wsdl:output message="tns:updateParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="removeConference">
+			<wsdl:input message="tns:removeConferenceIn"/>
+			<wsdl:output message="tns:removeConferenceOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceList">
+			<wsdl:input message="tns:getConferenceListIn"/>
+			<wsdl:output message="tns:getConferenceListOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="createConferenceTemplate">
+			<wsdl:input message="tns:createConferenceTemplateIn"/>
+			<wsdl:output message="tns:createConferenceTemplateOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplate">
+			<wsdl:input message="tns:getConferenceTemplateIn"/>
+			<wsdl:output message="tns:getConferenceTemplateOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="updateConferenceTemplate">
+			<wsdl:input message="tns:updateConferenceTemplateIn"/>
+			<wsdl:output message="tns:updateConferenceTemplateOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="removeConferenceTemplate">
+			<wsdl:input message="tns:removeConferenceTemplateIn"/>
+			<wsdl:output message="tns:removeConferenceTemplateOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplateList">
+			<wsdl:input message="tns:getConferenceTemplateListIn"/>
+			<wsdl:output message="tns:getConferenceTemplateListOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="addConferenceTemplateParticipant">
+			<wsdl:input message="tns:addConferenceTemplateParticipantIn"/>
+			<wsdl:output message="tns:addConferenceTemplateParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplateParticipant">
+			<wsdl:input message="tns:getConferenceTemplateParticipantIn"/>
+			<wsdl:output message="tns:getConferenceTemplateParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="updateConferenceTemplateParticipant">
+			<wsdl:input message="tns:updateConferenceTemplateParticipantIn"/>
+			<wsdl:output message="tns:updateConferenceTemplateParticipantOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="removeConferenceTemplateParticipant">
+			<wsdl:input message="tns:removeConferenceTemplateParticipantIn"/>
+			<wsdl:output message="tns:removeConferenceTemplateParticipantOut"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ccsHttpBinding" type="tns:ccsPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsp:PolicyReference URI="#TransportBindingPolicy"/>
+		<wsdl:operation name="createConference">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/createConference"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="commitConference">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/commitConference"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceStatus">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getConferenceStatus"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRunningConference">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getRunningConference"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateConference">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/updateConference"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getParticipantStatus">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getParticipantStatus"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="newParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/newParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/removeParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/updateParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeConference">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/removeConference"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceList">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getConferenceList"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createConferenceTemplate">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/createConferenceTemplate"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplate">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getConferenceTemplate"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateConferenceTemplate">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/updateConferenceTemplate"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeConferenceTemplate">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/removeConferenceTemplate"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplateList">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getConferenceTemplateList"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addConferenceTemplateParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/addConferenceTemplateParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConferenceTemplateParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/getConferenceTemplateParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateConferenceTemplateParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/updateConferenceTemplateParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="removeConferenceTemplateParticipant">
+			<soap:operation soapAction="http://ccs.developer.telekom.com/removeConferenceTemplateParticipant"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#STSTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ccs">
+		<wsdl:port name="ccsPort" binding="tns:ccsHttpBinding">
+			<soap:address location="https://gateway.developer.telekom.com/p3gw-mod-odg-ccs/services/ccsPort"/>
+		</wsdl:port>
+	</wsdl:service>
+	<wsp:Policy wsu:Id="TransportBindingPolicy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:TransportBinding>
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false"/>
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict/>
+							</wsp:Policy>
+						</sp:Layout>
+						<sp:IncludeTimestamp/>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256/>
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+					</wsp:Policy>
+				</sp:TransportBinding>
+				<sp:Wss11/>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="STSTokenPolicy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:SupportingTokens>
+					<wsp:Policy>
+						<sp:SamlToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+							<wsp:Policy>
+								<sp:WssSamlV20Token11/>
+							</wsp:Policy>
+						</sp:SamlToken>
+					</wsp:Policy>
+				</sp:SupportingTokens>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+</wsdl:definitions>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.3 $"/>
+		<generation date="$Date: 2009/05/05 23:06:38 $"/>
+		<language type="oc"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ar">arabi</language>
+			<language type="art">lenga artificiala</language>
+			<language type="az">azerbaijani</language>
+			<language type="ber">berbèr</language>
+			<language type="br">breton</language>
+			<language type="ca">catalan</language>
+			<language type="cel">lenga celtica</language>
+			<language type="da">danés</language>
+			<language type="de">aleman</language>
+			<language type="el">grec</language>
+			<language type="en">anglés</language>
+			<language type="es">espanhòl</language>
+			<language type="eu">bàscol</language>
+			<language type="fr">francés</language>
+			<language type="frm">francés mejan</language>
+			<language type="grc">grec ancian</language>
+			<language type="he">ebreu</language>
+			<language type="hy">armèni</language>
+			<language type="it">italian</language>
+			<language type="la">latin</language>
+			<language type="nl_BE">flamenc</language>
+			<language type="oc">occitan</language>
+			<language type="phn">fenician</language>
+			<language type="pro">occitan ancian</language>
+			<language type="pt">portugués</language>
+			<language type="roa">lenga romança</language>
+			<language type="zh">chinés</language>
+		</languages>
+		<scripts>
+			<script type="Arab">arabi</script>
+			<script type="Armn">armèni</script>
+			<script type="Cyrl">cirilic</script>
+			<script type="Grek">grec</script>
+			<script type="Hani">chinés</script>
+			<script type="Hebr">ebreu</script>
+			<script type="Jpan">japonés</script>
+			<script type="Latn">latin</script>
+			<script type="Phnx">fenician</script>
+			<script type="Syre">siriac estranguelo</script>
+			<script type="Syrj">siriac occidental</script>
+			<script type="Syrn">siriac oriental</script>
+		</scripts>
+		<territories>
+			<territory type="002">Africa</territory>
+			<territory type="013">America centrala</territory>
+			<territory type="019">Americas</territory>
+			<territory type="053">Austràlia e Nòva Zelanda</territory>
+			<territory type="142">Asia</territory>
+			<territory type="143">Asia centrala</territory>
+			<territory type="150">Euròpa</territory>
+			<territory type="AD">Andòrra</territory>
+			<territory type="AF">Afganistan</territory>
+			<territory type="AG">Antigua e Barbuda</territory>
+			<territory type="AI">Anguilla</territory>
+			<territory type="AL">Albania</territory>
+			<territory type="AM">Armènia</territory>
+			<territory type="AO">Angòla</territory>
+			<territory type="AQ">Antartica</territory>
+			<territory type="AR">Argentina</territory>
+			<territory type="AS">Samòa americana</territory>
+			<territory type="AT">Àustria</territory>
+			<territory type="AU">Austràlia</territory>
+			<territory type="AZ">Azerbaijan</territory>
+			<territory type="BA">Bòsnia e Ercegovina</territory>
+			<territory type="BB">Barbados</territory>
+			<territory type="BD">Bangladesh</territory>
+			<territory type="BE">Belgica</territory>
+			<territory type="BF">Burkina Faso</territory>
+			<territory type="BG">Bolgària</territory>
+			<territory type="BH">Bahrain</territory>
+			<territory type="BI">Burundi</territory>
+			<territory type="BJ">Benin</territory>
+			<territory type="BM">Bermuda</territory>
+			<territory type="BN">Brunei</territory>
+			<territory type="BO">Bolívia</territory>
+			<territory type="BR">Brasil</territory>
+			<territory type="BS">Bahamas</territory>
+			<territory type="BT">Botan</territory>
+			<territory type="BV">Isla Bouvet</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Bielorussia</territory>
+			<territory type="BZ">Belize</territory>
+			<territory type="CA">Canadà</territory>
+			<territory type="CD">Còngo - Kinshasa</territory>
+			<territory type="CF">Republica Centraficana</territory>
+			<territory type="CG">Còngo - Brazzaville</territory>
+			<territory type="CH">Soïssa</territory>
+			<territory type="CI">Còsta d'Evòri</territory>
+			<territory type="CL">Chile</territory>
+			<territory type="CM">Cameron</territory>
+			<territory type="CN">China</territory>
+			<territory type="CO">Colómbia</territory>
+			<territory type="CR">Còsta Rica</territory>
+			<territory type="CU">Cuba</territory>
+			<territory type="CV">Cap Verd</territory>
+			<territory type="CY">Chipre</territory>
+			<territory type="CZ">Republica chèca</territory>
+			<territory type="DE">Alemanha</territory>
+			<territory type="DJ">Jiboti</territory>
+			<territory type="DK">Danemarc</territory>
+			<territory type="DO">Republica dominicana</territory>
+			<territory type="DZ">Argeria</territory>
+			<territory type="EC">Eqüator</territory>
+			<territory type="EE">Estònia</territory>
+			<territory type="EG">Egipte</territory>
+			<territory type="ER">Eritrèa</territory>
+			<territory type="ES">Espanha</territory>
+			<territory type="ET">Etiopia</territory>
+			<territory type="FI">Finlàndia</territory>
+			<territory type="FJ">Fiji</territory>
+			<territory type="FR">França</territory>
+			<territory type="GA">Gabon</territory>
+			<territory type="GB">Reiaume Unit</territory>
+			<territory type="GF">Guiana francesa</territory>
+			<territory type="GQ">Guinèa Eqüatoriala</territory>
+			<territory type="HR">Croàcia</territory>
+			<territory type="IL">Israèl</territory>
+			<territory type="IN">Índia</territory>
+			<territory type="IT">Itàlia</territory>
+			<territory type="JP">Japon</territory>
+			<territory type="KH">Cambòja</territory>
+			<territory type="KM">Comòros</territory>
+			<territory type="KP">Corèa del Nòrd</territory>
+			<territory type="KR">Corèa del Sud</territory>
+			<territory type="KY">Islas Caiman</territory>
+			<territory type="KZ">Cazacstan</territory>
+			<territory type="LY">Libia</territory>
+			<territory type="MA">Marròc</territory>
+			<territory type="MC">Mónegue</territory>
+			<territory type="MM">Birmania</territory>
+			<territory type="MR">Mauritània</territory>
+			<territory type="MZ">Moçambic</territory>
+			<territory type="PE">Peró</territory>
+			<territory type="PT">Portugal</territory>
+			<territory type="PW">Belau</territory>
+			<territory type="QU">Union Europèa</territory>
+			<territory type="RU">Russia</territory>
+			<territory type="SA">Arabia Saudita</territory>
+			<territory type="SV">Lo Salvador</territory>
+			<territory type="SY">Súria</territory>
+			<territory type="TD">Chad</territory>
+			<territory type="TL">Timòr Èst</territory>
+			<territory type="UA">Ucràina</territory>
+			<territory type="US">Estats Units</territory>
+			<territory type="VE">Veneçuèla</territory>
+			<territory type="VN">Vietnam</territory>
+			<territory type="ZZ">Desconegut o Region invalida</territory>
+		</territories>
+		<keys>
+			<key type="calendar">calendier</key>
+			<key type="collation">òrde alfabetic</key>
+			<key type="currency">moneda</key>
+		</keys>
+		<codePatterns>
+			<codePattern type="language">Lenga: {0}</codePattern>
+			<codePattern type="script">Escritura: {0}</codePattern>
+			<codePattern type="territory">Region: {0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a á à b-e é è f-i í ï j-o ó ò p-u ú ü v-z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[á à ç é è í ï ó ò ú ü]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="1">genièr</month>
+							<month type="2">febrièr</month>
+							<month type="3">març</month>
+							<month type="4">abril</month>
+							<month type="5">mai</month>
+							<month type="6">junh</month>
+							<month type="7">julhet</month>
+							<month type="8">agost</month>
+							<month type="9">setembre</month>
+							<month type="10">octòbre</month>
+							<month type="11">novembre</month>
+							<month type="12">dezembre</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="wide">
+							<day type="sun">Dimenge</day>
+							<day type="mon">diluns</day>
+							<day type="tue">dimarç</day>
+							<day type="wed">dimècres</day>
+							<day type="thu">dijòus</day>
+							<day type="fri">divèndres</day>
+							<day type="sat">dissabte</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<fields>
+					<field type="era">
+						<displayName>era</displayName>
+					</field>
+					<field type="year">
+						<displayName>annada</displayName>
+					</field>
+					<field type="month">
+						<displayName>mes</displayName>
+					</field>
+					<field type="week">
+						<displayName>setmana</displayName>
+					</field>
+					<field type="day">
+						<displayName>jorn</displayName>
+						<relative type="-1">ièr</relative>
+						<relative type="0">uèi</relative>
+						<relative type="1">deman</relative>
+					</field>
+					<field type="weekday">
+						<displayName>jorn de la setmana</displayName>
+					</field>
+					<field type="hour">
+						<displayName>ora</displayName>
+					</field>
+					<field type="minute">
+						<displayName>minuta</displayName>
+					</field>
+					<field type="second">
+						<displayName>segonda</displayName>
+					</field>
+					<field type="zone">
+						<displayName>zòna</displayName>
+					</field>
+				</fields>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<regionFormat>Ora de: {0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="EUR">
+				<displayName>euro</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unit type="day">
+			<unitPattern count="other">{0} jorns</unitPattern>
+		</unit>
+		<unit type="hour">
+			<unitPattern count="other">{0} oras</unitPattern>
+		</unit>
+		<unit type="minute">
+			<unitPattern count="other">{0} minutas</unitPattern>
+		</unit>
+		<unit type="month">
+			<unitPattern count="other">{0} mes</unitPattern>
+		</unit>
+		<unit type="second">
+			<unitPattern count="other">{0} segondas</unitPattern>
+		</unit>
+		<unit type="week">
+			<unitPattern count="other">{0} setmanas</unitPattern>
+		</unit>
+		<unit type="year">
+			<unitPattern count="other">{0} annadas</unitPattern>
+		</unit>
+	</units>
+</ldml>

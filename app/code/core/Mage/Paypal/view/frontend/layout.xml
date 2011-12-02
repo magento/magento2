@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+-->
+<layout version="0.1.0">
+    <checkout_cart_index>
+        <reference name="checkout.cart.top_methods">
+            <block type="Mage_Paypal_Block_Express_Shortcut" name="checkout.cart.methods.paypal_express.top" before="-" template="express/shortcut.phtml">
+                <action method="setIsQuoteAllowed"><value>1</value></action>
+            </block>
+        </reference>
+
+        <reference name="checkout.cart.methods">
+            <block type="Mage_Paypal_Block_Express_Shortcut" name="checkout.cart.methods.paypal_express.bottom" before="-" template="express/shortcut.phtml">
+                <action method="setIsQuoteAllowed"><value>1</value></action>
+            </block>
+        </reference>
+
+        <update handle="SHORTCUT_popup" />
+    </checkout_cart_index>
+
+    <paypal_express_review translate="label">
+        <label>PayPal Express Order Review Form</label>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Paypal_Block_Express_Review" name="paypal.express.review" template="express/review.phtml">
+                <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
+                    <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
+                    <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+                </block>
+                <block type="Mage_Checkout_Block_Agreements" name="paypal.express.review.details.agreements" as="agreements" template="onepage/agreements.phtml"/>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>Mage_Paypal::review.js</file></action>
+        </reference>
+        <block type="Mage_Core_Block_Text_List" name="additional.product.info" />
+    </paypal_express_review>
+
+    <paypal_express_review_details>
+        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="toHtml" template="express/review/details.phtml">
+            <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
+            <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
+            <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
+            <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+        </block>
+    </paypal_express_review_details>
+
+    <paypal_payflow_review translate="label">
+        <label>Order Review Form</label>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Paypal_Block_Payflow_Link_Review" name="paypal.express.review" template="express/review.phtml">
+                <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
+                    <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
+                    <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+                </block>
+                <block type="Mage_Checkout_Block_Agreements" name="paypal.express.review.details.agreements" as="agreements" template="onepage/agreements.phtml"/>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>Mage_Paypal::review.js</file></action>
+        </reference>
+        <block type="Mage_Core_Block_Text_List" name="additional.product.info" />
+    </paypal_payflow_review>
+
+    <paypal_payflowadvanced_review translate="label">
+        <label>Order Review Form</label>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Paypal_Block_Payflow_Advanced_Review" name="paypal.express.review" template="express/review.phtml">
+                <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
+                    <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
+                    <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
+                    <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+                </block>
+                <block type="Mage_Checkout_Block_Agreements" name="paypal.express.review.details.agreements" as="agreements" template="onepage/agreements.phtml"/>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>Mage_Paypal::review.js</file></action>
+        </reference>
+        <block type="Mage_Core_Block_Text_List" name="additional.product.info" />
+    </paypal_payflowadvanced_review>
+
+<!--
+Available logo types can be assigned with action="setLogoType":
+ - wePrefer_150x60
+ - wePrefer_150x40
+ - nowAccepting_150x60
+ - nowAccepting_150x40
+ - paymentsBy_150x60
+ - paymentsBy_150x40
+ - shopNowUsing_150x60
+ - shopNowUsing_150x40
+-->
+    <catalog_product_view>
+        <reference name="product.info.addtocart">
+            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypal.wrapper" translate="label">
+                <label>PayPal Express Checkout Shortcut Wrapper</label>
+                <block type="Mage_Paypal_Block_Express_Shortcut" name="product.info.addtocart.paypal" template="express/shortcut.phtml">
+                    <action method="setIsInCatalogProduct"><value>1</value></action>
+                </block>
+            </block>
+        </reference>
+        <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml">
+                <!--action method="setLogoType"><value>wePrefer_150x60</value></action-->
+            </block>
+        </reference>
+    </catalog_product_view>
+
+    <catalog_category_default>
+        <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
+        </reference>
+    </catalog_category_default>
+
+    <catalog_category_layered>
+        <update handle="SHORTCUT_popup" />
+        <reference name="right">
+            <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
+        </reference>
+    </catalog_category_layered>
+
+    <catalog_product_compare_index>
+        <update handle="SHORTCUT_popup" />
+    </catalog_product_compare_index>
+
+    <catalogsearch_result_index>
+        <update handle="SHORTCUT_popup" />
+    </catalogsearch_result_index>
+
+    <catalogsearch_advanced_result>
+        <update handle="SHORTCUT_popup" />
+    </catalogsearch_advanced_result>
+
+    <tag_product_list>
+        <update handle="SHORTCUT_popup" />
+    </tag_product_list>
+    <tag_customer_view>
+        <update handle="SHORTCUT_popup" />
+    </tag_customer_view>
+
+    <wishlist_index_index>
+        <update handle="SHORTCUT_popup" />
+    </wishlist_index_index>
+    <review_product_list>
+        <update handle="SHORTCUT_popup" />
+    </review_product_list>
+
+    <checkout_onepage_success>
+        <update handle="SHORTCUT_popup" />
+    </checkout_onepage_success>
+    <checkout_onepage_failure>
+        <update handle="SHORTCUT_popup" />
+    </checkout_onepage_failure>
+
+    <cms_index_index>
+        <reference name="right">
+            <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
+        </reference>
+    </cms_index_index>
+
+    <default>
+        <reference name="topCart.extra_actions">
+            <block type="Mage_Paypal_Block_Express_Shortcut" name="paypal.partner.top_cart.shortcut" template="express/shortcut.phtml"/>
+        </reference>
+        <reference name="cart_sidebar.extra_actions">
+            <block type="Mage_Paypal_Block_Express_Shortcut" name="paypal.partner.cart_sidebar.shortcut" template="express/shortcut.phtml"/>
+        </reference>
+    </default>
+
+    <checkout_onepage_review>
+        <reference name="checkout.onepage.review.info.items.after">
+            <block type="Mage_Paypal_Block_Iframe" name="paypal.iframe" />
+        </reference>
+        <reference name="checkout.onepage.review.button">
+            <action method="setTemplate"><template helper="Mage_Paypal_Helper_Hss::getReviewButtonTemplate"><name>hss/review/button.phtml</name><block>checkout.onepage.review.button</block></template></action>
+        </reference>
+    </checkout_onepage_review>
+
+    <paypal_payflow_link_iframe>
+        <block type="Mage_Paypal_Block_Payflow_Link_Iframe" name="payflow.link.iframe" template="payflowlink/form.phtml" />
+        <block type="Mage_Paypal_Block_Payflow_Link_Info" name="payflow.link.info" template="payflowlink/info.phtml" />
+    </paypal_payflow_link_iframe>
+
+    <paypal_payflow_advanced_iframe>
+        <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/form.phtml" />
+        <block type="Mage_Paypal_Block_Payflow_Advanced_Info" name="payflow.advanced.info" template="payflowadvanced/info.phtml" />
+    </paypal_payflow_advanced_iframe>
+
+    <paypal_hosted_pro_iframe>
+        <block type="Mage_Paypal_Block_Hosted_Pro_Iframe" name="hosted.pro.iframe" template="hss/form.phtml"/>
+    </paypal_hosted_pro_iframe>
+
+    <SHORTCUT_popup>
+        <reference name="product.tooltip">
+            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypal.wrapper" translate="label">
+                <block type="Mage_Paypal_Block_Express_Shortcut" name="product.info.addtocart.paypal" template="express/shortcut.phtml">
+                    <action method="setIsInCatalogProduct"><value>1</value></action>
+                    <action method="setShowOrPosition"><value>after</value></action>
+                </block>
+            </block>
+        </reference>
+    </SHORTCUT_popup>
+</layout>

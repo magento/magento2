@@ -1,0 +1,170 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+.ipad {
+    font-family:"Helvetica Neue", Helvetica, Verdana, sans-serif;
+    line-height:1;
+    line-height:1;
+    height:467px;
+    width:350px;
+    }
+.ipad-landscape {
+    height:350px;
+    width:467px;
+    }
+    .ipad a {
+        color:#000;
+        text-decoration:none;
+        }
+    .ipad .status-bar {
+        background:url(../images/mobile_preview/ipad/bg_status_bar.png) no-repeat 0 0;
+        height:9px;
+        font-size:0;
+        line-height:0;
+        }
+    .ipad-landscape .status-bar {
+        background-image:url(../images/mobile_preview/ipad/bg_status_bar_hor.png);
+        }
+    .ipad .header-wrap {
+        background:url(../images/mobile_preview/ipad/bg_home_header.png) no-repeat 0 0 #000;
+        height:20px;
+        position:relative;
+        }
+    .ipad-landscape .header-wrap {
+        background-image:url(../images/mobile_preview/ipad/bg_home_header_hor.png);
+        height:20px;
+        }
+        .ipad .app-header .app-logo {
+            margin-left:5px;
+            margin-right:1px;
+            }
+            .ipad .app-header .app-logo img {
+                vertical-align:middle;
+                }
+        .ipad .app-header .store-name {
+            color:#fff;
+            font-size:9px;
+            line-height:20px;
+            margin-right:85px;
+            vertical-align:middle;
+            }
+        .ipad-landscape .app-header .store-name {
+            margin-right:210px;
+            }
+        .ipad .app-header img,
+        .ipad .app-header span span {
+            vertical-align:top;
+            }
+        .ipad .app-header .search {
+            font-size:6px;
+            position:absolute;
+            top:3px;
+            right:105px;
+            }
+        .ipad .app-header .info,
+        .ipad .app-header .login,
+        .ipad .app-header .cart {
+            float:right;
+            position:relative;
+            padding:0 5px;
+            top:5px;
+            }
+        .ipad .app-header .info {
+            top:6px;
+            }
+        .ipad .app-header .login {
+            margin-left:20px;
+            }
+        .ipad .app-header .cart {
+            margin-left:20px;
+            }
+    .ipad .shadow {
+        background:url(../images/mobile_preview/ipad/bg_home_shadow.png) no-repeat 0 0;
+        height:3px;
+        font-size:0;
+        line-height:0;
+        position:relative;
+        margin:0 0 -3px;
+        }
+    .ipad-landscape .shadow {
+        background-image:url(../images/mobile_preview/ipad/bg_home_shadow_hor.png);
+        height:8px;
+        margin-bottom:-8px;
+        }
+    .ipad .content {
+        background:url(../images/mobile_preview/ipad/background_portrait.jpg) no-repeat top center;
+        padding:0;
+        height:438px;
+        overflow:hidden;
+        }
+    .ipad-landscape .content {
+        background:url(../images/mobile_preview/ipad/background_home_landscape.jpg) top center;
+        height:321px;
+        }
+        .ipad .content .app-logo {
+            background:url(../images/mobile_preview/ipad/logo_big.png) no-repeat center center;
+            height:135px;
+            }
+        .ipad-landscape .content .app-logo {
+            height:157px;
+            }
+        .ipad .products-list-wrap {
+            background:url(../images/mobile_preview/ipad/bg_home_products.png) no-repeat 0 0;
+            overflow:hidden;
+            width:350px;
+            }
+            .ipad .products-list {
+                margin:18px 0 0 25px;
+                width:325px;
+                }
+                .ipad .products-list h4 {
+                    color:#000;
+                    font-size:7px;
+                    line-height:1;
+                    margin:0;
+                    }
+        .ipad-landscape .products-list-wrap {
+            width:467px;
+            }
+            .ipad-landscape .products-list {
+                margin-left:5px;
+                width:462px;
+                }
+                .ipad .products-list li {
+                    background:#fff;
+                    float:left;
+                    margin:0 20px 20px 20px;
+                    padding:2px 2px 4px;
+                    text-align:center;
+                    -moz-box-shadow:1px 3px 3px #444;
+                    -webkit-box-shadow:1px 3px 3px #444;
+                    box-shadow:1px 3px 3px #444;
+                    }
+                .ipad-landscape .products-list li {
+                    }
+                    .ipad .products-list .product-image {
+                        margin:0 0 4px;
+                        }
+                        .ipad .products-list .product-image img {
+                            vertical-align:bottom;
+                            }

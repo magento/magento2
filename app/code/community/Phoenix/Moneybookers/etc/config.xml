@@ -1,0 +1,299 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Phoenix
+ * @package     Phoenix_Moneybookers
+ * @copyright   Copyright (c) 2011 Phoenix Medien GmbH & Co. KG (http://www.phoenix-medien.de)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Phoenix_Moneybookers>
+            <version>1.6.0.0</version>
+        </Phoenix_Moneybookers>
+    </modules>
+    <global>
+        <resources>
+            <moneybookers_setup>
+                <setup>
+                    <module>Phoenix_Moneybookers</module>
+                </setup>
+            </moneybookers_setup>
+        </resources>
+        <template>
+            <email>
+                <moneybookers_activateemail translate="label" module="Phoenix_Moneybookers">
+                    <label>Activation of Payment Configuration</label>
+                    <file>email/activation.html</file>
+                    <type>html</type>
+                </moneybookers_activateemail>
+            </email>
+        </template>
+        <payment>
+            <groups>
+                <mbookers>Moneybookers</mbookers>
+            </groups>
+        </payment>
+    </global>
+    <frontend>
+        <secure_url>
+            <moneybookers_processing>/moneybookers/processing</moneybookers_processing>
+        </secure_url>
+        <routers>
+            <moneybookers>
+                <use>standard</use>
+                <args>
+                    <module>Phoenix_Moneybookers</module>
+                    <frontName>moneybookers</frontName>
+                </args>
+            </moneybookers>
+        </routers>
+        <translate>
+            <modules>
+                <Phoenix_Moneybookers>
+                    <files>
+                        <default>Phoenix_Moneybookers.csv</default>
+                    </files>
+                </Phoenix_Moneybookers>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <moneybookers module="Phoenix_Moneybookers">
+                    <file>layout.xml</file>
+                </moneybookers>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+         <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <moneybookers after="Mage_Adminhtml">Phoenix_Moneybookers</moneybookers>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Phoenix_Moneybookers>
+                    <files>
+                        <default>Phoenix_Moneybookers.csv</default>
+                    </files>
+                </Phoenix_Moneybookers>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <moneybookers module="Phoenix_Moneybookers">
+                    <file>layout.xml</file>
+                </moneybookers>
+            </updates>
+        </layout>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <moneybookers translate="title" module="Phoenix_Moneybookers">
+                                            <title>Moneybookers Settings</title>
+                                        </moneybookers>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <phoenix>
+        <moneybookers>
+            <verify_url>http://www.phoenix-medien.de/index.php?id=105</verify_url>
+        </moneybookers>
+    </phoenix>
+    <default>
+        <payment>
+            <moneybookers_acc>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Acc</model>
+                <title>Credit Card / Visa, Mastercard, AMEX, JCB, Diners</title>
+                <allowspecific>0</allowspecific>
+            </moneybookers_acc>
+            <moneybookers_csi>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Csi</model>
+                <title>CartaSi</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>IT</specificcountry>
+            </moneybookers_csi>
+            <moneybookers_did>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Did</model>
+                <title>Lastschrift (ELV)</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+            </moneybookers_did>
+            <moneybookers_dnk>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Dnk</model>
+                <title>Dankort</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DK</specificcountry>
+            </moneybookers_dnk>
+            <moneybookers_ebt>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Ebt</model>
+                <title>Nordea Solo</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>SE</specificcountry>
+            </moneybookers_ebt>
+            <moneybookers_ent>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Ent</model>
+                <title>eNETS</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>SG</specificcountry>
+            </moneybookers_ent>
+            <moneybookers_gcb>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Gcb</model>
+                <title>Carte Bleue</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>FR</specificcountry>
+            </moneybookers_gcb>
+            <moneybookers_gir>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Gir</model>
+                <title>Giropay</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+            </moneybookers_gir>
+            <moneybookers_idl>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Idl</model>
+                <title>iDeal</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>NL</specificcountry>
+            </moneybookers_idl>
+            <moneybookers_lsr>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Lsr</model>
+                <title>Laser</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>IE</specificcountry>
+            </moneybookers_lsr>
+            <moneybookers_mae>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Mae</model>
+                <title>Maestro</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>GB,AT,ES</specificcountry>
+            </moneybookers_mae>
+            <moneybookers_npy>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Npy</model>
+                <title>EPS Online-Überweisung</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>AT</specificcountry>
+            </moneybookers_npy>
+            <moneybookers_pli>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Pli</model>
+                <title>POLi</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>AU</specificcountry>
+            </moneybookers_pli>
+            <moneybookers_psp>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Psp</model>
+                <title>Postepay</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>IT</specificcountry>
+            </moneybookers_psp>
+            <moneybookers_pwy>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Pwy</model>
+                <title>All Polish Banks</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>PL</specificcountry>
+            </moneybookers_pwy>
+            <moneybookers_sft>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Sft</model>
+                <title>Sofortüberweisung</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+            </moneybookers_sft>
+            <moneybookers_so2>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_So2</model>
+                <title>Nordea Solo</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>FI</specificcountry>
+            </moneybookers_so2>
+            <moneybookers_wlt>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Wlt</model>
+                <title>Moneybookers eWallet</title>
+                <allowspecific>0</allowspecific>
+            </moneybookers_wlt>
+            <moneybookers_obt>
+                <group>mbookers</group>
+                <active>0</active>
+                <model>Phoenix_Moneybookers_Model_Obt</model>
+                <title>Onlineüberweisung (empfohlen)</title>
+                <allowspecific>1</allowspecific>
+                <specificcountry>GB,DE</specificcountry>
+            </moneybookers_obt>
+        </payment>
+        <moneybookers>
+            <settings>
+                <activationstatus>0</activationstatus>
+            </settings>
+        </moneybookers>
+    </default>
+</config>

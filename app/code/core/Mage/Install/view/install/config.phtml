@@ -1,0 +1,142 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Install configuration template
+ *
+ * @see Mage_Install_Block_Config
+ * @var $this Mage_Install_Block_Config
+ */
+?>
+<div class="page-head">
+    <h3><?php echo $this->__('Configuration') ?></h3>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php if($this->getInstaller()->getServerCheckStatus()): ?>
+<form action="<?php echo $this->getPostUrl() ?>" method="post" id="form-validate">
+
+<!--    database connection    -->
+<?php echo $this->getLayout()->getBlock('database')->toHtml() ?>
+
+<fieldset class="group-select">
+    <legend><?php echo $this->__('Web access options') ?></legend>
+    <h4 class="legend"><?php echo $this->__('Web access options') ?></h4>
+    <ul>
+        <li>
+            <label for="base_url"><?php echo $this->__('Base URL') ?> <span class="required">*</span></label><br />
+            <input type="text" name="config[unsecure_base_url]" id="base_url" value="<?php echo $this->getFormData()->getUnsecureBaseUrl() ?>" title="<?php echo $this->__('Base URL') ?>" class="required-entry validate-url input-text" />
+        </li>
+        <li>
+            <label for="admin_frontname"><?php echo $this->__('Admin Path') ?> <span class="required">*</span></label><br />
+            <input type="text" name="config[admin_frontname]" id="admin_frontname" value="<?php echo $this->getFormData()->getAdminFrontname() ?>" title="<?php echo $this->__('Admin Path') ?>" class="required-entry validate-data input-text" />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Additional path added after Base URL to access your Administrative Panel (e.g. admin, backend, control etc.).') ?></small>
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="config[enable_charts]" id="enable_charts" value="1" <?php if($this->getFormData()->getEnableCharts()): ?>checked="checked"<?php endif; ?> />
+            <label for="enable_charts"><?php echo $this->__('Enable Charts') ?></label><br />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Enable this option if you want the charts to be displayed on Dashboard.') ?></small>
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="skip_base_url_validation" id="skip_base_url_validation" value="1" <?php if($this->getSkipBaseUrlValidation()): ?>checked="checked"<?php endif; ?> />
+            <label for="skip_base_url_validation"><?php echo $this->__('Skip Base URL Validation Before the Next Step') ?></label><br />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Check this box only if it is not possible to automatically validate the Base URL.') ?></small>
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="config[use_rewrites]" id="use_rewrites" value="1" <?php if($this->getFormData()->getUseRewrites()): ?>checked="checked"<?php endif; ?> />
+            <label for="use_rewrites"><?php echo $this->__('Use Web Server (Apache) Rewrites') ?></label><br />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small>
+                    <?php echo $this->__('You could enable this option to use web server rewrites functionality for improved search engines optimization.') ?><br />
+                    <strong><?php echo $this->__('Please make sure that <code>mod_rewrite</code> is enabled in Apache configuration.') ?></strong>
+                </small>
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="config[use_secure]" id="use_secure" value="1" <?php if($this->getFormData()->getUseSecure()): ?>checked="checked"<?php endif ?> onclick="this.checked ? $('use_secure_options').show() : $('use_secure_options').hide(); return true;" />
+            <label for="use_secure"><?php echo $this->__('Use Secure URLs (SSL)') ?></label><br />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Enable this option only if you have SSL available.') ?></small>
+            </p>
+        </li>
+    </ul>
+    <ul id="use_secure_options" <?php if(!$this->getFormData()->getUseSecure()): ?>style="display:none"<?php endif ?>>
+        <li>
+            <label for="secure_base_url"><?php echo $this->__('Secure Base URL') ?> <span class="required">*</span></label><br />
+            <input type="text" name="config[secure_base_url]" id="secure_base_url" value="<?php echo $this->getFormData()->getSecureBaseUrl() ?>" title="<?php echo $this->__('Secure Base URL') ?>" class="required-entry validate-url input-text" />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Provide a complete base URL for SSL connection. For example: %s', '<strong>https://www.mydomain.com/magento/</strong>') ?></small>
+            </p>
+        </li>
+        <li>
+            <input type="checkbox" name="config[use_secure_admin]" id="use_secure_admin" value="1" <?php if($this->getFormData()->getUseSecureAdmin()): ?>checked="checked"<?php endif; ?> />
+            <label for="use_secure_admin"><?php echo $this->__('Run admin interface with SSL') ?></label><br />
+            <!--<p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('') ?></small>
+            </p>-->
+        </li>
+        <li>
+            <input type="checkbox" name="skip_url_validation" id="skip_url_validation" value="1" <?php if($this->getSkipUrlValidation()): ?>checked="checked"<?php endif; ?> />
+            <label for="skip_url_validation"><?php echo $this->__('Skip Secure URL validation before next step') ?></label><br />
+            <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                <small><?php echo $this->__('Check this box only if it is not possible to automatically validate Secure URL, for example if HTTP authentication is required.') ?></small>
+            </p>
+        </li>
+    </ul>
+</fieldset>
+
+<fieldset class="group-select">
+    <legend><?php echo $this->__('Session Storage Options') ?></legend>
+    <h4 class="legend"><?php echo $this->__('Session Storage Options') ?></h4>
+    <ul>
+        <li>
+            <div class="input-box">
+                <label for="password"><?php echo $this->__('Save Session Data In') ?></label><br />
+                <?php echo $this->getSessionSaveSelect() ?>
+            </div>
+        </li>
+    </ul>
+</fieldset>
+
+<div class="button-set">
+    <p class="required">* <?php echo $this->__('Required Fields') ?></p>
+    <button class="form-button" type="submit"><span><?php echo $this->__('Continue') ?></span></button>
+</div>
+</form>
+<script type="text/javascript">
+    var dataForm = new VarienForm('form-validate');
+</script>
+<?php else: ?>
+    <div><?php echo $this->__('Please set all required settings before clicking Continue') ?></div>
+    <div class="button-set">
+        <button class="form-button" type="button" onclick="setLocation('<?php echo $this->getUrl('*/*/*', array('_current'=>true)) ?>')"><span><?php echo $this->__('Continue') ?></span></button>
+    </div>
+<?php endif; ?>

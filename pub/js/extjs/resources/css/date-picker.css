@@ -1,0 +1,246 @@
+/*
+ * Ext JS Library 1.1 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-date-picker {
+    border: 1px solid #1b376c;
+    border-top:0 none;
+    background:#fff;
+	 position:relative;
+}
+.x-date-picker a {
+    -moz-outline:0 none;
+    outline:0 none;
+}
+.x-date-inner, .x-date-inner td, .x-date-inner th{
+    border-collapse:separate;
+}
+.x-date-middle,.x-date-left,.x-date-right {
+	background: url(../images/default/basic-dialog/hd-sprite.gif) repeat-x 0 -83px;
+	color:#FFF;
+	font:bold 11px "sans serif", tahoma, verdana, helvetica;
+	overflow:hidden;
+}
+
+.x-date-middle .x-btn-left,.x-date-middle .x-btn-center,.x-date-middle .x-btn-right{
+	background:transparent !important;
+    vertical-align:middle;
+}
+.x-date-middle .x-btn .x-btn-text {
+    color:#fff;
+}
+.x-date-middle .x-btn-with-menu  .x-btn-center em {
+    background:transparent url(../images/default/toolbar/btn-arrow-light.gif) no-repeat right 0;
+}
+.x-date-right, .x-date-left {
+    width:18px;
+}
+.x-date-right{
+    text-align:right;
+}
+.x-date-middle {
+    padding-top:2px;padding-bottom:2px;
+}
+.x-date-right a, .x-date-left a{
+    display:block;
+    width:16px;
+	height:16px;
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor:pointer;
+    -moz-opacity: 0.6;
+    opacity:.6;
+    filter: alpha(opacity=60);
+}
+.x-date-right a:hover, .x-date-left a:hover{
+    -moz-opacity: 1;
+    opacity:1;
+    filter: alpha(opacity=100);
+}
+.x-date-right a {
+    background-image: url(../images/default/shared/right-btn.gif);
+    margin-right:2px;
+    text-decoration:none !important;
+}
+.x-date-left a{
+	background-image: url(../images/default/shared/left-btn.gif);
+    margin-left:2px;
+    text-decoration:none !important;
+}
+table.x-date-inner {
+    width:100%;
+    table-layout:fixed;
+}
+.x-date-inner th {
+    width:25px;
+}
+.x-date-inner th {
+    background: #dfecfb url(../images/default/shared/glass-bg.gif) repeat-x left top;
+    text-align:right !important;
+	border-bottom: 1px solid #a3bad9;
+    font:normal 10px arial, helvetica,tahoma,sans-serif;
+	color:#233d6d;
+	cursor:default;
+    padding:0;
+    border-collapse:separate;
+}
+.x-date-inner th span {
+    display:block;
+    padding:2px;
+    padding-right:7px;
+}
+.x-date-inner td {
+    border: 1px solid #fff;
+	text-align:right;
+    padding:0;
+}
+.x-date-inner a {
+    padding:2px 5px;
+    display:block;
+    font:normal 11px arial, helvetica,tahoma,sans-serif;
+	text-decoration:none;
+    color:black;
+    text-align:right;
+    zoom:1;
+}
+.x-date-inner .x-date-active{
+	cursor:pointer;
+	color:black;
+}
+.x-date-inner .x-date-selected a{
+	background: #dfecfb url(../images/default/shared/glass-bg.gif) repeat-x left top;
+	border:1px solid #8db2e3;
+   padding:1px 4px;
+}
+.x-date-inner .x-date-today a{
+	border: 1px solid darkred;
+    padding:1px 4px;
+}
+.x-date-inner .x-date-selected span{
+    font-weight:bold;
+}
+.x-date-inner .x-date-prevday a,.x-date-inner .x-date-nextday a {
+	color:#aaaaaa;
+    text-decoration:none !important;
+}
+.x-date-bottom {
+    padding:4px;
+    border-top: 1px solid #a3bad9;
+    background: #dfecfb url(../images/default/shared/glass-bg.gif) repeat-x left top;
+}
+
+.x-date-inner a:hover, .x-date-inner .x-date-disabled a:hover{
+    text-decoration:none !important;
+    color:black;
+    background: #ddecfe;
+}
+
+.x-date-inner .x-date-disabled a {
+	cursor:default;
+	background:#eeeeee;
+	color:#bbbbbb;
+}
+.x-date-mmenu{
+    background:#eeeeee !important;
+}
+.x-date-mmenu .x-menu-item {
+	font-size:10px;
+	padding:1px 24px 1px 4px;
+	white-space: nowrap;
+	color:#000;
+}
+.x-date-mmenu .x-menu-item .x-menu-item-icon {
+    width:10px;height:10px;margin-right:5px;
+    background-position:center -4px !important;
+}
+
+.x-date-mp {
+	position:absolute;
+	left:0;
+	top:0;
+	background:white;
+	display:none;
+}
+.x-date-mp td {
+    padding:2px;
+	font:normal 11px arial, helvetica,tahoma,sans-serif;
+}
+td.x-date-mp-month,td.x-date-mp-year,td.x-date-mp-ybtn {
+   border: 0 none;
+	text-align:center;
+	vertical-align: middle;
+	width:25%;
+}
+.x-date-mp-ok {
+	margin-right:3px;
+}
+.x-date-mp-btns button {
+	text-decoration:none;
+	text-align:center;
+	text-decoration:none !important;
+	background:#083772;
+	color:white;
+	border:1px solid;
+	border-color: #3366cc #000055 #000055 #3366cc;
+	padding:1px 3px 1px;
+	font:normal 11px arial, helvetica,tahoma,sans-serif;
+	cursor:pointer;
+}
+.x-date-mp-btns {
+	background: #dfecfb url(../images/default/shared/glass-bg.gif) repeat-x left top;
+}
+.x-date-mp-btns td {
+	border-top: 1px solid #c5d2df;
+   text-align:center;
+}
+td.x-date-mp-month a,td.x-date-mp-year a {
+	display:block;
+	padding:2px 4px;
+	text-decoration:none;
+	text-align:center;
+	color:#15428b;
+}
+
+td.x-date-mp-month a:hover,td.x-date-mp-year a:hover {
+	color:#15428b;
+	text-decoration:none;
+	cursor:pointer;
+	background: #ddecfe;
+}
+
+td.x-date-mp-sel a {
+	padding:1px 3px;
+	background: #dfecfb url(../images/default/shared/glass-bg.gif) repeat-x left top;
+	border:1px solid #8db2e3;
+}
+.x-date-mp-ybtn a {
+    overflow:hidden;
+    width:15px;
+    height:15px;
+    cursor:pointer;
+    background:transparent url(../images/default/panel/tool-sprites.gif) no-repeat;
+    display:block;
+    margin:0 auto;
+}
+.x-date-mp-ybtn a.x-date-mp-next {
+    background-position:0 -120px;
+}
+.x-date-mp-ybtn a.x-date-mp-next:hover {
+    background-position:-15px -120px;
+}
+.x-date-mp-ybtn a.x-date-mp-prev {
+    background-position:0 -105px;
+}
+.x-date-mp-ybtn a.x-date-mp-prev:hover {
+    background-position:-15px -105px;
+}
+.x-date-mp-ybtn {
+   text-align:center;
+}
+td.x-date-mp-sep {
+   border-right:1px solid #c5d2df;
+}

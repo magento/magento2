@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.31 $"/>
+		<generation date="$Date: 2009/05/05 23:06:41 $"/>
+		<language type="wo"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="da">Danwaa</language>
+			<language type="de">Almaa</language>
+			<language type="en">Angale</language>
+			<language type="es">Españool</language>
+			<language type="fi">Finlaande</language>
+			<language type="fr">Fraañse</language>
+			<language type="it">Itaaliee</language>
+			<language type="ja">Jappone</language>
+			<language type="nl">Olaande</language>
+			<language type="no">Norweejiee</language>
+			<language type="pt">Portugees</language>
+			<language type="sv">Suweedwaa</language>
+		</languages>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a à b-e é ë f g i-n ñ ŋ o ó p-u w-y]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[ã h v z]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+</ldml>

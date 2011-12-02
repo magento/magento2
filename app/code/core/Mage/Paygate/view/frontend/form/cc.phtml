@@ -1,0 +1,92 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_formMessage=$this->getPartialAuthorizationFormMessage(); ?>
+<?php $_isPartialAuthorization=$this->isPartialAuthorization(); ?>
+<?php if ($_isPartialAuthorization || $_formMessage): ?>
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>_before" style="display:none;">
+    <?php if ($_formMessage): ?>
+    <?php echo $this->showNoticeMessage($_formMessage) ?>
+    <?php endif;?>
+
+    <?php if ($this->isPartialAuthorization()): ?>
+        <?php echo $this->getChildHtml('cards') ?>
+        <div class="release-amounts">
+            <button class="button" type="button" id="payment-button-cancel"><span><span>Cancel</span></span></button>
+            <span><?php echo $this->__('To cancel pending authorizations and release amounts that have already been processed during this payment, click Cancel.') ?></span>
+        </div>
+        <?php echo $this->showNoticeMessage($this->__('Please enter another credit card number to complete your purchase.')) ?>
+
+        <script type="text/javascript">
+        //<![CDATA[
+        var cancelButtonId = 'payment-button-cancel';
+        var cancelButton = $(cancelButtonId);
+        cancelButton.click = null;
+        Event.observe(cancelButton, 'click', cancelPaymentAuthorizations);
+
+        function cancelPaymentAuthorizations(event, hideConfirm){
+            if (!hideConfirm && !confirm('<?php echo $this->getCancelConfirmationMessage() ?>')) {
+                return;
+            }
+            $('cancel-please-wait').show();
+            new Ajax.Request('<?php echo $this->getCancelUrl() ?>', {
+                onSuccess : function(transport) {
+                    $('cancel-please-wait').hide();
+                    try{
+                        response = eval('(' + transport.responseText + ')');
+                    } catch (e) {
+                        response = {};
+                    }
+                    if (response.success) {
+                        $(cancelButtonId).remove();
+                        $('checkout-payment-method-load').update(response.update_html);
+                        if (checkout) {
+                            checkout.reloadProgressBlock();
+                        }
+                    } else {
+                        var msg = response.error_message;
+                        if (msg) {
+                            alert(msg);
+                        }
+                    }
+                }
+            });
+        }
+
+        <?php if ($_message=$this->getPartialAuthorizationConfirmationMessage()): ?>
+            if (!confirm('<?php echo $_message ?>')) {
+                cancelPaymentAuthorizations(true, true);
+            }
+        <?php endif;?>
+        //]]>
+        </script>
+        <span id="cancel-please-wait" class="please-wait" style="display:none">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="" class="v-middle" /> <?php echo $this->__('Processing...') ?>
+        </span>
+    <?php endif;?>
+</div>
+<?php endif;?>
+<?php echo $this->getChildHtml('method_form_block') ?>

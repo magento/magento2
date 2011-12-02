@@ -1,0 +1,59 @@
+/*
+ * Ext JS Library 2.0
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-html-editor-wrap {
+    border:1px solid #a9bfd3;
+    background:white;
+}
+.x-html-editor-tb .x-btn-text {
+    background:transparent url(../images/default/editor/tb-sprite.gif) no-repeat;
+}
+.x-html-editor-tb .x-edit-bold .x-btn-text {
+    background-position:0 0;
+}
+.x-html-editor-tb .x-edit-italic .x-btn-text {
+    background-position:-16px 0;
+}
+.x-html-editor-tb .x-edit-underline .x-btn-text {
+    background-position:-32px 0;
+}
+.x-html-editor-tb .x-edit-forecolor .x-btn-text {
+    background-position:-160px 0;
+}
+.x-html-editor-tb .x-edit-backcolor .x-btn-text {
+    background-position:-176px 0;
+}
+.x-html-editor-tb .x-edit-justifyleft .x-btn-text {
+    background-position:-112px 0;
+}
+.x-html-editor-tb .x-edit-justifycenter .x-btn-text {
+    background-position:-128px 0;
+}
+.x-html-editor-tb .x-edit-justifyright .x-btn-text {
+    background-position:-144px 0;
+}
+.x-html-editor-tb .x-edit-insertorderedlist .x-btn-text {
+    background-position:-80px 0;
+}
+.x-html-editor-tb .x-edit-insertunorderedlist .x-btn-text {
+    background-position:-96px 0;
+}
+.x-html-editor-tb .x-edit-increasefontsize .x-btn-text {
+    background-position:-48px 0;
+}
+.x-html-editor-tb .x-edit-decreasefontsize .x-btn-text {
+    background-position:-64px 0;
+}
+.x-html-editor-tb .x-edit-sourceedit .x-btn-text {
+    background-position:-192px 0;
+}
+
+.x-html-editor-tip .x-tip-bd .x-tip-bd-inner {
+    padding:5px;
+    padding-bottom:1px;
+}

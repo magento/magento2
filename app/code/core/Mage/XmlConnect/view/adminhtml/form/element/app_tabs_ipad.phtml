@@ -1,0 +1,218 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script type="text/javascript">
+// <![CDATA[
+
+// tabNumber:
+//  * 0, 1, 2  main tabs
+//  * 3, ...  active tabs
+
+// disabledTabNumber — another numbers
+
+enabledTabs = <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getTabs()->getEnabledTabs()); ?>
+
+disabledTabs = <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getTabs()->getDisabledTabs()); ?>
+
+disabledTabsMaxCount = 5;
+
+function XmlconnectTabUpdate() {
+    for(i=0; i<10; i++) {
+        tags=document.getElementsByClassName('mm_tab'+i)
+        for(j=0; j<tags.length; j++) {
+            isActive = i<enabledTabs.length
+            if(isActive) {
+                // Enabled tabs
+                if(tags[j].className.indexOf('mm_img')>0) {
+                    tags[j].innerHTML = '<img src="'+enabledTabs[i].image+'" alt="" />'
+                    tags[j].style.visibility = 'visible'
+                }
+                if(tags[j].className.indexOf('mm_name')>0) {
+                    tags[j].innerHTML = '<span>'+enabledTabs[i].label+'</span>'
+                }
+                if(tags[j].className.indexOf('mm_ctrl')>0) {
+                    tags[j].style.visibility = 'visible'
+                }
+            } else {
+                // Empty places
+                if(tags[j].className.indexOf('mm_img')>0) {
+                    tags[j].innerHTML = '<img src="<?php echo Mage::helper('Mage_XmlConnect_Helper_Image')->getSkinImagesUrl('tab_empty.png'); ?>" alt="" />'
+                    tags[j].style.visibility = 'hidden'
+                }
+                if(tags[j].className.indexOf('mm_name')>0) {
+                    tags[j].innerHTML = ''
+                }
+                if(tags[j].className.indexOf('mm_ctrl')>0) {
+                    tags[j].style.visibility = 'hidden';
+                }
+            }
+        }
+    }
+    for(i=0; i<disabledTabsMaxCount; i++) {
+        tags=document.getElementsByClassName('mmd_tab'+i)
+        for(j=0; j<tags.length; j++) {
+            if(i<disabledTabs.length && disabledTabs[i]) {
+                // Disabled tabs
+                if(tags[j].className.indexOf('mm_img')>0) {
+                    tags[j].innerHTML = '<img src="'+disabledTabs[i].image+'" alt="" />'
+                    tags[j].style.visibility = 'visible'
+                }
+                if(tags[j].className.indexOf('mm_name')>0) {
+                    tags[j].innerHTML = disabledTabs[i].label
+                }
+                if(tags[j].className.indexOf('mm_ctrl')>0) {
+                    tags[j].style.visibility = 'visible'
+                }
+            } else {
+                // Empty places
+                if(tags[j].className.indexOf('mm_img')>0) {
+                    tags[j].innerHTML = '<img src="<?php echo Mage::helper('Mage_XmlConnect_Helper_Image')->getSkinImagesUrl('tab_empty.png'); ?>" alt="" />'
+                    tags[j].style.visibility = 'hidden'
+                }
+                if(tags[j].className.indexOf('mm_name')>0) {
+                    tags[j].innerHTML = ''
+                }
+                if(tags[j].className.indexOf('mm_ctrl')>0) {
+                    tags[j].style.visibility = 'hidden'
+                }
+            }
+        }
+    }
+    document.getElementById('<?php echo htmlspecialchars($this->getName()); ?>').value = Object.toJSON({"enabledTabs": enabledTabs, "disabledTabs": disabledTabs})
+}
+
+document.observe("dom:loaded", function() {
+    XmlconnectTabUpdate();
+});
+
+function XmlconnectTabEnable(disabledTabNumber) {
+    enabledTabs.push(disabledTabs.splice(disabledTabNumber, 1).shift());
+    XmlconnectTabUpdate();
+    return false;
+}
+
+function XmlconnectTabDisable(tabNumber) {
+    tabActionText = '';
+    if (enabledTabs[tabNumber]) {
+        tabActionText = enabledTabs[tabNumber].action;
+    }
+    if(disabledTabs.length >= disabledTabsMaxCount) {
+        return false;
+    }
+    for (i = 0; i < enabledTabs.length; i++) {
+        if (enabledTabs[i].action == tabActionText) {
+            tabNumber = i;
+            break;
+        }
+    }
+    disabledTabs.push(enabledTabs.splice(tabNumber, 1).shift());
+    XmlconnectTabUpdate();
+    return false;
+}
+// ]]>
+</script>
+
+<tr><td>
+
+<input type="hidden"
+    name="<?php echo htmlspecialchars($this->getName()); ?>"
+    id="<?php echo htmlspecialchars($this->getName()); ?>"
+    value="<?php echo htmlspecialchars($this->getValue()); ?>" />
+
+<br/>
+<table border="0">
+    <tr>
+        <td width="20%" align="center" valign="bottom" class="mm_tab0 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab1 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab2 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab3 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab4 mm_img"> </td>
+    </tr>
+    <tr>
+        <td align="center" class="mm_tab0 mm_name"><span><?php echo $this->__('Home'); ?></span></td>
+        <td align="center" class="mm_tab1 mm_name"> </td>
+        <td align="center" class="mm_tab2 mm_name"> </td>
+        <td align="center" class="mm_tab3 mm_name"> </td>
+        <td align="center" class="mm_tab4 mm_name"> </td>
+    </tr>
+    <tr>
+        <td><!-- Home tab == always active --></td>
+        <td align="center" class="mm_tab1 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(1)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab2 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(2)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab3 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(3)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab4 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(4)"><?php echo $this->__('Make Inactive'); ?></a></td>
+    </tr>
+</table>
+<table border="0">
+    <tr>
+        <td width="20%" align="center" valign="bottom" class="mm_tab5 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab6 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab7 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab8 mm_img"> </td>
+        <td width="20%" align="center" valign="bottom" class="mm_tab9 mm_img"> </td>
+    </tr>
+    <tr>
+        <td align="center" class="mm_tab5 mm_name"> </td>
+        <td align="center" class="mm_tab6 mm_name"> </td>
+        <td align="center" class="mm_tab7 mm_name"> </td>
+        <td align="center" class="mm_tab8 mm_name"> </td>
+        <td align="center" class="mm_tab9 mm_name"> </td>
+    </tr>
+    <tr>
+        <td align="center" class="mm_tab5 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(5)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab6 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(6)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab7 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(7)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab8 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(8)"><?php echo $this->__('Make Inactive'); ?></a></td>
+        <td align="center" class="mm_tab9 mm_ctrl"><a href="#" onclick="return XmlconnectTabDisable(9)"><?php echo $this->__('Make Inactive'); ?></a></td>
+    </tr>
+</table>
+<div class="mm-tabs-title"><?php $this->__('Inactive Tabs'); ?></div>
+<table border="0">
+    <tr>
+        <td width="20%" align="center" valign="bottom" class="mmd_tab0 mm_img" style="opacity: .5"> </td>
+        <td width="20%" align="center" valign="bottom" class="mmd_tab1 mm_img" style="opacity: .5"> </td>
+        <td width="20%" align="center" valign="bottom" class="mmd_tab2 mm_img" style="opacity: .5"> </td>
+        <td width="20%" align="center" valign="bottom" class="mmd_tab3 mm_img" style="opacity: .5"> </td>
+        <td width="20%" align="center" valign="bottom" class="mmd_tab4 mm_img" style="opacity: .5"> </td>
+    </tr>
+    <tr>
+        <td align="center" class="mmd_tab0 mm_name"> </td>
+        <td align="center" class="mmd_tab1 mm_name"> </td>
+        <td align="center" class="mmd_tab2 mm_name"> </td>
+        <td align="center" class="mmd_tab3 mm_name"> </td>
+        <td align="center" class="mmd_tab4 mm_name"> </td>
+    </tr>
+    <tr>
+        <td align="center" class="mmd_tab0 mm_ctrl"><a href="#" onclick="return XmlconnectTabEnable(0)"><?php echo $this->__('Activate'); ?></a></td>
+        <td align="center" class="mmd_tab1 mm_ctrl"><a href="#" onclick="return XmlconnectTabEnable(1)"><?php echo $this->__('Activate'); ?></a></td>
+        <td align="center" class="mmd_tab2 mm_ctrl"><a href="#" onclick="return XmlconnectTabEnable(2)"><?php echo $this->__('Activate'); ?></a></td>
+        <td align="center" class="mmd_tab3 mm_ctrl"><a href="#" onclick="return XmlconnectTabEnable(3)"><?php echo $this->__('Activate'); ?></a></td>
+        <td align="center" class="mmd_tab4 mm_ctrl"><a href="#" onclick="return XmlconnectTabEnable(4)"><?php echo $this->__('Activate'); ?></a></td>
+    </tr>
+</table>
+
+</td></tr>

@@ -1,0 +1,55 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+.paypal-payment-notice { background:url(logo.gif) no-repeat 5px center #eaf0ee; border:1px solid #ccc; margin-bottom:10px; padding:10px 5px 5px 115px; }
+.paypal-payment-notice h4,
+.paypal-payment-notice p { margin:0; }
+.paypal-payment-notice h2 { color:#444; font-size:1.4em; line-height:1em; }
+.paypal-payment-notice a { text-decoration:none; }
+
+h3.paypal-header { background:url(section.png) no-repeat 0 0; height:0; overflow:hidden; padding:14px 0 0; width:53px; }
+
+ul.tabs a.paypal-section:hover { background-color:#d8e6e6; }
+ul.tabs a.paypal-section.active, ul.tabs a.paypal-section.active:hover { background-color:#fff; }
+ul.tabs a.paypal-section span,
+ul.tabs a.paypal-section:hover span { background:url(section.png) no-repeat 0 0; height:0; overflow:hidden; padding:14px 0 0; width:53px; }
+
+.paypal-selection { border-collapse:collapse; width:100%; }
+.paypal-selection .paypal-selection-info { text-align:right; }
+.paypal-selection th { font-size:13px; padding:5px 0; text-align:left; vertical-align:middle; }
+.paypal-selection td { background:#f2f2f2; border-bottom:5px solid #fff; padding:5px; vertical-align:top; }
+.paypal-selection .paypal-selection-simplified { background:#fff; padding-left:35px; }
+.paypal-selection td a { color:#2997d8; }
+.paypal-selection td strong { color:#3c616a; }
+.paypal-selection td label { display:block; padding-left:30px; text-indent:-30px; }
+.paypal-selection td div label { display:inline; padding:0; text-indent:0; }
+.paypal-selection td input { height:13px; overflow:hidden; margin-right:15px; position:relative; top:-1px; width:13px; vertical-align:middle; }
+
+.paypal-config .form-list { width:100%; }
+.paypal-config tr.hover { background:#f7f7f7; }
+.paypal-config tr.hover label { cursor:help; }
+
+.paypal-credentials { border:1px solid #f2f2f2; }
+.paypal-credentials caption { padding:5px; text-align:left; }
+.paypal-credentials .value { color:#ccc; }

@@ -1,0 +1,177 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+//<![CDATA[
+
+function pushCodes()
+{
+    var url = '<?php echo $this->getExportUrl() ?>';
+
+    new Ajax.Request(url, {
+        method: 'get',
+        parameters: {url: $('target_url').value},
+        onSuccess: function(transport) {
+            try {
+                if (transport.responseText.isJSON())
+                {
+                    if ($('page_type') && $('page_type').value == '') {
+                        alert('Please specify page type first.');
+                        return;
+                    }
+                    var response = transport.responseText.evalJSON();
+                    if ($('page_type')) {
+                        if ($('page_type').value == '<?php echo Mage_GoogleOptimizer_Model_Code_Page::PAGE_TYPE_VARIANT ?>') {
+                            $('<?php echo $this->getTrackingFieldKey() ?>').value = response.code_tracking_variants.unescapeHTML().strip();
+                        } else {
+                            $('<?php echo $this->getControlFieldKey() ?>').value = response.code_control.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                            $('<?php echo $this->getTrackingFieldKey() ?>').value = response.code_tracking_original.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                            $('<?php echo $this->getConversionFieldKey() ?>').value = response.code_tracking_conversion.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                        }
+                    } else {
+                        $('<?php echo $this->getControlFieldKey() ?>').value = response.code_control.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                        $('<?php echo $this->getTrackingFieldKey() ?>').value = response.code_tracking.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                        $('<?php echo $this->getConversionFieldKey() ?>').value = response.code_conversion.unescapeHTML().strip().replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                    }
+                }
+            }
+            catch (e) {
+                alert('Error occurs in scripts importing.');
+            }
+        }
+    });
+}
+
+function googleOptimizerScopeAction()
+{
+    $$('.googleoptimizer').each(function(elm){
+        if (elm.disabled) {
+            elm.disabled = false;
+        } else {
+            elm.disabled = true;
+        }
+    });
+}
+
+function googleOptimizerConversionPageAction(elm)
+{
+    var urls = <?php echo $this->getJsonConversionPagesUrl() ?>;
+    if (elm) {
+        if (elm.value == '' || elm.value == 'other') {
+            $('conversion_page_url').value = '';
+            return;
+        } else {
+            if (urls[elm.value]) {
+                if (urlField = $('conversion_page_url')) {
+                    urlField.value = urls[elm.value];
+                    urlField.focus();
+                    urlField.select();
+                }
+            }
+        }
+    }
+    return;
+}
+
+function googleOptimizerVariantPageAction(elm)
+{
+    if ($$('.validate-googleoptimizer')) {
+        var disableFlag = false;
+        if ($('page_type') && $('page_type').value == 'variant') {
+            disableFlag = true;
+        }
+        $$('.validate-googleoptimizer').each(function(elm){
+            if (elm.id == 'control_script' || elm.id == 'conversion_script' || elm.id == 'conversion_page') {
+                elm.disabled = disableFlag;
+            }
+        });
+    }
+}
+
+function googleOptimizerCheckAttributesCount(elm)
+{
+    var options = elm.options
+    var count = 0;
+    var maxCount = <?php echo $this->getMaxCountOfAttributes() ?>;
+    for (var i=0; i<options.length; i++) {
+        if (elm.options[i].value) {
+            if (elm.options[i].selected) {
+                count++;
+            }
+        }
+    }
+    if (count > 8) {
+        return false;
+    }
+    return true;
+}
+
+function googleOptimizerAttributesCheckAction(elm)
+{
+
+    if ($('advice-validate-googleoptimizer-attributes-attributes')) {
+        $('advice-validate-googleoptimizer-attributes-attributes').remove();
+    }
+
+    if (googleOptimizerCheckAttributesCount(elm) == false) {
+//        elm.addClassName('validation-failed');
+//        template = new Template('<div id="advice-validate-googleoptimizer-attributes-attributes" class="validation-advice">Not more than 8 attributes allowed.</div>');
+//        Element.insert(elm, {'after':template.evaluate({})});
+        alert('Not more than 8 attributes allowed.');
+    }
+    return true;
+}
+
+Validation.addAllThese([
+    ['validate-googleoptimizer', 'This field is required unless all the fields are empty.', function(v,element) {
+            var fieldEntry = false;
+            var self = false;
+            var validationResult = true;
+            if ($$('.validate-googleoptimizer')) {
+                $$('.validate-googleoptimizer').each(function(elm){
+                    if ((elm.value != "none") && (elm.value != null) && (elm.value.length != 0)) {
+                        fieldEntry = true;
+                        if (elm.id == element.id) {
+                            self = true;
+                        }
+                    } else {
+                        validationResult = false;
+                    }
+                });
+            }
+            if (fieldEntry && !validationResult && !self) {
+                return false;
+            }
+            return true;
+        }]
+    ]);
+Validation.addAllThese([
+    ['validate-googleoptimizer-attributes', 'Not more than 8 attributes allowed.', function(v,element) {
+            return googleOptimizerCheckAttributesCount(element);
+        }]
+    ]);
+//]]>
+</script>

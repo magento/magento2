@@ -1,0 +1,222 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+
+$orShipArr = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Ups')->getCode('originShipment');
+
+$defShipArr = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Ups')->getCode('method');
+
+$sectionCode = $this->getRequest()->getParam('section');
+$websiteCode = $this->getRequest()->getParam('website');
+$storeCode = $this->getRequest()->getParam('store');
+
+
+if(!$storeCode && $websiteCode){
+    $web = Mage::getModel('Mage_Core_Model_Website')->load($websiteCode);
+    $stroredAllowedMethods = $web->getConfig('carriers/ups/allowed_methods');
+    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
+    $stroredOriginShipment = $web->getConfig('carriers/ups/origin_shipment');
+    $stroredFreeShipment = $web->getConfig('carriers/ups/free_method');
+} elseif ($storeCode) {
+    $stroredAllowedMethods = Mage::getStoreConfig('carriers/ups/allowed_methods',$storeCode);
+    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
+    $stroredOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment',$storeCode);
+    $stroredFreeShipment = Mage::getStoreConfig('carriers/ups/free_method',$storeCode);
+} else {
+    $stroredAllowedMethods = Mage::getStoreConfig('carriers/ups/allowed_methods');
+    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
+    $stroredOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment');
+    $stroredFreeShipment = Mage::getStoreConfig('carriers/ups/free_method');
+}
+?>
+<script type="text/javascript">
+//<![CDATA[
+    originShipmentObj = new Object();
+
+
+    <?php
+    //get origin shipment data, using in UPS XML module
+        foreach ($orShipArr as $key=>$val){
+            print "originShipmentObj['$key'] = new Object();\n";
+            foreach ($val as $code=>$label){
+                print "\toriginShipmentObj['$key']['$code'] = '$label';\n";
+            }
+        }
+    ?>
+    //get default shipment data, using in UPS module
+    <?php
+        print "originShipmentObj['default'] = new Object();\n";
+        foreach ($defShipArr as $code=>$label){
+            print "\toriginShipmentObj['default']['$code'] = '$label';\n";
+        }
+    ?>
+    //get stored Allowed Methods
+    <?php
+    print "stroredAllowedMethods = new Array();\n";
+        foreach ($stroredAllowedMethods as $code){
+            print "\tstroredAllowedMethods.push('$code');\n";
+        }
+    ?>
+    //set stored origin shipment
+    <?php
+        print "stroredOriginShipment='$stroredOriginShipment'";
+    ?>
+
+    //set stored Free origin shipment
+    <?php
+        print "stroredFreeShipment='$stroredFreeShipment'";
+    ?>
+
+
+    function hideRowArrayElements(arr,method)
+    {
+        for(a=0;a<arr.length;a++){
+            $(arr[a]).up(1).hide();
+        }
+    }
+
+    function showRowArrayElements(arr,method)
+    {
+        for(a=0;a<arr.length;a++){
+            $(arr[a]).up(1).show();
+        }
+    }
+
+    function inArray(arr,value)
+    {
+        var i;
+        for (i=0; i < arr.length; i++) {
+                if (arr[i] === value) {
+                        return true;
+                }
+        }
+        return false;
+    }
+
+    var upsXml = Class.create();
+    upsXml.prototype = {
+        initialize : function()
+        {
+
+            this.carriersUpsTypeId = 'carriers_ups_type';
+            if($(this.carriersUpsTypeId)){
+                this.checkingUpsXmlId = new Array('carriers_ups_gateway_xml_url','carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number');
+                this.checkingUpsId = new Array('carriers_ups_gateway_url');
+                this.originShipmentTitle = '';
+                this.allowedMethodsId = 'carriers_ups_allowed_methods';
+                this.freeShipmentId = 'carriers_ups_free_method';
+                this.onlyUpsXmlElements = new Array('carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url','carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number','carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number','carriers_ups_mode_xml');
+                this.onlyUpsElements = new Array('carriers_ups_gateway_url');
+                this.setFormValues();
+                Event.observe($('carriers_ups_type'), 'change', this.setFormValues.bind(this));
+            }
+
+        },
+        updateAllowedMethods: function(originShipmentTitle)
+        {
+            selectFieldAllowedMethod = $(this.allowedMethodsId);
+            selectFieldFreeShipment = $(this.freeShipmentId);
+
+            originShipment = originShipmentObj[originShipmentTitle];
+
+            while (selectFieldAllowedMethod.length> 0) {
+                selectFieldAllowedMethod.remove(0);
+            }
+            while (selectFieldFreeShipment.length> 0) {
+                selectFieldFreeShipment.remove(0);
+            }
+
+            var optionFree = document.createElement("OPTION");
+            optionFree.text = 'None';
+            optionFree.value = '';
+            try {
+                selectFieldFreeShipment.add(optionFree, null);
+            } catch(ex) {
+                selectFieldFreeShipment.add(optionFree);
+            }
+
+            for(code in originShipment){
+                var option = document.createElement("OPTION");
+                option.text = originShipment[code];
+                option.value = code;
+
+                var optionFree = document.createElement("OPTION");
+                optionFree.text = originShipment[code];
+                optionFree.value = code;
+
+                if( (originShipmentTitle == stroredOriginShipment || originShipmentTitle=='default') && stroredFreeShipment==code){
+                    optionFree.selected = true;
+                }
+                if( (originShipmentTitle == stroredOriginShipment || originShipmentTitle=='default') && inArray(stroredAllowedMethods,code)){
+                    option.selected = true;
+                }
+                try {
+                    selectFieldAllowedMethod.add(option, null); // standards compliant; doesn't work in IE
+                    selectFieldFreeShipment.add(optionFree, null);
+                } catch(ex) {
+                    selectFieldAllowedMethod.add(option); // IE only
+                    selectFieldFreeShipment.add(optionFree);
+                }
+            }
+        },
+        setFormValues: function()
+        {
+            if($F(this.carriersUpsTypeId) == 'UPS'){
+                for(a=0;a<this.checkingUpsXmlId.length;a++){
+                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
+                }
+                for(a=0;a<this.checkingUpsId.length;a++){
+                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                }
+                Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                showRowArrayElements(this.onlyUpsElements);
+                hideRowArrayElements(this.onlyUpsXmlElements);
+                this.changeOriginShipment(null,'default');
+            } else {
+                for(a=0;a<this.checkingUpsXmlId.length;a++){
+                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                }
+                for(a=0;a<this.checkingUpsId.length;a++){
+                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
+                }
+                Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                showRowArrayElements(this.onlyUpsXmlElements);
+                hideRowArrayElements(this.onlyUpsElements);
+                this.changeOriginShipment();
+            }
+        },
+        changeOriginShipment: function(Event,key)
+        {
+            if(key)
+                this.originShipmentTitle = key
+            else
+                this.originShipmentTitle = $F('carriers_ups_origin_shipment');
+            this.updateAllowedMethods(this.originShipmentTitle);
+        }
+    }
+    xml = new upsXml();
+//]]>
+</script>

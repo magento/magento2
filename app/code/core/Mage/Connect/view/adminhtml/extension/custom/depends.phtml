@@ -1,0 +1,137 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="entry-edit">
+    <?php echo $this->getFormHtml() ?>
+
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__("Packages") ?></h4>
+    </div>
+    <fieldset id="depends_packages_fieldset" class="grid">
+        <legend><?php echo $this->__("Packages") ?></legend>
+        <table class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $this->__("Package") ?></th>
+                    <th><?php echo $this->__("Channel") ?></th>
+                    <th><?php echo $this->__("Min") ?></th>
+                    <th><?php echo $this->__("Max") ?></th>
+                    <th><?php echo $this->__("Files") ?></th>
+                    <th><?php echo $this->__("Action") ?></th>
+                </tr>
+                <tr id="depends_packages_template" style="display:none">
+<?php function showDependsPackageTemplate($self, $_i=0) { 
+                    $filesClass = "files";
+?>
+                
+                    
+                    <td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:200px;" name="depends[package][name][]" value="<?php echo $self->getValue('depends/package/name/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:200px;" name="depends[package][channel][]" value="<?php echo $self->getValue('depends/package/channel/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:50px;" name="depends[package][min][]" value="<?php echo $self->getValue('depends/package/min/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:50px;" name="depends[package][max][]" value="<?php echo $self->getValue('depends/package/max/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <textarea class="<?php echo $filesClass ?>" style="width:300px;display:none" name="depends[package][files][]"><?php echo $self->getValue('depends/package/files/'.$_i)?> </textarea>                                                
+                        <?php echo $self->getAddFileDepsRowButtonHtml("tr", $filesClass) ?>                        
+                    </td><td style="margin-bottom:5px;">                    
+                        <?php echo $self->getRemoveRowButtonHtml('tr') ?>
+                    </td>
+<?php } ?>
+<?php showDependsPackageTemplate($this) ?>
+                </tr>
+            </thead>
+            <tbody id="depends_packages_container">
+            <?php if ($this->getData('depends/package/name')): ?>
+            <?php foreach ($this->getData('depends/package/name') as $_i=>$_dbField): ?>
+                <?php if (0===$_i) continue; ?>
+                <tr>
+<?php showDependsPackageTemplate($this, $_i) ?>
+                </tr>
+            <?php endforeach ?>
+            <?php endif ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="a-right" colspan="8"><?php echo $this->getAddRowButtonHtml('depends_packages_container', 'depends_packages_template', $this->__('Add Package dependency')) ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+
+    <div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__("Extensions") ?></h4>
+    </div>
+    <fieldset id="depends_extensions_fieldset" class="grid">
+        <legend><?php echo $this->__("Extensions") ?></legend>
+        <table class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $this->__("Extension") ?></th>
+                    <th><?php echo $this->__("Min") ?></th>
+                    <th><?php echo $this->__("Max") ?></th>
+                    <th><?php echo $this->__("Action") ?></th>
+                </tr>
+                <tr id="depends_extensions_template" style="display:none">
+<?php function showDependsExtensionsTemplate($self, $_i=0) { ?>
+                    <td style="margin-bottom:5px;">
+                        <select name="depends[extension][name][]" style="width:100px">
+                        <?php foreach ($self->getExtensions() as $_value=>$_label): ?>
+                            <option value="<?php echo $_value ?>" <?php echo $self->getSelected('depends/extension/name/'.$_i, $_value) ?>><?php echo $_label ?></option>
+                        <?php endforeach ?>
+                        </select>
+                    </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:50px;" name="depends[extension][min][]" value="<?php echo $self->getValue('depends/extension/min/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:50px;" name="depends[extension][max][]" value="<?php echo $self->getValue('depends/extension/max/'.$_i) ?>"/>
+                    </td><td style="margin-bottom:5px;">
+                        <?php echo $self->getRemoveRowButtonHtml('tr') ?>
+                    </td>
+<?php } ?>
+<?php showDependsExtensionsTemplate($this) ?>
+                </tr>
+            </thead>
+            <tbody id="depends_extensions_container">
+            <?php if ($this->getData('depends/extension/name')): ?>
+            <?php foreach ($this->getData('depends/extension/name') as $_i=>$_dbField): ?>
+                <?php if (0===$_i) continue; ?>
+                <tr>
+<?php showDependsExtensionsTemplate($this, $_i) ?>
+                </tr>
+            <?php endforeach ?>
+            <?php endif ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="a-right" colspan="7"><?php echo $this->getAddRowButtonHtml('depends_extensions_container', 'depends_extensions_template', $this->__('Add PHP Extension dependency')) ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+
+</div>

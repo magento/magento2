@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var $this Mage_Paypal_Block_Express_Shortcut
+ */
+?>
+<p class="paypal-logo">
+<?php $shortcutHtmlId = $this->getShortcutHtmlId() ?>
+<?php if ($this->isOrPositionBefore()): ?>
+    <span class="paypal-or"><?php echo $this->__('-OR-');?></span>
+<?php endif; ?>
+<a id="<?php echo $shortcutHtmlId ?>" href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getImageUrl()?>" alt="<?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Checkout with PayPal');?>" title="<?php echo Mage::helper('Mage_Paypal_Helper_Data')->__('Checkout with PayPal');?>" /></a>
+<?php if ($this->isOrPositionAfter()): ?>
+    <span class="paypal-or"><?php echo $this->__('-OR-');?></span>
+<?php endif; ?>
+<?php if ($this->getConfirmationUrl() || $this->getIsInCatalogProduct()): ?>
+<?php if ($this->getIsInCatalogProduct()): ?>
+    <input type="hidden" id="pp_checkout_url" name="return_url" value="" />
+<?php endif; ?>
+<script type="text/javascript">
+//<![CDATA[
+    Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
+        <?php if ($this->getConfirmationUrl()): ?>
+            if (confirm('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape($this->getConfirmationMessage())?>')) {
+                this.href = '<?php echo $this->getConfirmationUrl() ?>';
+            }
+        <?php endif; ?>
+        <?php if ($this->getIsInCatalogProduct()): ?>
+            $('pp_checkout_url').value = this.href;
+            productAddToCartForm.submit(this);
+            event.stop();
+        <?php endif; ?>
+    });
+//]]>
+</script>
+<?php endif; ?>
+</p>

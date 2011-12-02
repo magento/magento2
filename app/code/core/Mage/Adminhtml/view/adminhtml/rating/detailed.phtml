@@ -1,0 +1,94 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+    <div class="product-review-box">
+        <table cellspacing="0" id="product-review-table">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th><span class="nobr"><?php echo Mage::helper('Mage_Rating_Helper_Data')->__('1 star') ?></span></th>
+                    <th><span class="nobr"><?php echo Mage::helper('Mage_Rating_Helper_Data')->__('2 stars') ?></span></th>
+                    <th><span class="nobr"><?php echo Mage::helper('Mage_Rating_Helper_Data')->__('3 stars') ?></span></th>
+                    <th><span class="nobr"><?php echo Mage::helper('Mage_Rating_Helper_Data')->__('4 stars') ?></span></th>
+                    <th><span class="nobr"><?php echo Mage::helper('Mage_Rating_Helper_Data')->__('5 stars') ?></span></th>
+                </tr>
+            </thead>
+        <?php $_oddIterator = 1; ?>
+            <tbody>
+            <?php foreach ($this->getRating() as $_rating): ?>
+                <tr class="odd<?php if($_oddIterator == $this->getRating()->getSize()): $_oddIterator = 0; ?> last<?php endif; ?>">
+                    <td class="label"><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></td>
+                <?php $_iterator = 1; ?>
+                <?php $_options = ( $_rating->getRatingOptions() ) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
+                <?php foreach ($_options as $_option): ?>
+                    <td<?php if($_iterator == 5): ?> class="last"<?php endif; ?>><input type="radio" name="ratings[<?php echo ( $_rating->getVoteId() ) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" <?php if( $this->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> /></td>
+                <?php $_iterator++ ?>
+                <?php endforeach; ?>
+                </tr>
+            <?php $_oddIterator ++; ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+    </div>
+<script type="text/javascript">
+//<![CDATA[
+    Validation.addAllThese(
+    [
+           ['validate-rating', '<?php echo Mage::helper('Mage_Rating_Helper_Data')->__('Please select one of each ratings above') ?>', function(v) {
+                var trs = $('product-review-table').getElementsBySelector('tr');
+                var inputs;
+                var error = 1;
+
+                for( var j=0; j < trs.length; j++ ) {
+                    var tr = trs[j];
+                    if( j > 0 ) {
+                        inputs = tr.getElementsBySelector('input');
+
+                        for( i in inputs ) {
+                            if( inputs[i].checked == true ) {
+                                error = 0;
+                            }
+                        }
+
+                        if( error == 1 ) {
+                            //console.log(tr)
+                            return false;
+                        } else {
+                            error = 1;
+                        }
+                    }
+                }
+                return true;
+            }]
+    ]
+    );
+//]]>
+</script>
+<?php else: ?>
+    <?php echo Mage::helper('Mage_Rating_Helper_Data')->__("Rating isn't Available") ?>
+<?php endif; ?>

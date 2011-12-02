@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.65 $"/>
+		<generation date="$Date: 2009/06/15 04:15:33 $"/>
+		<language type="gez"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="aa">አፋርኛ</language>
+			<language type="ab">አብሐዚኛ</language>
+			<language type="af">አፍሪቃንስኛ</language>
+			<language type="am">አምሐረኛ</language>
+			<language type="ar">ዐርቢኛ</language>
+			<language type="as">አሳሜዛዊ</language>
+			<language type="ay">አያማርኛ</language>
+			<language type="az">አዜርባይጃንኛ</language>
+			<language type="ba">ባስኪርኛ</language>
+			<language type="be">ቤላራሻኛ</language>
+			<language type="bg">ቡልጋሪኛ</language>
+			<language type="bh">ቢሃሪ</language>
+			<language type="bi">ቢስላምኛ</language>
+			<language type="bn">በንጋሊኛ</language>
+			<language type="bo">ትበትንኛ</language>
+			<language type="br">ብሬቶንኛ</language>
+			<language type="byn">ብሊን</language>
+			<language type="ca">ካታላንኛ</language>
+			<language type="co">ኮርሲካኛ</language>
+			<language type="cs">ቼክኛ</language>
+			<language type="cy">ወልሽ</language>
+			<language type="da">ዴኒሽ</language>
+			<language type="de">ጀርመን</language>
+			<language type="dz">ድዞንግኻኛ</language>
+			<language type="el">ግሪክኛ</language>
+			<language type="en">እንግሊዝኛ</language>
+			<language type="eo">ኤስፐራንቶ</language>
+			<language type="es">ስፓኒሽ</language>
+			<language type="et">ኤስቶኒአን</language>
+			<language type="eu">ባስክኛ</language>
+			<language type="fa">ፐርሲያኛ</language>
+			<language type="fi">ፊኒሽ</language>
+			<language type="fj">ፊጂኛ</language>
+			<language type="fo">ፋሮኛ</language>
+			<language type="fr">ፈረንሳይኛ</language>
+			<language type="fy">ፍሪስኛ</language>
+			<language type="ga">አይሪሽ</language>
+			<language type="gd">እስኮትስ፡ጌልክኛ</language>
+			<language type="gez">ግዕዝኛ</language>
+			<language type="gl">ጋለጋኛ</language>
+			<language type="gn">ጓራኒኛ</language>
+			<language type="gu">ጉጃርቲኛ</language>
+			<language type="ha">ሃውሳኛ</language>
+			<language type="he">ዕብራስጥ</language>
+			<language type="hi">ሐንድኛ</language>
+			<language type="hr">ክሮሽያንኛ</language>
+			<language type="hu">ሀንጋሪኛ</language>
+			<language type="hy">አርመናዊ</language>
+			<language type="ia">ኢንቴርሊንጓ</language>
+			<language type="id">እንዶኒሲኛ</language>
+			<language type="ie">እንተርሊንግወ</language>
+			<language type="ik">እኑፒያቅኛ</language>
+			<language type="is">አይስላንድኛ</language>
+			<language type="it">ጣሊያንኛ</language>
+			<language type="iu">እኑክቲቱትኛ</language>
+			<language type="ja">ጃፓንኛ</language>
+			<language type="jv">ጃቫንኛ</language>
+			<language type="ka">ጊዮርጊያን</language>
+			<language type="kk">ካዛክኛ</language>
+			<language type="kl">ካላሊሱትኛ</language>
+			<language type="km">ክመርኛ</language>
+			<language type="kn">ካናዳኛ</language>
+			<language type="ko">ኮሪያኛ</language>
+			<language type="ks">ካሽሚርኛ</language>
+			<language type="ku">ኩርድሽኛ</language>
+			<language type="ky">ኪርጊዝኛ</language>
+			<language type="la">ላቲንኛ</language>
+			<language type="ln">ሊንጋላኛ</language>
+			<language type="lo">ላውስኛ</language>
+			<language type="lt">ሊቱአኒያን</language>
+			<language type="lv">ላትቪያን</language>
+			<language type="mg">ማላጋስኛ</language>
+			<language type="mi">ማዮሪኛ</language>
+			<language type="mk">ማከዶኒኛ</language>
+			<language type="ml">ማላያላምኛ</language>
+			<language type="mn">ሞንጎላዊኛ</language>
+			<language type="mo">ሞልዳቫዊና</language>
+			<language type="mr">ማራዚኛ</language>
+			<language type="ms">ማላይኛ</language>
+			<language type="mt">ማልቲስኛ</language>
+			<language type="my">ቡርማኛ</language>
+			<language type="na">ናኡሩ</language>
+			<language type="ne">ኔፓሊኛ</language>
+			<language type="nl">ደች</language>
+			<language type="no">ኖርዌጂያን</language>
+			<language type="oc">ኦኪታንኛ</language>
+			<language type="om">ኦሮምኛ</language>
+			<language type="or">ኦሪያኛ</language>
+			<language type="pa">ፓንጃቢኛ</language>
+			<language type="pl">ፖሊሽ</language>
+			<language type="ps">ፑሽቶኛ</language>
+			<language type="pt">ፖርቱጋሊኛ</language>
+			<language type="qu">ኵቿኛ</language>
+			<language type="rm">ሮማንስ</language>
+			<language type="rn">ሩንዲኛ</language>
+			<language type="ro">ሮማኒያን</language>
+			<language type="ru">ራሽኛ</language>
+			<language type="rw">ኪንያርዋንድኛ</language>
+			<language type="sa">ሳንስክሪትኛ</language>
+			<language type="sd">ሲንድሂኛ</language>
+			<language type="sg">ሳንጎኛ</language>
+			<language type="si">ስንሃልኛ</language>
+			<language type="sid">ሲዳምኛ</language>
+			<language type="sk">ስሎቫክኛ</language>
+			<language type="sl">ስሎቪኛ</language>
+			<language type="sm">ሳሞአኛ</language>
+			<language type="sn">ሾናኛ</language>
+			<language type="so">ሱማልኛ</language>
+			<language type="sq">ልቤኒኛ</language>
+			<language type="sr">ሰርቢኛ</language>
+			<language type="ss">ስዋቲኛ</language>
+			<language type="st">ሶዞኛ</language>
+			<language type="su">ሱዳንኛ</language>
+			<language type="sv">ስዊድንኛ</language>
+			<language type="sw">ስዋሂሊኛ</language>
+			<language type="ta">ታሚልኛ</language>
+			<language type="te">ተሉጉኛ</language>
+			<language type="tg">ታጂኪኛ</language>
+			<language type="th">ታይኛ</language>
+			<language type="ti">ትግርኛ</language>
+			<language type="tig">ትግረ</language>
+			<language type="tk">ቱርክመንኛ</language>
+			<language type="tl">ታጋሎገኛ</language>
+			<language type="tn">ጽዋናዊኛ</language>
+			<language type="to">ቶንጋ</language>
+			<language type="tr">ቱርክኛ</language>
+			<language type="ts">ጾንጋኛ</language>
+			<language type="tt">ታታርኛ</language>
+			<language type="tw">ትዊኛ</language>
+			<language type="ug">ኡዊግሁርኛ</language>
+			<language type="uk">ዩክረኒኛ</language>
+			<language type="ur">ኡርዱኛ</language>
+			<language type="uz">ኡዝበክኛ</language>
+			<language type="vi">ቪትናምኛ</language>
+			<language type="vo">ቮላፑክኛ</language>
+			<language type="wo">ዎሎፍኛ</language>
+			<language type="xh">ዞሳኛ</language>
+			<language type="yi">ይዲሻዊኛ</language>
+			<language type="yo">ዮሩባዊኛ</language>
+			<language type="za">ዡዋንግኛ</language>
+			<language type="zh">ቻይንኛ</language>
+			<language type="zu">ዙሉኛ</language>
+		</languages>
+		<scripts>
+			<script type="Latn">ላቲን</script>
+		</scripts>
+		<territories>
+			<territory type="AD">አንዶራ</territory>
+			<territory type="AE">የተባበሩት፡አረብ፡ኤምሬትስ</territory>
+			<territory type="AL">አልባኒያ</territory>
+			<territory type="AM">አርሜኒያ</territory>
+			<territory type="AN">ኔዘርላንድስ፡አንቲልስ</territory>
+			<territory type="AR">አርጀንቲና</territory>
+			<territory type="AT">ኦስትሪያ</territory>
+			<territory type="AU">አውስትሬሊያ</territory>
+			<territory type="AZ">አዘርባጃን</territory>
+			<territory type="BA">ቦስኒያ፡እና፡ሄርዞጎቪኒያ</territory>
+			<territory type="BB">ባርቤዶስ</territory>
+			<territory type="BE">ቤልጄም</territory>
+			<territory type="BG">ቡልጌሪያ</territory>
+			<territory type="BH">ባህሬን</territory>
+			<territory type="BM">ቤርሙዳ</territory>
+			<territory type="BO">ቦሊቪያ</territory>
+			<territory type="BR">ብራዚል</territory>
+			<territory type="BT">ቡህታን</territory>
+			<territory type="BY">ቤላሩስ</territory>
+			<territory type="BZ">ቤሊዘ</territory>
+			<territory type="CF">የመካከለኛው፡አፍሪካ፡ሪፐብሊክ</territory>
+			<territory type="CH">ስዊዘርላንድ</territory>
+			<territory type="CL">ቺሊ</territory>
+			<territory type="CM">ካሜሩን</territory>
+			<territory type="CN">ቻይና</territory>
+			<territory type="CO">ኮሎምቢያ</territory>
+			<territory type="CS">ሰርቢያ</territory>
+			<territory type="CV">ኬፕ፡ቬርዴ</territory>
+			<territory type="CY">ሳይፕረስ</territory>
+			<territory type="CZ">ቼክ፡ሪፑብሊክ</territory>
+			<territory type="DE">ጀርመን</territory>
+			<territory type="DK">ዴንማርክ</territory>
+			<territory type="DM">ዶሚኒካ</territory>
+			<territory type="DO">ዶሚኒክ፡ሪፑብሊክ</territory>
+			<territory type="DZ">አልጄሪያ</territory>
+			<territory type="EC">ኢኳዶር</territory>
+			<territory type="EE">ኤስቶኒያ</territory>
+			<territory type="EG">ግብጽ</territory>
+			<territory type="EH">ምዕራባዊ፡ሳህራ</territory>
+			<territory type="ER">ኤርትራ</territory>
+			<territory type="ES">ስፔን</territory>
+			<territory type="ET">ኢትዮጵያ</territory>
+			<territory type="FI">ፊንላንድ</territory>
+			<territory type="FJ">ፊጂ</territory>
+			<territory type="FM">ሚክሮኔዢያ</territory>
+			<territory type="FR">ፈረንሳይ</territory>
+			<territory type="GB">እንግሊዝ</territory>
+			<territory type="GE">ጆርጂያ</territory>
+			<territory type="GF">የፈረንሳይ፡ጉዊአና</territory>
+			<territory type="GM">ጋምቢያ</territory>
+			<territory type="GN">ጊኒ</territory>
+			<territory type="GQ">ኢኳቶሪያል፡ጊኒ</territory>
+			<territory type="GR">ግሪክ</territory>
+			<territory type="GW">ቢሳዎ</territory>
+			<territory type="GY">ጉያና</territory>
+			<territory type="HK">ሆንግ፡ኮንግ</territory>
+			<territory type="HR">ክሮኤሽያ</territory>
+			<territory type="HT">ሀይቲ</territory>
+			<territory type="HU">ሀንጋሪ</territory>
+			<territory type="ID">ኢንዶኔዢያ</territory>
+			<territory type="IE">አየርላንድ</territory>
+			<territory type="IL">እስራኤል</territory>
+			<territory type="IN">ህንድ</territory>
+			<territory type="IQ">ኢራቅ</territory>
+			<territory type="IS">አይስላንድ</territory>
+			<territory type="IT">ጣሊያን</territory>
+			<territory type="JM">ጃማይካ</territory>
+			<territory type="JO">ጆርዳን</territory>
+			<territory type="JP">ጃፓን</territory>
+			<territory type="KH">ካምቦዲያ</territory>
+			<territory type="KM">ኮሞሮስ</territory>
+			<territory type="KP">ደቡብ፡ኮሪያ</territory>
+			<territory type="KR">ሰሜን፡ኮሪያ</territory>
+			<territory type="KW">ክዌት</territory>
+			<territory type="LB">ሊባኖስ</territory>
+			<territory type="LT">ሊቱዌኒያ</territory>
+			<territory type="LV">ላትቪያ</territory>
+			<territory type="LY">ሊቢያ</territory>
+			<territory type="MA">ሞሮኮ</territory>
+			<territory type="MD">ሞልዶቫ</territory>
+			<territory type="MK">ማከዶኒያ</territory>
+			<territory type="MN">ሞንጎሊያ</territory>
+			<territory type="MO">ማካዎ</territory>
+			<territory type="MR">ሞሪቴኒያ</territory>
+			<territory type="MT">ማልታ</territory>
+			<territory type="MU">ማሩሸስ</territory>
+			<territory type="MX">ሜክሲኮ</territory>
+			<territory type="MY">ማሌዢያ</territory>
+			<territory type="NA">ናሚቢያ</territory>
+			<territory type="NC">ኒው፡ካሌዶኒያ</territory>
+			<territory type="NG">ናይጄሪያ</territory>
+			<territory type="NL">ኔዘርላንድ</territory>
+			<territory type="NO">ኖርዌ</territory>
+			<territory type="NP">ኔፓል</territory>
+			<territory type="NZ">ኒው፡ዚላንድ</territory>
+			<territory type="PE">ፔሩ</territory>
+			<territory type="PF">የፈረንሳይ፡ፖሊኔዢያ</territory>
+			<territory type="PG">ፓፑዋ፡ኒው፡ጊኒ</territory>
+			<territory type="PL">ፖላንድ</territory>
+			<territory type="PR">ፖርታ፡ሪኮ</territory>
+			<territory type="RO">ሮሜኒያ</territory>
+			<territory type="RU">ራሺያ</territory>
+			<territory type="SA">ሳውድአረቢያ</territory>
+			<territory type="SD">ሱዳን</territory>
+			<territory type="SE">ስዊድን</territory>
+			<territory type="SG">ሲንጋፖር</territory>
+			<territory type="SI">ስሎቬኒያ</territory>
+			<territory type="SK">ስሎቫኪያ</territory>
+			<territory type="SN">ሴኔጋል</territory>
+			<territory type="SO">ሱማሌ</territory>
+			<territory type="SY">ሲሪያ</territory>
+			<territory type="TD">ቻድ</territory>
+			<territory type="TF">የፈረንሳይ፡ደቡባዊ፡ግዛቶች</territory>
+			<territory type="TH">ታይላንድ</territory>
+			<territory type="TJ">ታጃኪስታን</territory>
+			<territory type="TL">ምስራቅ፡ቲሞር</territory>
+			<territory type="TN">ቱኒዚያ</territory>
+			<territory type="TR">ቱርክ</territory>
+			<territory type="TT">ትሪኒዳድ፡እና፡ቶባጎ</territory>
+			<territory type="TZ">ታንዛኒያ</territory>
+			<territory type="UG">ዩጋንዳ</territory>
+			<territory type="US">አሜሪካ</territory>
+			<territory type="UZ">ዩዝበኪስታን</territory>
+			<territory type="VE">ቬንዙዌላ</territory>
+			<territory type="VG">የእንግሊዝ፡ድንግል፡ደሴቶች</territory>
+			<territory type="VI">የአሜሪካ፡ቨርጂን፡ደሴቶች</territory>
+			<territory type="YE">የመን</territory>
+			<territory type="ZA">ደቡብ፡አፍሪካ</territory>
+			<territory type="ZM">ዛምቢያ</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[\u135F ᎐-᎙ ሀ-ሆ ለ-ሎ ሐ-ሖ መ-ሞ ሠ-ሦ ረ-ሮ ሰ-ሶ ቀ-ቆ ቈ ቊ-ቍ በ-ቦ ተ-ቶ ኀ-ኆ ኈ ኊ-ኍ ነ-ኖ አ-ኦ ከ-ኮ ኰ ኲ-ኵ ወ-ዎ ዐ-ዖ ዘ-ዞ የ-ዮ ደ-ዶ ገ-ጎ ጐ ጒ-ጕ ጠ-ጦ ጰ-ጶ ጸ-ጾ ፀ-ፆ ፈ-ፎ ፐ-ፖ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[ሇ ሏ ⶀ ሗ ሟ ᎀ-ᎃ ⶁ ሧ ሯ ⶂ ሷ ⶃ ሸ-ሿ ⶄ ቇ ቐ-ቖ ቘ ቚ-ቝ ቧ ᎄ-ᎇ ⶅ ቮ ቯ ቷ ⶆ ቿ ⶇ ኇ ኗ ⶈ ኟ ⶉ ኧ ⶊ ኯ ኸ-ኾ ዀ ዂ-ዅ ዏ ዟ ⶋ ዠ-ዧ ዷ ⶌ ዸ-ዿ ⶍ ጀ-ጇ ⶎ ጏ ጘ-ጟ ⶓ-ⶖ ጧ ⶏ ጨ-ጯ ⶐ ጷ ⶑ ጿ ፇ ፏ ᎈ-ᎋ ፗ ᎌ-ᎏ ⶒ ፘ-ፚ ⶠ-ⶦ ⶨ-ⶮ ⶰ-ⶶ ⶸ-ⶾ ⷀ-ⷆ ⷈ-ⷎ ⷐ-ⷖ ⷘ-ⷞ]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ጠሐረ</month>
+							<month type="2">ከተተ</month>
+							<month type="3">መገበ</month>
+							<month type="4">አኀዘ</month>
+							<month type="5">ግንባ</month>
+							<month type="6">ሠንየ</month>
+							<month type="7">ሐመለ</month>
+							<month type="8">ነሐሰ</month>
+							<month type="9">ከረመ</month>
+							<month type="10">ጠቀመ</month>
+							<month type="11">ኀደረ</month>
+							<month type="12">ኀሠሠ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ጠሐረ</month>
+							<month type="2">ከተተ</month>
+							<month type="3">መገበ</month>
+							<month type="4">አኀዘ</month>
+							<month type="5">ግንባት</month>
+							<month type="6">ሠንየ</month>
+							<month type="7">ሐመለ</month>
+							<month type="8">ነሐሰ</month>
+							<month type="9">ከረመ</month>
+							<month type="10">ጠቀመ</month>
+							<month type="11">ኀደረ</month>
+							<month type="12">ኀሠሠ</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">ጠ</month>
+							<month type="2">ከ</month>
+							<month type="3">መ</month>
+							<month type="4">አ</month>
+							<month type="5">ግ</month>
+							<month type="6">ሠ</month>
+							<month type="7">ሐ</month>
+							<month type="8">ነ</month>
+							<month type="9">ከ</month>
+							<month type="10">ጠ</month>
+							<month type="11">ኀ</month>
+							<month type="12">ኀ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">እኁድ</day>
+							<day type="mon">ሰኑይ</day>
+							<day type="tue">ሠሉስ</day>
+							<day type="wed">ራብዕ</day>
+							<day type="thu">ሐሙስ</day>
+							<day type="fri">ዓርበ</day>
+							<day type="sat">ቀዳሚ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">እኁድ</day>
+							<day type="mon">ሰኑይ</day>
+							<day type="tue">ሠሉስ</day>
+							<day type="wed">ራብዕ</day>
+							<day type="thu">ሐሙስ</day>
+							<day type="fri">ዓርበ</day>
+							<day type="sat">ቀዳሚት</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">እ</day>
+							<day type="mon">ሰ</day>
+							<day type="tue">ሠ</day>
+							<day type="wed">ራ</day>
+							<day type="thu">ሐ</day>
+							<day type="fri">ዓ</day>
+							<day type="sat">ቀ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>ጽባሕ</am>
+				<pm>ምሴት</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">ዓ/ዓ</era>
+						<era type="1">ዓ/ም</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE፥ dd MMMM መዓልት y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>dd MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>dd-MMM-y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h:mm:ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd">dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMMdd">dd MMMM</dateFormatItem>
+						<dateFormatItem id="yyMM">MM/yy</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM y</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<group>ወ</group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="BRL">
+				<displayName>የብራዚል ሪል</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>የቻይና ዩአን ረንሚንቢ</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName>የኢትዮጵያ ብር</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>አውሮ</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>የእንግሊዝ ፓውንድ ስተርሊንግ</displayName>
+			</currency>
+			<currency type="INR">
+				<displayName>የሕንድ ሩፒ</displayName>
+			</currency>
+			<currency type="JPY">
+				<displayName>የጃፓን የን</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>የራሻ ሩብል</displayName>
+			</currency>
+			<currency type="USD">
+				<displayName>የአሜሪካን ዶላር</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

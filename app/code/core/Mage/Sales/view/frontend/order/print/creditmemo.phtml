@@ -1,0 +1,98 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_order = $this->getOrder() ?>
+<h1><?php echo $this->__('Order #%s', $_order->getRealOrderId()) ?></h1>
+<p class="order-date"><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<?php $_creditmemo = $this->getCreditmemo() ?>
+<?php if($_creditmemo): ?>
+    <?php $_creditmemos = array($_creditmemo); ?>
+<?php else: ?>
+    <?php $_creditmemos = $_order->getCreditmemosCollection() ?>
+<?php endif; ?>
+<?php foreach ($_creditmemos as $_creditmemo): ?>
+    <h2 class="h2"><?php echo $this->__('Refund #%s', $_creditmemo->getIncrementId()) ?></h2>
+    <div class="col2-set">
+        <div class="col-1">
+        <?php if (!$_order->getIsVirtual()): ?>
+            <h3><?php echo $this->__('Shipping Address') ?></h3>
+            <?php $_shipping = $_creditmemo->getShippingAddress() ?>
+            <address><?php echo $_shipping->format('html') ?></address>
+        </div>
+        <div class="col-2">
+        <?php endif; ?>
+            <h3><?php echo $this->__('Billing Address') ?></h3>
+            <?php $_billing = $_creditmemo->getbillingAddress() ?>
+            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+        </div>
+    <?php if (!$_order->getIsVirtual()): ?>
+    </div>
+    <div class="col2-set">
+        <div class="col-1">
+            <h3><?php echo $this->__('Shipping Method') ?></h3>
+             <?php echo $_order->getShippingDescription() ?>
+        </div>
+        <?php endif; ?>
+        <div class="col-2">
+            <h3><?php echo $this->__('Payment Method') ?></h3>
+            <?php echo $this->getPaymentInfoHtml() ?>
+        </div>
+    </div>
+    <h3><?php echo $this->__('Items Refunded') ?></h3>
+    <table class="data-table" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
+      <col />
+      <col width="1" />
+      <col width="1" />
+      <col width="1" />
+      <col width="1" />
+      <col width="1" />
+      <col width="1" />
+      <thead>
+          <tr>
+            <th><?php echo $this->__('Product Name') ?></th>
+            <th><?php echo $this->__('SKU') ?></th>
+            <th class="a-right"><?php echo $this->__('Price') ?></th>
+            <th class="a-center"><?php echo $this->__('Qty') ?></th>
+            <th class="a-right"><?php echo $this->__('Subtotal') ?></th>
+            <th class="a-center wrap"><?php echo $this->__('Discount Amount') ?></th>
+            <th class="a-center wrap"><?php echo $this->__('Row Total') ?></th>
+          </tr>
+      </thead>
+      <tfoot>
+        <?php echo $this->getTotalsHtml($_creditmemo);?>
+      </tfoot>
+    <?php $_items = $_creditmemo->getAllItems(); ?>
+    <?php $_count = count($_items); ?>
+    <?php foreach ($_items as $_item): ?>
+    <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+    <tbody>
+        <?php echo $this->getItemHtml($_item) ?>
+    </tbody>
+    <?php endforeach; ?>
+</table>
+<script type="text/javascript">decorateTable('my-refund-table-<?php echo $_creditmemo->getId(); ?>', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+<?php endforeach; ?>
+<script type="text/javascript">window.print();</script>

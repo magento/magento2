@@ -1,0 +1,3118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.126 $"/>
+		<generation date="$Date: 2009/06/16 21:53:37 $"/>
+		<language type="ar"/>
+	</identity>
+	<localeDisplayNames>
+		<localeDisplayPattern>
+			<localePattern>{0} ({1})</localePattern>
+			<localeSeparator>،</localeSeparator>
+		</localeDisplayPattern>
+		<languages>
+			<language type="aa">الأفارية</language>
+			<language type="ab">الأبخازية</language>
+			<language type="ace">الأتشينيزية</language>
+			<language type="ach">الأكولية</language>
+			<language type="ada">الأدانجمية</language>
+			<language type="ady">الأديجه</language>
+			<language type="ae">الأفستية</language>
+			<language type="af">الأفريقية</language>
+			<language type="afa">لغة أفرو آسيوية</language>
+			<language type="afh">الأفريهيلية</language>
+			<language type="ain">الآينوية</language>
+			<language type="ak">الأكانية</language>
+			<language type="akk">الأكادية</language>
+			<language type="ale">الأليوتية</language>
+			<language type="alg">اللغات الأمريكية الهندية</language>
+			<language type="alt">الألطائية الجنوبية</language>
+			<language type="am">الأمهرية</language>
+			<language type="an">الأراجونية</language>
+			<language type="ang">الانجليزية القديمة</language>
+			<language type="anp">الأنجيكا</language>
+			<language type="apa">اللغات الأباتشية</language>
+			<language type="ar">العربية</language>
+			<language type="arc">الآرامية</language>
+			<language type="arn">الأروكانية</language>
+			<language type="arp">الأراباهو</language>
+			<language type="art">الصناعية - أخرى</language>
+			<language type="arw">الأراواكية</language>
+			<language type="as">الأسامية</language>
+			<language type="ast">الأسترية</language>
+			<language type="ath">اللغات الأزباسكانية</language>
+			<language type="aus">اللغات الأسترالية</language>
+			<language type="av">الأفاريكية</language>
+			<language type="awa">الأوادية</language>
+			<language type="ay">الأيمارا</language>
+			<language type="az">الأذرية</language>
+			<language type="ba">الباشكيرية</language>
+			<language type="bad">الباندا</language>
+			<language type="bai">اللغات الباميليكية</language>
+			<language type="bal">البلوشية</language>
+			<language type="ban">اللغة البالية</language>
+			<language type="bas">الباسا</language>
+			<language type="bat">البلطيقية - أخرى</language>
+			<language type="be">البيلوروسية</language>
+			<language type="bej">البيجا</language>
+			<language type="bem">البيمبا</language>
+			<language type="ber">البربرية</language>
+			<language type="bg">البلغارية</language>
+			<language type="bh">البيهارية</language>
+			<language type="bho">البهوجبرية</language>
+			<language type="bi">البيسلامية</language>
+			<language type="bik">البيكولية</language>
+			<language type="bin">البينية</language>
+			<language type="bla">السيكسيكية</language>
+			<language type="bm">البامبارا</language>
+			<language type="bn">البنغالية</language>
+			<language type="bnt">البانتو</language>
+			<language type="bo">التبتية</language>
+			<language type="br">البريتونية</language>
+			<language type="bra">البراجية</language>
+			<language type="bs">البوسنية</language>
+			<language type="btk">الباتاكية</language>
+			<language type="bua">البرياتية</language>
+			<language type="bug">البجينيزية</language>
+			<language type="byn">البلينية</language>
+			<language type="ca">الكاتالوينية</language>
+			<language type="cad">الكادو</language>
+			<language type="cai">الهندية الأمريكية الوسطى - أخرى</language>
+			<language type="car">الكاريبية</language>
+			<language type="cau">القوقازية - أخرى</language>
+			<language type="cch">الأتسام</language>
+			<language type="ce">الشيشانية</language>
+			<language type="ceb">السيبيونو</language>
+			<language type="cel">السلتية - أخرى</language>
+			<language type="ch">التشامورو</language>
+			<language type="chb">التشيبشا</language>
+			<language type="chg">التشاجاتاى</language>
+			<language type="chk">التشكيزية</language>
+			<language type="chm">الماري</language>
+			<language type="chn">الشينوك جارجون</language>
+			<language type="cho">الشوكتو</language>
+			<language type="chp">الشيباوايان</language>
+			<language type="chr">الشيروكى</language>
+			<language type="chy">الشايان</language>
+			<language type="cmc">اللغات التشاميكية</language>
+			<language type="co">الكورسيكية</language>
+			<language type="cop">قبطية</language>
+			<language type="cpe">الكرييولى و اللغات المبسطة الأخرى للتفاهم بين الشعوب على أساس الأنجليزية</language>
+			<language type="cpf">الكرييولى و اللغات المبسطة الأخرى للتفاهم بين الشعوب على أساس الفرنسية</language>
+			<language type="cpp">الكرييولى و اللغات المبسطة الأخرى للتفاهم بين الشعوب على أساس البرتغالية</language>
+			<language type="cr">الكرى</language>
+			<language type="crh">تركى كريمين، لغة توركية كريمينية</language>
+			<language type="crp">الكرييولى و اللغات المبسطة الأخرى للتفاهم بين الشعوب - أخرى</language>
+			<language type="cs">التشيكية</language>
+			<language type="csb">الكاشبايان</language>
+			<language type="cu">سلافية كنسية</language>
+			<language type="cus">الكشيتيك - أخرى</language>
+			<language type="cv">التشفاش</language>
+			<language type="cy">الولزية</language>
+			<language type="da">الدانماركية</language>
+			<language type="dak">الداكوتا</language>
+			<language type="dar">الدارجوا</language>
+			<language type="day">الدياك</language>
+			<language type="de">الألمانية</language>
+			<language type="de_AT">الألمانية النمساوية</language>
+			<language type="de_CH">الألمانية العليا السويسرية</language>
+			<language type="del">الديلوير</language>
+			<language type="den">السلافية</language>
+			<language type="dgr">الدوجريب</language>
+			<language type="din">الدنكا</language>
+			<language type="doi">الدوجرى</language>
+			<language type="dra">الدرافيدين - أخرى</language>
+			<language type="dsb">الصربية السفلى</language>
+			<language type="dua">الديولا</language>
+			<language type="dum">الهولندية الوسطى</language>
+			<language type="dv">المالديفية</language>
+			<language type="dyu">الدايلا</language>
+			<language type="dz">الزونخاية</language>
+			<language type="ee">الايوي</language>
+			<language type="efi">الافيك</language>
+			<language type="egy">المصرية القديمة</language>
+			<language type="eka">الاكاجك</language>
+			<language type="el">اليونانية</language>
+			<language type="elx">الامايت</language>
+			<language type="en">الانجليزية</language>
+			<language type="en_AU">الانجليزية الأسترالية</language>
+			<language type="en_CA">الإنجليزية الكندية</language>
+			<language type="en_GB">الانجليزية البريطانية</language>
+			<language type="en_US">إنجليزية الولايات المتحدة</language>
+			<language type="enm">الانجليزية الوسطى</language>
+			<language type="eo">اسبرانتو</language>
+			<language type="es">الأسبانية</language>
+			<language type="es_419">أسبانية أمريكا اللاتينية</language>
+			<language type="es_ES">الأسبانية الأيبيرية</language>
+			<language type="et">الأستونية</language>
+			<language type="eu">لغة الباسك</language>
+			<language type="ewo">الايوندو</language>
+			<language type="fa">الفارسية</language>
+			<language type="fan">الفانج</language>
+			<language type="fat">الفانتى</language>
+			<language type="ff">الفلة</language>
+			<language type="fi">الفنلندية</language>
+			<language type="fil">الفلبينية</language>
+			<language type="fiu">فينو أجرايان - أخرى</language>
+			<language type="fj">الفيجية</language>
+			<language type="fo">الفارويز</language>
+			<language type="fon">الفون</language>
+			<language type="fr">الفرنسية</language>
+			<language type="fr_CA">الفرنسية الكندية</language>
+			<language type="fr_CH">الفرنسية السويسرية</language>
+			<language type="frm">الفرنسية الوسطى</language>
+			<language type="fro">الفرنسية القديمة</language>
+			<language type="frr">الفريزينية الشمالية</language>
+			<language type="frs">الفريزينية الشرقية</language>
+			<language type="fur">الفريلايان</language>
+			<language type="fy">الفريزيان</language>
+			<language type="ga">الأيرلندية</language>
+			<language type="gaa">الجا</language>
+			<language type="gay">الجايو</language>
+			<language type="gba">الجبيا</language>
+			<language type="gd">الغيلية الأسكتلندية</language>
+			<language type="gem">لغة جرمانية</language>
+			<language type="gez">الجيز</language>
+			<language type="gil">لغة أهل جبل طارق</language>
+			<language type="gl">الجاليكية</language>
+			<language type="gmh">الألمانية العليا الوسطى</language>
+			<language type="gn">الجوارانى</language>
+			<language type="goh">الألمانية العليا القديمة</language>
+			<language type="gon">الجندى</language>
+			<language type="gor">الجورونتالو</language>
+			<language type="got">القوطية</language>
+			<language type="grb">الجريبو</language>
+			<language type="grc">اليونانية القديمة</language>
+			<language type="gsw">الألمانية السويسرية</language>
+			<language type="gu">الغوجاراتية</language>
+			<language type="gv">المنكية</language>
+			<language type="ha">الهوسا</language>
+			<language type="hai">الهيدا</language>
+			<language type="haw">لغة أهل الهاواى</language>
+			<language type="he">العبرية</language>
+			<language type="hi">الهندية</language>
+			<language type="hil">الهيليجينون</language>
+			<language type="him">الهيماتشالى</language>
+			<language type="hit">الحثية</language>
+			<language type="hmn">الهمونجية</language>
+			<language type="ho">الهيرى موتو</language>
+			<language type="hr">الكرواتية</language>
+			<language type="hsb">الصربية العليا</language>
+			<language type="ht">الهايتية</language>
+			<language type="hu">الهنغارية</language>
+			<language type="hup">الهبا</language>
+			<language type="hy">الأرمينية</language>
+			<language type="hz">الهيريرو</language>
+			<language type="ia">اللّغة الوسيطة</language>
+			<language type="iba">الايبان</language>
+			<language type="id">الأندونيسية</language>
+			<language type="ie">الانترلينج</language>
+			<language type="ig">الايجبو</language>
+			<language type="ii">السيتشيون يى</language>
+			<language type="ijo">الايجو</language>
+			<language type="ik">الاينبياك</language>
+			<language type="ilo">الايلوكو</language>
+			<language type="inc">الهندية - أخرى</language>
+			<language type="ine">الهندية الأوروبية - أخرى</language>
+			<language type="inh">الانجوشية</language>
+			<language type="io">الايدو</language>
+			<language type="ira">الايرانية</language>
+			<language type="iro">اللغات الايروكويانية</language>
+			<language type="is">الأيسلاندية</language>
+			<language type="it">الايطالية</language>
+			<language type="iu">الاينكتيتت</language>
+			<language type="ja">اليابانية</language>
+			<language type="jbo">اللوجبان</language>
+			<language type="jpr">الجيدو الفارسى</language>
+			<language type="jrb">الجيدو العربى</language>
+			<language type="jv">الجاوية</language>
+			<language type="ka">الجورجية</language>
+			<language type="kaa">الكارا-كالباك</language>
+			<language type="kab">القبيلية</language>
+			<language type="kac">الكاتشين</language>
+			<language type="kaj">الجو</language>
+			<language type="kam">الكامبا</language>
+			<language type="kar">الكاريين</language>
+			<language type="kaw">الكوي</language>
+			<language type="kbd">الكاباردايان</language>
+			<language type="kfo">الكورو</language>
+			<language type="kg">الكونغو</language>
+			<language type="kha">الكازية</language>
+			<language type="khi">الخويسان - أخرى</language>
+			<language type="kho">الخوتانيز</language>
+			<language type="ki">الكيكيو</language>
+			<language type="kj">الكيونياما</language>
+			<language type="kk">الكازاخستانية</language>
+			<language type="kl">الكالاليست</language>
+			<language type="km">الخميرية</language>
+			<language type="kmb">الكيمبندو</language>
+			<language type="kn">الكانادا</language>
+			<language type="ko">الكورية</language>
+			<language type="kok">الكونكانية</language>
+			<language type="kos">الكوسراين</language>
+			<language type="kpe">الكبيل</language>
+			<language type="kr">الكانيوري</language>
+			<language type="krc">الكاراتشاي-بالكار</language>
+			<language type="krl">الكريلية</language>
+			<language type="kro">الكرو</language>
+			<language type="ks">الكاشميرية</language>
+			<language type="ku">الكردية</language>
+			<language type="kum">الكميك</language>
+			<language type="kut">الكتيناي</language>
+			<language type="kv">الكومي</language>
+			<language type="kw">الكورنية</language>
+			<language type="ky">القيرغستانية</language>
+			<language type="la">اللاتينية</language>
+			<language type="lad">الاسباعبرية</language>
+			<language type="lah">اللاهندا</language>
+			<language type="lam">اللامبا</language>
+			<language type="lb">اللوكسمبرجية</language>
+			<language type="lez">الليزجهايانية</language>
+			<language type="lg">الجاندا</language>
+			<language type="li">الليمبرجيشية</language>
+			<language type="ln">اللينجالا</language>
+			<language type="lo">اللاوية</language>
+			<language type="lol">منغولى</language>
+			<language type="loz">اللوزى</language>
+			<language type="lt">اللتوانية</language>
+			<language type="lu">اللبا-كاتانجا</language>
+			<language type="lua">اللبا-لؤلؤ</language>
+			<language type="lui">اللوسينو</language>
+			<language type="lun">اللوندا</language>
+			<language type="luo">اللو</language>
+			<language type="lus">اللشاي</language>
+			<language type="lv">اللاتفية</language>
+			<language type="mad">المادريز</language>
+			<language type="mag">الماجا</language>
+			<language type="mai">المايثيلي</language>
+			<language type="mak">الماكاسار</language>
+			<language type="man">الماندينغ</language>
+			<language type="map">الأوسترونيسيان</language>
+			<language type="mas">الماساي</language>
+			<language type="mdf">الموكشا</language>
+			<language type="mdr">الماندار</language>
+			<language type="men">الميند</language>
+			<language type="mg">المالاجاشية</language>
+			<language type="mga">الأيرلندية الوسطى</language>
+			<language type="mh">المارشالية</language>
+			<language type="mi">الماورية</language>
+			<language type="mic">الميكماكيونية</language>
+			<language type="min">المينانجكاباو</language>
+			<language type="mis">اللغات المتنوعة</language>
+			<language type="mk">المقدونية</language>
+			<language type="mkh">المون خمير- أخرى</language>
+			<language type="ml">الماليالام</language>
+			<language type="mn">المنغولية</language>
+			<language type="mnc">المانشو</language>
+			<language type="mni">المانيبرى</language>
+			<language type="mno">لغات مانوبو</language>
+			<language type="mo">المولدوفية</language>
+			<language type="moh">الموهوك</language>
+			<language type="mos">الموسي</language>
+			<language type="mr">الماراثى</language>
+			<language type="ms">لغة الملايو</language>
+			<language type="mt">المالطية</language>
+			<language type="mul">اللغات المتعددة</language>
+			<language type="mun">لغات المندا</language>
+			<language type="mus">الكريك</language>
+			<language type="mwl">الميرانديز</language>
+			<language type="mwr">الماروارى</language>
+			<language type="my">البورمية</language>
+			<language type="myn">لغات المايا</language>
+			<language type="myv">اللغة الارزية</language>
+			<language type="na">النورو</language>
+			<language type="nah">الناهيوتل</language>
+			<language type="nai">الهندية الأمريكية الشمالية - أخرى</language>
+			<language type="nap">اللغة النابولية</language>
+			<language type="nb">البوكمالية النرويجية</language>
+			<language type="nd">النديبيل الشمالى</language>
+			<language type="nds">الألمانية السفلى</language>
+			<language type="ne">النيبالية</language>
+			<language type="new">النيواري</language>
+			<language type="ng">الندونجا</language>
+			<language type="nia">النياس</language>
+			<language type="nic">النيجر - كوردوفانايان</language>
+			<language type="niu">النيوي</language>
+			<language type="nl">الهولندية</language>
+			<language type="nn">النينورسك النرويجي</language>
+			<language type="no">النرويجية</language>
+			<language type="nog">النوجاى</language>
+			<language type="non">النورس القديم</language>
+			<language type="nqo">انكو</language>
+			<language type="nr">النديبيل الجنوبى</language>
+			<language type="nso">السوتو الشمالية</language>
+			<language type="nub">اللغات النوبية</language>
+			<language type="nv">النافاجو</language>
+			<language type="nwc">النوارية التقليدية</language>
+			<language type="ny">النيانجا، التشيتشوا، التشوا</language>
+			<language type="nym">النيامويزى</language>
+			<language type="nyn">النيانكول</language>
+			<language type="nyo">النيورو</language>
+			<language type="nzi">النزيما</language>
+			<language type="oc">الأوكيتانية</language>
+			<language type="oj">الأوجيبوا</language>
+			<language type="om">الأورومو</language>
+			<language type="or">الأورييا</language>
+			<language type="os">الأوسيتيك</language>
+			<language type="osa">الأوساج</language>
+			<language type="ota">التركية العثمانية</language>
+			<language type="oto">اللغات الأوتومية</language>
+			<language type="pa">البنجابية</language>
+			<language type="paa">الغينية - أخرى</language>
+			<language type="pag">البانجاسينان</language>
+			<language type="pal">البهلوية</language>
+			<language type="pam">البامبانجا</language>
+			<language type="pap">البابيامينتو</language>
+			<language type="pau">البالوان</language>
+			<language type="peo">الفارسية القديمة</language>
+			<language type="phi">الفليبينية - أخرى</language>
+			<language type="phn">الفينيقية</language>
+			<language type="pi">البالية</language>
+			<language type="pl">البولندية</language>
+			<language type="pon">البوهنبيايان</language>
+			<language type="pra">اللغات البراقريطية</language>
+			<language type="pro">البروفانسية القديمة</language>
+			<language type="ps">البشتونية</language>
+			<language type="pt">البرتغالية</language>
+			<language type="pt_BR">البرتغالية البرازيلية</language>
+			<language type="pt_PT">البرتغالية الأيبيرية</language>
+			<language type="qu">الكويتشوا</language>
+			<language type="raj">الراجاسثانية</language>
+			<language type="rap">الرابانى</language>
+			<language type="rar">الراروتونجانى</language>
+			<language type="rm">الرهايتو-رومانس</language>
+			<language type="rn">الرندى</language>
+			<language type="ro">الرومانية</language>
+			<language type="roa">الرومانسية - أخرى</language>
+			<language type="rom">rom</language>
+			<language type="root">الجذر</language>
+			<language type="ru">الروسية</language>
+			<language type="rup">الأرومانيان</language>
+			<language type="rw">الكينيارواندا</language>
+			<language type="sa">السنسكريتية</language>
+			<language type="sad">السانداوى</language>
+			<language type="sah">الياكت</language>
+			<language type="sai">الهندية الأمريكية الجنوبية - أخرى</language>
+			<language type="sal">لغات ساليشان</language>
+			<language type="sam">الآرامية السومارية</language>
+			<language type="sas">الساساك</language>
+			<language type="sat">السانتالى</language>
+			<language type="sc">السردينية</language>
+			<language type="scn">الصقلية</language>
+			<language type="sco">الأسكتلندية</language>
+			<language type="sd">السيندى</language>
+			<language type="se">السامي الشمالى</language>
+			<language type="sel">السيلكب</language>
+			<language type="sem">السامية - أخرى</language>
+			<language type="sg">السانجو</language>
+			<language type="sga">الأيرلندية القديمة</language>
+			<language type="sgn">لغات الإشارة</language>
+			<language type="shn">الشانية</language>
+			<language type="si">السريلانكية</language>
+			<language type="sid">السيدامو</language>
+			<language type="sio">لغات السيويون</language>
+			<language type="sit">الصينية التيبتية - أخرى</language>
+			<language type="sk">السلوفاكية</language>
+			<language type="sl">السلوفانية</language>
+			<language type="sla">السلافية - أخرى</language>
+			<language type="sm">الساموائية</language>
+			<language type="sma">السامي الجنوبى</language>
+			<language type="smi">اللغات السامية - أخرى</language>
+			<language type="smj">اللول سامى</language>
+			<language type="smn">الاينارى سامى</language>
+			<language type="sms">السكولت سامى</language>
+			<language type="sn">الشونا</language>
+			<language type="snk">السونينك</language>
+			<language type="so">الصومالية</language>
+			<language type="sog">السوجدين</language>
+			<language type="son">السونجهاى</language>
+			<language type="sq">الألبانية</language>
+			<language type="sr">الصربية</language>
+			<language type="srn">السرانان تونجو</language>
+			<language type="srr">السرر</language>
+			<language type="ss">السواتى</language>
+			<language type="ssa">النيلية الصحراوية - أخرى</language>
+			<language type="st">السوتو الجنوبية</language>
+			<language type="su">السودانية</language>
+			<language type="suk">السوكوما</language>
+			<language type="sus">السوسو</language>
+			<language type="sux">السومارية</language>
+			<language type="sv">السويدية</language>
+			<language type="sw">السواحلية</language>
+			<language type="syc">سريانية تقليدية</language>
+			<language type="syr">السريانية</language>
+			<language type="ta">التاميلية</language>
+			<language type="tai">تاى - أخرى</language>
+			<language type="te">التيلجو</language>
+			<language type="tem">التيمن</language>
+			<language type="ter">التيرينو</language>
+			<language type="tet">التيتم</language>
+			<language type="tg">الطاجيكية</language>
+			<language type="th">التايلاندية</language>
+			<language type="ti">التيجرينيا</language>
+			<language type="tig">التيجر</language>
+			<language type="tiv">التيف</language>
+			<language type="tk">التركمانية</language>
+			<language type="tkl">التوكيلاو</language>
+			<language type="tl">التاغالوغية</language>
+			<language type="tlh">الكلينجون</language>
+			<language type="tli">التلينغيتية</language>
+			<language type="tmh">التاماشيك</language>
+			<language type="tn">التسوانية</language>
+			<language type="to">تونجا - جزر تونجا</language>
+			<language type="tog">تونجا - نياسا</language>
+			<language type="tpi">التوك بيسين</language>
+			<language type="tr">التركية</language>
+			<language type="ts">السونجا</language>
+			<language type="tsi">التسيمشيان</language>
+			<language type="tt">التتارية</language>
+			<language type="tum">التامبوكا</language>
+			<language type="tup">اللغات التوبية</language>
+			<language type="tut">الألطائية - أخرى</language>
+			<language type="tvl">التوفالو</language>
+			<language type="tw">التوي</language>
+			<language type="ty">التاهيتية</language>
+			<language type="udm">الأدمرت</language>
+			<language type="ug">الأغورية</language>
+			<language type="uga">اليجاريتيك</language>
+			<language type="uk">الأوكرانية</language>
+			<language type="umb">الأمبندو</language>
+			<language type="und">غير محدده</language>
+			<language type="ur">الأردية</language>
+			<language type="uz">الاوزباكية</language>
+			<language type="vai">الفاى</language>
+			<language type="ve">الفيندا</language>
+			<language type="vi">الفيتنامية</language>
+			<language type="vot">الفوتيك</language>
+			<language type="wa">الولونية</language>
+			<language type="wak">لغات الواكاشان</language>
+			<language type="wal">الوالامو</language>
+			<language type="war">الواراى</language>
+			<language type="was">الواشو</language>
+			<language type="wen">اللغات الصربية</language>
+			<language type="wo">الولوف</language>
+			<language type="xal">الكالميك</language>
+			<language type="yao">الياو</language>
+			<language type="yap">اليابيز</language>
+			<language type="yi">اليديشية</language>
+			<language type="yo">اليوروبية</language>
+			<language type="ypk">اللغات اليوبيكية</language>
+			<language type="za">الزهيونج</language>
+			<language type="zap">الزابوتيك</language>
+			<language type="zen">الزيناجا</language>
+			<language type="zh">الصينية</language>
+			<language type="zh_Hans">الصينية المبسطة</language>
+			<language type="zh_Hant">الصينية التقليدية</language>
+			<language type="znd">الزاند</language>
+			<language type="zu">الزولو</language>
+			<language type="zun">الزونية</language>
+			<language type="zxx">بدون محتوى لغوي</language>
+		</languages>
+		<scripts>
+			<script type="Arab">العربية</script>
+			<script type="Armn">الأرمينية</script>
+			<script type="Bali">البالية</script>
+			<script type="Batk">الباتاك</script>
+			<script type="Beng">البنغالية</script>
+			<script type="Blis">رموز بليس</script>
+			<script type="Bopo">البوبوموفو</script>
+			<script type="Brah">الهندوسية</script>
+			<script type="Brai">البرايل</script>
+			<script type="Bugi">البجينيز</script>
+			<script type="Buhd">البهيدية</script>
+			<script type="Cans">مقطعيات أصلية كندية موحدة</script>
+			<script type="Cari">الكارية</script>
+			<script type="Cham">التشامية</script>
+			<script type="Cher">الشيروكى</script>
+			<script type="Cirt">السيرث</script>
+			<script type="Copt">القبطية</script>
+			<script type="Cprt">القبرصية</script>
+			<script type="Cyrl">السيريلية</script>
+			<script type="Cyrs">السيريلية - متغير السلافية الكنسية القديمة</script>
+			<script type="Deva">الديفاناجارى</script>
+			<script type="Dsrt">الديسيريت</script>
+			<script type="Egyd">الديموطيقية</script>
+			<script type="Egyh">الهيراطيقية</script>
+			<script type="Egyp">الهيروغليفية</script>
+			<script type="Ethi">الاثيوبية</script>
+			<script type="Geok">الأبجدية الجورجية - أسومتافرلى و نسخرى</script>
+			<script type="Geor">الجورجية</script>
+			<script type="Glag">الجلاجوليتيك</script>
+			<script type="Goth">القوطية</script>
+			<script type="Grek">اليونانية</script>
+			<script type="Gujr">التاغجراتية</script>
+			<script type="Guru">الجرمخى</script>
+			<script type="Hang">الهانجل</script>
+			<script type="Hani">الهان</script>
+			<script type="Hano">الهانونو</script>
+			<script type="Hans">الهان المبسطة</script>
+			<script type="Hant">الهان التقليدية</script>
+			<script type="Hebr">العبرية</script>
+			<script type="Hira">الهيراجانا</script>
+			<script type="Hmng">الباهوه همونج</script>
+			<script type="Hrkt">الكتكانا أو الهيراجانا</script>
+			<script type="Hung">المجرية القديمة</script>
+			<script type="Inds">اندس - هارابان</script>
+			<script type="Ital">الإيطالية القديمة</script>
+			<script type="Java">الجاوية</script>
+			<script type="Jpan">اليابانية</script>
+			<script type="Kali">الكياه لى</script>
+			<script type="Kana">الكتكانا</script>
+			<script type="Khar">الخاروشتى</script>
+			<script type="Khmr">الخميرية</script>
+			<script type="Knda">الكانادا</script>
+			<script type="Kore">الكورية</script>
+			<script type="Lana">الانا</script>
+			<script type="Laoo">اللاو</script>
+			<script type="Latf">اللاتينية - متغير فراكتر</script>
+			<script type="Latg">اللاتينية - متغير غيلى</script>
+			<script type="Latn">اللاتينية</script>
+			<script type="Lepc">الليبتشا - رونج</script>
+			<script type="Limb">الليمبو</script>
+			<script type="Lina">الخطية أ</script>
+			<script type="Linb">الخطية ب</script>
+			<script type="Lyci">الليسية</script>
+			<script type="Lydi">الليدية</script>
+			<script type="Mand">المانداينية</script>
+			<script type="Maya">المايا الهيروغليفية</script>
+			<script type="Mero">الميرويتيك</script>
+			<script type="Mlym">الماليالام</script>
+			<script type="Mong">المغولية</script>
+			<script type="Moon">مون</script>
+			<script type="Mymr">الميانمار</script>
+			<script type="Nkoo">انكو</script>
+			<script type="Ogam">الأوجهام</script>
+			<script type="Orkh">الأورخون</script>
+			<script type="Orya">الأوريا</script>
+			<script type="Osma">الأوسمانيا</script>
+			<script type="Perm">البيرميكية القديمة</script>
+			<script type="Phag">الفاجسبا</script>
+			<script type="Phnx">الفينيقية</script>
+			<script type="Plrd">الصوتيات الجماء</script>
+			<script type="Qaai">الموروث</script>
+			<script type="Roro">رنجورنجو</script>
+			<script type="Runr">الروني</script>
+			<script type="Sara">الساراتي</script>
+			<script type="Shaw">الشواني</script>
+			<script type="Sinh">السينهالا</script>
+			<script type="Sund">السوندانية</script>
+			<script type="Sylo">السيلوتى ناجرى</script>
+			<script type="Syrc">السريانية</script>
+			<script type="Syre">السريانية الاسترنجيلية</script>
+			<script type="Syrj">السريانية - متغير غربى</script>
+			<script type="Syrn">السريانية - متغير شرقى</script>
+			<script type="Tagb">التاجبانوا</script>
+			<script type="Tale">التاى لى</script>
+			<script type="Talu">التاى لى الجديد</script>
+			<script type="Taml">التاميلية</script>
+			<script type="Telu">التيلجو</script>
+			<script type="Teng">التينجوار</script>
+			<script type="Tfng">التيفيناغ - البربر</script>
+			<script type="Tglg">التغالوغية</script>
+			<script type="Thaa">الثعنة</script>
+			<script type="Thai">التايلاندية</script>
+			<script type="Tibt">التبتية</script>
+			<script type="Ugar">الأجاريتيكية</script>
+			<script type="Vaii">الفاى</script>
+			<script type="Visp">الكلام المرئي</script>
+			<script type="Xpeo">الفارسية القديمة</script>
+			<script type="Xsux">الكتابة المسمارية الأكادية السومارية</script>
+			<script type="Yiii">اليى</script>
+			<script type="Zxxx">شفرة للغات الغير مكتوبة</script>
+			<script type="Zyyy">عام</script>
+			<script type="Zzzz">شفرة للنصوص الغير مشفرة</script>
+		</scripts>
+		<territories>
+			<territory type="001">العالم</territory>
+			<territory type="002">افريقيا</territory>
+			<territory type="003">أمريكا الشمالية</territory>
+			<territory type="005">أمريكا الجنوبية</territory>
+			<territory type="009">أوقيانوسيا</territory>
+			<territory type="011">غرب افريقيا</territory>
+			<territory type="013">أمريكا الوسطى</territory>
+			<territory type="014">شرق افريقيا</territory>
+			<territory type="015">شمال افريقيا</territory>
+			<territory type="017">وسط افريقيا</territory>
+			<territory type="018">جنوب افريقيا</territory>
+			<territory type="019">الأمريكتين</territory>
+			<territory type="021">شمال أمريكا</territory>
+			<territory type="029">الكاريبي</territory>
+			<territory type="030">شرق آسيا</territory>
+			<territory type="034">جنوب آسيا</territory>
+			<territory type="035">جنوب شرق آسيا</territory>
+			<territory type="039">جنوب أوروبا</territory>
+			<territory type="053">أستراليا ونيوزيلندا</territory>
+			<territory type="054">ميلانيزيا</territory>
+			<territory type="057">الجزر الميكرونيزية</territory>
+			<territory type="061">بولينيزيا</territory>
+			<territory type="062">جنوب وسط آسيا</territory>
+			<territory type="142">آسيا</territory>
+			<territory type="143">وسط آسيا</territory>
+			<territory type="145">غرب آسيا</territory>
+			<territory type="150">أوروبا</territory>
+			<territory type="151">شرق أوروبا</territory>
+			<territory type="154">شمال أوروبا</territory>
+			<territory type="155">غرب أوروبا</territory>
+			<territory type="172">كومنولث الدول المستقلة</territory>
+			<territory type="419">أمريكا اللاتينية و الكاريبي</territory>
+			<territory type="AD">أندورا</territory>
+			<territory type="AE">الامارات العربية المتحدة</territory>
+			<territory type="AF">أفغانستان</territory>
+			<territory type="AG">أنتيجوا وبربودا</territory>
+			<territory type="AI">أنجويلا</territory>
+			<territory type="AL">ألبانيا</territory>
+			<territory type="AM">أرمينيا</territory>
+			<territory type="AN">جزر الأنتيل الهولندية</territory>
+			<territory type="AO">أنجولا</territory>
+			<territory type="AQ">القطب الجنوبي</territory>
+			<territory type="AR">الأرجنتين</territory>
+			<territory type="AS">ساموا الأمريكية</territory>
+			<territory type="AT">النمسا</territory>
+			<territory type="AU">أستراليا</territory>
+			<territory type="AW">آروبا</territory>
+			<territory type="AX">جزر أولان</territory>
+			<territory type="AZ">أذربيجان</territory>
+			<territory type="BA">البوسنة والهرسك</territory>
+			<territory type="BB">بربادوس</territory>
+			<territory type="BD">بنجلاديش</territory>
+			<territory type="BE">بلجيكا</territory>
+			<territory type="BF">بوركينا فاسو</territory>
+			<territory type="BG">بلغاريا</territory>
+			<territory type="BH">البحرين</territory>
+			<territory type="BI">بوروندي</territory>
+			<territory type="BJ">بنين</territory>
+			<territory type="BM">برمودا</territory>
+			<territory type="BN">بروناي</territory>
+			<territory type="BO">بوليفيا</territory>
+			<territory type="BR">البرازيل</territory>
+			<territory type="BS">الباهاما</territory>
+			<territory type="BT">بوتان</territory>
+			<territory type="BV">جزيرة بوفيه</territory>
+			<territory type="BW">بتسوانا</territory>
+			<territory type="BY">روسيا البيضاء</territory>
+			<territory type="BZ">بليز</territory>
+			<territory type="CA">كندا</territory>
+			<territory type="CC">جزر كوكوس</territory>
+			<territory type="CD">جمهورية الكونغو الديمقراطية</territory>
+			<territory type="CF">جمهورية افريقيا الوسطى</territory>
+			<territory type="CG">الكونغو - برازافيل</territory>
+			<territory type="CH">سويسرا</territory>
+			<territory type="CI">ساحل العاج</territory>
+			<territory type="CK">جزر كوك</territory>
+			<territory type="CL">شيلي</territory>
+			<territory type="CM">الكاميرون</territory>
+			<territory type="CN">الصين</territory>
+			<territory type="CO">كولومبيا</territory>
+			<territory type="CR">كوستاريكا</territory>
+			<territory type="CS">صربيا والجبل الأسود</territory>
+			<territory type="CU">كوبا</territory>
+			<territory type="CV">الرأس الأخضر</territory>
+			<territory type="CX">جزيرة الكريسماس</territory>
+			<territory type="CY">قبرص</territory>
+			<territory type="CZ">جمهورية التشيك</territory>
+			<territory type="DE">ألمانيا</territory>
+			<territory type="DJ">جيبوتي</territory>
+			<territory type="DK">الدانمرك</territory>
+			<territory type="DM">دومينيكا</territory>
+			<territory type="DO">جمهورية الدومينيك</territory>
+			<territory type="DZ">الجزائر</territory>
+			<territory type="EC">الاكوادور</territory>
+			<territory type="EE">استونيا</territory>
+			<territory type="EG">مصر</territory>
+			<territory type="EH">الصحراء الغربية</territory>
+			<territory type="ER">اريتريا</territory>
+			<territory type="ES">أسبانيا</territory>
+			<territory type="ET">اثيوبيا</territory>
+			<territory type="FI">فنلندا</territory>
+			<territory type="FJ">فيجي</territory>
+			<territory type="FK">جزر فوكلاند</territory>
+			<territory type="FM">ميكرونيزيا</territory>
+			<territory type="FO">جزر فارو</territory>
+			<territory type="FR">فرنسا</territory>
+			<territory type="GA">الجابون</territory>
+			<territory type="GB">المملكة المتحدة</territory>
+			<territory type="GD">جرينادا</territory>
+			<territory type="GE">جورجيا</territory>
+			<territory type="GF">غويانا</territory>
+			<territory type="GH">غانا</territory>
+			<territory type="GI">جبل طارق</territory>
+			<territory type="GL">جرينلاند</territory>
+			<territory type="GM">غامبيا</territory>
+			<territory type="GN">غينيا</territory>
+			<territory type="GP">جوادلوب</territory>
+			<territory type="GQ">غينيا الاستوائية</territory>
+			<territory type="GR">اليونان</territory>
+			<territory type="GS">جورجيا الجنوبية وجزر ساندويتش الجنوبية</territory>
+			<territory type="GT">جواتيمالا</territory>
+			<territory type="GU">جوام</territory>
+			<territory type="GW">غينيا بيساو</territory>
+			<territory type="GY">غيانا</territory>
+			<territory type="HK">هونج كونج الصينية</territory>
+			<territory type="HM">جزيرة هيرد وماكدونالد</territory>
+			<territory type="HN">هندوراس</territory>
+			<territory type="HR">كرواتيا</territory>
+			<territory type="HT">هايتي</territory>
+			<territory type="HU">المجر</territory>
+			<territory type="ID">اندونيسيا</territory>
+			<territory type="IE">أيرلندا</territory>
+			<territory type="IL">اسرائيل</territory>
+			<territory type="IM">جزيرة مان</territory>
+			<territory type="IN">الهند</territory>
+			<territory type="IO">المحيط الهندي البريطاني</territory>
+			<territory type="IQ">العراق</territory>
+			<territory type="IR">ايران</territory>
+			<territory type="IS">أيسلندا</territory>
+			<territory type="IT">ايطاليا</territory>
+			<territory type="JE">جيرسي</territory>
+			<territory type="JM">جامايكا</territory>
+			<territory type="JO">الأردن</territory>
+			<territory type="JP">اليابان</territory>
+			<territory type="KE">كينيا</territory>
+			<territory type="KG">قرغيزستان</territory>
+			<territory type="KH">كمبوديا</territory>
+			<territory type="KI">كيريباتي</territory>
+			<territory type="KM">جزر القمر</territory>
+			<territory type="KN">سانت كيتس ونيفيس</territory>
+			<territory type="KP">كوريا الشمالية</territory>
+			<territory type="KR">كوريا الجنوبية</territory>
+			<territory type="KW">الكويت</territory>
+			<territory type="KY">جزر الكايمن</territory>
+			<territory type="KZ">كازاخستان</territory>
+			<territory type="LA">لاوس</territory>
+			<territory type="LB">لبنان</territory>
+			<territory type="LC">سانت لوسيا</territory>
+			<territory type="LI">ليختنشتاين</territory>
+			<territory type="LK">سريلانكا</territory>
+			<territory type="LR">ليبيريا</territory>
+			<territory type="LS">ليسوتو</territory>
+			<territory type="LT">ليتوانيا</territory>
+			<territory type="LU">لوكسمبورج</territory>
+			<territory type="LV">لاتفيا</territory>
+			<territory type="LY">ليبيا</territory>
+			<territory type="MA">المغرب</territory>
+			<territory type="MC">موناكو</territory>
+			<territory type="MD">مولدافيا</territory>
+			<territory type="ME">الجبل الأسود</territory>
+			<territory type="MF">سانت مارتين</territory>
+			<territory type="MG">مدغشقر</territory>
+			<territory type="MH">جزر المارشال</territory>
+			<territory type="MK">مقدونيا</territory>
+			<territory type="ML">مالي</territory>
+			<territory type="MM">ميانمار</territory>
+			<territory type="MN">منغوليا</territory>
+			<territory type="MO">ماكاو الصينية</territory>
+			<territory type="MP">جزر ماريانا الشمالية</territory>
+			<territory type="MQ">مارتينيك</territory>
+			<territory type="MR">موريتانيا</territory>
+			<territory type="MS">مونتسرات</territory>
+			<territory type="MT">مالطا</territory>
+			<territory type="MU">موريشيوس</territory>
+			<territory type="MV">جزر الملديف</territory>
+			<territory type="MW">ملاوي</territory>
+			<territory type="MX">المكسيك</territory>
+			<territory type="MY">ماليزيا</territory>
+			<territory type="MZ">موزمبيق</territory>
+			<territory type="NA">ناميبيا</territory>
+			<territory type="NC">كاليدونيا الجديدة</territory>
+			<territory type="NE">النيجر</territory>
+			<territory type="NF">جزيرة نورفوك</territory>
+			<territory type="NG">نيجيريا</territory>
+			<territory type="NI">نيكاراجوا</territory>
+			<territory type="NL">هولندا</territory>
+			<territory type="NO">النرويج</territory>
+			<territory type="NP">نيبال</territory>
+			<territory type="NR">نورو</territory>
+			<territory type="NU">نيوي</territory>
+			<territory type="NZ">نيوزيلاندا</territory>
+			<territory type="OM">عمان</territory>
+			<territory type="PA">بنما</territory>
+			<territory type="PE">بيرو</territory>
+			<territory type="PF">بولينيزيا الفرنسية</territory>
+			<territory type="PG">بابوا غينيا الجديدة</territory>
+			<territory type="PH">الفيلبين</territory>
+			<territory type="PK">باكستان</territory>
+			<territory type="PL">بولندا</territory>
+			<territory type="PM">سانت بيير وميكولون</territory>
+			<territory type="PN">بتكايرن</territory>
+			<territory type="PR">بورتوريكو</territory>
+			<territory type="PS">فلسطين</territory>
+			<territory type="PT">البرتغال</territory>
+			<territory type="PW">بالاو</territory>
+			<territory type="PY">باراجواي</territory>
+			<territory type="QA">قطر</territory>
+			<territory type="QO">أوقيانوسيا النائية</territory>
+			<territory type="QU">الاتحاد الاوروبي</territory>
+			<territory type="RE">روينيون</territory>
+			<territory type="RO">رومانيا</territory>
+			<territory type="RS">صربيا</territory>
+			<territory type="RU">روسيا</territory>
+			<territory type="RW">رواندا</territory>
+			<territory type="SA">المملكة العربية السعودية</territory>
+			<territory type="SB">جزر سليمان</territory>
+			<territory type="SC">سيشل</territory>
+			<territory type="SD">السودان</territory>
+			<territory type="SE">السويد</territory>
+			<territory type="SG">سنغافورة</territory>
+			<territory type="SH">سانت هيلنا</territory>
+			<territory type="SI">سلوفينيا</territory>
+			<territory type="SJ">سفالبارد وجان مايان</territory>
+			<territory type="SK">سلوفاكيا</territory>
+			<territory type="SL">سيراليون</territory>
+			<territory type="SM">سان مارينو</territory>
+			<territory type="SN">السنغال</territory>
+			<territory type="SO">الصومال</territory>
+			<territory type="SR">سورينام</territory>
+			<territory type="ST">ساو تومي وبرينسيبي</territory>
+			<territory type="SV">السلفادور</territory>
+			<territory type="SY">سوريا</territory>
+			<territory type="SZ">سوازيلاند</territory>
+			<territory type="TC">جزر الترك وجايكوس</territory>
+			<territory type="TD">تشاد</territory>
+			<territory type="TF">المقاطعات الجنوبية الفرنسية</territory>
+			<territory type="TG">توجو</territory>
+			<territory type="TH">تايلند</territory>
+			<territory type="TJ">طاجكستان</territory>
+			<territory type="TK">توكيلو</territory>
+			<territory type="TL">تيمور الشرقية</territory>
+			<territory type="TM">تركمانستان</territory>
+			<territory type="TN">تونس</territory>
+			<territory type="TO">تونجا</territory>
+			<territory type="TR">تركيا</territory>
+			<territory type="TT">ترينيداد وتوباغو</territory>
+			<territory type="TV">توفالو</territory>
+			<territory type="TW">تايوان</territory>
+			<territory type="TZ">تانزانيا</territory>
+			<territory type="UA">أوكرانيا</territory>
+			<territory type="UG">أوغندا</territory>
+			<territory type="UM">جزر الولايات المتحدة البعيدة الصغيرة</territory>
+			<territory type="US">الولايات المتحدة الأمريكية</territory>
+			<territory type="UY">أورجواي</territory>
+			<territory type="UZ">أوزبكستان</territory>
+			<territory type="VA">الفاتيكان</territory>
+			<territory type="VC">سانت فنسنت وغرنادين</territory>
+			<territory type="VE">فنزويلا</territory>
+			<territory type="VG">جزر فرجين البريطانية</territory>
+			<territory type="VI">جزر فرجين الأمريكية</territory>
+			<territory type="VN">فيتنام</territory>
+			<territory type="VU">فانواتو</territory>
+			<territory type="WF">جزر والس وفوتونا</territory>
+			<territory type="WS">ساموا</territory>
+			<territory type="YE">اليمن</territory>
+			<territory type="YT">مايوت</territory>
+			<territory type="ZA">جمهورية جنوب افريقيا</territory>
+			<territory type="ZM">زامبيا</territory>
+			<territory type="ZW">زيمبابوي</territory>
+			<territory type="ZZ">منطقة غير معرفة</territory>
+		</territories>
+		<variants>
+			<variant type="1901">التهجئة الألمانية التقليدية</variant>
+			<variant type="1996">التهجئة الألمانية لعام 1996</variant>
+			<variant type="AREVELA">أرمنية شرقية</variant>
+			<variant type="AREVMDA">أرمنية غربية</variant>
+			<variant type="BAKU1926">الأبجدية التركية اللاتينية الموحدة</variant>
+			<variant type="MONOTON">أحادي النغمة</variant>
+			<variant type="NEDIS">لهجة ناتيسون</variant>
+			<variant type="POLYTON">متعدد النغمات</variant>
+			<variant type="POSIX">حاسب آلي</variant>
+			<variant type="REVISED">تهجئة تم مراجعتها</variant>
+			<variant type="VALENCIA">بلنسية</variant>
+		</variants>
+		<keys>
+			<key type="calendar">التقويم</key>
+			<key type="collation">الترتيب</key>
+			<key type="currency">العملات</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation">الترتيب الصيني التقليدي - Big5</type>
+			<type type="buddhist" key="calendar">التقويم البوذي</type>
+			<type type="chinese" key="calendar">التقويم الصيني</type>
+			<type type="direct" key="collation">ترتيب مباشر</type>
+			<type type="gb2312han" key="collation">الترتيب الصيني المبسط - GB2312</type>
+			<type type="gregorian" key="calendar">التقويم الميلادي</type>
+			<type type="hebrew" key="calendar">التقويم العبري</type>
+			<type type="islamic" key="calendar">التقويم الهجري</type>
+			<type type="islamic-civil" key="calendar">تقويم اسلامي مدني</type>
+			<type type="japanese" key="calendar">التقويم الياباني</type>
+			<type type="phonebook" key="collation">ترتيب دليل الهاتف</type>
+			<type type="traditional" key="collation">ترتيب تقليدي</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">النظام المتري</measurementSystemName>
+			<measurementSystemName type="US">النظام الأمريكي</measurementSystemName>
+		</measurementSystemNames>
+		<codePatterns>
+			<codePattern type="language">اللغة: {0}</codePattern>
+			<codePattern type="script">نظام الكتابة: {0}</codePattern>
+			<codePattern type="territory">المنطقة: {0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<layout>
+		<orientation characters="right-to-left"/>
+	</layout>
+	<characters>
+		<exemplarCharacters>[\u064B-\u0652 ء-غ ف-ي]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u0640 \u200C-\u200F]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-z]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>“</quotationStart>
+		<quotationEnd>”</quotationEnd>
+		<alternateQuotationStart>‘</alternateQuotationStart>
+		<alternateQuotationEnd>’</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="buddhist">
+				<eras>
+					<eraAbbr>
+						<era type="0">التقويم البوذي</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="coptic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">توت</month>
+							<month type="2">بابه</month>
+							<month type="3">هاتور</month>
+							<month type="4">كيهك</month>
+							<month type="5">طوبة</month>
+							<month type="6">أمشير</month>
+							<month type="7">برمهات</month>
+							<month type="8">برمودة</month>
+							<month type="9">بشنس</month>
+							<month type="10">بؤونة</month>
+							<month type="11">أبيب</month>
+							<month type="12">مسرى</month>
+							<month type="13">نسيئ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">توت</month>
+							<month type="2">بابه</month>
+							<month type="3">هاتور</month>
+							<month type="4">كيهك</month>
+							<month type="5">طوبة</month>
+							<month type="6">أمشير</month>
+							<month type="7">برمهات</month>
+							<month type="8">برمودة</month>
+							<month type="9">بشنس</month>
+							<month type="10">بؤونة</month>
+							<month type="11">أبيب</month>
+							<month type="12">مسرى</month>
+							<month type="13">نسيئ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="ethiopic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">مسكريم</month>
+							<month type="2">تكمت</month>
+							<month type="3">هدار</month>
+							<month type="4">تهساس</month>
+							<month type="5">تر</month>
+							<month type="6">يكتت</month>
+							<month type="7">مجابيت</month>
+							<month type="8">ميازيا</month>
+							<month type="9">جنبت</month>
+							<month type="10">سين</month>
+							<month type="11">هامل</month>
+							<month type="12">نهاس</month>
+							<month type="13">باجمن</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">مسكريم</month>
+							<month type="2">تكمت</month>
+							<month type="3">هدار</month>
+							<month type="4">تهساس</month>
+							<month type="5">تر</month>
+							<month type="6">يكتت</month>
+							<month type="7">مجابيت</month>
+							<month type="8">ميازيا</month>
+							<month type="9">جنبت</month>
+							<month type="10">سين</month>
+							<month type="11">هامل</month>
+							<month type="12">نهاس</month>
+							<month type="13">باجمن</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">يناير</month>
+							<month type="2">فبراير</month>
+							<month type="3">مارس</month>
+							<month type="4">أبريل</month>
+							<month type="5">مايو</month>
+							<month type="6">يونيو</month>
+							<month type="7">يوليو</month>
+							<month type="8">أغسطس</month>
+							<month type="9">سبتمبر</month>
+							<month type="10">أكتوبر</month>
+							<month type="11">نوفمبر</month>
+							<month type="12">ديسمبر</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">يناير</month>
+							<month type="2">فبراير</month>
+							<month type="3">مارس</month>
+							<month type="4">أبريل</month>
+							<month type="5">مايو</month>
+							<month type="6">يونيو</month>
+							<month type="7">يوليو</month>
+							<month type="8">أغسطس</month>
+							<month type="9">سبتمبر</month>
+							<month type="10">أكتوبر</month>
+							<month type="11">نوفمبر</month>
+							<month type="12">ديسمبر</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">ي</month>
+							<month type="2">ف</month>
+							<month type="3">م</month>
+							<month type="4">أ</month>
+							<month type="5">و</month>
+							<month type="6">ن</month>
+							<month type="7">ل</month>
+							<month type="8">غ</month>
+							<month type="9">س</month>
+							<month type="10">ك</month>
+							<month type="11">ب</month>
+							<month type="12">د</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">أحد</day>
+							<day type="mon">إثنين</day>
+							<day type="tue">ثلاثاء</day>
+							<day type="wed">أربعاء</day>
+							<day type="thu">خميس</day>
+							<day type="fri">جمعة</day>
+							<day type="sat">سبت</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">الأحد</day>
+							<day type="mon">الإثنين</day>
+							<day type="tue">الثلاثاء</day>
+							<day type="wed">الأربعاء</day>
+							<day type="thu">الخميس</day>
+							<day type="fri">الجمعة</day>
+							<day type="sat">السبت</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">ح</day>
+							<day type="mon">ن</day>
+							<day type="tue">ث</day>
+							<day type="wed">ر</day>
+							<day type="thu">خ</day>
+							<day type="fri">ج</day>
+							<day type="sat">س</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">الربع الأول</quarter>
+							<quarter type="2">الربع الثاني</quarter>
+							<quarter type="3">الربع الثالث</quarter>
+							<quarter type="4">الربع الرابع</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">الربع الأول</quarter>
+							<quarter type="2">الربع الثاني</quarter>
+							<quarter type="3">الربع الثالث</quarter>
+							<quarter type="4">الربع الرابع</quarter>
+						</quarterWidth>
+					</quarterContext>
+					<quarterContext type="stand-alone">
+						<quarterWidth type="narrow">
+							<quarter type="1">١</quarter>
+							<quarter type="2">٢</quarter>
+							<quarter type="3">٣</quarter>
+							<quarter type="4">٤</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>ص</am>
+				<pm>م</pm>
+				<eras>
+					<eraNames>
+						<era type="0">قبل الميلاد</era>
+						<era type="1">ميلادي</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">ق.م</era>
+						<era type="1">م</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE، d MMMM، y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM، y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>dd‏/MM‏/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d‏/M‏/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>zzzz h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>z h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Hm">H:mm</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">d/‏M</dateFormatItem>
+						<dateFormatItem id="MEd">E، d-M</dateFormatItem>
+						<dateFormatItem id="MMdd">dd‏/MM</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E d MMMM</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">M‏/yyyy</dateFormatItem>
+						<dateFormatItem id="yMEd">EEE، d/‏M/‏yyyy</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">EEE، d MMMM y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM y</dateFormatItem>
+						<dateFormatItem id="yQ">yyyy Q</dateFormatItem>
+						<dateFormatItem id="yQQQ">y QQQ</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMM">MM‏/yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM، y</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h a - h a</greatestDifference>
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h:mm a - h:mm a</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">v h:mm a - h:mm a</greatestDifference>
+							<greatestDifference id="h">v h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">v h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">v h a - h a</greatestDifference>
+							<greatestDifference id="h">v h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M-M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">d‏/M - d‏/M</greatestDifference>
+							<greatestDifference id="M">d‏/M - d‏/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E، d/‏M -‏ E، d/‏M</greatestDifference>
+							<greatestDifference id="M">E، d/‏M - E، d/‏M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM-MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d-d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E، d - E، d MMM</greatestDifference>
+							<greatestDifference id="M">E، d MMM - E، d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMM">
+							<greatestDifference id="M">LLLL-LLLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">M‏/yyyy - M‏/yyyy</greatestDifference>
+							<greatestDifference id="y">M‏/yyyy - M‏/yyyy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">d‏/M‏/yyyy - d‏/M‏/yyyy</greatestDifference>
+							<greatestDifference id="M">d‏/M‏/yyyy - d‏/M‏/yyyy</greatestDifference>
+							<greatestDifference id="y">d‏/M‏/yyyy - d‏/M‏/yyyy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E، dd‏/MM‏/yyyy - E، dd‏/MM‏/yyyy</greatestDifference>
+							<greatestDifference id="M">E، d‏/M‏/yyyy - E، d‏/M‏/yyyy</greatestDifference>
+							<greatestDifference id="y">E، d‏/M‏/yyyy - E، d‏/M‏/yyyy</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM - MMM، y</greatestDifference>
+							<greatestDifference id="y">MMM، y - MMM، y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d-d MMM، y</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM، yyyy</greatestDifference>
+							<greatestDifference id="y">d MMM، y - d MMM، y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E، d - ِE، d MMM، yyyy</greatestDifference>
+							<greatestDifference id="M">E، d MMM - E، d MMM، y</greatestDifference>
+							<greatestDifference id="y">E، d MMM، y - E، d MMM، y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MM ‏– MM‏-yyyy‏</greatestDifference>
+							<greatestDifference id="y">MM -‏ MM–‏yyyy</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="era">
+						<displayName>العصر</displayName>
+					</field>
+					<field type="year">
+						<displayName>السنة</displayName>
+					</field>
+					<field type="month">
+						<displayName>الشهر</displayName>
+					</field>
+					<field type="week">
+						<displayName>الأسبوع</displayName>
+					</field>
+					<field type="day">
+						<displayName>يوم</displayName>
+						<relative type="-1">أمس</relative>
+						<relative type="0">اليوم</relative>
+						<relative type="1">غدًا</relative>
+						<relative type="2">بعد الغد</relative>
+					</field>
+					<field type="weekday">
+						<displayName>اليوم</displayName>
+					</field>
+					<field type="dayperiod">
+						<displayName>ص/م</displayName>
+					</field>
+					<field type="hour">
+						<displayName>الساعات</displayName>
+					</field>
+					<field type="minute">
+						<displayName>الدقائق</displayName>
+					</field>
+					<field type="second">
+						<displayName>الثواني</displayName>
+					</field>
+					<field type="zone">
+						<displayName>التوقيت</displayName>
+					</field>
+				</fields>
+			</calendar>
+			<calendar type="hebrew">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">تشري</month>
+							<month type="2">مرحشوان</month>
+							<month type="3">كيسلو</month>
+							<month type="4">طيفت</month>
+							<month type="5">شباط</month>
+							<month type="6">آذار الأول</month>
+							<month type="7">آذار الثاني</month>
+							<month type="8">نيسان</month>
+							<month type="9">أيار</month>
+							<month type="10">سيفان</month>
+							<month type="11">تموز</month>
+							<month type="12">آب</month>
+							<month type="13">أيلول</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">تشري</month>
+							<month type="2">مرحشوان</month>
+							<month type="3">كيسلو</month>
+							<month type="4">طيفت</month>
+							<month type="5">شباط</month>
+							<month type="6">آذار الأول</month>
+							<month type="7">آذار الثاني</month>
+							<month type="8">نيسان</month>
+							<month type="9">أيار</month>
+							<month type="10">سيفان</month>
+							<month type="11">تموز</month>
+							<month type="12">آب</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="1">محرم</month>
+							<month type="2">صفر</month>
+							<month type="3">ربيع الأول</month>
+							<month type="4">ربيع الآخر</month>
+							<month type="5">جمادى الأولى</month>
+							<month type="6">جمادى الآخرة</month>
+							<month type="7">رجب</month>
+							<month type="8">شعبان</month>
+							<month type="9">رمضان</month>
+							<month type="10">شوال</month>
+							<month type="11">ذو القعدة</month>
+							<month type="12">ذو الحجة</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">م</month>
+							<month type="2">ص</month>
+							<month type="3">ر</month>
+							<month type="4">ر</month>
+							<month type="5">ج</month>
+							<month type="6">ج</month>
+							<month type="7">ر</month>
+							<month type="8">ش</month>
+							<month type="9">ر</month>
+							<month type="10">ش</month>
+							<month type="11">ذ</month>
+							<month type="12">ذ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<am>ص</am>
+				<pm>م</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">هـ</era>
+					</eraAbbr>
+				</eras>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">d‏/M</dateFormatItem>
+						<dateFormatItem id="yM">M‏/yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="japanese">
+				<eras>
+					<eraAbbr>
+						<era type="0">تيكا</era>
+						<era type="1">هاكتشي</era>
+						<era type="2">هاكهو</era>
+						<era type="3">شتشو</era>
+						<era type="4">تيهو</era>
+						<era type="5">كيين</era>
+						<era type="6">وادو</era>
+						<era type="7">رييكي</era>
+						<era type="8">يورو</era>
+						<era type="9">جينكي</era>
+						<era type="10">تمبيو</era>
+						<era type="11">تمبيو-كامبو</era>
+						<era type="12">تمبيو-شوهو</era>
+						<era type="13">تمبيو-هوجي</era>
+						<era type="14">تمفو-جينجو</era>
+						<era type="15">جينجو-كيين</era>
+						<era type="16">هوكي</era>
+						<era type="17">تن-أو</era>
+						<era type="18">إنرياكو</era>
+						<era type="19">ديدو</era>
+						<era type="20">كونين</era>
+						<era type="21">تنتشو</era>
+						<era type="22">شووا</era>
+						<era type="23">كاجو</era>
+						<era type="24">نينجو</era>
+						<era type="25">سيكو</era>
+						<era type="26">تنان</era>
+						<era type="27">جوجان</era>
+						<era type="28">جينكيي</era>
+						<era type="29">نينا</era>
+						<era type="30">كامبيو</era>
+						<era type="31">شوتاي</era>
+						<era type="32">انجي</era>
+						<era type="33">انتشو</era>
+						<era type="34">شوهيي</era>
+						<era type="35">تنجيو</era>
+						<era type="36">تنرياكو</era>
+						<era type="37">تنتوكو</era>
+						<era type="38">أووا</era>
+						<era type="39">كوهو</era>
+						<era type="40">آنا</era>
+						<era type="41">تينروكو</era>
+						<era type="42">تن-ان</era>
+						<era type="43">جوجن</era>
+						<era type="44">تنجن</era>
+						<era type="45">إيكان</era>
+						<era type="46">كانا</era>
+						<era type="47">اي-ان</era>
+						<era type="48">ايسو</era>
+						<era type="49">شورياكو</era>
+						<era type="50">تشوتوكو</era>
+						<era type="51">تشوهو</era>
+						<era type="52">كانكو</era>
+						<era type="53">تشووا</era>
+						<era type="54">كانين</era>
+						<era type="55">جاين</era>
+						<era type="56">مانجو</era>
+						<era type="57">تشوجين</era>
+						<era type="58">تشورياكو</era>
+						<era type="59">تشوكيو</era>
+						<era type="60">كانتوكو</era>
+						<era type="61">ايشو</era>
+						<era type="62">تينجي</era>
+						<era type="63">كوهيي</era>
+						<era type="64">جيرياكو</era>
+						<era type="65">انكيو</era>
+						<era type="66">شوهو</era>
+						<era type="67">شورياكو</era>
+						<era type="68">ايهو</era>
+						<era type="69">أوتوكو</era>
+						<era type="70">كانجي</era>
+						<era type="71">كاهو</era>
+						<era type="72">ايتشو</era>
+						<era type="73">شوتوكو</era>
+						<era type="74">كووا</era>
+						<era type="75">تشوجي</era>
+						<era type="76">كاشو</era>
+						<era type="77">تنين</era>
+						<era type="78">تن-اي</era>
+						<era type="79">ايكيو</era>
+						<era type="80">جن-اي</era>
+						<era type="81">هوان</era>
+						<era type="82">تنجي</era>
+						<era type="83">ديجي</era>
+						<era type="84">تنشو</era>
+						<era type="85">تشوشو</era>
+						<era type="86">هوين</era>
+						<era type="87">ايجي</era>
+						<era type="88">كوجي</era>
+						<era type="89">تنيو</era>
+						<era type="90">كيوان</era>
+						<era type="91">نينبيي</era>
+						<era type="92">كيوجو</era>
+						<era type="93">هجين</era>
+						<era type="94">هيجي</era>
+						<era type="95">ايرياكو</era>
+						<era type="96">أوهو</era>
+						<era type="97">تشوكان</era>
+						<era type="98">ايمان</era>
+						<era type="99">نين-ان</era>
+						<era type="100">كاو</era>
+						<era type="101">شون</era>
+						<era type="102">أنجين</era>
+						<era type="103">جيشو</era>
+						<era type="104">يووا</era>
+						<era type="105">جيي</era>
+						<era type="106">جنريوكو</era>
+						<era type="107">بنجي</era>
+						<era type="108">كنكيو</era>
+						<era type="109">شوجي</era>
+						<era type="110">كنين</era>
+						<era type="111">جنكيو</era>
+						<era type="112">كن-اي</era>
+						<era type="113">شوجن</era>
+						<era type="114">كنرياكو</era>
+						<era type="115">كنبو</era>
+						<era type="116">شوكيو</era>
+						<era type="117">جو</era>
+						<era type="118">جيننين</era>
+						<era type="119">كروكو</era>
+						<era type="120">أنتيي</era>
+						<era type="121">كنكي</era>
+						<era type="122">جويي</era>
+						<era type="123">تمبكو</era>
+						<era type="124">بنرياكو</era>
+						<era type="125">كاتيي</era>
+						<era type="126">رياكنين</era>
+						<era type="127">ان-أو</era>
+						<era type="128">نينجي</era>
+						<era type="129">كنجين</era>
+						<era type="130">هوجي</era>
+						<era type="131">كنتشو</era>
+						<era type="132">كوجن</era>
+						<era type="133">شوكا</era>
+						<era type="134">شوجن</era>
+						<era type="135">بن-أو</era>
+						<era type="136">كوتشو</era>
+						<era type="137">بن-اي</era>
+						<era type="138">كنجي</era>
+						<era type="139">كوان</era>
+						<era type="140">شوو</era>
+						<era type="141">اينين</era>
+						<era type="142">شوان</era>
+						<era type="143">كنجن</era>
+						<era type="144">كجن</era>
+						<era type="145">توكجي</era>
+						<era type="146">انكي</era>
+						<era type="147">أوتشو</era>
+						<era type="148">شووا</era>
+						<era type="149">بنبو</era>
+						<era type="150">جنو</era>
+						<era type="151">جنكيو</era>
+						<era type="152">شوتشو</era>
+						<era type="153">كريكي</era>
+						<era type="154">جنتكو</era>
+						<era type="155">جنكو</era>
+						<era type="156">كمو</era>
+						<era type="157">إنجن</era>
+						<era type="158">كوككو</era>
+						<era type="159">شوهي</era>
+						<era type="160">كنتكو</era>
+						<era type="161">بنتشو</era>
+						<era type="162">تنجو</era>
+						<era type="163">كورياكو</era>
+						<era type="164">كووا</era>
+						<era type="165">جنتشو</era>
+						<era type="166">مييتكو</era>
+						<era type="167">كاكي</era>
+						<era type="168">كو</era>
+						<era type="169">مييتكو</era>
+						<era type="170">أويي</era>
+						<era type="171">شوتشو</era>
+						<era type="172">ايكيو</era>
+						<era type="173">ككيتسو</era>
+						<era type="174">بن-أن</era>
+						<era type="175">هوتكو</era>
+						<era type="176">كيوتكو</era>
+						<era type="177">كوشو</era>
+						<era type="178">تشوركو</era>
+						<era type="179">كنشو</era>
+						<era type="180">بنشو</era>
+						<era type="181">أونين</era>
+						<era type="182">بنمي</era>
+						<era type="183">تشوكيو</era>
+						<era type="184">انتكو</era>
+						<era type="185">ميو</era>
+						<era type="186">بنكي</era>
+						<era type="187">ايشو</era>
+						<era type="188">تييي</era>
+						<era type="189">كيوركو</era>
+						<era type="190">تنمن</era>
+						<era type="191">كوجي</era>
+						<era type="192">ايركو</era>
+						<era type="193">جنكي</era>
+						<era type="194">تنشو</era>
+						<era type="195">بنركو</era>
+						<era type="196">كيتشو</era>
+						<era type="197">جنوا</era>
+						<era type="198">كان-اي</era>
+						<era type="199">شوهو</era>
+						<era type="200">كيان</era>
+						<era type="201">شوو</era>
+						<era type="202">ميرياكو</era>
+						<era type="203">منجي</era>
+						<era type="204">كنبن</era>
+						<era type="205">انبو</era>
+						<era type="206">تنوا</era>
+						<era type="207">جوكيو</era>
+						<era type="208">جنركو</era>
+						<era type="209">هويي</era>
+						<era type="210">شوتكو</era>
+						<era type="211">كيوهو</era>
+						<era type="212">جنبن</era>
+						<era type="213">كنبو</era>
+						<era type="214">انكيو</era>
+						<era type="215">كان-ان</era>
+						<era type="216">هورياكو</era>
+						<era type="217">مييوا</era>
+						<era type="218">ان-اي</era>
+						<era type="219">تنمي</era>
+						<era type="220">كنسي</era>
+						<era type="221">كيووا</era>
+						<era type="222">بنكا</era>
+						<era type="223">بنسي</era>
+						<era type="224">تنبو</era>
+						<era type="225">كوكا</era>
+						<era type="226">كاي</era>
+						<era type="227">أنسي</era>
+						<era type="228">من-ان</era>
+						<era type="229">بنكيو</era>
+						<era type="230">جنجي</era>
+						<era type="231">كيو</era>
+						<era type="232">ميجي</era>
+						<era type="233">تيشو</era>
+						<era type="234">شووا</era>
+						<era type="235">هيسي</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="persian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">فرفردن</month>
+							<month type="2">أذربيهشت</month>
+							<month type="3">خرداد</month>
+							<month type="4">تار</month>
+							<month type="5">مرداد</month>
+							<month type="6">شهرفار</month>
+							<month type="7">مهر</month>
+							<month type="8">آيان</month>
+							<month type="9">آذر</month>
+							<month type="10">دي</month>
+							<month type="11">بهمن</month>
+							<month type="12">اسفندار</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">فرفردن</month>
+							<month type="2">أذربيهشت</month>
+							<month type="3">خرداد</month>
+							<month type="4">تار</month>
+							<month type="5">مرداد</month>
+							<month type="6">شهرفار</month>
+							<month type="7">مهر</month>
+							<month type="8">آيان</month>
+							<month type="9">آذر</month>
+							<month type="10">دي</month>
+							<month type="11">بهمن</month>
+							<month type="12">اسفندار</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="0">ه‍.ش</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<regionFormat>{0}</regionFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>غير معروف</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Rothera">
+				<exemplarCity>روثيرا</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Palmer">
+				<exemplarCity>بالمير</exemplarCity>
+			</zone>
+			<zone type="Antarctica/South_Pole">
+				<exemplarCity>القطب الجنوبي</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Syowa">
+				<exemplarCity>سايووا</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Mawson">
+				<exemplarCity>ماوسون</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Davis">
+				<exemplarCity>دافيز</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Vostok">
+				<exemplarCity>فوستوك</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Casey">
+				<exemplarCity>كاساي</exemplarCity>
+			</zone>
+			<zone type="Antarctica/DumontDUrville">
+				<exemplarCity>دي مونت دو روفيل</exemplarCity>
+			</zone>
+			<zone type="Antarctica/McMurdo">
+				<exemplarCity>ماك موردو</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Rio_Gallegos">
+				<exemplarCity>ريو جالييوس</exemplarCity>
+			</zone>
+			<zone type="America/Mendoza">
+				<exemplarCity>ميندوزا</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Juan">
+				<exemplarCity>سان خوان</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Ushuaia">
+				<exemplarCity>أشوا</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/La_Rioja">
+				<exemplarCity>لا ريوجا</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Luis">
+				<exemplarCity>سان لويس</exemplarCity>
+			</zone>
+			<zone type="America/Catamarca">
+				<exemplarCity>كاتاماركا</exemplarCity>
+			</zone>
+			<zone type="America/Jujuy">
+				<exemplarCity>جوجو</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Tucuman">
+				<exemplarCity>تاكمان</exemplarCity>
+			</zone>
+			<zone type="America/Cordoba">
+				<exemplarCity>كوردوبا</exemplarCity>
+			</zone>
+			<zone type="America/Buenos_Aires">
+				<exemplarCity>بوينوس أيرس</exemplarCity>
+			</zone>
+			<zone type="Australia/Perth">
+				<exemplarCity>برثا</exemplarCity>
+			</zone>
+			<zone type="Australia/Darwin">
+				<exemplarCity>دارون</exemplarCity>
+			</zone>
+			<zone type="Australia/Adelaide">
+				<exemplarCity>استراليا(توقيت أدليادا</exemplarCity>
+			</zone>
+			<zone type="Australia/Broken_Hill">
+				<exemplarCity>بروكن هيل</exemplarCity>
+			</zone>
+			<zone type="Australia/Melbourne">
+				<exemplarCity>ميلبورن</exemplarCity>
+			</zone>
+			<zone type="Australia/Hobart">
+				<exemplarCity>هوبارت</exemplarCity>
+			</zone>
+			<zone type="Australia/Lindeman">
+				<exemplarCity>ليندمان</exemplarCity>
+			</zone>
+			<zone type="Australia/Sydney">
+				<exemplarCity>سيدني</exemplarCity>
+			</zone>
+			<zone type="Australia/Brisbane">
+				<exemplarCity>برسيبان</exemplarCity>
+			</zone>
+			<zone type="Australia/Lord_Howe">
+				<exemplarCity>لورد هاو</exemplarCity>
+			</zone>
+			<zone type="America/Eirunepe">
+				<exemplarCity>ايرونبي</exemplarCity>
+			</zone>
+			<zone type="America/Rio_Branco">
+				<exemplarCity>ريوبرانكو</exemplarCity>
+			</zone>
+			<zone type="America/Porto_Velho">
+				<exemplarCity>بورتو فيلو</exemplarCity>
+			</zone>
+			<zone type="America/Boa_Vista">
+				<exemplarCity>باو فيستا</exemplarCity>
+			</zone>
+			<zone type="America/Manaus">
+				<exemplarCity>ماناوس</exemplarCity>
+			</zone>
+			<zone type="America/Cuiaba">
+				<exemplarCity>كيابا</exemplarCity>
+			</zone>
+			<zone type="America/Campo_Grande">
+				<exemplarCity>كومبو جراند</exemplarCity>
+			</zone>
+			<zone type="America/Belem">
+				<exemplarCity>بلم</exemplarCity>
+			</zone>
+			<zone type="America/Araguaina">
+				<exemplarCity>أروجوانيا</exemplarCity>
+			</zone>
+			<zone type="America/Sao_Paulo">
+				<exemplarCity>ساو باولو</exemplarCity>
+			</zone>
+			<zone type="America/Bahia">
+				<exemplarCity>باهيا</exemplarCity>
+			</zone>
+			<zone type="America/Fortaleza">
+				<exemplarCity>فورتاليزا</exemplarCity>
+			</zone>
+			<zone type="America/Maceio">
+				<exemplarCity>ماشيو</exemplarCity>
+			</zone>
+			<zone type="America/Recife">
+				<exemplarCity>ريسيف</exemplarCity>
+			</zone>
+			<zone type="America/Noronha">
+				<exemplarCity>نوروناه</exemplarCity>
+			</zone>
+			<zone type="America/Dawson">
+				<exemplarCity>داوسان</exemplarCity>
+			</zone>
+			<zone type="America/Whitehorse">
+				<exemplarCity>وايت هورس</exemplarCity>
+			</zone>
+			<zone type="America/Inuvik">
+				<exemplarCity>اينوفيك</exemplarCity>
+			</zone>
+			<zone type="America/Vancouver">
+				<exemplarCity>فانكوفر</exemplarCity>
+			</zone>
+			<zone type="America/Dawson_Creek">
+				<exemplarCity>داوسن كريك</exemplarCity>
+			</zone>
+			<zone type="America/Yellowknife">
+				<exemplarCity>يلونيف</exemplarCity>
+			</zone>
+			<zone type="America/Edmonton">
+				<exemplarCity>ايدمونتون</exemplarCity>
+			</zone>
+			<zone type="America/Swift_Current">
+				<exemplarCity>سوفت كارنت</exemplarCity>
+			</zone>
+			<zone type="America/Cambridge_Bay">
+				<exemplarCity>كامبرديج باي</exemplarCity>
+			</zone>
+			<zone type="America/Regina">
+				<exemplarCity>ريجينا</exemplarCity>
+			</zone>
+			<zone type="America/Winnipeg">
+				<exemplarCity>وينيبيج</exemplarCity>
+			</zone>
+			<zone type="America/Rainy_River">
+				<exemplarCity>راني ريفر</exemplarCity>
+			</zone>
+			<zone type="America/Rankin_Inlet">
+				<exemplarCity>رانكن انلت</exemplarCity>
+			</zone>
+			<zone type="America/Coral_Harbour">
+				<exemplarCity>كورال هاربر</exemplarCity>
+			</zone>
+			<zone type="America/Thunder_Bay">
+				<exemplarCity>ثندر باي</exemplarCity>
+			</zone>
+			<zone type="America/Nipigon">
+				<exemplarCity>نيبيجون</exemplarCity>
+			</zone>
+			<zone type="America/Toronto">
+				<exemplarCity>تورونتو</exemplarCity>
+			</zone>
+			<zone type="America/Montreal">
+				<exemplarCity>مونتريال</exemplarCity>
+			</zone>
+			<zone type="America/Iqaluit">
+				<exemplarCity>اكويلت</exemplarCity>
+			</zone>
+			<zone type="America/Pangnirtung">
+				<exemplarCity>بانجينتينج</exemplarCity>
+			</zone>
+			<zone type="America/Moncton">
+				<exemplarCity>وينكتون</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<exemplarCity>هاليفاكس</exemplarCity>
+			</zone>
+			<zone type="America/Goose_Bay">
+				<exemplarCity>جوس باي</exemplarCity>
+			</zone>
+			<zone type="America/Glace_Bay">
+				<exemplarCity>جلاس باي</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>سانت جونس</exemplarCity>
+			</zone>
+			<zone type="Africa/Kinshasa">
+				<exemplarCity>كينشاسا</exemplarCity>
+			</zone>
+			<zone type="Africa/Lubumbashi">
+				<exemplarCity>لومبباشا</exemplarCity>
+			</zone>
+			<zone type="Pacific/Easter">
+				<exemplarCity>استر</exemplarCity>
+			</zone>
+			<zone type="America/Santiago">
+				<exemplarCity>سانتيجو</exemplarCity>
+			</zone>
+			<zone type="Asia/Kashgar">
+				<exemplarCity>كاشجار</exemplarCity>
+			</zone>
+			<zone type="Asia/Urumqi">
+				<exemplarCity>أرومكي</exemplarCity>
+			</zone>
+			<zone type="Asia/Chongqing">
+				<exemplarCity>تشونجكينج</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<exemplarCity>العالمية</exemplarCity>
+			</zone>
+			<zone type="Asia/Harbin">
+				<exemplarCity>هاربين</exemplarCity>
+			</zone>
+			<zone type="Pacific/Galapagos">
+				<exemplarCity>جلاباجوس</exemplarCity>
+			</zone>
+			<zone type="America/Guayaquil">
+				<exemplarCity>جواياكيل</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Canary">
+				<exemplarCity>كناري</exemplarCity>
+			</zone>
+			<zone type="Africa/Ceuta">
+				<exemplarCity>سيتا</exemplarCity>
+			</zone>
+			<zone type="Europe/Madrid">
+				<exemplarCity>مدريد</exemplarCity>
+			</zone>
+			<zone type="Pacific/Truk">
+				<exemplarCity>ترك</exemplarCity>
+			</zone>
+			<zone type="Pacific/Ponape">
+				<exemplarCity>باناب</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kosrae">
+				<exemplarCity>كوسرا</exemplarCity>
+			</zone>
+			<zone type="Europe/London">
+				<exemplarCity>لندن</exemplarCity>
+			</zone>
+			<zone type="Europe/Guernsey">
+				<exemplarCity>جيرونسى</exemplarCity>
+			</zone>
+			<zone type="America/Thule">
+				<exemplarCity>ثيل</exemplarCity>
+			</zone>
+			<zone type="America/Godthab">
+				<exemplarCity>جودثاب</exemplarCity>
+			</zone>
+			<zone type="America/Scoresbysund">
+				<exemplarCity>سكورسبيسند</exemplarCity>
+			</zone>
+			<zone type="America/Danmarkshavn">
+				<exemplarCity>دانمرك شافن</exemplarCity>
+			</zone>
+			<zone type="Asia/Jakarta">
+				<exemplarCity>جاكرتا</exemplarCity>
+			</zone>
+			<zone type="Asia/Pontianak">
+				<exemplarCity>بونتيانك</exemplarCity>
+			</zone>
+			<zone type="Asia/Makassar">
+				<exemplarCity>ماكسار</exemplarCity>
+			</zone>
+			<zone type="Asia/Jayapura">
+				<exemplarCity>جايابيورا</exemplarCity>
+			</zone>
+			<zone type="Europe/Rome">
+				<exemplarCity>إيطاليا</exemplarCity>
+			</zone>
+			<zone type="Europe/Jersey">
+				<exemplarCity>جيرسى</exemplarCity>
+			</zone>
+			<zone type="Pacific/Enderbury">
+				<exemplarCity>اندربيرج</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kiritimati">
+				<exemplarCity>كيريتي ماتي</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tarawa">
+				<exemplarCity>تاراوا</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtau">
+				<exemplarCity>أكتاو</exemplarCity>
+			</zone>
+			<zone type="Asia/Oral">
+				<exemplarCity>أورال</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtobe">
+				<exemplarCity>أكتوب</exemplarCity>
+			</zone>
+			<zone type="Asia/Qyzylorda">
+				<exemplarCity>كيزيلوردا</exemplarCity>
+			</zone>
+			<zone type="Asia/Almaty">
+				<exemplarCity>ألماتي</exemplarCity>
+			</zone>
+			<zone type="Europe/Podgorica">
+				<exemplarCity>الجبل الأسود</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kwajalein">
+				<exemplarCity>كواجالين</exemplarCity>
+			</zone>
+			<zone type="Pacific/Majuro">
+				<exemplarCity>ماجورو</exemplarCity>
+			</zone>
+			<zone type="Africa/Bamako">
+				<exemplarCity>باماكو</exemplarCity>
+			</zone>
+			<zone type="Asia/Hovd">
+				<exemplarCity>هوفد</exemplarCity>
+			</zone>
+			<zone type="Asia/Ulaanbaatar">
+				<exemplarCity>آلانباتار</exemplarCity>
+			</zone>
+			<zone type="Asia/Choibalsan">
+				<exemplarCity>تشوبالسان</exemplarCity>
+			</zone>
+			<zone type="America/Tijuana">
+				<exemplarCity>تيخوانا</exemplarCity>
+			</zone>
+			<zone type="America/Hermosillo">
+				<exemplarCity>هيرموسيلو</exemplarCity>
+			</zone>
+			<zone type="America/Mazatlan">
+				<exemplarCity>مازاتلان</exemplarCity>
+			</zone>
+			<zone type="America/Chihuahua">
+				<exemplarCity>تشيواوا</exemplarCity>
+			</zone>
+			<zone type="America/Monterrey">
+				<exemplarCity>مونتيري</exemplarCity>
+			</zone>
+			<zone type="America/Mexico_City">
+				<exemplarCity>مدينة المكسيك</exemplarCity>
+			</zone>
+			<zone type="America/Merida">
+				<exemplarCity>ميريدا</exemplarCity>
+			</zone>
+			<zone type="America/Cancun">
+				<exemplarCity>كانكن</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuala_Lumpur">
+				<exemplarCity>كوالالمبور</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuching">
+				<exemplarCity>كيشينج</exemplarCity>
+			</zone>
+			<zone type="Pacific/Chatham">
+				<exemplarCity>تشاثام</exemplarCity>
+			</zone>
+			<zone type="Pacific/Auckland">
+				<exemplarCity>أوكلاند</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tahiti">
+				<exemplarCity>تاهيتي</exemplarCity>
+			</zone>
+			<zone type="Pacific/Marquesas">
+				<exemplarCity>ماركيساس</exemplarCity>
+			</zone>
+			<zone type="Pacific/Gambier">
+				<exemplarCity>جامبير</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Azores">
+				<exemplarCity>أزورس</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Madeira">
+				<exemplarCity>ماديرا</exemplarCity>
+			</zone>
+			<zone type="Europe/Lisbon">
+				<exemplarCity>ليسبون</exemplarCity>
+			</zone>
+			<zone type="Europe/Belgrade">
+				<exemplarCity>صربيا</exemplarCity>
+			</zone>
+			<zone type="Europe/Kaliningrad">
+				<exemplarCity>كالينجراد</exemplarCity>
+			</zone>
+			<zone type="Europe/Moscow">
+				<exemplarCity>موسكو</exemplarCity>
+			</zone>
+			<zone type="Europe/Volgograd">
+				<exemplarCity>فولوجراد</exemplarCity>
+			</zone>
+			<zone type="Europe/Samara">
+				<exemplarCity>سمراء</exemplarCity>
+			</zone>
+			<zone type="Asia/Yekaterinburg">
+				<exemplarCity>يكاترنبيرج</exemplarCity>
+			</zone>
+			<zone type="Asia/Omsk">
+				<exemplarCity>أومسك</exemplarCity>
+			</zone>
+			<zone type="Asia/Novosibirsk">
+				<exemplarCity>نوفوسبيرسك</exemplarCity>
+			</zone>
+			<zone type="Asia/Krasnoyarsk">
+				<exemplarCity>كراسنويارسك</exemplarCity>
+			</zone>
+			<zone type="Asia/Irkutsk">
+				<exemplarCity>ايركيتسك</exemplarCity>
+			</zone>
+			<zone type="Asia/Yakutsk">
+				<exemplarCity>ياكتسك</exemplarCity>
+			</zone>
+			<zone type="Asia/Vladivostok">
+				<exemplarCity>فلاديفوستك</exemplarCity>
+			</zone>
+			<zone type="Asia/Sakhalin">
+				<exemplarCity>سكالين</exemplarCity>
+			</zone>
+			<zone type="Asia/Magadan">
+				<exemplarCity>مجادن</exemplarCity>
+			</zone>
+			<zone type="Asia/Kamchatka">
+				<exemplarCity>كامتشاتكا</exemplarCity>
+			</zone>
+			<zone type="Asia/Anadyr">
+				<exemplarCity>أندير</exemplarCity>
+			</zone>
+			<zone type="Arctic/Longyearbyen">
+				<exemplarCity>لونجيربن</exemplarCity>
+			</zone>
+			<zone type="Europe/Uzhgorod">
+				<exemplarCity>أوزجرود</exemplarCity>
+			</zone>
+			<zone type="Europe/Kiev">
+				<exemplarCity>كييف</exemplarCity>
+			</zone>
+			<zone type="Europe/Simferopol">
+				<exemplarCity>سيمفروبول</exemplarCity>
+			</zone>
+			<zone type="Europe/Zaporozhye">
+				<exemplarCity>زابوروزي</exemplarCity>
+			</zone>
+			<zone type="Pacific/Midway">
+				<exemplarCity>ميدواي</exemplarCity>
+			</zone>
+			<zone type="Pacific/Johnston">
+				<exemplarCity>جونستون</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wake">
+				<exemplarCity>واك</exemplarCity>
+			</zone>
+			<zone type="America/Adak">
+				<exemplarCity>أداك</exemplarCity>
+			</zone>
+			<zone type="America/Nome">
+				<exemplarCity>نوم</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<exemplarCity>هونولولو</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<exemplarCity>أنشوراج</exemplarCity>
+			</zone>
+			<zone type="America/Yakutat">
+				<exemplarCity>ياكوتات</exemplarCity>
+			</zone>
+			<zone type="America/Juneau">
+				<exemplarCity>جوني</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<exemplarCity>لوس انجلوس</exemplarCity>
+			</zone>
+			<zone type="America/Boise">
+				<exemplarCity>بويس</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<exemplarCity>فينكس</exemplarCity>
+			</zone>
+			<zone type="America/Shiprock">
+				<exemplarCity>شيبروك</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<exemplarCity>دنفر</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity>نيو ساليم</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>سنتر</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<exemplarCity>شيكاغو</exemplarCity>
+			</zone>
+			<zone type="America/Menominee">
+				<exemplarCity>مينوميني</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity>فينسينس</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>بيترسبرغ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity>كونكس</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity>ويناماك</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity>مارنجو</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<exemplarCity>إنديانابوليس</exemplarCity>
+			</zone>
+			<zone type="America/Louisville">
+				<exemplarCity>لويس فيل</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity>فيفاي</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity>مونتيسيلو</exemplarCity>
+			</zone>
+			<zone type="America/Detroit">
+				<exemplarCity>ديترويت</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<exemplarCity>نيويورك</exemplarCity>
+			</zone>
+			<zone type="Asia/Samarkand">
+				<exemplarCity>سمرقند</exemplarCity>
+			</zone>
+			<zone type="Asia/Tashkent">
+				<exemplarCity>طشقند</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<defaultNumberingSystem>arab</defaultNumberingSystem>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>NaN</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##0.###;#,##0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤ #,##0.00;¤ #,##0.00-</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+			<unitPattern count="few">{0} {1}</unitPattern>
+			<unitPattern count="many">{0} {1}</unitPattern>
+			<unitPattern count="one">{0} {1}</unitPattern>
+			<unitPattern count="other">{0} {1}</unitPattern>
+			<unitPattern count="two">{0} {1}</unitPattern>
+			<unitPattern count="zero">{0} {1}</unitPattern>
+		</currencyFormats>
+		<currencies>
+			<currency type="ADP">
+				<displayName>بيستا أندوري</displayName>
+			</currency>
+			<currency type="AED">
+				<displayName>درهم إماراتي</displayName>
+				<symbol>د.إ.‏</symbol>
+			</currency>
+			<currency type="AFA">
+				<displayName>أفغاني - 1927-2002</displayName>
+			</currency>
+			<currency type="AFN">
+				<displayName>أفغاني</displayName>
+			</currency>
+			<currency type="ALL">
+				<displayName>ليك ألباني</displayName>
+			</currency>
+			<currency type="AMD">
+				<displayName>درام أرميني</displayName>
+			</currency>
+			<currency type="ANG">
+				<displayName>جلدر هولندي [ANG]</displayName>
+			</currency>
+			<currency type="AOA">
+				<displayName>كوانزا أنجولي</displayName>
+			</currency>
+			<currency type="AOK">
+				<displayName>كوانزا أنجولي - 1977-1990</displayName>
+			</currency>
+			<currency type="AON">
+				<displayName>كوانزا أنجولي جديدة - 1990-2000</displayName>
+			</currency>
+			<currency type="AOR">
+				<displayName>كوانزا أنجولي معدلة - 1995 - 1999</displayName>
+			</currency>
+			<currency type="ARA">
+				<displayName>استرال أرجنتيني</displayName>
+			</currency>
+			<currency type="ARP">
+				<displayName>بيزو أرجنتيني - 1983-1985</displayName>
+			</currency>
+			<currency type="ARS">
+				<displayName>بيزو أرجنتيني</displayName>
+			</currency>
+			<currency type="ATS">
+				<displayName>شلن نمساوي</displayName>
+			</currency>
+			<currency type="AUD">
+				<displayName>دولار أسترالي</displayName>
+			</currency>
+			<currency type="AWG">
+				<displayName>جلدر أروبي</displayName>
+			</currency>
+			<currency type="AZM">
+				<displayName>مانات أذريبجاني</displayName>
+			</currency>
+			<currency type="BAD">
+				<displayName>دينار البوسنة والهرسك</displayName>
+			</currency>
+			<currency type="BAM">
+				<displayName>مارك البوسنة والهرسك قابل للتحويل</displayName>
+			</currency>
+			<currency type="BBD">
+				<displayName>دولار بربادوسي</displayName>
+			</currency>
+			<currency type="BDT">
+				<displayName>تاكا بنجلاديشي</displayName>
+			</currency>
+			<currency type="BEC">
+				<displayName>(فرنك بلجيكي قابل للتحويل)</displayName>
+			</currency>
+			<currency type="BEF">
+				<displayName>فرنك بلجيكي</displayName>
+			</currency>
+			<currency type="BEL">
+				<displayName>(فرنك بلجيكي مالي)</displayName>
+			</currency>
+			<currency type="BGL">
+				<displayName>ليف بلغاري</displayName>
+			</currency>
+			<currency type="BGN">
+				<displayName>ليف بلغاري جديد</displayName>
+			</currency>
+			<currency type="BHD">
+				<displayName>دينار بحريني</displayName>
+				<symbol>د.ب.‏</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>فرنك بروندي</displayName>
+			</currency>
+			<currency type="BMD">
+				<displayName>دولار برمودي</displayName>
+			</currency>
+			<currency type="BND">
+				<displayName>دولار بروناي</displayName>
+			</currency>
+			<currency type="BOB">
+				<displayName>بوليفاريو</displayName>
+			</currency>
+			<currency type="BOP">
+				<displayName>بيزو بوليفي</displayName>
+			</currency>
+			<currency type="BOV">
+				<displayName>مفدول بوليفي</displayName>
+			</currency>
+			<currency type="BRB">
+				<displayName>نوفو كروزايرو برازيلي - 1967-1986</displayName>
+			</currency>
+			<currency type="BRC">
+				<displayName>كروزادو برازيلي</displayName>
+			</currency>
+			<currency type="BRE">
+				<displayName>كروزايرو برازيلي - 1990-1993</displayName>
+			</currency>
+			<currency type="BRL">
+				<displayName>ريال برازيلي</displayName>
+				<symbol>ر.ب.‏</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>دولار باهامي</displayName>
+			</currency>
+			<currency type="BTN">
+				<displayName>نولتوم بوتاني</displayName>
+			</currency>
+			<currency type="BUK">
+				<displayName>كيات بورمي</displayName>
+			</currency>
+			<currency type="BWP">
+				<displayName>بولا بتسواني</displayName>
+			</currency>
+			<currency type="BYB">
+				<displayName>روبل بيلاروسي جديد - 1994-1999</displayName>
+			</currency>
+			<currency type="BYR">
+				<displayName>روبل بيلاروسي</displayName>
+			</currency>
+			<currency type="BZD">
+				<displayName>دولار بليزي</displayName>
+			</currency>
+			<currency type="CAD">
+				<displayName>دولار كندي</displayName>
+			</currency>
+			<currency type="CDF">
+				<displayName>فنك كونغولي</displayName>
+			</currency>
+			<currency type="CHF">
+				<displayName>فرنك سويسري</displayName>
+			</currency>
+			<currency type="CLP">
+				<displayName>بيزو شيلي</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>يوان صيني</displayName>
+				<symbol>ي.ص</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>بيزو كولومبي</displayName>
+			</currency>
+			<currency type="CRC">
+				<displayName>كولن كوستا ريكي</displayName>
+			</currency>
+			<currency type="CSD">
+				<displayName>دينار صربي</displayName>
+			</currency>
+			<currency type="CSK">
+				<displayName>كرونة تشيكوسلوفاكيا</displayName>
+			</currency>
+			<currency type="CUP">
+				<displayName>بيزو كوبي</displayName>
+			</currency>
+			<currency type="CVE">
+				<displayName>اسكودو الرأس الخضراء</displayName>
+			</currency>
+			<currency type="CYP">
+				<displayName>جنيه قبرصي</displayName>
+			</currency>
+			<currency type="CZK">
+				<displayName>كرونة تشيكية</displayName>
+			</currency>
+			<currency type="DDM">
+				<displayName>أوستمارك ألماني شرقي</displayName>
+			</currency>
+			<currency type="DEM">
+				<displayName>مارك ألماني</displayName>
+			</currency>
+			<currency type="DJF">
+				<displayName>فرنك جيبوتي</displayName>
+			</currency>
+			<currency type="DKK">
+				<displayName>كرونة دانماركي</displayName>
+			</currency>
+			<currency type="DOP">
+				<displayName>بيزو الدومنيكان</displayName>
+			</currency>
+			<currency type="DZD">
+				<displayName>دينار جزائري</displayName>
+				<symbol>د.ج.‏</symbol>
+			</currency>
+			<currency type="EEK">
+				<displayName>كرونة استونية</displayName>
+			</currency>
+			<currency type="EGP">
+				<displayName>جنيه مصري</displayName>
+				<symbol>ج.م.‏</symbol>
+			</currency>
+			<currency type="ERN">
+				<displayName>ناكفا أريتري</displayName>
+			</currency>
+			<currency type="ESP">
+				<displayName>بيزيتا إسباني</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName>بير أثيوبي</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>يورو</displayName>
+			</currency>
+			<currency type="FIM">
+				<displayName>ماركا فنلندي</displayName>
+			</currency>
+			<currency type="FJD">
+				<displayName>دولار فيجي</displayName>
+			</currency>
+			<currency type="FKP">
+				<displayName>جنيه جزر فوكلاند</displayName>
+			</currency>
+			<currency type="FRF">
+				<displayName>فرنك فرنسي</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>جنيه إسترليني</displayName>
+			</currency>
+			<currency type="GEL">
+				<displayName>لارى جورجي</displayName>
+			</currency>
+			<currency type="GHC">
+				<displayName>سيدي غاني</displayName>
+			</currency>
+			<currency type="GIP">
+				<displayName>جنيه جبل طارق</displayName>
+			</currency>
+			<currency type="GMD">
+				<displayName>دلاسي جامبي</displayName>
+			</currency>
+			<currency type="GNF">
+				<displayName>فرنك غينيا</displayName>
+			</currency>
+			<currency type="GNS">
+				<displayName>سيلي غينيا</displayName>
+			</currency>
+			<currency type="GQE">
+				<displayName>اكويل جونينا غينيا الاستوائيّة</displayName>
+			</currency>
+			<currency type="GRD">
+				<displayName>دراخما يوناني</displayName>
+			</currency>
+			<currency type="GTQ">
+				<displayName>كوتزال جواتيمالا</displayName>
+			</currency>
+			<currency type="GWE">
+				<displayName>اسكود برتغالي غينيا</displayName>
+			</currency>
+			<currency type="GWP">
+				<displayName>بيزو غينيا بيساو</displayName>
+			</currency>
+			<currency type="GYD">
+				<displayName>دولار غيانا</displayName>
+			</currency>
+			<currency type="HKD">
+				<displayName>دولار هونج كونج</displayName>
+			</currency>
+			<currency type="HNL">
+				<displayName>ليمبيرا هنداروس</displayName>
+			</currency>
+			<currency type="HRD">
+				<displayName>دينار كرواتي</displayName>
+			</currency>
+			<currency type="HRK">
+				<displayName>كونا كرواتي</displayName>
+			</currency>
+			<currency type="HTG">
+				<displayName>جوردى هايتي</displayName>
+			</currency>
+			<currency type="HUF">
+				<displayName>فورينت مجري</displayName>
+			</currency>
+			<currency type="IDR">
+				<displayName>روبية إندونيسية</displayName>
+			</currency>
+			<currency type="IEP">
+				<displayName>جنيه إيرلندي</displayName>
+			</currency>
+			<currency type="ILP">
+				<displayName>جنيه إسرائيلي</displayName>
+			</currency>
+			<currency type="ILS">
+				<displayName>شيكل إسرائيلي جديد</displayName>
+			</currency>
+			<currency type="INR">
+				<displayName>روبيه هندي</displayName>
+				<symbol>ر.ه.‏</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>دينار عراقي</displayName>
+				<symbol>د.ع.‏</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>ريال إيراني</displayName>
+			</currency>
+			<currency type="ISK">
+				<displayName>كرونه أيسلندي</displayName>
+			</currency>
+			<currency type="ITL">
+				<displayName>ليرة إيطالية</displayName>
+			</currency>
+			<currency type="JMD">
+				<displayName>دولار جامايكي</displayName>
+			</currency>
+			<currency type="JOD">
+				<displayName>دينار أردني</displayName>
+				<symbol>د.أ.‏</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>ين ياباني</displayName>
+			</currency>
+			<currency type="KES">
+				<displayName>شلن كينيي</displayName>
+			</currency>
+			<currency type="KGS">
+				<displayName>سوم قيرغستاني</displayName>
+			</currency>
+			<currency type="KHR">
+				<displayName>رييال كمبودي</displayName>
+			</currency>
+			<currency type="KMF">
+				<displayName>فرنك جزر القمر</displayName>
+				<symbol>ف.ج.ق.‏</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>وون كوريا الشمالية</displayName>
+			</currency>
+			<currency type="KRW">
+				<displayName>وون كوريا الجنوبية</displayName>
+			</currency>
+			<currency type="KWD">
+				<displayName>دينار كويتي</displayName>
+				<symbol>د.ك.‏</symbol>
+			</currency>
+			<currency type="KYD">
+				<displayName>دولار جزر كيمن</displayName>
+			</currency>
+			<currency type="KZT">
+				<displayName>تينغ كازاخستاني</displayName>
+			</currency>
+			<currency type="LAK">
+				<displayName>كيب لاوسي</displayName>
+			</currency>
+			<currency type="LBP">
+				<displayName>جنية لبناني</displayName>
+				<symbol>ل.ل.‏</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>روبية سريلانكية</displayName>
+			</currency>
+			<currency type="LRD">
+				<displayName>دولار ليبيري</displayName>
+			</currency>
+			<currency type="LSL">
+				<displayName>لوتي ليسوتو</displayName>
+			</currency>
+			<currency type="LTL">
+				<displayName>الليتا الليتوانية</displayName>
+			</currency>
+			<currency type="LTT">
+				<displayName>تالوناس ليتواني</displayName>
+			</currency>
+			<currency type="LUC">
+				<displayName>فرنك لوكسمبرج قابل للتحويل</displayName>
+			</currency>
+			<currency type="LUF">
+				<displayName>فرنك لوكسمبرج</displayName>
+			</currency>
+			<currency type="LUL">
+				<displayName>فرنك لوكسمبرج المالي</displayName>
+			</currency>
+			<currency type="LVL">
+				<displayName>لاتس لاتفيا</displayName>
+			</currency>
+			<currency type="LVR">
+				<displayName>روبل لاتفيا</displayName>
+			</currency>
+			<currency type="LYD">
+				<displayName>دينار ليبي</displayName>
+				<symbol>د.ل.‏</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>درهم مغربي</displayName>
+				<symbol>د.م.‏</symbol>
+			</currency>
+			<currency type="MAF">
+				<displayName>فرنك مغربي</displayName>
+			</currency>
+			<currency type="MDL">
+				<displayName>لاو مولدوفي</displayName>
+			</currency>
+			<currency type="MGA">
+				<displayName>أرياري مدغشقر</displayName>
+			</currency>
+			<currency type="MGF">
+				<displayName>فرنك مدغشقر</displayName>
+			</currency>
+			<currency type="MKD">
+				<displayName>دينار مقدوني</displayName>
+			</currency>
+			<currency type="MLF">
+				<displayName>فرنك مالي</displayName>
+			</currency>
+			<currency type="MMK">
+				<displayName>كيات ميانمار</displayName>
+			</currency>
+			<currency type="MNT">
+				<displayName>توغروغ منغولي</displayName>
+			</currency>
+			<currency type="MOP">
+				<displayName>باتاكا ماكاوي</displayName>
+			</currency>
+			<currency type="MRO">
+				<displayName>أوقية موريتانية</displayName>
+				<symbol>أ.م.‏</symbol>
+			</currency>
+			<currency type="MTL">
+				<displayName>ليرة مالطية</displayName>
+			</currency>
+			<currency type="MTP">
+				<displayName>جنيه مالطي</displayName>
+			</currency>
+			<currency type="MUR">
+				<displayName>روبي موريشي</displayName>
+			</currency>
+			<currency type="MVR">
+				<displayName>روفيه جزر المالديف</displayName>
+			</currency>
+			<currency type="MWK">
+				<displayName>كواشا مالاوي</displayName>
+			</currency>
+			<currency type="MXN">
+				<displayName>بيزو مكسيكي</displayName>
+			</currency>
+			<currency type="MXP">
+				<displayName>بيزو فضي مكسيكي - 1861-1992</displayName>
+			</currency>
+			<currency type="MYR">
+				<displayName>رينغيت ماليزي</displayName>
+			</currency>
+			<currency type="MZE">
+				<displayName>اسكود موزمبيقي</displayName>
+			</currency>
+			<currency type="NAD">
+				<displayName>دولار نامبيا</displayName>
+			</currency>
+			<currency type="NGN">
+				<displayName>نايرا نيجيري</displayName>
+			</currency>
+			<currency type="NIC">
+				<displayName>كوردوبة نيكاراجوا</displayName>
+			</currency>
+			<currency type="NLG">
+				<displayName>جلدر هولندي</displayName>
+			</currency>
+			<currency type="NOK">
+				<displayName>كرونة نرويجية</displayName>
+			</currency>
+			<currency type="NPR">
+				<displayName>روبية نيبالي</displayName>
+			</currency>
+			<currency type="NZD">
+				<displayName>دولار نيوزيلندي</displayName>
+			</currency>
+			<currency type="OMR">
+				<displayName>ريال عماني</displayName>
+				<symbol>ر.ع.‏</symbol>
+			</currency>
+			<currency type="PAB">
+				<displayName>بالبوا بنمي</displayName>
+			</currency>
+			<currency type="PGK">
+				<displayName>كينا بابوا غينيا الجديدة</displayName>
+			</currency>
+			<currency type="PHP">
+				<displayName>بيزو فلبيني</displayName>
+			</currency>
+			<currency type="PKR">
+				<displayName>روبية باكستاني</displayName>
+			</currency>
+			<currency type="PLN">
+				<displayName>زلوتي بولندي</displayName>
+			</currency>
+			<currency type="PLZ">
+				<displayName>زلوتي بولندي - 1950-1995</displayName>
+			</currency>
+			<currency type="PTE">
+				<displayName>اسكود برتغالي</displayName>
+			</currency>
+			<currency type="PYG">
+				<displayName>جواراني باراجواي</displayName>
+			</currency>
+			<currency type="QAR">
+				<displayName>ريال قطري</displayName>
+				<symbol>ر.ق.‏</symbol>
+			</currency>
+			<currency type="RHD">
+				<displayName>دولار روديسي</displayName>
+			</currency>
+			<currency type="ROL">
+				<displayName>ليو روماني قديم</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>روبل روسي</displayName>
+				<symbol>ر.ر.‏</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>روبل روسي - 1991-1998</displayName>
+			</currency>
+			<currency type="RWF">
+				<displayName>فرنك رواندي</displayName>
+			</currency>
+			<currency type="SAR">
+				<displayName>ريال سعودي</displayName>
+				<symbol>ر.س.‏</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>دولار جزر سليمان</displayName>
+			</currency>
+			<currency type="SCR">
+				<displayName>روبية سيشيلية</displayName>
+			</currency>
+			<currency type="SDD">
+				<displayName>دينار سوداني</displayName>
+				<symbol>د.س.‏</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>جنيه سوداني</displayName>
+				<symbol>ج.س.‏</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>كرونة سويدية</displayName>
+			</currency>
+			<currency type="SGD">
+				<displayName>دولار سنغافوري</displayName>
+			</currency>
+			<currency type="SHP">
+				<displayName>جنيه سانت هيلين</displayName>
+			</currency>
+			<currency type="SIT">
+				<displayName>تولار سلوفيني</displayName>
+			</currency>
+			<currency type="SKK">
+				<displayName>كرونة سلوفاكية</displayName>
+			</currency>
+			<currency type="SLL">
+				<displayName>ليون سيراليوني</displayName>
+			</currency>
+			<currency type="SOS">
+				<displayName>شلن صومالي</displayName>
+			</currency>
+			<currency type="SRD">
+				<displayName>دولار سورينامي</displayName>
+			</currency>
+			<currency type="SRG">
+				<displayName>جلدر سورينامي</displayName>
+			</currency>
+			<currency type="STD">
+				<displayName>دوبرا ساو تومي وبرينسيبي</displayName>
+			</currency>
+			<currency type="SUR">
+				<displayName>روبل سوفيتي</displayName>
+			</currency>
+			<currency type="SVC">
+				<displayName>كولون سلفادوري</displayName>
+			</currency>
+			<currency type="SYP">
+				<displayName>جنيه سوري</displayName>
+				<symbol>ل.س.‏</symbol>
+			</currency>
+			<currency type="SZL">
+				<displayName>ليلانجيني سوازيلندي</displayName>
+			</currency>
+			<currency type="THB">
+				<displayName>باخت تايلاندي</displayName>
+			</currency>
+			<currency type="TJR">
+				<displayName>روبل طاجيكستاني</displayName>
+			</currency>
+			<currency type="TJS">
+				<displayName>سوموني طاجيكستاني</displayName>
+			</currency>
+			<currency type="TMM">
+				<displayName>مانات تركمنستاني</displayName>
+			</currency>
+			<currency type="TND">
+				<displayName>دينارتونسي</displayName>
+				<symbol>د.ت.‏</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>اسكود تيموري</displayName>
+			</currency>
+			<currency type="TRL">
+				<displayName>ليرة تركي</displayName>
+			</currency>
+			<currency type="TRY">
+				<displayName>ليرة تركية جديدة</displayName>
+			</currency>
+			<currency type="TTD">
+				<displayName>دولار ترينداد وتوباجو</displayName>
+			</currency>
+			<currency type="TWD">
+				<displayName>دولار تايواني</displayName>
+			</currency>
+			<currency type="TZS">
+				<displayName>شلن تنزاني</displayName>
+			</currency>
+			<currency type="UAH">
+				<displayName>هريفنيا أوكراني</displayName>
+			</currency>
+			<currency type="UGS">
+				<displayName>شلن أوغندي - 1966-1987</displayName>
+			</currency>
+			<currency type="UGX">
+				<displayName>شلن أوغندي</displayName>
+			</currency>
+			<currency type="USD">
+				<displayName>دولار أمريكي</displayName>
+			</currency>
+			<currency type="USN">
+				<displayName>دولار أمريكي (اليوم التالي)‏</displayName>
+			</currency>
+			<currency type="USS">
+				<displayName>دولار أمريكي (نفس اليوم)‏</displayName>
+			</currency>
+			<currency type="UYP">
+				<displayName>بيزو أوروجواي - 1975-1993</displayName>
+			</currency>
+			<currency type="UZS">
+				<displayName>سوم أوزبكستاني</displayName>
+			</currency>
+			<currency type="VEB">
+				<displayName>بوليفار فنزويلي</displayName>
+			</currency>
+			<currency type="VND">
+				<displayName>دونج فيتنامي</displayName>
+			</currency>
+			<currency type="XAF">
+				<displayName>فرنك أفريقي</displayName>
+				<symbol>ف.ا.‏</symbol>
+			</currency>
+			<currency type="XAG">
+				<displayName>فضة</displayName>
+			</currency>
+			<currency type="XAU">
+				<displayName>ذهب</displayName>
+			</currency>
+			<currency type="XBA">
+				<displayName>الوحدة الأوروبية المركبة</displayName>
+			</currency>
+			<currency type="XBB">
+				<displayName>الوحدة المالية الأوروبية</displayName>
+			</currency>
+			<currency type="XBC">
+				<displayName>الوحدة الحسابية الأوروبية</displayName>
+			</currency>
+			<currency type="XBD">
+				<displayName>XBD</displayName>
+			</currency>
+			<currency type="XCD">
+				<displayName>دولار شرق الكاريبي</displayName>
+			</currency>
+			<currency type="XDR">
+				<displayName>حقوق السحب الخاصة</displayName>
+			</currency>
+			<currency type="XEU">
+				<displayName>وحدة النقد الأوروبية</displayName>
+			</currency>
+			<currency type="XFO">
+				<displayName>فرنك فرنسي ذهبي</displayName>
+			</currency>
+			<currency type="XFU">
+				<displayName>XFU</displayName>
+			</currency>
+			<currency type="XPT">
+				<displayName>البلاتين</displayName>
+			</currency>
+			<currency type="XTS">
+				<displayName>كود اختبار العملة</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>بدون عملة</displayName>
+				<symbol>***</symbol>
+			</currency>
+			<currency type="YDD">
+				<displayName>دينار يمني</displayName>
+			</currency>
+			<currency type="YER">
+				<displayName>ريال يمني</displayName>
+				<symbol>ر.ي.‏</symbol>
+			</currency>
+			<currency type="YUD">
+				<displayName>دينار يوغسلافي</displayName>
+			</currency>
+			<currency type="YUN">
+				<displayName>دينار يوغسلافي قابل للتحويل</displayName>
+			</currency>
+			<currency type="ZAL">
+				<displayName>راند جنوب أفريقيا -مالي</displayName>
+			</currency>
+			<currency type="ZAR">
+				<displayName>راند جنوب أفريقيا</displayName>
+			</currency>
+			<currency type="ZMK">
+				<displayName>كواشا زامبي</displayName>
+			</currency>
+			<currency type="ZRN">
+				<displayName>زائير زائيري جديد</displayName>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>زائير زائيري</displayName>
+			</currency>
+			<currency type="ZWD">
+				<displayName>دولار زمبابوي</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unit type="day">
+			<unitPattern count="few">{0} أيام</unitPattern>
+			<unitPattern count="many">{0} يوماً</unitPattern>
+			<unitPattern count="one">يوم</unitPattern>
+			<unitPattern count="other">{0} يوم</unitPattern>
+			<unitPattern count="two">يومان</unitPattern>
+			<unitPattern count="zero">لا أيام</unitPattern>
+		</unit>
+		<unit type="hour">
+			<unitPattern count="few">{0} ساعات</unitPattern>
+			<unitPattern count="many">{0} ساعةً</unitPattern>
+			<unitPattern count="one">ساعة</unitPattern>
+			<unitPattern count="other">{0} ساعة</unitPattern>
+			<unitPattern count="two">ساعتان</unitPattern>
+			<unitPattern count="zero">لا ساعات</unitPattern>
+		</unit>
+		<unit type="minute">
+			<unitPattern count="few">{0} دقائق</unitPattern>
+			<unitPattern count="many">{0} دقيقةً</unitPattern>
+			<unitPattern count="one">دقيقة</unitPattern>
+			<unitPattern count="other">{0} دقيقة</unitPattern>
+			<unitPattern count="two">دقيقتان</unitPattern>
+			<unitPattern count="zero">لا دقائق</unitPattern>
+		</unit>
+		<unit type="month">
+			<unitPattern count="few">{0} أشهر</unitPattern>
+			<unitPattern count="many">{0} شهراً</unitPattern>
+			<unitPattern count="one">شهر</unitPattern>
+			<unitPattern count="other">{0} شهر</unitPattern>
+			<unitPattern count="two">شهران</unitPattern>
+			<unitPattern count="zero">لا أشهر</unitPattern>
+		</unit>
+		<unit type="second">
+			<unitPattern count="few">{0} ثوان</unitPattern>
+			<unitPattern count="many">{0} ثانيةً</unitPattern>
+			<unitPattern count="one">ثانية</unitPattern>
+			<unitPattern count="other">{0} ثانية</unitPattern>
+			<unitPattern count="two">ثانيتان</unitPattern>
+			<unitPattern count="zero">لا ثوان</unitPattern>
+		</unit>
+		<unit type="week">
+			<unitPattern count="few">{0} أسابيع</unitPattern>
+			<unitPattern count="many">{0} أسبوعاً</unitPattern>
+			<unitPattern count="one">أسبوع</unitPattern>
+			<unitPattern count="other">{0} أسبوع</unitPattern>
+			<unitPattern count="two">أسبوعان</unitPattern>
+			<unitPattern count="zero">لا أسابيع</unitPattern>
+		</unit>
+		<unit type="year">
+			<unitPattern count="few">{0} سنوات</unitPattern>
+			<unitPattern count="many">{0} سنةً</unitPattern>
+			<unitPattern count="one">سنة</unitPattern>
+			<unitPattern count="other">{0} سنة</unitPattern>
+			<unitPattern count="two">سنتان</unitPattern>
+			<unitPattern count="zero">لا سنوات</unitPattern>
+		</unit>
+	</units>
+	<posix>
+		<messages>
+			<yesstr>نعم:ن</yesstr>
+			<nostr>لا:ل</nostr>
+		</messages>
+	</posix>
+</ldml>
+

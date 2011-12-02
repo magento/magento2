@@ -1,0 +1,111 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+    $deviceType = Mage::helper('Mage_XmlConnect_Helper_Data')->getDeviceType();
+?>
+<div id="XmlconnectThemePreview"></div>
+
+<div class="mm-box-blue a-center" style="width:285px;">
+    <button type="button" class="scalable" onclick="updatePreview()"><span><?php echo $this->__('Update Preview');?></span></button>
+    <p><br />To preview the newly uploaded images, please save your application first.</p>
+</div>
+<div class="mm-pager">
+    <strong><?php echo $this->__('Screens:'); ?></strong>
+    <ul id="mmPager">
+        <li><a class="active" href="<?php echo $this->getPreviewActionUrl('home'); ?>" onclick="mmPreviewPage = this.href; updatePreview();return false;">1</a></li>
+        <li><a href="<?php echo $this->getPreviewActionUrl('catalog'); ?>" onclick="mmPreviewPage = this.href; updatePreview();return false;">2</a></li>
+    </ul>
+</div>
+<script type="text/javascript">
+previewIframe = $('XmlconnectThemePreview');
+// submit application flag
+mmPreviewPagePrefix = '';
+mmPreviewPage = '<?php echo $this->getPreviewActionUrl('home'); ?>';
+function updatePreview(someAction) {
+    previewIframe.update('<?php echo $this->__('Loading Preview...'); ?>').addClassName('preview-loading');
+    new Ajax.Request(mmPreviewPage + (someAction ? someAction : '') + mmPreviewPagePrefix, {
+        parameters: $('edit_form').serialize(true),
+        onSuccess : function(transport) {
+            try{
+                if (transport.responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON()
+                    if (response.error) {
+                        alert(response.message);
+                    }
+                    if(response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    previewIframe.removeClassName('preview-loading').update(transport.responseText);
+                }
+            } catch (e) {
+                alert(transport.responseText);
+            }
+
+            if (!response.success) {
+                var msg = response.error_message;
+                if (msg) {
+                    alert(msg);
+                }
+            }
+        }
+    });
+}
+function resetPager() {
+    $('mmPager').childElements().each(function(t){
+        t.down('a').removeClassName('active');
+    });
+}
+
+document.observe("dom:loaded", function() {
+    $('mmPager').childElements().each(function(t){
+        Event.observe(t.down('a'), 'click', function(e){
+            e.stop();
+            resetPager();
+            t.down('a').addClassName('active');
+            mmPreviewPage = t.down('a').href;
+        });
+    });
+});
+
+tabsDesignSectionPreviewClicked = false;
+Event.observe(document, 'dom:loaded', function() {
+    if ($("mobile_app_tabs_design_section")) {
+        $("mobile_app_tabs_design_section").observe('click', function() {
+            if (!tabsDesignSectionPreviewClicked) {
+                setTimeout("updatePreview()", 200);
+                tabsDesignSectionPreviewClicked = true;
+            }
+        });
+    } else {
+        // 1 is correct value - tells that you don't need to load app data
+        mmPreviewPagePrefix = 'submission_action/1/';
+        updatePreview();
+    }
+});
+
+</script>

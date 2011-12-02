@@ -1,0 +1,232 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $previewModel Mage_XmlConnect_Model_Preview_Iphone */
+$previewModel = Mage::helper('Mage_XmlConnect_Helper_Data')->getPreviewModel();
+
+$title1size = $previewModel->getConfigFontInfo('Title1/size');
+$title1name = $previewModel->getConfigFontInfo('Title1/name');
+$title1color = $previewModel->getConfigFontInfo('Title1/color');
+
+$title2name = $previewModel->getConfigFontInfo('Title2/name');
+$title2size = $previewModel->getConfigFontInfo('Title2/size');
+$title2color = $previewModel->getConfigFontInfo('Title2/color');
+
+$title3size = $previewModel->getConfigFontInfo('Title3/size');
+$title3name = $previewModel->getConfigFontInfo('Title3/name');
+$title3color = $previewModel->getConfigFontInfo('Title3/color');
+
+$title5name = $previewModel->getConfigFontInfo('Title5/name');
+$title5size = $previewModel->getConfigFontInfo('Title5/size');
+$title5color = $previewModel->getConfigFontInfo('Title5/color');
+
+$title8name = $previewModel->getConfigFontInfo('Title8/name');
+$title8size = $previewModel->getConfigFontInfo('Title8/size');
+$title8color = $previewModel->getConfigFontInfo('Title8/color');
+
+$text2name = $previewModel->getConfigFontInfo('Text2/name');
+$text2size = $previewModel->getConfigFontInfo('Text2/size');
+$text2color = $previewModel->getConfigFontInfo('Text2/color');
+
+$naviBarTintColor = $previewModel->getData('conf/navigationBar/tintColor');
+$primaryColor = $previewModel->getData('conf/body/primaryColor');
+$secondaryColor = $previewModel->getData('conf/body/secondaryColor');
+
+$activeStartImage = $previewModel->getPreviewImagesUrl('star-active.png');
+$inactiveStartImage = $previewModel->getPreviewImagesUrl('star-inactive.png');
+$productImage = $previewModel->getPreviewImagesUrl('t-shirt.png');
+?>
+<div class="iphone-catalog">
+    <div class="main-frame">
+        <div class="main-block" style="background: #000;">
+            <div class="top-header" style="background: #000;">
+                <div class="volume" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('1.gif'); ?>') bottom left no-repeat;"></div>
+                <div class="header-sign-1"><?php echo $this->__("Carrier"); ?></div>
+                <div class="antenna" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('3.gif'); ?>') bottom right no-repeat;"></div>
+                <div class="time"><?php if($previewModel->getData('conf/Time')): ?><?php echo $previewModel->getData('conf/Time'); ?><?php else: ?><?php echo $this->__("10:40 AM"); ?><?php endif; ?></div>
+                <div class="battery" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('2.gif'); ?>') bottom right no-repeat;"></div>
+            </div>
+            <div class="main-header"  style="background:<?php echo $naviBarTintColor; ?>;color:#f3f3f3;">
+                <div class="gradient">
+                    <table class="header-buttons">
+                        <tr>
+                            <td class="info">
+                                <div class="login-btn back-button">
+                                    <div class="login-left-alt"></div>
+                                    <div class="login-body"><span><?php echo $this->__('Back'); ?></span></div>
+                                    <div class="login-right"></div>
+                                </div>
+                            </td>
+                            <td class="logo-small"><div>
+                                <img src="<?php echo $previewModel->getLogoUrl(); ?>"/>
+                                <span class="sh-title">
+                                    <span class="sh-title1" style="font:bold <?php echo $title1size; ?>px <?php echo $title1name; ?>;">
+                                        <span class="sh-title2" style="color: <?php echo $title1color; ?>;"><?php echo $this->__("T-Shirts"); ?></span>
+                                <?php echo $this->__("T-Shirts"); ?>
+                            </span>
+                        </span>
+                            </div></td>
+                            <td class="info"><div class="login-btn edit-filter">
+
+        <!--                    <td class="login-btn edit-filter">-->
+                    <div class="login-left"></div>
+                    <div class="login-body"><span><?php echo $this->__('Edit Filter'); ?></span></div>
+                    <div class="login-right"></div>
+                            </div></td>
+                            <td class="info"><div class="login-btn edit-filter">
+                                <div class="login-left"></div>
+                                <div class="login-body"><span><?php echo $this->__('Edit Filter'); ?></span></div>
+                                <div class="login-right"></div>
+                            </div></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="filter-header" style="background:<?php echo $naviBarTintColor; ?>;">
+                <div class="gradient"></div>
+                <div style="background: url('<?php echo $previewModel->getData('conf/appliedFilters/backgroundImage'); ?>') center center no-repeat; width: 320px;height: 100%;">
+                    <div class="filter-lines">&nbsp;</div>
+                    <div class="filter-applied">
+                        <span class="filter-circle">3</span>
+                        <span class="filter-text"><?php echo $this->__('FILTERS APPLIED'); ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="sort-block" style="background:<?php echo $primaryColor; ?>;">
+                <div class="sort-block-inner">
+                    <div class="sort-block-inner-txt" style="font:bold <?php echo $title3size; ?>px <?php echo $title3name; ?>; color: <?php echo $title3color; ?>;"><?php echo $this->__('SORT BY:'); ?></div>
+                    <div class="buttons-holder">
+                        <span class="button button-pos" style="background-color:<?php echo $secondaryColor; ?>">Position<img src="<?php echo $previewModel->getPreviewImagesUrl('sort_buttons/button_up.gif');?>" alt="" /></span>
+                        <span class="button button-name">Name</span>
+                        <span class="button button-price">Price</span>
+                    </div>
+                </div>
+            </div>
+            <div class="items-list" style="background: <?php echo $previewModel->getData('conf/body/backgroundColor'); ?>">
+                <div class="item" style="background:<?php echo $primaryColor; ?>;">
+                    <div class="gradient"></div>
+                    <div class="item-image"><img width="72" height="72" src="<?php echo $productImage; ?>"/></div>
+                    <div class="item-info">
+                        <div class="item-title" style="font: bold <?php echo $title2size; ?>px <?php echo $title2name; ?>; color: <?php echo $title2color; ?>;"><?php echo $this->__('Product Name3 1'); ?></div>
+                        <div class="item-price-block">
+                            <span class="item-price" style="font: bold <?php echo $title5size; ?>px <?php echo $title5name; ?>; color: <?php echo $title5color; ?>;">$39.99</span>
+                        </div>
+                        <div class="item-rate">
+                            <span class="stars" style="color:<?php echo $secondaryColor; ?>;">
+                                <span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">c</span>
+                            </span>
+                            <strong style="color:<?php echo $text2color; ?>;">(2)</strong>
+                        </div>
+                        <div class="availability">
+                            <span class="item-status" style="font: bold <?php echo  $text2size; ?>px <?php echo $text2name; ?>; color: <?php echo $text2color; ?>;">In Stock</span>
+                        </div>
+                    </div>
+                    <div class="arrow">&nbsp;</div>
+                </div>
+                <div class="item" style="background:<?php echo $primaryColor; ?>;">
+                    <div class="gradient"></div>
+                    <div class="item-image"><img width="72" height="72" src="<?php echo $productImage; ?>"/></div>
+                    <div class="item-info">
+                        <div class="item-title" style="font: bold <?php echo $title2size; ?>px <?php echo $title2name; ?>; color: <?php echo $title2color; ?>;"><?php echo $this->__('Product Name3 2'); ?></div>
+                        <div class="item-price-block">
+                            <span class="item-price" style="font: bold <?php echo $title5size; ?>px <?php echo $title5name; ?>; color: <?php echo $title5color; ?>;">$39.99</span>
+                        </div>
+                        <div class="item-rate">
+                            <span class="stars" style="color:<?php echo $secondaryColor; ?>;">
+                                <span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">c</span>
+                            </span>
+                            <strong style="color:<?php echo $text2color; ?>;">(2)</strong>
+                        </div>
+                        <div class="availability">
+                            <span class="item-status" style="font: bold <?php echo  $text2size; ?>px <?php echo $text2name; ?>; color: <?php echo $text2color; ?>;"><?php echo $this->__('In Stock'); ?></span>
+                        </div>
+                    </div>
+                    <div class="arrow">&nbsp;</div>
+                </div>
+                <div class="slider" style="border-top:1px solid #666; border-bottom:1px solid #777; display: table; width: 320px; height: 91px; background-color:<?php echo $previewModel->getData('conf/body/secondaryColor'); ?>;">
+                    <div class="slider-item">
+                        <img src="<?php echo $previewModel->getPreviewImagesUrl('slider/viewGallery.png'); ?>" class="slider-image"/>
+                        <div class="slider-item-text" style="font: bold <?php echo $title8size; ?>px <?php echo $title8name; ?>; color: <?php echo $title8color; ?>;" class="slider-item-text" >
+                            <?php echo $this->__('View Gallery'); ?>
+                        </div>
+                    </div>
+                    <div class="slider-item">
+                        <img src="<?php echo $previewModel->getPreviewImagesUrl('slider/tellAFriend.png'); ?>" class="slider-image"/>
+                        <div class="slider-item-text" style="font: bold <?php echo $title8size; ?>px <?php echo $title8name; ?>; color: <?php echo $title8color; ?>;" class="slider-item-text" >
+                            <?php echo $this->__('Tell a Friend'); ?>
+                        </div>
+                    </div>
+                    <div class="slider-item">
+                        <img src="<?php echo $previewModel->getPreviewImagesUrl('slider/addToWishlist.png'); ?>" class="slider-image"/>
+                        <div class="slider-item-text" style="font: bold <?php echo $title8size; ?>px <?php echo $title8name; ?>; color: <?php echo $title8color; ?>;" class="slider-item-text" >
+                            <?php echo $this->__('Add to Wishlist'); ?>
+                        </div>
+                    </div>
+                    <div class="slider-item">
+                        <img src="<?php echo $previewModel->getPreviewImagesUrl('slider/addToCart.png'); ?>" class="slider-image"/>
+                        <div class="slider-item-text" style="font: bold <?php echo $title8size; ?>px <?php echo $title8name; ?>; color: <?php echo $title8color; ?>;" class="slider-item-text" >
+                            <?php echo $this->__('Add to Cart'); ?>
+                        </div>
+                    </div>
+                    <div class="slider-item">
+                        <img src="<?php echo $previewModel->getPreviewImagesUrl('slider/viewDetails.png'); ?>" class="slider-image"/>
+                        <div class="slider-item-text" style="font: bold <?php echo $title8size; ?>px <?php echo $title8name; ?>; color: <?php echo $title8color; ?>;" class="slider-item-text" >
+                            <?php echo $this->__('View Details'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <div class="item" style="background: <?php echo $primaryColor; ?>">
+                    <div class="gradient"></div>
+                    <div class="item-image"><img width="72" height="72" src="<?php echo $productImage; ?>"  /></div>
+                    <div class="item-info">
+                        <div class="item-title" style="font: bold <?php echo $title2size; ?>px <?php echo $title2name; ?>; color: <?php echo $title2color; ?>;"><?php echo $this->__('Product Name3 '); ?></div>
+                        <div class="item-price-block">
+                            <span class="item-price" style="font: bold <?php echo $title5size; ?>px <?php echo $title5name; ?>; color: <?php echo $title5color; ?>;">$39.99</span>
+                        </div>
+                        <div class="item-rate">
+                            <span class="stars" style="color:<?php echo $secondaryColor; ?>;">
+                                <span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">f</span><span class="star">c</span>
+                            </span>
+                            <strong style="color:<?php echo $text2color; ?>;">(4)</strong>
+                        </div>
+                        <div class="availability">
+                            <span class="item-status" style="font: bold <?php echo  $text2size; ?>px <?php echo $text2name; ?>; color: <?php echo $text2color; ?>;"><?php echo $this->__('In Stock'); ?></span>
+                        </div>
+                    </div>
+                    <div class="arrow">&nbsp;</div>
+                </div>
+            </div>
+          <?php echo $this->getChildHtml('tab_items'); ?>
+        </div>
+    </div>
+</div>
+<?php if ($this->getJsErrorMessage()) : ?>
+<script type="text/javascript">
+    alert('<?php echo $this->getJsErrorMessage(); ?>');
+</script>
+<?php endif; ?>

@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Mage_Adminhtml_Block_Notification_Survey
+ */
+?>
+<?php if ($this->canShow()): ?>
+    <script type="text/javascript">
+        function surveyAction(decision) {
+            if (decision == 'yes') {
+                var win = window.open('<?php echo $this->getSurveyUrl() ?>', '', 
+                    'width=900,height=600,resizable=1,scrollbars=1');
+                win.focus();
+            }
+            new Ajax.Request('<?php echo $this->getUrl('*/survey/index', array('_current' => true)); ?>', {
+                method: 'post',
+                params: {decision:decision},
+                onComplete: function(transport) {
+                    if (200 == transport.status) {
+                        if ($('survey_notification'))
+                            $('survey_notification').remove();
+                    }
+                }
+            });
+        }
+    </script>
+    <div id="survey_notification" class="notification-global notification-global-notice">
+        <?php echo $this->helper('Mage_Adminhtml_Helper_Data')->__('We appreciate our merchants\' feedback, please <a href="#" onclick="surveyAction(\'yes\'); return false;">take our survey</a> to provide insight on the features you would like included in Magento. <a href="#" onclick="surveyAction(\'no\'); return false;">Remove this notification</a>') ?>
+        
+    </div>
+<?php endif; ?>

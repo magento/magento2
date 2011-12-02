@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <global>
+        <install>
+            <date/>
+        </install>
+        <resources>
+            <default_setup>
+                <connection>
+                    <host>localhost</host>
+                    <username/>
+                    <password/>
+                    <dbname>magento</dbname>
+                    <model>mysql4</model>
+                    <initStatements>SET NAMES utf8</initStatements>
+                    <type>pdo_mysql</type>
+                    <active>0</active>
+                </connection>
+            </default_setup>
+            <default_write>
+                <connection>
+                    <use>default_setup</use>
+                </connection>
+            </default_write>
+            <default_read>
+                <connection>
+                    <use>default_setup</use>
+                </connection>
+            </default_read>
+            <core_setup>
+                <setup>
+                    <module>Mage_Core</module>
+                </setup>
+                <connection>
+                    <use>default_setup</use>
+                </connection>
+            </core_setup>
+            <core_write>
+                <connection>
+                    <use>default_write</use>
+                </connection>
+            </core_write>
+            <core_read>
+                <connection>
+                    <use>default_read</use>
+                </connection>
+            </core_read>
+        </resources>
+        <resource>
+            <connection>
+                <types>
+                    <pdo_mysql>
+                        <adapter>Varien_Db_Adapter_Pdo_Mysql</adapter>
+                        <class>Mage_Core_Model_Resource_Type_Db_Pdo_Mysql</class>
+                        <compatibleMode>1</compatibleMode>
+                    </pdo_mysql>
+                </types>
+            </connection>
+        </resource>
+    </global>
+    <default>
+        <system>
+            <filesystem>
+                <base>{{root_dir}}</base>
+                <app>{{root_dir}}/app</app>
+                <code>{{app_dir}}/code</code>
+                <design>{{app_dir}}/design</design>
+                <locale>{{app_dir}}/locale</locale>
+                <etc>{{app_dir}}/etc</etc>
+                <media>{{root_dir}}/pub/media</media>
+                <upload>{{root_dir}}/pub/media/upload</upload>
+                <var>{{var_dir}}</var>
+                <cache>{{var_dir}}/cache</cache>
+                <session>{{var_dir}}/session</session>
+                <tmp>{{var_dir}}/tmp</tmp>
+                <pear>{{var_dir}}/pear</pear>
+                <export>{{var_dir}}/export</export>
+            </filesystem>
+        </system>
+        <general>
+            <locale>
+                <code>en_US</code>
+                <timezone>America/Los_Angeles</timezone>
+            </locale>
+        </general>
+    </default>
+    <varien>
+        <class>Varien</class>
+    </varien>
+</config>

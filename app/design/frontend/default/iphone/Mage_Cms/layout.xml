@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout version="0.1.0">
+<!--
+Default layout, loads most of the pages
+-->
+
+    <default>
+        <reference name="footer">
+            <block type="Mage_Cms_Block_Block" name="cms_footer_links" before="footer_links">
+                <!--
+                    The content of this block is taken from the database by its block_id.
+                    You can manage it in admin CMS -> Static Blocks
+                -->
+                <action method="setBlockId"><block_id>footer_links</block_id></action>
+            </block>
+        </reference>
+    </default>
+
+    <cms_page translate="label">
+        <label>CMS Pages (All)</label>
+        <reference name="content">
+            <block type="Mage_Core_Block_Template" name="page_content_heading" template="Mage_Cms::content_heading.phtml"/>
+            <block type="Mage_Catalog_Block_Navigation" name="hp_nav" template="navigation/top.phtml" />
+            <block type="Mage_Page_Block_Html_Wrapper" name="cms.wrapper" translate="label">
+                <label>CMS Content Wrapper</label>
+                <action method="setElementClass"><value>std</value></action>
+                <block type="Mage_Cms_Block_Page" name="cms_page"/>
+            </block>
+        </reference>
+    </cms_page>
+
+    <cms_index_index translate="label">
+        <label>CMS Home Page</label>
+        <reference name="content">
+            <block type="Mage_Catalog_Block_Navigation" name="hp_nav" template="navigation/top.phtml" />
+        </reference>
+        <remove name="cms.wrapper"/>
+    </cms_index_index>
+
+    <cms_index_defaultindex>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Catalog_Block_Navigation" name="hp_nav" template="navigation/top.phtml" />
+            <block type="Mage_Core_Block_Template" name="default_home_page" template="Mage_Cms::default/home.phtml"/>
+        </reference>
+    </cms_index_defaultindex>
+
+    <cms_index_noroute translate="label">
+        <label>CMS No-Route Page</label>
+    </cms_index_noroute>
+
+    <cms_index_defaultnoroute>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Catalog_Block_Navigation" name="hp_nav" template="navigation/top.phtml" />
+            <block type="Mage_Core_Block_Template" name="default_no_route" template="Mage_Cms::default/no-route.phtml"/>
+        </reference>
+    </cms_index_defaultnoroute>
+
+</layout>

@@ -1,0 +1,205 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<style type="text/css" >
+    ul { list-style-type:none; padding:0; margin:0; }
+    li { margin-left:0; border:1px solid #ccc; margin:2px; padding:2px 2px 2px 2px; font:normal 12px sans-serif; }
+    img { margin-right:5px; }
+</style>
+<script type="text/javascript">
+    var FORM_KEY = "<?php echo $this->getFormKey();?>";
+</script>
+    <ul>
+        <li>
+        <?php if ($this->getProfile()->getId()):?>
+            <img src="<?php echo $this->getSkinUrl('images/note_msg_icon.gif')?>" class="v-middle" style="margin-right:5px"/>
+            <?php echo $this->__("Starting profile execution, please wait...");?>
+            </li>
+            <li style="background-color:#FFD;">
+            <img src="<?php echo $this->getSkinUrl('images/fam_bullet_error.gif');?>" class="v-middle" style="margin-right:5px"/>
+            <?php echo $this->__("Warning: Please do not close the window during importing/exporting data");?>
+        <?php else:?>
+            <img src="<?php echo $this->getSkinUrl('images/error_msg_icon.gif');?>" class="v-middle" style="margin-right:5px"/>
+            <?php echo $this->__("No profile loaded...");?>
+        <?php endif;?>
+        </li>
+    </ul>
+
+    <?php if ($this->getProfile()->getId()):?>
+    <ul id="profileRows">
+        <?php foreach ($this->getExceptions() as $exceptionInfo):?>
+            <li style="<?php echo $exceptionInfo['style'];?>">
+                <img src="<?php echo $exceptionInfo['src'];?>" class="v-middle"/>
+                <?php echo $exceptionInfo['message'];?>
+                <?php if ($exceptionInfo['position']):?>
+                    <small>(<?php echo $exceptionInfo['position'];?>)</small>
+                <?php endif;?>
+            </li>
+        <?php endforeach;?>
+        <?php if($this->getProfile()->getEntityType() == 'product' && $this->getProfile()->getDirection() == 'import'):?>
+            <li id="liBeforeFinish" style="background-color:#FFD; display:none;">
+                <img src="<?php echo $this->getSkinUrl('images/fam_bullet_error.gif');?>" class="v-middle" style="margin-right:5px"/>
+                <?php echo $this->__("Please wait while the indexes are being refreshed.");?>
+                <img id="before-finish-wait-img" src="<?php echo $this->getSkinUrl('images/rule-ajax-loader.gif');?>" class="v-middle" style="margin-right:5px"/>
+            </li>
+        <?php endif;?>
+            <li id="liFinished" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/note_msg_icon.gif');?>" class="v-middle" style="margin-right:5px"/>
+            <?php echo $this->__("Finished profile execution.");?>
+            </li>
+            </ul>
+            <?php if ($batchId = $this->getBatchModel()->getId()):?>
+                <?php if ($this->getBatchModelHasAdapter()):?>
+                <script type="text/javascript">
+                    var countOfStartedProfiles = 0;
+                    var countOfUpdated = 0;
+                    var countOfError = 0;
+                    var importData = [];
+                    var totalRecords = <?php echo $this->getBatchItemsCount();?>;
+                    var config= <?php echo $this->getBatchConfigJson();?>;
+                </script>
+                <script type="text/javascript">
+                    function addImportData(data) {
+                        importData.push(data);
+                    }
+
+                    function execImportData() {
+                        if (importData.length == 0) {
+                            $("updatedRows_img").src = config.styles.message.icon;
+                            $("updatedRows").style.backgroundColor = config.styles.message.bg;
+                            Element.insert($("liFinished"), {before: config.tpl.evaluate({
+                                style: "background-color:"+config.styles.message.bg,
+                                image: config.styles.message.icon,
+                                text: config.tplSccTxt.evaluate({updated:(countOfUpdated-countOfError)}),
+                                id: "updatedFinish"
+                            })});
+
+                            if ($("liBeforeFinish")) {
+                                Element.insert($("liFinished"), {before: $("liBeforeFinish")});
+                                $("liBeforeFinish").show();
+                            }
+
+                            new Ajax.Request("<?php echo $this->getUrl('*/*/batchFinish', array('id' => $batchId));?>", {
+                                method: "post",
+                                parameters: {form_key: FORM_KEY},
+                                onComplete: function(transport) {
+                                    if (transport.responseText.isJSON()) {
+                                        var response = transport.responseText.evalJSON();
+                                        if (response.error) {
+                                            Element.insert($("liFinished"), {before: config.tpl.evaluate({
+                                                style: "background-color:"+config.styles.error.bg,
+                                                image: config.styles.error.icon,
+                                                text: response.error.escapeHTML(),
+                                                id: "error-finish"
+                                            })});
+                                        }
+                                    }
+
+                                    if ($("before-finish-wait-img")) {
+                                        $("before-finish-wait-img").hide();
+                                    }
+
+                                    $('liFinished').show();
+                                }
+                            });
+                        } else {
+                            sendImportData(importData.shift());
+                        }
+                    }
+
+                    function sendImportData(data) {
+                        if (!config.tpl) {
+                            config.tpl = new Template(config.template);
+                            config.tplTxt = new Template(config.text);
+                            config.tplSccTxt = new Template(config.successText);
+                        }
+                        if (!$("updatedRows")) {
+                            Element.insert($("liFinished"), {before: config.tpl.evaluate({
+                                style: "background-color: #FFD;",
+                                image: config.styles.loader,
+                                text: config.tplTxt.evaluate({updated:countOfUpdated, percent:getPercent()}),
+                                id: "updatedRows"
+                            })});
+                        }
+                        countOfStartedProfiles++;
+                        if (!data.form_key) {
+                            data.form_key = FORM_KEY;
+                        }
+
+                        new Ajax.Request("<?php echo $this->getUrl('*/*/batchRun');?>", {
+                          method: "post",
+                          parameters: data,
+                          onSuccess: function(transport) {
+                            countOfStartedProfiles --;
+                            countOfUpdated += data["rows[]"].length;
+                            if (transport.responseText.isJSON()) {
+                                addProfileRow(transport.responseText.evalJSON());
+                            } else {
+                                Element.insert($("updatedRows"), {before: config.tpl.evaluate({
+                                    style: "background-color:"+config.styles.error.bg,
+                                    image: config.styles.error.icon,
+                                    text: transport.responseText.escapeHTML(),
+                                    id: "error-" + countOfStartedProfiles
+                                })});
+                                countOfError += data["rows[]"].length;
+                            }
+                            execImportData();
+                          }
+                        });
+                    }
+
+                    function getPercent() {
+                        return Math.ceil((countOfUpdated/totalRecords)*1000)/10;
+                    }
+
+                    function addProfileRow(data) {
+                        if (data.errors.length > 0) {
+                            for (var i=0, length=data.errors.length; i<length; i++) {
+                                Element.insert($("updatedRows"), {before: config.tpl.evaluate({
+                                    style: "background-color:"+config.styles.error.bg,
+                                    image: config.styles.error.icon,
+                                    text: data.errors[i],
+                                    id: "id-" + (countOfUpdated + i + 1)
+                                })});
+                                countOfError ++;
+                            }
+                        }
+                        $("updatedRows_status").update(config.tplTxt.evaluate({updated:countOfUpdated, percent:getPercent()}));
+                    }
+                </script>
+                <?php $importData = $this->getImportData();?>
+                <script type="text/javascript">
+                    <?php foreach ($importData as  $importValue):?>
+                    addImportData(<?php echo $this->jsonEncode($importValue);?>);
+                    <?php endforeach;?>
+                    execImportData();
+                </script>
+                <?php endif;?>
+            <?php endif;?>
+            <?php if ($this->getShowFinished()):?>
+                <script type="text/javascript">$('liFinished').show();</script>
+            <?php endif;?>
+   <?php endif;?>

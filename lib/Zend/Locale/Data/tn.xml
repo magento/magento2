@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.31 $"/>
+		<generation date="$Date: 2009/05/05 23:06:41 $"/>
+		<language type="tn"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">Seburu</language>
+			<language type="am">Amhariki</language>
+			<language type="ar">Arabic</language>
+			<language type="az">Azerbaijani</language>
+			<language type="be">Belarusian</language>
+			<language type="bg">Bulgarian</language>
+			<language type="bh">Bihari</language>
+			<language type="bn">Bengali</language>
+			<language type="bs">SeBosnia</language>
+			<language type="ca">Catalan</language>
+			<language type="cs">Se Czeck</language>
+			<language type="cy">Welsh</language>
+			<language type="da">Danish</language>
+			<language type="de">German</language>
+			<language type="el">SeGerika</language>
+			<language type="en">Sekgoa</language>
+			<language type="eo">Esperanto</language>
+			<language type="es">Spanish</language>
+			<language type="et">Estonian</language>
+			<language type="eu">Basque</language>
+			<language type="fa">Mo/SePerishia</language>
+			<language type="fi">Se-Finland</language>
+			<language type="fil">Tagalog</language>
+			<language type="fo">Faroese</language>
+			<language type="fr">Se Fora</language>
+			<language type="fy">Frisian</language>
+			<language type="ga">Irish</language>
+			<language type="gd">Scots Gaelic</language>
+			<language type="gl">Galician</language>
+			<language type="gu">Gujarati</language>
+			<language type="he">Se heberu</language>
+			<language type="hi">Hindi</language>
+			<language type="hr">Croatian</language>
+			<language type="hu">Hungarian</language>
+			<language type="ia">Interlingua</language>
+			<language type="id">Indonesian</language>
+			<language type="is">Icelandic</language>
+			<language type="it">Se Italiano</language>
+			<language type="ja">Se Japan</language>
+			<language type="jv">Javanese</language>
+			<language type="ka">Mo/SeJojia</language>
+			<language type="kn">Kannada</language>
+			<language type="ko">Se Korea</language>
+			<language type="la">Latin</language>
+			<language type="lt">Lithuanian</language>
+			<language type="lv">Latvian</language>
+			<language type="mk">Macedonian</language>
+			<language type="ml">Malayalam</language>
+			<language type="mr">Marathi</language>
+			<language type="ms">Malay</language>
+			<language type="mt">Maltese</language>
+			<language type="ne">Nepali</language>
+			<language type="nl">Se Dutch</language>
+			<language type="no">Puo ya kwa Norway</language>
+			<language type="oc">Occitan</language>
+			<language type="pa">Punjabi</language>
+			<language type="pl">Se Poland</language>
+			<language type="pt">Se Potoketsi</language>
+			<language type="ro">Se Roma</language>
+			<language type="ru">Russian</language>
+			<language type="sk">Slovak</language>
+			<language type="sl">Slovenian</language>
+			<language type="sq">Albanian</language>
+			<language type="sr">Serbian</language>
+			<language type="su">Mo/SeSundane</language>
+			<language type="sv">Swedish</language>
+			<language type="sw">Swahili</language>
+			<language type="ta">Tamil</language>
+			<language type="te">Telugu</language>
+			<language type="th">Thai</language>
+			<language type="ti">Tigrinya</language>
+			<language type="tlh">Klingon</language>
+			<language type="tn">Setswana</language>
+			<language type="tr">Turkish</language>
+			<language type="uk">Ukrainian</language>
+			<language type="ur">Urdu</language>
+			<language type="uz">Uzbek</language>
+			<language type="vi">Vietnamese</language>
+			<language type="xh">IsiXhosa</language>
+			<language type="zu">IsiZulu</language>
+		</languages>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a b d e ê f-o ô p r-u w y]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[c q v x z]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-z]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>‘</quotationStart>
+		<quotationEnd>’</quotationEnd>
+		<alternateQuotationStart>“</alternateQuotationStart>
+		<alternateQuotationEnd>”</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Fer</month>
+							<month type="2">Tlh</month>
+							<month type="3">Mop</month>
+							<month type="4">Mor</month>
+							<month type="5">Mot</month>
+							<month type="6">See</month>
+							<month type="7">Phu</month>
+							<month type="8">Pha</month>
+							<month type="9">Lwe</month>
+							<month type="10">Dip</month>
+							<month type="11">Ngw</month>
+							<month type="12">Sed</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Ferikgong</month>
+							<month type="2">Tlhakole</month>
+							<month type="3">Mopitlo</month>
+							<month type="4">Moranang</month>
+							<month type="5">Motsheganang</month>
+							<month type="6">Seetebosigo</month>
+							<month type="7">Phukwi</month>
+							<month type="8">Phatwe</month>
+							<month type="9">Lwetse</month>
+							<month type="10">Diphalane</month>
+							<month type="11">Ngwanatsele</month>
+							<month type="12">Sedimonthole</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Tsh</day>
+							<day type="mon">Mos</day>
+							<day type="tue">Bed</day>
+							<day type="wed">Rar</day>
+							<day type="thu">Ne</day>
+							<day type="fri">Tla</day>
+							<day type="sat">Mat</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Tshipi</day>
+							<day type="mon">Mosopulogo</day>
+							<day type="tue">Labobedi</day>
+							<day type="wed">Laboraro</day>
+							<day type="thu">Labone</day>
+							<day type="fri">Labotlhano</day>
+							<day type="sat">Matlhatso</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<era type="0">BC</era>
+						<era type="1">AD</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">BC</era>
+						<era type="1">AD</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, y MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y MMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength>
+				<scientificFormat>
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength>
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+	</numbers>
+</ldml>
+

@@ -1,0 +1,77 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Install localization template
+ *
+ * @see Mage_Install_Block_Locale
+ */
+?>
+<div class="page-head">
+    <h3><?php echo $this->__('Localization') ?></h3>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<form action="<?php echo $this->getPostUrl() ?>" method="get" id="form-validate">
+<fieldset class="group-select">
+ <legend><?php echo $this->__('Locale') ?></legend>
+    <h4 class="legend"><?php echo $this->__('Locale settings') ?></h4>
+    <ul>
+        <li>
+            <div class="input-box">
+                <label for="locale"><?php echo $this->__('Locale') ?> <span class="required">*</span></label><br/>
+                <?php echo $this->getLocaleSelect() ?>
+            </div>
+        </li>
+        <li>
+            <div class="input-box">
+                <label for="timezone"><?php echo $this->__('Time Zone') ?> <span class="required">*</span></label><br/>
+                <?php echo $this->getTimezoneSelect() ?>
+            </div>
+            <div class="input-box">
+                <label for="currency"><?php echo $this->__('Default Currency') ?> <span class="required">*</span></label><br/>
+                <?php echo $this->getCurrencySelect() ?>
+            </div>
+        </li>
+    </ul>
+</fieldset>
+<div class="button-set">
+    <p class="required">* <?php echo $this->__('Required Fields') ?></p>
+    <button class="form-button" type="submit"><span><?php echo $this->__('Continue') ?></span></button>
+</div>
+</form>
+<script type="text/javascript">
+    function changeLocale(event){
+        var elem = Event.element(event);
+        if(elem){
+            setLocation('<?php echo $this->getChangeUrl() ?>locale/'+elem.value+'/?timezone='+$('timezone').value+'&amp;currency='+$('currency').value);
+        }
+    }
+    var dataForm = new VarienForm('form-validate');
+    if($('locale')){
+        Event.observe($('locale'), 'change', changeLocale);
+    }
+</script>

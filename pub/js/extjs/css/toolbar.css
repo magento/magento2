@@ -1,0 +1,173 @@
+/*
+ * Ext JS Library 2.0
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-toolbar{
+	border-top: 1px solid #eaf0f7;
+    border-bottom: 1px solid #a9bfd3;
+    display: block;
+	padding:2px;
+    background:#d0def0 url(../images/default/layout/panel-title-light-bg.gif) repeat-x;
+}
+.x-toolbar .x-item-disabled .x-btn-icon {
+    opacity: .35;
+    -moz-opacity: .35;
+    filter: alpha(opacity=35);
+}
+.x-toolbar td {
+	vertical-align:middle;
+}
+.mso .x-toolbar, .x-grid-mso .x-toolbar{
+	border: 0 none;
+	background: url(../images/default/grid/mso-hd.gif);
+}
+.x-toolbar td,.x-toolbar span,.x-toolbar input,.x-toolbar div,.x-toolbar select,.x-toolbar label{
+	white-space: nowrap;
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+}
+.x-toolbar .x-item-disabled {
+	color:gray;
+	cursor:default;
+	opacity:.6;
+	-moz-opacity:.6;
+	filter:alpha(opacity=60);
+}
+.x-toolbar .x-item-disabled * {
+	color:gray;
+	cursor:default;
+}
+.x-toolbar .x-btn-left{
+	background:none;
+}
+.x-toolbar .x-btn-right{
+	background:none;
+}
+.x-toolbar .x-btn-center{
+	background:none;
+	padding:0 0;
+}
+
+.x-toolbar .x-btn-menu-text-wrap .x-btn-center button{
+	padding-right:2px;
+}
+.ext-gecko .x-toolbar .x-btn-menu-text-wrap .x-btn-center button{
+	padding-right:0;
+}
+.x-toolbar .x-btn-menu-arrow-wrap .x-btn-center button{
+	padding:0 2px;
+}
+.x-toolbar .x-btn-menu-arrow-wrap .x-btn-center button {
+    width:12px;
+    background:transparent url(../images/default/toolbar/btn-arrow.gif) no-repeat 0 3px;
+}
+.x-toolbar .x-btn-text-icon .x-btn-menu-arrow-wrap .x-btn-center button {
+    width:12px;
+    background:transparent url(../images/default/toolbar/btn-arrow.gif) no-repeat 0 3px;
+}
+.x-toolbar .x-btn-over .x-btn-menu-arrow-wrap .x-btn-center button {
+	background-position: 0 -47px;
+}
+.x-toolbar .x-btn-over .x-btn-left{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) no-repeat 0 0;
+}
+.x-toolbar .x-btn-over .x-btn-right{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) no-repeat 0 -21px;
+}
+.x-toolbar .x-btn-over .x-btn-center{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) repeat-x 0 -42px;
+}
+
+.x-toolbar .x-btn-click .x-btn-left, .x-toolbar .x-btn-pressed .x-btn-left, .x-toolbar .x-btn-menu-active .x-btn-left{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) no-repeat 0 -63px;
+}
+.x-toolbar .x-btn-click .x-btn-right, .x-toolbar .x-btn-pressed .x-btn-right, .x-toolbar .x-btn-menu-active .x-btn-right{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px;
+}
+.x-toolbar .x-btn-click .x-btn-center, .x-toolbar .x-btn-pressed .x-btn-center, .x-toolbar .x-btn-menu-active .x-btn-center{
+	background:url(../images/default/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;
+}
+
+.x-toolbar .x-btn-with-menu .x-btn-center em{
+	padding-right:8px;
+}
+
+.x-toolbar .ytb-text{
+   padding:2px;
+}
+.x-toolbar .ytb-sep {
+	background-image: url(../images/default/grid/grid-split.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+	display: block;
+	font-size: 1px;
+	height: 16px;
+	width:4px;
+	overflow: hidden;
+	cursor:default;
+	margin: 0 2px 0;
+	border:0;
+}
+.x-toolbar .ytb-spacer {
+    width:2px;
+}
+.mso .x-toolbar .ytb-sep, .x-grid-mso .x-toolbar .ytb-sep{
+	background-image: url(../images/default/grid/grid-blue-split.gif);
+}
+
+/* IE refuses to respect the negative margins in the toolbar */
+.ext-ie .x-toolbar .x-form-field-wrap {
+	padding-bottom:1px;
+}
+.ext-ie .x-toolbar .x-form-field-wrap .x-form-trigger {
+	top:1px;
+}
+.ext-ie .x-toolbar .x-form-field-wrap .x-form-twin-triggers img {
+	margin-top:1px;
+}
+
+/* Paging Toolbar */
+
+.x-grid-page-number{
+	width:24px;
+	height:14px;
+}
+.x-grid-page-first .x-btn-text{
+	background-image: url(../images/default/grid/page-first.gif);
+}
+.x-grid-loading .x-btn-text{
+	background-image: url(../images/default/grid/done.gif);
+}
+.x-grid-page-last .x-btn-text{
+	background-image: url(../images/default/grid/page-last.gif);
+}
+.x-grid-page-next .x-btn-text{
+	background-image: url(../images/default/grid/page-next.gif);
+}
+.x-grid-page-prev .x-btn-text{
+	background-image: url(../images/default/grid/page-prev.gif);
+}
+.x-item-disabled .x-grid-loading .x-btn-text{
+	background-image: url(../images/default/grid/loading.gif);
+}
+.x-item-disabled .x-grid-page-first .x-btn-text{
+	background-image: url(../images/default/grid/page-first-disabled.gif);
+}
+.x-item-disabled .x-grid-page-last .x-btn-text{
+	background-image: url(../images/default/grid/page-last-disabled.gif);
+}
+.x-item-disabled .x-grid-page-next .x-btn-text{
+	background-image: url(../images/default/grid/page-next-disabled.gif);
+}
+.x-item-disabled .x-grid-page-prev .x-btn-text{
+	background-image: url(../images/default/grid/page-prev-disabled.gif);
+}
+.x-paging-info {
+    position:absolute;
+    top:8px;
+    right: 8px;
+    color:#15428b;
+}

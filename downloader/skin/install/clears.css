@@ -1,0 +1,70 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/****************************************************/
+/****************[ Mage_CSS_B Clears ]***************/
+/****************************************************/
+
+.page-head:after,
+.page-head-alt:after,
+.clear:after,
+.col2-set:after,
+.col3-set:after,
+.col4-set:after,
+.col2-alt-set:after,
+.head:after,
+.inner-head:after,
+.header-top:after,
+.quick-access:after,
+.header-nav:after,
+#nav:after,
+.middle:after,
+.product-essential:after,
+.button-set:after,
+.actions:after,
+.legend:after,
+.form-list li:after,
+.button-container:after,
+.ratings:after,
+.page-head:after,
+.page-head-alt:after,
+.group-select li:after,
+.search-autocomplete li:after,
+.side-col li:after,
+.account-box li:after,
+.address-list li:after,
+.generic-product-list li:after,
+.listing-type-list .listing-item:after,
+.listing-type-list .product-info .product-reviews:after,
+.my-review-detail:after {
+    content:".";
+    display:block;
+    clear:both;
+    height:0;
+    font-size:0;
+    line-height:0em;
+    visibility:hidden;
+    overflow:hidden;
+    }

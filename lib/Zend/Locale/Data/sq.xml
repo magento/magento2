@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.81 $"/>
+		<generation date="$Date: 2009/06/15 03:46:26 $"/>
+		<language type="sq"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">Afrikanisht</language>
+			<language type="am">Amharike</language>
+			<language type="ar">Arabisht</language>
+			<language type="as">Asamezisht</language>
+			<language type="az">Azerbajxhanisht</language>
+			<language type="be">Bjellorusisht</language>
+			<language type="bg">Bullgarisht</language>
+			<language type="bh">Bihari</language>
+			<language type="bn">Bengalisht</language>
+			<language type="br">Breton</language>
+			<language type="bs">Boshnjakisht</language>
+			<language type="ca">Katalonisht</language>
+			<language type="cs">Çekisht</language>
+			<language type="cy">Uellsisht</language>
+			<language type="da">Danisht</language>
+			<language type="de">Gjermanisht</language>
+			<language type="el">Greqisht</language>
+			<language type="en">Anglisht</language>
+			<language type="eo">Esperanto</language>
+			<language type="es">Spanjisht</language>
+			<language type="et">Estonisht</language>
+			<language type="eu">Baskisht</language>
+			<language type="fa">Persisht</language>
+			<language type="fi">Finlandisht</language>
+			<language type="fil">Tagalogisht</language>
+			<language type="fo">Faroisht</language>
+			<language type="fr">Frengjisht</language>
+			<language type="fy">Frizianisht</language>
+			<language type="ga">Irlandisht</language>
+			<language type="gd">Galisht</language>
+			<language type="gl">Galicianisht</language>
+			<language type="gn">Guarani</language>
+			<language type="gu">Guxharati</language>
+			<language type="he">Hebraisht</language>
+			<language type="hi">Hindi</language>
+			<language type="hr">Kroatisht</language>
+			<language type="hu">Hungarisht</language>
+			<language type="hy">Armen</language>
+			<language type="ia">Interlingua</language>
+			<language type="id">Indonezisht</language>
+			<language type="ie">Gjuha nderkombtare</language>
+			<language type="is">Islandisht</language>
+			<language type="it">Italisht</language>
+			<language type="ja">Japanisht</language>
+			<language type="jv">Javanisht</language>
+			<language type="ka">Gjeorgjisht</language>
+			<language type="km">Kamboxhiane</language>
+			<language type="kn">Kanada</language>
+			<language type="ko">Koreançe</language>
+			<language type="ku">Kurd</language>
+			<language type="ky">Kyrgyz</language>
+			<language type="la">Latinisht</language>
+			<language type="ln">Lingala</language>
+			<language type="lo">Laosisht</language>
+			<language type="lt">Lituanisht</language>
+			<language type="lv">Letonisht</language>
+			<language type="mk">Maqedonisht</language>
+			<language type="ml">Malajalam</language>
+			<language type="mn">Mongolisht</language>
+			<language type="mr">Marati</language>
+			<language type="ms">Malajzisht</language>
+			<language type="mt">Maltisht</language>
+			<language type="ne">Nepalisht</language>
+			<language type="nl">Holandisht</language>
+			<language type="nn">Norvegjisht (Nynorsk)</language>
+			<language type="no">Norvegjisht</language>
+			<language type="oc">Oksitanisht</language>
+			<language type="or">Orija</language>
+			<language type="pa">Punxhabi</language>
+			<language type="pl">Polonisht</language>
+			<language type="ps">Pashto</language>
+			<language type="pt">Portugeze</language>
+			<language type="pt_BR">Portugalisht (Brazil)</language>
+			<language type="pt_PT">Portugalisht (Portugali)</language>
+			<language type="ro">Rumanisht</language>
+			<language type="ru">Rusisht</language>
+			<language type="sa">Sanskritisht</language>
+			<language type="sd">Si'ndi</language>
+			<language type="sh">Serbo-Kroatisht</language>
+			<language type="si">Sinhalezisht</language>
+			<language type="sk">Sllovakisht</language>
+			<language type="sl">Sllovenisht</language>
+			<language type="so">Somalisht</language>
+			<language type="sq">shqipe</language>
+			<language type="sr">Serbisht</language>
+			<language type="st">Sesotho</language>
+			<language type="su">Sundanisht</language>
+			<language type="sv">Suedisht</language>
+			<language type="sw">Suahilisht</language>
+			<language type="ta">Tamil</language>
+			<language type="te">Telugu</language>
+			<language type="th">Tajlandisht</language>
+			<language type="ti">Tigrinja</language>
+			<language type="tk">Turk</language>
+			<language type="tlh">Klingon</language>
+			<language type="tr">Turqisht</language>
+			<language type="tw">Twi</language>
+			<language type="ug">Ujgur</language>
+			<language type="uk">Ukrainisht</language>
+			<language type="und">Unknown or Invalid Language</language>
+			<language type="ur">Urdu</language>
+			<language type="uz">Uzbekistanisht</language>
+			<language type="vi">Vietnamisht</language>
+			<language type="xh">Xhosa</language>
+			<language type="yi">Jiden</language>
+			<language type="zh">Kineze</language>
+			<language type="zu">Zulu</language>
+		</languages>
+		<scripts>
+			<script type="Latn">Latine</script>
+			<script type="Zxxx">I pashkruar</script>
+			<script type="Zzzz">Skript i panjohur ose i pavlefshëm</script>
+		</scripts>
+		<territories>
+			<territory type="AD">Andorrë</territory>
+			<territory type="AE">Emiratet Arabe te Bashkuara</territory>
+			<territory type="AF">Afganistan</territory>
+			<territory type="AG">Antigua e Barbuda</territory>
+			<territory type="AL">Shqipëria</territory>
+			<territory type="AM">Armeni</territory>
+			<territory type="AO">Angolë</territory>
+			<territory type="AR">Argjentinë</territory>
+			<territory type="AT">Austri</territory>
+			<territory type="AU">Australi</territory>
+			<territory type="AX">Ishujt Aland</territory>
+			<territory type="AZ">Azerbajxhan</territory>
+			<territory type="BA">Bosnja dhe Hercegovina</territory>
+			<territory type="BE">Belgjikë</territory>
+			<territory type="BG">Bullgari</territory>
+			<territory type="BH">Bahrein</territory>
+			<territory type="BN">Brunej</territory>
+			<territory type="BO">Bolivi</territory>
+			<territory type="BR">Brazili</territory>
+			<territory type="BT">Butan</territory>
+			<territory type="BW">Botsvana</territory>
+			<territory type="BY">Bjellorusi</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CF">Republika Qendrore e Afrikës</territory>
+			<territory type="CG">Kongo</territory>
+			<territory type="CH">Zvicër</territory>
+			<territory type="CI">Bregu i Fildishtë</territory>
+			<territory type="CL">Kili</territory>
+			<territory type="CM">Kamerun</territory>
+			<territory type="CN">Kinë</territory>
+			<territory type="CO">Kolumbi</territory>
+			<territory type="CR">Kosta Rika</territory>
+			<territory type="CS">Serbië en Montenegro</territory>
+			<territory type="CU">Kubë</territory>
+			<territory type="CV">Kap Verde</territory>
+			<territory type="CY">Qipro</territory>
+			<territory type="CZ">Republika e Çekisë</territory>
+			<territory type="DE">Gjermani</territory>
+			<territory type="DJ">Xhibuti</territory>
+			<territory type="DK">Danimarkë</territory>
+			<territory type="DM">Dominikë</territory>
+			<territory type="DO">Republika Dominikanë</territory>
+			<territory type="DZ">Algjeri</territory>
+			<territory type="EC">Ekuator</territory>
+			<territory type="EE">Estoni</territory>
+			<territory type="EG">Egjipt</territory>
+			<territory type="EH">Saharaja Perëndimore</territory>
+			<territory type="ER">Eritre</territory>
+			<territory type="ES">Spanjë</territory>
+			<territory type="ET">Etiopi</territory>
+			<territory type="FI">Finlandë</territory>
+			<territory type="FJ">Fixhi</territory>
+			<territory type="FM">Mikronezi</territory>
+			<territory type="FR">Francë</territory>
+			<territory type="GA">Gjabon</territory>
+			<territory type="GB">Mbretëria e Bashkuar</territory>
+			<territory type="GE">Gjeorgji</territory>
+			<territory type="GH">Ganë</territory>
+			<territory type="GM">Gambi</territory>
+			<territory type="GN">Guine</territory>
+			<territory type="GQ">Guineja Ekuatoriale</territory>
+			<territory type="GR">Greqi</territory>
+			<territory type="GT">Guatemalë</territory>
+			<territory type="GW">Guine Bisau</territory>
+			<territory type="GY">Guajana</territory>
+			<territory type="HR">Kroaci</territory>
+			<territory type="HU">Hungari</territory>
+			<territory type="ID">Indonezi</territory>
+			<territory type="IE">Irlandë</territory>
+			<territory type="IL">Izrael</territory>
+			<territory type="IN">Indi</territory>
+			<territory type="IQ">Irak</territory>
+			<territory type="IS">Islandë</territory>
+			<territory type="IT">Itali</territory>
+			<territory type="JM">Xhamajkë</territory>
+			<territory type="JO">Jordani</territory>
+			<territory type="JP">Japoni</territory>
+			<territory type="KE">Kenia</territory>
+			<territory type="KG">Kirgistan</territory>
+			<territory type="KH">Kamboxhi</territory>
+			<territory type="KI">Qiribati</territory>
+			<territory type="KM">Komore</territory>
+			<territory type="KN">Saint Kitts e Nevis</territory>
+			<territory type="KP">Koreja e Veriut</territory>
+			<territory type="KR">Koreja e Jugut</territory>
+			<territory type="KW">Kuvajt</territory>
+			<territory type="KZ">Kazakistan</territory>
+			<territory type="LB">Liban</territory>
+			<territory type="LI">Lihtënshtajn</territory>
+			<territory type="LR">Liberi</territory>
+			<territory type="LS">Lesoto</territory>
+			<territory type="LT">Lituani</territory>
+			<territory type="LU">Luksemburg</territory>
+			<territory type="LV">Letoni</territory>
+			<territory type="LY">Libi</territory>
+			<territory type="MA">Maroko</territory>
+			<territory type="MC">Monako</territory>
+			<territory type="MD">Moldavi</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Ishujt Marshall</territory>
+			<territory type="MK">Maqedoni</territory>
+			<territory type="MN">Mongoli</territory>
+			<territory type="MR">Mauritani</territory>
+			<territory type="MT">Maltë</territory>
+			<territory type="MV">Maldivit</territory>
+			<territory type="MW">Malavi</territory>
+			<territory type="MX">Meksikë</territory>
+			<territory type="MY">Malajzi</territory>
+			<territory type="MZ">Mozambik</territory>
+			<territory type="NA">Namibi</territory>
+			<territory type="NG">Nigeri</territory>
+			<territory type="NI">Nikaragua</territory>
+			<territory type="NL">Vendet e Ulëta</territory>
+			<territory type="NO">Norvegji</territory>
+			<territory type="NZ">Zelanda e Re</territory>
+			<territory type="PG">Papua Guineja e Re</territory>
+			<territory type="PH">Filipine</territory>
+			<territory type="PL">Poloni</territory>
+			<territory type="PT">Portugali</territory>
+			<territory type="PY">Paraguaj</territory>
+			<territory type="QA">Katar</territory>
+			<territory type="RO">Rumani</territory>
+			<territory type="RU">Rusi</territory>
+			<territory type="RW">Ruanda</territory>
+			<territory type="SA">Arabia Saudite</territory>
+			<territory type="SB">Ishujt Solomon</territory>
+			<territory type="SC">Sishel</territory>
+			<territory type="SE">Suedi</territory>
+			<territory type="SG">Singapor</territory>
+			<territory type="SI">Slloveni</territory>
+			<territory type="SK">Sllovaki</territory>
+			<territory type="SL">Siera Leone</territory>
+			<territory type="SO">Somali</territory>
+			<territory type="ST">Sao Tome e Prinsipe</territory>
+			<territory type="SY">Siri</territory>
+			<territory type="SZ">Svazilandë</territory>
+			<territory type="TD">Çad</territory>
+			<territory type="TG">Togo</territory>
+			<territory type="TH">Tajlandë</territory>
+			<territory type="TJ">Taxhikistan</territory>
+			<territory type="TN">Tunisi</territory>
+			<territory type="TO">Tonga</territory>
+			<territory type="TR">Turqi</territory>
+			<territory type="TT">Trinidad e Tobago</territory>
+			<territory type="TW">Tajvan</territory>
+			<territory type="TZ">Tanzani</territory>
+			<territory type="UA">Ukrainë</territory>
+			<territory type="US">Shtetet e Bashkuara të Amerikës</territory>
+			<territory type="UY">Uruguaj</territory>
+			<territory type="VA">Vatikan</territory>
+			<territory type="VC">Saint Vincent e Grenadinet</territory>
+			<territory type="VE">Venezuelë</territory>
+			<territory type="YE">Jemen</territory>
+			<territory type="ZA">Afrika e Jugut</territory>
+			<territory type="ZM">Zambi</territory>
+			<territory type="ZW">Zimbabve</territory>
+			<territory type="ZZ">Rajon i panjohur ose i pavlefshëm</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-c ç d {dh} e ë f g {gj} h-l {ll} m n {nj} o-r {rr} s {sh} t {th} u v x {xh} y z {zh}]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[w]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Jan</month>
+							<month type="2">Shk</month>
+							<month type="3">Mar</month>
+							<month type="4">Pri</month>
+							<month type="5">Maj</month>
+							<month type="6">Qer</month>
+							<month type="7">Kor</month>
+							<month type="8">Gsh</month>
+							<month type="9">Sht</month>
+							<month type="10">Tet</month>
+							<month type="11">Nën</month>
+							<month type="12">Dhj</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">janar</month>
+							<month type="2">shkurt</month>
+							<month type="3">mars</month>
+							<month type="4">prill</month>
+							<month type="5">maj</month>
+							<month type="6">qershor</month>
+							<month type="7">korrik</month>
+							<month type="8">gusht</month>
+							<month type="9">shtator</month>
+							<month type="10">tetor</month>
+							<month type="11">nëntor</month>
+							<month type="12">dhjetor</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">J</month>
+							<month type="2">S</month>
+							<month type="3">M</month>
+							<month type="4">P</month>
+							<month type="5">M</month>
+							<month type="6">Q</month>
+							<month type="7">K</month>
+							<month type="8">G</month>
+							<month type="9">S</month>
+							<month type="10">T</month>
+							<month type="11">N</month>
+							<month type="12">D</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Die</day>
+							<day type="mon">Hën</day>
+							<day type="tue">Mar</day>
+							<day type="wed">Mër</day>
+							<day type="thu">Enj</day>
+							<day type="fri">Pre</day>
+							<day type="sat">Sht</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">e diel</day>
+							<day type="mon">e hënë</day>
+							<day type="tue">e martë</day>
+							<day type="wed">e mërkurë</day>
+							<day type="thu">e enjte</day>
+							<day type="fri">e premte</day>
+							<day type="sat">e shtunë</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">D</day>
+							<day type="mon">H</day>
+							<day type="tue">M</day>
+							<day type="wed">M</day>
+							<day type="thu">E</day>
+							<day type="fri">P</day>
+							<day type="sat">S</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+					<quarterContext type="stand-alone">
+						<quarterWidth type="narrow">
+							<quarter type="1">1</quarter>
+							<quarter type="2">2</quarter>
+							<quarter type="3">3</quarter>
+							<quarter type="4">4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>PD</am>
+				<pm>MD</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">p.e.r.</era>
+						<era type="1">n.e.r.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, dd MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>dd MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>yyyy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h.mm.ss.a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>h.mm.ss.a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h.mm.ss.a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h.mm.a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Hm">H.mm</dateFormatItem>
+						<dateFormatItem id="Hms">H.mm.ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MEd">E, d.M</dateFormatItem>
+						<dateFormatItem id="MMdd">MM-dd</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMMMdd">dd MMMM</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E d MMMM</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">M.yyyy</dateFormatItem>
+						<dateFormatItem id="yMEd">EEE, d.M.yyyy</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM y</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMM">yyyy-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM y</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0} - {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h.a - h.a</greatestDifference>
+							<greatestDifference id="h">h.-h.a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h.mm.a - h.mm.a</greatestDifference>
+							<greatestDifference id="h">h.mm.-h.mm.a</greatestDifference>
+							<greatestDifference id="m">h.mm.-h.mm.a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">h.mm.a - h.mm.a v</greatestDifference>
+							<greatestDifference id="h">h.mm.-h.mm.a v</greatestDifference>
+							<greatestDifference id="m">h.mm.-h.mm.a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">h.a - h.a v</greatestDifference>
+							<greatestDifference id="h">h.-h.a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M-M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd - MM-dd</greatestDifference>
+							<greatestDifference id="M">MM-dd - MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, MM-dd - E, MM-dd</greatestDifference>
+							<greatestDifference id="M">E, MM-dd - E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM-MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">dd-dd MMM</greatestDifference>
+							<greatestDifference id="M">dd MMM - dd MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E, dd - E, dd MMM</greatestDifference>
+							<greatestDifference id="M">E, dd MMM - E, dd MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">yy-MM - yy-MM</greatestDifference>
+							<greatestDifference id="y">yy-MM - yy-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">yy-MM-dd - yy-MM-dd</greatestDifference>
+							<greatestDifference id="M">yy-MM-dd - yy-MM-dd</greatestDifference>
+							<greatestDifference id="y">yy-MM-dd - yy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, yy-MM-dd - E, yy-MM-dd</greatestDifference>
+							<greatestDifference id="M">E, yy-MM-dd - E, yy-MM-dd</greatestDifference>
+							<greatestDifference id="y">E, yy-MM-dd - E, yy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">yyyy-MM – MM</greatestDifference>
+							<greatestDifference id="y">MMM y - MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">dd-dd MMM y</greatestDifference>
+							<greatestDifference id="M">dd MMM - dd MMM y</greatestDifference>
+							<greatestDifference id="y">dd MMM y - dd MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, dd - E, dd MMM y</greatestDifference>
+							<greatestDifference id="M">E, dd MMM - E, dd MMM y</greatestDifference>
+							<greatestDifference id="y">E, dd MMM y - E, dd MMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>Unknown</exemplarCity>
+			</zone>
+			<metazone type="Europe_Central">
+				<long>
+					<standard>Ora qendrore evropiane</standard>
+				</long>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<long>
+					<standard>Ora lindore evropiane</standard>
+				</long>
+			</metazone>
+			<metazone type="Moscow">
+				<long>
+					<standard>Ora standarde e Moskës</standard>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="ALL">
+				<symbol>Lek</symbol>
+			</currency>
+			<currency type="BRL">
+				<displayName>Real Brazilian</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>Renminbi(Yuan) Kinez</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>Euro</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>Paund Sterlina Britanike</displayName>
+			</currency>
+			<currency type="INR">
+				<displayName>Rupee indiane</displayName>
+			</currency>
+			<currency type="JPY">
+				<displayName>Jeni Japonez</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>Rubla ruse</displayName>
+			</currency>
+			<currency type="USD">
+				<displayName>Dollar amerikan</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>Unknown or Invalid Currency</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unit type="day">
+			<unitPattern count="one">{0} ditë</unitPattern>
+			<unitPattern count="other">{0} ditë</unitPattern>
+		</unit>
+		<unit type="hour">
+			<unitPattern count="one">{0} orë</unitPattern>
+		</unit>
+		<unit type="minute">
+			<unitPattern count="one">{0} minutë</unitPattern>
+			<unitPattern count="other">{0} minuta</unitPattern>
+		</unit>
+		<unit type="month">
+			<unitPattern count="one">{0} muaj</unitPattern>
+		</unit>
+		<unit type="second">
+			<unitPattern count="one">{0} sekondë</unitPattern>
+			<unitPattern count="other">{0} sekonda</unitPattern>
+		</unit>
+		<unit type="week">
+			<unitPattern count="one">{0} javë</unitPattern>
+		</unit>
+		<unit type="year">
+			<unitPattern count="one">{0} vit</unitPattern>
+			<unitPattern count="other">{0} vjet</unitPattern>
+		</unit>
+	</units>
+	<posix>
+		<messages>
+			<yesstr>po:p</yesstr>
+			<nostr>jo:j</nostr>
+		</messages>
+	</posix>
+</ldml>
+

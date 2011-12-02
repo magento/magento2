@@ -1,0 +1,1510 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/track/v5" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/track/v5" name="TrackServiceDefinitions">
+  <types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/track/v5">
+      <xs:element name="SignatureProofOfDeliveryFaxReply" type="ns:SignatureProofOfDeliveryFaxReply"/>
+      <xs:element name="SignatureProofOfDeliveryFaxRequest" type="ns:SignatureProofOfDeliveryFaxRequest"/>
+      <xs:element name="SignatureProofOfDeliveryLetterReply" type="ns:SignatureProofOfDeliveryLetterReply"/>
+      <xs:element name="SignatureProofOfDeliveryLetterRequest" type="ns:SignatureProofOfDeliveryLetterRequest"/>
+      <xs:element name="TrackNotificationReply" type="ns:TrackNotificationReply"/>
+      <xs:element name="TrackNotificationRequest" type="ns:TrackNotificationRequest"/>
+      <xs:element name="TrackReply" type="ns:TrackReply"/>
+      <xs:element name="TrackRequest" type="ns:TrackRequest"/>
+      <xs:complexType name="Address">
+        <xs:annotation>
+          <xs:documentation>Descriptive data for a physical location. May be used as an actual physical address (place to which one could go), or as a container of "address parts" which should be handled as a unit (such as a city-state-ZIP combination within the US).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="StreetLines" type="xs:string" minOccurs="0" maxOccurs="2">
+            <xs:annotation>
+              <xs:documentation>Combination of number, street name, etc. At least one line is required for a valid physical address; empty lines should not be included.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="City" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Name of city, town, etc.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StateOrProvinceCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifying abbreviation for US state, Canada province, etc. Format and presence of this field will vary, depending on country.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PostalCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identification of a region (usually small) for mail/package delivery. Format and presence of this field will vary, depending on country.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="UrbanizationCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Relevant only to addresses in Puerto Rico.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CountryCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The two-letter code used to identify a country.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Residential" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Indicates whether this address residential (as opposed to commercial).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ArrivalLocationType">
+        <xs:annotation>
+          <xs:documentation>Identifies where a tracking event occurs.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AIRPORT"/>
+          <xs:enumeration value="CUSTOMER"/>
+          <xs:enumeration value="CUSTOMS_BROKER"/>
+          <xs:enumeration value="DELIVERY_LOCATION"/>
+          <xs:enumeration value="DESTINATION_AIRPORT"/>
+          <xs:enumeration value="DESTINATION_FEDEX_FACILITY"/>
+          <xs:enumeration value="DROP_BOX"/>
+          <xs:enumeration value="ENROUTE"/>
+          <xs:enumeration value="FEDEX_FACILITY"/>
+          <xs:enumeration value="FEDEX_OFFICE_LOCATION"/>
+          <xs:enumeration value="INTERLINE_CARRIER"/>
+          <xs:enumeration value="NON_FEDEX_FACILITY"/>
+          <xs:enumeration value="ORIGIN_AIRPORT"/>
+          <xs:enumeration value="ORIGIN_FEDEX_FACILITY"/>
+          <xs:enumeration value="PICKUP_LOCATION"/>
+          <xs:enumeration value="PLANE"/>
+          <xs:enumeration value="PORT_OF_ENTRY"/>
+          <xs:enumeration value="SORT_FACILITY"/>
+          <xs:enumeration value="TURNPOINT"/>
+          <xs:enumeration value="VEHICLE"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="CarrierCodeType">
+        <xs:annotation>
+          <xs:documentation>Identification of a FedEx operating company (transportation).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FDXC"/>
+          <xs:enumeration value="FDXE"/>
+          <xs:enumeration value="FDXG"/>
+          <xs:enumeration value="FXCC"/>
+          <xs:enumeration value="FXFR"/>
+          <xs:enumeration value="FXSP"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ClientDetail">
+        <xs:annotation>
+          <xs:documentation>Descriptive data for the client submitting a transaction.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="AccountNumber" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The FedEx account number associated with this transaction.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MeterNumber" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This number is assigned by FedEx and identifies the unique device from which the request is originating</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="IntegratorId" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Only used in transactions which require identification of the Fed Ex Office integrator.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Localization" type="ns:Localization" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The language to be used for human-readable Notification.localizedMessages in responses to the request containing this ClientDetail object. Different requests from the same client may contain different Localization data. (Contrast with TransactionDetail.localization, which governs data payload language/translation.)</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Contact">
+        <xs:annotation>
+          <xs:documentation>The descriptive data for a point-of-contact person.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="PersonName" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the contact person's name.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Title" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the contact person's title.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CompanyName" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the company this contact is associated with.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PhoneNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the phone number associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PhoneExtension" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the phone extension associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PagerNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the pager number associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="FaxNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the fax number associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EMailAddress" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the email address associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ContactAndAddress">
+        <xs:sequence>
+          <xs:element name="Contact" type="ns:Contact" minOccurs="1"/>
+          <xs:element name="Address" type="ns:Address" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Dimensions">
+        <xs:annotation>
+          <xs:documentation>The dimensions of this package and the unit type used for the measurements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Length" type="xs:nonNegativeInteger" minOccurs="0"/>
+          <xs:element name="Width" type="xs:nonNegativeInteger" minOccurs="0"/>
+          <xs:element name="Height" type="xs:nonNegativeInteger" minOccurs="0"/>
+          <xs:element name="Units" type="ns:LinearUnits" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Distance">
+        <xs:annotation>
+          <xs:documentation>Driving or other transportation distances, distinct from dimension measurements.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Value" type="xs:decimal" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the distance quantity.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Units" type="ns:DistanceUnits" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the unit of measure for the distance value.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="DistanceUnits">
+        <xs:annotation>
+          <xs:documentation>Identifies the collection of units of measure that can be associated with a distance value.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="KM"/>
+          <xs:enumeration value="MI"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="EMailNotificationDetail">
+        <xs:annotation>
+          <xs:documentation>Information describing email notifications that will be sent in relation to events that occur during package movement</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="PersonalMessage" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A message that will be included in the email notifications</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Recipients" type="ns:EMailNotificationRecipient" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information describing the destination of the email, format of the email and events to be notified on</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="EMailNotificationEventType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ON_DELIVERY"/>
+          <xs:enumeration value="ON_EXCEPTION"/>
+          <xs:enumeration value="ON_SHIPMENT"/>
+          <xs:enumeration value="ON_TENDER"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="EMailNotificationFormatType">
+        <xs:annotation>
+          <xs:documentation>The format of the email</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="HTML"/>
+          <xs:enumeration value="TEXT"/>
+          <xs:enumeration value="WIRELESS"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="EMailNotificationRecipient">
+        <xs:sequence>
+          <xs:element name="EMailNotificationRecipientType" type="ns:EMailNotificationRecipientType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the relationship this email recipient has to the shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EMailAddress" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The email address to send the notification to</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="NotificationEventsRequested" type="ns:EMailNotificationEventType" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The types of email notifications being requested for this recipient.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Format" type="ns:EMailNotificationFormatType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The format of the email notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Localization" type="ns:Localization" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The language/locale to be used in this email notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="EMailNotificationRecipientType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BROKER"/>
+          <xs:enumeration value="OTHER"/>
+          <xs:enumeration value="RECIPIENT"/>
+          <xs:enumeration value="SHIPPER"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="LinearUnits">
+        <xs:annotation>
+          <xs:documentation>CM = centimeters, IN = inches</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CM"/>
+          <xs:enumeration value="IN"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="Localization">
+        <xs:annotation>
+          <xs:documentation>Identifies the representation of human-readable text.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="LanguageCode" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Two-letter code for language (e.g. EN, FR, etc.)</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="LocaleCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Two-letter code for the region (e.g. us, ca, etc..).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Notification">
+        <xs:annotation>
+          <xs:documentation>The descriptive data regarding the result of the submitted transaction.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Severity" type="ns:NotificationSeverityType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The severity of this notification. This can indicate success or failure or some other information about the request. The values that can be returned are SUCCESS - Your transaction succeeded with no other applicable information. NOTE - Additional information that may be of interest to you about your transaction. WARNING - Additional information that you need to know about your transaction that you may need to take action on. ERROR - Information about an error that occurred while processing your transaction. FAILURE - FedEx was unable to process your transaction at this time due to a system failure. Please try again later</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Source" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Indicates the source of this notification. Combined with the Code it uniquely identifies this notification</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Code" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A code that represents this notification. Combined with the Source it uniquely identifies this notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Message" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Human-readable text that explains this notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="LocalizedMessage" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The translated message. The language and locale specified in the ClientDetail. Localization are used to determine the representation. Currently only supported in a TrackReply.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MessageParameters" type="ns:NotificationParameter" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) witout having to parse the message string.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="NotificationParameter">
+        <xs:sequence>
+          <xs:element name="Id" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the type of data contained in Value (e.g. SERVICE_TYPE, PACKAGE_SEQUENCE, etc..).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Value" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The value of the parameter (e.g. PRIORITY_OVERNIGHT, 2, etc..).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="NotificationSeverityType">
+        <xs:annotation>
+          <xs:documentation>Identifies the set of severity values for a Notification.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ERROR"/>
+          <xs:enumeration value="FAILURE"/>
+          <xs:enumeration value="NOTE"/>
+          <xs:enumeration value="SUCCESS"/>
+          <xs:enumeration value="WARNING"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="OfficeOrderDeliveryMethodType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="COURIER"/>
+          <xs:enumeration value="OTHER"/>
+          <xs:enumeration value="PICKUP"/>
+          <xs:enumeration value="SHIPMENT"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="OperatingCompanyType">
+        <xs:annotation>
+          <xs:documentation>Identification for a FedEx operating company (transportation and non-transportation).</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FEDEX_OFFICE"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="PackagingType">
+        <xs:annotation>
+          <xs:documentation>The enumerated packaging type used for this package.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FEDEX_10KG_BOX"/>
+          <xs:enumeration value="FEDEX_25KG_BOX"/>
+          <xs:enumeration value="FEDEX_BOX"/>
+          <xs:enumeration value="FEDEX_ENVELOPE"/>
+          <xs:enumeration value="FEDEX_PAK"/>
+          <xs:enumeration value="FEDEX_TUBE"/>
+          <xs:enumeration value="YOUR_PACKAGING"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="QualifiedTrackingNumber">
+        <xs:annotation>
+          <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="TrackingNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>FedEx assigned identifier for a package/shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDate" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The date the package was shipped.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="AccountNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>If the account number used to ship the package is provided in the request the shipper and recipient information is included on the letter or fax.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Carrier" type="ns:CarrierCodeType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>FedEx operating company that delivered the package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Destination" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Only country is used for elimination of duplicate tracking numbers.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="RedirectToHoldEligibilityType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ELIGIBLE"/>
+          <xs:enumeration value="INELIGIBLE"/>
+          <xs:enumeration value="POSSIBLY_ELIGIBLE"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ServiceType">
+        <xs:annotation>
+          <xs:documentation>The service type of the package/shipment.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EUROPE_FIRST_INTERNATIONAL_PRIORITY"/>
+          <xs:enumeration value="FEDEX_1_DAY_FREIGHT"/>
+          <xs:enumeration value="FEDEX_2_DAY"/>
+          <xs:enumeration value="FEDEX_2_DAY_AM"/>
+          <xs:enumeration value="FEDEX_2_DAY_FREIGHT"/>
+          <xs:enumeration value="FEDEX_3_DAY_FREIGHT"/>
+          <xs:enumeration value="FEDEX_EXPRESS_SAVER"/>
+          <xs:enumeration value="FEDEX_FIRST_FREIGHT"/>
+          <xs:enumeration value="FEDEX_FREIGHT_ECONOMY"/>
+          <xs:enumeration value="FEDEX_FREIGHT_PRIORITY"/>
+          <xs:enumeration value="FEDEX_GROUND"/>
+          <xs:enumeration value="FIRST_OVERNIGHT"/>
+          <xs:enumeration value="GROUND_HOME_DELIVERY"/>
+          <xs:enumeration value="INTERNATIONAL_DISTRIBUTION_FREIGHT"/>
+          <xs:enumeration value="INTERNATIONAL_ECONOMY"/>
+          <xs:enumeration value="INTERNATIONAL_ECONOMY_DISTRIBUTION"/>
+          <xs:enumeration value="INTERNATIONAL_ECONOMY_FREIGHT"/>
+          <xs:enumeration value="INTERNATIONAL_FIRST"/>
+          <xs:enumeration value="INTERNATIONAL_PRIORITY"/>
+          <xs:enumeration value="INTERNATIONAL_PRIORITY_DISTRIBUTION"/>
+          <xs:enumeration value="INTERNATIONAL_PRIORITY_FREIGHT"/>
+          <xs:enumeration value="PRIORITY_OVERNIGHT"/>
+          <xs:enumeration value="SMART_POST"/>
+          <xs:enumeration value="STANDARD_OVERNIGHT"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="SignatureProofOfDeliveryFaxReply">
+        <xs:annotation>
+          <xs:documentation>FedEx Signature Proof Of Delivery Fax reply.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="HighestSeverity" type="ns:NotificationSeverityType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Notifications" type="ns:Notification" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Contains the version of the reply being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="FaxConfirmationNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Confirmation of fax transmission.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SignatureProofOfDeliveryFaxRequest">
+        <xs:annotation>
+          <xs:documentation>FedEx Signature Proof Of Delivery Fax request.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ClientDetail" type="ns:ClientDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The version of the request being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="QualifiedTrackingNumber" type="ns:QualifiedTrackingNumber" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="AdditionalComments" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Additional customer-supplied text to be added to the body of the letter.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="FaxSender" type="ns:ContactAndAddress" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contact and address information about the person requesting the fax to be sent.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="FaxRecipient" type="ns:ContactAndAddress" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contact and address information, including the fax number, about the person to receive the fax.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="SignatureProofOfDeliveryImageType">
+        <xs:annotation>
+          <xs:documentation>Identifies the set of SPOD image types.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="PDF"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="SignatureProofOfDeliveryLetterReply">
+        <xs:annotation>
+          <xs:documentation>FedEx Signature Proof Of Delivery Letter reply.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="HighestSeverity" type="ns:NotificationSeverityType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Notifications" type="ns:Notification" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Image of letter encoded in Base64 format.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Letter" type="xs:base64Binary" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Image of letter encoded in Base64 format.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SignatureProofOfDeliveryLetterRequest">
+        <xs:annotation>
+          <xs:documentation>FedEx Signature Proof Of Delivery Letter request.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ClientDetail" type="ns:ClientDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The version of the request being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="QualifiedTrackingNumber" type="ns:QualifiedTrackingNumber" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="AdditionalComments" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Additional customer-supplied text to be added to the body of the letter.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="LetterFormat" type="ns:SignatureProofOfDeliveryImageType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the set of SPOD image types.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Consignee" type="ns:ContactAndAddress" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>If provided this information will be print on the letter.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="StringBarcode">
+        <xs:annotation>
+          <xs:documentation>Each instance of this data type represents a barcode whose content must be represented as ASCII text (i.e. not binary data).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Type" type="ns:StringBarcodeType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The kind of barcode data in this instance.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Value" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The data content of this instance.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="StringBarcodeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ADDRESS"/>
+          <xs:enumeration value="ASTRA"/>
+          <xs:enumeration value="FEDEX_1D"/>
+          <xs:enumeration value="GROUND"/>
+          <xs:enumeration value="POSTAL"/>
+          <xs:enumeration value="USPS"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TrackDeliveryLocationType">
+        <xs:annotation>
+          <xs:documentation>The delivery location at the delivered to address.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FEDEX_LOCATION"/>
+          <xs:enumeration value="GUARD_OR_SECURITY_STATION"/>
+          <xs:enumeration value="IN_BOND_OR_CAGE"/>
+          <xs:enumeration value="MAILROOM"/>
+          <xs:enumeration value="OTHER"/>
+          <xs:enumeration value="PHARMACY"/>
+          <xs:enumeration value="RECEPTIONIST_OR_FRONT_DESK"/>
+          <xs:enumeration value="RESIDENCE"/>
+          <xs:enumeration value="SHIPPING_RECEIVING"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackDetail">
+        <xs:annotation>
+          <xs:documentation>Detailed tracking information about a particular package.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Notification" type="ns:Notification" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>To report soft error on an individual track detail.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackingNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The FedEx package identifier.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Barcode" type="ns:StringBarcode" minOccurs="0"/>
+          <xs:element name="TrackingNumberUniqueIdentifier" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>When duplicate tracking numbers exist this data is returned with summary information for each of the duplicates. The summary information is used to determine which of the duplicates the intended tracking number is. This identifier is used on a subsequent track request to retrieve the tracking data for the desired tracking number.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A code that identifies this type of status. This is the most recent status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusDescription" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A human-readable description of this status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Reconciliation" type="ns:TrackReconciliation" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Used to report the status of a piece of a multiple piece shipment which is no longer traveling with the rest of the packages in the shipment or has not been accounted for.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ServiceCommitMessage" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Used to convey information such as. 1. FedEx has received information about a package but has not yet taken possession of it. 2. FedEx has handed the package off to a third party for final delivery. 3. The package delivery has been cancelled</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CarrierCode" type="ns:CarrierCodeType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies a FedEx operating company (transportation).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="OperatingCompany" type="ns:OperatingCompanyType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies operating transportation company that is the specific to the carrier code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ProductionLocationContactAndAddress" type="ns:ContactAndAddress" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Specifies the FXO production centre contact and address.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="OtherIdentifiers" type="ns:TrackPackageIdentifier" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Other related identifiers for this package such as reference numbers.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ServiceInfo" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Retained for legacy compatibility only. User/screen friendly description of the Service type (e.g. Priority Overnight).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ServiceType" type="ns:ServiceType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Strict representation of the Service type (e.g. PRIORITY_OVERNIGHT).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageWeight" type="ns:Weight" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The weight of this package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageDimensions" type="ns:Dimensions" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Physical dimensions of the package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageDimensionalWeight" type="ns:Weight" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The dimensional weight of the package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipmentWeight" type="ns:Weight" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The weight of the entire shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Packaging" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Retained for legacy compatibility only.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackagingType" type="ns:PackagingType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Strict representation of the Packaging type (e.g. FEDEX_BOX, YOUR_PACKAGING).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageSequenceNumber" type="xs:nonNegativeInteger" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The sequence number of this package in a shipment. This would be 2 if it was package number 2 of 4.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageCount" type="xs:nonNegativeInteger" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The number of packages in this shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackReturnLabelType" type="ns:TrackReturnLabelType" minOccurs="0"/>
+          <xs:element name="TrackReturnDescription" type="xs:string" minOccurs="0"/>
+          <xs:element name="ShipperAddress" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The address information for the shipper.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="OriginLocationAddress" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The address of the FedEx pickup location/facility.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EstimatedPickupTimestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Estimated package pickup time for shipments that haven't been picked up.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipTimestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Time package was shipped/tendered over to FedEx. Time portion will be populated if available, otherwise will be set to midnight.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TotalTransitDistance" type="ns:Distance" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The distance from the origin to the destination. Returned for Custom Critical shipments.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DistanceToDestination" type="ns:Distance" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Total distance package still has to travel. Returned for Custom Critical shipments.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DestinationAddress" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The address this package is to be (or has been) delivered.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DestinationLocationAddress" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The address of the FedEx delivery location/facility.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EstimatedDeliveryTimestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Projected package delivery time based on ship time stamp, service and destination. Not populated if delivery has already occurred.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ActualDeliveryTimestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The time the package was actually delivered.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ActualDeliveryAddress" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Actual address where package was delivered. Differs from destinationAddress, which indicates where the package was to be delivered; This field tells where delivery actually occurred (next door, at station, etc.)</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="OfficeOrderDeliveryMethod" type="ns:OfficeOrderDeliveryMethodType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the method of office order delivery.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DeliveryLocationType" type="ns:TrackDeliveryLocationType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Strict text indicating the delivery location at the delivered to address.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DeliveryLocationDescription" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>User/screen friendly representation of the DeliveryLocationType (delivery location at the delivered to address). Can be returned in localized text.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DeliverySignatureName" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>This is either the name of the person that signed for the package or "Signature not requested" or "Signature on file".</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="SignatureProofOfDeliveryAvailable" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>True if signed for by signature image is available.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="NotificationEventsAvailable" type="ns:EMailNotificationEventType" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The types of email notifications that are available for the package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="SplitShipmentParts" type="ns:TrackSplitShipmentPart" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Returned for cargo shipments only when they are currently split across vehicles.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="RedirectToHoldEligibility" type="ns:RedirectToHoldEligibilityType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Indicates redirection eligibility as determined by tracking service, subject to refinement/override by redirect-to-hold service.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Events" type="ns:TrackEvent" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Event information for a tracking number.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackEvent">
+        <xs:annotation>
+          <xs:documentation>FedEx scanning information about a package.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Timestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The time this event occurred.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EventType" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Carrier's scan code. Pairs with EventDescription.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="EventDescription" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Literal description that pairs with the EventType.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusExceptionCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Further defines the Scan Type code's specific type (e.g., DEX08 business closed). Pairs with StatusExceptionDescription.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusExceptionDescription" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Literal description that pairs with the StatusExceptionCode.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Address" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Address information of the station that is responsible for the scan.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ArrivalLocation" type="ns:ArrivalLocationType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Indicates where the arrival actually occurred.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TrackIdentifierType">
+        <xs:annotation>
+          <xs:documentation>The type of track to be performed.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BILL_OF_LADING"/>
+          <xs:enumeration value="COD_RETURN_TRACKING_NUMBER"/>
+          <xs:enumeration value="CUSTOMER_AUTHORIZATION_NUMBER"/>
+          <xs:enumeration value="CUSTOMER_REFERENCE"/>
+          <xs:enumeration value="DEPARTMENT"/>
+          <xs:enumeration value="FREE_FORM_REFERENCE"/>
+          <xs:enumeration value="GROUND_INTERNATIONAL"/>
+          <xs:enumeration value="GROUND_SHIPMENT_ID"/>
+          <xs:enumeration value="GROUP_MPS"/>
+          <xs:enumeration value="INVOICE"/>
+          <xs:enumeration value="JOB_GLOBAL_TRACKING_NUMBER"/>
+          <xs:enumeration value="ORDER_GLOBAL_TRACKING_NUMBER"/>
+          <xs:enumeration value="ORDER_TO_PAY_NUMBER"/>
+          <xs:enumeration value="PARTNER_CARRIER_NUMBER"/>
+          <xs:enumeration value="PART_NUMBER"/>
+          <xs:enumeration value="PURCHASE_ORDER"/>
+          <xs:enumeration value="RETURNED_TO_SHIPPER_TRACKING_NUMBER"/>
+          <xs:enumeration value="RETURN_MATERIALS_AUTHORIZATION"/>
+          <xs:enumeration value="SHIPPER_REFERENCE"/>
+          <xs:enumeration value="STANDARD_MPS"/>
+          <xs:enumeration value="TRACKING_NUMBER_OR_DOORTAG"/>
+          <xs:enumeration value="TRANSPORTATION_CONTROL_NUMBER"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackNotificationPackage">
+        <xs:sequence>
+          <xs:element name="TrackingNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>FedEx assigned identifier for a package/shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackingNumberUniqueIdentifiers" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>When duplicate tracking numbers exist this data is returned with summary information for each of the duplicates. The summary information is used to determine which of the duplicates the intended tracking number is. This identifier is used on a subsequent track request to retrieve the tracking data for the desired tracking number.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CarrierCode" type="ns:CarrierCodeType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identification of a FedEx operating company (transportation).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDate" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The date the package was shipped (tendered to FedEx).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Destination" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The destination address of this package. Only city, state/province, and country are returned.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="RecipientDetails" type="ns:TrackNotificationRecipientDetail" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Options available for a tracking notification recipient.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackNotificationRecipientDetail">
+        <xs:annotation>
+          <xs:documentation>Options available for a tracking notification recipient.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="NotificationEventsAvailable" type="ns:EMailNotificationEventType" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The types of email notifications available for this recipient.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackNotificationReply">
+        <xs:annotation>
+          <xs:documentation>FedEx Track Notification reply.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="HighestSeverity" type="ns:NotificationSeverityType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Notifications" type="ns:Notification" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Contains the version of the reply being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DuplicateWaybill" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>True if duplicate packages (more than one package with the same tracking number) have been found, the packages array contains information about each duplicate. Use this information to determine which of the tracking numbers is the one you need and resend your request using the tracking number and TrackingNumberUniqueIdentifier for that package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MoreDataAvailable" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>True if additional packages remain to be retrieved.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PagingToken" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Value that must be passed in a TrackNotification request to retrieve the next set of packages (when MoreDataAvailable = true).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Packages" type="ns:TrackNotificationPackage" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information about the notifications that are available for this tracking number. If there are duplicates the ship date and destination address information is returned for determining which TrackingNumberUniqueIdentifier to use on a subsequent request.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackNotificationRequest">
+        <xs:annotation>
+          <xs:documentation>FedEx Track Notification request.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ClientDetail" type="ns:ClientDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifies the version/level of a service operation expected by a caller (in each request) and performed by the callee (in each reply).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackingNumber" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The tracking number to which the notifications will be triggered from.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MultiPiece" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Indicates whether to return tracking information for all associated packages.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PagingToken" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>When the MoreDataAvailable field is true in a TrackNotificationReply the PagingToken must be sent in the subsequent TrackNotificationRequest to retrieve the next page of data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackingNumberUniqueId" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Use this field when your original request informs you that there are duplicates of this tracking number. If you get duplicates you will also receive some information about each of the duplicate tracking numbers to enable you to chose one and resend that number along with the TrackingNumberUniqueId to get notifications for that tracking number.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDateRangeBegin" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>To narrow the search to a period in time the ShipDateRangeBegin and ShipDateRangeEnd can be used to help eliminate duplicates.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDateRangeEnd" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>To narrow the search to a period in time the ShipDateRangeBegin and ShipDateRangeEnd can be used to help eliminate duplicates.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="SenderEMailAddress" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Included in the email notification identifying the requester of this notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="SenderContactName" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Included in the email notification identifying the requester of this notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="NotificationDetail" type="ns:EMailNotificationDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Who to send the email notifications to and for which events. The notificationRecipientType and NotifyOnShipment fields are not used in this request.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackPackageIdentifier">
+        <xs:annotation>
+          <xs:documentation>The type and value of the package identifier that is to be used to retrieve the tracking information for a package.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Value" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The value to be used to retrieve tracking information for a package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Type" type="ns:TrackIdentifierType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The type of the Value to be used to retrieve tracking information for a package (e.g. SHIPPER_REFERENCE, PURCHASE_ORDER, TRACKING_NUMBER_OR_DOORTAG, etc..) .</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackReconciliation">
+        <xs:annotation>
+          <xs:documentation>Used to report the status of a piece of a multiple piece shipment which is no longer traveling with the rest of the packages in the shipment or has not been accounted for.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Status" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>An identifier for this type of status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Description" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>A human-readable description of this status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackReply">
+        <xs:annotation>
+          <xs:documentation>The descriptive data returned from a FedEx package tracking request.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="HighestSeverity" type="ns:NotificationSeverityType" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Notifications" type="ns:Notification" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Contains the version of the reply being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="DuplicateWaybill" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>True if duplicate packages (more than one package with the same tracking number) have been found, and only limited data will be provided for each one.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="MoreData" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>True if additional packages remain to be retrieved.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PagingToken" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Value that must be passed in a TrackNotification request to retrieve the next set of packages (when MoreDataAvailable = true).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackDetails" type="ns:TrackDetail" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Contains detailed tracking information for the requested packages(s).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackRequest">
+        <xs:annotation>
+          <xs:documentation>The descriptive data sent by a client to track a FedEx package.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ClientDetail" type="ns:ClientDetail" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TransactionDetail" type="ns:TransactionDetail" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Version" type="ns:VersionId" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The version of the request being used.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CarrierCode" type="ns:CarrierCodeType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The FedEx operating company (transportation) used for this package's delivery.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="OperatingCompany" type="ns:OperatingCompanyType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies operating transportation company that is the specific to the carrier code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PackageIdentifier" type="ns:TrackPackageIdentifier" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The type and value of the package identifier that is to be used to retrieve the tracking information for a package or group of packages.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="TrackingNumberUniqueIdentifier" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Used to distinguish duplicate FedEx tracking numbers.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDateRangeBegin" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>To narrow the search to a period in time the ShipDateRangeBegin and ShipDateRangeEnd can be used to help eliminate duplicates.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipDateRangeEnd" type="xs:date" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>To narrow the search to a period in time the ShipDateRangeBegin and ShipDateRangeEnd can be used to help eliminate duplicates.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ShipmentAccountNumber" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>For tracking by references information either the account number or destination postal code and country must be provided.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Destination" type="ns:Address" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>For tracking by references information either the account number or destination postal code and country must be provided.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="IncludeDetailedScans" type="xs:boolean" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>If false the reply will contain summary/profile data including current status. If true the reply contains profile + detailed scan activity for each package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PagingToken" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>When the MoreData field = true in a TrackReply the PagingToken must be sent in the subsequent TrackRequest to retrieve the next page of data.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TrackReturnLabelType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EMAIL"/>
+          <xs:enumeration value="PRINT"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackSplitShipmentPart">
+        <xs:annotation>
+          <xs:documentation>Used when a cargo shipment is split across vehicles. This is used to give the status of each part of the shipment.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="PieceCount" type="xs:positiveInteger" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The number of pieces in this part.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Timestamp" type="xs:dateTime" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The date and time this status began.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A code that identifies this type of status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StatusDescription" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>A human-readable description of this status.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TransactionDetail">
+        <xs:annotation>
+          <xs:documentation>Descriptive data that governs data payload language/translations.  The TransactionDetail from the request is echoed back to the caller in the corresponding reply.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="CustomerTransactionId" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Free form text to be echoed back in the reply. Used to match requests and replies.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Localization" type="ns:Localization" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Governs data payload language/translations (contrasted with ClientDetail.localization, which governs Notification.localizedMessage language selection).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Weight">
+        <xs:annotation>
+          <xs:documentation>The descriptive data for the heaviness of an object.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Units" type="ns:WeightUnits" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the unit of measure associated with a weight value.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Value" type="xs:decimal" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the weight value of a package/shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="WeightUnits">
+        <xs:annotation>
+          <xs:documentation>Identifies the collection of units of measure that can be associated with a weight value.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="KG"/>
+          <xs:enumeration value="LB"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="WebAuthenticationDetail">
+        <xs:annotation>
+          <xs:documentation>Used in authentication of the sender's identity.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="UserCredential" type="ns:WebAuthenticationCredential" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Credential used to authenticate a specific software application. This value is provided by FedEx after registration.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="WebAuthenticationCredential">
+        <xs:annotation>
+          <xs:documentation>Two part authentication string used for the sender's identity</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="Key" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifying part of authentication credential. This value is provided by FedEx after registration</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Password" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Secret part of authentication key. This value is provided by FedEx after registration.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="VersionId">
+        <xs:annotation>
+          <xs:documentation>Identifies the version/level of a service operation expected by a caller (in each request) and performed by the callee (in each reply).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element name="ServiceId" type="xs:string" fixed="trck" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Major" type="xs:int" fixed="5" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifies the service business level.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Intermediate" type="xs:int" fixed="0" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifies the service interface level.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Minor" type="xs:int" fixed="0" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Identifies the service code level.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="SignatureProofOfDeliveryFaxReply">
+    <part name="SignatureProofOfDeliveryFaxReply" element="ns:SignatureProofOfDeliveryFaxReply"/>
+  </message>
+  <message name="TrackRequest">
+    <part name="TrackRequest" element="ns:TrackRequest"/>
+  </message>
+  <message name="SignatureProofOfDeliveryFaxRequest">
+    <part name="SignatureProofOfDeliveryFaxRequest" element="ns:SignatureProofOfDeliveryFaxRequest"/>
+  </message>
+  <message name="SignatureProofOfDeliveryLetterRequest">
+    <part name="SignatureProofOfDeliveryLetterRequest" element="ns:SignatureProofOfDeliveryLetterRequest"/>
+  </message>
+  <message name="TrackNotificationRequest">
+    <part name="TrackNotificationRequest" element="ns:TrackNotificationRequest"/>
+  </message>
+  <message name="TrackNotificationReply">
+    <part name="TrackNotificationReply" element="ns:TrackNotificationReply"/>
+  </message>
+  <message name="TrackReply">
+    <part name="TrackReply" element="ns:TrackReply"/>
+  </message>
+  <message name="SignatureProofOfDeliveryLetterReply">
+    <part name="SignatureProofOfDeliveryLetterReply" element="ns:SignatureProofOfDeliveryLetterReply"/>
+  </message>
+  <portType name="TrackPortType">
+    <operation name="getTrackNotification" parameterOrder="TrackNotificationRequest">
+      <input message="ns:TrackNotificationRequest"/>
+      <output message="ns:TrackNotificationReply"/>
+    </operation>
+    <operation name="retrieveSignatureProofOfDeliveryLetter" parameterOrder="SignatureProofOfDeliveryLetterRequest">
+      <input message="ns:SignatureProofOfDeliveryLetterRequest"/>
+      <output message="ns:SignatureProofOfDeliveryLetterReply"/>
+    </operation>
+    <operation name="track" parameterOrder="TrackRequest">
+      <input message="ns:TrackRequest"/>
+      <output message="ns:TrackReply"/>
+    </operation>
+    <operation name="sendSignatureProofOfDeliveryFax" parameterOrder="SignatureProofOfDeliveryFaxRequest">
+      <input message="ns:SignatureProofOfDeliveryFaxRequest"/>
+      <output message="ns:SignatureProofOfDeliveryFaxReply"/>
+    </operation>
+  </portType>
+  <binding name="TrackServiceSoapBinding" type="ns:TrackPortType">
+    <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getTrackNotification">
+      <s1:operation soapAction="getTrackNotification" style="document"/>
+      <input>
+        <s1:body use="literal"/>
+      </input>
+      <output>
+        <s1:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="retrieveSignatureProofOfDeliveryLetter">
+      <s1:operation soapAction="retrieveSignatureProofOfDeliveryLetter" style="document"/>
+      <input>
+        <s1:body use="literal"/>
+      </input>
+      <output>
+        <s1:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="track">
+      <s1:operation soapAction="track" style="document"/>
+      <input>
+        <s1:body use="literal"/>
+      </input>
+      <output>
+        <s1:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendSignatureProofOfDeliveryFax">
+      <s1:operation soapAction="sendSignatureProofOfDeliveryFax" style="document"/>
+      <input>
+        <s1:body use="literal"/>
+      </input>
+      <output>
+        <s1:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="TrackService">
+    <port name="TrackServicePort" binding="ns:TrackServiceSoapBinding">
+      <s1:address location=""/>
+    </port>
+  </service>
+</definitions>

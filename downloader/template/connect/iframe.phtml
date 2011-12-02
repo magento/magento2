@@ -1,0 +1,121 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<a name="connect_iframe"></a>
+
+<div id="connect_iframe_container" style="display:none;">
+    <input id="connect_iframe_scroll" type="checkbox" checked="checked"/> <label for="connect_iframe_scroll">Auto-scroll console contents</label><br/>
+    <iframe id="connect_iframe" name="connect_iframe" src="<?php echo $this->url('empty') ?>" style="width:100%; height:300px;" frameborder="no"></iframe>
+</div>
+
+<script type="text/javascript">
+function disableInputs(flag)
+{
+    top.$$('input, select, button').each(function(el){
+        if (el.id!='connect_iframe_scroll') el.disabled = flag;
+    });
+    if (flag) {
+        window.onbeforeunload = confirmExit;
+    } else {
+        window.onbeforeunload = null;
+    }
+}
+
+function confirmExit()
+{
+    return "There are Connect processes running.\nIf you will close the window or navigate away from the page, installation will be interrupted.";
+}
+
+function onSubmit(formObj)
+{
+    if(formObj)formObj.action = addParamToUrl(formObj.action, 'maintenance', (top.$('maintenance').checked === true ? '1' : '0'));
+    top.$('connect_iframe_success').style.display = 'none';
+    top.$('connect_iframe_failure').style.display = 'none';
+    top.$('connect_iframe_container').style.display = '';
+    top.location.href = '#connect_iframe';
+    return true;
+}
+
+function onSuccess()
+{
+    var div = top.$('connect_iframe_success');
+    if (div) {
+        top.location.href = top.location.href.replace(/#.*$/, '')+'#connect_iframe_result';
+        div.style.display = '';
+    }
+}
+
+function onFailure()
+{
+    var div = top.$('connect_iframe_failure');
+    if (div) {
+        top.location.href = top.location.href.replace(/#.*$/, '')+'#connect_iframe_result';
+        div.style.display = '';
+    }
+}
+
+function checkForUpdateClick()
+{
+    url = addParamToUrl(location.href, 'maintenance', (top.$('maintenance').checked === true ? '1' : '0'));
+    url = addParamToUrl(url, 'updates', 'yes');
+    location.href = url;
+}
+
+function addParamToUrl(url, param, value)
+{
+    var anchor = null, params = {};
+    var anchorPos = url.search(/#/);
+    if (anchorPos != -1) {
+        anchor = url.substr(anchorPos + 1);
+        url = url.substr(0, anchorPos);
+    }
+    getPos = url.search(/\?/);
+    if (getPos != -1) {
+        url.substr(getPos + 1).split('&').each(function(pv){
+            if (pv != 'loggedin') {
+                pv = pv.split('=');
+                params[pv[0]] = pv[1];
+            }
+        });
+        url = url.substr(0, getPos);
+    }
+
+    params[param] = value;
+
+    if (params) {
+        url += '?';
+        for (k in params) {
+            url += k + '=' + params[k] + '&';
+        }
+        url = url.substr(0, url.length - 1);
+    }
+    if (anchor) {
+        url = url + '#' + anchor;
+    }
+
+    return url;
+}
+</script>

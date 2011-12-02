@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Catalog
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<convert version="1.0">
+
+    <container name="catalog_file" type="dataflow/convert_adapter_io">
+        <var name="path">/tmp</var>
+        <var name="filename">test.xml</var>
+    </container>
+
+
+    <profile name="import_products_from_excel_xml">
+        <action method="load" type="dataflow/convert_adapter_io">
+            <var name="filename">products.xml</var>
+        </action>
+
+        <action method="parse" type="dataflow/convert_parser_xml_excel">
+            <var name="single_sheet">Products</var>
+        </action>
+
+        <action method="parse" type="catalog/convert_parser_product"/>
+
+        <action method="validate" type="dataflow/convert_validator_dryrun"/>
+
+        <action method="save" type="eav/convert_adapter_collection"/>
+    </profile>
+
+    <profile name="export_products_to_file">
+        <action method="load" type="eav/convert_adapter_collection">
+            <var name="entity_type">catalog/product</var>
+        </action>
+
+        <action method="unparse" type="catalog/convert_parser_product"/>
+
+        <action method="unparse" type="dataflow/convert_parser_xml_excel">
+            <var name="single_sheet">Products</var>
+        </action>
+
+        <action method="validate" type="dataflow/convert_validator_dryrun"/>
+
+        <action method="save" type="dataflow/convert_adapter_io">
+            <var name="filename">products.xml</var>
+        </action>
+    </profile>
+
+    <profile name="import_catalog">
+        <action method="load" use="catalog_file"/>
+
+        <action method="parse" type="dataflow/convert_parser_xml_excel"/>
+
+        <action method="save" type="catalog/convert_adapter_catalog"/>
+    </profile>
+
+    <profile name="export_catalog">
+        <action method="load" type="catalog/convert_adapter_catalog"/>
+
+        <action method="unparse" type="dataflow/convert_parser_xml_excel"/>
+
+        <action method="save" use="catalog_file"/>
+    </profile>
+
+    <profile name="export_catalog_to_http">
+        <action method="load" type="catalog/convert_adapter_catalog"/>
+
+        <action method="unparse" type="dataflow/convert_parser_xml_excel"/>
+
+        <action method="save" type="Mage_Dataflow_Model_Convert_Adapter_Http">
+            <var name="Content-Disposition">attachment; filename=catalog.xml</var>
+            <var name="Content-Type">application/octet-stream</var>
+        </action>
+    </profile>
+
+    <profile name="import_csv_to_table">
+        <action method="load" type="Mage_Dataflow_Model_Convert_Adapter_Io">
+            <var name="type">file</var>
+            <var name="filename">data.csv</var>
+        </action>
+
+        <action method="parse" type="Mage_Dataflow_Model_Convert_Parser_Csv"/>
+
+        <action method="map" type="Mage_Dataflow_Model_Convert_Mapper_Column">
+            <input name="field_in_result">field_in_source</input>
+        </action>
+
+        <action method="validate" type="Mage_Dataflow_Model_Convert_Validator_Column">
+            <var name="field_in_table">!=''</var>
+        </action>
+
+        <action method="save" type="core/convert_adapter_db_table">
+            <var name="resource">module_write</var>
+            <var name="table">module/table_name</var>
+        </action>
+    </profile>
+
+    <profile name="export_pending_orders_to_ftp">
+        <action method="load" type="sales/convert_adapter_orders">
+            <var name="status">pending</var>
+        </action>
+
+        <action method="unparse" type="Mage_Dataflow_Model_Convert_Parser_Csv"/>
+
+        <action method="save" type="Mage_Dataflow_Model_Convert_Adapter_Io">
+            <var name="type">ftp</var>
+            <var name="host">some.host.com</var>
+            <var name="path">upload</var>
+        </action>
+    </profile>
+</convert>

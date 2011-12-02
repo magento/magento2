@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.57 $"/>
+		<generation date="$Date: 2009/06/09 06:08:19 $"/>
+		<language type="de"/>
+		<territory type="CH"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="be">Weissrussisch</language>
+		</languages>
+		<territories>
+			<territory type="BD">Bangladesh</territory>
+			<territory type="BN">Brunei</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Weissrussland</territory>
+			<territory type="CV">Kapverden</territory>
+			<territory type="DJ">Djibouti</territory>
+			<territory type="GB">Grossbritannien</territory>
+			<territory type="MH">Marshall-Inseln</territory>
+			<territory type="QO">Äusseres Ozeanien</territory>
+			<territory type="RW">Rwanda</territory>
+			<territory type="SB">Salomon-Inseln</territory>
+			<territory type="ST">Sao Tomé und Principe</territory>
+			<territory type="ZW">Zimbabwe</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a ä b-o ö p-u ü v-z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ß ú ù ŭ û ū ÿ]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>«</quotationStart>
+		<quotationEnd>»</quotationEnd>
+		<alternateQuotationStart>‹</alternateQuotationStart>
+		<alternateQuotationEnd>›</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd">MM-dd</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>'</group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤ #,##0.00;¤-#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+	</numbers>
+</ldml>
+

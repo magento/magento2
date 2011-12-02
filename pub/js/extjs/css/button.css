@@ -1,0 +1,148 @@
+/*
+ * Ext JS Library 2.0
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-btn{
+	font:normal 11px tahoma, verdana, helvetica;
+	cursor:pointer;
+	white-space: nowrap;
+}
+.x-btn button{
+    border:0 none;
+    background:transparent;
+    font:normal 11px tahoma,verdana,helvetica;
+    padding-left:3px;
+    padding-right:3px;
+    cursor:pointer;
+    margin:0;
+    overflow:visible;
+    width:auto;
+    -moz-outline:0 none;
+    outline:0 none;
+}
+* html .ext-ie .x-btn button {
+    width:1px;
+}
+.ext-gecko .x-btn button {
+    padding-left:0;
+    padding-right:0;
+}
+.ext-ie .x-btn button {
+    padding-top:2px;
+}
+/*
+ Predefined css class for buttons with only icon. Add this class (x-btn-icon) and a class with a background-image
+ to your button for a button with just an icon.
+ e.g.
+ .my-class .x-btn-text { background-image: url(foo.gif); }
+ */
+ 
+.x-btn-icon .x-btn-center .x-btn-text{
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 16px;
+	width: 16px;
+	cursor:pointer;
+	white-space: nowrap;
+    padding:0;
+}
+.x-btn-icon .x-btn-center{
+	padding:1px;
+}
+.x-btn em {
+    font-style:normal;
+    font-weight:normal;
+}
+/*
+ Button class for icon and text. Add this class (x-btn-text-icon) and a class with a background-image
+ to your button for both text and icon. 
+*/
+
+.x-btn-text-icon .x-btn-center .x-btn-text{
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+	padding-left:18px;
+	padding-top:3px;
+	padding-bottom:3px;
+    padding-right:0;
+}
+
+.x-btn-left, .x-btn-right{
+	font-size:1px;
+    line-height:1px;
+}
+.x-btn-left{
+	width:3px;
+	height:21px;
+	background:url(../images/default/basic-dialog/btn-sprite.gif) no-repeat 0 0;
+}
+.x-btn-right{
+	width:3px;
+	height:21px;
+	background:url(../images/default/basic-dialog/btn-sprite.gif) no-repeat 0 -21px;
+}
+.x-btn-left i, .x-btn-right i{
+	display:block;
+    width:3px;
+    overflow:hidden;
+    font-size:1px;
+    line-height:1px;
+}
+.x-btn-center{
+	background:url(../images/default/basic-dialog/btn-sprite.gif) repeat-x 0 -42px;
+	vertical-align: middle;
+	text-align:center;
+	padding:0 5px;
+	cursor:pointer;
+	white-space:nowrap;
+}
+.x-btn-over .x-btn-left{
+	background-position:0 -63px;
+}
+.x-btn-over .x-btn-right{
+	background-position:0 -84px;
+}
+.x-btn-over .x-btn-center{
+	background-position:0 -105px;
+}
+.x-btn-click .x-btn-center, .x-btn-menu-active .x-btn-center{
+	background-position:0 -126px;
+}
+.x-btn-disabled *{
+	color:gray !important;
+	cursor:default !important;
+}
+.x-btn-menu-text-wrap .x-btn-center {
+	padding:0 3px;
+}
+.ext-gecko .x-btn-menu-text-wrap .x-btn-center {
+	padding:0 1px;
+}
+.x-btn-menu-arrow-wrap .x-btn-center {
+    padding:0;
+}
+.x-btn-menu-arrow-wrap .x-btn-center button {
+	width:12px !important;
+    height:21px;
+    padding:0 !important;
+    display:block;
+    background:transparent url(../images/default/basic-dialog/btn-arrow.gif) no-repeat left 3px;
+}
+.x-btn-with-menu  .x-btn-center {
+    padding-right:2px !important;
+}
+.x-btn-with-menu  .x-btn-center em {
+    display:block;
+    background:transparent url(../images/default/toolbar/btn-arrow.gif) no-repeat right 0;
+	padding-right:10px;
+}
+
+.x-btn-text-icon .x-btn-with-menu .x-btn-center em {
+    display:block;
+    background:transparent url(../images/default/toolbar/btn-arrow.gif) no-repeat right 3px;
+	padding-right:10px;
+}

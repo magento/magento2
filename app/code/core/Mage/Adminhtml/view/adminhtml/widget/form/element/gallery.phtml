@@ -1,0 +1,142 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<tr>
+<td colspan="2">
+<label for="gallery"><?php echo $this->__('Images') ?></label>
+<table id="gallery" class="gallery" border="0" cellspacing="3" cellpadding="0">
+<thead id="gallery_thead" class="gallery">
+    <tr class="gallery">
+        <td class="gallery" valign="middle" align="center"><?php echo $this->__('Big Image') ?></td>
+        <td class="gallery" valign="middle" align="center"><?php echo $this->__('Thumbnail') ?></td>
+        <td class="gallery" valign="middle" align="center"><?php echo $this->__('Sort Order') ?></td>
+        <td class="gallery" valign="middle" align="center"><?php echo $this->__('Delete') ?></td>
+    </tr>
+</thead>
+
+<tfoot class="gallery">
+<tr class="gallery">
+<td class="gallery v-middle a-left"colspan="5"><?php echo $this->getAddButtonHtml() ?></td>
+</tr>
+</tfoot>
+
+<tbody class="gallery">
+
+<?php $i = 0; if (!is_null($this->getValues())): ?>
+    <?php foreach ($this->getValues() as $image): $i++; ?>
+        <tr id="<?php echo $this->getElement()->getHtmlId() ?>_tr_<?php echo $image->getValueId() ?>" class="gallery">
+        <?php foreach ($this->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
+            <td class="gallery" align="center" style="vertical-align:bottom;">
+            <a href="<?php echo $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?php echo $this->getElement()->getHtmlId() ?>_image_<?php echo $type ?>_<?php echo $image->getValueId() ?>');return false;">
+            <img id="<?php echo $this->getElement()->getHtmlId() ?>_image_<?php echo $type ?>_<?php echo $image->getValueId() ?>" src="<?php echo $image->setType($type)->getSourceUrl() ?>?<?php echo time() ?>" alt="<?php echo $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
+            <input type="file" name="<?php echo $this->getElement()->getName() ?>_<?php echo $type ?>[<?php echo $image->getValueId() ?>]" size="1"></td>
+        <?php endforeach; ?>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?php echo $this->getElement()->getParentName() ?>[position][<?php echo $image->getValueId() ?>]" value="<?php echo $image->getPosition() ?>" id="<?php echo $this->getElement()->getHtmlId() ?>_position_<?php echo $image->getValueId() ?>" size="3"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><?php echo $this->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?php echo $this->getElement()->getParentName() ?>[delete][<?php echo $image->getValueId() ?>]" id="<?php echo $this->getElement()->getHtmlId() ?>_delete_<?php echo $image->getValueId() ?>"/></td>
+        </tr>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+<?php if ($i==0): ?>
+    <script type="text/javascript">document.getElementById("gallery_thead").style.visibility="hidden";</script>
+<?php endif; ?>
+
+</tbody></table>
+
+<script type="text/javascript">
+//<![CDATA[
+id = 0;
+num_of_images = <?php echo $i ?>;
+
+function addNewImage()
+{
+
+    document.getElementById("gallery_thead").style.visibility="visible";
+
+    id--;
+    num_of_images++;
+    new_file_input = '<input type="file" name="<?php echo $this->getElement()->getName() ?>_%j%[%id%]" size="1">';
+
+    // Sort order input
+    var new_row_input = document.createElement( 'input' );
+    new_row_input.type = 'text';
+    new_row_input.name = '<?php echo $this->getElement()->getParentName() ?>[position]['+id+']';
+    new_row_input.size = '3';
+    new_row_input.value = '0';
+
+    // Delete button
+    new_row_button = '<?php echo $this->getDeleteButtonHtml("this") ?>';
+
+    table = document.getElementById( "gallery" );
+
+    // no of rows in the table:
+    noOfRows = table.rows.length;
+
+    // no of columns in the pre-last row:
+    noOfCols = table.rows[noOfRows-2].cells.length;
+
+    // insert row at pre-last:
+    var x=table.insertRow(noOfRows-1);
+
+    // insert cells in row.
+    for (var j = 0; j < noOfCols; j++) {
+
+        newCell = x.insertCell(j);
+        newCell.align = "center";
+        newCell.valign = "middle";
+
+        if (j==2) {
+            newCell.appendChild( new_row_input );
+        }
+        else if (j==3) {
+            newCell.innerHTML = new_row_button;
+        }
+        else {
+            newCell.innerHTML = new_file_input.replace(/%j%/g, j).replace(/%id%/g, id);
+        }
+
+    }
+
+}
+
+function deleteImage(image)
+{
+    num_of_images--;
+    if (num_of_images<=0) {
+        document.getElementById("gallery_thead").style.visibility="hidden";
+    }
+    if (image>0) {
+        document.getElementById('<?php echo $this->getElement()->getName() ?>_delete_'+image).value=image;
+        document.getElementById('<?php echo $this->getElement()->getName() ?>_tr_'+image).style.display='none';
+    }
+    else {
+        image.parentNode.parentNode.parentNode.removeChild( image.parentNode.parentNode );
+    }
+}
+//]]>
+</script>
+    </td>
+</tr>

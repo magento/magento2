@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="storeEntity">
+                <all>
+                    <element name="store_id" type="xsd:int" />
+                    <element name="code" type="xsd:string" />
+                    <element name="website_id" type="xsd:int" />
+                    <element name="group_id" type="xsd:int" />
+                    <element name="name" type="xsd:string" />
+                    <element name="sort_order" type="xsd:int" />
+                    <element name="is_active" type="xsd:int" />
+                </all>
+            </complexType>
+            <complexType name="storeEntityArray">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:storeEntity[]" />
+                    </restriction>
+                </complexContent>
+            </complexType>
+        </schema>
+    </types>
+    <message name="storeListRequest">
+        <part name="sessionId" type="xsd:string" />
+    </message>
+    <message name="storeListResponse">
+        <part name="stores" type="typens:storeEntityArray" />
+    </message>
+    <message name="storeInfoRequest">
+        <part name="sessionId" type="xsd:string" />
+        <part name="storeId" type="xsd:string" />
+    </message>
+    <message name="storeInfoResponse">
+        <part name="info" type="typens:storeEntity" />
+    </message>
+    <portType name="{{var wsdl.handler}}PortType">
+        <operation name="storeList">
+            <documentation>List of stores</documentation>
+            <input message="typens:storeListRequest" />
+            <output message="typens:storeListResponse" />
+        </operation>
+        <operation name="storeInfo">
+            <documentation>Store view info</documentation>
+            <input message="typens:storeInfoRequest" />
+            <output message="typens:storeInfoResponse" />
+        </operation>
+    </portType>
+    <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="storeList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="storeInfo">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+    <service name="{{var wsdl.name}}Service">
+        <port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </port>
+    </service>
+</definitions>

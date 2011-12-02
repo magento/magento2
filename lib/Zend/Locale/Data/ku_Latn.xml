@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.20 $"/>
+		<generation date="$Date: 2009/06/15 03:46:24 $"/>
+		<language type="ku"/>
+		<script type="Latn"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ar">erebî</language>
+			<language type="en">îngilîzî</language>
+			<language type="ja">japonî</language>
+			<language type="ku">kurdî</language>
+		</languages>
+		<scripts>
+			<script type="Arab">erebî</script>
+		</scripts>
+		<territories>
+			<territory type="001">Cîhan</territory>
+			<territory type="TR">Tirkiye</territory>
+		</territories>
+		<keys>
+			<key type="calendar">salname</key>
+			<key type="collation">rêzkirin</key>
+		</keys>
+		<types>
+			<type type="gregorian" key="calendar">mîladî</type>
+			<type type="islamic" key="calendar">hîcrî</type>
+		</types>
+	</localeDisplayNames>
+	<layout>
+		<orientation/>
+	</layout>
+	<characters>
+		<exemplarCharacters>[a-c ç d e ê f-i î j-s ş t u û v-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">çil</month>
+							<month type="2">sib</month>
+							<month type="3">adr</month>
+							<month type="4">nîs</month>
+							<month type="5">gul</month>
+							<month type="6">hez</month>
+							<month type="7">tîr</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">çile</month>
+							<month type="2">sibat</month>
+							<month type="3">adar</month>
+							<month type="4">nîsan</month>
+							<month type="5">gulan</month>
+							<month type="6">hezîran</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">ç</month>
+							<month type="2">s</month>
+							<month type="3">a</month>
+							<month type="4">n</month>
+							<month type="5">g</month>
+							<month type="6">h</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">yş</day>
+							<day type="mon">dş</day>
+							<day type="tue">sş</day>
+							<day type="wed">çş</day>
+							<day type="thu">pş</day>
+							<day type="fri">în</day>
+							<day type="sat">ş</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">yekşem</day>
+							<day type="mon">duşem</day>
+							<day type="tue">şê</day>
+							<day type="wed">çarşem</day>
+							<day type="thu">pêncşem</day>
+							<day type="fri">în</day>
+							<day type="sat">şemî</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">y</day>
+							<day type="mon">d</day>
+							<day type="tue">s</day>
+							<day type="wed">ç</day>
+							<day type="thu">p</day>
+							<day type="fri">î</day>
+							<day type="sat">ş</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Ç1</quarter>
+							<quarter type="2">Ç2</quarter>
+							<quarter type="3">Ç3</quarter>
+							<quarter type="4">Ç4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Ç1</quarter>
+							<quarter type="2">Ç2</quarter>
+							<quarter type="3">Ç3</quarter>
+							<quarter type="4">Ç4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>BN</am>
+				<pm>PN</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">BZ</era>
+						<era type="1">PZ</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<fields>
+					<field type="year">
+						<displayName>sal</displayName>
+					</field>
+					<field type="month">
+						<displayName>meh</displayName>
+					</field>
+					<field type="week">
+						<displayName>hefte</displayName>
+					</field>
+					<field type="day">
+						<displayName>roj</displayName>
+					</field>
+					<field type="hour">
+						<displayName>demjimêr</displayName>
+					</field>
+					<field type="minute">
+						<displayName>xulek</displayName>
+					</field>
+					<field type="second">
+						<displayName>çirke</displayName>
+					</field>
+				</fields>
+			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="1">muẖerem</month>
+							<month type="2">sefer</month>
+							<month type="3">rebîʿulewel</month>
+							<month type="4">rebîʿulaxer</month>
+							<month type="5">cemazîyelewel</month>
+							<month type="6">cemazîyelaxer</month>
+							<month type="7">receb</month>
+							<month type="8">şeʿban</month>
+							<month type="9">remezan</month>
+							<month type="10">şewal</month>
+							<month type="11">zîlqeʿde</month>
+							<month type="12">zîlẖece</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+		</calendars>
+	</dates>
+	<posix>
+		<messages>
+			<yesstr>erê:e</yesstr>
+			<nostr>na:n</nostr>
+		</messages>
+	</posix>
+</ldml>
+

@@ -1,0 +1,110 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* @var $this Mage_Sales_Block_Billing_Agreement_View */ ?>
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('Billing Agreement # %s', $this->escapeHtml($this->getReferenceId())) ?></h1>
+    <?php if ($this->getCanCancel()): ?>
+        <button type="button" title="<?php echo $this->__('Cancel') ?>" class="button" onclick="if( confirm('<?php echo $this->__('Are you sure you want to do this?') ?>') ) { window.location.href = '<?php echo $this->getCancelUrl() ?>'; } return false;"><span><span><?php echo $this->__('Cancel') ?></span></span></button>
+    <?php endif; ?>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="billing-agreements">
+    <div class="info-box">
+        <h2 class="box-title"><?php echo $this->__('Agreement Information') ?></h2>
+        <div class="box-content">
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th><?php echo $this->__('Reference ID:') ?></th>
+                        <td><?php echo $this->escapeHtml($this->getReferenceId()); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $this->__('Status:') ?></th>
+                        <td><?php echo $this->getAgreementStatus() ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $this->__('Created:') ?></th>
+                        <td><?php echo $this->escapeHtml($this->getAgreementCreatedAt()) ?></td>
+                    </tr>
+                    <?php if($this->getAgreementUpdatedAt()): ?>
+                    <tr>
+                        <th><?php echo $this->__('Updated:') ?></th>
+                        <td><?php echo $this->escapeHtml($this->getAgreementUpdatedAt()); ?></td>
+                    </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <th><?php echo $this->__('Payment Method:') ?></th>
+                        <td><?php echo $this->getPaymentMethodTitle() ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php $relatedOrders = $this->getRelatedOrders() ?>
+    <?php if(count($relatedOrders) > 0): ?>
+    <?php echo $this->getChildHtml('pager'); ?>
+    <h2 class="table-caption"><?php echo $this->__('Related Orders') ?></h2>
+    <table class="data-table" id="related-orders-table">
+        <col width="1" />
+        <col width="1" />
+        <col />
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <thead>
+            <tr>
+                <th><span class="nobr"><?php echo $this->__('Order #') ?></span></th>
+                <th><?php echo $this->__('Date') ?></th>
+                <th><?php echo $this->__('Ship To') ?></th>
+                <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
+                <th><span class="nobr"><?php echo $this->__('Order Status') ?></span></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($relatedOrders as $order): ?>
+                <tr>
+                    <td><?php echo $this->getOrderItemValue($order, 'order_increment_id') ?></td>
+                    <td><span class="nobr"><?php echo $this->getOrderItemValue($order, 'created_at') ?></span></td>
+                    <td><?php echo $this->getOrderItemValue($order, 'shipping_address') ?></td>
+                    <td><?php echo $this->getOrderItemValue($order, 'order_total') ?></td>
+                    <td><em><?php echo $this->getOrderItemValue($order, 'status_label') ?></em></td>
+                    <td class="a-center">
+                        <span class="nobr">
+                            <a href="<?php echo $this->getOrderItemValue($order, 'view_url') ?>"><?php echo $this->__('View Order') ?></a>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <script type="text/javascript">decorateTable('related-orders-table');</script>
+    <?php endif; ?>
+    <div class="buttons-set">
+        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->__('Back to Billing Agreements') ?></a></p>
+    </div>
+</div>

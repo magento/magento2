@@ -1,0 +1,3178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.192 $"/>
+		<generation date="$Date: 2009/06/15 21:39:59 $"/>
+		<language type="root"/>
+	</identity>
+	<fallback/>
+	<localeDisplayNames>
+		<localeDisplayPattern>
+			<localePattern>{0} ({1})</localePattern>
+			<localeSeparator>, </localeSeparator>
+		</localeDisplayPattern>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">Metric</measurementSystemName>
+			<measurementSystemName type="US">US</measurementSystemName>
+		</measurementSystemNames>
+		<codePatterns>
+			<codePattern type="language">{0}</codePattern>
+			<codePattern type="script">{0}</codePattern>
+			<codePattern type="territory">{0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<layout>
+		<orientation/>
+		<inList>mixed</inList>
+		<inText type="currency">mixed</inText>
+		<inText type="dayWidth">mixed</inText>
+		<inText type="fields">mixed</inText>
+		<inText type="keys">mixed</inText>
+		<inText type="languages">mixed</inText>
+		<inText type="long">mixed</inText>
+		<inText type="measurementSystemNames">mixed</inText>
+		<inText type="monthWidth">mixed</inText>
+		<inText type="quarterWidth">mixed</inText>
+		<inText type="scripts">mixed</inText>
+		<inText type="territories">mixed</inText>
+		<inText type="types">mixed</inText>
+		<inText type="variants">mixed</inText>
+	</layout>
+	<characters>
+		<exemplarCharacters>[]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[a-c č d-l ł m-o º p-z]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>“</quotationStart>
+		<quotationEnd>”</quotationEnd>
+		<alternateQuotationStart>‘</alternateQuotationStart>
+		<alternateQuotationEnd>’</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<dateRangePattern>{0} - {1}</dateRangePattern>
+		<calendars>
+			<default choice="gregorian"/>
+			<calendar type="buddhist">
+				<months>
+					<alias source="locale" path="../../calendar[@type='gregorian']/months"/>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">BE</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<default choice="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>MMMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>MMM d, y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>M/d/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength>
+						<alias source="locale" path="../../../calendar[@type='gregorian']/dateTimeFormats/dateTimeFormatLength"/>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="EEEd">EEE d</dateFormatItem>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">H:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">H:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MEd">E, M-d</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">MMM d</dateFormatItem>
+						<dateFormatItem id="MMMEd">E MMM d</dateFormatItem>
+						<dateFormatItem id="MMMMd">MMMM d</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E MMMM d</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">M/y</dateFormatItem>
+						<dateFormatItem id="yMEd">EEE, M/d/y</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM, y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">EEE, MMM d, y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM, y</dateFormatItem>
+						<dateFormatItem id="yQ">y Q</dateFormatItem>
+						<dateFormatItem id="yQQQ">y QQQ</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Day">{0} ({2}: {1})</appendItem>
+						<appendItem request="Day-Of-Week">{0} {1}</appendItem>
+						<appendItem request="Era">{0} {1}</appendItem>
+						<appendItem request="Hour">{0} ({2}: {1})</appendItem>
+						<appendItem request="Minute">{0} ({2}: {1})</appendItem>
+						<appendItem request="Month">{0} ({2}: {1})</appendItem>
+						<appendItem request="Quarter">{0} ({2}: {1})</appendItem>
+						<appendItem request="Second">{0} ({2}: {1})</appendItem>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+						<appendItem request="Week">{0} ({2}: {1})</appendItem>
+						<appendItem request="Year">{0} {1}</appendItem>
+					</appendItems>
+					<intervalFormats>
+						<alias source="locale" path="../../../calendar[@type='gregorian']/dateTimeFormats/intervalFormats"/>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="chinese">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<dateFormats>
+					<default choice="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE y'x'G-Ml-d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y'x'G-Ml-d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y'x'G-Ml-d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>y'x'G-Ml-d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="coptic">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Tout</month>
+							<month type="2">Baba</month>
+							<month type="3">Hator</month>
+							<month type="4">Kiahk</month>
+							<month type="5">Toba</month>
+							<month type="6">Amshir</month>
+							<month type="7">Baramhat</month>
+							<month type="8">Baramouda</month>
+							<month type="9">Bashans</month>
+							<month type="10">Paona</month>
+							<month type="11">Epep</month>
+							<month type="12">Mesra</month>
+							<month type="13">Nasie</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+							<month type="13">13</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">ERA0</era>
+						<era type="1">ERA1</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="ethiopic">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Meskerem</month>
+							<month type="2">Tekemt</month>
+							<month type="3">Hedar</month>
+							<month type="4">Tahsas</month>
+							<month type="5">Ter</month>
+							<month type="6">Yekatit</month>
+							<month type="7">Megabit</month>
+							<month type="8">Miazia</month>
+							<month type="9">Genbot</month>
+							<month type="10">Sene</month>
+							<month type="11">Hamle</month>
+							<month type="12">Nehasse</month>
+							<month type="13">Pagumen</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+							<month type="13">13</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">ERA0</era>
+						<era type="1">ERA1</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="ethiopic-amete-alem">
+				<months>
+					<alias source="locale" path="../../calendar[@type='ethiopic']/months"/>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">ERA0</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<default choice="format"/>
+					<dayContext type="format">
+						<default choice="wide"/>
+						<dayWidth type="abbreviated">
+							<alias source="locale" path="../dayWidth[@type='wide']"/>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<alias source="locale" path="../../dayContext[@type='stand-alone']/dayWidth[@type='narrow']"/>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="abbreviated">
+							<alias source="locale" path="../../dayContext[@type='format']/dayWidth[@type='abbreviated']"/>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<alias source="locale" path="../../dayContext[@type='format']/dayWidth[@type='wide']"/>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<alias source="locale" path="../quarterWidth[@type='wide']"/>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<alias source="locale" path="../../quarterContext[@type='stand-alone']/quarterWidth[@type='narrow']"/>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+					<quarterContext type="stand-alone">
+						<quarterWidth type="abbreviated">
+							<alias source="locale" path="../../quarterContext[@type='format']/quarterWidth[@type='abbreviated']"/>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1">1</quarter>
+							<quarter type="2">2</quarter>
+							<quarter type="3">3</quarter>
+							<quarter type="4">4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<alias source="locale" path="../../quarterContext[@type='format']/quarterWidth[@type='wide']"/>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">BCE</era>
+						<era type="1">CE</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<default choice="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, y MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y MMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yyyy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<default choice="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<default choice="medium"/>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="EEEd">d EEE</dateFormatItem>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">H:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">H:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MEd">E, M-d</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">MMM d</dateFormatItem>
+						<dateFormatItem id="MMMEd">E MMM d</dateFormatItem>
+						<dateFormatItem id="MMMMd">MMMM d</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E MMMM d</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">y-M</dateFormatItem>
+						<dateFormatItem id="yMEd">EEE, y-M-d</dateFormatItem>
+						<dateFormatItem id="yMMM">y MMM</dateFormatItem>
+						<dateFormatItem id="yMMMEd">EEE, y MMM d</dateFormatItem>
+						<dateFormatItem id="yMMMM">y MMMM</dateFormatItem>
+						<dateFormatItem id="yQ">y Q</dateFormatItem>
+						<dateFormatItem id="yQQQ">y QQQ</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Day">{0} ({2}: {1})</appendItem>
+						<appendItem request="Day-Of-Week">{0} {1}</appendItem>
+						<appendItem request="Era">{0} {1}</appendItem>
+						<appendItem request="Hour">{0} ({2}: {1})</appendItem>
+						<appendItem request="Minute">{0} ({2}: {1})</appendItem>
+						<appendItem request="Month">{0} ({2}: {1})</appendItem>
+						<appendItem request="Quarter">{0} ({2}: {1})</appendItem>
+						<appendItem request="Second">{0} ({2}: {1})</appendItem>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+						<appendItem request="Week">{0} ({2}: {1})</appendItem>
+						<appendItem request="Year">{0} {1}</appendItem>
+					</appendItems>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">HH-HH</greatestDifference>
+							<greatestDifference id="h">HH-HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">HH:mm-HH:mm</greatestDifference>
+							<greatestDifference id="h">HH:mm-HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm-HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">HH:mm-HH:mm v</greatestDifference>
+							<greatestDifference id="h">HH:mm-HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm-HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">HH-HH v</greatestDifference>
+							<greatestDifference id="h">HH-HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M-M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd – dd</greatestDifference>
+							<greatestDifference id="M">MM-dd – MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, MM-dd – E, MM-dd</greatestDifference>
+							<greatestDifference id="M">E, MM-dd – E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">LLL-LLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">MM-d – d</greatestDifference>
+							<greatestDifference id="M">MM-d – MM-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E, MM-d – E, MM-d</greatestDifference>
+							<greatestDifference id="M">E, MM-d – E, MM-d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMM">
+							<greatestDifference id="M">LLLL-LLLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">yyyy-MM – MM</greatestDifference>
+							<greatestDifference id="y">yyyy-MM – yyyy-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">yyyy-MM-dd – dd</greatestDifference>
+							<greatestDifference id="M">yyyy-MM-dd – MM-dd</greatestDifference>
+							<greatestDifference id="y">yyyy-MM-dd – yyyy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+							<greatestDifference id="M">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+							<greatestDifference id="y">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">yyyy-MM – MM</greatestDifference>
+							<greatestDifference id="y">yyyy-MM – yyyy-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">yyyy-MM-d – d</greatestDifference>
+							<greatestDifference id="M">yyyy-MM-dd – MM-d</greatestDifference>
+							<greatestDifference id="y">yyyy-MM-dd – yyyy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+							<greatestDifference id="M">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+							<greatestDifference id="y">E, yyyy-MM-dd – E, yyyy-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">yyyy-MM – MM</greatestDifference>
+							<greatestDifference id="y">yyyy-MM – yyyy-MM</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="era">
+						<displayName>Era</displayName>
+					</field>
+					<field type="year">
+						<displayName>Year</displayName>
+					</field>
+					<field type="month">
+						<displayName>Month</displayName>
+					</field>
+					<field type="week">
+						<displayName>Week</displayName>
+					</field>
+					<field type="day">
+						<displayName>Day</displayName>
+						<relative type="-1">Yesterday</relative>
+						<relative type="0">Today</relative>
+						<relative type="1">Tomorrow</relative>
+					</field>
+					<field type="weekday">
+						<displayName>Day of the Week</displayName>
+					</field>
+					<field type="dayperiod">
+						<displayName>Dayperiod</displayName>
+					</field>
+					<field type="hour">
+						<displayName>Hour</displayName>
+					</field>
+					<field type="minute">
+						<displayName>Minute</displayName>
+					</field>
+					<field type="second">
+						<displayName>Second</displayName>
+					</field>
+					<field type="zone">
+						<displayName>Zone</displayName>
+					</field>
+				</fields>
+			</calendar>
+			<calendar type="hebrew">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Tishri</month>
+							<month type="2">Heshvan</month>
+							<month type="3">Kislev</month>
+							<month type="4">Tevet</month>
+							<month type="5">Shevat</month>
+							<month type="6">Adar I</month>
+							<month type="7">Adar</month>
+							<month type="8">Nisan</month>
+							<month type="9">Iyar</month>
+							<month type="10">Sivan</month>
+							<month type="11">Tamuz</month>
+							<month type="12">Av</month>
+							<month type="13">Elul</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+							<month type="13">13</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">AM</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="indian">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Chaitra</month>
+							<month type="2">Vaisakha</month>
+							<month type="3">Jyaistha</month>
+							<month type="4">Asadha</month>
+							<month type="5">Sravana</month>
+							<month type="6">Bhadra</month>
+							<month type="7">Asvina</month>
+							<month type="8">Kartika</month>
+							<month type="9">Agrahayana</month>
+							<month type="10">Pausa</month>
+							<month type="11">Magha</month>
+							<month type="12">Phalguna</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">SAKA</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="islamic">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabiʻ I</month>
+							<month type="4">Rabiʻ II</month>
+							<month type="5">Jumada I</month>
+							<month type="6">Jumada II</month>
+							<month type="7">Rajab</month>
+							<month type="8">Shaʻban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Shawwal</month>
+							<month type="11">Dhuʻl-Qiʻdah</month>
+							<month type="12">Dhuʻl-Hijjah</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">AH</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="islamic-civil">
+				<alias source="locale" path="../calendar[@type='islamic']"/>
+			</calendar>
+			<calendar type="japanese">
+				<months>
+					<alias source="locale" path="../../calendar[@type='gregorian']/months"/>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">Taika</era>
+						<era type="1">Hakuchi</era>
+						<era type="2">Hakuhō</era>
+						<era type="3">Shuchō</era>
+						<era type="4">Taihō</era>
+						<era type="5">Keiun</era>
+						<era type="6">Wadō</era>
+						<era type="7">Reiki</era>
+						<era type="8">Yōrō</era>
+						<era type="9">Jinki</era>
+						<era type="10">Tempyō</era>
+						<era type="11">Tempyō-kampō</era>
+						<era type="12">Tempyō-shōhō</era>
+						<era type="13">Tempyō-hōji</era>
+						<era type="14">Temphō-jingo</era>
+						<era type="15">Jingo-keiun</era>
+						<era type="16">Hōki</era>
+						<era type="17">Ten-ō</era>
+						<era type="18">Enryaku</era>
+						<era type="19">Daidō</era>
+						<era type="20">Kōnin</era>
+						<era type="21">Tenchō</era>
+						<era type="22">Shōwa</era>
+						<era type="23">Kajō</era>
+						<era type="24">Ninju</era>
+						<era type="25">Saiko</era>
+						<era type="26">Tennan</era>
+						<era type="27">Jōgan</era>
+						<era type="28">Genkei</era>
+						<era type="29">Ninna</era>
+						<era type="30">Kampyō</era>
+						<era type="31">Shōtai</era>
+						<era type="32">Engi</era>
+						<era type="33">Enchō</era>
+						<era type="34">Shōhei</era>
+						<era type="35">Tengyō</era>
+						<era type="36">Tenryaku</era>
+						<era type="37">Tentoku</era>
+						<era type="38">Ōwa</era>
+						<era type="39">Kōhō</era>
+						<era type="40">Anna</era>
+						<era type="41">Tenroku</era>
+						<era type="42">Ten-en</era>
+						<era type="43">Jōgen</era>
+						<era type="44">Tengen</era>
+						<era type="45">Eikan</era>
+						<era type="46">Kanna</era>
+						<era type="47">Ei-en</era>
+						<era type="48">Eiso</era>
+						<era type="49">Shōryaku</era>
+						<era type="50">Chōtoku</era>
+						<era type="51">Chōhō</era>
+						<era type="52">Kankō</era>
+						<era type="53">Chōwa</era>
+						<era type="54">Kannin</era>
+						<era type="55">Jian</era>
+						<era type="56">Manju</era>
+						<era type="57">Chōgen</era>
+						<era type="58">Chōryaku</era>
+						<era type="59">Chōkyū</era>
+						<era type="60">Kantoku</era>
+						<era type="61">Eishō</era>
+						<era type="62">Tengi</era>
+						<era type="63">Kōhei</era>
+						<era type="64">Jiryaku</era>
+						<era type="65">Enkyū</era>
+						<era type="66">Shōho</era>
+						<era type="67">Shōryaku</era>
+						<era type="68">Eiho</era>
+						<era type="69">Ōtoku</era>
+						<era type="70">Kanji</era>
+						<era type="71">Kaho</era>
+						<era type="72">Eichō</era>
+						<era type="73">Shōtoku</era>
+						<era type="74">Kōwa</era>
+						<era type="75">Chōji</era>
+						<era type="76">Kashō</era>
+						<era type="77">Tennin</era>
+						<era type="78">Ten-ei</era>
+						<era type="79">Eikyū</era>
+						<era type="80">Gen-ei</era>
+						<era type="81">Hoan</era>
+						<era type="82">Tenji</era>
+						<era type="83">Daiji</era>
+						<era type="84">Tenshō</era>
+						<era type="85">Chōshō</era>
+						<era type="86">Hoen</era>
+						<era type="87">Eiji</era>
+						<era type="88">Kōji</era>
+						<era type="89">Tenyō</era>
+						<era type="90">Kyūan</era>
+						<era type="91">Ninpei</era>
+						<era type="92">Kyūju</era>
+						<era type="93">Hogen</era>
+						<era type="94">Heiji</era>
+						<era type="95">Eiryaku</era>
+						<era type="96">Ōho</era>
+						<era type="97">Chōkan</era>
+						<era type="98">Eiman</era>
+						<era type="99">Nin-an</era>
+						<era type="100">Kaō</era>
+						<era type="101">Shōan</era>
+						<era type="102">Angen</era>
+						<era type="103">Jishō</era>
+						<era type="104">Yōwa</era>
+						<era type="105">Juei</era>
+						<era type="106">Genryuku</era>
+						<era type="107">Bunji</era>
+						<era type="108">Kenkyū</era>
+						<era type="109">Shōji</era>
+						<era type="110">Kennin</era>
+						<era type="111">Genkyū</era>
+						<era type="112">Ken-ei</era>
+						<era type="113">Shōgen</era>
+						<era type="114">Kenryaku</era>
+						<era type="115">Kenpō</era>
+						<era type="116">Shōkyū</era>
+						<era type="117">Jōō</era>
+						<era type="118">Gennin</era>
+						<era type="119">Karoku</era>
+						<era type="120">Antei</era>
+						<era type="121">Kanki</era>
+						<era type="122">Jōei</era>
+						<era type="123">Tempuku</era>
+						<era type="124">Bunryaku</era>
+						<era type="125">Katei</era>
+						<era type="126">Ryakunin</era>
+						<era type="127">En-ō</era>
+						<era type="128">Ninji</era>
+						<era type="129">Kangen</era>
+						<era type="130">Hōji</era>
+						<era type="131">Kenchō</era>
+						<era type="132">Kōgen</era>
+						<era type="133">Shōka</era>
+						<era type="134">Shōgen</era>
+						<era type="135">Bun-ō</era>
+						<era type="136">Kōchō</era>
+						<era type="137">Bun-ei</era>
+						<era type="138">Kenji</era>
+						<era type="139">Kōan</era>
+						<era type="140">Shōō</era>
+						<era type="141">Einin</era>
+						<era type="142">Shōan</era>
+						<era type="143">Kengen</era>
+						<era type="144">Kagen</era>
+						<era type="145">Tokuji</era>
+						<era type="146">Enkei</era>
+						<era type="147">Ōchō</era>
+						<era type="148">Shōwa</era>
+						<era type="149">Bunpō</era>
+						<era type="150">Genō</era>
+						<era type="151">Genkyō</era>
+						<era type="152">Shōchū</era>
+						<era type="153">Kareki</era>
+						<era type="154">Gentoku</era>
+						<era type="155">Genkō</era>
+						<era type="156">Kemmu</era>
+						<era type="157">Engen</era>
+						<era type="158">Kōkoku</era>
+						<era type="159">Shōhei</era>
+						<era type="160">Kentoku</era>
+						<era type="161">Bunchũ</era>
+						<era type="162">Tenju</era>
+						<era type="163">Kōryaku</era>
+						<era type="164">Kōwa</era>
+						<era type="165">Genchũ</era>
+						<era type="166">Meitoku</era>
+						<era type="167">Kakei</era>
+						<era type="168">Kōō</era>
+						<era type="169">Meitoku</era>
+						<era type="170">Ōei</era>
+						<era type="171">Shōchō</era>
+						<era type="172">Eikyō</era>
+						<era type="173">Kakitsu</era>
+						<era type="174">Bun-an</era>
+						<era type="175">Hōtoku</era>
+						<era type="176">Kyōtoku</era>
+						<era type="177">Kōshō</era>
+						<era type="178">Chōroku</era>
+						<era type="179">Kanshō</era>
+						<era type="180">Bunshō</era>
+						<era type="181">Ōnin</era>
+						<era type="182">Bunmei</era>
+						<era type="183">Chōkyō</era>
+						<era type="184">Entoku</era>
+						<era type="185">Meiō</era>
+						<era type="186">Bunki</era>
+						<era type="187">Eishō</era>
+						<era type="188">Taiei</era>
+						<era type="189">Kyōroku</era>
+						<era type="190">Tenmon</era>
+						<era type="191">Kōji</era>
+						<era type="192">Eiroku</era>
+						<era type="193">Genki</era>
+						<era type="194">Tenshō</era>
+						<era type="195">Bunroku</era>
+						<era type="196">Keichō</era>
+						<era type="197">Genwa</era>
+						<era type="198">Kan-ei</era>
+						<era type="199">Shōho</era>
+						<era type="200">Keian</era>
+						<era type="201">Shōō</era>
+						<era type="202">Meiryaku</era>
+						<era type="203">Manji</era>
+						<era type="204">Kanbun</era>
+						<era type="205">Enpō</era>
+						<era type="206">Tenwa</era>
+						<era type="207">Jōkyō</era>
+						<era type="208">Genroku</era>
+						<era type="209">Hōei</era>
+						<era type="210">Shōtoku</era>
+						<era type="211">Kyōhō</era>
+						<era type="212">Genbun</era>
+						<era type="213">Kanpō</era>
+						<era type="214">Enkyō</era>
+						<era type="215">Kan-en</era>
+						<era type="216">Hōryaku</era>
+						<era type="217">Meiwa</era>
+						<era type="218">An-ei</era>
+						<era type="219">Tenmei</era>
+						<era type="220">Kansei</era>
+						<era type="221">Kyōwa</era>
+						<era type="222">Bunka</era>
+						<era type="223">Bunsei</era>
+						<era type="224">Tenpō</era>
+						<era type="225">Kōka</era>
+						<era type="226">Kaei</era>
+						<era type="227">Ansei</era>
+						<era type="228">Man-en</era>
+						<era type="229">Bunkyū</era>
+						<era type="230">Genji</era>
+						<era type="231">Keiō</era>
+						<era type="232">Meiji</era>
+						<era type="233">Taishō</era>
+						<era type="234">Shōwa</era>
+						<era type="235">Heisei</era>
+					</eraAbbr>
+					<eraNarrow>
+						<era type="232">M</era>
+						<era type="233">T</era>
+						<era type="234">S</era>
+						<era type="235">H</era>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<default choice="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, G y MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>G y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>G y MMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>G yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<default choice="medium"/>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed">E d</dateFormatItem>
+						<dateFormatItem id="H">H</dateFormatItem>
+						<dateFormatItem id="hm">hh:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">HH:mm</dateFormatItem>
+						<dateFormatItem id="hms">hh:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MMMEd">E MMM d</dateFormatItem>
+						<dateFormatItem id="MMMMd">MMMM d</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="yyyy">yy GGG</dateFormatItem>
+						<dateFormatItem id="yyyyM">GGGGG yy-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMd">GGGGG yy-MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyMMM">GGGGG yy MMM</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd">GGGGG yy MMM d</dateFormatItem>
+						<dateFormatItem id="yyyyQ">GGGGG yy Q</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Day">{0} ({2}: {1})</appendItem>
+						<appendItem request="Day-Of-Week">{0} {1}</appendItem>
+						<appendItem request="Era">{0} {1}</appendItem>
+						<appendItem request="Hour">{0} ({2}: {1})</appendItem>
+						<appendItem request="Minute">{0} ({2}: {1})</appendItem>
+						<appendItem request="Month">{0} ({2}: {1})</appendItem>
+						<appendItem request="Quarter">{0} ({2}: {1})</appendItem>
+						<appendItem request="Second">{0} ({2}: {1})</appendItem>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+						<appendItem request="Week">{0} ({2}: {1})</appendItem>
+						<appendItem request="Year">{0} {1}</appendItem>
+					</appendItems>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="persian">
+				<months>
+					<default choice="format"/>
+					<monthContext type="format">
+						<default choice="wide"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<alias source="locale" path="../../monthContext[@type='stand-alone']/monthWidth[@type='narrow']"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Farvardin</month>
+							<month type="2">Ordibehesht</month>
+							<month type="3">Khordad</month>
+							<month type="4">Tir</month>
+							<month type="5">Mordad</month>
+							<month type="6">Shahrivar</month>
+							<month type="7">Mehr</month>
+							<month type="8">Aban</month>
+							<month type="9">Azar</month>
+							<month type="10">Dey</month>
+							<month type="11">Bahman</month>
+							<month type="12">Esfand</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='abbreviated']"/>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<alias source="locale" path="../../monthContext[@type='format']/monthWidth[@type='wide']"/>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">AP</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="roc">
+				<months>
+					<alias source="locale" path="../../calendar[@type='gregorian']/months"/>
+				</months>
+				<days>
+					<alias source="locale" path="../../calendar[@type='gregorian']/days"/>
+				</days>
+				<quarters>
+					<alias source="locale" path="../../calendar[@type='gregorian']/quarters"/>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">Before R.O.C.</era>
+						<era type="1">R.O.C.</era>
+					</eraAbbr>
+					<eraNarrow>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<default choice="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, MMMM d, G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>MMMM d, G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>MMM d, G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>G y/M/d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength>
+						<alias source="locale" path="../../../calendar[@type='gregorian']/dateTimeFormats/dateTimeFormatLength"/>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">H:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">H:mm:ss</dateFormatItem>
+						<dateFormatItem id="Md">M/d</dateFormatItem>
+						<dateFormatItem id="MEd">E, M/d</dateFormatItem>
+						<dateFormatItem id="MMMd">MMM d</dateFormatItem>
+						<dateFormatItem id="MMMEd">E, MMM d</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="yyyy">G y</dateFormatItem>
+						<dateFormatItem id="yyyyM">G y/M</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">EEE, G y/M/d</dateFormatItem>
+						<dateFormatItem id="yyyyMMM">MMM, G y</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">EEE, MMM d, G y</dateFormatItem>
+						<dateFormatItem id="yyyyQ">Q G y</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ">QQQ G y</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Day">{0} ({2}: {1})</appendItem>
+						<appendItem request="Day-Of-Week">{0} {1}</appendItem>
+						<appendItem request="Era">{0} {1}</appendItem>
+						<appendItem request="Hour">{0} ({2}: {1})</appendItem>
+						<appendItem request="Minute">{0} ({2}: {1})</appendItem>
+						<appendItem request="Month">{0} ({2}: {1})</appendItem>
+						<appendItem request="Quarter">{0} ({2}: {1})</appendItem>
+						<appendItem request="Second">{0} ({2}: {1})</appendItem>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+						<appendItem request="Week">{0} ({2}: {1})</appendItem>
+						<appendItem request="Year">{0} {1}</appendItem>
+					</appendItems>
+					<intervalFormats>
+						<alias source="locale" path="../../../calendar[@type='gregorian']/dateTimeFormats/intervalFormats"/>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<hoursFormat>{0}/{1}</hoursFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+			<regionFormat>{0}</regionFormat>
+			<fallbackFormat>{1} ({0})</fallbackFormat>
+			<abbreviationFallback choice="standard"/>
+			<preferenceOrdering choice=""/>
+			<singleCountries list="Europe/Kiev Pacific/Majuro Africa/Bamako America/Godthab America/Santiago America/Guayaquil Asia/Shanghai Asia/Tashkent Asia/Kuala_Lumpur Europe/Madrid Europe/Lisbon Europe/London Pacific/Auckland Pacific/Tahiti"/>
+			<zone type="Etc/Unknown">
+				<exemplarCity>Unknown</exemplarCity>
+			</zone>
+			<zone type="Antarctica/DumontDUrville">
+				<exemplarCity>Dumont d'Urville</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>St. John's</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity>New Salem, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>Center, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity>Vincennes, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>Petersburg, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Tell_City">
+				<exemplarCity>Tell City, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity>Knox, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity>Winamac, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity>Marengo, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity>Vevay, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity>Monticello, Kentucky</exemplarCity>
+			</zone>
+			<metazone type="Acre">
+				<short>
+					<standard>ACT (Acre)</standard>
+					<daylight>ACST (Acre)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Afghanistan">
+				<short>
+					<standard>AFT</standard>
+				</short>
+			</metazone>
+			<metazone type="Africa_Central">
+				<short>
+					<standard>CAT</standard>
+				</short>
+			</metazone>
+			<metazone type="Africa_Eastern">
+				<short>
+					<standard>EAT</standard>
+				</short>
+			</metazone>
+			<metazone type="Africa_Southern">
+				<short>
+					<standard>SAST</standard>
+				</short>
+			</metazone>
+			<metazone type="Africa_Western">
+				<short>
+					<standard>WAT</standard>
+					<daylight>WAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Aktyubinsk">
+				<short>
+					<standard>AKTT</standard>
+					<daylight>AKTST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Alaska">
+				<short>
+					<standard>AKST</standard>
+					<daylight>AKDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Alaska_Hawaii">
+				<short>
+					<standard>AHST</standard>
+					<daylight>AHDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Almaty">
+				<short>
+					<standard>ALMT</standard>
+					<daylight>ALMST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Amazon">
+				<short>
+					<standard>AMT</standard>
+					<daylight>AMST</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Central">
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Eastern">
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Mountain">
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Pacific">
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Anadyr">
+				<short>
+					<standard>ANAT</standard>
+					<daylight>ANAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Aqtau">
+				<short>
+					<standard>AQTT (Aqtau)</standard>
+					<daylight>AQTST (Aqtau)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Aqtobe">
+				<short>
+					<standard>AQTT (Aqtobe)</standard>
+					<daylight>AQTST (Aqtobe)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Arabian">
+				<short>
+					<standard>AST (SA)</standard>
+					<daylight>ADT (SA)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Argentina">
+				<short>
+					<standard>ART</standard>
+					<daylight>ARST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Argentina_Western">
+				<short>
+					<standard>WART</standard>
+				</short>
+			</metazone>
+			<metazone type="Armenia">
+				<short>
+					<standard>AMT (AM)</standard>
+					<daylight>AMST (AM)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Ashkhabad">
+				<short>
+					<standard>ASHT</standard>
+					<daylight>ASHST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Atlantic">
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Australia_Central">
+				<short>
+					<standard>ACST</standard>
+					<daylight>ACDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Australia_CentralWestern">
+				<short>
+					<standard>ACWST</standard>
+					<daylight>ACWDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Australia_Eastern">
+				<short>
+					<standard>AEST</standard>
+					<daylight>AEDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Australia_Western">
+				<short>
+					<standard>AWST</standard>
+					<daylight>AWDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Azerbaijan">
+				<short>
+					<standard>AZT</standard>
+					<daylight>AZST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Azores">
+				<short>
+					<standard>AZOT</standard>
+					<daylight>AZOST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Baku">
+				<short>
+					<standard>BAKT</standard>
+					<daylight>BAKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Bangladesh">
+				<short>
+					<standard>BDT</standard>
+					<daylight>BDST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Bering">
+				<short>
+					<standard>BST (Bering)</standard>
+					<daylight>BDT (Bering)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Bhutan">
+				<short>
+					<standard>BTT</standard>
+				</short>
+			</metazone>
+			<metazone type="Bolivia">
+				<short>
+					<standard>BOT</standard>
+				</short>
+			</metazone>
+			<metazone type="Borneo">
+				<short>
+					<standard>BORT</standard>
+					<daylight>BORST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Brasilia">
+				<short>
+					<standard>BRT</standard>
+					<daylight>BRST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Brunei">
+				<short>
+					<standard>BNT</standard>
+				</short>
+			</metazone>
+			<metazone type="Cape_Verde">
+				<short>
+					<standard>CVT</standard>
+					<daylight>CVST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Chamorro">
+				<short>
+					<standard>ChST</standard>
+				</short>
+			</metazone>
+			<metazone type="Changbai">
+				<short>
+					<standard>CHAT</standard>
+				</short>
+			</metazone>
+			<metazone type="Chatham">
+				<short>
+					<standard>CHAST</standard>
+					<daylight>CHADT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Chile">
+				<short>
+					<standard>CLT</standard>
+					<daylight>CLST</daylight>
+				</short>
+			</metazone>
+			<metazone type="China">
+				<short>
+					<standard>CST (CN)</standard>
+					<daylight>CDT (CN)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Choibalsan">
+				<short>
+					<standard>CHOT</standard>
+					<daylight>CHOST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Christmas">
+				<short>
+					<standard>CXT</standard>
+				</short>
+			</metazone>
+			<metazone type="Cocos">
+				<short>
+					<standard>CCT</standard>
+				</short>
+			</metazone>
+			<metazone type="Colombia">
+				<short>
+					<standard>COT</standard>
+					<daylight>COST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Cook">
+				<short>
+					<standard>CKT</standard>
+					<daylight>CKHST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Cuba">
+				<short>
+					<standard>CST (CU)</standard>
+					<daylight>CDT (CU)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Dacca">
+				<short>
+					<standard>DACT</standard>
+				</short>
+			</metazone>
+			<metazone type="Davis">
+				<short>
+					<standard>DAVT</standard>
+				</short>
+			</metazone>
+			<metazone type="DumontDUrville">
+				<short>
+					<standard>DDUT</standard>
+				</short>
+			</metazone>
+			<metazone type="Dushanbe">
+				<short>
+					<standard>DUST</standard>
+					<daylight>DUSST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Dutch_Guiana">
+				<short>
+					<standard>NEGT</standard>
+				</short>
+			</metazone>
+			<metazone type="East_Timor">
+				<short>
+					<standard>TLT</standard>
+				</short>
+			</metazone>
+			<metazone type="Easter">
+				<short>
+					<standard>EAST</standard>
+					<daylight>EASST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Ecuador">
+				<short>
+					<standard>ECT</standard>
+				</short>
+			</metazone>
+			<metazone type="Europe_Central">
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<short>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Western">
+				<short>
+					<standard>WET</standard>
+					<daylight>WEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Falkland">
+				<short>
+					<standard>FKT</standard>
+					<daylight>FKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Fiji">
+				<short>
+					<standard>FJT</standard>
+					<daylight>FJST</daylight>
+				</short>
+			</metazone>
+			<metazone type="French_Guiana">
+				<short>
+					<standard>GFT</standard>
+				</short>
+			</metazone>
+			<metazone type="French_Southern">
+				<short>
+					<standard>TFT</standard>
+				</short>
+			</metazone>
+			<metazone type="Frunze">
+				<short>
+					<standard>FRUT</standard>
+					<daylight>FRUST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Galapagos">
+				<short>
+					<standard>GALT</standard>
+				</short>
+			</metazone>
+			<metazone type="Gambier">
+				<short>
+					<standard>GAMT</standard>
+				</short>
+			</metazone>
+			<metazone type="Georgia">
+				<short>
+					<standard>GET</standard>
+					<daylight>GEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Gilbert_Islands">
+				<short>
+					<standard>GILT</standard>
+				</short>
+			</metazone>
+			<metazone type="GMT">
+				<short>
+					<standard>GMT</standard>
+				</short>
+			</metazone>
+			<metazone type="Greenland_Central">
+				<short>
+					<standard>CGT</standard>
+					<daylight>CGST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Greenland_Eastern">
+				<short>
+					<standard>EGT</standard>
+					<daylight>EGST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Greenland_Western">
+				<short>
+					<standard>WGT</standard>
+					<daylight>WGST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Guam">
+				<short>
+					<standard>GST (GU)</standard>
+				</short>
+			</metazone>
+			<metazone type="Gulf">
+				<short>
+					<standard>GST</standard>
+				</short>
+			</metazone>
+			<metazone type="Guyana">
+				<short>
+					<standard>GYT</standard>
+				</short>
+			</metazone>
+			<metazone type="Hawaii_Aleutian">
+				<short>
+					<standard>HST</standard>
+				</short>
+			</metazone>
+			<metazone type="Hong_Kong">
+				<short>
+					<standard>HKT</standard>
+					<daylight>HKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Hovd">
+				<short>
+					<standard>HOVT</standard>
+					<daylight>HOVST</daylight>
+				</short>
+			</metazone>
+			<metazone type="India">
+				<short>
+					<standard>IST</standard>
+				</short>
+			</metazone>
+			<metazone type="Indian_Ocean">
+				<short>
+					<standard>IOT</standard>
+				</short>
+			</metazone>
+			<metazone type="Indochina">
+				<short>
+					<standard>ICT</standard>
+				</short>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<short>
+					<standard>CIT</standard>
+				</short>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<short>
+					<standard>EIT</standard>
+				</short>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<short>
+					<standard>WIT</standard>
+				</short>
+			</metazone>
+			<metazone type="Iran">
+				<short>
+					<standard>IRST</standard>
+					<daylight>IRDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Irkutsk">
+				<short>
+					<standard>IRKT</standard>
+					<daylight>IRKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Israel">
+				<short>
+					<standard>IST (IL)</standard>
+					<daylight>IDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Japan">
+				<short>
+					<standard>JST</standard>
+					<daylight>JDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Kamchatka">
+				<short>
+					<standard>PETT</standard>
+					<daylight>PETST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Karachi">
+				<short>
+					<standard>KART</standard>
+				</short>
+			</metazone>
+			<metazone type="Kashgar">
+				<short>
+					<standard>KAST</standard>
+				</short>
+			</metazone>
+			<metazone type="Kazakhstan_Eastern">
+				<short>
+					<standard>EKST</standard>
+				</short>
+			</metazone>
+			<metazone type="Kazakhstan_Western">
+				<short>
+					<standard>WKST</standard>
+				</short>
+			</metazone>
+			<metazone type="Kizilorda">
+				<short>
+					<standard>KIZT</standard>
+					<daylight>KIZST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Korea">
+				<short>
+					<standard>KST</standard>
+					<daylight>KDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Kosrae">
+				<short>
+					<standard>KOST</standard>
+				</short>
+			</metazone>
+			<metazone type="Krasnoyarsk">
+				<short>
+					<standard>KRAT</standard>
+					<daylight>KRAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Kuybyshev">
+				<short>
+					<standard>KUYT</standard>
+					<daylight>KUYST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Kwajalein">
+				<short>
+					<standard>KWAT</standard>
+				</short>
+			</metazone>
+			<metazone type="Kyrgystan">
+				<short>
+					<standard>KGT</standard>
+				</short>
+			</metazone>
+			<metazone type="Lanka">
+				<short>
+					<standard>LKT</standard>
+				</short>
+			</metazone>
+			<metazone type="Line_Islands">
+				<short>
+					<standard>LINT</standard>
+				</short>
+			</metazone>
+			<metazone type="Long_Shu">
+				<short>
+					<standard>LONT</standard>
+				</short>
+			</metazone>
+			<metazone type="Lord_Howe">
+				<short>
+					<standard>LHST</standard>
+					<daylight>LHDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Macau">
+				<short>
+					<standard>MOT</standard>
+					<daylight>MOST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Magadan">
+				<short>
+					<standard>MAGT</standard>
+					<daylight>MAGST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Malaya">
+				<short>
+					<standard>MALT</standard>
+				</short>
+			</metazone>
+			<metazone type="Malaysia">
+				<short>
+					<standard>MYT</standard>
+				</short>
+			</metazone>
+			<metazone type="Maldives">
+				<short>
+					<standard>MVT</standard>
+				</short>
+			</metazone>
+			<metazone type="Marquesas">
+				<short>
+					<standard>MART</standard>
+				</short>
+			</metazone>
+			<metazone type="Marshall_Islands">
+				<short>
+					<standard>MHT</standard>
+				</short>
+			</metazone>
+			<metazone type="Mauritius">
+				<short>
+					<standard>MUT</standard>
+					<daylight>MUST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Mawson">
+				<short>
+					<standard>MAWT</standard>
+				</short>
+			</metazone>
+			<metazone type="Mongolia">
+				<short>
+					<standard>ULAT</standard>
+					<daylight>ULAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Moscow">
+				<short>
+					<standard>MSK</standard>
+					<daylight>MSKS</daylight>
+				</short>
+			</metazone>
+			<metazone type="Myanmar">
+				<short>
+					<standard>MMT</standard>
+				</short>
+			</metazone>
+			<metazone type="Nauru">
+				<short>
+					<standard>NRT</standard>
+				</short>
+			</metazone>
+			<metazone type="Nepal">
+				<short>
+					<standard>NPT</standard>
+				</short>
+			</metazone>
+			<metazone type="New_Caledonia">
+				<short>
+					<standard>NCT</standard>
+					<daylight>NCST</daylight>
+				</short>
+			</metazone>
+			<metazone type="New_Zealand">
+				<short>
+					<standard>NZST</standard>
+					<daylight>NZDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Newfoundland">
+				<short>
+					<standard>NST</standard>
+					<daylight>NDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Niue">
+				<short>
+					<standard>NUT</standard>
+				</short>
+			</metazone>
+			<metazone type="Norfolk">
+				<short>
+					<standard>NFT</standard>
+				</short>
+			</metazone>
+			<metazone type="Noronha">
+				<short>
+					<standard>FNT</standard>
+					<daylight>FNST</daylight>
+				</short>
+			</metazone>
+			<metazone type="North_Mariana">
+				<short>
+					<standard>MPT</standard>
+				</short>
+			</metazone>
+			<metazone type="Novosibirsk">
+				<short>
+					<standard>NOVT</standard>
+					<daylight>NOVST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Omsk">
+				<short>
+					<standard>OMST</standard>
+					<daylight>OMSST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Pakistan">
+				<short>
+					<standard>PKT</standard>
+					<daylight>PKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Palau">
+				<short>
+					<standard>PWT</standard>
+				</short>
+			</metazone>
+			<metazone type="Papua_New_Guinea">
+				<short>
+					<standard>PGT</standard>
+				</short>
+			</metazone>
+			<metazone type="Paraguay">
+				<short>
+					<standard>PYT</standard>
+					<daylight>PYST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Peru">
+				<short>
+					<standard>PET</standard>
+					<daylight>PEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Philippines">
+				<short>
+					<standard>PHT</standard>
+					<daylight>PHST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Phoenix_Islands">
+				<short>
+					<standard>PHOT</standard>
+				</short>
+			</metazone>
+			<metazone type="Pierre_Miquelon">
+				<short>
+					<standard>PMST</standard>
+					<daylight>PMDT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Pitcairn">
+				<short>
+					<standard>PNT</standard>
+				</short>
+			</metazone>
+			<metazone type="Ponape">
+				<short>
+					<standard>PONT</standard>
+				</short>
+			</metazone>
+			<metazone type="Qyzylorda">
+				<short>
+					<standard>QYZT</standard>
+					<daylight>QYZST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Reunion">
+				<short>
+					<standard>RET</standard>
+				</short>
+			</metazone>
+			<metazone type="Rothera">
+				<short>
+					<standard>ROTT</standard>
+				</short>
+			</metazone>
+			<metazone type="Sakhalin">
+				<short>
+					<standard>SAKT</standard>
+					<daylight>SAKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Samara">
+				<short>
+					<standard>SAMT</standard>
+					<daylight>SAMST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Samarkand">
+				<short>
+					<standard>SAMT (Samarkand)</standard>
+					<daylight>SAMST (Samarkand)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Samoa">
+				<short>
+					<standard>SST</standard>
+				</short>
+			</metazone>
+			<metazone type="Seychelles">
+				<short>
+					<standard>SCT</standard>
+				</short>
+			</metazone>
+			<metazone type="Shevchenko">
+				<short>
+					<standard>SHET</standard>
+					<daylight>SHEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Singapore">
+				<short>
+					<standard>SGT</standard>
+				</short>
+			</metazone>
+			<metazone type="Solomon">
+				<short>
+					<standard>SBT</standard>
+				</short>
+			</metazone>
+			<metazone type="South_Georgia">
+				<short>
+					<standard>GST (GS)</standard>
+				</short>
+			</metazone>
+			<metazone type="Suriname">
+				<short>
+					<standard>SRT</standard>
+				</short>
+			</metazone>
+			<metazone type="Sverdlovsk">
+				<short>
+					<standard>SVET</standard>
+					<daylight>SVEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Syowa">
+				<short>
+					<standard>SYOT</standard>
+				</short>
+			</metazone>
+			<metazone type="Tahiti">
+				<short>
+					<standard>TAHT</standard>
+				</short>
+			</metazone>
+			<metazone type="Taipei">
+				<short>
+					<standard>CST (TW)</standard>
+					<daylight>CDT (TW)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Tajikistan">
+				<short>
+					<standard>TJT</standard>
+				</short>
+			</metazone>
+			<metazone type="Tashkent">
+				<short>
+					<standard>TAST</standard>
+					<daylight>TASST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Tbilisi">
+				<short>
+					<standard>TBIT</standard>
+					<daylight>TBIST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Tokelau">
+				<short>
+					<standard>TKT</standard>
+				</short>
+			</metazone>
+			<metazone type="Tonga">
+				<short>
+					<standard>TOT</standard>
+					<daylight>TOST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Truk">
+				<short>
+					<standard>TRUT</standard>
+				</short>
+			</metazone>
+			<metazone type="Turkey">
+				<short>
+					<standard>TRT</standard>
+					<daylight>TRST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Turkmenistan">
+				<short>
+					<standard>TMT</standard>
+					<daylight>TMST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Tuvalu">
+				<short>
+					<standard>TVT</standard>
+				</short>
+			</metazone>
+			<metazone type="Uralsk">
+				<short>
+					<standard>URAT</standard>
+					<daylight>URAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Uruguay">
+				<short>
+					<standard>UYT</standard>
+					<daylight>UYST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Urumqi">
+				<short>
+					<standard>URUT</standard>
+				</short>
+			</metazone>
+			<metazone type="Uzbekistan">
+				<short>
+					<standard>UZT</standard>
+					<daylight>UZST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Vanuatu">
+				<short>
+					<standard>VUT</standard>
+					<daylight>VUST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Venezuela">
+				<short>
+					<standard>VET</standard>
+				</short>
+			</metazone>
+			<metazone type="Vladivostok">
+				<short>
+					<standard>VLAT</standard>
+					<daylight>VLAST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Volgograd">
+				<short>
+					<standard>VOLT</standard>
+					<daylight>VOLST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Vostok">
+				<short>
+					<standard>VOST</standard>
+				</short>
+			</metazone>
+			<metazone type="Wake">
+				<short>
+					<standard>WAKT</standard>
+				</short>
+			</metazone>
+			<metazone type="Wallis">
+				<short>
+					<standard>WFT</standard>
+				</short>
+			</metazone>
+			<metazone type="Yakutsk">
+				<short>
+					<standard>YAKT</standard>
+					<daylight>YAKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Yekaterinburg">
+				<short>
+					<standard>YEKT</standard>
+					<daylight>YEKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Yerevan">
+				<short>
+					<standard>YERT</standard>
+					<daylight>YERST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Yukon">
+				<short>
+					<standard>YST</standard>
+					<daylight>YDT</daylight>
+				</short>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<defaultNumberingSystem>latn</defaultNumberingSystem>
+		<symbols>
+			<decimal>.</decimal>
+			<group>,</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>NaN</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength>
+				<scientificFormat>
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength>
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats>
+			<currencySpacing>
+				<beforeCurrency>
+					<currencyMatch>[:letter:]</currencyMatch>
+					<surroundingMatch>[:digit:]</surroundingMatch>
+					<insertBetween> </insertBetween>
+				</beforeCurrency>
+				<afterCurrency>
+					<currencyMatch>[:letter:]</currencyMatch>
+					<surroundingMatch>[:digit:]</surroundingMatch>
+					<insertBetween> </insertBetween>
+				</afterCurrency>
+			</currencySpacing>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+			<unitPattern count="other">{0} {1}</unitPattern>
+		</currencyFormats>
+		<currencies>
+			<currency type="AFN">
+				<symbol>Af</symbol>
+			</currency>
+			<currency type="ANG">
+				<symbol>NAf.</symbol>
+			</currency>
+			<currency type="AOA">
+				<symbol>Kz</symbol>
+			</currency>
+			<currency type="ARA">
+				<symbol>₳</symbol>
+			</currency>
+			<currency type="ARL">
+				<symbol>$L</symbol>
+			</currency>
+			<currency type="ARM">
+				<symbol>m$n</symbol>
+			</currency>
+			<currency type="ARS">
+				<symbol>AR$</symbol>
+			</currency>
+			<currency type="AUD">
+				<symbol>AU$</symbol>
+			</currency>
+			<currency type="AWG">
+				<symbol>Afl.</symbol>
+			</currency>
+			<currency type="AZN">
+				<symbol>man.</symbol>
+			</currency>
+			<currency type="BAM">
+				<symbol>KM</symbol>
+			</currency>
+			<currency type="BBD">
+				<symbol>Bds$</symbol>
+			</currency>
+			<currency type="BDT">
+				<symbol>Tk</symbol>
+			</currency>
+			<currency type="BEF">
+				<symbol>BF</symbol>
+			</currency>
+			<currency type="BHD">
+				<symbol>BD</symbol>
+			</currency>
+			<currency type="BIF">
+				<symbol>FBu</symbol>
+			</currency>
+			<currency type="BMD">
+				<symbol>BD$</symbol>
+			</currency>
+			<currency type="BND">
+				<symbol>BN$</symbol>
+			</currency>
+			<currency type="BOB">
+				<symbol>Bs</symbol>
+			</currency>
+			<currency type="BOP">
+				<symbol>$b.</symbol>
+			</currency>
+			<currency type="BRL">
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BSD">
+				<symbol>BS$</symbol>
+			</currency>
+			<currency type="BTN">
+				<symbol>Nu.</symbol>
+			</currency>
+			<currency type="BWP">
+				<symbol>BWP</symbol>
+			</currency>
+			<currency type="BZD">
+				<symbol>BZ$</symbol>
+			</currency>
+			<currency type="CAD">
+				<symbol>CA$</symbol>
+			</currency>
+			<currency type="CDF">
+				<symbol>CDF</symbol>
+			</currency>
+			<currency type="CHF">
+				<symbol>Fr.</symbol>
+			</currency>
+			<currency type="CLE">
+				<symbol>Eº</symbol>
+			</currency>
+			<currency type="CLP">
+				<symbol>CL$</symbol>
+			</currency>
+			<currency type="CNY">
+				<symbol>CN¥</symbol>
+			</currency>
+			<currency type="COP">
+				<symbol>CO$</symbol>
+			</currency>
+			<currency type="CRC">
+				<symbol>₡</symbol>
+			</currency>
+			<currency type="CUC">
+				<symbol>CUC$</symbol>
+			</currency>
+			<currency type="CUP">
+				<symbol>CU$</symbol>
+			</currency>
+			<currency type="CVE">
+				<symbol>CV$</symbol>
+			</currency>
+			<currency type="CYP">
+				<symbol>CY£</symbol>
+			</currency>
+			<currency type="CZK">
+				<symbol>Kč</symbol>
+			</currency>
+			<currency type="DEM">
+				<symbol>DM</symbol>
+			</currency>
+			<currency type="DJF">
+				<symbol>Fdj</symbol>
+			</currency>
+			<currency type="DKK">
+				<symbol>Dkr</symbol>
+			</currency>
+			<currency type="DOP">
+				<symbol>RD$</symbol>
+			</currency>
+			<currency type="DZD">
+				<symbol>DA</symbol>
+			</currency>
+			<currency type="EEK">
+				<symbol>Ekr</symbol>
+			</currency>
+			<currency type="EGP">
+				<symbol>EG£</symbol>
+			</currency>
+			<currency type="ERN">
+				<symbol>Nfk</symbol>
+			</currency>
+			<currency type="ESP">
+				<symbol>Pts</symbol>
+			</currency>
+			<currency type="ETB">
+				<symbol>Br</symbol>
+			</currency>
+			<currency type="EUR">
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<symbol>mk</symbol>
+			</currency>
+			<currency type="FJD">
+				<symbol>FJ$</symbol>
+			</currency>
+			<currency type="FKP">
+				<symbol>FK£</symbol>
+			</currency>
+			<currency type="FRF">
+				<symbol>₣</symbol>
+			</currency>
+			<currency type="GBP">
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GHC">
+				<symbol>₵</symbol>
+			</currency>
+			<currency type="GHS">
+				<symbol>GH₵</symbol>
+			</currency>
+			<currency type="GIP">
+				<symbol>GI£</symbol>
+			</currency>
+			<currency type="GMD">
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GNF">
+				<symbol>FG</symbol>
+			</currency>
+			<currency type="GRD">
+				<symbol>₯</symbol>
+			</currency>
+			<currency type="GTQ">
+				<symbol>GTQ</symbol>
+			</currency>
+			<currency type="GYD">
+				<symbol>GY$</symbol>
+			</currency>
+			<currency type="HKD">
+				<symbol>HK$</symbol>
+			</currency>
+			<currency type="HNL">
+				<symbol>HNL</symbol>
+			</currency>
+			<currency type="HRK">
+				<symbol>kn</symbol>
+			</currency>
+			<currency type="HTG">
+				<symbol>HTG</symbol>
+			</currency>
+			<currency type="HUF">
+				<symbol>Ft</symbol>
+			</currency>
+			<currency type="IDR">
+				<symbol>Rp</symbol>
+			</currency>
+			<currency type="IEP">
+				<symbol>IR£</symbol>
+			</currency>
+			<currency type="ILP">
+				<symbol>I£</symbol>
+			</currency>
+			<currency type="ILS">
+				<symbol>₪</symbol>
+			</currency>
+			<currency type="INR">
+				<symbol>Rs</symbol>
+			</currency>
+			<currency type="ISK">
+				<symbol>Ikr</symbol>
+			</currency>
+			<currency type="ITL">
+				<symbol>IT₤</symbol>
+			</currency>
+			<currency type="JMD">
+				<symbol>J$</symbol>
+			</currency>
+			<currency type="JOD">
+				<symbol>JD</symbol>
+			</currency>
+			<currency type="JPY">
+				<symbol>JP¥</symbol>
+			</currency>
+			<currency type="KES">
+				<symbol>Ksh</symbol>
+			</currency>
+			<currency type="KMF">
+				<symbol>CF</symbol>
+			</currency>
+			<currency type="KRW">
+				<symbol>₩</symbol>
+			</currency>
+			<currency type="KWD">
+				<symbol>KD</symbol>
+			</currency>
+			<currency type="KYD">
+				<symbol>KY$</symbol>
+			</currency>
+			<currency type="LAK">
+				<symbol>₭</symbol>
+			</currency>
+			<currency type="LBP">
+				<symbol>LB£</symbol>
+			</currency>
+			<currency type="LKR">
+				<symbol>SLRs</symbol>
+			</currency>
+			<currency type="LRD">
+				<symbol>L$</symbol>
+			</currency>
+			<currency type="LSL">
+				<symbol>LSL</symbol>
+			</currency>
+			<currency type="LTL">
+				<symbol>Lt</symbol>
+			</currency>
+			<currency type="LVL">
+				<symbol>Ls</symbol>
+			</currency>
+			<currency type="LYD">
+				<symbol>LD</symbol>
+			</currency>
+			<currency type="MMK">
+				<symbol>MMK</symbol>
+			</currency>
+			<currency type="MNT">
+				<symbol>₮</symbol>
+			</currency>
+			<currency type="MOP">
+				<symbol>MOP$</symbol>
+			</currency>
+			<currency type="MRO">
+				<symbol>UM</symbol>
+			</currency>
+			<currency type="MTL">
+				<symbol>Lm</symbol>
+			</currency>
+			<currency type="MTP">
+				<symbol>MT£</symbol>
+			</currency>
+			<currency type="MUR">
+				<symbol>MURs</symbol>
+			</currency>
+			<currency type="MXP">
+				<symbol>MX$</symbol>
+			</currency>
+			<currency type="MYR">
+				<symbol>RM</symbol>
+			</currency>
+			<currency type="MZM">
+				<symbol>Mt</symbol>
+			</currency>
+			<currency type="MZN">
+				<symbol>MTn</symbol>
+			</currency>
+			<currency type="NAD">
+				<symbol>N$</symbol>
+			</currency>
+			<currency type="NGN">
+				<symbol>₦</symbol>
+			</currency>
+			<currency type="NIO">
+				<symbol>C$</symbol>
+			</currency>
+			<currency type="NLG">
+				<symbol>fl</symbol>
+			</currency>
+			<currency type="NOK">
+				<symbol>Nkr</symbol>
+			</currency>
+			<currency type="NPR">
+				<symbol>NPRs</symbol>
+			</currency>
+			<currency type="NZD">
+				<symbol>NZ$</symbol>
+			</currency>
+			<currency type="PAB">
+				<symbol>B/.</symbol>
+			</currency>
+			<currency type="PEI">
+				<symbol>I/.</symbol>
+			</currency>
+			<currency type="PEN">
+				<symbol>S/.</symbol>
+			</currency>
+			<currency type="PGK">
+				<symbol>PGK</symbol>
+			</currency>
+			<currency type="PHP">
+				<symbol>₱</symbol>
+			</currency>
+			<currency type="PKR">
+				<symbol>PKRs</symbol>
+			</currency>
+			<currency type="PLN">
+				<symbol>zł</symbol>
+			</currency>
+			<currency type="PTE">
+				<symbol>Esc</symbol>
+			</currency>
+			<currency type="PYG">
+				<symbol>₲</symbol>
+			</currency>
+			<currency type="QAR">
+				<symbol>QR</symbol>
+			</currency>
+			<currency type="RHD">
+				<symbol>RH$</symbol>
+			</currency>
+			<currency type="RON">
+				<symbol>RON</symbol>
+			</currency>
+			<currency type="RSD">
+				<symbol>din.</symbol>
+			</currency>
+			<currency type="SAR">
+				<symbol>SR</symbol>
+			</currency>
+			<currency type="SBD">
+				<symbol>SI$</symbol>
+			</currency>
+			<currency type="SCR">
+				<symbol>SRe</symbol>
+			</currency>
+			<currency type="SDD">
+				<symbol>LSd</symbol>
+			</currency>
+			<currency type="SEK">
+				<symbol>Skr</symbol>
+			</currency>
+			<currency type="SGD">
+				<symbol>S$</symbol>
+			</currency>
+			<currency type="SHP">
+				<symbol>SH£</symbol>
+			</currency>
+			<currency type="SKK">
+				<symbol>Sk</symbol>
+			</currency>
+			<currency type="SLL">
+				<symbol>Le</symbol>
+			</currency>
+			<currency type="SOS">
+				<symbol>Ssh</symbol>
+			</currency>
+			<currency type="SRD">
+				<symbol>SR$</symbol>
+			</currency>
+			<currency type="SRG">
+				<symbol>Sf</symbol>
+			</currency>
+			<currency type="STD">
+				<symbol>Db</symbol>
+			</currency>
+			<currency type="SVC">
+				<symbol>SV₡</symbol>
+			</currency>
+			<currency type="SYP">
+				<symbol>SY£</symbol>
+			</currency>
+			<currency type="SZL">
+				<symbol>SZL</symbol>
+			</currency>
+			<currency type="THB">
+				<symbol>฿</symbol>
+			</currency>
+			<currency type="TMM">
+				<symbol>TMM</symbol>
+			</currency>
+			<currency type="TND">
+				<symbol>DT</symbol>
+			</currency>
+			<currency type="TOP">
+				<symbol>T$</symbol>
+			</currency>
+			<currency type="TRL">
+				<symbol>TRL</symbol>
+			</currency>
+			<currency type="TRY">
+				<symbol>TL</symbol>
+			</currency>
+			<currency type="TTD">
+				<symbol>TT$</symbol>
+			</currency>
+			<currency type="TWD">
+				<symbol>NT$</symbol>
+			</currency>
+			<currency type="TZS">
+				<symbol>TSh</symbol>
+			</currency>
+			<currency type="UAH">
+				<symbol>₴</symbol>
+			</currency>
+			<currency type="UGX">
+				<symbol>USh</symbol>
+			</currency>
+			<currency type="USD">
+				<symbol>US$</symbol>
+			</currency>
+			<currency type="UYU">
+				<symbol>$U</symbol>
+			</currency>
+			<currency type="VEF">
+				<symbol>Bs.F.</symbol>
+			</currency>
+			<currency type="VND">
+				<symbol>₫</symbol>
+			</currency>
+			<currency type="VUV">
+				<symbol>VT</symbol>
+			</currency>
+			<currency type="WST">
+				<symbol>WS$</symbol>
+			</currency>
+			<currency type="XAF">
+				<symbol>FCFA</symbol>
+			</currency>
+			<currency type="XCD">
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XOF">
+				<symbol>CFA</symbol>
+			</currency>
+			<currency type="XPF">
+				<symbol>CFPF</symbol>
+			</currency>
+			<currency type="YER">
+				<symbol>YR</symbol>
+			</currency>
+			<currency type="ZAR">
+				<symbol>R</symbol>
+			</currency>
+			<currency type="ZMK">
+				<symbol>ZK</symbol>
+			</currency>
+			<currency type="ZRN">
+				<symbol>NZ</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<symbol>ZRZ</symbol>
+			</currency>
+			<currency type="ZWD">
+				<symbol>Z$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unit type="day">
+			<unitPattern count="other">{0} d</unitPattern>
+		</unit>
+		<unit type="hour">
+			<unitPattern count="other">{0} h</unitPattern>
+		</unit>
+		<unit type="minute">
+			<unitPattern count="other">{0} min</unitPattern>
+		</unit>
+		<unit type="month">
+			<unitPattern count="other">{0} m</unitPattern>
+		</unit>
+		<unit type="second">
+			<unitPattern count="other">{0} s</unitPattern>
+		</unit>
+		<unit type="week">
+			<unitPattern count="other">{0} w</unitPattern>
+		</unit>
+		<unit type="year">
+			<unitPattern count="other">{0} y</unitPattern>
+		</unit>
+	</units>
+	<posix>
+		<messages>
+			<yesstr>yes:y</yesstr>
+			<nostr>no:n</nostr>
+		</messages>
+	</posix>
+</ldml>
+

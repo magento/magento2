@@ -1,0 +1,166 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->template('header.phtml') ?>
+
+<script type="text/javascript">
+function useCustomPermissions (element)
+{
+    if (element.value == '1') {
+        disabledMode = 'block';
+    } else {
+        disabledMode = 'none';
+    }
+    document.getElementById('use_custom_permissions_mode_panel').style.display = disabledMode;
+}
+function changeDeploymentType (element)
+{
+    if (element.value == 'ftp') {
+        disabledMode = 'block';
+    } else {
+        disabledMode = 'none';
+    }
+    document.getElementById('deployment_type_panel').style.display = disabledMode;
+}
+</script>
+
+<div class="settings-page">
+    <h2 class="page-head">Settings</h2>
+    <form action="<?php echo $this->url('settingsPost') ?>" method="post">
+        <fieldset>
+            <p>Magento Extensions are available in three different versions.</p>
+            <ul class="disc">
+                <li><strong>Stable</strong> means the extension can be used in a production environment.</li>
+                <li><strong>Beta</strong> means the extension is not recommended for use in a production environment.</li>
+                <li><strong>Alpha</strong> means the extension is still in development.</li>
+            </ul>
+            <p><strong>Please note: extensions are provided as is. Make sure to backup your data before installing new extensions.</strong></p>
+            <table cellspacing="0" class="form-list">
+                <tr>
+                    <td class="label">Magento Connect Channel Protocol:</td>
+                    <td class="value">
+                        <select id="protocol" name="protocol">
+                            <option value="http" <?php if ($this->get('protocol')=='http'):?>selected="selected"<?php endif ?>>Http</option>
+                            <option value="ftp" <?php if ($this->get('protocol')=='ftp'):?>selected="selected"<?php endif ?>>Ftp</option>
+                        </select>
+                    </td>
+                </tr>
+                <?php echo $this->get('channel_protocol_fields'); ?>
+                <tr>
+                    <td class="label">Preferred State:</td>
+                    <td class="value">
+                        <select id="preferred_state" name="preferred_state">
+                            <option value="stable" <?php if ($this->get('preferred_state')=='stable'):?>selected="selected"<?php endif ?>>Stable</option>
+                            <option value="beta" <?php if ($this->get('preferred_state')=='beta'):?>selected="selected"<?php endif ?>>Beta</option>
+                            <option value="alpha" <?php if ($this->get('preferred_state')=='alpha'):?>selected="selected"<?php endif ?>>Alpha</option>
+                        </select>
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <td class="label">Magento Installation Directory:</td>
+                    <td class="value"><input name="mage_dir" value="<?php echo htmlentities($this->get('mage_dir'))?>" style="width:250px;"/></td>
+                </tr>
+                -->
+            </table>
+            <p><strong>Permission to create new files and folders.</strong></p>
+            <table cellspacing="0" class="form-list">
+                <tr>
+                    <td class="label">Use custom permissions:</td>
+                    <td class="value">
+                        <select onchange="useCustomPermissions(this)" id="use_custom_permissions_mode" name="use_custom_permissions_mode">
+                            <option value="1" <?php if ($this->get('use_custom_permissions_mode')=='1'):?>selected="selected"<?php endif ?>>Yes</option>
+                            <option value="0" <?php if ($this->get('use_custom_permissions_mode')=='0'):?>selected="selected"<?php endif ?>>No</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" class="form-list" id="use_custom_permissions_mode_panel" <?php if ($this->get('use_custom_permissions_mode')=='0'):?>style="display:none;"<?php endif ?>>
+                <tr>
+                    <td class="label">Folders:</td>
+                    <td class="value">
+                        <input id="mkdir_mode" name="mkdir_mode" value="<?php echo($this->get('mkdir_mode'));?>" class="input-text" type="text"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Files:</td>
+                    <td class="value">
+                        <input id="chmod_file_mode" name="chmod_file_mode" value="<?php echo($this->get('chmod_file_mode'));?>" class="input-text" type="text"></input>
+                    </td>
+                </tr>
+            </table>
+
+            <p><strong>Deployment.</strong></p>
+            <table cellspacing="0" class="form-list">
+                <tr>
+                    <td class="label">Deployment Type:</td>
+                    <td class="value">
+                        <input value="fs" type="radio" name="deployment_type" id="deployment_fs" onclick="changeDeploymentType(this)" <?php if ($this->get('deployment_type')=='fs'):?>checked="checked"<?php endif ?> <?php if ($this->get('fs_disabled')):?>disabled="disabled"<?php endif ?> />
+                        <label for="deployment_fs"> <span class="label">Local Filesystem</span> </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">&nbsp;</td>
+                    <td class="value">
+                        <input value="ftp" type="radio" name="deployment_type" id="deployment_ftp" onclick="changeDeploymentType(this)" <?php if ($this->get('deployment_type')=='ftp'):?>checked="checked"<?php endif ?> />
+                        <label for="deployment_ftp"><span class="label">FTP Connection</span></label>
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" class="form-list" id="deployment_type_panel" <?php if ($this->get('deployment_type')!='ftp'):?>style="display:none;"<?php endif ?>>
+                <tr>
+                    <td class="label">FTP Host:</td>
+                    <td class="value">
+                        <input id="ftp_host" name="ftp_host" value="<?php echo($this->get('ftp_host'));?>" class="input-text" type="text"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">FTP Login:</td>
+                    <td class="value">
+                        <input id="ftp_login" name="ftp_login" value="<?php echo($this->get('ftp_login'));?>" class="input-text" type="text"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">FTP Password:</td>
+                    <td class="value">
+                        <input id="ftp_password" name="ftp_password" value="<?php echo($this->get('ftp_password'));?>" class="input-text" type="password"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Installation Path:</td>
+                    <td class="value">
+                        <input id="ftp_path" name="ftp_path" value="<?php echo($this->get('ftp_path'));?>" class="input-text" type="text"></input>
+                    </td>
+                </tr>
+            </table>
+
+            <p><button type="submit">Save Settings</button></p>
+        </fieldset>
+    </form>
+</div>
+
+<?php echo $this->template('footer.phtml') ?>
+

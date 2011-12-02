@@ -1,0 +1,112 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $previewModel Mage_XmlConnect_Model_Preview_Iphone */
+$previewModel = Mage::helper('Mage_XmlConnect_Helper_Data')->getPreviewModel();
+
+$categoryItemTintColor = $previewModel->getCategoryItemTintColor();
+$categoryItemBackgroundColor = $previewModel->getData('conf/categoryItem/backgroundColor');
+
+$title1name = $previewModel->getConfigFontInfo('Title1/name');
+$title1size = $previewModel->getConfigFontInfo('Title1/size');
+$title1color = $previewModel->getConfigFontInfo('Title1/color');
+
+$title9name = $previewModel->getConfigFontInfo('Title9/name');
+$title9size = $previewModel->getConfigFontInfo('Title9/size');
+$title9color = $previewModel->getConfigFontInfo('Title9/color');
+
+$backgroundColor = $previewModel->getData('conf/body/backgroundColor');
+$menImage = $previewModel->getPreviewImagesUrl('men.png');
+$bannerImage = $previewModel->getBannerImage();
+?>
+<div class="iphone-home">
+    <div class="main-frame">
+        <div class="main-block" style="background: <?php echo $backgroundColor; ?>;">
+            <div class="top-header" style="background:#000;">
+                <div class="volume" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('1.gif'); ?>') bottom left no-repeat;"></div>
+                <div class="header-sign-1"><?php echo $this->__("Carrier"); ?></div>
+                <div class="antenna" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('3.gif'); ?>') bottom right no-repeat;"></div>
+                <div class="time"><?php if($previewModel->getData('conf/Time')): ?><?php echo $previewModel->getData('conf/Time'); ?><?php else: ?><?php echo $this->__("10:40 AM"); ?><?php endif; ?></div>
+                <div class="battery" style="background:url('<?php echo $previewModel->getPreviewImagesUrl('2.gif'); ?>') bottom right no-repeat;"></div>
+            </div>
+            <div class="main-header"  style="background:<?php echo $previewModel->getData('conf/navigationBar/tintColor'); ?>;color:#f3f3f3;">
+                <div class="gradient">
+                    <table class="header-buttons">
+                        <tr>
+                            <td class="info"><img src="<?php echo $previewModel->getPreviewImagesUrl('info.png') ?>" alt="" width="20" height="20" /></td>
+                            <td class="logo-small"><div>
+                                <img src="<?php echo $previewModel->getLogoUrl();?>" alt="" />
+                                <span class="sh-title">
+                                    <span class="sh-title1" style="font: bold <?php echo $title1size; ?>px/44px <?php echo $title1name; ?>;">
+                                    <span class="sh-title2" style="color: <?php echo $title1color; ?>;"><?php echo $this->__("Home"); ?></span>
+                                    <?php echo $this->__("Home"); ?>
+                                    </span>
+                                </span>
+                            </div></td>
+                            <td class="login-btn">
+                                <div class="login-left"></div>
+                                <div class="login-body"><span><?php echo $this->__("Log In"); ?></span></div>
+                                <div class="login-right"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="big-logo">
+                <img src="<?php echo $bannerImage; ?>" alt="" />
+            </div>
+            <div class="catalog">
+                <div class="item" style="background:<?php echo $categoryItemBackgroundColor; ?>">
+                    <img src="<?php echo $menImage ?>" width="80" height="80" alt="" />
+                    <div class="item-text" style="font:bold <?php echo $title9size; ?>px <?php echo $title9name; ?>;color:<?php echo $title9color; ?>;<?php echo $categoryItemTintColor; ?>"><?php echo $this->__("80x80 px"); ?></div>
+                </div>
+                <div class="item" style="background:<?php echo $categoryItemBackgroundColor; ?>">
+                    <img src="<?php echo $menImage ?>" width="80" height="80" alt="" />
+                    <div class="item-text" style="font:bold <?php echo $title9size; ?>px <?php echo $title9name; ?>;color:<?php echo $title9color; ?>;<?php echo $categoryItemTintColor; ?>"><?php echo $this->__("80x80 px"); ?></div>
+                </div>
+                <div class="item" style="background:<?php echo $categoryItemBackgroundColor; ?>">
+                    <img src="<?php echo $menImage ?>" width="80" height="80" alt="" />
+                    <div class="item-text" style="font:bold <?php echo $title9size; ?>px <?php echo $title9name; ?>;color:<?php echo $title9color; ?>;<?php echo $categoryItemTintColor; ?>"><?php echo $this->__("80x80 px"); ?></div>
+                </div>
+                <div class="item" style="background:<?php echo $categoryItemBackgroundColor; ?>">
+                    <img src="<?php echo $menImage ?>" width="80" height="80" alt="" />
+                    <div class="item-text" style="font:bold <?php echo $title9size; ?>px <?php echo $title9name; ?>;color:<?php echo $title9color; ?>;<?php echo $categoryItemTintColor; ?>"><?php echo $this->__("80x80 px"); ?></div>
+                </div>
+                <!-- div class="item" style="background:<?php echo $categoryItemBackgroundColor; ?>">
+                    <img src="<?php echo $menImage ?>" width="80" height="80" alt="" />
+                    <div class="item-text" style="font:bold <?php echo $title9size; ?>px/18px <?php echo $title9name; ?>;color:<?php echo $title9color; ?>; background:<?php echo $previewModel->getData('conf/categoryItem/tintColor'); ?>"><?php echo $this->__("80x80 px"); ?></div>
+                </div -->
+            </div>
+            <?php echo $this->getChildHtml('tab_items'); ?>
+        </div>
+    </div>
+</div>
+<?php if ($this->getJsErrorMessage()) : ?>
+<script type="text/javascript">
+    alert('<?php echo $this->getJsErrorMessage(); ?>');
+</script>
+<?php endif; ?>

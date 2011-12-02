@@ -1,0 +1,388 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+-->
+<layout version="0.1.0">
+
+<!--
+Adding custom product price block
+-->
+
+    <catalog_category_default>
+        <reference name="product_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalog_category_default>
+
+    <catalog_category_view>
+        <reference name="product_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalog_category_view>
+
+    <catalog_category_layered>
+        <reference name="product_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalog_category_layered>
+
+    <catalog_product_compare_index>
+        <reference name="catalog.compare.list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalog_product_compare_index>
+
+    <catalogsearch_result_index>
+        <reference name="search_result_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalogsearch_result_index>
+
+    <catalogsearch_advanced_result>
+        <reference name="search_result_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalogsearch_advanced_result>
+
+    <tag_product_list>
+        <reference name="search_result_list">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </tag_product_list>
+
+    <tag_customer_view>
+        <reference name="customer_view">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </tag_customer_view>
+
+    <default>
+        <reference name="cart_sidebar">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::cart/sidebar/default.phtml</template></action>
+        </reference>
+        <reference name="wishlist_sidebar">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+        <reference name="catalog_product_price_template">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </default>
+
+    <wishlist_index_index>
+        <reference name="customer.wishlist">
+            <action method="addOptionsRenderCfg"><type>bundle</type><helper>Mage_Bundle_Helper_Catalog_Product_Configuration</helper></action>
+        </reference>
+    </wishlist_index_index>
+
+    <catalog_product_view>
+        <reference name="catalog.product.related">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </catalog_product_view>
+
+<!--
+Partof block for simple products
+-->
+
+   <PRODUCT_TYPE_simple>
+        <reference name="product.info.upsell">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+            <action method="setItemLimit"><type>bundle</type><limit>4</limit></action>
+        </reference>
+    </PRODUCT_TYPE_simple>
+
+<!--
+Shopping cart item renderer (sidebar)
+-->
+
+    <customer_account>
+        <reference name="cart_sidebar">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::cart/sidebar/default.phtml</template></action>
+        </reference>
+    </customer_account>
+
+<!--
+Shopping cart item renderer
+-->
+
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::cart/item/default.phtml</template></action>
+        </reference>
+        <reference name="checkout.cart.crosssell">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+        </reference>
+    </checkout_cart_index>
+
+<!--
+Onepage Checkout Review Page
+-->
+
+    <checkout_onepage_review>
+        <reference name="root">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
+        </reference>
+    </checkout_onepage_review>
+
+    <checkout_multishipping_addresses>
+        <reference name="checkout_addresses">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::multishipping/item/default.phtml</template></action>
+        </reference>
+    </checkout_multishipping_addresses>
+
+    <checkout_multishipping_shipping>
+        <reference name="checkout_shipping">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::multishipping/item/default.phtml</template></action>
+        </reference>
+        <reference name="checkout_billing_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::multishipping/item/default.phtml</template></action>
+        </reference>
+    </checkout_multishipping_shipping>
+
+    <checkout_multishipping_overview>
+        <reference name="checkout_overview">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::multishipping/item/default.phtml</template></action>
+        </reference>
+    </checkout_multishipping_overview>
+
+    <paypal_express_review>
+        <reference name="paypal.express.review.details">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
+        </reference>
+    </paypal_express_review>
+    <paypal_express_review_details>
+        <reference name="root">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
+        </reference>
+    </paypal_express_review_details>
+
+    <paypaluk_express_review>
+        <reference name="paypal.express.review.details">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
+        </reference>
+    </paypaluk_express_review>
+    <paypaluk_express_review_details>
+        <reference name="root">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
+        </reference>
+    </paypaluk_express_review_details>
+
+    <xmlconnect_cart_index>
+        <reference name="xmlconnect.cart">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::cart/item/default.phtml</template></action>
+        </reference>
+        <reference name="xmlconnect.catalog.product.price">
+            <action method="addRenderer"><type>bundle</type><renderer>Mage_XmlConnect_Block_Catalog_Product_Price_Bundle</renderer></action>
+        </reference>
+    </xmlconnect_cart_index>
+
+<!--
+Additional block for bundle product type
+-->
+
+    <PRODUCT_TYPE_bundle translate="label" module="Mage_Bundle">
+        <label>Catalog Product View (Bundle)</label>
+        <reference name="head">
+            <action method="addJs"><file>Mage_Bundle::bundle.js</file></action>
+        </reference>
+        <reference name="product.info">
+            <block type="Mage_Bundle_Block_Catalog_Product_View_Type_Bundle" name="product.info.bundle" as="product_type_data" template="catalog/product/view/type/bundle.phtml">
+                <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
+                <block type="Mage_Bundle_Block_Catalog_Product_Price" name="bundle.prices" as="bundle_prices" template="catalog/product/view/price.phtml">
+                    <action method="setMAPTemplate"><tmpl>product/price_msrp_item.phtml</tmpl></action>
+                </block>
+            </block>
+        </reference>
+        <reference name="product.info.options.wrapper">
+            <block type="Mage_Bundle_Block_Catalog_Product_View_Type_Bundle" name="product.info.bundle.options" as="type_bundle_options" template="catalog/product/view/type/bundle/options.phtml">
+                <action method="addRenderer"><type>select</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Select</block></action>
+                <action method="addRenderer"><type>multi</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Multi</block></action>
+                <action method="addRenderer"><type>radio</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Radio</block></action>
+                <action method="addRenderer"><type>checkbox</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Checkbox</block></action>
+            </block>
+            <action method="insert"><block>product.info.bundle.options</block></action>
+        </reference>
+        <reference name="product.info.options.wrapper.bottom">
+            <remove name="product.tierprices" />
+            <block type="Mage_Bundle_Block_Catalog_Product_View" name="bundle.tierprices" as="tierprices" before="-" template="catalog/product/view/tierprices.phtml"/>
+            <block type="Mage_CatalogInventory_Block_Qtyincrements" name="product.info.extrahint" as="extrahint" template="qtyincrements.phtml"/>
+        </reference>
+        <reference name="product.clone_prices">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/view/price.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_bundle>
+
+    <sales_order_view>
+        <reference name="order_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_view>
+
+    <sales_order_invoice>
+        <reference name="invoice_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/invoice/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_invoice>
+
+    <sales_order_shipment>
+        <reference name="shipment_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/shipment/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_shipment>
+
+    <sales_order_creditmemo>
+        <reference name="creditmemo_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/creditmemo/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_creditmemo>
+
+<!--
+Print pages
+-->
+
+    <sales_order_print>
+        <reference name="sales.order.print">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_print>
+
+    <sales_order_printinvoice>
+        <reference name="sales.order.print.invoice">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/invoice/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_printinvoice>
+
+    <sales_order_printshipment>
+        <reference name="sales.order.print.shipment">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/shipment/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_printshipment>
+
+    <sales_order_printcreditmemo>
+        <reference name="sales.order.print.creditmemo">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/creditmemo/items/renderer.phtml</template></action>
+        </reference>
+    </sales_order_printcreditmemo>
+
+<!--
+For guests
+-->
+    <sales_guest_view>
+        <reference name="order_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_view>
+
+    <sales_guest_invoice>
+        <reference name="invoice_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/invoice/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_invoice>
+
+    <sales_guest_shipment>
+        <reference name="shipment_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/shipment/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_shipment>
+
+    <sales_guest_creditmemo>
+        <reference name="creditmemo_items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/creditmemo/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_creditmemo>
+
+    <sales_guest_print>
+        <reference name="sales.order.print">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_print>
+
+    <sales_guest_printinvoice>
+        <reference name="sales.order.print.invoice">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/invoice/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_printinvoice>
+
+    <sales_guest_printshipment>
+        <reference name="sales.order.print.shipment">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/shipment/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_printshipment>
+
+    <sales_guest_printcreditmemo>
+        <reference name="sales.order.print.creditmemo">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>sales/order/creditmemo/items/renderer.phtml</template></action>
+        </reference>
+    </sales_guest_printcreditmemo>
+
+<!--
+Emails
+-->
+    <sales_email_order_items>
+        <reference name="items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>email/order/items/order/default.phtml</template></action>
+        </reference>
+    </sales_email_order_items>
+
+    <sales_email_order_invoice_items>
+        <reference name="items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>email/order/items/invoice/default.phtml</template></action>
+        </reference>
+    </sales_email_order_invoice_items>
+
+
+    <sales_email_order_shipment_items>
+        <reference name="items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>email/order/items/shipment/default.phtml</template></action>
+        </reference>
+    </sales_email_order_shipment_items>
+
+    <sales_email_order_creditmemo_items>
+        <reference name="items">
+            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Sales_Order_Items_Renderer</block><template>email/order/items/creditmemo/default.phtml</template></action>
+        </reference>
+    </sales_email_order_creditmemo_items>
+
+<!--
+RSS
+-->
+    <rss_catalog_category>
+        <reference name="rss.catalog.category">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>rss/catalog/product/price.phtml</template></action>
+        </reference>
+    </rss_catalog_category>
+    <rss_catalog_new>
+        <reference name="rss.catalog.new">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>rss/catalog/product/price.phtml</template></action>
+        </reference>
+    </rss_catalog_new>
+    <rss_catalog_tag>
+        <reference name="rss.catalog.tag">
+            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>rss/catalog/product/price.phtml</template></action>
+        </reference>
+    </rss_catalog_tag>
+</layout>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.58 $"/>
+		<generation date="$Date: 2009/06/15 03:46:25 $"/>
+		<language type="as"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="as">অসমীয়া</language>
+			<language type="ie">উপস্থাপন ভাষা</language>
+			<language type="km">কম্বোডিয়ান</language>
+		</languages>
+		<scripts>
+			<script type="Beng">বঙালী</script>
+		</scripts>
+		<territories>
+			<territory type="AQ">এন্টাৰ্টিকা</territory>
+			<territory type="BR">ব্ৰাজিল</territory>
+			<territory type="BV">বভেট দ্বীপ</territory>
+			<territory type="CN">চীন</territory>
+			<territory type="DE">জাৰ্মানি</territory>
+			<territory type="FR">ফ্ৰান্স</territory>
+			<territory type="GB">সংযুক্ত ৰাজ্য</territory>
+			<territory type="GS">দক্ষিণ জৰ্জিয়া আৰু দক্ষিণ চেণ্ডৱিচ্‌ দ্বীপ</territory>
+			<territory type="HM">হাৰ্ড দ্বীপ আৰু মেক্‌ডোনাল্ড দ্বীপ</territory>
+			<territory type="IN">ভাৰত</territory>
+			<territory type="IO">ব্ৰিটিশ্ব ইণ্ডিয়ান মহাসাগৰৰ অঞ্চল</territory>
+			<territory type="IT">ইটালি</territory>
+			<territory type="JP">জাপান</territory>
+			<territory type="RU">ৰুচ</territory>
+			<territory type="TF">দক্ষিণ ফ্ৰান্সৰ অঞ্চল</territory>
+			<territory type="US">যুক্তৰাষ্ট্ৰ</territory>
+			<territory type="ZZ">অজ্ঞাত বা অবৈধ অঞ্চল</territory>
+		</territories>
+		<keys>
+			<key type="calendar">পঞ্জিকা</key>
+			<key type="collation">শৰীকৰণ</key>
+			<key type="currency">মুদ্ৰা</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation">পৰম্পৰাগত চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - Big5</type>
+			<type type="buddhist" key="calendar">বৌদ্ধ পঞ্জিকা</type>
+			<type type="chinese" key="calendar">চীনা পঞ্জিকা</type>
+			<type type="direct" key="collation">পোনপটীয়াকৈ শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম</type>
+			<type type="gb2312han" key="collation">সৰল চীনা শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম - GB2312</type>
+			<type type="gregorian" key="calendar">গ্ৰিগোৰীয় পঞ্জিকা</type>
+			<type type="hebrew" key="calendar">হীব্ৰু পঞ্জিকা</type>
+			<type type="indian" key="calendar">ভাৰতীয় ৰাষ্ট্ৰীয় পঞ্জিকা</type>
+			<type type="islamic" key="calendar">ইচলামী পঞ্জিকা</type>
+			<type type="islamic-civil" key="calendar">ইচলামী-নাগৰিকৰ পঞ্জিকা</type>
+			<type type="japanese" key="calendar">জাপানী পঞ্জিকা</type>
+			<type type="phonebook" key="collation">টেলিফোন বহিৰ মতেশৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম</type>
+			<type type="pinyin" key="collation">পিন্‌য়িন শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম</type>
+			<type type="roc" key="calendar">চীনা গণৰাজ্যৰ পঞ্জিকা</type>
+			<type type="stroke" key="collation">স্ট্ৰোক শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম</type>
+			<type type="traditional" key="collation">পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম</type>
+		</types>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[় অ-ঋ ৠ ঌ ৡ এ ঐ ও ঔ ং ঁ ঃ ক-ড {ড়} ঢ {ঢ়} ণ ত ৎ থ-ন প-য {য়} ৰ ল ৱ শ-হ ঽ-ৄ ৢ ৣ ে ৈ ো-্ ৗ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D ৲]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">জানু</month>
+							<month type="2">ফেব্ৰু</month>
+							<month type="3">মাৰ্চ</month>
+							<month type="4">এপ্ৰিল</month>
+							<month type="5">মে</month>
+							<month type="6">জুন</month>
+							<month type="7">জুলাই</month>
+							<month type="8">আগ</month>
+							<month type="9">সেপ্ট</month>
+							<month type="10">অক্টো</month>
+							<month type="11">নভে</month>
+							<month type="12">ডিসে</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">জানুয়াৰী</month>
+							<month type="2">ফেব্ৰুয়াৰী</month>
+							<month type="3">মাৰ্চ</month>
+							<month type="4">এপ্ৰিল</month>
+							<month type="5">মে</month>
+							<month type="6">জুন</month>
+							<month type="7">জুলাই</month>
+							<month type="8">আগষ্ট</month>
+							<month type="9">সেপ্টেম্বৰ</month>
+							<month type="10">অক্টোবৰ</month>
+							<month type="11">নভেম্বৰ</month>
+							<month type="12">ডিসেম্বৰ</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ৰবি</day>
+							<day type="mon">সোম</day>
+							<day type="tue">মঙ্গল</day>
+							<day type="wed">বুধ</day>
+							<day type="thu">বৃহষ্পতি</day>
+							<day type="fri">শুক্ৰ</day>
+							<day type="sat">শনি</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">দেওবাৰ</day>
+							<day type="mon">সোমবাৰ</day>
+							<day type="tue">মঙ্গলবাৰ</day>
+							<day type="wed">বুধবাৰ</day>
+							<day type="thu">বৃহষ্পতিবাৰ</day>
+							<day type="fri">শুক্ৰবাৰ</day>
+							<day type="sat">শনিবাৰ</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>পূৰ্বা</am>
+				<pm>অপ</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">BCE</era>
+						<era type="1">CE</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM, y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM, y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>dd-MM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d-M-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h.mm.ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>h.mm.ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h.mm.ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h.mm. a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd">dd-MM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+						<dateFormatItem id="yyyyMM">MM-yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM, y</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+			<zone type="Asia/Calcutta">
+				<exemplarCity>এলাহাৱাদ</exemplarCity>
+			</zone>
+			<metazone type="India">
+				<long>
+					<standard>ভাৰতীয় সময়</standard>
+				</long>
+				<short>
+					<standard>ভা. স.</standard>
+				</short>
+				<commonlyUsed>true</commonlyUsed>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<percentFormats>
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤ #,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="INR">
+				<symbol>টকা</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

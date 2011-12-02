@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.50 $"/>
+		<generation date="$Date: 2009/06/15 03:46:25 $"/>
+		<language type="ln"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="af">afrikánsi</language>
+			<language type="afh">afríhili</language>
+			<language type="ak">akan</language>
+			<language type="am">liamariki</language>
+			<language type="ar">liarabu</language>
+			<language type="as">liasame</language>
+			<language type="az">liazerbayani</language>
+			<language type="bai">nkótá ya Bamileke</language>
+			<language type="be">belarusi</language>
+			<language type="bg">kibulgaria</language>
+			<language type="bh">libiyari</language>
+			<language type="bm">bambara</language>
+			<language type="bn">bengali</language>
+			<language type="br">breton</language>
+			<language type="bs">libosinia</language>
+			<language type="ca">katalani</language>
+			<language type="cs">litshɛki</language>
+			<language type="cy">liwelesi</language>
+			<language type="da">lidanemark</language>
+			<language type="de">lialemani</language>
+			<language type="el">ligreki</language>
+			<language type="en">lingɛlɛ́sa</language>
+			<language type="en_CA">lingɛlɛ́sa (CA)</language>
+			<language type="eo">lisipelanto</language>
+			<language type="es">lispanyola</language>
+			<language type="et">liestonia</language>
+			<language type="eu">libaske</language>
+			<language type="fa">lipɛrsi</language>
+			<language type="fi">lifilandi</language>
+			<language type="fil">litagalog</language>
+			<language type="fo">lifarose</language>
+			<language type="fr">lifalansé</language>
+			<language type="fr_CA">lifalansé (CA)</language>
+			<language type="fy">lifrisi</language>
+			<language type="ga">lirlande</language>
+			<language type="gd">ligaeliki</language>
+			<language type="gl">ligalicia</language>
+			<language type="gn">ligwarani</language>
+			<language type="gu">liguzarati</language>
+			<language type="he">liyuda</language>
+			<language type="hi">lihindi</language>
+			<language type="hr">likroasia</language>
+			<language type="hu">liungaria</language>
+			<language type="hy">liarmenya</language>
+			<language type="ia">interlingua</language>
+			<language type="id">lindonesi</language>
+			<language type="ie">interlingue</language>
+			<language type="is">lislanda</language>
+			<language type="it">litaliano</language>
+			<language type="ja">liyapani</language>
+			<language type="jv">lizava</language>
+			<language type="ka">lizorzi</language>
+			<language type="kg">kikɔ́ngɔ</language>
+			<language type="km">likambodia</language>
+			<language type="kn">kanada</language>
+			<language type="ko">likorea</language>
+			<language type="ku">likurdi</language>
+			<language type="ky">kirgizi</language>
+			<language type="la">kilatini</language>
+			<language type="ln">lingála</language>
+			<language type="lo">lilao</language>
+			<language type="lt">lituani</language>
+			<language type="lua">ciluba</language>
+			<language type="lun">lunda</language>
+			<language type="lv">lilativa</language>
+			<language type="mk">limasedonia</language>
+			<language type="ml">limalayalami</language>
+			<language type="mn">limongoli</language>
+			<language type="mr">limarati</language>
+			<language type="ms">limalasi</language>
+			<language type="mt">limalta</language>
+			<language type="mul">nkótá míngi</language>
+			<language type="ne">linepali</language>
+			<language type="nl">lifalamá</language>
+			<language type="nn">linovezi-nynorsk</language>
+			<language type="no">linovezi</language>
+			<language type="oc">liosita</language>
+			<language type="or">oriya</language>
+			<language type="pa">lipunzabi</language>
+			<language type="pl">lipoloni</language>
+			<language type="ps">pashto</language>
+			<language type="pt">lipulutugɛ́si</language>
+			<language type="pt_BR">lipulutugɛ́si (Brazil)</language>
+			<language type="ro">lirumani</language>
+			<language type="ru">lirusi</language>
+			<language type="sa">indu-ya-kala</language>
+			<language type="sd">lisindi</language>
+			<language type="sg">sango</language>
+			<language type="sh">liserbokroata</language>
+			<language type="si">lisinalɛ́si</language>
+			<language type="sk">lisolovaki</language>
+			<language type="sl">lisoloveni</language>
+			<language type="so">lisomali</language>
+			<language type="sq">lialbania</language>
+			<language type="sr">liserbia</language>
+			<language type="st">Sotho ya Sidi</language>
+			<language type="su">lisundanɛ́si</language>
+			<language type="sv">liswédwa</language>
+			<language type="sw">kiswahili</language>
+			<language type="ta">tamili</language>
+			<language type="te">litelegu</language>
+			<language type="th">thai</language>
+			<language type="ti">tigirinya</language>
+			<language type="tk">turkmen</language>
+			<language type="tlh">kilingoni</language>
+			<language type="tr">turk</language>
+			<language type="tw">twi</language>
+			<language type="ug">uighur</language>
+			<language type="uk">liukrenia</language>
+			<language type="und">lokótá eyébámí tɛ́</language>
+			<language type="ur">liurdu</language>
+			<language type="uz">liusibeki</language>
+			<language type="vi">livietnami</language>
+			<language type="xh">xhosa</language>
+			<language type="yi">yiddish</language>
+			<language type="zu">zulu</language>
+		</languages>
+		<scripts>
+			<script type="Arab">arabu</script>
+			<script type="Latn">latɛ́</script>
+			<script type="Zxxx">ekomí tɛ́</script>
+			<script type="Zzzz">bokomi boyébámí tɛ́</script>
+		</scripts>
+		<territories>
+			<territory type="001">mokili mobimba</territory>
+			<territory type="002">Afríka</territory>
+			<territory type="005">Ameríka ya Sídi</territory>
+			<territory type="011">Afríka ya límbe</territory>
+			<territory type="015">Afríka ya Nola</territory>
+			<territory type="018">Afríka ya Sídi</territory>
+			<territory type="142">Azía</territory>
+			<territory type="150">Erópa</territory>
+			<territory type="154">Erópa ya Nola</territory>
+			<territory type="155">Erópa ya límbe</territory>
+			<territory type="AD">Andora</territory>
+			<territory type="AF">Afganistáni</territory>
+			<territory type="AG">Antigua mpé Barbuda</territory>
+			<territory type="AO">Angóla</territory>
+			<territory type="AR">Argentina</territory>
+			<territory type="AX">Albania</territory>
+			<territory type="BA">Bosnia na Erzegovina</territory>
+			<territory type="BD">Bángaladɛ́si</territory>
+			<territory type="BE">Bɛ́ljika</territory>
+			<territory type="BF">Burkina Faso</territory>
+			<territory type="BG">Bulgaria</territory>
+			<territory type="BI">Burundi</territory>
+			<territory type="BR">Bresíli</territory>
+			<territory type="BT">Butáni</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Bielorusia</territory>
+			<territory type="CA">Kanadá</territory>
+			<territory type="CD">Kongó-Kinsásá</territory>
+			<territory type="CF">Santrafríka</territory>
+			<territory type="CG">Kongó-Brazzaville</territory>
+			<territory type="CH">Swisi</territory>
+			<territory type="CM">Kamerun</territory>
+			<territory type="CN">Sína</territory>
+			<territory type="CZ">Republiki Sheki</territory>
+			<territory type="DE">Alémani</territory>
+			<territory type="DJ">Djibuti</territory>
+			<territory type="DZ">Aljeria</territory>
+			<territory type="EG">Ejipti</territory>
+			<territory type="EH">Sahara ya límbe</territory>
+			<territory type="ES">Espania</territory>
+			<territory type="ET">Etiopya</territory>
+			<territory type="FI">Finilanda</territory>
+			<territory type="FR">Falansia</territory>
+			<territory type="GB">Ingɛlɛ́tɛlɛ</territory>
+			<territory type="GH">Ghana</territory>
+			<territory type="GI">Gibraltar</territory>
+			<territory type="GM">Gambia</territory>
+			<territory type="GN">Gine</territory>
+			<territory type="GR">Gresi</territory>
+			<territory type="GW">Gine-Bisau</territory>
+			<territory type="HR">Kroasia</territory>
+			<territory type="HU">Ungri</territory>
+			<territory type="ID">Indoneziá</territory>
+			<territory type="IE">Irlandí</territory>
+			<territory type="IN">Ɛndɛ</territory>
+			<territory type="IS">Islandi</territory>
+			<territory type="IT">Italia</territory>
+			<territory type="JO">Zordaní</territory>
+			<territory type="JP">Yapan</territory>
+			<territory type="KE">Kenya</territory>
+			<territory type="KG">Kirghizistáni</territory>
+			<territory type="KI">KI</territory>
+			<territory type="KP">Kore ya Nola</territory>
+			<territory type="KR">Kore ya Sidi</territory>
+			<territory type="KZ">Kazakstáni</territory>
+			<territory type="LB">Liban</territory>
+			<territory type="LR">Liberia</territory>
+			<territory type="LT">Litwani</territory>
+			<territory type="LU">Luksamburg</territory>
+			<territory type="LV">Letoni</territory>
+			<territory type="LY">Libíya</territory>
+			<territory type="MK">Masedoni</territory>
+			<territory type="ML">Mali</territory>
+			<territory type="MN">Mongolí</territory>
+			<territory type="MO">Makau</territory>
+			<territory type="MV">Madívi</territory>
+			<territory type="MZ">Mozambíki</territory>
+			<territory type="NA">Namibia</territory>
+			<territory type="NE">Nijé</territory>
+			<territory type="NG">Nijeria</territory>
+			<territory type="NL">Holanda</territory>
+			<territory type="NO">Norvej</territory>
+			<territory type="NP">Nepáli</territory>
+			<territory type="PK">Pakistáni</territory>
+			<territory type="PL">Poloni</territory>
+			<territory type="PT">Pulutugal</territory>
+			<territory type="RO">Rumania</territory>
+			<territory type="RU">Rusí</territory>
+			<territory type="RW">Rwanda</territory>
+			<territory type="SD">Sudani</territory>
+			<territory type="SE">Swési</territory>
+			<territory type="SH">Santu Helena</territory>
+			<territory type="SM">Santu Marino</territory>
+			<territory type="SO">Somalia</territory>
+			<territory type="ST">Sǎo Tomé na Principe</territory>
+			<territory type="SY">Sirí</territory>
+			<territory type="TG">Togo</territory>
+			<territory type="TJ">Tazikistáni</territory>
+			<territory type="TM">Turkmenistáni</territory>
+			<territory type="TN">Tunizia</territory>
+			<territory type="TR">Turkí</territory>
+			<territory type="TT">Trinidad mpé Tobago</territory>
+			<territory type="TW">Taiwan</territory>
+			<territory type="US">Etazíni</territory>
+			<territory type="UZ">Uzbekistáni</territory>
+			<territory type="VA">Vatikáni</territory>
+			<territory type="VN">Vietnami</territory>
+			<territory type="YE">Yeméni</territory>
+			<territory type="ZA">Sidafríka</territory>
+			<territory type="ZM">Zambia</territory>
+			<territory type="ZW">Zimbabwe</territory>
+			<territory type="ZZ">Esíká eyébámí tɛ́</territory>
+		</territories>
+		<keys>
+			<key type="calendar">manáka</key>
+			<key type="collation">elandiseli</key>
+			<key type="currency">mbɔ́ngɔ</key>
+		</keys>
+		<types>
+			<type type="gregorian" key="calendar">manáka ya Gregor</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">na mɛ́tɛlɛ</measurementSystemName>
+			<measurementSystemName type="US">na míli</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a á â ǎ b-e é ê ě ɛ {ɛ\u0301} {ɛ\u0302} {ɛ\u030C} f g {gb} h i í î ǐ k-m {mb} {mp} n {nd} {ng} {nk} {ns} {nt} {nz} o ó ô ǒ ɔ {ɔ\u0301} {ɔ\u0302} {ɔ\u030C} p r-u ú û ǔ v w y z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[j q x]</exemplarCharacters>
+		<exemplarCharacters type="currencySymbol">[c f F]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>«</quotationStart>
+		<quotationEnd>»</quotationEnd>
+		<alternateQuotationStart>“</alternateQuotationStart>
+		<alternateQuotationEnd>”</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">s1</month>
+							<month type="2">s2</month>
+							<month type="3">s3</month>
+							<month type="4">s4</month>
+							<month type="5">s5</month>
+							<month type="6">s6</month>
+							<month type="7">s7</month>
+							<month type="8">s8</month>
+							<month type="9">s9</month>
+							<month type="10">s10</month>
+							<month type="11">s11</month>
+							<month type="12">s12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">sánzá ya yambo</month>
+							<month type="2">sánzá ya míbalé</month>
+							<month type="3">sánzá ya mísáto</month>
+							<month type="4">sánzá ya mínei</month>
+							<month type="5">sánzá ya mítáno</month>
+							<month type="6">sánzá ya motóbá</month>
+							<month type="7">sánzá ya nsambo</month>
+							<month type="8">sánzá ya mwambe</month>
+							<month type="9">sánzá ya libwa</month>
+							<month type="10">sánzá ya zómi</month>
+							<month type="11">sánzá ya zómi na mɔ̌kɔ́</month>
+							<month type="12">sánzá ya zómi na míbalé</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">eye</day>
+							<day type="mon">m1</day>
+							<day type="tue">m2</day>
+							<day type="wed">m3</day>
+							<day type="thu">m4</day>
+							<day type="fri">m5</day>
+							<day type="sat">mps</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">eyenga</day>
+							<day type="mon">mokɔlɔ ya libosó</day>
+							<day type="tue">mokɔlɔ ya míbalé</day>
+							<day type="wed">mokɔlɔ ya mísáto</day>
+							<day type="thu">mokɔlɔ ya mínéi</day>
+							<day type="fri">mokɔlɔ ya mítáno</day>
+							<day type="sat">mpɔ́sɔ</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="narrow">
+							<day type="sun">1</day>
+							<day type="mon">2</day>
+							<day type="tue">3</day>
+							<day type="wed">4</day>
+							<day type="thu">5</day>
+							<day type="fri">6</day>
+							<day type="sat">7</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">SM1</quarter>
+							<quarter type="2">SM2</quarter>
+							<quarter type="3">SM3</quarter>
+							<quarter type="4">SM4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">sánzá mísáto ya yambo</quarter>
+							<quarter type="2">sánzá mísáto ya míbalé</quarter>
+							<quarter type="3">sánzá mísáto ya mísáto</quarter>
+							<quarter type="4">sánzá mísáto ya mínei</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<am>AM</am>
+				<pm>PM</pm>
+				<eras>
+					<eraNames>
+						<era type="0">libosó ya Y.-K.</era>
+						<era type="1">nsima ya Y.-K.</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">libosó ya Y.-K.</era>
+						<era type="1">nsima ya Y.-K.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, y MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y MMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="yyQ">Q yy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="day">
+						<displayName>mokɔlɔ</displayName>
+						<relative type="0">lɛlɔ́</relative>
+					</field>
+				</fields>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<regionFormat>{0}</regionFormat>
+			<zone type="Africa/Kinshasa">
+				<exemplarCity>Kinsásá</exemplarCity>
+			</zone>
+			<zone type="Africa/Bangui">
+				<exemplarCity>Santrafríka</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+		</symbols>
+		<currencies>
+			<currency type="BEF">
+				<displayName>falánga ya Bɛ́ljika</displayName>
+			</currency>
+			<currency type="BIF">
+				<displayName>falánga ya Burundi</displayName>
+			</currency>
+			<currency type="CDF">
+				<displayName>falánga kongolé</displayName>
+				<symbol>F</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>Falánga ya Swisi</displayName>
+			</currency>
+			<currency type="FRF">
+				<displayName>Falánga ya Falansia</displayName>
+			</currency>
+			<currency type="XOF">
+				<displayName>Falánga CFA BCEAO</displayName>
+			</currency>
+			<currency type="XPF">
+				<displayName>Falánga CFP</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>mbɔ́ngɔ eyébámí tɛ́</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

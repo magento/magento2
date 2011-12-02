@@ -1,0 +1,304 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+body { margin: 0; padding: 0 }
+
+.main-block 
+{
+	width: 320px;
+	height: 450px;
+}
+.header-sign-1
+{
+	font: bold 12px arial;
+	color: #e9e9e9;
+	float: left;
+	padding: 5px 0 3px 3px;	
+	height: 10px;
+}
+.top-header 
+{
+	height: 20px	
+}
+
+.battery 
+{
+	height: 16px;
+	width: 25px;
+	float: right;
+	margin: 0px 5px 5px 13px;
+}
+
+.volume 
+{
+	height: 16px; 
+	width: 25px; 	
+	float: left;
+}
+
+.antenna 
+{
+	height: 16px; 
+	width: 18px; 	
+	float: left;
+	padding-left: 20px;	
+}
+.time 
+{	 
+	width: 50%;
+	position:relative;
+	top:3px;
+	text-align: center;
+	font: bold 12px arial;
+	color: #e9e9e9;
+	float: left;
+}
+
+.main-header 
+{
+	width: 100%; 
+	height: 50px;
+	color: #f3f3f3;
+	text-align: center;
+}
+.main-header-text 
+{
+	
+}
+
+.clearB 
+{
+	clear: both; 
+	height: 1px;
+}
+.btn-l
+{
+	position:relative;
+	left: 0px;
+	top:7px;
+	width: 70px;
+	height: 32px;
+	text-align: center;
+	float: left;
+	margin: 0 0 0 15px;
+	background:url('btn-l.png') center center no-repeat;
+}
+
+.btn-r
+{
+	position:relative;
+	right: 0px;
+	top:7px;
+	width: 72px;
+	height: 32px;
+	text-align: center;
+	float: right;
+	margin: 0 20px 0 0;
+	background:url('btn-r.png') center center no-repeat;
+}
+.main-header-text 
+{
+	width: 110px;
+	height: 32px;
+	text-align: center;
+	float: left;
+}
+
+
+
+.btn-txt 
+{
+	position:relative;
+	top:8px;
+}
+.title 
+{
+	position:relative;
+	top:0px;
+	font: bold 19px arial;
+	color: #e9e9e9;	
+}
+.filter-header
+{
+	height: 25px;
+	text-align: center;
+	vertical-align: middle;
+}
+.filter-applied 
+{
+	position:relative;
+	top:5px; 
+}
+.filter-circle
+{
+	width: 18px;
+	height: 18px;
+	background:url('circle.png') center center no-repeat;
+}
+.filter-text
+{
+	padding: 0 0 0 5px;
+	font-size: 11px;
+}
+.filter-lines
+{
+	float: right;
+	width: 25px;
+	height: 25px;
+	padding: 0 25px 0 0;
+	background:url('lines-h.png') center center no-repeat;
+}
+.sort-block 
+{
+	height: 40px;
+	text-align: center;
+}
+.sort-block-inner 
+{
+	position:relative;
+	top:7px;
+}
+.sort-block-inner-txt 
+{
+	float: left;  
+	width: 75px; 
+	height: 26px; 
+	padding-top: 12px; 
+}
+
+.sort-buttons
+{
+	text-align: center;
+	font: bold 10px arial;
+	float: right;
+	padding: 0 5px 0 0;
+}
+
+.active 
+{
+	color: #e9e9e9;
+}
+
+.inactive 
+{
+	color: #333;
+} 
+
+.item 
+{
+	height: 91px;	
+}
+
+.slider
+{
+
+}
+
+.slider-item
+{
+	background: url('actionsBg.png') left center repeat-x; 
+	width: 20%; 
+	height: 100%;
+	float: left;
+	text-align: center;
+}
+.slider-image
+{
+	position: relative;
+	top: 20px;
+}
+
+.slider-item-text
+{
+	position: relative;
+	top: 30px;
+}
+
+.lines-v 
+{
+	height: 91px;
+	width: 20px;
+	background: url('lines-v.png') center center no-repeat;
+	float: left;
+}
+.arrow 
+{
+	height: 91px;
+	width: 20px;
+	background: url('arrow.png') center center no-repeat;
+	float: right;
+}
+.item-image 
+{
+	padding: 10px 0 0 10px;
+	float: left;	
+}
+.item-info
+{
+	float: left;	
+	text-align: left;
+	padding: 10px 0 0 20px;
+}
+.item-title 
+{
+	padding: 0 0 10px 0;	
+}
+
+.item-rate span
+{
+	position: relative;
+	top: -2px;
+	left: 0px;
+	font: bold 12px arial;
+	color: #333;	
+}
+
+.item-rate
+{
+	float: left;
+	display: block;
+}	
+
+.bottom-buttons 
+{
+	height: 50px;
+	width: 320px;
+	clear: left;	
+	margin-top: -30px;
+}
+.bottom-button 
+{
+	width: 64px;
+	height: 26px;
+	margin-top: 5px;
+	float: left;
+}
+.bottom-button p 
+{
+	position:relative;
+	top:20px;
+	text-align: center;
+	font: bold 11px arial;
+	color: #e9e9e9;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.44 $"/>
+		<generation date="$Date: 2009/05/05 23:06:34 $"/>
+		<language type="de"/>
+		<territory type="LI"/>
+	</identity>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>'</group>
+		</symbols>
+		<currencyFormats>
+			<currencyFormatLength>
+				<currencyFormat>
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+	</numbers>
+</ldml>

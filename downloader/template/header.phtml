@@ -1,0 +1,73 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title><?php echo $this->__('Magento Downloader') ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link type="image/x-icon" href="<?php echo $this->baseUrl()?>/favicon.ico" rel="icon"/>
+    <link type="image/x-icon" href="<?php echo $this->baseUrl()?>/favicon.ico" rel="shortcut icon"/>
+    <script type="text/javascript" src="js/prototype.js"></script>
+    <link type="text/css" rel="stylesheet" href="skin/boxes.css"></link>
+    <!--[if IE]>
+    <link type="text/css" rel="stylesheet" href="skin/ieboxes.css" media="all"></link>
+    <![endif]-->
+    <!--[if gt IE 6]>
+    <link type="text/css" rel="stylesheet" href="skin/ie7boxes.css" media="all"></link>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+
+        <div class="header-top">
+            <h1 id="logo">Magento Downloader</h1>
+        </div>
+        <div class="main">
+        <?php if ($this->controller()->getAction()!='login' && !$this->get('exception')): ?>
+            <div class="nav">
+            <?php if (true||$this->controller()->isWritable()): ?>
+                <?php if ($this->controller()->session()->getUserId()): ?>
+                    <a href="<?php echo $this->url('logout') ?>" class="f-right" style="margin:0px 10px;">Log Out</a>
+                    <?php if ($returnUrl = $this->controller()->session()->getReturnUrl()): ?>
+                        <a href="<?php echo $returnUrl ?>" class="f-right" style="margin:0px 10px;">Return to Admin</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <ul>
+                    <li class="first"><a <?php echo $this->getNavLinkParams('connectPackages') ?>>Extensions</a></li>
+                    <li class="last"><a <?php echo $this->getNavLinkParams('settings') ?>>Settings</a></li>
+                </ul>
+             <?php else: ?>
+                <ul>
+                    <li class="first last"><a class="active">Check Write Permissions</a></li>
+                </ul>
+             <?php endif; ?>
+            </div>
+        <?php endif; ?>
+            <div class="content">
+<?php $this->set('messages', $this->controller()->session()->getMessages()) ?>
+<?php echo $this->template('messages.phtml') ?>

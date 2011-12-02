@@ -1,0 +1,3784 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ldml>
+	<identity>
+		<version number="$Revision: 1.141 $"/>
+		<generation date="$Date: 2009/06/22 12:56:45 $"/>
+		<language type="zh"/>
+		<script type="Hant"/>
+	</identity>
+	<localeDisplayNames>
+		<localeDisplayPattern>
+			<localeSeparator>，</localeSeparator>
+		</localeDisplayPattern>
+		<languages>
+			<language type="ab">阿布哈茲文</language>
+			<language type="ace">亞齊文</language>
+			<language type="ach">阿僑利文</language>
+			<language type="ada">阿當莫文</language>
+			<language type="ady">阿迪各文</language>
+			<language type="ae">阿緯斯陀文</language>
+			<language type="af">南非荷蘭文</language>
+			<language type="afa">亞非諸語言</language>
+			<language type="ain">愛努文</language>
+			<language type="ak">阿坎文</language>
+			<language type="ale">阿留申文</language>
+			<language type="alg">阿爾岡昆諸語言</language>
+			<language type="alt">南阿爾泰文</language>
+			<language type="an">阿拉貢文</language>
+			<language type="ang">古英文</language>
+			<language type="apa">阿帕切諸語言</language>
+			<language type="arn">阿勞坎文</language>
+			<language type="art">人工語言</language>
+			<language type="as">阿薩姆文</language>
+			<language type="ast">阿斯圖里亞文</language>
+			<language type="ath">阿薩帕斯坎諸語言</language>
+			<language type="aus">澳洲諸語言</language>
+			<language type="av">阿瓦爾文</language>
+			<language type="awa">阿瓦文</language>
+			<language type="ay">艾馬拉文</language>
+			<language type="az">亞塞拜然文</language>
+			<language type="ba">巴什客爾文</language>
+			<language type="bad">班達文</language>
+			<language type="bai">巴米累克諸語言</language>
+			<language type="ban">峇里文</language>
+			<language type="bas">巴薩文</language>
+			<language type="bat">波羅的海諸語言</language>
+			<language type="be">白俄羅斯文</language>
+			<language type="bej">貝扎文</language>
+			<language type="bem">別姆巴文</language>
+			<language type="ber">柏柏爾文</language>
+			<language type="bg">保加利亞文</language>
+			<language type="bh">比哈爾文</language>
+			<language type="bho">博傑普爾文</language>
+			<language type="bi">比斯拉馬文</language>
+			<language type="bik">比科爾文</language>
+			<language type="bla">錫克錫卡文</language>
+			<language type="bnt">班圖諸語言</language>
+			<language type="bo">藏文</language>
+			<language type="bs">波士尼亞文</language>
+			<language type="bua">布里阿特文</language>
+			<language type="bug">布吉斯文</language>
+			<language type="byn">比林文</language>
+			<language type="ca">加泰羅尼亞文</language>
+			<language type="cai">中美印第安諸語言</language>
+			<language type="car">加勒比文</language>
+			<language type="cau">高加索諸語言</language>
+			<language type="cch">阿燦文</language>
+			<language type="ce">車臣文</language>
+			<language type="ceb">宿霧文</language>
+			<language type="cel">凱爾特諸語言</language>
+			<language type="ch">查莫洛文</language>
+			<language type="chb">奇布查文</language>
+			<language type="chk">處奇斯文</language>
+			<language type="chm">馬里文</language>
+			<language type="chn">契奴克文</language>
+			<language type="cho">喬克托文</language>
+			<language type="chp">奇佩瓦揚文</language>
+			<language type="chr">柴羅基文</language>
+			<language type="chy">沙伊安文</language>
+			<language type="cmc">佔語諸語言</language>
+			<language type="cpe">歐洲腔調和洋涇濱，源自英文的(其他)</language>
+			<language type="cpf">歐洲腔調和洋涇濱，源自法文的(其他)</language>
+			<language type="cpp">歐洲腔調和洋涇濱，源自葡萄牙文的(其他)</language>
+			<language type="cr">克裡文</language>
+			<language type="crh">克里米亞半島的土耳其文；克里米亞半島的塔塔爾文</language>
+			<language type="crp">克里奧爾文和皮欽文</language>
+			<language type="csb">卡舒布文</language>
+			<language type="cus">庫施特諸語言</language>
+			<language type="cy">威爾斯文</language>
+			<language type="da">丹麥文</language>
+			<language type="dak">達科他文</language>
+			<language type="dar">達爾格瓦文</language>
+			<language type="day">迪雅克文</language>
+			<language type="de_AT">德文 (奧地利)</language>
+			<language type="del">德拉瓦文</language>
+			<language type="den">斯拉夫</language>
+			<language type="dgr">多格里布文</language>
+			<language type="doi">多格來文</language>
+			<language type="dra">德拉威諸語言</language>
+			<language type="dsb">下索布文</language>
+			<language type="dua">杜亞拉文</language>
+			<language type="dum">中古荷蘭文</language>
+			<language type="dv">迪維西文</language>
+			<language type="ee">埃維文</language>
+			<language type="efi">埃菲克文</language>
+			<language type="egy">古埃及文</language>
+			<language type="eka">艾卡朱克文</language>
+			<language type="el">希臘文</language>
+			<language type="elx">埃蘭文</language>
+			<language type="en_AU">英文 (澳洲)</language>
+			<language type="en_GB">英文 (英國)</language>
+			<language type="en_US">英文 (美國)</language>
+			<language type="eo">世界語</language>
+			<language type="es_419">西班牙文 (拉丁美洲)</language>
+			<language type="es_ES">西班牙文 (西班牙)</language>
+			<language type="et">愛沙尼亞文</language>
+			<language type="ewo">依汪都文</language>
+			<language type="fan">芳族文</language>
+			<language type="ff">富拉文</language>
+			<language type="fi">芬蘭文</language>
+			<language type="fil">菲律賓文</language>
+			<language type="fiu">芬烏諸語言</language>
+			<language type="fj">斐濟文</language>
+			<language type="fo">法羅文</language>
+			<language type="fon">豐文</language>
+			<language type="fr_CH">法文 (瑞士)</language>
+			<language type="frr">北弗里西亞文</language>
+			<language type="frs">東弗里西亞文</language>
+			<language type="fy">西弗里西亞文</language>
+			<language type="ga">愛爾蘭文</language>
+			<language type="gaa">加族文</language>
+			<language type="gay">加約文</language>
+			<language type="gba">葛巴亞文</language>
+			<language type="gd">蘇格蘭 - 蓋爾文</language>
+			<language type="gem">日耳曼諸語言</language>
+			<language type="gez">吉茲文</language>
+			<language type="gil">吉爾伯特群島文</language>
+			<language type="gl">加里西亞文</language>
+			<language type="gmh">中古高地日耳曼文</language>
+			<language type="goh">古高地日耳曼文</language>
+			<language type="gon">岡德文</language>
+			<language type="gor">科隆達羅文</language>
+			<language type="got">哥德文</language>
+			<language type="grc">古希臘文</language>
+			<language type="gu">吉亞拉塔文</language>
+			<language type="gv">曼島文</language>
+			<language type="gwi">圭契文</language>
+			<language type="hai">海達文</language>
+			<language type="he">希伯來文</language>
+			<language type="hi">北印度文</language>
+			<language type="hil">希利蓋農文</language>
+			<language type="him">赫馬查利文</language>
+			<language type="hit">赫梯文</language>
+			<language type="hmn">孟文</language>
+			<language type="ho">西里莫圖土文</language>
+			<language type="hr">克羅埃西亞文</language>
+			<language type="ht">海地文</language>
+			<language type="hy">亞美尼亞文</language>
+			<language type="hz">赫雷羅文</language>
+			<language type="ia">國際文A</language>
+			<language type="id">印尼文</language>
+			<language type="ie">國際文E</language>
+			<language type="ig">伊布文</language>
+			<language type="ii">四川彝文</language>
+			<language type="ijo">伊喬文</language>
+			<language type="ik">依奴皮維克文</language>
+			<language type="ilo">伊洛闊文</language>
+			<language type="inc">印度諸語言</language>
+			<language type="ine">印歐諸語言</language>
+			<language type="io">伊朗文</language>
+			<language type="ira">伊朗諸語言</language>
+			<language type="iro">易洛魁文</language>
+			<language type="is">冰島文</language>
+			<language type="it">義大利文</language>
+			<language type="iu">因紐特文</language>
+			<language type="jbo">邏輯文</language>
+			<language type="jpr">猶太教-波斯文</language>
+			<language type="jrb">猶太阿拉伯文</language>
+			<language type="ka">喬治亞文</language>
+			<language type="kaa">卡拉卡爾帕克文</language>
+			<language type="kab">卡比爾文</language>
+			<language type="kar">克倫文</language>
+			<language type="kbd">卡巴爾達文</language>
+			<language type="kfo">科羅文</language>
+			<language type="kg">剛果文</language>
+			<language type="khi">科依桑諸語言</language>
+			<language type="kho">和闐文</language>
+			<language type="ki">吉庫尤文</language>
+			<language type="kj">廣亞馬文</language>
+			<language type="kk">哈薩克文</language>
+			<language type="kl">格陵蘭文</language>
+			<language type="km">高棉文</language>
+			<language type="kn">坎那達文</language>
+			<language type="ko">韓文</language>
+			<language type="kok">貢根文</language>
+			<language type="kos">科斯雷恩文</language>
+			<language type="kr">卡努裡文</language>
+			<language type="krc">卡拉柴-包爾卡爾文</language>
+			<language type="kro">克魯文</language>
+			<language type="kru">庫魯科文</language>
+			<language type="ks">克什米爾文</language>
+			<language type="ku">庫爾德文</language>
+			<language type="kum">庫密克文</language>
+			<language type="kut">庫特奈文</language>
+			<language type="kw">康瓦耳文</language>
+			<language type="ky">吉爾吉斯文</language>
+			<language type="lad">拉迪諾文</language>
+			<language type="lah">拉亨達文</language>
+			<language type="lam">蘭巴文</language>
+			<language type="lb">盧森堡文</language>
+			<language type="lez">列茲干文</language>
+			<language type="lg">干達文</language>
+			<language type="li">林堡文</language>
+			<language type="lo">寮國文</language>
+			<language type="lol">芒戈文</language>
+			<language type="loz">洛齊文</language>
+			<language type="lt">立陶宛語</language>
+			<language type="lu">魯巴加丹加文</language>
+			<language type="lua">魯巴魯魯亞文</language>
+			<language type="lui">路易塞諾文</language>
+			<language type="lun">盧恩達文</language>
+			<language type="luo">盧奧文</language>
+			<language type="lus">盧晒文</language>
+			<language type="lv">拉脫維亞文</language>
+			<language type="mad">馬都拉文</language>
+			<language type="mag">馬加伊文</language>
+			<language type="mai">邁蒂利文</language>
+			<language type="mak">望加錫文</language>
+			<language type="map">南島諸語言</language>
+			<language type="mas">馬賽文</language>
+			<language type="mdr">曼達文</language>
+			<language type="men">門德文</language>
+			<language type="mg">馬爾加什文</language>
+			<language type="mga">中古愛爾蘭文</language>
+			<language type="mh">馬紹爾文</language>
+			<language type="mic">米克馬克文</language>
+			<language type="min">米南卡堡文</language>
+			<language type="mis">混雜語諸語言</language>
+			<language type="mk">馬其頓文</language>
+			<language type="mkh">孟高棉諸語言</language>
+			<language type="ml">馬來亞拉姆文</language>
+			<language type="mnc">滿族文</language>
+			<language type="mni">曼尼普裡文</language>
+			<language type="mno">馬諾博諸語言</language>
+			<language type="mo">摩爾多瓦文</language>
+			<language type="moh">莫霍克文</language>
+			<language type="mr">馬拉地文</language>
+			<language type="ms">馬來文</language>
+			<language type="mt">馬爾他文</language>
+			<language type="mul">多種語言</language>
+			<language type="mun">蒙達諸語言</language>
+			<language type="mus">克里克文</language>
+			<language type="mwl">米蘭德斯文</language>
+			<language type="mwr">馬爾尼裡文</language>
+			<language type="my">緬甸文</language>
+			<language type="myn">馬雅諸語言</language>
+			<language type="myv">厄爾茲亞文</language>
+			<language type="na">諾魯文</language>
+			<language type="nah">納瓦特文</language>
+			<language type="nai">北美印第安諸語言</language>
+			<language type="nb">挪威波克默爾文</language>
+			<language type="nd">北地畢列文</language>
+			<language type="nds">低地日耳曼文；低地薩克遜文</language>
+			<language type="ne">尼泊爾文</language>
+			<language type="new">尼瓦爾文</language>
+			<language type="ng">恩東加文</language>
+			<language type="nia">尼亞斯文</language>
+			<language type="nic">尼日爾科爾多凡諸語言</language>
+			<language type="niu">紐埃文</language>
+			<language type="nl">荷蘭文</language>
+			<language type="nl_BE">法蘭德斯文</language>
+			<language type="nn">新挪威文</language>
+			<language type="nog">諾蓋文</language>
+			<language type="non">古諾爾斯文</language>
+			<language type="nqo">西非書面語言（N'ko）</language>
+			<language type="nr">南地畢列文</language>
+			<language type="nub">努比亞諸語言</language>
+			<language type="nv">納瓦約文</language>
+			<language type="nwc">古尼瓦爾文</language>
+			<language type="ny">尼揚賈文</language>
+			<language type="nym">尼揚韋齊文</language>
+			<language type="nyn">尼揚科萊文</language>
+			<language type="nyo">尼奧囉文</language>
+			<language type="nzi">尼茲馬文</language>
+			<language type="oc">奧克西坦文</language>
+			<language type="oj">奧杰布瓦文</language>
+			<language type="om">阿曼文</language>
+			<language type="or">歐里亞文</language>
+			<language type="os">奧塞提文</language>
+			<language type="osa">歐塞奇文</language>
+			<language type="ota">鄂圖曼土耳其文 (1500-1928)</language>
+			<language type="oto">奧托米諸語言</language>
+			<language type="paa">巴布亞諸語言</language>
+			<language type="pag">潘加辛文</language>
+			<language type="pal">巴列維文</language>
+			<language type="pam">潘帕嘉文</language>
+			<language type="pap">帕皮阿門托文</language>
+			<language type="pau">帛琉文</language>
+			<language type="peo">古波斯文 (ca.600-400 B.C.)</language>
+			<language type="phi">菲律賓諸語言</language>
+			<language type="pl">波蘭文</language>
+			<language type="pon">波那貝文</language>
+			<language type="pra">普拉克里特諸語言</language>
+			<language type="pro">古普羅旺斯文</language>
+			<language type="ps">普什圖文</language>
+			<language type="pt_PT">葡萄牙文 (葡萄牙)</language>
+			<language type="qu">蓋丘亞文</language>
+			<language type="raj">拉賈斯坦諸文</language>
+			<language type="rap">復活島文</language>
+			<language type="rar">拉羅通加文</language>
+			<language type="rm">里托羅曼斯文</language>
+			<language type="rn">隆迪文</language>
+			<language type="ro">羅馬尼亞文</language>
+			<language type="roa">羅曼諸語言</language>
+			<language type="rom">吉普賽文</language>
+			<language type="root">根語言</language>
+			<language type="rup">羅馬尼亞語系</language>
+			<language type="rw">盧安達文</language>
+			<language type="sad">桑達韋文</language>
+			<language type="sah">雅庫特文</language>
+			<language type="sai">南美印第安諸語言</language>
+			<language type="sal">薩利什諸語言</language>
+			<language type="sam">薩瑪利亞阿拉姆文</language>
+			<language type="sas">撒撒克文</language>
+			<language type="sat">散塔利文</language>
+			<language type="sc">撒丁文</language>
+			<language type="sco">蘇格蘭文</language>
+			<language type="sd">印度語</language>
+			<language type="se">北方薩米文</language>
+			<language type="sel">瑟爾卡普文</language>
+			<language type="sem">閃語諸語言</language>
+			<language type="sga">古愛爾蘭文（至 900）</language>
+			<language type="sgn">手語</language>
+			<language type="sh">塞爾維亞克羅埃西亞文</language>
+			<language type="shn">撣文</language>
+			<language type="si">僧伽羅文</language>
+			<language type="sid">希達摩文</language>
+			<language type="sio">蘇語諸語言</language>
+			<language type="sit">漢藏諸語言</language>
+			<language type="sl">斯洛維尼亞文</language>
+			<language type="sla">斯拉夫諸語言</language>
+			<language type="sm">薩摩亞文</language>
+			<language type="sma">南薩米文</language>
+			<language type="smi">薩米諸語言</language>
+			<language type="smj">魯勒薩米文</language>
+			<language type="smn">伊納裡薩米文</language>
+			<language type="sms">斯科特薩米文</language>
+			<language type="sn">塞內加爾文</language>
+			<language type="so">索馬利文</language>
+			<language type="sog">索格底亞納文</language>
+			<language type="sq">阿爾巴尼亞文</language>
+			<language type="sr">塞爾維亞文</language>
+			<language type="srn">蘇拉南東墎文</language>
+			<language type="srr">塞雷爾文</language>
+			<language type="ssa">尼羅撒哈拉諸語言</language>
+			<language type="su">巽他語</language>
+			<language type="suk">蘇庫馬文</language>
+			<language type="sus">蘇蘇文</language>
+			<language type="sux">蘇美文</language>
+			<language type="sw">史瓦希里文</language>
+			<language type="syc">古敘利亞文</language>
+			<language type="syr">敘利亞文</language>
+			<language type="ta">坦米爾文</language>
+			<language type="tai">傣語諸語言</language>
+			<language type="te">泰盧固文</language>
+			<language type="tem">提姆文</language>
+			<language type="ter">泰雷諾文</language>
+			<language type="tet">泰頓文</language>
+			<language type="ti">提格利尼亞文</language>
+			<language type="tig">蒂格雷文</language>
+			<language type="tiv">提夫文</language>
+			<language type="tk">土庫曼文</language>
+			<language type="tkl">托克勞文</language>
+			<language type="tl">塔加路族文</language>
+			<language type="tlh">克林貢文</language>
+			<language type="tli">特林基特文</language>
+			<language type="tmh">塔馬奇克文</language>
+			<language type="tn">突尼西亞文</language>
+			<language type="to">東加文</language>
+			<language type="tog">湯加文(尼亞薩文)</language>
+			<language type="tpi">托比辛文</language>
+			<language type="ts">特松加文</language>
+			<language type="tsi">欽西安文</language>
+			<language type="tt">韃靼文</language>
+			<language type="tum">圖姆布卡文</language>
+			<language type="tup">圖皮諸語言</language>
+			<language type="tut">阿爾泰諸語言（其他）</language>
+			<language type="tvl">吐瓦魯文</language>
+			<language type="ty">大溪地文</language>
+			<language type="tyv">土凡文</language>
+			<language type="udm">沃蒂艾克文</language>
+			<language type="ug">維吾爾文</language>
+			<language type="uga">烏加列文</language>
+			<language type="uk">烏克蘭文</language>
+			<language type="umb">姆本杜文</language>
+			<language type="und">未確定的</language>
+			<language type="ur">烏爾都文</language>
+			<language type="uz">烏茲別克文</language>
+			<language type="vai">越南文 Vai</language>
+			<language type="ve">溫達文</language>
+			<language type="wak">瓦卡什諸語言</language>
+			<language type="war">瓦瑞文</language>
+			<language type="was">瓦紹文</language>
+			<language type="wen">索布諸語言</language>
+			<language type="wo">沃爾夫文</language>
+			<language type="xal">卡爾梅克文</language>
+			<language type="xh">科薩文</language>
+			<language type="yao">瑤文</language>
+			<language type="yi">意第緒文</language>
+			<language type="yo">約魯巴文</language>
+			<language type="ypk">尤皮克諸語言</language>
+			<language type="za">壯文</language>
+			<language type="zap">薩波特克文</language>
+			<language type="zbl">布列斯符號</language>
+			<language type="zen">澤納加文</language>
+			<language type="zh_Hans">簡體中文</language>
+			<language type="zh_Hant">繁體中文</language>
+			<language type="znd">贊德文</language>
+			<language type="zu">祖魯文</language>
+			<language type="zun">祖尼文</language>
+			<language type="zxx">無語言內容</language>
+		</languages>
+		<scripts>
+			<script type="Arab">阿拉伯文</script>
+			<script type="Armi">皇室亞美尼亞文</script>
+			<script type="Armn">亞美尼亞文</script>
+			<script type="Avst">阿維斯陀文</script>
+			<script type="Bali">峇里文</script>
+			<script type="Batk">巴塔克文</script>
+			<script type="Beng">孟加拉文</script>
+			<script type="Blis">布列斯文</script>
+			<script type="Bopo">注音符號</script>
+			<script type="Brah">婆羅米文</script>
+			<script type="Brai">盲人用點字法</script>
+			<script type="Bugi">布吉斯文</script>
+			<script type="Buhd">布希德文</script>
+			<script type="Cakm">查克馬文</script>
+			<script type="Cans">加拿大原住民通用字符</script>
+			<script type="Cari">卡里亞文</script>
+			<script type="Cham">占文</script>
+			<script type="Cher">柴羅基文</script>
+			<script type="Copt">科普特文</script>
+			<script type="Cprt">塞浦路斯文</script>
+			<script type="Cyrl">西里俄语</script>
+			<script type="Cyrs">西里爾文（古教會斯拉夫文變體）</script>
+			<script type="Dsrt">德瑟雷特文</script>
+			<script type="Egyd">古埃及世俗體</script>
+			<script type="Egyh">古埃及僧侶體</script>
+			<script type="Egyp">古埃及象形文字</script>
+			<script type="Ethi">衣索匹亞文</script>
+			<script type="Geok">格魯吉亞語系（阿索他路里和努斯克胡里文）</script>
+			<script type="Geor">喬治亞文</script>
+			<script type="Glag">格拉哥里文</script>
+			<script type="Goth">歌德文</script>
+			<script type="Grek">希臘文</script>
+			<script type="Gujr">古吉拉特文</script>
+			<script type="Guru">古爾穆奇文</script>
+			<script type="Hang">諺文</script>
+			<script type="Hani">漢語</script>
+			<script type="Hano">哈努諾文</script>
+			<script type="Hans">簡體中文</script>
+			<script type="Hant">繁體中文</script>
+			<script type="Hebr">希伯來文</script>
+			<script type="Hmng">楊松錄苗文</script>
+			<script type="Hung">古匈牙利文</script>
+			<script type="Inds">印度河流域（哈拉帕文）</script>
+			<script type="Ital">古意大利文</script>
+			<script type="Java">爪哇文</script>
+			<script type="Jpan">日文</script>
+			<script type="Kali">克耶李文</script>
+			<script type="Khar">卡羅須提文</script>
+			<script type="Khmr">高棉文</script>
+			<script type="Knda">坎那達文</script>
+			<script type="Kore">韓文</script>
+			<script type="Lana">藍拿文</script>
+			<script type="Laoo">寮國文</script>
+			<script type="Latf">拉丁文（尖角體活字變體）</script>
+			<script type="Latg">拉丁文（蓋爾語變體）</script>
+			<script type="Latn">拉丁文</script>
+			<script type="Lepc">雷布查文</script>
+			<script type="Limb">林佈文</script>
+			<script type="Lina">線性文字 A</script>
+			<script type="Linb">線性文字 B</script>
+			<script type="Lyci">呂西亞語</script>
+			<script type="Lydi">里底亞語</script>
+			<script type="Mand">曼安底文</script>
+			<script type="Maya">瑪雅象形文字</script>
+			<script type="Mero">麥羅埃文</script>
+			<script type="Mlym">馬來亞拉姆文</script>
+			<script type="Mong">蒙古文</script>
+			<script type="Moon">Moon</script>
+			<script type="Mtei">曼尼普爾文</script>
+			<script type="Mymr">緬甸文</script>
+			<script type="Nkoo">西非書面語言 (N’Ko)</script>
+			<script type="Ogam">歐甘文</script>
+			<script type="Olck">桑塔利文</script>
+			<script type="Orkh">鄂爾渾文</script>
+			<script type="Orya">歐利亞文</script>
+			<script type="Osma">歐斯曼亞文</script>
+			<script type="Perm">古彼爾姆諸文</script>
+			<script type="Phnx">腓尼基文</script>
+			<script type="Plrd">柏格理拼音符</script>
+			<script type="Qaai">Qaai</script>
+			<script type="Rjng">拉讓文</script>
+			<script type="Roro">朗格朗格象形文</script>
+			<script type="Runr">古北歐文字</script>
+			<script type="Saur">索拉什特拉文</script>
+			<script type="Sgnw">手語書寫符號</script>
+			<script type="Shaw">簫柏納字符</script>
+			<script type="Sinh">錫蘭文</script>
+			<script type="Sylo">希洛弟納格里文</script>
+			<script type="Syrc">敍利亞文</script>
+			<script type="Syre">敘利亞文（福音體文字變體）</script>
+			<script type="Syrj">敘利亞文（西方文字變體）</script>
+			<script type="Syrn">敘利亞文（東方文字變體）</script>
+			<script type="Tagb">南島文</script>
+			<script type="Tale">傣哪文</script>
+			<script type="Taml">坦米爾文</script>
+			<script type="Telu">泰魯古文</script>
+			<script type="Teng">談格瓦文</script>
+			<script type="Tfng">提非納（柏柏爾文）</script>
+			<script type="Tglg">塔加拉文</script>
+			<script type="Thaa">塔安那文</script>
+			<script type="Thai">泰文</script>
+			<script type="Tibt">西藏文</script>
+			<script type="Ugar">烏加列文</script>
+			<script type="Vaii">瓦依文</script>
+			<script type="Visp">視覺語音文</script>
+			<script type="Xpeo">古波斯文</script>
+			<script type="Xsux">蘇米魯亞甲文楔形文字</script>
+			<script type="Yiii">彞文</script>
+			<script type="Zxxx">非書寫語言碼</script>
+			<script type="Zyyy">一般文字</script>
+			<script type="Zzzz">未編碼工序指令碼</script>
+		</scripts>
+		<territories>
+			<territory type="014">東非</territory>
+			<territory type="018">非洲南部</territory>
+			<territory type="030">東亞</territory>
+			<territory type="034">南亞</territory>
+			<territory type="035">東南亞</territory>
+			<territory type="039">南歐</territory>
+			<territory type="053">澳洲與紐西蘭</territory>
+			<territory type="054">美拉尼西亞</territory>
+			<territory type="057">密克羅尼西亞</territory>
+			<territory type="061">玻里尼西亞</territory>
+			<territory type="062">中南亞</territory>
+			<territory type="142">亞洲</territory>
+			<territory type="143">中亞</territory>
+			<territory type="145">西亞</territory>
+			<territory type="150">歐洲</territory>
+			<territory type="151">東歐</territory>
+			<territory type="154">北歐</territory>
+			<territory type="155">西歐</territory>
+			<territory type="172">獨立國協</territory>
+			<territory type="830">海峽群島</territory>
+			<territory type="AD">安道爾</territory>
+			<territory type="AE">阿拉伯聯合大公國</territory>
+			<territory type="AG">安地卡及巴布達</territory>
+			<territory type="AI">安圭拉島</territory>
+			<territory type="AL">阿爾巴尼亞</territory>
+			<territory type="AM">亞美尼亞</territory>
+			<territory type="AN">荷屬安地列斯</territory>
+			<territory type="AQ">南極洲</territory>
+			<territory type="AS">美屬薩摩亞群島</territory>
+			<territory type="AT">奧地利</territory>
+			<territory type="AU">澳洲</territory>
+			<territory type="AW">阿路巴</territory>
+			<territory type="AX">亞蘭群島</territory>
+			<territory type="AZ">亞塞拜然</territory>
+			<territory type="BA">波士尼亞與赫塞格維納</territory>
+			<territory type="BB">巴貝多</territory>
+			<territory type="BD">孟加拉</territory>
+			<territory type="BE">比利時</territory>
+			<territory type="BF">布吉納法索</territory>
+			<territory type="BG">保加利亞</territory>
+			<territory type="BI">蒲隆地</territory>
+			<territory type="BJ">貝南</territory>
+			<territory type="BL">聖巴瑟米</territory>
+			<territory type="BM">百慕達</territory>
+			<territory type="BN">汶萊</territory>
+			<territory type="BO">玻利維亞</territory>
+			<territory type="BS">巴哈馬</territory>
+			<territory type="BV">布威島</territory>
+			<territory type="BW">波札那</territory>
+			<territory type="BY">白俄羅斯</territory>
+			<territory type="BZ">貝里斯</territory>
+			<territory type="CC">可可斯群島</territory>
+			<territory type="CD">剛果民主共和國</territory>
+			<territory type="CF">中非共和國</territory>
+			<territory type="CG">剛果</territory>
+			<territory type="CI">科特迪瓦</territory>
+			<territory type="CK">庫克群島</territory>
+			<territory type="CM">喀麥隆</territory>
+			<territory type="CN">中華人民共和國</territory>
+			<territory type="CO">哥倫比亞</territory>
+			<territory type="CR">哥斯大黎加</territory>
+			<territory type="CS">塞爾維亞和蒙特尼哥羅</territory>
+			<territory type="CV">維德角</territory>
+			<territory type="CX">聖誕島</territory>
+			<territory type="CY">賽普勒斯</territory>
+			<territory type="CZ">捷克共和國</territory>
+			<territory type="DE">德國</territory>
+			<territory type="DJ">吉布地</territory>
+			<territory type="DK">丹麥</territory>
+			<territory type="DM">多明尼加</territory>
+			<territory type="DO">多明尼加共和國</territory>
+			<territory type="DZ">阿爾及利亞</territory>
+			<territory type="EC">厄瓜多</territory>
+			<territory type="EE">愛沙尼亞</territory>
+			<territory type="ER">厄利垂亞</territory>
+			<territory type="ET">衣索比亞</territory>
+			<territory type="FI">芬蘭</territory>
+			<territory type="FJ">斐濟</territory>
+			<territory type="FK">福克蘭群島</territory>
+			<territory type="FM">密克羅尼西亞群島</territory>
+			<territory type="FO">法羅群島</territory>
+			<territory type="FR">法國</territory>
+			<territory type="GA">加彭</territory>
+			<territory type="GB">英國</territory>
+			<territory type="GD">格瑞納達</territory>
+			<territory type="GE">喬治亞共和國</territory>
+			<territory type="GF">法屬圭亞那</territory>
+			<territory type="GG">根西島</territory>
+			<territory type="GH">迦納</territory>
+			<territory type="GI">直布羅陀</territory>
+			<territory type="GL">格陵蘭</territory>
+			<territory type="GM">甘比亞</territory>
+			<territory type="GN">幾內亞</territory>
+			<territory type="GP">哥德普洛</territory>
+			<territory type="GQ">赤道幾內亞</territory>
+			<territory type="GR">希臘</territory>
+			<territory type="GS">南喬治亞與南三明治群島</territory>
+			<territory type="GT">瓜地馬拉</territory>
+			<territory type="GU">關島</territory>
+			<territory type="GW">幾內亞比索</territory>
+			<territory type="GY">蓋亞納</territory>
+			<territory type="HK">中華人民共和國香港特別行政區</territory>
+			<territory type="HM">赫德與麥克當諾群島</territory>
+			<territory type="HN">宏都拉斯</territory>
+			<territory type="HR">克羅埃西亞</territory>
+			<territory type="ID">印尼</territory>
+			<territory type="IE">愛爾蘭</territory>
+			<territory type="IM">曼島</territory>
+			<territory type="IO">英屬印度洋領土</territory>
+			<territory type="IS">冰島</territory>
+			<territory type="IT">義大利</territory>
+			<territory type="JE">澤西島</territory>
+			<territory type="JM">牙買加</territory>
+			<territory type="JO">約旦</territory>
+			<territory type="KE">肯亞</territory>
+			<territory type="KG">吉爾吉斯</territory>
+			<territory type="KI">吉里巴斯</territory>
+			<territory type="KM">科摩羅群島</territory>
+			<territory type="KN">聖克里斯多福及尼維斯</territory>
+			<territory type="KP">北韓</territory>
+			<territory type="KR">南韓</territory>
+			<territory type="KY">開曼群島</territory>
+			<territory type="KZ">哈薩克</territory>
+			<territory type="LA">寮國</territory>
+			<territory type="LC">聖露西亞</territory>
+			<territory type="LI">列支敦斯登</territory>
+			<territory type="LK">斯里蘭卡</territory>
+			<territory type="LR">賴比瑞亞</territory>
+			<territory type="LS">賴索扥</territory>
+			<territory type="LU">盧森堡</territory>
+			<territory type="LV">拉脫維亞</territory>
+			<territory type="LY">利比亞</territory>
+			<territory type="MC">摩納哥</territory>
+			<territory type="MD">摩爾多瓦</territory>
+			<territory type="ME">蒙特內哥羅</territory>
+			<territory type="MF">聖馬丁</territory>
+			<territory type="MG">馬達加斯加</territory>
+			<territory type="MH">馬紹爾群島</territory>
+			<territory type="MK">馬其頓</territory>
+			<territory type="ML">馬利</territory>
+			<territory type="MM">緬甸</territory>
+			<territory type="MO">中華人民共和國澳門特別行政區</territory>
+			<territory type="MP">北馬里亞納群島</territory>
+			<territory type="MQ">馬丁尼克島</territory>
+			<territory type="MR">茅利塔尼亞</territory>
+			<territory type="MS">蒙特色拉特島</territory>
+			<territory type="MT">馬爾他</territory>
+			<territory type="MU">模里西斯</territory>
+			<territory type="MV">馬爾地夫</territory>
+			<territory type="MW">馬拉威</territory>
+			<territory type="MY">馬來西亞</territory>
+			<territory type="MZ">莫三比克</territory>
+			<territory type="NA">納米比亞</territory>
+			<territory type="NC">新喀里多尼亞群島</territory>
+			<territory type="NE">尼日</territory>
+			<territory type="NF">諾福克島</territory>
+			<territory type="NG">奈及利亞</territory>
+			<territory type="NL">荷蘭</territory>
+			<territory type="NP">尼泊爾</territory>
+			<territory type="NR">諾魯</territory>
+			<territory type="NU">紐威島</territory>
+			<territory type="NZ">紐西蘭</territory>
+			<territory type="OM">阿曼王國</territory>
+			<territory type="PA">巴拿馬</territory>
+			<territory type="PE">秘魯</territory>
+			<territory type="PF">法屬玻里尼西亞</territory>
+			<territory type="PG">巴布亞紐幾內亞</territory>
+			<territory type="PH">菲律賓</territory>
+			<territory type="PL">波蘭</territory>
+			<territory type="PM">聖彼德與密啟崙</territory>
+			<territory type="PN">皮特康</territory>
+			<territory type="PS">巴勒斯坦</territory>
+			<territory type="PW">帛琉</territory>
+			<territory type="QA">卡達</territory>
+			<territory type="QO">大洋洲邊疆群島</territory>
+			<territory type="QU">歐盟</territory>
+			<territory type="RE">留尼旺</territory>
+			<territory type="RO">羅馬尼亞</territory>
+			<territory type="RS">塞爾維亞</territory>
+			<territory type="RU">俄羅斯</territory>
+			<territory type="RW">盧安達</territory>
+			<territory type="SA">沙烏地阿拉伯</territory>
+			<territory type="SB">索羅門群島</territory>
+			<territory type="SC">塞席爾</territory>
+			<territory type="SD">蘇丹</territory>
+			<territory type="SH">聖赫勒拿島</territory>
+			<territory type="SI">斯洛維尼亞</territory>
+			<territory type="SJ">冷岸及央麥恩群島</territory>
+			<territory type="SL">獅子山</territory>
+			<territory type="SM">聖馬利諾</territory>
+			<territory type="SN">塞內加爾</territory>
+			<territory type="SO">索馬利亞</territory>
+			<territory type="SR">蘇利南</territory>
+			<territory type="ST">聖多美及普林西比</territory>
+			<territory type="SV">薩爾瓦多</territory>
+			<territory type="SY">敘利亞</territory>
+			<territory type="SZ">史瓦濟蘭</territory>
+			<territory type="TC">土克斯及開科斯群島</territory>
+			<territory type="TD">查德</territory>
+			<territory type="TF">法屬南方屬地</territory>
+			<territory type="TG">多哥共和國</territory>
+			<territory type="TH">泰國</territory>
+			<territory type="TJ">塔吉克</territory>
+			<territory type="TK">托克勞群島</territory>
+			<territory type="TL">東帝汶</territory>
+			<territory type="TM">土庫曼</territory>
+			<territory type="TN">突尼西亞</territory>
+			<territory type="TO">東加</territory>
+			<territory type="TT">千里達及托巴哥</territory>
+			<territory type="TV">吐瓦魯</territory>
+			<territory type="TW">台灣</territory>
+			<territory type="TZ">坦尚尼亞</territory>
+			<territory type="UA">烏克蘭</territory>
+			<territory type="UG">烏干達</territory>
+			<territory type="UM">美屬邊疆群島</territory>
+			<territory type="US">美國</territory>
+			<territory type="UY">烏拉圭</territory>
+			<territory type="UZ">烏茲別克</territory>
+			<territory type="VA">梵蒂岡</territory>
+			<territory type="VC">聖文森及格瑞那丁</territory>
+			<territory type="VE">委內瑞拉</territory>
+			<territory type="VG">英屬維京群島</territory>
+			<territory type="VI">美屬維京群島</territory>
+			<territory type="VU">萬那杜</territory>
+			<territory type="WF">瓦利斯和福杜納群島</territory>
+			<territory type="WS">薩摩亞群島</territory>
+			<territory type="YE">葉門</territory>
+			<territory type="YT">馬約特</territory>
+			<territory type="ZM">尚比亞</territory>
+			<territory type="ZW">辛巴威</territory>
+			<territory type="ZZ">未確定的區域</territory>
+		</territories>
+		<variants>
+			<variant type="1901">傳統德語拼字學</variant>
+			<variant type="1996">1996 年的德語拼字學</variant>
+			<variant type="AREVELA">亞美尼亞東部</variant>
+			<variant type="AREVMDA">亞美尼亞西部</variant>
+			<variant type="FONIPA">IPA 拼音</variant>
+			<variant type="FONUPA">UPA 拼音</variant>
+			<variant type="MONOTON">單音</variant>
+			<variant type="NEDIS">Natisone 方言</variant>
+			<variant type="POSIX">電腦</variant>
+			<variant type="REVISED">已修訂的拼字學</variant>
+			<variant type="SAAHO">SAAHO</variant>
+		</variants>
+		<keys>
+			<key type="calendar">日曆</key>
+			<key type="collation">校對</key>
+			<key type="currency">貨幣</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation">繁體中文排序 - Big5</type>
+			<type type="buddhist" key="calendar">佛教曆法</type>
+			<type type="chinese" key="calendar">農曆</type>
+			<type type="direct" key="collation">直接排序</type>
+			<type type="gb2312han" key="collation">簡體中文排序 - GB2312</type>
+			<type type="gregorian" key="calendar">公曆</type>
+			<type type="hebrew" key="calendar">希伯來曆法</type>
+			<type type="indian" key="calendar">印度國家曆法</type>
+			<type type="islamic" key="calendar">伊斯蘭曆法</type>
+			<type type="islamic-civil" key="calendar">伊斯蘭城市曆法</type>
+			<type type="japanese" key="calendar">日本曆法</type>
+			<type type="phonebook" key="collation">電話簿排序</type>
+			<type type="pinyin" key="collation">拼音排序</type>
+			<type type="roc" key="calendar">中華民國曆</type>
+			<type type="stroke" key="collation">筆劃排序</type>
+			<type type="traditional" key="collation">傳統排序</type>
+		</types>
+		<codePatterns>
+			<codePattern type="language">語言：{0}</codePattern>
+			<codePattern type="script">文字：{0}</codePattern>
+			<codePattern type="territory">地區：{0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[一 丁 七 丈-不 且 世 丘 丙 丟 並 中 串 丸 丹 主 乃 久 么 之 乎 乏 乖 乘 乙 九 也 乾 亂 了 予 事 二 于 云 互 五 井 些 亞 亡 交 亦 亨 享 京 亮 人 什 仁 仇 今 介 仍 仔 他 付 仙 代-以 仰 仲 件 任 份 企 伊 伍 伐 休 伙 伯 估 伴 伸 似 伽 但 佈 位-住 佔 何 余 佛 作 你 佩 佳 使 來 例 供 依 侯 侵 便 係-俄 俊 俗 保 俠 信 修 俱 俾 個 倍 們 倒 候 倚 借 倫 值 假 偉 偏 做 停 健 側-偷 傑 備 傢 傲 傳 傷 傻 傾 僅 像 僑 僧 價 儀 億 儒 儘 優 允 元-充 兇-光 克 免 兒 兔 入 內-兩 八-兮 共 兵-典 兼 冊 再 冒 冠 冬 冰 冷 准 凌 凝 凡 凰 凱 出 函 刀 分 切 刊 列 初 判 別 利 刪 到 制 刷 刺 刻 則 前 剛 剩 剪 副 割 創 劃 劇 劉 劍 力 功 加 助-劫 勁 勇 勉 勒 動 務 勝 勞 勢 勤 勵 勸 勿 包 匈 化 北 匹 區 十 千 升 午 半 卒-協 南 博 卡 印 危 即 卷 卻 厄 厘 厚 原 厭 厲 去 參 又 及 友 反 叔 取 受 口-另 叫-叭 可 台 史 右 司 吃 各 合-吊 同-后 吐 向 君 吝-吟 否 吧 含 吳 吵 吸 吹 吾 呀 呂 呆 告 呢 周 味 呵 呼 命 和 咖 咦 咧 咪 咬 咱 哀 品 哇-哉 哎 員 哥 哦 哩 哪 哭 哲 唉 唐 唬 售 唯 唱 唷 唸 商 啊 問 啟 啡 啥 啦 啪 喀 喂 善 喇 喊 喔 喜 喝 喬 單 喵 嗎 嗚 嗨 嗯 嘆 嘉 嘗 嘛 嘴 嘻 嘿 器 噴 嚇 嚴 囉 四 回 因 困 固 圈 國 圍 園 圓 圖 團 圜 土 在 圭 地 圾 址 均 坎 坐 坡 坤 坦 坪 垂 垃 型 埃 城 埔 域 執 培 基 堂 堅 堆 堡 堪 報 場 塊 塔 塗 塞 填 塵 境 增 墨 墮 壁 壓 壘 壞 壢 士 壯 壽 夏 夕 外 多 夜 夠 夢 夥 大 天-夫 央 失 夷 夸 夾 奇-奉 奎 奏 契 奔 套 奧 奪 奮 女 奴 奶 她 好 如 妙 妥 妨 妮 妳 妹 妻 姆 姊 始 姐 姑 姓 委 姿 威 娃 娘 婁 婆 婚 婦 媒 媽 嫌 嫩 子 孔 字 存 孝 孟 季 孤 孩 孫 學 它 宅 宇-安 宋 完 宏 宗-宜 客-室 宮 害 家 容 宿 寂 寄 密 富 寒 寞 察 寢 實-審 寫 寬 寮 寶 封 射 將 專 尊 尋 對-小 少 尖 尚 尤 就 尺 尼 尾 局 屁 居 屆 屋 屏 展 屠 層 屬 山 岡 岩 岸 峰 島 峽 崇 崙 崴 嵐 嶺 川 州 巡 工-巨 巫 差 己 已 巴 巷 市 布 希 帕 帛 帝 帥 師 席 帳 帶 常 帽 幅 幕 幣 幫 干-年 幸 幹 幻-幾 床 序 底 店 府 度 座 庫 庭 康 庸 廉 廖 廠 廢 廣 廳 延 廷 建 弄 式 引 弗 弘 弟 弦 弱 張 強 彈 彊 彌 彎 彞 形 彥 彩 彬 彭 彰 影 役 彼 往 征 待 很 律 後 徐-徒 得 從 復 微 徵 德 徹 心 必 忌 忍 志-忙 忠 快 念 忽 怎 怒 怕 怖 思 怡 急 性 怨 怪 恆 恐 恢 恥 恨 恩 恭 息 恰 悅 悉 悔 悟 悠 您 悲 悶 情 惑 惜 惠 惡 惱 想 惹 愁 愈 愉 意 愚 愛 感 慈 態 慕 慘 慢 慣 慧 慮 慰 慶 慾 憂 憐 憑 憲 憶 憾 懂 應 懶 懷 懼 戀 戈 成-戒 或 截 戰 戲 戴 戶 房-扁 扇 手 才 扎 打 托 扣 扥 扭 扯 批 找-技 抄 把 抓 投 抗 折 披 抬 抱 抵 抹 抽 拆 拉 拋 拍 拒 拔 拖 招 拜 括 拳 拼 拾 拿 持 指 按 挑 挖 挪 振 挺 捐 捕 捨 捲 捷 掃 授 掉 掌 排 掛 採 探 接 控 推 措 描 提 插 揚 換 握 揮 援 損 搖 搞 搬 搭 搶 摘 摩 摸 撐 撒 撞 撣 撥 播 撾 撿 擁 擇 擊 擋 操 擎 擔 據 擠 擦 擬 擴 擺 擾 攝 支 收 改 攻 放 政 故 效 敍 敏 救 敗-教 敝 敢 散 敦 敬 整 敵 數 文 斐 斗 料 斯 新 斷 方 於 施 旁 旅 旋 族 旗 既 日 旦 早 旭 旺 昂 昆 昇 昌 明 昏 易 星 映 春 昨 昭 是 時 晉 晒 晚 晨 普 景 晴 晶 智 暑 暖 暗 暫 暴 曆 曉 曰 曲 更 書 曼 曾-最 會 月 有 朋 服 朗 望 朝 期 木 未-札 朱 朵 杉 李 材 村 杜 束 杯-東 松 板 析 林 果 枝 架 柏 某 染 柔 查 柬 柳 柴 校 核 根 格 桃 案 桌 桑 梁 梅 條 梨 梯 械 梵 棄 棉 棋 棒 棚 森 椅 植 椰 楊 楓 楚 業 極 概 榜 榮 構 槍 樂 樓 標 樞 模 樣 樹 橋 機 橫 檀 檔 檢 欄 權 次 欣 欲 欺 欽 款 歉 歌 歐 歡-武 歲 歷 歸 死 殊 殘 段 殺 殼 毀 毅 母 每 毒 比 毛 毫 氏 民 氣 水 永 求 汗 汝 江-污 汪 汶 決 汽 沃 沈 沉 沒 沖 沙 河 油 治 沿 況 泉 泊 法 泡 波 泥 注 泰 泳 洋 洗 洛 洞 洩 洪 洲 活 洽 派 流 浦 浩 浪 浮 海 涇-涉 涯 液 涵 涼 淑 淚 淡 淨 深 混 淺 清 減 渡 測 港 游 湖 湯 源 準 溝 溪 溫 滄 滅 滋 滑 滴 滾 滿 漂 漏 演 漠 漢 漫 漲 漸 潔 潘 潛 潮 澤 澳 激 濃 濟 濤 濫 濱 灌 灣 火 灰 災 炎 炮 炸 為 烈 烏 烤 無 焦 然 煙 煞 照 煩 熊 熟 熱 燃 燈 燒 營 爆 爐 爛 爪 爬 爭 爵 父 爸 爺 爽 爾 牆-版 牌 牙 牛 牠 牧 物 牲 特 牽 犧 犯 狀 狂 狐 狗 狠 狼 猛 猜 猶 獄 獅 獎 獨 獲 獸 獻 玄 率 玉 王 玩 玫 玲 玻 珊 珍 珠 班 現 球 理 琉 琪 琴 瑙 瑜 瑞 瑟 瑤 瑪 瑰 環 瓜 瓦 瓶 甘 甚 甜 生 產 用 田-申 男 甸 界 留 畢 略 番 畫 異 當 疆 疏 疑 疼 病 痕 痛 痴 瘋 療 癡 登-百 的 皆 皇 皮 盃 益 盛 盜 盟 盡 監 盤 盧 目 盲 直 相 盼 盾 省 眉 看 真 眠 眼 眾 睛 睡 督 瞧 瞭 矛 矣 知 短 石 砂 砍 研 砲 破 硬 碎 碗 碟 碧 碩 碰 確 碼 磁 磨 磯 礎 礙 示 社 祕 祖 祝 神 祥 票 禁 禍 福 禪 禮 秀 私 秋 科 秒 秘 租 秤 秦 移 稅 程 稍 種 稱 稿 穆 穌 積 穩 究 穹 空 穿 突 窗 窩 窮 立 站 竟 章 童 端 競 竹 笑 笛 符 笨 第 筆 等 筋 答 策 简 算 管 箭 箱 節 範 篇 築 簡 簫 簽 簿 籃 籌 籍 米 粉 粗 精 糊 糕 糟 系 糾 紀 約 紅 納 紐 純 紙-紛 素 索 紫 累 細 紹 終 組 結 絕 絡 給 統 絲 經 綜 綠 維 綱 網 緊 緒 線 緣 編 緩 緬 緯 練 縣 縮 縱 總 績 繁 織 繞 繪 繳 繼 續 缸 缺 罕 罪 置 罰 署 罵 罷 羅 羊 美 羞 群 義 羽 翁 習 翔 翰 翹 翻 翼 耀 老 考 者 而 耍 耐 耗 耳 耶 聊 聖 聚 聞 聯 聰 聲 職 聽 肉 肚 股 肥 肩 肯 育 背 胎 胖 胞 胡 胸 能 脆 脫 腓 腔 腦 腰 腳 腿 膽 臉 臘 臣 臥 臨 自 臭 至 致 臺 與-舊 舌 舍 舒 舞 舟 航 般 船 艦 良 色 艾 芝 芬 花 芳 若 苦 英 茅 茫 茲 茶 草 荒 荷 莉 莊 莎 莫 菜 菩 華 菲 萄 萊 萬 落 葉 著 葛 葡 蒂 蒙 蒲 蒼 蓋 蓮 蔕 蔡 蔣 蕭 薄 薦 薩 薪 藉 藍 藏 藝 藤 藥 蘆 蘇 蘭 虎 處 虛 號 虧 蛋 蛙 蜂 蜜 蝶 融 螢 蟲 蟹 蠍 蠻 血 行 術 街 衛 衝 衡 衣 表 袋 被 裁 裂 裕 補 裝 裡 製 複 褲 西 要 覆 見 規 視 親 覺 覽 觀 角 解 觸 言 訂 計 訊 討 訓 託 記 訪 設 許 訴 註 証 評 詞 詢 試 詩 話-詳 誇 誌 認 誓 誕 語 誠 誤 說 誰 課 誼 調 談 請 諒 論 諸 諺 諾 謀 謂 講 謝 證 識 譜 警 譯 議 護 譽 讀 變 讓 讚 谷 豆 豈 豐 象 豪 豬 貌 貓 貝 貞 負-貢 貨 貪-責 貴 買 費 貼 賀 資 賈 賓 賜 賞 賢-賤 賦 質 賭 賴 賺 購 賽 贈 贊 贏 赤 赫 走 起 超 越 趕 趙 趣 趨 足 跌 跎 跑 距 跟 跡 路 跳 踏 踢 蹟 蹤 躍 身 躲 車 軌 軍 軒 軟 較 載 輔 輕 輛 輝 輩 輪 輯 輸 轉 轟 辛 辦 辨 辭 辯 辱 農 迅 迎 近 迦 迪 迫 述 迴 迷 追 退 送 逃 逆 透 逐 途 這-逛 逝 速 造 逢 連 週 進 逸 逼 遇 遊 運 遍 過 道-違 遙 遜 遠 適 遭 遮 遲 遷 選 遺 避-邁 還 邊 邏 那 邦 邪 邱 郎 部 郭 郵 都 鄂 鄉 鄭 鄰 配 酒 酷 酸 醉 醒 醜 醫 采 釋-量 金 針 釣 鈴 銀 銖 銘 銳 銷 鋒 鋼 錄 錢 錦 錫 錯 鍋 鍵 鍾 鎊 鎖 鎮 鏡 鐘 鐵 鑑 長 門 閃 閉 開 閒 間 閣 閱 闆 闊 闐 關 闡 防 阻 阿 陀 附 降 限 院-除 陪 陰 陳 陵-陸 陽 隆 隊 階 隔 際 障 隨 險 隱 隻 雄-集 雖 雙 雜 雞 離 難 雨 雪 雲 零 雷 電 需 震 霍 霧 露 霸 霹 靂 靈 青 靖 靜 非 靠 面 革 靼 鞋 韃 韋 韓 音 韻 響 頁 頂 項 順 須 預 頑 頓 頗 領 頭 頻 顆 題 額 顏 願 類 顧 顯 風 飄 飛 食 飯 飲 飽 飾 餅 養 餐 餘 館 首 香 馬 駐 駕 駛 騎 騙 騷 驅 驗 驚 骨 體 高 髮 鬆 鬥 鬧 鬱 鬼 魁 魂 魅 魔 魚 魯 鮮 鳥 鳳 鳴 鴻 鵝 鷹 鹿 麗 麥 麵 麻 麼 黃 黎 黑 默 點 黨 鼓 鼠 鼻 齊 齋 齒 齡 龍 龜]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[伏 侶 兌 兹 别 勳 卑 占 叶 堤 墎 奥 孜 峇 巽 彝 楔 渾 燦 狄 琳 瑚 甫 礁 芒 苗 茨 蚩 蜀 隴]</exemplarCharacters>
+	</characters>
+	<delimiters>
+		<quotationStart>「</quotationStart>
+		<quotationEnd>」</quotationEnd>
+		<alternateQuotationStart>『</alternateQuotationStart>
+		<alternateQuotationEnd>』</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="chinese">
+				<am>上午</am>
+				<pm>下午</pm>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEEy'x'G-Ml-d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">1月</month>
+							<month type="2">2月</month>
+							<month type="3">3月</month>
+							<month type="4">4月</month>
+							<month type="5">5月</month>
+							<month type="6">6月</month>
+							<month type="7">7月</month>
+							<month type="8">8月</month>
+							<month type="9">9月</month>
+							<month type="10">10月</month>
+							<month type="11">11月</month>
+							<month type="12">12月</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">週日</day>
+							<day type="mon">週一</day>
+							<day type="tue">週二</day>
+							<day type="wed">週三</day>
+							<day type="thu">週四</day>
+							<day type="fri">週五</day>
+							<day type="sat">週六</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="wide">
+							<quarter type="1">第1季</quarter>
+							<quarter type="2">第2季</quarter>
+							<quarter type="3">第3季</quarter>
+							<quarter type="4">第4季</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<eras>
+					<eraNames>
+						<era type="0">西元前</era>
+						<era type="1">西元</era>
+					</eraNames>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>yyyy/M/d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy/M/d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>zzzzah時mm分ss秒</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>zah時mm分ss秒</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>ah:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Ed">d日(E)</dateFormatItem>
+						<dateFormatItem id="H">H時</dateFormatItem>
+						<dateFormatItem id="HHmm">H:mm</dateFormatItem>
+						<dateFormatItem id="HHmmss">H:mm:ss</dateFormatItem>
+						<dateFormatItem id="Md">M/d</dateFormatItem>
+						<dateFormatItem id="MEd">M-d（E）</dateFormatItem>
+						<dateFormatItem id="MMdd">MM/dd</dateFormatItem>
+						<dateFormatItem id="MMMMEd">MMMMd日(E)</dateFormatItem>
+						<dateFormatItem id="yM">yyyy/M</dateFormatItem>
+						<dateFormatItem id="yMEd">yyyy/M/d（EEE）</dateFormatItem>
+						<dateFormatItem id="yMMM">y年M月</dateFormatItem>
+						<dateFormatItem id="yMMMEd">y年M月d日EEE</dateFormatItem>
+						<dateFormatItem id="yMMMM">y年M月</dateFormatItem>
+						<dateFormatItem id="yyMM">yyyy/MM</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0}至{1}</intervalFormatFallback>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">ah時至ah時</greatestDifference>
+							<greatestDifference id="h">ah時至h時</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">vah時至ah時</greatestDifference>
+							<greatestDifference id="h">vah時至h時</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M月至M月</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">M/d至M/d</greatestDifference>
+							<greatestDifference id="M">M/d至M/d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">M/dE至M/dE</greatestDifference>
+							<greatestDifference id="M">M/dE至M/dE</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMM">
+							<greatestDifference id="M">LLLL至LLLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">yyyy/M至yyyy/M</greatestDifference>
+							<greatestDifference id="y">yyyy/M至yyyy/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">yyyy/M/d至yyyy/M/d</greatestDifference>
+							<greatestDifference id="M">yyyy/M/d至yyyy/M/d</greatestDifference>
+							<greatestDifference id="y">yyyy/M/d至yyyy/M/d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">yyyy/M/dE至yyyy/M/dE</greatestDifference>
+							<greatestDifference id="M">yyyy/M/dE至yyyy/M/dE</greatestDifference>
+							<greatestDifference id="y">yyyy/M/dE至yyyy/M/dE</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">y年M月至M月</greatestDifference>
+							<greatestDifference id="y">y/M至y/M</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="era">
+						<displayName>年代</displayName>
+					</field>
+					<field type="week">
+						<displayName>週</displayName>
+					</field>
+					<field type="day">
+						<relative type="-3">大前天</relative>
+						<relative type="2">後天</relative>
+						<relative type="3">大後天</relative>
+					</field>
+					<field type="weekday">
+						<displayName>週天</displayName>
+					</field>
+					<field type="hour">
+						<displayName>小時</displayName>
+					</field>
+					<field type="minute">
+						<displayName>分鐘</displayName>
+					</field>
+					<field type="second">
+						<displayName>秒</displayName>
+					</field>
+					<field type="zone">
+						<displayName>區域</displayName>
+					</field>
+				</fields>
+			</calendar>
+			<calendar type="roc">
+				<am>上午</am>
+				<pm>下午</pm>
+				<eras>
+					<eraAbbr>
+						<era type="0">民國前</era>
+						<era type="1">民國</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>Gy/M/d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>Gy/M/d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMd">M月d日</dateFormatItem>
+						<dateFormatItem id="MMMEd">M月d日EEE</dateFormatItem>
+						<dateFormatItem id="yyyy">Gy</dateFormatItem>
+						<dateFormatItem id="yyyyM">y/M</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">y/M/d（EEE）</dateFormatItem>
+						<dateFormatItem id="yyyyMM">y/MM</dateFormatItem>
+						<dateFormatItem id="yyyyMMM">Gy年M月</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">Gy年M月d日EEE</dateFormatItem>
+						<dateFormatItem id="yyyyQ">y年第Q季度</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ">Gy QQQ</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+			<regionFormat>{0}時間</regionFormat>
+			<fallbackFormat>{1}({0})</fallbackFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>未知地區</exemplarCity>
+			</zone>
+			<zone type="Europe/Andorra">
+				<exemplarCity>安道爾</exemplarCity>
+			</zone>
+			<zone type="Asia/Dubai">
+				<exemplarCity>杜拜</exemplarCity>
+			</zone>
+			<zone type="Asia/Kabul">
+				<exemplarCity>阿富汗</exemplarCity>
+			</zone>
+			<zone type="America/Antigua">
+				<exemplarCity>安地卡及巴布達</exemplarCity>
+			</zone>
+			<zone type="America/Anguilla">
+				<exemplarCity>安吉拉</exemplarCity>
+			</zone>
+			<zone type="Europe/Tirane">
+				<exemplarCity>阿爾巴尼亞</exemplarCity>
+			</zone>
+			<zone type="Asia/Yerevan">
+				<exemplarCity>亞美尼亞</exemplarCity>
+			</zone>
+			<zone type="America/Curacao">
+				<exemplarCity>荷屬安地列斯</exemplarCity>
+			</zone>
+			<zone type="Africa/Luanda">
+				<exemplarCity>安哥拉</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Rothera">
+				<exemplarCity>羅瑟拉</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Palmer">
+				<exemplarCity>帕麥</exemplarCity>
+			</zone>
+			<zone type="Antarctica/South_Pole">
+				<exemplarCity>南極</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Syowa">
+				<exemplarCity>昭和</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Davis">
+				<exemplarCity>戴維斯</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Vostok">
+				<exemplarCity>莫斯托克</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Casey">
+				<exemplarCity>凱西</exemplarCity>
+			</zone>
+			<zone type="Antarctica/DumontDUrville">
+				<exemplarCity>杜蒙杜爾維爾</exemplarCity>
+			</zone>
+			<zone type="Antarctica/McMurdo">
+				<exemplarCity>麥克馬多</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Rio_Gallegos">
+				<exemplarCity>加拉哥斯</exemplarCity>
+			</zone>
+			<zone type="America/Mendoza">
+				<exemplarCity>門多薩</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Juan">
+				<exemplarCity>聖胡安</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Ushuaia">
+				<exemplarCity>烏斯懷亞</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/La_Rioja">
+				<exemplarCity>拉略哈</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Luis">
+				<exemplarCity>聖路易</exemplarCity>
+			</zone>
+			<zone type="America/Catamarca">
+				<exemplarCity>卡塔馬卡</exemplarCity>
+			</zone>
+			<zone type="America/Jujuy">
+				<exemplarCity>胡韋</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Tucuman">
+				<exemplarCity>吐庫曼</exemplarCity>
+			</zone>
+			<zone type="America/Cordoba">
+				<exemplarCity>哥多華</exemplarCity>
+			</zone>
+			<zone type="America/Buenos_Aires">
+				<exemplarCity>布宜諾斯艾利斯</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pago_Pago">
+				<exemplarCity>派哥派哥</exemplarCity>
+			</zone>
+			<zone type="Europe/Vienna">
+				<exemplarCity>奧地利</exemplarCity>
+			</zone>
+			<zone type="Australia/Perth">
+				<exemplarCity>伯斯</exemplarCity>
+			</zone>
+			<zone type="Australia/Darwin">
+				<exemplarCity>達爾文</exemplarCity>
+			</zone>
+			<zone type="Australia/Adelaide">
+				<exemplarCity>阿得雷德</exemplarCity>
+			</zone>
+			<zone type="Australia/Broken_Hill">
+				<exemplarCity>斷丘市</exemplarCity>
+			</zone>
+			<zone type="Australia/Currie">
+				<exemplarCity>克黎</exemplarCity>
+			</zone>
+			<zone type="Australia/Melbourne">
+				<exemplarCity>墨爾本</exemplarCity>
+			</zone>
+			<zone type="Australia/Hobart">
+				<exemplarCity>荷巴特</exemplarCity>
+			</zone>
+			<zone type="Australia/Sydney">
+				<exemplarCity>雪梨</exemplarCity>
+			</zone>
+			<zone type="Australia/Brisbane">
+				<exemplarCity>布利斯班</exemplarCity>
+			</zone>
+			<zone type="Australia/Lord_Howe">
+				<exemplarCity>羅豪島</exemplarCity>
+			</zone>
+			<zone type="America/Aruba">
+				<exemplarCity>阿魯巴</exemplarCity>
+			</zone>
+			<zone type="Europe/Mariehamn">
+				<exemplarCity>奧蘭群島</exemplarCity>
+			</zone>
+			<zone type="Asia/Baku">
+				<exemplarCity>亞塞拜然</exemplarCity>
+			</zone>
+			<zone type="Europe/Sarajevo">
+				<exemplarCity>沙拉耶佛</exemplarCity>
+			</zone>
+			<zone type="America/Barbados">
+				<exemplarCity>巴貝多</exemplarCity>
+			</zone>
+			<zone type="Asia/Dhaka">
+				<exemplarCity>孟加拉</exemplarCity>
+			</zone>
+			<zone type="Europe/Brussels">
+				<exemplarCity>布魯塞爾</exemplarCity>
+			</zone>
+			<zone type="Africa/Ouagadougou">
+				<exemplarCity>布吉納法索</exemplarCity>
+			</zone>
+			<zone type="Europe/Sofia">
+				<exemplarCity>保加利亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Bujumbura">
+				<exemplarCity>蒲隆地</exemplarCity>
+			</zone>
+			<zone type="Africa/Porto-Novo">
+				<exemplarCity>貝南</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Bermuda">
+				<exemplarCity>百慕達</exemplarCity>
+			</zone>
+			<zone type="Asia/Brunei">
+				<exemplarCity>汶萊</exemplarCity>
+			</zone>
+			<zone type="America/La_Paz">
+				<exemplarCity>玻利維亞</exemplarCity>
+			</zone>
+			<zone type="America/Eirunepe">
+				<exemplarCity>艾魯內佩</exemplarCity>
+			</zone>
+			<zone type="America/Rio_Branco">
+				<exemplarCity>布蘭科</exemplarCity>
+			</zone>
+			<zone type="America/Porto_Velho">
+				<exemplarCity>維留港</exemplarCity>
+			</zone>
+			<zone type="America/Boa_Vista">
+				<exemplarCity>保維斯塔</exemplarCity>
+			</zone>
+			<zone type="America/Manaus">
+				<exemplarCity>瑪瑙斯</exemplarCity>
+			</zone>
+			<zone type="America/Cuiaba">
+				<exemplarCity>古雅巴</exemplarCity>
+			</zone>
+			<zone type="America/Campo_Grande">
+				<exemplarCity>格蘭場</exemplarCity>
+			</zone>
+			<zone type="America/Belem">
+				<exemplarCity>貝倫</exemplarCity>
+			</zone>
+			<zone type="America/Araguaina">
+				<exemplarCity>阿拉圭那</exemplarCity>
+			</zone>
+			<zone type="America/Sao_Paulo">
+				<exemplarCity>聖保羅</exemplarCity>
+			</zone>
+			<zone type="America/Bahia">
+				<exemplarCity>巴伊阿</exemplarCity>
+			</zone>
+			<zone type="America/Fortaleza">
+				<exemplarCity>福塔力莎</exemplarCity>
+			</zone>
+			<zone type="America/Maceio">
+				<exemplarCity>馬瑟歐</exemplarCity>
+			</zone>
+			<zone type="America/Recife">
+				<exemplarCity>雷西非</exemplarCity>
+			</zone>
+			<zone type="America/Noronha">
+				<exemplarCity>諾倫哈</exemplarCity>
+			</zone>
+			<zone type="America/Nassau">
+				<exemplarCity>巴哈馬</exemplarCity>
+			</zone>
+			<zone type="Asia/Thimphu">
+				<exemplarCity>不丹</exemplarCity>
+			</zone>
+			<zone type="Africa/Gaborone">
+				<exemplarCity>波札那</exemplarCity>
+			</zone>
+			<zone type="Europe/Minsk">
+				<exemplarCity>白俄羅斯</exemplarCity>
+			</zone>
+			<zone type="America/Belize">
+				<exemplarCity>貝里斯</exemplarCity>
+			</zone>
+			<zone type="America/Dawson">
+				<exemplarCity>道生河</exemplarCity>
+			</zone>
+			<zone type="America/Whitehorse">
+				<exemplarCity>懷特霍斯</exemplarCity>
+			</zone>
+			<zone type="America/Inuvik">
+				<exemplarCity>伊奴維克</exemplarCity>
+			</zone>
+			<zone type="America/Vancouver">
+				<exemplarCity>溫哥華</exemplarCity>
+			</zone>
+			<zone type="America/Dawson_Creek">
+				<exemplarCity>道生灣</exemplarCity>
+			</zone>
+			<zone type="America/Yellowknife">
+				<exemplarCity>耐羅耐佛</exemplarCity>
+			</zone>
+			<zone type="America/Edmonton">
+				<exemplarCity>艾德蒙吞</exemplarCity>
+			</zone>
+			<zone type="America/Swift_Current">
+				<exemplarCity>瑞夫卡倫特</exemplarCity>
+			</zone>
+			<zone type="America/Cambridge_Bay">
+				<exemplarCity>劍橋灣</exemplarCity>
+			</zone>
+			<zone type="America/Regina">
+				<exemplarCity>利宅那</exemplarCity>
+			</zone>
+			<zone type="America/Winnipeg">
+				<exemplarCity>溫尼伯</exemplarCity>
+			</zone>
+			<zone type="America/Resolute">
+				<exemplarCity>羅斯魯特</exemplarCity>
+			</zone>
+			<zone type="America/Rainy_River">
+				<exemplarCity>雨河鎮</exemplarCity>
+			</zone>
+			<zone type="America/Rankin_Inlet">
+				<exemplarCity>蘭今灣</exemplarCity>
+			</zone>
+			<zone type="America/Thunder_Bay">
+				<exemplarCity>珊德灣</exemplarCity>
+			</zone>
+			<zone type="America/Nipigon">
+				<exemplarCity>尼皮岡</exemplarCity>
+			</zone>
+			<zone type="America/Toronto">
+				<exemplarCity>多倫多</exemplarCity>
+			</zone>
+			<zone type="America/Montreal">
+				<exemplarCity>蒙特婁</exemplarCity>
+			</zone>
+			<zone type="America/Iqaluit">
+				<exemplarCity>伊魁特</exemplarCity>
+			</zone>
+			<zone type="America/Pangnirtung">
+				<exemplarCity>潘尼爾東</exemplarCity>
+			</zone>
+			<zone type="America/Moncton">
+				<exemplarCity>蒙克頓</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<exemplarCity>哈里法克斯</exemplarCity>
+			</zone>
+			<zone type="America/Goose_Bay">
+				<exemplarCity>鵝灣</exemplarCity>
+			</zone>
+			<zone type="America/Glace_Bay">
+				<exemplarCity>格雷斯貝</exemplarCity>
+			</zone>
+			<zone type="America/Blanc-Sablon">
+				<exemplarCity>白朗薩布隆</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>聖約翰</exemplarCity>
+			</zone>
+			<zone type="Indian/Cocos">
+				<exemplarCity>科科斯群島</exemplarCity>
+			</zone>
+			<zone type="Africa/Kinshasa">
+				<exemplarCity>金夏沙</exemplarCity>
+			</zone>
+			<zone type="Africa/Lubumbashi">
+				<exemplarCity>蘆佈巴西</exemplarCity>
+			</zone>
+			<zone type="Africa/Bangui">
+				<exemplarCity>中非共和國</exemplarCity>
+			</zone>
+			<zone type="Africa/Brazzaville">
+				<exemplarCity>剛果共和國</exemplarCity>
+			</zone>
+			<zone type="Europe/Zurich">
+				<exemplarCity>瑞士</exemplarCity>
+			</zone>
+			<zone type="Africa/Abidjan">
+				<exemplarCity>象牙海岸</exemplarCity>
+			</zone>
+			<zone type="Pacific/Rarotonga">
+				<exemplarCity>拉洛東加島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Easter">
+				<exemplarCity>復活島</exemplarCity>
+			</zone>
+			<zone type="America/Santiago">
+				<exemplarCity>聖地牙哥</exemplarCity>
+			</zone>
+			<zone type="Africa/Douala">
+				<exemplarCity>喀麥隆</exemplarCity>
+			</zone>
+			<zone type="Asia/Kashgar">
+				<exemplarCity>喀什米爾</exemplarCity>
+			</zone>
+			<zone type="Asia/Urumqi">
+				<exemplarCity>烏魯木齊</exemplarCity>
+			</zone>
+			<zone type="Asia/Chongqing">
+				<exemplarCity>重慶</exemplarCity>
+			</zone>
+			<zone type="Asia/Harbin">
+				<exemplarCity>哈爾濱</exemplarCity>
+			</zone>
+			<zone type="America/Bogota">
+				<exemplarCity>哥倫比亞</exemplarCity>
+			</zone>
+			<zone type="America/Costa_Rica">
+				<exemplarCity>哥斯大黎加</exemplarCity>
+			</zone>
+			<zone type="America/Havana">
+				<exemplarCity>古巴</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Cape_Verde">
+				<exemplarCity>維德角</exemplarCity>
+			</zone>
+			<zone type="Indian/Christmas">
+				<exemplarCity>聖誕島</exemplarCity>
+			</zone>
+			<zone type="Asia/Nicosia">
+				<exemplarCity>塞浦勒斯</exemplarCity>
+			</zone>
+			<zone type="Europe/Prague">
+				<exemplarCity>捷克</exemplarCity>
+			</zone>
+			<zone type="Europe/Berlin">
+				<exemplarCity>德國</exemplarCity>
+			</zone>
+			<zone type="Africa/Djibouti">
+				<exemplarCity>吉布地</exemplarCity>
+			</zone>
+			<zone type="Europe/Copenhagen">
+				<exemplarCity>丹麥</exemplarCity>
+			</zone>
+			<zone type="America/Dominica">
+				<exemplarCity>多明尼加</exemplarCity>
+			</zone>
+			<zone type="America/Santo_Domingo">
+				<exemplarCity>多明尼加共和國</exemplarCity>
+			</zone>
+			<zone type="Africa/Algiers">
+				<exemplarCity>阿爾及利亞</exemplarCity>
+			</zone>
+			<zone type="Pacific/Galapagos">
+				<exemplarCity>加拉巴哥群島</exemplarCity>
+			</zone>
+			<zone type="America/Guayaquil">
+				<exemplarCity>瓜亞基爾</exemplarCity>
+			</zone>
+			<zone type="Europe/Tallinn">
+				<exemplarCity>愛沙尼亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Cairo">
+				<exemplarCity>埃及</exemplarCity>
+			</zone>
+			<zone type="Africa/El_Aaiun">
+				<exemplarCity>西撒哈拉</exemplarCity>
+			</zone>
+			<zone type="Africa/Asmera">
+				<exemplarCity>厄利垂亞</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Canary">
+				<exemplarCity>加納利</exemplarCity>
+			</zone>
+			<zone type="Africa/Ceuta">
+				<exemplarCity>休達</exemplarCity>
+			</zone>
+			<zone type="Europe/Madrid">
+				<exemplarCity>馬德里</exemplarCity>
+			</zone>
+			<zone type="Africa/Addis_Ababa">
+				<exemplarCity>衣索比亞</exemplarCity>
+			</zone>
+			<zone type="Europe/Helsinki">
+				<exemplarCity>芬蘭</exemplarCity>
+			</zone>
+			<zone type="Pacific/Fiji">
+				<exemplarCity>斐濟</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Stanley">
+				<exemplarCity>史坦萊</exemplarCity>
+			</zone>
+			<zone type="Pacific/Truk">
+				<exemplarCity>土魯克群島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Ponape">
+				<exemplarCity>波納佩</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kosrae">
+				<exemplarCity>科斯里</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Faeroe">
+				<exemplarCity>法羅群島</exemplarCity>
+			</zone>
+			<zone type="Africa/Libreville">
+				<exemplarCity>加彭</exemplarCity>
+			</zone>
+			<zone type="Europe/London">
+				<exemplarCity>倫敦</exemplarCity>
+			</zone>
+			<zone type="America/Grenada">
+				<exemplarCity>格瑞納達</exemplarCity>
+			</zone>
+			<zone type="Asia/Tbilisi">
+				<exemplarCity>喬治亞</exemplarCity>
+			</zone>
+			<zone type="America/Cayenne">
+				<exemplarCity>法屬蓋亞那</exemplarCity>
+			</zone>
+			<zone type="Europe/Guernsey">
+				<exemplarCity>根息</exemplarCity>
+			</zone>
+			<zone type="Africa/Accra">
+				<exemplarCity>迦納</exemplarCity>
+			</zone>
+			<zone type="Europe/Gibraltar">
+				<exemplarCity>直布羅陀</exemplarCity>
+			</zone>
+			<zone type="America/Thule">
+				<exemplarCity>杜里</exemplarCity>
+			</zone>
+			<zone type="America/Godthab">
+				<exemplarCity>高特哈市</exemplarCity>
+			</zone>
+			<zone type="America/Scoresbysund">
+				<exemplarCity>斯可比海峽</exemplarCity>
+			</zone>
+			<zone type="America/Danmarkshavn">
+				<exemplarCity>丹馬沙文</exemplarCity>
+			</zone>
+			<zone type="Africa/Banjul">
+				<exemplarCity>斑竹</exemplarCity>
+			</zone>
+			<zone type="Africa/Conakry">
+				<exemplarCity>幾內亞</exemplarCity>
+			</zone>
+			<zone type="America/Guadeloupe">
+				<exemplarCity>瓜德羅普</exemplarCity>
+			</zone>
+			<zone type="Africa/Malabo">
+				<exemplarCity>赤道幾內亞</exemplarCity>
+			</zone>
+			<zone type="Europe/Athens">
+				<exemplarCity>希臘</exemplarCity>
+			</zone>
+			<zone type="Atlantic/South_Georgia">
+				<exemplarCity>南喬治亞與南三明治島</exemplarCity>
+			</zone>
+			<zone type="America/Guatemala">
+				<exemplarCity>瓜地馬拉</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guam">
+				<exemplarCity>關島</exemplarCity>
+			</zone>
+			<zone type="Africa/Bissau">
+				<exemplarCity>幾內亞比索</exemplarCity>
+			</zone>
+			<zone type="America/Guyana">
+				<exemplarCity>圭亞那</exemplarCity>
+			</zone>
+			<zone type="Asia/Hong_Kong">
+				<exemplarCity>中華人民共和國香港特別行政區</exemplarCity>
+			</zone>
+			<zone type="America/Tegucigalpa">
+				<exemplarCity>德古斯加巴</exemplarCity>
+			</zone>
+			<zone type="Europe/Zagreb">
+				<exemplarCity>克羅埃西亞</exemplarCity>
+			</zone>
+			<zone type="America/Port-au-Prince">
+				<exemplarCity>海地</exemplarCity>
+			</zone>
+			<zone type="Europe/Budapest">
+				<exemplarCity>匈牙利</exemplarCity>
+			</zone>
+			<zone type="Asia/Jakarta">
+				<exemplarCity>雅加達</exemplarCity>
+			</zone>
+			<zone type="Asia/Makassar">
+				<exemplarCity>馬卡沙爾</exemplarCity>
+			</zone>
+			<zone type="Asia/Jayapura">
+				<exemplarCity>加亞布拉</exemplarCity>
+			</zone>
+			<zone type="Europe/Dublin">
+				<exemplarCity>愛爾蘭</exemplarCity>
+			</zone>
+			<zone type="Asia/Calcutta">
+				<exemplarCity>印度</exemplarCity>
+			</zone>
+			<zone type="Indian/Chagos">
+				<exemplarCity>英屬印度洋領地</exemplarCity>
+			</zone>
+			<zone type="Asia/Baghdad">
+				<exemplarCity>伊拉克</exemplarCity>
+			</zone>
+			<zone type="Asia/Tehran">
+				<exemplarCity>伊朗</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Reykjavik">
+				<exemplarCity>冰島</exemplarCity>
+			</zone>
+			<zone type="Europe/Rome">
+				<exemplarCity>羅馬</exemplarCity>
+			</zone>
+			<zone type="America/Jamaica">
+				<exemplarCity>牙買加</exemplarCity>
+			</zone>
+			<zone type="Asia/Amman">
+				<exemplarCity>約旦</exemplarCity>
+			</zone>
+			<zone type="Asia/Tokyo">
+				<exemplarCity>東京</exemplarCity>
+			</zone>
+			<zone type="Africa/Nairobi">
+				<exemplarCity>奈洛比</exemplarCity>
+			</zone>
+			<zone type="Asia/Bishkek">
+				<exemplarCity>吉爾吉斯</exemplarCity>
+			</zone>
+			<zone type="Asia/Phnom_Penh">
+				<exemplarCity>柬埔寨</exemplarCity>
+			</zone>
+			<zone type="Pacific/Enderbury">
+				<exemplarCity>恩得伯理島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kiritimati">
+				<exemplarCity>吉里巴斯</exemplarCity>
+			</zone>
+			<zone type="Indian/Comoro">
+				<exemplarCity>科摩羅群島</exemplarCity>
+			</zone>
+			<zone type="America/St_Kitts">
+				<exemplarCity>聖啟斯與尼維斯</exemplarCity>
+			</zone>
+			<zone type="Asia/Pyongyang">
+				<exemplarCity>北韓</exemplarCity>
+			</zone>
+			<zone type="Asia/Seoul">
+				<exemplarCity>首爾</exemplarCity>
+			</zone>
+			<zone type="America/Cayman">
+				<exemplarCity>開曼</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtau">
+				<exemplarCity>艾克陶</exemplarCity>
+			</zone>
+			<zone type="Asia/Oral">
+				<exemplarCity>奧拉爾</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtobe">
+				<exemplarCity>阿克糾賓</exemplarCity>
+			</zone>
+			<zone type="Asia/Qyzylorda">
+				<exemplarCity>奎茲羅答</exemplarCity>
+			</zone>
+			<zone type="Asia/Almaty">
+				<exemplarCity>阿拉木圖</exemplarCity>
+			</zone>
+			<zone type="Asia/Vientiane">
+				<exemplarCity>寮國</exemplarCity>
+			</zone>
+			<zone type="Asia/Beirut">
+				<exemplarCity>貝鲁特特</exemplarCity>
+			</zone>
+			<zone type="America/St_Lucia">
+				<exemplarCity>聖露西亞</exemplarCity>
+			</zone>
+			<zone type="Europe/Vaduz">
+				<exemplarCity>列支敦斯登</exemplarCity>
+			</zone>
+			<zone type="Asia/Colombo">
+				<exemplarCity>可倫坡</exemplarCity>
+			</zone>
+			<zone type="Africa/Monrovia">
+				<exemplarCity>蒙羅維亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Maseru">
+				<exemplarCity>賴索托</exemplarCity>
+			</zone>
+			<zone type="Europe/Vilnius">
+				<exemplarCity>立陶宛</exemplarCity>
+			</zone>
+			<zone type="Europe/Luxembourg">
+				<exemplarCity>盧森堡</exemplarCity>
+			</zone>
+			<zone type="Europe/Riga">
+				<exemplarCity>拉脫維亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Tripoli">
+				<exemplarCity>利比亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<exemplarCity>卡薩布蘭卡</exemplarCity>
+			</zone>
+			<zone type="Europe/Monaco">
+				<exemplarCity>摩納哥</exemplarCity>
+			</zone>
+			<zone type="Europe/Chisinau">
+				<exemplarCity>奇西瑙</exemplarCity>
+			</zone>
+			<zone type="Europe/Podgorica">
+				<exemplarCity>波多里察</exemplarCity>
+			</zone>
+			<zone type="Indian/Antananarivo">
+				<exemplarCity>馬達加斯加</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kwajalein">
+				<exemplarCity>瓜加林島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Majuro">
+				<exemplarCity>馬朱諾</exemplarCity>
+			</zone>
+			<zone type="Europe/Skopje">
+				<exemplarCity>斯科普耶</exemplarCity>
+			</zone>
+			<zone type="Africa/Bamako">
+				<exemplarCity>巴馬科</exemplarCity>
+			</zone>
+			<zone type="Asia/Rangoon">
+				<exemplarCity>緬甸</exemplarCity>
+			</zone>
+			<zone type="Asia/Ulaanbaatar">
+				<exemplarCity>烏蘭巴托</exemplarCity>
+			</zone>
+			<zone type="Asia/Choibalsan">
+				<exemplarCity>卓巴爾塞</exemplarCity>
+			</zone>
+			<zone type="Asia/Macau">
+				<exemplarCity>中華人民共和國澳門特別行政區</exemplarCity>
+			</zone>
+			<zone type="Pacific/Saipan">
+				<exemplarCity>北馬里亞納群島</exemplarCity>
+			</zone>
+			<zone type="America/Martinique">
+				<exemplarCity>馬丁尼克</exemplarCity>
+			</zone>
+			<zone type="Africa/Nouakchott">
+				<exemplarCity>茅利塔尼亞</exemplarCity>
+			</zone>
+			<zone type="America/Montserrat">
+				<exemplarCity>蒙賽拉特</exemplarCity>
+			</zone>
+			<zone type="Europe/Malta">
+				<exemplarCity>馬爾他</exemplarCity>
+			</zone>
+			<zone type="Indian/Mauritius">
+				<exemplarCity>模里西斯</exemplarCity>
+			</zone>
+			<zone type="Indian/Maldives">
+				<exemplarCity>馬爾地夫</exemplarCity>
+			</zone>
+			<zone type="Africa/Blantyre">
+				<exemplarCity>馬拉威</exemplarCity>
+			</zone>
+			<zone type="America/Tijuana">
+				<exemplarCity>提華納</exemplarCity>
+			</zone>
+			<zone type="America/Hermosillo">
+				<exemplarCity>厄莫休</exemplarCity>
+			</zone>
+			<zone type="America/Mazatlan">
+				<exemplarCity>馬薩特蘭</exemplarCity>
+			</zone>
+			<zone type="America/Chihuahua">
+				<exemplarCity>奇華華</exemplarCity>
+			</zone>
+			<zone type="America/Monterrey">
+				<exemplarCity>蒙特瑞</exemplarCity>
+			</zone>
+			<zone type="America/Mexico_City">
+				<exemplarCity>墨西哥市</exemplarCity>
+			</zone>
+			<zone type="America/Merida">
+				<exemplarCity>美里達</exemplarCity>
+			</zone>
+			<zone type="America/Cancun">
+				<exemplarCity>康庫</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuching">
+				<exemplarCity>古晉</exemplarCity>
+			</zone>
+			<zone type="Africa/Maputo">
+				<exemplarCity>莫三比克</exemplarCity>
+			</zone>
+			<zone type="Africa/Windhoek">
+				<exemplarCity>溫荷克</exemplarCity>
+			</zone>
+			<zone type="Pacific/Noumea">
+				<exemplarCity>新喀里多尼亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Niamey">
+				<exemplarCity>尼日</exemplarCity>
+			</zone>
+			<zone type="Pacific/Norfolk">
+				<exemplarCity>諾福克群島</exemplarCity>
+			</zone>
+			<zone type="Africa/Lagos">
+				<exemplarCity>奈及利亞</exemplarCity>
+			</zone>
+			<zone type="America/Managua">
+				<exemplarCity>尼加拉瓜</exemplarCity>
+			</zone>
+			<zone type="Europe/Amsterdam">
+				<exemplarCity>荷蘭</exemplarCity>
+			</zone>
+			<zone type="Europe/Oslo">
+				<exemplarCity>奧斯陸</exemplarCity>
+			</zone>
+			<zone type="Asia/Katmandu">
+				<exemplarCity>尼泊爾</exemplarCity>
+			</zone>
+			<zone type="Pacific/Nauru">
+				<exemplarCity>諾魯</exemplarCity>
+			</zone>
+			<zone type="Pacific/Niue">
+				<exemplarCity>紐埃</exemplarCity>
+			</zone>
+			<zone type="Pacific/Chatham">
+				<exemplarCity>查坦</exemplarCity>
+			</zone>
+			<zone type="Pacific/Auckland">
+				<exemplarCity>奧克蘭</exemplarCity>
+			</zone>
+			<zone type="Asia/Muscat">
+				<exemplarCity>阿曼</exemplarCity>
+			</zone>
+			<zone type="America/Panama">
+				<exemplarCity>巴拿馬</exemplarCity>
+			</zone>
+			<zone type="America/Lima">
+				<exemplarCity>秘魯</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tahiti">
+				<exemplarCity>大溪地</exemplarCity>
+			</zone>
+			<zone type="Pacific/Marquesas">
+				<exemplarCity>馬可薩斯島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Gambier">
+				<exemplarCity>岡必爾群島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Port_Moresby">
+				<exemplarCity>巴布亞新幾內亞</exemplarCity>
+			</zone>
+			<zone type="Asia/Manila">
+				<exemplarCity>菲律賓</exemplarCity>
+			</zone>
+			<zone type="Asia/Karachi">
+				<exemplarCity>喀拉蚩</exemplarCity>
+			</zone>
+			<zone type="Europe/Warsaw">
+				<exemplarCity>波蘭</exemplarCity>
+			</zone>
+			<zone type="America/Miquelon">
+				<exemplarCity>聖皮里及米圭隆</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pitcairn">
+				<exemplarCity>匹特開恩群島</exemplarCity>
+			</zone>
+			<zone type="Asia/Gaza">
+				<exemplarCity>加薩</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Azores">
+				<exemplarCity>亞速爾群島</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Madeira">
+				<exemplarCity>馬得拉群島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Palau">
+				<exemplarCity>帛琉</exemplarCity>
+			</zone>
+			<zone type="America/Asuncion">
+				<exemplarCity>巴拉圭</exemplarCity>
+			</zone>
+			<zone type="Asia/Qatar">
+				<exemplarCity>卡達</exemplarCity>
+			</zone>
+			<zone type="Indian/Reunion">
+				<exemplarCity>留尼旺島</exemplarCity>
+			</zone>
+			<zone type="Europe/Belgrade">
+				<exemplarCity>塞爾維亞</exemplarCity>
+			</zone>
+			<zone type="Europe/Kaliningrad">
+				<exemplarCity>加里寧格勒</exemplarCity>
+			</zone>
+			<zone type="Europe/Volgograd">
+				<exemplarCity>伏爾加格勒</exemplarCity>
+			</zone>
+			<zone type="Europe/Samara">
+				<exemplarCity>沙馬拉</exemplarCity>
+			</zone>
+			<zone type="Asia/Yekaterinburg">
+				<exemplarCity>葉卡捷林堡</exemplarCity>
+			</zone>
+			<zone type="Asia/Novosibirsk">
+				<exemplarCity>新西伯利亞</exemplarCity>
+			</zone>
+			<zone type="Asia/Krasnoyarsk">
+				<exemplarCity>克拉斯諾雅斯克</exemplarCity>
+			</zone>
+			<zone type="Asia/Irkutsk">
+				<exemplarCity>伊爾庫次克</exemplarCity>
+			</zone>
+			<zone type="Asia/Yakutsk">
+				<exemplarCity>雅庫次克</exemplarCity>
+			</zone>
+			<zone type="Asia/Vladivostok">
+				<exemplarCity>海參崴</exemplarCity>
+			</zone>
+			<zone type="Asia/Sakhalin">
+				<exemplarCity>庫頁島</exemplarCity>
+			</zone>
+			<zone type="Asia/Magadan">
+				<exemplarCity>馬加丹</exemplarCity>
+			</zone>
+			<zone type="Asia/Kamchatka">
+				<exemplarCity>堪查加</exemplarCity>
+			</zone>
+			<zone type="Asia/Anadyr">
+				<exemplarCity>阿那底河</exemplarCity>
+			</zone>
+			<zone type="Africa/Kigali">
+				<exemplarCity>盧安達</exemplarCity>
+			</zone>
+			<zone type="Asia/Riyadh">
+				<exemplarCity>利雅德</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guadalcanal">
+				<exemplarCity>瓜達卡納</exemplarCity>
+			</zone>
+			<zone type="Indian/Mahe">
+				<exemplarCity>塞席爾</exemplarCity>
+			</zone>
+			<zone type="Africa/Khartoum">
+				<exemplarCity>卡土穆</exemplarCity>
+			</zone>
+			<zone type="Europe/Stockholm">
+				<exemplarCity>斯德哥爾摩</exemplarCity>
+			</zone>
+			<zone type="Atlantic/St_Helena">
+				<exemplarCity>聖赫勒拿島</exemplarCity>
+			</zone>
+			<zone type="Europe/Ljubljana">
+				<exemplarCity>斯洛維尼亞</exemplarCity>
+			</zone>
+			<zone type="Arctic/Longyearbyen">
+				<exemplarCity>隆意耳拜恩</exemplarCity>
+			</zone>
+			<zone type="Europe/Bratislava">
+				<exemplarCity>布拉提拉瓦</exemplarCity>
+			</zone>
+			<zone type="Africa/Freetown">
+				<exemplarCity>獅子山</exemplarCity>
+			</zone>
+			<zone type="Europe/San_Marino">
+				<exemplarCity>聖馬利諾</exemplarCity>
+			</zone>
+			<zone type="Africa/Dakar">
+				<exemplarCity>塞內加爾</exemplarCity>
+			</zone>
+			<zone type="Africa/Mogadishu">
+				<exemplarCity>摩加迪休</exemplarCity>
+			</zone>
+			<zone type="America/Paramaribo">
+				<exemplarCity>巴拉馬利波</exemplarCity>
+			</zone>
+			<zone type="Africa/Sao_Tome">
+				<exemplarCity>聖多美普林西比</exemplarCity>
+			</zone>
+			<zone type="America/El_Salvador">
+				<exemplarCity>薩爾瓦多</exemplarCity>
+			</zone>
+			<zone type="Asia/Damascus">
+				<exemplarCity>敘利亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Mbabane">
+				<exemplarCity>史瓦濟蘭</exemplarCity>
+			</zone>
+			<zone type="America/Grand_Turk">
+				<exemplarCity>土克斯和開卡斯群島</exemplarCity>
+			</zone>
+			<zone type="Africa/Ndjamena">
+				<exemplarCity>恩加納美</exemplarCity>
+			</zone>
+			<zone type="Indian/Kerguelen">
+				<exemplarCity>克格連群島</exemplarCity>
+			</zone>
+			<zone type="Africa/Lome">
+				<exemplarCity>多哥</exemplarCity>
+			</zone>
+			<zone type="Asia/Bangkok">
+				<exemplarCity>泰國</exemplarCity>
+			</zone>
+			<zone type="Asia/Dushanbe">
+				<exemplarCity>塔吉克</exemplarCity>
+			</zone>
+			<zone type="Pacific/Fakaofo">
+				<exemplarCity>托克勞</exemplarCity>
+			</zone>
+			<zone type="Asia/Dili">
+				<exemplarCity>東帝汶</exemplarCity>
+			</zone>
+			<zone type="Asia/Ashgabat">
+				<exemplarCity>土庫曼</exemplarCity>
+			</zone>
+			<zone type="Africa/Tunis">
+				<exemplarCity>坦尚尼亞</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tongatapu">
+				<exemplarCity>東加</exemplarCity>
+			</zone>
+			<zone type="Europe/Istanbul">
+				<exemplarCity>伊斯坦堡</exemplarCity>
+			</zone>
+			<zone type="America/Port_of_Spain">
+				<exemplarCity>千里達</exemplarCity>
+			</zone>
+			<zone type="Pacific/Funafuti">
+				<exemplarCity>吐瓦魯</exemplarCity>
+			</zone>
+			<zone type="Asia/Taipei">
+				<exemplarCity>台灣</exemplarCity>
+			</zone>
+			<zone type="Africa/Dar_es_Salaam">
+				<exemplarCity>尚尼亞</exemplarCity>
+			</zone>
+			<zone type="Europe/Uzhgorod">
+				<exemplarCity>烏茲哥洛</exemplarCity>
+			</zone>
+			<zone type="Europe/Kiev">
+				<exemplarCity>基輔</exemplarCity>
+			</zone>
+			<zone type="Europe/Simferopol">
+				<exemplarCity>辛非洛浦</exemplarCity>
+			</zone>
+			<zone type="Europe/Zaporozhye">
+				<exemplarCity>札波羅結</exemplarCity>
+			</zone>
+			<zone type="Africa/Kampala">
+				<exemplarCity>康培拉</exemplarCity>
+			</zone>
+			<zone type="Pacific/Midway">
+				<exemplarCity>中途島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Johnston">
+				<exemplarCity>強斯頓</exemplarCity>
+			</zone>
+			<zone type="America/Adak">
+				<exemplarCity>艾達克</exemplarCity>
+			</zone>
+			<zone type="America/Nome">
+				<exemplarCity>諾姆</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<exemplarCity>安克里治</exemplarCity>
+			</zone>
+			<zone type="America/Yakutat">
+				<exemplarCity>雅庫塔</exemplarCity>
+			</zone>
+			<zone type="America/Juneau">
+				<exemplarCity>朱諾</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<exemplarCity>洛杉磯</exemplarCity>
+			</zone>
+			<zone type="America/Boise">
+				<exemplarCity>波伊斯</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<exemplarCity>鳳凰城</exemplarCity>
+			</zone>
+			<zone type="America/Shiprock">
+				<exemplarCity>船岩峰</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity>紐沙倫，北達科他州</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>申特城</exemplarCity>
+			</zone>
+			<zone type="America/Menominee">
+				<exemplarCity>美諾米克</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity>溫森斯</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>彼得堡，印第安那州</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Tell_City">
+				<exemplarCity>泰爾城</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity>諾克斯</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity>威納麥克，印第安那州</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity>馬倫哥</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<exemplarCity>印第安那波里斯</exemplarCity>
+			</zone>
+			<zone type="America/Louisville">
+				<exemplarCity>路易斯維爾</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity>維威</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity>蒙提瑟洛</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<exemplarCity>紐約</exemplarCity>
+			</zone>
+			<zone type="America/Montevideo">
+				<exemplarCity>烏拉圭</exemplarCity>
+			</zone>
+			<zone type="Asia/Samarkand">
+				<exemplarCity>撒馬爾罕</exemplarCity>
+			</zone>
+			<zone type="Europe/Vatican">
+				<exemplarCity>梵蒂岡</exemplarCity>
+			</zone>
+			<zone type="America/St_Vincent">
+				<exemplarCity>聖文森</exemplarCity>
+			</zone>
+			<zone type="America/Caracas">
+				<exemplarCity>卡拉卡斯</exemplarCity>
+			</zone>
+			<zone type="America/Tortola">
+				<exemplarCity>托托拉島</exemplarCity>
+			</zone>
+			<zone type="America/St_Thomas">
+				<exemplarCity>美屬維京群島</exemplarCity>
+			</zone>
+			<zone type="Asia/Saigon">
+				<exemplarCity>越南</exemplarCity>
+			</zone>
+			<zone type="Pacific/Efate">
+				<exemplarCity>愛發提</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wallis">
+				<exemplarCity>瓦利斯與富圖納群島</exemplarCity>
+			</zone>
+			<zone type="Pacific/Apia">
+				<exemplarCity>亞庇</exemplarCity>
+			</zone>
+			<zone type="Asia/Aden">
+				<exemplarCity>葉門</exemplarCity>
+			</zone>
+			<zone type="Indian/Mayotte">
+				<exemplarCity>馬約特島</exemplarCity>
+			</zone>
+			<zone type="Africa/Johannesburg">
+				<exemplarCity>南非</exemplarCity>
+			</zone>
+			<zone type="Africa/Lusaka">
+				<exemplarCity>尚比亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Harare">
+				<exemplarCity>辛巴威</exemplarCity>
+			</zone>
+			<metazone type="Acre">
+				<long>
+					<standard>艾克時間</standard>
+					<daylight>艾克夏令時間</daylight>
+				</long>
+				<short>
+					<standard>ACT（艾克）</standard>
+					<daylight>ACST（艾克）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Afghanistan">
+				<long>
+					<standard>阿富汗時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Central">
+				<long>
+					<standard>中非時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Eastern">
+				<long>
+					<standard>東非時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Southern">
+				<long>
+					<generic>南非時間</generic>
+					<standard>南非標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Western">
+				<long>
+					<standard>西非時間</standard>
+					<daylight>西非夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Aktyubinsk">
+				<long>
+					<standard>阿克秋賓斯克時間</standard>
+					<daylight>阿克秋賓斯克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Alaska">
+				<long>
+					<generic>阿拉斯加時間</generic>
+					<standard>阿拉斯加標準時間</standard>
+					<daylight>阿拉斯加夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Alaska_Hawaii">
+				<long>
+					<generic>阿拉斯加-夏威夷時間</generic>
+					<standard>阿拉斯加-夏威夷標準時間</standard>
+					<daylight>阿拉斯加-夏威夷夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Almaty">
+				<long>
+					<standard>阿拉木圖時間</standard>
+					<daylight>阿拉木圖夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Amazon">
+				<long>
+					<standard>亞馬遜時間</standard>
+					<daylight>亞馬遜夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Central">
+				<long>
+					<generic>中部時間</generic>
+					<standard>中部標準時間</standard>
+					<daylight>中部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic>東部時間</generic>
+					<standard>東部標準時間</standard>
+					<daylight>東部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Mountain">
+				<long>
+					<generic>山區時間</generic>
+					<standard>山區標準時間</standard>
+					<daylight>山區日光節約時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic>太平洋時間</generic>
+					<standard>太平洋標準時間</standard>
+					<daylight>太平洋夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Anadyr">
+				<long>
+					<standard>阿那底河標準時間</standard>
+					<daylight>阿那底河夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Aqtau">
+				<long>
+					<standard>阿克陶時間</standard>
+					<daylight>阿克陶夏令時間</daylight>
+				</long>
+				<short>
+					<standard>AQTT (阿克陶)</standard>
+					<daylight>AQTST (阿克陶)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Aqtobe">
+				<long>
+					<standard>阿克托比時間</standard>
+					<daylight>阿克托比夏令時間</daylight>
+				</long>
+				<short>
+					<standard>AQTT (阿克托比)</standard>
+					<daylight>AQTST (阿克托比)</daylight>
+				</short>
+			</metazone>
+			<metazone type="Arabian">
+				<long>
+					<generic>阿拉伯時間</generic>
+					<standard>阿拉伯標準時間</standard>
+					<daylight>阿拉伯夏令時間</daylight>
+				</long>
+				<short>
+					<generic>AT（阿拉伯）</generic>
+					<standard>AST（阿拉伯）</standard>
+					<daylight>ADT ( 阿拉伯 )</daylight>
+				</short>
+			</metazone>
+			<metazone type="Argentina">
+				<long>
+					<standard>阿根廷時間</standard>
+					<daylight>阿根廷夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Argentina_Western">
+				<long>
+					<standard>阿根廷西部時間</standard>
+					<daylight>阿根廷西部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Armenia">
+				<long>
+					<standard>亞美尼亞時間</standard>
+					<daylight>亞美尼亞夏令時間</daylight>
+				</long>
+				<short>
+					<standard>AMT（亞美尼亞）</standard>
+					<daylight>AMST（亞美尼亞）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Ashkhabad">
+				<long>
+					<standard>阿什哈巴德時間</standard>
+					<daylight>阿什哈巴德夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Atlantic">
+				<long>
+					<generic>大西洋時間</generic>
+					<standard>大西洋標準時間</standard>
+					<daylight>大西洋夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Central">
+				<long>
+					<generic>澳洲中部時間</generic>
+					<standard>澳洲中部標準時間</standard>
+					<daylight>澳洲中部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_CentralWestern">
+				<long>
+					<generic>澳洲中西部時間</generic>
+					<standard>澳洲中西部標準時間</standard>
+					<daylight>澳洲中西部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Eastern">
+				<long>
+					<generic>澳洲東部時間</generic>
+					<standard>澳洲東部標準時間</standard>
+					<daylight>澳洲東部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Western">
+				<long>
+					<generic>澳洲西部時間</generic>
+					<standard>澳洲西部標準時間</standard>
+					<daylight>澳洲西部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Azerbaijan">
+				<long>
+					<standard>亞塞拜然時間</standard>
+					<daylight>亞塞拜然夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Azores">
+				<long>
+					<standard>亞速爾群島時間</standard>
+					<daylight>亞速爾群島夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Baku">
+				<long>
+					<standard>巴庫時間</standard>
+					<daylight>巴庫夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Bangladesh">
+				<long>
+					<generic>孟加拉時間</generic>
+					<standard>孟加拉標準時間</standard>
+					<daylight>孟加拉夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Bering">
+				<long>
+					<generic>白令時間</generic>
+					<standard>白令標準時間</standard>
+					<daylight>白令夏令時間</daylight>
+				</long>
+				<short>
+					<generic>BT（白令）</generic>
+					<standard>BST（白令）</standard>
+					<daylight>BDT（白令）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Bhutan">
+				<long>
+					<standard>不丹時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Bolivia">
+				<long>
+					<standard>玻利維亞時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Borneo">
+				<long>
+					<standard>婆羅洲時間</standard>
+					<daylight>婆羅洲夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Brasilia">
+				<long>
+					<standard>巴西利亞時間</standard>
+					<daylight>巴西利亞夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Brunei">
+				<long>
+					<standard>汶萊時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Chamorro">
+				<long>
+					<standard>關島-北馬里亞納群島時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Changbai">
+				<long>
+					<standard>長白山時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Chile">
+				<long>
+					<standard>智利時間</standard>
+					<daylight>智利夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="China">
+				<long>
+					<generic>中國時間</generic>
+					<standard>中國標準時間</standard>
+					<daylight>中國夏令時間</daylight>
+				</long>
+				<short>
+					<generic>CT（中國）</generic>
+					<standard>CST（中國）</standard>
+					<daylight>CDT（中國）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Choibalsan">
+				<long>
+					<standard>喬巴山時間</standard>
+					<daylight>喬巴山夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Colombia">
+				<long>
+					<standard>哥倫比亞時間</standard>
+					<daylight>哥倫比亞夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Cuba">
+				<long>
+					<generic>古巴時間</generic>
+					<standard>古巴標準時間</standard>
+					<daylight>古巴夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Dacca">
+				<long>
+					<standard>達卡時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Dushanbe">
+				<long>
+					<standard>杜尚別時間</standard>
+					<daylight>杜尚別夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Dutch_Guiana">
+				<long>
+					<standard>荷屬圭亞那時間</standard>
+				</long>
+			</metazone>
+			<metazone type="East_Timor">
+				<long>
+					<standard>東帝汶時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Ecuador">
+				<long>
+					<standard>厄瓜多時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Europe_Central">
+				<long>
+					<standard>中歐標準時間</standard>
+					<daylight>中歐夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<long>
+					<standard>東歐標準時間</standard>
+					<daylight>東歐夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Western">
+				<long>
+					<standard>西歐時間</standard>
+					<daylight>西歐夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="French_Guiana">
+				<long>
+					<standard>法屬圭亞那時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Frunze">
+				<long>
+					<standard>伏龍芝時間</standard>
+					<daylight>伏龍芝夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Galapagos">
+				<long>
+					<standard>加拉帕戈群島時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Georgia">
+				<long>
+					<standard>喬治亞時間</standard>
+					<daylight>喬治亞夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="GMT">
+				<long>
+					<standard>格林威治標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Greenland_Central">
+				<long>
+					<standard>格陵蘭中部時間</standard>
+					<daylight>格陵蘭中部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Greenland_Eastern">
+				<long>
+					<standard>格陵蘭東部時間</standard>
+					<daylight>格陵蘭東部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Greenland_Western">
+				<long>
+					<standard>格陵蘭西部時間</standard>
+					<daylight>格陵蘭西部夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Guam">
+				<long>
+					<standard>關島標準時間</standard>
+				</long>
+				<short>
+					<standard>GST (關島)</standard>
+				</short>
+			</metazone>
+			<metazone type="Gulf">
+				<long>
+					<standard>波斯灣海域標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Guyana">
+				<long>
+					<standard>蓋亞納時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Hawaii_Aleutian">
+				<long>
+					<standard>夏威夷-阿留申標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Hong_Kong">
+				<long>
+					<standard>香港時間</standard>
+					<daylight>香港夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Hovd">
+				<long>
+					<standard>科布多時間</standard>
+					<daylight>科布多夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="India">
+				<long>
+					<standard>印度標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<long>
+					<standard>印尼中部時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<long>
+					<standard>印尼東部時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<long>
+					<standard>印尼西部時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Iran">
+				<long>
+					<standard>伊朗標準時間</standard>
+					<daylight>伊朗夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Irkutsk">
+				<long>
+					<standard>伊爾庫次克時間</standard>
+					<daylight>伊爾庫次克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Israel">
+				<long>
+					<generic>以色列時間</generic>
+					<standard>以色列標準時間</standard>
+					<daylight>以色列夏令時間</daylight>
+				</long>
+				<short>
+					<standard>IST（以色列）</standard>
+				</short>
+			</metazone>
+			<metazone type="Japan">
+				<long>
+					<generic>日本時間</generic>
+					<standard>日本標準時間</standard>
+					<daylight>日本夏令時間</daylight>
+				</long>
+				<short>
+					<generic>JT</generic>
+				</short>
+			</metazone>
+			<metazone type="Karachi">
+				<long>
+					<standard>喀拉蚩時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Kashgar">
+				<long>
+					<standard>喀什時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Kazakhstan_Eastern">
+				<long>
+					<generic>東哈薩克時間</generic>
+					<standard>東哈薩克標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Kazakhstan_Western">
+				<long>
+					<generic>西哈薩克時間</generic>
+					<standard>西哈薩克標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Kizilorda">
+				<long>
+					<standard>吉力羅達時間</standard>
+					<daylight>吉力羅達夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Korea">
+				<long>
+					<generic>韓國時間</generic>
+					<standard>韓國標準時間</standard>
+					<daylight>韓國夏令時間</daylight>
+				</long>
+				<short>
+					<generic>KT</generic>
+				</short>
+			</metazone>
+			<metazone type="Kuybyshev">
+				<long>
+					<standard>古比雪夫時間</standard>
+					<daylight>古比雪夫夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Kwajalein">
+				<long>
+					<standard>瓜加林環礁時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Kyrgystan">
+				<long>
+					<standard>吉爾吉斯時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Lanka">
+				<long>
+					<standard>蘭卡時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Long_Shu">
+				<long>
+					<standard>隴蜀時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Lord_Howe">
+				<long>
+					<generic>豪勳爵島時間</generic>
+					<standard>豪勳爵島標準時間</standard>
+					<daylight>豪勳爵島夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Macau">
+				<long>
+					<standard>澳門時間</standard>
+					<daylight>澳門夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Magadan">
+				<long>
+					<standard>馬加丹時間</standard>
+					<daylight>馬加丹夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Malaya">
+				<long>
+					<standard>馬來亞時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Malaysia">
+				<long>
+					<standard>馬來西亞時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Marshall_Islands">
+				<long>
+					<standard>馬紹爾群島時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Mongolia">
+				<long>
+					<standard>烏蘭巴托時間</standard>
+					<daylight>烏蘭巴托夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Moscow">
+				<long>
+					<generic>莫斯科時間</generic>
+					<standard>莫斯科標準時間</standard>
+					<daylight>莫斯科夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Myanmar">
+				<long>
+					<standard>緬甸時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Nepal">
+				<long>
+					<standard>尼泊爾時間</standard>
+				</long>
+			</metazone>
+			<metazone type="New_Zealand">
+				<long>
+					<generic>紐西蘭時間</generic>
+					<standard>紐西蘭標準時間</standard>
+					<daylight>紐西蘭夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Newfoundland">
+				<long>
+					<generic>紐芬蘭時間</generic>
+					<standard>紐芬蘭標準時間</standard>
+					<daylight >紐芬蘭夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Noronha">
+				<long>
+					<standard>諾倫哈時間</standard>
+					<daylight>諾倫哈夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="North_Mariana">
+				<long>
+					<standard>北馬里亞納群島時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Novosibirsk">
+				<long>
+					<standard>新西伯利亞時間</standard>
+					<daylight>新西伯利亞夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Omsk">
+				<long>
+					<standard>鄂木斯克時間</standard>
+					<daylight>鄂木斯克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Pakistan">
+				<long>
+					<standard>巴基斯坦時間</standard>
+					<daylight>巴基斯坦夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Paraguay">
+				<long>
+					<standard>巴拉圭時間</standard>
+					<daylight>巴拉圭夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Peru">
+				<long>
+					<standard>秘魯時間</standard>
+					<daylight>秘魯夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Philippines">
+				<long>
+					<standard>菲律賓時間</standard>
+					<daylight>菲律賓夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Pierre_Miquelon">
+				<long>
+					<generic>聖彼德與密啟崙時間</generic>
+					<standard>聖彼德與密啟崙標準時間</standard>
+					<daylight>聖彼德與密啟崙夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Qyzylorda">
+				<long>
+					<standard>克孜勒奧爾達時間</standard>
+					<daylight>克孜勒奧爾達夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Sakhalin">
+				<long>
+					<standard>庫頁島時間</standard>
+					<daylight>庫頁島夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Samara">
+				<long>
+					<standard>薩馬拉時間</standard>
+					<daylight>薩馬拉夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Samarkand">
+				<long>
+					<standard>撒馬爾罕時間</standard>
+					<daylight>撒馬爾罕夏令時間</daylight>
+				</long>
+				<short>
+					<standard>SAMT（撒馬爾罕）</standard>
+					<daylight>SAMST（撒馬爾罕）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Samoa">
+				<long>
+					<standard>薩摩亞標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Shevchenko">
+				<long>
+					<standard>舍甫琴科時間</standard>
+					<daylight>舍甫琴科夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Singapore">
+				<long>
+					<standard>新加坡標準時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Suriname">
+				<long>
+					<standard>蘇利南時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Sverdlovsk">
+				<long>
+					<standard>斯維爾德洛夫斯克時間</standard>
+					<daylight>斯維爾德洛夫斯克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Taipei">
+				<long>
+					<generic>中原時間</generic>
+					<standard>中原標準時間</standard>
+					<daylight>中原夏令時間</daylight>
+				</long>
+				<short>
+					<generic>CT（中原）</generic>
+					<standard>CST（中原）</standard>
+					<daylight>CDT（中原）</daylight>
+				</short>
+			</metazone>
+			<metazone type="Tajikistan">
+				<long>
+					<standard>塔吉克時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Tashkent">
+				<long>
+					<standard>塔什干時間</standard>
+					<daylight>塔什干夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Tbilisi">
+				<long>
+					<standard>第比利斯時間</standard>
+					<daylight>第比利斯夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Turkey">
+				<long>
+					<standard>土耳其時間</standard>
+					<daylight>土耳其夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Turkmenistan">
+				<long>
+					<standard>土庫曼時間</standard>
+					<daylight>土庫曼夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Uralsk">
+				<long>
+					<standard>烏拉斯克時間</standard>
+					<daylight>烏拉斯克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Uruguay">
+				<long>
+					<standard>烏拉圭時間</standard>
+					<daylight>烏拉圭夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Urumqi">
+				<long>
+					<standard>烏魯木齊時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Uzbekistan">
+				<long>
+					<standard>烏茲別克時間</standard>
+					<daylight>烏茲別克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Venezuela">
+				<long>
+					<standard>委內瑞拉時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Vladivostok">
+				<long>
+					<standard>海參崴時間</standard>
+					<daylight>海參崴夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Yakutsk">
+				<long>
+					<standard>雅庫次克時間</standard>
+					<daylight>雅庫次克夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Yekaterinburg">
+				<long>
+					<standard>凱薩琳堡時間</standard>
+					<daylight>凱薩琳堡夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Yerevan">
+				<long>
+					<standard>葉里溫時間</standard>
+					<daylight>葉里溫夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Yukon">
+				<long>
+					<generic>育空時間</generic>
+					<standard>育空標準時間</standard>
+					<daylight>育空夏令時間</daylight>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="ADP">
+				<displayName>安道爾陪士特</displayName>
+			</currency>
+			<currency type="AED">
+				<displayName>阿拉伯聯合大公國迪爾汗</displayName>
+			</currency>
+			<currency type="ALL">
+				<displayName>阿爾巴尼亞列克</displayName>
+			</currency>
+			<currency type="AMD">
+				<displayName>亞美尼亞德拉姆</displayName>
+			</currency>
+			<currency type="ANG">
+				<displayName>荷屬安地列斯盾</displayName>
+			</currency>
+			<currency type="AOA">
+				<displayName>安哥拉寬扎</displayName>
+			</currency>
+			<currency type="AOK">
+				<displayName>安哥拉寬扎 (1977-1990)</displayName>
+			</currency>
+			<currency type="AON">
+				<displayName>安哥拉新寬扎 (1990-2000)</displayName>
+			</currency>
+			<currency type="AOR">
+				<displayName>安哥拉新寬扎 Reajustado (1995-1999)</displayName>
+			</currency>
+			<currency type="ARA">
+				<displayName>阿根廷奧斯特納爾</displayName>
+			</currency>
+			<currency type="ARP">
+				<displayName>阿根廷披索 (1983-1985)</displayName>
+			</currency>
+			<currency type="ARS">
+				<displayName>阿根廷披索</displayName>
+			</currency>
+			<currency type="ATS">
+				<displayName>奧地利先令</displayName>
+			</currency>
+			<currency type="AUD">
+				<displayName>澳幣</displayName>
+			</currency>
+			<currency type="AWG">
+				<displayName>阿魯巴盾</displayName>
+			</currency>
+			<currency type="AZM">
+				<displayName>亞塞拜然馬納特 (1993-2006)</displayName>
+			</currency>
+			<currency type="AZN">
+				<displayName>亞塞拜然馬納特</displayName>
+			</currency>
+			<currency type="BAD">
+				<displayName>波士尼亞-黑塞哥維那第納爾</displayName>
+			</currency>
+			<currency type="BAM">
+				<displayName>波士尼亞-黑塞哥維那可轉換馬克</displayName>
+			</currency>
+			<currency type="BBD">
+				<displayName>巴貝多元</displayName>
+			</currency>
+			<currency type="BDT">
+				<displayName>孟加拉塔卡</displayName>
+			</currency>
+			<currency type="BEC">
+				<displayName>比利時法郎（可轉換）</displayName>
+			</currency>
+			<currency type="BEF">
+				<displayName>比利時法郎</displayName>
+			</currency>
+			<currency type="BEL">
+				<displayName>比利時法郎（金融）</displayName>
+			</currency>
+			<currency type="BGL">
+				<displayName>保加利亞硬列弗</displayName>
+			</currency>
+			<currency type="BGN">
+				<displayName>保加利亞新列弗</displayName>
+			</currency>
+			<currency type="BHD">
+				<displayName>巴林第納爾</displayName>
+			</currency>
+			<currency type="BIF">
+				<displayName>蒲隆地法郎</displayName>
+			</currency>
+			<currency type="BMD">
+				<displayName>百慕達幣</displayName>
+			</currency>
+			<currency type="BND">
+				<displayName>汶萊元</displayName>
+			</currency>
+			<currency type="BOB">
+				<displayName>玻利維亞貨幣單位</displayName>
+			</currency>
+			<currency type="BOP">
+				<displayName>玻利維亞披索</displayName>
+			</currency>
+			<currency type="BOV">
+				<displayName>玻利維亞幕多</displayName>
+			</currency>
+			<currency type="BRB">
+				<displayName>巴西克魯薩多農瓦（1967-1986）</displayName>
+			</currency>
+			<currency type="BRC">
+				<displayName>巴西克魯賽羅 (1986-1989)</displayName>
+			</currency>
+			<currency type="BRE">
+				<displayName>巴西克魯賽羅 (1990-1993)</displayName>
+			</currency>
+			<currency type="BRL">
+				<displayName>巴西里拉</displayName>
+			</currency>
+			<currency type="BRN">
+				<displayName>巴西克如爾達農瓦</displayName>
+			</currency>
+			<currency type="BRR">
+				<displayName>巴西克魯賽羅</displayName>
+			</currency>
+			<currency type="BSD">
+				<displayName>巴哈馬元</displayName>
+			</currency>
+			<currency type="BTN">
+				<displayName>不丹那特倫</displayName>
+			</currency>
+			<currency type="BUK">
+				<displayName>緬甸基雅特</displayName>
+			</currency>
+			<currency type="BWP">
+				<displayName>波札那普拉</displayName>
+			</currency>
+			<currency type="BYB">
+				<displayName>白俄羅斯新盧布 (1994-1999)</displayName>
+			</currency>
+			<currency type="BYR">
+				<displayName>白俄羅斯盧布</displayName>
+			</currency>
+			<currency type="BZD">
+				<displayName>貝里斯元</displayName>
+			</currency>
+			<currency type="CAD">
+				<displayName>加幣</displayName>
+			</currency>
+			<currency type="CDF">
+				<displayName>剛果法郎</displayName>
+			</currency>
+			<currency type="CHE">
+				<displayName>WIR 歐元</displayName>
+			</currency>
+			<currency type="CHW">
+				<displayName>WIR 法郎</displayName>
+			</currency>
+			<currency type="CLF">
+				<displayName>卡林油達佛曼跎</displayName>
+			</currency>
+			<currency type="CLP">
+				<displayName>智利披索</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>人民幣</displayName>
+			</currency>
+			<currency type="COP">
+				<displayName>哥倫比亞披索</displayName>
+			</currency>
+			<currency type="CRC">
+				<displayName>哥斯大黎加科郎</displayName>
+			</currency>
+			<currency type="CSD">
+				<displayName>舊塞爾維亞第納爾</displayName>
+			</currency>
+			<currency type="CSK">
+				<displayName>捷克斯洛伐克硬克朗</displayName>
+			</currency>
+			<currency type="CUP">
+				<displayName>古巴披索</displayName>
+			</currency>
+			<currency type="CVE">
+				<displayName>維德角埃斯庫多</displayName>
+			</currency>
+			<currency type="CYP">
+				<displayName>賽普勒斯鎊</displayName>
+			</currency>
+			<currency type="CZK">
+				<displayName>捷克克朗</displayName>
+			</currency>
+			<currency type="DDM">
+				<displayName>東德奧斯特馬克</displayName>
+			</currency>
+			<currency type="DEM">
+				<displayName>德國馬克</displayName>
+			</currency>
+			<currency type="DJF">
+				<displayName>吉布地法郎</displayName>
+			</currency>
+			<currency type="DKK">
+				<displayName>丹麥克羅納</displayName>
+			</currency>
+			<currency type="DOP">
+				<displayName>多明尼加披索</displayName>
+			</currency>
+			<currency type="DZD">
+				<displayName>阿爾及利亞第納爾</displayName>
+			</currency>
+			<currency type="ECS">
+				<displayName>厄瓜多蘇克雷</displayName>
+			</currency>
+			<currency type="ECV">
+				<displayName>厄瓜多爾由里達瓦康斯坦 (UVC)</displayName>
+			</currency>
+			<currency type="EEK">
+				<displayName>愛沙尼亞克朗</displayName>
+			</currency>
+			<currency type="EGP">
+				<displayName>埃及鎊</displayName>
+			</currency>
+			<currency type="ERN">
+				<displayName>厄立特里亞納克法</displayName>
+			</currency>
+			<currency type="ESA">
+				<displayName>西班牙比塞塔（會計單位）</displayName>
+			</currency>
+			<currency type="ESB">
+				<displayName>西班牙比塞塔（可轉換會計單位）</displayName>
+			</currency>
+			<currency type="ESP">
+				<displayName>西班牙陪士特</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName>衣索比亞比爾</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>歐元</displayName>
+			</currency>
+			<currency type="FIM">
+				<displayName>芬蘭馬克</displayName>
+			</currency>
+			<currency type="FJD">
+				<displayName>斐濟元</displayName>
+			</currency>
+			<currency type="FKP">
+				<displayName>福克蘭群島鎊</displayName>
+			</currency>
+			<currency type="FRF">
+				<displayName>法國法郎</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>英鎊</displayName>
+			</currency>
+			<currency type="GEK">
+				<displayName>喬治庫旁拉里</displayName>
+			</currency>
+			<currency type="GEL">
+				<displayName>喬治拉里</displayName>
+			</currency>
+			<currency type="GHC">
+				<displayName>迦納仙蔕</displayName>
+			</currency>
+			<currency type="GIP">
+				<displayName>直布羅陀鎊</displayName>
+			</currency>
+			<currency type="GMD">
+				<displayName>甘比亞達拉西</displayName>
+			</currency>
+			<currency type="GNF">
+				<displayName>幾內亞法郎</displayName>
+			</currency>
+			<currency type="GNS">
+				<displayName>幾內亞西里</displayName>
+			</currency>
+			<currency type="GQE">
+				<displayName>赤道幾內亞埃奎勒</displayName>
+			</currency>
+			<currency type="GRD">
+				<displayName>希臘德拉克馬</displayName>
+			</currency>
+			<currency type="GTQ">
+				<displayName>瓜地馬拉格查爾</displayName>
+			</currency>
+			<currency type="GWE">
+				<displayName>葡屬幾內亞埃斯庫多</displayName>
+			</currency>
+			<currency type="GWP">
+				<displayName>幾內亞比索披索</displayName>
+			</currency>
+			<currency type="GYD">
+				<displayName>圭亞那元</displayName>
+			</currency>
+			<currency type="HKD">
+				<displayName>港幣</displayName>
+			</currency>
+			<currency type="HNL">
+				<displayName>洪都拉斯倫皮拉</displayName>
+			</currency>
+			<currency type="HRD">
+				<displayName>克羅地亞第納爾</displayName>
+			</currency>
+			<currency type="HRK">
+				<displayName>克羅地亞庫納</displayName>
+			</currency>
+			<currency type="HUF">
+				<displayName>匈牙利福林</displayName>
+			</currency>
+			<currency type="IDR">
+				<displayName>印尼盾</displayName>
+			</currency>
+			<currency type="IEP">
+				<displayName>愛爾蘭鎊</displayName>
+			</currency>
+			<currency type="ILP">
+				<displayName>以色列鎊</displayName>
+			</currency>
+			<currency type="ILS">
+				<displayName>以色列新謝克爾</displayName>
+			</currency>
+			<currency type="INR">
+				<displayName>印度盧比</displayName>
+			</currency>
+			<currency type="IQD">
+				<displayName>伊拉克第納爾</displayName>
+			</currency>
+			<currency type="IRR">
+				<displayName>伊朗里亞爾</displayName>
+			</currency>
+			<currency type="ISK">
+				<displayName>冰島克朗</displayName>
+			</currency>
+			<currency type="ITL">
+				<displayName>義大利里拉</displayName>
+			</currency>
+			<currency type="JMD">
+				<displayName>牙買加元</displayName>
+			</currency>
+			<currency type="JOD">
+				<displayName>約旦第納爾</displayName>
+			</currency>
+			<currency type="JPY">
+				<displayName>日圓</displayName>
+			</currency>
+			<currency type="KES">
+				<displayName>肯尼亞先令</displayName>
+			</currency>
+			<currency type="KGS">
+				<displayName>吉爾吉斯索馬</displayName>
+			</currency>
+			<currency type="KHR">
+				<displayName>柬埔寨瑞爾</displayName>
+			</currency>
+			<currency type="KMF">
+				<displayName>科摩羅法郎</displayName>
+			</currency>
+			<currency type="KPW">
+				<displayName>北韓圜</displayName>
+			</currency>
+			<currency type="KRW">
+				<displayName>韓圜</displayName>
+			</currency>
+			<currency type="KWD">
+				<displayName>科威特第納爾</displayName>
+			</currency>
+			<currency type="KYD">
+				<displayName>開曼群島美元</displayName>
+			</currency>
+			<currency type="KZT">
+				<displayName>卡扎克斯坦坦吉</displayName>
+			</currency>
+			<currency type="LAK">
+				<displayName>寮國基普</displayName>
+			</currency>
+			<currency type="LBP">
+				<displayName>黎巴嫩鎊</displayName>
+			</currency>
+			<currency type="LKR">
+				<displayName>斯里蘭卡盧布</displayName>
+			</currency>
+			<currency type="LRD">
+				<displayName>賴比瑞亞元</displayName>
+			</currency>
+			<currency type="LSL">
+				<displayName>賴索托羅蒂</displayName>
+			</currency>
+			<currency type="LTL">
+				<displayName>立陶宛里塔</displayName>
+			</currency>
+			<currency type="LTT">
+				<displayName>立陶宛特羅</displayName>
+			</currency>
+			<currency type="LUC">
+				<displayName>盧森堡可兌換法郎</displayName>
+			</currency>
+			<currency type="LUF">
+				<displayName>盧森堡法郎</displayName>
+			</currency>
+			<currency type="LUL">
+				<displayName>盧森堡金融法郎</displayName>
+			</currency>
+			<currency type="LVL">
+				<displayName>拉脫維亞拉特銀幣</displayName>
+			</currency>
+			<currency type="LVR">
+				<displayName>拉脫維亞盧布</displayName>
+			</currency>
+			<currency type="LYD">
+				<displayName>利比亞第納爾</displayName>
+			</currency>
+			<currency type="MDL">
+				<displayName>摩杜雲列伊</displayName>
+			</currency>
+			<currency type="MGA">
+				<displayName>馬達加斯加艾瑞爾</displayName>
+			</currency>
+			<currency type="MGF">
+				<displayName>馬達加斯加法郎</displayName>
+			</currency>
+			<currency type="MKD">
+				<displayName>馬其頓第納爾</displayName>
+			</currency>
+			<currency type="MLF">
+				<displayName>馬里法郎</displayName>
+			</currency>
+			<currency type="MMK">
+				<displayName>緬甸元</displayName>
+			</currency>
+			<currency type="MNT">
+				<displayName>蒙古圖格里克</displayName>
+			</currency>
+			<currency type="MOP">
+				<displayName>澳門元</displayName>
+			</currency>
+			<currency type="MRO">
+				<displayName>茅利塔尼亞烏吉亞</displayName>
+			</currency>
+			<currency type="MTL">
+				<displayName>馬爾他里拉</displayName>
+			</currency>
+			<currency type="MTP">
+				<displayName>馬爾他鎊</displayName>
+			</currency>
+			<currency type="MUR">
+				<displayName>模里西斯盧布</displayName>
+			</currency>
+			<currency type="MVR">
+				<displayName>馬爾地夫海島盧非亞</displayName>
+			</currency>
+			<currency type="MWK">
+				<displayName>馬拉維克瓦查</displayName>
+			</currency>
+			<currency type="MXN">
+				<displayName>墨西哥披索</displayName>
+			</currency>
+			<currency type="MXP">
+				<displayName>墨西哥銀披索 (1861-1992)</displayName>
+			</currency>
+			<currency type="MXV">
+				<displayName>墨西哥轉換單位（UDI）</displayName>
+			</currency>
+			<currency type="MYR">
+				<displayName>馬來西亞令吉</displayName>
+			</currency>
+			<currency type="MZE">
+				<displayName>莫三比克埃斯庫多</displayName>
+			</currency>
+			<currency type="MZM">
+				<displayName>莫三比克梅蒂卡爾</displayName>
+			</currency>
+			<currency type="MZN">
+				<displayName>莫三比克美提卡</displayName>
+			</currency>
+			<currency type="NAD">
+				<displayName>納米比亞元</displayName>
+			</currency>
+			<currency type="NGN">
+				<displayName>奈及利亞奈拉</displayName>
+			</currency>
+			<currency type="NIO">
+				<displayName>尼加拉瓜金科多巴</displayName>
+			</currency>
+			<currency type="NLG">
+				<displayName>荷蘭盾</displayName>
+			</currency>
+			<currency type="NOK">
+				<displayName>挪威克羅納</displayName>
+			</currency>
+			<currency type="NPR">
+				<displayName>尼泊爾盧布</displayName>
+			</currency>
+			<currency type="NZD">
+				<displayName>紐西蘭幣</displayName>
+			</currency>
+			<currency type="OMR">
+				<displayName>阿曼里奧</displayName>
+			</currency>
+			<currency type="PAB">
+				<displayName>巴拿馬巴波亞</displayName>
+			</currency>
+			<currency type="PEI">
+				<displayName>祕魯因蒂</displayName>
+			</currency>
+			<currency type="PEN">
+				<displayName>秘魯新太陽幣</displayName>
+			</currency>
+			<currency type="PES">
+				<displayName>秘魯太陽幣</displayName>
+			</currency>
+			<currency type="PGK">
+				<displayName>巴布亞紐幾內亞基那</displayName>
+			</currency>
+			<currency type="PHP">
+				<displayName>菲律賓披索</displayName>
+			</currency>
+			<currency type="PKR">
+				<displayName>巴基斯坦盧布</displayName>
+			</currency>
+			<currency type="PLN">
+				<displayName>波蘭茲羅提</displayName>
+			</currency>
+			<currency type="PLZ">
+				<displayName>波蘭茲羅提 (1950-1995)</displayName>
+			</currency>
+			<currency type="PTE">
+				<displayName>葡萄牙埃斯庫多</displayName>
+			</currency>
+			<currency type="PYG">
+				<displayName>巴拉圭瓜拉尼</displayName>
+			</currency>
+			<currency type="QAR">
+				<displayName>卡達爾里亞爾</displayName>
+			</currency>
+			<currency type="RHD">
+				<displayName>羅德西亞元</displayName>
+			</currency>
+			<currency type="ROL">
+				<displayName>舊羅馬尼亞列伊</displayName>
+			</currency>
+			<currency type="RON">
+				<displayName>羅馬尼亞列伊</displayName>
+			</currency>
+			<currency type="RSD">
+				<displayName>塞爾維亞戴納</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>俄羅斯盧布</displayName>
+			</currency>
+			<currency type="RUR">
+				<displayName>俄羅斯盧布 (1991-1998)</displayName>
+			</currency>
+			<currency type="RWF">
+				<displayName>盧安達法郎</displayName>
+			</currency>
+			<currency type="SAR">
+				<displayName>沙烏地里雅</displayName>
+			</currency>
+			<currency type="SBD">
+				<displayName>索羅門群島元</displayName>
+			</currency>
+			<currency type="SCR">
+				<displayName>塞席爾盧比</displayName>
+			</currency>
+			<currency type="SDD">
+				<displayName>蘇丹第納爾</displayName>
+			</currency>
+			<currency type="SDG">
+				<displayName>蘇丹鎊</displayName>
+			</currency>
+			<currency type="SDP">
+				<displayName>舊蘇丹鎊</displayName>
+			</currency>
+			<currency type="SEK">
+				<displayName>瑞典克羅納</displayName>
+			</currency>
+			<currency type="SGD">
+				<displayName>新加坡幣</displayName>
+			</currency>
+			<currency type="SHP">
+				<displayName>聖赫勒拿鎊</displayName>
+			</currency>
+			<currency type="SIT">
+				<displayName>斯洛維尼亞托勒</displayName>
+			</currency>
+			<currency type="SKK">
+				<displayName>斯洛伐克克朗</displayName>
+			</currency>
+			<currency type="SLL">
+				<displayName>獅子山利昂</displayName>
+			</currency>
+			<currency type="SOS">
+				<displayName>索馬利亞先令</displayName>
+			</currency>
+			<currency type="SRD">
+				<displayName>蘇利南元</displayName>
+			</currency>
+			<currency type="SRG">
+				<displayName>蘇利南基爾</displayName>
+			</currency>
+			<currency type="STD">
+				<displayName>聖多美島和普林西比島多布拉</displayName>
+			</currency>
+			<currency type="SUR">
+				<displayName>蘇聯盧布</displayName>
+			</currency>
+			<currency type="SVC">
+				<displayName>薩爾瓦多科郎</displayName>
+			</currency>
+			<currency type="SYP">
+				<displayName>敘利亞鎊</displayName>
+			</currency>
+			<currency type="SZL">
+				<displayName>史瓦濟蘭里朗吉尼</displayName>
+			</currency>
+			<currency type="THB">
+				<displayName>泰銖</displayName>
+			</currency>
+			<currency type="TJR">
+				<displayName>塔吉克盧布</displayName>
+			</currency>
+			<currency type="TJS">
+				<displayName>塔吉克索莫尼</displayName>
+			</currency>
+			<currency type="TMM">
+				<displayName>土庫曼馬納特</displayName>
+			</currency>
+			<currency type="TND">
+				<displayName>突尼西亞第納爾</displayName>
+			</currency>
+			<currency type="TOP">
+				<displayName>東加潘加</displayName>
+			</currency>
+			<currency type="TPE">
+				<displayName>帝汶埃斯庫多</displayName>
+			</currency>
+			<currency type="TTD">
+				<displayName>千里達及托巴哥元</displayName>
+			</currency>
+			<currency type="TWD">
+				<displayName>新臺幣</displayName>
+			</currency>
+			<currency type="TZS">
+				<displayName>坦尚尼亞先令</displayName>
+			</currency>
+			<currency type="UAH">
+				<displayName>烏克蘭格里夫那</displayName>
+			</currency>
+			<currency type="UAK">
+				<displayName>烏克蘭卡本瓦那茲</displayName>
+			</currency>
+			<currency type="UGS">
+				<displayName>烏干達先令 (1966-1987)</displayName>
+			</currency>
+			<currency type="UGX">
+				<displayName>烏干達先令</displayName>
+			</currency>
+			<currency type="USD">
+				<symbol>$</symbol>
+			</currency>
+			<currency type="USN">
+				<displayName>美元 (第二天)</displayName>
+			</currency>
+			<currency type="USS">
+				<displayName>美元 (同一天)</displayName>
+			</currency>
+			<currency type="UYP">
+				<displayName>烏拉圭披索 (1975-1993)</displayName>
+			</currency>
+			<currency type="UYU">
+				<displayName>烏拉圭披索</displayName>
+			</currency>
+			<currency type="UZS">
+				<displayName>烏茲別克索姆</displayName>
+			</currency>
+			<currency type="VEB">
+				<displayName>委內瑞拉玻利瓦</displayName>
+			</currency>
+			<currency type="VEF">
+				<displayName>委內瑞拉強勢玻利瓦</displayName>
+			</currency>
+			<currency type="VUV">
+				<displayName>萬那杜萬杜</displayName>
+			</currency>
+			<currency type="WST">
+				<displayName>西薩摩亞塔拉</displayName>
+			</currency>
+			<currency type="XAF">
+				<displayName>西非法郎 BEAC</displayName>
+			</currency>
+			<currency type="XAG">
+				<displayName>XAG</displayName>
+			</currency>
+			<currency type="XAU">
+				<displayName>黃金</displayName>
+			</currency>
+			<currency type="XBA">
+				<displayName>歐洲綜合單位</displayName>
+			</currency>
+			<currency type="XBB">
+				<displayName>歐洲貨幣單位 XBB</displayName>
+			</currency>
+			<currency type="XBC">
+				<displayName>歐洲會計單位 (XBC)</displayName>
+			</currency>
+			<currency type="XBD">
+				<displayName>歐洲會計單位 (XBD)</displayName>
+			</currency>
+			<currency type="XCD">
+				<displayName>格瑞那達元</displayName>
+			</currency>
+			<currency type="XDR">
+				<displayName>特殊提款權</displayName>
+			</currency>
+			<currency type="XEU">
+				<displayName>歐洲貨幣單位 XEU</displayName>
+			</currency>
+			<currency type="XFO">
+				<displayName>法國金法郎</displayName>
+			</currency>
+			<currency type="XFU">
+				<displayName>法國 UIC 法郎</displayName>
+			</currency>
+			<currency type="XOF">
+				<displayName>西非法郎 BCEAO</displayName>
+			</currency>
+			<currency type="XPD">
+				<displayName>帕拉狄昂</displayName>
+			</currency>
+			<currency type="XPF">
+				<displayName>CFP 法郎</displayName>
+			</currency>
+			<currency type="XPT">
+				<displayName>白金</displayName>
+			</currency>
+			<currency type="XTS">
+				<displayName>XTS</displayName>
+			</currency>
+			<currency type="XXX">
+				<displayName>XXX</displayName>
+			</currency>
+			<currency type="YDD">
+				<displayName>葉門第納爾</displayName>
+			</currency>
+			<currency type="YER">
+				<displayName>葉門里雅</displayName>
+			</currency>
+			<currency type="YUD">
+				<displayName>南斯拉夫第納爾硬幣</displayName>
+			</currency>
+			<currency type="YUM">
+				<displayName>南斯拉夫挪威亞第納爾</displayName>
+			</currency>
+			<currency type="YUN">
+				<displayName>南斯拉夫 可轉換第納爾</displayName>
+			</currency>
+			<currency type="ZAL">
+				<displayName>南非蘭特 (金融)</displayName>
+			</currency>
+			<currency type="ZAR">
+				<displayName>南非蘭特</displayName>
+			</currency>
+			<currency type="ZMK">
+				<displayName>尚比亞克瓦查</displayName>
+			</currency>
+			<currency type="ZRN">
+				<displayName>薩伊新扎伊爾</displayName>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>薩伊扎伊爾</displayName>
+			</currency>
+			<currency type="ZWD">
+				<displayName>辛巴威元</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unit type="hour">
+			<unitPattern count="other">{0}小時</unitPattern>
+		</unit>
+		<unit type="week">
+			<unitPattern count="other">{0} 週</unitPattern>
+		</unit>
+	</units>
+	<posix>
+		<messages>
+			<yesstr>是:確定</yesstr>
+		</messages>
+	</posix>
+</ldml>
+

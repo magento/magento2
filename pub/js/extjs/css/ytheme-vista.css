@@ -1,0 +1,511 @@
+/*
+ * Ext JS Library 2.0
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.ext-el-mask-msg {
+    border:1px solid #aaa;
+    background: #ddd url(../images/default/box/tb.gif) repeat-x 0 -16px;
+}
+.ext-el-mask-msg div {
+    border:1px solid #ccc;
+}
+/*
+ Menu
+ */
+.x-menu {
+	border-color: #999 #999 #999 #999;
+    background-image:url(../images/gray/menu/menu.gif);
+}
+.x-menu-item-arrow{
+	background-image:url(../images/gray/menu/menu-parent.gif);
+}
+.x-menu-item {
+	color:#222;
+}
+.x-menu-item-active {
+	background:#ddd;
+    border:1px solid #aaa;
+}
+.x-menu-sep {
+	background:#aaa;
+}
+/** 
+* Tabs
+*/
+.x-tabs-wrap {
+	background:#4f4f4f;
+	border-bottom:1px solid #b3b6b0;
+}
+.x-tabs-strip .x-tabs-text {
+	color:white;
+	font-weight:normal;
+}
+.x-tabs-strip .on .x-tabs-text {
+	cursor:default;
+	color:#333333;
+}
+.x-tabs-top .x-tabs-strip a.x-tabs-right {
+	background:transparent url(../images/vista/tabs/tab-sprite.gif) no-repeat right -50px;
+}
+.x-tabs-top .x-tabs-strip a .x-tabs-left{
+	background:transparent url(../images/vista/tabs/tab-sprite.gif) no-repeat 0px -150px;
+}
+.x-tabs-top .x-tabs-strip .on .x-tabs-right {
+	 background: url(../images/vista/tabs/tab-sprite.gif) no-repeat right 0;
+}
+.x-tabs-top .x-tabs-strip .on .x-tabs-left{
+	 background: url(../images/vista/tabs/tab-sprite.gif) no-repeat 0px -100px;
+}
+.x-tabs-strip .x-tabs-closable .close-icon{
+	background-image:url(../images/vista/layout/tab-close.gif);
+}
+.x-tabs-strip .on .close-icon{
+	background-image:url(../images/vista/layout/tab-close-on.gif);
+}
+.x-tabs-strip .x-tabs-closable .close-over{
+	background-image:url(../images/vista/layout/tab-close-on.gif);
+}
+.x-tabs-body {
+    border:1px solid #b3b6b0;
+    border-top:0 none;
+}
+
+.x-tabs-bottom .x-tabs-strip {
+	background:#4f4f4f;
+}
+.x-tabs-bottom .x-tabs-strip a.x-tabs-right {
+	background:transparent url(../images/vista/tabs/tab-btm-inactive-right-bg.gif) no-repeat bottom right;
+}
+.x-tabs-bottom .x-tabs-strip a .x-tabs-left{
+	background:transparent url(../images/vista/tabs/tab-btm-inactive-left-bg.gif) no-repeat bottom left;
+}
+.x-tabs-bottom .x-tabs-wrap {
+	border-bottom:0 none;
+	padding-top:0;
+	border-top:1px solid #b3b6b0;
+}
+.x-tabs-bottom .x-tabs-strip .on .x-tabs-right {
+	 background: url(../images/vista/tabs/tab-btm-right-bg.gif) no-repeat bottom left;
+}
+.x-tabs-bottom .x-tabs-strip .on .x-tabs-left {
+	 background: url(../images/vista/tabs/tab-btm-left-bg.gif) no-repeat bottom right;
+}
+
+.x-tabs-bottom .x-tabs-body {
+    border:1px solid #b3b6b0;
+    border-bottom:0 none;
+}
+/**
+* Basic-Dialog 
+*/
+.x-dlg-proxy {
+	background:#d3d6d0;
+	border:2px solid #b3b6b0;
+}
+.x-dlg-shadow{
+	background:#cccccc;
+   opacity:.3;
+   -moz-opacity:.3;
+   filter: alpha(opacity=30);
+}
+.x-dlg .x-dlg-hd {
+	background: url(../images/vista/basic-dialog/hd-sprite.gif) repeat-x 0 -82px;
+	background-color:#333333;
+	zoom:1;
+}
+.x-dlg .x-dlg-hd-left {
+	opacity:.95;-moz-opacity:.95;filter:alpha(opacity=90);
+	background: url(../images/vista/basic-dialog/hd-sprite.gif) no-repeat 0 -41px;
+	zoom:1;
+}
+.x-dlg .x-dlg-hd-right {
+	background: url(../images/vista/basic-dialog/hd-sprite.gif) no-repeat right 0;
+	zoom:1;
+}
+.x-dlg .x-dlg-dlg-body{
+	background:#fff;
+	border:0 none;
+	border-top:0 none;
+	padding:0 0px 0px;
+	position:absolute;
+	top:24px;left:0;
+	z-index:1;
+}
+.x-dlg-auto-tabs .x-dlg-dlg-body{
+	background:transparent;
+}
+.x-dlg-auto-tabs .x-tabs-top .x-tabs-wrap{
+	background:transparent;
+}
+.x-dlg .x-dlg-ft{
+	border-top:1px solid #b3b6b0;
+	background:#F0F0F0;
+	padding-bottom:8px;
+}
+.x-dlg .x-dlg-bg{
+	opacity:.90;-moz-opacity:.90;filter:alpha(opacity=85);
+	zoom:1;
+}
+.x-dlg .x-dlg-bg-left,.x-dlg .x-dlg-bg-center,.x-dlg .x-dlg-bg-right{
+}
+.x-dlg .x-dlg-bg-center {
+	padding: 0px 4px 4px 4px;
+	background:transparent url(../images/vista/basic-dialog/bg-center.gif) repeat-x bottom;
+	zoom:1;
+}
+.x-dlg .x-dlg-bg-left{
+	padding-left:4px;
+	background:transparent url(../images/vista/basic-dialog/bg-left.gif) no-repeat bottom left;
+	zoom:1;
+}
+.x-dlg .x-dlg-bg-right{
+	padding-right:4px;
+	background:transparent url(../images/vista/basic-dialog/bg-right.gif) no-repeat bottom right;
+	zoom:1;
+}
+.x-dlg .x-tabs-top .x-tabs-body{
+	border:0 none;
+}
+.x-dlg .x-tabs-bottom .x-tabs-body{
+	border:1px solid #b3b6b0;
+	border-bottom:0 none;
+}
+.x-dlg .x-layout-container  .x-tabs-body{
+	border:0 none;
+}
+.x-dlg .x-dlg-close {
+    background-image:url(../images/vista/basic-dialog/close.gif);
+}
+.x-dlg .x-dlg-collapse {
+    background-image:url(../images/vista/basic-dialog/collapse.gif);
+}
+.x-dlg-collapsed .x-dlg-collapse {
+    background-image:url(../images/vista/basic-dialog/expand.gif);
+}
+.x-dlg div.x-resizable-handle-east{
+	background-image:url(../images/vista/s.gif);
+	border:0 none;
+}
+.x-dlg div.x-resizable-handle-south{
+	background-image:url(../images/vista/s.gif);
+	border:0 none;
+}
+.x-dlg div.x-resizable-handle-west{
+	background-image:url(../images/vista/s.gif);
+	border:0 none;
+}
+.x-dlg div.x-resizable-handle-southeast{
+	background-image:url(../images/vista/s.gif);
+	background-position: bottom right;
+	width:8px;
+	height:8px;
+	border:0;
+}
+.x-dlg div.x-resizable-handle-southwest{
+	background-image:url(../images/vista/s.gif);
+	background-position: top right;
+	margin-left:1px;
+	margin-bottom:1px;
+	border:0;
+}
+.x-dlg div.x-resizable-handle-north{
+	background-image:url(../images/vista/s.gif);
+	border:0 none;
+}
+
+/* QuickTips */
+
+.x-tip .x-tip-top {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-top-left {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-top-right {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-ft {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-ft-left {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-ft-right {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-bd-left {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+.x-tip .x-tip-bd-right {
+	background-image: url(../images/vista/qtip/tip-sprite.gif);
+}
+
+.x-tip .x-tip-bd-inner {
+    padding:2px;
+}
+
+/* BorderLayout */
+.x-layout-container{
+    background:#4f4f4f;
+}
+.x-layout-collapsed{
+    background-color:#9f9f9f;
+	 border:1px solid #4c535c;
+}
+.x-layout-collapsed-over{
+	 background-color:#bfbfbf;
+}
+.x-layout-panel{
+    border:1px solid #4c535c;
+}
+.x-layout-nested-layout .x-layout-panel {
+	  border:0 none;
+}
+.x-layout-split{
+    background-color:#f3f2e7;
+}
+.x-layout-panel-hd{
+    background-image: url(../images/vista/layout/panel-title-bg.gif);
+    border-bottom:1px solid #b5bac1;
+    color:white;
+}
+.x-layout-panel-hd-text{
+	color:white;
+}
+.x-layout-tools-button-over{
+    border:1px solid #4c535c;
+	 background:#9f9f9f url(../images/vista/layout/panel-title-bg.gif) repeat-x;
+}
+.x-layout-close{
+    background-image:url(../images/vista/layout/tab-close.gif);
+}
+
+.x-layout-stick{
+    background-image:url(../images/vista/layout/stick.gif);
+}
+.x-layout-collapse-west,.x-layout-expand-east{
+    background-image:url(../images/vista/layout/collapse.gif);
+}
+.x-layout-expand-west,.x-layout-collapse-east{
+    background-image:url(../images/vista/layout/expand.gif);
+}
+.x-layout-collapse-north,.x-layout-expand-south{
+    background-image:url(../images/vista/layout/ns-collapse.gif);
+}
+.x-layout-expand-north,.x-layout-collapse-south{
+    background-image:url(../images/vista/layout/ns-expand.gif);
+}
+.x-layout-split-h{
+    background:#9f9f9f;
+}
+.x-layout-split-v{
+    background:#9f9f9f;
+}
+.x-layout-panel .x-tabs-wrap{
+    background:#4f4f4f;
+}
+.x-layout-nested-layout .x-layout-panel-north {
+	  border-bottom:1px solid #4c535c;
+}
+.x-layout-nested-layout .x-layout-panel-south {
+	  border-top:1px solid #4c535c;
+}
+.x-layout-nested-layout .x-layout-panel-east {
+	  border-left:1px solid #4c535c;
+}
+.x-layout-nested-layout .x-layout-panel-west {
+	  border-right:1px solid #4c535c;
+}
+.x-layout-panel-dragover {
+	border: 2px solid #4c535c;
+}
+.x-layout-panel-proxy {
+	background-image: url(../images/vista/layout/gradient-bg.gif);
+	background-color:#f3f2e7;
+	border:1px dashed #4c535c;
+}
+
+.x-layout-container .x-layout-tabs-body{
+	border:0 none;
+}
+/** Resizable */
+
+.x-resizable-over .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-east{
+    background:url(../images/vista/sizer/e-handle.gif);
+	 background-position: left;
+}
+.x-resizable-over .x-resizable-handle-east, .x-resizable-pinned .x-resizable-handle-west{
+    background:url(../images/vista/sizer/e-handle.gif);
+	 background-position: left;
+}
+.x-resizable-over .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-south{
+    background:url(../images/vista/sizer/s-handle.gif);
+    background-position: top;
+}
+.x-resizable-over .x-resizable-handle-south, .x-resizable-pinned .x-resizable-handle-north{
+    background:url(../images/vista/sizer/s-handle.gif);
+    background-position: top;
+}
+.x-resizable-over .x-resizable-handle-southeast, .x-resizable-pinned .x-resizable-handle-southeast{
+    background:url(../images/vista/sizer/se-handle.gif);
+    background-position: top left;
+}
+.x-resizable-over .x-resizable-handle-northwest,.x-resizable-pinned .x-resizable-handle-northwest{
+    background:url(../images/vista/sizer/nw-handle.gif);
+    background-position:bottom right;
+}
+.x-resizable-over .x-resizable-handle-northeast,.x-resizable-pinned .x-resizable-handle-northeast{
+    background:url(../images/vista/sizer/ne-handle.gif);
+    background-position: bottom left;
+}
+.x-resizable-over .x-resizable-handle-southwest,.x-resizable-pinned .x-resizable-handle-southwest{
+    background:url(../images/vista/sizer/sw-handle.gif);
+    background-position: top right;
+}
+.x-resizable-proxy{
+    border: 1px dashed #615e55;
+}
+
+/** Toolbar */
+.x-toolbar{
+	border:0 none;
+	background: #efefe3 url(../images/vista/toolbar/gray-bg.gif) repeat-x;
+	padding:3px;
+}
+.x-toolbar .ytb-button-over{
+	border:1px solid transparent;
+	border-bottom:1px solid #bbbbbb;
+	border-top:1px solid #eeeeee;
+	background:#9f9f9f url(../images/vista/grid/grid-vista-hd.gif) repeat-x;
+}
+
+.x-paging-info {
+    color:#000;
+}
+/* grid */
+.x-grid-topbar .x-toolbar{
+	border:0;
+	border-bottom:1px solid #555;
+}
+.x-grid-bottombar .x-toolbar{
+	border:0;
+	border-top:1px solid #555;
+}
+.x-grid-locked .x-grid-body td {
+	background: #fafafa;
+	border-right: 1px solid #e1e1e1;
+	border-bottom: 1px solid #e1e1e1 !important;
+}
+.x-grid-locked .x-grid-body td .x-grid-cell-inner {
+	border-top:0 none;
+}
+.x-grid-locked .x-grid-row-alt td{
+	background: #f1f1f1;
+}
+.x-grid-locked .x-grid-row-selected td{
+	color: #fff !important;
+	background-color: #316ac5 !important;
+}
+.x-grid-hd{
+	border-bottom:0;
+	background:none;
+}
+.x-grid-hd-row{
+	height:auto;
+}
+.x-grid-split {
+	background-image: url(../images/vista/grid/grid-split.gif);
+}
+.x-grid-header{
+	background: url(../images/vista/grid/grid-vista-hd.gif);
+	border:0 none;
+    border-bottom:1px solid #555;
+}
+.x-grid-row-alt{
+	background-color: #f5f5f5;
+}
+.x-grid-row-over td{
+	background-color:#eeeeee;
+}
+.x-grid-col {
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+}
+.x-grid-header .x-grid-hd-inner {
+	padding-bottom: 1px;
+}
+.x-grid-header  .x-grid-hd-text {
+	padding-bottom: 3px;
+    color:#333333;
+}
+.x-grid-hd-over .x-grid-hd-inner {
+	border-bottom: 1px solid #555;
+	padding-bottom: 0;
+}
+.x-grid-hd-over .x-grid-hd-text {
+	background-color: #fafafa;
+	border-bottom: 1px solid #555;
+	padding-bottom: 2px;
+}
+.x-grid-header .sort-asc .x-grid-hd-inner, .x-grid-header .sort-desc .x-grid-hd-inner {
+	border-bottom: 1px solid #555;
+	padding-bottom: 0;
+}
+.x-grid-header .sort-asc  .x-grid-hd-text, .x-grid-header .sort-desc .x-grid-hd-text {
+	border-bottom: 1px solid #3b5a82;
+	padding-bottom: 2px;
+}
+.x-dd-drag-proxy .x-grid-hd-inner{
+	background: url(../images/vista/grid/grid-vista-hd.gif) repeat-x;
+	height:22px;
+	width:120px;
+}
+.x-props-grid .x-grid-col-name{
+	 background-color: #eee;
+}
+/* toolbar */
+.x-toolbar .ytb-sep{
+	background-image: url(../images/vista/grid/grid-split.gif);
+}
+
+.x-toolbar .x-btn-over .x-btn-left{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) no-repeat 0 0px;
+}
+.x-toolbar .x-btn-over .x-btn-right{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) no-repeat 0 -21px;
+}
+.x-toolbar .x-btn-over .x-btn-center{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) repeat-x 0 -42px;
+}
+
+.x-toolbar .x-btn-click .x-btn-left, .x-toolbar .x-btn-pressed .x-btn-left, .x-toolbar .x-btn-menu-active .x-btn-left{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) no-repeat 0 -63px;
+}
+.x-toolbar .x-btn-click .x-btn-right, .x-toolbar .x-btn-pressed .x-btn-right, .x-toolbar .x-btn-menu-active .x-btn-right{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px;
+}
+.x-toolbar .x-btn-click .x-btn-center, .x-toolbar .x-btn-pressed .x-btn-center, .x-toolbar .x-btn-menu-active .x-btn-center{
+	background:url(../images/vista/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;
+}
+
+/* combo box */
+.x-combo-list {
+    border:1px solid #999;
+    background:#dddddd;
+}
+.x-combo-list-hd {
+    background-image: url(../images/vista/layout/panel-title-bg.gif);
+    border-bottom:1px solid #b5bac1;
+    color:white;
+}
+.x-resizable-pinned .x-combo-list-inner {
+    border-bottom:1px solid #aaa;
+}
+.x-combo-list .x-combo-selected{
+	background:#ddd !important;
+    border:1px solid #aaa;
+}

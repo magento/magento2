@@ -1,0 +1,134 @@
+/*
+ * Ext JS Library 1.1 Beta 1
+ * Copyright(c) 2006-2007, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://www.extjs.com/license
+ */
+
+.x-tabs-wrap {
+	border-bottom:1px solid #6593cf;
+	padding-top:2px;
+}
+.x-tabs-strip-wrap{
+	width:100%;	
+}
+.x-tabs-wrap table{
+	position:relative;
+	top:0; left:0;
+}
+.x-tabs-strip td{
+	padding:0;
+	padding-left:2px;
+}
+.x-tabs-strip a, .x-tabs-strip span, .x-tabs-strip em {
+	display:block;
+}
+.x-tabs-strip a {
+	text-decoration:none !important;
+	-moz-outline: none;
+	outline: none;
+	cursor:pointer;
+}
+.x-tabs-strip .x-tabs-text {
+	font:bold 11px tahoma,arial,helvetica;
+	color:#666;
+	overflow:hidden;
+	white-space: nowrap;
+	cursor:pointer;
+	text-overflow: ellipsis;
+}
+.x-tabs-strip .on .x-tabs-text {
+	cursor:default;
+	color:#083772;
+}
+.x-tabs-strip .disabled .x-tabs-text {
+	cursor:default;
+	color:#aaaaaa;
+}
+.x-tabs-strip .x-tabs-inner {
+	 padding:4px 10px;	
+}
+
+.x-tabs-strip .on .x-tabs-right {
+	 background: url(../images/default/tabs/tab-sprite.gif) no-repeat right 0;
+}
+.x-tabs-strip .on .x-tabs-left {
+	 background: url(../images/default/tabs/tab-sprite.gif) no-repeat 0 -100px;
+}
+.x-tabs-strip .x-tabs-right {
+	 background: url(../images/default/tabs/tab-sprite.gif) no-repeat right -50px;
+}
+.x-tabs-strip .x-tabs-left {
+	 background: url(../images/default/tabs/tab-sprite.gif) no-repeat 0 -150px;
+}
+
+.x-tabs-strip  a {
+	position:relative;
+	top:1px; left:0;
+}
+.x-tabs-strip .on a {
+	position:relative;
+}
+.x-tabs-strip .on .x-tabs-inner {
+	padding-bottom:5px;
+}
+/** closable tabs */
+.x-tabs-strip .x-tabs-closable .x-tabs-inner{
+	padding-right:22px;
+	position:relative;
+}
+.x-tabs-strip .x-tabs-closable .close-icon{
+	line-height: 1px;
+	font-size:1px;
+	background-image:url(../images/default/layout/tab-close.gif);
+	display:block;
+	position:absolute;
+	right:5px;top:4px;
+	width:11px;height:11px;
+	cursor:pointer;
+}
+.x-tabs-strip .on .close-icon{
+	background-image:url(../images/default/layout/tab-close-on.gif);
+}
+.x-tabs-strip .x-tabs-closable .close-over{
+	background-image:url(../images/default/layout/tab-close-on.gif);
+}
+.x-tabs-body {
+    border:1px solid #6593cf;
+    border-top:0 none;
+}
+.x-tabs-bottom .x-tabs-wrap {
+	border-top:1px solid #6593cf;
+	border-bottom:0 none;
+	padding-top:0;
+	padding-bottom:2px;
+}
+.x-tabs-bottom .x-tabs-strip .x-tabs-right {
+	 background: url(../images/default/tabs/tab-btm-inactive-right-bg.gif) no-repeat bottom left;
+}
+.x-tabs-bottom .x-tabs-strip .x-tabs-left {
+	 background: url(../images/default/tabs/tab-btm-inactive-left-bg.gif) no-repeat bottom right;
+}
+.x-tabs-bottom .x-tabs-strip .on .x-tabs-right {
+	 background: url(../images/default/tabs/tab-btm-right-bg.gif) no-repeat bottom left;
+}
+.x-tabs-bottom .x-tabs-strip .on .x-tabs-left {
+	 background: url(../images/default/tabs/tab-btm-left-bg.gif) no-repeat bottom right;
+}
+.x-tabs-bottom .x-tabs-strip  a {
+	position:relative;
+	top:0; left:0;
+}
+.x-tabs-bottom .x-tabs-strip .on a {
+	margin-top:-1px;
+}
+.x-tabs-bottom .x-tabs-strip .on .x-tabs-inner {
+	padding-top:5px;
+}
+
+.x-tabs-bottom .x-tabs-body {
+    border:1px solid #6593cf;
+    border-bottom:0 none;
+}
+

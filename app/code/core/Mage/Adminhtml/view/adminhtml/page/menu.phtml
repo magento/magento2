@@ -1,0 +1,49 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<!-- menu start -->
+
+<!-- menu end -->
+<div class="nav-bar">
+<?php drawMenuLevel($this->getMenuArray()); ?>
+<?php function drawMenuLevel($_menu, $_level=0) { ?>
+    <ul <?php if(!$_level): ?>id="nav"<?php endif ?>>
+        <?php foreach ($_menu as $_item): ?>
+        <li <?php if(!empty($_item['children'])): ?>onmouseover="Element.addClassName(this,'over')" onmouseout="Element.removeClassName(this,'over')"<?php endif ?> class=" <?php echo (!$_level && !empty($_item['active']))?' active':'' ?> <?php echo !empty($_item['children'])?' parent':'' ?><?php echo (!empty($_level) && !empty($_item['last']))?' last':'' ?> level<?php echo $_level ?>"> <a href="<?php echo $_item['url'] ?>" <?php if(!empty($_item['title'])): ?>title="<?php echo $_item['title'] ?>"<?php endif ?> <?php if(!empty($_item['click'])): ?>onclick="<?php echo $_item['click']; ?>"<?php endif ?> class="<?php echo ($_level===0 && !empty($_item['active']))?'active':'' ?>"><span><?php echo $_item['label'] ?><?php if(!$_level): ?><?php endif ?></span></a>
+            <?php if(!empty($_item['children'])): ?>
+                <?php drawMenuLevel($_item['children'], $_level+1); ?>
+            <?php endif; ?>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+<?php }//function ?>
+
+    <a id="page-help-link" href="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->getPageHelpUrl() ?>"><?php echo $this->__('Get help for this page') ?></a>
+    <script type="text/javascript">$('page-help-link').target = 'magento_page_help'</script>
+
+</div>
+

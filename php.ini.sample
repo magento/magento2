@@ -1,0 +1,34 @@
+; This file is for CGI/FastCGI installations.
+; Try copying it to php5.ini, if it doesn't work
+
+; adjust memory limit
+
+memory_limit = 64M
+
+max_execution_time = 18000
+
+; disable magic quotes for php request vars
+
+magic_quotes_gpc = off
+
+; disable automatic session start
+; before autoload was initialized
+
+flag session.auto_start = off
+
+; enable resulting html compression
+
+zlib.output_compression = on
+
+; disable user agent verification to not break multiple image upload
+
+suhosin.session.cryptua = off
+
+; turn off compatibility with PHP4 when dealing with objects
+    
+zend.ze1_compatibility_mode = off
+
+; PHP for some reason ignores this setting in system php.ini 
+; and disables mcrypt if this line is missing in local php.ini
+
+extension=mcrypt.so

@@ -1,0 +1,117 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_websiteCollection = $this->getWebsiteCollection() ?>
+<?php if ($_websiteCollection->getSize()): ?>
+<div id="store_switcher_container">
+<p class="switcher"><label for="store_switcher"><?php echo $this->__('Choose Store View') ?>:</label>
+<select name="store_switcher" id="store_switcher" class="left-col-block">
+    <option value=""><?php echo $this->getDefaultStoreName() ?></option>
+    <?php foreach ($_websiteCollection as $_website): ?>
+        <?php $showWebsite=false; ?>
+        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+            <?php $showGroup=false; ?>
+            <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                <?php if ($showWebsite == false): ?>
+                    <?php $showWebsite = true; ?>
+                    <optgroup label="<?php echo $_website->getName() ?>"></optgroup>
+                <?php endif; ?>
+                <?php if ($showGroup == false): ?>
+                    <?php $showGroup = true; ?>
+                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?>">
+                <?php endif; ?>
+                <option group="<?php echo $_group->getId() ?>" value="<?php echo $_store->getId() ?>"<?php if($this->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
+            <?php endforeach; ?>
+            <?php if ($showGroup): ?>
+                </optgroup>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</select>
+</p>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+var varienStore = new Class.create();
+
+varienStore.prototype = {
+    initialize : function(containerId, storeSwitcher, url, useAjax, useConfirm){
+
+        this.containerId    = containerId;
+        this.storeSwitcher  = storeSwitcher
+        this.url            = url;
+        this.useAjax        = useAjax;
+        this.useConfirm     = useConfirm;
+
+        this.storeSelectorClickCallback = false;
+
+        this.selectorOnChange = this.optionOnChange.bindAsEventListener(this);
+
+        this.storesGroup = {};
+
+        this.initSwitcher();
+    },
+
+    optionOnChange : function (event)
+    {
+        if (this.storeSelectorClickCallback) {
+            try {
+                this.storeSelectorClickCallback(event, this);
+            }
+            catch (e) {}
+        }
+    },
+
+    initSwitcher : function()
+    {
+        if ($(this.storeSwitcher)) {
+            this.options = $$('#'+this.containerId+' option');
+            for (var option=0; option<this.options.length; option++) {
+                if (option%2==0) {
+                    Element.addClassName(this.options[option], 'even');
+                }
+                var id = this.options[option].value*1;
+                this.storesGroup[id] = this.options[option].getAttribute('group');
+            }
+            Event.observe(this.storeSwitcher, 'change', this.selectorOnChange);
+        }
+    },
+
+    getContainerId : function()
+    {
+        return this.containerId;
+    },
+
+    isSameSore: function(checkId, currentId)
+    {
+        return (this.storesGroup[currentId] == this.storesGroup[checkId]);
+    }
+}
+
+var varienStoreSwitcher = new varienStore('store_switcher_container', 'store_switcher', '<?php echo $this->getSwitchUrl() ?>', <?php echo $this->getUseAjax() ?>, <?php echo $this->getUseConfirm() ?>);
+//]]>
+</script>
+<?php endif; ?>

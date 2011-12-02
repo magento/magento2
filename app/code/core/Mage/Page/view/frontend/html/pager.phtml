@@ -1,0 +1,124 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Pager template
+ *
+ * @see Mage_Page_Block_Html_Pager
+ */
+?>
+<?php if($this->getCollection()->getSize()): ?>
+
+    <?php if($this->getUseContainer()): ?>
+    <div class="pager">
+    <?php endif ?>
+
+    <?php if($this->getShowAmounts()): ?>
+    <p class="amount">
+        <?php if($this->getLastPageNum()>1): ?>
+            <?php echo $this->__('Items %s to %s of %s total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+        <?php else: ?>
+            <strong><?php echo $this->__('%s Item(s)', $this->getTotalNum()) ?></strong>
+        <?php endif; ?>
+    </p>
+    <?php endif ?>
+
+    <?php if($this->getShowPerPage()): ?>
+    <div class="limiter">
+        <label><?php echo $this->__('Show') ?></label>
+        <select onchange="setLocation(this.value)">
+        <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
+            <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
+                <?php echo $_limit ?>
+            </option>
+        <?php endforeach; ?>
+        </select> <?php echo $this->__('per page') ?>
+    </div>
+    <?php endif ?>
+
+    <?php if($this->getLastPageNum()>1): ?>
+    <div class="pages">
+        <strong><?php echo $this->__('Page:') ?></strong>
+        <ol>
+        <?php if (!$this->isFirstPage()): ?>
+            <li>
+                <a class="previous<?php if(!$this->getAnchorTextForPrevious()): ?> i-previous<?php endif;?>" href="<?php echo $this->getPreviousPageUrl() ?>" title="<?php echo $this->__('Previous') ?>">
+                    <?php if(!$this->getAnchorTextForPrevious()): ?>
+                        <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                    <?php else: ?>
+                        <?php echo $this->getAnchorTextForPrevious() ?>
+                    <?php endif;?>
+                </a>
+            </li>
+        <?php endif;?>
+
+        <?php if ($this->canShowFirst()): ?>
+            <li><a class="first" href="<?php echo $this->getFirstPageUrl() ?>">1</a></li>
+        <?php endif;?>
+
+        <?php if ($this->canShowPreviousJump()): ?>
+            <li><a class="previous_jump" title="" href="<?php echo $this->getPreviousJumpUrl() ?>">...</a></li>
+        <?php endif;?>
+
+        <?php foreach ($this->getFramePages() as $_page): ?>
+            <?php if ($this->isPageCurrent($_page)): ?>
+                <li class="current"><?php echo $_page ?></li>
+            <?php else: ?>
+                <li><a href="<?php echo $this->getPageUrl($_page) ?>"><?php echo $_page ?></a></li>
+            <?php endif;?>
+        <?php endforeach;?>
+
+
+        <?php if ($this->canShowNextJump()): ?>
+            <li><a class="next_jump" title="" href="<?php echo $this->getNextJumpUrl() ?>">...</a></li>
+        <?php endif;?>
+
+        <?php if ($this->canShowLast()): ?>
+          <li><a class="last" href="<?php echo $this->getLastPageUrl() ?>"><?php echo $this->getLastPageNum() ?></a></li>
+        <?php endif;?>
+
+        <?php if (!$this->isLastPage()): ?>
+            <li>
+                <a class="next<?php if(!$this->getAnchorTextForNext()): ?> i-next<?php endif; ?>" href="<?php echo $this->getNextPageUrl() ?>" title="<?php echo $this->__('Next') ?>">
+                    <?php if(!$this->getAnchorTextForNext()): ?>
+                        <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Next') ?>" class="v-middle" />
+                    <?php else: ?>
+                        <?php echo $this->getAnchorTextForNext() ?>
+                    <?php endif;?>
+                </a>
+            </li>
+        <?php endif;?>
+        </ol>
+
+    </div>
+    <?php endif; ?>
+
+    <?php if($this->getUseContainer()): ?>
+    </div>
+    <?php endif ?>
+
+<?php endif ?>

@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Ogone
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <sections>
+        <payment>
+            <groups>
+                <ogone translate="label,comment" module="Mage_Ogone">
+                    <label>Ogone</label>
+                    <comment><![CDATA[<br />
+<div class="custom-options">
+<div class="box">
+<p class="grand-total"><br /><b>Signing up with Ogone</b></p>
+<p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
+<p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
+<p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
+</div>
+</div>
+]]></comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>800</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <debug_flag translate="label">
+                            <label>Debug</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </debug_flag>                        
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <pspid translate="label">
+                            <label>PSPID</label>
+                            <frontend_type>text</frontend_type>
+                            <comment> PSPID is a case sensitive field.</comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </pspid>
+                        <secret_key_out translate="label comment">
+                            <label>SHA-IN Pass Phrase</label>
+                            <comment><![CDATA[Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.]]></comment>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <frontend_type>obscure</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </secret_key_out>
+                        <secret_key_in translate="label comment">
+                            <label>SHA-OUT Pass Phrase</label>
+                            <comment><![CDATA[Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.]]></comment>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <frontend_type>obscure</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </secret_key_in>
+                        <shamode translate="label comment tooltip">
+                            <label>Hash All Parameters</label>
+                            <comment><![CDATA[Enabling this feature needs adjusting "Technical information > Global security parameters" on merchant administration.]]></comment>
+                            <tooltip><![CDATA[To hash <strong>all parameters</strong>, select the following options in the "Global security parameters" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>"Hash algorithm" same as "Hashing Algorithm" below</li><li>UTF-8</li></ul>]]></tooltip>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </shamode>
+                        <hashing_algorithm translate="label">
+                            <label>Hashing Algorithm</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Ogone_Model_Api::getHashingAlgorithms</source_model>
+                            <depends><shamode>1</shamode></depends>
+                            <sort_order>37</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </hashing_algorithm>
+                        <ogone_gateway translate="label comment">
+                            <label>Gateway URL</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>For production, replace "test" with "prod". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp</comment>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ogone_gateway>
+                        <payment_action translate="label comment">
+                            <label>Payment Action</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Ogone_Model_Source_PaymentAction</source_model>
+                            <comment>If you choose "No Operation", Ogone will use default payment procedure setup in Ogone configuration.</comment>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </payment_action>
+                        <template translate="label comment">
+                            <label>Payment Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Ogone_Model_Source_Template</source_model>
+                            <comment>If you choose "Ogone Template", you will need to fill in all the following fields.</comment>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </template>
+                        <html_title translate="label comment">
+                            <label>Title of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </html_title>
+                        <bgcolor translate="label comment">
+                            <label>Background Color of Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "white".]]></comment>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bgcolor>
+                        <txtcolor translate="label comment">
+                            <label>Text Color of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "black".]]></comment>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </txtcolor>
+                        <tblbgcolor translate="label comment">
+                            <label>Table Background Color of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "white".]]></comment>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tblbgcolor>
+                        <tbltxtcolor translate="label comment">
+                            <label>Table Text Color of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "black".]]></comment>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tbltxtcolor>
+                        <buttonbgcolor translate="label">
+                            <label>Button Background Color of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </buttonbgcolor>
+                        <buttontxtcolor translate="label comment">
+                            <label>Button Text Color of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "white".]]></comment>
+                            <sort_order>85</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </buttontxtcolor>
+                        <fonttype translate="label comment">
+                            <label>Font Family of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[E.g: "Verdana".]]></comment>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </fonttype>
+                        <logo translate="label comment">
+                            <label>Logo of the Ogone Template</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.]]></comment>
+                            <sort_order>95</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </logo>
+                        <pmlist translate="label comment">
+                            <label>Layout of Payment Methods</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Ogone_Model_Source_Pmlist</source_model>
+                            <comment>You can arrange the layout/list of the payment methods on Ogone payment page.</comment>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pmlist>
+                    </fields>
+                </ogone>
+            </groups>
+        </payment>
+    </sections>
+</config>

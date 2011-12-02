@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:schema="http://sts.idm.telekom.com/schema/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://sts.idm.telekom.com/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="sts" targetNamespace="http://sts.idm.telekom.com/wsdl/">
+	<wsdl:types>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://sts.idm.telekom.com/schema/" version="0.1" xmlns:tns="http://sts.idm.telekom.com/schema/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:complexType name="FaultResponse">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="code" nillable="false" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="msg" nillable="false" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="lockedUntil" nillable="true" type="xsd:dateTime"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="SecurityTokenFormatId">
+				<xsd:annotation>
+					<xsd:documentation>
+
+					Telekom specific format id, e.g. there will be multiple
+					different token formats derived from SAML 2.0 Assertions
+				     </xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="saml20"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="SecurityTokenEncodingId">
+				<xsd:annotation>
+					<xsd:documentation>
+
+					Telekom specific encoding id - there can be different
+					encoding formats for the same token format, e.g. SAML
+					Assertions can be encoded as plain XML or in
+					base64-encoding
+				     </xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="text/xml"/>
+					<xsd:enumeration value="text/base64"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="SecurityTokenResponse">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="tokenFormat" type="tns:SecurityTokenFormatId">
+						<xsd:annotation>
+							<xsd:documentation>
+
+							format of the token carried by the response,
+							determines syntax and processing rules for token
+						       </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="0" name="tokenEncoding" type="tns:SecurityTokenEncodingId">
+						<xsd:annotation>
+							<xsd:documentation>
+
+							encoding of the token carried by the response,
+							determines syntax and processing rules for token
+						       </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="tokenData" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+
+							contains the string representation of the
+							security token - no further token format identifier
+						       </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="login">
+				<xsd:sequence/>
+			</xsd:complexType>
+			<xsd:complexType name="getTokens">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="serviceId" type="xsd:string">
+
+				     </xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="getTokensResponse">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="securityToken" type="tns:SecurityTokenResponse">
+
+				     </xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="getTokensForSession">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="serviceId" type="xsd:string">
+
+				     </xsd:element>
+					<xsd:element maxOccurs="1" minOccurs="1" name="ssid" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+
+							valid SAM Session Id
+						       </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="IDType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="guid"/>
+					<xsd:enumeration value="anid"/>
+					<xsd:enumeration value="alia"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="getTokensForUserId">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="serviceId" type="xsd:string">
+
+				     </xsd:element>
+					<xsd:element name="uid" type="xsd:string"/>
+					<xsd:element name="idx" type="tns:IDType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="authn" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="getTokensForUserIdAndProfile">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="serviceId" type="xsd:string">
+
+				     </xsd:element>
+					<xsd:element name="uid" type="xsd:string"/>
+					<xsd:element name="idx" type="tns:IDType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="authn" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="profileId" type="xsd:string">
+
+				     </xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="FaultResponse" type="tns:FaultResponse"/>
+			<xsd:element name="login" type="tns:login"/>
+			<xsd:element name="loginResponse" type="tns:SecurityTokenResponse"/>
+			<xsd:element name="getTokens" type="tns:getTokens"/>
+			<xsd:element name="getTokensResponse" type="tns:getTokensResponse"/>
+			<xsd:element name="getTokensForSessionResponse" type="tns:getTokensResponse"/>
+			<xsd:element name="getTokensForUserIdResponse" type="tns:getTokensResponse"/>
+			<xsd:element name="getTokensForUserIdAndProfileResponse" type="tns:getTokensResponse"/>
+			<xsd:element name="getTokensForSession" type="tns:getTokensForSession"/>
+			<xsd:element name="getTokensForUserId" type="tns:getTokensForUserId"/>
+			<xsd:element name="getTokensForUserIdAndProfile" type="tns:getTokensForUserIdAndProfile"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="FaultResponse">
+		<wsdl:part name="fault" element="schema:FaultResponse"/>
+	</wsdl:message>
+	<wsdl:message name="loginRequest">
+		<wsdl:part name="parameters" element="schema:login"/>
+	</wsdl:message>
+	<wsdl:message name="loginResponse">
+		<wsdl:part name="parameters" element="schema:loginResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTokensRequest">
+		<wsdl:part name="parameters" element="schema:getTokens"/>
+	</wsdl:message>
+	<wsdl:message name="getTokensResponse">
+		<wsdl:part name="getTokensResponse" element="schema:getTokensResponse">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForSessionRequest">
+		<wsdl:part name="parameters" element="schema:getTokensForSession">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForSessionResponse">
+		<wsdl:part name="getTokensForSessionResponse" element="schema:getTokensForSessionResponse">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForUserIdRequest">
+		<wsdl:part name="parameters" element="schema:getTokensForUserId">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForUserIdResponse">
+		<wsdl:part name="getTokensForUserIdResponse" element="schema:getTokensForUserIdResponse">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForUserIdAndProfileRequest">
+		<wsdl:part name="parameters" element="schema:getTokensForUserIdAndProfile">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getTokensForUserIdAndProfileResponse">
+		<wsdl:part name="getTokensForUserIdAndProfileResponse" element="schema:getTokensForUserIdAndProfileResponse">
+
+      </wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="SecurityTokenServiceWS">
+		<wsdl:operation name="login">
+			<wsdl:input message="tns:loginRequest"/>
+			<wsdl:output message="tns:loginResponse"/>
+			<wsdl:fault name="fault" message="tns:FaultResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTokens">
+			<wsdl:input message="tns:getTokensRequest"/>
+			<wsdl:output message="tns:getTokensResponse"/>
+			<wsdl:fault name="fault" message="tns:FaultResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForSession">
+			<wsdl:input message="tns:getTokensForSessionRequest"/>
+			<wsdl:output message="tns:getTokensForSessionResponse"/>
+			<wsdl:fault name="fault" message="tns:FaultResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForUserId">
+			<wsdl:input message="tns:getTokensForUserIdRequest"/>
+			<wsdl:output message="tns:getTokensForUserIdResponse"/>
+			<wsdl:fault name="fault" message="tns:FaultResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForUserIdAndProfile">
+			<wsdl:input message="tns:getTokensForUserIdAndProfileRequest">
+
+         </wsdl:input>
+			<wsdl:output message="tns:getTokensForUserIdAndProfileResponse"/>
+			<wsdl:fault name="fault" message="tns:FaultResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SecurityTokenServiceSOAPBinding" type="tns:SecurityTokenServiceWS">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsp:PolicyReference URI="#TransportBindingPolicy"/>
+		<wsdl:operation name="login">
+			<soap:operation soapAction="http://sts.idm.telekom.com/wsdl/login"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#UsernameTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getTokens">
+			<soap:operation soapAction="http://sts.idm.telekom.com/wsdl/getTokens"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#SAMLTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForSession">
+			<soap:operation soapAction="http://sts.idm.telekom.com/wsdl/getTokensForSession"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#SAMLTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForUserId">
+			<soap:operation soapAction="http://sts.idm.telekom.com/wsdl/getTokensForUserId"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#SAMLTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getTokensForUserIdAndProfile">
+			<soap:operation soapAction="http://sts.idm.telekom.com/wsdl/getTokensForUserIdAndProfile"/>
+			<wsdl:input>
+				<wsp:PolicyReference URI="#SAMLTokenPolicy"/>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault name="fault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SecurityTokenService">
+		<wsdl:port name="TokenService" binding="tns:SecurityTokenServiceSOAPBinding">
+			<soap:address location="https://sts.idm.telekom.com/TokenService"/>
+		</wsdl:port>
+	</wsdl:service>
+	<wsp:Policy wsu:Id="TransportBindingPolicy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<wsaws:UsingAddressing xmlns:wsaws="http://www.w3.org/2006/05/addressing/wsdl"/>
+				<sp:TransportBinding>
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false"/>
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict/>
+							</wsp:Policy>
+						</sp:Layout>
+						<sp:IncludeTimestamp/>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256/>
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+					</wsp:Policy>
+				</sp:TransportBinding>
+				<sp:Wss11/>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="UsernameTokenPolicy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:SupportingTokens>
+					<wsp:Policy>
+						<sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+							<wsp:Policy>
+								<sp:WssUsernameToken11/>
+							</wsp:Policy>
+						</sp:UsernameToken>
+					</wsp:Policy>
+				</sp:SupportingTokens>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="SAMLTokenPolicy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:SupportingTokens>
+					<wsp:Policy>
+						<sp:SamlToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+							<wsp:Policy>
+								<sp:WssSamlV20Token11/>
+							</wsp:Policy>
+						</sp:SamlToken>
+					</wsp:Policy>
+				</sp:SupportingTokens>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+</wsdl:definitions>

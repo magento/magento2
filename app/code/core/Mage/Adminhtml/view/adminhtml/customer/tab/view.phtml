@@ -1,0 +1,82 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for block Mage_Adminhtml_Block_Customer_Edit_Tab_View
+ */
+?>
+<?php
+$lastLoginDateAdmin = $this->getLastLoginDate();
+$lastLoginDateStore = $this->getStoreLastLoginDate();
+
+$createDateAdmin    = $this->getCreateDate();
+$createDateStore    = $this->getStoreCreateDate();
+?>
+<div class="entry-edit">
+    <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Personal Information') ?></h4></div>
+    <fieldset>
+        <table cellspacing="2" class="box-left">
+            <tr>
+                <td><strong><?php echo $this->__('Last Logged In:') ?></strong></td>
+                <td><?php echo $lastLoginDateAdmin ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+            </tr>
+            <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
+            <tr>
+                <td><strong><?php echo $this->__('Last Logged In (%s):', $this->getStoreLastLoginDateTimezone()) ?></strong></td>
+                <td><?php echo $lastLoginDateStore ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+                <td><strong><?php echo $this->__('Confirmed email:') ?></strong></td>
+                <td><?php echo $this->getIsConfirmedStatus() ?></td>
+            </tr>
+            <tr>
+                <td><strong><?php echo $this->__('Account Created on:') ?></strong></td>
+                <td><?php echo $createDateAdmin ?></td>
+            </tr>
+            <?php if ($createDateAdmin != $createDateStore): ?>
+            <tr>
+                <td><strong><?php echo $this->__('Account Created on (%s):', $this->getStoreCreateDateTimezone()) ?></strong></td>
+                <td><?php echo $createDateStore ?></td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+                <td><strong><?php echo $this->__('Account Created in:') ?></strong></td>
+                <td><?php echo $this->getCreatedInStore() ?></td>
+            </tr>
+            <tr>
+                <td><strong><?php echo $this->__('Customer Group:') ?></strong></td>
+                <td><?php echo $this->getGroupName() ?></td>
+            </tr>
+        </table>
+        <address class="box-right">
+            <strong><?php echo $this->__('Default Billing Address') ?></strong><br/>
+            <?php echo $this->getBillingAddressHtml() ?>
+        </address>
+    </fieldset>
+</div>
+<?php echo $this->getChildHtml('', true, true); ?>

@@ -1,0 +1,160 @@
+.overlay_mac_os_x_dialog {
+	background-color: #FF7224;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+
+.mac_os_x_dialog_nw {
+  background: transparent url(mac_os_x_dialog/L.png) repeat-y top left;			
+  width:16px;
+  height:16px;
+}
+
+.mac_os_x_dialog_n {
+	background: transparent url(mac_os_x_dialog/bg.gif) repeat 0 0;			
+  height:18px;
+}
+
+.mac_os_x_dialog_ne {
+  background: transparent url(mac_os_x_dialog/R.png) repeat-y top left;
+  width:16px;
+  height:16px;
+}
+
+.mac_os_x_dialog_w {
+  background: transparent url(mac_os_x_dialog/L.png) repeat-y top left;			
+  width:16px;
+}
+
+.mac_os_x_dialog_e {
+  background: transparent url(mac_os_x_dialog/R.png) repeat-y top right;			
+  width:16px;	  
+}
+
+.mac_os_x_dialog_sw {
+  background: transparent url(mac_os_x_dialog/BL.png) no-repeat 0 0;			
+  width:31px;
+  height:40px;
+}
+
+.mac_os_x_dialog_s {
+  background: transparent url(mac_os_x_dialog/B.png) repeat-x 0 0;			
+  height:40px;
+}
+
+.mac_os_x_dialog_se, .mac_os_x_dialog_sizer {
+  background: transparent url(mac_os_x_dialog/BR.png) no-repeat 0 0;			
+  width:31px;
+  height:40px;
+}
+
+.mac_os_x_dialog_sizer {
+	cursor:se-resize;	
+}
+
+.mac_os_x_dialog_close {
+	width: 19px;
+	height: 19px;
+	background: transparent url(mac_os_x_dialog/close.gif) no-repeat 0 0;			
+	position:absolute;
+	top:12px;
+	left:25px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.mac_os_x_dialog_minimize {
+	width: 19px;
+	height: 19px;
+	background: transparent url(mac_os_x_dialog/minimize.gif) no-repeat 0 0;			
+	position:absolute;
+	top:12px;
+	left:45px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.mac_os_x_dialog_maximize {
+	width: 19px;
+	height: 19px;
+	background: transparent url(mac_os_x_dialog/maximize.gif) no-repeat 0 0;			
+	position:absolute;
+	top:12px;
+	left:65px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.mac_os_x_dialog_title {
+	float:left;
+	height:14px;
+	font-family: Tahoma, Arial, sans-serif;
+	font-size:12px;
+	text-align:center;
+	margin-top:6px;
+	width:100%;
+	color:#000;
+}
+
+.mac_os_x_dialog_content {
+	overflow:auto;
+	color: #222;
+	font-family: Tahoma, Arial, sans-serif;
+	font-size: 10px;
+	background: transparent url(mac_os_x_dialog/bg.gif) repeat 0 0;			
+}
+
+.mac_os_x_dialog_buttons {
+  text-align: center;
+}
+/* FOR IE */
+* html .mac_os_x_dialog_nw {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/L.png", sizingMethod="scale");
+}
+
+
+* html .mac_os_x_dialog_ne {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/R.png", sizingMethod="scale");
+}
+
+* html .mac_os_x_dialog_w {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/L.png", sizingMethod="scale");
+}
+
+* html .mac_os_x_dialog_e {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/R.png", sizingMethod="scale");
+}
+
+* html .mac_os_x_dialog_sw {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/BL.png", sizingMethod="crop");
+}
+
+* html .mac_os_x_dialog_s {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/B.png", sizingMethod="scale");
+}
+
+* html .mac_os_x_dialog_se {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/BR.png", sizingMethod="crop");
+}
+
+* html .mac_os_x_dialog_sizer {
+	background-color: transparent;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../themes/mac_os_x_dialog/BR.png", sizingMethod="crop");
+}
+

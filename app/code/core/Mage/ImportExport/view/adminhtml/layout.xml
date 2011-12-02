@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_import_index>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::import/form/before.phtml" name="import.form.before" alias="form_before"/>
+            <block type="Mage_ImportExport_Block_Adminhtml_Import_Edit" name="import.form.container"/>
+            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::import/form/after.phtml" name="import.form.after" alias="form_after"/>
+        </reference>
+    </adminhtml_import_index>
+    <adminhtml_import_validate>
+        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="toHtml"/>
+    </adminhtml_import_validate>
+    <adminhtml_import_start>
+        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="toHtml"/>
+    </adminhtml_import_start>
+    <adminhtml_import_busy>
+        <reference name="content">
+            <block type="Mage_Core_Block_Template" template="Mage_ImportExport::busy.phtml" name="busy" alias="busy"/>
+        </reference>
+    </adminhtml_import_busy>
+    <adminhtml_export_index>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::export/form/before.phtml" name="export.form.before" alias="form_before"/>
+            <block type="Mage_ImportExport_Block_Adminhtml_Export_Edit" name="export.form.container"/>
+            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::export/form/after.phtml" name="export.form.after" alias="form_after"/>
+        </reference>
+    </adminhtml_export_index>
+    <adminhtml_export_getfilter>
+        <block type="Mage_Core_Block_Text_List" name="root">
+            <block type="Mage_ImportExport_Block_Adminhtml_Export_Filter" name="export.filter"/>
+        </block>
+    </adminhtml_export_getfilter>
+</layout>

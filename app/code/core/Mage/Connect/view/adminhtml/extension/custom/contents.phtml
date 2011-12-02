@@ -1,0 +1,91 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<div class="entry-edit">
+    <?php echo $this->getFormHtml() ?>
+
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__("Contents") ?></h4>
+    </div>
+    <fieldset id="contents_fieldset" class="grid">
+        <legend><?php echo $this->__("Contents") ?></legend>
+        <table class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $this->__("Target") ?></th>
+                    <th><?php echo $this->__("Path") ?></th>
+                    <th><?php echo $this->__("Type") ?></th>
+                    <th><?php echo $this->__("Include") ?></th>
+                    <th><?php echo $this->__("Ignore") ?></th>
+                    <th><?php echo $this->__("Action") ?></th>
+                </tr>
+                <tr id="contents_template" style="display:none">
+<?php function showContentsTemplate($self, $_i=0) { ?>
+                    <td style="margin-bottom:5px;">
+                        <select name="contents[target][]" style="width:170px">
+                            <optgroup label="Magento">
+                            <?php foreach ($self->getMageTargets() as $_value=>$_label): ?>
+                                <option value="<?php echo $_value ?>" <?php echo $self->getSelected('contents/target/'.$_i, $_value) ?>><?php echo $_label ?></option>
+                            <?php endforeach ?>
+                            </optgroup>
+                        </select>
+                     </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:150px" name="contents[path][]" value="<?php echo $self->getValue('contents/path/'.$_i) ?>"/>
+                     </td><td style="margin-bottom:5px;">
+                        <select name="contents[type][]" style="width:100px">
+                            <option value="file" <?php echo $self->getSelected('contents/type/'.$_i, 'file') ?>><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__("File") ?></option>
+                            <option value="dir" <?php echo $self->getSelected('contents/type/'.$_i, 'dir') ?>><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__("Recursive Dir") ?></option>
+                        </select>
+                     </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:100px" name="contents[include][]" value="<?php echo $self->getValue('contents/include/'.$_i) ?>"/>
+                     </td><td style="margin-bottom:5px;">
+                        <input class="input-text" style="width:100px"  name="contents[ignore][]" value="<?php echo $self->getValue('contents/ignore/'.$_i) ?>"/>
+                     </td><td style="margin-bottom:5px;">
+                        <?php echo $self->getRemoveRowButtonHtml('tr') ?>
+                     </td>
+<?php } ?>
+<?php showContentsTemplate($this) ?>
+                </tr>
+            </thead>
+            <tbody id="contents_container">
+            <?php if ($this->getData('contents/target')): ?>
+                <?php foreach ($this->getData('contents/target') as $_i=>$_dbField): ?>
+                    <?php if (0===$_i) continue; ?>
+                <tr>
+<?php showContentsTemplate($this, $_i) ?>
+                </tr>
+                <?php endforeach ?>
+            <?php endif ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="a-right" colspan="6"><?php echo $this->getAddRowButtonHtml('contents_container', 'contents_template', $this->__('Add Contents Path')) ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+</div>

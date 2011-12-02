@@ -1,0 +1,287 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+ @font-face {
+    font-family: 'stars';
+    src: url('../fonts/stars-webfont.eot');
+    src: local('O'), url('../fonts/stars-webfont.woff') format('woff'), url('../fonts/stars-webfont.ttf') format('truetype'), url('../fonts/stars-webfont.svg#webfontyMStiDRV') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ipad-catalog {
+    font-family:"Helvetica Neue", Helvetica, Verdana, sans-serif;
+    line-height:1;
+    height:467px;
+    width:350px;
+    }
+.ipad-catalog-landscape {
+    height:350px;
+    width:467px;
+    }
+.ipad-catalog a {
+    color:#000;
+    text-decoration:none;
+    }
+    .ipad-catalog .status-bar {
+        background:url(../images/mobile_preview/ipad/bg_status_bar.png) no-repeat 0 0;
+        height:9px;
+        font-size:0;
+        line-height:0;
+        }
+    .ipad-catalog-landscape .status-bar {
+        background-image:url(../images/mobile_preview/ipad/bg_status_bar_hor.png);
+        }
+    .ipad-catalog .header-wrap {
+        background:url(../images/mobile_preview/ipad/bg_header.png) no-repeat 0 0 #000;
+        height:20px;
+        position:relative;
+        }
+    .ipad-catalog-landscape .header-wrap {
+        background-image:url(../images/mobile_preview/ipad/bg_catalog_header_hor.png);
+        height:20px;
+        }
+        .ipad-catalog .app-header .app-logo {
+            margin-left:80px;
+            margin-right:1px;
+            }
+        .ipad-catalog-landscape .app-header .app-logo {
+            margin-left:130px;
+            }
+            .ipad-catalog .app-header .app-logo img {
+                vertical-align:middle;
+                }
+        .ipad-catalog .app-header .store-name {
+            color:#fff;
+            font-size:9px;
+            line-height:20px;
+            margin-right:10px;
+            vertical-align:middle;
+            }
+        .ipad-catalog-landscape .app-header .store-name {
+            margin-right:80px;
+            }
+        .ipad-catalog .app-header img,
+        .ipad-catalog .app-header span span {
+            vertical-align:top;
+            }
+        .ipad-catalog .app-header .search {
+            font-size:6px;
+            position:absolute;
+            top:3px;
+            right:105px;
+            }
+        .ipad-catalog .app-header .info,
+        .ipad-catalog .app-header .login,
+        .ipad-catalog .app-header .cart {
+            float:right;
+            position:relative;
+            padding:0 5px;
+            top:5px;
+            }
+        .ipad-catalog .app-header .info {
+            top:6px;
+            }
+        .ipad-catalog .app-header .login {
+            margin-left:20px;
+            }
+        .ipad-catalog .app-header .cart {
+            margin-left:20px;
+            }
+    .ipad-catalog .filters-wrap {
+        background:url(../images/mobile_preview/ipad/bg_filters_wrap.png) no-repeat 0 0 #c7c7c7;
+        height:15px;
+        position:relative;
+        }
+    .ipad-catalog-landscape .filters-wrap {
+        float:left;
+        display:inline;
+        width:341px;
+        }
+        .ipad-catalog .filters h3 {
+            color:#424242;
+            font-size:6px;
+            line-height:15px;
+            float:left;
+            margin:0;
+            padding:0 5px;
+            }
+        .ipad-catalog .filters ul {
+            color:#424242;
+            font-size:7px;
+            padding:1px 0 0;
+            }
+            .ipad-catalog .filters li {
+                background:url(../images/mobile_preview/ipad/bg_filters_buttons.png) no-repeat #a5a5a5;
+                border:1px solid #8f8f8f;
+                display:inline;
+                line-height:11px;
+                text-align:center;
+                float:left;
+                width:45px;
+                }
+                .ipad-catalog .filters .position {
+                    background:#ffa65a;
+                    -moz-border-radius:2px 0 0 2px;
+                    -webkit-border-radius:2px 0 0 2px;
+                    border-radius:2px 0 0 2px;
+                    border-right:none;
+                    }
+                .ipad-catalog .filters .home {
+                    border-right:none;
+                    }
+                .ipad-catalog .filters .price {
+                    -moz-border-radius:0 2px 2px 0;
+                    -webkit-border-radius:0 2px 2px 0;
+                    border-radius:0 2px 2px 0;
+                    }
+        .ipad-catalog .filters-wrap .filter-button {
+            background:url(../images/mobile_preview/ipad/bg_filter_button.png) no-repeat #e3710a;
+            color:#000;
+            font-size:6px;
+            float:right;
+            margin:1px 5px 0 0;
+            padding:3px 12px;
+            -moz-border-radius:2px;
+            -webkit-border-radius:2px;
+            border-radius:2px;
+            }
+        .ipad-catalog .filters-wrap .filters-popup {
+            background:url(../images/mobile_preview/ipad/bg_filters_tooltip.png) no-repeat 0 0;
+            display:none;
+            position:absolute;
+            top:20px;
+            left:200px;
+            padding:12px 0 0;
+            height:110px;
+            width:144px;
+            }
+            .filters-popup h3 {
+                color:#fff;
+                font-size:9px;
+                line-height:14px;
+                text-align:center;
+                }
+            .filters-popup .apply-button {
+                background:#5c5e62;
+                color:#fff;
+                font-size:6px;
+                margin:0 0 0 112px;
+                padding:4px 7px;
+                position:absolute;
+                -moz-border-radius:2px;
+                -webkit-border-radius:2px;
+                border-radius:2px;
+                }
+            .filters-popup ol {
+                color:#767676;
+                font-size:7px;
+                padding:3px 0 3px 5px;
+                }
+                .filters-popup .delete-button {
+                    background:url(../images/mobile_preview/ipad/i_remove.png) no-repeat 0 0;
+                    display:inline-block;
+                    height:14px;
+                    width:14px;
+                    text-indent:-9999px;
+                    vertical-align:middle;
+                    }
+            .filters-popup ul {}
+                .filters-popup ul li {
+                    color:#3e3e3e;
+                    font-size:9px;
+                    height:20px;
+                    line-height:18px;
+                    padding-left:10px;
+                    }
+    .ipad-catalog .content {
+        background:url(../images/mobile_preview/ipad/bg_content.jpg) no-repeat top;
+        float:left;
+        display:inline;
+        padding:15px 0 0 15px;
+        height:407px;
+        }
+    .ipad-catalog-landscape .content {
+        background-image:url(../images/mobile_preview/ipad/background_home_landscape.jpg);
+        padding:5px 0 0 10px;
+        height:300px;
+        width:331px;
+        }
+        .ipad-catalog .products-list {
+            font-size:7px;
+            line-height:9px;
+            overflow:hidden;
+            width:100%;
+            }
+            .ipad-catalog .products-list li {
+                display:inline;
+                float:left;
+                margin:0 4px 4px 0;
+                }
+                .ipad-catalog .product-image img {
+                    margin:0 0 5px;
+                    border:1px solid #fcfcfc;
+                    vertical-align:bottom;
+                    }
+                .ipad-catalog .products-list h4 {
+                    font-size:7px;
+                    margin:0;
+                    }
+                .ipad-catalog .price-box {}
+                    .ipad-catalog .price-box span {
+                        display:block;
+                        }
+                .ipad-catalog .rating .star {
+                    font-family:'stars';
+                    font-size:8px;
+                    }
+                .ipad-catalog .rating img {
+                    margin-right:4px;
+                    }
+    .ipad-catalog-landscape .bg {
+        overflow:hidden;
+        width:100%;
+        }
+    .ipad-catalog-landscape .sections {
+        background:url(../images/mobile_preview/ipad/bg_sections.jpg) no-repeat  0 0;
+        border-right:1px solid #8c857f;
+        display:inline;
+        float:left;
+        height:321px;
+        width:125px;
+        list-style:outside;
+        }
+        .ipad-catalog-landscape .sections li {
+            background:#fff;
+            border-bottom:1px solid #d1d1d1;
+            font-size:8px;
+            height:20px;
+            line-height:20px;
+            padding-left:5px;
+            }
+        .ipad-catalog-landscape .sections .arrow {
+            background:url(../images/mobile_preview/ipad/sections_arrow.png) no-repeat 115px 6px #fff;
+            }
+        .ipad-catalog-landscape .sections .active {
+            background:#f2f2f2;
+            }

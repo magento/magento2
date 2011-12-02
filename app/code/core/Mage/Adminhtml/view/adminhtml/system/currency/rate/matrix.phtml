@@ -1,0 +1,74 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+$_oldRates = $this->getOldRates();
+$_newRates = $this->getNewRates();
+$_rates = ( $_newRates ) ? $_newRates : $_oldRates;
+?>
+<form name="rateForm" id="rateForm" method="post" action="<?php echo $this->getRatesFormAction(); ?>">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <div class="grid">
+        <table cellspacing="0">
+        <thead>
+            <tr class="headings">
+                <th class="a-right">&nbsp;</th>
+                <?php $_i = 0; foreach( $this->getAllowedCurrencies() as $_currencyCode ): ?>
+                    <th class="<?php echo (( ++$_i == (sizeof($this->getAllowedCurrencies())) ) ? 'last' : '' ) ?> a-right"><strong><?php echo $_currencyCode ?><strong></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <?php $_j = 0; foreach( $this->getDefaultCurrencies() as $_currencyCode ): ?>
+        <tr>
+            <?php if( isset($_rates[$_currencyCode]) && is_array($_rates[$_currencyCode])): ?>
+                <?php foreach( $_rates[$_currencyCode] as $_rate => $_value ): ?>
+                    <?php if( ++$_j == 1 ): ?>
+                        <td class="a-right"><strong><?php echo $_currencyCode ?></strong></td>
+                        <td class="a-right">
+                            <input type="text" name="rate[<?php echo $_currencyCode ?>][<?php echo $_rate ?>]" value="<?php echo ( $_currencyCode == $_rate ) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>" <?php echo ( $_currencyCode == $_rate ) ? 'class="input-text input-text-disabled" readonly="true"' : 'class="input-text"' ?> />
+                            <?php if( isset($_newRates) && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate]) ): ?>
+                            <br /><span class="old-rate"><?php echo $this->__('Old rate:') ?> <?php echo $_oldRates[$_currencyCode][$_rate] ?></span>
+                            <?php endif; ?>
+                        </th>
+                    <?php else: ?>
+                        <td class="a-right">
+                            <input type="text" name="rate[<?php echo $_currencyCode ?>][<?php echo $_rate ?>]" value="<?php echo ( $_currencyCode == $_rate ) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>" <?php echo ( $_currencyCode == $_rate ) ? 'class="input-text input-text-disabled" readonly="true"' : 'class="input-text"' ?> />
+                            <?php if( isset($_newRates)  && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate]) ): ?>
+                            <br /><span class="old-rate"><?php echo $this->__('Old rate:') ?> <?php echo $_oldRates[$_currencyCode][$_rate] ?></span>
+                            <?php endif; ?>
+                        </td>
+                    <?php endif; ?>
+                <?php endforeach; $_j = 0; ?>
+            <?php endif; ?>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+    </div>
+</form>
+<script type="text/javascript">
+    currencyForm = new varienForm('rateForm');
+</script>

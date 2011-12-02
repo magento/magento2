@@ -1,0 +1,1940 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Paypal
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+   <sections>
+        <payment>
+            <groups>
+                <hint>
+                    <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Hint</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </hint>
+            </groups>
+        </payment>
+        <paypal translate="label" module="Mage_Paypal">
+            <label>PayPal</label>
+            <class>paypal-section</class>
+            <header_css>paypal-header</header_css>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>350</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <account translate="label">
+                    <label>Merchant Account</label>
+                    <fieldset_css>paypal-config</fieldset_css>
+                    <expanded>1</expanded>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <merchant_country translate="label comment">
+                            <label>Merchant Country</label>
+                            <config_path>paypal/general/merchant_country</config_path>
+                            <comment>If not specified, Default Country from General Config will be used</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_MerchantCountry</source_model>
+                            <backend_model>Mage_Paypal_Model_System_Config_Backend_MerchantCountry</backend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <sort_order>5</sort_order>
+                        </merchant_country>
+                        <business_account translate="label comment tooltip">
+                            <label>Email Associated with PayPal Merchant Account</label>
+                            <comment><![CDATA[<a href="http://www.magentocommerce.com/paypal">Start accepting payments via PayPal!</a>]]></comment>
+                            <tooltip>Don't have a PayPal account? Simply enter your email address.</tooltip>
+                            <config_path>paypal/general/business_account</config_path>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <sort_order>10</sort_order>
+                            <frontend_class>validate-email</frontend_class>
+                        </business_account>
+                    </fields>
+                </account>
+
+                <global translate="label">
+                    <label>Select a PayPal Solution</label>
+                    <help_url><![CDATA[https://merchant.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=merchant/home]]></help_url>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Global</frontend_model>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <express translate="label comment">
+                            <label>Express Checkout</label>
+                            <comment>Add an Express Checkout button to your existing shopping cart for quick and easy credit card payments. PayPal handles all payment processing.</comment>
+                            <demo_url><![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_express_checkout]]></demo_url>
+                            <more_url><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=ECA]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>all</enable_for_countries>
+                                <urls>
+                                    <JP translate="switcher fieldset">
+                                        <more_url><![CDATA[https://cms.paypal.com/jp/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_jp/ExpressCheckout&nav=3.1.1]]></more_url>
+                                    </JP>
+                                </urls>
+                            </backend_congif>
+                            <config_path>payment/paypal_express/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </express>
+                        <wps translate="label comment">
+                            <label>Website Payments Standard</label>
+                            <comment>PayPal processes all of your orders, and you get paid.</comment>
+                            <demo_url><![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_WPS]]></demo_url>
+                            <more_url><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=WPSA]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>all</enable_for_countries>
+                                <urls>
+                                    <JP translate="switcher fieldset">
+                                        <more_url><![CDATA[https://cms.paypal.com/jp/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_jp/WebsitePaymentsStandard&nav=3.1.2]]></more_url>
+                                    </JP>
+                                </urls>
+                            </backend_congif>
+                            <config_path>payment/paypal_standard/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </wps>
+                        <wpp translate="label comment">
+                            <label>Website Payments Pro</label>
+                            <comment>Process credit cards directly on your website with PayPal’s all-in-one online payment processing solution.</comment>
+                            <demo_url><![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_wpp]]></demo_url>
+                            <more_url><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=WPPROA]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>US, CA, GB</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/paypal_direct/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </wpp>
+                        <wpp_pe translate="label comment">
+                            <label>Website Payments Pro Payflow Edition (includes Express Checkout)</label>
+                            <comment>Accept PayPal payments in your shopping cart. PayPal will process your credit card payments through the Payflow Pro Gateway.</comment>
+                            <backend_congif>
+                                <enable_for_countries>US, GB</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/paypaluk_direct/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </wpp_pe>
+                        <verisign translate="label comment">
+                            <label>Payflow Pro Gateway</label>
+                            <comment>Don’t have a PayPal merchant account? You can still accept credit card payments through the Payflow Pro Gateway.</comment>
+                            <more_url><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=payflow_pro]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>US, CA, AU, NZ</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/verisign/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </verisign>
+                        <express_pe translate="label comment">
+                            <label>Express Checkout</label>
+                            <comment>Accept payments without customers leaving your website. Many popular web-hosting services and shopping carts come with the Payflow payment gateways built in, so they are easy to set up.</comment>
+                            <backend_congif>
+                                <enable_for_countries>US, GB</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/paypaluk_express/active</config_path>
+                            <is_simplified>1</is_simplified>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </express_pe>
+                        <payflow_link translate="label comment">
+                            <label>Payflow Link (for USA and Canada)</label>
+                            <comment>Accept payments with a PCI-compliant checkout that keeps customers on your site. For use with your own merchant account.</comment>
+                            <more_url><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_payflow-link-overview-outside]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>US, CA</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/payflow_link/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payflow_link>
+                        <payflow_advanced translate="label comment">
+                            <label>PayPal Payments Advanced</label>
+                            <comment>Accept payments with a PCI-compliant checkout that keeps customers on your site.  Includes a merchant account from PayPal.</comment>
+                            <backend_congif>
+                                <enable_for_countries>US</enable_for_countries>
+                            </backend_congif>
+                            <config_path>payment/payflow_advanced/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payflow_advanced>
+                        <hosted_pro translate="label comment">
+                            <label>Website Payments Pro Hosted Solution</label>
+                            <comment><![CDATA[Payments by cards + seller protection - <strong style="color:red">Contact PayPal before activating</strong>]]></comment>
+                            <more_url><![CDATA[https://cms.paypal.com/cms_content/GB/en_GB/files/developer/HostedSolution.pdf]]></more_url>
+                            <backend_congif>
+                                <enable_for_countries>all</enable_for_countries>
+                                <disable_for_countries>US,CA</disable_for_countries>
+                                <labels>
+                                    <JP translate="switcher fieldset">
+                                        <switcher>Website Payments Plus</switcher>
+                                        <fieldset>Website Payments Plus Settings</fieldset>
+                                    </JP>
+                                    <FR translate="switcher fieldset">
+                                        <switcher>Integral Evolution</switcher>
+                                        <fieldset>Integral Evolution Settings</fieldset>
+                                    </FR>
+                                    <IT translate="switcher fieldset">
+                                        <switcher>PayPal Pro</switcher>
+                                        <fieldset>PayPal Pro Settings</fieldset>
+                                    </IT>
+                                    <ES translate="switcher fieldset">
+                                        <switcher>Pasarela integral</switcher>
+                                        <fieldset>Pasarela integral Settings</fieldset>
+                                    </ES>
+                                </labels>
+                                <urls>
+                                    <JP translate="switcher fieldset">
+                                        <more_url><![CDATA[https://www.paypal-japan.com/wpp/]]></more_url>
+                                    </JP>
+                                </urls>
+                            </backend_congif>
+                            <config_path>payment/hosted_pro/active</config_path>
+                            <frontend_type>checkbox</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </hosted_pro>
+                    </fields>
+                </global>
+                <store>
+                    <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Store</frontend_model>
+                    <sort_order>5</sort_order>
+                    <show_in_store>1</show_in_store>
+                </store>
+                <api translate="label comment">
+                    <label>API/Integration Settings</label>
+                    <fieldset_css>paypal-config</fieldset_css>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <api_authentication translate="label">
+                            <label>API Authentication Methods</label>
+                            <config_path>paypal/wpp/api_authentication</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getApiAuthenticationMethods</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </api_authentication>
+                        <api_username translate="label">
+                            <label>API Username</label>
+                            <config_path>paypal/wpp/api_username</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </api_username>
+                        <api_password translate="label">
+                            <label>API Password</label>
+                            <config_path>paypal/wpp/api_password</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </api_password>
+                        <api_signature translate="label">
+                            <label>API Signature</label>
+                            <config_path>paypal/wpp/api_signature</config_path>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <frontend_type>obscure</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><api_authentication>0</api_authentication></depends>
+                        </api_signature>
+                        <api_cert translate="label">
+                            <label>API Certificate</label>
+                            <config_path>paypal/wpp/api_cert</config_path>
+                            <frontend_type>file</frontend_type>
+                            <backend_model>Mage_Paypal_Model_System_Config_Backend_Cert</backend_model>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><api_authentication>1</api_authentication></depends>
+                        </api_cert>
+                        <api_wizard translate="button_label sandbox_button_label">
+                            <label></label>
+                            <button_label>Get Credentials from PayPal</button_label>
+                            <button_url><![CDATA[https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]></button_url>
+                            <sandbox_button_label>Sandbox Credentials</sandbox_button_label>
+                            <sandbox_button_url><![CDATA[https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]></sandbox_button_url>
+                            <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_ApiWizard</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </api_wizard>
+                        <sandbox_flag translate="label">
+                            <label>Sandbox Mode</label>
+                            <config_path>paypal/wpp/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <use_proxy translate="label">
+                            <label>API Uses Proxy</label>
+                            <config_path>paypal/wpp/use_proxy</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </use_proxy>
+                        <proxy_host translate="label">
+                            <label>Proxy Host</label>
+                            <config_path>paypal/wpp/proxy_host</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_host>
+                        <proxy_port translate="label">
+                            <label>Proxy Port</label>
+                            <config_path>paypal/wpp/proxy_port</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_port>
+                    </fields>
+                </api>
+
+                <express translate="label">
+                    <label>Express Checkout Settings</label>
+                    <fieldset_css>paypal-config</fieldset_css>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "PayPal" per store views.</comment>
+                            <config_path>payment/paypal_express/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypal_express/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypal_express/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions_Express</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypal_express/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypal_express/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypal_express/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypal_express/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <transfer_shipping_options translate="label tooltip comment">
+                            <label>Transfer Shipping Options</label>
+                            <config_path>payment/paypal_express/transfer_shipping_options</config_path>
+                            <tooltip>If this option is enabled, customer can change shipping address and shipping method on PayPal website. In live mode works via HTTPS protocol only.</tooltip>
+                            <comment>Notice that PayPal can handle up to 10 shipping options. That is why Magento will transfer only first 10 cheapest shipping options if there are more than 10 available.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><line_items_enabled>1</line_items_enabled></depends>
+                        </transfer_shipping_options>
+                        <visible_on_cart translate="label comment">
+                            <label>Shortcut on Shopping Cart</label>
+                            <config_path>payment/paypal_express/visible_on_cart</config_path>
+                            <comment>Also affects mini-shopping cart.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </visible_on_cart>
+                        <visible_on_product translate="label">
+                            <label>Shortcut on Product View</label>
+                            <config_path>payment/paypal_express/visible_on_product</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </visible_on_product>
+                        <button_flavor translate="label">
+                            <label>Shortcut Buttons Flavor</label>
+                            <config_path>paypal/wpp/button_flavor</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getExpressCheckoutButtonFlavors</source_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </button_flavor>
+                        <solution_type translate="label comment">
+                            <label>Enable PayPal Guest Checkout</label>
+                            <comment>Ability for buyer to purchase without PayPal account.</comment>
+                            <config_path>payment/paypal_express/solution_type</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getExpressCheckoutSolutionTypes</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </solution_type>
+                        <allow_ba_signup translate="label comment tooltip">
+                            <label>Billing Agreement Signup </label>
+                            <comment>Whether to create a billing agreement, if there are no active billing agreements available.</comment>
+                            <tooltip><![CDATA[Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.]]></tooltip>
+                            <config_path>payment/paypal_express/allow_ba_signup</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getExpressCheckoutBASignupOptions</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allow_ba_signup>
+                        <!-- heading_sftp translate="label">
+                            <label>some text</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_sftp -->
+                        <authorization_honor_period translate="label comment">
+                            <label>Authorization Honor Period (days)</label>
+                            <comment>Specifies what the Authorization Honor Period is on the merchant’s PayPal account. It must mirror the setting in PayPal.</comment>
+                            <config_path>payment/paypal_express/authorization_honor_period</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </authorization_honor_period>
+                        <order_valid_period translate="label comment">
+                            <label>Order Valid Period (days)</label>
+                            <comment>Specifies what the Order Valid Period is on the merchant’s PayPal account. It must mirror the setting in PayPal.</comment>
+                            <config_path>payment/paypal_express/order_valid_period</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </order_valid_period>
+                        <child_authorization_number translate="label comment">
+                            <label>Number of Child Authorizations</label>
+                            <comment>The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase.</comment>
+                            <config_path>payment/paypal_express/child_authorization_number</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </child_authorization_number>
+                    </fields>
+                </express>
+
+                <wps translate="label comment">
+                    <label>Website Payments Standard Settings</label>
+                    <fieldset_css>paypal-config</fieldset_css>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "PayPal" per store views.</comment>
+                            <config_path>payment/paypal_standard/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypal_standard/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypal_standard/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypal_standard/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypal_standard/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <sandbox_flag translate="label">
+                            <label>Sandbox Mode</label>
+                            <config_path>payment/paypal_standard/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypal_standard/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypal_standard/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <line_items_summary translate="label comment">
+                            <label>Summary Text for Aggregated Cart</label>
+                            <config_path>payment/paypal_standard/line_items_summary</config_path>
+                            <comment>Uses store frontend name by default.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><line_items_enabled>0</line_items_enabled></depends>
+                        </line_items_summary>
+                    </fields>
+                </wps>
+
+                <wpp translate="label comment">
+                    <label>Website Payments Pro Settings</label>
+                    <fieldset_css>paypal-config</fieldset_css>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                            <config_path>payment/paypal_direct/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypal_direct/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypal_direct/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypal_direct/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypal_direct/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypal_direct/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypal_direct/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <heading_cc translate="label">
+                            <label>Credit Card Settings</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_cc>
+                        <cctypes translate="label comment">
+                            <label>Allowed Credit Card Types</label>
+                            <comment><![CDATA[3D Secure validation is required for Maestro cards. Supporting of American Express cards require additional agreement. Learn more at <a href="http://www.paypal.com/amexupdate">http://www.paypal.com/amexupdate</a>.]]></comment>
+                            <config_path>payment/paypal_direct/cctypes</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getWppCcTypesAsOptionArray</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </cctypes>
+                        <useccv translate="label">
+                            <label>Require CVV Entry</label>
+                            <config_path>payment/paypal_direct/useccv</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </useccv>
+                        <heading_3dsecure translate="label">
+                            <label>3D Secure</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_3dsecure>
+                        <centinel translate="label">
+                            <label>3D Secure Card Validation</label>
+                            <config_path>payment/paypal_direct/centinel</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </centinel>
+                        <centinel_is_mode_strict translate="label comment">
+                            <label>Severe 3D Secure Card Validation</label>
+                            <config_path>payment/paypal_direct/centinel_is_mode_strict</config_path>
+                            <comment>Severe Validation Removes Chargeback Liability on Merchant</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_is_mode_strict>
+                        <centinel_api_url translate="label comment">
+                            <label>Centinel Custom API URL</label>
+                            <config_path>payment/paypal_direct/centinel_api_url</config_path>
+                            <comment>If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement.</comment>
+                            <frontend_type>text</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_api_url>
+                    </fields>
+                </wpp>
+
+                <paypal_billing_agreement translate="label">
+                    <label>Paypal Billing Agreement Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>45</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label comment">
+                            <label>Enabled</label>
+                            <comment><![CDATA[Will appear as a payment option only for customers who have at least one active billing agreement.]]></comment>
+                            <config_path>payment/paypal_billing_agreement/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <config_path>payment/paypal_billing_agreement/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypal_billing_agreement/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypal_billing_agreement/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypal_billing_agreement/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypal_billing_agreement/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypal_billing_agreement/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypal_billing_agreement/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <allow_billing_agreement_wizard translate="label">
+                            <label>Allow in Billing Agreement Wizard</label>
+                            <config_path>payment/paypal_billing_agreement/allow_billing_agreement_wizard</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allow_billing_agreement_wizard>
+                    </fields>
+                </paypal_billing_agreement>
+
+<!-- TODO: paypal recurring profile -->
+
+                <wpp_pe translate="label">
+                    <label>Website Payments Pro (Payflow Edition) Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>55</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                            <config_path>payment/paypaluk_direct/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypaluk_direct/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypaluk_direct/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypaluk_direct/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypaluk_direct/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypaluk_direct/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypaluk_direct/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <heading_api translate="label">
+                            <label>API/Integration</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_api>
+                        <partner translate="label">
+                            <label>Partner</label>
+                            <config_path>paypal/wpuk/partner</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </partner>
+                        <user translate="label">
+                            <label>User</label>
+                            <frontend_type>obscure</frontend_type>
+                            <config_path>paypal/wpuk/user</config_path>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </user>
+                        <vendor translate="label">
+                            <label>Vendor</label>
+                            <config_path>paypal/wpuk/vendor</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </vendor>
+                        <pwd translate="label">
+                            <label>Password</label>
+                            <config_path>paypal/wpuk/pwd</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </pwd>
+                        <sandbox_flag translate="label">
+                            <label>Sandbox Mode</label>
+                            <config_path>paypal/wpuk/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <use_proxy translate="label">
+                            <label>API Uses Proxy</label>
+                            <config_path>paypal/wpuk/use_proxy</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </use_proxy>
+                        <proxy_host translate="label">
+                            <label>Proxy Host</label>
+                            <config_path>paypal/wpuk/proxy_host</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_host>
+                        <proxy_port translate="label">
+                            <label>Proxy Port</label>
+                            <config_path>paypal/wpuk/proxy_port</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_port>
+                        <heading_cc translate="label">
+                            <label>Credit Card Settings</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>85</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_cc>
+                        <cctypes translate="label">
+                            <label>Allowed Credit Card Types</label>
+                            <comment><![CDATA[3D Secure validation is required for Maestro cards.]]></comment>
+                            <config_path>payment/paypaluk_direct/cctypes</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getWppPeCcTypesAsOptionArray</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </cctypes>
+                        <useccv translate="label">
+                            <label>Require CVV Entry</label>
+                            <config_path>payment/paypaluk_direct/useccv</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>95</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </useccv>
+                        <heading_3dsecure translate="label">
+                            <label>3D Secure</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_3dsecure>
+                        <centinel translate="label">
+                            <label>3D Secure Card Validation</label>
+                            <config_path>payment/paypaluk_direct/centinel</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>105</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </centinel>
+                        <centinel_is_mode_strict translate="label comment">
+                            <label>Severe 3D Secure Card Validation</label>
+                            <config_path>payment/paypaluk_direct/centinel_is_mode_strict</config_path>
+                            <comment>Severe Validation Removes Chargeback Liability on Merchant</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_is_mode_strict>
+                        <centinel_api_url translate="label comment">
+                            <label>Centinel API URL</label>
+                            <config_path>payment/paypaluk_direct/centinel_api_url</config_path>
+                            <comment>If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement.</comment>
+                            <frontend_type>text</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>115</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_api_url>
+                    </fields>
+                </wpp_pe>
+
+                <verisign translate="label">
+                    <label>Payflow Pro Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                            <config_path>payment/verisign/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/verisign/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/verisign/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/verisign/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>20</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/verisign/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>25</sort_order>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/verisign/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <heading_payflow translate="label">
+                            <label>API/Integration</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_payflow>
+                        <partner translate="label">
+                            <label>Partner</label>
+                            <config_path>payment/verisign/partner</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </partner>
+                        <user translate="label">
+                            <label>User</label>
+                            <config_path>payment/verisign/user</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </user>
+                        <vendor translate="label">
+                            <label>Vendor</label>
+                            <config_path>payment/verisign/vendor</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </vendor>
+                        <pwd translate="label">
+                            <label>Password</label>
+                            <config_path>payment/verisign/pwd</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </pwd>
+                        <sandbox_flag translate="label">
+                            <label>Test Mode</label>
+                            <config_path>payment/verisign/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <use_proxy translate="label">
+                            <label>Use Proxy</label>
+                            <config_path>payment/verisign/use_proxy</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </use_proxy>
+                        <proxy_host translate="label">
+                            <label>Proxy Host</label>
+                            <config_path>payment/verisign/proxy_host</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_host>
+                        <proxy_port translate="label">
+                            <label>Proxy Port</label>
+                            <config_path>payment/verisign/proxy_port</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_port>
+                        <heading_cc translate="label">
+                            <label>Credit Card Settings</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_cc>
+                        <cctypes translate="label comment">
+                            <label>Allowed Credit Card Types</label>
+                            <comment><![CDATA[Supporting of American Express cards require additional agreement. Learn more at <a href="http://www.paypal.com/amexupdate">http://www.paypal.com/amexupdate</a>.]]></comment>
+                            <config_path>payment/verisign/cctypes</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_Config::getPayflowproCcTypesAsOptionArray</source_model>
+                            <sort_order>85</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </cctypes>
+                        <useccv translate="label">
+                            <label>Require CVV Entry</label>
+                            <config_path>payment/verisign/useccv</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </useccv>
+                        <heading_3dsecure translate="label">
+                            <label>3D Secure</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>95</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_3dsecure>
+                        <centinel translate="label">
+                            <label>3D Secure Card Validation</label>
+                            <config_path>payment/verisign/centinel</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </centinel>
+                        <centinel_is_mode_strict translate="label comment">
+                            <label>Severe 3D Secure Card Validation</label>
+                            <config_path>payment/verisign/centinel_is_mode_strict</config_path>
+                            <comment>Severe validation removes chargeback liability on merchant.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>105</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_is_mode_strict>
+                        <centinel_api_url translate="label comment">
+                            <label>Centinel API URL</label>
+                            <config_path>payment/verisign/centinel_api_url</config_path>
+                            <comment>A value is required for live mode. Refer to your CardinalCommerce agreement.</comment>
+                            <frontend_type>text</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><centinel>1</centinel></depends>
+                        </centinel_api_url>
+                    </fields>
+                </verisign>
+
+                <express_pe translate="label">
+                    <label>Express Checkout (Payflow Edition) Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>65</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label">
+                            <label>Title</label>
+                            <config_path>payment/paypaluk_express/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/paypaluk_express/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/paypaluk_express/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/paypaluk_express/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>20</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/paypaluk_express/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>25</sort_order>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/paypaluk_express/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <line_items_enabled translate="label">
+                            <label>Transfer Cart Line Items</label>
+                            <config_path>payment/paypaluk_express/line_items_enabled</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </line_items_enabled>
+                        <visible_on_cart translate="label comment">
+                            <label>Shortcut on Shopping Cart</label>
+                            <comment>Also affects mini-shopping cart.</comment>
+                            <config_path>payment/paypaluk_express/visible_on_cart</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </visible_on_cart>
+                        <visible_on_product translate="label">
+                            <label>Shortcut on Product View</label>
+                            <config_path>payment/paypaluk_express/visible_on_product</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </visible_on_product>
+                    </fields>
+                </express_pe>
+
+                <settlement_reports translate="label">
+                    <label>Settlement Report Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>70</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <fields>
+                        <heading_sftp translate="label">
+                            <label>SFTP Credentials</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_sftp>
+                        <settlement_reports_ftp_login translate="label">
+                            <label>Login</label>
+                            <config_path>paypal/fetch_reports/ftp_login</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </settlement_reports_ftp_login>
+                        <settlement_reports_ftp_password translate="label">
+                            <label>Password</label>
+                            <config_path>paypal/fetch_reports/ftp_password</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </settlement_reports_ftp_password>
+                        <settlement_reports_ftp_sandbox translate="label">
+                            <label>Sandbox Mode</label>
+                            <config_path>paypal/fetch_reports/ftp_sandbox</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </settlement_reports_ftp_sandbox>
+                        <settlement_reports_ftp_ip translate="label comment tooltip">
+                            <label>Custom Endpoint Hostname or IP-Address</label>
+                            <comment>By default it is "reports.paypal.com".</comment>
+                            <tooltip>Use colon to specify port. For example: "test.example.com:5224".</tooltip>
+                            <config_path>paypal/fetch_reports/ftp_ip</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><settlement_reports_ftp_sandbox>0</settlement_reports_ftp_sandbox></depends>
+                        </settlement_reports_ftp_ip>
+                        <settlement_reports_ftp_path translate="label comeent">
+                            <label>Custom Path</label>
+                            <comment>By default it is "/ppreports/outgoing".</comment>
+                            <config_path>paypal/fetch_reports/ftp_path</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><settlement_reports_ftp_sandbox>0</settlement_reports_ftp_sandbox></depends>
+                        </settlement_reports_ftp_path>
+                        <heading_schedule translate="label">
+                            <label>Scheduled Fetching</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_schedule>
+                        <settlement_reports_active translate="label">
+                            <label>Enable Automatic Fetching</label>
+                            <config_path>paypal/fetch_reports/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </settlement_reports_active>
+                        <settlement_reports_schedule translate="label comment">
+                            <label>Schedule</label>
+                            <comment>PayPal retains reports for 45 days.</comment>
+                            <config_path>paypal/fetch_reports/schedule</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_FetchingSchedule</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </settlement_reports_schedule>
+                        <settlement_reports_time translate="label">
+                            <label>Time of Day</label>
+                            <config_path>paypal/fetch_reports/time</config_path>
+                            <frontend_type>time</frontend_type>
+                            <!-- backend_model>Mage_Paypal_Model_System_Config_Backend_Cron</backend_model -->
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </settlement_reports_time>
+                    </fields>
+                </settlement_reports>
+
+                <style translate="label">
+                    <label>Frontend Experience Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>75</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <logo translate="label comment">
+                            <label>PayPal Product Logo</label>
+                            <comment>Displays on catalog pages and homepage.</comment>
+                            <config_path>paypal/style/logo</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_Logo</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </logo>
+                        <paypal_pages translate="label">
+                            <label>PayPal Merchant Pages Style</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypal_pages>
+                        <page_style translate="label tooltip">
+                            <label>Page Style</label>
+                            <config_path>paypal/style/page_style</config_path>
+                            <tooltip><![CDATA[Allowable values: "paypal", "primary" (default), your_custom_value (a custom payment page style from your merchant account profile).]]></tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </page_style>
+                        <paypal_hdrimg translate='label tooltip'>
+                            <label>Header Image URL</label>
+                            <config_path>paypal/style/paypal_hdrimg</config_path>
+                            <tooltip><![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style="color:red">https</strong> is highly encouraged.]]></tooltip>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypal_hdrimg>
+                        <paypal_hdrbackcolor translate="label tooltip">
+                            <label>Header Background Color</label>
+                            <config_path>paypal/style/paypal_hdrbackcolor</config_path>
+                            <tooltip><![CDATA[The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.]]></tooltip>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypal_hdrbackcolor>
+                        <paypal_hdrbordercolor translate="label tooltip">
+                            <label>Header Border Color</label>
+                            <config_path>paypal/style/paypal_hdrbordercolor</config_path>
+                            <tooltip>2-pixel perimeter around the header space.</tooltip>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypal_hdrbordercolor>
+                        <paypal_payflowcolor translate="label tooltip">
+                            <label>Page Background Color</label>
+                            <config_path>paypal/style/paypal_payflowcolor</config_path>
+                            <tooltip><![CDATA[The background color for the checkout page around the header and payment form.]]></tooltip>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </paypal_payflowcolor>
+                    </fields>
+                </style>
+
+                <payflow_link translate="label">
+                    <label>Payflow Link Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>80</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <payflowlink_info>
+                            <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Payflowlink_Info</frontend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>22</sort_order>
+                        </payflowlink_info>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                            <config_path>payment/payflow_link/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/payflow_link/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/payflow_link/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <authorization_amount translate="label">
+                            <label>Verification Authorization Amount</label>
+                            <comment><![CDATA[<a id="PayFlowLinkLearnMore" href="#">Learn More</a>]]></comment>
+                            <config_path>payment/payflow_link/authorization_amount</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_AuthorizationAmounts</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </authorization_amount>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/payflow_link/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/payflow_link/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/payflow_link/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <heading_payflowlink translate="label">
+                            <label>API/Integration</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_payflowlink>
+                        <partner translate="label">
+                            <label>Partner</label>
+                            <config_path>payment/payflow_link/partner</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </partner>
+                        <vendor translate="label">
+                            <label>Vendor / Merchant Login</label>
+                            <config_path>payment/payflow_link/vendor</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </vendor>
+                        <user translate="label">
+                            <label>User</label>
+                            <comment>If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here.</comment>
+                            <frontend_type>text</frontend_type>
+                            <config_path>payment/payflow_link/user</config_path>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </user>
+                        <pwd translate="label">
+                            <label>Password</label>
+                            <config_path>payment/payflow_link/pwd</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </pwd>
+                        <sandbox_flag translate="label">
+                            <label>Test Mode</label>
+                            <config_path>payment/payflow_link/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <use_proxy translate="label">
+                            <label>Use Proxy</label>
+                            <config_path>payment/payflow_link/use_proxy</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </use_proxy>
+                        <proxy_host translate="label">
+                            <label>Proxy Host</label>
+                            <config_path>payment/payflow_link/proxy_host</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_host>
+                        <proxy_port translate="label">
+                            <label>Proxy Port</label>
+                            <config_path>payment/payflow_link/proxy_port</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_port>
+                    </fields>
+                </payflow_link>
+
+                <payflow_advanced translate="label">
+                    <label>PayPal Paymets Advanced</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>90</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <payflowlink_info>
+                            <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Payflowlink_Advanced</frontend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>22</sort_order>
+                        </payflowlink_info>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                            <config_path>payment/payflow_advanced/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/payflow_advanced/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/payflow_advanced/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/payflow_advanced/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/payflow_advanced/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/payflow_advanced/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                        <heading_payflowlink translate="label">
+                            <label>API/Integration</label>
+                            <frontend_model>Mage_Adminhtml_Block_System_Config_Form_Field_Heading</frontend_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </heading_payflowlink>
+                        <partner translate="label">
+                            <label>Partner</label>
+                            <config_path>payment/payflow_advanced/partner</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </partner>
+                        <vendor translate="label">
+                            <label>Vendor / Merchant Login</label>
+                            <config_path>payment/payflow_advanced/vendor</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </vendor>
+                        <user translate="label">
+                            <label>User</label>
+                            <comment>If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here.</comment>
+                            <frontend_type>text</frontend_type>
+                            <config_path>payment/payflow_advanced/user</config_path>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </user>
+                        <pwd translate="label">
+                            <label>Password</label>
+                            <config_path>payment/payflow_advanced/pwd</config_path>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Encrypted</backend_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </pwd>
+                        <sandbox_flag translate="label">
+                            <label>Test Mode</label>
+                            <config_path>payment/payflow_advanced/sandbox_flag</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </sandbox_flag>
+                        <use_proxy translate="label">
+                            <label>Use Proxy</label>
+                            <config_path>payment/payflow_advanced/use_proxy</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </use_proxy>
+                        <proxy_host translate="label">
+                            <label>Proxy Host</label>
+                            <config_path>payment/payflow_advanced/proxy_host</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_host>
+                        <proxy_port translate="label">
+                            <label>Proxy Port</label>
+                            <config_path>payment/payflow_advanced/proxy_port</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>75</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><use_proxy>1</use_proxy></depends>
+                        </proxy_port>
+                    </fields>
+                </payflow_advanced>
+
+                <hosted_pro translate="label">
+                    <label>Website Payments Pro Hosted Solution Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>90</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>It is recommended to set this value to "PayPal" per store views.</comment>
+                            <config_path>payment/hosted_pro/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/hosted_pro/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/hosted_pro/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_PaymentActions</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </payment_action>
+                        <allowspecific translate="label">
+                            <label>Payment Applicable From</label>
+                            <config_path>payment/hosted_pro/allowspecific</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <config_path>payment/hosted_pro/specificcountry</config_path>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_BuyerCountry</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <depends><allowspecific>1</allowspecific></depends>
+                        </specificcountry>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <config_path>payment/hosted_pro/debug</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </debug>
+                    </fields>
+                </hosted_pro>
+            </groups>
+        </paypal>
+    </sections>
+</config>

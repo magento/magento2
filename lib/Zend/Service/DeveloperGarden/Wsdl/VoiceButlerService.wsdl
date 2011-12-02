@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions
+	targetNamespace="http://webservice.voicebutler.odg.tonline.de"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:tns="http://webservice.voicebutler.odg.tonline.de"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	<wsdl:documentation>VoiceButlerService</wsdl:documentation>
+	<wsdl:types> 
+		<xsd:schema 
+			targetNamespace="http://webservice.voicebutler.odg.tonline.de"
+			elementFormDefault="unqualified"
+			attributeFormDefault="unqualified">
+			<xsd:include schemaLocation="VoiceButlerService.xsd" />
+			
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="callStatusRequest">
+		<wsdl:part name="parameters" element="tns:callStatus" />
+	</wsdl:message>
+	<wsdl:message name="callStatusResponse">
+		<wsdl:part name="parameters" element="tns:callStatusResponse" />
+	</wsdl:message>
+    <wsdl:message name="callStatus2Request">
+      <wsdl:part name="parameters" element="tns:callStatus2" />
+    </wsdl:message>
+    <wsdl:message name="callStatus2Response">
+      <wsdl:part name="parameters" element="tns:callStatus2Response" />
+    </wsdl:message>
+	<wsdl:message name="tearDownCallRequest">
+		<wsdl:part name="parameters" element="tns:tearDownCall" />
+	</wsdl:message>
+	<wsdl:message name="tearDownCallResponse">
+		<wsdl:part name="parameters" element="tns:tearDownCallResponse" />
+	</wsdl:message>
+	<wsdl:message name="newCallRequest">
+		<wsdl:part name="parameters" element="tns:newCall" />
+	</wsdl:message>
+ 	<wsdl:message name="newCallResponse">
+		<wsdl:part name="parameters" element="tns:newCallResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="newCallSequencedRequest">
+		<wsdl:part name="parameters" element="tns:newCallSequenced"/>
+	</wsdl:message>
+	<wsdl:message name="newCallSequencedResponse">
+		<wsdl:part name="parameters" element="tns:newCallSequencedResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="VoiceButlerServicePortType">
+		<wsdl:operation name="callStatus">
+			<wsdl:input message="tns:callStatusRequest"
+				wsaw:Action="urn:callStatus" />
+			<wsdl:output message="tns:callStatusResponse"
+				wsaw:Action="urn:callStatusResponse" />
+		</wsdl:operation>
+        <wsdl:operation name="callStatus2">
+          <wsdl:input message="tns:callStatus2Request"
+            wsaw:Action="urn:callStatus2" />
+          <wsdl:output message="tns:callStatus2Response"
+            wsaw:Action="urn:callStatus2Response" />
+        </wsdl:operation>
+		<wsdl:operation name="tearDownCall">
+			<wsdl:input message="tns:tearDownCallRequest"
+				wsaw:Action="urn:tearDownCall" />
+			<wsdl:output message="tns:tearDownCallResponse"
+				wsaw:Action="urn:tearDownCallResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="newCall">
+			<wsdl:input message="tns:newCallRequest"
+				wsaw:Action="urn:newCall" />
+			<wsdl:output message="tns:newCallResponse"
+				wsaw:Action="urn:newCallResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="newCallSequenced">
+		<wsdl:input message="tns:newCallSequencedRequest"
+        wsaw:Action="urn:newCallSequence" />
+      <wsdl:output message="tns:newCallSequencedResponse"
+        wsaw:Action="urn:newCallSequenceResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+ 
+	<wsdl:binding name="VoiceButlerServiceHttpBinding"
+		type="tns:VoiceButlerServicePortType">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="callStatus">
+
+			<soap:operation
+				soapAction="http://webservice.voicebutler.odg.tonline.de/callStatus" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+      <wsdl:operation name="callStatus2">
+  
+        <soap:operation
+          soapAction="http://webservice.voicebutler.odg.tonline.de/callStatus2" />
+        <wsdl:input>
+  
+          <soap:body use="literal" />
+        </wsdl:input>
+        <wsdl:output>
+  
+          <soap:body use="literal" />
+        </wsdl:output>
+      </wsdl:operation>
+		<wsdl:operation name="tearDownCall">
+
+			<soap:operation
+				soapAction="http://webservice.voicebutler.odg.tonline.de/tearDownCall" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="newCall">
+
+			<soap:operation
+				soapAction="http://webservice.voicebutler.odg.tonline.de/newCall" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="newCallSequenced">
+			<soap:operation
+				soapAction="http://webservice.voicebutler.odg.tonline.de/newCallSequence" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="VoiceButlerService">
+
+		<wsdl:port name="VoiceButlerService"
+			binding="tns:VoiceButlerServiceHttpBinding">
+
+			<soap:address
+				location="https://gateway.developer.telekom.com/p3gw-mod-odg-voicebutler/services/VoiceButlerService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

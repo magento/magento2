@@ -1,0 +1,288 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+@font-face {
+    font-family: 'stars';
+    src: url('../fonts/stars-webfont.eot');
+    src: local('O'), url('../fonts/stars-webfont.woff') format('woff'), url('../fonts/stars-webfont.ttf') format('truetype'), url('../fonts/stars-webfont.svg#webfontyMStiDRV') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'icons';
+    src: url('../fonts/android_icons-webfont.eot');
+    src: local('O'), url('../fonts/android_icons-webfont.woff') format('woff'), url('../fonts/android_icons-webfont.ttf') format('truetype'), url('../fonts/android_icons-webfont.svg#webfontyMStiDRV') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.main-frame {
+    background:url(../images/mobile_preview/android/bg_frame.gif) no-repeat 0 0;
+    font:12px/15px Verdana;
+    line-height:1;
+    margin:0 0 10px;
+    padding:4px;
+    height:480px;
+    width:320px;
+    }
+.status-bar {
+    background:url(../images/mobile_preview/android/bg_status_bar.png) no-repeat 0 0;
+    height:25px;
+    width:320px;
+    }
+.header-wrap {
+    background:url(../images/mobile_preview/android/bg_header.png) repeat-x center #333;
+    height:48px;
+    width:320px;
+    }
+    .header-wrap .app-header {
+        height:48px;
+        }
+        .header-wrap .icon {
+            font-family:'icons';
+            font-size:35px;
+            line-height:48px;
+            text-align:center;
+            text-shadow:0 1px 0 #333;
+            float:right;
+            height:48px;
+            width:47px;
+            }
+            .header-wrap .icon-home {
+                border-right:1px solid #333;
+                float:left;
+                }
+            .header-wrap .icon-search {
+                border-left:1px solid #333;
+                padding-left:5px;
+                width:42px;
+                }
+            .header-wrap .icon-account {
+                border-left:1px solid #333;
+                padding-left:5px;
+                width:42px;
+                }
+        .header-wrap .app-logo {
+            color:#fff;
+            float:left;
+            font-size:13px;
+            font-weight:bold;
+            padding:12px 0 0 45px;
+            text-shadow:0 0 5px #333;
+            }
+            .header-wrap .app-logo img {
+                margin-right:10px;
+                vertical-align:middle;
+                }
+.home-page .content {
+    background:url(../images/mobile_preview/android/bg_logo.png) no-repeat center;
+    padding:0;
+    height:267px;
+    width:320px;
+    }
+.items-list-wrap {
+    background:#ededed;
+    padding:14px 0 14px 10px;
+    width:310px;
+    }
+.items-list {
+    overflow:hidden;
+    width:310px;
+    }
+    .items-list ul {
+        width:360px;
+        }
+    .items-list li {
+        background:#fff;
+        display:inline;
+        float:left;
+        margin-right:9px;
+        padding:8px 8px 7px;
+        }
+        .items-list .product-image {
+            margin-bottom:7px;
+            }
+            .items-list .product-image img {
+                border:1px solid #989898;
+                vertical-align:bottom;
+                -moz-border-radius:1px;
+                -webkit-border-radius:1px;
+                border-radius:1px;
+            }
+        .items-list .link {
+            border:1px solid #d13b00;
+            display:inline-block;
+            font-size:12px;
+            line-height:22px;
+            height:22px;
+            width:62px;
+            text-align:center;
+            -moz-border-radius:2px;
+            -webkit-border-radius:2px;
+            border-radius:2px;
+            }
+            .items-list .link a {
+                display:inline-block;
+                background:#d13b00;
+                color:#fff;
+                font-weight:bold;
+                height:22px;
+                width:62px;
+                text-shadow:0 -1px 1px #d13b00;
+                text-decoration:none;
+                }
+
+.catalog-page .filters-wrap {
+    background:url(../images/mobile_preview/android/bg_catalog_filters_shadow.png) repeat-x;
+    height:50px;
+    width:320px;
+    position:absolute;
+    }
+    .catalog-page .filters-wrap .filters {
+        height:50px;
+        width:320px;
+        }
+        .catalog-page .filters-wrap .buttons {
+            padding:9px 5px;
+            overflow:hidden;
+            width:310px;
+            }
+            .catalog-page .filters-wrap .filters .button {
+                background:#ec7912;
+                border-color:transparent;
+                border:1px solid rgba(255, 255, 255, 0.1);
+                color:#fff;
+                display:inline-block;
+                float:left;
+                height:30px;
+                text-align:center;
+                line-height:32px;
+                vertical-align:middle;
+                -moz-box-shadow:0 1px 1px #999;
+                -webkit-box-shadow:0 1px 1px #999;
+                box-shadow:0 1px 1px #999;
+                text-shadow:0 -1px 1px #d66804;
+                -moz-border-radius:5px;
+                -webkit-border-radius:5px;
+                border-radius:5px;
+                }
+                .catalog-page .filters-wrap .filters .button-filter {
+                    margin-right:5px;
+                    width:62px;
+                    }
+                .catalog-page .filters-wrap .filters .button-qty {
+                    background:#dedede;
+                    color:#222;
+                    margin-right:32px;
+                    width:30px;
+                    text-shadow:0 1px 1px #fdfdfd;
+                    }
+                .catalog-page .filters-wrap .filters .label {
+                    color:#fff;
+                    font-size:14px;
+                    float:left;
+                    font-weight:bold;
+                    margin-right:10px;
+                    padding:8px 0 0;
+                    position:relative;
+                    top:2px;
+                    text-shadow:0 0 10px rgba(0,0,0,0.3);
+                    }
+                .catalog-page .filters-wrap .filters .button-sort-name {
+                    margin-right:5px;
+                    width:62px;
+                    }
+                .catalog-page .filters-wrap .filters .button-up {
+                    background-image:url(../images/mobile_preview/android/bg_button_up.gif);
+                    background-position:center center;
+                    background-repeat:no-repeat;
+                    width:30px;
+                    }
+.catalog-page .cat-list {
+    overflow:hidden;
+    height:407px;
+    width:320px;
+    }
+    .catalog-page .cat-list li {
+        background:url(../images/mobile_preview/android/bg_cat_item.png) no-repeat 0 0 #ededed;
+        overflow:hidden;
+        height:103px;
+        width:320px;
+        }
+        .catalog-page .cat-list .wrap {
+            padding:10px 0 1px 12px;
+            }
+        .catalog-page .cat-list .col-1 {
+            float:left;
+            display:inline;
+            width:79px;
+            }
+            .catalog-page .cat-list .col-1 .product-image {
+                margin-bottom:2px;
+                }
+                .catalog-page .cat-list .product-image img {
+                    border:1px solid #a5a5a5;
+                    -moz-border-radius:1px;
+                    -webkit-border-radius:1px;
+                    border-radius:1px;
+                    vertical-align:top;
+                    }
+            .catalog-page .cat-list .col-1 .rating {
+                white-space:nowrap;
+                }
+                .catalog-page .cat-list .col-1 .rating .star {
+                    font-family:'stars';
+                    font-size:14px;
+                    }
+                .catalog-page .cat-list .col-1 .rating img,
+                .catalog-page .cat-list .col-1 .rating span {
+                    font-size:10px;
+                    }
+        .catalog-page .cat-list .col-2 {
+            }
+            .catalog-page .cat-list .col-2 h3 {
+                color:#222222;
+                font-size:14px;
+                line-height:1;
+                margin:0;
+                font-weight:normal;
+                }
+            .catalog-page .cat-list .col-2 .price-box {
+                color:#d55000;
+                font-size:12px;
+                padding:0 0 5px;
+                }
+                .catalog-page .cat-list .col-2 .price-box span {
+                    display:block;
+                    padding:5px 0 0;
+                    }
+                .catalog-page .cat-list .col-2 .price-box .old-price {
+                    color:#222;
+                    font-size:10px;
+                    text-decoration:line-through;
+                    }
+            .catalog-page .cat-list .col-2 .availability {
+                color:#222;
+                font-size:11px;
+                }
