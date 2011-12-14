@@ -48,7 +48,7 @@ HTML;
  * Constants definition
  */
 define('DS', DIRECTORY_SEPARATOR);
-define('BP', dirname(__DIR__));
+define('BP', __DIR__);
 
 if (file_exists(BP . '/maintenance.flag')) {
     if (PHP_SAPI == 'cli') {
