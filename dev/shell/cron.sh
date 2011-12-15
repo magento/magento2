@@ -3,7 +3,7 @@
 if [ ! "$1" = "" ] ; then
 CRONSCRIPT=$1
 else
-CRONSCRIPT=pub/cron.php
+CRONSCRIPT=../../pub/cron.php
 fi
 
 PHP_BIN=`which php`

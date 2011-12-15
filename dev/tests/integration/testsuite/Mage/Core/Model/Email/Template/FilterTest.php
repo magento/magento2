@@ -69,4 +69,28 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
         ));
         $this->assertStringMatchesFormat('http://example.com/%score/ajax/translate/', $url);
     }
+
+    public function testEscapehtmlDirective()
+    {
+        $this->_model->setVariables(array(
+            'first' => '<p><i>Hello</i> <b>world!</b></p>',
+            'second' => '<p>Hello <strong>world!</strong></p>',
+        ));
+
+        $allowedTags = 'i,b';
+
+        $expectedResults = array(
+            'first' => '&lt;p&gt;<i>Hello</i> <b>world!</b>&lt;/p&gt;',
+            'second' => '&lt;p&gt;Hello &lt;strong&gt;world!&lt;/strong&gt;&lt;/p&gt;'
+        );
+
+        foreach ($expectedResults as $varName => $expectedResult) {
+            $result = $this->_model->escapehtmlDirective(array(
+                '{{escapehtml var=$' . $varName . ' allowed_tags=' . $allowedTags . '}}',
+                'escapehtml',
+                ' var=$' . $varName . ' allowed_tags=' . $allowedTags
+            ));
+            $this->assertEquals($expectedResult, $result);
+        }
+    }
 }

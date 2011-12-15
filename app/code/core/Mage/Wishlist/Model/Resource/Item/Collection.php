@@ -319,6 +319,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
      * @TODO  wishlist product collection
      * @TODO - this method is useless because we can calculate days in php, and don't use MySQL for it
      *
+     * @deprecated since 1.5.0.0
      * @return Mage_Wishlist_Model_Resource_Item_Collection
      */
     public function addDaysInWishlist()

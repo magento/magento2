@@ -281,8 +281,7 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'mysql'  => array(self::$_localXmlFile, 'mysql'),
-            'mssql'  => array(realpath(__DIR__ . '/../../../../../../etc/local-mssql.xml.dist'),  'mssql'),
-            'oracle' => array(realpath(__DIR__ . '/../../../../../../etc/local-oracle.xml.dist'), 'oracle'),
+            'custom' => array(realpath(__DIR__ . '/Bootstrap/_files/local-custom.xml'), 'mssql'),
         );
     }
 

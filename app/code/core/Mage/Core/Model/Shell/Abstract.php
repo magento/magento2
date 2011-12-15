@@ -31,77 +31,74 @@
  * @package     Mage_Shell
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Shell_Abstract
+abstract class Mage_Core_Model_Shell_Abstract
 {
     /**
-     * Is include Mage and initialize application
+     * Raw arguments, that should be parsed
      *
-     * @var bool
+     * @var array
      */
-    protected $_includeMage = true;
+    protected $_rawArgs     = array();
 
     /**
-     * Magento Root path
-     *
-     * @var string
-     */
-    protected $_rootPath;
-
-    /**
-     * Initialize application with code (store, website code)
-     *
-     * @var string
-     */
-    protected $_appCode     = 'admin';
-
-    /**
-     * Initialize application code type (store, website, store_group)
-     *
-     * @var string
-     */
-    protected $_appType     = 'store';
-
-    /**
-     * Input arguments
+     * Parsed input arguments
      *
      * @var array
      */
     protected $_args        = array();
 
     /**
-     * Initialize application and parse input parameters
+     * Entry point - script filename that is executed
      *
+     * @var string
      */
-    public function __construct()
+    protected $_entryPoint = null;
+
+    /**
+     * Initializes application and parses input parameters
+     *
+     * @var string $entryPoint
+     */
+    public function __construct($entryPoint)
     {
-        if ($this->_includeMage) {
-            require_once $this->_getRootPath() . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php';
-            Mage::app($this->_appCode, $this->_appType);
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            throw new Exception('This script cannot be run from Browser. This is the shell script.');
         }
 
+        $this->_entryPoint = $entryPoint;
+        $this->_rawArgs = $_SERVER['argv'];
         $this->_applyPhpVariables();
         $this->_parseArgs();
-        $this->_construct();
-        $this->_validate();
-        $this->_showHelp();
     }
 
     /**
-     * Get Magento Root path (with last directory separator)
+     * Sets raw arguments to be parsed
+     *
+     * @param array $args
+     * @return Mage_Core_Model_Shell_Abstract
+     */
+    public function setRawArgs($args)
+    {
+        $this->_rawArgs = $args;
+        $this->_parseArgs();
+        return $this;
+    }
+
+
+    /**
+     * Gets Magento root path (with last directory separator)
      *
      * @return string
      */
     protected function _getRootPath()
     {
-        if (is_null($this->_rootPath)) {
-            $this->_rootPath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
-        }
-        return $this->_rootPath;
+        return Mage::getBaseDir() . '/../';
     }
 
     /**
-     * Parse .htaccess file and apply php settings to shell script
+     * Parses .htaccess file and apply php settings to shell script
      *
+     * @return Mage_Core_Model_Shell_Abstract
      */
     protected function _applyPhpVariables()
     {
@@ -123,17 +120,18 @@ abstract class Mage_Shell_Abstract
                 }
             }
         }
+        return $this;
     }
 
     /**
-     * Parse input arguments
+     * Parses input arguments
      *
-     * @return Mage_Shell_Abstract
+     * @return Mage_Core_Model_Shell_Abstract
      */
     protected function _parseArgs()
     {
         $current = null;
-        foreach ($_SERVER['argv'] as $arg) {
+        foreach ($this->_rawArgs as $arg) {
             $match = array();
             if (preg_match('#^--([\w\d_-]{1,})$#', $arg, $match) || preg_match('#^-([\w\d_]{1,})$#', $arg, $match)) {
                 $current = $match[1];
@@ -150,51 +148,35 @@ abstract class Mage_Shell_Abstract
     }
 
     /**
-     * Additional initialize instruction
+     * Runs script
      *
-     * @return Mage_Shell_Abstract
-     */
-    protected function _construct()
-    {
-        return $this;
-    }
-
-    /**
-     * Validate arguments
-     *
-     */
-    protected function _validate()
-    {
-        if (isset($_SERVER['REQUEST_METHOD'])) {
-            die('This script cannot be run from Browser. This is the shell script.');
-        }
-    }
-
-    /**
-     * Run script
-     *
+     * @return Mage_Core_Model_Shell_Abstract
      */
     abstract public function run();
 
     /**
-     * Check is show usage help
+     * Shows usage help, if requested
      *
+     * @return bool
      */
     protected function _showHelp()
     {
         if (isset($this->_args['h']) || isset($this->_args['help'])) {
-            die($this->usageHelp());
+            echo $this->getUsageHelp();
+            return true;
         }
+        return false;
     }
 
     /**
-     * Retrieve Usage Help Message
+     * Retrieves usage help message
      *
+     * @return string
      */
-    public function usageHelp()
+    public function getUsageHelp()
     {
         return <<<USAGE
-Usage:  php -f script.php -- [options]
+Usage:  php -f {$this->_entryPoint} -- [options]
 
   -h            Short alias for help
   help          This help
@@ -202,7 +184,7 @@ USAGE;
     }
 
     /**
-     * Retrieve argument value by name or false
+     * Retrieves argument value by name. If argument is not found - returns FALSE.
      *
      * @param string $name the argument name
      * @return mixed

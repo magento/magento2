@@ -320,7 +320,7 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
      * @param array $construction
      * @return string
      */
-    public function htmlescapeDirective($construction)
+    public function escapehtmlDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
         if (!isset($params['var'])) {

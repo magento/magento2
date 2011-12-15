@@ -19,44 +19,22 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Shell
+ * @package     Mage_Log
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once 'abstract.php';
-
 /**
- * Magento Log Shell Script
+ * Shell model, used to work with logs via command line
  *
  * @category    Mage
- * @package     Mage_Shell
+ * @package     Mage_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Shell_Log extends Mage_Shell_Abstract
+class Mage_Log_Model_Shell extends Mage_Core_Model_Shell_Abstract
 {
     /**
-     * Log instance
-     *
-     * @var Mage_Log_Model_Log
-     */
-    protected $_log;
-
-    /**
-     * Retrieve Log instance
-     *
-     * @return Mage_Log_Model_Log
-     */
-    protected function _getLog()
-    {
-        if (is_null($this->_log)) {
-            $this->_log = Mage::getModel('Mage_Log_Model_Log');
-        }
-        return $this->_log;
-    }
-
-    /**
-     * Convert count to human view
+     * Converts count to human view
      *
      * @param int $number
      * @return string
@@ -75,7 +53,7 @@ class Mage_Shell_Log extends Mage_Shell_Abstract
     }
 
     /**
-     * Convert size to human view
+     * Converts size to human view
      *
      * @param int $number
      * @return string
@@ -94,40 +72,29 @@ class Mage_Shell_Log extends Mage_Shell_Abstract
     }
 
     /**
-     * Run script
+     * Runs script
      *
+     * @return Mage_Log_Model_Shell
      */
     public function run()
     {
+        if ($this->_showHelp()) {
+            return $this;
+        }
+
         if ($this->getArg('clean')) {
             $days = $this->getArg('days');
             if ($days > 0) {
                 Mage::app()->getStore()->setConfig(Mage_Log_Model_Log::XML_LOG_CLEAN_DAYS, $days);
             }
-            $this->_getLog()->clean();
+            /** @var $model Mage_Log_Model_Log */
+            $model = Mage::getModel('Mage_Log_Model_Log');
+            $model->clean();
             echo "Log cleaned\n";
         } else if ($this->getArg('status')) {
-            $resource = $this->_getLog()->getResource();
-            $adapter  = $resource->getReadConnection();
-            // log tables
-            $tables = array(
-                $resource->getTable('log_customer'),
-                $resource->getTable('log_visitor'),
-                $resource->getTable('log_visitor_info'),
-                $resource->getTable('log_url_table'),
-                $resource->getTable('log_url_info_table'),
-                $resource->getTable('log_quote_table'),
-
-                $resource->getTable('reports_viewed_product_index'),
-                $resource->getTable('reports_compared_product_index'),
-                $resource->getTable('reports_event'),
-
-                $resource->getTable('catalog_compare_item'),
-            );
-
-            $rows        = 0;
-            $dataLengh   = 0;
-            $indexLength = 0;
+            /** @var $resource Mage_Log_Model_Resource_Shell */
+            $resource = Mage::getModel('Mage_Log_Model_Resource_Shell');
+            $tables = $resource->getTablesInfo();
 
             $line = '-----------------------------------+------------+------------+------------+' . "\n";
             echo $line;
@@ -138,45 +105,45 @@ class Mage_Shell_Log extends Mage_Shell_Abstract
             echo "\n";
             echo $line;
 
+            $rows = 0;
+            $dataLength = 0;
+            $indexLength = 0;
             foreach ($tables as $table) {
-                $query  = $adapter->quoteInto('SHOW TABLE STATUS LIKE ?', $table);
-                $status = $adapter->fetchRow($query);
-                if (!$status) {
-                    continue;
-                }
+                $rows += $table['rows'];
+                $dataLength += $table['data_length'];
+                $indexLength += $table['index_length'];
 
-                $rows += $status['Rows'];
-                $dataLengh += $status['Data_length'];
-                $indexLength += $status['Index_length'];
-
-                echo sprintf('%-35s|', $table);
-                echo sprintf(' %-11s|', $this->_humanCount($status['Rows']));
-                echo sprintf(' %-11s|', $this->_humanSize($status['Data_length']));
-                echo sprintf(' %-11s|', $this->_humanSize($status['Index_length']));
+                echo sprintf('%-35s|', $table['name']);
+                echo sprintf(' %-11s|', $this->_humanCount($table['rows']));
+                echo sprintf(' %-11s|', $this->_humanSize($table['data_length']));
+                echo sprintf(' %-11s|', $this->_humanSize($table['index_length']));
                 echo "\n";
             }
 
             echo $line;
             echo sprintf('%-35s|', 'Total');
             echo sprintf(' %-11s|', $this->_humanCount($rows));
-            echo sprintf(' %-11s|', $this->_humanSize($dataLengh));
+            echo sprintf(' %-11s|', $this->_humanSize($dataLength));
             echo sprintf(' %-11s|', $this->_humanSize($indexLength));
             echo "\n";
             echo $line;
         } else {
-            echo $this->usageHelp();
+            echo $this->getUsageHelp();
         }
+
+        return $this;
     }
 
     /**
-     * Retrieve Usage Help Message
+     * Retrieves usage help message
      *
+     * @return string
      */
-    public function usageHelp()
+    public function getUsageHelp()
     {
         return <<<USAGE
-Usage:  php -f log.php -- [options]
-        php -f log.php -- clean --days 1
+Usage:  php -f {$this->_entryPoint} -- [options]
+        php -f {$this->_entryPoint} -- clean --days 1
 
   clean             Clean Logs
   --days <days>     Save log, days. (Minimum 1 day, if defined - ignoring system value)
@@ -186,6 +153,3 @@ Usage:  php -f log.php -- [options]
 USAGE;
     }
 }
-
-$shell = new Mage_Shell_Log();
-$shell->run();

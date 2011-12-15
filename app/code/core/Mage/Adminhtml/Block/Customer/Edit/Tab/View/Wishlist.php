@@ -59,7 +59,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Wishlist extends Mage_Adminhtm
         $collection = $wishlist->loadByCustomer(Mage::registry('current_customer'))
             ->setSharedStoreIds($wishlist->getSharedStoreIds(false))
             ->getItemCollection()
-            ->addDaysInWishlist(true)
+            ->addDaysInWishlist()
             ->addStoreData()
             ->setInStockFilter(true);
 

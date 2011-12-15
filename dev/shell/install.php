@@ -96,7 +96,8 @@
  * --url                        // required, URL the store is supposed to be available at
  * --skip_url_validation        // optional, skip validating base url during installation or not. No by default
  * --use_rewrites               // optional, Use Web Server (Apache) Rewrites,
- *                              // You could enable this option to use web server rewrites functionality for improved SEO
+ *                              // You could enable this option to use web server rewrites functionality
+ *                              // for improved SEO
  *                              // Please make sure that mod_rewrite is enabled in Apache configuration
  * --use_secure                 // optional, Use Secure URLs (SSL)
  *                              // Enable this option only if you have SSL available.
@@ -118,7 +119,7 @@
  *
  */
 
-require_once dirname(dirname(__FILE__)) . '/app/bootstrap.php';
+require_once '../../app/bootstrap.php';
 
 try {
     $app = Mage::app('default');
@@ -126,6 +127,7 @@ try {
     $installer = Mage::getSingleton('Mage_Install_Model_Installer_Console');
     /* @var $installer Mage_Install_Model_Installer_Console */
 
+    // @codingStandardsIgnoreStart
     if ($installer->init($app)          // initialize installer
         && $installer->checkConsole()   // check if the script is run in shell, otherwise redirect to web-installer
         && $installer->setArgs()        // set and validate script arguments
@@ -134,6 +136,7 @@ try {
         echo 'SUCCESS: ' . $installer->getEncryptionKey() . "\n";
         exit;
     }
+    // @codingStandardsIgnoreEnd
 
 } catch (Exception $e) {
     Mage::printException($e);

@@ -2,10 +2,10 @@
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
-"htmlescape var=$customer.name":"Customer Name",
+"escapehtml var=$customer.name":"Customer Name",
 "store url=\"customer/account/\"":"Customer Account Url",
 "var customer.email":"Customer Email",
-"htmlescape var=$customer.password":"Customer Password"}
+"escapehtml var=$customer.password":"Customer Password"}
 @-->
 
 <!--@styles
@@ -26,12 +26,12 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                 <!-- [ middle starts here] -->
                     <tr>
                         <td valign="top">
-                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Dear {{htmlescape var=$customer.name}},</h1>
+                            <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Dear {{escapehtml var=$customer.name}},</h1>
                             <p style="font-size:12px; line-height:16px; margin:0 0 16px 0;">Welcome to {{var store.getFrontendName()}}. To log in when visiting our site just click <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">Login</a> or <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">My Account</a> at the top of every page, and then enter your e-mail address and password.</p>
                             <p style="border:1px solid #E0E0E0; font-size:12px; line-height:16px; margin:0; padding:13px 18px; background:#f9f9f9;">
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail</strong>: {{var customer.email}}<br/>
-                                <strong>Password</strong>: {{htmlescape var=$customer.password}}<p>
+                                <strong>Password</strong>: {{escapehtml var=$customer.password}}<p>
                             <p style="font-size:12px; line-height:16px; margin:0 0 8px 0;">When you log in to your account, you will be able to do the following:</p>
                             <ul style="font-size:12px; line-height:16px; margin:0 0 16px 0; padding:0;">
                                 <li style="list-style:none inside; padding:0 0 0 10px;">&ndash; Proceed through checkout faster when making a purchase</li>

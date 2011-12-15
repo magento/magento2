@@ -112,25 +112,6 @@
                 </moneybookers>
             </updates>
         </layout>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <config>
-                                    <children>
-                                        <moneybookers translate="title" module="Phoenix_Moneybookers">
-                                            <title>Moneybookers Settings</title>
-                                        </moneybookers>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
     </adminhtml>
     <phoenix>
         <moneybookers>

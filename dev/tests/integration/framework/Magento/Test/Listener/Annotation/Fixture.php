@@ -212,9 +212,7 @@ class Magento_Test_Listener_Annotation_Fixture
                 if (isset($fileInfo['extension'])) {
                     $extension = '.' . $fileInfo['extension'];
                 }
-
-                $rollbackFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR
-                        . $fileInfo['filename'] . '_rollback' . $extension;
+                $rollbackFile = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '_rollback' . $extension;
                 if (file_exists($rollbackFile)) {
                     $this->_applyOneFixture($rollbackFile);
                 }
