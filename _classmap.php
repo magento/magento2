@@ -26,5 +26,5 @@
 /**
  * Class files map
  */
-return array (
+return array(
 );
