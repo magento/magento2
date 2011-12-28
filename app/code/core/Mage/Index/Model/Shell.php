@@ -31,7 +31,7 @@
  * @package     Mage_Shell
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Index_Model_Shell extends Mage_Core_Model_Shell_Abstract
+class Mage_Index_Model_Shell extends Mage_Core_Model_ShellAbstract
 {
     /**
      * Gets indexer instance

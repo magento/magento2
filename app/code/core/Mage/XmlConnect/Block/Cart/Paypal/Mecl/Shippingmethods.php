@@ -43,7 +43,7 @@ class Mage_XmlConnect_Block_Cart_Paypal_Mecl_Shippingmethods
     {
         /** @var $listXmlObj Mage_XmlConnect_Model_Simplexml_Element */
         $methodListXmlObj = Mage::getModel(
-            'xmlconnect/simplexml_element',
+            'Mage_XmlConnect_Model_Simplexml_Element',
             '<shipping_method_list></shipping_method_list>'
         );
 

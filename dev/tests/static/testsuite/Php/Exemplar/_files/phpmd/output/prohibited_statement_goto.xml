@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="prohibited_statement_goto.php">
+    <violation beginline="10" endline="10" rule="GotoStatement" ruleset="Design Rules" priority="1">
+      The method loopArrayCallback() utilizes a goto statement.
+    </violation>
+  </file>
+</pmd>

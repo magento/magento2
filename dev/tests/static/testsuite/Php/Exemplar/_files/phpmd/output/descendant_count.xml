@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="descendant_count.php">
+    <violation beginline="3" endline="3" rule="NumberOfChildren" ruleset="Design Rules" package="+global" class="Foo01" priority="2">
+      The class Foo01 has 15 children. Consider to rebalance this class hierarchy.
+    </violation>
+  </file>
+</pmd>

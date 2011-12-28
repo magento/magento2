@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="coupling.php">
+    <violation beginline="19" endline="78" rule="CouplingBetweenObjects" ruleset="Design Rules" package="+global" class="Foo" priority="2">
+      The class Foo has a coupling between objects value of 13. Consider to reduce the number of dependencies under 13.
+    </violation>
+  </file>
+</pmd>

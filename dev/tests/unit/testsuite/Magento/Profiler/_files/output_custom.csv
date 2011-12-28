@@ -1,0 +1,4 @@
+some_root_timer.`0.080000`.`0.040000`.2.51,000,000.50,000,000
+some_root_timer->some_nested_timer.`0.080000`.`0.026667`.3.42,000,000.40,000,000
+some_root_timer->some_nested_timer->some_deeply_nested_timer.`0.030000`.`0.010000`.3.13,000,000.10,000,000
+one_more_root_timer.`0.010000`.`0.010000`.1.23,456,789.12,345,678

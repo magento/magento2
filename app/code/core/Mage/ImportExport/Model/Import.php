@@ -374,7 +374,7 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
         $count = self::MAX_IMPORT_CHUNKS;
         for ($i = 1; $i < $count; $i++) {
             $writer = Mage::getModel(
-                'importexport/export_adapter_csv',
+                'Mage_ImportExport_Model_Export_Adapter_Csv',
                 self::getWorkingDir() . sprintf($filenameFormat, $i)
             );
 

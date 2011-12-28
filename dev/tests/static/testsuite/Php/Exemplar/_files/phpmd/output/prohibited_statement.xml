@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="prohibited_statement.php">
+    <violation beginline="7" endline="7" rule="ExitExpression" ruleset="Design Rules" priority="1">
+      The method terminateApplication() contains an exit expression.
+    </violation>
+    <violation beginline="12" endline="12" rule="EvalExpression" ruleset="Design Rules" priority="1">
+      The method evaluateExpression() contains an eval expression.
+    </violation>
+  </file>
+</pmd>

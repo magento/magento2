@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="field_count.php">
+    <violation beginline="6" endline="29" rule="TooManyFields" ruleset="Code Size Rules" package="+global" class="Foo" priority="3">
+      Too many fields
+    </violation>
+  </file>
+</pmd>

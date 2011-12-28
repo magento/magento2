@@ -98,7 +98,4 @@ foreach ($regex as $file) {
     }
 }
 
-$code = '<?php
-return ' . var_export($map, true) . ';';
-
-echo $code;
+echo serialize($map);

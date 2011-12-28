@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="naming.php">
+    <violation beginline="5" endline="5" rule="ConstantNamingConventions" ruleset="Naming Rules" priority="4">
+      Constant nonUppercaseName should be defined in uppercase
+    </violation>
+    <violation beginline="11" endline="11" rule="ShortVariable" ruleset="Naming Rules" priority="3">
+      Avoid variables with short names like $_a
+    </violation>
+    <violation beginline="13" endline="13" rule="LongVariable" ruleset="Naming Rules" priority="3">
+      Avoid excessively long variable names like $_tooLongPropertyName1
+    </violation>
+    <violation beginline="18" endline="18" rule="ConstructorWithNameAsEnclosingClass" ruleset="Naming Rules" package="+global" class="Foo" method="Foo" priority="3">
+      Classes should not have a constructor method with the same name as the class
+    </violation>
+    <violation beginline="20" endline="20" rule="ShortVariable" ruleset="Naming Rules" priority="3">
+      Avoid variables with short names like $a1
+    </violation>
+    <violation beginline="20" endline="20" rule="LongVariable" ruleset="Naming Rules" priority="3">
+      Avoid excessively long variable names like $tooLongParameterName2
+    </violation>
+    <violation beginline="22" endline="22" rule="ShortVariable" ruleset="Naming Rules" priority="3">
+      Avoid variables with short names like $a2
+    </violation>
+    <violation beginline="23" endline="23" rule="LongVariable" ruleset="Naming Rules" priority="3">
+      Avoid excessively long variable names like $tooLongLocalVariable3
+    </violation>
+    <violation beginline="30" endline="30" rule="ShortMethodName" ruleset="Naming Rules" package="+global" class="Foo" method="_x" priority="3">
+      Avoid using short method names like Foo::_x()
+    </violation>
+    <violation beginline="36" endline="39" rule="BooleanGetMethodName" ruleset="Naming Rules" package="+global" class="Foo" method="getBoolValue" priority="4">
+      The 'getBoolValue()' method which returns a boolean should be named 'is...()' or 'has...()'
+    </violation>
+  </file>
+</pmd>

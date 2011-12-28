@@ -1,0 +1,7 @@
+dev/tests/integration/framework/tests/unit/testsuite/Magento/Test/TestSuite/_files
+dev/tests/integration/testsuite/integrity/modular/TemplateFilesTest.php
+dev/tests/integration/testsuite/integrity/theme/TemplateFilesTest.php
+dev/tests/integration/testsuite/Mage/Core/Block/_files
+dev/tests/integration/tmp
+dev/tests/static/testsuite/Php/Exemplar/_files/phpcs/input
+dev/tests/static/testsuite/Php/Exemplar/_files/phpmd/input

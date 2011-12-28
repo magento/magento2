@@ -1,0 +1,43 @@
+<table border="1" cellspacing="0" cellpadding="2">
+<caption>Code Profiler Title</caption>
+<tr>
+<th>Timer Id</th>
+<th>Time</th>
+<th>Avg</th>
+<th>Cnt</th>
+<th>Emalloc</th>
+<th>RealMem</th>
+</tr>
+<tr>
+<td title="some_root_timer">some_root_timer</td>
+<td title="some_root_timer">0.080000</td>
+<td title="some_root_timer">0.040000</td>
+<td title="some_root_timer">2</td>
+<td title="some_root_timer">51,000,000</td>
+<td title="some_root_timer">50,000,000</td>
+</tr>
+<tr>
+<td title="some_root_timer->some_nested_timer">&middot;&nbsp;&nbsp;some_nested_timer</td>
+<td title="some_root_timer->some_nested_timer">0.080000</td>
+<td title="some_root_timer->some_nested_timer">0.026667</td>
+<td title="some_root_timer->some_nested_timer">3</td>
+<td title="some_root_timer->some_nested_timer">42,000,000</td>
+<td title="some_root_timer->some_nested_timer">40,000,000</td>
+</tr>
+<tr>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">&middot;&nbsp;&nbsp;&middot;&nbsp;&nbsp;some_deeply_nested_timer</td>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">0.030000</td>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">0.010000</td>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">3</td>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">13,000,000</td>
+<td title="some_root_timer->some_nested_timer->some_deeply_nested_timer">10,000,000</td>
+</tr>
+<tr>
+<td title="one_more_root_timer">one_more_root_timer</td>
+<td title="one_more_root_timer">0.010000</td>
+<td title="one_more_root_timer">0.010000</td>
+<td title="one_more_root_timer">1</td>
+<td title="one_more_root_timer">23,456,789</td>
+<td title="one_more_root_timer">12,345,678</td>
+</tr>
+</table>

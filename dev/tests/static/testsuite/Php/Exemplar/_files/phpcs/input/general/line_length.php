@@ -1,0 +1,4 @@
+<?php
+$lineEighty = '                                                              ';
+$lineOneTwenty = '                                                                                                    ';
+$tooLong = '                                                                                                           ';

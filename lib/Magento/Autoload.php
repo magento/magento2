@@ -159,7 +159,7 @@ class Magento_Autoload
     {
         if (is_string($map)) {
             if (is_file($map) && is_readable($map)) {
-                $map = include $map;
+                $map = unserialize(file_get_contents($map));
             } else {
                 throw new Exception($map . ' file does not exist.');
             }

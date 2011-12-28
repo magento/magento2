@@ -31,7 +31,7 @@
  * @package     Mage_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Log_Model_Shell extends Mage_Core_Model_Shell_Abstract
+class Mage_Log_Model_Shell extends Mage_Core_Model_ShellAbstract
 {
     /**
      * Converts count to human view

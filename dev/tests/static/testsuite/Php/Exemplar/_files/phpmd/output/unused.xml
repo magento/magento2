@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="unused.php">
+    <violation beginline="5" endline="5" rule="UnusedPrivateField" ruleset="Unused Code Rules" priority="3">
+      Avoid unused private fields such as '$_unusedField'.
+    </violation>
+    <violation beginline="7" endline="7" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="+global" class="Foo" method="_unusedMethod" priority="3">
+      Avoid unused private methods such as '_unusedMethod'.
+    </violation>
+    <violation beginline="9" endline="9" rule="UnusedFormalParameter" ruleset="Unused Code Rules" priority="3">
+      Avoid unused parameters such as '$unusedParameter'.
+    </violation>
+    <violation beginline="11" endline="11" rule="UnusedLocalVariable" ruleset="Unused Code Rules" priority="3">
+      Avoid unused local variables such as '$unusedLocalVariable'.
+    </violation>
+  </file>
+</pmd>

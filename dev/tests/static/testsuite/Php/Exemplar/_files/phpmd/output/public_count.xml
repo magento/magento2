@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="public_count.php">
+    <violation beginline="11" endline="58" rule="ExcessivePublicCount" ruleset="Code Size Rules" package="+global" class="Foo" priority="3">
+      This class has a bunch of public methods and attributes
+    </violation>
+  </file>
+</pmd>

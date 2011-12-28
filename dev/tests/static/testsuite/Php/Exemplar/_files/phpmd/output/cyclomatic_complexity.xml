@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="cyclomatic_complexity.php">
+    <violation beginline="8" endline="40" rule="CyclomaticComplexity" ruleset="Code Size Rules" package="+global" class="Foo" method="bar" priority="3">
+      The method bar() has a Cyclomatic Complexity of 10.
+    </violation>
+  </file>
+</pmd>

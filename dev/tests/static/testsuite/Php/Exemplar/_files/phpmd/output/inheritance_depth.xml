@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="inheritance_depth.php">
+    <violation beginline="15" endline="15" rule="DepthOfInheritance" ruleset="Design Rules" package="+global" class="Foo07" priority="2">
+      The class Foo07 has 6 parents. Consider to reduce the depth of this class hierarchy.
+    </violation>
+  </file>
+</pmd>

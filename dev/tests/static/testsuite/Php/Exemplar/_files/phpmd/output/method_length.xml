@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pmd>
+  <file name="method_length.php">
+    <violation beginline="8" endline="107" rule="ExcessiveMethodLength" ruleset="Code Size Rules" package="+global" class="Foo" method="bar" priority="3">
+      Avoid really long methods.
+    </violation>
+  </file>
+</pmd>

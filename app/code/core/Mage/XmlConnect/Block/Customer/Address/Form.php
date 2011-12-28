@@ -106,7 +106,7 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
         $action = Mage::helper('Mage_XmlConnect_Helper_Data')->getActionUrl('xmlconnect/customer/saveaddress');
 
         /** @var Mage_XmlConnect_Model_Simplexml_Form $fromXmlObj */
-        $fromXmlObj = Mage::getModel('xmlconnect/simplexml_form', array(
+        $fromXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form', array(
             'xml_id' => 'address_form',
             'action' => $action,
             'use_container' => true

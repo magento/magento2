@@ -312,6 +312,20 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
     }
 
     /**
+     * Update entity attribute value
+     *
+     * @param Varien_Object $object
+     * @param Mage_Eav_Model_Entity_Attribute_Abstract $attribute
+     * @param mixed $valueId
+     * @param mixed $value
+     * @return Mage_Catalog_Model_Resource_Abstract
+     */
+    protected function _updateAttribute($object, $attribute, $valueId, $value)
+    {
+        return $this->_saveAttributeValue($object, $attribute, $value);
+    }
+
+    /**
      * Update attribute value for specific store
      *
      * @param Mage_Catalog_Model_Abstract $object
