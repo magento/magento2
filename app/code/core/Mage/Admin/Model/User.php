@@ -388,7 +388,7 @@ class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
         if ($user) {
             $this->setData($user);
         }
-        
+
         return $this;
     }
 
