@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -80,7 +80,7 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         $configFields = Mage::getSingleton('Mage_Adminhtml_Model_Config');
         $sections = $configFields->getSections($current);
         $tabs     = (array)$configFields->getTabs()->children();
-       
+
 
         $sections = (array)$sections;
 
@@ -99,7 +99,7 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
 
 
         foreach ($sections as $section) {
-
+            Mage::dispatchEvent('adminhtml_block_system_config_init_tab_sections_before', array('section' => $section));
             $hasChildren = $configFields->hasChildren($section, $websiteCode, $storeCode);
 
             //$code = $section->getPath();

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  static_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -108,24 +108,22 @@ class Inspection_CopyPasteDetector_Command extends Inspection_CommandAbstract
     }
 
     /**
-     * Under Unix platform creates one more report in html-format.
-     * The report is generated based on already existing report in xml format and XSLT conversion scheme
-     * in "html_report.xslt". Returns null, if conversion tool was not found, otherwise returns true/false as a result
-     * of conversion tool execution.
+     * Generate HTML representation for an existing XML report using XSLT transformation
      *
      * @return bool|null
      */
     protected function _generateHtmlReport()
     {
-        $isWindows = strncasecmp(PHP_OS, 'win', 3) == 0;
-        if ($isWindows) {
-            return null;
-        }
-        if (!$this->_execShellCmd('xsltproc --version')) {
+        if ($this->_execShellCmd('xsltproc --version') === false) {
             return null;
         }
         $xsltFile = __DIR__ . '/html_report.xslt';
-        $result = $this->_execShellCmd("xsltproc {$xsltFile} {$this->_reportFile} > {$this->_reportFile}.html");
-        return $result;
+        $result = $this->_execShellCmd(sprintf(
+            "xsltproc %s %s > %s",
+            escapeshellarg($xsltFile),
+            escapeshellarg($this->_reportFile),
+            escapeshellarg("{$this->_reportFile}.html")
+        ));
+        return ($result !== false);
     }
 }

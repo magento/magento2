@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Shipping
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -267,8 +267,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
         $adapter->commit();
 
         if ($this->_importErrors) {
-            $error = Mage::helper('Mage_Shipping_Helper_Data')->__('%1$d records have been imported. See the following list of errors for each record that has not been imported: %2$s',
-                $this->_importedRows, implode(" \n", $this->_importErrors));
+            $error = Mage::helper('Mage_Shipping_Helper_Data')->__('%1$d records have been imported. See the following list of errors for each record that has not been imported: %2$s', $this->_importedRows, implode(" \n", $this->_importErrors));
             Mage::throwException($error);
         }
 
@@ -349,8 +348,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
     {
         // validate row
         if (count($row) < 5) {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Table Rates format in the Row #%s',
-                $rowNumber);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Table Rates format in the Row #%s', $rowNumber);
             return false;
         }
 
@@ -367,8 +365,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
         } elseif ($row[0] == '*' || $row[0] == '') {
             $countryId = '0';
         } else {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Country "%s" in the Row #%s.',
-                $row[0], $rowNumber);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Country "%s" in the Row #%s.', $row[0], $rowNumber);
             return false;
         }
 
@@ -378,8 +375,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
         } elseif ($row[1] == '*' || $row[1] == '') {
             $regionId = 0;
         } else {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Region/State "%s" in the Row #%s.',
-                $row[1], $rowNumber);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Region/State "%s" in the Row #%s.', $row[1], $rowNumber);
             return false;
         }
 
@@ -393,24 +389,21 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
         // validate condition value
         $value = $this->_parseDecimalValue($row[3]);
         if ($value === false) {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid %s "%s" in the Row #%s.',
-                $this->_getConditionFullName($this->_importConditionName), $row[3], $rowNumber);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid %s "%s" in the Row #%s.', $this->_getConditionFullName($this->_importConditionName), $row[3], $rowNumber);
             return false;
         }
 
         // validate price
         $price = $this->_parseDecimalValue($row[4]);
         if ($price === false) {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Shipping Price "%s" in the Row #%s.',
-                $row[4], $rowNumber);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Invalid Shipping Price "%s" in the Row #%s.', $row[4], $rowNumber);
             return false;
         }
 
         // protect from duplicate
         $hash = sprintf("%s-%d-%s-%F", $countryId, $regionId, $zipCode, $value);
         if (isset($this->_importUniqueHash[$hash])) {
-            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Duplicate Row #%s (Country "%s", Region/State "%s", Zip "%s" and Value "%s").',
-                $rowNumber, $row[0], $row[1], $zipCode, $value);
+            $this->_importErrors[] = Mage::helper('Mage_Shipping_Helper_Data')->__('Duplicate Row #%s (Country "%s", Region/State "%s", Zip "%s" and Value "%s").', $rowNumber, $row[0], $row[1], $zipCode, $value);
             return false;
         }
         $this->_importUniqueHash[$hash] = true;

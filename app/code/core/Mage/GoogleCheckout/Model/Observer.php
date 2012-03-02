@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleCheckout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,8 +38,20 @@ class Mage_GoogleCheckout_Model_Observer
         $track = $observer->getEvent()->getTrack();
 
         $order = $track->getShipment()->getOrder();
+        $shippingMethod = $order->getShippingMethod(); // String in format of 'carrier_method'
+        if (!$shippingMethod) {
+            return;
+        }
 
-        if ($order->getShippingMethod()!='googlecheckout_carrier') {
+        // Process only Google Checkout internal methods
+        /* @var $gcCarrier Mage_GoogleCheckout_Model_Shipping */
+        $gcCarrier = Mage::getModel('Mage_GoogleCheckout_Model_Shipping');
+        list($carrierCode, $methodCode) = explode('_', $shippingMethod);
+        if ($gcCarrier->getCarrierCode() != $carrierCode) {
+            return;
+        }
+        $internalMethods = $gcCarrier->getInternallyAllowedMethods();
+        if (!isset($internalMethods[$methodCode])) {
             return;
         }
 

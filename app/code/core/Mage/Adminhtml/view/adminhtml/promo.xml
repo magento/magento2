@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -73,14 +73,25 @@
                 <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Conditions" name="promo_quote_edit_tab_conditions"/>
                 <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Actions" name="promo_quote_edit_tab_actions"/>
                 <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Labels" name="promo_quote_edit_tab_labels"/>
+                <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons" name="promo_quote_edit_tab_coupons">
+                    <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Form" name="promo_quote_edit_tab_coupons_form"/>
+                    <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid" name="promo_quote_edit_tab_coupons_grid"/>
+                </block>
                 <action method="addTab"><name>main_section</name><block>promo_quote_edit_tab_main</block></action>
                 <action method="addTab"><name>conditions_section</name><block>promo_quote_edit_tab_conditions</block></action>
                 <action method="addTab"><name>actions_section</name><block>promo_quote_edit_tab_actions</block></action>
                 <action method="addTab"><name>labels_section</name><block>promo_quote_edit_tab_labels</block></action>
+                <action method="addTab"><name>coupons_section</name><block>promo_quote_edit_tab_coupons</block></action>
             </block>
+            <block type="Mage_Adminhtml_Block_Template" template="promo/salesrulejs.phtml" name="promo_quote_edit_jsinit"/>
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Promo_Quote_Edit" name="promo_quote_edit"></block>
         </reference>
     </adminhtml_promo_quote_edit>
+    <adminhtml_promo_quote_couponsgrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid" name="promo_quote_edit_tab_coupons_grid" />
+        </block>
+    </adminhtml_promo_quote_couponsgrid>
 </layout>

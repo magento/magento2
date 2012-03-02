@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -133,5 +133,39 @@ class MageTest extends PHPUnit_Framework_TestCase
             'module name' => array('Mage_Core',           'Mage_Core_Helper_Data'),
             'class name'  => array('Mage_Core_Helper_Js', 'Mage_Core_Helper_Js'),
         );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testSetConfigModel()
+    {
+        Mage::reset();
+        Mage::setConfigModel();
+        $config = Mage::getConfig();
+        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
+
+        Mage::reset();
+        Mage::setConfigModel(array('config_model' => 'Mage_Core_Model_Config'));
+        $config = Mage::getConfig();
+        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
+
+        Mage::reset();
+        Mage::setConfigModel(array('config_model' => 'ERROR_STRING'));
+        $config = Mage::getConfig();
+        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testSetIsInstalled()
+    {
+        if (!Mage::isInstalled()) {
+            $this->assertFalse(Mage::isInstalled());
+
+            Mage::setIsInstalled(array('is_installed' => true));
+            $this->assertTrue(Mage::isInstalled());
+        }
     }
 }

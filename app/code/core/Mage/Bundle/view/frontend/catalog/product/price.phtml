@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -35,12 +35,17 @@
 <?php
 if ($_product->getPriceType() == 1) {
     $_weeeTaxAmount = Mage::helper('Mage_Weee_Helper_Data')->getAmount($_product);
+    $_weeeTaxAmountInclTaxes = $_weeeTaxAmount;
+    if (Mage::helper('Mage_Weee_Helper_Data')->isTaxable()) {
+        $_attributes = Mage::helper('Mage_Weee_Helper_Data')->getProductWeeeAttributesForRenderer($_product, null, null, null, true);
+        $_weeeTaxAmountInclTaxes = Mage::helper('Mage_Weee_Helper_Data')->getAmountInclTaxes($_attributes);
+    }
     if ($_weeeTaxAmount && Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(0, 1, 4))) {
         $_minimalPriceTax += $_weeeTaxAmount;
-        $_minimalPriceInclTax += $_weeeTaxAmount;
+        $_minimalPriceInclTax += $_weeeTaxAmountInclTaxes;
     }
     if ($_weeeTaxAmount && Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, 2)) {
-        $_minimalPriceInclTax += $_weeeTaxAmount;
+        $_minimalPriceInclTax += $_weeeTaxAmountInclTaxes;
     }
 
     if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(1, 2, 4))) {
@@ -153,10 +158,10 @@ if ($_product->getPriceType() == 1) {
                     if ($_product->getPriceType() == 1) {
                         if ($_weeeTaxAmount && Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, array(0, 1, 4))) {
                             $_maximalPriceTax += $_weeeTaxAmount;
-                            $_maximalPriceInclTax += $_weeeTaxAmount;
+                            $_maximalPriceInclTax += $_weeeTaxAmountInclTaxes;
                         }
                         if ($_weeeTaxAmount && Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_product, 2)) {
-                            $_maximalPriceInclTax += $_weeeTaxAmount;
+                            $_maximalPriceInclTax += $_weeeTaxAmountInclTaxes;
                         }
                     }
                 ?>

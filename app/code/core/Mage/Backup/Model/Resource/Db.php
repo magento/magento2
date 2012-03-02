@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backup
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,11 +35,11 @@
 class Mage_Backup_Model_Resource_Db
 {
     /**
-     * Read connection
+     * Database connection adapter
      *
      * @var Varien_Db_Adapter_Pdo_Mysql
      */
-    protected $_read;
+    protected $_write;
 
     /**
      * tables Foreign key data array
@@ -55,7 +55,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function __construct()
     {
-        $this->_read = Mage::getSingleton('Mage_Core_Model_Resource')->getConnection('backup_read');
+        $this->_write = Mage::getSingleton('Mage_Core_Model_Resource')->getConnection('backup_write');
     }
 
     /**
@@ -74,7 +74,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function getTables()
     {
-        return $this->_read->listTables();
+        return $this->_write->listTables();
     }
 
     /**
@@ -112,7 +112,10 @@ class Mage_Backup_Model_Resource_Db
         if (!$tableName) {
             $tables = $this->getTables();
             foreach($tables as $table) {
-                $fkScript = $fkScript . Mage::getResourceHelper('Mage_Backup')->getTableForeignKeysSql($table);
+                $tableFkScript = Mage::getResourceHelper('Mage_Backup')->getTableForeignKeysSql($table);
+                if (!empty($tableFkScript)) {
+                    $fkScript .= "\n" . $tableFkScript;
+                }
             }
         } else {
             $fkScript = $this->getTableForeignKeysSql($tableName);
@@ -128,7 +131,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function getTableStatus($tableName)
     {
-        $row = $this->_read->showTableStatus($tableName);
+        $row = $this->_write->showTableStatus($tableName);
 
         if ($row) {
             $statusObject = new Varien_Object();
@@ -137,8 +140,8 @@ class Mage_Backup_Model_Resource_Db
                 $statusObject->setData(strtolower($field), $value);
             }
 
-            $cntRow = $this->_read->fetchRow(
-                    $this->_read->select()->from($tableName, 'COUNT(1) as rows'));
+            $cntRow = $this->_write->fetchRow(
+                    $this->_write->select()->from($tableName, 'COUNT(1) as rows'));
             $statusObject->setRows($cntRow['rows']);
 
             return $statusObject;
@@ -157,8 +160,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function getTableDataSql($tableName, $count = null, $offset = null)
     {
-        return Mage::getResourceHelper('Mage_Backup')->getInsertSql($tableName);
-
+        return Mage::getResourceHelper('Mage_Backup')->getPartInsertSql($tableName, $count, $offset);
     }
 
     /**
@@ -181,7 +183,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function getTableHeader($tableName)
     {
-        $quotedTableName = $this->_read->quoteIdentifier($tableName);
+        $quotedTableName = $this->_write->quoteIdentifier($tableName);
         return "\n--\n"
             . "-- Table structure for table {$quotedTableName}\n"
             . "--\n\n";
@@ -249,7 +251,7 @@ class Mage_Backup_Model_Resource_Db
     public function beginTransaction()
     {
         Mage::getResourceHelper('Mage_Backup')->turnOnSerializableMode();
-        $this->_read->beginTransaction();
+        $this->_write->beginTransaction();
         return $this;
     }
 
@@ -260,7 +262,7 @@ class Mage_Backup_Model_Resource_Db
      */
     public function commitTransaction()
     {
-        $this->_read->commit();
+        $this->_write->commit();
         Mage::getResourceHelper('Mage_Backup')->turnOnReadCommittedMode();
         return $this;
     }
@@ -272,7 +274,18 @@ class Mage_Backup_Model_Resource_Db
      */
     public function rollBackTransaction()
     {
-        $this->_read->rollBack();
+        $this->_write->rollBack();
+        return $this;
+    }
+
+    /**
+     * Run sql code
+     *
+     * @param $command
+     * @return Mage_Backup_Model_Resource_Db
+     */
+    public function runCommand($command){
+        $this->_write->query($command);
         return $this;
     }
 }

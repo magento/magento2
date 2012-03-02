@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -165,6 +165,7 @@ return array(
     'Varien_Convert_Validator_Dryrun',
     'Varien_Convert_Validator_Column',
     'Varien_Convert_Validator_Interface',
+    'Varien_Profiler' => array('suggestion' => 'Magento_Profiler'),
     'Mage_Catalog_Model_Resource_Product_Attribute_Frontend_Tierprice',
     'Mage_Adminhtml_Block_Api_Tab_Userroles',
     'Mage_Adminhtml_Block_Api_Edituser',

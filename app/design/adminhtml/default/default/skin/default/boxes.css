@@ -17,7 +17,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -90,9 +90,9 @@
     position:fixed;
     top:45%;
     left:50%;
-    width:120px;
-    margin-left:-60px;
-    padding:15px 60px;
+    width:150px;
+    margin-left:-105px;
+    padding:15px 30px;
     background:#fff4e9;
     border:2px solid #f1af73;
     color:#d85909;
@@ -134,6 +134,9 @@
 .grid th                        { white-space:nowrap; }
 .grid td.editable input.input-text { width:50px !important; margin-left:4px !important; }
 .grid td input.input-text       { width:86%; }
+.grid td input.input-text-export-filter { width:272px; }
+.grid td input.input-text-range { width:104px; }
+.grid td input.input-text-range-date { width:87px; }
 .grid td input.input-inactive   { background:#eee; }
 .grid table td                  { border-width:0 1px 1px 0; border-color:#dadfe0; border-style:solid; }
 .grid table.border td           { background:#fff !important; }
@@ -205,7 +208,9 @@ table.actions td                { vertical-align:top; }
 .grid tr.filter .range select    { float:right; width:56px !important; margin-top:0; }
 .grid tr.filter .range .label    { display:block; width:36px; float:left; padding-left:2px; }
 .grid tr.filter .date img        { width:15px; height:15px; cursor:pointer; vertical-align:middle; }
-.grid .head-massaction select    { width:50px !important; }
+.grid .head-massaction select    { width:auto !important; max-width:90px; }
+.grid select.select-export-filter,
+.grid select.multiselect-export-filter { width:278px; }
 
 /* Grid Footer */
 .grid table tfoot tr            { background:#D7E5EF; }
@@ -270,7 +275,7 @@ ul.tabs a.changed               { font-style:italic; }
 ul.tabs-horiz                   { margin:0 0 18px 0; background:url(images/horiz_tabs_ul_bg.gif) repeat-x 0 100% #f8f8f8; padding:8px 0 0 5px; }
 ul.tabs-horiz li                { float:left; margin:0 4px; }
 ul.tabs-horiz li a              { display:block; background:#e2e2e2; border:1px solid #ccc; padding:2px 10px; color:#333 !important; text-decoration:none !important; }
-ul.tabs-horiz li a.notloaded    { color:#999 !important; }
+ul.tabs-horiz li a.notloaded    { /* not used for now */ }
 ul.tabs-horiz li a.active       { border-bottom:1px solid #fff; background:#fff; }
 
 
@@ -335,6 +340,7 @@ table.form-edit                         { width:100%; }
 label.inline                            { float:none !important; width:auto !important; }
 .nested-content .entry-edit             { margin-left:2em; }
 .nested-content .entry-edit .entry-edit { margin-left:0; }
+#coupon_container .entry-edit { min-width:310px; }
 
 /* Form Elements */
 input.input-text,textarea,select { border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; background:#fff; font:12px arial, helvetica, sans-serif; }
@@ -352,7 +358,10 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 .field-100 { background-color:#fff; border-width:1px; border-style:solid; border-color:#aaa #c8c8c8 #c8c8c8 #aaa; padding:2px; }
 .field-100 textarea,
 .field-100 input.input-text { float:left; width:100% !important; border:0 !important; padding:0 !important; }
-
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select option:disabled,
+    select:disabled option { color:#c9c9c9!important;color:#cacaca!important; text-shadow:2px 2px 2px #000; }
+}
 
 /* Form List */ /* Table for default form data */
 .form-list                      { width:auto; border:0 !important; }
@@ -369,6 +378,7 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 .form-list td.value textarea    { width:274px; }
 .form-list td.value textarea    { height:15em; }
 .form-list td.value select      { width:280px; }
+.form-list td.value select.select-date { width:87px; }
 .form-list td.note              { background:url(images/note_cell_bg.gif) 6px 10px no-repeat !important; padding-left:18px; }
 .form-list td.scope-label       { padding-left:5px; color:#6f8992; font-size:.9em; }
 .form-list p.note               { margin:0; padding:0 0 0 13px; background:url(images/note_bg.gif) 1px 6px no-repeat; font-size:11px; }
@@ -403,7 +413,7 @@ span.delete-file                { padding:0; }
 
 /* Form Button */
 .content-buttons.form-buttons,
-.content-header .form-buttons   { text-align:right; margin-bottom:0; white-space:nowrap; }
+.content-header .form-buttons   { text-align:right; margin-bottom:0; }
 .content-header .content-buttons-placeholder { display:inline !important; }
 .content-header .form-buttons   { float:right; }
 .content-header td.form-buttons   { float:none; }
@@ -414,6 +424,7 @@ button,
 button:hover                    { background:#f77c16 url(images/btn_over_bg.gif) repeat-x 0 0; }
 button:active                   { background:#f77c16 url(images/btn_on_bg.gif) repeat-x 0 0; }
 button span                     { line-height:1.35em; background-repeat:no-repeat; background-position:0 50%; }
+button span span                { background:none !important; padding:0 !important; margin:0 !important; display:inline !important; }
 button.delete,
 button.save,
 button.add                      { padding-left:6px; }
@@ -424,12 +435,18 @@ button.add span,
 button.back span,
 button.add-image span,
 button.add-widget span { padding-left:20px; }
+/* Google Chrome specific fix for empty buttons */
+button.add span:after,
+button.delete span:after { display:inline-block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }
 button.back { border-color:#ccc #aaa #aaa #ccc; background-color:#fff; background-image:url(images/btn_back_bg.gif); color:#555; }
 button.back span { background-image:url(images/icon_btn_back.gif); }
+button.fail,
 button.cancel,
 button.delete { border-color:#d24403 #a92000 #a92000 #d24403; background-image:url(images/cancel_btn_bg.gif); background-color:#fcaf81; color:#fff; }
+button.fail:hover,
 button.cancel:hover,
 button.delete:hover { background-image:url(images/cancel_btn_over_bg.gif); }
+button.fail:active,
 button.cancel:active,
 button.delete:active { background-image:url(images/cancel_btn_active_bg.gif); background-color:#e0612f; }
 button.cancel span,
@@ -442,6 +459,9 @@ button.add-widget span { background-image:url(images/btn_add-widget_icon2.gif); 
 button.add-variable span { background-image:url(images/btn_add-variable_icon.gif); padding-left:26px; }
 button.go span { background-image:url(images/btn_go.gif); padding-left:16px; }
 button.btn-chooser { display:block; margin:0 0 10px; }
+button.success { background-image:url(images/btn_gr_bg.gif); border-color:#46745E; }
+button.success:hover { background:url(images/btn_gr_over.gif) #6cac46; }
+button.success:active { background:url(images/btn_gr_on.gif) repeat-x 0 0 #3fa05e; }
 
 button.disabled,
 button.disabled:hover,
@@ -461,6 +481,7 @@ button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0;
 .side-col .switcher select { width:100%; }
 /*.side-col .switcher     { margin-right:20px; margin-bottom:20px; }*/
 .catalog-categories .side-col .switcher { margin-right:0; margin-bottom:15px; }
+.link-storeScope { display:inline-block; vertical-align:middle; margin:0 0 1px; width:16px; height:16px; background:url(images/i_question-mark.png) 0 0 no-repeat; text-decoration:none !important; text-indent:-999em; overflow:hidden; }
 
 
 /* SPACE
@@ -693,7 +714,24 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 .login-container .legal                 { margin:0; background:url(images/login_box_legal_bg.gif) no-repeat; padding:8px 8px 5px 8px; font-size:.95em; }
 .login-form .validation-advice          { margin:3px 0 0 0; }
 .login-form .forgot-link                { margin:0 17px 0 0; text-align:right; }
+.login-form .captcha                    { padding:10px 0 0; }
+.login-form .captcha-image              { border:1px solid #aaa; margin:1.5em 0 0; position:relative; }
+.login-form .captcha-image img          { vertical-align:bottom; }
+.login-form .captcha-reload             { cursor:pointer; position: absolute; top:2px; right:2px; }
+.login-form .captcha-reload.refreshing  { animation:rotate 1.5s infinite linear; -webkit-animation:rotate 1.5s infinite linear; -moz-animation:rotate 1.5s infinite linear; }
 
+@-webkit-keyframes rotate {
+    0% { -webkit-transform:rotate(0); }
+    0% { -webkit-transform:rotate(360deg); }
+}
+@-moz-keyframes rotate {
+    0% { -moz-transform:rotate(0); }
+    0% { -moz-transform:rotate(360deg); }
+}
+@keyframes rotate {
+    0% { transform:rotate(0); }
+    0% { transform:rotate(360deg); }
+}
 
 
 /* DASHBOARD
@@ -758,9 +796,10 @@ ul.item-options li { padding-left:.7em; }
 
 .entry-edit .order-address td.label label { width:100px; }
 .entry-edit .order-address input.input-text,
-.entry-edit .order-address .textarea    { width:95% !important; }
-.entry-edit .order-address .select      { width:96.5%; }
-.order-search-items .entry-edit .grid   { height:610px; overflow:auto; }
+.entry-edit .order-address .textarea     { width:95% !important; }
+.entry-edit .order-address .select       { width:96.5%; }
+.entry-edit .order-address .validate-vat { text-align:right; padding:10px 0 0; width:96%; }
+.order-search-items .entry-edit .grid    { height:610px; overflow:auto; }
 .order-search-items .entry-edit .grid table { width:99.9%; }
 /* .create-order-totals                 { background:url(images/bg_create_order_totals.gif) repeat-y 50% 0 !important; } */
 
@@ -959,6 +998,7 @@ ul.tabs a.paypal-section:hover { background:url(images/tabs_span_bg.gif) repeat-
 .x-tree-node { margin:0 !important; }
 .x-tree-node .leaf .x-tree-node-icon        { background-image:url(images/fam_leaf.png); }
 .x-tree-node .system-leaf .x-tree-node-icon { background-image:url(images/fam_application_form_delete.png); }
+.x-tree-node-ct { overflow:hidden; }
 
 /* Product - Websites */
 .webiste-groups                         { padding:10px 20px; }
@@ -1392,6 +1432,19 @@ ul.super-product-attributes { padding-left:15px; }
 #catalog-wysiwyg-editor .magento_message { padding:0 7px; }
 #catalog-wysiwyg-editor .magento_buttons { padding-left:7px; padding-right:7px; }
 
+/* Backups */
+.backup-dialog { background-color:#6f8992; background:rgba(111, 137, 146, 0.5); cursor:default; left:50%; margin:0 0 0 -271px; position:fixed; top:50%; width:470px; padding:8px; z-index:400; -moz-box-shadow:0 0 100px #ccc; -webkit-box-shadow:0 0 100px #ccc; box-shadow:0 0 100px #ccc; }
+.backup-dialog .entry-edit { border:1px solid #6f8992; }
+.backup-dialog .content { background:#fff; border-bottom:1px solid #ccc; max-height:400px; overflow:auto; }
+.backup-dialog .question {margin-top: 15px;}
+.backup-dialog .buttons-set { border-top:1px solid #ddd; background:#eee; margin:0; overflow:hidden; padding:7px 10px 8px; width:448px; }
+.backup-dialog .buttons-set button { margin:0 0 0 5px; }
+.backup-dialog #ftp-credentials-container {margin-top: 25px;}
+.backup-dialog .password-box-container {margin-top: 15px;}
+.backup-dialog #ftp-credentials-container fieldset {margin-bottom: 0;}
+.backup-dialog input[type=text], .backup-dialog input[type=password] {width: 180px}
+.backup-dialog .exclude-media-checkbox-container {margin-top: 15px;}
+.backup-dialog td.maintenance-checkbox-container {margin-top: 0; padding-top: 4px;}
 
 /*****************************************/
 /******** ALIGNMENTS AND CLEARS **********/

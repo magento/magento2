@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Archive
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -157,12 +157,13 @@ class Mage_Archive
             if ($i == 0) {
                 $packed = rtrim($destination, DS) . DS;
             } else {
-                $packed = rtrim($destination, DS) . DS . '~tmp-'. microtime(true) . $archivers[$i-1] . '.' . $archivers[$i-1];
+                $packed = rtrim($destination, DS) . DS . '~tmp-'. microtime(true) . $archivers[$i-1] . '.'
+                    . $archivers[$i-1];
             }
             $source = $this->_getArchiver($archivers[$i])->unpack($source, $packed);
-            
+
             //var_dump($packed, $source);
-            
+
             if ($clearInterm && $interimSource && $i >= 0) {
                 unlink($interimSource);
             }
@@ -218,5 +219,4 @@ class Mage_Archive
         }
         return false;
     }
-
 }

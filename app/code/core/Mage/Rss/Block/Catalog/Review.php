@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Rss
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,10 +64,8 @@ class Mage_Rss_Block_Catalog_Review extends Mage_Rss_Block_Abstract
     protected function _toHtml()
     {
         $newUrl = Mage::getUrl('rss/catalog/review');
-        /* @var $helper Mage_Rss_Helper_Data */
-        $helper = Mage::helper('Mage_Rss_Helper_Data');
-        $title = $helper->__('Pending product review(s)');
-        $helper->disableFlat();
+        $title = Mage::helper('Mage_Rss_Helper_Data')->__('Pending product review(s)');
+        Mage::helper('Mage_Rss_Helper_Data')->disableFlat();
 
         $rssObj = Mage::getModel('Mage_Rss_Model_Rss');
         $data = array(

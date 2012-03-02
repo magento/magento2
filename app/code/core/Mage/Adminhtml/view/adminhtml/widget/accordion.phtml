@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -29,11 +29,11 @@
  * Template for Mage_Adminhtml_Block_Widget_Accordion
  */
 ?>
-<dl id="<?php echo $this->getHtmlId() ?>" class="accordion">
+<dl id="tab_content_<?php echo $this->getHtmlId() ?>" name="tab_content_<?php echo $this->getHtmlId() ?>" class="accordion">
 <?php foreach ($this->getItems() as $_item): ?>
     <?php echo $this->getChildHtml($_item->getId()) ?>
 <?php endforeach ?>
 </dl>
 <script type="text/javascript">
-    <?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
+    tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
 </script>

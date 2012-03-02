@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -98,7 +98,7 @@ class Mage_Cms_Block_Page extends Mage_Core_Block_Abstract
         $helper = Mage::helper('Mage_Cms_Helper_Data');
         $processor = $helper->getPageTemplateProcessor();
         $html = $processor->filter($this->getPage()->getContent());
-        $html = $this->getMessagesBlock()->getGroupedHtml() . $html;
+        $html = $this->getMessagesBlock()->toHtml() . $html;
         return $html;
     }
 }

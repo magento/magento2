@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -76,6 +76,27 @@ class Mage_Catalog_Model_Layer_Filter_Item extends Varien_Object
         $params['_query']       = $query;
         $params['_escape']      = true;
         return Mage::getUrl('*/*/*', $params);
+    }
+
+    /**
+     * Get url for "clear" link
+     *
+     * @return false|string
+     */
+    public function getClearLinkUrl()
+    {
+        $clearLinkText = $this->getFilter()->getClearLinkText();
+        if (!$clearLinkText) {
+            return false;
+        }
+
+        $urlParams = array(
+            '_current' => true,
+            '_use_rewrite' => true,
+            '_query' => array($this->getFilter()->getRequestVar() => null),
+            '_escape' => true,
+        );
+        return Mage::getUrl('*/*/*', $urlParams);
     }
 
     /**

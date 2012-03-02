@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,13 +52,21 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
         $orderId = $this->getRequest()->getParam('order_id');
         $order = Mage::getModel('Mage_Sales_Model_Order')->load($orderId);
 
-        if ($order->getId()) {
-            $this->_getSession()->setUseOldShippingMethod(true);
-            $this->_getOrderCreateModel()->initFromOrder($order);
-            $this->_redirect('*/*');
-        }
-        else {
-            $this->_redirect('*/sales_order/');
+        try {
+            if ($order->getId()) {
+                $this->_getSession()->setUseOldShippingMethod(true);
+                $this->_getOrderCreateModel()->initFromOrder($order);
+                $this->_redirect('*/*');
+            }
+            else {
+                $this->_redirect('*/sales_order/');
+            }
+        } catch (Mage_Core_Exception $e) {
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
+            $this->_redirect('*/sales_order/view', array('order_id' => $orderId));
+        } catch (Exception $e) {
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addException($e, $e->getMessage());
+            $this->_redirect('*/sales_order/view', array('order_id' => $orderId));
         }
     }
 
@@ -74,7 +82,7 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
             ->_setActiveMenu('sales/order')
             ->renderLayout();
     }
-    
+
     /**
      * Acl check for admin
      *
@@ -83,5 +91,5 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
     protected function _isAllowed()
     {
         return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/edit');
-    }    
+    }
 }

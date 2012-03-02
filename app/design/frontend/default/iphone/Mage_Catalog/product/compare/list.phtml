@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Catalog_Block_Product_Compare_List */
@@ -30,9 +30,6 @@ $_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
 ?>
 <?php $_total=$this->getItems()->getSize() ?>
 <?php if($_total): ?>
-    <div class="compare-back-link">
-        <a href="javascript:history.back(1);">Back</a>
-    </div>
     <table class="data-table compare-table" id="product_comparison">
     <?php $_i=0 ?>
     <?php foreach($this->getItems() as $_item): ?>
@@ -46,14 +43,19 @@ $_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
             <?php $_i=0 ?>
             <?php foreach($this->getItems() as $_item): ?>
                 <?php if($_i++%10==0): ?>
-                    <th>&nbsp;</th>
+                    <th>
+                        <div class="compare-back-link">
+                            <a href="javascript:history.back(1);">Back</a>
+                        </div>
+                        <a href="#" onclick="removeAll(event, '<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getClearListUrl(); ?>');" class="compare-clear-all">Clear All</a>
+                    </th>
                 <?php endif; ?>
                 <td>
                     <a class="product-image" href="#" onclick="setLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>">
                         <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_item, 'small_image')->resize($_imageSize); ?>" width="<?php echo $_imageSize ?>" height="<?php echo $_imageSize ?>" alt="<?php echo $this->stripTags($_item->getName(), null, true) ?>" />
                     </a>
                     <span class="loader" style="display:none;"></span>
-                    <a href="#" class="btn-remove" onclick="removeItem('<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getRemoveUrl($_item) ?>', this);"><img src="<?php echo $this->getSkinUrl('images/btn_trash.png') ?>" height="10" width="10" /></a>
+                    <a href="#" class="btn-remove" onclick="removeItem(event, '<?php echo $this->helper('Mage_Catalog_Helper_Product_Compare')->getRemoveUrl($_item) ?>', this);"><img src="<?php echo $this->getSkinUrl('images/btn_trash.png') ?>" height="10" width="10" /></a>
                     <h2 class="product-name"><a href="#" onclick="setLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $_item->getName(), 'name') ?></a></h2>
                     <?php echo $this->getReviewsSummaryHtml($_item, 'short') ?>
                     <?php echo $this->getPriceHtml($_item, true, '-compare-list-top') ?>
@@ -132,19 +134,79 @@ $_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
     </div>
     <script type="text/javascript">
         document.observe("dom:loaded", function() {
-            $('product_comparison').on('click', 'th', function (e, elem) {
-                if ( elem.hasClassName('collapsible') ) {
-                    elem.toggleClassName('collapsed');
-                }
-                elem.nextSiblings().each(function (td) {
-                    td.toggleClassName('collapsed');
+            (function () {
+                var compare_table = $('product_comparison');
+
+                compare_table.on('click', 'th', function (e, elem) {
+                    if ( elem.hasClassName('collapsible') ) {
+                        elem.toggleClassName('collapsed');
+                    }
+                    elem.nextSiblings().each(function (td) {
+                        td.toggleClassName('collapsed');
+                    });
                 });
-            });
-            $('product_comparison').select('th').each(function(th) {
-                if ( th.getDimensions().height > 30 && th.down('span') ) {
-                    th.addClassName('collapsible');
+                compare_table.select('th').each(function(th) {
+                    if ( th.getDimensions().height > 30 && th.down('span') ) {
+                        th.addClassName('collapsible');
+                    }
+                });
+
+                if ( compare_table.select('.product-shop-row td').length > 1 ) {
+
+                    compare_table.select('.product-shop-row td').each(function (td) {
+                        td.insert({ 'top' : new Element('span', { 'class' : 'move-right' }) });
+                        td.insert({ 'top' : new Element('span', { 'class' : 'move-left' }) });
+                    });
+                    compare_table.on('click', '.move-right', function (e, elem) {
+                        var index = elem.up('td').cellIndex + 1;
+                        compare_table.select('tr td:nth-child(' + index + ')').each(function (td) {
+                            if ( td.next() ) {
+                                //td.addClassName('move-right-animation');
+                                //td.next().addClassName('move-left-animation');
+                                var clone = td.clone(true);
+                                td.next().setStyle({ 'webkitTransform' : 'translate3d(100%, 0, 0)' }).addClassName('moved-left').insert({ after : clone.setStyle({ 'webkitTransform' : 'translate3d(-100%, 0, 0)' }).addClassName('moved-right') });
+                                td.remove();
+
+                                setTimeout(function () {
+                                    $$('.moved-right').invoke('addClassName', 'move-right-animation-scale');
+                                    $$('.moved-left').invoke('addClassName', 'move-left-animation');
+                                }, 1);
+                            }
+                        });
+                        compare_table.addClassName('hide-controls');
+                    });
+
+                    compare_table.on('webkitTransitionEnd', 'td', function(e, elem) {
+                        elem.writeAttribute('style', '');
+                        var classArray = elem.classNames().toArray();
+                        for (var index = 0, len = classArray.size(); index < len; ++index) {
+                            if(classArray[index] !== 'collapsed'){
+                                elem.removeClassName(classArray[index]);
+                            }
+                        }
+                        compare_table.removeClassName('hide-controls');
+                    })
+
+                    compare_table.on('click', '.move-left', function (e, elem) {
+                        var index = elem.up('td').cellIndex + 1;
+                        compare_table.select('tr td:nth-child(' + index + ')').each(function (td) {
+                            if ( td.previous() && td.previous().cellIndex !== 0 ) {
+                                var clone = td.clone(true);
+                                td.previous().setStyle({ 'webkitTransform' : 'translate3d(-100%, 0, 0)' }).addClassName('moved-right').insert({ before : clone.setStyle({ 'webkitTransform' : 'translate3d(100%, 0, 0)' }).addClassName('moved-left') });
+                                td.remove();
+
+                                setTimeout(function () {
+                                    $$('.moved-right').invoke('addClassName', 'move-right-animation');
+                                    $$('.moved-left').invoke('addClassName', 'move-left-animation-scale');
+                                }, 1);
+                            }
+                        });
+                        compare_table.addClassName('hide-controls');
+                    });
+
                 }
-            });
+
+            }());
         });
 
 
@@ -164,8 +226,8 @@ $_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
         /**
          * Send remove item request, after that reload windows
          */
-        function removeItem (url, item)
-        {
+        function removeItem (e, url, item) {
+            e.preventDefault();
             new Ajax.Request(url, {
                 parameters: {isAjax: 1, method: 'POST'},
                 onLoading: function() {
@@ -176,8 +238,21 @@ $_imageSize = $this->getVar('product_compare_small_image_size', 'Mage_Catalog');
                 },
                 onFailure: item.show()
             });
+        }
+
+        function removeAll (e, url) {
+            e.preventDefault();
+            new Ajax.Request(url, {
+                parameters: {isAjax: 1, method: 'POST'},
+                onLoading: function() {
+                },
+                onSuccess: function() {
+                    window.location.href = document.referrer;
+                }
+            });
 
         }
+
     </script>
 <?php else: ?>
     <script type="text/javascript">

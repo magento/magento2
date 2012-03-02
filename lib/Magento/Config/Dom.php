@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -135,7 +135,7 @@ class Magento_Config_Dom
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws Exception an exception is possible if original document contains multiple nodes for identifier
+     * @throws Magento_Exception an exception is possible if original document contains multiple nodes for identifier
      * @return DOMElement | null
      */
     protected function _getMatchedNode($nodePath)
@@ -144,7 +144,7 @@ class Magento_Config_Dom
         $matchedNodes = $xPath->query($nodePath);
         $node = null;
         if ($matchedNodes->length > 1) {
-            throw new Exception("More than one node matching the query: {$nodePath}");
+            throw new Magento_Exception("More than one node matching the query: {$nodePath}");
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);
         }

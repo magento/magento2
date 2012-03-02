@@ -20,13 +20,14 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Paypal PayflowLink Express Onepage checkout block
  *
+ * @deprecated since 1.6.2.0
  * @category   Mage
  * @package    Mage_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -41,11 +42,6 @@ class Mage_Paypal_Block_Payflow_Link_Review extends Mage_Paypal_Block_Express_Re
      */
     protected function _beforeToHtml()
     {
-        parent::_beforeToHtml();
-        $this->setPlaceOrderUrl($this->getUrl("*/*/placeOrder"));
-        $this->setEditUrl();
-        $this->setSuccessUrl($this->getUrl("checkout/onepage/success"));
-        $this->setUseAjax(true);
-        return $this;
+        return parent::_beforeToHtml();
     }
 }

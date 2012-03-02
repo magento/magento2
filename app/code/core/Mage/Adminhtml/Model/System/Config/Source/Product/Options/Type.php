@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,13 +41,16 @@ class Mage_Adminhtml_Model_System_Config_Source_Product_Options_Type
             array('value' => '', 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('-- Please select --'))
         );
 
+        $helper = Mage::helper('Mage_Catalog_Helper_Data');
+
         foreach (Mage::getConfig()->getNode(self::PRODUCT_OPTIONS_GROUPS_PATH)->children() as $group) {
             $types = array();
             $typesPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/types';
             foreach (Mage::getConfig()->getNode($typesPath)->children() as $type) {
-                $labelPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/types/' . $type->getName() . '/label';
+                $labelPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/types/' . $type->getName()
+                    . '/label';
                 $types[] = array(
-                    'label' => (string) Mage::getConfig()->getNode($labelPath),
+                    'label' => $helper->__((string) Mage::getConfig()->getNode($labelPath)),
                     'value' => $type->getName()
                 );
             }
@@ -55,7 +58,7 @@ class Mage_Adminhtml_Model_System_Config_Source_Product_Options_Type
             $labelPath = self::PRODUCT_OPTIONS_GROUPS_PATH . '/' . $group->getName() . '/label';
 
             $groups[] = array(
-                'label' => (string) Mage::getConfig()->getNode($labelPath),
+                'label' => $helper->__((string) Mage::getConfig()->getNode($labelPath)),
                 'value' => $types
             );
         }

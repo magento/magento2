@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,16 +29,33 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Store_Switcher extends Mage_Adminhtml_Block_Template
 {
+    /**
+     * Key in config for store switcher hint
+     */
+    const XPATH_HINT_KEY = 'store_switcher';
+
     /**
      * @var array
      */
     protected $_storeIds;
 
+    /**
+     * Name of store variable
+     *
+     * @var string
+     */
     protected $_storeVarName = 'store';
+
+    /**
+     * Url for store switcher hint
+     *
+     * @var string
+     */
+    protected $_hintUrl;
 
     /**
      * @var bool
@@ -205,5 +222,39 @@ class Mage_Adminhtml_Block_Store_Switcher extends Mage_Adminhtml_Block_Template
             $this->_hasDefaultOption = $hasDefaultOption;
         }
         return $this->_hasDefaultOption;
+    }
+
+    /**
+     * Return url for store switcher hint
+     *
+     * @return string
+     */
+    public function getHintUrl()
+    {
+        if (null === $this->_hintUrl) {
+            $this->_hintUrl = Mage::helper('Mage_Core_Helper_Hint')->getHintByCode(self::XPATH_HINT_KEY);
+        }
+        return $this->_hintUrl;
+    }
+
+    /**
+     * Return store switcher hint html
+     *
+     * @return string
+     */
+    public function getHintHtml()
+    {
+        $html = '';
+        $url = $this->getHintUrl();
+        if ($url) {
+            $html = '<a'
+                . ' href="'. $this->escapeUrl($url) . '"'
+                . ' onclick="this.target=\'_blank\'"'
+                . ' title="' . $this->__('What is this?') . '"'
+                . ' class="link-storeScope">'
+                . $this->__('What is this?')
+                . '</a>';
+        }
+        return $html;
     }
 }

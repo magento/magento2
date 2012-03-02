@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,11 +32,12 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_System_Email_Template_Grid_Renderer_Type extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+class Mage_Adminhtml_Block_System_Email_Template_Grid_Renderer_Type
+    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
     protected static $_types = array(
-        Mage_Newsletter_Model_Template::TYPE_HTML   => 'HTML',
-        Mage_Newsletter_Model_Template::TYPE_TEXT 	=> 'Text',
+        Mage_Newsletter_Model_Template::TYPE_HTML    => 'HTML',
+        Mage_Newsletter_Model_Template::TYPE_TEXT    => 'Text',
     );
     public function render(Varien_Object $row)
     {

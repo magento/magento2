@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -96,9 +96,14 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
     const COOKIE_NAME                     = 'store';
 
     /**
+     * Cookie currency key
+     */
+    const COOKIE_CURRENCY                 = 'currency';
+
+    /**
      * Script name, which returns all the images
      */
-    const MEDIA_REWRITE_SCRIPT          = 'get.php/';
+    const MEDIA_REWRITE_SCRIPT            = 'get.php/';
 
     /**
      * Cache flag
@@ -677,7 +682,8 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
         }
 
         if (Mage::isInstalled()) {
-            $secureBaseUrl = $this->getConfig(Mage_Core_Model_Url::XML_PATH_SECURE_URL);
+            $secureBaseUrl = Mage::getStoreConfig(Mage_Core_Model_Url::XML_PATH_SECURE_URL);
+
             if (!$secureBaseUrl) {
                 return false;
             }
@@ -766,9 +772,9 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
             if ($code == $this->getDefaultCurrency()) {
-                Mage::app()->getCookie()->delete('currency', $code);
+                Mage::app()->getCookie()->delete(self::COOKIE_CURRENCY, $code);
             } else {
-                Mage::app()->getCookie()->set('currency', $code);
+                Mage::app()->getCookie()->set(self::COOKIE_CURRENCY, $code);
             }
         }
         return $this;

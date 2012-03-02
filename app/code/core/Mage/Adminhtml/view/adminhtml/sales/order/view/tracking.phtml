@@ -20,23 +20,24 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if($this->getOrder()->getShippingCarrier()->isTrackingAvailable()) : ?>
+<?php $_shippingCarrier = $this->getOrder()->getShippingCarrier(); ?>
+<?php if ($_shippingCarrier && $_shippingCarrier->isTrackingAvailable()): ?>
 <span class="field-row" id="order_tracking_info">
 <table cellpadding="0" cellspacing="0" width="100%">
     <tr>
-        <td><label id="tracking_number"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Tracking Number') ?></label></td>
+        <td><label for="tracking_number"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Tracking Number') ?></label></td>
         <td width="100%">
-            <?php if($_numbers = $this->getOrder()->getTrackingNumbers()): ?>
-
-            <?php foreach ($_numbers as $_number): ?>
-                <a href="#" onclick="<?php echo $this->getViewLinkHtml($_number) ?>"><?php echo $_number ?></a>
-                <a href="#" onclick="<?php echo $this->getRemoveLinkHtml($_number) ?>"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Delete') ?></a><br/>
-                <span id="order_tracking_info_response_<?php echo $_number ?>"></span>
-            <?php endforeach; ?>
+            <?php $_numbers = $this->getOrder()->getTrackingNumbers(); ?>
+            <?php if ($_numbers): ?>
+                <?php foreach ($_numbers as $_number): ?>
+                    <a href="#" onclick="<?php echo $this->getViewLinkHtml($_number) ?>"><?php echo $_number ?></a>
+                    <a href="#" onclick="<?php echo $this->getRemoveLinkHtml($_number) ?>"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Delete') ?></a><br/>
+                    <span id="order_tracking_info_response_<?php echo $_number ?>"></span>
+                <?php endforeach; ?>
             <?php endif; ?>
             <input class="input-text" type="text" id="tracking_number" name="tracking_number" value="" style="width:120px;"/>
             <?php echo $this->getSaveButtonHtml() ?>
@@ -44,4 +45,4 @@
     </tr>
 </table>
 </span>
-<?php endif ?>
+<?php endif; ?>

@@ -23,7 +23,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Integrity
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
@@ -36,14 +36,14 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
     protected static $_existingClasses = array();
 
     /**
-     * @param SplFileInfo $file
-     * @dataProvider phpFileDataProvider
+     * @param string $file
+     * @dataProvider Util_Files::getPhpFiles
      */
     public function testPhpFile($file)
     {
         self::skipBuggyFile($file);
         $contents = file_get_contents($file);
-        $classes = $this->_collectMatches($contents, '/
+        $classes = Util_Classes::getAllMatches($contents, '/
             # ::getResourceModel ::getBlockSingleton ::getModel ::getSingleton
             \:\:get(?:ResourceModel | BlockSingleton | Model | Singleton)?\(\s*[\'"]([a-z\d_]+)[\'"]\s*[\),]
 
@@ -66,7 +66,7 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
         );
 
         // without modifier "i". Starting from capital letter is a significant characteristic of a class name
-        $this->_collectMatches($contents, '/(?:\-> | parent\:\:)(?:_init | setType)\(\s*
+        Util_Classes::getAllMatches($contents, '/(?:\-> | parent\:\:)(?:_init | setType)\(\s*
                 \'([A-Z][a-z\d][A-Za-z\d_]+)\'(?:,\s*\'([A-Z][a-z\d][A-Za-z\d_]+)\')
             \s*\)/x',
             $classes
@@ -85,18 +85,10 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
      */
     protected function _collectResourceHelpersPhp($contents, &$classes)
     {
-        $matches = $this->_collectMatches($contents, '/(?:\:\:|\->)getResourceHelper\(\s*\'([a-z\d_]+)\'\s*\)/ix');
+        $matches = Util_Classes::getAllMatches($contents, '/(?:\:\:|\->)getResourceHelper\(\s*\'([a-z\d_]+)\'\s*\)/ix');
         foreach ($matches as $moduleName) {
             $classes[] = "{$moduleName}_Model_Resource_Helper_Mysql4";
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function phpFileDataProvider()
-    {
-        return FileDataProvider::getPhpFiles();
     }
 
     /**
@@ -106,44 +98,8 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
     public function testConfigFile($path)
     {
         self::skipBuggyFile($path);
-        $xml = simplexml_load_file($path);
-        $classes = array();
-
-        // various nodes
-        $nodes = $xml->xpath('/config//resource_adapter | //class | //model | //backend_model | //source_model
-            | //price_model | //model_token | //writer_model | //clone_model | //frontend_model | //admin_renderer
-            | //renderer'
-        ) ?: array();
-        foreach ($nodes as $node) {
-            if (preg_match('/^([A-Z][a-z\d_][A-Za-z\d_]+)\:?/', (string)$node, $matches)) {
-                $classes[$matches[1]] = 1;
-            }
-        }
-
-        // "backend_model" attribute
-        $nodes = $xml->xpath('//@backend_model') ?: array();
-        foreach ($nodes as $node) {
-            $node = (array)$node;
-            $classes[$node['@attributes']['backend_model']] = 1;
-        }
-
-        $this->_collectLoggingExpectedModels($xml, $classes);
-
-        $this->_assertClassesExist(array_keys($classes));
-    }
-
-    /**
-     * Special case: collect "expected models" from logging xml-file
-     *
-     * @param SimpleXmlElement $xml
-     * @param array &$classes
-     */
-    protected function _collectLoggingExpectedModels($xml, &$classes)
-    {
-        $nodes = $xml->xpath('/logging/*/expected_models/* | /logging/*/actions/*/expected_models/*') ?: array();
-        foreach ($nodes as $node) {
-            $classes[$node->getName()] = 1;
-        }
+        $classes = Util_Classes::collectClassesInConfig(simplexml_load_file($path));
+        $this->_assertClassesExist($classes);
     }
 
     /**
@@ -151,71 +107,30 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
      */
     public function configFileDataProvider()
     {
-        return FileDataProvider::getConfigFiles();
+        return Util_Files::getConfigFiles();
     }
 
     /**
      * @param string $path
-     * @dataProvider layoutFileDataProvider
+     * @dataProvider Util_Files::getLayoutFiles
      */
     public function testLayoutFile($path)
     {
         self::skipBuggyFile($path);
         $xml = simplexml_load_file($path);
-        $classes = array();
 
-        // block@type
-        $nodes = $xml->xpath('/layout//block[@type]') ?: array();
-        foreach ($nodes as $node) {
-            $node = (array)$node;
-            $class = $node['@attributes']['type'];
-            $classes[(string)$class] = 1;
+        $classes = Util_Classes::getXmlNodeValues($xml,
+            '/layout//*[contains(text(), "_Block_") or contains(text(), "_Model_") or contains(text(), "_Helper_")]'
+        );
+        foreach (Util_Classes::getXmlAttributeValues($xml, '/layout//@helper', 'helper') as $class) {
+            $classes[] = Util_Classes::getCallbackClass($class);
         }
-
-        // any text nodes that contain conventional block/model/helper names
-        $nodes = $xml->xpath('/layout//action/attributeType | /layout//action[@method="addTab"]/content
-            | /layout//action[@method="addRenderer" or @method="addItemRender" or @method="addColumnRender"
-                or @method="addPriceBlockType" or @method="addMergeSettingsBlockType"
-                or @method="addInformationRenderer" or @method="addOptionRenderer" or @method="addRowItemRender"
-                or @method="addDatabaseBlock"]/*[2]
-            | /layout//action[@method="setMassactionBlockName" or @method="addProductConfigurationHelper"]/name
-            | /layout//action[@method="setEntityModelClass"]/code
-            | /layout//*[contains(text(), "_Block_") or contains(text(), "_Model_") or contains(text(), "_Helper_")]'
-        ) ?: array();
-        foreach ($nodes as $node) {
-            $classes[(string)$node] = 1;
+        foreach (Util_Classes::getXmlAttributeValues($xml, '/layout//@module', 'module') as $module) {
+            $classes[] = "{$module}_Helper_Data";
         }
+        $classes = array_merge($classes, Util_Classes::collectLayoutClasses($xml));
 
-        $this->_collectLayoutHelpersAndModules($xml, $classes);
-
-        $this->_assertClassesExist(array_keys($classes));
-    }
-
-    /**
-     * Special case: collect declaration of helpers and modules in layout files and figure out helper class names
-     *
-     * @param SimpleXmlElement $xml
-     * @param array &$classes
-     */
-    protected function _collectLayoutHelpersAndModules($xml, &$classes)
-    {
-        $nodes = $xml->xpath('/layout//@helper | /layout//@module') ?: array();
-        foreach ($nodes as $node) {
-            $node = (array)$node;
-            if (isset($node['@attributes']['helper'])) {
-                $class = explode('::', $node['@attributes']['helper']);
-                $classes[array_shift($class)] = 1;
-            }
-            if (isset($node['@attributes']['module'])) {
-                $class = $node['@attributes']['module'] . '_Helper_Data';
-                $classes[$class] = 1;
-            }
-        }
-    }
-
-    public function layoutFileDataProvider()
-    {
-        return FileDataProvider::getLayoutFiles();
+        $this->_assertClassesExist(array_unique($classes));
     }
 
     /**
@@ -244,27 +159,6 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
         ) {
             self::markTestIncomplete('Bug MMOBAPP-1792');
         }
-    }
-
-    /**
-     * Sub-routine to find all unique matches in specified content using specified PCRE
-     *
-     * @param string $contents
-     * @param string $regex
-     * @param array &$result
-     * @return array
-     */
-    protected function _collectMatches($contents, $regex, &$result = array())
-    {
-        preg_match_all($regex, $contents, $matches);
-        array_shift($matches);
-        foreach ($matches as $row) {
-            $result = array_merge($result, $row);
-        }
-        $result = array_filter(array_unique($result), function($value) {
-            return !empty($value);
-        });
-        return $result;
     }
 
     /**

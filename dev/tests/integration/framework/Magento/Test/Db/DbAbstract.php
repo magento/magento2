@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -72,7 +72,8 @@ abstract class Magento_Test_Db_DbAbstract
      * @param string $user
      * @param string $password
      * @param string $schema
-     * @param string $dumpFile
+     * @param string $varPath
+     * @throws Magento_Exception
      */
     public function __construct($host, $user, $password, $schema, $varPath)
     {
@@ -83,7 +84,9 @@ abstract class Magento_Test_Db_DbAbstract
 
         $this->_varPath = $varPath;
         if (!is_dir($this->_varPath) || !is_writable($this->_varPath)) {
-            throw new Exception(sprintf('The specified "%s" is not a directory or not writable.', $this->_varPath));
+            throw new Magento_Exception(
+                sprintf('The specified "%s" is not a directory or not writable.', $this->_varPath)
+            );
         }
     }
 

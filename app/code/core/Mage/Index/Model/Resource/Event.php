@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Index
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,7 @@ class Mage_Index_Model_Resource_Event extends Mage_Core_Model_Resource_Db_Abstra
                 $object->mergePreviousData($data);
             }
         }
+        $object->cleanNewData();
         return parent::_beforeSave($object);
     }
 
@@ -85,7 +86,7 @@ class Mage_Index_Model_Resource_Event extends Mage_Core_Model_Resource_Db_Abstra
                 $this->_getWriteAdapter()->delete($processTable);
             } else {
                 foreach ($processIds as $processId => $processStatus) {
-                    if (is_null($processStatus)) {
+                    if (is_null($processStatus) || $processStatus == Mage_Index_Model_Process::EVENT_STATUS_DONE) {
                         $this->_getWriteAdapter()->delete($processTable, array(
                             'process_id = ?' => $processId,
                             'event_id = ?'   => $object->getId(),

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -41,7 +41,7 @@
         <option value="<?php echo $_queue['value'] ?>"><?php echo $_queue['label'] ?> #<?php echo $_queue['value'] ?></option>
     <?php endforeach; ?>
     </select>
-    <button class="scalable" onclick="subscriberController.addToQueue();"><span><?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Add to Queue'); ?></span></button>
+    <button class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo Mage::helper('Mage_Newsletter_Helper_Data')->__('Add to Queue'); ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script type="text/javascript">

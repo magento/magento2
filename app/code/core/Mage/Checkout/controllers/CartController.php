@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,10 +75,12 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
     {
         $returnUrl = $this->getRequest()->getParam('return_url');
         if ($returnUrl) {
-            // clear layout messages in case of external url redirect
-            if ($this->_isUrlInternal($returnUrl)) {
-                $this->_getSession()->getMessages(true);
+
+            if (!$this->_isUrlInternal($returnUrl)) {
+                throw new Mage_Exception('External urls redirect to "' . $returnUrl . '" denied!');
             }
+
+            $this->_getSession()->getMessages(true);
             $this->getResponse()->setRedirect($returnUrl);
         } elseif (!Mage::getStoreConfig('checkout/cart/redirect_to_cart')
             && !$this->getRequest()->getParam('in_cart')
@@ -124,7 +126,13 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $cart->save();
 
             if (!$this->_getQuote()->validateMinimumAmount()) {
-                $warning = Mage::getStoreConfig('sales/minimum_order/description');
+                $minimumAmount = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())
+                    ->toCurrency(Mage::getStoreConfig('sales/minimum_order/amount'));
+
+                $warning = Mage::getStoreConfig('sales/minimum_order/description')
+                    ? Mage::getStoreConfig('sales/minimum_order/description')
+                    : Mage::helper('Mage_Checkout_Helper_Data')->__('Minimum order amount is %s', $minimumAmount);
+
                 $cart->getCheckoutSession()->addNotice($warning);
             }
         }
@@ -368,9 +376,30 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
     }
 
     /**
-     * Update shoping cart data action
+     * Update shopping cart data action
      */
     public function updatePostAction()
+    {
+        $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
+
+        switch ($updateAction) {
+            case 'empty_cart':
+                $this->_emptyShoppingCart();
+                break;
+            case 'update_qty':
+                $this->_updateShoppingCart();
+                break;
+            default:
+                $this->_updateShoppingCart();
+        }
+
+        $this->_goBack();
+    }
+
+    /**
+     * Update customer's shopping cart
+     */
+    protected function _updateShoppingCart()
     {
         try {
             $cartData = $this->getRequest()->getParam('cart');
@@ -399,7 +428,21 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $this->_getSession()->addException($e, $this->__('Cannot update shopping cart.'));
             Mage::logException($e);
         }
-        $this->_goBack();
+    }
+
+    /**
+     * Empty customer's shopping cart
+     */
+    protected function _emptyShoppingCart()
+    {
+        try {
+            $this->_getCart()->truncate()->save();
+            $this->_getSession()->setCartWasUpdated(true);
+        } catch (Mage_Core_Exception $exception) {
+            $this->_getSession()->addError($exception->getMessage());
+        } catch (Exception $exception) {
+            $this->_getSession()->addException($exception, $this->__('Cannot update shopping cart.'));
+        }
     }
 
     /**

@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_SalesRule
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <sections>
+        <promo translate="label" module="Mage_SalesRule">
+            <class>separator-top</class>
+            <label>Promotions</label>
+            <tab>customer</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>400</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <auto_generated_coupon_codes translate="label" module="Mage_SalesRule">
+                    <label>Auto Generated Specific Coupon Codes</label>
+                    <show_in_default>1</show_in_default>
+                    <sort_order>10</sort_order>
+                    <fields>
+                        <length translate="label comment" module="Mage_SalesRule">
+                            <label>Code Length</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Excluding prefix, suffix and separators.</comment>
+                            <frontend_class>validate-digits</frontend_class>
+                        </length>
+                        <format translate="label" module="Mage_SalesRule">
+                            <label>Code Format</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_SalesRule_Model_System_Config_Source_Coupon_Format</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </format>
+                        <prefix translate="label" module="Mage_SalesRule">
+                            <label>Code Prefix</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </prefix>
+                        <suffix translate="label" module="Mage_SalesRule">
+                            <label>Code Suffix</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </suffix>
+                        <dash translate="label comment" module="Mage_SalesRule">
+                            <label>Dash Every X Characters</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>If empty no separation.</comment>
+                            <frontend_class>validate-digits</frontend_class>
+                        </dash>
+                    </fields>
+                </auto_generated_coupon_codes>
+            </groups>
+        </promo>
+    </sections>
+</config>

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -59,10 +59,7 @@
         $latestNoticeUrl = $this->getLatestNoticeUrl();
     ?>
     <?php /*
-    <span class="f-right"><?php echo $this->__('You have %s unread message(s). <a href="%s">Go to messages inbox</a>.',
-        $msgStats,
-        $this->getNoticesInboxUrl()
-    );?></span>
+    <span class="f-right"><?php echo $this->__('You have %s unread message(s). <a href="%s">Go to messages inbox</a>.', $msgStats, $this->getNoticesInboxUrl());?></span>
     */?>
 
     <span class="f-right">
@@ -70,12 +67,7 @@
         <?php echo $this->__('You have %s unread message(s).', $msgStats) ?> <a href="<?php echo $this->getNoticesInboxUrl() ?>"><?php echo $goToBoxMessage ?></a>
     </span>
 <?php /* ********** temporary commented
-    <span class="f-right"><?php echo $this->__('You have %s, %s and %s unread messages. <a href="%s">Go to messages inbox</a>.',
-        '<span class="critical"><strong>'.$this->getCriticalCount().'</strong> '.$this->__('critical').'</span>',
-        '<strong>'.$this->getMajorCount().'</strong> '.$this->__('major'),
-        '<strong>'.$this->getMinorCount().'</strong> '.$this->__('minor'),
-        $this->getNoticesInboxUrl()
-    );?></span>
+    <span class="f-right"><?php echo $this->__('You have %s, %s and %s unread messages. <a href="%s">Go to messages inbox</a>.', '<span class="critical"><strong>'.$this->getCriticalCount().'</strong> '.$this->__('critical').'</span>', '<strong>'.$this->getMajorCount().'</strong> '.$this->__('major'), '<strong>'.$this->getMinorCount().'</strong> '.$this->__('minor'), $this->getNoticesInboxUrl());?></span>
 ******** */?>
     <?php if ($this->isMessageWindowAvailable()): ?>
         <strong class="label clickable" onclick="openMessagePopup()">

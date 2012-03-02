@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -57,47 +57,70 @@
     <adminhtml_customer_wishlist>
         <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Wishlist" name="customer.wishlist.edit.tab" output="toHtml" />
     </adminhtml_customer_wishlist>
-    
+
     <adminhtml_customer_orders>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Orders" name="adminhtml.customer.edit.tab.orders"/>
         </block>
     </adminhtml_customer_orders>
-    
+
     <adminhtml_customer_carts>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Carts" name="admin.customer.carts"/>
         </block>
     </adminhtml_customer_carts>
-    
+
     <adminhtml_customer_viewcart>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_View_Cart" name="admin.customer.view.cart"/>
         </block>
     </adminhtml_customer_viewcart>
-    
+
     <adminhtml_customer_viewwishlist>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_View_Wishlist" name="admin.customer.view.wishlist"/>
         </block>
     </adminhtml_customer_viewwishlist>
-    
+
     <adminhtml_customer_lastorders>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_View_Orders" name="admin.customer.lastorders"/>
         </block>
     </adminhtml_customer_lastorders>
-    
+
     <adminhtml_customer_productreviews>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Reviews" name="admin.customer.reviews"/>
         </block>
     </adminhtml_customer_productreviews>
-    
+
     <adminhtml_customer_producttags>
         <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Tag" name="admin.customer.tags"/>
         </block>
     </adminhtml_customer_producttags>
-    
+
+    <adminhtml_customer_taggrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Tag" name="admin.customer.tags"/>
+        </block>
+    </adminhtml_customer_taggrid>
+
+    <adminhtml_customer_newsletter>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid" name="admin.customer.newsletter.grid"/>
+        </block>
+    </adminhtml_customer_newsletter>
+
+    <adminhtml_customer_grid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Customer_Grid" name="admin.customer.grid"/>
+        </block>
+    </adminhtml_customer_grid>
+
+    <adminhtml_customer_cart>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Cart" name="admin.customer.view.edit.cart" />
+        </block>
+    </adminhtml_customer_cart>
 </layout>

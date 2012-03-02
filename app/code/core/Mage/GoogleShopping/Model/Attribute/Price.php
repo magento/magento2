@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleShopping
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,7 +43,9 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
     public function convertAttribute($product, $entry)
     {
         $product->setWebsiteId(Mage::app()->getStore($product->getStoreId())->getWebsiteId());
-        $product->setCustomerGroupId(Mage::getStoreConfig('customer/create_account/default_group', $product->getStoreId()));
+        $product->setCustomerGroupId(
+            Mage::getStoreConfig(Mage_Customer_Model_Group::XML_PATH_DEFAULT_ID, $product->getStoreId())
+        );
 
         $store = Mage::app()->getStore($product->getStoreId());
         $targetCountry = Mage::getSingleton('Mage_GoogleShopping_Model_Config')->getTargetCountry($product->getStoreId());
@@ -93,7 +95,9 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
 
                 $effectiveDate = $this->getGroupAttributeSalePriceEffectiveDate();
                 if (!is_null($effectiveDate)) {
-                    $effectiveDate->setGroupAttributeSalePriceEffectiveDateFrom($this->getGroupAttributeSalePriceEffectiveDateFrom())
+                    $effectiveDate->setGroupAttributeSalePriceEffectiveDateFrom(
+                            $this->getGroupAttributeSalePriceEffectiveDateFrom()
+                        )
                         ->setGroupAttributeSalePriceEffectiveDateTo($this->getGroupAttributeSalePriceEffectiveDateTo())
                         ->convertAttribute($product, $entry);
                 }

@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Data
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -308,7 +308,7 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
         $html.= isset($data['style']) ? ' style="'.$data['style'].'"' : '';
         $html.= isset($data['id']) ? ' id="'.$data['id'].'"' : '';
         $html.= '>';
-        $html.= isset($data['title']) ? '<span>'.$data['title'].'</span>' : '';
+        $html.= isset($data['title']) ? '<span><span><span>'.$data['title'].'</span></span></span>' : '';
         $html.= '</button>';
 
         return $html;

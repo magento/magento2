@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,14 @@
  */
 class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
 {
+    /**
+     * VAT Validation parameters XML paths
+     */
+    const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT = 'customer/create_account/viv_disable_auto_group_assign_default';
+    const XML_PATH_VIV_ON_EACH_TRANSACTION         = 'customer/create_account/viv_on_each_transaction';
+    const XML_PATH_VAT_VALIDATION_ENABLED          = 'customer/create_account/auto_group_assign';
+    const XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE = 'customer/create_account/tax_calculation_address_type';
+
     /**
      * Array of Customer Address Attributes
      *
@@ -199,5 +207,48 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
         }
 
         return $lines;
+    }
+
+    /**
+     * Check whether VAT ID validation is enabled
+     *
+     * @param Mage_Core_Model_Store|string|int $store
+     * @return bool
+     */
+    public function isVatValidationEnabled($store = null)
+    {
+        return (bool)Mage::getStoreConfig(self::XML_PATH_VAT_VALIDATION_ENABLED, $store);
+    }
+
+    /**
+     * Retrieve disable auto group assign default value
+     *
+     * @return bool
+     */
+    public function getDisableAutoGroupAssignDefaultValue()
+    {
+        return (bool)Mage::getStoreConfig(self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT);
+    }
+
+    /**
+     * Retrieve 'validate on each transaction' value
+     *
+     * @param Mage_Core_Model_Store|string|int $store
+     * @return bool
+     */
+    public function getValidateOnEachTransaction($store = null)
+    {
+        return (bool)Mage::getStoreConfig(self::XML_PATH_VIV_ON_EACH_TRANSACTION, $store);
+    }
+
+    /**
+     * Retrieve customer address type on which tax calculation must be based
+     *
+     * @param Mage_Core_Model_Store|string|int|null $store
+     * @return string
+     */
+    public function getTaxCalculationAddressType($store = null)
+    {
+        return (string)Mage::getStoreConfig(self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE, $store);
     }
 }

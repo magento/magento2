@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,6 +40,9 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
 {
     const XML_PATH_RANGE_CALCULATION    = 'catalog/layered_navigation/price_range_calculation';
     const XML_PATH_RANGE_STEP           = 'catalog/layered_navigation/price_range_step';
+    const XML_PATH_RANGE_MAX_INTERVALS  = 'catalog/layered_navigation/price_range_max_intervals';
+    const XML_PATH_ONE_PRICE_INTERVAL  = 'catalog/layered_navigation/one_price_interval';
+    const XML_PATH_INTERVAL_DIVISION_LIMIT  = 'catalog/layered_navigation/interval_division_limit';
 
     const RANGE_CALCULATION_AUTO    = 'auto';
     const RANGE_CALCULATION_MANUAL  = 'manual';
@@ -107,10 +110,6 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
                 }
             }
 
-            while (ceil($maxPrice / $range) > 25) {
-                $range *= 10;
-            }
-
             $this->setData('price_range', $range);
         }
 
@@ -146,6 +145,19 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
         $items = $this->getData($rangeKey);
         if (is_null($items)) {
             $items = $this->_getResource()->getCount($this, $range);
+            // checking max number of intervals
+            $i = 0;
+            $lastIndex = null;
+            $maxIntervalsNumber = $this->getMaxIntervalsNumber();
+            foreach ($items as $k => $v) {
+                ++$i;
+                if ($i > 1 && $i > $maxIntervalsNumber) {
+                    $items[$lastIndex] += $v;
+                    unset($items[$k]);
+                } else {
+                    $lastIndex = $k;
+                }
+            }
             $this->setData($rangeKey, $items);
         }
 
@@ -182,11 +194,34 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
         $formattedFromPrice  = $store->formatPrice($fromPrice);
         if (empty($toPrice)) {
             return Mage::helper('Mage_Catalog_Helper_Data')->__('%s and above', $formattedFromPrice);
-        } elseif ($fromPrice == $toPrice) {
+        } elseif ($fromPrice == $toPrice && Mage::app()->getStore()->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)) {
             return $formattedFromPrice;
         } else {
-            return Mage::helper('Mage_Catalog_Helper_Data')->__('%s - %s', $formattedFromPrice, $store->formatPrice($toPrice - .01));
+            if ($fromPrice != $toPrice) {
+                $toPrice -= .01;
+            }
+            return Mage::helper('Mage_Catalog_Helper_Data')->__('%s - %s', $formattedFromPrice, $store->formatPrice($toPrice));
         }
+    }
+
+    /**
+     * Get additional request param data
+     *
+     * @return string
+     */
+    protected function _getAdditionalRequestData()
+    {
+        $result = '';
+        $appliedInterval = $this->getInterval();
+        if ($appliedInterval) {
+            $result = ',' . $appliedInterval[0] . '-' . $appliedInterval[1];
+            $priorIntervals = $this->getResetValue();
+            if ($priorIntervals) {
+                $result .= ',' . $priorIntervals;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -196,20 +231,20 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
      */
     protected function _getCalculatedItemsData()
     {
-        $appliedInterval = $this->getInterval();
-        if ($appliedInterval) {
-            return array();
-        }
-
         /** @var $algorithmModel Mage_Catalog_Model_Layer_Filter_Price_Algorithm */
         $algorithmModel = Mage::getSingleton('Mage_Catalog_Model_Layer_Filter_Price_Algorithm');
+        $appliedInterval = $this->getInterval();
+        if ($appliedInterval) {
+            $algorithmModel->setLimits($appliedInterval[0], $appliedInterval[1]);
+        }
         $this->_getResource()->loadAllPrices($algorithmModel, $this);
 
         $items = array();
         foreach ($algorithmModel->calculateSeparators() as $separator) {
             $items[] = array(
                 'label' => $this->_renderRangeLabel($separator['from'], $separator['to']),
-                'value' => (($separator['from'] == 0) ? '' : $separator['from']) . '-' . $separator['to'],
+                'value' => (($separator['from'] == 0) ? '' : $separator['from'])
+                    . '-' . $separator['to'] . $this->_getAdditionalRequestData(),
                 'count' => $separator['count'],
             );
         }
@@ -226,6 +261,8 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     {
         if (Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION) == self::RANGE_CALCULATION_AUTO) {
             return $this->_getCalculatedItemsData();
+        } elseif ($this->getInterval()) {
+            return array();
         }
 
         $range      = $this->getPriceRange();
@@ -263,6 +300,27 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     }
 
     /**
+     * Validate and parse filter request param
+     *
+     * @param string $filter
+     * @return array|bool
+     */
+    protected function _validateFilter($filter)
+    {
+        $filter = explode('-', $filter);
+        if (count($filter) != 2) {
+            return false;
+        }
+        foreach ($filter as $v) {
+            if ($v !== '' && (float)$v <= 0) {
+                return false;
+            }
+        }
+
+        return $filter;
+    }
+
+    /**
      * Apply price range filter
      *
      * @param Zend_Controller_Request_Abstract $request
@@ -281,19 +339,30 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
         }
 
         //validate filter
-        $filter = explode('-', $filter);
-        if (count($filter) != 2) {
+        $filterParams = explode(',', $filter);
+        $filter = $this->_validateFilter($filterParams[0]);
+        if (!$filter) {
             return $this;
-        }
-        foreach ($filter as $v) {
-            if ($v !== '' && (float)$v <= 0) {
-                return $this;
-            }
         }
 
         list($from, $to) = $filter;
 
         $this->setInterval(array($from, $to));
+
+        $priorFilters = array();
+        for ($i = 1; $i < count($filterParams); ++$i) {
+            $priorFilter = $this->_validateFilter($filterParams[$i]);
+            if ($priorFilter) {
+                $priorFilters[] = $priorFilter;
+            } else {
+                //not valid data
+                $priorFilters = array();
+                break;
+            }
+        }
+        if ($priorFilters) {
+            $this->setPriorIntervals($priorFilters);
+        }
 
         $this->_applyPriceRange();
         $this->getLayer()->getState()->addFilter($this->_createItem(
@@ -369,5 +438,57 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     public function setCurrencyRate($rate)
     {
         return $this->setData('currency_rate', $rate);
+    }
+
+    /**
+     * Get maximum number of intervals
+     *
+     * @return int
+     */
+    public function getMaxIntervalsNumber()
+    {
+        return (int)Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_MAX_INTERVALS);
+    }
+
+    /**
+     * Get interval division limit
+     *
+     * @return int
+     */
+    public function getIntervalDivisionLimit()
+    {
+        return (int)Mage::app()->getStore()->getConfig(self::XML_PATH_INTERVAL_DIVISION_LIMIT);
+    }
+
+    /**
+     * Get filter value for reset current filter state
+     *
+     * @return null|string
+     */
+    public function getResetValue()
+    {
+        $priorIntervals = $this->getPriorIntervals();
+        $value = array();
+        if ($priorIntervals) {
+            foreach ($priorIntervals as $priorInterval) {
+                $value[] = implode('-', $priorInterval);
+            }
+            return implode(',', $value);
+        }
+        return parent::getResetValue();
+    }
+
+    /**
+     * Get 'clear price' link text
+     *
+     * @return false|string
+     */
+    public function getClearLinkText()
+    {
+        if (Mage::app()->getStore()->getConfig(self::XML_PATH_RANGE_CALCULATION) == self::RANGE_CALCULATION_AUTO) {
+            return Mage::helper('Mage_Catalog_Helper_Data')->__('Clear Price');
+        }
+
+        return parent::getClearLinkText();
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,7 +70,7 @@ class Mage_Checkout_Model_Type_Onepage
     public function __construct()
     {
         $this->_helper = Mage::helper('Mage_Checkout_Helper_Data');
-        $this->_customerEmailExistsMessage = $this->_helper->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.');
+        $this->_customerEmailExistsMessage = Mage::helper('Mage_Checkout_Helper_Data')->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.');
         $this->_checkoutSession = Mage::getSingleton('Mage_Checkout_Model_Session');
         $this->_customerSession = Mage::getSingleton('Mage_Customer_Model_Session');
     }
@@ -102,6 +102,7 @@ class Mage_Checkout_Model_Type_Onepage
      * Declare checkout quote instance
      *
      * @param Mage_Sales_Model_Quote $quote
+     * @return Mage_Checkout_Model_Type_Onepage
      */
     public function setQuote(Mage_Sales_Model_Quote $quote)
     {
@@ -146,7 +147,7 @@ class Mage_Checkout_Model_Type_Onepage
         }
 
         /*
-        * want to laod the correct customer information by assiging to address
+        * want to load the correct customer information by assigning to address
         * instead of just loading from sales/quote_address
         */
         $customer = $customerSession->getCustomer();
@@ -177,7 +178,7 @@ class Mage_Checkout_Model_Type_Onepage
     }
 
     /**
-     * Specify chceckout method
+     * Specify checkout method
      *
      * @param   string $method
      * @return  array
@@ -185,7 +186,7 @@ class Mage_Checkout_Model_Type_Onepage
     public function saveCheckoutMethod($method)
     {
         if (empty($method)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid data.'));
         }
 
         $this->getQuote()->setCheckoutMethod($method)->save();
@@ -220,7 +221,7 @@ class Mage_Checkout_Model_Type_Onepage
     public function saveBilling($data, $customerAddressId)
     {
         if (empty($data)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid data.'));
         }
 
         $address = $this->getQuote()->getBillingAddress();
@@ -235,7 +236,7 @@ class Mage_Checkout_Model_Type_Onepage
             if ($customerAddress->getId()) {
                 if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
                     return array('error' => 1,
-                        'message' => $this->_helper->__('Customer Address is not valid.')
+                        'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Customer Address is not valid.')
                     );
                 }
 
@@ -261,7 +262,7 @@ class Mage_Checkout_Model_Type_Onepage
                     $address->setData($attribute->getAttributeCode(), NULL);
                 }
             }
-
+            $address->setCustomerAddressId(null);
             // Additional form data, not fetched by extractData (as it fetches only attributes)
             $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
         }
@@ -289,7 +290,7 @@ class Mage_Checkout_Model_Type_Onepage
              */
             $usingCase = isset($data['use_for_shipping']) ? (int)$data['use_for_shipping'] : 0;
 
-            switch($usingCase) {
+            switch ($usingCase) {
                 case 0:
                     $shipping = $this->getQuote()->getShippingAddress();
                     $shipping->setSameAsBilling(0);
@@ -300,11 +301,14 @@ class Mage_Checkout_Model_Type_Onepage
                     $shipping = $this->getQuote()->getShippingAddress();
                     $shippingMethod = $shipping->getShippingMethod();
 
+                    // Billing address properties that must be always copied to shipping address
+                    $requiredBillingAttributes = array('customer_address_id');
+
                     // don't reset original shipping data, if it was not changed by customer
                     foreach ($shipping->getData() as $shippingKey => $shippingValue) {
-                        if (!is_null($shippingValue)
-                            && !is_null($billing->getData($shippingKey))
-                            && !isset($data[$shippingKey])) {
+                        if (!is_null($shippingValue) && !is_null($billing->getData($shippingKey))
+                            && !isset($data[$shippingKey]) && !in_array($shippingKey, $requiredBillingAttributes)
+                        ) {
                             $billing->unsetData($shippingKey);
                         }
                     }
@@ -343,8 +347,8 @@ class Mage_Checkout_Model_Type_Onepage
      */
     protected function _validateCustomerData(array $data)
     {
-        /* @var $customerForm Mage_Customer_Model_Form */
-        $customerForm    = Mage::getModel('Mage_Customer_Model_Form');
+        /** @var $customerForm Mage_Customer_Model_Form */
+        $customerForm = Mage::getModel('Mage_Customer_Model_Form');
         $customerForm->setFormCode('checkout_register')
             ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
 
@@ -380,10 +384,13 @@ class Mage_Checkout_Model_Type_Onepage
             $customer->setPassword($customerRequest->getParam('customer_password'));
             $customer->setConfirmation($customerRequest->getParam('confirm_password'));
         } else {
-            // emulate customer password for quest
+            // spoof customer password for guest
             $password = $customer->generatePassword();
             $customer->setPassword($password);
             $customer->setConfirmation($password);
+            // set NOT LOGGED IN group id explicitly,
+            // otherwise copyFieldset('customer_account', 'to_quote') will fill it with default group id value
+            $customer->setGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
         $result = $customer->validate();
@@ -418,7 +425,7 @@ class Mage_Checkout_Model_Type_Onepage
     public function saveShipping($data, $customerAddressId)
     {
         if (empty($data)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid data.'));
         }
         $address = $this->getQuote()->getShippingAddress();
 
@@ -433,7 +440,7 @@ class Mage_Checkout_Model_Type_Onepage
             if ($customerAddress->getId()) {
                 if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
                     return array('error' => 1,
-                        'message' => $this->_helper->__('Customer Address is not valid.')
+                        'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Customer Address is not valid.')
                     );
                 }
 
@@ -460,6 +467,7 @@ class Mage_Checkout_Model_Type_Onepage
                 }
             }
 
+            $address->setCustomerAddressId(null);
             // Additional form data, not fetched by extractData (as it fetches only attributes)
             $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
             $address->setSameAsBilling(empty($data['same_as_billing']) ? 0 : 1);
@@ -490,11 +498,11 @@ class Mage_Checkout_Model_Type_Onepage
     public function saveShippingMethod($shippingMethod)
     {
         if (empty($shippingMethod)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid shipping method.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid shipping method.'));
         }
         $rate = $this->getQuote()->getShippingAddress()->getShippingRateByCode($shippingMethod);
         if (!$rate) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid shipping method.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid shipping method.'));
         }
         $this->getQuote()->getShippingAddress()
             ->setShippingMethod($shippingMethod);
@@ -515,7 +523,7 @@ class Mage_Checkout_Model_Type_Onepage
     public function savePayment($data)
     {
         if (empty($data)) {
-            return array('error' => -1, 'message' => $this->_helper->__('Invalid data.'));
+            return array('error' => -1, 'message' => Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid data.'));
         }
         $quote = $this->getQuote();
         if ($quote->isVirtual()) {
@@ -546,16 +554,15 @@ class Mage_Checkout_Model_Type_Onepage
      */
     public function validate()
     {
-        $helper = Mage::helper('Mage_Checkout_Helper_Data');
         $quote  = $this->getQuote();
         if ($quote->getIsMultiShipping()) {
-            Mage::throwException($helper->__('Invalid checkout type.'));
+            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Invalid checkout type.'));
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST
             && !Mage::helper('Mage_Checkout_Helper_Data')->isAllowedGuestCheckout($quote)
         ) {
-            Mage::throwException($this->_helper->__('Sorry, guest checkout is not enabled. Please try again or contact store owner.'));
+            Mage::throwException(Mage::helper('Mage_Checkout_Helper_Data')->__('Sorry, guest checkout is not enabled. Please try again or contact store owner.'));
         }
     }
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tax
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,7 +70,7 @@ class Mage_Tax_Model_Calculation extends Mage_Core_Model_Abstract
     public function getDefaultCustomerTaxClass($store = null)
     {
         if ($this->_defaultCustomerTaxClass === null) {
-            $defaultCustomerGroup = Mage::getStoreConfig(Mage_Customer_Model_Group::XML_PATH_DEFAULT_ID, $store);
+            $defaultCustomerGroup = Mage::helper('Mage_Customer_Helper_Data')->getDefaultCustomerGroupId($store);
             $this->_defaultCustomerTaxClass = Mage::getModel('Mage_Customer_Model_Group')->getTaxClassId($defaultCustomerGroup);
         }
         return $this->_defaultCustomerTaxClass;

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -194,9 +194,9 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
                 'ru_RU',
             ),
             'lib skin file inside theme' => array(
-                'varien/product.js',
+                'jquery/jquery-no-conflict.js',
                 array('_skin' => 'theme_nested_skin'),
-                $prefix . 'custom_theme/skin/theme_nested_skin/varien/product.js',
+                $prefix . 'custom_theme/skin/theme_nested_skin/jquery/jquery-no-conflict.js',
             ),
             'primary theme fallback - same theme & default skin' => array(
                 'fixture_script_two.js',
@@ -214,9 +214,9 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
                 $prefix . 'default/skin/default/fixture_script_four.js',
             ),
             'lib fallback' => array(
-                'varien/product.js',
+                'jquery/jquery-no-conflict.js',
                 array('_skin' => 'default'),
-                '%s/pub/js/varien/product.js',
+                '%s/pub/js/jquery/jquery-no-conflict.js',
             ),
         );
     }
@@ -325,7 +325,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $file
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      * @dataProvider getSkinUrlDataExceptionProvider
      */
     public function testGetSkinUrlException($file)
@@ -339,17 +339,15 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     public function getSkinUrlDataExceptionProvider()
     {
         return array(
-            // non-existing theme file
-            array('path/to/nonexisting-file.ext'),
-            // non-existing module file
-            array('Some_Module::path/to/nonexisting-file.ext'),
+            'non-existing theme file'  => array('path/to/nonexisting-file.ext'),
+            'non-existing module file' => array('Some_Module::path/to/nonexisting-file.ext'),
         );
     }
 
 
     /**
      * @param string $file
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      * @dataProvider findFileExceptionDataProvider
      */
     public function testFindFileException($file)

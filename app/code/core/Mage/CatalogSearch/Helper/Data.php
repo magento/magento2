@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogSearch
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -287,8 +287,9 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         $searchType = Mage::getStoreConfig(Mage_CatalogSearch_Model_Fulltext::XML_PATH_CATALOG_SEARCH_TYPE);
-        if ($searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_COMBINE &&
-            $searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_LIKE) {
+        if ($searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_COMBINE
+            && $searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_LIKE
+        ) {
             return $this;
         }
 
@@ -300,14 +301,13 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
             return $this;
         }
 
-        $wordsCut = array_diff($wordsFull, $wordsLike);
-        $wordsCut = array_map(array($this, 'escapeHtml'), $wordsCut);
-        $this->addNoteMessage(
-            $this->__('Maximum words count is %1$s. In your search query was cut next part: %2$s.',
-                $this->getMaxQueryWords(),
-                join(' ', $wordsCut)
-            )
-        );
+        if (count($wordsFull) > count($wordsLike)) {
+            $wordsCut = array_diff($wordsFull, $wordsLike);
+            $wordsCut = array_map(array($this, 'escapeHtml'), $wordsCut);
+            $this->addNoteMessage(
+                $this->__('Maximum words count is %1$s. In your search query was cut next part: %2$s.', $this->getMaxQueryWords(), join(' ', $wordsCut))
+            );
+        }
         return $this;
     }
 

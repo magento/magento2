@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -71,22 +71,21 @@ class Mage_XmlConnect_Model_Simplexml_Form_Element_Validator_Abstract
      */
     protected function _setDefaultValidatorTypeMessages()
     {
-        $helper = Mage::helper('Mage_XmlConnect_Helper_Data');
         $this->_validatorTypeMessages = array(
-            'min_length' => $helper->__('Text length does not satisfy specified min text range.'),
-            'max_length' => $helper->__('Text length does not satisfy specified max text range.'),
-            'alphanumeric' => $helper->__('Please use only letters (a-z or A-Z) or numbers (0-9) only in this field. No spaces or other characters are allowed.'),
-            'email' => $helper->__('Please enter a valid email address. For example johndoe@domain.com.'),
-            'required' => $helper->__('This is a required field.'),
-            'required_select' => $helper->__('Please select an option.'),
-            'numeric' => $helper->__('Please use numbers only in this field. Please avoid spaces or other characters such as dots or commas.'),
-            'alpha' => $helper->__('Please use letters only (a-z or A-Z) in this field.'),
-            'url' => $helper->__('Please enter a valid URL. Protocol is required (http://, https:// or ftp://)'),
-            'date' => $helper->__('Please enter a valid date.'),
-            'max_file_size' => $helper->__('\'%s\' exceeds the allowed file size: %d (bytes)', $this->getFieldLabel(), $this->getValue()),
-            'file_extensions' => $helper->__('\'%s\' is not a valid file extension. Allowed extensions: %s', $this->getFieldLabel(), $this->getValue()),
-            'max_image_width' => $helper->__('\'%s\' width exceeds allowed value of %d px', $this->getFieldLabel(), $this->getValue()),
-            'max_image_height' => $helper->__('\'%s\' height exceeds allowed value of %d px', $this->getFieldLabel(), $this->getValue())
+            'min_length' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Text length does not satisfy specified min text range.'),
+            'max_length' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Text length does not satisfy specified max text range.'),
+            'alphanumeric' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please use only letters (a-z or A-Z) or numbers (0-9) only in this field. No spaces or other characters are allowed.'),
+            'email' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please enter a valid email address. For example johndoe@domain.com.'),
+            'required' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('This is a required field.'),
+            'required_select' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please select an option.'),
+            'numeric' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please use numbers only in this field. Please avoid spaces or other characters such as dots or commas.'),
+            'alpha' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please use letters only (a-z or A-Z) in this field.'),
+            'url' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please enter a valid URL. Protocol is required (http://, https:// or ftp://)'),
+            'date' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Please enter a valid date.'),
+            'max_file_size' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('\'%s\' exceeds the allowed file size: %d (bytes)', $this->getFieldLabel(), $this->getValue()),
+            'file_extensions' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('\'%s\' is not a valid file extension. Allowed extensions: %s', $this->getFieldLabel(), $this->getValue()),
+            'max_image_width' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('\'%s\' width exceeds allowed value of %d px', $this->getFieldLabel(), $this->getValue()),
+            'max_image_height' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('\'%s\' height exceeds allowed value of %d px', $this->getFieldLabel(), $this->getValue())
         );
         return $this;
     }

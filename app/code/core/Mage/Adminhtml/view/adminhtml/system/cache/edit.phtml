@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -73,7 +73,7 @@
                                 <?php if (isset($_button['warning']) && $_button['warning']): ?>
                                     <?php $clickAction = "if (confirm('".addslashes($_button['warning'])."')) {{$clickAction}}"; ?>
                                 <?php endif; ?>
-                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>onclick="<?php echo $clickAction; ?>"<?php endif; ?> id="<?php echo $_button['name'] ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif; ?>" style=""><span><?php echo $_button['action'] ?></span></button>
+                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>onclick="<?php echo $clickAction; ?>"<?php endif; ?> id="<?php echo $_button['name'] ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif; ?>" style=""><span><span><span><?php echo $_button['action'] ?></span></span></span></button>
                                 <?php if (isset($_button['comment'])): ?> <br /> <small><?php echo $_button['comment']; ?></small> <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
@@ -96,7 +96,7 @@
                     <tr>
                         <td class="label"><label><?php echo $this->__('JavaScript/CSS Cache') ?></label></td>
                         <td class="value">
-                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><?php echo $this->__('Clear') ?></span></button>
+                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?php echo $this->__('Clear') ?></span></span></span></button>
                         </td>
                     </tr>
                 </tbody>

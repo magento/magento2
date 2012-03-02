@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -93,6 +93,16 @@ class Mage_Customer_Block_Widget_Name extends Mage_Customer_Block_Widget_Abstrac
     public function showMiddlename()
     {
         return (bool)$this->_getAttribute('middlename')->getIsVisible();
+    }
+
+    /**
+     * Define if middlename attribute is required
+     *
+     * @return bool
+     */
+    public function isMiddlenameRequired()
+    {
+        return (bool)$this->_getAttribute('middlename')->getIsRequired();
     }
 
     /**

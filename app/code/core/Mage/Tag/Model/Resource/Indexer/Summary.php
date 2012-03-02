@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tag
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -195,7 +195,8 @@ class Mage_Tag_Model_Resource_Indexer_Summary extends Mage_Catalog_Model_Resourc
                 ->group(array(
                     'tr.tag_id',
                     'tr.store_id'
-                ));
+                ))
+                ->where('tr.active = 1');
 
             $statusCond = $writeAdapter->quoteInto('=?', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
             $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond);
@@ -236,7 +237,8 @@ class Mage_Tag_Model_Resource_Indexer_Summary extends Mage_Catalog_Model_Resourc
 
             $agregateSelect = $writeAdapter->select();
             $agregateSelect->from($this->getTable('tag_relation'), $selectedFields)
-                ->group('tag_id');
+                ->group('tag_id')
+                ->where('active = 1');
 
             if (!empty($tagIds)) {
                 $agregateSelect->where('tag_id IN(?)', $tagIds);

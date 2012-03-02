@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -150,7 +150,7 @@ class Mage_Customer_Model_Address extends Mage_Customer_Model_Address_Abstract
         }
         return $entityTypeId;
     }
-    
+
     /**
      * Return Region ID
      *
@@ -160,7 +160,7 @@ class Mage_Customer_Model_Address extends Mage_Customer_Model_Address_Abstract
     {
         return (int)$this->getData('region_id');
     }
-    
+
     /**
      * Set Region ID. $regionId is automatically converted to integer
      *

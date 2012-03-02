@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,8 @@
  * @package     Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address extends Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract
+class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
+    extends Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract
 {
     /**
      * Customer Address Form instance
@@ -83,7 +84,9 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address extends Mage_Adminhtm
 
         foreach ($this->getAddressCollection() as $address) {
             $addressForm->setEntity($address);
-            $data[$address->getId()] = $addressForm->outputData(Mage_Customer_Model_Attribute_Data::OUTPUT_FORMAT_JSON);
+            $data[$address->getId()] = $addressForm->outputData(
+                Mage_Customer_Model_Attribute_Data::OUTPUT_FORMAT_JSON
+            );
         }
         return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($data);
     }
@@ -166,6 +169,15 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address extends Mage_Adminhtm
         if (!$this->_form->getElement('country_id')->getValue()) {
             $this->_form->getElement('country_id')->setValue(
                 Mage::helper('Mage_Core_Helper_Data')->getDefaultCountry($this->getStore())
+            );
+        }
+
+        // Set custom renderer for VAT field if needed
+        $vatIdElement = $this->_form->getElement('vat_id');
+        if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
+            $vatIdElement->setRenderer(
+                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat')
+                    ->setJsVariablePrefix($this->getJsVariablePrefix())
             );
         }
 

@@ -20,100 +20,29 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /** @var $this Mage_Paypal_Block_Payflow_Link_Form */
 ?>
-<?php $_code=$this->getMethodCode() ?>
-<div id="payment_form_<?php echo $_code ?>" style="display:none;">
-<div id="iframe-warning" class="warning-message" style="display:none;">
+<div id="iframe-warning" class="warning-message">
     <?php echo $this->__('Please do not refresh the page until you complete payment.') ?>
 </div>
-
+<iframe id="payflow-link-iframe" style="display:none;" scrolling="no" frameborder="0" border="0" src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>
 <script type="text/javascript">
 //<![CDATA[
-var PayflowLink = Class.create();
-PayflowLink.prototype = {
-    stepName: 'payment',
-    loadingText: ' <?php echo $this->__('Loading payment information...') ?> ',
-    loadingDefaultText: '',
-    buttonContinue: '',
-    pleaseWaitBox: '',
-    pleaseWaitBoxTextNode: '',
-    initialize: function(){
-        this.buttonContinue = $(this.stepName + '-buttons-container').select('button').first();
-        this.pleaseWaitBox = $(this.stepName + '-please-wait');
-
-        if (Prototype.Browser.IE) {
-            this.pleaseWaitBoxTextNode = this.pleaseWaitBox.childNodes[1];
-        } else {
-            this.pleaseWaitBoxTextNode = this.pleaseWaitBox.childNodes[2];
-        }
-
-        this.loadingDefaultText = this.pleaseWaitBoxTextNode.nodeValue;
-    },
-    showFrame: function(){
-        if (!$('payflow-link-iframe')) {
-            this.showLoading();
-            checkout.setLoadWaiting(this.stepName);
-            var payflowLinkIframe = '<iframe id="payflow-link-iframe" style="display:none;" scrolling="no" frameborder="0" border="0" '
-                    + 'src="<?php echo $this->getFrameActionUrl() ?>" height="610" width="570"></iframe>';
-            $('payment_form_<?php echo $_code ?>').insert({bottom:payflowLinkIframe});
-            $('payflow-link-iframe').observe('load', function(){
-                if (!$('payflow-link-iframe').visible()) {
-                    $('payflow-link-iframe').show();
-                    $('iframe-warning').show();
-                }
-                payflowLink.setSpinnerDefaultText();
-                checkout.setLoadWaiting(false, true);
-                $(payflowLink.buttonContinue).addClassName('disabled');
-
-                window.name = '<?php echo Mage::getBaseUrl(); ?>';
-            });
-        } else {
-            $(this.buttonContinue).addClassName('disabled');
-            checkout.setLoadWaiting(this.stepName);
-            checkout.setLoadWaiting(false, true);
-        }
-    },
-    hideFrame: function(){
-        checkout.setLoadWaiting(this.stepName);
-        checkout.setLoadWaiting(false);
-        $(this.buttonContinue).removeClassName('disabled');
-    },
-    setSpinnerText: function(text){
-        if (!text) {
-            text = this.loadingText;
-        }
-        this.pleaseWaitBoxTextNode.nodeValue = text;
-    },
-    setSpinnerDefaultText: function(){
-        this.pleaseWaitBoxTextNode.nodeValue = this.loadingDefaultText;
-    },
-    showLoading: function(){
-        this.setSpinnerText();
-        $(this.buttonContinue).addClassName('disabled');
-        checkout.setLoadWaiting(this.stepName);
-    }
-}
-var payflowLink;
-
-Event.observe($('payment_form_<?php echo $_code ?>'), 'payment-method:switched', function(event){
-    if (!window.payflowLink) {
-        window.payflowLink = new PayflowLink();
-    }
-    if (!payflowLink) {
-        payflowLink = window.payflowLink;
-    }
-    payflowLink.showFrame();
+var headers = $$('#' + checkout.accordion.container.readAttribute('id') + ' .section');
+headers.each(function(header) {
+    header.removeClassName('allow');
 });
-Event.observe($('payment_form_<?php echo $_code ?>'), 'payment-method:switched-off', function(event){
-    payflowLink.hideFrame();
+$('payflow-link-iframe').observe('load', function(){
+    $('payflow-link-iframe').show();
+    $('iframe-warning').show();
+    checkout.loadWaiting = 'review';
+    checkout.setLoadWaiting(false);
+    if (checkout.accordion.currentSection == 'opc-review') {
+        $('checkout-review-submit').hide();
+    }
 });
-if ($('p_method_payflow_link').checked) {
-    $('payment_form_<?php echo $_code ?>').fire('payment-method:switched', {method_code : '<?php echo $_code ?>'});
-}
 //]]>
 </script>
-</div>

@@ -14,7 +14,6 @@
 /app/etc/local.xml
 /app/etc/local.xml.*
 /app/etc/modules/XEnterprise_Enabler.xml
-/app/locale/en_US_org
 /downloader/.cache
 /downloader/cache.cfg
 /downloader/connect.cfg

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -342,16 +342,17 @@ class Mage_Core_Model_Design_Package
      * @param string $file
      * @param array &$params
      * @return string
+     * @throws Magento_Exception
      */
     protected function _extractScope($file, array &$params)
     {
         if (preg_match('/\.\//', str_replace('\\', '/', $file))) {
-            throw new Exception("File name '{$file}' is forbidden for security reasons.");
+            throw new Magento_Exception("File name '{$file}' is forbidden for security reasons.");
         }
         if (false !== strpos($file, self::SCOPE_SEPARATOR)) {
             $file = explode(self::SCOPE_SEPARATOR, $file);
             if (empty($file[0])) {
-                throw new Exception('Scope separator "::" can\'n be used without scope identifier.');
+                throw new Magento_Exception('Scope separator "::" cannot be used without scope identifier.');
             }
             $params['_module'] = $file[0];
             $file = $file[1];
@@ -419,9 +420,11 @@ class Mage_Core_Model_Design_Package
     }
 
     /**
-     * Design package (optional) themes list getter
-     * @param string $package
-     * @return string
+     * Retrieve the list of themes available in the system.
+     * Results are grouped by packages themes belong to, if the optional 'package' argument is omitted.
+     *
+     * @param string|null $package
+     * @return array
      */
     public function getThemeList($package = null)
     {
@@ -575,7 +578,7 @@ class Mage_Core_Model_Design_Package
      * @param string $file
      * @param bool|null $isSecure
      * @return string
-     * @throws Exception
+     * @throws Magento_Exception
      */
     protected function _getPublicFileUrl($file, $isSecure = null)
     {
@@ -593,7 +596,9 @@ class Mage_Core_Model_Design_Package
             $url = Mage::getBaseUrl($publicUrlType, $isSecure) . $url;
             return $url;
         }
-        throw new Exception("Cannot build URL for the file '$file' because it does not reside in a public directory.");
+        throw new Magento_Exception(
+            "Cannot build URL for the file '$file' because it does not reside in a public directory."
+        );
     }
 
     /**
@@ -654,6 +659,7 @@ class Mage_Core_Model_Design_Package
      * @param  string $skinFile
      * @param  array $params
      * @return string
+     * @throws Magento_Exception
      */
     protected function _publishSkinFile($skinFile, $params)
     {
@@ -661,7 +667,7 @@ class Mage_Core_Model_Design_Package
 
         $file = $this->getSkinFile($skinFile, $params);
         if (!file_exists($file)) {
-            throw new Exception("Unable to locate skin file: '{$file}'");
+            throw new Magento_Exception("Unable to locate skin file '{$file}'.");
         }
 
         if (!$this->_needToPublishFile($file)) {
@@ -851,7 +857,7 @@ class Mage_Core_Model_Design_Package
      *
      * @param string $filename
      * @param bool $isRelative flag that identify that filename is relative
-     * @throw Exception if file can't be canonized
+     * @throws Magento_Exception if file can't be canonized
      * @return string|false
      */
     protected function _canonize($filename, $isRelative = false)
@@ -872,7 +878,7 @@ class Mage_Core_Model_Design_Package
         foreach ($parts as $part) {
             if ('..' === $part) {
                 if (null === array_pop($result)) {
-                    throw new Exception('Invalid file: '.$filename);
+                    throw new Magento_Exception("Invalid file '{$filename}'.");
                 }
             } elseif ('.' !== $part) {
                 $result[] = $part;
@@ -886,7 +892,7 @@ class Mage_Core_Model_Design_Package
      *
      * @param array $files list of names relative to the same folder
      * @param string $contentType
-     * @throw Exception exception will be triggered if not existing file requested for merge
+     * @throws Magento_Exception if not existing file requested for merge
      * @return string
      */
     protected function _mergeFiles($files, $contentType)
@@ -920,7 +926,7 @@ class Mage_Core_Model_Design_Package
         $result = array();
         foreach ($filesToMerge as $file) {
             if (!file_exists($file)) {
-                throw new Exception("Merging failed: unable to locate file '{$file}'");
+                throw new Magento_Exception("Unable to locate file '{$file}' for merging.");
             }
             $content = file_get_contents($file);
             if ($contentType == self::CONTENT_TYPE_CSS) {
@@ -941,7 +947,7 @@ class Mage_Core_Model_Design_Package
     /**
      * Replace relative URLs in the CSS content with ones shifted by the directories offset
      *
-     * @throws Exception
+     * @throws Magento_Exception
      * @param string $cssContent
      * @param string $relativeOffset
      * @return string
@@ -951,7 +957,9 @@ class Mage_Core_Model_Design_Package
         $relativeUrls = $this->_extractCssRelativeUrls($cssContent);
         foreach ($relativeUrls as $urlNotation => $fileUrl) {
             if (strpos($fileUrl, self::SCOPE_SEPARATOR)) {
-                throw new Exception('URL offset cannot be applied to CSS content that contains scope separator.');
+                throw new Magento_Exception(
+                    'URL offset cannot be applied to CSS content that contains scope separator.'
+                );
             }
             $fileUrlNew = $this->_canonize($relativeOffset . '/' . $fileUrl, true);
             $urlNotationNew = str_replace($fileUrl, $fileUrlNew, $urlNotation);
@@ -971,7 +979,7 @@ class Mage_Core_Model_Design_Package
      *  pub/skin/frontend/default/default/skin/default/style.css -> img/empty.gif
      *  pub/skin/_merged/hash.css -> ../frontend/default/default/skin/default/img/empty.gif
      *
-     * @throws Exception
+     * @throws Magento_Exception
      * @param string $originalFile path to original file
      * @param string $relocationDir path to directory where content will be relocated
      * @return string
@@ -980,7 +988,7 @@ class Mage_Core_Model_Design_Package
     {
         $publicDir = Mage::getBaseDir();
         if (strpos($originalFile, $publicDir) !== 0 || strpos($relocationDir, $publicDir) !== 0) {
-            throw new Exception('Offset can be calculated for public resources only.');
+            throw new Magento_Exception('Offset can be calculated for public resources only.');
         }
         $offset = '';
         while ($relocationDir != $publicDir && strpos($originalFile, $relocationDir) !== 0) {

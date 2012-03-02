@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -64,6 +64,7 @@
                             <label>Products per Page on Grid Allowed Values</label>
                             <comment>Comma-separated.</comment>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-per-page-value-list</validate>
                             <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
@@ -74,6 +75,7 @@
                             <label>Products per Page on Grid Default Value</label>
                             <comment>Must be in the allowed values list.</comment>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-per-page-value</validate>
                             <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
@@ -84,6 +86,7 @@
                             <label>Products per Page on List Allowed Values</label>
                             <comment>Comma-separated.</comment>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-per-page-value-list</validate>
                             <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage</source_model>-->
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
@@ -94,6 +97,7 @@
                             <label>Products per Page on List Default Value</label>
                             <comment>Must be in the allowed values list.</comment>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-per-page-value</validate>
                             <!--<source_model>Mage_Adminhtml_Model_System_Config_Source_Catalog_ListPerPage</source_model>-->
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
@@ -320,12 +324,46 @@
                         <price_range_step translate="label">
                             <label>Default Price Navigation Step</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number validate-number-range number-range-0.01-1000000000</validate>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <depends><price_range_calculation>manual</price_range_calculation></depends>
                         </price_range_step>
+                        <price_range_max_intervals translate="label comment">
+                            <label>Maximum Number of Price Intervals</label>
+                            <comment>Maximum number of price intervals is 100</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits validate-digits-range digits-range-2-100</validate>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><price_range_calculation>manual</price_range_calculation></depends>
+                        </price_range_max_intervals>
+                        <one_price_interval translate="label comment">
+                            <label>Display Price Interval as One Price</label>
+                            <comment>This setting will be applied when all prices in the specific price interval are equal.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><price_range_calculation>auto</price_range_calculation></depends>
+                        </one_price_interval>
+                        <interval_division_limit translate="label comment">
+                            <label>Interval Division Limit</label>
+                            <comment>Please specify the number of products, that will not be divided into subintervals.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
+                            <depends><price_range_calculation>auto</price_range_calculation></depends>
+                        </interval_division_limit>
                     </fields>
                 </layered_navigation>
                 <navigation translate="label">

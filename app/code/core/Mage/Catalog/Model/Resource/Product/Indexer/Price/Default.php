@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -220,6 +220,11 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
                 'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id'
                     . ' AND tp.customer_group_id = cg.customer_group_id',
                 array())
+            ->joinLeft(
+                array('gp' => $this->_getGroupPriceIndexTable()),
+                'gp.entity_id = e.entity_id AND gp.website_id = cw.website_id'
+                    . ' AND gp.customer_group_id = cg.customer_group_id',
+                array())
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add enable products limitation
@@ -237,6 +242,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
         $specialFrom    = $this->_addAttributeToSelect($select, 'special_from_date', 'e.entity_id', 'cs.store_id');
         $specialTo      = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
         $currentDate    = $write->getDatePartSql('cwd.website_date');
+        $groupPrice     = $write->getCheckSql('gp.price IS NULL', "{$price}", 'gp.price');
 
         $specialFromDate    = $write->getDatePartSql($specialFrom);
         $specialToDate      = $write->getDatePartSql($specialTo);
@@ -247,14 +253,17 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
         $specialToHas       = $write->getCheckSql("{$specialTo} IS NULL", '1', "{$specialToUse}");
         $finalPrice         = $write->getCheckSql("{$specialFromHas} > 0 AND {$specialToHas} > 0"
             . " AND {$specialPrice} < {$price}", $specialPrice, $price);
+        $finalPrice         = $write->getCheckSql("{$groupPrice} < {$finalPrice}", $groupPrice, $finalPrice);
 
         $select->columns(array(
-            'orig_price'    => $price,
-            'price'         => $finalPrice,
-            'min_price'     => $finalPrice,
-            'max_price'     => $finalPrice,
-            'tier_price'    => new Zend_Db_Expr('tp.min_price'),
-            'base_tier'     => new Zend_Db_Expr('tp.min_price'),
+            'orig_price'       => $price,
+            'price'            => $finalPrice,
+            'min_price'        => $finalPrice,
+            'max_price'        => $finalPrice,
+            'tier_price'       => new Zend_Db_Expr('tp.min_price'),
+            'base_tier'        => new Zend_Db_Expr('tp.min_price'),
+            'group_price'      => new Zend_Db_Expr('gp.price'),
+            'base_group_price' => new Zend_Db_Expr('gp.price'),
         ));
 
         if (!is_null($entityIds)) {
@@ -304,7 +313,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
         if ($this->useIdxTable()) {
             return $this->getTable('catalog_product_index_price_opt_agr_idx');
         }
-        return $this->getTable('catalog_product_index_price_opt_agr_idx');
+        return $this->getTable('catalog_product_index_price_opt_agr_tmp');
     }
 
     /**
@@ -403,16 +412,22 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
         $tierPriceValue = $write->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
         $tierPrice      = $write->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
 
+        $groupPriceRound = new Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
+        $groupPriceExpr  = $write->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
+        $groupPriceMin   = new Zend_Db_Expr("MIN($groupPriceExpr)");
+        $groupPriceValue = $write->getCheckSql("MIN(o.is_require) > 0", $groupPriceMin, 0);
+        $groupPrice      = $write->getCheckSql("MIN(i.base_group_price) IS NOT NULL", $groupPriceValue, "NULL");
+
         $maxPriceRound  = new Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
         $maxPriceExpr   = $write->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
-        //$tierPriceMin   = new Zend_Db_Expr("MIN($tierPriceExpr)");
         $maxPrice       = $write->getCheckSql("(MIN(o.type)='radio' OR MIN(o.type)='drop_down')",
             "MAX($maxPriceExpr)", "SUM($maxPriceExpr)");
 
         $select->columns(array(
-            'min_price'  => $minPrice,
-            'max_price'  => $maxPrice,
-            'tier_price' => $tierPrice
+            'min_price'   => $minPrice,
+            'max_price'   => $maxPrice,
+            'tier_price'  => $tierPrice,
+            'group_price' => $groupPrice,
         ));
 
         $query = $select->insertFromSelect($coaTable);
@@ -461,10 +476,16 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
         $tierPriceValue = $write->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require > 0", $tierPriceExpr, 0);
         $tierPrice      = $write->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
 
+        $groupPriceRound = new Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
+        $groupPriceExpr  = $write->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
+        $groupPriceValue = $write->getCheckSql("{$groupPriceExpr} > 0 AND o.is_require > 0", $groupPriceExpr, 0);
+        $groupPrice      = $write->getCheckSql("i.base_group_price IS NOT NULL", $groupPriceValue, "NULL");
+
         $select->columns(array(
-            'min_price'  => $minPrice,
-            'max_price'  => $maxPrice,
-            'tier_price' => $tierPrice
+            'min_price'   => $minPrice,
+            'max_price'   => $maxPrice,
+            'tier_price'  => $tierPrice,
+            'group_price' => $groupPrice,
         ));
 
         $query = $select->insertFromSelect($coaTable);
@@ -480,6 +501,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
                     'min_price'     => 'SUM(min_price)',
                     'max_price'     => 'SUM(max_price)',
                     'tier_price'    => 'SUM(tier_price)',
+                    'group_price'   => 'SUM(group_price)',
                 ))
             ->group(array('entity_id', 'customer_group_id', 'website_id'));
         $query = $select->insertFromSelect($copTable);
@@ -493,9 +515,13 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
                     .' AND i.website_id = io.website_id',
                 array());
         $select->columns(array(
-            'min_price'  => new Zend_Db_Expr('i.min_price + io.min_price'),
-            'max_price'  => new Zend_Db_Expr('i.max_price + io.max_price'),
-            'tier_price' => $write->getCheckSql('i.tier_price IS NOT NULL', 'i.tier_price + io.tier_price', 'NULL'),
+            'min_price'   => new Zend_Db_Expr('i.min_price + io.min_price'),
+            'max_price'   => new Zend_Db_Expr('i.max_price + io.max_price'),
+            'tier_price'  => $write->getCheckSql('i.tier_price IS NOT NULL', 'i.tier_price + io.tier_price', 'NULL'),
+            'group_price' => $write->getCheckSql(
+                'i.group_price IS NOT NULL',
+                'i.group_price + io.group_price', 'NULL'
+            ),
         ));
         $query = $select->crossUpdateFromSelect($table);
         $write->query($query);
@@ -522,7 +548,8 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
             'final_price'       => 'price',
             'min_price'         => 'min_price',
             'max_price'         => 'max_price',
-            'tier_price'        => 'tier_price'
+            'tier_price'        => 'tier_price',
+            'group_price'       => 'group_price',
         );
 
         $write  = $this->_getWriteAdapter();
@@ -546,6 +573,16 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Default
     protected function _getTierPriceIndexTable()
     {
         return $this->getTable('catalog_product_index_tier_price');
+    }
+
+    /**
+     * Retrieve table name for product group price index
+     *
+     * @return string
+     */
+    protected function _getGroupPriceIndexTable()
+    {
+        return $this->getTable('catalog_product_index_group_price');
     }
 
     /**

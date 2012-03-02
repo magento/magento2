@@ -93,10 +93,10 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
      * @var integer
      */
     protected $_timeout = 300;
-    
+
     /**
      * Should generate() keep session or create a new one?
-     * 
+     *
      * @var boolean
      */
     protected $_keepSession = false;
@@ -219,11 +219,11 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
 
 	/**
 	 * Sets if session should be preserved on generate()
-	 * 
+	 *
 	 * @param $keepSession Should session be kept on generate()?
 	 * @return Zend_Captcha_Word
 	 */
-	public function setKeepSession($keepSession) 
+	public function setKeepSession($keepSession)
 	{
 		$this->_keepSession = $keepSession;
 		return $this;
@@ -231,7 +231,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
 
     /**
      * Numbers should be included in the pattern?
-     * 
+     *
      * @return bool
      */
     public function getUseNumbers()
@@ -241,7 +241,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
 
 	/**
 	 * Set if numbers should be included in the pattern
-	 * 
+	 *
      * @param $_useNumbers numbers should be included in the pattern?
      * @return Zend_Captcha_Word
      */
@@ -250,7 +250,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
         $this->_useNumbers = $_useNumbers;
         return $this;
     }
-	
+
 	/**
      * Get session object
      *
@@ -348,7 +348,7 @@ abstract class Zend_Captcha_Word extends Zend_Captcha_Base
     public function generate()
     {
         if(!$this->_keepSession) {
-            $this->_session = null;   
+            $this->_session = null;
         }
         $id = $this->_generateRandomId();
         $this->_setId($id);

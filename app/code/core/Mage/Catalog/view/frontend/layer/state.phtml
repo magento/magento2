@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -40,9 +40,14 @@
         <li>
             <a href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
             <span class="label"><?php echo $this->__($_filter->getName()) ?>:</span> <?php echo $this->stripTags($_filter->getLabel()) ?>
+            <?php
+                $clearLinkUrl = $_filter->getClearLinkUrl();
+                if ($clearLinkUrl):
+            ?>
+                <div class="actions"><a href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a></div>
+            <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ol>
-    <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
 </div>
 <?php endif; ?>

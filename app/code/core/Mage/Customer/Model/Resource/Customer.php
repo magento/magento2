@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -325,7 +325,7 @@ class Mage_Customer_Model_Resource_Customer extends Mage_Eav_Model_Entity_Abstra
     public function changeResetPasswordLinkToken(Mage_Customer_Model_Customer $customer, $newResetPasswordLinkToken) {
         if (is_string($newResetPasswordLinkToken) && !empty($newResetPasswordLinkToken)) {
             $customer->setRpToken($newResetPasswordLinkToken);
-            $currentDate = Varien_Date::now(true);
+            $currentDate = Varien_Date::now();
             $customer->setRpTokenCreatedAt($currentDate);
             $this->saveAttribute($customer, 'rp_token');
             $this->saveAttribute($customer, 'rp_token_created_at');

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,20 +67,12 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_Create extends Mage_Adminhtml_
     public function getHeaderText()
     {
         if ($this->getCreditmemo()->getInvoice()) {
-            $header = Mage::helper('Mage_Sales_Helper_Data')->__('New Credit Memo for Invoice #%s',
-                $this->getCreditmemo()->getInvoice()->getIncrementId()
-            );
+            $header = Mage::helper('Mage_Sales_Helper_Data')->__('New Credit Memo for Invoice #%s', $this->getCreditmemo()->getInvoice()->getIncrementId());
         }
         else {
-            $header = Mage::helper('Mage_Sales_Helper_Data')->__('New Credit Memo for Order #%s',
-                $this->getCreditmemo()->getOrder()->getRealOrderId()
-            );
+            $header = Mage::helper('Mage_Sales_Helper_Data')->__('New Credit Memo for Order #%s', $this->getCreditmemo()->getOrder()->getRealOrderId());
         }
-        /*$header = Mage::helper('Mage_Sales_Helper_Data')->__('New Credit Memo for Order #%s | Order Date: %s | Customer Name: %s',
-            $this->getCreditmemo()->getOrder()->getRealOrderId(),
-            $this->formatDate($this->getCreditmemo()->getOrder()->getCreatedAt(), 'medium', true),
-            $this->getCreditmemo()->getOrder()->getCustomerName()
-        );*/
+
         return $header;
     }
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleShopping
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,6 +50,18 @@ class Mage_GoogleShopping_Model_Resource_Type_Collection extends Mage_Core_Model
         $this->_joinAttributeSet();
         return $this;
     }
+
+   /**
+    * Get SQL for get record count
+    *
+    * @return Varien_Db_Select
+    */
+   public function getSelectCountSql()
+   {
+       $this->_renderFilters();
+       $paginatorAdapter = new Zend_Paginator_Adapter_DbSelect($this->getSelect());
+       return $paginatorAdapter->getCountSelect();
+   }
 
     /**
      * Add total count of Items for each type

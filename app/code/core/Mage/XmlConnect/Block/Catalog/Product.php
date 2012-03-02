@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,9 +46,9 @@ class Mage_XmlConnect_Block_Catalog_Product extends Mage_XmlConnect_Block_Catalo
         $item = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<' . $itemNodeName . '></' . $itemNodeName . '>');
         if ($product && $product->getId()) {
             $item->addChild('entity_id', $product->getId());
-            $item->addChild('name', $item->xmlentities($product->getName()));
+            $item->addChild('name', $item->escapeXml($product->getName()));
             $item->addChild('entity_type', $product->getTypeId());
-            $item->addChild('short_description', $item->xmlentities($product->getShortDescription()));
+            $item->addChild('short_description', $item->escapeXml($product->getShortDescription()));
             $description = Mage::helper('Mage_XmlConnect_Helper_Data')->htmlize($item->xmlentities($product->getDescription()));
             $item->addChild('description', $description);
             $item->addChild('link', $product->getProductUrl());
@@ -81,7 +81,8 @@ class Mage_XmlConnect_Block_Catalog_Product extends Mage_XmlConnect_Block_Catalo
             /**
              * If product type is grouped than it has options as its grouped items
              */
-            if ($product->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) {
+            if ($product->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE
+                || $product->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
                 $product->setHasOptions(true);
             }
             $item->addChild('has_options', (int)$product->getHasOptions());

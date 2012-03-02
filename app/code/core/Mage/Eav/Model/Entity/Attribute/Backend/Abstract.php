@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,8 @@
  * @package    Mage_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract implements Mage_Eav_Model_Entity_Attribute_Backend_Interface
+abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract
+    implements Mage_Eav_Model_Entity_Attribute_Backend_Interface
 {
     /**
      * Reference to the attribute instance
@@ -47,6 +48,13 @@ abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract implements Mage_
      * @var integer
      */
     protected $_valueId;
+
+    /**
+     * PK value_ids for each loaded entity
+     *
+     * @var array
+     */
+    protected $_valueIds = array();
 
     /**
      * Table name for this attribute
@@ -164,7 +172,24 @@ abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract implements Mage_
     }
 
     /**
-     * Retreive value id
+     * Set entity value id
+     *
+     * @param Varien_Object $entity
+     * @param int $valueId
+     * @return Mage_Eav_Model_Entity_Attribute_Backend_Abstract
+     */
+    public function setEntityValueId($entity, $valueId)
+    {
+        if (!$entity || !$entity->getId()) {
+            return $this->setValueId($valueId);
+        }
+
+        $this->_valueIds[$entity->getId()] = $valueId;
+        return $this;
+    }
+
+    /**
+     * Retrieve value id
      *
      * @return int
      */
@@ -174,7 +199,22 @@ abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract implements Mage_
     }
 
     /**
-     * Retreive default value
+     * Get entity value id
+     *
+     * @param Varien_Object $entity
+     * @return int
+     */
+    public function getEntityValueId($entity)
+    {
+        if (!$entity || !$entity->getId() || !array_key_exists($entity->getId(), $this->_valueIds)) {
+            return $this->getValueId();
+        }
+
+        return $this->_valueIds[$entity->getId()];
+    }
+
+    /**
+     * Retrieve default value
      *
      * @return mixed
      */

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,11 +33,11 @@
  */
 class Mage_Connect_Loader
 {
-
     /**
      * Factory for HTTP client
-     * @param string/false $protocol  'curl'/'socket' or false for auto-detect
-     * @return Mage_HTTP_Client/Mage_Connect_Loader_Ftp
+     *
+     * @param string|false $protocol  'curl'/'socket' or false for auto-detect
+     * @return Mage_HTTP_IClient|Mage_Connect_Loader_Ftp
      */
     public static function getInstance($protocol='')
     {
@@ -47,5 +47,4 @@ class Mage_Connect_Loader
             return Mage_HTTP_Client::getInstance();
         }
     }
-
 }

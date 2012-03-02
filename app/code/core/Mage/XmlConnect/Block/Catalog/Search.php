@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -96,7 +96,7 @@ class Mage_XmlConnect_Block_Catalog_Search extends Mage_XmlConnect_Block_Catalog
                     continue;
                 }
                 $item = $filtersXmlObject->addChild('item');
-                $item->addChild('name', $searchXmlObject->xmlentities($filter->getName()));
+                $item->addChild('name', $searchXmlObject->escapeXml($filter->getName()));
                 $item->addChild('code', $filter->getRequestVar());
                 $values = $item->addChild('values');
 
@@ -107,9 +107,7 @@ class Mage_XmlConnect_Block_Catalog_Search extends Mage_XmlConnect_Block_Catalog
                     }
                     $value = $values->addChild('value');
                     $value->addChild('id', $valueItem->getValueString());
-                    $value->addChild(
-                        'label', $searchXmlObject->xmlentities(strip_tags($valueItem->getLabel()))
-                    );
+                    $value->addChild('label', $searchXmlObject->escapeXml($valueItem->getLabel()));
                     $value->addChild('count', $count);
                 }
             }

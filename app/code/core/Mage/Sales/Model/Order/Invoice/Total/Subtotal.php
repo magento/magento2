@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,11 +43,11 @@ class Mage_Sales_Model_Order_Invoice_Total_Subtotal extends Mage_Sales_Model_Ord
         $order = $invoice->getOrder();
 
         foreach ($invoice->getAllItems() as $item) {
-            $item->calcRowTotal();
-
             if ($item->getOrderItem()->isDummy()) {
                 continue;
             }
+
+            $item->calcRowTotal();
 
             $subtotal       += $item->getRowTotal();
             $baseSubtotal   += $item->getBaseRowTotal();
@@ -56,11 +56,30 @@ class Mage_Sales_Model_Order_Invoice_Total_Subtotal extends Mage_Sales_Model_Ord
         }
 
         $allowedSubtotal = $order->getSubtotal() - $order->getSubtotalInvoiced();
-        $baseAllowedSubtotal = $order->getBaseSubtotal() -$order->getBaseSubtotalInvoiced();
+        $baseAllowedSubtotal = $order->getBaseSubtotal() - $order->getBaseSubtotalInvoiced();
         $allowedSubtotalInclTax = $allowedSubtotal + $order->getHiddenTaxAmount()
-                + $order->getTaxAmount() - $order->getTaxInvoiced() - $order->getShippingTaxAmount();
+                + $order->getTaxAmount() - $order->getTaxInvoiced() - $order->getHiddenTaxInvoiced();
         $baseAllowedSubtotalInclTax = $baseAllowedSubtotal + $order->getBaseHiddenTaxAmount()
-                + $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced() - $order->getBaseShippingTaxAmount();
+                + $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced() - $order->getBaseHiddenTaxInvoiced();
+
+        /**
+         * Check if shipping tax calculation is included to current invoice.
+         */
+        $includeShippingTax = true;
+        foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
+            if ($previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
+                $includeShippingTax = false;
+                break;
+            }
+        }
+
+        if ($includeShippingTax) {
+            $allowedSubtotalInclTax     -= $order->getShippingTaxAmount();
+            $baseAllowedSubtotalInclTax -= $order->getBaseShippingTaxAmount();
+        } else {
+            $allowedSubtotalInclTax     += $order->getShippingHiddenTaxAmount();
+            $baseAllowedSubtotalInclTax += $order->getBaseShippingHiddenTaxAmount();
+        }
 
         if ($invoice->isLast()) {
             $subtotal = $allowedSubtotal;

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,8 +46,9 @@ class Mage_Sales_Model_Resource_Quote_Address_Attribute_Frontend_Discount
         $amount = $address->getDiscountAmount();
         if ($amount != 0) {
             $title = Mage::helper('Mage_Sales_Helper_Data')->__('Discount');
-            if ($address->getQuote()->getCouponCode()) {
-                $title .= sprintf(' (%s)', $address->getQuote()->getCouponCode());
+            $couponCode = $address->getQuote()->getCouponCode();
+            if (strlen($couponCode)) {
+                $title .= sprintf(' (%s)', $couponCode);
             }
             $address->addTotal(array(
                 'code'  => 'discount',

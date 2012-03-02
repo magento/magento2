@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -215,6 +215,12 @@ class Mage_Downloadable_Model_Observer
                 if ($item->getProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
                 ) {
+                    if ($item->getStatusId() == Mage_Sales_Model_Order_Item::STATUS_BACKORDERED &&
+                        $orderItemStatusToEnable == Mage_Sales_Model_Order_Item::STATUS_PENDING &&
+                        !in_array(Mage_Sales_Model_Order_Item::STATUS_BACKORDERED, $availableStatuses, true) ) {
+                        $availableStatuses[] = Mage_Sales_Model_Order_Item::STATUS_BACKORDERED;
+                    }
+
                     if (in_array($item->getStatusId(), $availableStatuses)) {
                         $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
                     }

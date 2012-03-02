@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Review
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -318,8 +318,9 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
     public function getSelectCountSql()
     {
         $select = parent::getSelectCountSql();
-
-        $select->reset(Zend_Db_Select::HAVING);
+        $select->reset(Zend_Db_Select::COLUMNS)
+            ->columns('COUNT(e.entity_id)')
+            ->reset(Zend_Db_Select::HAVING);
 
         return $select;
     }

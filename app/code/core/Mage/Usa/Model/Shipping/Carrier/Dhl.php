@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Usa
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -382,6 +382,8 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl
         if ($request->getPackageId()) {
             $r->setPackageId($request->getPackageId());
         }
+
+        $r->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
 
         $this->_rawRequest = $r;
         return $this;
@@ -798,8 +800,7 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl
                         $code = (string)$xml->Faults->Fault->Code;
                         $description = $xml->Faults->Fault->Description;
                         $context = $xml->Faults->Fault->Context;
-                        $this->_errors[$code] = Mage::helper('Mage_Usa_Helper_Data')->__('Error #%s : %s (%s)', $code, $description,
-                            $context);
+                        $this->_errors[$code] = Mage::helper('Mage_Usa_Helper_Data')->__('Error #%s : %s (%s)', $code, $description, $context);
                     } else {
                         if ($r->getDestCountryId() == self::USA_COUNTRY_ID) {
                             if ($xml->Shipment) {
@@ -1198,15 +1199,9 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl
                                     } else {
                                         $description = (string)$txml->Result->Desc;
                                         if ($description)
-                                            $errorArr[$tracknum] = Mage::helper('Mage_Usa_Helper_Data')->__(
-                                                'Error #%s: %s',
-                                                $code,
-                                                $description
-                                            );
+                                            $errorArr[$tracknum] = Mage::helper('Mage_Usa_Helper_Data')->__('Error #%s: %s', $code, $description);
                                         else
-                                            $errorArr[$tracknum] = Mage::helper('Mage_Usa_Helper_Data')->__(
-                                                'Unable to retrieve tracking'
-                                            );
+                                            $errorArr[$tracknum] = Mage::helper('Mage_Usa_Helper_Data')->__('Unable to retrieve tracking');
                                     }
                                 } else {
                                     $errorArr[$tracknum] = Mage::helper('Mage_Usa_Helper_Data')->__('Unable to retrieve tracking');
@@ -1371,6 +1366,8 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl
         $request->setPackageCustomsValue($customsValue);
         $request->setFreeMethodWeight(0);
         $request->setDhlShipmentType($request->getPackagingType());
+
+        $request->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -332,12 +332,16 @@ class Mage_Adminhtml_Block_System_Config_Form extends Mage_Adminhtml_Block_Widge
 
                 if ($e->depends) {
                     foreach ($e->depends->children() as $dependent) {
+                        /* @var $dependent Mage_Core_Model_Config_Element */
                         $dependentId = $section->getName()
                             . '_' . $group->getName()
                             . '_' . $fieldPrefix
                             . $dependent->getName();
                         $shouldBeAddedDependence = true;
                         $dependentValue          = (string) $dependent;
+                        if (isset($dependent['separator'])) {
+                            $dependentValue = explode((string)$dependent['separator'], $dependentValue);
+                        }
                         $dependentFieldName      = $fieldPrefix . $dependent->getName();
                         $dependentField          = $group->fields->$dependentFieldName;
                         /*
@@ -350,10 +354,12 @@ class Mage_Adminhtml_Block_System_Config_Form extends Mage_Adminhtml_Block_Widge
                                 . '/' . $group->getName()
                                 . '/' . $fieldPrefix
                                 . $dependent->getName();
-                            $shouldBeAddedDependence = $dependentValue != Mage::getStoreConfig(
-                                $dependentFullPath,
-                                $this->getStoreCode()
-                            );
+                            $dependentValueInStore = Mage::getStoreConfig($dependentFullPath, $this->getStoreCode());
+                            if (is_array($dependentValue)) {
+                                $shouldBeAddedDependence = !in_array($dependentValueInStore, $dependentValue);
+                            } else {
+                                $shouldBeAddedDependence = $dependentValue != $dependentValueInStore;
+                            }
                         }
                         if($shouldBeAddedDependence) {
                             $this->_getDependence()

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_iphone
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -46,6 +46,7 @@
                     <label for="pass"><?php echo $this->__('Enter your password') ?>:</label>
                     <input type="password" class="required-entry validate-password" name="login[password]" id="pass" placeholder="<?php echo $this->__('Password') ?>" />
                 </li>
+                <?php echo $this->getChildHtml('form.additional.info'); ?>
             </ul>
             <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot your password?') ?></a>
             <div class="login-button">

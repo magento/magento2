@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -29,7 +29,7 @@
         <iframe frameborder="0" border="0" id="<?php echo $this->getContainerId() ?>" src="" style="display:none;"></iframe>
     </div>
 </div>
-<button onclick="cardValidator.validate()" class="scalable" type="button"><span><?php echo $this->__('Start/Reset Validation...')?></span></button>
+<button onclick="cardValidator.validate()" class="scalable" type="button"><span><span><span><?php echo $this->__('Start/Reset Validation...')?></span></span></span></button>
 <script type="text/javascript">
 //<![CDATA[
 cardValidator = new centinelValidator('<?php echo $this->getMethodCode() ?>', '<?php echo $this->getFrameUrl() ?>', '<?php echo $this->getContainerId() ?>');

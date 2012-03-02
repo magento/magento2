@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,23 +29,27 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_System_Email_Template_Preview extends Mage_Adminhtml_Block_Widget
 {
-
     protected function _toHtml()
     {
+        /** @var $template Mage_Core_Model_Email_Template */
         $template = Mage::getModel('Mage_Core_Model_Email_Template');
-        if($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $template->load($id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));
             $template->setTemplateText($this->getRequest()->getParam('text'));
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
+
+        /* @var $filter Mage_Core_Model_Input_Filter_MaliciousCode */
+        $filter = Mage::getSingleton('Mage_Core_Model_Input_Filter_MaliciousCode');
+
         $template->setTemplateText(
-            $this->escapeHtml($template->getTemplateText())
+            $filter->filter($template->getTemplateText())
         );
 
         Magento_Profiler::start("email_template_proccessing");
@@ -53,7 +57,7 @@ class Mage_Adminhtml_Block_System_Email_Template_Preview extends Mage_Adminhtml_
 
         $templateProcessed = $template->getProcessedTemplate($vars, true);
 
-        if($template->isPlain()) {
+        if ($template->isPlain()) {
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
@@ -61,5 +65,4 @@ class Mage_Adminhtml_Block_System_Email_Template_Preview extends Mage_Adminhtml_
 
         return $templateProcessed;
     }
-
 }

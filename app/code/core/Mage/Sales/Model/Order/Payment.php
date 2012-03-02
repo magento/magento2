@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -1010,11 +1010,6 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
         if ($isOnline) {
             // invoke authorization on gateway
             $this->getMethodInstance()->setStore($order->getStoreId())->authorize($this, $amount);
-        } else {
-            $message = Mage::helper('Mage_Sales_Helper_Data')->__(
-                'Registered notification about authorized amount of %s.',
-                $this->_formatPrice($amount)
-            );
         }
 
         // similar logic of "payment review" order as in capturing

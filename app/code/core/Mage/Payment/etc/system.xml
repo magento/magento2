@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Payment
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -79,6 +79,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <title translate="label">
                             <label>Title</label>
@@ -202,6 +203,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <title translate="label">
                             <label>Title</label>
@@ -299,6 +301,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <depends>
+                                <order_status separator=",">processing,processed_ogone</order_status>
+                            </depends>
                         </payment_action>
                         <sort_order translate="label">
                             <label>Sort Order</label>
@@ -307,6 +312,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <title translate="label">
                             <label>Title</label>
@@ -390,6 +396,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <title translate="label">
                             <label>Title</label>

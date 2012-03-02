@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Data
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -110,10 +110,12 @@ class Varien_Data_Form_Abstract extends Varien_Object
     /**
      * Add form element
      *
-     * @param   Varien_Data_Form_Element_Abstract $element
-     * @return  Varien_Data_Form
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @param bool|string|null $after
+     *
+     * @return Varien_Data_Form
      */
-    public function addElement(Varien_Data_Form_Element_Abstract $element, $after=null)
+    public function addElement(Varien_Data_Form_Element_Abstract $element, $after = null)
     {
         $element->setForm($this);
         $this->getElements()->add($element, $after);
@@ -163,11 +165,12 @@ class Varien_Data_Form_Abstract extends Varien_Object
      * Enter description here...
      *
      * @param string $elementId
-     * @param unknown_type $config
-     * @param unknown_type $after
+     * @param array $config
+     * @param bool|string|null $after
+     *
      * @return Varien_Data_Form_Element_Fieldset
      */
-    public function addFieldset($elementId, $config, $after=false)
+    public function addFieldset($elementId, $config, $after = false)
     {
         $element = new Varien_Data_Form_Element_Fieldset($config);
         $element->setId($elementId);

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -50,7 +50,7 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
                 <td colspan="<?php echo count($this->_columns) ?>"></td>
                 <td <?php echo $_colspan?>>
                     <button style="" onclick="" class="scalable add" type="button" id="addToEndBtn<?php echo $_htmlId ?>">
-                        <span><?php echo $this->_addButtonLabel ?></span>
+                        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
                     </button>
                 </td>
             </tr>
@@ -61,7 +61,7 @@ $_colspan = $_colspan > 1 ? 'colspan="' . $_colspan . '"' : '';
 </div>
 <div id="empty<?php echo $_htmlId ?>">
     <button style="" onclick="" class="scalable add" type="button" id="emptyAddBtn<?php echo $_htmlId ?>">
-        <span><?php echo $this->_addButtonLabel ?></span>
+        <span><span><span><?php echo $this->_addButtonLabel ?></span></span></span>
     </button>
 </div>
 
@@ -78,9 +78,9 @@ var arrayRow<?php echo $_htmlId ?> = {
             +'<\/td>'
 <?php endforeach;?>
 <?php if ($this->_addAfter):?>
-            +'<td><button onclick="" class="scalable add" type="button" id="addAfterBtn#{_id}"><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add after') ?><\/span><\/button><\/td>'
+            +'<td><button onclick="" class="scalable add" type="button" id="addAfterBtn#{_id}"><span><span><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add after') ?><\/span><\/span><\/span><\/button><\/td>'
 <?php endif;?>
-            +'<td><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'#{_id}\')" class="scalable delete" type="button"><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Delete') ?><\/span><\/button><\/td>'
+            +'<td><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'#{_id}\')" class="scalable delete" type="button"><span><span><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Delete') ?><\/span><\/span><\/span><\/button><\/td>'
         +'<\/tr>'
     ),
 

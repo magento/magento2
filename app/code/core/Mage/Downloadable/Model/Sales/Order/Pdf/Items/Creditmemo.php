@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,8 @@
  * @package    Mage_Downloadable
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Creditmemo extends Mage_Downloadable_Model_Sales_Order_Pdf_Items_Abstract
+class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Creditmemo
+    extends Mage_Downloadable_Model_Sales_Order_Pdf_Items_Abstract
 {
     /**
      * Draw item line
@@ -66,13 +67,29 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Creditmemo extends Mage_Down
 
         $x += 100;
         // draw Total (ex)
-        $lines[0][] = array(
-            'text'  => $order->formatPriceTxt($item->getRowTotal()),
-            'feed'  => $x,
-            'font'  => 'bold',
-            'align' => 'right',
-            'width' => 50,
-        );
+        $i = 0;
+        $prices = $this->getItemPricesForDisplay();
+        foreach ($prices as $priceData){
+            if (isset($priceData['label'])) {
+                // draw Subtotal label
+                $lines[$i][] = array(
+                    'text'  => $priceData['label'],
+                    'feed'  => $x,
+                    'align' => 'right',
+                    'width' => 50,
+                );
+                $i++;
+            }
+            // draw Subtotal
+            $lines[$i][] = array(
+                'text'  => $priceData['subtotal'],
+                'feed'  => $x,
+                'font'  => 'bold',
+                'align' => 'right',
+                'width' => 50,
+            );
+            $i++;
+        }
 
         $x += 50;
         // draw Discount
@@ -106,8 +123,10 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Creditmemo extends Mage_Down
 
         $x += 45;
         // draw Subtotal
+        $subtotal = $item->getRowTotal()
+            + $item->getTaxAmount() + $item->getHiddenTaxAmount() - $item->getDiscountAmount();
         $lines[0][] = array(
-            'text'  => $order->formatPriceTxt($item->getRowTotal() + $item->getTaxAmount() - $item->getDiscountAmount()),
+            'text'  => $order->formatPriceTxt($subtotal),
             'feed'  => $rightBound,
             'font'  => 'bold',
             'align' => 'right'

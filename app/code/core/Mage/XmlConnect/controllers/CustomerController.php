@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -367,7 +367,6 @@ class Mage_XmlConnect_CustomerController extends Mage_XmlConnect_Controller_Acti
     public function addressAction()
     {
         if (!$this->_getSession()->isLoggedIn()) {
-            Mage::log('address:'.$this->_getSession()->getSessionId());
             $this->_message(
                 $this->__('Customer not logged in.'), self::MESSAGE_STATUS_ERROR, array('logged_in' => '0')
             );

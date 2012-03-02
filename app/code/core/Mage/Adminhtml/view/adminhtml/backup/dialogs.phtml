@@ -1,0 +1,190 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="backup-dialog" style="display: none;" id="rollback-warning">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="head-edit-form fieldset-legend"><?php echo $this->__('Warning') ?></h4>
+        </div>
+        <div class="content">
+            <div><?php echo $this->__('Any data created since the backup was made will be lost including admin users, customers and orders.')?></div>
+            <div class="question"><?php echo $this->__('Are you sure you want to proceed?')?></div>
+        </div>
+        <div class="buttons-set">
+            <div class="f-right">
+                <button type="button" class="scalable " onclick="backup.requestPassword()"><span><?php echo $this->__('OK')?></span></button>
+                <button type="button" class="scalable " onclick="backup.hidePopups()"><span><?php echo $this->__('Cancel')?></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="backup-dialog" style="display: none;" id="backup-warning">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="head-edit-form fieldset-legend"><?php echo $this->__('Warning') ?></h4>
+        </div>
+        <div class="content">
+            <div class="backup-messages" style="display: none;"><ul class="messages"></ul></div>
+            <div><?php echo $this->__("The backup's creation process will take time.")?></div>
+            <div><?php echo $this->__('You will need to wait when the action ends.')?></div>
+            <div><?php echo $this->__('Do you really want to proceed?')?></div>
+        </div>
+        <div class="buttons-set">
+            <div class="f-right">
+                <button type="button" class="scalable " onclick="backup.requestBackupOptions()"><span><?php echo $this->__('OK')?></span></button>
+                <button type="button" class="scalable " onclick="backup.hidePopups()"><span><?php echo $this->__('Cancel')?></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="backup-dialog" style="display: none;" id="backup-options">
+     <div class="entry-edit">
+         <div class="entry-edit-head">
+             <h4 class="head-edit-form fieldset-legend"><?php echo $this->__('Backup options') ?></h4>
+         </div>
+         <div class="content">
+             <div class="backup-messages" style="display: none;"><ul class="messages"></ul></div>
+             <div><?php echo $this->__('Please specify backup creation options')?></div>
+             <form action="" method="post" id="backup-form" onsubmit="return backup.submitBackup();">
+                 <table class="form-list question" cellspacing="0">
+                     <tr>
+                         <td style="padding-right: 8px;"><label for="backup_name" class="nobr"><?php echo $this->__('Backup Name')?></label></td>
+                         <td>
+                             <input type="text" name="backup_name" id="backup_name" class="validate-alphanum-with-spaces" style="width: 343px"/>
+                             <p class="note"><span><?php echo $this->__('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'); ?></span></p>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td>&nbsp;</td>
+                         <td class="maintenance-checkbox-container">
+                             <input type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
+                             <label for="backup_maintenance_mode"><?php echo $this->__('Put store on the maintenance mode while backup creation')?></label>
+                         </td>
+                     </tr>
+                     <tr id="exclude-media-checkbox-container" style="display: none;">
+                         <td>&nbsp;</td>
+                         <td>
+                             <input type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
+                             <label for="exclude_media"><?php echo $this->__('Exclude media folder from backup')?></label>
+                         </td>
+                     </tr>
+                 </table>
+             </form>
+         </div>
+         <div class="buttons-set">
+             <div class="f-right">
+                 <button type="button" class="scalable " onclick="backup.submitBackup()"><span><?php echo $this->__('OK')?></span></button>
+                 <button type="button" class="scalable " onclick="backup.hidePopups()"><span><?php echo $this->__('Cancel')?></span></button>
+             </div>
+         </div>
+     </div>
+ </div>
+
+<div class="backup-dialog" style="display: none;" id="rollback-request-password">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="head-edit-form fieldset-legend"><?php echo $this->__('Please enter password') ?></h4>
+        </div>
+        <div class="content">
+            <div class="backup-messages" style="display: none;"><ul class="messages"></ul></div>
+            <div><?php echo $this->__('Please enter password to confirm rollback.')?></div>
+            <div><?php echo $this->__('This action cannot be undone.')?></div>
+            <div class="question"><?php echo $this->__('Are you sure you want to proceed?')?></div>
+            <form action="" method="post" id="rollback-form" onsubmit="return backup.submitRollback();">
+                <div class="password-box-container">
+                    <table class="form-list" cellspacing="0">
+                        <tr>
+                            <td style="padding-right: 8px;"><label for="password" class="nobr"><?php echo $this->__('User Password')?> <span class="required">*</span></label></td>
+                            <td><input type="password" name="password" id="password" class="required-entry"></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="maintenance-checkbox-container">
+                                <input type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>
+                                <label for="rollback_maintenance_mode"><?php echo $this->__('Put store on the maintenance mode while rollback processing')?></label>
+                            </td>
+                        </tr>
+                        <tr id="use-ftp-checkbox-row" style="display: none;">
+                            <td>&nbsp;</td>
+                            <td><input type="checkbox" name="use_ftp" value="1" id="use_ftp" onClick="backup.toggleFtpCredentialsForm();"/> <label for="use_ftp"><?php echo $this->__('Use FTP Connection')?></label></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="entry-edit" id="ftp-credentials-container" style="display: none;">
+                    <div class="entry-edit-head">
+                        <h4 class=""><?php echo $this->__('FTP credentials')?></h4>
+                    </div>
+                    <fieldset>
+                        <table class="form-list" cellspacing="0">
+                            <tr>
+                                <td class="label"><label for="ftp_host"><?php echo $this->__('FTP Host')?> <span class="required">*</span></label></td>
+                                <td class="value"><input type="text" name="ftp_host" id="ftp_host"></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="ftp_user"><?php echo $this->__('FTP Login')?> <span class="required">*</span></label></td>
+                                <td class="value"><input type="text" name="ftp_user" id="ftp_user"></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="ftp_pass"><?php echo $this->__('FTP Password')?> <span class="required">*</span></label></td>
+                                <td class="value"><input type="password" name="ftp_pass" id="ftp_pass"></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="ftp_path"><?php echo $this->__('Magento root directory')?></label></td>
+                                <td class="value"><input type="text" name="ftp_path" id="ftp_path"></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+        <div class="buttons-set">
+            <div class="f-right">
+                <button type="button" class="scalable " onclick="backup.submitRollback()"><span><?php echo $this->__('OK')?></span></button>
+                <button type="button" class="scalable " onclick="backup.hidePopups()"><span><?php echo $this->__('Cancel')?></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popup-window-mask" style="display: none;"></div>
+
+<?php
+    $helper = Mage::helper('Mage_Backup_Helper_Data');
+    $rollbackUrl = $this->getUrl('*/*/rollback');
+    $backupUrl = $this->getUrl('*/*/create');
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+    document.observe('dom:loaded', function () {
+        backup = new AdminBackup();
+        backup.rollbackUrl = '<?php echo $helper->jsQuoteEscape($rollbackUrl);?>';
+        backup.backupUrl = '<?php echo $helper->jsQuoteEscape($backupUrl);?>';
+    });
+//]]>
+</script>

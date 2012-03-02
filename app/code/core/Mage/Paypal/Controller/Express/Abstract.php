@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,7 +69,7 @@ abstract class Mage_Paypal_Controller_Express_Abstract extends Mage_Core_Control
             $customer = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomer();
             if ($customer && $customer->getId()) {
                 $this->_checkout->setCustomerWithAddressChange(
-                    $customer, null, $this->_getQuote()->getShippingAddress()
+                    $customer, $this->_getQuote()->getBillingAddress(), $this->_getQuote()->getShippingAddress()
                 );
             }
 

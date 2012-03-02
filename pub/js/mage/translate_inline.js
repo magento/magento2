@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     js
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -59,16 +59,18 @@ TranslateInline.prototype = {
         $$('*[translate]').each(this.initializeElement.bind(this));
     },
 
-    trigShow: function (el) {
-        this.trigHideClear();
+    trigShow: function (el, event) {
+        if (this.trigContentEl != el) {
+            this.trigHideClear();
+            this.trigContentEl = el;
 
-        var p = Element.cumulativeOffset(el);
+            var p = Element.cumulativeOffset(el);
 
-        this.trigEl.style.left = p[0]+'px';
-        this.trigEl.style.top = p[1]+'px';
-        this.trigEl.style.display = 'block';
-
-        this.trigContentEl = el;
+            this.trigEl.style.left = p[0]+'px';
+            this.trigEl.style.top = p[1]+'px';
+            this.trigEl.style.display = 'block';
+            Event.stop(event);
+        };
     },
 
     trigHide: function() {

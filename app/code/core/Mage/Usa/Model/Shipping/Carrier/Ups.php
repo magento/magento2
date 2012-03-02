@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Usa
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -272,6 +272,8 @@ class Mage_Usa_Model_Shipping_Carrier_Ups
 
         $r->setIsReturn($request->getIsReturn());
 
+        $r->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
+
         $this->_rawRequest = $r;
 
         return $this;
@@ -487,7 +489,7 @@ class Mage_Usa_Model_Shipping_Carrier_Ups
     /**
      * Get configuration data of carrier
      *
-     * @param strin $type
+     * @param string $type
      * @param string $code
      * @return array|bool
      */
@@ -1007,10 +1009,7 @@ XMLRequest;
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (float) $cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
                             } else {
-                                $errorTitle = Mage::helper('Mage_Directory_Helper_Data')
-                                    ->__('Can\'t convert rate from "%s-%s".',
-                                        $responseCurrencyCode,
-                                        $this->_request->getPackageCurrency()->getCode());
+                                $errorTitle = Mage::helper('Mage_Directory_Helper_Data')->__('Can\'t convert rate from "%s-%s".', $responseCurrencyCode, $this->_request->getPackageCurrency()->getCode());
                                 $error = Mage::getModel('Mage_Shipping_Model_Rate_Result_Error');
                                 $error->setCarrier('ups');
                                 $error->setCarrierTitle($this->getConfigData('title'));

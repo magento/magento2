@@ -19,7 +19,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -406,7 +406,7 @@ tr.summary-details-excluded { font-style:italic; }
 .std ul.disc { list-style:disc outside; padding-left:18px; margin:0 0 10px; }
 .std dl dt { font-weight:bold; }
 .std dl dd { margin:0 0 10px; }
-/*.std ul,
+std ul,
 .std ol,
 .std dl,
 .std p,
@@ -426,7 +426,7 @@ tr.summary-details-excluded { font-style:italic; }
 .std b,
 .std strong { font-weight:bold; }
 .std i,
-.std em { font-style:italic; }*/
+.std em { font-style:italic; }
 
 /* Misc */
 .links li { display:inline; }
@@ -1407,7 +1407,7 @@ tr.summary-details-excluded { font-style:italic; }
 
 
 /* Account Login/Create Pages ============================================================ */
-.account-login .content { min-height:240px; padding:14px 21px; background:#faf7ee url(../images/bkg_login-box.gif) 0 0 repeat-x; border:1px solid #bbb6a5; border-bottom:0; }
+.account-login .content { min-height:345px; padding:14px 21px; background:#faf7ee url(../images/bkg_login-box.gif) 0 0 repeat-x; border:1px solid #bbb6a5; border-bottom:0; }
 .account-login .content h2 { font-weight:bold; font-size:13px; margin:0 0 14px; padding:0 0 5px 23px; border-bottom:1px solid #ddd; background-position:0 1px; background-repeat:no-repeat; text-transform:uppercase; color:#e76200; }
 .account-login .new-users h2 { background-image:url(../images/i_page1.gif)}
 .account-login .registered-users h2 { background-image:url(../images/i_page2.gif); }
@@ -1416,6 +1416,26 @@ tr.summary-details-excluded { font-style:italic; }
 .account-create {}
 /* Account Login/Create Pages ============================================================ */
 
+/* Captcha */
+.captcha-note      { clear:left; padding-top:5px; }
+.captcha-image     { float:left; display:inline; margin:0; position:relative; width:258px; }
+.captcha-image .captcha-img { border:1px solid #b6b6b6; vertical-align:bottom; width:100%; }
+.registered-users .captcha-image { margin:0; }
+.captcha-reload { cursor:pointer; position:absolute; top:2px; right:2px;}
+.captcha-reload.refreshing  { animation:rotate 1.5s infinite linear; -webkit-animation:rotate 1.5s infinite linear; -moz-animation:rotate 1.5s infinite linear; }
+
+@-webkit-keyframes rotate {
+    0% { -webkit-transform:rotate(0); }
+    0% { -webkit-transform:rotate(-360deg); }
+}
+@-moz-keyframes rotate {
+    0% { -moz-transform:rotate(0); }
+    0% { -moz-transform:rotate(-360deg); }
+}
+@keyframes rotate {
+    0% { transform:rotate(0); }
+    0% { transform:rotate(-360deg); }
+}
 
 /* Remember Me Popup ===================================================================== */
 .window-overlay {background:rgba(0, 0, 0, 0.35); position:absolute; top:0; left:0; height:100%; width:100%; z-index:990; }

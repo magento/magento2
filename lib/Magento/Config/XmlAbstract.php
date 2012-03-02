@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,12 +39,12 @@ abstract class Magento_Config_XmlAbstract
      * Instantiate with the list of files to merge
      *
      * @param array $configFiles
-     * @throws Exception
+     * @throws Magento_Exception
      */
     public function __construct(array $configFiles)
     {
         if (empty($configFiles)) {
-            throw new Exception('There must be at least one configuration file specified.');
+            throw new Magento_Exception('There must be at least one configuration file specified.');
         }
         $this->_merge($configFiles);
     }
@@ -60,14 +60,14 @@ abstract class Magento_Config_XmlAbstract
      * Merge the config XML-files
      *
      * @param array $configFiles
-     * @throws Exception if a non-existing or invalid XML-file passed
+     * @throws Magento_Exception if a non-existing or invalid XML-file passed
      */
     protected function _merge($configFiles)
     {
         $domConfig = new Magento_Config_Dom($this->_getInitialXml(), $this->_getIdAttributes());
         foreach ($configFiles as $file) {
             if (!file_exists($file)) {
-                throw new Exception("File does not exist: {$file}");
+                throw new Magento_Exception("File does not exist: {$file}");
             }
             $domConfig->merge(file_get_contents($file));
             if (!$domConfig->validate($this->getSchemaFile(), $errors)) {
@@ -76,7 +76,7 @@ abstract class Magento_Config_XmlAbstract
                 foreach ($errors as $error) {
                     $message .= "{$error->message} Line: {$error->line}\n";
                 }
-                throw new Exception($message);
+                throw new Magento_Exception($message);
             }
         }
         $this->_dom = $domConfig->getDom();

@@ -20,203 +20,176 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+/** @var $upsModel Mage_Usa_Model_Shipping_Carrier_Ups */
+$upsModel = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Ups');
+$orShipArr = $upsModel->getCode('originShipment');
+$defShipArr = $upsModel->getCode('method');
 
-$orShipArr = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Ups')->getCode('originShipment');
-
-$defShipArr = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Ups')->getCode('method');
-
+/** @var $this Mage_Adminhtml_Block_Template */
 $sectionCode = $this->getRequest()->getParam('section');
 $websiteCode = $this->getRequest()->getParam('website');
 $storeCode = $this->getRequest()->getParam('store');
 
-
-if(!$storeCode && $websiteCode){
+if (!$storeCode && $websiteCode) {
+    /** @var $web Mage_Core_Model_Website */
     $web = Mage::getModel('Mage_Core_Model_Website')->load($websiteCode);
-    $stroredAllowedMethods = $web->getConfig('carriers/ups/allowed_methods');
-    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
-    $stroredOriginShipment = $web->getConfig('carriers/ups/origin_shipment');
-    $stroredFreeShipment = $web->getConfig('carriers/ups/free_method');
+    $storedAllowedMethods = explode(',', $web->getConfig('carriers/ups/allowed_methods'));
+    $storedOriginShipment = $web->getConfig('carriers/ups/origin_shipment');
+    $storedFreeShipment   = $web->getConfig('carriers/ups/free_method');
+    $storedUpsType        = $web->getConfig('carriers/ups/type');
 } elseif ($storeCode) {
-    $stroredAllowedMethods = Mage::getStoreConfig('carriers/ups/allowed_methods',$storeCode);
-    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
-    $stroredOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment',$storeCode);
-    $stroredFreeShipment = Mage::getStoreConfig('carriers/ups/free_method',$storeCode);
+    $storedAllowedMethods = explode(',', Mage::getStoreConfig('carriers/ups/allowed_methods', $storeCode));
+    $storedOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment', $storeCode);
+    $storedFreeShipment   = Mage::getStoreConfig('carriers/ups/free_method', $storeCode);
+    $storedUpsType        = Mage::getStoreConfig('carriers/ups/type', $storeCode);
 } else {
-    $stroredAllowedMethods = Mage::getStoreConfig('carriers/ups/allowed_methods');
-    $stroredAllowedMethods = explode(',',$stroredAllowedMethods);
-    $stroredOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment');
-    $stroredFreeShipment = Mage::getStoreConfig('carriers/ups/free_method');
+    $storedAllowedMethods = explode(',', Mage::getStoreConfig('carriers/ups/allowed_methods'));
+    $storedOriginShipment = Mage::getStoreConfig('carriers/ups/origin_shipment');
+    $storedFreeShipment   = Mage::getStoreConfig('carriers/ups/free_method');
+    $storedUpsType        = Mage::getStoreConfig('carriers/ups/type');
 }
 ?>
 <script type="text/javascript">
 //<![CDATA[
-    originShipmentObj = new Object();
-
-
-    <?php
-    //get origin shipment data, using in UPS XML module
-        foreach ($orShipArr as $key=>$val){
-            print "originShipmentObj['$key'] = new Object();\n";
-            foreach ($val as $code=>$label){
-                print "\toriginShipmentObj['$key']['$code'] = '$label';\n";
-            }
-        }
-    ?>
-    //get default shipment data, using in UPS module
-    <?php
-        print "originShipmentObj['default'] = new Object();\n";
-        foreach ($defShipArr as $code=>$label){
-            print "\toriginShipmentObj['default']['$code'] = '$label';\n";
-        }
-    ?>
-    //get stored Allowed Methods
-    <?php
-    print "stroredAllowedMethods = new Array();\n";
-        foreach ($stroredAllowedMethods as $code){
-            print "\tstroredAllowedMethods.push('$code');\n";
-        }
-    ?>
-    //set stored origin shipment
-    <?php
-        print "stroredOriginShipment='$stroredOriginShipment'";
-    ?>
-
-    //set stored Free origin shipment
-    <?php
-        print "stroredFreeShipment='$stroredFreeShipment'";
-    ?>
-
-
-    function hideRowArrayElements(arr,method)
+    function hideRowArrayElements(arr)
     {
-        for(a=0;a<arr.length;a++){
+        for (var a = 0; a < arr.length; a++) {
             $(arr[a]).up(1).hide();
         }
     }
 
-    function showRowArrayElements(arr,method)
+    function showRowArrayElements(arr)
     {
-        for(a=0;a<arr.length;a++){
+        for (var a = 0; a < arr.length; a++) {
             $(arr[a]).up(1).show();
         }
     }
 
-    function inArray(arr,value)
+    function inArray(arr, value)
     {
-        var i;
-        for (i=0; i < arr.length; i++) {
-                if (arr[i] === value) {
-                        return true;
-                }
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === value) {
+                return true;
+            }
         }
         return false;
     }
 
     var upsXml = Class.create();
     upsXml.prototype = {
-        initialize : function()
+        initialize: function()
         {
-
             this.carriersUpsTypeId = 'carriers_ups_type';
-            if($(this.carriersUpsTypeId)){
-                this.checkingUpsXmlId = new Array('carriers_ups_gateway_xml_url','carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number');
-                this.checkingUpsId = new Array('carriers_ups_gateway_url');
-                this.originShipmentTitle = '';
-                this.allowedMethodsId = 'carriers_ups_allowed_methods';
-                this.freeShipmentId = 'carriers_ups_free_method';
-                this.onlyUpsXmlElements = new Array('carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url','carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number','carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number','carriers_ups_mode_xml');
-                this.onlyUpsElements = new Array('carriers_ups_gateway_url');
-                this.setFormValues();
-                Event.observe($('carriers_ups_type'), 'change', this.setFormValues.bind(this));
+            if (!$(this.carriersUpsTypeId)) {
+                return;
             }
 
+            this.checkingUpsXmlId = ['carriers_ups_gateway_xml_url','carriers_ups_username',
+                'carriers_ups_password','carriers_ups_access_license_number'];
+            this.checkingUpsId = ['carriers_ups_gateway_url'];
+            this.originShipmentTitle = '';
+            this.allowedMethodsId = 'carriers_ups_allowed_methods';
+            this.freeShipmentId = 'carriers_ups_free_method';
+            this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url',
+                'carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number',
+                'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
+                'carriers_ups_mode_xml'];
+            this.onlyUpsElements = ['carriers_ups_gateway_url'];
+
+            this.storedOriginShipment = '<?php echo $storedOriginShipment ?>';
+            this.storedFreeShipment = '<?php echo $storedFreeShipment ?>';
+            this.storedUpsType = '<?php echo $storedUpsType ?>';
+            <?php /** @var $_coreHelper Mage_Core_Helper_Data */ $_coreHelper = Mage::helper('Mage_Core_Helper_Data'); ?>
+            this.storedAllowedMethods = <?php echo $_coreHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?php echo $_coreHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?php echo $_coreHelper->jsonEncode($defShipArr) ?>;
+
+            this.setFormValues();
+            Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
         },
         updateAllowedMethods: function(originShipmentTitle)
         {
-            selectFieldAllowedMethod = $(this.allowedMethodsId);
-            selectFieldFreeShipment = $(this.freeShipmentId);
+            var allowedMethods = $(this.allowedMethodsId), // multiselect
+                freeMethod = $(this.freeShipmentId), // single-choice select
+                originShipment = this.originShipmentObj[originShipmentTitle];
 
-            originShipment = originShipmentObj[originShipmentTitle];
-
-            while (selectFieldAllowedMethod.length> 0) {
-                selectFieldAllowedMethod.remove(0);
-            }
-            while (selectFieldFreeShipment.length> 0) {
-                selectFieldFreeShipment.remove(0);
+            while (allowedMethods.length > 0) {
+                allowedMethods.remove(0);
             }
 
-            var optionFree = document.createElement("OPTION");
-            optionFree.text = 'None';
-            optionFree.value = '';
-            try {
-                selectFieldFreeShipment.add(optionFree, null);
-            } catch(ex) {
-                selectFieldFreeShipment.add(optionFree);
+            while (freeMethod.length > 0) {
+                freeMethod.remove(0);
             }
 
-            for(code in originShipment){
-                var option = document.createElement("OPTION");
-                option.text = originShipment[code];
-                option.value = code;
+            freeMethod.insert(new Element('option', {value:''}).update('None'));
 
-                var optionFree = document.createElement("OPTION");
-                optionFree.text = originShipment[code];
-                optionFree.value = code;
-
-                if( (originShipmentTitle == stroredOriginShipment || originShipmentTitle=='default') && stroredFreeShipment==code){
-                    optionFree.selected = true;
-                }
-                if( (originShipmentTitle == stroredOriginShipment || originShipmentTitle=='default') && inArray(stroredAllowedMethods,code)){
+            var code, option;
+            for (code in originShipment) {
+                option = new Element('option', {value:code}).update(originShipment[code]);
+                if ((originShipmentTitle == this.storedOriginShipment || originShipmentTitle == 'default')
+                    && this.storedFreeShipment == code
+                ) {
                     option.selected = true;
                 }
-                try {
-                    selectFieldAllowedMethod.add(option, null); // standards compliant; doesn't work in IE
-                    selectFieldFreeShipment.add(optionFree, null);
-                } catch(ex) {
-                    selectFieldAllowedMethod.add(option); // IE only
-                    selectFieldFreeShipment.add(optionFree);
+                freeMethod.insert(option);
+
+                option = new Element('option', {value:code}).update(originShipment[code]);
+                if (this.storedUpsType == 'UPS') {
+                    if (originShipmentTitle != 'default' || inArray(this.storedAllowedMethods, code)) {
+                        option.selected = true;
+                    }
+                } else if (originShipmentTitle != this.storedOriginShipment
+                    || inArray(this.storedAllowedMethods, code)
+                ) {
+                    option.selected = true;
                 }
+
+                if ((originShipmentTitle == 'default' || originShipmentTitle == this.storedOriginShipment)
+                    && inArray(this.storedAllowedMethods, code)
+                ) {
+                    option.selected = true;
+                }
+
+                allowedMethods.insert(option);
             }
         },
         setFormValues: function()
         {
-            if($F(this.carriersUpsTypeId) == 'UPS'){
-                for(a=0;a<this.checkingUpsXmlId.length;a++){
+            var a;
+            if ($F(this.carriersUpsTypeId) == 'UPS') {
+                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
-                for(a=0;a<this.checkingUpsId.length;a++){
+                for (a = 0; a < this.checkingUpsId.length; a++) {
                     $(this.checkingUpsXmlId[a]).addClassName('required-entry');
                 }
                 Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsElements);
                 hideRowArrayElements(this.onlyUpsXmlElements);
-                this.changeOriginShipment(null,'default');
+                this.changeOriginShipment(null, 'default');
             } else {
-                for(a=0;a<this.checkingUpsXmlId.length;a++){
+                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).addClassName('required-entry');
                 }
-                for(a=0;a<this.checkingUpsId.length;a++){
+                for (a = 0; a < this.checkingUpsId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
                 Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsXmlElements);
                 hideRowArrayElements(this.onlyUpsElements);
-                this.changeOriginShipment();
+                this.changeOriginShipment(null, null);
             }
         },
-        changeOriginShipment: function(Event,key)
+        changeOriginShipment: function(Event, key)
         {
-            if(key)
-                this.originShipmentTitle = key
-            else
-                this.originShipmentTitle = $F('carriers_ups_origin_shipment');
+            this.originShipmentTitle = key ? key : $F('carriers_ups_origin_shipment');
             this.updateAllowedMethods(this.originShipmentTitle);
         }
-    }
+    };
     xml = new upsXml();
-//]]>
+    //]]>
 </script>

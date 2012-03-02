@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     js
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -32,6 +32,6 @@
             return this.delay.curry(0.01).apply(this, arguments);
         }
 
-        return eDefer.apply(this, args);
+        return eDefer.apply(this, arguments);
     }
 })();

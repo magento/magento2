@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -100,8 +100,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Widget_Chooser extends Mage_Adminhtml
     public function getCheckboxCheckCallback()
     {
         if ($this->getUseMassaction()) {
-            return "function (grid, event) {
-                $(grid.containerId).fire('product:changed', {});
+            return "function (grid, element) {
+                $(grid.containerId).fire('product:changed', {element: element});
             }";
         }
     }

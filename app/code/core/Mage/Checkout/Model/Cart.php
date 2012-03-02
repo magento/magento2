@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,7 @@
  * @package     Mage_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Checkout_Model_Cart extends Varien_Object
+class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Model_Cart_Interface
 {
     protected $_summaryQty = null;
     protected $_productIds = null;
@@ -55,7 +55,7 @@ class Mage_Checkout_Model_Cart extends Varien_Object
     }
 
     /**
-     * Retrieve custome session model
+     * Retrieve customer session model
      *
      * @return Mage_Customer_Model_Customer
      */
@@ -101,6 +101,18 @@ class Mage_Checkout_Model_Cart extends Varien_Object
             $this->setData('quote', $this->getCheckoutSession()->getQuote());
         }
         return $this->_getData('quote');
+    }
+
+    /**
+     * Set quote object associated with the cart
+     *
+     * @param Mage_Sales_Model_Quote $quote
+     * @return Mage_Checkout_Model_Cart
+     */
+    public function setQuote(Mage_Sales_Model_Quote $quote)
+    {
+        $this->setData('quote', $quote);
+        return $this;
     }
 
     /**
@@ -430,17 +442,29 @@ class Mage_Checkout_Model_Cart extends Varien_Object
         $this->getQuote()->save();
         $this->getCheckoutSession()->setQuoteId($this->getQuote()->getId());
         /**
-         * Cart save usually called after chenges with cart items.
+         * Cart save usually called after changes with cart items.
          */
         Mage::dispatchEvent('checkout_cart_save_after', array('cart'=>$this));
         return $this;
     }
 
+    /**
+     * Save cart (implement interface method)
+     */
+    public function saveQuote()
+    {
+        $this->save();
+    }
+
+    /**
+     * Mark all quote items as deleted (empty shopping cart)
+     *
+     * @return Mage_Checkout_Model_Cart
+     */
     public function truncate()
     {
-        foreach ($this->getQuote()->getItemsCollection() as $item) {
-            $item->isDeleted(true);
-        }
+        $this->getQuote()->removeAllItems();
+        return $this;
     }
 
     public function getProductIds()

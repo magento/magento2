@@ -20,9 +20,10 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/* @var $this Mage_Checkout_Block_Onepage_Progress */
 ?>
 <div class="block block-progress opc-block-progress">
     <div class="block-title">
@@ -31,9 +32,10 @@
     <div class="block-content">
         <dl>
         <?php if ($this->getCheckout()->getStepData('billing', 'is_show')): ?>
-        <?php if($this->getCheckout()->getStepData('billing', 'complete')): ?>
+        <?php if ($this->isStepComplete('billing')): ?>
             <dt class="complete">
-                <?php echo $this->__('Billing Address') ?> <span class="separator">|</span> <a href="#billing" onclick="checkout.accordion.openSection('opc-billing'); return false;"><?php echo $this->__('Change') ?></a>
+                <?php echo $this->__('Billing Address') ?> <span class="separator">|</span>
+                <a href="#billing" onclick="checkout.gotoSection('billing'); return false;"><?php echo $this->__('Change') ?></a>
             </dt>
             <dd class="complete">
                 <address><?php echo $this->getBilling()->format('html') ?></address>
@@ -46,9 +48,10 @@
         <?php endif; ?>
 
         <?php if ($this->getCheckout()->getStepData('shipping', 'is_show')): ?>
-        <?php if($this->getCheckout()->getStepData('shipping', 'complete')): ?>
+        <?php if ($this->isStepComplete('shipping')): ?>
             <dt class="complete">
-                <?php echo $this->__('Shipping Address') ?> <span class="separator">|</span> <a href="#payment" onclick="checkout.accordion.openSection('opc-shipping');return false;"><?php echo $this->__('Change') ?></a>
+                <?php echo $this->__('Shipping Address') ?> <span class="separator">|</span>
+                <a href="#payment" onclick="checkout.gotoSection('shipping');return false;"><?php echo $this->__('Change') ?></a>
             </dt>
             <dd class="complete">
                 <address><?php echo $this->getShipping()->format('html') ?></address>
@@ -61,9 +64,10 @@
         <?php endif; ?>
 
         <?php if ($this->getCheckout()->getStepData('shipping_method', 'is_show')): ?>
-        <?php if($this->getCheckout()->getStepData('shipping_method', 'complete')): ?>
+        <?php if ($this->isStepComplete('shipping_method')): ?>
             <dt class="complete">
-                <?php echo $this->__('Shipping Method') ?> <span class="separator">|</span> <a href="#shipping_method" onclick="checkout.accordion.openSection('opc-shipping_method'); return false;"><?php echo $this->__('Change') ?></a>
+                <?php echo $this->__('Shipping Method') ?> <span class="separator">|</span>
+                <a href="#shipping_method" onclick="checkout.gotoSection('shipping_method'); return false;"><?php echo $this->__('Change') ?></a>
             </dt>
             <dd class="complete">
                 <?php if ($this->getShippingMethod()): ?>
@@ -92,9 +96,10 @@
         <?php endif; ?>
 
         <?php if ($this->getCheckout()->getStepData('payment', 'is_show')): ?>
-        <?php if($this->getCheckout()->getStepData('payment', 'complete')): ?>
+        <?php if ($this->isStepComplete('payment')): ?>
             <dt class="complete">
-                <?php echo $this->__('Payment Method') ?> <span class="separator">|</span> <a href="#payment" onclick="checkout.accordion.openSection('opc-payment'); return false;"><?php echo $this->__('Change') ?></a>
+                <?php echo $this->__('Payment Method') ?> <span class="separator">|</span>
+                <a href="#payment" onclick="checkout.gotoSection('payment'); return false;"><?php echo $this->__('Change') ?></a>
             </dt>
             <dd class="complete">
                 <?php echo $this->getPaymentHtml() ?>

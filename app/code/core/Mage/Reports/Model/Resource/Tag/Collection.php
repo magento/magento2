@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,12 +45,13 @@ class Mage_Reports_Model_Resource_Tag_Collection extends Mage_Tag_Model_Resource
         $select = $this->getSelect()
             ->joinLeft(
                 array('tr' => $this->getTable('tag_relation')),
-                'main_table.tag_id = tr.tag_id',
+                'main_table.tag_id = tr.tag_id AND tr.active = 1',
                 array('popularity' => 'COUNT(tr.tag_id)')
             );
         if (!empty($storeIds)) {
             $select->where('tr.store_id IN(?)', $storeIds);
         }
+
         $select->group('main_table.tag_id');
 
         /**

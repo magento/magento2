@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -99,9 +99,6 @@
         <li>
             <input type="checkbox" name="config[use_secure_admin]" id="use_secure_admin" value="1" <?php if($this->getFormData()->getUseSecureAdmin()): ?>checked="checked"<?php endif; ?> />
             <label for="use_secure_admin"><?php echo $this->__('Run admin interface with SSL') ?></label><br />
-            <!--<p style="margin-top:4px; line-height:1.3em; color:#666;">
-                <small><?php echo $this->__('') ?></small>
-            </p>-->
         </li>
         <li>
             <input type="checkbox" name="skip_url_validation" id="skip_url_validation" value="1" <?php if($this->getSkipUrlValidation()): ?>checked="checked"<?php endif; ?> />

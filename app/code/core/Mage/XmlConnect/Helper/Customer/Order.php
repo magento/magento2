@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -62,7 +62,7 @@ class Mage_XmlConnect_Helper_Customer_Order extends Mage_Core_Helper_Abstract
         $typesOfDisplay = $renderer->getTypesOfDisplay();
         if ($isIncludeTax) {
             $nodeName = 'including_tax';
-            $nodeLabel = $renderer->__('Incl. Tax');
+            $nodeLabel = Mage::helper('Mage_Tax_Helper_Data')->__('Incl. Tax');
 
             $inclPrice      = $renderer->helper('Mage_Checkout_Helper_Data')->getPriceInclTax($item);
             $inclSubtotal   = $renderer->helper('Mage_Checkout_Helper_Data')->getSubtotalInclTax($item);
@@ -77,7 +77,7 @@ class Mage_XmlConnect_Helper_Customer_Order extends Mage_Core_Helper_Abstract
             $weeeParams['include'] = $inclPrice;
         } else {
             $nodeName = 'excluding_tax';
-            $nodeLabel = $renderer->__('Excl. Tax');
+            $nodeLabel = Mage::helper('Mage_Tax_Helper_Data')->__('Excl. Tax');
 
             if ($typesOfDisplay[self::PRICE_DISPLAY_TYPE_14]) {
                 $price = $item->getPrice() + $renderer->getWeeeTaxAppliedAmount()
@@ -221,19 +221,19 @@ class Mage_XmlConnect_Helper_Customer_Order extends Mage_Core_Helper_Abstract
     ) {
         $qty = 1 * $item->getQtyOrdered();
         if ($qty > 0) {
-            $quantityXml->addCustomChild('value', $qty, array('label' => $renderer->__('Ordered')));
+            $quantityXml->addCustomChild('value', $qty, array('label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Ordered')));
         }
         $qty = 1 * $item->getQtyShipped();
         if ($qty > 0) {
-            $quantityXml->addCustomChild('value', $qty, array('label' => $renderer->__('Shipped')));
+            $quantityXml->addCustomChild('value', $qty, array('label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Shipped')));
         }
         $qty = 1 * $item->getQtyCanceled();
         if ($qty > 0) {
-            $quantityXml->addCustomChild('value', $qty, array('label' => $renderer->__('Canceled')));
+            $quantityXml->addCustomChild('value', $qty, array('label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Canceled')));
         }
         $qty = 1 * $item->getQtyRefunded();
         if ($qty > 0) {
-            $quantityXml->addCustomChild('value', $qty, array('label' => $renderer->__('Refunded')));
+            $quantityXml->addCustomChild('value', $qty, array('label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Refunded')));
         }
     }
 

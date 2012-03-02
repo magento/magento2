@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,35 +57,12 @@ class Mage_Paypal_Model_Observer
     /**
      * Clean unfinished transaction
      *
+     * @deprecated since 1.6.2.0
      * @return Mage_Paypal_Model_Observer
      */
     public function cleanTransactions()
     {
-        /** @var $date Mage_Core_Model_Date */
-        $date = Mage::getModel('Mage_Core_Model_Date');
-        $createdBefore = strtotime('-1 hour', $date->timestamp());
-
-        /** @var $collection Mage_Paypal_Model_Resource_Payment_Transaction_Collection */
-        $collection = Mage::getModel('Mage_Paypal_Model_Payment_Transaction')->getCollection();
-        $collection->addCreatedBeforeFilter($date->gmtDate(null, $createdBefore));
-
-        /** @var $method Mage_Paypal_Model_Payflowlink */
-        $method = Mage::helper('Mage_Payment_Helper_Data')->getMethodInstance(Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK);
-
-        /** @var $item Mage_Paypal_Model_Payment_Transaction */
-        foreach ($collection as $item) {
-            try {
-                $method->void(new Varien_Object(array(
-                    'transaction_id' => $item->getTxnId(),
-                    'store' => $item->getAdditionalInformation('store_id')
-                )));
-                $item->delete();
-            } catch (Mage_Paypal_Exception $e) {
-                $item->delete();
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-        }
+        return $this;
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -1074,7 +1074,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
         if ($attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $object->setData($attributeCode, $valueRow['value']);
-            $attribute->getBackend()->setValueId($valueRow['value_id']);
+            $attribute->getBackend()->setEntityValueId($object, $valueRow['value_id']);
         }
 
         return $this;
@@ -1213,11 +1213,11 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
                 if ($this->_isAttributeValueEmpty($attribute, $v)) {
                     $delete[$attribute->getBackend()->getTable()][] = array(
                         'attribute_id'  => $attrId,
-                        'value_id'      => $attribute->getBackend()->getValueId()
+                        'value_id'      => $attribute->getBackend()->getEntityValueId($newObject)
                     );
                 } elseif ($v !== $origData[$k]) {
                     $update[$attrId] = array(
-                        'value_id' => $attribute->getBackend()->getValueId(),
+                        'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
                         'value'    => $v,
                     );
                 }

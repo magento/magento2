@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,6 +47,13 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const CHARS_PASSWORD_UPPERS                 = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
     const CHARS_PASSWORD_DIGITS                 = '23456789';
     const CHARS_PASSWORD_SPECIALS               = '!$*-.=?@_';
+
+    /**
+     * Config pathes to merchant country code and merchant VAT number
+     */
+    const XML_PATH_MERCHANT_COUNTRY_CODE = 'general/store_information/merchant_country';
+    const XML_PATH_MERCHANT_VAT_NUMBER = 'general/store_information/merchant_vat_number';
+    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
      * @var Mage_Core_Model_Encryption
@@ -527,12 +534,12 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * @param array $array
      * @param string $rootName
      * @return SimpleXMLElement
-     * @throws Exception
+     * @throws Magento_Exception
      */
     public function assocToXml(array $array, $rootName = '_')
     {
         if (empty($rootName) || is_numeric($rootName)) {
-            throw new Exception('Root element must not be empty or numeric');
+            throw new Magento_Exception('Root element must not be empty or numeric');
         }
 
         $xmlstr = <<<XML
@@ -542,7 +549,7 @@ XML;
         $xml = new SimpleXMLElement($xmlstr);
         foreach ($array as $key => $value) {
             if (is_numeric($key)) {
-                throw new Exception('Array root keys must not be numeric.');
+                throw new Magento_Exception('Array root keys must not be numeric.');
             }
         }
         return self::_assocToXml($array, $rootName, $xml);
@@ -555,7 +562,7 @@ XML;
      * @param string $rootName
      * @param SimpleXMLElement $xml
      * @return SimpleXMLElement
-     * @throws Exception
+     * @throws Magento_Exception
      */
     private function _assocToXml(array $array, $rootName, SimpleXMLElement &$xml)
     {
@@ -565,7 +572,7 @@ XML;
             if (!is_array($value)) {
                 if (is_string($key)) {
                     if ($key === $rootName) {
-                        throw new Exception('Associative key must not be the same as its parent associative key.');
+                        throw new Magento_Exception('Associative key must not be the same as its parent associative key.');
                     }
                     $hasStringKey = true;
                     $xml->$key = $value;
@@ -580,7 +587,7 @@ XML;
             }
         }
         if ($hasNumericKey && $hasStringKey) {
-            throw new Exception('Associative and numeric keys must not be mixed at one level.');
+            throw new Magento_Exception('Associative and numeric keys must not be mixed at one level.');
         }
         return $xml;
     }
@@ -719,5 +726,40 @@ XML;
         $path = 'global/resource/connection/types/' . $connType . '/compatibleMode';
         $value = (string) Mage::getConfig()->getNode($path);
         return (bool) $value;
+    }
+
+    /**
+     * Retrieve merchant country code
+     *
+     * @param Mage_Core_Model_Store|string|int|null $store
+     * @return string
+     */
+    public function getMerchantCountryCode($store = null)
+    {
+        return (string) Mage::getStoreConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
+    }
+
+    /**
+     * Retrieve merchant VAT number
+     *
+     * @param Mage_Core_Model_Store|string|int|null $store
+     * @return string
+     */
+    public function getMerchantVatNumber($store = null)
+    {
+        return (string) Mage::getStoreConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
+    }
+
+    /**
+     * Check whether specified country is in EU countries list
+     *
+     * @param string $countryCode
+     * @param null|int $storeId
+     * @return bool
+     */
+    public function isCountryInEU($countryCode, $storeId = null)
+    {
+        $euCountries = explode(',', Mage::getStoreConfig(self::XML_PATH_EU_COUNTRIES_LIST, $storeId));
+        return in_array($countryCode, $euCountries);
     }
 }

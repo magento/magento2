@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -318,7 +318,7 @@ class Mage_Widget_Model_Widget_Instance extends Mage_Core_Model_Abstract
         } else if (is_null($this->getData('widget_parameters'))) {
             return array();
         }
-        return $this->getData('widget_parameters');
+        return (is_array($this->getData('widget_parameters'))) ? $this->getData('widget_parameters') : array();
     }
 
     /**

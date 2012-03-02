@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,29 +31,8 @@
  * @package    Mage_Paypal
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Paypal_PayflowController extends Mage_Paypal_Controller_Express_Abstract
+class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
 {
-    /**
-     * Config mode type
-     *
-     * @var string
-     */
-    protected $_configType = 'Mage_Paypal_Model_Config';
-
-    /**
-     * Config method type
-     *
-     * @var string
-     */
-    protected $_configMethod = Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK;
-
-    /**
-     * Checkout mode type
-     *
-     * @var string
-     */
-    protected $_checkoutType = 'paypal/payflowlink';
-
     /**
      * When a customer cancel payment from payflow gateway.
      */
@@ -71,43 +50,56 @@ class Mage_Paypal_PayflowController extends Mage_Paypal_Controller_Express_Abstr
      */
     public function returnUrlAction()
     {
-        $errorMsg = '';
-        $session = $this->_getCheckout();        $quote = $session->getQuote();
-        /** @var $payment Mage_Sales_Model_Quote_Payment */
-        $payment = $quote->getPayment();
-        $gotoSection = 'payment';
-        if ($payment->getAdditionalInformation('authorization_id')) {
-            $gotoSection = 'review';
-        } else {
-            $gotoSection = 'payment';
-            $errorMsg = $this->__('Payment has been declined. Please try again.');
-        }
-
-        $checkToken = $this->getRequest()->getParam('TOKEN');
-        if ($checkToken) {
-            $payment->setAdditionalInformation('express_checkout_token', $checkToken)->save();
-            Mage::getSingleton('Mage_Paypal_Model_Session')->setExpressCheckoutToken($checkToken);
-            $this->_redirect('*/*/review');
-            return;
-        }
-
         $redirectBlock = $this->_getIframeBlock()
-            ->setTemplate('payflowlink/redirect.phtml');
+            ->setTemplate('paypal/payflowlink/redirect.phtml');
 
-        $redirectBlock->setErrorMsg($errorMsg);
-        $redirectBlock->setGotoSection($gotoSection);
+        $session = $this->_getCheckout();
+        if ($session->getLastRealOrderId()) {
+            $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($session->getLastRealOrderId());
+
+            if ($order && $order->getIncrementId() == $session->getLastRealOrderId()) {
+                $allowedOrderStates = array(
+                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                    Mage_Sales_Model_Order::STATE_COMPLETE
+                );
+                if (in_array($order->getState(), $allowedOrderStates)) {
+                    $session->unsLastRealOrderId();
+                    $redirectBlock->setGotoSuccessPage(true);
+                } else {
+                    $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                    $redirectBlock->setGotoSection($gotoSection);
+                    $redirectBlock->setErrorMsg($this->__('Payment has been declined. Please try again.'));
+                }
+            }
+        }
+
         $this->getResponse()->setBody($redirectBlock->toHtml());
     }
 
     /**
-     * When a customer return to website from payflow gateway.
+     * Submit transaction to Payflow getaway into iframe
      */
-    public function placeOrderAction()
+    public function formAction()
     {
-        $session = $this->_getCheckout();
-        $quote = $session->getQuote();
-        $quote->collectTotals();
-        $this->_forward('saveOrder', 'onepage', 'checkout');
+        $this->getResponse()
+            ->setBody($this->_getIframeBlock()->toHtml());
+    }
+
+    /**
+     * Get response from PayPal by silent post method
+     */
+    public function silentPostAction()
+    {
+        $data = $this->getRequest()->getPost();
+        if (isset($data['INVNUM'])) {
+            /** @var $paymentModel Mage_Paypal_Model_Payflowlink */
+            $paymentModel = Mage::getModel('Mage_Paypal_Model_Payflowlink');
+            try {
+                $paymentModel->process($data);
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
     }
 
     /**
@@ -144,55 +136,6 @@ class Mage_Paypal_PayflowController extends Mage_Paypal_Controller_Express_Abstr
         }
 
         return $gotoSection;
-    }
-
-    /**
-     * Submit transaction to Payflow getaway into iframe
-     */
-    public function formAction()
-    {
-        $quote = $this->_getCheckout()->getQuote();
-        $payment = $quote->getPayment();
-
-        try {
-            $method = Mage::helper('Mage_Payment_Helper_Data')
-                ->getMethodInstance(Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK);
-            $method->setData('info_instance', $payment);
-            $method->initialize($method->getConfigData('payment_action'), new Varien_Object());
-
-            $quote->save();
-        } catch (Mage_Core_Exception $e) {
-            $this->loadLayout('paypal_payflow_link_iframe');
-
-            $block = $this->getLayout()->getBlock('payflow.link.info');
-            $block->setErrorMessage($e->getMessage());
-
-            $this->getResponse()->setBody(
-                $block->toHtml()
-            );
-            return;
-        } catch (Exception $e) {
-            Mage::logException($e);
-        }
-        $this->getResponse()
-            ->setBody($this->_getIframeBlock()->toHtml());
-    }
-
-    /**
-     * Get response from PayPal by silent post method
-     */
-    public function silentPostAction()
-    {
-        $data = $this->getRequest()->getPost();
-        if (isset($data['INVNUM'])) {
-            /** @var $paymentModel Mage_Paypal_Model_Payflowlink */
-            $paymentModel = Mage::getModel('Mage_Paypal_Model_Payflowlink');
-            try {
-                $paymentModel->process($data);
-            } catch (Exception $e) {
-                Mage::logException($e);
-            }
-        }
     }
 
     /**

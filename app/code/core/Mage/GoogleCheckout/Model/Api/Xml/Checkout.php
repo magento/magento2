@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleCheckout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -889,10 +889,7 @@ EOT;
     {
         $customerGroup = $this->getQuote()->getCustomerGroupId();
         if (!$customerGroup) {
-            $customerGroup = Mage::getStoreConfig(
-                Mage_Customer_Model_Group::XML_PATH_DEFAULT_ID,
-                $this->getQuote()->getStoreId()
-            );
+            $customerGroup = Mage::helper('Mage_Customer_Helper_Data')->getDefaultCustomerGroupId($this->getQuote()->getStoreId());
         }
         return Mage::getModel('Mage_Customer_Model_Group')->load($customerGroup)->getTaxClassId();
     }

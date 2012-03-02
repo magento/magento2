@@ -20,17 +20,37 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 class Mage_Checkout_Block_Cart_Shipping extends Mage_Checkout_Block_Cart_Abstract
 {
+    /**
+     * Available Carriers Instances
+     * @var null|array
+     */
     protected $_carriers = null;
+
+    /**
+     * Estimate Rates
+     * @var array
+     */
     protected $_rates = array();
+
+    /**
+     * Address Model
+     *
+     * @var array
+     */
     protected $_address = array();
 
+    /**
+     * Get Estimate Rates
+     *
+     * @return array
+     */
     public function getEstimateRates()
     {
         if (empty($this->_rates)) {
@@ -41,7 +61,7 @@ class Mage_Checkout_Block_Cart_Shipping extends Mage_Checkout_Block_Cart_Abstrac
     }
 
     /**
-     * Get address model
+     * Get Address Model
      *
      * @return Mage_Sales_Model_Quote_Address
      */
@@ -53,6 +73,12 @@ class Mage_Checkout_Block_Cart_Shipping extends Mage_Checkout_Block_Cart_Abstrac
         return $this->_address;
     }
 
+    /**
+     * Get Carrier Name
+     *
+     * @param string $carrierCode
+     * @return mixed
+     */
     public function getCarrierName($carrierCode)
     {
         if ($name = Mage::getStoreConfig('carriers/'.$carrierCode.'/title')) {
@@ -61,51 +87,107 @@ class Mage_Checkout_Block_Cart_Shipping extends Mage_Checkout_Block_Cart_Abstrac
         return $carrierCode;
     }
 
+    /**
+     * Get Shipping Method
+     *
+     * @return string
+     */
     public function getAddressShippingMethod()
     {
         return $this->getAddress()->getShippingMethod();
     }
 
+    /**
+     * Get Estimate Country Id
+     *
+     * @return string
+     */
     public function getEstimateCountryId()
     {
         return $this->getAddress()->getCountryId();
     }
 
+    /**
+     * Get Estimate Postcode
+     *
+     * @return string
+     */
     public function getEstimatePostcode()
     {
         return $this->getAddress()->getPostcode();
     }
 
+    /**
+     * Get Estimate City
+     *
+     * @return string
+     */
     public function getEstimateCity()
     {
         return $this->getAddress()->getCity();
     }
 
+    /**
+     * Get Estimate Region Id
+     *
+     * @return mixed
+     */
     public function getEstimateRegionId()
     {
         return $this->getAddress()->getRegionId();
     }
 
+    /**
+     * Get Estimate Region
+     *
+     * @return string
+     */
     public function getEstimateRegion()
     {
         return $this->getAddress()->getRegion();
     }
 
+    /**
+     * Show City in Shipping Estimation
+     *
+     * @return bool
+     */
     public function getCityActive()
     {
-        return (bool)Mage::getStoreConfig('carriers/dhl/active');
+        return (bool)Mage::getStoreConfig('carriers/dhl/active')
+            || (bool)Mage::getStoreConfig('carriers/dhlint/active');
     }
 
+    /**
+     * Show State in Shipping Estimation
+     *
+     * @return bool
+     */
     public function getStateActive()
     {
-        return (bool)Mage::getStoreConfig('carriers/dhl/active') || (bool)Mage::getStoreConfig('carriers/tablerate/active');
+        return (bool)Mage::getStoreConfig('carriers/dhl/active')
+            || (bool)Mage::getStoreConfig('carriers/tablerate/active')
+            || (bool)Mage::getStoreConfig('carriers/dhlint/active');
     }
 
+    /**
+     * Convert price from default currency to current currency
+     *
+     * @param float $price
+     * @return float
+     */
     public function formatPrice($price)
     {
         return $this->getQuote()->getStore()->convertPrice($price, true);
     }
 
+    /**
+     * Get Shipping Price
+     *
+     * @param float $price
+     * @param bool $flag
+     * @return float
+     */
     public function getShippingPrice($price, $flag)
     {
         return $this->formatPrice($this->helper('Mage_Tax_Helper_Data')->getShippingPrice(

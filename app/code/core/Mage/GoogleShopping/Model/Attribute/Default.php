@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleShopping
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -132,10 +132,9 @@ class Mage_GoogleShopping_Model_Attribute_Default extends Mage_GoogleShopping_Mo
     protected function _setAttribute($entry, $name, $type = self::ATTRIBUTE_TYPE_TEXT, $value = '', $unit = null)
     {
         if (is_object($value) || ((string)$value != $value)) {
-            Mage::throwException(Mage::helper('Mage_GoogleShopping_Helper_Data')->__(
-                'The attribute "%s" has incorrect type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.',
-                $name
-            ));
+            Mage::throwException(
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('The attribute "%s" has incorrect type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.', $name)
+            );
         }
         $attribute = $entry->getContentAttributeByName($name);
         if ($attribute instanceof Varien_Gdata_Gshopping_Extension_Attribute) {

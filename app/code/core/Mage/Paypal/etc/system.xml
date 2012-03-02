@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -382,6 +382,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -557,6 +558,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -654,6 +656,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -803,6 +806,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -890,6 +894,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -1107,6 +1112,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -1313,6 +1319,7 @@
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -1589,6 +1596,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -1599,16 +1607,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                         </payment_action>
-                        <authorization_amount translate="label">
-                            <label>Verification Authorization Amount</label>
-                            <comment><![CDATA[<a id="PayFlowLinkLearnMore" href="#">Learn More</a>]]></comment>
-                            <config_path>payment/payflow_link/authorization_amount</config_path>
-                            <frontend_type>select</frontend_type>
-                            <source_model>Mage_Paypal_Model_System_Config_Source_AuthorizationAmounts</source_model>
-                            <sort_order>15</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                        </authorization_amount>
                         <allowspecific translate="label">
                             <label>Payment Applicable From</label>
                             <config_path>payment/payflow_link/allowspecific</config_path>
@@ -1718,7 +1716,7 @@
                 </payflow_link>
 
                 <payflow_advanced translate="label">
-                    <label>PayPal Paymets Advanced</label>
+                    <label>PayPal Payments Advanced</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>90</sort_order>
                     <show_in_default>1</show_in_default>
@@ -1750,6 +1748,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>
@@ -1894,6 +1893,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
                         </sort_order>
                         <payment_action translate="label">
                             <label>Payment Action</label>

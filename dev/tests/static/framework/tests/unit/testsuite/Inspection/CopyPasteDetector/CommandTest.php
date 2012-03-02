@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  static_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,32 +41,25 @@ class Inspection_CopyPasteDetector_CommandTest extends PHPUnit_Framework_TestCas
         );
     }
 
-    public function canTestDataProvider()
-    {
-        return array(
-            'success' => array(true),
-            'failure' => array(false),
-        );
-    }
-
     /**
-     * @dataProvider canTestDataProvider
+     * @dataProvider canRunDataProvider
      */
-    public function testCanRun($expectedResult)
+    public function testCanRun($cmdOutput, $expectedResult)
     {
         $this->_cmd
             ->expects($this->once())
             ->method('_execShellCmd')
             ->with($this->stringContains('phpcpd'))
-            ->will($this->returnValue($expectedResult))
+            ->will($this->returnValue($cmdOutput))
         ;
         $this->assertEquals($expectedResult, $this->_cmd->canRun());
     }
 
-    public function getVersionDataProvider()
+    public function canRunDataProvider()
     {
         return array(
-            array('phpcpd 1.3.2 by Sebastian Bergmann.', '1.3.2'),
+            'success' => array('phpcpd X.Y.Z', true),
+            'failure' => array(false, false),
         );
     }
 
@@ -75,18 +68,20 @@ class Inspection_CopyPasteDetector_CommandTest extends PHPUnit_Framework_TestCas
      */
     public function testGetVersion($versionCmdOutput, $expectedVersion)
     {
-        $cmdCallback = function ($shellCmd, array &$output = null) use ($versionCmdOutput)
-        {
-            $output = array($versionCmdOutput);
-            return !empty($shellCmd);
-        };
         $this->_cmd
             ->expects($this->once())
             ->method('_execShellCmd')
             ->with($this->stringContains('phpcpd'))
-            ->will($this->returnCallback($cmdCallback))
+            ->will($this->returnValue($versionCmdOutput))
         ;
         $this->assertEquals($expectedVersion, $this->_cmd->getVersion());
+    }
+
+    public function getVersionDataProvider()
+    {
+        return array(
+            array('phpcpd 1.3.2 by Sebastian Bergmann.', '1.3.2'),
+        );
     }
 
     public function testRun()
@@ -100,10 +95,34 @@ class Inspection_CopyPasteDetector_CommandTest extends PHPUnit_Framework_TestCas
         ;
         $expectedCmd = str_replace('"', $expectedQuoteChar, $expectedCmd);
         $this->_cmd
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('_execShellCmd')
             ->with($expectedCmd)
         ;
         $this->_cmd->run(array('some/test/dir with space', 'some/test/file with space.php'));
+    }
+
+    public function testRunHtmlReport()
+    {
+        $this->_cmd
+            ->expects($this->at(0))
+            ->method('_execShellCmd')
+            ->with($this->stringContains('phpcpd'))
+        ;
+        $this->_cmd
+            ->expects($this->at(1))
+            ->method('_execShellCmd')
+            ->with($this->stringContains('xsltproc'))
+            ->will($this->returnValue('Using libxml X, libxslt Y and libexslt Z'))
+        ;
+        $expectedQuoteChar = substr(escapeshellarg(' '), 0, 1);
+        $expectedXsltCmd = 'xsltproc "%s/html_report.xslt" "some/report/file.xml" > "some/report/file.xml.html"';
+        $expectedXsltCmd = str_replace('"', $expectedQuoteChar, $expectedXsltCmd);
+        $this->_cmd
+            ->expects($this->at(2))
+            ->method('_execShellCmd')
+            ->with($this->matches($expectedXsltCmd))
+        ;
+        $this->_cmd->run(array());
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Newsletter
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,6 +68,7 @@ class Mage_Newsletter_Model_Resource_Problem_Collection extends Mage_Core_Model_
             'main_table.subscriber_id = subscriber.subscriber_id',
             array('subscriber_email','customer_id','subscriber_status')
         );
+        $this->addFilterToMap('subscriber_id', 'main_table.subscriber_id');
         $this->_subscribersInfoJoinedFlag = true;
 
         return $this;
@@ -84,7 +85,7 @@ class Mage_Newsletter_Model_Resource_Problem_Collection extends Mage_Core_Model_
             'main_table.queue_id = queue.queue_id',
             array('queue_start_at', 'queue_finish_at')
         )
-        ->joinLeft(array('template'=>$this->getTable('newsletter_template')), 'main_table.queue_id = queue.queue_id',
+        ->joinLeft(array('template'=>$this->getTable('newsletter_template')), 'queue.template_id = template.template_id',
             array('template_subject','template_code','template_sender_name','template_sender_email')
         );
         return $this;

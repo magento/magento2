@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var Packaging = Class.create();
@@ -248,6 +248,17 @@ Packaging.prototype = {
     },
 
     validate: function() {
+        var dimensionElements = $("packaging_window").select(
+            'input[name=container_length],input[name=container_width],input[name=container_height]'
+        );
+        var callback = null;
+        if ( dimensionElements.any(function(element) { return !!element.value; })) {
+            callback = function(element) { $(element).addClassName('required-entry'); };
+        } else {
+            callback = function(element) { $(element).removeClassName('required-entry'); };
+        }
+        dimensionElements.each(callback);
+
         return result = $$('[id^="package_block_"] input').collect(function (element) {
             return this.validateElement(element)
         }, this).all();
@@ -609,7 +620,7 @@ Packaging.prototype = {
             return;
         }
 
-        currentNode.select(
+        $(currentNode).select(
             'input[name=container_length],input[name=container_width],input[name=container_height],select[name=container_dimension_units]'
         ).each(function(inputElement) {
             if (disable) {

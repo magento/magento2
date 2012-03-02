@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Payment
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,7 +74,7 @@ class Mage_Payment_Model_Method_Free extends Mage_Payment_Model_Method_Abstract
     public function getConfigPaymentAction()
     {
         if ('pending' == $this->getConfigData('order_status')) {
-            return Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE;
+            return null; // do nothing if status pending
         }
         return parent::getConfigPaymentAction();
     }

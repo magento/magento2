@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -195,11 +195,12 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
     }
 
     /**
-     * Retrive full uploader SWF's file URL
+     * Retrieve full uploader SWF's file URL
      * Implemented to solve problem with cross domain SWFs
      * Now uploader can be only in the same URL where backend located
      *
-     * @param string url to uploader in current theme
+     * @param string $url url to uploader in current theme
+     *
      * @return string full URL
      */
     public function getUploaderUrl($url)

@@ -20,66 +20,49 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
 /**
- * @var $this Mage_Paypal_Block_Iframe
+ * @var $this Mage_Paypal_Block_Payflow_Advanced_Iframe
  */
 ?>
 <html>
 <head>
 <script type="text/javascript">
 //<![CDATA[
-    function allowCheckoutSteps(allow)
-    {
-        var window_top = window.top;
-        for (var s = 0; s < window_top.checkout.steps.length; s++) {
-            if (window_top.checkout.steps[s] == '<?php echo $this->getGotoSection() ?>') {
-                break;
-            }
-            if (window_top.document.getElementById('opc-' + window_top.checkout.steps[s])) {
-                if (allow) {
-                    window_top.document.getElementById('opc-' + window_top.checkout.steps[s]).addClassName('allow');
-                } else {
-                    window_top.document.getElementById('opc-' + window_top.checkout.steps[s]).removeClassName('allow');
-                }
-            }
+    if (window.top == window.self) {
+        window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
+    }
+    var window_top = window.top;
+<?php if ($this->getGotoSection()): ?>
+    var checkout_steps;
+
+    try{
+        checkout_steps = window.top.checkout.steps
+    }catch(e){
+        window_top.location="<?php echo $this->getUrl('checkout/cart') ?>";
+    }
+
+    for (var s = 0; s < checkout_steps.length; s++) {
+        if (checkout_steps[s] == '<?php echo $this->getGotoSection() ?>') {
+            break;
+        }
+        if (window_top.document.getElementById('opc-' + checkout_steps[s])) {
+            window_top.document.getElementById('opc-' + checkout_steps[s]).addClassName('allow');
         }
     }
-if (window.top==window.self) {
-    window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
-}
-var window_name = '<?php echo Mage::getBaseUrl(); ?>';
-var window_top = window.top;
-var allowed_domain = false;
-try{
-    allowed_domain = window_name == window_top.name
-}catch(e){
-    allowed_domain = false;
-}
-<?php if ($this->getErrorMsg()): ?>
-    alert('<?php echo $this->getErrorMsg() ?>');
-    if (allowed_domain) {
-        window_top.payflowAdvanced.showLoading();
-    }
-    window.location = "<?php echo $this->getUrl('paypal/payflowadvanced/form') ?>";
-<?php else: ?>
-    if (allowed_domain) {
-        <?php if ($this->getGotoSection()): ?>
-            allowCheckoutSteps(true);
-            <?php if ($this->getGotoSection() == 'review'): ?>
-                allowCheckoutSteps(false);
-                window_top.payment.save();
-            <?php else : ?>
-                window_top.checkout.gotoSection("<?php echo $this->getGotoSection() ?>");
-            <?php endif; ?>
-        <?php else : ?>
-            window_top.location="<?php echo $this->getUrl('checkout/cart') ?>";
-        <?php endif; ?>
-    } else {
-        alert('<?php echo $this->jsQuoteEscape($this->__('Wrong configuration of Payment Method'));?>');
-    }
+    window_top.checkout.gotoSection("<?php echo $this->getGotoSection() ?>");
+    window_top.document.getElementById('checkout-review-submit').show();
+    window_top.document.getElementById('iframe-warning').hide();
+    <?php if ($this->getErrorMsg()): ?>
+        alert('<?php echo $this->getErrorMsg() ?>');
+    <?php endif; ?>
+<?php elseif ($this->getGotoSuccessPage()) : ?>
+    window_top.location="<?php echo $this->getUrl('checkout/onepage/success') ?>";
+<?php else : ?>
+    window_top.location="<?php echo $this->getUrl('checkout/cart') ?>";
 <?php endif; ?>
 //]]>
 </script>

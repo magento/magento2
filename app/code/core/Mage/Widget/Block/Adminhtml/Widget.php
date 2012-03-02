@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ class Mage_Widget_Block_Adminhtml_Widget extends Mage_Adminhtml_Block_Widget_For
         $this->_blockGroup = 'Mage_Widget';
         $this->_controller = 'adminhtml';
         $this->_mode = 'widget';
-        $this->_headerText = 'Widget Insertion';
+        $this->_headerText = $this->helper('Mage_Widget_Helper_Data')->__('Widget Insertion');
 
         $this->removeButton('reset');
         $this->removeButton('back');
@@ -49,7 +49,8 @@ class Mage_Widget_Block_Adminhtml_Widget extends Mage_Adminhtml_Block_Widget_For
         $this->_updateButton('save', 'id', 'insert_button');
         $this->_updateButton('save', 'onclick', 'wWidget.insertWidget()');
 
-        $this->_formScripts[] = 'wWidget = new WysiwygWidget.Widget("widget_options_form", "select_widget_type", "widget_options", "'
-                              . $this->getUrl('*/*/loadOptions').'", "' . $this->getRequest()->getParam('widget_target_id') . '");';
+        $this->_formScripts[] = 'wWidget = new WysiwygWidget.Widget('
+            . '"widget_options_form", "select_widget_type", "widget_options", "'
+            . $this->getUrl('*/*/loadOptions') .'", "' . $this->getRequest()->getParam('widget_target_id') . '");';
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Log
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -115,6 +115,26 @@ class Mage_Log_Model_Resource_Visitor extends Mage_Core_Model_Resource_Db_Abstra
             if ($visitor->getDoQuoteCreate() || $visitor->getDoQuoteDestroy()) {
                 $this->_saveQuoteInfo($visitor);
             }
+        }
+        return $this;
+    }
+
+    /**
+     * Perform actions after object load
+     *
+     * @param Varien_Object $object
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
+    protected function _afterLoad(Mage_Core_Model_Abstract $object)
+    {
+        parent::_afterLoad($object);
+        // Add information about quote to visitor
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from($this->getTable('log_quote'), 'quote_id')
+            ->where('visitor_id = ?', $object->getId())->limit(1);
+        $result = $adapter->query($select)->fetch();
+        if (isset($result['quote_id'])) {
+            $object->setQuoteId((int) $result['quote_id']);
         }
         return $this;
     }

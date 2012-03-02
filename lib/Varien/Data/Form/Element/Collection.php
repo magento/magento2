@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Data
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -116,10 +116,11 @@ class Varien_Data_Form_Element_Collection implements ArrayAccess, IteratorAggreg
      *
      * @todo get it straight with $after
      * @param Varien_Data_Form_Element_Abstract $element
-     * @param boolean|'^'|string $after
-     * @return Varien_Data_Form_Element_Abstract
+     * @param bool|string $after
+     *
+     * @return Varien_Data_Form_Element_Collection
      */
-    public function add(Varien_Data_Form_Element_Abstract $element, $after=false)
+    public function add(Varien_Data_Form_Element_Abstract $element, $after = false)
     {
         // Set the Form for the node
         if ($this->_container->getForm() instanceof Varien_Data_Form) {

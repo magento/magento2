@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,8 +51,7 @@ class Mage_Adminhtml_Block_Customer_Group_Edit_Form extends Mage_Adminhtml_Block
                 'name'  => 'code',
                 'label' => Mage::helper('Mage_Customer_Helper_Data')->__('Group Name'),
                 'title' => Mage::helper('Mage_Customer_Helper_Data')->__('Group Name'),
-                'note'  => Mage::helper('Mage_Customer_Helper_Data')->__('Maximum length must be less then %s symbols',
-                    Mage_Customer_Model_Group::GROUP_CODE_MAX_LENGTH),
+                'note'  => Mage::helper('Mage_Customer_Helper_Data')->__('Maximum length must be less then %s symbols', Mage_Customer_Model_Group::GROUP_CODE_MAX_LENGTH),
                 'class' => $validateClass,
                 'required' => true,
             )

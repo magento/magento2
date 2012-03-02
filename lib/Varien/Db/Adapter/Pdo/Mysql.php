@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Db
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,6 +47,11 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
     const LENGTH_TABLE_NAME     = 64;
     const LENGTH_INDEX_NAME     = 64;
     const LENGTH_FOREIGN_NAME   = 64;
+
+    /**
+     * MEMORY engine type for MySQL tables
+     */
+    const ENGINE_MEMORY = 'MEMORY';
 
     /**
      * Default class name for a DB statement.
@@ -426,21 +431,6 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                         unset($bind[$k]);
                     }
                 }
-            }
-        }
-
-        if (strpos($sql, ':') !== false || strpos($sql, '?') !== false) {
-            $before = count($bind);
-            $this->_bindParams = $bind; // Used by callback
-            $sql = preg_replace_callback('#(([\'"])((\\2)|((.*?[^\\\\])\\2)))#',
-                array($this, 'proccessBindCallback'),
-                $sql);
-            Varien_Exception::processPcreError();
-            $bind = $this->_bindParams;
-
-            // If _processBindCallbacks() has added named entries to positional bind - normalize it to positional
-            if (!$isNamedBind && $before && (count($bind) != $before)) {
-                $this->_convertMixedBind($sql, $bind);
             }
         }
 
@@ -2002,23 +1992,10 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 }
 
                 $columns = array();
-                $columnsDefinition = $table->getColumns();
                 foreach ($indexData['COLUMNS'] as $columnData) {
-                    $columnCode = strtoupper($columnData['NAME']);
                     $column = $this->quoteIdentifier($columnData['NAME']);
                     if (!empty($columnData['SIZE'])) {
                         $column .= sprintf('(%d)', $columnData['SIZE']);
-                    } else if (isset($columnsDefinition[$columnCode]['DATA_TYPE'])
-                               && in_array($columnsDefinition[$columnCode]['DATA_TYPE'],
-                                           array(Varien_Db_Ddl_Table::TYPE_BLOB, Varien_Db_Ddl_Table::TYPE_TEXT))
-                    ) {
-                        if (!empty($columnsDefinition[$columnCode]['LENGTH'])
-                            && is_numeric($columnsDefinition[$columnCode]['LENGTH'])
-                        ) {
-                            $column .= "({$columnsDefinition[$columnCode]['LENGTH']})";
-                        } else {
-                            $column .= '(255)';
-                        }
                     }
                     $columns[] = $column;
                 }
@@ -2361,19 +2338,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                     $field, $tableName);
                 throw new Zend_Db_Exception($msg);
             }
-            $prefix = '';
-            $fieldUpperCase = strtoupper($field);
-            if (isset($columns[$fieldUpperCase]['DATA_TYPE'])
-                && in_array($columns[$fieldUpperCase]['DATA_TYPE'],
-                            array(Varien_Db_Ddl_Table::TYPE_BLOB, Varien_Db_Ddl_Table::TYPE_TEXT))
-            ) {
-                if (!empty($columns[$fieldUpperCase]['LENGTH']) && is_numeric($columns[$fieldUpperCase]['LENGTH'])) {
-                    $prefix .= "({$columns[$fieldUpperCase]['LENGTH']})";
-                } else {
-                    $prefix .= '(255)';
-                }
-            }
-            $fieldSql[] = $this->quoteIdentifier($field) . $prefix;
+            $fieldSql[] = $this->quoteIdentifier($field);
         }
         $fieldSql = implode(',', $fieldSql);
 
@@ -2700,7 +2665,9 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 $value = (int)$value;
                 break;
             case 'bigint':
-                // Can't cast to int on 32 bit systems here: BIGINT is larger than such systems' MAX_INT
+                if (!is_integer($value)) {
+                    $value = sprintf('%.0f', (float)$value);
+                }
                 break;
 
             case 'decimal':
@@ -2939,6 +2906,22 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
     public function getDatePartSql($date)
     {
         return new Zend_Db_Expr(sprintf('DATE(%s)', $date));
+    }
+
+    /**
+     * Prepare substring sql function
+     *
+     * @param Zend_Db_Expr|string $stringExpression quoted field name or SQL statement
+     * @param int|string|Zend_Db_Expr $pos
+     * @param int|string|Zend_Db_Expr|null $len
+     * @return Zend_Db_Expr
+     */
+    public function getSubstringSql($stringExpression, $pos, $len = null)
+    {
+        if (is_null($len)) {
+            return new Zend_Db_Expr(sprintf('SUBSTRING(%s, %s)', $stringExpression, $pos));
+        }
+        return new Zend_Db_Expr(sprintf('SUBSTRING(%s, %s, %s)', $stringExpression, $pos, $len));
     }
 
     /**

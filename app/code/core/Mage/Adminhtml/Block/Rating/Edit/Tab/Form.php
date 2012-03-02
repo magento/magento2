@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,7 +111,8 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
                 'label'     => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
 //                'required'  => true,
                 'name'      => 'stores[]',
-                'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm()
+                'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
+                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
 
             if (Mage::registry('rating_data')) {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -415,19 +415,15 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
         $result = array();
         foreach ($errors as $errorCode) {
             if ($errorCode == Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION) {
-                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' for '%s' has an invalid extension",
-                    $fileInfo['title'], $option->getTitle());
+                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' for '%s' has an invalid extension", $fileInfo['title'], $option->getTitle());
             } elseif ($errorCode == Zend_Validate_File_Extension::FALSE_EXTENSION) {
-                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' for '%s' has an invalid extension",
-                    $fileInfo['title'], $option->getTitle());
+                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' for '%s' has an invalid extension", $fileInfo['title'], $option->getTitle());
             } elseif ($errorCode == Zend_Validate_File_ImageSize::WIDTH_TOO_BIG
                 || $errorCode == Zend_Validate_File_ImageSize::HEIGHT_TOO_BIG)
             {
-                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("Maximum allowed image size for '%s' is %sx%s px.",
-                    $option->getTitle(), $option->getImageSizeX(), $option->getImageSizeY());
+                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("Maximum allowed image size for '%s' is %sx%s px.", $option->getTitle(), $option->getImageSizeX(), $option->getImageSizeY());
             } elseif ($errorCode == Zend_Validate_File_FilesSize::TOO_BIG) {
-                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' you uploaded is larger than %s Megabytes allowed by server",
-                    $fileInfo['title'], $this->_bytesToMbytes($this->_getUploadMaxFilesize()));
+                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' you uploaded is larger than %s Megabytes allowed by server", $fileInfo['title'], $this->_bytesToMbytes($this->_getUploadMaxFilesize()));
             }
         }
         return $result;
@@ -513,7 +509,9 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
     {
         $value = $this->_unserializeValue($optionValue);
         try {
-            if (isset($value) && isset($value['width']) && isset($value['height']) && $value['width'] > 0 && $value['height'] > 0) {
+            if (isset($value) && isset($value['width']) && isset($value['height'])
+                && $value['width'] > 0 && $value['height'] > 0
+            ) {
                 $sizes = $value['width'] . ' x ' . $value['height'] . ' ' . Mage::helper('Mage_Catalog_Helper_Data')->__('px.');
             } else {
                 $sizes = '';

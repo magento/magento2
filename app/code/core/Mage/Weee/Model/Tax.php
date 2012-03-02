@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Weee
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -163,18 +163,17 @@ class Mage_Weee_Model_Tax extends Mage_Core_Model_Abstract
 
                     $taxAmount = $amount = 0;
                     $amount    = $value;
-                    /**
-                     * We can't use FPT imcluding/excluding tax
-                     */
-//                    if ($calculateTax && Mage::helper('Mage_Weee_Helper_Data')->isTaxable($store)) {
-//                        $defaultPercent = Mage::getModel('Mage_Tax_Model_Calculation')
-//                              ->getRate($defaultRateRequest
-//                              ->setProductClassId($product->getTaxClassId()));
-//                        $currentPercent = $product->getTaxPercent();
-//
-//                        $taxAmount = Mage::app()->getStore()->roundPrice($value/(100+$defaultPercent)*$currentPercent);
-//                        $amount = $value - $taxAmount;
-//                    }
+                    if ($calculateTax && Mage::helper('Mage_Weee_Helper_Data')->isTaxable($store)) {
+                        $defaultPercent = Mage::getModel('Mage_Tax_Model_Calculation')
+                            ->getRate($defaultRateRequest
+                            ->setProductClassId($product->getTaxClassId()));
+                        $currentPercent = $product->getTaxPercent();
+                        if (Mage::helper('Mage_Tax_Helper_Data')->priceIncludesTax($store)) {
+                            $taxAmount = Mage::app()->getStore()->roundPrice($value/(100+$defaultPercent)*$currentPercent);
+                        } else {
+                            $taxAmount = Mage::app()->getStore()->roundPrice($value*$defaultPercent/100);
+                        }
+                    }
 
                     $one = new Varien_Object();
                     $one->setName(Mage::helper('Mage_Catalog_Helper_Data')->__($attribute->getFrontend()->getLabel()))

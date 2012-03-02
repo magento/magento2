@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -131,13 +131,13 @@ class Mage_XmlConnect_Block_Catalog_Product_Options_Configurable extends Mage_Xm
             $optionNode = $optionsXmlObj->addChild('option');
             $optionNode->addAttribute('code', 'super_attribute[' . $id . ']');
             $optionNode->addAttribute('type', 'select');
-            $optionNode->addAttribute('label', $optionsXmlObj->xmlentities($attribute['label']));
+            $optionNode->addAttribute('label', $optionsXmlObj->escapeXml($attribute['label']));
             $optionNode->addAttribute('is_required', 1);
             if ($isFirst) {
                 foreach ($attribute['options'] as $option) {
                     $valueNode = $optionNode->addChild('value');
                     $valueNode->addAttribute('code', $option['id']);
-                    $valueNode->addAttribute('label', $optionsXmlObj->xmlentities($option['label']));
+                    $valueNode->addAttribute('label', $optionsXmlObj->escapeXml($option['label']));
                     if ((float)$option['price'] != 0.00) {
                         $valueNode->addAttribute('price', $option['price']);
                         $valueNode->addAttribute('formated_price', $option['formated_price']);
@@ -187,7 +187,7 @@ class Mage_XmlConnect_Block_Catalog_Product_Options_Configurable extends Mage_Xm
 
             $_valueNode = $relatedNode->addChild('value');
             $_valueNode->addAttribute('code', $option['id']);
-            $_valueNode->addAttribute('label', $_valueNode->xmlentities($option['label']));
+            $_valueNode->addAttribute('label', $_valueNode->escapeXml($option['label']));
             if ((float)$option['price'] != 0.00) {
                 $_valueNode->addAttribute('price', $option['price']);
                 $_valueNode->addAttribute('formated_price', $option['formated_price']);

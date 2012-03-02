@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -49,4 +49,40 @@
         <remove name="root" />
         <block type="Mage_Adminhtml_Block_Tag_Assigned_Grid" name="assigned_grid" output="toHtml" />
     </adminhtml_tag_assignedgridonly>
+
+    <adminhtml_tag_index>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Tag_Tag" name="adminhtml.tag.tag"/>
+        </reference>
+    </adminhtml_tag_index>
+
+    <adminhtml_tag_pending>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Tag_Pending" name="adminhtml.tag.pending"/>
+        </reference>
+    </adminhtml_tag_pending>
+
+    <adminhtml_tag_ajaxgrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Tag_Tag_Grid" name="adminhtml.tag.tag.grid"/>
+        </block>
+    </adminhtml_tag_ajaxgrid>
+
+    <adminhtml_tag_ajaxpendinggrid>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Tag_Grid_Pending" name="adminhtml.tag.grid.pending"/>
+        </block>
+    </adminhtml_tag_ajaxpendinggrid>
+
+    <adminhtml_tag_product>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Tag_Product_Grid" name="adminhtml.tag.product.grid"/>
+        </block>
+    </adminhtml_tag_product>
+
+    <adminhtml_tag_customer>
+        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Tag_Customer_Grid" name="adminhtml.tag.customer.grid"/>
+        </block>
+    </adminhtml_tag_customer>
 </layout>

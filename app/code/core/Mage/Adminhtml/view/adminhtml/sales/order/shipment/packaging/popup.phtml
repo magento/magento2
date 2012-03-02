@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  ?>
@@ -46,7 +46,7 @@ document.observe("dom:loaded", function() {
     <div class="entry-edit">
         <div class="entry-edit-head">
             <button type="button" class="scalable AddPackageBtn" onclick="packaging.newPackage();">
-                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Package') ?></span>
+                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Package') ?></span></span></span>
             </button>
             <h4 class="icon-head fieldset-legend"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Create Packages') ?></h4>
         </div>
@@ -156,12 +156,12 @@ document.observe("dom:loaded", function() {
                         <?php endif; ?>
                         <td>
                             <button type="button" class="scalable AddItemsBtn" onclick="packaging.getItemsForPack(this);">
-                                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Products') ?></span>
+                                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Products') ?></span></span></span>
                             </button>
                         </td>
                         <td>
                             <button type="button" class="scalable DeletePackageBtn" onclick="packaging.deletePackage(this);">
-                                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Delete Package') ?></span>
+                                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Delete Package') ?></span></span></span>
                             </button>
                         </td>
                     </tbody>
@@ -198,7 +198,7 @@ document.observe("dom:loaded", function() {
                     <div class="package_prapare" style="display:none">
                         <div class="entry-edit-head">
                             <button type="button" class="scalable AddSelectedBtn" onclick="packaging.packItems(this);">
-                                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Selected Product(s) to Package') ?></span>
+                                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add Selected Product(s) to Package') ?></span></span></span>
                             </button>
                             <h4><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Please Select Products to Add') ?></h4>
                         </div>
@@ -210,10 +210,10 @@ document.observe("dom:loaded", function() {
         </div>
         <div class="buttons-set a-right">
             <button type="button" class="scalable disabled SavePackagesBtn" disabled="disabled" onclick="packaging.confirmPackaging();" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Products should be added to package(s)')?>">
-                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('OK') ?></span>
+                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('OK') ?></span></span></span>
             </button>
             <button type="button" class="scalable" onclick="packaging.cancelPackaging();">
-                <span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Cancel') ?></span>
+                <span><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Cancel') ?></span></span></span>
             </button>
         </div>
     </div>

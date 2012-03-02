@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,7 +60,7 @@ class Mage_XmlConnect_Block_Checkout_Order_Review_Info extends Mage_Checkout_Blo
             $itemXml->addChild('entity_id', $item->getProduct()->getId());
             $itemXml->addChild('entity_type', $type);
             $itemXml->addChild('item_id', $item->getId());
-            $itemXml->addChild('name', $itemsXmlObj->xmlentities($renderer->getProductName()));
+            $itemXml->addChild('name', $itemsXmlObj->escapeXml($renderer->getProductName()));
             $itemXml->addChild('qty', $renderer->getQty());
             $icon = $renderer->getProductThumbnail()->resize(
                 Mage::helper('Mage_XmlConnect_Helper_Image')->getImageSizeForContent('product_small')
@@ -174,16 +174,15 @@ class Mage_XmlConnect_Block_Checkout_Order_Review_Info extends Mage_Checkout_Blo
             /**
              * Options list
              */
-            if ($_options = $renderer->getOptionList()) {
+            $_options = $renderer->getOptionList();
+            if ($_options) {
                 $itemOptionsXml = $itemXml->addChild('options');
                 foreach ($_options as $_option) {
                     $_formattedOptionValue = $renderer->getFormatedOptionValue($_option);
                     $optionXml = $itemOptionsXml->addChild('option');
-                    $labelValue = $itemsXmlObj->xmlentities($_option['label']);
+                    $labelValue = $itemsXmlObj->escapeXml($_option['label']);
                     $optionXml->addAttribute('label', $labelValue);
-                    $textValue = $itemsXmlObj->xmlentities(
-                        strip_tags($_formattedOptionValue['value'])
-                    );
+                    $textValue = $itemsXmlObj->escapeXml($_formattedOptionValue['value']);
                     $optionXml->addAttribute('text', $textValue);
                 }
             }

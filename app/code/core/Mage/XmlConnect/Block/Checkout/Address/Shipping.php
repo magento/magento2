@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,7 +54,7 @@ class Mage_XmlConnect_Block_Checkout_Address_Shipping extends Mage_Checkout_Bloc
                 $item->addAttribute('selected', 1);
             }
             $this->getChild('address_list')->prepareAddressData($address, $item);
-            $item->addChild('address_line', $shippingXmlObj->xmlentities($address->format('oneline')));
+            $item->addChild('address_line', $shippingXmlObj->escapeXml($address->format('oneline')));
         }
 
         return $shippingXmlObj->asNiceXml();

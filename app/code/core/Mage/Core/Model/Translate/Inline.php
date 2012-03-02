@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,6 +70,13 @@ class Mage_Core_Model_Translate_Inline
     protected $_isJson              = false;
 
     /**
+     * Get max translate block in same tag
+     *
+     * @var int
+     */
+    protected $_maxTranslateBlocks    = 7;
+
+    /**
      * List of global tags
      *
      * @var array
@@ -87,7 +94,6 @@ class Mage_Core_Model_Translate_Inline
     protected $_allowedTagsSimple = array(
         'legend'        => 'Caption for the fieldset element',
         'label'         => 'Label for an input element.',
-        'option'        => 'Drop-down list option',
         'button'        => 'Push button',
         'a'             => 'Link label',
         'b'             => 'Bold text',
@@ -108,7 +114,6 @@ class Mage_Core_Model_Translate_Inline
         'dd'            => 'Item description in a definition list.',
         'caption'       => 'Table caption',
         'th'            => 'Header cell in a table',
-        'td'            => 'Standard cell in a table',
         'abbr'          => 'Abbreviated phrase',
         'acronym'       => 'An acronym',
         'var'           => 'Variable part of a text',
@@ -124,7 +129,8 @@ class Mage_Core_Model_Translate_Inline
         'h6'            => 'Heading level 6',
         'p'             => 'Paragraph',
         'pre'           => 'Preformatted text',
-        'center'        => 'Centered text'
+        'center'        => 'Centered text',
+        'select'        => 'List options',
     );
 
     /**
@@ -201,8 +207,7 @@ class Mage_Core_Model_Translate_Inline
                 $this->stripInlineTranslations($part);
             }
         } else if (is_string($body)) {
-            $body = preg_replace('#'.$this->_tokenRegex.'#', '$1', $body);
-            $body = preg_replace('/{{escape.*?}}/', '', $body);
+            $body = preg_replace('#' . $this->_tokenRegex . '#', '$1', $body);
         }
         return $this;
     }
@@ -229,17 +234,20 @@ class Mage_Core_Model_Translate_Inline
         } else if (is_string($body)) {
             $this->_content = $body;
 
-            $this->_tagAttributes();
             $this->_specialTags();
+            $this->_tagAttributes();
             $this->_otherText();
             $this->_insertInlineScriptsHtml();
-            $this->_escapeInline();
+
             $body = $this->_content;
         }
 
         return $this;
     }
 
+    /**
+     * Add translate js to body
+     */
     protected function _insertInlineScriptsHtml()
     {
         if ($this->_isScriptInserted || stripos($this->_content, '</body>')===false) {
@@ -269,7 +277,7 @@ class Mage_Core_Model_Translate_Inline
 <?php
         $html = ob_get_clean();
 
-        $this->_content = str_ireplace('</body>', $html.'</body>', $this->_content);
+        $this->_content = str_ireplace('</body>', $html . '</body>', $this->_content);
 
         $this->_isScriptInserted = true;
     }
@@ -286,24 +294,62 @@ class Mage_Core_Model_Translate_Inline
     }
 
     /**
-     * Escapes quoting inside inline translations. Useful when inline translation is inserted inside a JS string.
-     * @see Mage_Core_Helper_Translate::inlineTranslateStartMarker()
-     * @see Mage_Core_Helper_Translate::inlineTranslateEndMarker()
-     * @return Mage_Core_Model_Translate_Inline
+     * Get attribute location
+     *
+     * @param array $matches
+     * @param array $options
+     * @return string
      */
-    protected function _escapeInline()
+    protected function _getAttributeLocation($matches, $options)
     {
-        // {{escape='}}some_javascript_with_'_inside{{escape}}
-        while (preg_match('/\{\{escape=(.)\}\}(.*?)\{\{escape\}\}/', $this->_content, $matches)) {
-            // escape double quote character to make it possible to use it inside ""
-            $charToEscape = str_replace('"', '\\"', $matches[1]);
-            // preg_replace() used to avoid escaping already escaped quotes
-            $part = preg_replace("/[^\\\\]{$charToEscape}/", "\\{$charToEscape}", $matches[2]);
-            // Replace markers+string with the string itself
-            $this->_content = str_replace($matches[0], $part, $this->_content);
-        }
-        return $this;
+        return 'Tag attribute (ALT, TITLE, etc.)';
     }
+
+    /**
+     * Get tag location
+     *
+     * @param array $matches
+     * @param array $options
+     * @return string
+     */
+    protected function _getTagLocation($matches, $options)
+    {
+        $tagName = strtolower($options['tagName']);
+
+        if (isset($options['tagList'][$tagName])) {
+            return $options['tagList'][$tagName];
+        }
+
+        return ucfirst($tagName) . ' Text';
+    }
+
+    /**
+     * Get translate data by regexp
+     *
+     * @param string $regexp
+     * @param string $text
+     * @param string|array $locationCallback
+     * @param array $options
+     * @return array
+     */
+    protected function _getTranslateData($regexp, &$text, $locationCallback, $options = array())
+    {
+        $trArr = array();
+        $next = 0;
+        while (preg_match($regexp, $text, $m, PREG_OFFSET_CAPTURE, $next)) {
+            $trArr[] = json_encode(array(
+                'shown' => $m[1][0],
+                'translated' => $m[2][0],
+                'original' => $m[3][0],
+                'location' => call_user_func($locationCallback, $m, $options),
+                'scope' => $m[4][0],
+            ));
+            $text = substr_replace($text, $m[1][0], $m[0][1], strlen($m[0][0]));
+            $next = $m[0][1];
+        }
+        return $trArr;
+    }
+
 
     /**
      * Prepare tags inline translates
@@ -312,139 +358,192 @@ class Mage_Core_Model_Translate_Inline
     protected function _tagAttributes()
     {
         if ($this->getIsJson()) {
-            $quotePatern = '\\\\"';
             $quoteHtml   = '\"';
-            $tagEndRegexp = '(\\\\/)?' . '>$';
         } else {
-            $quotePatern = '"';
             $quoteHtml   = '"';
-            $tagEndRegexp = '/?>$';
         }
 
         $tagMatch   = array();
         $nextTag    = 0;
-        $tagRegExp  = '#<([a-z]+)\s*?[^>]+?((' . $this->_tokenRegex . ')[^/>]*?)+(/?(>))#i';
+        $tagRegExp  = '#<([a-z]+)\s*?[^>]+?((' . $this->_tokenRegex . ')[^>]*?)+/?>#i';
         while (preg_match($tagRegExp, $this->_content, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
             $next       = 0;
             $tagHtml    = $tagMatch[0][0];
-            $trArr      = array();
             $m          = array();
             $attrRegExp = '#' . $this->_tokenRegex . '#';
-
-            while (preg_match($attrRegExp, $tagHtml, $m, PREG_OFFSET_CAPTURE, $next)) {
-                $trArr[] = '{shown:\''.$this->_escape($m[1][0]) . '\','
-                    . 'translated:\''.$this->_escape($m[2][0]) . '\','
-                    . 'original:\''.$this->_escape($m[3][0]) . '\','
-                    . 'location:\'Tag attribute (ALT, TITLE, etc.)\','
-                    . 'scope:\''.$this->_escape($m[4][0]) . '\'}';
-                $tagHtml = substr_replace($tagHtml, $m[1][0], $m[0][1], strlen($m[0][0]));
-                $next = $m[0][1];
-            }
-
-            $transRegExp = '# translate='.$quotePatern.'\[(.+?)\]'.$quotePatern.'#i';
-            if (preg_match($transRegExp, $tagHtml, $m, PREG_OFFSET_CAPTURE)) {
-                foreach ($trArr as $i => $tr) {
-                    if (strpos($m[1][0], $tr) !== false) {
-                        unset($trArr[$i]);
-                    }
+            $trArr = $this->_getTranslateData($attrRegExp, $tagHtml, array($this, '_getAttributeLocation'));
+            if ($trArr) {
+                $transRegExp = '# translate=' . $quoteHtml . '\[([^'.preg_quote($quoteHtml).']*)]' . $quoteHtml . '#i';
+                if (preg_match($transRegExp, $tagHtml, $m)) {
+                    $tagHtml = str_replace($m[0], '', $tagHtml); //remove tra
+                    $trAttr  = ' translate=' . $quoteHtml
+                        . htmlspecialchars('[' . $m[1] . ',' . join(',', $trArr) . ']') . $quoteHtml;
+                } else {
+                    $trAttr  = ' translate=' . $quoteHtml
+                        . htmlspecialchars('[' . join(',', $trArr) . ']') . $quoteHtml;
                 }
-                array_unshift($trArr, $m[1][0]);
-                $tagHtml = substr_replace($tagHtml, '', $m[0][1], strlen($m[0][0]));
+                $this->_content = substr_replace($this->_content, $tagHtml, $tagMatch[0][1], strlen($tagMatch[0][0]));
             }
-            $trAttr  = ' translate=' . $quoteHtml . '[' . join(',', $trArr) . ']' . $quoteHtml;
-            $tagHtml = preg_replace('#' . $tagEndRegexp . '#', $trAttr . '$0', $tagHtml);
+            $nextTag = $tagMatch[0][1] + strlen($tagHtml);
+        }
+    }
 
-            $this->_content = substr_replace($this->_content, $tagHtml, $tagMatch[0][1],
-                $tagMatch[9][1]+1-$tagMatch[0][1]);
-            $nextTag = $tagMatch[0][1];
+    /**
+     * Get html quote symbol
+     *
+     * @return string
+     */
+    protected function _getHtmlQuote()
+    {
+        if ($this->getIsJson()) {
+            return '\"';
+        } else {
+            return '"';
         }
     }
 
     /**
      * Prepare special tags
-     *
      */
-    protected function _specialTags()
+    protected function _specialTags() {
+        $this->_translateTags($this->_content, $this->_allowedTagsGlobal, '_applySpecialTagsFormat', false);
+        $this->_translateTags($this->_content, $this->_allowedTagsSimple, '_applySimpleTagsFormat', true);
+    }
+
+    /**
+     * Format translate for special tags
+     *
+     * @param string $tagHtml
+     * @param string  $tagName
+     * @param array $trArr
+     * @return string
+     */
+    protected function _applySpecialTagsFormat($tagHtml, $tagName, $trArr)
+    {
+        return $tagHtml . '<span class="translate-inline-' . $tagName
+            . '" translate='
+            . $this->_getHtmlQuote()
+            . htmlspecialchars('[' . join(',', $trArr) . ']')
+            . $this->_getHtmlQuote() . '>'
+            . strtoupper($tagName) . '</span>';
+    }
+
+    /**
+     * Format translate for simple tags
+     *
+     * @param string $tagHtml
+     * @param string  $tagName
+     * @param array $trArr
+     * @return string
+     */
+    protected function _applySimpleTagsFormat($tagHtml, $tagName, $trArr)
+    {
+        return substr($tagHtml, 0, strlen($tagName) + 1)
+            . ' translate='
+            . $this->_getHtmlQuote() . htmlspecialchars( '[' . join(',', $trArr) . ']')
+            . $this->_getHtmlQuote()
+            . substr($tagHtml, strlen($tagName) + 1);
+    }
+
+    /**
+     * Prepare simple tags
+     *
+     * @param string $body
+     * @param array $tagsList
+     * @param string|array $formatCallback
+     * @param bool $isNeedTranslateAttributes
+     */
+    protected function _translateTags(&$body, $tagsList, $formatCallback, $isNeedTranslateAttributes)
     {
         if ($this->getIsJson()) {
-            $quotePatern = '\\\\"';
             $quoteHtml   = '\"';
         } else {
-            $quotePatern = '"';
             $quoteHtml   = '"';
         }
 
         $nextTag = 0;
 
-        $location = array_merge($this->_allowedTagsGlobal, $this->_allowedTagsSimple);
-        $tags = implode('|', array_merge(array_keys($this->_allowedTagsGlobal),
-            array_keys($this->_allowedTagsSimple)));
-        $tagRegExp  = '#<(' . $tags . ')(\s+[^>]*|)(>)#i';
+        $tags = implode('|', array_keys($tagsList));
+        $tagRegExp  = '#<(' . $tags . ')(\s*[^>]*>)#i';
 
         $tagMatch = array();
-        while (preg_match($tagRegExp, $this->_content, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
-            $tagClosure = '</'.$tagMatch[1][0].'>';
-            $tagClosurePos = stripos($this->_content, $tagClosure, $tagMatch[0][1]);
+        while (preg_match($tagRegExp, $body, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
+            $tagName  = strtolower($tagMatch[1][0]);
+            $tagClosurePos = $this->findEndOfTag($body, $tagName, $tagMatch[0][1]);
             if ($tagClosurePos === false) {
-                $tagClosure = '<\/'.$tagMatch[1][0].'>';
-                $tagClosurePos = stripos($this->_content, $tagClosure, $tagMatch[0][1]);
+                $nextTag += strlen($tagMatch[0][0]);
+                continue;
             }
-            $tagLength = $tagClosurePos-$tagMatch[0][1]+strlen($tagClosure);
 
-            $next       = 0;
-            $tagHtml    = substr($this->_content, $tagMatch[0][1], $tagLength);
-            $trArr      = array();
-            $m          = array();
-            while (preg_match('#'.$this->_tokenRegex.'#i', $tagHtml, $m, PREG_OFFSET_CAPTURE, $next)) {
-                $trArr[] = '{shown:\''.$this->_escape($m[1][0]).'\','
-                    .'translated:\''.$this->_escape($m[2][0]).'\','
-                    .'original:\''.$this->_escape($m[3][0]).'\','
-                    .'location:\''.$location[strtolower($tagMatch[1][0])].'\','
-                    .'scope:\''.$this->_escape($m[4][0]).'\'}';
+            $tagLength = $tagClosurePos - $tagMatch[0][1];
 
-                $tagHtml = substr_replace($tagHtml, $m[1][0], $m[0][1], strlen($m[0][0]));
-                $next    = $m[0][1];
+            $tagStartLength = strlen($tagMatch[0][0]);
+
+            $tagHtml = $tagMatch[0][0] ;
+            $tagEnd = substr($body, $tagMatch[0][1] + $tagStartLength, $tagLength - $tagStartLength);
+
+            if ($isNeedTranslateAttributes
+                && preg_match_all('#' . $this->_tokenRegex . '#', $tagEnd, $m)
+                && count($m[0]) > $this->_maxTranslateBlocks
+            ) {
+                $this->_translateTags($tagEnd, $tagsList, $formatCallback, $isNeedTranslateAttributes);
             }
+
+            if ($isNeedTranslateAttributes) {
+                $this->_tagAttributes($tagEnd);
+            }
+            $tagHtml .= $tagEnd;
+
+            $trArr = $this->_getTranslateData(
+                '#' . $this->_tokenRegex . '#i',
+                $tagHtml,
+                array($this, '_getTagLocation'),
+                array(
+                    'tagName' => $tagName,
+                    'tagList' => $tagsList
+                )
+            );
+
             if (!empty($trArr)) {
                 $trArr = array_unique($trArr);
-                $tag   = strtolower($tagMatch[1][0]);
+                $tagHtml = call_user_func(array($this, $formatCallback), $tagHtml, $tagName, $trArr);
 
-                if (in_array($tag, array_keys($this->_allowedTagsGlobal))) {
-                    $tagHtml .= '<span class="translate-inline-'.$tag
-                        .'" translate='.$quoteHtml.'['.join(',', $trArr).']'.$quoteHtml.'>'.strtoupper($tag).'</span>';
-                }
-                $this->_content = substr_replace($this->_content, $tagHtml, $tagMatch[0][1], $tagLength);
-
-                if (in_array($tag, array_keys($this->_allowedTagsSimple))) {
-                    if (preg_match('# translate='.$quotePatern.'\[(.+?)\]'.$quotePatern.'#i',
-                        $tagMatch[0][0], $m, PREG_OFFSET_CAPTURE)
-                    ) {
-                        foreach ($trArr as $i=>$tr) {
-                            if (strpos($m[1][0], $tr)!==false) {
-                                unset($trArr[$i]);
-                            }
-                        }
-                        array_unshift($trArr, $m[1][0]);
-                        $start = $tagMatch[0][1]+$m[0][1];
-                        $len = strlen($m[0][0]);
-                    } else {
-                        $start = $tagMatch[2][1];
-                        $len = 0;
-                    }
-
-                    $this->_content = substr_replace($this->_content,
-                        ' translate='.$quoteHtml.'['.join(',', $trArr).']'.$quoteHtml, $start, $len);
-                }
+                $body = substr_replace($body, $tagHtml, $tagMatch[0][1], $tagLength);
             }
-
-            $nextTag = $tagMatch[0][1]+10;
+            $nextTag = $tagClosurePos;
         }
+    }
 
+    /**
+     * Find end of tag
+     *
+     * @param $body
+     * @param $tagName
+     * @param $from
+     * @return bool|int return false if end of tag is not found
+     */
+    private function findEndOfTag($body, $tagName, $from)
+    {
+        $openTag = '<' . $tagName;
+        $closeTag = '</' . $tagName;
+        $end = $from + strlen($openTag);
+        $length = $end - $from;
+        while (substr_count($body, $openTag, $from, $length) != substr_count($body, $closeTag, $from, $length)) {
+            $end = strpos($body, $closeTag, $end + strlen($closeTag) - 1);
+            if ($end === false) {
+                return false;
+            }
+            $length = $end - $from  + strlen($closeTag);
+        }
+        if (preg_match('#<\/' . $tagName .'\s*?>#i', $body, $tagMatch, null, $end)) {
+            return $end + strlen($tagMatch[0]);
+        } else {
+            return false;
+        }
     }
 
     /**
      * Prepare other text inline translates
-     *
      */
     protected function _otherText()
     {
@@ -456,22 +555,19 @@ class Mage_Core_Model_Translate_Inline
 
         $next = 0;
         $m    = array();
-        while (preg_match('#(>|title=\")*('.$this->_tokenRegex.')#', $this->_content, $m, PREG_OFFSET_CAPTURE, $next)) {
-            if(-1 == $m[1][1])//title was not found - this is not an attribute
-            {
-                $tr = '{shown:\''.$this->_escape($m[3][0]).'\','
-                    .'translated:\''.$this->_escape($m[4][0]).'\','
-                    .'original:\''.$this->_escape($m[5][0]).'\','
-                    .'location:\'Text\','
-                    .'scope:\''.$this->_escape($m[6][0]).'\'}';
-                $spanHtml = '<span translate='.$quoteHtml.'['.$tr.']'.$quoteHtml.'>'.$m[3][0].'</span>';
-            }
-            else
-            {
-                $spanHtml = $m[3][0];
-            }
-            $this->_content = substr_replace($this->_content, $spanHtml, $m[2][1], strlen($m[2][0]) );
-            $next = $m[0][1];
+        while (preg_match('#' . $this->_tokenRegex . '#', $this->_content, $m, PREG_OFFSET_CAPTURE, $next)) {
+            $tr = json_encode(array(
+                'shown' => $m[1][0],
+                'translated' => $m[2][0],
+                'original' => $m[3][0],
+                'location' => 'Text',
+                'scope' => $m[4][0],
+            ));
+
+            $spanHtml = '<span translate=' . $quoteHtml . htmlspecialchars('[' . $tr . ']') . $quoteHtml
+                . '>' . $m[1][0] . '</span>';
+            $this->_content = substr_replace($this->_content, $spanHtml, $m[0][1], strlen($m[0][0]));
+            $next = $m[0][1] + strlen($spanHtml) - 1;
         }
 
     }
@@ -498,4 +594,3 @@ class Mage_Core_Model_Translate_Inline
         return $this;
     }
 }
-

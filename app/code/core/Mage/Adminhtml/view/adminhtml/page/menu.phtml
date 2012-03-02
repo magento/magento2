@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -33,7 +33,7 @@
 <?php function drawMenuLevel($_menu, $_level=0) { ?>
     <ul <?php if(!$_level): ?>id="nav"<?php endif ?>>
         <?php foreach ($_menu as $_item): ?>
-        <li <?php if(!empty($_item['children'])): ?>onmouseover="Element.addClassName(this,'over')" onmouseout="Element.removeClassName(this,'over')"<?php endif ?> class=" <?php echo (!$_level && !empty($_item['active']))?' active':'' ?> <?php echo !empty($_item['children'])?' parent':'' ?><?php echo (!empty($_level) && !empty($_item['last']))?' last':'' ?> level<?php echo $_level ?>"> <a href="<?php echo $_item['url'] ?>" <?php if(!empty($_item['title'])): ?>title="<?php echo $_item['title'] ?>"<?php endif ?> <?php if(!empty($_item['click'])): ?>onclick="<?php echo $_item['click']; ?>"<?php endif ?> class="<?php echo ($_level===0 && !empty($_item['active']))?'active':'' ?>"><span><?php echo $_item['label'] ?><?php if(!$_level): ?><?php endif ?></span></a>
+        <li <?php if(!empty($_item['children'])): ?>onmouseover="Element.addClassName(this,'over')" onmouseout="Element.removeClassName(this,'over')"<?php endif ?> class=" <?php echo (!$_level && !empty($_item['active']))?' active':'' ?> <?php echo !empty($_item['children'])?' parent':'' ?><?php echo (!empty($_level) && !empty($_item['last']))?' last':'' ?> level<?php echo $_level ?>"> <a href="<?php echo $_item['url'] ?>" <?php if(!empty($_item['title'])): ?>title="<?php echo $_item['title'] ?>"<?php endif ?> <?php if(!empty($_item['click'])): ?>onclick="<?php echo $_item['click']; ?>"<?php endif ?> class="<?php echo ($_level===0 && !empty($_item['active']))?'active':'' ?>"><span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->escapeHtml($_item['label']); ?><?php if(!$_level): ?><?php endif ?></span></a>
             <?php if(!empty($_item['children'])): ?>
                 <?php drawMenuLevel($_item['children'], $_level+1); ?>
             <?php endif; ?>

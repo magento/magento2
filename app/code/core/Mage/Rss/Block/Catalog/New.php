@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Rss
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -65,20 +65,31 @@ getFinalPrice() - used in shopping cart calculations
 */
 
         $product = Mage::getModel('Mage_Catalog_Model_Product');
-        $todayDate = $product->getResource()->formatDate(time());
+
+        $todayStartOfDayDate  = Mage::app()->getLocale()->date()
+            ->setTime('00:00:00')
+            ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
+
+        $todayEndOfDayDate  = Mage::app()->getLocale()->date()
+            ->setTime('23:59:59')
+            ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
 
         $products = $product->getCollection()
             ->setStoreId($storeId)
             ->addStoreFilter()
-
-            ->addAttributeToFilter('news_from_date', array('date'=>true, 'to'=> $todayDate))
+            ->addAttributeToFilter('news_from_date', array('or' => array(
+                0 => array('date' => true, 'to' => $todayEndOfDayDate),
+                1 => array('is' => new Zend_Db_Expr('null')))
+            ), 'left')
+            ->addAttributeToFilter('news_to_date', array('or' => array(
+                0 => array('date' => true, 'from' => $todayStartOfDayDate),
+                1 => array('is' => new Zend_Db_Expr('null')))
+            ), 'left')
             ->addAttributeToFilter(
                 array(
-                     array('attribute'=>'news_to_date', 'date'=>true, 'from'=>$todayDate),
-                     array('attribute'=>'news_to_date', 'is' => new Zend_Db_Expr('null'))
-                ),
-                '',
-                'left'
+                    array('attribute' => 'news_from_date', 'is' => new Zend_Db_Expr('not null')),
+                    array('attribute' => 'news_to_date', 'is' => new Zend_Db_Expr('not null'))
+                )
             )
             ->addAttributeToSort('news_from_date','desc')
             ->addAttributeToSelect(array('name', 'short_description', 'description', 'thumbnail'), 'inner')

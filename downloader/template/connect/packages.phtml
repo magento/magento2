@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -30,17 +30,54 @@
     <h4>Settings</h4>
 </div>
 <ul class="bare-list">
-<li><input type="checkbox" id="maintenance" value="1" checked="checked" /> &nbsp;
-<label for="maintenance">Put store on the maintenance mode while installing/upgrading</label>
-</li>
+    <li>
+        <input type="checkbox" id="maintenance" value="1" checked="checked" /> &nbsp;
+        <label for="maintenance">Put store on the maintenance mode while installing/upgrading/backup creating</label>
+    </li>
+    <li>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td rowspan="2" valign="top">
+                    <input type="checkbox" id="is_backup" value="1"  /> &nbsp;
+                </td>
+                <td>
+                    <label for="is_backup">Create Backup</label>
+                </td>
+                <td>
+                    &nbsp;<select id="archive_type" style="width: 320px;">
+                        <option value="1">Database</option>
+                        <option value="4">Database and Media</option>
+                        <option value="2">System</option>
+                        <option value="3">System (excluding Media)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="backup-name-container" style="display: none; margin-top: 5px;">
+                <td>
+                    <label for="backup_name">Backup Name</label>
+                </td>
+                <td>
+                    &nbsp;<input type="text" name="backup_name" id="backup_name" style="width: 320px; margin-top:8px;"/>
+                </td>
+            </tr>
+        </table>
+    </li>
 </ul>
-
 <div class="bar-head">
     <h4>Install New Extensions</h4>
 </div>
 <script type="text/javascript">
 <!--
- function connectPrepare(form) {
+changeAvailableArchiveStatus = function (){
+    $('archive_type').disabled = !$('is_backup').checked;
+    $('is_backup').checked ? $('backup-name-container').show() : $('backup-name-container').hide();
+    $('backup_name').value = '';
+}
+
+Event.observe('is_backup', 'change', changeAvailableArchiveStatus);
+Event.observe(window, 'load', changeAvailableArchiveStatus);
+
+function connectPrepare(form) {
     new Ajax.Request(form.action, {
       method:'post',
       parameters: {install_package_id: form.install_package_id.value},

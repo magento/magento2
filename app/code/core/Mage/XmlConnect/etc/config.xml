@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -29,7 +29,7 @@
     <modules>
         <Mage_XmlConnect>
             <version>1.6.0.0</version>
-            <innerVersion>22.0</innerVersion>
+            <innerVersion>22.1</innerVersion>
         </Mage_XmlConnect>
     </modules>
     <global>
@@ -359,6 +359,7 @@
         </screen_size>
         <xmlconnect>
             <mobile_application>
+                <curl_ssl_verifypeer>1</curl_ssl_verifypeer>
                 <magentocommerce_url>www.magentocommerce.com/products/index.php/mobile/activate/index/key/</magentocommerce_url>
                 <activation_key_url>http://www.magentocommerce.com/product/mobile</activation_key_url>
                 <resubmission_key_url>http://www.magentocommerce.com/product/mobile#resubmission</resubmission_key_url>

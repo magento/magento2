@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Bundle
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -654,7 +654,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
                  * Create extra attributes that will be converted to product options in order item
                  * for selection (not for all bundle)
                  */
-                $price = $product->getPriceModel()->getSelectionPrice($product, $selection, $qty);
+                $price = $product->getPriceModel()->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
                 $attributes = array(
                     'price'         => Mage::app()->getStore()->convertPrice($price),
                     'qty'           => $qty,
@@ -792,9 +792,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
                 if ($selection->isSalable()) {
                     $selectionQty = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
                     if ($selectionQty) {
-                        $price = $product->getPriceModel()->getSelectionPrice(
-                            $product,
-                            $selection,
+                        $price = $product->getPriceModel()->getSelectionFinalTotalPrice($product, $selection, 0,
                             $selectionQty->getValue()
                         );
 

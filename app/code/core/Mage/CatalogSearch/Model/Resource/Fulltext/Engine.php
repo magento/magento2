@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogSearch
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -72,10 +72,9 @@ class Mage_CatalogSearch_Model_Resource_Fulltext_Engine extends Mage_Core_Model_
      */
     public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
     {
-        $adapter = $this->_getWriteAdapter();
         $data    = array();
         $storeId = (int)$storeId;
-        foreach ($entityIndexes as $entityId => &$index) {
+        foreach ($entityIndexes as $entityId => $index) {
             $data[] = array(
                 'product_id'    => (int)$entityId,
                 'store_id'      => $storeId,
@@ -89,6 +88,16 @@ class Mage_CatalogSearch_Model_Resource_Fulltext_Engine extends Mage_Core_Model_
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve allowed visibility values for current engine
+     *
+     * @return array
+     */
+    public function getAllowedVisibility()
+    {
+        return Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInSearchIds();
     }
 
     /**

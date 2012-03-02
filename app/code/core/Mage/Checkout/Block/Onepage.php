@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,19 +33,24 @@
  */
 class Mage_Checkout_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
 {
+    /**
+     * Get 'one step checkout' step data
+     *
+     * @return array
+     */
     public function getSteps()
     {
         $steps = array();
+        $stepCodes = $this->_getStepCodes();
 
-        if (!$this->isCustomerLoggedIn()) {
-            $steps['login'] = $this->getCheckout()->getStepData('login');
+        if ($this->isCustomerLoggedIn()) {
+            $stepCodes = array_diff($stepCodes, array('login'));
         }
-
-        $stepCodes = array('billing', 'shipping', 'shipping_method', 'payment', 'review');
 
         foreach ($stepCodes as $step) {
             $steps[$step] = $this->getCheckout()->getStepData($step);
         }
+
         return $steps;
     }
 

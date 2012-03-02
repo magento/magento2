@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Reports>
-            <version>1.6.0.0</version>
+            <version>1.6.0.0.1</version>
         </Mage_Reports>
     </modules>
     <global>

@@ -19,7 +19,7 @@
  *
  * @category    design
  * @package     default_blank
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -373,7 +373,7 @@ tr.summary-details-excluded { font-style:italic; }
 .std ul.disc { list-style:disc outside; padding-left:18px; margin:0 0 10px; }
 .std dl dt { font-weight:bold; }
 .std dl dd { margin:0 0 10px; }
-/*.std ul,
+.std ul,
 .std ol,
 .std dl,
 .std p,
@@ -393,7 +393,7 @@ tr.summary-details-excluded { font-style:italic; }
 .std b,
 .std strong { font-weight:bold; }
 .std i,
-.std em { font-style:italic; }*/
+.std em { font-style:italic; }
 
 /* Misc */
 .links li { display:inline; }
@@ -1061,6 +1061,27 @@ tr.summary-details-excluded { font-style:italic; }
 .account-create {}
 /* Account Login/Create Pages ============================================================ */
 
+/* Captcha */
+.captcha-note  {}
+.captcha-image { float:left; position:relative; }
+.captcha-img { border:1px solid #ccc; }
+.registered-users .captcha-image    {}
+#checkout-step-login .captcha-image {}
+.captcha-reload { position:absolute; top:2px; right:2px;}
+.captcha-reload.refreshing  { animation:rotate 1.5s infinite linear; -webkit-animation:rotate 1.5s infinite linear; -moz-animation:rotate 1.5s infinite linear; }
+
+@-webkit-keyframes rotate {
+    0% { -webkit-transform:rotate(0); }
+    0% { -webkit-transform:rotate(-360deg); }
+}
+@-moz-keyframes rotate {
+    0% { -moz-transform:rotate(0); }
+    0% { -moz-transform:rotate(-360deg); }
+}
+@keyframes rotate {
+    0% { transform:rotate(0); }
+    0% { transform:rotate(-360deg); }
+}
 
 /* Remember Me Popup ===================================================================== */
 .window-overlay { background:rgba(0, 0, 0, 0.35); position:absolute; top:0; left:0; height:100%; width:100%; z-index:990; }

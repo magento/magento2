@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -1296,8 +1296,8 @@ class Mage_Eav_Model_Entity_Setup extends Mage_Core_Model_Resource_Setup
         foreach ($types as $type => $fieldType) {
             $eavTableName = array($baseTableName, $type);
 
-            $eavTable = $connection
-                ->newTable($this->getTable($eavTableName))
+            $eavTable = $connection->newTable($this->getTable($eavTableName));
+            $eavTable
                 ->addColumn('value_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
                     'identity'  => true,
                     'nullable'  => false,
@@ -1333,11 +1333,15 @@ class Mage_Eav_Model_Entity_Setup extends Mage_Core_Model_Resource_Setup
                 ->addIndex($this->getIdxName($eavTableName, array('store_id')),
                     array('store_id'))
                 ->addIndex($this->getIdxName($eavTableName, array('entity_id')),
-                    array('entity_id'))
-                ->addIndex($this->getIdxName($eavTableName, array('attribute_id', 'value')),
-                    array('attribute_id', 'value'))
-                ->addIndex($this->getIdxName($eavTableName, array('entity_type_id', 'value')),
-                    array('entity_type_id', 'value'))
+                    array('entity_id'));
+            if ($type !== 'text') {
+                $eavTable->addIndex($this->getIdxName($eavTableName, array('attribute_id', 'value')),
+                    array('attribute_id', 'value'));
+                $eavTable->addIndex($this->getIdxName($eavTableName, array('entity_type_id', 'value')),
+                    array('entity_type_id', 'value'));
+            }
+
+            $eavTable
                 ->addForeignKey($this->getFkName($eavTableName, 'entity_id', $baseTableName, 'entity_id'),
                     'entity_id', $this->getTable($baseTableName), 'entity_id',
                     Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)

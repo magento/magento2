@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Db
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -820,6 +820,16 @@ interface Varien_Db_Adapter_Interface
      * @return Zend_Db_Expr
      */
     public function getDatePartSql($date);
+
+    /**
+     * Prepare substring sql function
+     *
+     * @param Zend_Db_Expr|string $stringExpression quoted field name or SQL statement
+     * @param int|string|Zend_Db_Expr $pos
+     * @param int|string|Zend_Db_Expr|null $len
+     * @return Zend_Db_Expr
+     */
+    public function getSubstringSql($stringExpression, $pos, $len = null);
 
     /**
      * Extract part of a date

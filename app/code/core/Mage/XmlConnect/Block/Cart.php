@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -62,7 +62,7 @@ class Mage_XmlConnect_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
             $itemXml->addChild('entity_id', $item->getProduct()->getId());
             $itemXml->addChild('entity_type', $type);
             $itemXml->addChild('item_id', $item->getId());
-            $itemXml->addChild('name', $xmlObject->xmlentities($renderer->getProductName()));
+            $itemXml->addChild('name', $xmlObject->escapeXml($renderer->getProductName()));
             $itemXml->addChild('code', 'cart[' . $item->getId() . '][qty]');
             $itemXml->addChild('qty', $renderer->getQty());
             $icon = $renderer->getProductThumbnail()->resize(
@@ -192,27 +192,27 @@ class Mage_XmlConnect_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
             /**
              * Options list
              */
-            if ($_options = $renderer->getOptionList()) {
+            $_options = $renderer->getOptionList();
+            if ($_options) {
                 $itemOptionsXml = $itemXml->addChild('options');
                 foreach ($_options as $_option) {
                     $_formattedOptionValue = $renderer->getFormatedOptionValue($_option);
                     $optionXml = $itemOptionsXml->addChild('option');
                     $optionXml->addAttribute('label', $xmlObject->xmlAttribute($_option['label']));
-                    $optionXml->addAttribute(
-                        'text', $xmlObject->xmlAttribute(strip_tags($_formattedOptionValue['value']))
-                    );
+                    $optionXml->addAttribute('text', $xmlObject->xmlAttribute($_formattedOptionValue['value']));
                 }
             }
 
             /**
              * Item messages
              */
-            if ($messages = $renderer->getMessages()) {
+            $messages = $renderer->getMessages();
+            if ($messages) {
                 $itemMessagesXml = $itemXml->addChild('messages');
                 foreach ($messages as $message) {
                     $messageXml = $itemMessagesXml->addChild('option');
                     $messageXml->addChild('type', $message['type']);
-                    $messageXml->addChild('text', $xmlObject->xmlentities($message['text']));
+                    $messageXml->addChild('text', $xmlObject->escapeXml($message['text']));
                 }
             }
         }

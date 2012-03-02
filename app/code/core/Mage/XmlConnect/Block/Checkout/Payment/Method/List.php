@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -289,7 +289,7 @@ class Mage_XmlConnect_Block_Checkout_Payment_Method_List extends Mage_Payment_Bl
             $methodItemXmlObj = $methodsXmlObj->addChild('method');
             $methodItemXmlObj->addAttribute('post_name', 'payment[method]');
             $methodItemXmlObj->addAttribute('code', $method->getCode());
-            $methodItemXmlObj->addAttribute('label', $methodsXmlObj->xmlentities($method->getTitle()));
+            $methodItemXmlObj->addAttribute('label', $methodsXmlObj->escapeXml($method->getTitle()));
             if ($this->getQuote()->getPayment()->getMethod() == $method->getCode()) {
                 $methodItemXmlObj->addAttribute('selected', 1);
             }

@@ -20,13 +20,13 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 
 <?php if ($websites = $this->getWebsites()): ?>
-<label for="store_switcher"><?php echo $this->__('Choose Store View') ?>:</label>
+<label for="store_switcher"><?php echo $this->__('Choose Store View:') ?></label>
 <select name="store_switcher" id="store_switcher">
     <?php foreach ($websites as $website): ?>
         <?php $showWebsite=false; ?>
@@ -49,6 +49,7 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
 </select>
+<?php echo $this->getHintHtml() ?>
 <script type="text/javascript">
 //<![CDATA[
 Event.observe($('store_switcher'), 'change', function(event) {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -109,7 +109,8 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form extends Mage_Adminhtml_Block_W
             ));
 
             if (Mage::registry('store_action') == 'edit') {
-                $groups = Mage::getModel('Mage_Core_Model_Store_Group')->getCollection()->addWebsiteFilter($websiteModel->getId())->toOptionArray();
+                $groups = Mage::getModel('Mage_Core_Model_Store_Group')->getCollection()
+                    ->addWebsiteFilter($websiteModel->getId())->toOptionArray();
                 //array_unshift($groups, array('label'=>'', 'value'=>0));
                 $fieldset->addField('website_default_group_id', 'select', array(
                     'name'      => 'website[default_group_id]',
@@ -202,7 +203,8 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form extends Mage_Adminhtml_Block_W
             ));
 
             if (Mage::registry('store_action') == 'edit') {
-                $stores = Mage::getModel('Mage_Core_Model_Store')->getCollection()->addGroupFilter($groupModel->getId())->toOptionArray();
+                $stores = Mage::getModel('Mage_Core_Model_Store')->getCollection()
+                     ->addGroupFilter($groupModel->getId())->toOptionArray();
                 //array_unshift($stores, array('label'=>'', 'value'=>0));
                 $fieldset->addField('group_default_store_id', 'select', array(
                     'name'      => 'group[default_store_id]',
@@ -334,6 +336,8 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form extends Mage_Adminhtml_Block_W
         $form->setAction($this->getUrl('*/*/save'));
         $form->setUseContainer(true);
         $this->setForm($form);
+
+        Mage::dispatchEvent('adminhtml_store_edit_form_prepare_form', array('block' => $this));
 
         return parent::_prepareForm();
     }

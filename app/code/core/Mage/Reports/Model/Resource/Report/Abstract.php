@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -368,7 +368,7 @@ abstract class Mage_Reports_Model_Resource_Report_Abstract extends Mage_Core_Mod
         foreach ($periods as $offset => $timestamps) {
             $subParts = array();
             foreach ($timestamps as $ts) {
-                $subParts[] = "($column between '{$ts['from']}' and '{$ts['to']}')";
+                $subParts[] = "($column between {$ts['from']} and {$ts['to']})";
             }
 
             $then = $this->_getWriteAdapter()
@@ -393,16 +393,17 @@ abstract class Mage_Reports_Model_Resource_Report_Abstract extends Mage_Core_Mod
         $tzTransitions = array();
         try {
             if (!empty($from)) {
-                $from = new Zend_Date($from, 'Y-m-d H:i:s');
+                $from = new Zend_Date($from, Varien_Date::DATETIME_INTERNAL_FORMAT);
                 $from = $from->getTimestamp();
             }
 
-            $to = new Zend_Date($to);
-            $nextPeriod = $to->toString('c');
+            $to = new Zend_Date($to, Varien_Date::DATETIME_INTERNAL_FORMAT);
+            $nextPeriod = $this->_getWriteAdapter()->formatDate($to->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
             $to = $to->getTimestamp();
 
             $dtz = new DateTimeZone($timezone);
             $transitions = $dtz->getTransitions();
+            $dateTimeObject = new Zend_Date('c');
 
             for ($i = count($transitions) - 1; $i >= 0; $i--) {
                 $tr = $transitions[$i];
@@ -410,6 +411,9 @@ abstract class Mage_Reports_Model_Resource_Report_Abstract extends Mage_Core_Mod
                     continue;
                 }
 
+                $dateTimeObject->set($tr['time']);
+                $tr['time'] = $this->_getWriteAdapter()
+                    ->formatDate($dateTimeObject->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
                 $tzTransitions[$tr['offset']][] = array('from' => $tr['time'], 'to' => $nextPeriod);
 
                 if (!empty($from) && $tr['ts'] < $from) {

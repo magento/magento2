@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,34 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
             array(array('backend' => 'File'), 'Zend_Cache_Backend_File'),
             array(array('backend' => 'File', 'backend_options' => array()), 'Zend_Cache_Backend_File'),
             array(array('backend' => 'Database'), 'Varien_Cache_Backend_Database'),
+        );
+    }
+
+    /**
+     * @param string $optionCode
+     * @param string $extensionRequired
+     * @dataProvider backendTwoLevelsDataProvider
+     */
+    public function testBackendTwoLevels($optionCode, $extensionRequired)
+    {
+        if ($extensionRequired) {
+            if (!extension_loaded($extensionRequired)) {
+                $this->markTestSkipped("The PHP extension '{$extensionRequired}' is required for this test.");
+            }
+        }
+        $model = new Mage_Core_Model_Cache(array('backend' => $optionCode));
+        $backend = $model->getFrontend()->getBackend();
+        $this->assertInstanceOf('Zend_Cache_Backend_TwoLevels', $backend);
+    }
+
+    /**
+     * @return array
+     */
+    public function backendTwoLevelsDataProvider()
+    {
+        return array(
+            array('Memcached', 'memcached'),
+            array('Memcached', 'memcache'),
         );
     }
 
@@ -270,6 +298,7 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
         Mage_Core_Model_CacheTestRequestProcessor::$isEnabled = true;
         $this->assertTrue($model->processRequest());
     }
+
 }
 
 class Mage_Core_Model_CacheTestRequestProcessor

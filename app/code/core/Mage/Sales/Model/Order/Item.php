@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -180,6 +180,12 @@
  * @method Mage_Sales_Model_Order_Item setHiddenTaxCanceled(float $value)
  * @method float getTaxRefunded()
  * @method Mage_Sales_Model_Order_Item setTaxRefunded(float $value)
+ * @method float getBaseTaxRefunded()
+ * @method Mage_Sales_Model_Order_Item setBaseTaxRefunded(float $value)
+ * @method float getDiscountRefunded()
+ * @method Mage_Sales_Model_Order_Item setDiscountRefunded(float $value)
+ * @method float getBaseDiscountRefunded()
+ * @method Mage_Sales_Model_Order_Item setBaseDiscountRefunded(float $value)
  *
  * @category    Mage
  * @package     Mage_Sales

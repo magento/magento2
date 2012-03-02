@@ -20,14 +20,15 @@
  *
  * @category    design
  * @package     default_modern
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
     <div class="form-subscribe">
-    <div class="form-subscribe-header"><?php echo $this->__('Sign up for our newsletter') ?></div>
-        <label for="newsletter"><?php echo $this->__('Newsletter Sign-up:') ?></label>
+        <div class="form-subscribe-header">
+            <label for="newsletter"><?php echo $this->__('Newsletter Sign-up:') ?></label>
+        </div>
         <div class="input-box">
            <input type="text" name="email" id="newsletter" title="<?php echo $this->__('Sign up for our newsletter') ?>" class="input-text required-entry validate-email" />
         </div>

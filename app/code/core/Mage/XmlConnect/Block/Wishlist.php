@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,13 +70,14 @@ class Mage_XmlConnect_Block_Wishlist extends Mage_Wishlist_Block_Customer_Wishli
                 $itemXmlObj->addChild('item_id', $item->getWishlistItemId());
                 $itemXmlObj->addChild('entity_id', $item->getProductId());
                 $itemXmlObj->addChild('entity_type_id', $item->getProduct()->getTypeId());
-                $itemXmlObj->addChild('name', $wishlistXmlObj->xmlentities($item->getName()));
-                $itemXmlObj->addChild('in_stock', (int)$item->getProduct()->getIsInStock());
+                $itemXmlObj->addChild('name', $wishlistXmlObj->escapeXml($item->getName()));
+                $itemXmlObj->addChild('in_stock', (int)$item->getProduct()->getStockItem()->getIsInStock());
                 $itemXmlObj->addChild('is_salable', (int)$item->getProduct()->isSalable());
                 /**
                  * If product type is grouped than it has options as its grouped items
                  */
-                if ($item->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) {
+                if ($item->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE
+                    || $item->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
                     $item->getProduct()->setHasOptions(true);
                 }
                 $itemXmlObj->addChild('has_options', (int)$item->getProduct()->getHasOptions());
@@ -89,10 +90,10 @@ class Mage_XmlConnect_Block_Wishlist extends Mage_Wishlist_Block_Customer_Wishli
                 $file = Mage::helper('Mage_XmlConnect_Helper_Data')->urlToPath($icon);
                 $iconXml->addAttribute('modification_time', filemtime($file));
 
-                $description = $wishlistXmlObj->xmlentities(strip_tags($item->getDescription()));
+                $description = $wishlistXmlObj->escapeXml($item->getDescription());
                 $itemXmlObj->addChild('description', $description);
 
-                $addedDate = $wishlistXmlObj->xmlentities($this->getFormatedDate($item->getAddedAt()));
+                $addedDate = $wishlistXmlObj->escapeXml($this->getFormatedDate($item->getAddedAt()));
                 $itemXmlObj->addChild('added_date', $addedDate);
 
                 if ($this->getChild('product_price')) {

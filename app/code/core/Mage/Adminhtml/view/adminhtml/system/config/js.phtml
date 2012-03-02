@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -251,11 +251,6 @@ perPageModel.prototype = {
             var values = $(elm.id + '_values').value.split(',');
             return values.indexOf(v) != -1;
         });
-
-        this.gridValuesElement.addClassName('validate-per-page-value-list');
-        this.listValuesElement.addClassName('validate-per-page-value-list');
-        this.gridElement.addClassName('validate-per-page-value');
-        this.listElement.addClassName('validate-per-page-value');
     }
 }
 

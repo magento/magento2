@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,8 +31,17 @@
  * @package    Mage_Paypal
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Paypal_Block_Payflow_Link_Iframe extends Mage_Payment_Block_Form
+class Mage_Paypal_Block_Payflow_Link_Iframe extends Mage_Paypal_Block_Iframe
 {
+    /**
+     * Set payment method code
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->_paymentMethodCode = Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK;
+    }
+
     /**
      * Get frame action URL
      *
@@ -50,7 +59,7 @@ class Mage_Paypal_Block_Payflow_Link_Iframe extends Mage_Payment_Block_Form
      */
     public function getSecureToken()
     {
-        return $this->_getSalesDocument()
+        return $this->_getOrder()
             ->getPayment()
             ->getAdditionalInformation('secure_token');
     }
@@ -62,7 +71,7 @@ class Mage_Paypal_Block_Payflow_Link_Iframe extends Mage_Payment_Block_Form
      */
     public function getSecureTokenId()
     {
-        return $this->_getSalesDocument()
+        return $this->_getOrder()
             ->getPayment()
             ->getAdditionalInformation('secure_token_id');
     }
@@ -85,18 +94,8 @@ class Mage_Paypal_Block_Payflow_Link_Iframe extends Mage_Payment_Block_Form
     public function isTestMode()
     {
         $mode = Mage::helper('Mage_Payment_Helper_Data')
-            ->getMethodInstance(Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK)
+            ->getMethodInstance($this->_paymentMethodCode)
             ->getConfigData('sandbox_flag');
         return (bool) $mode;
-    }
-
-    /**
-     * Get sales document object
-     *
-     * @return Mage_Sales_Model_Order|Mage_Sales_Model_Quote
-     */
-    protected function _getSalesDocument()
-    {
-       return Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote();
     }
 }

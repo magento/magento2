@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,7 +67,7 @@ class Mage_XmlConnect_Block_Catalog extends Mage_Core_Block_Template
                 $item->addAttribute('isDefault', 1);
             }
             $item->addChild('code', $code);
-            $item->addChild('name', $ordersXmlObject->xmlentities(strip_tags($name)));
+            $item->addChild('name', $ordersXmlObject->escapeXml($name));
         }
 
         return $ordersXmlObject;

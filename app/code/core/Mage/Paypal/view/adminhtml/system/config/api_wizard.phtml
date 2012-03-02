@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -33,12 +33,12 @@
     <tr>
         <td>
             <button style="" onclick="javascript:window.open('<?php echo $this->getButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
-                <span><?php echo $this->escapeHtml($this->getButtonLabel()); ?></span>
+                <span><span><span><?php echo $this->escapeHtml($this->getButtonLabel()); ?></span></span></span>
             </button>
         </td>
         <td>
             <button style="" onclick="javascript:window.open('<?php echo $this->getSandboxButtonUrl()?>', 'apiwizard','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=100, top=100, width=380, height=470'); return false;" class="scalable" type="button" id="<?php echo $this->getSandboxHtmlId() ?>">
-                <span><?php echo $this->escapeHtml($this->getSandboxButtonLabel()); ?></span>
+                <span><span><span><?php echo $this->escapeHtml($this->getSandboxButtonLabel()); ?></span></span></span>
             </button>
         </td>
     </tr>

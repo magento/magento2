@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,22 @@ class Mage_Adminhtml_Block_Report_Product_Viewed extends Mage_Adminhtml_Block_Wi
         $this->_controller = 'report_product_viewed';
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Most Viewed');
         parent::__construct();
+        $this->setTemplate('report/grid/container.phtml');
         $this->_removeButton('add');
+        $this->addButton('filter_form_submit', array(
+            'label'     => Mage::helper('Mage_Reports_Helper_Data')->__('Show Report'),
+            'onclick'   => 'filterFormSubmit()'
+        ));
+    }
+
+    /**
+     * Get filter url
+     *
+     * @return string
+     */
+    public function getFilterUrl()
+    {
+        $this->getRequest()->setParam('filter', null);
+        return $this->getUrl('*/*/viewed', array('_current' => true));
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -1459,6 +1459,17 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     protected function _productLimitationJoinPrice()
     {
+        return $this->_productLimitationPrice();
+    }
+
+    /**
+     * Join Product Price Table with left-join possibility
+     *
+     * @see Mage_Catalog_Model_Resource_Product_Collection::_productLimitationJoinPrice()
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function _productLimitationPrice($joinLeft = false)
+    {
         $filters = $this->_productLimitationFilters;
         if (empty($filters['use_price_index'])) {
             return $this;
@@ -1480,11 +1491,12 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
                 $least, 'price_index.min_price');
             $colls       = array('price', 'tax_class_id', 'final_price',
                 'minimal_price' => $minimalExpr , 'min_price', 'max_price', 'tier_price');
-            $select->join(
-                array('price_index' => $this->getTable('catalog_product_index_price')),
-                $joinCond,
-                $colls
-            );
+            $tableName = array('price_index' => $this->getTable('catalog_product_index_price'));
+            if ($joinLeft) {
+                $select->joinLeft($tableName, $joinCond, $colls);
+            } else {
+                $select->join($tableName, $joinCond, $colls);
+            }
             // Set additional field filters
             foreach ($this->_priceDataFieldFilters as $filterData) {
                 $select->where(call_user_func_array('sprintf', $filterData));

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -172,6 +172,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
             try {
                 switch ($postData['store_type']) {
                     case 'website':
+                        $postData['website']['name'] = $this->_getHelper()->removeTags($postData['website']['name']);
                         $websiteModel = Mage::getModel('Mage_Core_Model_Website');
                         if ($postData['website']['website_id']) {
                             $websiteModel->load($postData['website']['website_id']);
@@ -186,6 +187,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
                         break;
 
                     case 'group':
+                        $postData['group']['name'] = $this->_getHelper()->removeTags($postData['group']['name']);
                         $groupModel = Mage::getModel('Mage_Core_Model_Store_Group');
                         if ($postData['group']['group_id']) {
                             $groupModel->load($postData['group']['group_id']);
@@ -205,6 +207,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
                     case 'store':
                         $eventName = 'store_edit';
                         $storeModel = Mage::getModel('Mage_Core_Model_Store');
+                        $postData['store']['name'] = $this->_getHelper()->removeTags($postData['store']['name']);
                         if ($postData['store']['store_id']) {
                             $storeModel->load($postData['store']['store_id']);
                         }
@@ -498,4 +501,3 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
     }
 
 }
-

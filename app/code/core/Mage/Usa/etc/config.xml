@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Usa
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -54,6 +54,9 @@
                     <dhl>
                         <class>Mage_Usa_Model_Shipping_Carrier_Dhl</class>
                     </dhl>
+                    <dhlint>
+                        <class>Mage_Usa_Model_Shipping_Carrier_Dhl_International</class>
+                    </dhlint>
                 </carriers>
             </shipping>
             <tax>
@@ -102,7 +105,7 @@
                 <shipment_type>P</shipment_type>
                 <shipping_key backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
                 <shipping_intlkey backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <title>DHL</title>
+                <title>DHL (Deprecated)</title>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <max_package_weight>150</max_package_weight>
                 <handling_type>F</handling_type>
@@ -183,6 +186,25 @@
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
             </usps>
+            <dhlint>
+                <model>Mage_Usa_Model_Shipping_Carrier_Dhl_International</model>
+                <account/>
+                <active>0</active>
+                <title>DHL</title>
+                <sallowspecific>0</sallowspecific>
+                <allowed_methods>1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y</allowed_methods>
+                <free_method>G</free_method>
+                <gateway_url>https://xmlpitest-ea.dhl.com/XMLShippingServlet</gateway_url>
+                <id backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <shipment_type>N</shipment_type>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <divide_order_weight>1</divide_order_weight>
+                <unit_of_measure>K</unit_of_measure>
+                <size>R</size>
+                <handling_type>F</handling_type>
+                <handling_action>O</handling_action>
+            </dhlint>
         </carriers>
     </default>
 </config>

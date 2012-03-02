@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Checkout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,9 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         'shipping-method' => '_getShippingMethodsHtml',
         'review'          => '_getReviewHtml',
     );
+
+    /** @var Mage_Sales_Model_Order */
+    protected $_order;
 
     /**
      * @return Mage_Checkout_OnepageController
@@ -128,6 +131,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         $layout->generateXml();
         $layout->generateBlocks();
         $output = $layout->getOutput();
+        Mage::getSingleton('Mage_Core_Model_Translate_Inline')->processResponseBody($output);
         return $output;
     }
 
@@ -167,7 +171,10 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             return;
         }
         if (!$quote->validateMinimumAmount()) {
-            $error = Mage::getStoreConfig('sales/minimum_order/error_message');
+            $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                Mage::getStoreConfig('sales/minimum_order/error_message') :
+                Mage::helper('Mage_Checkout_Helper_Data')->__('Subtotal must exceed minimum order amount');
+
             Mage::getSingleton('Mage_Checkout_Model_Session')->addError($error);
             $this->_redirect('checkout/cart');
             return;
@@ -442,9 +449,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result));
     }
 
-    /* @var $_order Mage_Sales_Model_Order */
-    protected $_order;
-
     /**
      * Get Order by quoteId
      *
@@ -505,21 +509,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
             $this->getOnepage()->saveOrder();
-
-            $storeId = Mage::app()->getStore()->getId();
-            $paymentHelper = Mage::helper("Mage_Payment_Helper_Data");
-            $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
-            if ($paymentHelper->isZeroSubTotal($storeId)
-                    && $this->_getOrder()->getGrandTotal() == 0
-                    && $zeroSubTotalPaymentAction == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
-                    && $paymentHelper->getZeroSubTotalOrderStatus($storeId) == 'pending') {
-                $invoice = $this->_initInvoice();
-                $invoice->getOrder()->setIsInProcess(true);
-                $transactionSave = Mage::getModel('Mage_Core_Model_Resource_Transaction')
-                    ->addObject($invoice)
-                    ->addObject($invoice->getOrder());
-                $transactionSave->save();
-            }
 
             $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();
             $result['success'] = true;

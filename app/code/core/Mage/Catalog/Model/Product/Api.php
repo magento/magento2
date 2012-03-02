@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -182,6 +182,11 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
             ->setTypeId($type)
             ->setSku($sku);
 
+        if (!isset($productData['stock_data']) || !is_array($productData['stock_data'])) {
+            //Set default stock_data if not exist in product data
+            $product->setStockData(array('use_config_manage_stock' => 0));
+        }
+
         $this->_prepareDataForSave($product, $productData);
 
         try {
@@ -262,6 +267,14 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
         }
 
         foreach ($product->getTypeInstance()->getEditableAttributes($product) as $attribute) {
+            //Unset data if object attribute has no value in current store
+            if (Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID !== $product->getStoreId()
+                && !$product->getExistsStoreValueFlag($attribute->getAttributeCode())
+                && !$attribute->isScopeGlobal()
+            ) {
+                $product->setData($attribute->getAttributeCode(), false);
+            }
+
             if ($this->_isAllowedAttribute($attribute)) {
                 if (isset($productData[$attribute->getAttributeCode()])) {
                     $product->setData(
@@ -303,8 +316,6 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
 
         if (isset($productData['stock_data']) && is_array($productData['stock_data'])) {
             $product->setStockData($productData['stock_data']);
-        } else {
-            $product->setStockData(array('use_config_manage_stock' => 0));
         }
 
         if (isset($productData['tier_price']) && is_array($productData['tier_price'])) {

@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -159,18 +159,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      */
     protected function _getRegexpTableInArrays($filePath)
     {
-        $keys = array(
-            'table',
-            'additional_attribute_table',
-        );
-
-        $regexps = array();
-        foreach ($keys as $key) {
-            $regexps[] = '[\'"]' . $key . '[\'"]\s*=>\s*[\'"]([^\'"]+)';
-        }
-        $result = '#' . implode('|', $regexps) . '#';
-
-        return $result;
+        return '/[\'"](?:[a-z\d_]+_)?table[\'"]\s*=>\s*[\'"]([^\'"]+)/';
     }
 
     /**
@@ -243,6 +232,6 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      */
     public function tableNameDataProvider()
     {
-        return FileDataProvider::getPhpFiles();
+        return Util_Files::getPhpFiles();
     }
 }

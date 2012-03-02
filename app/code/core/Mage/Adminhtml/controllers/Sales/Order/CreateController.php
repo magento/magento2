@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -131,6 +131,14 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
      */
     protected function _processActionData($action = null)
     {
+        $eventData = array(
+            'order_create_model' => $this->_getOrderCreateModel(),
+            'request_model'      => $this->getRequest(),
+            'session'            => $this->_getSession(),
+        );
+
+        Mage::dispatchEvent('adminhtml_sales_order_create_process_data_before', $eventData);
+
         /**
          * Saving order data
          */
@@ -279,7 +287,8 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         $data = $this->getRequest()->getPost('order');
         if (!empty($data['coupon']['code'])) {
             if ($this->_getQuote()->getCouponCode() !== $data['coupon']['code']) {
-                $this->_getSession()->addError($this->__('"%s" coupon code is not valid.', $data['coupon']['code']));
+                $this->_getSession()->addError(
+                    $this->__('"%s" coupon code is not valid.', $this->_getHelper()->escapeHtml($data['coupon']['code'])));
             } else {
                 $this->_getSession()->addSuccess($this->__('The coupon code has been accepted.'));
             }
@@ -610,5 +619,15 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
             $session->unsUpdateResult();
             return false;
         }
+    }
+
+    /**
+     * Process data and display index page
+     */
+    public function processDataAction()
+    {
+        $this->_initSession();
+        $this->_processData();
+        $this->_forward('index');
     }
 }

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,7 +38,7 @@ class Magento_Config_ThemeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      */
     public function testConstructException()
     {
@@ -99,7 +99,7 @@ class Magento_Config_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCompatibleVersionsExceptionDataProvider
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      */
     public function testGetCompatibleVersionsException($package, $theme)
     {

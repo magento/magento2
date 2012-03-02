@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -169,6 +169,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
         if ($indexer->getIsComposite()) {
             $this->_copyRelationIndexData($productId);
             $this->_prepareTierPriceIndex($productId);
+            $this->_prepareGroupPriceIndex($productId);
             $indexer->reindexEntity($productId);
         } else {
             $parentIds = $this->getProductParentsByChild($productId);
@@ -177,6 +178,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
                 $processIds = array_merge($processIds, array_keys($parentIds));
                 $this->_copyRelationIndexData(array_keys($parentIds), $productId);
                 $this->_prepareTierPriceIndex($processIds);
+                $this->_prepareGroupPriceIndex($processIds);
                 $indexer->reindexEntity($productId);
 
                 $parentByType = array();
@@ -189,6 +191,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
                 }
             } else {
                 $this->_prepareTierPriceIndex($productId);
+                $this->_prepareGroupPriceIndex($productId);
                 $indexer->reindexEntity($productId);
             }
         }
@@ -371,6 +374,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
             $this->clearTemporaryIndexTable();
             $this->_prepareWebsiteDateTable();
             $this->_prepareTierPriceIndex();
+            $this->_prepareGroupPriceIndex();
 
             $indexers = $this->getTypeIndexers();
             foreach ($indexers as $indexer) {
@@ -395,6 +399,16 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
     protected function _getTierPriceIndexTable()
     {
         return $this->getTable('catalog_product_index_tier_price');
+    }
+
+    /**
+     * Retrieve table name for product group price index
+     *
+     * @return string
+     */
+    protected function _getGroupPriceIndexTable()
+    {
+        return $this->getTable('catalog_product_index_group_price');
     }
 
     /**
@@ -432,6 +446,49 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price extends Mage_Index_Model
 
         if (!empty($entityIds)) {
             $select->where('tp.entity_id IN(?)', $entityIds);
+        }
+
+        $query = $select->insertFromSelect($table);
+        $write->query($query);
+
+        return $this;
+    }
+
+    /**
+     * Prepare group price index table
+     *
+     * @param int|array $entityIds the entity ids limitation
+     * @return Mage_Catalog_Model_Resource_Product_Indexer_Price
+     */
+    protected function _prepareGroupPriceIndex($entityIds = null)
+    {
+        $write = $this->_getWriteAdapter();
+        $table = $this->_getGroupPriceIndexTable();
+        $write->delete($table);
+
+        $websiteExpression = $write->getCheckSql('gp.website_id = 0', 'ROUND(gp.value * cwd.rate, 4)', 'gp.value');
+        $select = $write->select()
+            ->from(
+                array('gp' => $this->getTable('catalog_product_entity_group_price')),
+                array('entity_id'))
+            ->join(
+                array('cg' => $this->getTable('customer_group')),
+                'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
+                array('customer_group_id'))
+            ->join(
+                array('cw' => $this->getTable('core_website')),
+                'gp.website_id = 0 OR gp.website_id = cw.website_id',
+                array('website_id'))
+            ->join(
+                array('cwd' => $this->_getWebsiteDateTable()),
+                'cw.website_id = cwd.website_id',
+                array())
+            ->where('cw.website_id != 0')
+            ->columns(new Zend_Db_Expr("MIN({$websiteExpression})"))
+            ->group(array('gp.entity_id', 'cg.customer_group_id', 'cw.website_id'));
+
+        if (!empty($entityIds)) {
+            $select->where('gp.entity_id IN(?)', $entityIds);
         }
 
         $query = $select->insertFromSelect($table);

@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_SalesRule
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_SalesRule>
-            <version>1.6.0.1</version>
+            <version>1.6.0.3</version>
         </Mage_SalesRule>
     </modules>
     <global>
@@ -57,6 +57,14 @@
                     </salesrule>
                 </observers>
             </sales_quote_config_get_product_attributes>
+            <sales_convert_quote_to_order>
+                <observers>
+                    <salesrule>
+                        <class>Mage_SalesRule_Model_Observer</class>
+                        <method>addSalesRuleNameToOrder</method>
+                    </salesrule>
+                </observers>
+            </sales_convert_quote_to_order>
         </events>
         <sales>
             <quote>
@@ -80,6 +88,16 @@
                 </nominal_totals>
             </quote>
         </sales>
+        <salesrule>
+            <coupon>
+                <separator>-</separator>
+                <charset>
+                    <alphanum>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</alphanum>
+                    <alpha>ABCDEFGHIJKLMNOPQRSTUVWXYZ</alpha>
+                    <num>0123456789</num>
+                </charset>
+            </coupon>
+        </salesrule>
     </global>
     <adminhtml>
         <translate>
@@ -133,4 +151,12 @@
             </aggregate_sales_report_coupons_data>
         </jobs>
     </crontab>
+    <default>
+        <promo>
+            <auto_generated_coupon_codes>
+                <length>12</length>
+                <format>1</format>
+            </auto_generated_coupon_codes>
+        </promo>
+    </default>
 </config>

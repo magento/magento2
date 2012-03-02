@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -77,6 +77,79 @@
                     <update>1</update>
                 </gender>
             </customer_account>
+            <customer_address>
+                <vat_id>
+                    <to_quote_address>*</to_quote_address>
+                </vat_id>
+                <vat_is_valid>
+                    <to_quote_address>*</to_quote_address>
+                </vat_is_valid>
+                <vat_request_id>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_id>
+                <vat_request_date>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_date>
+                <vat_request_success>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_success>
+            </customer_address>
+            <sales_convert_order_address>
+                <vat_id>
+                    <to_quote_address>*</to_quote_address>
+                </vat_id>
+                <vat_is_valid>
+                    <to_quote_address>*</to_quote_address>
+                </vat_is_valid>
+                <vat_request_id>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_id>
+                <vat_request_date>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_date>
+                <vat_request_success>
+                    <to_quote_address>*</to_quote_address>
+                </vat_request_success>
+            </sales_convert_order_address>
+            <sales_convert_quote_address>
+                <vat_id>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </vat_id>
+                <vat_is_valid>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </vat_is_valid>
+                <vat_request_id>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </vat_request_id>
+                <vat_request_date>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </vat_request_date>
+                <vat_request_success>
+                    <to_order_address>*</to_order_address>
+                    <to_customer_address>*</to_customer_address>
+                </vat_request_success>
+            </sales_convert_quote_address>
+            <sales_copy_order_billing_address>
+                <vat_id>
+                    <to_order>*</to_order>
+                </vat_id>
+                <vat_is_valid>
+                    <to_order>*</to_order>
+                </vat_is_valid>
+                <vat_request_id>
+                    <to_order>*</to_order>
+                </vat_request_id>
+                <vat_request_date>
+                    <to_order>*</to_order>
+                </vat_request_date>
+                <vat_request_success>
+                    <to_order>*</to_order>
+                </vat_request_success>
+            </sales_copy_order_billing_address>
         </fieldsets>
     </global>
     <admin>

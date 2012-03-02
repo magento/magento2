@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class Mage_Adminhtml_Block_Widget_Button extends Mage_Adminhtml_Block_Widget
             . ' style="'.$this->getStyle() .'"'
             . ($this->getValue()?' value="'.$this->getValue() . '"':'')
             . ($this->getDisabled() ? ' disabled="disabled"' : '')
-            . '><span>' .$this->getLabel().'</span></button>'.$this->getAfterHtml();
+            . '><span><span><span>' .$this->getLabel().'</span></span></span></button>'.$this->getAfterHtml();
 
         return $html;
     }

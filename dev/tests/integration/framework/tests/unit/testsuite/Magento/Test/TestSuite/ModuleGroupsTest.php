@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -159,11 +159,12 @@ class Magento_Test_TestSuite_ModuleGroupsTest extends PHPUnit_Framework_TestCase
      * Adds fixture tests to the suite
      *
      * @param Magento_Test_TestSuite_ModuleGroups $suite
-     * @return Magento_Test_Profiler_ModuleGroupsTest
+     * @return Magento_Test_TestSuite_ModuleGroupsTest
      */
     protected function _fillTests($suite)
     {
-        $fileIterator = File_Iterator_Factory::getFileIterator(
+        $fileIteratorFactory = new File_Iterator_Factory();
+        $fileIterator = $fileIteratorFactory->getFileIterator(
             array(__DIR__ . '/_files/ModuleGroups'),
             '.php'
         );

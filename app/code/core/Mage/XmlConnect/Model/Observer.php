@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -112,7 +112,6 @@ class Mage_XmlConnect_Model_Observer
         foreach ($collection as $message) {
             if ($message->getId()) {
                 Mage::helper('Mage_XmlConnect_Helper_Data')->sendBroadcastMessage($message);
-                $message->save();
             }
         }
     }

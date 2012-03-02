@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -330,7 +330,7 @@ if($('<?php echo $this->getAddButtonId() ?>')){
 
 //validation for selected input type
 Validation.addAllThese([
-    ['required-option-select', '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Select type of option') ?>', function(v, elm) {
+    ['required-option-select', <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode(Mage::helper('Mage_Catalog_Helper_Data')->__('Select type of option')) ?>, function(v, elm) {
         if (elm.getValue() == '') {
             return false;
         }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,8 @@
  * @package    Mage_Downloadable
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Downloadable_Model_Sales_Order_Pdf_Items_Abstract
+class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Invoice
+    extends Mage_Downloadable_Model_Sales_Order_Pdf_Items_Abstract
 {
     /**
      * Draw item line
@@ -65,26 +66,46 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Downloa
             'feed'  => 435
         );
 
-        // draw Price
-        $lines[0][] = array(
-            'text'  => $order->formatPriceTxt($item->getPrice()),
-            'feed'  => 395,
-            'font'  => 'bold',
-            'align' => 'right'
-        );
+        // draw item Prices
+        $i = 0;
+        $prices = $this->getItemPricesForDisplay();
+        foreach ($prices as $priceData){
+            if (isset($priceData['label'])) {
+                // draw Price label
+                $lines[$i][] = array(
+                    'text'  => $priceData['label'],
+                    'feed'  => 395,
+                    'align' => 'right'
+                );
+                // draw Subtotal label
+                $lines[$i][] = array(
+                    'text'  => $priceData['label'],
+                    'feed'  => 565,
+                    'align' => 'right'
+                );
+                $i++;
+            }
+            // draw Price
+            $lines[$i][] = array(
+                'text'  => $priceData['price'],
+                'feed'  => 395,
+                'font'  => 'bold',
+                'align' => 'right'
+            );
+            // draw Subtotal
+            $lines[$i][] = array(
+                'text'  => $priceData['subtotal'],
+                'feed'  => 565,
+                'font'  => 'bold',
+                'align' => 'right'
+            );
+            $i++;
+        }
 
         // draw Tax
         $lines[0][] = array(
             'text'  => $order->formatPriceTxt($item->getTaxAmount()),
             'feed'  => 495,
-            'font'  => 'bold',
-            'align' => 'right'
-        );
-
-        // draw Subtotal
-        $lines[0][] = array(
-            'text'  => $order->formatPriceTxt($item->getRowTotal()),
-            'feed'  => 565,
             'font'  => 'bold',
             'align' => 'right'
         );
@@ -101,7 +122,11 @@ class Mage_Downloadable_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Downloa
                 );
 
                 if ($option['value']) {
-                    $_printValue = isset($option['print_value']) ? $option['print_value'] : strip_tags($option['value']);
+                    if (isset($option['print_value'])) {
+                        $_printValue = $option['print_value'];
+                    } else {
+                        $_printValue = strip_tags($option['value']);
+                    }
                     $values = explode(', ', $_printValue);
                     foreach ($values as $value) {
                         $lines[][] = array(

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -43,7 +43,7 @@
     <?php echo $this->getChildHtml('head') ?>
 </head>
 
-<body id="html-body"<?php echo $this->getBodyClass()?'class="'.$this->getBodyClass().'"':'' ?>>
+<body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?>>
 <?php echo $this->getChildHtml('notification_window'); ?>
 <div class="wrapper">
     <?php echo $this->getChildHtml('global_notices') ?>

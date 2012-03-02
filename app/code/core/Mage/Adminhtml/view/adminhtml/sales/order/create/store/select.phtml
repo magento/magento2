@@ -20,11 +20,12 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this Mage_Adminhtml_Block_Sales_Order_Create_Store_Select */ ?>
+<?php echo $this->getHintHtml() ?>
 <?php foreach ($this->getWebsiteCollection() as $_website): ?>
     <?php $showWebsite=false; ?>
     <?php foreach ($this->getGroupCollection($_website) as $_group): ?>

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -150,12 +150,15 @@ class Integrity_Theme_SkinFilesTest extends Magento_Test_TestCase_IntegrityAbstr
         $layout = Mage::app()->getLayout()->getUpdate()->getFileLayoutUpdatesXml(
             $area, $package, $theme
         );
-        foreach ($layout->xpath('//action[@method="addCss" or @method="addJs"]/*[1]') as $filenameNode) {
-            $skinFile = (string)$filenameNode;
-            if ($this->_isFileForDisabledModule($skinFile)) {
-                continue;
+        $elements = $layout->xpath('//action[@method="addCss" or @method="addJs"]/*[1]');
+        if ($elements) {
+            foreach ($elements as $filenameNode) {
+                $skinFile = (string)$filenameNode;
+                if ($this->_isFileForDisabledModule($skinFile)) {
+                    continue;
+                }
+                $files[$area][$package][$theme][] = $skinFile;
             }
-            $files[$area][$package][$theme][] = $skinFile;
         }
     }
 

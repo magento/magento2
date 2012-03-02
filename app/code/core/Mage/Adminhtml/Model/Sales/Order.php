@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -71,9 +71,7 @@ class Mage_Adminhtml_Model_Sales_Order
         foreach ($order->getAllItems() as $item) {
             if (!$productCollection->getItemById($item->getProductId())) {
                 $this->_getSession()->addError(
-                   Mage::helper('Mage_Adminhtml_Helper_Data')->__('The item %s (SKU %s) does not exist in the catalog anymore.',
-                       $item->getName(),
-                       $item->getSku()
+                   Mage::helper('Mage_Adminhtml_Helper_Data')->__('The item %s (SKU %s) does not exist in the catalog anymore.', $item->getName(), $item->getSku()
                 ));
                 $hasBadItems = true;
             }
@@ -87,4 +85,3 @@ class Mage_Adminhtml_Model_Sales_Order
     }
 
 }
-

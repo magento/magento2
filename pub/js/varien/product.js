@@ -19,7 +19,7 @@
  *
  * @category    Varien
  * @package     js
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 if(typeof Product=='undefined') {
@@ -491,7 +491,8 @@ Product.Config.prototype = {
             for(var i=this.settings.length-1;i>=0;i--){
                 var selected = this.settings[i].options[this.settings[i].selectedIndex];
                 if(selected.config){
-                    price+= parseFloat(selected.config.price);
+                    var parsedOldPrice = parseFloat(selected.config.oldPrice);
+                    price += isNaN(parsedOldPrice) ? 0 : parsedOldPrice;
                 }
             }
             if (price < 0)
@@ -572,8 +573,11 @@ Product.OptionsPrice.prototype = {
         this.oldMinusDisposition = config.oldMinusDisposition;
         this.minusDisposition    = config.minusDisposition;
 
-        this.optionPrices    = {};
-        this.containers      = {};
+        this.exclDisposition     = config.exclDisposition;
+
+        this.optionPrices   = {};
+        this.customPrices   = {};
+        this.containers     = {};
 
         this.displayZeroPrice   = true;
 
@@ -596,6 +600,9 @@ Product.OptionsPrice.prototype = {
         this.optionPrices[key] = price;
     },
 
+    addCustomPrices: function(key, price) {
+        this.customPrices[key] = price;
+    },
     getOptionPrices: function() {
         var price = 0;
         var nonTaxable = 0;
@@ -657,6 +664,20 @@ Product.OptionsPrice.prototype = {
                     _priceInclTax += parseFloat(_productPrice) * (100 + this.currentTax) / 100;
                 }
 
+                var subPrice = 0;
+                var subPriceincludeTax = 0;
+                Object.values(this.customPrices).each(function(el){
+                    if (el.excludeTax && el.includeTax) {
+                        subPrice += el.excludeTax;
+                        subPriceincludeTax += el.includeTax;
+                    } else {
+                        subPrice += el.price;
+                        subPriceincludeTax += el.price;
+                    }
+                });
+                price += subPrice;
+                _priceInclTax += subPriceincludeTax;
+
                 if (this.specialTaxPrice == 'true') {
                     var excl = price;
                     var incl = _priceInclTax;
@@ -671,7 +692,10 @@ Product.OptionsPrice.prototype = {
                     var incl = excl + tax;
                 }
 
-                excl += parseFloat(_plusDisposition);
+                if (typeof this.exclDisposition == 'undefined') {
+                    excl += parseFloat(_plusDisposition);
+                }
+
                 incl += parseFloat(_plusDisposition) + parseFloat(this.plusDispositionTax);
                 excl -= parseFloat(_minusDisposition);
                 incl -= parseFloat(_minusDisposition);
@@ -735,7 +759,8 @@ Product.OptionsPrice.prototype = {
                 };
                 var container = $(this.containers[3]) ? this.containers[3] : this.containers[0];
                 var price = parsePrice($(container).innerHTML);
-                var tierPrice = parsePrice($$('.price.tier-' + i)[0].innerHTML);
+                var tierPrice = $$('.price.tier-' + i);
+                tierPrice = tierPrice.length ? parseInt(tierPrice[0].innerHTML, 10) : 0;
                 var $percent = Selector.findChildElements(el, ['.percent.tier-' + i]);
                 $percent.each(function (el) {
                     el.innerHTML = Math.ceil(100 - ((100 / price) * tierPrice));

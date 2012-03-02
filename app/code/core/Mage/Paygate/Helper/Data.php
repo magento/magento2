@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paygate
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,9 +51,9 @@ class Mage_Paygate_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $exception
      * @return bool|string
      */
-    public function getTransactionMessage(
-        $payment, $requestType, $lastTransactionId, $card, $amount = false, $exception = false)
-    {
+    public function getTransactionMessage($payment, $requestType, $lastTransactionId, $card, $amount = false,
+        $exception = false
+    ) {
         return $this->getExtendedTransactionMessage(
             $payment, $requestType, $lastTransactionId, $card, $amount, $exception
         );
@@ -72,8 +72,8 @@ class Mage_Paygate_Helper_Data extends Mage_Core_Helper_Abstract
      * @return bool|string
      */
     public function getExtendedTransactionMessage($payment, $requestType, $lastTransactionId, $card, $amount = false,
-                                          $exception = false, $additionalMessage = false)
-    {
+        $exception = false, $additionalMessage = false
+    ) {
         $operation = $this->_getOperation($requestType);
 
         if (!$operation) {

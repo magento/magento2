@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -126,7 +126,7 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
     public function setDesignConfig(array $config)
     {
         if (!isset($config['area']) || !isset($config['store'])) {
-            throw new Exception(Mage::helper('Mage_Core_Helper_Data')->__('Design config must have area and store.'));
+            throw new Magento_Exception('Design config must have area and store.');
         }
         $this->getDesignConfig()->setData($config);
         return $this;

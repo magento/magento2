@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -82,10 +82,8 @@ class Mage_XmlConnect_Block_Customer_Address_List extends Mage_Core_Block_Templa
      * @return array
      */
     public function prepareAddressData(
-        Mage_Customer_Model_Address $address,
-        Mage_XmlConnect_Model_Simplexml_Element $item
-    )
-    {
+        Mage_Customer_Model_Address $address, Mage_XmlConnect_Model_Simplexml_Element $item
+    ) {
         if (!$address) {
             return array();
         }
@@ -123,7 +121,7 @@ class Mage_XmlConnect_Block_Customer_Address_List extends Mage_Core_Block_Templa
             if (empty($value)) {
                 continue;
             }
-            $item->addChild($key, $item->xmlentities($value));
+            $item->addChild($key, $item->escapeXml($value));
         }
     }
 }

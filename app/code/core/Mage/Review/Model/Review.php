@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Review
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -113,18 +113,16 @@ class Mage_Review_Model_Review extends Mage_Core_Model_Abstract
     {
         $errors = array();
 
-        $helper = Mage::helper('Mage_Customer_Helper_Data');
-
         if (!Zend_Validate::is($this->getTitle(), 'NotEmpty')) {
-            $errors[] = $helper->__('Review summary can\'t be empty');
+            $errors[] = Mage::helper('Mage_Review_Helper_Data')->__('Review summary can\'t be empty');
         }
 
         if (!Zend_Validate::is($this->getNickname(), 'NotEmpty')) {
-            $errors[] = $helper->__('Nickname can\'t be empty');
+            $errors[] = Mage::helper('Mage_Review_Helper_Data')->__('Nickname can\'t be empty');
         }
 
         if (!Zend_Validate::is($this->getDetail(), 'NotEmpty')) {
-            $errors[] = $helper->__('Review can\'t be empty');
+            $errors[] = Mage::helper('Mage_Review_Helper_Data')->__('Review can\'t be empty');
         }
 
         if (empty($errors)) {

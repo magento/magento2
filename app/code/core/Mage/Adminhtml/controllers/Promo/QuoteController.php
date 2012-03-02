@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,9 +32,14 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
         $this->_title($this->__('Promotions'))->_title($this->__('Shopping Cart Price Rules'));
 
         Mage::register('current_promo_quote_rule', Mage::getModel('Mage_SalesRule_Model_Rule'));
-        if ($id = (int) $this->getRequest()->getParam('id')) {
-            Mage::registry('current_promo_quote_rule')
-                ->load($id);
+        $id = (int)$this->getRequest()->getParam('id');
+
+        if (!$id && $this->getRequest()->getParam('rule_id')) {
+            $id = (int)$this->getRequest()->getParam('rule_id');
+        }
+
+        if ($id) {
+            Mage::registry('current_promo_quote_rule')->load($id);
         }
     }
 
@@ -110,21 +115,12 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
     {
         if ($this->getRequest()->getPost()) {
             try {
+                /** @var $model Mage_SalesRule_Model_Rule */
                 $model = Mage::getModel('Mage_SalesRule_Model_Rule');
                 Mage::dispatchEvent(
                     'adminhtml_controller_salesrule_prepare_save',
                     array('request' => $this->getRequest()));
                 $data = $this->getRequest()->getPost();
-
-                //filter HTML tags
-                /** @var $helper Mage_Adminhtml_Helper_Data */
-                $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-                $data['name'] = $helper->stripTags($data['name']);
-                $data['description'] = $helper->stripTags($data['description']);
-                foreach ($data['store_labels'] as &$label) {
-                    $label = $helper->stripTags($label);
-                }
-
                 $data = $this->_filterDates($data, array('from_date', 'to_date'));
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
@@ -159,6 +155,9 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
                 unset($data['rule']);
                 $model->loadPost($data);
 
+                $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+                $model->setUseAutoGeneration($useAutoGeneration);
+
                 $session->setPageData($model->getData());
 
                 $model->save();
@@ -172,12 +171,20 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
                 return;
             } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
+                $id = (int)$this->getRequest()->getParam('rule_id');
+                if (!empty($id)) {
+                    $this->_redirect('*/*/edit', array('id' => $id));
+                } else {
+                    $this->_redirect('*/*/new');
+                }
+                return;
+
             } catch (Exception $e) {
                 $this->_getSession()->addError(
                     Mage::helper('Mage_CatalogRule_Helper_Data')->__('An error occurred while saving the rule data. Please review the log and try again.'));
                 Mage::logException($e);
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setPageData($data);
-                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
+                $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
                 return;
             }
         }
@@ -265,6 +272,128 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
     }
 
     /**
+     * Coupon codes grid
+     */
+    public function couponsGridAction()
+    {
+        $this->_initRule();
+        $this->loadLayout()->renderLayout();
+    }
+
+    /**
+     * Export coupon codes as excel xml file
+     *
+     * @return void
+     */
+    public function exportCouponsXmlAction()
+    {
+        $this->_initRule();
+        $rule = Mage::registry('current_promo_quote_rule');
+        if ($rule->getId()) {
+            $fileName = 'coupon_codes.xml';
+            $content = $this->getLayout()
+                ->createBlock('Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid')
+                ->getExcelFile($fileName);
+            $this->_prepareDownloadResponse($fileName, $content);
+        } else {
+            $this->_redirect('*/*/detail', array('_current' => true));
+            return;
+        }
+    }
+
+    /**
+     * Export coupon codes as CSV file
+     *
+     * @return void
+     */
+    public function exportCouponsCsvAction()
+    {
+        $this->_initRule();
+        $rule = Mage::registry('current_promo_quote_rule');
+        if ($rule->getId()) {
+            $fileName = 'coupon_codes.csv';
+            $content = $this->getLayout()
+                ->createBlock('Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid')
+                ->getCsvFile();
+            $this->_prepareDownloadResponse($fileName, $content);
+        } else {
+            $this->_redirect('*/*/detail', array('_current' => true));
+            return;
+        }
+    }
+
+    /**
+     * Coupons mass delete action
+     */
+    public function couponsMassDeleteAction()
+    {
+        $this->_initRule();
+        $rule = Mage::registry('current_promo_quote_rule');
+
+        if (!$rule->getId()) {
+            $this->_forward('noRoute');
+        }
+
+        $codesIds = $this->getRequest()->getParam('ids');
+
+        if (is_array($codesIds)) {
+
+            $couponsCollection = Mage::getResourceModel('Mage_SalesRule_Model_Resource_Coupon_Collection')
+                ->addFieldToFilter('coupon_id', array('in' => $codesIds));
+
+            foreach ($couponsCollection as $coupon) {
+                $coupon->delete();
+            }
+        }
+    }
+
+    /**
+     * Generate Coupons action
+     */
+    public function generateAction()
+    {
+        if (!$this->getRequest()->isAjax()) {
+            $this->_forward('noRoute');
+            return;
+        }
+        $result = array();
+        $this->_initRule();
+
+        /** @var $rule Mage_SalesRule_Model_Rule */
+        $rule = Mage::registry('current_promo_quote_rule');
+
+        if (!$rule->getId()) {
+            $result['error'] = Mage::helper('Mage_SalesRule_Helper_Data')->__('Rule is not defined');
+        } else {
+            try {
+                $data = $this->getRequest()->getParams();
+                if (!empty($data['to_date'])) {
+                    $data = array_merge($data, $this->_filterDates($data, array('to_date')));
+                }
+
+                /** @var $generator Mage_SalesRule_Model_Coupon_Massgenerator */
+                $generator = $rule->getCouponMassGenerator();
+                if (!$generator->validateData($data)) {
+                    $result['error'] = Mage::helper('Mage_SalesRule_Helper_Data')->__('Not valid data provided');
+                } else {
+                    $generator->setData($data);
+                    $generator->generatePool();
+                    $generated = $generator->getGeneratedCount();
+                    $this->_getSession()->addSuccess(Mage::helper('Mage_SalesRule_Helper_Data')->__('%s Coupon(s) generated successfully', $generated));
+                    $this->_initLayoutMessages('Mage_Adminhtml_Model_Session');
+                    $result['messages']  = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
+                }
+            } catch (Mage_Core_Exception $e) {
+                $result['error'] = $e->getMessage();
+            } catch (Exception $e) {
+                $result['error'] = Mage::helper('Mage_SalesRule_Helper_Data')->__('An error occurred while generating coupons. Please review the log and try again.');
+                Mage::logException($e);
+            }
+        }
+        $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result));
+    }
+
+    /**
      * Chooser source action
      */
     public function chooserAction()
@@ -276,6 +405,10 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
         $this->getResponse()->setBody($chooserBlock->toHtml());
     }
 
+    /**
+     * Returns result of current user permission check on resource and privilege
+     * @return boolean
+     */
     protected function _isAllowed()
     {
         return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('promo/quote');

@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Data
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,19 +33,28 @@
  */
 class Varien_Data_Form_Element_Label extends Varien_Data_Form_Element_Abstract
 {
-	public function __construct($attributes=array())
+    /**
+     * Assigns attributes for Element
+     *
+     * @param array $attributes
+     */
+    public function __construct($attributes=array())
     {
         parent::__construct($attributes);
         $this->setType('label');
     }
 
+    /**
+     * Retrieve Element HTML
+     *
+     * @return string
+     */
     public function getElementHtml()
     {
-    	$html = $this->getBold() ? '<strong>' : '';
-    	$html.= $this->getEscapedValue();
-    	$html.= $this->getBold() ? '</strong>' : '';
-    	$html.= $this->getAfterElementHtml();
-    	return $html;
+        $html = $this->getBold() ? '<strong>' : '';
+        $html.= $this->getEscapedValue();
+        $html.= $this->getBold() ? '</strong>' : '';
+        $html.= $this->getAfterElementHtml();
+        return $html;
     }
-
 }

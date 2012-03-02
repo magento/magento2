@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -143,12 +143,12 @@ class Magento_Test_Bootstrap
      * Self instance getter
      *
      * @return Magento_Test_Bootstrap
-     * @throws Exception
+     * @throws Magento_Exception
      */
     public static function getInstance()
     {
         if (!self::$_instance) {
-            throw new Exception('Bootstrap instance is not defined yet.');
+            throw new Magento_Exception('Bootstrap instance is not defined yet.');
         }
         return self::$_instance;
     }
@@ -175,13 +175,15 @@ class Magento_Test_Bootstrap
      * @param string $moduleEtcFiles
      * @param string $tmpDir
      * @param string $cleanupAction
+     * @param bool $developerMode
+     * @throws Magento_Exception
      */
     public function __construct(
         $magentoDir, $localXmlFile, $globalEtcFiles, $moduleEtcFiles, $tmpDir, $cleanupAction = self::CLEANUP_NONE,
         $developerMode = false
     ) {
         if (!in_array($cleanupAction, array(self::CLEANUP_NONE, self::CLEANUP_UNINSTALL, self::CLEANUP_RESTORE_DB))) {
-            throw new Exception("Cleanup action '{$cleanupAction}' is not supported.");
+            throw new Magento_Exception("Cleanup action '{$cleanupAction}' is not supported.");
         }
 
         $this->_magentoDir = $magentoDir;
@@ -270,12 +272,12 @@ class Magento_Test_Bootstrap
      * Re-create empty temporary dir by specified
      *
      * @param string $optionCode
-     * @throws Exception if one of protected directories specified
+     * @throws Magento_Exception if one of protected directories specified
      */
     public function cleanupDir($optionCode)
     {
         if (in_array($optionCode, array('etc_dir', 'var_dir', 'media_dir'))) {
-            throw new Exception("Directory '{$optionCode}' must not be cleaned up while running tests.");
+            throw new Magento_Exception("Directory '{$optionCode}' must not be cleaned up while running tests.");
         }
         $dir = $this->_options[$optionCode];
         $this->_removeDirectory($dir, false);
@@ -318,18 +320,18 @@ class Magento_Test_Bootstrap
     /**
      * Load application local.xml file, determine database vendor name
      *
-     * @throws Exception
+     * @throws Magento_Exception
      */
     protected function _readLocalXml()
     {
         if (!is_file($this->_localXmlFile)) {
-            throw new Exception("Local XML configuration file '{$this->_localXmlFile}' does not exist.");
+            throw new Magento_Exception("Local XML configuration file '{$this->_localXmlFile}' does not exist.");
         }
         $this->_localXml = simplexml_load_file($this->_localXmlFile);
         $dbVendorId = (string)$this->_localXml->global->resources->default_setup->connection->model;
         $dbVendorMap = array('mysql4' => 'mysql', 'mssql' => 'mssql', 'oracle' => 'oracle');
         if (!array_key_exists($dbVendorId, $dbVendorMap)) {
-            throw new Exception("Database vendor '{$dbVendorId}' is not supported.");
+            throw new Magento_Exception("Database vendor '{$dbVendorId}' is not supported.");
         }
         $this->_dbVendorName = $dbVendorMap[$dbVendorId];
     }
@@ -338,17 +340,17 @@ class Magento_Test_Bootstrap
      * Check all required directories contents and permissions
      *
      * @param string $tmpDir
-     * @throws Exception when any of required directories is not eligible
+     * @throws Magento_Exception when any of required directories is not eligible
      */
     protected function _verifyDirectories($tmpDir)
     {
         /* Magento application dir */
         if (!is_file($this->_magentoDir . '/app/bootstrap.php')) {
-            throw new Exception('Unable to locate Magento root folder and bootstrap.php.');
+            throw new Magento_Exception('Unable to locate Magento root folder and bootstrap.php.');
         }
         /* Temporary directory */
         if (!is_dir($tmpDir) || !is_writable($tmpDir)) {
-            throw new Exception("The '{$tmpDir}' is not a directory or not writable.");
+            throw new Magento_Exception("The '{$tmpDir}' is not a directory or not writable.");
         }
     }
 
@@ -400,7 +402,7 @@ class Magento_Test_Bootstrap
     /**
      * Create a directory with write permissions or don't touch existing one
      *
-     * @throws Exception
+     * @throws Magento_Exception
      * @param string $dir
      */
     protected function _ensureDirExists($dir)
@@ -410,7 +412,7 @@ class Magento_Test_Bootstrap
             mkdir($dir, 0777);
             umask($old);
         } else if (!is_dir($dir)) {
-            throw new Exception("'$dir' is not a directory.");
+            throw new Magento_Exception("'$dir' is not a directory.");
         }
     }
 
@@ -440,6 +442,8 @@ class Magento_Test_Bootstrap
 
     /**
      * Install application using temporary directory and vendor-specific database settings
+     *
+     * @throws Magento_Exception
      */
     protected function _install()
     {
@@ -464,7 +468,9 @@ class Magento_Test_Bootstrap
         /* Make sure that local.xml contains an invalid installation date */
         $installDate = (string)$this->_localXml->global->install->date;
         if ($installDate && strtotime($installDate)) {
-            throw new Exception("Configuration file '$this->_localXmlFile' must contain an invalid installation date.");
+            throw new Magento_Exception(
+                "Configuration file '$this->_localXmlFile' must contain an invalid installation date."
+            );
         }
 
         /* Replace local.xml */
@@ -485,7 +491,7 @@ class Magento_Test_Bootstrap
         $localXml = file_get_contents($targetLocalXml);
         $localXml = str_replace($installDate, date('r'), $localXml, $replacementCount);
         if ($replacementCount != 1) {
-            throw new Exception("Unable to replace installation date properly in '$targetLocalXml' file.");
+            throw new Magento_Exception("Unable to replace installation date properly in '$targetLocalXml' file.");
         }
         file_put_contents($targetLocalXml, $localXml, LOCK_EX);
 

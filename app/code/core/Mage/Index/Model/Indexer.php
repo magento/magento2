@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Index
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -203,26 +203,37 @@ class Mage_Index_Model_Indexer
      */
     protected function _runAll($method, $args)
     {
+        $checkLocks = $method != 'register';
         $processed = array();
         foreach ($this->_processesCollection as $process) {
             $code = $process->getIndexerCode();
             if (in_array($code, $processed)) {
                 continue;
             }
+            $hasLocks = false;
 
             if ($process->getDepends()) {
                 foreach ($process->getDepends() as $processCode) {
                     $dependProcess = $this->getProcessByCode($processCode);
                     if ($dependProcess && !in_array($processCode, $processed)) {
-                        call_user_func_array(array($dependProcess, $method), $args);
-                        $processed[] = $processCode;
+                        if ($checkLocks && $dependProcess->isLocked()) {
+                            $hasLocks = true;
+                        } else {
+                            call_user_func_array(array($dependProcess, $method), $args);
+                            if ($checkLocks && $dependProcess->getMode() == Mage_Index_Model_Process::MODE_MANUAL) {
+                                $hasLocks = true;
+                            } else {
+                                $processed[] = $processCode;
+                            }
+                        }
                     }
                 }
             }
 
-            call_user_func_array(array($process, $method), $args);
-
-            $processed[] = $code;
+            if (!$hasLocks) {
+                call_user_func_array(array($process, $method), $args);
+                $processed[] = $code;
+            }
         }
     }
 

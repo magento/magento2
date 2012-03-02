@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,8 +69,8 @@
  * @method float getBaseGrandTotal()
  * @method Mage_Sales_Model_Quote setBaseGrandTotal(float $value)
  * @method Mage_Sales_Model_Quote setCheckoutMethod(string $value)
- * @method int getCustomerId()
- * @method Mage_Sales_Model_Quote setCustomerId(int $value)
+ * @method int|null getCustomerId()
+ * @method Mage_Sales_Model_Quote setCustomerId(int|null $value)
  * @method Mage_Sales_Model_Quote setCustomerTaxClassId(int $value)
  * @method Mage_Sales_Model_Quote setCustomerGroupId(int $value)
  * @method string getCustomerEmail()
@@ -129,6 +129,8 @@
  * @method Mage_Sales_Model_Quote setExtShippingInfo(string $value)
  * @method int getGiftMessageId()
  * @method Mage_Sales_Model_Quote setGiftMessageId(int $value)
+ * @method bool|null getIsPersistent()
+ * @method Mage_Sales_Model_Quote setIsPersistent(bool $value)
  *
  * @category    Mage
  * @package     Mage_Sales
@@ -175,6 +177,13 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      * @var array
      */
     protected $_errorInfoGroups = array();
+
+    /**
+     * Whether quote should not be saved
+     *
+     * @var bool
+     */
+    protected $_preventSaving = false;
 
     /**
      * Init resource model
@@ -448,9 +457,10 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function getCustomerGroupId()
     {
-        if ($this->getCustomerId()) {
-            return ($this->getData('customer_group_id')) ? $this->getData('customer_group_id')
-                : $this->getCustomer()->getGroupId();
+        if ($this->hasData('customer_group_id')) {
+            return $this->getData('customer_group_id');
+        } else if ($this->getCustomerId()) {
+            return $this->getCustomer()->getGroupId();
         } else {
             return Mage_Customer_Model_Group::NOT_LOGGED_IN_ID;
         }
@@ -460,7 +470,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     {
         /*
         * tax class can vary at any time. so instead of using the value from session,
-        * we need to retrieve from db everytime to get the correct tax class
+        * we need to retrieve from db every time to get the correct tax class
         */
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
         $classId = Mage::getModel('Mage_Customer_Model_Group')->getTaxClassId($this->getCustomerGroupId());
@@ -671,6 +681,9 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function getItemsCollection($useCache = true)
     {
+        if ($this->hasItemsCollection()) {
+            return $this->getData('items_collection');
+        }
         if (is_null($this->_items)) {
             $this->_items = Mage::getModel('Mage_Sales_Model_Quote_Item')->getCollection();
             $this->_items->setQuote($this);
@@ -795,6 +808,19 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             Mage::dispatchEvent('sales_quote_remove_item', array('quote_item' => $item));
         }
 
+        return $this;
+    }
+
+    /**
+     * Mark all quote items as deleted (empty quote)
+     *
+     * @return Mage_Sales_Model_Quote
+     */
+    public function removeAllItems()
+    {
+        foreach ($this->getItemsCollection() as $item) {
+            $item->isDeleted(true);
+        }
         return $this;
     }
 
@@ -1191,12 +1217,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         if ($this->getTotalsCollectedFlag()) {
             return $this;
         }
-        Mage::dispatchEvent(
-            $this->_eventPrefix . '_collect_totals_before',
-            array(
-                 $this->_eventObject=>$this
-            )
-        );
+        Mage::dispatchEvent($this->_eventPrefix . '_collect_totals_before', array($this->_eventObject => $this));
 
         $this->setSubtotal(0);
         $this->setBaseSubtotal(0);
@@ -1261,10 +1282,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         $this->setData('trigger_recollect', 0);
         $this->_validateCouponCode();
 
-        Mage::dispatchEvent(
-            $this->_eventPrefix . '_collect_totals_after',
-            array($this->_eventObject => $this)
-        );
+        Mage::dispatchEvent($this->_eventPrefix . '_collect_totals_after', array($this->_eventObject => $this));
 
         $this->setTotalsCollectedFlag(true);
         return $this;
@@ -1332,6 +1350,11 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         return $this;
     }
 
+    /**
+     * Retrieve current quote messages
+     *
+     * @return array
+     */
     public function getMessages()
     {
         $messages = $this->getData('messages');
@@ -1340,6 +1363,23 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             $this->setData('messages', $messages);
         }
         return $messages;
+    }
+
+    /**
+     * Retrieve current quote errors
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        $errors = array();
+        foreach ($this->getMessages() as $message) {
+            /* @var $error Mage_Core_Model_Message_Abstract */
+            if ($message->getType() == Mage_Core_Model_Message::ERROR) {
+                array_push($errors, $message);
+            }
+        }
+        return $errors;
     }
 
     /**
@@ -1788,5 +1828,29 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             return self::CHECKOUT_METHOD_LOGIN_IN;
         }
         return $this->_getData('checkout_method');
+    }
+
+    /**
+     * Prevent quote from saving
+     *
+     * @return Mage_Sales_Model_Quote
+     */
+    public function preventSaving()
+    {
+        $this->_preventSaving = true;
+        return $this;
+    }
+
+    /**
+     * Save quote with prevention checking
+     *
+     * @return Mage_Sales_Model_Quote
+     */
+    public function save()
+    {
+        if ($this->_preventSaving) {
+            return $this;
+        }
+        return parent::save();
     }
 }

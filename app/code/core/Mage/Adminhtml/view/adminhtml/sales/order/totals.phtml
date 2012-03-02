@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -35,6 +35,26 @@
 <table cellspacing="0" width="100%">
     <col />
     <col width="1" />
+    <?php $_totals = $this->getTotals('footer')?>
+    <?php if ($_totals):?>
+    <tfoot>
+    <?php foreach ($this->getTotals('footer') as $_code => $_total): ?>
+        <?php if ($_total->getBlockName()): ?>
+            <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+        <?php else:?>
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="label">
+                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
+            </td>
+            <td <?php echo $this->getValueProperties()?> class="emph">
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+            </td>
+        </tr>
+        <?php endif?>
+    <?php endforeach?>
+    </tfoot>
+    <?php endif?>
+
     <?php $_totals = $this->getTotals('')?>
     <?php if ($_totals):?>
     <tbody>
@@ -45,9 +65,9 @@
         <tr class="<?php echo $_code?>">
             <td <?php echo $this->getLabelProperties()?> class="label">
                 <?php if ($_total->getStrong()):?>
-                <strong><?php echo $_total->getLabel()?></strong>
+                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
                 <?php else:?>
-                <?php echo $_total->getLabel()?>
+                <?php echo $this->escapeHtml($_total->getLabel()); ?>
                 <?php endif?>
             </td>
             <?php if ($_total->getStrong()):?>
@@ -62,25 +82,5 @@
         <?php endif?>
     <?php endforeach?>
     </tbody>
-    <?php endif?>
-
-    <?php $_totals = $this->getTotals('footer')?>
-    <?php if ($_totals):?>
-    <tfoot>
-    <?php foreach ($this->getTotals('footer') as $_code => $_total): ?>
-        <?php if ($_total->getBlockName()): ?>
-            <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
-        <?php else:?>
-        <tr class="<?php echo $_code?>">
-            <td <?php echo $this->getLabelProperties()?> class="label">
-                <strong><?php echo $_total->getLabel()?></strong>
-            </td>
-            <td <?php echo $this->getValueProperties()?> class="emph">
-                <strong><?php echo $this->formatValue($_total) ?></strong>
-            </td>
-        </tr>
-        <?php endif?>
-    <?php endforeach?>
-    </tfoot>
     <?php endif?>
 </table>

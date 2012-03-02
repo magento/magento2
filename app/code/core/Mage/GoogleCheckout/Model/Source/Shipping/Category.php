@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleCheckout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,10 +29,9 @@ class Mage_GoogleCheckout_Model_Source_Shipping_Category
 {
     public function toOptionArray()
     {
-        $hlp = Mage::helper('Mage_GoogleCheckout_Helper_Data');
         return array(
-            array('value' => 'COMMERCIAL',  'label' => $hlp->__('Commercial')),
-            array('value' => 'RESIDENTIAL', 'label' => $hlp->__('Residential')),
+            array('value' => 'COMMERCIAL',  'label' => Mage::helper('Mage_GoogleCheckout_Helper_Data')->__('Commercial')),
+            array('value' => 'RESIDENTIAL', 'label' => Mage::helper('Mage_GoogleCheckout_Helper_Data')->__('Residential')),
         );
     }
 }

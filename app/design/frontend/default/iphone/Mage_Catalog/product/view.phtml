@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -120,7 +120,7 @@
             try {
                 var originalImg = $$('.product-image-wrap .product-image img')[0];
                 originalImg.up('.product-image-wrap').insert(originalImg.clone().addClassName('cloned'));
-                setTimeout(function () {$$('.cloned')[0].addClassName('animate');}, 1);
+                setTimeout(function () {$$('.cloned')[0].setStyle({'webkitTransform' : 'translate3d(' + (document.body.offsetWidth - 190) + 'px, -150px, 2px) scale(0) rotate(200deg)'});}, 1);
                 $$('.product-image-wrap .cloned')[0].observe('webkitTransitionEnd', function(e) {
                     this.form.submit();
                 }.bind(this));

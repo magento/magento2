@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -37,11 +37,13 @@
             var url = "<?php echo $this->getUrl('*/*/getFilter') ?>";
             url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity');
 
-            new Ajax.Updater ('export_filter_grid_container', url, {
+            new Ajax.Request(url, {
                 method:      'post',
                 //parameters:  $(this.formId).serialize(),
                 evalScripts: true,
-                onComplete:  function(){
+                onComplete:  function(transport) {
+                    var responseText = transport.responseText.replace(/>\s+</g, '><');
+                    $('export_filter_grid_container').update(responseText);
                     $('export_filter_container').show();
                 }
             });

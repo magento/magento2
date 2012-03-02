@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -72,21 +72,26 @@ class Mage_Catalog_Block_Product_Price extends Mage_Core_Block_Template
         if (is_null($product)) {
             $product = $this->getProduct();
         }
-        $prices  = $product->getFormatedTierPrice();
+        $prices = $product->getFormatedTierPrice();
 
         $res = array();
         if (is_array($prices)) {
             foreach ($prices as $price) {
-                $price['price_qty'] = $price['price_qty']*1;
+                $price['price_qty'] = $price['price_qty'] * 1;
 
+                $productPrice = $product->getPrice();
                 if ($product->getPrice() != $product->getFinalPrice()) {
                     $productPrice = $product->getFinalPrice();
-                } else {
-                    $productPrice = $product->getPrice();
                 }
 
-                if ($price['price']<$productPrice) {
-                    $price['savePercent'] = ceil(100 - (( 100/$productPrice ) * $price['price'] ));
+                // Group price must be used for percent calculation if it is lower
+                $groupPrice = $product->getGroupPrice();
+                if ($productPrice > $groupPrice) {
+                    $productPrice = $groupPrice;
+                }
+
+                if ($price['price'] < $productPrice) {
+                    $price['savePercent'] = ceil(100 - ((100 / $productPrice) * $price['price']));
 
                     $tierPrice = Mage::app()->getStore()->convertPrice(
                         Mage::helper('Mage_Tax_Helper_Data')->getPrice($product, $price['website_price'])

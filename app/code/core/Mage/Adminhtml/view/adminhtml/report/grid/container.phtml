@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -42,6 +42,7 @@
     <?php echo $this->getGridHtml() ?>
 </div>
 <script type="text/javascript">
+//<![CDATA[
     function filterFormSubmit() {
         var filters = $$('#filter_form input', '#filter_form select');
         var elements = [];
@@ -53,4 +54,5 @@
             setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+encode_base64(Form.serializeElements(elements))+'/');
         }
     }
+//]]>
 </script>

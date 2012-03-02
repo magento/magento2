@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -58,9 +58,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion extends Mage_Adminht
             // prepare title for cart
             $title = Mage::helper('Mage_Customer_Helper_Data')->__('Shopping Cart - %d item(s)', $cartItemsCount);
             if (count($customer->getSharedWebsiteIds()) > 1) {
-                $title = Mage::helper('Mage_Customer_Helper_Data')->__('Shopping Cart of %1$s - %2$d item(s)',
-                    $website->getName(), $cartItemsCount
-                );
+                $title = Mage::helper('Mage_Customer_Helper_Data')->__('Shopping Cart of %1$s - %2$d item(s)', $website->getName(), $cartItemsCount);
             }
 
             // add cart ajax accordion

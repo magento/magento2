@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Usa
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -144,7 +144,7 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
      * @param Mage_Shipping_Model_Rate_Request $request
      * @return Mage_Shipping_Model_Carrier_Abstract|Mage_Shipping_Model_Rate_Result_Error|boolean
      */
-    public function processAdditionalValidation(Mage_Shipping_Model_Rate_Request $request)
+    public function proccessAdditionalValidation(Mage_Shipping_Model_Rate_Request $request)
     {
         //Skip by item validation if there is no items in request
         if(!count($this->getAllItems($request))) {
@@ -159,7 +159,7 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
 
         foreach ($this->getAllItems($request) as $item) {
             if ($item->getProduct() && $item->getProduct()->getId()) {
-                if ($item->getProduct()->getWeight() > $maxAllowedWeight) {
+                if ($item->getProduct()->getWeight() * $item->getQty() > $maxAllowedWeight) {
                     $errorMsg = ($configErrorMsg) ? $configErrorMsg : $defaultErrorMsg;
                     break;
                 }

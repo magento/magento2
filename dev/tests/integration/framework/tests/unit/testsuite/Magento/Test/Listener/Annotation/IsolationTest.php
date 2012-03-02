@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,7 +54,13 @@ class Magento_Test_Listener_Annotation_IsolationTest extends PHPUnit_Framework_T
 
     protected function tearDown()
     {
-        $this->_listener->endTest($this->_listener->getCurrentTest(), 0);
+        /*
+         * If an exception is thrown by a listener on 'startTest' event,
+         * 'setUp' method won't be executed and there will be nothing to cleanup
+         */
+        if ($this->_listener) {
+            $this->_listener->endTest($this->_listener->getCurrentTest(), 0);
+        }
     }
 
     public function testStartTestSuite()
@@ -65,7 +71,7 @@ class Magento_Test_Listener_Annotation_IsolationTest extends PHPUnit_Framework_T
 
     /**
      * @magentoAppIsolation invalid
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      */
     public function testEndTestIsolationInvalid()
     {
@@ -75,7 +81,7 @@ class Magento_Test_Listener_Annotation_IsolationTest extends PHPUnit_Framework_T
     /**
      * @magentoAppIsolation enabled
      * @magentoAppIsolation disabled
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      */
     public function testEndTestIsolationAmbiguous()
     {

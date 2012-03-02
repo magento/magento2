@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Sales>
-            <version>1.6.0.4</version>
+            <version>1.6.0.7</version>
         </Mage_Sales>
     </modules>
     <global>
@@ -399,6 +399,16 @@
                 </grand_total>
             </totals>
         </pdf>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <sales_vat_request_params_order_comment>
+                        <class>Mage_Sales_Model_Observer</class>
+                        <method>addVatRequestParamsOrderComment</method>
+                    </sales_vat_request_params_order_comment>
+                </observers>
+            </sales_order_place_after>
+        </events>
     </global>
     <frontend>
         <secure_url>
@@ -436,6 +446,22 @@
             </updates>
         </layout>
         <events>
+            <sales_quote_address_collect_totals_before>
+                <observers>
+                    <sales_customer_validate_vat_number>
+                        <class>Mage_Sales_Model_Observer</class>
+                        <method>changeQuoteCustomerGroupId</method>
+                    </sales_customer_validate_vat_number>
+                </observers>
+            </sales_quote_address_collect_totals_before>
+            <sales_quote_address_collect_totals_after>
+                <observers>
+                    <sales_customer_validate_vat_number>
+                        <class>Mage_Sales_Model_Observer</class>
+                        <method>restoreQuoteCustomerGroupId</method>
+                    </sales_customer_validate_vat_number>
+                </observers>
+            </sales_quote_address_collect_totals_after>
             <sales_quote_collect_totals_after>
                 <observers>
                     <catalog_msrp>

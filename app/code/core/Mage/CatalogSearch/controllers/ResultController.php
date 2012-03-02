@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogSearch
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ class Mage_CatalogSearch_ResultController extends Mage_Core_Controller_Front_Act
 
         $query->setStoreId(Mage::app()->getStore()->getId());
 
-        if ($query->getQueryText()) {
+        if ($query->getQueryText() != '') {
             if (Mage::helper('Mage_CatalogSearch_Helper_Data')->isMinQueryLength()) {
                 $query->setId(0)
                     ->setIsActive(1)

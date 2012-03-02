@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_ImportExport
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -72,9 +72,8 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
         $dateBlock = new Mage_Core_Block_Html_Date(array(
             'name'         => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-            'class'        => 'input-text',
+            'class'        => 'input-text input-text-range-date',
             'format'       => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
-            'extra_params' => 'style="width:85px !important"',
             'image'        => $this->getSkinUrl('images/grid-cal.gif')
         ));
         $fromValue = null;
@@ -101,7 +100,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
     protected function _getInputHtmlWithValue(Mage_Eav_Model_Entity_Attribute $attribute, $value)
     {
         $html = '<input type="text" name="' . $this->getFilterElementName($attribute->getAttributeCode())
-             . '" class="input-text" style="width:274px;"';
+             . '" class="input-text input-text-export-filter"';
         if ($value) {
             $html .= ' value="' . $this->_helper->escapeHtml($value) . '"';
         }
@@ -134,9 +133,8 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             $selectBlock = new Mage_Core_Block_Html_Select(array(
                 'name'         => $this->getFilterElementName($attribute->getAttributeCode()). '[]',
                 'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class'        => 'multiselect',
+                'class'        => 'multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
-                                . '" style="width:280px"'
             ));
             return $selectBlock->setOptions($options)
                 ->setValue($value)
@@ -164,11 +162,11 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
         }
 
         return '<strong>' . $this->_helper->__('From') . ':</strong>&nbsp;'
-             . '<input type="text" name="' . $name . '[]" class="input-text"'
-             . ' value="' . $fromValue . '" style="width:100px;"/>&nbsp;'
+             . '<input type="text" name="' . $name . '[]" class="input-text input-text-range"'
+             . ' value="' . $fromValue . '"/>&nbsp;'
              . '<strong>' . $this->_helper->__('To')
              . ':</strong>&nbsp;<input type="text" name="' . $name
-             . '[]" class="input-text" style="width:100px;" value="' . $toValue . '" />';
+             . '[]" class="input-text input-text-range" value="' . $toValue . '" />';
     }
 
     /**
@@ -201,8 +199,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             $selectBlock = new Mage_Core_Block_Html_Select(array(
                 'name'         => $this->getFilterElementName($attribute->getAttributeCode()),
                 'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class'        => 'select',
-                'extra_params' => 'style="width:280px"'
+                'class'        => 'select select-export-filter'
             ));
             return $selectBlock->setOptions($options)
                 ->setValue($value)

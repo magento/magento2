@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_SalesRule
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,6 +44,8 @@
  * @method Mage_SalesRule_Model_Coupon setExpirationDate(string $value)
  * @method int getIsPrimary()
  * @method Mage_SalesRule_Model_Coupon setIsPrimary(int $value)
+ * @method int getType()
+ * @method Mage_SalesRule_Model_Coupon setType(int $value)
  *
  * @category    Mage
  * @package     Mage_SalesRule
@@ -92,11 +94,24 @@ class Mage_SalesRule_Model_Coupon extends Mage_Core_Model_Abstract
     /**
      * Load primary coupon for specified rule
      *
-     * @param Mage_SalesRule_Model_Rule|int Rule
+     * @param Mage_SalesRule_Model_Rule|int $rule
+     * @return Mage_SalesRule_Model_Coupon
      */
     public function loadPrimaryByRule($rule)
     {
         $this->getResource()->loadPrimaryByRule($this, $rule);
+        return $this;
+    }
+
+    /**
+     * Load Shopping Cart Price Rule by coupon code
+     *
+     * @param string $couponCode
+     * @return Mage_SalesRule_Model_Coupon
+     */
+    public function loadByCode($couponCode)
+    {
+        $this->load($couponCode, 'code');
         return $this;
     }
 }

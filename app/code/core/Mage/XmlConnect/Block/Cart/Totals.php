@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -112,7 +112,7 @@ class Mage_XmlConnect_Block_Cart_Totals extends Mage_Checkout_Block_Cart_Totals
                             $title = $this->__('Gift Card (%s)', $cardCode['c']);
                             $value = $cardCode['c'];
                             $totalXmlObj = $totalsXmlObj->addChild($code);
-                            $totalXmlObj->addChild('title', $totalsXmlObj->xmlentities($title));
+                            $totalXmlObj->addChild('title', $totalsXmlObj->escapeXml($title));
                             $totalXmlObj->addChild('value', $value);
                             $value = Mage::helper('Mage_XmlConnect_Helper_Data')->formatPriceForXml($cardCode['a']);
                             $formattedValue = $this->getQuote()->getStore()->formatPrice($value, false);
@@ -149,7 +149,7 @@ class Mage_XmlConnect_Block_Cart_Totals extends Mage_Checkout_Block_Cart_Totals
     {
         $value = Mage::helper('Mage_XmlConnect_Helper_Data')->formatPriceForXml($value);
         $totalXmlObj = $totalsXmlObj->addChild($code);
-        $totalXmlObj->addChild('title', $totalsXmlObj->xmlentities($title));
+        $totalXmlObj->addChild('title', $totalsXmlObj->escapeXml($title));
         $formattedValue = $this->getQuote()->getStore()->formatPrice($value, false);
         $totalXmlObj->addChild('value', $value);
         $totalXmlObj->addChild('formated_value', $formattedValue);

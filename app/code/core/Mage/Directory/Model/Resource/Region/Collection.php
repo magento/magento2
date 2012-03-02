@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Directory
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -58,6 +58,9 @@ class Mage_Directory_Model_Resource_Region_Collection extends Mage_Core_Model_Re
 
         $this->_countryTable    = $this->getTable('directory_country');
         $this->_regionNameTable = $this->getTable('directory_country_region_name');
+
+        $this->addOrder('name', Varien_Data_Collection::SORT_ORDER_ASC);
+        $this->addOrder('default_name', Varien_Data_Collection::SORT_ORDER_ASC);
     }
 
     /**

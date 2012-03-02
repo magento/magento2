@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,32 +54,4 @@ class Mage_Paypal_Model_Payflowadvanced extends Mage_Paypal_Model_Payflowlink
      * @var string
      */
     protected $_infoBlockType = 'Mage_Paypal_Block_Payflow_Advanced_Info';
-
-    /**
-     * Instantiate state and set it to state object
-     * PayflowAdvanced should always use full authorization amount
-     *
-     * @param string $paymentAction
-     * @param Varien_Object $stateObject
-     * @return Mage_Paypal_Model_Payflowadvanced
-     */
-    public function initialize($paymentAction, $stateObject)
-    {
-        $payment = $this->getInfoInstance();
-
-        $salesDocument = $payment->getOrder();
-        if (!$salesDocument) {
-            $salesDocument = $payment->getQuote();
-            $amount = $salesDocument->getBaseGrandTotal();
-        } else {
-            $amount = $salesDocument->getBaseTotalDue();
-        }
-
-        $this->_initialize($payment, $amount);
-
-        $payment->setAdditionalInformation('authorization_amount',
-            Mage_Paypal_Model_Config::AUTHORIZATION_AMOUNT_FULL);
-
-        return $this;
-    }
 }

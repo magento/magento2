@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleCheckout
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -679,10 +679,7 @@ class Mage_GoogleCheckout_Model_Api_Xml_Callback extends Mage_GoogleCheckout_Mod
         if (null !== ($shipping = $this->getData($prefix . 'carrier-calculated-shipping-adjustment'))) {
             $method = 'googlecheckout_carrier';
         } else if (null !== ($shipping = $this->getData($prefix . 'merchant-calculated-shipping-adjustment'))) {
-            $method = $this->_getShippingMethodByName($shipping['shipping-name']['VALUE']);
-            if ($method === false) {
-                $method = 'googlecheckout_merchant';
-            }
+            $method = 'googlecheckout_merchant';
         } else if (null !== ($shipping = $this->getData($prefix . 'flat-rate-shipping-adjustment'))) {
             $method = 'googlecheckout_flatrate';
         } else if (null !== ($shipping = $this->getData($prefix . 'pickup-shipping-adjustment'))) {

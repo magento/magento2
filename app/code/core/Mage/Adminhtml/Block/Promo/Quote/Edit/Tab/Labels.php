@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -89,6 +89,9 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Labels
             'legend'       => Mage::helper('Mage_SalesRule_Helper_Data')->__('Store View Specific Labels'),
             'table_class'  => 'form-list stores-tree',
         ));
+        $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset');
+        $fieldset->setRenderer($renderer);
+
         foreach (Mage::app()->getWebsites() as $website) {
             $fieldset->addField("w_{$website->getId()}_label", 'note', array(
                 'label'    => $website->getName(),

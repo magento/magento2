@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /**
@@ -35,9 +35,9 @@
     <tr class="<?php echo $_code?>">
         <td <?php echo $this->getLabelProperties()?>>
             <?php if ($_total->getStrong()):?>
-            <strong><?php echo $_total->getLabel()?></strong>
+            <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
             <?php else:?>
-            <?php echo $_total->getLabel()?>
+            <?php echo $this->escapeHtml($_total->getLabel());?>
             <?php endif?>
         </td>
         <td <?php echo $this->getValueProperties()?>>

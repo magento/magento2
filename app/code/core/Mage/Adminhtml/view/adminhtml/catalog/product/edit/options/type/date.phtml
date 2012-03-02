@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -36,7 +36,7 @@ OptionTemplateDate = '<table class="border" cellpadding="0" cellspacing="0">'+
         '</tr>'+
         '<tr>'+
             <?php if ($this->getCanReadPrice() !== false) : ?>
-            '<td><input type="text" class="input-text validate-zero-or-greater product-option-price" id="product_option_{{option_id}}_price" name="product[options][{{option_id}}][price]" value="{{price}}"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?>></td>' +
+            '<td><input type="text" class="input-text validate-number product-option-price" id="product_option_{{option_id}}_price" name="product[options][{{option_id}}][price]" value="{{price}}"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?>></td>' +
             '<td><?php echo $this->getPriceTypeSelectHtml() ?>{{checkboxScopePrice}}</td>' +
             <?php else : ?>
             '<input type="hidden" id="product_option_{{option_id}}_price" name="product[options][{{option_id}}][price]">' +

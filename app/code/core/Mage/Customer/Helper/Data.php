@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,10 +45,42 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD = 'customer/startup/redirect_dashboard';
 
     /**
+     * Config pathes to VAT related customer groups
+     */
+    const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
+    const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
+    const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
+    const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
+
+    /**
+     * Config path to option that enables/disables automatic group assignment based on VAT
+     */
+    const XML_PATH_CUSTOMER_VIV_GROUP_AUTO_ASSIGN = 'customer/create_account/viv_disable_auto_group_assign_default';
+
+    /**
+     * Config path to support email
+     */
+    const XML_PATH_SUPPORT_EMAIL = 'trans_email/ident_support/email';
+
+    /**
+     * WSDL of VAT validation service
+     *
+     */
+    const VAT_VALIDATION_WSDL_URL = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService?wsdl';
+
+    /**
      * Configuration path to expiration period of reset password link
      */
     const XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD
         = 'default/customer/password/reset_link_expiration_period';
+
+    /**
+     * VAT class constants
+     */
+    const VAT_CLASS_DOMESTIC    = 'domestic';
+    const VAT_CLASS_INTRA_UNION = 'intra_union';
+    const VAT_CLASS_INVALID     = 'invalid';
+    const VAT_CLASS_ERROR       = 'error';
 
     /**
      * Customer groups collection
@@ -345,5 +377,229 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
     public function getResetPasswordLinkExpirationPeriod()
     {
         return (int) Mage::getConfig()->getNode(self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD);
+    }
+
+    /**
+     * Get default customer group id
+     *
+     * @param Mage_Core_Model_Store|string|int $store
+     * @return int
+     */
+    public function getDefaultCustomerGroupId($store = null)
+    {
+        return (int)Mage::getStoreConfig(Mage_Customer_Model_Group::XML_PATH_DEFAULT_ID, $store);
+    }
+
+    /**
+     * Retrieve customer group ID based on his VAT number
+     *
+     * @param string $customerCountryCode
+     * @param Varien_Object $vatValidationResult
+     * @param Mage_Core_Model_Store|string|int $store
+     * @return null|int
+     */
+    public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
+    {
+        $groupId = null;
+
+        $vatClass = $this->getCustomerVatClass($customerCountryCode, $vatValidationResult, $store);
+
+        $vatClassToGroupXmlPathMap = array(
+            self::VAT_CLASS_DOMESTIC => self::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP,
+            self::VAT_CLASS_INTRA_UNION => self::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP,
+            self::VAT_CLASS_INVALID => self::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
+            self::VAT_CLASS_ERROR => self::XML_PATH_CUSTOMER_VIV_ERROR_GROUP
+        );
+
+        if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
+            $groupId = (int)Mage::getStoreConfig($vatClassToGroupXmlPathMap[$vatClass], $store);
+        }
+
+        return $groupId;
+    }
+
+    /**
+     * Send request to VAT validation service and return validation result
+     *
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @param string $requesterCountryCode
+     * @param string $requesterVatNumber
+     *
+     * @return Varien_Object
+     */
+    public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
+    {
+        // Default response
+        $gatewayResponse = new Varien_Object(array(
+            'is_valid' => false,
+            'request_date' => '',
+            'request_identifier' => '',
+            'request_success' => false
+        ));
+
+        if (!extension_loaded('soap')) {
+            Mage::logException(Mage::exception('Mage_Core',
+                Mage::helper('Mage_Core_Helper_Data')->__('PHP SOAP extension is required.')));
+            return $gatewayResponse;
+        }
+
+        if (!$this->canCheckVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber)) {
+            return $gatewayResponse;
+        }
+
+        try {
+            $soapClient = $this->_createVatNumberValidationSoapClient();
+
+            $requestParams = array();
+            $requestParams['countryCode'] = $countryCode;
+            $requestParams['vatNumber'] = $vatNumber;
+            $requestParams['requesterCountryCode'] = $requesterCountryCode;
+            $requestParams['requesterVatNumber'] = $requesterVatNumber;
+
+            // Send request to service
+            $result = $soapClient->checkVatApprox($requestParams);
+
+            $gatewayResponse->setIsValid((boolean) $result->valid);
+            $gatewayResponse->setRequestDate((string) $result->requestDate);
+            $gatewayResponse->setRequestIdentifier((string) $result->requestIdentifier);
+            $gatewayResponse->setRequestSuccess(true);
+        } catch (Exception $exception) {
+            $gatewayResponse->setIsValid(false);
+            $gatewayResponse->setRequestDate('');
+            $gatewayResponse->setRequestIdentifier('');
+        }
+
+        return $gatewayResponse;
+    }
+
+    /**
+     * Check if parameters are valid to send to VAT validation service
+     *
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @param string $requesterCountryCode
+     * @param string $requesterVatNumber
+     *
+     * @return boolean
+     */
+    public function canCheckVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber)
+    {
+        $result = true;
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('Mage_Core_Helper_Data');
+
+        if (!is_string($countryCode)
+            || !is_string($vatNumber)
+            || !is_string($requesterCountryCode)
+            || !is_string($requesterVatNumber)
+            || empty($countryCode)
+            || !$coreHelper->isCountryInEU($countryCode)
+            || empty($vatNumber)
+            || (empty($requesterCountryCode) && !empty($requesterVatNumber))
+            || (!empty($requesterCountryCode) && empty($requesterVatNumber))
+            || (!empty($requesterCountryCode) && !$coreHelper->isCountryInEU($requesterCountryCode))
+        ) {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get VAT class
+     *
+     * @param string $customerCountryCode
+     * @param Varien_Object $vatValidationResult
+     * @param Mage_Core_Model_Store|string|int|null $store
+     * @return null|string
+     */
+    public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
+    {
+        $vatClass = null;
+
+        $isVatNumberValid = $vatValidationResult->getIsValid();
+
+        if (is_string($customerCountryCode)
+            && !empty($customerCountryCode)
+            && $customerCountryCode === Mage::helper('Mage_Core_Helper_Data')->getMerchantCountryCode($store)
+            && $isVatNumberValid
+        ) {
+            $vatClass = self::VAT_CLASS_DOMESTIC;
+        } elseif ($isVatNumberValid) {
+            $vatClass = self::VAT_CLASS_INTRA_UNION;
+        } else {
+            $vatClass = self::VAT_CLASS_INVALID;
+        }
+
+        if (!$vatValidationResult->getRequestSuccess()) {
+            $vatClass = self::VAT_CLASS_ERROR;
+        }
+
+        return $vatClass;
+    }
+
+    /**
+     * Get validation message that will be displayed to user by VAT validation result object
+     *
+     * @param Mage_Customer_Model_Address $customerAddress
+     * @param bool $customerGroupAutoAssignDisabled
+     * @param Varien_Object $validationResult
+     * @return Varien_Object
+     */
+    public function getVatValidationUserMessage($customerAddress, $customerGroupAutoAssignDisabled, $validationResult)
+    {
+        $message = '';
+        $isError = true;
+        $customerVatClass = $this->getCustomerVatClass($customerAddress->getCountryId(), $validationResult);
+        $groupAutoAssignDisabled = Mage::getStoreConfigFlag(self::XML_PATH_CUSTOMER_VIV_GROUP_AUTO_ASSIGN);
+
+        $willChargeTaxMessage    = $this->__('You will be charged tax.');
+        $willNotChargeTaxMessage = $this->__('You will not be charged tax.');
+
+        if ($validationResult->getIsValid()) {
+            $message = $this->__('Your VAT ID was successfully validated.');
+            $isError = false;
+
+            if (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled) {
+                $message .= ' ' . ($customerVatClass == self::VAT_CLASS_DOMESTIC
+                    ? $willChargeTaxMessage
+                    : $willNotChargeTaxMessage);
+            }
+        } else if ($validationResult->getRequestSuccess()) {
+            $message = sprintf(
+                $this->__('The VAT ID entered (%s) is not a valid VAT ID.') . ' ',
+                $this->escapeHtml($customerAddress->getVatId())
+            );
+            if (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled) {
+                $message .= $willChargeTaxMessage;
+            }
+        }
+        else {
+            $contactUsMessage = sprintf($this->__('If you believe this is an error, please contact us at %s'),
+                Mage::getStoreConfig(self::XML_PATH_SUPPORT_EMAIL));
+
+            $message = $this->__('Your Tax ID cannot be validated.') . ' '
+                . (!$groupAutoAssignDisabled && !$customerGroupAutoAssignDisabled
+                    ? $willChargeTaxMessage . ' ' : '')
+                . $contactUsMessage;
+        }
+
+        $validationMessageEnvelope = new Varien_Object();
+        $validationMessageEnvelope->setMessage($message);
+        $validationMessageEnvelope->setIsError($isError);
+
+        return $validationMessageEnvelope;
+    }
+
+    /**
+     * Create SOAP client based on VAT validation service WSDL
+     *
+     * @param boolean $trace
+     * @return SoapClient
+     */
+    protected function _createVatNumberValidationSoapClient($trace = false)
+    {
+        return new SoapClient(self::VAT_VALIDATION_WSDL_URL, array('trace' => $trace));
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_SalesRule
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,11 @@ class Mage_SalesRule_Model_Resource_Report_Rule_Createdat extends Mage_Reports_M
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
+        $from = $this->_dateToUtc($from);
+        $to   = $this->_dateToUtc($to);
+
+        $this->_checkDates($from, $to);
+
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_flat_order');
         $adapter = $this->_getWriteAdapter();
@@ -90,6 +95,7 @@ class Mage_SalesRule_Model_Resource_Report_Rule_Createdat extends Mage_Reports_M
                 'store_id'                => 'store_id',
                 'order_status'            => 'status',
                 'coupon_code'             => 'coupon_code',
+                'rule_name'               => 'coupon_rule_name',
                 'coupon_uses'             => 'COUNT(entity_id)',
 
                 'subtotal_amount'         =>
@@ -151,6 +157,7 @@ class Mage_SalesRule_Model_Resource_Report_Rule_Createdat extends Mage_Reports_M
                 'store_id'                => new Zend_Db_Expr('0'),
                 'order_status'            => 'order_status',
                 'coupon_code'             => 'coupon_code',
+                'rule_name'               => 'rule_name',
                 'coupon_uses'             => 'SUM(coupon_uses)',
                 'subtotal_amount'         => 'SUM(subtotal_amount)',
                 'discount_amount'         => 'SUM(discount_amount)',

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -98,6 +98,8 @@ class Mage_Paypal_Model_Config
 
     /**
      * Authorization amounts for Account Verification
+     *
+     * @deprecated since 1.6.2.0
      * @var int
      */
     const AUTHORIZATION_AMOUNT_ZERO = 0;
@@ -873,16 +875,12 @@ class Mage_Paypal_Model_Config
     /**
      * Returns array of possible Authorization Amounts for Account Verification
      *
+     * @deprecated since 1.6.2.0
      * @return array
      */
     public function getAuthorizationAmounts()
     {
-        $authorizationAmount = array(
-            self::AUTHORIZATION_AMOUNT_ZERO => Mage::helper('Mage_Paypal_Helper_Data')->__('$0 Auth'),
-            self::AUTHORIZATION_AMOUNT_ONE  => Mage::helper('Mage_Paypal_Helper_Data')->__('$1 Auth'),
-            self::AUTHORIZATION_AMOUNT_FULL => Mage::helper('Mage_Paypal_Helper_Data')->__('Full Auth'),
-        );
-        return $authorizationAmount;
+        return array();
     }
 
     /**
@@ -1367,4 +1365,3 @@ class Mage_Paypal_Model_Config
         return Mage::getModel('Mage_Paypal_Model_Cert')->loadByWebsite($websiteId, false)->getCertPath();
     }
 }
-

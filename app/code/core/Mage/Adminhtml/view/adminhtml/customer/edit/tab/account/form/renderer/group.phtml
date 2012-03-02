@@ -1,0 +1,52 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+$_element = $this->getElement();
+$_note = $_element->getNote();
+$_trId = $_element->getHtmlContainerId();
+$_class = $_element->getFieldsetHtmlClass();
+?>
+<?php if (!$_element->getNoDisplay()): ?>
+<tr<?php if ($_trId): ?> id="<?php echo $_trId; ?>"<?php endif; ?>>
+    <?php if ($_element->getType() == 'hidden'): ?>
+    <td colspan="2" class="hidden"><?php echo trim($_element->getElementHtml()); ?></td>
+    <?php else: ?>
+    <td class="label<?php echo $_class ? " {$_class}-label" : ''; ?>"><?php echo trim($_element->getLabelHtml()); ?></td>
+    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value'; ?><?php echo $_class ? " {$_class}-value" : ''; ?>">
+        <?php echo trim($_element->getElementHtml()); ?>
+        <?php if ($this->getDisableAutoGroupChangeAttribute()): ?>
+            <br/>
+            <input id="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>" name="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementName()); ?>" type="checkbox"<?php if ($this->getDisableAutoGroupChangeCheckboxState() == 'checked') :?> checked="checked"<?php endif; ?> value="1"/>
+            <label for="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>"><?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxLabel()); ?></label>
+        <?php endif; ?>
+        <?php if ($_note): ?>
+            <p class="note<?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>"><span><?php echo $_note; ?></span></p>
+        <?php endif ?>
+    </td>
+    <?php endif; ?>
+</tr>
+<?php endif; ?>

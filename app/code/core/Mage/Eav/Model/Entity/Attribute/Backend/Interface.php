@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,4 +45,19 @@ interface Mage_Eav_Model_Entity_Attribute_Backend_Interface
     public function afterSave($object);
     public function beforeDelete($object);
     public function afterDelete($object);
+
+    /**
+     * Get entity value id
+     *
+     * @param Varien_Object $entity
+     */
+    public function getEntityValueId($entity);
+
+    /**
+     * Set entity value id
+     *
+     * @param Varien_Object $entity
+     * @param int $valueId
+     */
+    public function setEntityValueId($entity, $valueId);
 }

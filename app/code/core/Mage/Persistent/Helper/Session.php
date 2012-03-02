@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Persistent
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,23 +37,23 @@ class Mage_Persistent_Helper_Session extends Mage_Core_Helper_Data
     /**
      * Instance of Session Model
      *
-     * @var Mage_Persistent_Model_Session
+     * @var null|Mage_Persistent_Model_Session
      */
-    protected $_sessionModel = null;
+    protected $_sessionModel;
 
     /**
      * Persistent customer
      *
-     * @var Mage_Customer_Model_Customer
+     * @var null|Mage_Customer_Model_Customer
      */
-    protected $_customer = null;
+    protected $_customer;
 
     /**
      * Is "Remember Me" checked
      *
-     * @var bool
+     * @var null|bool
      */
-    protected $_isRememberMeChecked = null;
+    protected $_isRememberMeChecked;
 
     /**
      * Get Session model
@@ -88,7 +88,7 @@ class Mage_Persistent_Helper_Session extends Mage_Core_Helper_Data
      */
     public function isPersistent()
     {
-        return (bool)$this->getSession()->getId() && Mage::helper('Mage_Persistent_Helper_Data')->isEnabled();
+        return $this->getSession()->getId() && Mage::helper('Mage_Persistent_Helper_Data')->isEnabled();
     }
 
     /**

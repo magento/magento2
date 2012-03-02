@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -42,8 +42,10 @@
     </td>
     <?php endif; ?>
     <td <?php if($this->getCustomerId()): ?>class="main-col"<?php endif; ?>>
+       <div id="order-additional_area" style="display:none" class="order-additional-area"><?php echo $this->getChildHtml('additional_area') ?></div>
        <div id="order-search" style="display:none" class="order-search-items"><?php echo $this->getChildHtml('search') ?></div>
         <div id="order-items"><?php echo $this->getChildHtml('items') ?></div>
+        <div id="order-errors"><?php echo $this->getChildHtml('errors') ?></div>
         <div id="order-form_account"><?php echo $this->getChildHtml('form_account') ?></div>
         <div id="order-addresses">
             <div id="order-billing_address" class="box-left"><?php echo $this->getChildHtml('billing_address') ?></div>

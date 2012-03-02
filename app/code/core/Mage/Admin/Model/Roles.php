@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Admin
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,42 +53,86 @@ class Mage_Admin_Model_Roles extends Mage_Core_Model_Abstract
      */
     protected $_eventPrefix = 'admin_roles';
 
+    /**
+     * Constructor
+     */
     protected function _construct()
     {
         $this->_init('Mage_Admin_Model_Resource_Roles');
     }
 
+    /**
+     * Update object into database
+     *
+     * @return Mage_Admin_Model_Roles
+     */
     public function update()
     {
         $this->getResource()->update($this);
         return $this;
     }
 
+    /**
+     * Retrieve users collection
+     *
+     * @return Mage_Admin_Model_Resource_Roles_User_Collection
+     */
     public function getUsersCollection()
     {
         return Mage::getResourceModel('Mage_Admin_Model_Resource_Roles_User_Collection');
     }
 
+    /**
+     * Return tree of acl resources
+     *
+     * @return array|null|Varien_Simplexml_Element
+     */
     public function getResourcesTree()
     {
         return $this->_buildResourcesArray(null, null, null, null, true);
     }
 
+    /**
+     * Return list of acl resources
+     *
+     * @return array|null|Varien_Simplexml_Element
+     */
     public function getResourcesList()
     {
         return $this->_buildResourcesArray();
     }
 
+    /**
+     * Return list of acl resources in 2D format
+     *
+     * @return array|null|Varien_Simplexml_Element
+     */
     public function getResourcesList2D()
     {
         return $this->_buildResourcesArray(null, null, null, true);
     }
 
+    /**
+     * Return users for role
+     *
+     * @return array|false
+     */
     public function getRoleUsers()
     {
         return $this->getResource()->getRoleUsers($this);
     }
 
+    /**
+     * Build resources array process
+     *
+     * @param  null|Varien_Simplexml_Element $resource
+     * @param  null $parentName
+     * @param  int $level
+     * @param  null $represent2Darray
+     * @param  bool $rawNodes
+     * @param  string $module
+     * @return array|null|Varien_Simplexml_Element
+     */
     protected function _buildResourcesArray(Varien_Simplexml_Element $resource = null,
         $parentName = null, $level = 0, $represent2Darray = null, $rawNodes = false, $module = 'Mage_Adminhtml')
     {
@@ -99,7 +143,7 @@ class Mage_Admin_Model_Roles extends Mage_Core_Model_Abstract
             $level = -1;
         } else {
             $resourceName = $parentName;
-            if ($resource->getName() != 'title' && $resource->getName() != 'sort_order' && $resource->getName() != 'children') {
+            if (!in_array($resource->getName(), array('title', 'sort_order', 'children', 'disabled'))) {
                 $resourceName = (is_null($parentName) ? '' : $parentName . '/') . $resource->getName();
 
                 //assigning module for its' children nodes
@@ -121,22 +165,20 @@ class Mage_Admin_Model_Roles extends Mage_Core_Model_Abstract
             }
         }
 
+        //check children and run recursion if they exists
         $children = $resource->children();
-        if (empty($children)) {
-            if ($rawNodes) {
-                return $resource;
-            } else {
-                return $result;
+        foreach ($children as $key => $child) {
+            if (1 == $child->disabled) {
+                $resource->{$key} = null;
+                continue;
             }
-        }
-        foreach ($children as $child) {
             $this->_buildResourcesArray($child, $resourceName, $level + 1, $represent2Darray, $rawNodes, $module);
         }
+
         if ($rawNodes) {
             return $resource;
         } else {
             return $result;
         }
     }
-
 }

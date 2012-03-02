@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var AdminOrder = new Class.create();
@@ -42,6 +42,48 @@ AdminOrder.prototype = {
         this.giftMessageDataChanged = false;
         this.productConfigureAddFields = {};
         this.productPriceBase = {};
+        this.collectElementsValue = true;
+        Event.observe(window, 'load',  (function(){
+            this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
+            this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
+                addControlButton: function(button){
+                    var controlButtonArea = $(this.node).select('.form-buttons')[0];
+                    if (typeof controlButtonArea != 'undefined') {
+                        var buttons = controlButtonArea.childElements();
+                        for (var i = 0; i < buttons.length; i++) {
+                            if (buttons[i].innerHTML.include(button.label)) {
+                                return ;
+                            }
+                        }
+                        button.insertIn(controlButtonArea, 'top');
+                    }
+                }
+            });
+
+            var searchButton = new ControlButton(Translator.translate('Add Products')),
+                searchAreaId = this.getAreaId('search');
+            searchButton.onClick = function() {
+                $(searchAreaId).show();
+                this.remove();
+            }
+            this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
+                proceed();
+                if (!$(searchAreaId).visible()) {
+                    this.addControlButton(searchButton);
+                }
+            });
+            this.areasLoaded();
+        }).bind(this));
+    },
+
+    areasLoaded: function(){
+    },
+
+    itemsLoaded: function(){
+    },
+
+    dataLoaded: function(){
+        this.dataShow();
     },
 
     setLoadBaseUrl : function(url){
@@ -63,7 +105,7 @@ AdminOrder.prototype = {
     setCustomerAfter : function () {
         this.customerSelectorHide();
         if (this.storeId) {
-            $(this.getAreaId('data')).callback = 'dataShow';
+            $(this.getAreaId('data')).callback = 'dataLoaded';
             this.loadArea(['data'], true);
         }
         else {
@@ -219,14 +261,26 @@ AdminOrder.prototype = {
         }
     },
 
-    disableShippingAddress : function(flag){
+    disableShippingAddress : function(flag) {
         this.shippingAsBilling = flag;
-        if($('order-shipping_address_customer_address_id')) {
-            $('order-shipping_address_customer_address_id').disabled=flag;
+        if ($('order-shipping_address_customer_address_id')) {
+            $('order-shipping_address_customer_address_id').disabled = flag;
         }
-        if($(this.shippingAddressContainer)){
+        if ($(this.shippingAddressContainer)) {
             var dataFields = $(this.shippingAddressContainer).select('input', 'select', 'textarea');
-            for(var i=0;i<dataFields.length;i++) dataFields[i].disabled = flag;
+            for (var i = 0; i < dataFields.length; i++) {
+                dataFields[i].disabled = flag;
+            }
+            var buttons = $(this.shippingAddressContainer).select('button');
+            // Add corresponding class to buttons while disabling them
+            for (i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = flag;
+                if (flag) {
+                    buttons[i].addClassName('disabled');
+                } else {
+                    buttons[i].removeClassName('disabled');
+                }
+            }
         }
     },
 
@@ -598,13 +652,27 @@ AdminOrder.prototype = {
         this.showArea('data');
     },
 
-    sidebarApplyChanges : function(){
-        if($(this.getAreaId('sidebar'))){
-            var data  = {};
-            var elems = $(this.getAreaId('sidebar')).select('input');
-            for(var i=0; i<elems.length; i++){
-                if(elems[i].getValue()){
-                    data[elems[i].name] = elems[i].getValue();
+    clearShoppingCart : function(confirmMessage){
+        if (confirm(confirmMessage)) {
+            this.collectElementsValue = false;
+            order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+        }
+    },
+
+    sidebarApplyChanges : function(auxiliaryParams) {
+        if ($(this.getAreaId('sidebar'))) {
+            var data = {};
+            if (this.collectElementsValue) {
+                var elems = $(this.getAreaId('sidebar')).select('input');
+                for (var i=0; i < elems.length; i++) {
+                    if (elems[i].getValue()) {
+                        data[elems[i].name] = elems[i].getValue();
+                    }
+                }
+            }
+            if (auxiliaryParams instanceof Object) {
+                for (var paramName in auxiliaryParams) {
+                    data[paramName] = String(auxiliaryParams[paramName]);
                 }
             }
             data.reset_shipping = true;
@@ -1056,5 +1124,125 @@ AdminOrder.prototype = {
             top: parentPos[1] + 'px',
             left: parentPos[0] + 'px'
         });
+    },
+
+    validateVat: function(parameters)
+    {
+        var params = {
+            country: $(parameters.countryElementId).value,
+            vat: $(parameters.vatElementId).value
+        };
+
+        if (this.storeId !== false) {
+            params.store_id = this.storeId;
+        }
+
+        var currentCustomerGroupId = $(parameters.groupIdHtmlId).value;
+
+        new Ajax.Request(parameters.validateUrl, {
+            parameters: params,
+            onSuccess: function(response) {
+                var message = '';
+                var groupChangeRequired = false;
+                try {
+                    response = response.responseText.evalJSON();
+
+                    if (true === response.valid) {
+                        message = parameters.vatValidMessage;
+                        if (currentCustomerGroupId != response.group) {
+                            message = parameters.vatValidAndGroupChangeMessage;
+                            groupChangeRequired = true;
+                        }
+                    } else if (response.success) {
+                        message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                    } else {
+                        message = parameters.vatValidationFailedMessage;
+                    }
+
+                } catch (e) {
+                    message = parameters.vatValidationFailedMessage;
+                }
+                if (!groupChangeRequired) {
+                    alert(message);
+                }
+                else {
+                    this.processCustomerGroupChange(parameters.groupIdHtmlId, message, response.group);
+                }
+            }.bind(this)
+        });
+    },
+
+    processCustomerGroupChange: function(groupIdHtmlId, message, groupId)
+    {
+        var currentCustomerGroupId = $(groupIdHtmlId).value;
+        var currentCustomerGroupTitle = $$('#' + groupIdHtmlId + ' > option[value=' + currentCustomerGroupId + ']')[0].text;
+        var customerGroupOption = $$('#' + groupIdHtmlId + ' > option[value=' + groupId + ']')[0];
+        var confirmText = message.replace(/%s/, customerGroupOption.text);
+        confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
+        if (confirm(confirmText)) {
+            $$('#' + groupIdHtmlId + ' option').each(function(o) {
+                o.selected = o.readAttribute('value') == groupId;
+            });
+            this.accountGroupChange();
+        }
+    }
+};
+
+var OrderFormArea = Class.create();
+OrderFormArea.prototype = {
+    _name: null,
+    _node: null,
+    _parent: null,
+    _callbackName: null,
+
+    initialize: function(name, node, parent){
+        this._name = name;
+        this._parent = parent;
+        this._callbackName = node.callback;
+        if (typeof this._callbackName == 'undefined') {
+            this._callbackName = name + 'Loaded';
+            node.callback = this._callbackName;
+        }
+        parent[this._callbackName] = parent[this._callbackName].wrap((function (proceed){
+            proceed();
+            this.onLoad();
+        }).bind(this));
+
+        this.setNode(node);
+    },
+
+    setNode: function(node){
+        if (!node.callback) {
+            node.callback = this._callbackName;
+        }
+        this.node = node;
+    },
+
+    onLoad: function(){
+    }
+};
+
+var ControlButton = Class.create();
+ControlButton.prototype = {
+    _label: '',
+    _node: null,
+
+    initialize: function(label){
+        this._label = label;
+        this._node = new Element('button', {
+            'class': 'scalable add'
+        });
+    },
+
+    onClick: function(){
+    },
+
+    insertIn: function(element, position){
+        var node = Object.extend(this._node),
+            content = {};
+        node.observe('click', this.onClick);
+        node.update('<span>' + this._label + '</span>');
+        content[position] = node;
+        Element.insert(element, content);
     }
 };

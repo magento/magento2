@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -91,7 +91,7 @@ Layout for customer login page
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Customer_Block_Form_Login" name="customer_form_login" template="form/login.phtml"/>
+            <block type="Mage_Customer_Block_Form_Login" name="customer_form_login" template="form/login.phtml" />
         </reference>
     </customer_account_login>
 
@@ -148,7 +148,7 @@ New customer registration
             <action method="setHeaderTitle" translate="title" module="Mage_Customer"><title>Password forgotten</title></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Customer_Block_Account_Forgotpassword" name="forgotPassword" template="form/forgotpassword.phtml"/>
+            <block type="Mage_Customer_Block_Account_Forgotpassword" name="forgotPassword" template="form/forgotpassword.phtml" />
         </reference>
     </customer_account_forgotpassword>
 

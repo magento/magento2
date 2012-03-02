@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -261,14 +261,6 @@
                     <model>Mage_Paypal_Model_Observer::fetchReports</model>
                 </run>
             </paypal_fetch_settlement_reports>
-            <paypal_payment_transaction_clean>
-                <schedule>
-                    <cron_expr>*/15 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>Mage_Paypal_Model_Observer::cleanTransactions</model>
-                </run>
-            </paypal_payment_transaction_clean>
         </jobs>
     </crontab>
     <admin>

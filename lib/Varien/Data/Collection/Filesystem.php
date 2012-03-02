@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Data
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -511,7 +511,7 @@ class Varien_Data_Collection_Filesystem extends Varien_Data_Collection
             return $this->addCallbackFilter($field, $cond['in'], $type, array($this, 'filterCallbackInArray'));
         }
         if (isset($cond['nin'])) {
-            return $this->addCallbackFilter($field, $cond['nin'], $type, array($this, 'filterCallbackIn'), $inverted);
+            return $this->addCallbackFilter($field, $cond['nin'], $type, array($this, 'filterCallbackInArray'), $inverted);
         }
         if (isset($cond['notnull'])) {
             return $this->addCallbackFilter($field, $cond['notnull'], $type, array($this, 'filterCallbackIsNull'), $inverted);

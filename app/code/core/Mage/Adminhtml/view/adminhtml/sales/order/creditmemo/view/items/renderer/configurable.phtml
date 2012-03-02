@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -215,12 +215,11 @@
                     <?php endif; ?>
 
                     <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, 2, 'sales')): ?>
-                        <br /><span class="nobr"><?php echo Mage::helper('Mage_Weee_Helper_Data')->__('Total'); ?>:<br /> <?php echo $this->displayPrices($_baseIncl+$_item->getBaseWeeeTaxAppliedRowAmnt(), $_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
+                        <br /><span class="nobr"><?php echo Mage::helper('Mage_Weee_Helper_Data')->__('Total'); ?>:<br /> <?php echo $this->displayPrices($_baseIncl+$_item->getBaseWeeeTaxAppliedRowAmount(), $_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
                     <?php endif; ?>
                 <?php endif; ?>
             </span>
         <?php endif; ?>
-        </span>
     </td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('tax_amount') ?></td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('discount_amount') ?></td>

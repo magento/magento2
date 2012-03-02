@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @copyright  Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -397,7 +397,7 @@ final class Mage
      *
      * @link    Mage_Core_Model_Config::getModelInstance
      * @param   string $modelClass
-     * @param   array $arguments
+     * @param   array|object $arguments
      * @return  Mage_Core_Model_Abstract
      */
     public static function getModel($modelClass = '', $arguments = array())
@@ -497,7 +497,7 @@ final class Mage
     }
 
     /**
-     * Retreive resource helper object
+     * Retrieve resource helper object
      *
      * @param string $moduleName
      * @return Mage_Core_Model_Resource_Helper_Abstract
@@ -555,7 +555,8 @@ final class Mage
             self::$_app = new Mage_Core_Model_App();
             self::setRoot();
             self::$_events = new Varien_Event_Collection();
-            self::$_config = new Mage_Core_Model_Config($options);
+            self::setIsInstalled($options);
+            self::setConfigModel($options);
 
             Magento_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
@@ -577,7 +578,8 @@ final class Mage
         try {
             self::setRoot();
             self::$_app     = new Mage_Core_Model_App();
-            self::$_config  = new Mage_Core_Model_Config();
+            self::setIsInstalled($options);
+            self::setConfigModel($options);
 
             if (!empty($modules)) {
                 self::$_app->initSpecified($code, $type, $options, $modules);
@@ -616,7 +618,8 @@ final class Mage
                 self::$_app->setResponse($options['response']);
             }
             self::$_events = new Varien_Event_Collection();
-            self::$_config = new Mage_Core_Model_Config($options);
+            self::setIsInstalled($options);
+            self::setConfigModel($options);
             self::$_app->run(array(
                 'scope_code' => $code,
                 'scope_type' => $type,
@@ -644,6 +647,40 @@ final class Mage
             } catch (Exception $ne) {
                 self::printException($ne, $e->getMessage());
             }
+        }
+    }
+
+    /**
+     * Set application isInstalled flag based on given options
+     *
+     * @param array $options
+     */
+    public static function setIsInstalled($options = array())
+    {
+        if (isset($options['is_installed']) && $options['is_installed']) {
+            self::$_isInstalled = true;
+        }
+    }
+
+    /**
+     * Set application Config model
+     *
+     * @param array $options
+     */
+    public static function setConfigModel($options = array())
+    {
+        if (isset($options['config_model']) && Magento_Autoload::getInstance()->classExists($options['config_model'])) {
+            $alternativeConfigModelName = $options['config_model'];
+            unset($options['config_model']);
+            $alternativeConfigModel = new $alternativeConfigModelName($options);
+        } else {
+            $alternativeConfigModel = null;
+        }
+
+        if (!is_null($alternativeConfigModel) && ($alternativeConfigModel instanceof Mage_Core_Model_Config)) {
+            self::$_config = $alternativeConfigModel;
+        } else {
+            self::$_config = new Mage_Core_Model_Config($options);
         }
     }
 

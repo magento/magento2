@@ -20,23 +20,40 @@
  *
  * @category    Mage
  * @package     Mage_SalesRule
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 /**
- * SalesRule Model Resource Rule_Collection
+ * Sales Rules resource collection model
  *
  * @category    Mage
  * @package     Mage_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
+class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Rule_Model_Resource_Rule_Collection_Abstract
 {
     /**
-     * Constructor
+     * Store associated with rule entities information map
      *
+     * @var array
+     */
+    protected $_associatedEntitiesMap = array(
+        'website' => array(
+            'associations_table' => 'salesrule_website',
+            'rule_id_field'      => 'rule_id',
+            'entity_id_field'    => 'website_id'
+        ),
+        'customer_group' => array(
+            'associations_table' => 'salesrule_customer_group',
+            'rule_id_field'      => 'rule_id',
+            'entity_id_field'    => 'customer_group_id'
+        )
+    );
+
+    /**
+     * Set resource model and determine field mapping
      */
     protected function _construct()
     {
@@ -45,72 +62,100 @@ class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Core_Model_Reso
     }
 
     /**
-     * Set filter to select rules that matches current criteria
+     * Filter collection by specified website, customer group, coupon code, date.
+     * Filter collection to use only active rules.
+     * Involved sorting by sort_order column.
      *
-     * @param unknown_type $websiteId
-     * @param unknown_type $customerGroupId
-     * @param unknown_type $couponCode
-     * @param unknown_type $now
+     * @param int $websiteId
+     * @param int $customerGroupId
+     * @param string $couponCode
+     * @param string|null $now
+     * @use $this->addWebsiteGroupDateFilter()
+     *
      * @return Mage_SalesRule_Model_Resource_Rule_Collection
      */
     public function setValidationFilter($websiteId, $customerGroupId, $couponCode = '', $now = null)
     {
-        if (is_null($now)) {
-            $now = Mage::getModel('Mage_Core_Model_Date')->date('Y-m-d');
-        }
-        /* We need to overwrite joinLeft if coupon is applied */
-        $this->getSelect()->reset();
-        parent::_initSelect();
+        if (!$this->getFlag('validation_filter')) {
 
-        $this->addFieldToFilter('website_ids', array('finset' => (int)$websiteId))
-            ->addFieldToFilter('customer_group_ids', array('finset' => (int)$customerGroupId))
-            ->addFieldToFilter('is_active', 1);
+            /* We need to overwrite joinLeft if coupon is applied */
+            $this->getSelect()->reset();
+            parent::_initSelect();
 
-        if ($couponCode) {
-            $this->getSelect()
-                ->joinLeft(
+            $this->addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now);
+            $select = $this->getSelect();
+
+            if (strlen($couponCode)) {
+                $select->joinLeft(
                     array('rule_coupons' => $this->getTable('salesrule_coupon')),
                     'main_table.rule_id = rule_coupons.rule_id ',
                     array('code')
                 );
-            $this->getSelect()->where(
-                '(main_table.coupon_type = ? ',  Mage_SalesRule_Model_Rule::COUPON_TYPE_NO_COUPON
-            );
-            $this->getSelect()->orWhere('rule_coupons.code = ?)', $couponCode);
-        } else {
-            $this->addFieldToFilter('main_table.coupon_type', Mage_SalesRule_Model_Rule::COUPON_TYPE_NO_COUPON);
+            $select->where('(main_table.coupon_type = ? ', Mage_SalesRule_Model_Rule::COUPON_TYPE_NO_COUPON)
+                ->orWhere('(main_table.coupon_type = ? AND rule_coupons.type = 0',
+                    Mage_SalesRule_Model_Rule::COUPON_TYPE_AUTO)
+                ->orWhere('main_table.coupon_type = ? AND main_table.use_auto_generation = 1 ' .
+                    'AND rule_coupons.type = 1', Mage_SalesRule_Model_Rule::COUPON_TYPE_SPECIFIC)
+                ->orWhere('main_table.coupon_type = ? AND main_table.use_auto_generation = 0 ' .
+                    'AND rule_coupons.type = 0)', Mage_SalesRule_Model_Rule::COUPON_TYPE_SPECIFIC)
+                ->where('rule_coupons.code = ?)', $couponCode);
+            } else {
+                $this->addFieldToFilter('main_table.coupon_type', Mage_SalesRule_Model_Rule::COUPON_TYPE_NO_COUPON);
+            }
+            $this->setOrder('sort_order', self::SORT_ORDER_ASC);
+            $this->setFlag('validation_filter', true);
         }
-        $this->getSelect()->where('from_date is null or from_date <= ?', $now);
-        $this->getSelect()->where('to_date is null or to_date >= ?', $now);
-        $this->getSelect()->order('sort_order');
+
         return $this;
     }
 
     /**
-     * Filter collection by specified website IDs
+     * Filter collection by website(s), customer group(s) and date.
+     * Filter collection to only active rules.
+     * Sorting is not involved
      *
-     * @param int|array $websiteIds
-     * @return Mage_SalesRule_Model_Resource_Rule_Collection
+     * @param int $websiteId
+     * @param int $customerGroupId
+     * @param string|null $now
+     * @use $this->addWebsiteFilter()
+     *
+     * @return Mage_SalesRule_Model_Mysql4_Rule_Collection
      */
-    public function addWebsiteFilter($websiteIds)
+    public function addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now = null)
     {
-        if (!is_array($websiteIds)) {
-            $websiteIds = array($websiteIds);
+        if (!$this->getFlag('website_group_date_filter')) {
+            if (is_null($now)) {
+                $now = Mage::getModel('Mage_Core_Model_Date')->date('Y-m-d');
+            }
+
+            $this->addWebsiteFilter($websiteId);
+
+            $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
+            $connection = $this->getConnection();
+            $this->getSelect()
+                ->joinInner(
+                    array('customer_group_ids' => $this->getTable($entityInfo['associations_table'])),
+                    $connection->quoteInto(
+                        'main_table.' . $entityInfo['rule_id_field']
+                            . ' = customer_group_ids.' . $entityInfo['rule_id_field']
+                            . ' AND customer_group_ids.' . $entityInfo['entity_id_field'] . ' = ?',
+                        (int)$customerGroupId
+                    ),
+                    array()
+                )
+                ->where('from_date is null or from_date <= ?', $now)
+                ->where('to_date is null or to_date >= ?', $now);
+
+            $this->addIsActiveFilter();
+
+            $this->setFlag('website_group_date_filter', true);
         }
-        $parts = array();
-        foreach ($websiteIds as $websiteId) {
-            $parts[] = $this->getConnection()
-                ->prepareSqlCondition('main_table.website_ids', array('finset' => $websiteId));
-        }
-        if ($parts) {
-            $this->getSelect()->where(new Zend_Db_Expr(implode(' OR ', $parts)));
-        }
+
         return $this;
     }
 
     /**
-     * Init collection select
-     *
+     * Add primary coupon to collection
      *
      * @return Mage_SalesRule_Model_Resource_Rule_Collection
      */
@@ -130,6 +175,7 @@ class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Core_Model_Reso
      * Find product attribute in conditions or actions
      *
      * @param string $attributeCode
+     *
      * @return Mage_SalesRule_Model_Resource_Rule_Collection
      */
     public function addAttributeInConditionFilter($attributeCode)
@@ -141,6 +187,21 @@ class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Core_Model_Reso
         $aCond = $this->_getConditionSql($field, array('like' => $match));
 
         $this->getSelect()->where(sprintf('(%s OR %s)', $cCond, $aCond), null, Varien_Db_Select::TYPE_CONDITION);
+
+        return $this;
+    }
+
+    /**
+     * Excludes price rules with generated specific coupon codes from collection
+     *
+     * @return Mage_SalesRule_Model_Resource_Rule_Collection
+     */
+    public function addAllowedSalesRulesFilter()
+    {
+        $this->addFieldToFilter(
+            'main_table.use_auto_generation',
+            array('neq' => 1)
+        );
 
         return $this;
     }

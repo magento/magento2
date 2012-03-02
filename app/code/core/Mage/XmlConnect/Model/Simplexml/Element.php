@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,17 +61,54 @@ class Mage_XmlConnect_Model_Simplexml_Element extends Varien_Simplexml_Element
     }
 
     /**
+     * Escape xml entities
+     *
+     * @param mixed $data
+     * @param bool $stripTags
+     * @param array $allowedTags
+     * @return mixed
+     */
+    public function escapeXml($data, $stripTags = true, $allowedTags = null)
+    {
+        if (is_array($data)) {
+            $result = array();
+            foreach ($data as $item) {
+                if ($stripTags) {
+                    $item = Mage::helper('Mage_Core_Helper_Data')->stripTags($item, $allowedTags);
+                }
+                $result[] = $this->xmlentities($item);
+            }
+        } else {
+            if (is_null($data)) {
+                $data = $this;
+            }
+            $data = (string)$data;
+
+            if ($stripTags) {
+                $data = Mage::helper('Mage_Core_Helper_Data')->stripTags($data, $allowedTags);
+            }
+            $result = $this->xmlentities($data);
+        }
+        return $result;
+    }
+
+    /**
      * Converts meaningful xml character (") to xml attribute specification
      *
      * @param string $value
+     * @param bool $stripTags
      * @return string|this
      */
-    public function xmlAttribute($value = null)
+    public function xmlAttribute($value = null, $stripTags = true)
     {
         if (is_null($value)) {
             $value = $this;
         }
         $value = (string)$value;
+
+        if ($stripTags) {
+            $value = Mage::helper('Mage_Core_Helper_Data')->stripTags($value);
+        }
         $value = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $value);
         return $value;
     }

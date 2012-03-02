@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -45,6 +45,12 @@
                     <li>
                         Under Display <span style="text-decoration: underline">Options on Payment Page</span>, enter the following:
                         <ul style="list-style:lower-roman;padding:0 2em;">
+                            <li>
+                                <span style="text-decoration: underline">Cancel URL</span>:<br />
+                                <a href="<?php echo $this->getFrontendUrl('paypal/payflow/cancelPayment') ?>" onclick="return false;">
+                                    <?php echo $this->getFrontendUrl('paypal/payflow/cancelPayment') ?>
+                                </a>
+                            </li>
                             <li>
                                 <span style="text-decoration: underline">Error URL</span>:<br />
                                 <a href="<?php echo $this->getFrontendUrl('paypal/payflow/returnUrl') ?>" onclick="return false;">
@@ -95,27 +101,3 @@
         </ul>
     </div>
 </div>
-<div id="PayFlowLinkLearnMoreText" style="display:none">
-    <?php echo $this->__('When using Payflow Link in Magento, a payment authorization transaction must be performed after the shopper enters their credit card information on the Payment page of checkout.  If a full authorization is performed for the entire dollar amount of the transaction, then in some cases, the transaction amount might be reserved on the shopper\'s credit card for up to 30 days, even if they abandon their cart.  This is not an ideal customer experience.  Using this advanced setting in Magento, you can configure key details of this authorization.') ?>
-
-    <ul style="list-style:disc; padding-left:2em;">
-        <li>
-            <?php echo $this->__('Select $0 Auth if your credit card processor supports $0 Auth capability and Reference Transactions, or if you are unsure what to select.  This setting provides the best experience for shoppers.') ?>
-        </li>
-        <li>
-            <?php echo $this->__('Select Full Auth if you want to minimize your credit card processing fees, or if your credit card processor does not permit reference transactions.  Please note that in some cases, shoppers who abandon your cart late in the process may find that there is a payment authorization outstanding from your company, which will go away on its own in a few days/weeks. This authorization can be reversal by voiding it, however, there is no guarantee the card-issuing bank will accept this request.') ?>
-        </li>
-    </ul>
-</div>
-<script type="text/javascript">
-//<![CDATA[
-    document.observe("dom:loaded", function() {
-        $('row_paypal_payflow_link_authorization_amount').insert({after:'<tr id="PayFlowLinkLearnMoreRow"><td colspan="4"><tr>'});
-        $('PayFlowLinkLearnMoreRow').down().insert({top:$('PayFlowLinkLearnMoreText')});
-        $('PayFlowLinkLearnMore').observe('click', function(event){
-            $('PayFlowLinkLearnMoreText').toggle();
-            event.stop();
-        });
-    });
-//]]>
-</script>

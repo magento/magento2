@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,7 @@
  * @package     Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object
+class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements Mage_Checkout_Model_Cart_Interface
 {
     /**
      * Quote session object
@@ -110,6 +110,13 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object
      * @var array
      */
     protected $_errors = array();
+
+    /**
+     * Quote associated with the model
+     *
+     * @var Mage_Sales_Model_Quote
+     */
+    protected $_quote;
 
     public function __construct()
     {
@@ -233,7 +240,22 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object
      */
     public function getQuote()
     {
-        return $this->getSession()->getQuote();
+        if (!$this->_quote) {
+            $this->_quote = $this->getSession()->getQuote();
+        }
+        return $this->_quote;
+    }
+
+    /**
+     * Set quote object
+     *
+     * @param Mage_Sales_Model_Quote $quote
+     * @return Mage_Adminhtml_Model_Sales_Order_Create
+     */
+    public function setQuote(Mage_Sales_Model_Quote $quote)
+    {
+        $this->_quote = $quote;
+        return $this;
     }
 
     /**
@@ -632,6 +654,9 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object
             foreach ($data['remove'] as $itemId => $from) {
                 $this->removeItem($itemId, $from);
             }
+        }
+        if (isset($data['empty_customer_cart']) && (int)$data['empty_customer_cart'] == 1) {
+            $this->getCustomerCart()->removeAllItems()->collectTotals()->save();
         }
         return $this;
     }

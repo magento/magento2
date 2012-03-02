@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -299,5 +299,15 @@ abstract class Mage_Catalog_Model_Layer_Filter_Abstract extends Varien_Object
     public function setWebsiteId($websiteId)
     {
         return $this->setData('website_id', $websiteId);
+    }
+
+    /**
+     * Clear current element link text, for example 'Clear Price'
+     *
+     * @return false|string
+     */
+    public function getClearLinkText()
+    {
+        return false;
     }
 }

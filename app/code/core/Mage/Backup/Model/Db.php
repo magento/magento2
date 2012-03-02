@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backup
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,10 +37,10 @@ class Mage_Backup_Model_Db
 
     /**
      * Buffer length for multi rows
-     * default 512 Kb
+     * default 100 Kb
      *
      */
-    const BUFFER_LENGTH = 524288;
+    const BUFFER_LENGTH = 102400;
 
     /**
      * Retrieve resource model

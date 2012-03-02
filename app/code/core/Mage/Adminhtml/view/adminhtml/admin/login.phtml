@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -38,6 +38,7 @@
     <script type="text/javascript" src="<?php echo $this->getSkinUrl('prototype/validation.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getSkinUrl('scriptaculous/effects.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/adminhtml/form.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/captcha.js') ?>"></script>
 
     <!--[if IE]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('iestyles.css') ?>" type="text/css" media="all" /> <![endif]-->
     <!--[if lt IE 7]> <link rel="stylesheet" href="<?php echo $this->getSkinUrl('below_ie7.css') ?>" type="text/css" media="all" /> <![endif]-->
@@ -57,6 +58,7 @@
                         <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" /></div>
                     <div class="input-box input-right"><label for="login"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Password:') ?></label><br />
                         <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" /></div>
+                    <?php echo $this->getChildHtml('form.additional.info'); ?>
                     <div class="clear"></div>
                     <div class="form-buttons">
                         <a class="left" href="<?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->getUrl('adminhtml/index/forgotpassword', array('_nosecret' => true)) ?>"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Forgot your password?') ?></a>
@@ -72,4 +74,3 @@
     </div>
 </body>
 </html>
-

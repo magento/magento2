@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,6 +114,7 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
     {
         $actualText = $originalText;
         $this->_model->processResponseBody($actualText);
+        $this->markTestIncomplete('Bug MAGE-2494');
         $this->assertEquals($expectedText, $actualText);
     }
 

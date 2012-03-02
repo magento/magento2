@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Archive
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,9 +43,19 @@ class Mage_Archive_Bz extends Mage_Archive_Abstract implements Mage_Archive_Inte
     */
     public function pack($source, $destination)
     {
-        $data = $this->_readFile($source);
-        $bzData = bzcompress($data, 9);
-        $this->_writeFile($destination, $bzData);
+        $fileReader = new Mage_Archive_Helper_File($source);
+        $fileReader->open('r');
+
+        $archiveWriter = new Mage_Archive_Helper_File_Bz($destination);
+        $archiveWriter->open('w');
+
+        while (!$fileReader->eof()) {
+            $archiveWriter->write($fileReader->read());
+        }
+
+        $fileReader->close();
+        $archiveWriter->close();
+
         return $destination;
     }
 
@@ -58,21 +68,21 @@ class Mage_Archive_Bz extends Mage_Archive_Abstract implements Mage_Archive_Inte
     */
     public function unpack($source, $destination)
     {
-        $data = '';
-        $bzPointer = bzopen($source, 'r' );
-        if (empty($bzPointer)) {
-            throw new Exception('Can\'t open BZ archive : ' . $source);
-        }
-        while (!feof($bzPointer)) {
-            $data .= bzread($bzPointer, 131072);
-        }
-        bzclose($bzPointer);
         if (is_dir($destination)) {
             $file = $this->getFilename($source);
             $destination = $destination . $file;
         }
-        echo $destination;
-        $this->_writeFile($destination, $data);
+
+        $archiveReader = new Mage_Archive_Helper_File_Bz($source);
+        $archiveReader->open('r');
+
+        $fileWriter = new Mage_Archive_Helper_File($destination);
+        $fileWriter->open('w');
+
+        while (!$archiveReader->eof()) {
+            $fileWriter->write($archiveReader->read());
+        }
+
         return $destination;
     }
 

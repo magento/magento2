@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,6 +41,7 @@ class Mage_Reports_Model_Flag extends Mage_Core_Model_Flag
     const REPORT_REFUNDED_FLAG_CODE = 'report_refunded_aggregated';
     const REPORT_COUPONS_FLAG_CODE  = 'report_coupons_aggregated';
     const REPORT_BESTSELLERS_FLAG_CODE = 'report_bestsellers_aggregated';
+    const REPORT_PRODUCT_VIEWED_FLAG_CODE = 'report_product_viewed_aggregated';
 
     /**
      * Setter for flag code

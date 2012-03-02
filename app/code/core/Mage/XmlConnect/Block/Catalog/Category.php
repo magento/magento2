@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -78,7 +78,7 @@ class Mage_XmlConnect_Block_Catalog_Category extends Mage_XmlConnect_Block_Catal
                 $item = Mage::getModel('Mage_Catalog_Model_Category')->load($item->getId());
 
                 $itemXmlObj = $itemsXmlObj->addChild('item');
-                $itemXmlObj->addChild('label', $categoryXmlObj->xmlentities($item->getName()));
+                $itemXmlObj->addChild('label', $categoryXmlObj->escapeXml($item->getName()));
                 $itemXmlObj->addChild('entity_id', $item->getId());
                 $itemXmlObj->addChild('content_type', $item->hasChildren() ? 'categories' : 'products');
                 if (!is_null($categoryId)) {

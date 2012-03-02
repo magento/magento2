@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,8 +48,11 @@ class Mage_Adminhtml_Model_System_Config_Backend_Locale extends Mage_Core_Model_
 
         $values     = explode(',', $this->getValue());
         $exceptions = array();
+
         foreach ($collection as $data) {
             $match = false;
+            $scopeName = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Default scope');
+
             if (preg_match('/(base|default)$/', $data->getPath(), $match)) {
                 if (!in_array($data->getValue(), $values)) {
                     $currencyName = Mage::app()->getLocale()->currency($data->getValue())->getName();
@@ -76,11 +79,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_Locale extends Mage_Core_Model_
                             break;
                     }
 
-                    $exceptions[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Currency "%s" is used as %s in %s.',
-                        $currencyName,
-                        $fieldName,
-                        $scopeName
-                    );
+                    $exceptions[] = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Currency "%s" is used as %s in %s.', $currencyName, $fieldName, $scopeName);
                 }
             }
         }

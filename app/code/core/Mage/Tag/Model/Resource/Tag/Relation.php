@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tag
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -174,8 +174,7 @@ class Mage_Tag_Model_Resource_Tag_Relation extends Mage_Core_Model_Resource_Db_A
         $select = $write->select()
             ->from($this->getMainTable(), 'product_id')
             ->where('tag_id = :tag_id')
-            ->where('store_id = :store_id')
-            ->where('customer_id IS NULL');
+            ->where('store_id = :store_id');
         $oldRelationIds = $write->fetchCol($select, $bind);
 
         $insert = array_diff($addedIds, $oldRelationIds);
@@ -199,7 +198,6 @@ class Mage_Tag_Model_Resource_Tag_Relation extends Mage_Core_Model_Resource_Db_A
             $write->delete($this->getMainTable(), array(
                 'product_id IN (?)' => $delete,
                 'store_id = ?'      => $model->getStoreId(),
-                'customer_id IS NULL'
             ));
         }
 

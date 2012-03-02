@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,18 +31,25 @@
  * @package     Mage_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 class Mage_Connect_Validator
 {
+    /**
+     * Array of stability variants
+     *
+     * @var array
+     */
     protected static $_stability = array(0=>'devel',1=>'alpha',2=>'beta',3=>'stable');
 
-
+    /**
+     * Get array of Stability variants
+     *
+     * @static
+     * @return array
+     */
     public static function getStabilities()
     {
         return self::$_stability;
     }
-
-
 
     /**
      * Compare stabilities. Returns:
@@ -50,31 +57,30 @@ class Mage_Connect_Validator
      * -1 if the first stability is lower than the second
      *  0 if they are equal
      *  1 if the second is lower.
-     * @param $s1
-     * @param $s2
-     * @return int
+     *
+     * @param int|string $s1
+     * @param int|string $s2
+     * @return int|null
      */
     public function compareStabilities($s1, $s2)
     {
         $list = $this->getStabilities();
         $tmp = array_combine(array_values($list),array_keys($list));
 
-        if(!isset($tmp[$s1], $tmp[$s2])) {
+        if (!isset($tmp[$s1], $tmp[$s2])) {
             throw new Exception("Invalid stability in compareStabilities argument");
         }
 
-
-        // 'stable' turns to 3
-        // 'devel' turns to 0
         $s1 = $tmp[$s1];
         $s2 = $tmp[$s2];
-        if($s1 === $s2) {
+        if ($s1 === $s2) {
             return 0;
-        } elseif($s1 > $s2) {
+        } elseif ($s1 > $s2) {
             return 1;
-        } elseif($s1 < $s2) {
+        } elseif ($s1 < $s2) {
             return -1;
         }
+        return null;
     }
 
     /**
@@ -87,6 +93,7 @@ class Mage_Connect_Validator
 
     /**
      * Validate max len of string
+     *
      * @param string $str
      * @param int $maxLen
      * @return bool
@@ -123,94 +130,103 @@ class Mage_Connect_Validator
 
     /**
      * Validate compatible data
+     *
      * @param array $data
      * @return bool
      */
     public function validateCompatible(array $data)
     {
-        if(!count($data)) {
+        if (!count($data)) {
             /**
              * Allow empty
              */
             return true;
         }
         $count = 0;
-        foreach($data as $k=>$v) {
-           foreach(array('name','channel','min','max') as $fld) {
+        foreach ($data as $v) {
+            /**
+             * Converts an array to variables
+             * @var $channel string Channel Name
+             * @var $name string Package Name
+             * @var $max string Maximum version number
+             * @var $min string Minimum version number
+             */
+            foreach (array('name','channel','min','max') as $fld) {
                  $$fld = trim($v[$fld]);
-           }
-           $count++;
+            }
+            $count++;
 
-           $res = $this->validateUrl($channel) && strlen($channel);
-           if(!$res) {
-              $this->addError("Invalid or empty channel in compat. #{$count}");
-           }
+            $res = $this->validateUrl($channel) && strlen($channel);
+            if (!$res) {
+                $this->addError("Invalid or empty channel in compatibility #{$count}");
+            }
 
-           $res = $this->validatePackageName($name) && strlen($name);
-           if(!$res) {
-              $this->addError("Invalid or empty name in compat. #{$count}");
-           }
-           $res1 = $this->validateVersion($min);
-           if(!$res1) {
-              $this->addError("Invalid or empty minVersion in compat. #{$count}");
-           }
-           $res2 = $this->validateVersion($max);
-           if(!$res2) {
-              $this->addError("Invalid or empty maxVersion in compat. #{$count}");
-           }
-           if($res1 && $res2 && $this->versionLower($max, $min)) {
-                 $this->addError("Max version is lower than min in compat #{$count}");
-           }
-
+            $res = $this->validatePackageName($name) && strlen($name);
+            if (!$res) {
+                $this->addError("Invalid or empty name in compatibility #{$count}");
+            }
+            $res1 = $this->validateVersion($min);
+            if (!$res1) {
+                $this->addError("Invalid or empty minVersion in compatibility #{$count}");
+            }
+            $res2 = $this->validateVersion($max);
+            if (!$res2) {
+                $this->addError("Invalid or empty maxVersion in compatibility #{$count}");
+            }
+            if ($res1 && $res2 && $this->versionLower($max, $min)) {
+                $this->addError("Max version is lower than min in compatibility #{$count}");
+            }
         }
-        return ! $this->hasErrors();
+        return !$this->hasErrors();
     }
 
     /**
      * Validate authors of package
+     *
      * @param array $authors
      * @return bool
      */
     public function validateAuthors(array $authors)
     {
-        if(!count($authors)) {
+        if (!count($authors)) {
             $this->addError('Empty authors section');
             return false;
         }
         $count = 0;
-        foreach($authors as $k=>$v) {
+        foreach ($authors as $v) {
            $count++;
            array_map('trim', $v);
            $name = $v['name'];
            $login = $v['user'];
            $email = $v['email'];
            $res = $this->validateMaxLen($name, 256) && strlen($name);
-           if(!$res) {
+           if (!$res) {
               $this->addError("Invalid or empty name for author #{$count}");
            }
-           $res = $this->validatePackageName($login) && strlen($login);
-           if(!$res) {
+           $res = $this->validateAuthorName($login) && strlen($login);
+           if (!$res) {
                  $this->addError("Invalid or empty login for author #{$count}");
            }
            $res = $this->validateEmail($email);
-           if(!$res) {
+           if (!$res) {
                  $this->addError("Invalid or empty email for author #{$count}");
            }
         }
-        return ! $this->hasErrors();
+        return !$this->hasErrors();
     }
-
 
     /**
      * Validator errors
+     *
      * @var array
      */
     private $_errors = array();
 
     /**
      * Add error
+     *
      * @param string $err
-     * @return
+     * @return void
      */
     private function addError($err)
     {
@@ -219,10 +235,10 @@ class Mage_Connect_Validator
 
     /**
      * Set validator errors
+     *
      * @param array $err
-     * @return
+     * @return void
      */
-
     private function setErrors(array $err)
     {
         $this->_errors = $err;
@@ -230,7 +246,8 @@ class Mage_Connect_Validator
 
     /**
      * Clear validator errors
-     * @return
+     *
+     * @return void
      */
     private function clearErrors()
     {
@@ -239,23 +256,24 @@ class Mage_Connect_Validator
 
     /**
      * Check if there are validator errors set
-     * @return unknown_type
+     *
+     * @return int
      */
     public function hasErrors()
     {
         return count($this->_errors) != 0;
     }
 
-
     /**
      * Get errors
+     *
      * @param bool $clear if true after this call erros will be cleared
      * @return array
      */
     public function getErrors($clear = true)
     {
         $out = $this->_errors;
-        if($clear) {
+        if ($clear) {
             $this->clearErrors();
         }
         return $out;
@@ -263,6 +281,7 @@ class Mage_Connect_Validator
 
     /**
      * Validate URL
+     *
      * @param string $str
      * @return bool
      */
@@ -274,9 +293,9 @@ class Mage_Connect_Validator
         return preg_match($regex, $str);
     }
 
-
     /**
      * Validates package stability
+     *
      * @param string $str
      * @return bool
      */
@@ -287,6 +306,7 @@ class Mage_Connect_Validator
 
     /**
      * Validate date format
+     *
      * @param $date
      * @return bool
      */
@@ -294,12 +314,11 @@ class Mage_Connect_Validator
     {
         $subs = null;
         $check1 = preg_match("/^([\d]{4})-([\d]{2})-([\d]{2})$/i", $date, $subs);
-        if(!$check1) {
+        if (!$check1) {
             return false;
         }
         return checkdate($subs[2], $subs[3], $subs[1]);
     }
-
 
     /**
      * Validate email
@@ -322,7 +341,19 @@ class Mage_Connect_Validator
     }
 
     /**
+     * Validate author name
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function validateAuthorName($name)
+    {
+        return preg_match("/^[a-zA-Z0-9_-]+$/i", $name);
+    }
+
+    /**
      * Validate version number
+     *
      * @param string $version
      * @return bool
      */
@@ -333,6 +364,7 @@ class Mage_Connect_Validator
 
     /**
      * Check versions are equal
+     *
      * @param string $v1
      * @param string $v2
      * @return bool
@@ -344,6 +376,7 @@ class Mage_Connect_Validator
 
     /**
      * Check version $v1 <= $v2
+     *
      * @param string $v1
      * @param string $v2
      * @return bool
@@ -353,9 +386,9 @@ class Mage_Connect_Validator
         return version_compare($v1, $v2, "le");
     }
 
-
     /**
      * Check if version $v1 lower than $v2
+     *
      * @param string $v1
      * @param string $v2
      * @return bool
@@ -367,6 +400,7 @@ class Mage_Connect_Validator
 
     /**
      * Check version $v1 >= $v2
+     *
      * @param string $v1
      * @param string $v2
      * @return bool
@@ -376,9 +410,9 @@ class Mage_Connect_Validator
         return version_compare($v1, $v2, "ge");
     }
 
-
     /**
      * Generic regex validation
+     *
      * @param string $str
      * @param string $regex
      * @return bool
@@ -388,9 +422,9 @@ class Mage_Connect_Validator
         return preg_match($regex, $str);
     }
 
-
     /**
      * Check if PHP extension loaded
+     *
      * @param string $name Extension name
      * @return bool
      */
@@ -399,15 +433,22 @@ class Mage_Connect_Validator
         return extension_loaded($name);
     }
 
-
+    /**
+     * Validate PHP version
+     *
+     * @param string $min
+     * @param string $max
+     * @param string $ver
+     * @return bool
+     */
     public function validatePHPVersion($min, $max, $ver = PHP_VERSION)
     {
         $minAccepted = true;
-        if($min) {
+        if ($min) {
             $minAccepted = version_compare($ver, $min, ">=");
         }
         $maxAccepted = true;
-        if($max) {
+        if ($max) {
             $maxAccepted = version_compare($ver, $max, "<=");
         }
         return (bool) $minAccepted && $maxAccepted;

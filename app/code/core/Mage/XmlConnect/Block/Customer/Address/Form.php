@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -250,12 +250,12 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
 
         if ($this->getNameWidgetBlock()->getPrefixOptions() === false) {
             $contactInfoFieldset->addField($this->getNameWidgetBlock()->getFieldId('prefix'), 'text', array(
-                'label' => $this->getNameWidgetBlock()->__('Prefix'),
+                'label' => $this->__('Prefix'),
                 'name' => $this->getNameWidgetBlock()->getFieldName('prefix')
             ) + $attributes);
         } else {
             $contactInfoFieldset->addField($this->getNameWidgetBlock()->getFieldId('prefix'), 'select', array(
-                'label' => $this->getNameWidgetBlock()->__('Prefix'),
+                'label' => $this->__('Prefix'),
                 'name' => $this->getNameWidgetBlock()->getFieldName('prefix'),
                 'options' => $this->getNameWidgetBlock()->getPrefixOptions()
             ) + $attributes);
@@ -284,12 +284,12 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
 
         if ($this->getNameWidgetBlock()->getSuffixOptions() === false) {
             $contactInfoFieldset->addField($this->getNameWidgetBlock()->getFieldId('suffix'), 'text', array(
-                'label' => $this->getNameWidgetBlock()->__('Suffix'),
+                'label' => $this->__('Suffix'),
                 'name' => $this->getNameWidgetBlock()->getFieldName('suffix')
             ) + $attributes);
         } else {
             $contactInfoFieldset->addField($this->getNameWidgetBlock()->getFieldId('suffix'), 'select', array(
-                'label' => $this->getNameWidgetBlock()->__('Suffix'),
+                'label' => $this->__('Suffix'),
                 'name' => $this->getNameWidgetBlock()->getFieldName('suffix'),
                 'options' => $this->getNameWidgetBlock()->getSuffixOptions()
             ) + $attributes);
@@ -314,7 +314,7 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
         );
 
         $contactInfoFieldset->addField($this->getNameWidgetBlock()->getFieldId('middlename'), 'text', array(
-            'label' => $this->getNameWidgetBlock()->__('M.I.'),
+            'label' => $this->__('M.I.'),
             'name' => $this->getNameWidgetBlock()->getFieldName('middlename')
         ) + $attributes);
 

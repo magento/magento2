@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Captcha
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <sections>
+        <admin>
+            <groups>
+                <captcha translate="label">
+                    <label>CAPTCHA</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable CAPTCHA in Admin</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enable>
+                        <font translate="label">
+                            <label>Font</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Font</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </font>
+                        <forms translate="label">
+                            <label>Forms</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Form_Backend</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </forms>
+                        <mode translate="label">
+                            <label>Displaying Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Mode</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </mode>
+                        <failed_attempts_login translate="label comment">
+                            <label>Number of Unsuccessful Attempts to Login</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>If 0 is specified, CAPTCHA on the Login form will be always available.</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <mode>after_fail</mode>
+                                <enable>1</enable>
+                            </depends>
+                            <frontend_class>required-entry validate-digits</frontend_class>
+                        </failed_attempts_login>
+                        <timeout translate="label">
+                            <label>CAPTCHA Timeout (minutes)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry validate-digits</frontend_class>
+                        </timeout>
+                        <length translate="label comment">
+                            <label>Number of Symbols</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Please specify 8 symbols at the most. Range allowed (e.g. 3-5)</comment>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry</frontend_class>
+                        </length>
+                        <symbols translate="label comment">
+                            <label>Symbols Used in CAPTCHA</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]></comment>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry validate-alphanum</frontend_class>
+                        </symbols>
+                        <case_sensitive translate="label">
+                            <label>Case Sensitive</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </case_sensitive>
+                    </fields>
+                </captcha>
+            </groups>
+        </admin>
+        <customer>
+            <groups>
+                <captcha translate="label">
+                    <label>CAPTCHA</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>110</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable CAPTCHA on Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enable>
+                        <font translate="label">
+                            <label>Font</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Font</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </font>
+                        <forms translate="label comment">
+                            <label>Forms</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Form_Frontend</source_model>
+                            <comment>CAPTCHA for "Create user" and "Forgot password" forms is always enabled if chosen</comment>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </forms>
+                        <mode translate="label">
+                            <label>Displaying Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Captcha_Model_Config_Mode</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </mode>
+                        <failed_attempts_login translate="label comment">
+                            <label>Number of Unsuccessful Attempts to Login</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>If 0 is specified, CAPTCHA on the Login form will be always available.</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                                <mode>after_fail</mode>
+                            </depends>
+                            <frontend_class>required-entry validate-digits</frontend_class>
+                        </failed_attempts_login>
+                        <timeout translate="label">
+                            <label>CAPTCHA Timeout (minutes)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry validate-digits</frontend_class>
+                        </timeout>
+                        <length translate="label comment">
+                            <label>Number of Symbols</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Please specify 8 symbols at the most. Range allowed (e.g. 3-5)</comment>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry</frontend_class>
+                        </length>
+                        <symbols translate="label comment">
+                            <label>Symbols Used in CAPTCHA</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]></comment>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                            <frontend_class>required-entry validate-alphanum</frontend_class>
+                        </symbols>
+                        <case_sensitive translate="label">
+                            <label>Case Sensitive</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><enable>1</enable></depends>
+                        </case_sensitive>
+                    </fields>
+                </captcha>
+            </groups>
+        </customer>
+    </sections>
+</config>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -136,10 +136,9 @@ class Mage_Core_Model_Resource_Variable extends Mage_Core_Model_Resource_Db_Abst
      */
     protected function _addValueToSelect(Zend_Db_Select $select, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
     {
-        $ifNullPlainValue = $this->_getReadAdapter()
-            ->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
-        $ifNullHtmlValue  = $this->_getReadAdapter()
-            ->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
+        $adapter = $this->_getReadAdapter();
+        $ifNullPlainValue = $adapter->getCheckSql('store.plain_value IS NULL', 'def.plain_value', 'store.plain_value');
+        $ifNullHtmlValue  = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(
                 array('def' => $this->getTable('core_variable_value')),
@@ -147,7 +146,7 @@ class Mage_Core_Model_Resource_Variable extends Mage_Core_Model_Resource_Db_Abst
                 array())
             ->joinLeft(
                 array('store' => $this->getTable('core_variable_value')),
-                'store.variable_id = def.variable_id AND store.store_id = ' . $storeId,
+                'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
                 array())
             ->columns(array(
                 'plain_value'       => $ifNullPlainValue,

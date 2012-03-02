@@ -20,18 +20,25 @@
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-class Mage_Connect_Command_Config
-extends Mage_Connect_Command
-
+/**
+ * Configuration command callbacks
+ *
+ * @throws Exception
+ * @category    Mage
+ * @package     Mage_Connect
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class Mage_Connect_Command_Config extends Mage_Connect_Command
 {
+    /**
+     * Parameters constants
+     */
     const PARAM_KEY = 0;
     const PARAM_VAL = 1;
-
 
     /**
      * Show config variable
@@ -69,7 +76,6 @@ extends Mage_Connect_Command
             return $this->doError($command, $e->getMessage());
         }
     }
-
 
     /**
      * Set config variable
@@ -207,7 +213,4 @@ extends Mage_Connect_Command
             return $this->doError($command, $e->getMessage());
         }
     }
-
 }
-
-

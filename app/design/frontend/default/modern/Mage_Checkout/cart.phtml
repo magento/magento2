@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_modern
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -99,7 +99,8 @@
                             <?php if($this->getContinueShoppingUrl()): ?>
                                 <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
                             <?php endif; ?>
-                            <button type="submit" title="<?php echo $this->__('Update Shopping Cart') ?>" class="button btn-update"><span><span><?php echo $this->__('Update Shopping Cart') ?></span></span></button>
+                            <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo $this->__('Clear Shopping Cart'); ?>" class="button btn-update"><span><span><?php echo $this->__('Clear Shopping Cart'); ?></span></span></button>
+                            <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo $this->__('Update Shopping Cart'); ?>" class="button btn-update" style="margin-left: 5px;"><span><span><?php echo $this->__('Update Shopping Cart'); ?></span></span></button>
                         </td>
                     </tr>
                 </tfoot>

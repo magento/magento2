@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Persistent
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,7 +61,10 @@ class Mage_Persistent_Model_Resource_Session extends Mage_Core_Model_Resource_Db
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         if (!$object->getLoadExpired()) {
-            $select->where('updated_at >= ?', $object->getExpiredBefore());
+            $select->join(
+                array('customer' => $this->getTable('customer_entity')),
+                'customer.entity_id = persistent_session.customer_id'
+            )->where('persistent_session.updated_at >= ?', $object->getExpiredBefore());
         }
 
         return $select;

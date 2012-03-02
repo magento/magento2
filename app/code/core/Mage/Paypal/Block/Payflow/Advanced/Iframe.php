@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,15 @@
  */
 class Mage_Paypal_Block_Payflow_Advanced_Iframe extends Mage_Paypal_Block_Payflow_Link_Iframe
 {
+    /**
+     * Set payment method code
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->_paymentMethodCode = Mage_Paypal_Model_Config::METHOD_PAYFLOWADVANCED;
+    }
+
     /**
      * Get frame action URL
      *

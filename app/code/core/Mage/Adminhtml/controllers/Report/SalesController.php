@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,49 +29,19 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Action
+class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Report_Abstract
 {
     /**
-     * Admin session model
+     * Add report/sales breadcrumbs
      *
-     * @var null|Mage_Admin_Model_Session
+     * @return Mage_Adminhtml_Report_SalesController
      */
-    protected $_adminSession = null;
-
     public function _initAction()
     {
-        $this->loadLayout()
-            ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Reports'), Mage::helper('Mage_Reports_Helper_Data')->__('Reports'))
-            ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Sales'), Mage::helper('Mage_Reports_Helper_Data')->__('Sales'));
-        return $this;
-    }
-
-    public function _initReportAction($blocks)
-    {
-        if (!is_array($blocks)) {
-            $blocks = array($blocks);
-        }
-
-        $requestData = Mage::helper('Mage_Adminhtml_Helper_Data')->prepareFilterString($this->getRequest()->getParam('filter'));
-        $requestData = $this->_filterDates($requestData, array('from', 'to'));
-        $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
-        $params = new Varien_Object();
-
-        foreach ($requestData as $key => $value) {
-            if (!empty($value)) {
-                $params->setData($key, $value);
-            }
-        }
-
-        foreach ($blocks as $block) {
-            if ($block) {
-                $block->setPeriodType($params->getData('period_type'));
-                $block->setFilterData($params);
-            }
-        }
-
+        parent::_initAction();
+        $this->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Sales'), Mage::helper('Mage_Reports_Helper_Data')->__('Sales'));
         return $this;
     }
 
@@ -103,7 +73,7 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Ac
         $this->_showLastExecutionTime(Mage_Reports_Model_Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
         $this->_initAction()
-            ->_setActiveMenu('report/sales/bestsellers')
+            ->_setActiveMenu('report/products/bestsellers')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Bestsellers Report'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Bestsellers Report'));
 
         $gridBlock = $this->getLayout()->getBlock('report_sales_bestsellers.grid');
@@ -137,22 +107,6 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Ac
         $grid       = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid');
         $this->_initReportAction($grid);
         $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
-    }
-
-    protected function _showLastExecutionTime($flagCode, $refreshCode)
-    {
-        $flag = Mage::getModel('Mage_Reports_Model_Flag')->setReportFlagCode($flagCode)->loadSelf();
-        $updatedAt = ($flag->hasData())
-            ? Mage::app()->getLocale()->storeDate(
-                0, new Zend_Date($flag->getLastUpdate(), Varien_Date::DATETIME_INTERNAL_FORMAT), true
-            )
-            : 'undefined';
-
-        $refreshStatsLink = $this->getUrl('*/*/refreshstatistics');
-        $directRefreshLink = $this->getUrl('*/*/refreshRecent', array('code' => $refreshCode));
-
-        Mage::getSingleton('Mage_Adminhtml_Model_Session')->addNotice(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Last updated: %s. To refresh last day\'s <a href="%s">statistics</a>, click <a href="%s">here</a>.', $updatedAt, $refreshStatsLink, $directRefreshLink));
-        return $this;
     }
 
     /**
@@ -448,18 +402,5 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Ac
                 return $this->_getSession()->isAllowed('report/salesroot');
                 break;
         }
-    }
-
-    /**
-     * Retrieve admin session model
-     *
-     * @return Mage_Admin_Model_Session
-     */
-    protected function _getSession()
-    {
-        if (is_null($this->_adminSession)) {
-            $this->_adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
-        }
-        return $this->_adminSession;
     }
 }

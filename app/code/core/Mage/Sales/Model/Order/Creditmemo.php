@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -157,6 +157,13 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
     protected $_items;
     protected $_order;
     protected $_comments;
+
+    /**
+     * Calculator instances for delta rounding of prices
+     *
+     * @var array
+     */
+    protected $_calculators = array();
 
     protected $_eventPrefix = 'sales_order_creditmemo';
     protected $_eventObject = 'creditmemo';
@@ -312,6 +319,25 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
         return $this;
     }
 
+    /**
+     * Round price considering delta
+     *
+     * @param float $price
+     * @param string $type
+     * @param bool $negative Indicates if we perform addition (true) or subtraction (false) of rounded value
+     * @return float
+     */
+    public function roundPrice($price, $type = 'regular', $negative = false)
+    {
+        if ($price) {
+            if (!isset($this->_calculators[$type])) {
+                $this->_calculators[$type] = Mage::getModel('Mage_Core_Model_Calculator', $this->getStore());
+            }
+            $price = $this->_calculators[$type]->deltaRound($price, $negative);
+        }
+        return $price;
+    }
+
     public function canRefund()
     {
         if ($this->getState() != self::STATE_CANCELED
@@ -377,9 +403,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid()- $this->getOrder()->getBaseTotalRefunded();
 
             Mage::throwException(
-                Mage::helper('Mage_Sales_Helper_Data')->__('Maximum amount available to refund is %s',
-                    $this->getOrder()->formatBasePrice($baseAvailableRefund)
-                )
+                Mage::helper('Mage_Sales_Helper_Data')->__('Maximum amount available to refund is %s', $this->getOrder()->formatBasePrice($baseAvailableRefund))
             );
         }
         $order = $this->getOrder();

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -202,17 +202,18 @@ class Mage_Sales_Model_Order_Creditmemo_Item extends Mage_Core_Model_Abstract
      */
     public function register()
     {
-        $this->getOrderItem()->setQtyRefunded(
-            $this->getOrderItem()->getQtyRefunded() + $this->getQty()
-        );
-        $this->getOrderItem()->setTaxRefunded(
-            $this->getOrderItem()->getTaxRefunded()
-                + $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
-        );
-        $this->getOrderItem()->setHiddenTaxRefunded(
-            $this->getOrderItem()->getHiddenTaxRefunded()
-                + $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
-        );
+        $orderItem = $this->getOrderItem();
+
+        $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $this->getQty());
+        $orderItem->setTaxRefunded($orderItem->getTaxRefunded() + $this->getTaxAmount());
+        $orderItem->setBaseTaxRefunded($orderItem->getBaseTaxRefunded() + $this->getBaseTaxAmount());
+        $orderItem->setHiddenTaxRefunded($orderItem->getHiddenTaxRefunded() + $this->getHiddenTaxAmount());
+        $orderItem->setBaseHiddenTaxRefunded($orderItem->getBaseHiddenTaxRefunded() + $this->getBaseHiddenTaxAmount());
+        $orderItem->setAmountRefunded($orderItem->getAmountRefunded() + $this->getRowTotal());
+        $orderItem->setBaseAmountRefunded($orderItem->getBaseAmountRefunded() + $this->getBaseRowTotal());
+        $orderItem->setDiscountRefunded($orderItem->getDiscountRefunded() + $this->getDiscountAmount());
+        $orderItem->setBaseDiscountRefunded($orderItem->getBaseDiscountRefunded() + $this->getBaseDiscountAmount());
+
         return $this;
     }
 
@@ -239,24 +240,31 @@ class Mage_Sales_Model_Order_Creditmemo_Item extends Mage_Core_Model_Abstract
      */
     public function calcRowTotal()
     {
-        $store          = $this->getCreditmemo()->getStore();
-        $orderItem      = $this->getOrderItem();
-        $orderItemQty   = $orderItem->getQtyOrdered();
+        $creditmemo           = $this->getCreditmemo();
+        $orderItem            = $this->getOrderItem();
+        $orderItemQtyInvoiced = $orderItem->getQtyInvoiced();
 
-        $rowTotal       = $orderItem->getRowTotal();
-        $baseRowTotal   = $orderItem->getBaseRowTotal();
-        $rowTotalInclTax    = $orderItem->getRowTotalInclTax();
-        $baseRowTotalInclTax= $orderItem->getBaseRowTotalInclTax();
+        $rowTotal            = $orderItem->getRowInvoiced() - $orderItem->getAmountRefunded();
+        $baseRowTotal        = $orderItem->getBaseRowInvoiced() - $orderItem->getBaseAmountRefunded();
+        $rowTotalInclTax     = $orderItem->getRowTotalInclTax();
+        $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        $rowTotal       = $rowTotal/$orderItemQty*$this->getQty();
-        $baseRowTotal   = $baseRowTotal/$orderItemQty*$this->getQty();
-
-        $this->setRowTotal($store->roundPrice($rowTotal));
-        $this->setBaseRowTotal($store->roundPrice($baseRowTotal));
+        if (!$this->isLast()) {
+            $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
+            $rowTotal     = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
+            $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
+        }
+        $this->setRowTotal($rowTotal);
+        $this->setBaseRowTotal($baseRowTotal);
 
         if ($rowTotalInclTax && $baseRowTotalInclTax) {
-            $this->setRowTotalInclTax($store->roundPrice($rowTotalInclTax/$orderItemQty*$this->getQty()));
-            $this->setBaseRowTotalInclTax($store->roundPrice($baseRowTotalInclTax/$orderItemQty*$this->getQty()));
+            $orderItemQty = $orderItem->getQtyOrdered();
+            $this->setRowTotalInclTax(
+                $creditmemo->roundPrice($rowTotalInclTax / $orderItemQty * $this->getQty(), 'including')
+            );
+            $this->setBaseRowTotalInclTax(
+                $creditmemo->roundPrice($baseRowTotalInclTax / $orderItemQty * $this->getQty(), 'including_base')
+            );
         }
         return $this;
     }

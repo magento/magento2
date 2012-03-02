@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,6 +111,20 @@ class Mage_Core_Helper_AbstractTest extends PHPUnit_Framework_TestCase
         $expected = array("Don\\'t do that.", "Can\\'t do that.");
         $this->assertEquals($expected, $this->_helper->jsQuoteEscape($data));
         $this->assertEquals($expected[0], $this->_helper->jsQuoteEscape($data[0]));
+    }
+
+    /**
+     * @covers Mage_Core_Helper_Abstract::quoteEscape
+     */
+    public function testQuoteEscape()
+    {
+        $data = "Text with 'single' and \"double\" quotes";
+        $expected = array(
+            "Text with &#039;single&#039; and &quot;double&quot; quotes",
+            "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
+        );
+        $this->assertEquals($expected[0], $this->_helper->quoteEscape($data));
+        $this->assertEquals($expected[1], $this->_helper->quoteEscape($data, true));
     }
 
     public function testSetGetLayout()

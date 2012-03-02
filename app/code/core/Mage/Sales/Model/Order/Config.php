@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -142,7 +142,11 @@ class Mage_Sales_Model_Order_Config extends Mage_Core_Model_Config_Base
      */
     public function getStateStatuses($state, $addLabels = true)
     {
-        $key = $state . $addLabels;
+        if (is_array($state)) {
+            $key = implode("|", $state) . $addLabels;
+        } else {
+            $key = $state . $addLabels;
+        }
         if (isset($this->_stateStatuses[$key])) {
             return $this->_stateStatuses[$key];
         }

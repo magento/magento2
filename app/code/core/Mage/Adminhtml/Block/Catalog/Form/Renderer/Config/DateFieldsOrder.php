@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,8 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_DateFieldsOrder extends Mage_Adminhtml_Block_System_Config_Form_Field
+class Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_DateFieldsOrder
+    extends Mage_Adminhtml_Block_System_Config_Form_Field
 {
 
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
@@ -43,7 +44,7 @@ class Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_DateFieldsOrder extends 
         );
 
         $element->setValues($_options)
-            ->setStyle('width:70px;')
+            ->setClass('select-date')
             ->setName($element->getName() . '[]');
         if ($element->getValue()) {
             $values = explode(',', $element->getValue());
@@ -56,6 +57,6 @@ class Mage_Adminhtml_Block_Catalog_Form_Renderer_Config_DateFieldsOrder extends 
         $_parts[] = $element->setValue(isset($values[1]) ? $values[1] : null)->getElementHtml();
         $_parts[] = $element->setValue(isset($values[2]) ? $values[2] : null)->getElementHtml();
 
-        return implode(' / ', $_parts);
+        return implode(' <span>/</span> ', $_parts);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Acti
     protected $_sessionNamespace = 'frontend';
 
     /**
-     * Predispatch: shoud set layout area
+     * Predispatch: should set layout area
      *
      * @return Mage_Core_Controller_Front_Action
      */

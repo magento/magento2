@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paygate
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -831,8 +831,9 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
                 break;
             case self::RESPONSE_CODE_DECLINED:
             case self::RESPONSE_CODE_ERROR:
-            if ($result->getResponseReasonCode() == self::RESPONSE_REASON_CODE_NOT_FOUND &&
-                $this->_isTransactionExpired($realAuthTransactionId)) {
+            if ($result->getResponseReasonCode() == self::RESPONSE_REASON_CODE_NOT_FOUND
+                && $this->_isTransactionExpired($realAuthTransactionId)
+            ) {
                 $voidTransactionId = $realAuthTransactionId . '-void';
                 return $this->_addTransaction(
                     $payment,

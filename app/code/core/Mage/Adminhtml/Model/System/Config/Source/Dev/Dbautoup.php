@@ -20,18 +20,17 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Adminhtml_Model_System_Config_Source_Dev_Dbautoup
 {
     public function toOptionArray()
     {
-        $hlp = Mage::helper('Mage_Adminhtml_Helper_Data');
         return array(
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ALWAYS, 'label'=>$hlp->__('Always (during development)')),
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ONCE, 'label'=>$hlp->__('Only Once (version upgrade)')),
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_NEVER, 'label'=>$hlp->__('Never (production)')),
+            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ALWAYS, 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Always (during development)')),
+            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ONCE,   'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Only Once (version upgrade)')),
+            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_NEVER,  'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Never (production)')),
         );
     }
 

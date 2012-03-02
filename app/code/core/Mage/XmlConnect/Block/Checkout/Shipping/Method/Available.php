@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,16 +49,16 @@ class Mage_XmlConnect_Block_Checkout_Shipping_Method_Available
             $_sole = count($_shippingRateGroups) == 1;
             foreach ($_shippingRateGroups as $code => $_rates) {
                 $methodXmlObj = $methodsXmlObj->addChild('method');
-                $methodXmlObj->addAttribute('label', $methodsXmlObj->xmlentities($this->getCarrierName($code)));
+                $methodXmlObj->addAttribute('label', $methodsXmlObj->escapeXml($this->getCarrierName($code)));
                 $ratesXmlObj = $methodXmlObj->addChild('rates');
 
                 $_sole = $_sole && count($_rates) == 1;
                 foreach ($_rates as $_rate) {
                     $rateXmlObj = $ratesXmlObj->addChild('rate');
-                    $rateXmlObj->addAttribute('label', $methodsXmlObj->xmlentities($_rate->getMethodTitle()));
+                    $rateXmlObj->addAttribute('label', $methodsXmlObj->escapeXml($_rate->getMethodTitle()));
                     $rateXmlObj->addAttribute('code', $_rate->getCode());
                     if ($_rate->getErrorMessage()) {
-                        $rateXmlObj->addChild('error_message', $methodsXmlObj->xmlentities($_rate->getErrorMessage()));
+                        $rateXmlObj->addChild('error_message', $methodsXmlObj->escapeXml($_rate->getErrorMessage()));
                     } else {
                         $price = Mage::helper('Mage_Tax_Helper_Data')->getShippingPrice(
                             $_rate->getPrice(),

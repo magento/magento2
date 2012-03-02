@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -74,6 +74,7 @@
 </table>
 </div>
 <script type="text/javascript">
+//<![CDATA[
 function selectCarrier(elem) {
     option = elem.options[elem.selectedIndex];
     if (option.value && option.value != 'custom') {
@@ -89,4 +90,5 @@ function deleteTrackingNumber(url) {
         submitAndReloadArea($('shipment_tracking_info').parentNode, url)
     }
 }
+//]]>
 </script>

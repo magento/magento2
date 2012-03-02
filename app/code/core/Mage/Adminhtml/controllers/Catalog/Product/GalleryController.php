@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,6 +45,11 @@ class Mage_Adminhtml_Catalog_Product_GalleryController extends Mage_Adminhtml_Co
             $result = $uploader->save(
                 Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')->getBaseTmpMediaPath()
             );
+
+            Mage::dispatchEvent('catalog_product_gallery_upload_image_after', array(
+                'result' => $result,
+                'action' => $this
+            ));
 
             /**
              * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS

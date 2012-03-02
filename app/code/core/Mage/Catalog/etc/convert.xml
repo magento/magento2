@@ -21,30 +21,30 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <convert version="1.0">
 
-    <container name="catalog_file" type="dataflow/convert_adapter_io">
+    <container name="catalog_file" type="Mage_Dataflow_Model_Convert_Adapter_Io">
         <var name="path">/tmp</var>
         <var name="filename">test.xml</var>
     </container>
 
 
     <profile name="import_products_from_excel_xml">
-        <action method="load" type="dataflow/convert_adapter_io">
+        <action method="load" type="Mage_Dataflow_Model_Convert_Adapter_Io">
             <var name="filename">products.xml</var>
         </action>
 
-        <action method="parse" type="dataflow/convert_parser_xml_excel">
+        <action method="parse" type="Mage_Dataflow_Model_Convert_Parser_Xml_Excel">
             <var name="single_sheet">Products</var>
         </action>
 
-        <action method="parse" type="catalog/convert_parser_product"/>
+        <action method="parse" type="Mage_Catalog_Model_Convert_Parser_Product"/>
 
-        <action method="validate" type="dataflow/convert_validator_dryrun"/>
+        <action method="validate" type="Mage_Dataflow_Model_Convert_Validator_Dryrun"/>
 
         <action method="save" type="eav/convert_adapter_collection"/>
     </profile>
@@ -54,15 +54,15 @@
             <var name="entity_type">catalog/product</var>
         </action>
 
-        <action method="unparse" type="catalog/convert_parser_product"/>
+        <action method="unparse" type="Mage_Catalog_Model_Convert_Parser_Product"/>
 
-        <action method="unparse" type="dataflow/convert_parser_xml_excel">
+        <action method="unparse" type="Mage_Dataflow_Model_Convert_Parser_Xml_Excel">
             <var name="single_sheet">Products</var>
         </action>
 
-        <action method="validate" type="dataflow/convert_validator_dryrun"/>
+        <action method="validate" type="Mage_Dataflow_Model_Convert_Validator_Dryrun"/>
 
-        <action method="save" type="dataflow/convert_adapter_io">
+        <action method="save" type="Mage_Dataflow_Model_Convert_Adapter_Io">
             <var name="filename">products.xml</var>
         </action>
     </profile>
@@ -70,23 +70,23 @@
     <profile name="import_catalog">
         <action method="load" use="catalog_file"/>
 
-        <action method="parse" type="dataflow/convert_parser_xml_excel"/>
+        <action method="parse" type="Mage_Dataflow_Model_Convert_Parser_Xml_Excel"/>
 
-        <action method="save" type="catalog/convert_adapter_catalog"/>
+        <action method="save" type="Mage_Catalog_Model_Convert_Adapter_Catalog"/>
     </profile>
 
     <profile name="export_catalog">
-        <action method="load" type="catalog/convert_adapter_catalog"/>
+        <action method="load" type="Mage_Catalog_Model_Convert_Adapter_Catalog"/>
 
-        <action method="unparse" type="dataflow/convert_parser_xml_excel"/>
+        <action method="unparse" type="Mage_Dataflow_Model_Convert_Parser_Xml_Excel"/>
 
         <action method="save" use="catalog_file"/>
     </profile>
 
     <profile name="export_catalog_to_http">
-        <action method="load" type="catalog/convert_adapter_catalog"/>
+        <action method="load" type="Mage_Catalog_Model_Convert_Adapter_Catalog"/>
 
-        <action method="unparse" type="dataflow/convert_parser_xml_excel"/>
+        <action method="unparse" type="Mage_Dataflow_Model_Convert_Parser_Xml_Excel"/>
 
         <action method="save" type="Mage_Dataflow_Model_Convert_Adapter_Http">
             <var name="Content-Disposition">attachment; filename=catalog.xml</var>

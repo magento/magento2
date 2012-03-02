@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -178,9 +178,7 @@ class Mage_Adminhtml_Catalog_SearchController extends Mage_Adminhtml_Controller_
                     $model->delete();
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    Mage::helper('Mage_Adminhtml_Helper_Data')->__(
-                        'Total of %d record(s) were deleted', count($searchIds)
-                    )
+                    Mage::helper('Mage_Adminhtml_Helper_Data')->__('Total of %d record(s) were deleted', count($searchIds))
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());

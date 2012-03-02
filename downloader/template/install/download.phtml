@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -41,13 +41,13 @@
     <button class="form-button" type="button" onclick="location.href='<?php echo $this->mageUrl() ?>'"><span>Continue Magento installation</span></button>
     <br/><br/><br/>
     <p>Alternatively, you could proceed with Re-Downloading all packages</p>
-  <?php echo($this->get('channel_notice')); ?>
+    <?php echo($this->get('channel_notice')); ?>
     <form id="reinstall_all" method="post" action="<?php echo $this->url('connectInstallAll') ?>&force=1" target="connect_iframe" onsubmit="return installAll(true)">
         <fieldset class="fieldset-download">
 <?php endif; ?>
 
             <table cellspacing="0" class="form-list">
-              <tr>
+                <tr>
                     <td class="label">Magento Connect Channel Protocol:</td>
                     <td class="value">
                         <select id="protocol" name="protocol">
@@ -55,8 +55,18 @@
                             <option value="ftp" <?php if ($this->get('protocol')=='ftp'):?>selected="selected"<?php endif ?>>Ftp</option>
                         </select>
                     </td>
-              </tr>
-              <?php echo($this->get('channel_protocol_fields')); ?>
+                </tr>
+                <?php echo($this->get('channel_protocol_fields')); ?>
+                <tr>
+                    <td class="label">Magento Version Stability:</td>
+                    <td class="value">
+                        <select id="preferred_state" name="preferred_state">
+                            <option value="stable" <?php if ($this->get('preferred_state') == 'stable'):?>selected="selected"<?php endif ?>>stable</option>
+                            <option value="beta" <?php if ($this->get('preferred_state') == 'beta'):?>selected="selected"<?php endif ?>>beta</option>
+                            <option value="alpha" <?php if ($this->get('preferred_state') == 'alpha'):?>selected="selected"<?php endif ?>>alpha</option>
+                        </select>
+                    </td>
+                </tr>
                 <tr>
                     <td class="label">Use Custom Permissions:</td>
                     <td class="value">
@@ -71,13 +81,13 @@
                 <tr>
                     <td class="label">Folders:</td>
                     <td class="value">
-                        <input id="mkdir_mode" name="mkdir_mode" value="<?php echo($this->get('mkdir_mode'));?>" type="text" class="input-text"></input>
+                        <input id="mkdir_mode" name="mkdir_mode" value="<?php echo($this->get('mkdir_mode'));?>" type="text" class="input-text"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">Files:</td>
                     <td class="value">
-                        <input id="chmod_file_mode" name="chmod_file_mode" value="<?php echo($this->get('chmod_file_mode'));?>" type="text" class="input-text"></input>
+                        <input id="chmod_file_mode" name="chmod_file_mode" value="<?php echo($this->get('chmod_file_mode'));?>" type="text" class="input-text"/>
                     </td>
                 </tr>
             </table>

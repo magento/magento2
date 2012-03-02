@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_ProductAlert
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,7 +66,11 @@ class Mage_ProductAlert_AddController extends Mage_Core_Controller_Front_Action
         if (!$product->getId()) {
             /* @var $product Mage_Catalog_Model_Product */
             $session->addError($this->__('Not enough parameters.'));
-            $this->_redirectUrl($backUrl);
+            if ($this->_isUrlInternal($backUrl)) {
+                $this->_redirectUrl($backUrl);
+            } else {
+                $this->_redirect('/');
+            }
             return ;
         }
 

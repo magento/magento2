@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price_Tier */
@@ -80,11 +80,11 @@ var tierPriceRowTemplate = '<tr>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="nobr"><input class="<?php echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php echo $_htmlName ?>[{{index}}][price_qty]" value="{{qty}}" id="tier_price_row_{{index}}_qty" />'
-    + ' <small class="nobr"><?php echo Mage::helper("Mage_Catalog_Helper_Data")->__("and above")?></small></td>'
+    + ' <small class="nobr"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("and above")?></small></td>'
     + '<td><input class="<?php echo $_htmlClass ?> required-entry <?php echo $_priceValueValidation ?>" type="text" name="<?php echo $_htmlName ?>[{{index}}][price]" value="{{price}}" id="tier_price_row_{{index}}_price" /></td>'
     + '<td class="last"><input type="hidden" name="<?php echo $_htmlName ?>[{{index}}][delete]" class="delete" value="" id="tier_price_row_{{index}}_delete" />'
-    + '<button title="<?php echo Mage::helper("Mage_Catalog_Helper_Data")->__("Delete Tier") ?>" type="button" class="scalable delete icon-btn delete-product-option" id="tier_price_row_{{index}}_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
-    + '<span><?php echo Mage::helper("Mage_Catalog_Helper_Data")->__("Delete") ?></span></button></td>'
+    + '<button title="<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete Tier") ?>" type="button" class="scalable delete icon-btn delete-product-option" id="tier_price_row_{{index}}_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<span><span><span><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__("Delete") ?></span></span></span></button></td>'
     + '</tr>';
 
 var tierPriceControl = {

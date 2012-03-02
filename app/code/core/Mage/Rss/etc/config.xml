@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Rss
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -54,22 +54,22 @@
     </adminhtml>
     <frontend>
         <events>
-            <sales_order_item_save_after>
+            <sales_order_save_after>
                 <observers>
                     <notifystock>
                         <class>Mage_Rss_Model_Observer</class>
                         <method>salesOrderItemSaveAfterNotifyStock</method>
                     </notifystock>
                 </observers>
-            </sales_order_item_save_after>
-            <sales_order_item_save_after>
+            </sales_order_save_after>
+            <sales_order_save_after>
                 <observers>
                     <ordernew>
                         <class>Mage_Rss_Model_Observer</class>
                         <method>salesOrderItemSaveAfterOrderNew</method>
                     </ordernew>
                 </observers>
-            </sales_order_item_save_after>
+            </sales_order_save_after>
         </events>
         <translate>
             <modules>

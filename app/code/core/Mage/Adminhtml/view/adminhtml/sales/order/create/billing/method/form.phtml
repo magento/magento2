@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -50,5 +50,5 @@
 </div>
 <script type="text/javascript">order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')</script>
 <?php else: ?>
-    <?php echo Mage::helper('Mage_Sales_Helper_Data')->__('No Payment Methods') ?>
+    <div><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('No Payment Methods') ?></div>
 <?php endif; ?>

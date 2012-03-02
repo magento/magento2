@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -406,8 +406,12 @@ addressesModel.prototype = {
                 var html = this.itemContentTemplate.evaluate(data);
                 html = html.replace(new RegExp('(<br\\s*/?>\\s*){2,}','img'),'<br/>');
                 html = html.replace(new RegExp('<br\\s*/?>(\\s*,){1,}\\s*<br\\s*/?>','ig'),'<br/>');
+                html = html.replace(new RegExp('<br\\s*/?>(\\s*,){1,}(.*)<br\\s*/?>','ig'),'<br/>$2<br/>');
+                html = html.replace(new RegExp('<br\\s*/?>(.*?)(,\\s*){1,}<br\\s*/?>','ig'),'<br/>$1<br/>');
+                html = html.replace(new RegExp('<br\\s*/?>(.*?)(,\\s*){2,}(.*?)<br\\s*/?>','ig'),'<br/>$1, $3<br/>');
                 html = html.replace(new RegExp('t:\\s*<br\\s*/?>','ig'),'');
-                html = html.replace(new RegExp('f:\\s*$','ig'),'');
+                html = html.replace(new RegExp('f:\\s*<br\\s*/?>','ig'),'');
+                html = html.replace(new RegExp('vat:\\s*$','ig'),'');
                 itemContainer[0].innerHTML = html;
             }
         }

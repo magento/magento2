@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -72,7 +72,7 @@
     </div>
     <div class="values-container right">
         <label for="__id___label" class="bold"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute Name:') ?></label>
-        <input id="__id___label" type="text" <?php if ($this->isReadonly()):?> disabled="disabled" <?php endif;?> class="input-text attribute-label required-entry template no-display" value="'{{label}}'" readonly="label" />
+        <input id="__id___label" type="text" <?php if ($this->isAttributesConfigurationReadonly()): ?> disabled="disabled" <?php endif;?> class="input-text attribute-label required-entry template no-display" value="'{{label}}'" readonly="label" />
         <input id="__id___label_use_default" type="checkbox" value="1" " checked="use_default" class="attribute-use-default-label">
         <label for="__id___label_use_default"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use default')?> ('{{store_label}}')</label>
         <ul class="attribute-values">
@@ -87,17 +87,17 @@
 <div class="attribute-values-container-main">
     <div class="attribute-values-container left">
     <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price:') ?>
-    <input id="__id___pricing" type="text" <?php if ($this->isReadonly() || $this->getCanEditPrice() === false):?> disabled="disabled" <?php endif;?> class="input-text attribute-price validate-number template no-display" value="'{{pricing_value}}'"/>
+    <input id="__id___pricing" type="text" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?> class="input-text attribute-price validate-number template no-display" value="'{{pricing_value}}'"/>
 </div>
 <div class="attribute-values-container left">
-    &nbsp;<select class="attribute-price-type" id="__id___price_type" <?php if ($this->isReadonly() || $this->getCanEditPrice() === false):?> disabled="disabled" <?php endif;?>>
+    &nbsp;<select class="attribute-price-type" id="__id___price_type" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?>>
         <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Fixed') ?></option>
         <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Percentage') ?></option>
     </select>
 </div>
 <?php if ($this->getShowUseDefaultPrice()):?>
 <div class="attribute-values-container">
-    &nbsp;<input id="__id___default" type="checkbox" <?php if ($this->isReadonly() || $this->getCanEditPrice() === false):?> disabled="disabled" <?php endif;?> class="attribute-use-default-value"> <label for="__id___default" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Default Value') ?></label>
+    &nbsp;<input id="__id___default" type="checkbox" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?> class="attribute-use-default-value"> <label for="__id___default" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Default Value') ?></label>
 </div>
 <?php endif;?>
 <?php else : ?>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,11 @@ class Mage_Core_Model_App
     const XML_PATH_INSTALL_DATE = 'global/install/date';
 
     const XML_PATH_SKIP_PROCESS_MODULES_UPDATES = 'global/skip_process_modules_updates';
+
+    /**
+     * if this node set to true, we will ignore Developer Mode for applying updates
+     */
+    const XML_PATH_IGNORE_DEV_MODE = 'global/skip_process_modules_updates_ignore_dev_mode';
 
     const DEFAULT_ERROR_HANDLER = 'mageCoreErrorHandler';
 
@@ -438,7 +443,8 @@ class Mage_Core_Model_App
             return false;
         }
 
-        if (Mage::getIsDeveloperMode()) {
+        $ignoreDevelopmentMode = (bool)(string)$this->_config->getNode(self::XML_PATH_IGNORE_DEV_MODE);
+        if (Mage::getIsDeveloperMode() && !$ignoreDevelopmentMode) {
             return false;
         }
 

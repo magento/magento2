@@ -20,9 +20,10 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/* @var $this Mage_Catalog_Block_Product_View_Options */
 ?>
 
 <?php $_options = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getOptions()) ?>
@@ -109,20 +110,20 @@
             document.observe("dom:loaded", this.reloadPrice.bind(this));
         },
         reloadPrice : function(){
-            price = new Number();
-            oldPrice = new Number();
-            config = this.config;
-            skipIds = [];
-            $$('.product-custom-option').each(function(element){
+            var config = this.config;
+            var skipIds = [];
+            $$('body .product-custom-option').each(function(element){
                 var optionId = 0;
                 element.name.sub(/[0-9]+/, function(match){
-                    optionId = match[0];
+                    optionId = parseInt(match[0], 10);
                 });
-                if (this.config[optionId]) {
+                if (config[optionId]) {
+                    var configOptions = config[optionId];
+                    var curConfig = {price: 0};
                     if (element.type == 'checkbox' || element.type == 'radio') {
                         if (element.checked) {
-                            if (config[optionId][element.getValue()]['price']) {
-                                price += parseFloat(config[optionId][element.getValue()]['price']);
+                            if (typeof configOptions[element.getValue()] != 'undefined') {
+                                curConfig = configOptions[element.getValue()];
                             }
                         }
                     } else if(element.hasClassName('datetime-picker') && !skipIds.include(optionId)) {
@@ -133,35 +134,42 @@
                             }
                         });
                         if (dateSelected) {
-                            price += parseFloat(this.config[optionId]);
+                            curConfig = configOptions;
                             skipIds[optionId] = optionId;
                         }
                     } else if(element.type == 'select-one' || element.type == 'select-multiple') {
-                        if (element.options) {
+                        if ('options' in element) {
                             $A(element.options).each(function(selectOption){
-                                try {
-                                    if (selectOption.selected) {
-                                        if (typeof(this.config[optionId][selectOption.value]['oldPrice']) !== undefined) {
-                                            price += parseFloat(this.config[optionId][selectOption.value]['price']);
-                                            oldPrice += parseFloat(this.config[optionId][selectOption.value]['oldPrice']);
-                                        }
+                                if ('selected' in selectOption && selectOption.selected) {
+                                    if (typeof(configOptions[selectOption.value]) != 'undefined') {
+                                        curConfig = configOptions[selectOption.value];
                                     }
-                                } catch (e) {}
+                                }
                             });
                         }
                     } else {
                         if (element.getValue().strip() != '') {
-                            price += parseFloat(this.config[optionId]);
+                            curConfig = configOptions;
                         }
+                    }
+                    if(element.type == 'select-multiple' && ('options' in element)) {
+                        $A(element.options).each(function(selectOption) {
+                            if (('selected' in selectOption) && typeof(configOptions[selectOption.value]) != 'undefined') {
+                                if (selectOption.selected) {
+                                    curConfig = configOptions[selectOption.value];
+                                } else {
+                                    curConfig = {price: 0};
+                                }
+                                optionsPrice.addCustomPrices(optionId + '-' + selectOption.value, curConfig);
+                                optionsPrice.reload();
+                            }
+                        });
+                    } else {
+                        optionsPrice.addCustomPrices(element.id || optionId, curConfig);
+                        optionsPrice.reload();
                     }
                 }
             });
-            try {
-                optionsPrice.changePrice('config', {'price': price, 'oldPrice': oldPrice, 'optionsPriceInclTax': price});
-                optionsPrice.reload();
-            } catch (e) {
-
-            }
         }
     }
     function validateOptionsCallback(elmId, result){

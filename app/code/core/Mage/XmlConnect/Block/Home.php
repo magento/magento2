@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,7 +69,7 @@ class Mage_XmlConnect_Block_Home extends Mage_XmlConnect_Block_Catalog
             /** @var $item Mage_Catalog_Model_Category */
             $item = Mage::getModel('Mage_Catalog_Model_Category')->load($item->getId());
             $itemXmlObj = $itemsXmlObj->addChild('item');
-            $itemXmlObj->addChild('label', $homeXmlObj->xmlentities($item->getName()));
+            $itemXmlObj->addChild('label', $homeXmlObj->escapeXml($item->getName()));
             $itemXmlObj->addChild('entity_id', $item->getId());
             $itemXmlObj->addChild('content_type', $item->hasChildren() ? 'categories' : 'products');
             $icon = Mage::helper('Mage_XmlConnect_Helper_Catalog_Category_Image')->initialize($item, 'thumbnail')

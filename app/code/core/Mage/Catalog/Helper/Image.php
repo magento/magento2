@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,22 +31,87 @@
  */
 class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
 {
+    /**
+     * Current model
+     *
+     * @var Mage_Catalog_Model_Product_Image
+     */
     protected $_model;
+
+    /**
+     * Scheduled for resize image
+     *
+     * @var bool
+     */
     protected $_scheduleResize = false;
+
+    /**
+     * Scheduled for rotate image
+     *
+     * @var bool
+     */
     protected $_scheduleRotate = false;
+
+    /**
+     * Angle
+     *
+     * @var int
+     */
     protected $_angle;
 
+    /**
+     * Watermark file name
+     *
+     * @var string
+     */
     protected $_watermark;
+
+    /**
+     * Watermark Position
+     *
+     * @var string
+     */
     protected $_watermarkPosition;
+
+    /**
+     * Watermark Size
+     *
+     * @var string
+     */
     protected $_watermarkSize;
+
+    /**
+     * Watermark Image opacity
+     *
+     * @var int
+     */
     protected $_watermarkImageOpacity;
 
+    /**
+     * Current Product
+     *
+     * @var Mage_Catalog_Model_Product
+     */
     protected $_product;
+
+    /**
+     * Image File
+     *
+     * @var string
+     */
     protected $_imageFile;
+
+    /**
+     * Image Placeholder
+     *
+     * @var string
+     */
     protected $_placeholder;
 
     /**
-     * Reset all previos data
+     * Reset all previous data
+     *
+     * @return Mage_Catalog_Helper_Image
      */
     protected function _reset()
     {
@@ -63,6 +128,14 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         return $this;
     }
 
+    /**
+     * Initialize Helper to work with Image
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param string $attributeName
+     * @param mixed $imageFile
+     * @return Mage_Catalog_Helper_Image
+     */
     public function init(Mage_Catalog_Model_Product $product, $attributeName, $imageFile=null)
     {
         $this->_reset();
@@ -70,17 +143,24 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         $this->_getModel()->setDestinationSubdir($attributeName);
         $this->setProduct($product);
 
-        $this->setWatermark(Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_image"));
-        $this->setWatermarkImageOpacity(Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity"));
-        $this->setWatermarkPosition(Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_position"));
-        $this->setWatermarkSize(Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_size"));
+        $this->setWatermark(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_image")
+        );
+        $this->setWatermarkImageOpacity(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity")
+        );
+        $this->setWatermarkPosition(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_position")
+        );
+        $this->setWatermarkSize(
+            Mage::getStoreConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_size")
+        );
 
         if ($imageFile) {
             $this->setImageFile($imageFile);
-        }
-        else {
+        } else {
             // add for work original size
-            $this->_getModel()->setBaseFile( $this->getProduct()->getData($this->_getModel()->getDestinationSubdir()) );
+            $this->_getModel()->setBaseFile($this->getProduct()->getData($this->_getModel()->getDestinationSubdir()));
         }
         return $this;
     }
@@ -198,6 +278,12 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         return $this;
     }
 
+    /**
+     * Rotate image into specified angle
+     *
+     * @param int $angle
+     * @return Mage_Catalog_Helper_Image
+     */
     public function rotate($angle)
     {
         $this->setAngle($angle);
@@ -225,11 +311,22 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         return $this;
     }
 
+    /**
+     * Set placeholder
+     *
+     * @param string $fileName
+     * @return void
+     */
     public function placeholder($fileName)
     {
         $this->_placeholder = $fileName;
     }
 
+    /**
+     * Get Placeholder
+     *
+     * @return string
+     */
     public function getPlaceholder()
     {
         if (!$this->_placeholder) {
@@ -239,41 +336,49 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         return $this->_placeholder;
     }
 
+    /**
+     * Return Image URL
+     *
+     * @return string
+     */
     public function __toString()
     {
         try {
-            if( $this->getImageFile() ) {
-                $this->_getModel()->setBaseFile( $this->getImageFile() );
+            $model = $this->_getModel();
+
+            if ($this->getImageFile()) {
+                $model->setBaseFile($this->getImageFile());
             } else {
-                $this->_getModel()->setBaseFile( $this->getProduct()->getData($this->_getModel()->getDestinationSubdir()) );
+                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
             }
 
-            if( $this->_getModel()->isCached() ) {
-                return $this->_getModel()->getUrl();
+            if ($model->isCached()) {
+                return $model->getUrl();
             } else {
-                if( $this->_scheduleRotate ) {
-                    $this->_getModel()->rotate( $this->getAngle() );
+                if ($this->_scheduleRotate) {
+                    $model->rotate($this->getAngle());
                 }
 
                 if ($this->_scheduleResize) {
-                    $this->_getModel()->resize();
+                    $model->resize();
                 }
 
-                if( $this->getWatermark() ) {
-                    $this->_getModel()->setWatermark($this->getWatermark());
+                if ($this->getWatermark()) {
+                    $model->setWatermark($this->getWatermark());
                 }
 
-                $url = $this->_getModel()->saveFile()->getUrl();
+                $url = $model->saveFile()->getUrl();
             }
-        } catch( Exception $e ) {
+        } catch (Exception $e) {
             $url = Mage::getDesign()->getSkinUrl($this->getPlaceholder());
         }
         return $url;
     }
 
     /**
-     * Enter description here...
+     * Set current Image model
      *
+     * @param Mage_Catalog_Model_Product_Image $model
      * @return Mage_Catalog_Helper_Image
      */
     protected function _setModel($model)
@@ -283,7 +388,7 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Enter description here...
+     * Get current Image model
      *
      * @return Mage_Catalog_Model_Product_Image
      */
@@ -292,12 +397,23 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
         return $this->_model;
     }
 
+    /**
+     * Set Rotation Angle
+     *
+     * @param int $angle
+     * @return Mage_Catalog_Helper_Image
+     */
     protected function setAngle($angle)
     {
         $this->_angle = $angle;
         return $this;
     }
 
+    /**
+     * Get Rotation Angle
+     *
+     * @return int
+     */
     protected function getAngle()
     {
         return $this->_angle;
@@ -393,44 +509,67 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
      */
     protected function getWatermarkImageOpacity()
     {
-        if( $this->_watermarkImageOpacity ) {
+        if ($this->_watermarkImageOpacity) {
             return $this->_watermarkImageOpacity;
         }
 
         return $this->_getModel()->getWatermarkImageOpacity();
     }
 
+    /**
+     * Set current Product
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Helper_Image
+     */
     protected function setProduct($product)
     {
         $this->_product = $product;
         return $this;
     }
 
+    /**
+     * Get current Product
+     *
+     * @return Mage_Catalog_Model_Product
+     */
     protected function getProduct()
     {
         return $this->_product;
     }
 
+    /**
+     * Set Image file
+     *
+     * @param string $file
+     * @return Mage_Catalog_Helper_Image
+     */
     protected function setImageFile($file)
     {
         $this->_imageFile = $file;
         return $this;
     }
 
+    /**
+     * Get Image file
+     *
+     * @return string
+     */
     protected function getImageFile()
     {
         return $this->_imageFile;
     }
 
     /**
-     * Enter description here...
+     * Retrieve size from string
      *
-     * @return array
+     * @param string $string
+     * @return array|bool
      */
     protected function parseSize($string)
     {
         $size = explode('x', strtolower($string));
-        if( sizeof($size) == 2 ) {
+        if (sizeof($size) == 2) {
             return array(
                 'width' => ($size[0] > 0) ? $size[0] : null,
                 'heigth' => ($size[1] > 0) ? $size[1] : null,
@@ -478,13 +617,15 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
      *
      * @param string $filePath
      * @return bool
-     * @throw Mage_Core_Exception
+     * @throws Mage_Core_Exception
      */
     public function validateUploadFile($filePath) {
         if (!getimagesize($filePath)) {
             Mage::throwException($this->__('Disallowed file type.'));
         }
-        return true;
+
+        $_processor = new Varien_Image($filePath);
+        return $_processor->getMimeType() !== null;
     }
 
 }

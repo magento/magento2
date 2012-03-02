@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -115,7 +115,8 @@ class Mage_Core_Helper_String extends Mage_Core_Helper_Abstract
             if ($this->strlen($part) >= $length) {
                 $lastDelimetr = $this->strpos($this->strrev($part), $needle);
                 $tmpNewStr = '';
-                $tmpNewStr = $this->substr($this->strrev($part), 0, $lastDelimetr) . $insert . $this->substr($this->strrev($part), $lastDelimetr);
+                $tmpNewStr = $this->substr($this->strrev($part), 0, $lastDelimetr)
+                    . $insert . $this->substr($this->strrev($part), $lastDelimetr);
                 $newStr .= $this->strrev($tmpNewStr);
             } else {
                 $newStr .= $part;
@@ -264,7 +265,8 @@ class Mage_Core_Helper_String extends Mage_Core_Helper_Abstract
      */
     public function cleanString($string)
     {
-        return '"libiconv"' == ICONV_IMPL ? iconv(self::ICONV_CHARSET, self::ICONV_CHARSET . '//IGNORE', $string) : $string;
+        return '"libiconv"' == ICONV_IMPL ?
+            iconv(self::ICONV_CHARSET, self::ICONV_CHARSET . '//IGNORE', $string) : $string;
     }
 
     /**
@@ -292,7 +294,9 @@ class Mage_Core_Helper_String extends Mage_Core_Helper_Abstract
             return false;
         }
         $oldLocale = setlocale(LC_COLLATE, "0");
-        setlocale(LC_COLLATE, Mage::app()->getLocale()->getLocaleCode() . '.UTF8');
+        $localeCode = Mage::app()->getLocale()->getLocaleCode();
+        // use fallback locale if $localeCode is not available
+        setlocale(LC_COLLATE,  $localeCode . '.UTF8', 'C.UTF-8', 'en_US.utf8');
         ksort($sort, SORT_LOCALE_STRING);
         setlocale(LC_COLLATE, $oldLocale);
 

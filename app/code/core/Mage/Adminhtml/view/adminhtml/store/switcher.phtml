@@ -20,13 +20,13 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this Mage_Core_Block_Template */ ?>
 <?php if ($websites = $this->getWebsites()): ?>
-<p class="switcher"><label for="store_switcher"><?php echo $this->__('Choose Store View') ?>:</label>
+<p class="switcher"><label for="store_switcher"><?php echo $this->__('Choose Store View:') ?></label>
 <select name="store_switcher" id="store_switcher" onchange="return switchStore(this);">
 <?php if ($this->hasDefaultOption()): ?>
     <option value=""><?php echo $this->getDefaultStoreName() ?></option>
@@ -52,6 +52,7 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
 </select>
+<?php echo $this->getHintHtml() ?>
 </p>
 <script type="text/javascript">
     function switchStore(obj) {

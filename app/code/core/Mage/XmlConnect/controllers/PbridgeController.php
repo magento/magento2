@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_XmlConnect
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,9 +60,7 @@ class Mage_XmlConnect_PbridgeController extends Mage_Core_Controller_Front_Actio
     protected function _checkPbridge()
     {
         if (!is_object(Mage::getConfig()->getNode('modules/Enterprise_Pbridge'))) {
-            $this->getResponse()->setBody(
-                $this->__('Payment Bridge module unavailable.')
-            );
+            $this->getResponse()->setBody($this->__('Payment Bridge module unavailable.'));
             return false;
         }
         return true;

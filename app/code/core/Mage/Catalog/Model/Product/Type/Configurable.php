@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -389,17 +389,19 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
 
         if ($product->getCanSaveConfigurableAttributes()) {
             $product->canAffectOptions(true);
-            if ($data = $product->getConfigurableAttributesData()) {
-                if (!empty($data)) {
-                    foreach ($data as $attribute) {
-                        if (!empty($attribute['values'])) {
-                            $product->setTypeHasOptions(true);
-                            $product->setTypeHasRequiredOptions(true);
-                            break;
-                        }
+            $data = $product->getConfigurableAttributesData();
+            if (!empty($data)) {
+                foreach ($data as $attribute) {
+                    if (!empty($attribute['values'])) {
+                        $product->setTypeHasOptions(true);
+                        $product->setTypeHasRequiredOptions(true);
+                        break;
                     }
                 }
             }
+        }
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            $product->setData($attribute->getProductAttribute()->getAttributeCode(), null);
         }
 
         return $this;

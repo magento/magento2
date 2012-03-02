@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Shipping
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -161,7 +161,7 @@ class Mage_Shipping_Model_Shipping
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
         if (false !== $result && !($result instanceof Mage_Shipping_Model_Rate_Result_Error)) {
-            $result = $carrier->processAdditionalValidation($request);
+            $result = $carrier->proccessAdditionalValidation($request);
         }
         /*
         * Result will be false if the admin set not to show the shipping module
@@ -211,6 +211,8 @@ class Mage_Shipping_Model_Shipping
         $request->setBaseCurrency(Mage::app()->getStore()->getBaseCurrency());
         $request->setPackageCurrency(Mage::app()->getStore()->getCurrentCurrency());
         $request->setLimitCarrier($limitCarrier);
+
+        $request->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax());
 
         return $this->collectRates($request);
     }

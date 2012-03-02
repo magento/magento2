@@ -20,13 +20,14 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /* @var $this Mage_Core_Block_Template */ ?>
 <div class="switcher">
     <label for="store_switcher"><?php echo $this->__('Current Configuration Scope:') ?></label>
+    <?php echo $this->getHintHtml() ?>
     <select id="store_switcher" class="system-config-store-switcher" onchange="location.href=this.options[this.selectedIndex].getAttribute('url')">
     <?php foreach ($this->getStoreSelectOptions() as $_value => $_option): ?>
     <?php if (isset($_option['is_group'])): ?>

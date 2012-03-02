@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -500,10 +500,10 @@ function deleteTheme() {
 
         <div class="form-buttons" style="float:right">
             <button type="button" class="scalable" id="save_theme" onclick="saveTheme();">
-                <span><?php echo $this->__('Save Theme'); ?></span>
+                <span><span><span><?php echo $this->__('Save Theme'); ?></span></span></span>
             </button>
             <button type="button" class="scalable" id="save_as_theme_init">
-                <span><?php echo $this->__('Save As'); ?></span>
+                <span><span><span><?php echo $this->__('Save As'); ?></span></span></span>
             </button>
         </div>
 
@@ -516,10 +516,10 @@ function deleteTheme() {
                     <input id="input_save_as" type="text" class="input-text" name="input_save_as" autocomplete="off" value="" />
                     <div class="validation-advice" id="advice-required-theme-name" style="display:none;"><?php echo $this->__('Theme label can\'t be empty'); ?></div>
                     <button type="button" class="scalable save" id="save_as_theme">
-                        <span><?php echo $this->__('Save'); ?></span>
+                        <span><span><span><?php echo $this->__('Save'); ?></span></span></span>
                     </button>
                     <button type="button" class="scalable" id="save_as_theme_cancel">
-                        <span><?php echo $this->__('Cancel'); ?></span>
+                        <span><span><span><?php echo $this->__('Cancel'); ?></span></span></span>
                     </button>
                 </div>
             </div>
@@ -601,11 +601,11 @@ $id2observe     = array();
         <div class="reset-theme">
 
             <button id="reset_theme" type="button" class="scalable">
-                <span><?php echo $this->__('Reset theme to default'); ?></span>
+                <span><span><span><?php echo $this->__('Reset theme to default'); ?></span></span></span>
             </button>
 
             <button id="delete_theme" type="button" class="scalable delete">
-                <span><?php echo $this->__('Delete theme'); ?></span>
+                <span><span><span><?php echo $this->__('Delete theme'); ?></span></span></span>
             </button>
 
             <div id="reset_note" style="display:none;"><?php echo $this->__('Only default theme can be reset'); ?></div>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -96,8 +96,8 @@ abstract class Mage_Catalog_Block_Product_View_Options_Abstract extends Mage_Cor
     {
         if ($option = $this->getOption()) {
             return $this->_formatPrice(array(
-                'is_percent' => ($option->getPriceType() == 'percent') ? true : false,
-                'pricing_value' => $option->getPrice(true)
+                'is_percent'    => ($option->getPriceType() == 'percent'),
+                'pricing_value' => $option->getPrice($option->getPriceType() == 'percent')
             ));
         }
         return '';

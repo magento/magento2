@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Backup
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -51,4 +51,13 @@
             </modules>
         </translate>
     </adminhtml>
+    <crontab>
+        <jobs>
+            <system_backup>
+                <run>
+                    <model>Mage_Backup_Model_Observer::scheduledBackup</model>
+                </run>
+            </system_backup>
+        </jobs>
+    </crontab>
 </config>

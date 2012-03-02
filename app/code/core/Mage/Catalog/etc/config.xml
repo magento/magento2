@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.8</version>
+            <version>1.6.0.0.11</version>
         </Mage_Catalog>
     </modules>
     <global>
@@ -392,6 +392,9 @@
             <layered_navigation>
                 <price_range_calculation>auto</price_range_calculation>
                 <price_range_step>100</price_range_step>
+                <price_range_max_intervals>10</price_range_max_intervals>
+                <one_price_interval>0</one_price_interval>
+                <interval_division_limit>9</interval_division_limit>
             </layered_navigation>
         </catalog>
         <system>

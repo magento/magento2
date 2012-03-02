@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -41,7 +41,7 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
         '<div class="option-title">'+
             '<?php echo $this->getRemoveLayoutButtonHtml() ?>'+
             '<label for="widget_instance[{{id}}][page_group]">Display On <span class="required">*</span></label>'+
-            '<?php echo $this->getDisplayOnSelectHtml() ?>'+
+            '<?php echo $this->getDisplayOnSelectHtml(); ?>'+
         '</div>'+
 <?php foreach ($this->getDisplayOnContainers() as $container): ?>
     '<div class="no-display <?php echo $container['code'] ?> group_container" id="<?php echo $container['name'] ?>_{{id}}">'+
@@ -87,7 +87,7 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
             '<input type="hidden" class="product_type_id" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][product_type_id]" value="<?php echo $container['product_type_id'] ?>" />'+
             '<p>' +
                 '<input type="text" class="input-text entities" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][entities]" value="{{<?php echo $container['name'] ?>_entities}}" readonly="readonly" />&nbsp;' +
-                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_{{id}}\')" title="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')); ?>">' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_{{id}}\')"  title="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')) ?>">' +
                     '<img src="<?php echo Mage::getDesign()->getSkinUrl('images/rule_chooser_trigger.gif') ?>" class="v-middle" alt="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
                 '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_{{id}}\')" title="<?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Apply')); ?>">' +
@@ -175,6 +175,8 @@ var WidgetInstance = {
     templatePattern : /(^|.|\r|\n)({{(\w+)}})/,
     count : 0,
     activePageGroups : $H({}),
+    selectedItems : {},
+
     addPageGroup : function(data) {
         if (this.pageGroupTemplate && (pageGroupContainer = $(this.pageGroupContainerId))) {
             if (!data.page_id) {
@@ -183,6 +185,14 @@ var WidgetInstance = {
                 data.entities = '';
             }
             data.id = this.count++;
+            if (data[data.group + '_entities']) {
+                var selected_entities = data[data.group + '_entities'].split(',');
+                if (selected_entities.length > 0) {
+                    for (var i = 0; i < selected_entities.length; i++) {
+                        this.addProductItemToSelection(data.group + '_ids_' + data.id, selected_entities[i]);
+                    }
+                }
+            }
             pageGroupTemplateObj = new Template(this.pageGroupTemplate, this.templatePattern);
             Element.insert(pageGroupContainer, {'top':pageGroupTemplateObj.evaluate(data)});
             if (data.group) {
@@ -196,7 +206,7 @@ var WidgetInstance = {
                 if (data.group == 'pages') {
                     layoutSelect = pageGroup.down('select#layout_handle');
                     if (layoutSelect) {
-                        for (var i=0; i < layoutSelect.options.length; i++) {
+                        for (var i = 0; i < layoutSelect.options.length; i++) {
                             if (layoutSelect.options[i].value == data.layout_handle) {
                                 layoutSelect.options[i].selected = true;
                                 break;
@@ -206,7 +216,7 @@ var WidgetInstance = {
                 }
                 if ($(this.pageGroupContainerId+'_'+data.id)) {
                     selectGroupElm = $(this.pageGroupContainerId+'_'+data.id).down('select.page_group_select');
-                    for (var i=0; i < selectGroupElm.options.length; i++) {
+                    for (var i = 0; i < selectGroupElm.options.length; i++) {
                         if (selectGroupElm.options[i].value == data.group) {
                             selectGroupElm.options[i].selected = true;
                             break;
@@ -232,6 +242,19 @@ var WidgetInstance = {
         container = element.up('div.page_group_container');
         if (container) {
             container.remove();
+        }
+    },
+    addProductItemToSelection: function(groupId, item) {
+        if (undefined == this.selectedItems[groupId]) {
+            this.selectedItems[groupId] = $H({});
+        }
+        if (!isNaN(parseInt(item))) {
+            this.selectedItems[groupId].set(item, 1);
+        }
+    },
+    removeProductItemFromSelection: function(groupId, item) {
+        if (undefined !== this.selectedItems[groupId]) {
+            this.selectedItems[groupId].unset(item);
         }
     },
     showBlockContainer : function(container) {
@@ -334,16 +357,17 @@ var WidgetInstance = {
         }
     },
     checkProduct : function(event) {
-        chooser = event.target.up('div.chooser')
-        ids = [];
-        chooser.select('input[type="checkbox"].entities').each(function(elm){
-            if (elm.checked) {
-                ids.push(elm.value);
-            }
-        });
-        entitiesElm = chooser.up('div.chooser_container').down('input[type="text"].entities');
+        var elm = event.memo.element,
+            container = event.target.up('div.chooser').up('div.chooser_container'),
+            selectionId = container.id,
+            entitiesElm = container.down('input[type="text"].entities');
+        if (elm.checked) {
+            this.addProductItemToSelection(selectionId, elm.value);
+        } else {
+            this.removeProductItemFromSelection(selectionId, elm.value);
+        }
         if (entitiesElm) {
-            entitiesElm.value = ids.join(',');
+            entitiesElm.value = this.selectedItems[selectionId].keys().join(',');
         }
     },
     checkCategory : function(event) {

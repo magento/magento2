@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Usa
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -261,6 +261,8 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
 
         $r->setIsReturn($request->getIsReturn());
 
+        $r->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
+
         $this->_rawRequest = $r;
 
         return $this;
@@ -316,7 +318,7 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                 'ShipTimestamp' => date('c'),
                 'PackagingType' => $r->getPackaging(),
                 'TotalInsuredValue' => array(
-                    'Ammount'  => $r->getValue(),
+                    'Amount'  => $r->getValue(),
                     'Currency' => $this->getCurrencyCode()
                 ),
                 'Shipper' => array(
@@ -339,6 +341,12 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                         'CountryCode'   => $r->getOrigCountry()
                     )
                 ),
+                'CustomsClearanceDetail' => array(
+                    'CustomsValue' => array(
+                        'Amount' => $r->getValue(),
+                        'Currency' => $this->getCurrencyCode()
+                    )
+                ),
                 'RateRequestTypes' => 'LIST',
                 'PackageCount'     => '1',
                 'PackageDetail'    => 'INDIVIDUAL_PACKAGES',
@@ -347,6 +355,10 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                         'Weight' => array(
                             'Value' => (float)$r->getWeight(),
                             'Units' => 'LB'
+                        ),
+                        'InsuredValue' => array(
+                            'Amount'  => $r->getValue(),
+                            'Currency' => $this->getCurrencyCode()
                         )
                     )
                 )
@@ -395,8 +407,7 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                     foreach ($response->RateReplyDetails as $rate) {
                         $serviceName = (string)$rate->ServiceType;
                         if (in_array($serviceName, $allowedMethods)) {
-                            $amount = (string)$rate->RatedShipmentDetails[0]
-                                ->ShipmentRateDetail->TotalNetCharge->Amount;
+                            $amount = $this->_getRateAmountOriginBased($rate);
                             $costArr[$serviceName]  = $amount;
                             $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
                         }
@@ -406,7 +417,7 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
                     $rate = $response->RateReplyDetails;
                     $serviceName = (string)$rate->ServiceType;
                     if (in_array($serviceName, $allowedMethods)) {
-                        $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
+                        $amount = $this->_getRateAmountOriginBased($rate);
                         $costArr[$serviceName]  = $amount;
                         $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
                     }
@@ -436,6 +447,31 @@ class Mage_Usa_Model_Shipping_Carrier_Fedex
             }
         }
         return $result;
+    }
+
+    /**
+     * Get origin based amount form response of rate estimation
+     *
+     * @param stdClass $rate
+     * @return null|float
+     */
+    protected function _getRateAmountOriginBased($rate)
+    {
+        $amount = null;
+        if (is_object($rate)) {
+            foreach($rate->RatedShipmentDetails as $ratedShipmentDetail) {
+                $shipmentRateDetail = $ratedShipmentDetail->ShipmentRateDetail;
+                // The "RATED..." rates are expressed in the currency of the origin country
+                if ((string)$shipmentRateDetail->RateType == 'RATED_ACCOUNT_SHIPMENT') {
+                    $amount = (string)$shipmentRateDetail->TotalNetCharge->Amount;
+                }
+            }
+            if (is_null($amount)) {
+                $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail
+                    ->TotalNetCharge->Amount;
+            }
+        }
+        return $amount;
     }
 
     /**

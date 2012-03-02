@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -484,7 +484,7 @@ class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                     'weight'             => array(
                         'type'                       => 'decimal',
                         'label'                      => 'Weight',
-                        'input'                      => 'text',
+                        'input'                      => 'weight',
                         'sort_order'                 => 5,
                         'apply_to'                   => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
                     ),
@@ -575,6 +575,17 @@ class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                         'required'                   => false,
                         'sort_order'                 => 6,
                         'visible'                    => false,
+                    ),
+                    'group_price'         => array(
+                        'type'                       => 'decimal',
+                        'label'                      => 'Group Price',
+                        'input'                      => 'text',
+                        'backend'                    => 'Mage_Catalog_Model_Product_Attribute_Backend_Groupprice',
+                        'required'                   => false,
+                        'sort_order'                 => 6,
+                        'global'                     => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
+                        'apply_to'                   => 'simple,configurable,virtual',
+                        'group'                      => 'Prices',
                     ),
                     'tier_price'         => array(
                         'type'                       => 'decimal',

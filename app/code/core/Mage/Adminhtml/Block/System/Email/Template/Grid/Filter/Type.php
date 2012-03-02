@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,19 +32,20 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_System_Email_Template_Grid_Filter_Type extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select
+class Mage_Adminhtml_Block_System_Email_Template_Grid_Filter_Type
+    extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select
 {
     protected static $_types = array(
-        null										=>	null,
+        null                                        =>  null,
         Mage_Newsletter_Model_Template::TYPE_HTML   => 'HTML',
-        Mage_Newsletter_Model_Template::TYPE_TEXT 	=> 'Text',
+        Mage_Newsletter_Model_Template::TYPE_TEXT   => 'Text',
     );
 
     protected function _getOptions()
     {
         $result = array();
-        foreach (self::$_types as $code=>$label) {
-            $result[] = array('value'=>$code, 'label'=>Mage::helper('Mage_Adminhtml_Helper_Data')->__($label));
+        foreach (self::$_types as $code => $label) {
+            $result[] = array('value' => $code, 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__($label));
         }
 
         return $result;
@@ -57,8 +58,6 @@ class Mage_Adminhtml_Block_System_Email_Template_Grid_Filter_Type extends Mage_A
             return null;
         }
 
-        return array('eq'=>$this->getValue());
+        return array('eq' => $this->getValue());
     }
-
-
-}// Class Mage_Adminhtml_Block_Newsletter_Queue_Grid_Filter_Status END
+}

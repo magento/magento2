@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,6 +52,7 @@ class Mage_Sales_Model_Order_Invoice_Total_Discount extends Mage_Sales_Model_Ord
             $baseTotalDiscountAmount = $baseTotalDiscountAmount + $invoice->getOrder()->getBaseShippingDiscountAmount();
         }
 
+        /** @var $item Mage_Sales_Model_Order_Invoice_Item */
         foreach ($invoice->getAllItems() as $item) {
             if ($item->getOrderItem()->isDummy()) {
                 continue;
@@ -65,16 +66,12 @@ class Mage_Sales_Model_Order_Invoice_Total_Discount extends Mage_Sales_Model_Ord
                 /**
                  * Resolve rounding problems
                  */
-                if ($item->isLast()) {
-                    $discount = $orderItemDiscount - $orderItem->getDiscountInvoiced();
-                    $baseDiscount = $baseOrderItemDiscount - $orderItem->getBaseDiscountInvoiced();
-                }
-                else {
-                    $discount = $orderItemDiscount*$item->getQty()/$orderItemQty;
-                    $baseDiscount = $baseOrderItemDiscount*$item->getQty()/$orderItemQty;
-
-                    $discount = $invoice->getStore()->roundPrice($discount);
-                    $baseDiscount = $invoice->getStore()->roundPrice($baseDiscount);
+                $discount = $orderItemDiscount - $orderItem->getDiscountInvoiced();
+                $baseDiscount = $baseOrderItemDiscount - $orderItem->getBaseDiscountInvoiced();
+                if (!$item->isLast()) {
+                    $activeQty = $orderItemQty - $orderItem->getQtyInvoiced();
+                    $discount = $invoice->roundPrice($discount / $activeQty * $item->getQty(), 'regular', true);
+                    $baseDiscount = $invoice->roundPrice($baseDiscount / $activeQty * $item->getQty(), 'base', true);
                 }
 
                 $item->setDiscountAmount($discount);

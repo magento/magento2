@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -71,8 +71,7 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Decimal extends Mage_Core_Model_R
 
         $collection->getSelect()
             ->where("{$tableAlias}.value >= ?", ($range * ($index - 1)))
-            ->where("{$tableAlias}.value < ?", ($range * $index))
-            ->group('e.entity_id');
+            ->where("{$tableAlias}.value < ?", ($range * $index));
 
         return $this;
     }
@@ -143,7 +142,7 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Decimal extends Mage_Core_Model_R
         $select     = $this->_getSelect($filter);
         $adapter    = $this->_getReadAdapter();
 
-        $countExpr  = new Zend_Db_Expr("COUNT(DISTINCT e.entity_id)");
+        $countExpr  = new Zend_Db_Expr("COUNT(*)");
         $rangeExpr  = new Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
 
         $select->columns(array(

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Sales_Model_Quote_Address_Total_Grand extends Mage_Sales_Model_Quote_
     }
 
     /**
-     * Add grand total information to adderess
+     * Add grand total information to address
      *
      * @param   Mage_Sales_Model_Quote_Address $address
      * @return  Mage_Sales_Model_Quote_Address_Total_Grand

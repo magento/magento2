@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,8 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element extends Mage_Adminhtml_Block_Template implements Varien_Data_Form_Element_Renderer_Interface
+class Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element extends Mage_Adminhtml_Block_Template
+    implements Varien_Data_Form_Element_Renderer_Interface
 {
     protected $_element;
 

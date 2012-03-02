@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -51,7 +51,11 @@ function confirmExit()
 
 function onSubmit(formObj)
 {
-    if(formObj)formObj.action = addParamToUrl(formObj.action, 'maintenance', (top.$('maintenance').checked === true ? '1' : '0'));
+    if(formObj){
+        formObj.action = addParamToUrl(formObj.action, 'maintenance', (top.$('maintenance').checked === true ? '1' : '0'));
+        formObj.action = addParamToUrl(formObj.action, 'archive_type', top.$('is_backup').checked === true ? top.$('archive_type').value:0);
+        formObj.action = addParamToUrl(formObj.action, 'backup_name', top.$('backup_name').value);
+    }
     top.$('connect_iframe_success').style.display = 'none';
     top.$('connect_iframe_failure').style.display = 'none';
     top.$('connect_iframe_container').style.display = '';

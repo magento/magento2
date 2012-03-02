@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,13 @@ class Mage_Adminhtml_Block_Report_Refresh_Statistics_Grid extends Mage_Adminhtml
                 'report'        => Mage::helper('Mage_Sales_Helper_Data')->__('Bestsellers'),
                 'comment'       => Mage::helper('Mage_Sales_Helper_Data')->__('Products Bestsellers Report'),
                 'updated_at'    => $this->_getUpdatedAt(Mage_Reports_Model_Flag::REPORT_BESTSELLERS_FLAG_CODE)
-            )
+            ),
+            array(
+                'id'            => 'viewed',
+                'report'        => Mage::helper('Mage_Sales_Helper_Data')->__('Most Viewed'),
+                'comment'       => Mage::helper('Mage_Sales_Helper_Data')->__('Most Viewed Products Report'),
+                'updated_at'    => $this->_getUpdatedAt(Mage_Reports_Model_Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE)
+            ),
         );
 
         foreach ($data as $value) {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -220,9 +220,12 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
             $this->_saveShipment($shipment);
 
             $shipment->sendEmail(!empty($data['send_email']), $comment);
-            $this->_getSession()->addSuccess($isNeedCreateLabel ?
-                $this->__('The shipment has been created. The shipping label has been created.') :
-                $this->__('The shipment has been created.'));
+
+            $shipmentCreatedMessage = $this->__('The shipment has been created.');
+            $labelCreatedMessage    = $this->__('The shipping label has been created.');
+
+            $this->_getSession()->addSuccess($isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage
+                : $shipmentCreatedMessage);
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->getCommentText(true);
         } catch (Mage_Core_Exception $e) {
             if ($isNeedCreateLabel) {

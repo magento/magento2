@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var varienGrid = new Class.create();
@@ -240,20 +240,27 @@ varienGrid.prototype = {
     _processFailure : function(transport){
         location.href = BASE_URL;
     },
-    addVarToUrl : function(varName, varValue){
+    _addVarToUrl : function(url, varName, varValue){
         var re = new RegExp('\/('+varName+'\/.*?\/)');
-        var parts = this.url.split(new RegExp('\\?'));
-        this.url = parts[0].replace(re, '/');
-        this.url+= varName+'/'+varValue+'/';
+        var parts = url.split(new RegExp('\\?'));
+        url = parts[0].replace(re, '/');
+        url+= varName+'/'+varValue+'/';
         if(parts.size()>1) {
-            this.url+= '?' + parts[1];
+            url+= '?' + parts[1];
         }
-        //this.url = this.url.replace(/([^:])\/{2,}/g, '$1/');
+        return url;
+    },
+    addVarToUrl : function(varName, varValue){
+        this.url = this._addVarToUrl(this.url, varName, varValue);
         return this.url;
     },
     doExport : function(){
         if($(this.containerId+'_export')){
-            location.href = $(this.containerId+'_export').value;
+            var exportUrl = $(this.containerId+'_export').value;
+            if(this.massaction && this.massaction.checkedString) {
+                exportUrl = this._addVarToUrl(exportUrl, this.massaction.formFieldNameInternal, this.massaction.checkedString);
+            }
+            location.href = exportUrl;
         }
     },
     bindFilterFields : function(){
@@ -353,6 +360,7 @@ varienGridMassaction.prototype = {
 
         this.useAjax        = false;
         this.grid           = grid;
+        this.grid.massaction = this;
         this.containerId    = containerId;
         this.initMassactionElements();
 

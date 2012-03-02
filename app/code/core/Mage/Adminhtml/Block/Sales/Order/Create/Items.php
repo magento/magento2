@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,38 +29,78 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 class Mage_Adminhtml_Block_Sales_Order_Create_Items extends Mage_Adminhtml_Block_Sales_Order_Create_Abstract
 {
+    /**
+     * Contains button descriptions to be shown at the top of accordion
+     * @var array
+     */
+    protected $_buttons = array();
+
+    /**
+     * Define block ID
+     */
     public function __construct()
     {
         parent::__construct();
         $this->setId('sales_order_create_items');
     }
 
+    /**
+     * Accordion header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return Mage::helper('Mage_Sales_Helper_Data')->__('Items Ordered');
     }
 
+    /**
+     * Returns all visible items
+     *
+     * @return array
+     */
     public function getItems()
     {
-//        return $this->getQuote()->getAllItems();
         return $this->getQuote()->getAllVisibleItems();
     }
 
-    public function getButtonsHtml()
+    /**
+     * Add button to the items header
+     *
+     * @param $args array
+     */
+    public function addButton($args)
     {
-        $addButtonData = array(
-            'label' => Mage::helper('Mage_Sales_Helper_Data')->__('Add Products'),
-            'onclick' => "order.productGridShow(this)",
-            'class' => 'add',
-        );
-        return $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData($addButtonData)->toHtml();
+        $this->_buttons[] = $args;
     }
 
+    /**
+     * Render buttons and return HTML code
+     *
+     * @return string
+     */
+    public function getButtonsHtml()
+    {
+        $html = '';
+        // Make buttons to be rendered in opposite order of addition. This makes "Add products" the last one.
+        $this->_buttons = array_reverse($this->_buttons);
+        foreach ($this->_buttons as $buttonData) {
+            $html .= $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData($buttonData)->toHtml();
+        }
+
+        return $html;
+    }
+
+    /**
+     * Return HTML code of the block
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         if ($this->getStoreId()) {

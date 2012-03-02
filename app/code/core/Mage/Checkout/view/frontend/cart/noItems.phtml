@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -29,6 +29,8 @@
 </div>
 <div class="cart-empty">
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('checkout_cart_empty_widget'); ?>
     <p><?php echo $this->__('You have no items in your shopping cart.') ?></p>
     <p><?php echo $this->__('Click <a href="%s">here</a> to continue shopping.', $this->getContinueShoppingUrl()) ?></p>
+    <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
 </div>

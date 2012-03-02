@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -130,6 +130,15 @@ class Magento_Test_Listener_Annotation_FixtureTest extends PHPUnit_Framework_Tes
             ->method('_rollbackTransaction')
         ;
         $this->_annotation->endTest();
+    }
+
+    /**
+     * @magentoDataFixture fixture\path\must\not\contain\backslash.php
+     * @expectedException Magento_Exception
+     */
+    public function testMethodAnnotationInvalidPath()
+    {
+        $this->_annotation->startTest();
     }
 
     /**

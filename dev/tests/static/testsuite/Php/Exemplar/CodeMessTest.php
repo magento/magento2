@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @category    tests
+ * @package     static
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,7 +68,7 @@ class Php_Exemplar_CodeMessTest extends PHPUnit_Framework_TestCase
         $doc->load($rulesetFile);
 
         libxml_use_internal_errors(true);
-        $isValid = $doc->schemaValidate('http://pmd.sourceforge.net/ruleset_xml_schema.xsd');
+        $isValid = $doc->schemaValidate(__DIR__ . '/_files/phpmd_ruleset.xsd');
         $errors = "XML-file is invalid.\n";
         if ($isValid === false) {
             foreach (libxml_get_errors() as $error) {
@@ -93,24 +92,25 @@ class Php_Exemplar_CodeMessTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $inputFile
-     * @param string $expectedReportFile
+     * @param string|array $expectedXpaths
      * @depends testRulesetFormat
      * @depends testPhpMdAvailability
      * @dataProvider ruleViolationDataProvider
      */
-    public function testRuleViolation($inputFile, $expectedReportFile)
+    public function testRuleViolation($inputFile, $expectedXpaths)
     {
         $this->assertFalse(self::$_cmd->run(
             array($inputFile)), "PHP Mess Detector has failed to identify problem at the erroneous file {$inputFile}"
         );
 
-        /* Cleanup report from the variable information */
-        $actualReportXml = file_get_contents(self::$_cmd->getReportFile());
-        $actualReportXml = preg_replace('/(?<!\?xml)\s+version=".+?"/', '', $actualReportXml, 1);
-        $actualReportXml = preg_replace('/\s+(?:timestamp|externalInfoUrl)=".+?"/', '', $actualReportXml);
-        $actualReportXml = str_replace(realpath($inputFile), basename($inputFile), $actualReportXml);
-
-        $this->assertXmlStringEqualsXmlFile($expectedReportFile, $actualReportXml);
+        $actualReportXml = simplexml_load_file(self::$_cmd->getReportFile());
+        $expectedXpaths = (array)$expectedXpaths;
+        foreach ($expectedXpaths as $expectedXpath) {
+            $this->assertNotEmpty(
+                $actualReportXml->xpath($expectedXpath),
+                "Expected xpath: '$expectedXpath' for file: '$inputFile'"
+            );
+        }
     }
 
     /**
@@ -118,59 +118,6 @@ class Php_Exemplar_CodeMessTest extends PHPUnit_Framework_TestCase
      */
     public function ruleViolationDataProvider()
     {
-        return array(
-            'cyclomatic complexity' => array(
-                __DIR__ . '/_files/phpmd/input/cyclomatic_complexity.php',
-                __DIR__ . '/_files/phpmd/output/cyclomatic_complexity.xml',
-            ),
-            'method length' => array(
-                __DIR__ . '/_files/phpmd/input/method_length.php',
-                __DIR__ . '/_files/phpmd/output/method_length.xml',
-            ),
-            'parameter list' => array(
-                __DIR__ . '/_files/phpmd/input/parameter_list.php',
-                __DIR__ . '/_files/phpmd/output/parameter_list.xml',
-            ),
-            'method count' => array(
-                __DIR__ . '/_files/phpmd/input/method_count.php',
-                __DIR__ . '/_files/phpmd/output/method_count.xml',
-            ),
-            'field count' => array(
-                __DIR__ . '/_files/phpmd/input/field_count.php',
-                __DIR__ . '/_files/phpmd/output/field_count.xml',
-            ),
-            'public count' => array(
-                __DIR__ . '/_files/phpmd/input/public_count.php',
-                __DIR__ . '/_files/phpmd/output/public_count.xml',
-            ),
-            'prohibited statement' => array(
-                __DIR__ . '/_files/phpmd/input/prohibited_statement.php',
-                __DIR__ . '/_files/phpmd/output/prohibited_statement.xml',
-            ),
-            'prohibited statement goto' => array(
-                __DIR__ . '/_files/phpmd/input/prohibited_statement_goto.php',
-                __DIR__ . '/_files/phpmd/output/prohibited_statement_goto.xml',
-            ),
-            'inheritance depth' => array(
-                __DIR__ . '/_files/phpmd/input/inheritance_depth.php',
-                __DIR__ . '/_files/phpmd/output/inheritance_depth.xml',
-            ),
-            'descendant count' => array(
-                __DIR__ . '/_files/phpmd/input/descendant_count.php',
-                __DIR__ . '/_files/phpmd/output/descendant_count.xml',
-            ),
-            'coupling' => array(
-                __DIR__ . '/_files/phpmd/input/coupling.php',
-                __DIR__ . '/_files/phpmd/output/coupling.xml',
-            ),
-            'naming' => array(
-                __DIR__ . '/_files/phpmd/input/naming.php',
-                __DIR__ . '/_files/phpmd/output/naming.xml',
-            ),
-            'unused' => array(
-                __DIR__ . '/_files/phpmd/input/unused.php',
-                __DIR__ . '/_files/phpmd/output/unused.xml',
-            ),
-        );
+        return include(__DIR__ . '/_files/phpmd/data.php');
     }
 }
