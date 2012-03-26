@@ -111,11 +111,10 @@ class Mage_Persistent_Model_Observer
             null
         );
 
-        $block->setWelcome(Mage::helper('Mage_Persistent_Helper_Data')->__('Welcome, %s!', $escapedName));
-
         $this->_applyAccountLinksPersistentData();
-        $block->setAdditionalHtml(Mage::app()->getLayout()->getBlock('header.additional')->toHtml());
-
+        $welcomeMessage = Mage::helper('Mage_Persistent_Helper_Data')->__('Welcome, %s!', $escapedName)
+            . ' ' . Mage::app()->getLayout()->getBlock('header.additional')->toHtml();
+        $block->setWelcome($welcomeMessage);
         return $this;
     }
 
@@ -127,29 +126,6 @@ class Mage_Persistent_Model_Observer
         if (!Mage::app()->getLayout()->getBlock('header.additional')) {
             Mage::app()->getLayout()->addBlock('Mage_Persistent_Block_Header_Additional', 'header.additional');
         }
-    }
-
-    /**
-     * Emulate 'account links' block with persistent data
-     *
-     * @param Mage_Core_Block_Abstract $block
-     */
-    public function emulateAccountLinks($block)
-    {
-        $this->_applyAccountLinksPersistentData();
-        $block->getCacheKeyInfo();
-        $helper = Mage::helper('Mage_Persistent_Helper_Data');
-        $block->addLink(
-            $helper->getPersistentName(),
-            $helper->getUnsetCookieUrl(),
-            $helper->getPersistentName(),
-            false,
-            array(),
-            110
-        );
-        $customerHelper = Mage::helper('Mage_Customer_Helper_Data');
-        $block->removeLinkByUrl($customerHelper->getRegisterUrl());
-        $block->removeLinkByUrl($customerHelper->getLoginUrl());
     }
 
     /**
@@ -544,27 +520,6 @@ class Mage_Persistent_Model_Observer
         }
 
         return $this;
-    }
-
-    /**
-     * Create handle for persistent session if persistent cookie and customer not logged in
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function createPersistentHandleLayout(Varien_Event_Observer $observer)
-    {
-        /** @var $layout Mage_Core_Model_Layout */
-        $layout = $observer->getEvent()->getLayout();
-        $helper = Mage::helper('Mage_Persistent_Helper_Data');
-        if ($helper->canProcess($observer)
-            && $layout && $helper->isEnabled()
-            && Mage::helper('Mage_Persistent_Helper_Session')->isPersistent()
-        ) {
-            $handle = (Mage::getSingleton('Mage_Customer_Model_Session')->isLoggedIn())
-                ? Mage_Persistent_Helper_Data::LOGGED_IN_LAYOUT_HANDLE
-                : Mage_Persistent_Helper_Data::LOGGED_OUT_LAYOUT_HANDLE;
-            $layout->getUpdate()->addHandle($handle);
-        }
     }
 
     /**

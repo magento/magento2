@@ -110,7 +110,6 @@ class Mage_Catalog_Model_Layer extends Varien_Object
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
-            //->addStoreFilter()
             ->addUrlRewrite($this->getCurrentCategory()->getId())
             ->setVisibility(Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInCatalogIds());
 

@@ -41,6 +41,7 @@ class Mage_Catalog_Helper_Data extends Mage_Core_Helper_Abstract
     const CONFIG_USE_STATIC_URLS           = 'cms/wysiwyg/use_static_urls_in_catalog';
     const CONFIG_PARSE_URL_DIRECTIVES      = 'catalog/frontend/parse_url_directives';
     const XML_PATH_CONTENT_TEMPLATE_FILTER = 'global/catalog/content/tempate_filter';
+    const XML_PATH_DISPLAY_PRODUCT_COUNT   = 'catalog/layered_navigation/display_product_count';
 
     /**
      * Minimum advertise price constants
@@ -450,5 +451,15 @@ class Mage_Catalog_Helper_Data extends Mage_Core_Helper_Abstract
             $product,
             Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_ON_GESTURE
         );
+    }
+
+    /**
+     * Whether to display items count for each filter option
+     * @param int $storeId Store view ID
+     * @return bool
+     */
+    public function shouldDisplayProductCountOnLayer($storeId = null)
+    {
+        return Mage::getStoreConfigFlag(self::XML_PATH_DISPLAY_PRODUCT_COUNT, $storeId);
     }
 }

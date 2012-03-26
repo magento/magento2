@@ -115,13 +115,6 @@ class Mage_Catalog_Model_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertContains(Mage::app()->getStore()->getId(), $this->_model->getStoreIds());
     }
 
-    public function testGetLayoutUpdateHandle()
-    {
-        $this->assertEquals('catalog_category_default', $this->_model->getLayoutUpdateHandle());
-        $this->_model->setIsAnchor(true);
-        $this->assertEquals('catalog_category_layered', $this->_model->getLayoutUpdateHandle());
-    }
-
     public function testSetGetStoreId()
     {
         $this->assertEquals(Mage::app()->getStore()->getId(), $this->_model->getStoreId());

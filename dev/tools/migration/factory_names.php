@@ -40,16 +40,40 @@ foreach (Util_Files::getPhpFiles() as $file) {
     $replace = array();
     foreach ($factoryNames as $factoryName) {
         list($module, $name) = getModuleName($factoryName);
-        addReplace($factoryName, $module, $name, '::getModel(%s', '_Model_', $search, $replace);
-        addReplace($factoryName, $module, $name, '::getSingleton(%s', '_Model_', $search, $replace);
-        addReplace($factoryName, $module, $name, '::getResourceModel(%s', '_Model_Resource_', $search, $replace);
-        addReplace($factoryName, $module, $name, '::getResourceSingleton(%s', '_Model_Resource_', $search, $replace);
-        addReplace($factoryName, $module, $name, 'addBlock(%s', '_Block_', $search, $replace);
-        addReplace($factoryName, $module, $name, 'createBlock(%s', '_Block_', $search, $replace);
-        addReplace($factoryName, $module, $name, 'getBlockClassName(%s', '_Block_', $search, $replace);
-        addReplace($factoryName, $module, $name, 'getBlockSingleton(%s', '_Block_', $search, $replace);
-        addReplace($factoryName, $module, $name, 'helper(%s', '_Helper_', $search, $replace);
+        addReplace($factoryName, $module, $name, '::getModel(\'%s\'', '_Model_', $search, $replace);
+        addReplace($factoryName, $module, $name, '::getSingleton(\'%s\'', '_Model_', $search, $replace);
+        addReplace($factoryName, $module, $name, '::getResourceModel(\'%s\'', '_Model_Resource_', $search, $replace);
+        addReplace($factoryName, $module, $name, "::getResourceSingleton('%s'", '_Model_Resource_', $search, $replace);
+        addReplace($factoryName, $module, $name, 'addBlock(\'%s\'', '_Block_', $search, $replace);
+        addReplace($factoryName, $module, $name, 'createBlock(\'%s\'', '_Block_', $search, $replace);
+        addReplace($factoryName, $module, $name, 'getBlockClassName(\'%s\'', '_Block_', $search, $replace);
+        addReplace($factoryName, $module, $name, 'getBlockSingleton(\'%s\'', '_Block_', $search, $replace);
+        addReplace($factoryName, $module, $name, 'helper(\'%s\'', '_Helper_', $search, $replace);
     }
+    $newContent = str_replace($search, $replace, $content);
+    if ($newContent != $content) {
+        echo "{$file}\n";
+        print_r($factoryNames);
+        file_put_contents($file, $newContent);
+    }
+}
+
+// layouts
+foreach (Util_Files::getLayoutFiles() as $file) {
+    $file = array_shift($file);
+    $xml = simplexml_load_file($file);
+    $classes = Util_Classes::collectLayoutClasses($xml);
+    $factoryNames = array_filter($classes, 'isFactoryName');
+    if (!$factoryNames) {
+        continue;
+    }
+    $search = array();
+    $replace = array();
+    foreach ($factoryNames as $factoryName) {
+        list($module, $name) = getModuleName($factoryName);
+        addReplace($factoryName, $module, $name, 'type="%s"', '_Block_', $search, $replace);
+    }
+    $content = file_get_contents($file);
     $newContent = str_replace($search, $replace, $content);
     if ($newContent != $content) {
         echo "{$file}\n";
@@ -109,6 +133,6 @@ function addReplace($factoryName, $module, $name, $pattern, $suffix, &$search, &
         $name = 'data';
     }
     $realName = implode('_', array_map('ucfirst', explode('_', $module . $suffix . $name)));
-    $search[] = sprintf($pattern, "'{$factoryName}'");
-    $replace[] = sprintf($pattern, "'{$realName}'");
+    $search[] = sprintf($pattern, "{$factoryName}");
+    $replace[] = sprintf($pattern, "{$realName}");
 }

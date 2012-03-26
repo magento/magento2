@@ -28,11 +28,11 @@
 
 <layout>
     <adminhtml_widget_index>
-        <block name="wysiwyg_widget" type="Mage_Widget_Block_Adminhtml_Widget" output="toHtml" />
+        <block name="wysiwyg_widget" type="Mage_Widget_Block_Adminhtml_Widget" output="1" />
     </adminhtml_widget_index>
 
     <adminhtml_widget_loadoptions>
-        <block name="wysiwyg_widget.options" type="Mage_Widget_Block_Adminhtml_Widget_Options" output="toHtml" />
+        <block name="wysiwyg_widget.options" type="Mage_Widget_Block_Adminhtml_Widget_Options" output="1" />
     </adminhtml_widget_loadoptions>
 
     <adminhtml_widget_instance_index>
@@ -47,7 +47,7 @@
             <action method="addJs"><file>mage/adminhtml/wysiwyg/widget.js</file></action>
             <action method="addJs"><file>prototype/window.js</file></action>
             <action method="addCss"><file>prototype/windows/themes/default.css</file></action>
-            <action method="addCss"><file>prototype/windows/themes/magento.css</file></action>
+            <action method="addCss"><file>Mage_Core::prototype/magento.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Widget_Block_Adminhtml_Widget_Instance_Edit" name="widget_instance_edit" />

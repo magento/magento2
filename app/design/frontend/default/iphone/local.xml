@@ -32,6 +32,7 @@
             <action method="addCss"><file>css/styles-ie.css</file><params/><if>lt IE 8</if></action>
             <action method="addCss"><file>css/print.css</file><params>media="print"</params></action>
             <action method="addCss"><file>css/iphone.css</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/iphone_styles.css</file><params/><if/><condition>design_editor_active</condition></action>
         </reference>
     </default>
 </layout>

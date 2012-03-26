@@ -39,7 +39,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
     /**
      * Translate file name
      */
-    const JAVASCRIPT_TRANSLATE_CONFIG_FILENAME = 'translater.xml';
+    const JAVASCRIPT_TRANSLATE_CONFIG_FILENAME = 'jstranslator.xml';
 
     /**
      * Array of senteces of JS translations
@@ -84,7 +84,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
      */
     public function getScript($script)
     {
-        return '<script type="text/javascript">'.$script.'</script>';
+        return '<script type="text/javascript">//<![CDATA[' . "\n{$script}\n" . '//]]></script>';
     }
 
     /**
@@ -107,11 +107,14 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
     {
         if ($this->_translateData === null) {
             $this->_translateData = array();
-
-            foreach ($this->_getXmlConfig()->getXpath('*/message') as $message) {
-                $messageText = (string)$message;
-                $module = $message->getParent()->getAttribute("module");
-                $this->_translateData[$messageText] = Mage::helper(empty($module) ? 'Mage_Core' : $module)->__($messageText);
+            $messages = $this->_getXmlConfig()->getXpath('*/message');
+            if (!empty($messages)) {
+                foreach ($messages as $message) {
+                    $messageText = (string)$message;
+                    $module = $message->getParent()->getAttribute("module");
+                    $this->_translateData[$messageText] = Mage::helper(empty($module) ? 'Mage_Core' : $module
+                    )->__($messageText);
+                }
             }
 
             foreach ($this->_translateData as $key => $value) {
@@ -137,7 +140,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
                 $xmlConfig = new Varien_Simplexml_Config($cachedXml);
             } else {
                 $xmlConfig = new Varien_Simplexml_Config();
-                $xmlConfig->loadString('<?xml version="1.0"?><translater></translater>');
+                $xmlConfig->loadString('<?xml version="1.0"?><jstranslator></jstranslator>');
                 Mage::getConfig()->loadModulesConfiguration(self::JAVASCRIPT_TRANSLATE_CONFIG_FILENAME, $xmlConfig);
 
                 if ($canUsaCache) {

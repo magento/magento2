@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Tax_Class extends Mage_Adminhtml_Block_Widget_Grid_Co
             $this->_addButtonLabel  = Mage::helper('Mage_Tax_Helper_Data')->__('Add New Class');
         }
 
-        $this->getChild('grid')->setClassType($classType);
+        $this->getChildBlock('grid')->setClassType($classType);
         $this->setData('class_type', $classType);
 
         return $this;

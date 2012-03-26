@@ -29,6 +29,7 @@
 <?php $_option      = $this->getOption(); ?>
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
+<?php $_skipSaleableCheck = Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $this->_getDefaultValues(); ?>
 
 <dt>
@@ -46,7 +47,7 @@
         <select id="bundle-option-<?php echo $_option->getId() ?>" name="bundle_option[<?php echo $_option->getId() ?>]" class="bundle-option-<?php echo $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> bundle-option-select change-container-classname" onchange="ProductConfigure.bundleControl.changeSelection(this)">
             <option value=""><?php echo $this->__('Choose a selection...') ?></option>
         <?php foreach ($_selections as $_selection): ?>
-            <option value="<?php echo $_selection->getSelectionId() ?>"<?php if ($this->_isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?> price="<?php echo $this->getSelectionPrice($_selection) ?>" qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input"><?php echo $this->getSelectionTitlePrice($_selection, false) ?></option>
+            <option value="<?php echo $_selection->getSelectionId() ?>"<?php if ($this->_isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?> price="<?php echo $this->getSelectionPrice($_selection) ?>" qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input"><?php echo $this->getSelectionTitlePrice($_selection, false) ?></option>
         <?php endforeach; ?>
         </select>
     <?php endif; ?>

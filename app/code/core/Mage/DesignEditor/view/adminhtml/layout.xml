@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout>
+    <adminhtml_system_design_editor_index>
+        <reference name="content">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form_Container" name="design_editor_launcher_form_container">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form" name="design_editor_launcher_form" as="form"/>
+            </block>
+        </reference>
+    </adminhtml_system_design_editor_index>
+
+    <adminhtml_system_design_editor_exit>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Template" name="design_editor_exit" as="exit" template="Mage_DesignEditor::exit.phtml"/>
+        </reference>
+    </adminhtml_system_design_editor_exit>
+</layout>

@@ -32,23 +32,11 @@
 Adding custom product price block
 -->
 
-    <catalog_category_default>
-        <reference name="product_list">
-            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
-        </reference>
-    </catalog_category_default>
-
     <catalog_category_view>
         <reference name="product_list">
             <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
         </reference>
     </catalog_category_view>
-
-    <catalog_category_layered>
-        <reference name="product_list">
-            <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
-        </reference>
-    </catalog_category_layered>
 
     <catalog_product_compare_index>
         <reference name="catalog.compare.list">
@@ -92,12 +80,6 @@ Adding custom product price block
         </reference>
     </default>
 
-    <wishlist_index_index>
-        <reference name="customer.wishlist">
-            <action method="addOptionsRenderCfg"><type>bundle</type><helper>Mage_Bundle_Helper_Catalog_Product_Configuration</helper></action>
-        </reference>
-    </wishlist_index_index>
-
     <catalog_product_view>
         <reference name="catalog.product.related">
             <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
@@ -108,12 +90,12 @@ Adding custom product price block
 Partof block for simple products
 -->
 
-   <PRODUCT_TYPE_simple>
+   <catalog_product_view_type_simple>
         <reference name="product.info.upsell">
             <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/price.phtml</template></action>
             <action method="setItemLimit"><type>bundle</type><limit>4</limit></action>
         </reference>
-    </PRODUCT_TYPE_simple>
+    </catalog_product_view_type_simple>
 
 <!--
 Shopping cart item renderer (sidebar)
@@ -143,7 +125,7 @@ Onepage Checkout Review Page
 -->
 
     <checkout_onepage_review>
-        <reference name="root">
+        <reference name="order_review">
             <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
         </reference>
     </checkout_onepage_review>
@@ -186,7 +168,7 @@ Onepage Checkout Review Page
         </reference>
     </paypaluk_express_review>
     <paypaluk_express_review_details>
-        <reference name="root">
+        <reference name="order_review">
             <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
         </reference>
     </paypaluk_express_review_details>
@@ -204,7 +186,7 @@ Onepage Checkout Review Page
 Additional block for bundle product type
 -->
 
-    <PRODUCT_TYPE_bundle translate="label" module="Mage_Bundle">
+    <catalog_product_view_type_bundle translate="label" module="Mage_Bundle" type="page" parent="catalog_product_view">
         <label>Catalog Product View (Bundle)</label>
         <reference name="head">
             <action method="addJs"><file>Mage_Bundle::bundle.js</file></action>
@@ -229,12 +211,12 @@ Additional block for bundle product type
         <reference name="product.info.options.wrapper.bottom">
             <remove name="product.tierprices" />
             <block type="Mage_Bundle_Block_Catalog_Product_View" name="bundle.tierprices" as="tierprices" before="-" template="catalog/product/view/tierprices.phtml"/>
-            <block type="Mage_CatalogInventory_Block_Qtyincrements" name="product.info.extrahint" as="extrahint" template="qtyincrements.phtml"/>
+            <block type="Mage_CatalogInventory_Block_Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
         </reference>
         <reference name="product.clone_prices">
             <action method="addPriceBlockType"><type>bundle</type><block>Mage_Bundle_Block_Catalog_Product_Price</block><template>catalog/product/view/price.phtml</template></action>
         </reference>
-    </PRODUCT_TYPE_bundle>
+    </catalog_product_view_type_bundle>
 
     <sales_order_view>
         <reference name="order_items">

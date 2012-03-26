@@ -94,7 +94,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid extends Mage_Adminh
                 Mage::helper('Mage_Adminhtml_Helper_Data')->__('No'),
                 Mage::helper('Mage_Adminhtml_Helper_Data')->__('Yes')
             ),
-            'renderer' => 'adminhtml/promo_quote_edit_tab_coupons_grid_column_renderer_used',
+            'renderer' => 'Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Coupons_Grid_Column_Renderer_Used',
             'filter_condition_callback' => array(
                 Mage::getResourceModel('Mage_SalesRule_Model_Resource_Coupon_Collection'), 'addIsUsedFilterCallback'
             )

@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_CatalogRule>
-            <version>1.6.0.2</version>
+            <version>1.6.0.3</version>
         </Mage_CatalogRule>
     </modules>
     <global>

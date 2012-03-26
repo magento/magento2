@@ -83,9 +83,18 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test/controller/action', $this->_model->getFullActionName('/'));
     }
 
-    public function testGetLayout()
+    /**
+     * @param string $controllerClass
+     * @param string $expectedArea
+     * @dataProvider controllerAreaDesignDataProvider
+     * @magentoAppIsolation enabled
+     */
+    public function testGetLayout($controllerClass, $expectedArea)
     {
-        $this->assertInstanceOf('Mage_Core_Model_Layout', $this->_model->getLayout());
+        /** @var $controller Mage_Core_Controller_Varien_Action */
+        $controller = new $controllerClass(new Magento_Test_Request(), new Magento_Test_Response());
+        $this->assertInstanceOf('Mage_Core_Model_Layout', $controller->getLayout());
+        $this->assertEquals($expectedArea, $controller->getLayout()->getArea());
     }
 
     /**
@@ -102,17 +111,49 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mage_Core_Block_Abstract', $this->_model->getLayout()->getBlock('root'));
     }
 
+    public function testGetDefaultLayoutHandle()
+    {
+        $this->_model->getRequest()
+            ->setRouteName('Test')
+            ->setControllerName('Controller')
+            ->setActionName('Action');
+        $this->assertEquals('test_controller_action', $this->_model->getDefaultLayoutHandle());
+    }
+
     /**
      * @magentoAppIsolation enabled
      */
     public function testAddActionLayoutHandles()
     {
-        $this->_model->getRequest()->setRouteName('test')
-            ->setControllerName('controller')
-            ->setActionName('action');
+        $this->_model->getRequest()
+            ->setRouteName('Test')
+            ->setControllerName('Controller')
+            ->setActionName('Action');
         $this->_model->addActionLayoutHandles();
         $handles = $this->_model->getLayout()->getUpdate()->getHandles();
         $this->assertContains('test_controller_action', $handles);
+        $this->assertNotContains('STORE_' . Mage::app()->getStore()->getCode(), $handles);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testAddPageLayoutHandles()
+    {
+        $this->_model->getRequest()->setRouteName('test')
+            ->setControllerName('controller')
+            ->setActionName('action');
+        $this->_model->addPageLayoutHandles(array());
+        $this->assertEmpty($this->_model->getLayout()->getUpdate()->getHandles());
+
+        $this->_model->getRequest()->setRouteName('catalog')
+            ->setControllerName('product')
+            ->setActionName('view');
+        $this->_model->addPageLayoutHandles(array('type' => 'simple'));
+        $handles = $this->_model->getLayout()->getUpdate()->getHandles();
+        $this->assertContains('default', $handles);
+        $this->assertContains('catalog_product_view', $handles);
+        $this->assertContains('catalog_product_view_type_simple', $handles);
     }
 
     /**
@@ -159,29 +200,39 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->_model->getResponse()->getBody());
     }
 
-    public function preDispatchDetectDesignDataProvider()
-    {
-        return array(
-            'install'  => array('Mage_Install_Controller_Action',    'install',   'default/default/default'),
-            'backend'  => array('Mage_Adminhtml_Controller_Action',  'adminhtml', 'default/default/default'),
-            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend',  'default/iphone/default'),
-        );
-    }
-
     /**
      * @magentoConfigFixture               install/design/theme/full_name   default/default/default
      * @magentoConfigFixture               adminhtml/design/theme/full_name default/default/default
      * @magentoConfigFixture current_store design/theme/full_name           default/iphone/default
      * @magentoAppIsolation  enabled
-     * @dataProvider         preDispatchDetectDesignDataProvider
+     *
+     * @dataProvider controllerAreaDesignDataProvider
+     *
+     * @param string $controllerClass
+     * @param string $expectedArea
+     * @param string $expectedStore
+     * @param string $expectedDesign
      */
-    public function testPreDispatchDetectDesign($controllerClass, $expectedArea, $expectedDesign)
+    public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign)
     {
         /** @var $controller Mage_Core_Controller_Varien_Action */
         $controller = new $controllerClass(new Magento_Test_Request(), new Magento_Test_Response());
         $controller->preDispatch();
         $this->assertEquals($expectedArea, Mage::getDesign()->getArea());
-        $this->assertEquals($expectedDesign, Mage::getDesign()->getDesignTheme());
+        $this->assertEquals($expectedStore, Mage::app()->getStore()->getCode());
+        if ($expectedDesign) {
+            $this->assertEquals($expectedDesign, Mage::getDesign()->getDesignTheme());
+        }
+    }
+
+    public function controllerAreaDesignDataProvider()
+    {
+        return array(
+            'install'  => array('Mage_Install_Controller_Action',    'install',   'default', 'default/default/default'),
+            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend',  'default', 'default/iphone/default'),
+            'backend'  => array('Mage_Adminhtml_Controller_Action',  'adminhtml', 'admin',   'default/default/default'),
+            'api'      => array('Mage_Api_Controller_Action',        'adminhtml', 'admin',   ''),
+        );
     }
 
     public function testNoRouteAction()

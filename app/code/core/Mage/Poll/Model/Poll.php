@@ -81,16 +81,28 @@ class Mage_Poll_Model_Poll extends Mage_Core_Model_Abstract
      */
     public function getCookieName($pollId = null)
     {
-        return $this->_pollCookieDefaultName . $this->getPoolId($pollId);
+        return $this->_pollCookieDefaultName . $this->getPollId($pollId);
     }
 
     /**
      * Retrieve defined or current Id
      *
+     * @deprecated since 1.7.0.0
      * @param int $pollId
      * @return int
      */
     public function getPoolId($pollId = null)
+    {
+        return $this->getPollId($pollId);
+    }
+
+    /**
+     * Retrieve defined or current Id
+     *
+     * @param int|null $pollId
+     * @return int
+     */
+    public function getPollId($pollId = null)
     {
         if (is_null($pollId)) {
             $pollId = $this->getId();
@@ -116,7 +128,7 @@ class Mage_Poll_Model_Poll extends Mage_Core_Model_Abstract
      */
     public function setVoted($pollId=null)
     {
-        $this->getCookie()->set($this->getCookieName($pollId), $this->getPoolId($pollId));
+        $this->getCookie()->set($this->getCookieName($pollId), $this->getPollId($pollId));
 
         return $this;
     }
@@ -129,7 +141,7 @@ class Mage_Poll_Model_Poll extends Mage_Core_Model_Abstract
      */
     public function isVoted($pollId = null)
     {
-        $pollId = $this->getPoolId($pollId);
+        $pollId = $this->getPollId($pollId);
 
         // check if it is in cookie
         $cookie = $this->getCookie()->get($this->getCookieName($pollId));

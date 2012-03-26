@@ -61,7 +61,7 @@
 class Mage_Admin_Model_User extends Mage_Core_Model_Abstract
 {
     /**
-     * Configuration pathes for email templates and identities
+     * Configuration paths for email templates and identities
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE    = 'admin/emails/forgot_email_template';
     const XML_PATH_FORGOT_EMAIL_IDENTITY    = 'admin/emails/forgot_email_identity';

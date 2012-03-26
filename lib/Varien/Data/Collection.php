@@ -145,7 +145,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
      * - 'foo' -- get the first filter with field name 'foo'
      * - array('foo') -- get all filters with field name 'foo'
      * - array('foo', 'bar') -- get all filters with field name 'foo' or 'bar'
-     * - array() -- get all filters 
+     * - array() -- get all filters
      *
      * @param string|array $field
      * @return Varien_Object|array|null
@@ -164,7 +164,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
                     $result[] = $filter;
                 }
             }
-            return $result; 
+            return $result;
         }
 
         // get a first filter by specified name
@@ -374,8 +374,20 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
             }
             $this->_items[$itemId] = $item;
         } else {
-            $this->_items[] = $item;
+            $this->_addItem($item);
         }
+        return $this;
+    }
+
+    /**
+     * Add item that has no id to collection
+     *
+     * @param Varien_Object $item
+     * @return Varien_Data_Collection
+     */
+    protected function _addItem($item)
+    {
+        $this->_items[] = $item;
         return $this;
     }
 

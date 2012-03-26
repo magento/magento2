@@ -33,11 +33,17 @@
  */
 class Mage_Adminhtml_Block_System_Email_Template_Preview extends Mage_Adminhtml_Block_Widget
 {
+    /**
+     * Prepare html output
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         /** @var $template Mage_Core_Model_Email_Template */
         $template = Mage::getModel('Mage_Core_Model_Email_Template');
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        $id = (int)$this->getRequest()->getParam('id');
+        if ($id) {
             $template->load($id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));

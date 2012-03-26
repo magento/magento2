@@ -60,6 +60,9 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expectedBackendClass, $backend);
     }
 
+    /**
+     * @return array
+     */
     public function constructorDataProvider()
     {
         return array(
@@ -80,6 +83,7 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
         if ($extensionRequired) {
             if (!extension_loaded($extensionRequired)) {
                 $this->markTestSkipped("The PHP extension '{$extensionRequired}' is required for this test.");
+
             }
         }
         $model = new Mage_Core_Model_Cache(array('backend' => $optionCode));
@@ -196,15 +200,38 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend_Db_Adapter_Abstract', $this->_model->getDbAdapter());
     }
 
-    public function testCanUseAndBanUse()
+    /**
+     * @return Mage_Core_Model_Cache
+     */
+    public function testCanUse()
     {
-        $actualCacheOptions = $this->_model->canUse('');
-        $this->assertEquals(array('config' => true), $actualCacheOptions);
-
+        $this->assertEquals(array('config' => true), $this->_model->canUse(''));
         $this->assertTrue($this->_model->canUse('config'));
+        return $this->_model;
+    }
 
-        $this->_model->banUse('config');
-        $this->assertFalse($this->_model->canUse('config'));
+    /**
+     * @depends testCanUse
+     * @param Mage_Core_Model_Cache $model
+     * @return Mage_Core_Model_CacheTest
+     */
+    public function testBanUse(Mage_Core_Model_Cache $model)
+    {
+        $this->assertTrue($model->canUse('config'));
+        $model->banUse('config');
+        $this->assertFalse($model->canUse('config'));
+        return $model;
+    }
+
+    /**
+     * @depends testBanUse
+     * @param Mage_Core_Model_Cache $model
+     */
+    public function testAllowUse(Mage_Core_Model_Cache $model)
+    {
+        $this->assertFalse($model->canUse('config'));
+        $model->allowUse('config');
+        $this->assertTrue($model->canUse('config'));
     }
 
     /**

@@ -261,19 +261,25 @@ class Mage_Customer_Model_Session extends Mage_Core_Model_Session_Abstract
      * Authenticate controller action by login customer
      *
      * @param   Mage_Core_Controller_Varien_Action $action
+     * @param   bool $loginUrl
      * @return  bool
      */
     public function authenticate(Mage_Core_Controller_Varien_Action $action, $loginUrl = null)
     {
-        if (!$this->isLoggedIn()) {
-            $this->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_current'=>true)));
-            if (is_null($loginUrl)) {
-                $loginUrl = Mage::helper('Mage_Customer_Helper_Data')->getLoginUrl();
-            }
-            $action->getResponse()->setRedirect($loginUrl);
-            return false;
+        if ($this->isLoggedIn()) {
+            return true;
         }
-        return true;
+
+        $this->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_current' => true)));
+        if (isset($loginUrl)) {
+            $action->getResponse()->setRedirect($loginUrl);
+        } else {
+            $action->setRedirectWithCookieCheck(Mage_Customer_Helper_Data::ROUTE_ACCOUNT_LOGIN,
+                Mage::helper('Mage_Customer_Helper_Data')->getLoginUrlParams()
+            );
+        }
+
+        return false;
     }
 
     /**
@@ -335,8 +341,7 @@ class Mage_Customer_Model_Session extends Mage_Core_Model_Session_Abstract
     public function renewSession()
     {
         parent::renewSession();
-        Mage::getSingleton('Mage_Core_Model_Session')->unsSessionHosts();
-
+        $this->_cleanHosts();
         return $this;
     }
 }

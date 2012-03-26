@@ -212,10 +212,6 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
 
         while($dateStart->compare($dateEnd) < 0){
             switch ($this->getDataHelper()->getParam('period')) {
-                case '24h':
-                    $d = $dateStart->toString('yyyy-MM-dd HH:00');
-                    $dateStart->addHour(1);
-                    break;
                 case '7d':
                 case '1m':
                     $d = $dateStart->toString('yyyy-MM-dd');
@@ -226,6 +222,9 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
                     $d = $dateStart->toString('yyyy-MM');
                     $dateStart->addMonth(1);
                     break;
+                default:
+                    $d = $dateStart->toString('yyyy-MM-dd HH:00');
+                    $dateStart->addHour(1);
             }
             foreach ($this->getAllSeries() as $index=>$serie) {
                 if (in_array($d, $this->_axisLabels['x'])) {
@@ -280,22 +279,15 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
         }
 
         // process each string in the array, and find the max length
+        $localmaxvalue = array(0);
+        $localminvalue = array(0);
         foreach ($this->getAllSeries() as $index => $serie) {
-            $localmaxlength[$index] = sizeof($serie);
             $localmaxvalue[$index] = max($serie);
             $localminvalue[$index] = min($serie);
         }
 
-        if (is_numeric($this->_max)) {
-            $maxvalue = $this->_max;
-        } else {
-            $maxvalue = max($localmaxvalue);
-        }
-        if (is_numeric($this->_min)) {
-            $minvalue = $this->_min;
-        } else {
-            $minvalue = min($localminvalue);
-        }
+        $maxvalue = max($localmaxvalue);
+        $minvalue = min($localminvalue);
 
         // default values
         $yrange = 0;
@@ -304,7 +296,6 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
         $maxy = 0;
         $yorigin = 0;
 
-        $maxlength = max($localmaxlength);
         if ($minvalue >= 0 && $maxvalue >= 0) {
             $miny = 0;
             if ($maxvalue > 10) {

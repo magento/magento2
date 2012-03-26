@@ -266,7 +266,11 @@ class Mage_Catalog_Model_Product_Option extends Mage_Core_Model_Abstract
             } else {
                 if ($this->getData('previous_type') != '') {
                     $previousType = $this->getData('previous_type');
-                    //if previous option has dfferent group from one is came now need to remove all data of previous group
+
+                    /**
+                     * if previous option has different group from one is came now
+                     * need to remove all data of previous group
+                     */
                     if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
 
                         switch ($this->getGroupByType($previousType)) {
@@ -373,9 +377,13 @@ class Mage_Catalog_Model_Product_Option extends Mage_Core_Model_Abstract
             ->addTitleToResult($product->getStoreId())
             ->addPriceToResult($product->getStoreId())
             ->setOrder('sort_order', 'asc')
-            ->setOrder('title', 'asc')
-            ->addValuesToResult($product->getStoreId());
+            ->setOrder('title', 'asc');
 
+        if ($this->getAddRequiredFilter()) {
+            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
+        }
+
+        $collection->addValuesToResult($product->getStoreId());
         return $collection;
     }
 

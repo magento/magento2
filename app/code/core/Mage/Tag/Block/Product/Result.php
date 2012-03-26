@@ -51,7 +51,7 @@ class Mage_Tag_Block_Product_Result extends Mage_Catalog_Block_Product_Abstract
     }
 
     public function setListOrders() {
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
             ->setAvailableOrders(array(
                 'name' => Mage::helper('Mage_Tag_Helper_Data')->__('Name'),
                 'price'=>Mage::helper('Mage_Tag_Helper_Data')->__('Price'))
@@ -59,7 +59,7 @@ class Mage_Tag_Block_Product_Result extends Mage_Catalog_Block_Product_Abstract
     }
 
     public function setListModes() {
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
             ->setModes(array(
                 'grid' => Mage::helper('Mage_Tag_Helper_Data')->__('Grid'),
                 'list' => Mage::helper('Mage_Tag_Helper_Data')->__('List'))
@@ -67,7 +67,7 @@ class Mage_Tag_Block_Product_Result extends Mage_Catalog_Block_Product_Abstract
     }
 
     public function setListCollection() {
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
            ->setCollection($this->_getProductCollection());
     }
 

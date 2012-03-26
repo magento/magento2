@@ -71,30 +71,35 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
         $this->_forward('edit');
     }
 
+    /**
+     * Save rating
+     */
     public function saveAction()
     {
         $this->_initEnityId();
 
-        if ( $this->getRequest()->getPost() ) {
+        if ($this->getRequest()->getPost()) {
             try {
                 $ratingModel = Mage::getModel('Mage_Rating_Model_Rating');
 
                 $stores = $this->getRequest()->getParam('stores');
+                $position = (int)$this->getRequest()->getParam('position');
                 $stores[] = 0;
                 $ratingModel->setRatingCode($this->getRequest()->getParam('rating_code'))
-                      ->setRatingCodes($this->getRequest()->getParam('rating_codes'))
-                      ->setStores($stores)
-                      ->setId($this->getRequest()->getParam('id'))
-                      ->setEntityId(Mage::registry('entityId'))
-                      ->save();
+                    ->setRatingCodes($this->getRequest()->getParam('rating_codes'))
+                    ->setStores($stores)
+                    ->setPosition($position)
+                    ->setId($this->getRequest()->getParam('id'))
+                    ->setEntityId(Mage::registry('entityId'))
+                    ->save();
 
                 $options = $this->getRequest()->getParam('option_title');
 
-                if( is_array($options) ) {
+                if (is_array($options)) {
                     $i = 1;
-                    foreach( $options as $key => $optionCode ) {
+                    foreach ($options as $key => $optionCode) {
                         $optionModel = Mage::getModel('Mage_Rating_Model_Rating_Option');
-                        if( !preg_match("/^add_([0-9]*?)$/", $key) ) {
+                        if (!preg_match("/^add_([0-9]*?)$/", $key)) {
                             $optionModel->setId($key);
                         }
 

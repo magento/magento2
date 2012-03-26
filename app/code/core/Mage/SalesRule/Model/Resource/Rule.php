@@ -126,8 +126,8 @@ class Mage_SalesRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abstra
 
         // Save product attributes used in rule
         $ruleProductAttributes = array_merge(
-            $this->getProductAttributes($object->getConditionsSerialized()),
-            $this->getProductAttributes($object->getActionsSerialized())
+            $this->getProductAttributes(serialize($object->getConditions()->asArray())),
+            $this->getProductAttributes(serialize($object->getActions()->asArray()))
         );
         if (count($ruleProductAttributes)) {
             $this->setActualProductAttributes($object, $ruleProductAttributes);

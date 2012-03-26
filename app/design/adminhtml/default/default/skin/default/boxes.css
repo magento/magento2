@@ -385,14 +385,18 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 
 .columns .form-list             { width:auto; }
 .columns .form-list td.value    { width:280px; padding-right:5px !important; }
+.columns .form-list td.value  { white-space:nowrap; }
+.columns .form-list td.value > * { white-space:normal; }
+.columns .form-list td.value > strong,
+.columns .form-list td.value > button { display:block; }
 .columns .form-list td.value .next-toinput { width:75px; display:inline; margin-right:5px; }
-.columns .form-list td.value .next-toselect input.input-text { width:180px; display:inline; }
+.columns .form-list td.value .next-toselect input.input-text { width:195px!important; display:inline; }
 
 .fieldset-wide .form-list { width:100% !important; }
 .fieldset-wide .form-list td.value { width:auto !important; }
 .fieldset-wide .form-list td.value input.input-text,
 .fieldset-wide .form-list td.value textarea { width:98% !important; }
-.fieldset-wide .form-list td.value select { display:block; }
+/*.fieldset-wide .form-list td.value select { display:block; }*/
 .fieldset-wide .form-list td.scope-label { white-space:nowrap; width:1px; }
 .fieldset-wide .form-list td.note { width:120px; }
 
@@ -405,7 +409,6 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 span.delete-image,
 span.delete-file                { display:block; white-space:nowrap; padding-left:25px; }
 span.delete-file                { padding:0; }
-
 
 /* Back compatibility with span forms */
 .entry-edit .field-row          { display:block; }
@@ -482,6 +485,10 @@ button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0;
 /*.side-col .switcher     { margin-right:20px; margin-bottom:20px; }*/
 .catalog-categories .side-col .switcher { margin-right:0; margin-bottom:15px; }
 .link-storeScope { display:inline-block; vertical-align:middle; margin:0 0 1px; width:16px; height:16px; background:url(images/i_question-mark.png) 0 0 no-repeat; text-decoration:none !important; text-indent:-999em; overflow:hidden; }
+.form-list td.value .link-storeScope { vertical-align:top; margin-top:6px; }
+.storeScope .link-storeScope { float:left; margin-right:10px; }
+.storeScope .tree-storeScope { float:left; padding:7px 10px; border:1px dotted #dedede; }
+.storeScope table.stores-tree { float:left; width:auto !important; }
 
 
 /* SPACE
@@ -1508,4 +1515,5 @@ div.actions:after,
 .notification-global:after,
 .files .row:after,
 .files-wide .row:after,
-.grid tr.filter .range .range-line:after { display:block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }
+.grid tr.filter .range .range-line:after,
+.storeScope:after { display:block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }

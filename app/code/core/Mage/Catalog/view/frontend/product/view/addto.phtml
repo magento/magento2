@@ -30,7 +30,7 @@
 
 <ul class="add-to-links">
 <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
-    <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, '<?php echo $_wishlistSubmitUrl ?>'); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+    <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
 <?php endif; ?>
 <?php
     $_compareUrl = $this->helper('Mage_Catalog_Helper_Product_Compare')->getAddUrl($_product);

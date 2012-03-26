@@ -189,7 +189,13 @@ class Mage_Adminhtml_Block_Report_Filter_Form extends Mage_Adminhtml_Block_Widge
      */
     protected function _initFormValues()
     {
-        $this->getForm()->addValues($this->getFilterData()->getData());
+        $data = $this->getFilterData()->getData();
+        foreach ($data as $key => $value) {
+            if (is_array($value) && isset($value[0])) {
+                $data[$key] = explode(',', $value[0]);
+            }
+        }
+        $this->getForm()->addValues($data);
         return parent::_initFormValues();
     }
 

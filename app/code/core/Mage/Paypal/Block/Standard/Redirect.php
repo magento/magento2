@@ -38,6 +38,13 @@ class Mage_Paypal_Block_Standard_Redirect extends Mage_Core_Block_Abstract
         foreach ($standard->getStandardCheckoutFormFields() as $field=>$value) {
             $form->addField($field, 'hidden', array('name'=>$field, 'value'=>$value));
         }
+        $idSuffix = Mage::helper('Mage_Core_Helper_Data')->uniqHash();
+        $submitButton = new Varien_Data_Form_Element_Submit(array(
+            'value'    => $this->__('Click here if you are not redirected within 10 seconds...'),
+        ));
+        $id = "submit_to_paypal_button_{$idSuffix}";
+        $submitButton->setId($id);
+        $form->addElement($submitButton);
         $html = '<html><body>';
         $html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
         $html.= $form->toHtml();

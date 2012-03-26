@@ -118,6 +118,16 @@ abstract class Mage_Wishlist_Block_Abstract extends Mage_Catalog_Block_Product_A
     }
 
     /**
+     * Create wishlist item collection
+     *
+     * @return Mage_Wishlist_Model_Resource_Item_Collection
+     */
+    protected function _createWishlistItemCollection()
+    {
+        return $this->_getWishlist()->getItemCollection();
+    }
+
+    /**
      * Retrieve Wishlist Product Items collection
      *
      * @return Mage_Wishlist_Model_Resource_Item_Collection
@@ -125,12 +135,21 @@ abstract class Mage_Wishlist_Block_Abstract extends Mage_Catalog_Block_Product_A
     public function getWishlistItems()
     {
         if (is_null($this->_collection)) {
-            $this->_collection = $this->_getWishlist()
-                ->getItemCollection();
+            $this->_collection = $this->_createWishlistItemCollection();
             $this->_prepareCollection($this->_collection);
         }
 
         return $this->_collection;
+    }
+
+    /**
+     * Retrieve wishlist instance
+     *
+     * @return Mage_Wishlist_Model_Wishlist
+     */
+    public function getWishlistInstance()
+    {
+        return $this->_getWishlist();
     }
 
     /**

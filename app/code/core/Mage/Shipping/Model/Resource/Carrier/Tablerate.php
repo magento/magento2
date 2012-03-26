@@ -267,7 +267,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
         $adapter->commit();
 
         if ($this->_importErrors) {
-            $error = Mage::helper('Mage_Shipping_Helper_Data')->__('%1$d records have been imported. See the following list of errors for each record that has not been imported: %2$s', $this->_importedRows, implode(" \n", $this->_importErrors));
+            $error = Mage::helper('Mage_Shipping_Helper_Data')->__('File has not been imported. See the following list of errors: %s', implode(" \n", $this->_importErrors));
             Mage::throwException($error);
         }
 

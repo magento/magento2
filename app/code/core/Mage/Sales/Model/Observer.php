@@ -434,9 +434,6 @@ class Mage_Sales_Model_Observer
         /** @var $customerHelper Mage_Customer_Helper_Data */
         $customerHelper = Mage::helper('Mage_Customer_Helper_Data');
 
-        $customerAddressId = $quoteAddress->getCustomerAddressId();
-        $customerDefaultAddressId = $this->_getVatRequiredCustomerAddress($customerInstance, $storeId);
-
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
 
@@ -487,16 +484,15 @@ class Mage_Sales_Model_Observer
             ));
         }
 
-        if ($customerAddressId != $customerDefaultAddressId || is_null($customerDefaultAddressId)) {
-            $groupId = $customerHelper->getCustomerGroupIdBasedOnVatNumber(
-                $customerCountryCode, $gatewayResponse, $customerInstance->getStore()
-            );
+        // Magento always has to emulate group even if customer uses default billing/shipping address
+        $groupId = $customerHelper->getCustomerGroupIdBasedOnVatNumber(
+            $customerCountryCode, $gatewayResponse, $customerInstance->getStore()
+        );
 
-            if ($groupId) {
-                $quoteAddress->setPrevQuoteCustomerGroupId($quoteInstance->getCustomerGroupId());
-                $customerInstance->setGroupId($groupId);
-                $quoteInstance->setCustomerGroupId($groupId);
-            }
+        if ($groupId) {
+            $quoteAddress->setPrevQuoteCustomerGroupId($quoteInstance->getCustomerGroupId());
+            $customerInstance->setGroupId($groupId);
+            $quoteInstance->setCustomerGroupId($groupId);
         }
     }
 

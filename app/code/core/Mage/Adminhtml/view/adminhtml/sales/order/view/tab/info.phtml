@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this Mage_Adminhtml_Block_Sales_Order_View_Tab_Info */ ?>
 <?php $_order = $this->getOrder() ?>
 <div>
     <div id="order-messages">
@@ -60,7 +61,7 @@
                 <br/>
                 <?php endif; ?>
                 <?php if ($_order->getShippingDescription()): ?>
-                    <strong><?php echo $_order->getShippingDescription() ?></strong>
+                    <strong><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></strong>
 
                     <?php if ($this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()): ?>
                         <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>

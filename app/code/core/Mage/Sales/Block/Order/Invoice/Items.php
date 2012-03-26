@@ -62,7 +62,7 @@ class Mage_Sales_Block_Order_Invoice_Items extends Mage_Sales_Block_Items_Abstra
     public function getInvoiceTotalsHtml($invoice)
     {
         $html = '';
-        $totals = $this->getChild('invoice_totals');
+        $totals = $this->getChildBlock('invoice_totals');
         if ($totals) {
             $totals->setInvoice($invoice);
             $html = $totals->toHtml();
@@ -79,7 +79,7 @@ class Mage_Sales_Block_Order_Invoice_Items extends Mage_Sales_Block_Items_Abstra
     public function getInvoiceCommentsHtml($invoice)
     {
         $html = '';
-        $comments = $this->getChild('invoice_comments');
+        $comments = $this->getChildBlock('invoice_comments');
         if ($comments) {
             $comments->setEntity($invoice)
                 ->setTitle(Mage::helper('Mage_Sales_Helper_Data')->__('About Your Invoice'));

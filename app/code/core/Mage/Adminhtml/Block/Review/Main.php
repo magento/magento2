@@ -49,6 +49,12 @@ class Mage_Adminhtml_Block_Review_Main extends Mage_Adminhtml_Block_Widget_Grid_
             $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
             $customerName = $this->escapeHtml($customerName);
         }
+        $productId = $this->getRequest()->getParam('productId', false);
+        $productName = null;
+        if ($productId) {
+            $product = Mage::getModel('Mage_Catalog_Model_Product')->load($productId);
+            $productName =  $this->escapeHtml($product->getName());
+        }
 
         if( Mage::registry('usePendingFilter') === true ) {
             if ($customerName) {
@@ -60,6 +66,8 @@ class Mage_Adminhtml_Block_Review_Main extends Mage_Adminhtml_Block_Widget_Grid_
         } else {
             if ($customerName) {
                 $this->_headerText = Mage::helper('Mage_Review_Helper_Data')->__('All Reviews of Customer `%s`', $customerName);
+            } elseif ($productName) {
+                $this->_headerText = Mage::helper('Mage_Review_Helper_Data')->__('All Reviews of Product `%s`', $productName);
             } else {
                 $this->_headerText = Mage::helper('Mage_Review_Helper_Data')->__('All Reviews');
             }

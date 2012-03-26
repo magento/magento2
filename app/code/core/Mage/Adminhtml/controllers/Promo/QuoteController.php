@@ -379,7 +379,7 @@ class Mage_Adminhtml_Promo_QuoteController extends Mage_Adminhtml_Controller_Act
                     $generator->setData($data);
                     $generator->generatePool();
                     $generated = $generator->getGeneratedCount();
-                    $this->_getSession()->addSuccess(Mage::helper('Mage_SalesRule_Helper_Data')->__('%s Coupon(s) generated successfully', $generated));
+                    $this->_getSession()->addSuccess(Mage::helper('Mage_SalesRule_Helper_Data')->__('%s Coupon(s) have been generated', $generated));
                     $this->_initLayoutMessages('Mage_Adminhtml_Model_Session');
                     $result['messages']  = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }

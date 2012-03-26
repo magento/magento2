@@ -31,7 +31,7 @@ $disableAGCAttributeCode = 'disable_auto_group_change';
 
 $installer->addAttribute('customer', $disableAGCAttributeCode, array(
     'type'      => 'static',
-    'label'     => 'Disable automatic group change',
+    'label'     => 'Disable automatic group change based on VAT ID',
     'input'     => 'boolean',
     'backend'   => 'Mage_Customer_Model_Attribute_Backend_Data_Boolean',
     'position'  => 28,

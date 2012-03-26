@@ -167,7 +167,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     public function getUploadButtonHtml()
     {
-        return $this->getChild('upload_button')->toHtml();
+        return $this->getChildBlock('upload_button')->toHtml();
     }
 
     /**

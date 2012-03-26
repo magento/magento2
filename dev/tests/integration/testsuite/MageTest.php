@@ -134,38 +134,4 @@ class MageTest extends PHPUnit_Framework_TestCase
             'class name'  => array('Mage_Core_Helper_Js', 'Mage_Core_Helper_Js'),
         );
     }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testSetConfigModel()
-    {
-        Mage::reset();
-        Mage::setConfigModel();
-        $config = Mage::getConfig();
-        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
-
-        Mage::reset();
-        Mage::setConfigModel(array('config_model' => 'Mage_Core_Model_Config'));
-        $config = Mage::getConfig();
-        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
-
-        Mage::reset();
-        Mage::setConfigModel(array('config_model' => 'ERROR_STRING'));
-        $config = Mage::getConfig();
-        $this->assertInstanceOf('Mage_Core_Model_Config', $config);
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testSetIsInstalled()
-    {
-        if (!Mage::isInstalled()) {
-            $this->assertFalse(Mage::isInstalled());
-
-            Mage::setIsInstalled(array('is_installed' => true));
-            $this->assertTrue(Mage::isInstalled());
-        }
-    }
 }

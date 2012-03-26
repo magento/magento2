@@ -56,7 +56,7 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
             '<thead>'+
                 '<tr>'+
                     '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('%s', $container['label'])) ?></label></th>'+
-                    '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Block Reference')) ?> <span class="required">*</span></label></th>'+
+                    '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
                     '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Template')) ?></label></th>'+
                     '<th>&nbsp;</th>'+
                 '</tr>'+
@@ -109,7 +109,7 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
         '<col />'+
         '<thead>'+
             '<tr>'+
-                '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Block Reference')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Template')) ?></label></th>'+
                 '<th>&nbsp;</th>'+
             '</tr>'+
@@ -143,7 +143,7 @@ var pageGroupTemplate = '<div class="options-box page_group_container" id="page_
         '<thead>'+
             '<tr>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Page')) ?> <span class="required">*</span></label></th>'+
-                '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Block Reference')) ?> <span class="required">*</span></label></th>'+
+                '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Container')) ?> <span class="required">*</span></label></th>'+
                 '<th><label><?php echo $this->helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Template')) ?></label></th>'+
                 '<th>&nbsp;</th>'+
             '</tr>'+
@@ -198,6 +198,7 @@ var WidgetInstance = {
             if (data.group) {
                 pageGroup = $(data.group+'_'+data.id);
                 additional = {};
+                additional.selectedLayoutHandle = data.layout_handle;
                 additional.selectedBlock = data.block;
                 additional.selectedTemplate = data.template;
                 additional.position = data.position;
@@ -293,6 +294,8 @@ var WidgetInstance = {
             layoutHandle = '';
             if (layoutHandleField = container.down('input.layout_handle_pattern')) {
                 layoutHandle = layoutHandleField.value;
+            } else if (additional.selectedLayoutHandle) {
+                layoutHandle = additional.selectedLayoutHandle;
             }
             this.loadSelectBoxByType('block_reference', container, layoutHandle, additional);
         }

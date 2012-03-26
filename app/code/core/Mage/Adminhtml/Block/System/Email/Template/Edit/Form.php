@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit_Form extends Mage_Adminhtm
         if ($head = $this->getLayout()->getBlock('head')) {
             $head->addJs('prototype/window.js')
                 ->addCss('prototype/windows/themes/default.css')
-                ->addCss('prototype/windows/themes/magento.css')
+                ->addCss('Mage_Core::prototype/magento.css')
                 ->addJs('Mage_Adminhtml::variables.js');
         }
         return parent::_prepareLayout();
@@ -72,7 +72,8 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit_Form extends Mage_Adminhtm
                 'container_id' => 'used_currently_for',
                 'after_element_html' =>
                     '<script type="text/javascript">' .
-                    (!$this->getEmailTemplate()->getSystemConfigPathsWhereUsedCurrently() ? '$(\'' . 'used_currently_for' . '\').hide(); ' : '') .
+                    (!$this->getEmailTemplate()->getSystemConfigPathsWhereUsedCurrently()
+                        ? '$(\'' . 'used_currently_for' . '\').hide(); ' : '') .
                     '</script>',
             ));
         }
@@ -83,7 +84,8 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit_Form extends Mage_Adminhtm
                 'container_id' => 'used_default_for',
                 'after_element_html' =>
                     '<script type="text/javascript">' .
-                    (!(bool)$this->getEmailTemplate()->getOrigTemplateCode() ? '$(\'' . 'used_default_for' . '\').hide(); ' : '') .
+                    (!(bool)$this->getEmailTemplate()->getOrigTemplateCode()
+                        ? '$(\'' . 'used_default_for' . '\').hide(); ' : '') .
                     '</script>',
             ));
         }

@@ -215,34 +215,23 @@ class Mage_XmlConnect_Block_Checkout_Payment_Method_List extends Mage_Payment_Bl
         }
 
         /**
-         * Get blocks for layout to check available renderers
-         */
-        $methodBlocks = $this->getChild();
-
-        /**
          * Collect directly supported by xmlconnect methods
          */
-        if (!empty($methodBlocks) && is_array($methodBlocks)) {
-            foreach ($methodBlocks as $block) {
-                if (!$block) {
-                    continue;
-                }
-
-                $method = $block->getMethod();
-                if (!$this->_canUseMethod($method) || in_array($method->getCode(), $usedCodes)) {
-                    continue;
-                }
-                $this->_assignMethod($method);
-                $usedCodes[] = $method->getCode();
-                $usedMethods[$method->getCode()] = array('renderer' => $block, 'method' => $method);
+        foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $block) {
+            $method = $block->getMethod();
+            if (!$this->_canUseMethod($method) || in_array($method->getCode(), $usedCodes)) {
+                continue;
             }
+            $this->_assignMethod($method);
+            $usedCodes[] = $method->getCode();
+            $usedMethods[$method->getCode()] = array('renderer' => $block, 'method' => $method);
         }
 
         /**
          * Collect all "Credit Card" / "CheckMo" / "Purchaseorder" method compatible methods
          */
         foreach ($methodArray as $methodName => $methodModelClassName) {
-            $methodRenderer = $this->getChild($methodName);
+            $methodRenderer = $this->getChildBlock($methodName);
             if (!empty($methodRenderer)) {
                 foreach ($sortedAvailableMethodCodes as $methodCode) {
                     /**

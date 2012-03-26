@@ -126,7 +126,7 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
      */
     public function getMode()
     {
-        return $this->getChild('toolbar')->getCurrentMode();
+        return $this->getChildBlock('toolbar')->getCurrentMode();
     }
 
     /**

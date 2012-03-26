@@ -116,13 +116,13 @@ class Mage_Bundle_Model_Product_Price extends Mage_Catalog_Model_Product_Type_Pr
         }
 
         $finalPrice = $this->getBasePrice($product, $qty);
-
         $product->setFinalPrice($finalPrice);
         Mage::dispatchEvent('catalog_product_get_final_price', array('product' => $product, 'qty' => $qty));
         $finalPrice = $product->getData('final_price');
 
-        $finalPrice += $this->getTotalBundleItemsPrice($product, $qty);
         $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
+        $finalPrice += $this->getTotalBundleItemsPrice($product, $qty);
+
         $product->setFinalPrice($finalPrice);
         return max(0, $product->getData('final_price'));
     }
@@ -381,7 +381,14 @@ class Mage_Bundle_Model_Product_Price extends Mage_Catalog_Model_Product_Type_Pr
             $price = $selectionProduct->getFinalPrice($takeTierPrice ? $selectionQty : 1);
         } else {
             if ($selectionProduct->getSelectionPriceType()) { // percent
-                $price = $this->getPrice($bundleProduct) * ($selectionProduct->getSelectionPriceValue() / 100);
+                $product = clone $bundleProduct;
+                $product->setFinalPrice($this->getPrice($product));
+                Mage::dispatchEvent(
+                    'catalog_product_get_final_price',
+                    array('product' => $product, 'qty' => $bundleQty)
+                );
+                $price = $product->getData('final_price') * ($selectionProduct->getSelectionPriceValue() / 100);
+
             } else { // fixed
                 $price = $selectionProduct->getSelectionPriceValue();
             }

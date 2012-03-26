@@ -74,6 +74,7 @@
                         <stock_threshold_qty translate="label">
                             <label>Only X left Threshold</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -112,6 +113,7 @@
                         <max_sale_qty translate="label">
                             <label>Maximum Qty Allowed in Shopping Cart</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -120,6 +122,7 @@
                         <min_qty translate="label">
                             <label>Qty for Item's Status to Become Out of Stock</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
                             <backend_model>Mage_CatalogInventory_Model_System_Config_Backend_Minqty</backend_model>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
@@ -138,6 +141,7 @@
                        <notify_stock_qty translate="label">
                             <label>Notify for Quantity Below</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
                             <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -164,12 +168,12 @@
                        <qty_increments translate="label">
                             <label>Qty Increments</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-number validate-greater-than-zero</validate>
                             <backend_model>Mage_CatalogInventory_Model_System_Config_Backend_Qtyincrements</backend_model>
                             <sort_order>9</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <frontend_class>validate-per-page-value-list</frontend_class>
                             <depends><enable_qty_increments>1</enable_qty_increments></depends>
                        </qty_increments>
                     </fields>

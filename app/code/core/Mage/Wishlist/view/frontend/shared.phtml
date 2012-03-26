@@ -64,7 +64,7 @@
                             <button type="button" title="<?php echo $this->__('Add to Cart') ?>" onclick="setLocation('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
                         <?php endif ?>
                     <?php endif; ?>
-                        <p><a href="#" onclick="setLocation('<?php echo $this->getAddToWishlistUrl($item) ?>'); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></p>
+                        <p><a href="<?php echo $this->getAddToWishlistUrl($item) ?>" onclick="setLocation(this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></p>
                     </td>
                 </tr>
             <?php endforeach ?>

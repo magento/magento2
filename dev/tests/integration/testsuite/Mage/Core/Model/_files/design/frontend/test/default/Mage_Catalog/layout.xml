@@ -26,4 +26,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout />
+<layout>
+    <catalog_product_view type="page" parent="default"></catalog_product_view>
+    <catalog_product_view_type_simple type="page" parent="catalog_product_view"></catalog_product_view_type_simple>
+    <catalog_category_view type="page" parent="default"></catalog_category_view>
+    <catalog_category_view_type_default type="page" parent="catalog_category_view"></catalog_category_view_type_default>
+</layout>

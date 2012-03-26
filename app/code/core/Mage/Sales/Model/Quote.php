@@ -69,8 +69,8 @@
  * @method float getBaseGrandTotal()
  * @method Mage_Sales_Model_Quote setBaseGrandTotal(float $value)
  * @method Mage_Sales_Model_Quote setCheckoutMethod(string $value)
- * @method int|null getCustomerId()
- * @method Mage_Sales_Model_Quote setCustomerId(int|null $value)
+ * @method int getCustomerId()
+ * @method Mage_Sales_Model_Quote setCustomerId(int $value)
  * @method Mage_Sales_Model_Quote setCustomerTaxClassId(int $value)
  * @method Mage_Sales_Model_Quote setCustomerGroupId(int $value)
  * @method string getCustomerEmail()
@@ -818,8 +818,12 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function removeAllItems()
     {
-        foreach ($this->getItemsCollection() as $item) {
-            $item->isDeleted(true);
+        foreach ($this->getItemsCollection() as $itemId => $item) {
+            if (is_null($item->getId())) {
+                $this->getItemsCollection()->removeItemByKey($itemId);
+            } else {
+                $item->isDeleted(true);
+            }
         }
         return $this;
     }
@@ -922,7 +926,10 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $errors[] = $item->getMessage();
+                $message = $item->getMessage();
+                if (!in_array($message, $errors)) { // filter duplicate messages
+                    $errors[] = $message;
+                }
             }
         }
         if (!empty($errors)) {

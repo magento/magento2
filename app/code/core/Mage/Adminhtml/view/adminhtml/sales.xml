@@ -29,7 +29,7 @@
 <layout>
     <adminhtml_sales_order_grid>
         <update handle="formkey"/>
-        <block type="Mage_Adminhtml_Block_Sales_Order_Grid" name="sales_order.grid" output="toHtml"></block>
+        <block type="Mage_Adminhtml_Block_Sales_Order_Grid" name="sales_order.grid" output="1"></block>
     </adminhtml_sales_order_grid>
 
     <adminhtml_sales_order_index>
@@ -39,7 +39,7 @@
     </adminhtml_sales_order_index>
 
     <adminhtml_sales_order_transactions>
-        <block type="Mage_Adminhtml_Block_Sales_Transactions_Grid" name="sales_transactions.grid" output="toHtml"></block>
+        <block type="Mage_Adminhtml_Block_Sales_Transactions_Grid" name="sales_transactions.grid" output="1"></block>
     </adminhtml_sales_order_transactions>
 
     <adminhtml_sales_billing_agreement_index>
@@ -49,7 +49,7 @@
     </adminhtml_sales_billing_agreement_index>
 
     <adminhtml_sales_billing_agreement_grid>
-        <block type="Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid" name="sales.billing.agreement.grid" output="toHtml"></block>
+        <block type="Mage_Sales_Block_Adminhtml_Billing_Agreement_Grid" name="sales.billing.agreement.grid" output="1"></block>
     </adminhtml_sales_billing_agreement_grid>
 
     <adminhtml_sales_billing_agreement_view>
@@ -65,11 +65,11 @@
     </adminhtml_sales_billing_agreement_view>
 
     <adminhtml_sales_billing_agreement_ordersgrid>
-        <block type="Mage_Sales_Block_Adminhtml_Billing_Agreement_View_Tab_Orders" name="related.orders.grid" output="toHtml"></block>
+        <block type="Mage_Sales_Block_Adminhtml_Billing_Agreement_View_Tab_Orders" name="related.orders.grid" output="1"></block>
     </adminhtml_sales_billing_agreement_ordersgrid>
 
     <adminhtml_sales_billing_agreement_customergrid>
-        <block type="Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement" name="customer.billing.agreement.grid" output="toHtml"></block>
+        <block type="Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement" name="customer.billing.agreement.grid" output="1"></block>
     </adminhtml_sales_billing_agreement_customergrid>
 
     <adminhtml_sales_order_view>
@@ -135,7 +135,7 @@
     </adminhtml_sales_order_view>
 
     <adminhtml_sales_order_addcomment>
-        <block type="Mage_Adminhtml_Block_Sales_Order_View_History" name="order_history" template="sales/order/view/history.phtml" output="toHtml"/>
+        <block type="Mage_Adminhtml_Block_Sales_Order_View_History" name="order_history" template="sales/order/view/history.phtml" output="1"/>
     </adminhtml_sales_order_addcomment>
 
     <adminhtml_sales_order_invoice_new>
@@ -149,7 +149,7 @@
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
 
                         <block type="Mage_Adminhtml_Block_Sales_Order_Invoice_Totals" name="invoice_totals" template="sales/order/totals.phtml">
@@ -193,7 +193,7 @@
             <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
             <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
             <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
             <block type="Mage_Adminhtml_Block_Sales_Order_Totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
             <block type="Mage_Adminhtml_Block_Sales_Order_Invoice_Totals" name="invoice_totals" template="sales/order/totals.phtml">
                 <block type="Mage_Adminhtml_Block_Sales_Order_Totals_Tax" name="tax" template="sales/order/totals/tax.phtml" />
@@ -245,7 +245,7 @@
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                     </block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Comments_View" name="order_comments" template="sales/order/comments/view.phtml">
                         <action method="setParentType"><type>invoice</type></action>
@@ -298,7 +298,7 @@
                         <action method="addItemRender"><type>default</type><block>Mage_Adminhtml_Block_Sales_Items_Renderer_Default</block><template>sales/order/shipment/create/items/renderer/default.phtml</template></action>
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                     </block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Shipment_Packaging" name="shipment_packaging" template="sales/order/shipment/packaging/popup.phtml" />
                 </block>
@@ -334,7 +334,7 @@
                         <action method="addItemRender"><type>default</type><block>Mage_Adminhtml_Block_Sales_Items_Renderer_Default</block><template>sales/order/shipment/view/items/renderer/default.phtml</template></action>
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                     </block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Tracking" name="invoice_tracking" template="sales/order/shipment/create/tracking.phtml"></block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Comments_View"  name="order_comments" template="sales/order/comments/view.phtml">
@@ -358,7 +358,7 @@
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
 
                         <block type="Mage_Adminhtml_Block_Sales_Order_Creditmemo_Totals" name="creditmemo_totals" template="sales/order/totals.phtml">
@@ -381,8 +381,8 @@
                                 <block type="Mage_Adminhtml_Block_Sales_Order_Totals_Item" name="adjustments" template="sales/order/creditmemo/create/totals/adjustments.phtml" />
                             </block>-->
                         </block>
-                        <block type="Mage_Core_Block_Text_List" name="submit_before" />
-                        <block type="Mage_Core_Block_Text_List" name="submit_after" />
+                        <container name="submit_before" label="Submit Before"/>
+                        <container name="submit_after" label="Submit After"/>
                     </block>
                 </block>
             </block>
@@ -395,7 +395,7 @@
             <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
             <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
             <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
             <block type="Mage_Adminhtml_Block_Sales_Order_Totalbar" name="order_totalbar" template="sales/order/totalbar.phtml"></block>
 
             <block type="Mage_Adminhtml_Block_Sales_Order_Creditmemo_Totals" name="creditmemo_totals" template="sales/order/totals.phtml">
@@ -420,8 +420,8 @@
                 </block>-->
             </block>
 
-            <block type="Mage_Core_Block_Text_List" name="submit_before" />
-            <block type="Mage_Core_Block_Text_List" name="submit_after" />
+            <container name="submit_before" label="Submit Before"/>
+            <container name="submit_after" label="Submit After"/>
         </block>
     </adminhtml_sales_order_creditmemo_updateqty>
 
@@ -442,7 +442,7 @@
                         <action method="addColumnRender"><column>qty</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Qty</block><template>sales/items/column/qty.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name</block><template>sales/items/column/name.phtml</template></action>
                         <action method="addColumnRender"><column>name</column><block>Mage_Adminhtml_Block_Sales_Items_Column_Name_Grouped</block><template>sales/items/column/name.phtml</template><type>grouped</type></action>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                     </block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Comments_View" name="order_comments" template="sales/order/comments/view.phtml">
                         <action method="setParentType"><type>creditmemo</type></action>
@@ -485,7 +485,7 @@
         </reference>
     </adminhtml_sales_transactions_index>
     <adminhtml_sales_transactions_grid>
-        <block type="Mage_Adminhtml_Block_Sales_Transactions_Grid" name="sales_transactions.grid" output="toHtml"></block>
+        <block type="Mage_Adminhtml_Block_Sales_Transactions_Grid" name="sales_transactions.grid" output="1"></block>
     </adminhtml_sales_transactions_grid>
     <adminhtml_sales_transactions_view>
         <reference name="content">
@@ -558,7 +558,7 @@
                         <block type="Mage_Adminhtml_Block_Template" name="gift_options" template="sales/order/giftoptions.phtml">
                             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Giftmessage" template="sales/order/create/giftmessage.phtml" name="giftmessage" />
                         </block>
-                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                        <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
                     </block>
                 </block>
             </block>
@@ -577,7 +577,7 @@
 
     <adminhtml_sales_order_create_load_block_plain>
         <reference name="root">
-            <block type="Mage_Core_Block_Text_List" name="content" />
+            <container name="content" label="Content"/>
         </reference>
     </adminhtml_sales_order_create_load_block_plain>
 
@@ -620,7 +620,7 @@
                 <block type="Mage_Adminhtml_Block_Template" name="gift_options" template="sales/order/giftoptions.phtml">
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Giftmessage" template="sales/order/create/giftmessage.phtml" name="giftmessage" />
                 </block>
-                <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+                <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
             </block>
         </reference>
     </adminhtml_sales_order_create_load_block_data>
@@ -711,7 +711,7 @@
                     </block>
                 </block>
             </block>
-            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"></block>
+            <block type="Mage_Core_Block_Text_List" name="order_item_extra_info"/>
         </reference>
     </adminhtml_sales_order_create_load_block_items>
 
@@ -969,11 +969,11 @@
 
     <adminhtml_sales_recurring_profile_grid>
         <remove name="root"/>
-        <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid" name="sales.recurring.profile.grid" output="toHtml"/>
+        <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid" name="sales.recurring.profile.grid" output="1"/>
     </adminhtml_sales_recurring_profile_grid>
 
     <adminhtml_sales_recurring_profile_customergrid>
-        <block type="Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Recurring_Profile" name="customer.recurring.profile.grid" output="toHtml"></block>
+        <block type="Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Recurring_Profile" name="customer.recurring.profile.grid" output="1"></block>
     </adminhtml_sales_recurring_profile_customergrid>
 
     <adminhtml_sales_recurring_profile_view>
@@ -1035,7 +1035,7 @@
 
     <adminhtml_sales_recurring_profile_orders>
         <remove name="root"/>
-        <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_View_Tab_Orders" name="sales.recurring.profile.tab.orders" output="toHtml"/>
+        <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_View_Tab_Orders" name="sales.recurring.profile.tab.orders" output="1"/>
     </adminhtml_sales_recurring_profile_orders>
 
     <adminhtml_customer_edit>

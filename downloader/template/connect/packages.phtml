@@ -32,7 +32,7 @@
 <ul class="bare-list">
     <li>
         <input type="checkbox" id="maintenance" value="1" checked="checked" /> &nbsp;
-        <label for="maintenance">Put store on the maintenance mode while installing/upgrading/backup creating</label>
+        <label for="maintenance">Put store on the maintenance mode while installing/upgrading/backup creation</label>
     </li>
     <li>
         <table cellpadding="0" cellspacing="0">
@@ -53,11 +53,16 @@
                 </td>
             </tr>
             <tr id="backup-name-container" style="display: none; margin-top: 5px;">
-                <td>
-                    <label for="backup_name">Backup Name</label>
+                <td valign="top">
+                    <div style="margin: 6px 0 0 5px;">
+                        <label for="backup_name">Backup Name</label>
+                    </div>
                 </td>
                 <td>
-                    &nbsp;<input type="text" name="backup_name" id="backup_name" style="width: 320px; margin-top:8px;"/>
+                    <div style="margin: 6px 0 0 4px;">
+                        <input type="text" name="backup_name" id="backup_name" style="width: 318px;" maxlength="50"/>
+                        <div class="notice-msg">Please use only letters (a-z or A-Z), numbers (0-9) or<br/> space in this field. Other characters are not allowed.</div>
+                    </div>
                 </td>
             </tr>
         </table>

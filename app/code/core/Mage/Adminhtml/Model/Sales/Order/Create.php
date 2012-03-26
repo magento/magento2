@@ -532,7 +532,8 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
         $item = $this->_getQuoteItem($item);
         if ($item) {
             $removeItem = false;
-            switch ($moveTo) {
+            $moveTo = explode('_', $moveTo);
+            switch ($moveTo[0]) {
                 case 'order':
                     $info = $item->getBuyRequest();
                     $info->setOptions($this->_prepareOptionsForRequest($item))
@@ -585,8 +586,27 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
                     }
                     break;
                 case 'wishlist':
-                    $wishlist = $this->getCustomerWishlist();
-                    if ($wishlist && $item->getProduct()->isVisibleInSiteVisibility()) {
+                    $wishlist = null;
+                    if (!isset($moveTo[1])) {
+                        $wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist')->loadByCustomer(
+                            $this->getSession()->getCustomer(),
+                            true
+                        );
+                    } else {
+                        $wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist')->load($moveTo[1]);
+                        if (!$wishlist->getId()
+                            || $wishlist->getCustomerId() != $this->getSession()->getCustomerId()
+                        ) {
+                            $wishlist = null;
+                        }
+                    }
+                    if (!$wishlist) {
+                        Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Could not find wishlist'));
+                    }
+                    $wishlist->setStore($this->getSession()->getStore())
+                        ->setSharedStoreIds($this->getSession()->getStore()->getWebsite()->getStoreIds());
+
+                    if ($wishlist->getId() && $item->getProduct()->isVisibleInSiteVisibility()) {
                         $info = $item->getBuyRequest();
                         $info->setOptions($this->_prepareOptionsForRequest($item))
                             ->setQty($qty)
@@ -1489,6 +1509,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
         $quote = $this->getQuote();
         $this->_prepareQuoteItems();
 
+        /** @var $service Mage_Sales_Model_Service_Quote */
         $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $quote);
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
@@ -1507,7 +1528,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
             $service->setOrderData($orderData);
         }
 
-        $order = $service->submit();
+        $order = $service->submitOrder();
         if ((!$quote->getCustomer()->getId() || !$quote->getCustomer()->isInStore($this->getSession()->getStore()))
             && !$quote->getCustomerIsGuest()
         ) {

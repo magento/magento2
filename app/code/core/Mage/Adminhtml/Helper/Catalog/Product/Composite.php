@@ -79,7 +79,7 @@ class Mage_Adminhtml_Helper_Catalog_Product_Composite extends Mage_Core_Helper_A
         $update = $controller->getLayout()->getUpdate();
         if ($isOk) {
             $update->addHandle('ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE')
-                ->addHandle('PRODUCT_TYPE_' . $productType);
+                ->addHandle('catalog_product_view_type_' . $productType);
         } else {
             $update->addHandle('ADMINHTML_CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR');
         }

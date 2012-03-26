@@ -103,6 +103,7 @@ class Mage_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract
             'manage_stock',
             'enable_qty_increments',
             'qty_increments',
+            'is_decimal_divided',
         );
     }
 

@@ -39,6 +39,11 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
      */
     protected $_customOptionDownloadUrl = 'sales/download/downloadCustomOption';
 
+    /**
+     * @var mixed
+     */
+    protected $_formattedOptionValue = null;
+
     public function isCustomizedView()
     {
         return true;

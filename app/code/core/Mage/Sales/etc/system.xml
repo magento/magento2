@@ -43,6 +43,25 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <hide_customer_ip translate="label comment">
+                            <label>Hide Customer IP</label>
+                            <comment>Controls whether customer IP is shown in orders, invoices, shipments, credit memos.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </hide_customer_ip>
+                    </fields>
+                </general>
                 <totals_sort translate="label">
                     <label>Checkout Totals Sort Order</label>
                     <frontend_type>text</frontend_type>
@@ -129,7 +148,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Default logo, will be used in PDF and HTML documents.&lt;br /&gt;(jpeg, tiff, png)</comment>
+                            <comment>Default logo, will be used in PDF and HTML documents.&lt;br /&gt;(jpeg, tiff, png) If you see image distortion in PDF, try to use larger image</comment>
                         </logo>
                         <logo_html translate="label comment">
                             <label>Logo for HTML Print View</label>

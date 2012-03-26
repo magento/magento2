@@ -111,8 +111,8 @@ class Mage_Adminhtml_Block_Widget_Tabs extends Mage_Adminhtml_Block_Widget
             if (strpos($tab, '_Block_')) {
                 $this->_tabs[$tabId] = $this->getLayout()->createBlock($tab);
             }
-            elseif ($this->getChild($tab)) {
-                $this->_tabs[$tabId] = $this->getChild($tab);
+            elseif ($this->getChildBlock($tab)) {
+                $this->_tabs[$tabId] = $this->getChildBlock($tab);
             }
             else {
                 $this->_tabs[$tabId] = null;

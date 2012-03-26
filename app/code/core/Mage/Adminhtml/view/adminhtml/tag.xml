@@ -33,8 +33,8 @@
     </adminhtml_tag_edit>
     <adminhtml_tag_assigned>
             <remove name="root" />
-            <block type="Mage_Adminhtml_Block_Tag_Assigned_Grid" name="tag_assigned_grid" output="toHtml" />
-            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="tag_grid_serializer" output="toHtml">
+            <block type="Mage_Adminhtml_Block_Tag_Assigned_Grid" name="tag_assigned_grid" output="1" />
+            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="tag_grid_serializer" output="1">
                 <reference name="tag_grid_serializer">
                     <action method="initSerializerBlock">
                         <grid_block_name>tag_assigned_grid</grid_block_name>
@@ -47,7 +47,7 @@
     </adminhtml_tag_assigned>
     <adminhtml_tag_assignedgridonly>
         <remove name="root" />
-        <block type="Mage_Adminhtml_Block_Tag_Assigned_Grid" name="assigned_grid" output="toHtml" />
+        <block type="Mage_Adminhtml_Block_Tag_Assigned_Grid" name="assigned_grid" output="1" />
     </adminhtml_tag_assignedgridonly>
 
     <adminhtml_tag_index>
@@ -63,26 +63,26 @@
     </adminhtml_tag_pending>
 
     <adminhtml_tag_ajaxgrid>
-        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Tag_Grid" name="adminhtml.tag.tag.grid"/>
-        </block>
+        </container>
     </adminhtml_tag_ajaxgrid>
 
     <adminhtml_tag_ajaxpendinggrid>
-        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Grid_Pending" name="adminhtml.tag.grid.pending"/>
-        </block>
+        </container>
     </adminhtml_tag_ajaxpendinggrid>
 
     <adminhtml_tag_product>
-        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Product_Grid" name="adminhtml.tag.product.grid"/>
-        </block>
+        </container>
     </adminhtml_tag_product>
 
     <adminhtml_tag_customer>
-        <block type="Mage_Core_Block_Text_List" name="root" output="toHtml">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Customer_Grid" name="adminhtml.tag.customer.grid"/>
-        </block>
+        </container>
     </adminhtml_tag_customer>
 </layout>

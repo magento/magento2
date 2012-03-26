@@ -140,13 +140,14 @@ class Mage_Checkout_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
     /**
      * Return list of available checkout methods
      *
-     * @param string $nameInLayout Container block alias in layout
+     * @param string $alias Container block alias in layout
      * @return array
      */
-    public function getMethods($nameInLayout)
+    public function getMethods($alias)
     {
-        if ($this->getChild($nameInLayout) instanceof Mage_Core_Block_Abstract) {
-            return $this->getChild($nameInLayout)->getSortedChildren();
+        $childName = $this->getLayout()->getChildName($this->getNameInLayout(), $alias);
+        if ($childName) {
+            return $this->getLayout()->getChildNames($childName);
         }
         return array();
     }

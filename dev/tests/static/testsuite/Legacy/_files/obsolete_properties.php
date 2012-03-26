@@ -25,15 +25,23 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
+    '_anonSuffix' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_isAnonymous' => array('class_scope' => 'Mage_Core_Block_Abstract'),
     'decoratedIsFirst' => array('suggestion' => 'getDecoratedIsFirst'),
     'decoratedIsEven' => array('suggestion' => 'getDecoratedIsEven'),
     'decoratedIsOdd' => array('suggestion' => 'getDecoratedIsOdd'),
     'decoratedIsLast' => array('suggestion' => 'getDecoratedIsLast'),
+    '_alias' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_children' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_childrenHtmlCache' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_childGroups' => array('class_scope' => 'Mage_Core_Block_Abstract'),
     '_currencyNameTable',
     '_combineHistory',
     '_searchTextFields',
     '_skipFieldsByModel',
     '_imageFields' => array('class_scope' => 'Mage_Catalog_Model_Convert_Adapter_Product'),
+    '_parent' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_parentBlock' => array('class_scope' => 'Mage_Core_Block_Abstract'),
     '_setAttributes' => array('class_scope' => 'Mage_Catalog_Model_Product_Type_Abstract'),
     '_storeFilter' => array('class_scope' => 'Mage_Catalog_Model_Product_Type_Abstract'),
     '_addMinimalPrice' => array('class_scope' => 'Mage_Catalog_Model_Resource_Product_Collection'),
@@ -57,4 +65,6 @@ return array(
     '_track_id',
     '_order_id',
     '_ship_id',
+    '_sortedChildren' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_sortInstructions' => array('class_scope' => 'Mage_Core_Block_Abstract'),
 );

@@ -135,10 +135,10 @@ class Mage_Core_Controller_RequestHttpTest extends PHPUnit_Framework_TestCase
 
     public function testGetHttpHost()
     {
-        $this->assertFalse($this->_model->getHttpHost());
-        $_SERVER['HTTP_HOST'] = 'localhost:80';
-        $this->assertEquals($_SERVER['HTTP_HOST'], $this->_model->getHttpHost(false));
         $this->assertEquals('localhost', $this->_model->getHttpHost());
+        $_SERVER['HTTP_HOST'] = 'example.com:80';
+        $this->assertEquals($_SERVER['HTTP_HOST'], $this->_model->getHttpHost(false));
+        $this->assertEquals('example.com', $this->_model->getHttpHost());
     }
 
     public function testSetPost()

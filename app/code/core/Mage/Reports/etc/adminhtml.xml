@@ -124,11 +124,11 @@
                     <sort_order>60</sort_order>
                     <action>adminhtml/report/search</action>
                 </search>
-                <refresh_statistics translate="title" module="Mage_Reports">
+                <statistics translate="title" module="Mage_Reports">
                     <sort_order>65535</sort_order>
                     <title>Refresh Statistics</title>
                     <action>adminhtml/report_statistics</action>
-                </refresh_statistics>
+                </statistics>
             </children>
         </report>
     </menu>

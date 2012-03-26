@@ -48,8 +48,8 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
     protected function _beforeToHtml()
     {
         $this->setId($this->getId().'_'.$this->getIndex());
-        $this->getChild('reset_filter_button')->setData('onclick', $this->getJsObjectName().'.resetFilter()');
-        $this->getChild('search_button')->setData('onclick', $this->getJsObjectName().'.doFilter()');
+        $this->getChildBlock('reset_filter_button')->setData('onclick', $this->getJsObjectName().'.resetFilter()');
+        $this->getChildBlock('search_button')->setData('onclick', $this->getJsObjectName().'.doFilter()');
 
         return parent::_beforeToHtml();
     }

@@ -280,4 +280,17 @@ class Mage_Downloadable_Model_Observer
 
         return $this;
     }
+
+    /**
+     * Initialize product options renderer with downloadable specific params
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Downloadable_Model_Observer
+     */
+    public function initOptionRenderer(Varien_Event_Observer $observer)
+    {
+        $block = $observer->getBlock();
+        $block->addOptionsRenderCfg('downloadable', 'Mage_Downloadable_Helper_Catalog_Product_Configuration');
+        return $this;
+    }
 }

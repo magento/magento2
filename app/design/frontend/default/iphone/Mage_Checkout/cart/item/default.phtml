@@ -27,7 +27,7 @@
 <?php $_item = $this->getItem()?>
 <?php $canApplyMsrp = Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
 <tr>
-    <td><?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnail()->resize(90); ?>" width="45" height="45" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?></td>
+    <td><?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnailUrl() ?>" width="<?php echo $this->getThumbnailSize()?>" height="<?php echo $this->getThumbnailSize()?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?></td>
     <td>
         <h2 class="product-name">
         <?php if ($this->hasProductUrl()):?>
@@ -165,7 +165,7 @@
     <td class="a-center item-qty">
         <b><?php echo $this->__('Qty'); ?></b><input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" />
     </td>
-    <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartPriceExclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
+    <?php if (($this->helper('Mage_Tax_Helper_Data')->displayCartPriceExclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
     <td class="a-center">
         <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <span class="cart-tax-total" onclick="taxToggle('esubtotal-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
@@ -210,7 +210,7 @@
         <?php endif; ?>
     </td>
     <?php endif; ?>
-    <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartPriceInclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
+    <?php if (($this->helper('Mage_Tax_Helper_Data')->displayCartPriceInclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
     <td>
         <?php $_incl = $this->helper('Mage_Checkout_Helper_Data')->getSubtotalInclTax($_item); ?>
         <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>

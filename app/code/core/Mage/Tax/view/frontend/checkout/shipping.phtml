@@ -57,7 +57,7 @@
 <?php else:?>
 <tr>
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
-        <?php echo $this->getTotal()->getTitle() ?>
+        <?php echo $this->escapeHtml($this->getTotal()->getTitle()) ?>
     </td>
     <td style="<?php echo $this->getStyle() ?>" class="a-right">
         <?php echo $this->helper('Mage_Checkout_Helper_Data')->formatPrice($this->getShippingExcludeTax()) ?>

@@ -32,6 +32,7 @@
             <action method="addJs"><file>mage/directpost.js</file></action>
         </reference>
     </checkout_onepage_index>
+
     <checkout_onepage_review>
         <reference name="checkout.onepage.review.info.items.after">
             <block type="Mage_Authorizenet_Block_Directpost_Form" name="payment.form.directpost" template="directpost/form.phtml">
@@ -39,4 +40,18 @@
             </block>
         </reference>
     </checkout_onepage_review>
+
+    <authorizenet_directpost_payment_redirect translate="label" type="page" parent="ajax_index">
+        <label>AuthorizeNet Directpost Redirect</label>
+        <reference name="root">
+            <block type="Mage_Authorizenet_Block_Directpost_Iframe" name="iframe" template="directpost/iframe.phtml"/>
+        </reference>
+    </authorizenet_directpost_payment_redirect>
+
+    <authorizenet_directpost_payment_response translate="label" type="page" parent="ajax_index">
+        <label>AuthorizeNet Directpost Response</label>
+        <reference name="root">
+            <block type="Mage_Authorizenet_Block_Directpost_Iframe" name="iframe" template="directpost/iframe.phtml"/>
+        </reference>
+    </authorizenet_directpost_payment_response>
 </layout>

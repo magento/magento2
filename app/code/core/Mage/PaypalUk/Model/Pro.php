@@ -36,7 +36,7 @@ class Mage_PaypalUk_Model_Pro extends Mage_Paypal_Model_Pro
      *
      * @var string
      */
-    protected $_apiType = 'paypaluk/api_nvp';
+    protected $_apiType = 'Mage_PaypalUk_Model_Api_Nvp';
 
     /**
      * Config model type

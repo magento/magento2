@@ -28,6 +28,7 @@
 <?php /* @var $this Mage_Bundle_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Options_Type_Multi */ ?>
 <?php $_option = $this->getOption(); ?>
 <?php $_selections = $_option->getSelections(); ?>
+<?php $_skipSaleableCheck = Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck(); ?>
 <dt><label<?php if ($_option->getRequired()) echo ' class="required"' ?>><?php if ($_option->getRequired()) echo '<em>*</em>' ?><?php echo $this->escapeHtml($_option->getTitle()) ?></label></dt>
 <dd<?php if ($_option->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
     <div class="input-box">
@@ -40,7 +41,7 @@
             <option value=""><?php echo $this->__('None') ?></option>
         <?php endif; ?>
         <?php foreach ($_selections as $_selection): ?>
-            <option value="<?php echo $_selection->getSelectionId() ?>"<?php if ($this->_isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?> price="<?php echo $this->getSelectionPrice($_selection) ?>"><?php echo $this->getSelectionQtyTitlePrice($_selection, false) ?></option>
+            <option value="<?php echo $_selection->getSelectionId() ?>"<?php if ($this->_isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?> price="<?php echo $this->getSelectionPrice($_selection) ?>"><?php echo $this->getSelectionQtyTitlePrice($_selection, false) ?></option>
         <?php endforeach; ?>
         </select>
     <?php endif; ?>

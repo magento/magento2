@@ -136,10 +136,27 @@ class Magento_Test_Listener_Annotation_ConfigTest extends PHPUnit_Framework_Test
     }
 
     /**
+     * @magentoConfigFixture some/config/path some_config_value
+     */
+    public function testInitFrontControllerBeforeOutOfScope()
+    {
+        $this->_annotation
+            ->expects($this->never())
+            ->method('_getConfigValue')
+        ;
+        $this->_annotation
+            ->expects($this->never())
+            ->method('_setConfigValue')
+        ;
+        $this->_annotation->initFrontControllerBefore();
+    }
+
+    /**
      * @magentoConfigFixture web/unsecure/base_url http://example.com/
      */
     public function testInitFrontControllerBefore()
     {
+        $this->_annotation->startTest();
         $this->_annotation
             ->expects($this->at(0))
             ->method('_getConfigValue')
@@ -152,5 +169,6 @@ class Magento_Test_Listener_Annotation_ConfigTest extends PHPUnit_Framework_Test
             ->with('web/unsecure/base_url', 'http://example.com/')
         ;
         $this->_annotation->initFrontControllerBefore();
+        $this->_annotation->endTest();
     }
 }

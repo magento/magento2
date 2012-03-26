@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.11</version>
+            <version>1.6.0.0.13</version>
         </Mage_Catalog>
     </modules>
     <global>
@@ -71,6 +71,14 @@
                     </catalog_product_compare_item>
                 </observers>
             </log_log_clean_after>
+            <page_block_html_topmenu_gethtml_before>
+                <observers>
+                    <catalog_add_topmenu_items>
+                        <class>Mage_Catalog_Model_Observer</class>
+                        <method>addCatalogToTopmenuItems</method>
+                    </catalog_add_topmenu_items>
+                </observers>
+            </page_block_html_topmenu_gethtml_before>
         </events>
         <catalog>
             <product>
@@ -395,6 +403,7 @@
                 <price_range_max_intervals>10</price_range_max_intervals>
                 <one_price_interval>0</one_price_interval>
                 <interval_division_limit>9</interval_division_limit>
+                <display_product_count>1</display_product_count>
             </layered_navigation>
         </catalog>
         <system>

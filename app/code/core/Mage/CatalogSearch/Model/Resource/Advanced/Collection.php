@@ -99,6 +99,9 @@ class Mage_CatalogSearch_Model_Resource_Advanced_Collection extends Mage_Catalog
                                 if (!is_numeric($conditionValue['from'])){
                                     $conditionValue['from'] = Mage::getSingleton('Mage_Core_Model_Date')
                                         ->gmtDate(null, $conditionValue['from']);
+                                    if (!$conditionValue['from']) {
+                                        $conditionValue['from'] = Mage::getSingleton('Mage_Core_Model_Date')->gmtDate();
+                                    }
                                 }
                                 $conditionData[] = array('gteq' => $conditionValue['from']);
                             }
@@ -109,6 +112,9 @@ class Mage_CatalogSearch_Model_Resource_Advanced_Collection extends Mage_Catalog
                                 if (!is_numeric($conditionValue['to'])){
                                     $conditionValue['to'] = Mage::getSingleton('Mage_Core_Model_Date')
                                         ->gmtDate(null, $conditionValue['to']);
+                                    if (!$conditionValue['to']) {
+                                        $conditionValue['to'] = Mage::getSingleton('Mage_Core_Model_Date')->gmtDate();
+                                    }
                                 }
                                 $conditionData[] = array('lteq' => $conditionValue['to']);
                             }

@@ -41,13 +41,22 @@ class Mage_Core_Model_Config_DataTest extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         Mage::app()->getConfig()->saveConfig(self::SAMPLE_CONFIG_PATH, self::SAMPLE_VALUE);
-        Magento_Test_Bootstrap::getInstance()->refreshConfiguration();
+        self::_refreshConfiguration();
     }
 
     public static function tearDownAfterClass()
     {
         Mage::app()->getConfig()->deleteConfig(self::SAMPLE_CONFIG_PATH);
-        Magento_Test_Bootstrap::getInstance()->refreshConfiguration();
+        self::_refreshConfiguration();
+    }
+
+    /**
+     * Remove cached configuration and reinitialize the application
+     */
+    protected static function _refreshConfiguration()
+    {
+        Mage::app()->cleanCache(array(Mage_Core_Model_Config::CACHE_TAG));
+        Magento_Test_Bootstrap::getInstance()->initialize();
     }
 
     protected function setUp()

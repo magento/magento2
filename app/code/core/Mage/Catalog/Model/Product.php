@@ -1281,7 +1281,8 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     public function isAvailable()
     {
-        return $this->getTypeInstance()->isSalable($this);
+        return $this->getTypeInstance()->isSalable($this)
+            || Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck();
     }
 
     /**
@@ -1967,5 +1968,15 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     public function getProductEntitiesInfo($columns = null)
     {
         return $this->_getResource()->getProductEntitiesInfo($columns);
+    }
+
+    /**
+     * Checks whether product has disabled status
+     *
+     * @return bool
+     */
+    public function isDisabled()
+    {
+        return $this->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
     }
 }

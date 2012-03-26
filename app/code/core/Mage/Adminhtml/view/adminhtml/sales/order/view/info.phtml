@@ -81,7 +81,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 </a></td>
             </tr>
             <?php endif; ?>
-            <?php if($_order->getRemoteIp()): ?>
+            <?php if($_order->getRemoteIp() && $this->shouldDisplayCustomerIp()): ?>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Placed from IP') ?></label></td>
                 <td class="value"><strong><?php echo $_order->getRemoteIp(); echo ($_order->getXForwardedFor())?' (' . $_order->getXForwardedFor() . ')':''; ?></strong></td>

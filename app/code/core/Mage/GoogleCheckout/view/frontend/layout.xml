@@ -38,7 +38,8 @@
         </reference>
     </checkout_cart_index>
 
-    <googlecheckout_redirect_redirect>
+    <googlecheckout_redirect_redirect translate="label" type="page" parent="checkout_onepage_paymentmethod">
+        <label>GoogleCheckout Redirect</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-right.phtml</template></action>
         </reference>

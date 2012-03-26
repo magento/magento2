@@ -141,6 +141,8 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
         $messages = array();
         foreach ($cart->getQuote()->getMessages() as $message) {
             if ($message) {
+                // Escape HTML entities in quote message to prevent XSS
+                $message->setCode(Mage::helper('Mage_Core_Helper_Data')->escapeHtml($message->getCode()));
                 $messages[] = $message;
             }
         }
@@ -213,11 +215,11 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             }
         } catch (Mage_Core_Exception $e) {
             if ($this->_getSession()->getUseNotice(true)) {
-                $this->_getSession()->addNotice($e->getMessage());
+                $this->_getSession()->addNotice(Mage::helper('Mage_Core_Helper_Data')->escapeHtml($e->getMessage()));
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->_getSession()->addError($message);
+                    $this->_getSession()->addError(Mage::helper('Mage_Core_Helper_Data')->escapeHtml($message));
                 }
             }
 
@@ -423,7 +425,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             }
             $this->_getSession()->setCartWasUpdated(true);
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->_getSession()->addError(Mage::helper('Mage_Core_Helper_Data')->escapeHtml($e->getMessage()));
         } catch (Exception $e) {
             $this->_getSession()->addException($e, $this->__('Cannot update shopping cart.'));
             Mage::logException($e);

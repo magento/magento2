@@ -668,6 +668,27 @@ function fireEvent(element, event) {
 }
 
 /**
+ * Returns more accurate results of floating-point modulo division
+ * E.g.:
+ * 0.6 % 0.2 = 0.19999999999999996
+ * modulo(0.6, 0.2) = 0
+ *
+ * @param dividend
+ * @param divisor
+ */
+function modulo(dividend, divisor)
+{
+    var epsilon = divisor / 10000;
+    var remainder = dividend % divisor;
+
+    if (Math.abs(remainder - divisor) < epsilon || Math.abs(remainder) < epsilon) {
+        remainder = 0;
+    }
+
+    return remainder;
+}
+
+/**
  * createContextualFragment is not supported in IE9. Adding its support.
  */
 if ((typeof Range != "undefined") && !Range.prototype.createContextualFragment)

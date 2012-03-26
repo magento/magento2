@@ -83,7 +83,11 @@
                 <?php endif; ?>
             </div>
             <div class="product-collateral">
-                <?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
+                <?php $layout = $this->getLayout(); ?>
+                <?php foreach ($this->getGroupChildNames('detailed_info') as $name):?>
+                        <?php $html = $layout->renderElement($name); ?>
+                        <?php if (!$html) continue; ?>
+                        <?php $alias = $layout->getElementAlias($name); ?>
                         <div class="box-collateral <?php echo "box-{$alias}"?>">
                             <?php if ($title = $this->getChildData($alias, 'title')):?>
                             <h2><?php echo $this->escapeHtml($title); ?></h2>

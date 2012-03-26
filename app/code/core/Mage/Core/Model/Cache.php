@@ -510,12 +510,25 @@ class Mage_Core_Model_Cache
 
     /**
      * Disable cache usage for specific data type
+     *
      * @param string $typeCode
      * @return Mage_Core_Model_Cache
      */
     public function banUse($typeCode)
     {
         $this->_allowedCacheOptions[$typeCode] = false;
+        return $this;
+    }
+
+    /**
+     * Enable cache usage for specific data type
+     *
+     * @param string $typeCode
+     * @return Mage_Core_Model_Cache
+     */
+    public function allowUse($typeCode)
+    {
+        $this->_allowedCacheOptions[$typeCode] = true;
         return $this;
     }
 

@@ -185,7 +185,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
      */
     public function getItemExtraInfoHtml(Varien_Object $item)
     {
-        $extraInfoBlock = $this->getChild('order_item_extra_info');
+        $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
             return $extraInfoBlock
                 ->setItem($item)

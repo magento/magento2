@@ -48,8 +48,14 @@
                 </tools>
                 <design translate="title">
                     <title>Design</title>
-                    <action>adminhtml/system_design</action>
                     <sort_order>30</sort_order>
+                    <children>
+                        <schedule translate="title">
+                            <title>Schedule</title>
+                            <action>adminhtml/system_design</action>
+                            <sort_order>10</sort_order>
+                        </schedule>
+                    </children>
                 </design>
                 <convert translate="title">
                     <title>Import/Export</title>
@@ -150,6 +156,12 @@
                             <design translate="title">
                                 <title>Design</title>
                                 <sort_order>25</sort_order>
+                                <children>
+                                    <schedule translate="title">
+                                        <title>Schedule</title>
+                                        <sort_order>10</sort_order>
+                                    </schedule>
+                                </children>
                             </design>
                             <config translate="title">
                                 <title>Configuration</title>

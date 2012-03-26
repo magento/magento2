@@ -296,7 +296,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
     /**
      * Set a member of the $_POST superglobal
      *
-     * @param striing|array $key
+     * @param string|array $key
      * @param mixed $value
      *
      * @return Mage_Core_Controller_Request_Http

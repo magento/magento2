@@ -303,18 +303,25 @@
                     </subtotal>
                     <discount>
                         <class>Mage_Sales_Model_Order_Invoice_Total_Discount</class>
+                        <after>subtotal</after>
                     </discount>
                     <shipping>
                         <class>Mage_Sales_Model_Order_Invoice_Total_Shipping</class>
+                        <after>subtotal,discount</after>
+                        <before>grand_total,tax</before>
                     </shipping>
                     <tax>
                         <class>Mage_Sales_Model_Order_Invoice_Total_Tax</class>
+                        <after>subtotal</after>
                     </tax>
                     <grand_total>
                         <class>Mage_Sales_Model_Order_Invoice_Total_Grand</class>
+                        <after>shipping</after>
                     </grand_total>
                     <cost_total>
                         <class>Mage_Sales_Model_Order_Invoice_Total_Cost</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
                     </cost_total>
                 </totals>
             </order_invoice>
@@ -325,18 +332,25 @@
                     </subtotal>
                     <shipping>
                         <class>Mage_Sales_Model_Order_Creditmemo_Total_Shipping</class>
+                        <after>subtotal,discount</after>
+                        <before>grand_total,tax</before>
                     </shipping>
                     <tax>
                         <class>Mage_Sales_Model_Order_Creditmemo_Total_Tax</class>
+                        <after>subtotal</after>
                     </tax>
                     <discount>
                         <class>Mage_Sales_Model_Order_Creditmemo_Total_Discount</class>
+                        <after>subtotal</after>
                     </discount>
                     <grand_total>
                         <class>Mage_Sales_Model_Order_Creditmemo_Total_Grand</class>
+                        <after>shipping,subtotal</after>
                     </grand_total>
                     <cost_total>
                         <class>Mage_Sales_Model_Order_Creditmemo_Total_Cost</class>
+                        <after>discount</after>
+                        <before>grand_total</before>
                     </cost_total>
                 </totals>
             </order_creditmemo>

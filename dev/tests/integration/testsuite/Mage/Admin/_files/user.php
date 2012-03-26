@@ -19,32 +19,11 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Mage_Adminhtml
+ * @package     Mage_Admin
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$user = new Mage_Admin_Model_User();
-$user->setData(array(
-    'firstname' => 'firstname',
-    'lastname'  => 'lastname',
-    'email'     => 'admin@example.com',
-    'username'  => 'user',
-    'password'  => 'password',
-    'is_active' => 1
-));
-$user->save();
-
-$roleAdmin = new Mage_Admin_Model_Role();
-$roleAdmin->load('Administrators', 'role_name');
-
-$roleUser = new Mage_Admin_Model_Role();
-$roleUser->setData(array(
-    'parent_id'  => $roleAdmin->getId(),
-    'tree_level' => $roleAdmin->getTreeLevel() + 1,
-    'role_type'  => Mage_Admin_Model_Acl::ROLE_TYPE_USER,
-    'user_id'    => $user->getId(),
-    'role_name'  => $user->getFirstname(),
-));
-$roleUser->save();
+Mage_Admin_Utility_User::getInstance()
+    ->createAdmin();

@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this Mage_Adminhtml_Block_Sales_Order_Shipment_View_Tracking */ ?>
 <div class="field-row grid" id="shipment_tracking_info">
 <table cellspacing="0" class="data">
     <col width="100" />
@@ -43,7 +44,7 @@
             <td>
                 <select name="carrier" class="select" style="width:110px" onchange="selectCarrier(this)">
                     <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
-                    <option value="<?php echo $_code ?>"><?php echo $_name ?></option>
+                    <option value="<?php echo $_code ?>"><?php echo $this->escapeHtml($_name) ?></option>
                     <?php endforeach; ?>
                 </select>
             </td>
@@ -56,7 +57,7 @@
     <tbody>
     <?php $i=0;foreach ($_tracks as $_track):$i++ ?>
         <tr class="<?php echo ($i%2==0)?'even':'odd' ?>">
-            <td><?php echo $this->getCarrierTitle($_track->getCarrierCode()) ?></td>
+            <td><?php echo $this->escapeHtml($this->getCarrierTitle($_track->getCarrierCode())) ?></td>
             <td><?php echo $this->escapeHtml($_track->getTitle()) ?></td>
             <td>
                 <?php if ($_track->isCustom()): ?>
@@ -76,13 +77,8 @@
 <script type="text/javascript">
 //<![CDATA[
 function selectCarrier(elem) {
-    option = elem.options[elem.selectedIndex];
-    if (option.value && option.value != 'custom') {
-        $('tracking_title').value = option.text;
-    }
-    else {
-        $('tracking_title').value = '';
-    }
+    var option = elem.options[elem.selectedIndex];
+    $('tracking_title').value = option.value && option.value != 'custom' ? option.text : '';
 }
 
 function deleteTrackingNumber(url) {

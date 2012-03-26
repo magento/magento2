@@ -49,7 +49,7 @@ class Mage_Catalog_Helper_Product_CompareTest extends PHPUnit_Framework_TestCase
         $this->assertContains('/catalog/product_compare/index/', $empty->getListUrl());
 
         $this->_populateCompareList();
-        $this->assertContains('/catalog/product_compare/index/items/10,11/', $this->_helper->getListUrl());
+        $this->assertRegExp('#/catalog/product_compare/index/items/(?:10,11|11,10)/#', $this->_helper->getListUrl());
     }
 
     public function testGetAddUrl()

@@ -347,6 +347,35 @@
                         </anchor_text_for_next>
                     </fields>
                 </pagination>
+                <email translate="label">
+                    <label>Transactional Emails</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>510</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <logo translate="label">
+                            <label>Logo Image</label>
+                            <comment>Allowed file types: jpg, jpeg, gif, png</comment>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Logo</backend_model>
+                            <base_url type="media" scope_info="1">email/logo</base_url>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </logo>
+                        <logo_alt translate="label">
+                            <label>Logo Image Alt</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </logo_alt>
+                    </fields>
+                </email>
             </groups>
         </design>
         <dev translate="label" module="Mage_Core">
@@ -853,8 +882,8 @@
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Email_Template</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </forgot_email_template>
                         <forgot_email_identity translate="label">
                             <label>Forgot Password Email Sender</label>
@@ -862,13 +891,14 @@
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Email_Identity</source_model>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </forgot_email_identity>
                         <password_reset_link_expiration_period translate="label comment">
                             <label>Recovery Link Expiration Period (days)</label>
-                            <comment>This value must be greater than 0.</comment>
+                            <comment>Please enter a number 1 or greater in this field.</comment>
                             <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
                             <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod</backend_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -976,15 +1006,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </use_case_sensitive_login>
-                        <session_cookie_lifetime translate="label comment">
-                            <label>Session Lifetime (seconds)</label>
-                            <comment>Values less than 60 are ignored. Note that changes will apply after logout.</comment>
+                        <session_lifetime translate="label comment">
+                            <label>Admin Session Lifetime (seconds)</label>
+                            <comment>Values less than 60 are ignored.</comment>
                             <validate>validate-digits</validate>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </session_cookie_lifetime>
+                        </session_lifetime>
                     </fields>
                 </security>
                 <dashboard translate="label">
@@ -1224,7 +1254,7 @@
                     <show_in_store>1</show_in_store>
                 </polls>
                 <cookie translate="label">
-                    <label>Session Cookie Management</label>
+                    <label>Default Cookie Settings</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>50</sort_order>
                     <show_in_default>1</show_in_default>
@@ -1264,6 +1294,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </cookie_httponly>
+                        <cookie_restriction translate="label">
+                            <label>Cookie Restriction Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cookie_restriction>
                     </fields>
                 </cookie>
                 <session translate="label">

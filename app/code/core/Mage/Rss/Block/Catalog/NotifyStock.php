@@ -86,10 +86,12 @@ class Mage_Rss_Block_Catalog_NotifyStock extends Mage_Rss_Block_Abstract
         $collection = $product->getCollection();
         $stockItemTable = $collection->getTable('cataloginventory_stock_item');
 
+        $adapter = $collection->getConnection();
         $stockItemWhere = '({{table}}.low_stock_date is not null) '
             . " AND ( ({{table}}.use_config_manage_stock=1 AND {$configManageStock}=1)"
             . " AND {{table}}.qty < "
-            . "IF({$stockItemTable}.`use_config_notify_stock_qty`, {$globalNotifyStockQty}, {{table}}.notify_stock_qty)"
+            . $adapter->getCheckSql("{$stockItemTable}.use_config_notify_stock_qty = 1", $globalNotifyStockQty,
+                '{{table}}.notify_stock_qty')
             . ' OR ({{table}}.use_config_manage_stock=0 AND {{table}}.manage_stock=1) )';
 
         $collection

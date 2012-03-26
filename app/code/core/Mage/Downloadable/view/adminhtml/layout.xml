@@ -89,9 +89,9 @@
         </reference>
     </adminhtml_customer_wishlist>
 
-    <PRODUCT_TYPE_downloadable>
+    <catalog_product_view_type_downloadable>
         <reference name="product.composite.fieldset">
             <block type="Mage_Downloadable_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Downloadable" name="product.composite.fieldset.downloadable" before="product.composite.fieldset.options" template="product/composite/fieldset/downloadable.phtml" />
         </reference>
-    </PRODUCT_TYPE_downloadable>
+    </catalog_product_view_type_downloadable>
 </layout>

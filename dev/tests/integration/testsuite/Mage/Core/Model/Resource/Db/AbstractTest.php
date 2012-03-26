@@ -25,54 +25,44 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Core_Model_Resource_Db_AbstractTestAbstract extends Mage_Core_Model_Resource_Db_Abstract
-{
-    protected function _construct()
-    {
-        return $this;
-    }
-
-    public function getResources()
-    {
-        return $this->_resources;
-    }
-
-    public function setMainTable($mainTable, $idFieldName = null)
-    {
-        return parent::_setMainTable($mainTable, $idFieldName);
-    }
-}
-
 /**
  * @group module:Mage_Core
  */
 class Mage_Core_Model_Resource_Db_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Core_Model_Resource_Db_AbstractTestAbstract
+     * @var Mage_Core_Model_Resource_Db_Abstract
      */
     protected $_model;
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Db_AbstractTestAbstract();
+        $this->_model = $this->getMockForAbstractClass('Mage_Core_Model_Resource_Db_Abstract');
     }
 
     public function testConstruct()
     {
-        $model = new Mage_Core_Model_Resource_Db_AbstractTestAbstract();
-        $this->assertInstanceOf('Mage_Core_Model_Resource', $model->getResources());
+        $resourceProperty = new ReflectionProperty(get_class($this->_model), '_resources');
+        $resourceProperty->setAccessible(true);
+        $this->assertInstanceOf('Mage_Core_Model_Resource', $resourceProperty->getValue($this->_model));
     }
 
     public function testSetMainTable()
     {
+        if (!method_exists('ReflectionMethod', 'setAccessible')) {
+            $this->markTestSkipped('Test requires ReflectionMethod::setAccessible (PHP 5 >= 5.3.2).');
+        }
+
+        $setMainTableMethod = new ReflectionMethod($this->_model, '_setMainTable');
+        $setMainTableMethod->setAccessible(true);
+
         $tableName = $this->_model->getTable('core_website');
         $idFieldName = 'website_id';
 
-        $this->_model->setMainTable($tableName);
+        $setMainTableMethod->invoke($this->_model, $tableName);
         $this->assertEquals($tableName, $this->_model->getMainTable());
 
-        $this->_model->setMainTable($tableName, $idFieldName);
+        $setMainTableMethod->invoke($this->_model, $tableName, $idFieldName);
         $this->assertEquals($tableName, $this->_model->getMainTable());
         $this->assertEquals($idFieldName, $this->_model->getIdFieldName());
     }

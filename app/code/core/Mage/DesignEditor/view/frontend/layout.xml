@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout>
+    <design_editor_toolbar>
+        <label>Design Editor Toolbar</label>
+        <reference name="head">
+            <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+            <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
+            <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui-1.8.17.custom.min.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
+        <reference name="after_body_start">
+            <block type="Mage_DesignEditor_Block_Toolbar" name="design_editor_toolbar" template="toolbar.phtml" before="-">
+                <block type="Mage_Core_Block_Template" name="design_editor_toolbar_row1" template="Mage_DesignEditor::toolbar/row.phtml">
+                    <block type="Mage_DesignEditor_Block_Toolbar_Skin" name="design_editor_toolbar_skin" template="toolbar/skin.phtml"/>
+                    <block type="Mage_Core_Block_Template" name="design_editor_toolbar_highlighting" template="Mage_DesignEditor::toolbar/highlighting.phtml"/>
+                    <block type="Mage_DesignEditor_Block_Toolbar_Exit" name="design_editor_toolbar_exit" template="toolbar/exit.phtml"/>
+                </block>
+                <block type="Mage_Core_Block_Template" name="design_editor_toolbar_row2" template="Mage_DesignEditor::toolbar/row.phtml">
+                    <block type="Mage_DesignEditor_Block_Toolbar_Breadcrumbs" name="design_editor_toolbar_breadcrumbs" template="toolbar/breadcrumbs.phtml"/>
+                    <block type="Mage_DesignEditor_Block_Toolbar_PageType" name="design_editor_toolbar_page_types" template="toolbar/page_types.phtml"/>
+                </block>
+            </block>
+        </reference>
+    </design_editor_toolbar>
+
+    <design_editor_page>
+        <label>Design Editor Page Blocks Management Page</label>
+        <reference name="root">
+            <action method="setTemplate"><template>Mage_DesignEditor::page.phtml</template></action>
+            <block type="Mage_Page_Block_Html_Head" name="head" as="head"/>
+            <container name="after_body_start" as="after_body_start" label="Page Top"/>
+        </reference>
+    </design_editor_page>
+</layout>

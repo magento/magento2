@@ -29,20 +29,15 @@
 function setSettings(urlTemplate, typeElement, packageThemeElement) {
     templateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
     var template = new Template(urlTemplate, templateSyntax);
-    typeElement = $F(typeElement).replace(/\//g, "-");
-    packageThemeElement = $F(packageThemeElement).split(/\//g);
-    if(typeof packageThemeElement[0] == 'undefined' || typeof packageThemeElement[1] == 'undefined') {
-        alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Widget_Helper_Data')->__('Undefined Design Package or Theme.')); ?>');
-        return false;
-    }
+    typeElement = $F(typeElement);
+    packageThemeElement = $F(packageThemeElement).replace(/\//g, "-");
     setLocation(template.evaluate({
         'type':    typeElement,
-        'package': packageThemeElement[0],
-        'theme':   packageThemeElement[1]
+        'package_theme': packageThemeElement
     }));
 }
 function saveAndContinueEdit(){
-    editForm.submit($('edit_form').action+'back/edit/');
+    editForm.submit($('edit_form').action + 'back/edit/');
 }
 //]]>
 </script>

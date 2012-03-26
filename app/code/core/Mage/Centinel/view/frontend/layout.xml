@@ -27,12 +27,14 @@
 
 -->
 <layout version="0.1.0">
-    <centinel_index_authenticationstart>
-        <block type="Mage_Centinel_Block_Authentication_Start" name="root" output="toHtml" template="authentication/start.phtml"/>
+    <centinel_index_authenticationstart translate="label" type="page" parent="checkout_onepage_paymentmethod">
+        <label>Centinel Authentication Start</label>
+        <block type="Mage_Centinel_Block_Authentication_Start" name="root" output="1" template="authentication/start.phtml"/>
     </centinel_index_authenticationstart>
 
-    <centinel_index_authenticationcomplete>
-        <block type="Mage_Centinel_Block_Authentication_Complete" name="root" output="toHtml" template="authentication/complete.phtml"/>
+    <centinel_index_authenticationcomplete translate="label" type="page" parent="centinel_index_authenticationstart">
+        <label>Centinel Authentication Finish</label>
+        <block type="Mage_Centinel_Block_Authentication_Complete" name="root" output="1" template="authentication/complete.phtml"/>
     </centinel_index_authenticationcomplete>
 
     <checkout_multishipping_overview>

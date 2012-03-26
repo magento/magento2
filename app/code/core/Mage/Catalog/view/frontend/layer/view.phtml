@@ -38,6 +38,9 @@
     </div>
     <div class="block-content">
         <?php echo $this->getStateHtml() ?>
+        <?php if ($this->getLayer()->getState()->getFilters()): ?>
+            <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
+        <?php endif; ?>
         <?php if($this->canShowOptions()): ?>
             <p class="block-subtitle"><?php echo $this->__('Shopping Options') ?></p>
             <dl id="narrow-by-list">
@@ -50,9 +53,6 @@
                 <?php endforeach; ?>
             </dl>
             <script type="text/javascript">decorateDataList('narrow-by-list')</script>
-        <?php endif; ?>
-        <?php if ($this->getLayer()->getState()->getFilters()): ?>
-            <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
         <?php endif; ?>
     </div>
 </div>

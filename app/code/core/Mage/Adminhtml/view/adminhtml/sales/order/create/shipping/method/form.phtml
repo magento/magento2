@@ -24,11 +24,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if($_shippingRateGroups = $this->getShippingRates()): ?>
+<?php /** @var $this Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form */ ?>
+<?php $_shippingRateGroups = $this->getShippingRates(); ?>
+<?php if ($_shippingRateGroups): ?>
     <div id="order-shipping-method-choose" style="display:none">
     <dl class="shipment-methods">
     <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><strong><?php echo $this->getCarrierName($code) ?></strong></dt>
+        <dt><strong><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></strong></dt>
         <dd>
             <ul>
             <?php foreach ($_rates as $_rate): ?>
@@ -37,13 +39,13 @@
                 <li>
                    <?php if ($_rate->getErrorMessage()): ?>
                         <ul class="messages">
-                            <li class="error-msg"><?php echo $_rate->getErrorMessage() ?></li>
+                            <li class="error-msg"><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li>
                         </ul>
                    <?php else: ?>
                         <?php $_checked = $this->isMethodActive($_code) ? 'checked="checked"' : '' ?>
                         <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>
                         <label class="normal" for="s_method_<?php echo $_code ?>">
-                            <?php echo $_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()?> -
+                            <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                             <strong>
                                 <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()); ?>
                                 <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
@@ -64,8 +66,8 @@
     </div>
     <?php if ($_rate = $this->getActiveMethodRate()): ?>
         <div id="order-shipping-method-info">
-            <strong><?php echo $this->getCarrierName($_rate->getCarrier()) ?></strong><br/>
-            <?php echo $_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription() ?> -
+            <strong><?php echo $this->escapeHtml($this->getCarrierName($_rate->getCarrier())) ?></strong><br/>
+            <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
             <strong>
                 <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()); ?>
                 <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>

@@ -107,7 +107,7 @@
                                 <title>Update Attributes</title>
                             </update_attributes>
                             <urlrewrite translate="title">
-                                <title>Url Rewrite Management</title>
+                                <title>URL Rewrite Management</title>
                             </urlrewrite>
                         </children>
                     </catalog>

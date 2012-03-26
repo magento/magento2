@@ -98,13 +98,13 @@ class Mage_XmlConnect_Block_Catalog_Product extends Mage_XmlConnect_Block_Catalo
             $item->addChild('rating_summary', round((int)$product->getRatingSummary()->getRatingSummary() / 10));
             $item->addChild('reviews_count', $product->getRatingSummary()->getReviewsCount());
 
-            if ($this->getChild('product_price')) {
-                $this->getChild('product_price')->setProduct($product)->setProductXmlObj($item)
+            if ($this->getChildBlock('product_price')) {
+                $this->getChildBlock('product_price')->setProduct($product)->setProductXmlObj($item)
                     ->collectProductPrices();
             }
 
-            if ($this->getChild('additional_info')) {
-                $this->getChild('additional_info')->addAdditionalData($product, $item);
+            if ($this->getChildBlock('additional_info')) {
+                $this->getChildBlock('additional_info')->addAdditionalData($product, $item);
             }
         }
 
@@ -145,14 +145,14 @@ class Mage_XmlConnect_Block_Catalog_Product extends Mage_XmlConnect_Block_Catalo
             $this->setProduct($product);
             $productXmlObj = $this->productToXmlObject($product, 'product');
 
-            $relatedProductsBlock = $this->getChild('related_products');
+            $relatedProductsBlock = $this->getChildBlock('related_products');
             if ($relatedProductsBlock) {
                 $relatedXmlObj = $relatedProductsBlock->getRelatedProductsXmlObj();
                 $productXmlObj->appendChild($relatedXmlObj);
             }
         }
 
-        $productOptions = $this->getChild('xmlconnect.catalog.product.options')
+        $productOptions = $this->getChildBlock('xmlconnect.catalog.product.options')
             ->getProductOptionsXmlObject($product);
         if ($productOptions instanceof Mage_XmlConnect_Model_Simplexml_Element) {
             $productXmlObj->appendChild($productOptions);

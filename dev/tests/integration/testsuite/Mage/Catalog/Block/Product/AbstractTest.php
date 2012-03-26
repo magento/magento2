@@ -26,14 +26,6 @@
  */
 
 /**
- * Empty class for testing
- */
-class Mage_Catalog_Block_Product_AbstractTestAbstract extends Mage_Catalog_Block_Product_Abstract
-{
-
-}
-
-/**
  * Test class for Mage_Catalog_Block_Product_Abstract.
  *
  * @group module:Mage_Catalog
@@ -43,7 +35,7 @@ class Mage_Catalog_Block_Product_AbstractTestAbstract extends Mage_Catalog_Block
 class Mage_Catalog_Block_Product_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Catalog_Block_Product_AbstractTestAbstract
+     * @var Mage_Catalog_Block_Product_Abstract
      */
     protected $_block;
 
@@ -59,7 +51,7 @@ class Mage_Catalog_Block_Product_AbstractTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Mage_Catalog_Block_Product_AbstractTestAbstract;
+        $this->_block = $this->getMockForAbstractClass('Mage_Catalog_Block_Product_Abstract');
         $this->_product = new Mage_Catalog_Model_Product();
         $this->_product->load(1);
         $this->_product->addData(array(

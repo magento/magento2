@@ -327,7 +327,8 @@ class Mage_Adminhtml_Block_Sales_Order_Shipment_Packaging extends Mage_Adminhtml
      */
     public function getCustomValueCurrencyCode()
     {
-        return Mage::app()->getStore()->getBaseCurrencyCode();
+        $orderInfo = $this->getShipment()->getOrder();
+        return $orderInfo->getBaseCurrency()->getCurrencyCode();
     }
 
     /**
@@ -339,6 +340,18 @@ class Mage_Adminhtml_Block_Sales_Order_Shipment_Packaging extends Mage_Adminhtml
     public function displayPrice($price)
     {
         return $this->getShipment()->getOrder()->formatPriceTxt($price);
+    }
+
+    /**
+     * Display formatted customs price
+     *
+     * @param float $price
+     * @return string
+     */
+    public function displayCustomsPrice($price)
+    {
+        $orderInfo = $this->getShipment()->getOrder();
+        return $orderInfo->getBaseCurrency()->formatTxt($price);
     }
 
     /**

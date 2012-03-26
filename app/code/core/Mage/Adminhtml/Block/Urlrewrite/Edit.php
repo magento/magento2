@@ -206,15 +206,18 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
      * Since buttons are set as children, we remove them as children after generating them
      * not to duplicate them in future
      *
+     * @param null $area
      * @return string
      */
     public function getButtonsHtml($area = null)
     {
         if (null === $this->_buttonsHtml) {
             $this->_buttonsHtml = parent::getButtonsHtml();
-            foreach ($this->_children as $alias => $child) {
+            $layout = $this->getLayout();
+            foreach ($this->getChildNames() as $name) {
+                $alias = $layout->getElementAlias($name);
                 if (false !== strpos($alias, '_button')) {
-                    $this->unsetChild($alias);
+                    $layout->unsetChild($this->getNameInLayout(), $alias);
                 }
             }
         }

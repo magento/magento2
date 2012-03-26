@@ -27,27 +27,9 @@
 
 -->
 <layout version="0.1.0">
-    <checkout_cart_index>
+    <default>
         <reference name="head">
             <action method="addJs"><file>Mage_Weee::tax_toggle.js</file></action>
         </reference>
-    </checkout_cart_index>
-
-    <checkout_onepage_index>
-        <reference name="head">
-            <action method="addJs"><file>Mage_Weee::tax_toggle.js</file></action>
-        </reference>
-    </checkout_onepage_index>
-    
-    <checkout_multishipping>
-        <reference name="head">
-            <action method="addJs"><file>Mage_Weee::tax_toggle.js</file></action>
-        </reference>
-    </checkout_multishipping>
-
-    <customer_logged_in>
-        <reference name="head">
-            <action method="addJs"><file>Mage_Weee::tax_toggle.js</file></action>
-        </reference>
-    </customer_logged_in>
+    </default>
 </layout>

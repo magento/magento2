@@ -58,12 +58,12 @@ class Mage_CatalogSearch_Block_Advanced_Result extends Mage_Core_Block_Template
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
 
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
             ->setAvailableOrders($availableOrders);
     }
 
     public function setListModes() {
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
             ->setModes(array(
                 'grid' => Mage::helper('Mage_CatalogSearch_Helper_Data')->__('Grid'),
                 'list' => Mage::helper('Mage_CatalogSearch_Helper_Data')->__('List'))
@@ -71,7 +71,7 @@ class Mage_CatalogSearch_Block_Advanced_Result extends Mage_Core_Block_Template
     }
 
     public function setListCollection() {
-        $this->getChild('search_result_list')
+        $this->getChildBlock('search_result_list')
            ->setCollection($this->_getProductCollection());
     }
 

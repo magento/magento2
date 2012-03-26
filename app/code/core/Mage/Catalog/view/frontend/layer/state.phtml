@@ -38,13 +38,15 @@
     <ol>
     <?php foreach ($_filters as $_filter): ?>
         <li>
-            <a href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
-            <span class="label"><?php echo $this->__($_filter->getName()) ?>:</span> <?php echo $this->stripTags($_filter->getLabel()) ?>
+            <span class="label"><?php echo $this->__($_filter->getName()) ?>:</span> <span class="value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
             <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
                 if ($clearLinkUrl):
             ?>
-                <div class="actions"><a href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a></div>
+                <a  class="btn-previous" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Previous') ?>"><?php echo $this->__('Previous') ?></a>
+                <a  class="btn-remove" title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>" href="<?php echo $clearLinkUrl ?>"><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></a>
+            <?php else: ?>
+                <a  class="btn-remove" href="<?php echo $_filter->getRemoveUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"><?php echo $this->__('Remove This Item') ?></a>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>

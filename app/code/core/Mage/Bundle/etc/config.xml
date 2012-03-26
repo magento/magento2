@@ -152,6 +152,14 @@
                     </bundle_observer>
                 </observers>
             </catalog_product_collection_load_after>
+            <product_option_renderer_init>
+                <observers>
+                    <bundle_observer>
+                        <class>Mage_Bundle_Model_Observer</class>
+                        <method>initOptionRenderer</method>
+                    </bundle_observer>
+                </observers>
+            </product_option_renderer_init>
         </events>
     </frontend>
     <admin>

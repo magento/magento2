@@ -179,7 +179,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Options extends Mage_Adminhtml_Block_Wi
             $fieldType = 'hidden';
         }
         // just an element renderer
-        elseif ($fieldType && class_exists($fieldType)) {
+        elseif ($fieldType && $this->_isClassName($fieldType)) {
             $fieldRenderer = $this->getLayout()->createBlock($fieldType);
             $fieldType = $this->_defaultElementType;
         }
@@ -202,7 +202,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Options extends Mage_Adminhtml_Block_Wi
         }
 
         // dependencies from other fields
-        $dependenceBlock = $this->getChild('form_after');
+        $dependenceBlock = $this->getChildBlock('form_after');
         $dependenceBlock->addFieldMap($field->getId(), $fieldName);
         if ($parameter->getDepends()) {
             foreach ($parameter->getDepends() as $from => $row) {
@@ -212,5 +212,16 @@ class Mage_Widget_Block_Adminhtml_Widget_Options extends Mage_Adminhtml_Block_Wi
         }
 
         return $field;
+    }
+
+    /**
+     * Checks whether $fieldType is a class name of custom renderer, and not just a type of input element
+     *
+     * @param string $fieldType
+     * @return bool
+     */
+    protected function _isClassName($fieldType)
+    {
+        return preg_match('/[A-Z]/', $fieldType) > 0;
     }
 }

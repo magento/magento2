@@ -39,7 +39,9 @@
         <a href="<?php echo $this->escapeUrl($_item->getUrl()) ?>"><?php echo $_item->getLabel() ?></a>
         <?php else: echo $_item->getLabel() ?>
         <?php endif; ?>
+        <?php if ($this->shouldDisplayProductCount()): ?>
         (<?php echo $_item->getCount() ?>)
+        <?php endif; ?>
     </li>
 <?php endforeach ?>
 </ol>

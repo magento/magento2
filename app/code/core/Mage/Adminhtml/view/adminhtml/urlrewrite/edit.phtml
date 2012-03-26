@@ -37,7 +37,7 @@
 
 <?php echo $this->getChildHtml() ?>
 
-<?php if ($this->getChild('form')): ?>
+<?php if ($this->getChildBlock('form')): ?>
 <script type="text/javascript">
     var editForm = new varienForm('edit_form', '<?php echo $this->getValidationUrl() ?>');
 </script>

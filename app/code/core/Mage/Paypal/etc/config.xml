@@ -251,6 +251,7 @@
                 <title>Payment by cards or by PayPal account</title>
                 <payment_action>Authorization</payment_action>
                 <group>paypal</group>
+                <display_ec>0</display_ec>
             </hosted_pro>
         </payment>
     </default>

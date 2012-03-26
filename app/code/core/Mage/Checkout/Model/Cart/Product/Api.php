@@ -188,7 +188,8 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
 
             try {
                 /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem, $this->_getProductRequest($productItem));
+                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
+                    $this->_getProductRequest($productItem));
                 if (is_null($quoteItem->getId())) {
                     $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products is not belong any of quote item");
                     continue;
@@ -233,12 +234,13 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             /** @var $item Mage_Sales_Model_Quote_Item */
             $product = $item->getProduct();
             $productsResult[] = array( // Basic product data
-                'product_id' => $product->getId(),
-                'sku'        => $product->getSku(),
-                'set'        => $product->getAttributeSetId(),
-                'type'       => $product->getTypeId(),
-                'categories' => $product->getCategoryIds(),
-                'websites'   => $product->getWebsiteIds()
+                'product_id'   => $product->getId(),
+                'sku'          => $product->getSku(),
+                'name'         => $product->getName(),
+                'set'          => $product->getAttributeSetId(),
+                'type'         => $product->getTypeId(),
+                'category_ids' => $product->getCategoryIds(),
+                'website_ids'  => $product->getWebsiteIds()
             );
         }
 
@@ -295,7 +297,8 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
 
             try {
                 /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem, $this->_getProductRequest($productItem));
+                $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
+                    $this->_getProductRequest($productItem));
                 if($quoteItem->getId()){
                     $customerQuote->addItem($quoteItem);
                     $quote->removeItem($quoteItem->getId());

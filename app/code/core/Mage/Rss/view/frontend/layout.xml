@@ -36,7 +36,7 @@
         <block type="Mage_Rss_Block_List" name="head_rss" ifconfig="rss/config/active" />
     </default>
 
-    <rss_index_index translate="label">
+    <rss_index_index translate="label" type="page" parent="default">
         <label>RSS Feeds List</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-right.phtml</template></action>
@@ -46,58 +46,55 @@
         </reference>
     </rss_index_index>
 
-    <rss_index_nofeed>
-        <block type="Mage_Core_Block_Template" name="root" output="toHtml" template="Mage_Rss::nofeed.phtml"/>
+    <rss_index_nofeed translate="label" type="page" parent="rss_index_index">
+        <label>RSS No Feed</label>
+        <block type="Mage_Core_Block_Template" name="root" output="1" template="Mage_Rss::nofeed.phtml"/>
     </rss_index_nofeed>
 
-    <rss_index_wishlist>
-        <block type="Mage_Rss_Block_Wishlist" name="rss.wishlist" output="toHtml">
+    <rss_index_wishlist translate="label" type="page" parent="rss_index_index">
+        <label>RSS Wishlist</label>
+        <block type="Mage_Rss_Block_Wishlist" name="rss.wishlist" output="1">
             <action method="addPriceBlockType"><type>msrp_rss</type><block>Mage_Catalog_Block_Product_Price</block><template>Mage_Wishlist::render/item/price_msrp_rss.phtml</template></action>
         </block>
     </rss_index_wishlist>
 <!--
 Catalog layout
 -->
-    <rss_catalog_new>
-        <block type="Mage_Rss_Block_Catalog_New" output="toHtml" name="rss.catalog.new">
+    <rss_catalog_new translate="label" type="page" parent="rss_index_index">
+        <label>RSS New</label>
+        <block type="Mage_Rss_Block_Catalog_New" output="1" name="rss.catalog.new">
             <action method="addPriceBlockType"><type>msrp_rss</type><block>Mage_Catalog_Block_Product_Price</block><template>product/price_msrp_rss.phtml</template></action>
         </block>
     </rss_catalog_new>
 
-    <rss_catalog_special>
-        <block type="Mage_Rss_Block_Catalog_Special" output="toHtml" name="rss.catalog.special" />
+    <rss_catalog_special translate="label" type="page" parent="rss_catalog_new">
+        <label>RSS Special</label>
+        <block type="Mage_Rss_Block_Catalog_Special" output="1" name="rss.catalog.special" />
     </rss_catalog_special>
 
-    <rss_catalog_salesrule>
-        <block type="Mage_Rss_Block_Catalog_Salesrule" output="toHtml" name="rss.catalog.salesrule" />
+    <rss_catalog_salesrule translate="label" type="page" parent="rss_catalog_new">
+        <label>RSS Sales Rule</label>
+        <block type="Mage_Rss_Block_Catalog_Salesrule" output="1" name="rss.catalog.salesrule" />
     </rss_catalog_salesrule>
 
-    <rss_catalog_tag>
-        <block type="Mage_Rss_Block_Catalog_Tag" output="toHtml" name="rss.catalog.tag">
+    <rss_catalog_tag translate="label" type="page" parent="rss_catalog_new">
+        <label>RSS Tag</label>
+        <block type="Mage_Rss_Block_Catalog_Tag" output="1" name="rss.catalog.tag">
             <action method="addPriceBlockType"><type>msrp_rss</type><block>Mage_Catalog_Block_Product_Price</block><template>product/price_msrp_rss.phtml</template></action>
         </block>
     </rss_catalog_tag>
 
-    <rss_catalog_notifystock>
-        <block type="Mage_Rss_Block_Catalog_NotifyStock" output="toHtml" name="rss.catalog.notifystock" />
-    </rss_catalog_notifystock>
-
-    <rss_catalog_review>
-        <block type="Mage_Rss_Block_Catalog_Review" output="toHtml" name="rss.catalog.review" />
-    </rss_catalog_review>
-
-    <rss_catalog_category>
-        <block type="Mage_Rss_Block_Catalog_Category" output="toHtml" name="rss.catalog.category">
+    <rss_catalog_category translate="label" type="page" parent="rss_catalog_new">
+        <label>RSS Catalog Category</label>
+        <block type="Mage_Rss_Block_Catalog_Category" output="1" name="rss.catalog.category">
             <action method="addPriceBlockType"><type>msrp_rss</type><block>Mage_Catalog_Block_Product_Price</block><template>product/price_msrp_rss.phtml</template></action>
         </block>
     </rss_catalog_category>
 <!--
 Order layout
 -->
-    <rss_order_new>
-        <block type="Mage_Rss_Block_Order_New" output="toHtml" name="rss.order.new"/>
-    </rss_order_new>
-    <rss_order_status>
-        <block type="Mage_Rss_Block_Order_Status" output="toHtml" name="rss.order.status"/>
+    <rss_order_status translate="label" type="page" parent="rss_index_index">
+        <label>RSS Order Status</label>
+        <block type="Mage_Rss_Block_Order_Status" output="1" name="rss.order.status"/>
     </rss_order_status>
 </layout>

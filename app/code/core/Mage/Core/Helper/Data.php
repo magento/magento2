@@ -56,6 +56,11 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
+     * Const for correct dividing decimal values
+     */
+    const DIVIDE_EPSILON = 10000;
+
+    /**
      * @var Mage_Core_Model_Encryption
      */
     protected $_encryptor = null;
@@ -761,5 +766,24 @@ XML;
     {
         $euCountries = explode(',', Mage::getStoreConfig(self::XML_PATH_EU_COUNTRIES_LIST, $storeId));
         return in_array($countryCode, $euCountries);
+    }
+
+    /**
+     * Returns the floating point remainder (modulo) of the division of the arguments
+     *
+     * @param float|int $dividend
+     * @param float|int $divisor
+     * @return float|int
+     */
+    public function getExactDivision($dividend, $divisor)
+    {
+        $epsilon = $divisor / self::DIVIDE_EPSILON;
+
+        $remainder = fmod($dividend, $divisor);
+        if (abs($remainder - $divisor) < $epsilon || abs($remainder) < $epsilon) {
+            $remainder = 0;
+        }
+
+        return $remainder;
     }
 }

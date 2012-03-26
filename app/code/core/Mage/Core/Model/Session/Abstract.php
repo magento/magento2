@@ -32,11 +32,16 @@
  * @package    Mage_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_Varien
+class Mage_Core_Model_Session_Abstract extends Varien_Object
 {
+    const VALIDATOR_KEY                         = '_session_validator_data';
+    const VALIDATOR_HTTP_USER_AGENT_KEY         = 'http_user_agent';
+    const VALIDATOR_HTTP_X_FORVARDED_FOR_KEY    = 'http_x_forwarded_for';
+    const VALIDATOR_HTTP_VIA_KEY                = 'http_via';
+    const VALIDATOR_REMOTE_ADDR_KEY             = 'remote_addr';
+
     const XML_PATH_COOKIE_DOMAIN        = 'web/cookie/cookie_domain';
     const XML_PATH_COOKIE_PATH          = 'web/cookie/cookie_path';
-    const XML_PATH_COOKIE_LIFETIME      = 'web/cookie/cookie_lifetime';
     const XML_NODE_SESSION_SAVE         = 'global/session_save';
     const XML_NODE_SESSION_SAVE_PATH    = 'global/session_save_path';
 
@@ -49,6 +54,7 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     const XML_NODE_USET_AGENT_SKIP      = 'global/session/validation/http_user_agent_skip';
     const XML_PATH_LOG_EXCEPTION_FILE   = 'dev/log/exception_file';
 
+    const HOST_KEY                      = '_session_hosts';
     const SESSION_ID_QUERY_PARAM        = 'SID';
 
     /**
@@ -73,7 +79,101 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     protected $_skipSessionIdFlag   = false;
 
     /**
-     * Init session
+     * Configure session handler and start session
+     *
+     * @param string $sessionName
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    public function start($sessionName=null)
+    {
+        if (isset($_SESSION)) {
+            return $this;
+        }
+
+        switch($this->getSessionSaveMethod()) {
+            case 'db':
+                ini_set('session.save_handler', 'user');
+                $sessionResource = Mage::getResourceSingleton('Mage_Core_Model_Resource_Session');
+                /* @var $sessionResource Mage_Core_Model_Resource_Session */
+                $sessionResource->setSaveHandler();
+                break;
+            case 'memcache':
+                ini_set('session.save_handler', 'memcache');
+                session_save_path($this->getSessionSavePath());
+                break;
+            case 'memcached':
+                ini_set('session.save_handler', 'memcached');
+                session_save_path($this->getSessionSavePath());
+                break;
+            case 'eaccelerator':
+                ini_set('session.save_handler', 'eaccelerator');
+                break;
+            default:
+                session_module_name($this->getSessionSaveMethod());
+                if (is_writable($this->getSessionSavePath())) {
+                    session_save_path($this->getSessionSavePath());
+                }
+                break;
+        }
+        $cookie = $this->getCookie();
+
+        // session cookie params
+        $cookieParams = array(
+            'lifetime' => 0, // 0 is browser session lifetime
+            'path'     => $cookie->getPath(),
+            'domain'   => $cookie->getConfigDomain(),
+            'secure'   => $cookie->isSecure(),
+            'httponly' => $cookie->getHttponly()
+        );
+
+        if (!$cookieParams['httponly']) {
+            unset($cookieParams['httponly']);
+            if (!$cookieParams['secure']) {
+                unset($cookieParams['secure']);
+                if (!$cookieParams['domain']) {
+                    unset($cookieParams['domain']);
+                }
+            }
+        }
+
+        if (isset($cookieParams['domain'])) {
+            $cookieParams['domain'] = $cookie->getDomain();
+        }
+
+        call_user_func_array('session_set_cookie_params', $cookieParams);
+
+        if (!empty($sessionName)) {
+            $this->setSessionName($sessionName);
+        }
+
+        // potential custom logic for session id (ex. switching between hosts)
+        $this->setSessionId();
+
+        Magento_Profiler::start('session_start');
+        $sessionCacheLimiter = Mage::getConfig()->getNode('global/session_cache_limiter');
+        if ($sessionCacheLimiter) {
+            session_cache_limiter((string)$sessionCacheLimiter);
+        }
+
+        session_start();
+
+        Magento_Profiler::stop('session_start');
+
+        return $this;
+    }
+
+    /**
+     * Retrieve cookie object
+     *
+     * @return Mage_Core_Model_Cookie
+     */
+    public function getCookie()
+    {
+        return Mage::getSingleton('Mage_Core_Model_Cookie');
+    }
+
+    /**
+     * Init session with namespace
      *
      * @param string $namespace
      * @param string $sessionName
@@ -81,9 +181,181 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
      */
     public function init($namespace, $sessionName=null)
     {
-        parent::init($namespace, $sessionName);
-        $this->addHost(true);
+        if (!isset($_SESSION)) {
+            $this->start($sessionName);
+        }
+        if (!isset($_SESSION[$namespace])) {
+            $_SESSION[$namespace] = array();
+        }
+
+        $this->_data = &$_SESSION[$namespace];
+
+        $this->validate();
+        $this->_addHost();
         return $this;
+    }
+
+    /**
+     * Additional get data with clear mode
+     *
+     * @param string $key
+     * @param bool $clear
+     * @return mixed
+     */
+    public function getData($key='', $clear = false)
+    {
+        $data = parent::getData($key);
+        if ($clear && isset($this->_data[$key])) {
+            unset($this->_data[$key]);
+        }
+        return $data;
+    }
+
+    /**
+     * Retrieve session Id
+     *
+     * @return string
+     */
+    public function getSessionId()
+    {
+        return session_id();
+    }
+
+    /**
+     * Retrieve session name
+     *
+     * @return string
+     */
+    public function getSessionName()
+    {
+        return session_name();
+    }
+
+    /**
+     * Set session name
+     *
+     * @param string $name
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    public function setSessionName($name)
+    {
+        session_name($name);
+        return $this;
+    }
+
+    /**
+     * Unset all data
+     *
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    public function unsetAll()
+    {
+        $this->unsetData();
+        return $this;
+    }
+
+    /**
+     * Alias for unsetAll
+     *
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    public function clear()
+    {
+        return $this->unsetAll();
+    }
+
+    /**
+     * Validate session
+     *
+     * @param string $namespace
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    public function validate()
+    {
+        if (!isset($_SESSION[self::VALIDATOR_KEY])) {
+            $_SESSION[self::VALIDATOR_KEY] = $this->_getSessionEnvironment();
+        } else {
+            if (!$this->_validate()) {
+                $this->getCookie()->delete(session_name());
+                // throw core session exception
+                throw new Mage_Core_Model_Session_Exception('');
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate data
+     *
+     * @return bool
+     */
+    protected function _validate()
+    {
+        $sessionData = $_SESSION[self::VALIDATOR_KEY];
+        $validatorData = $this->_getSessionEnvironment();
+
+        if (Mage::getStoreConfig(self::XML_PATH_USE_REMOTE_ADDR)
+                && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]) {
+            return false;
+        }
+        if (Mage::getStoreConfig(self::XML_PATH_USE_HTTP_VIA)
+                && $sessionData[self::VALIDATOR_HTTP_VIA_KEY] != $validatorData[self::VALIDATOR_HTTP_VIA_KEY]) {
+            return false;
+        }
+
+        $sessionValidateHttpXForwardedForKey = $sessionData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY];
+        $validatorValidateHttpXForwardedForKey = $validatorData[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY];
+        if (Mage::getStoreConfig(self::XML_PATH_USE_X_FORWARDED)
+            && $sessionValidateHttpXForwardedForKey != $validatorValidateHttpXForwardedForKey ) {
+            return false;
+        }
+        if (Mage::getStoreConfig(self::XML_PATH_USE_USER_AGENT)
+            && $sessionData[self::VALIDATOR_HTTP_USER_AGENT_KEY] != $validatorData[self::VALIDATOR_HTTP_USER_AGENT_KEY]
+        ) {
+            $userAgentValidated = $this->getValidateHttpUserAgentSkip();
+            foreach ($userAgentValidated as $agent) {
+                if (preg_match('/' . $agent . '/iu', $validatorData[self::VALIDATOR_HTTP_USER_AGENT_KEY])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Prepare session environment data for validation
+     *
+     * @return array
+     */
+    protected function _getSessionEnvironment()
+    {
+        $parts = array(
+            self::VALIDATOR_REMOTE_ADDR_KEY             => '',
+            self::VALIDATOR_HTTP_VIA_KEY                => '',
+            self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY    => '',
+            self::VALIDATOR_HTTP_USER_AGENT_KEY         => ''
+        );
+
+        // collect ip data
+        if (Mage::helper('Mage_Core_Helper_Http')->getRemoteAddr()) {
+            $parts[self::VALIDATOR_REMOTE_ADDR_KEY] = Mage::helper('Mage_Core_Helper_Http')->getRemoteAddr();
+        }
+        if (isset($_ENV['HTTP_VIA'])) {
+            $parts[self::VALIDATOR_HTTP_VIA_KEY] = (string)$_ENV['HTTP_VIA'];
+        }
+        if (isset($_ENV['HTTP_X_FORWARDED_FOR'])) {
+            $parts[self::VALIDATOR_HTTP_X_FORVARDED_FOR_KEY] = (string)$_ENV['HTTP_X_FORWARDED_FOR'];
+        }
+
+        // collect user agent data
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $parts[self::VALIDATOR_HTTP_USER_AGENT_KEY] = (string)$_SERVER['HTTP_USER_AGENT'];
+        }
+
+        return $parts;
     }
 
     /**
@@ -114,73 +386,6 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     public function getCookieLifetime()
     {
         return $this->getCookie()->getLifetime();
-    }
-
-    /**
-     * Use REMOTE_ADDR in validator key
-     *
-     * @return bool
-     */
-    public function useValidateRemoteAddr()
-    {
-        $use = Mage::getStoreConfig(self::XML_PATH_USE_REMOTE_ADDR);
-        if (is_null($use)) {
-            return parent::useValidateRemoteAddr();
-        }
-        return (bool)$use;
-    }
-
-    /**
-     * Use HTTP_VIA in validator key
-     *
-     * @return bool
-     */
-    public function useValidateHttpVia()
-    {
-        $use = Mage::getStoreConfig(self::XML_PATH_USE_HTTP_VIA);
-        if (is_null($use)) {
-            return parent::useValidateHttpVia();
-        }
-        return (bool)$use;
-    }
-
-    /**
-     * Use HTTP_X_FORWARDED_FOR in validator key
-     *
-     * @return bool
-     */
-    public function useValidateHttpXForwardedFor()
-    {
-        $use = Mage::getStoreConfig(self::XML_PATH_USE_X_FORWARDED);
-        if (is_null($use)) {
-            return parent::useValidateHttpXForwardedFor();
-        }
-        return (bool)$use;
-    }
-
-    /**
-     * Use HTTP_USER_AGENT in validator key
-     *
-     * @return bool
-     */
-    public function useValidateHttpUserAgent()
-    {
-        $use = Mage::getStoreConfig(self::XML_PATH_USE_USER_AGENT);
-        if (is_null($use)) {
-            return parent::useValidateHttpUserAgent();
-        }
-        return (bool)$use;
-    }
-
-    /**
-     * Check whether SID can be used for session initialization
-     * Admin area will always have this feature enabled
-     *
-     * @return bool
-     */
-    public function useSid()
-    {
-        return Mage::app()->getStore()->isAdmin() || Mage::getStoreConfig(self::XML_PATH_USE_FRONTEND_SID);
     }
 
     /**
@@ -278,7 +483,7 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     }
 
     /**
-     * Adding new nitice message
+     * Adding new notice message
      *
      * @param   string $message
      * @return  Mage_Core_Model_Session_Abstract
@@ -375,38 +580,31 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
      */
     public function setSessionId($id=null)
     {
-        if (is_null($id) && $this->useSid()) {
+
+        if (is_null($id)
+            && (Mage::app()->getStore()->isAdmin() || Mage::getStoreConfig(self::XML_PATH_USE_FRONTEND_SID))) {
             $_queryParam = $this->getSessionIdQueryParam();
             if (isset($_GET[$_queryParam]) && Mage::getSingleton('Mage_Core_Model_Url')->isOwnOriginUrl()) {
                 $id = $_GET[$_queryParam];
-                /**
-                 * No reason use crypt key for session
-                 */
-//                if ($tryId = Mage::helper('Mage_Core_Helper_Data')->decrypt($_GET[self::SESSION_ID_QUERY_PARAM])) {
-//                    $id = $tryId;
-//                }
             }
         }
 
-        $this->addHost(true);
-        return parent::setSessionId($id);
+        $this->_addHost();
+        if (!is_null($id) && preg_match('#^[0-9a-zA-Z,-]+$#', $id)) {
+            session_id($id);
+        }
+        return $this;
     }
 
     /**
-     * Get ecrypted session identifuer
-     * No reason use crypt key for session id encryption
-     * we can use session identifier as is
+     * Get encrypted session identifier.
+     * No reason use crypt key for session id encryption, we can use session identifier as is.
      *
      * @return string
      */
     public function getEncryptedSessionId()
     {
         if (!self::$_encryptedSessionId) {
-//            $helper = Mage::helper('Mage_Core_Helper_Data');
-//            if (!$helper) {
-//                return $this;
-//            }
-//            self::$_encryptedSessionId = $helper->encrypt($this->getSessionId());
             self::$_encryptedSessionId = $this->getSessionId();
         }
         return self::$_encryptedSessionId;
@@ -444,7 +642,7 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     }
 
     /**
-     * If the host was switched but session cookie won't recognize it - add session id to query
+     * If session cookie is not applicable due to host or path mismatch - add session id to query
      *
      * @param string $urlHost can be host or url
      * @return string {session_id_key}={session_id_encrypted}
@@ -455,7 +653,8 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
             return '';
         }
 
-        if (!$httpHost = Mage::app()->getFrontController()->getRequest()->getHttpHost()) {
+        $httpHost = Mage::app()->getFrontController()->getRequest()->getHttpHost();
+        if (!$httpHost) {
             return '';
         }
 
@@ -463,23 +662,22 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
         if (!empty($urlHostArr[2])) {
             $urlHost = $urlHostArr[2];
         }
+        $urlPath = empty($urlHostArr[3]) ? '' : $urlHostArr[3];
 
         if (!isset(self::$_urlHostCache[$urlHost])) {
             $urlHostArr = explode(':', $urlHost);
             $urlHost = $urlHostArr[0];
-
-            if ($httpHost !== $urlHost && !$this->isValidForHost($urlHost)) {
-                $sessionId = $this->getEncryptedSessionId();
-            } else {
-                $sessionId = '';
-            }
+            $sessionId = $httpHost !== $urlHost && !$this->isValidForHost($urlHost)
+                ? $this->getEncryptedSessionId() : '';
             self::$_urlHostCache[$urlHost] = $sessionId;
         }
-        return self::$_urlHostCache[$urlHost];
+
+        return Mage::app()->getStore()->isAdmin() || $this->isValidForPath($urlPath) ? self::$_urlHostCache[$urlHost]
+            : $this->getEncryptedSessionId();
     }
 
     /**
-     * Check is valid session for hostname
+     * Check if session is valid for given hostname
      *
      * @param string $host
      * @return bool
@@ -487,42 +685,65 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     public function isValidForHost($host)
     {
         $hostArr = explode(':', $host);
-        $hosts = $this->getSessionHosts();
+        $hosts = $this->_getHosts();
         return (!empty($hosts[$hostArr[0]]));
     }
 
     /**
-     * Add hostname to session
+     * Check if session is valid for given path
      *
-     * @param string $host
-     * @return Mage_Core_Model_Session_Abstract
+     * @param string $path
+     * @return bool
      */
-    public function addHost($host)
+    public function isValidForPath($path)
     {
-        if ($host === true) {
-            if (!$host = Mage::app()->getFrontController()->getRequest()->getHttpHost()) {
-                return $this;
-            }
+        $cookiePath = trim($this->getCookiePath(), '/') . '/';
+        if ($cookiePath == '/') {
+            return true;
         }
 
+        $urlPath = trim($path, '/') . '/';
+
+        return strpos($urlPath, $cookiePath) === 0;
+    }
+
+    /**
+     * Register request host name as used with session
+     *
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    protected function _addHost()
+    {
+        $host = Mage::app()->getFrontController()->getRequest()->getHttpHost();
         if (!$host) {
             return $this;
         }
 
-        $hosts = $this->getSessionHosts();
+        $hosts = $this->_getHosts();
         $hosts[$host] = true;
-        $this->setSessionHosts($hosts);
+        $_SESSION[self::HOST_KEY] = $hosts;
         return $this;
     }
 
     /**
-     * Retrieve session hostnames
+     * Get all host names where session was used
      *
      * @return array
      */
-    public function getSessionHosts()
+    protected function _getHosts()
     {
-        return $this->getData('session_hosts');
+        return isset($_SESSION[self::HOST_KEY]) ? $_SESSION[self::HOST_KEY] : array();
+    }
+
+    /**
+     * Clean all host names that were registered with session
+     *
+     * @return Mage_Core_Model_Session_Abstract
+     */
+    protected function _cleanHosts()
+    {
+        unset($_SESSION[self::HOST_KEY]);
+        return $this;
     }
 
     /**
@@ -533,9 +754,9 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
     public function getSessionSaveMethod()
     {
         if (Mage::isInstalled() && $sessionSave = Mage::getConfig()->getNode(self::XML_NODE_SESSION_SAVE)) {
-            return $sessionSave;
+            return (string) $sessionSave;
         }
-        return parent::getSessionSaveMethod();
+        return 'files';
     }
 
     /**
@@ -548,7 +769,7 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
         if (Mage::isInstalled() && $sessionSavePath = Mage::getConfig()->getNode(self::XML_NODE_SESSION_SAVE_PATH)) {
             return $sessionSavePath;
         }
-        return parent::getSessionSavePath();
+        return Mage::getBaseDir('session');
     }
 
     /**
@@ -558,10 +779,13 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
      */
     public function renewSession()
     {
-        $this->getCookie()->delete($this->getSessionName());
-        $this->regenerateSessionId();
+        if (headers_sent()) {
+            Mage::log('Can not regenerate session id because HTTP headers already sent.');
+            return $this;
+        }
+        session_regenerate_id(true);
 
-        $sessionHosts = $this->getSessionHosts();
+        $sessionHosts = $this->_getHosts();
         $currentCookieDomain = $this->getCookie()->getDomain();
         if (is_array($sessionHosts)) {
             foreach (array_keys($sessionHosts) as $host) {
@@ -574,5 +798,4 @@ class Mage_Core_Model_Session_Abstract extends Mage_Core_Model_Session_Abstract_
 
         return $this;
     }
-
 }

@@ -71,7 +71,7 @@
                     <?php endif; ?>
                     <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
                         <ul class="add-to-links">
-                            <li><a href="#" class="link-wishlist" onclick="setPLocation('<?php echo $this->getAddToWishlistUrl($_item) ?>', true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <li><a href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist" onclick="setPLocation(this.href, true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
                         </ul>
                     <?php endif; ?>
                 </td>
@@ -124,7 +124,7 @@
                     <?php endif; ?>
                     <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
                         <ul class="add-to-links">
-                            <li><a href="#" class="link-wishlist" onclick="setPLocation('<?php echo $this->getAddToWishlistUrl($_item) ?>', true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <li><a href="<?php echo $this->getAddToWishlistUrl($_item);?>" class="link-wishlist" onclick="setPLocation(this.href, true)"><?php echo $this->__('Add to Wishlist') ?></a></li>
                         </ul>
                     <?php endif; ?>
                 </td>

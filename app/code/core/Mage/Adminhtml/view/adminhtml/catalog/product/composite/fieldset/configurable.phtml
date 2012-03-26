@@ -28,7 +28,8 @@
 <?php /* @var $this Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Configurable */ ?>
 <?php $_product = $this->getProduct(); ?>
 <?php $_attributes = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getAllowAttributes()); ?>
-<?php if ($_product->isSaleable() && count($_attributes)):?>
+<?php $_skipSaleableCheck = Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck(); ?>
+<?php if (($_product->isSaleable() || $_skipSaleableCheck) && count($_attributes)):?>
 <div id="catalog_product_composite_configure_fields_configurable" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Associated Products') ?></h4>
     <div class="product-options">

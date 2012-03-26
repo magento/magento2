@@ -58,7 +58,9 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle extends Mage_Catalog_Bl
                 $product
             );
 
-            $this->_options = $optionCollection->appendSelections($selectionCollection, false, false);
+            $this->_options = $optionCollection->appendSelections($selectionCollection, false,
+                Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck()
+            );
         }
 
         return $this->_options;
@@ -87,6 +89,10 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle extends Mage_Catalog_Bl
         $currentProduct = $this->getProduct();
         /* @var $coreHelper Mage_Core_Helper_Data */
         $coreHelper   = Mage::helper('Mage_Core_Helper_Data');
+        /* @var $catalogHelper Mage_Catalog_Helper_Data */
+        $catalogHelper = Mage::helper('Mage_Catalog_Helper_Data');
+        /* @var $taxHelper Mage_Tax_Helper_Data */
+        $taxHelper = Mage::helper('Mage_Tax_Helper_Data');
         /* @var $bundlePriceModel Mage_Bundle_Model_Product_Price */
         $bundlePriceModel = Mage::getModel('Mage_Bundle_Model_Product_Price');
 
@@ -122,7 +128,7 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle extends Mage_Catalog_Bl
                 unset($tierPriceInfo); // break the reference with the last element
 
                 $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice($currentProduct, $_selection,
-                        $currentProduct->getQty(), $_selection->getQty(), false, false
+                    $currentProduct->getQty(), $_selection->getQty(), false, false
                 );
 
                 $canApplyMAP = false;

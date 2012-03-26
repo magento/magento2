@@ -40,6 +40,24 @@
                 </zend_page_cache>
             </controls>
         </external_cache>
+        <events>
+            <design_editor_session_activate>
+                <observers>
+                    <mage_pagecache>
+                        <class>Mage_PageCache_Model_Observer</class>
+                        <method>designEditorSessionActivate</method>
+                    </mage_pagecache>
+                </observers>
+            </design_editor_session_activate>
+            <design_editor_session_deactivate>
+                <observers>
+                    <mage_pagecache>
+                        <class>Mage_PageCache_Model_Observer</class>
+                        <method>designEditorSessionDeactivate</method>
+                    </mage_pagecache>
+                </observers>
+            </design_editor_session_deactivate>
+        </events>
     </global>
     <adminhtml>
         <layout>

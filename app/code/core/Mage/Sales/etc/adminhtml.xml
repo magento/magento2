@@ -101,7 +101,7 @@
                                             <review_payment translate="title"><title>Accept or Deny Payment</title></review_payment>
                                             <capture translate="title"><title>Capture</title></capture>
                                             <invoice translate="title"><title>Invoice</title></invoice>
-                                            <creditmemo translate="title"><title>Creditmemo</title></creditmemo>
+                                            <creditmemo translate="title"><title>Credit Memos</title></creditmemo>
                                             <hold translate="title"><title>Hold</title></hold>
                                             <unhold translate="title"><title>Unhold</title></unhold>
                                             <ship translate="title"><title>Ship</title></ship>

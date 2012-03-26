@@ -29,6 +29,7 @@
  * Multishipping checkout shipping template
  *
  * @see Mage_Checkout_Block_Multishipping_Shipping
+ * @var $this Mage_Checkout_Block_Multishipping_Shipping
  */
 ?>
 <div class="multiple-checkout">
@@ -60,20 +61,20 @@
                         <?php else: ?>
                         <dl class="sp-methods">
                             <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-                                <dt><?php echo $this->getCarrierName($code) ?></dt>
+                                <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
                                 <dd>
                                     <ul>
                                     <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                                         <li<?php if ($_rate->getErrorMessage()) echo ' class="error-msg"' ?>>
                                            <?php if ($_rate->getErrorMessage()): ?>
-                                                <?php echo $_rate->getCarrierTitle() ?>: <?php echo $_rate->getErrorMessage() ?>
+                                                <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $this->escapeHtml($_rate->getErrorMessage()) ?>
                                            <?php else: ?>
                                                 <?php if ($_sole) : ?>
                                                 <span class="no-display"><input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $this->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>" checked="checked"/></span>
                                                 <?php else: ?>
-                                                <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $this->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
+                                                <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
                                                 <?php endif; ?>
-                                                <label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
+                                                <label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                                                 <?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()); ?>
                                                 <?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
                                                 <?php echo $_excl; ?>

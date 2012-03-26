@@ -315,7 +315,7 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
             if ($rulesData) {
                 foreach ($rulesData as $ruleData) {
                     if ($product->getParentId()) {
-                        if ($ruleData['sub_is_enable']) {
+                        if (!empty($ruleData['sub_simple_action'])) {
                             $priceRules = Mage::helper('Mage_CatalogRule_Helper_Data')->calcPriceRule(
                                 $ruleData['sub_simple_action'],
                                 $ruleData['sub_discount_amount'],
@@ -324,16 +324,16 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
                         } else {
                             $priceRules = $price;
                         }
-                        if ($ruleData['stop_rules_processing']) {
+                        if ($ruleData['action_stop']) {
                             break;
                         }
                     } else {
                         $priceRules = Mage::helper('Mage_CatalogRule_Helper_Data')->calcPriceRule(
-                            $ruleData['simple_action'],
-                            $ruleData['discount_amount'],
-                            $priceRules ? $priceRules :$price
+                            $ruleData['action_operator'],
+                            $ruleData['action_amount'],
+                            $priceRules ? $priceRules : $price
                         );
-                        if ($ruleData['stop_rules_processing']) {
+                        if ($ruleData['action_stop']) {
                             break;
                         }
                     }

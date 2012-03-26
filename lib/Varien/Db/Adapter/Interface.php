@@ -832,6 +832,14 @@ interface Varien_Db_Adapter_Interface
     public function getSubstringSql($stringExpression, $pos, $len = null);
 
     /**
+     * Prepare standard deviation sql function
+     *
+     * @param Zend_Db_Expr|string $expressionField   quoted field name or SQL statement
+     * @return Zend_Db_Expr
+     */
+    public function getStandardDeviationSql($expressionField);
+
+    /**
      * Extract part of a date
      *
      * @see INTERVAL_* constants for $unit

@@ -70,7 +70,9 @@ class Mage_Adminhtml_System_CurrencyController extends Mage_Adminhtml_Controller
                 throw new Exception(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Invalid Import Service Specified'));
             }
             try {
-                $importModel = Mage::getModel(Mage::getConfig()->getNode('global/currency/import/services/' . $service . '/model')->asArray());
+                $importModel = Mage::getModel(
+                    Mage::getConfig()->getNode('global/currency/import/services/' . $service . '/model')->asArray()
+                );
             } catch (Exception $e) {
                 Mage::throwException(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Unable to initialize import model'));
             }
@@ -120,6 +122,6 @@ class Mage_Adminhtml_System_CurrencyController extends Mage_Adminhtml_Controller
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/currency');
+        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/currency/rates');
     }
 }

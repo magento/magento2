@@ -27,11 +27,24 @@
 
 class Mage_Shipping_Model_Rate_Result
 {
+    /**
+     * Shippin method rates
+     *
+     * @var array
+     */
     protected $_rates = array();
+
+    /**
+     * Shipping errors
+     *
+     * @var null|bool
+     */
     protected $_error = null;
 
     /**
      * Reset result
+     *
+     * @return Mage_Shipping_Model_Rate_Result
      */
     public function reset()
     {
@@ -39,11 +52,22 @@ class Mage_Shipping_Model_Rate_Result
         return $this;
     }
 
+    /**
+     * Set Error
+     *
+     * @param bool $error
+     * @return void
+     */
     public function setError($error)
     {
         $this->_error = $error;
     }
 
+    /**
+     * Get Error
+     *
+     * @return null|bool;
+     */
     public function getError()
     {
         return $this->_error;
@@ -53,6 +77,7 @@ class Mage_Shipping_Model_Rate_Result
      * Add a rate to the result
      *
      * @param Mage_Shipping_Model_Rate_Result_Abstract|Mage_Shipping_Model_Rate_Result $result
+     * @return Mage_Shipping_Model_Rate_Result
      */
     public function append($result)
     {
@@ -73,6 +98,8 @@ class Mage_Shipping_Model_Rate_Result
 
     /**
      * Return all quotes in the result
+     *
+     * @return array
      */
     public function getAllRates()
     {
@@ -81,6 +108,9 @@ class Mage_Shipping_Model_Rate_Result
 
     /**
      * Return rate by id in array
+     *
+     * @param int $id
+     * @return Mage_Shipping_Model_Rate_Result_Method|null
      */
     public function getRateById($id)
     {
@@ -90,19 +120,25 @@ class Mage_Shipping_Model_Rate_Result
     /**
      * Return quotes for specified type
      *
-     * @param string $type
+     * @param string $carrier
+     * @return array
      */
     public function getRatesByCarrier($carrier)
     {
         $result = array();
         foreach ($this->_rates as $rate) {
-            if ($rate->getCarrier()===$carrier) {
+            if ($rate->getCarrier() === $carrier) {
                 $result[] = $rate;
             }
         }
         return $result;
     }
 
+    /**
+     * Converts object to array
+     *
+     * @return array
+     */
     public function asArray()
     {
         $currencyFilter = Mage::app()->getStore()->getPriceFilter();
@@ -111,20 +147,25 @@ class Mage_Shipping_Model_Rate_Result
         foreach ($allRates as $rate) {
             $rates[$rate->getCarrier()]['title'] = $rate->getCarrierTitle();
             $rates[$rate->getCarrier()]['methods'][$rate->getMethod()] = array(
-                'title'=>$rate->getMethodTitle(),
-                'price'=>$rate->getPrice(),
-                'price_formatted'=>$currencyFilter->filter($rate->getPrice()),
+                'title' => $rate->getMethodTitle(),
+                'price' => $rate->getPrice(),
+                'price_formatted' => $currencyFilter->filter($rate->getPrice()),
             );
         }
         return $rates;
     }
 
+    /**
+     * Get cheapest rate
+     *
+     * @return null|Mage_Shipping_Model_Rate_Result_Method
+     */
     public function getCheapestRate()
     {
         $cheapest = null;
         $minPrice = 100000;
         foreach ($this->getAllRates() as $rate) {
-            if (is_numeric($rate->getPrice()) && $rate->getPrice()<$minPrice) {
+            if (is_numeric($rate->getPrice()) && $rate->getPrice() < $minPrice) {
                 $cheapest = $rate;
                 $minPrice = $rate->getPrice();
             }
@@ -133,11 +174,11 @@ class Mage_Shipping_Model_Rate_Result
     }
 
     /**
-     *  Sort rates by price from min to max
+     * Sort rates by price from min to max
      *
-     *  @return	  Mage_Shipping_Model_Rate_Result
+     * @return Mage_Shipping_Model_Rate_Result
      */
-    public function sortRatesByPrice ()
+    public function sortRatesByPrice()
     {
         if (!is_array($this->_rates) || !count($this->_rates)) {
             return $this;
@@ -155,6 +196,23 @@ class Mage_Shipping_Model_Rate_Result
 
         $this->reset();
         $this->_rates = $result;
+        return $this;
+    }
+
+    /**
+     * Set price for each rate according to count of packages
+     *
+     * @param int $packageCount
+     * @return Mage_Shipping_Model_Rate_Result
+     */
+    public function updateRatePrice($packageCount)
+    {
+        if ($packageCount > 1) {
+            foreach ($this->_rates as $rate) {
+                $rate->setPrice($rate->getPrice() * $packageCount);
+            }
+        }
+
         return $this;
     }
 }

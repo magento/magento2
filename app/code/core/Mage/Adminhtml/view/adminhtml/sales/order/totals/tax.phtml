@@ -73,9 +73,9 @@ $_fullInfo  = $this->getFullTaxInfo();
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($info['percent'])): ?>
-                    <td class="label"><?php echo $info['title']; ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
+                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?php echo $info['title']; ?><br /></td>
+                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?><br /></td>
                 <?php endif; ?>
                     <td><?php echo $this->displayAmount($amount, $baseAmount); ?></td>
             </tr>

@@ -29,11 +29,11 @@
 <layout version="0.1.0">
 
     <adminhtml_centinel_index_authenticationstart>
-        <block type="Mage_Centinel_Block_Authentication_Start" name="root" output="toHtml" template="authentication/start.phtml"/>
+        <block type="Mage_Centinel_Block_Authentication_Start" name="root" output="1" template="authentication/start.phtml"/>
     </adminhtml_centinel_index_authenticationstart>
     
     <adminhtml_centinel_index_authenticationcomplete>
-        <block type="Mage_Centinel_Block_Authentication_Complete" name="root" output="toHtml" template="authentication/complete.phtml"/>
+        <block type="Mage_Centinel_Block_Authentication_Complete" name="root" output="1" template="authentication/complete.phtml"/>
     </adminhtml_centinel_index_authenticationcomplete>
 
     <adminhtml_sales_order_create_index>

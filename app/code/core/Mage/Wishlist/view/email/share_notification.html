@@ -1,7 +1,8 @@
 <!--@subject Take a look at {{var customer.name}}'s wishlist @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
-"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"var logo_url":"Email Logo Image Url",
+"var logo_alt":"Email Logo Image Alt",
 "var message":"Wishlist Message",
 "var items":"Wishlist Items"}
 @-->
@@ -18,7 +19,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
             <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
                 <tr>
                     <td valign="top">
-                        <a href="{{store url=""}}" style="color:#1E7EC8;"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}" border="0"/></a>
+                        <a href="{{store url=""}}" style="color:#1E7EC8;"><img src="{{var logo_url}}" alt="{{var logo_alt}}" border="0"/></a>
                     </td>
                 </tr>
                 <!-- [ middle starts here] -->

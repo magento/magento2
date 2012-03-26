@@ -165,14 +165,16 @@ class Mage_ImportExport_Model_Import_Entity_Customer_Address extends Mage_Import
         /** @var $resource Mage_Customer_Model_Address */
         $resource       = Mage::getModel('Mage_Customer_Model_Address');
         $strftimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
-        $table = $resource->getResource()->getEntityTable();
+        $table          = $resource->getResource()->getEntityTable();
         $nextEntityId   = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($table);
         $customerId     = null;
         $regionColName  = self::getColNameForAttrCode('region');
         $countryColName = self::getColNameForAttrCode('country_id');
+        /** @var $regionIdAttr Mage_Customer_Model_Attribute */
         $regionIdAttr   = Mage::getSingleton('Mage_Eav_Model_Config')->getAttribute($this->getEntityTypeCode(), 'region_id');
         $regionIdTable  = $regionIdAttr->getBackend()->getTable();
         $regionIdAttrId = $regionIdAttr->getId();
+        $isAppendMode   = Mage_ImportExport_Model_Import::BEHAVIOR_APPEND == $this->_customer->getBehavior();
 
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $entityRows = array();
@@ -191,6 +193,31 @@ class Mage_ImportExport_Model_Import_Entity_Customer_Address extends Mage_Import
                 if (!$customerId || !$this->_isRowWithAddress($rowData) || !$this->validateRow($rowData, $rowNum)) {
                     continue;
                 }
+
+                /** @var $addressCollection Mage_Customer_Model_Resource_Address_Collection */
+                $addressCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Address_Collection');
+                $addressCollection->addAttributeToFilter('parent_id', $customerId);
+
+                $addressAttributes = array();
+                foreach ($this->_attributes as $attrAlias => $attrParams) {
+                    if (isset($rowData[$attrAlias]) && strlen($rowData[$attrAlias])) {
+                        if ('select' == $attrParams['type']) {
+                            $value = $attrParams['options'][strtolower($rowData[$attrAlias])];
+                        } elseif ('datetime' == $attrParams['type']) {
+                            $value = gmstrftime($strftimeFormat, strtotime($rowData[$attrAlias]));
+                        } else {
+                            $value = $rowData[$attrAlias];
+                        }
+                        $addressAttributes[$attrParams['id']] = $value;
+                        $addressCollection->addAttributeToFilter($attrParams['code'], $value);
+                    }
+                }
+
+                // skip duplicate address
+                if ($isAppendMode && $addressCollection->getSize()) {
+                    continue;
+                }
+
                 $entityId = $nextEntityId++;
 
                 // entity table data
@@ -203,15 +230,9 @@ class Mage_ImportExport_Model_Import_Entity_Customer_Address extends Mage_Import
                 );
                 // attribute values
                 foreach ($this->_attributes as $attrAlias => $attrParams) {
-                    if (isset($rowData[$attrAlias]) && strlen($rowData[$attrAlias])) {
-                        if ('select' == $attrParams['type']) {
-                            $value = $attrParams['options'][strtolower($rowData[$attrAlias])];
-                        } elseif ('datetime' == $attrParams['type']) {
-                            $value = gmstrftime($strftimeFormat, strtotime($rowData[$attrAlias]));
-                        } else {
-                            $value = $rowData[$attrAlias];
-                        }
-                        $attributes[$attrParams['table']][$entityId][$attrParams['id']] = $value;
+                    if (isset($addressAttributes[$attrParams['id']])) {
+                        $attributes[$attrParams['table']][$entityId][$attrParams['id']]
+                            = $addressAttributes[$attrParams['id']];
                     }
                 }
                 // customer default addresses
@@ -237,8 +258,8 @@ class Mage_ImportExport_Model_Import_Entity_Customer_Address extends Mage_Import
                 }
             }
             $this->_saveAddressEntity($entityRows)
-                    ->_saveAddressAttributes($attributes)
-                    ->_saveCustomerDefaults($defaults);
+                ->_saveAddressAttributes($attributes)
+                ->_saveCustomerDefaults($defaults);
         }
         return true;
     }
@@ -251,8 +272,8 @@ class Mage_ImportExport_Model_Import_Entity_Customer_Address extends Mage_Import
     protected function _initAttributes()
     {
         $addrCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Address_Attribute_Collection')
-                            ->addSystemHiddenFilter()
-                            ->addExcludeHiddenFrontendFilter();
+            ->addSystemHiddenFilter()
+            ->addExcludeHiddenFrontendFilter();
 
         foreach ($addrCollection as $attribute) {
             $this->_attributes[self::getColNameForAttrCode($attribute->getAttributeCode())] = array(

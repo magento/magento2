@@ -26,17 +26,6 @@
  */
 
 /**
- * The class is not really abstract, therefore can be tested with a dummy descendant.
- *
- * @SuppressWarnings(PHPMD.LongVariable)
- */
-class Mage_Catalog_Model_AbstractTestAbstract extends Mage_Catalog_Model_Abstract
-{
-    protected $_resourceCollectionName = 'Mage_Catalog_Model_Resource_Product_Collection';
-    protected $_resourceName = 'Mage_Catalog_Model_Resource_Product';
-}
-
-/**
  * @group module:Mage_Catalog
  */
 class Mage_Catalog_Model_AbstractTest extends PHPUnit_Framework_TestCase
@@ -46,13 +35,17 @@ class Mage_Catalog_Model_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_AbstractTestAbstract;
+        $this->_model = $this->getMockForAbstractClass('Mage_Catalog_Model_Abstract');
+
+        $resourceProperty = new ReflectionProperty(get_class($this->_model), '_resourceName');
+        $resourceProperty->setAccessible(true);
+        $resourceProperty->setValue($this->_model, 'Mage_Catalog_Model_Resource_Product');
+
+        $collectionProperty = new ReflectionProperty(get_class($this->_model), '_resourceCollectionName');
+        $collectionProperty->setAccessible(true);
+        $collectionProperty->setValue($this->_model, 'Mage_Catalog_Model_Resource_Product_Collection');
     }
 
     /**

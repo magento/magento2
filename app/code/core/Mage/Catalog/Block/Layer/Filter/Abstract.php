@@ -48,6 +48,12 @@ abstract class Mage_Catalog_Block_Layer_Filter_Abstract extends Mage_Core_Block_
     protected $_filterModelName;
 
     /**
+     * Whether to display product count for layer navigation items
+     * @var bool
+     */
+    protected $_displayProductCount = null;
+
+    /**
      * Initialize filter template
      *
      */
@@ -124,6 +130,18 @@ abstract class Mage_Catalog_Block_Layer_Filter_Abstract extends Mage_Core_Block_
     public function getItemsCount()
     {
         return $this->_filter->getItemsCount();
+    }
+
+    /**
+     * Getter for $_displayProductCount
+     * @return bool
+     */
+    public function shouldDisplayProductCount()
+    {
+        if ($this->_displayProductCount === null) {
+            $this->_displayProductCount = Mage::helper('Mage_Catalog_Helper_Data')->shouldDisplayProductCountOnLayer();
+        }
+        return $this->_displayProductCount;
     }
 
     /**

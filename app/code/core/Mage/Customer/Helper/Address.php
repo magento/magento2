@@ -170,6 +170,29 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Get string with frontend validation classes for attribute
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    public function getAttributeValidationClass($attributeCode)
+    {
+        if (isset($this->_attributes[$attributeCode])) {
+            $attribute = $this->_attributes[$attributeCode];
+        }
+
+        if (!isset($attribute)) {
+            $attribute = Mage::getSingleton('Mage_Eav_Model_Config')->getAttribute('customer_address', $attributeCode);
+        }
+
+        if (!$attribute) {
+            return '';
+        }
+
+        return $attribute->getFrontend()->getClass();
+    }
+
+    /**
      * Convert streets array to new street lines count
      * Examples of use:
      *  $origStreets = array('street1', 'street2', 'street3', 'street4')

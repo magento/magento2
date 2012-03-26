@@ -26,12 +26,6 @@
  */
 -->
 <layout version="0.1.0">
-    <customer_logged_out_psc_handle>
-        <reference name="top.links">
-            <action method="addLink" translate="label title" module="Mage_Persistent"><label helper="Mage_Persistent_Helper_Data::getPersistentName"/><url helper="Mage_Persistent_Helper_Data::getUnsetCookieUrl"/><title helper="Mage_Persistent_Helper_Data::getPersistentName"/><prepare/><urlParams/><position>9</position></action>
-        </reference>
-    </customer_logged_out_psc_handle>
-
     <customer_account_login>
         <reference name="customer_form_login">
             <action method="setTemplate"><template>Mage_Persistent::customer/form/login.phtml</template></action>

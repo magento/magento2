@@ -74,17 +74,6 @@ class Mage_CatalogInventory_Model_Resource_Indexer_Stock extends Mage_Catalog_Mo
         $productId = $data['product_id'];
         $this->reindexProducts($productId);
 
-        if (!empty($data['force_reindex_required'])) {
-            $massObject = new Varien_Object();
-            $massObject->setAttributesData(array(
-                'force_reindex_required'   => 1
-            ));
-            $massObject->setProductIds(array($productId));
-            Mage::getSingleton('Mage_Index_Model_Indexer')->logEvent(
-                $massObject, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
-            );
-        }
-
         return $this;
     }
 

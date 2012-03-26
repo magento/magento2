@@ -129,6 +129,12 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 ############################################
+## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
+
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+    RewriteRule .* - [L,R=405]
+
+############################################
 ## always send 404 on missing files in these folders
 
     RewriteCond %{REQUEST_URI} !^/(media|js)/

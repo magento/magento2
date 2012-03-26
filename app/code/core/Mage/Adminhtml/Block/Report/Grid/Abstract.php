@@ -241,6 +241,7 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
             ->isSubTotals(true);
 
         $this->_addOrderStatusFilter($subTotalsCollection, $filterData);
+        $this->_addCustomFilter($subTotalsCollection, $filterData);
 
         $this->setSubTotals($subTotalsCollection->getItems());
         return parent::getSubTotals();

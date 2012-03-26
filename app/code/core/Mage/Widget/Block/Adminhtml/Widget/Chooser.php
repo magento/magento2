@@ -182,21 +182,21 @@ class Mage_Widget_Block_Adminhtml_Widget_Chooser extends Mage_Adminhtml_Block_Te
             <div id="' . $chooserId . 'advice-container" class="hidden"></div>
             <script type="text/javascript">//<![CDATA[
                 (function() {
-                    var fun_'. $chooserId .' = function() {
+                    var instantiateChooser = function() {
                         window.' . $chooserId . ' = new WysiwygWidget.chooser(
                             "' . $chooserId . '",
                             "' . $this->getSourceUrl() . '",
                             ' . $configJson . '
                         );
-                    };
+                        if ($("' . $chooserId . 'value")) {
+                            $("' . $chooserId . 'value").advaiceContainer = "' . $chooserId . 'advice-container";
+                        }
+                    }
+
                     if (document.loaded) { //allow load over ajax
-                        $("'.$chooserId.'value").advaiceContainer = "'.$chooserId.'advice-container";
-                        fun_'. $chooserId .'.call();
+                        instantiateChooser();
                     } else {
-                        document.observe("dom:loaded", function () {
-                            $("'.$chooserId.'value").advaiceContainer = "'.$chooserId.'advice-container";
-                            fun_'. $chooserId .'.call();
-                        });
+                        document.observe("dom:loaded", instantiateChooser);
                     }
                 })();
             //]]></script>

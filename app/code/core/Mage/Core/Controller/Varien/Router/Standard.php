@@ -154,7 +154,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
             return false;
         }
 
-        //checkings after we foundout that this router should be used for current module
+        // checks after we found out that this router should be used for current module
         if (!$this->_afterModuleMatch()) {
             return false;
         }
@@ -210,7 +210,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
         }
 
         /**
-         * if we did not found any siutibul
+         * if we did not found any suitable
          */
         if (!$found) {
             if ($this->_noRouteShouldBeApplied()) {
@@ -407,13 +407,12 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
     }
 
     /**
-     * Check if request URL should be secure
-     *
-     * Function redirects user to correct URL if needed
+     * Check that request uses https protocol if it should.
+     * Function redirects user to correct URL if needed.
      *
      * @param Mage_Core_Controller_Request_Http $request
      * @param string $path
-     * @return null
+     * @return void
      */
     protected function _checkShouldBeSecure($request, $path = '')
     {
@@ -423,11 +422,14 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
 
         if ($this->_shouldBeSecure($path) && !$request->isSecure()) {
             $url = $this->_getCurrentSecureUrl($request);
+            if ($request->getRouteName() != 'adminhtml' && Mage::app()->getUseSessionInUrl()) {
+                $url = Mage::getSingleton('Mage_Core_Model_Url')->getRedirectUrl($url);
+            }
 
             Mage::app()->getFrontController()->getResponse()
                 ->setRedirect($url)
                 ->sendResponse();
-            exit();
+            exit;
         }
     }
 

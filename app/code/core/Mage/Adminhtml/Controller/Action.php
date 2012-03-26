@@ -25,15 +25,19 @@
  */
 
 /**
- * Base adminhtml controller
- *
- * @category    Mage
- * @package     Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Generic backend controller
  */
 class Mage_Adminhtml_Controller_Action extends Mage_Core_Controller_Varien_Action
 {
+    /**
+     * Name of "is URLs checked" flag
+     */
     const FLAG_IS_URLS_CHECKED = 'check_url_settings';
+
+    /**
+     * Session namespace to refer in other places
+     */
+    const SESSION_NAMESPACE = 'adminhtml';
 
     /**
      * Array of actions which can be processed without secret key validation
@@ -59,7 +63,7 @@ class Mage_Adminhtml_Controller_Action extends Mage_Core_Controller_Varien_Actio
      *
      * @var string
      */
-    protected $_sessionNamespace = 'adminhtml';
+    protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     protected function _isAllowed()
     {
@@ -107,23 +111,44 @@ class Mage_Adminhtml_Controller_Action extends Mage_Core_Controller_Varien_Actio
     }
 
     /**
+     * @param Mage_Core_Block_Abstract $block
      * @return Mage_Adminhtml_Controller_Action
      */
     protected function _addContent(Mage_Core_Block_Abstract $block)
     {
-        $this->getLayout()->getBlock('content')->append($block);
-        return $this;
+        return $this->_moveBlockToContainer($block, 'content');
     }
 
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     * @return Mage_Adminhtml_Controller_Action
+     */
     protected function _addLeft(Mage_Core_Block_Abstract $block)
     {
-        $this->getLayout()->getBlock('left')->append($block);
-        return $this;
+        return $this->_moveBlockToContainer($block, 'left');
     }
 
+    /**
+     * @param Mage_Core_Block_Abstract $block
+     * @return Mage_Adminhtml_Controller_Action
+     */
     protected function _addJs(Mage_Core_Block_Abstract $block)
     {
-        $this->getLayout()->getBlock('js')->append($block);
+        return $this->_moveBlockToContainer($block, 'js');
+    }
+
+    /**
+     * Set specified block as an anonymous child to specified container
+     *
+     * The block will be moved to the container from previous parent after all other elements
+     *
+     * @param Mage_Core_Block_Abstract $block
+     * @param string $containerName
+     * @return Mage_Adminhtml_Controller_Action
+     */
+    private function _moveBlockToContainer(Mage_Core_Block_Abstract $block, $containerName)
+    {
+        $this->getLayout()->setChild($containerName, $block->getNameInLayout(), '');
         return $this;
     }
 
@@ -134,7 +159,7 @@ class Mage_Adminhtml_Controller_Action extends Mage_Core_Controller_Varien_Actio
      */
     public function preDispatch()
     {
-        $this->getLayout()->setArea($this->_currentArea);
+        Mage::app()->setCurrentStore('admin');
         $this->_areaDesign = (string)Mage::getConfig()->getNode(
             $this->_currentArea . '/' . Mage_Core_Model_Design_Package::XML_PATH_THEME
         ) ?: 'default/default/default'; // always override frontend theme

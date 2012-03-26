@@ -615,7 +615,7 @@ abstract class Mage_Payment_Model_Method_Abstract extends Varien_Object
      *
      * TODO: payment method instance is not supposed to know about quote
      *
-     * @param Mage_Sales_Model_Quote $quote
+     * @param Mage_Sales_Model_Quote|null $quote
      *
      * @return bool
      */

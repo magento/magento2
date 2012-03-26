@@ -25,23 +25,24 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Core_Helper_AbstractTestAbstract extends Mage_Core_Helper_Abstract
-{
-}
-
 /**
  * @group module:Mage_Core
  */
 class Mage_Core_Helper_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Core_Helper_Abstract
+     * @var Mage_Core_Helper_Abstract|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_helper = null;
 
     protected function setUp()
     {
-        $this->_helper = new Mage_Core_Helper_AbstractTestAbstract;
+        $this->_helper = $this->getMock('Mage_Core_Helper_Abstract', array('_getModuleName'));
+        $this->_helper
+            ->expects($this->any())
+            ->method('_getModuleName')
+            ->will($this->returnValue('Mage_Core'))
+        ;
     }
 
     /**

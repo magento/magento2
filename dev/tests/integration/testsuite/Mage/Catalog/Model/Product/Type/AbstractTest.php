@@ -26,13 +26,6 @@
  */
 
 /**
- * The Mage_Catalog_Model_Product_Type_Abstract is a fake abstract
- */
-class Mage_Catalog_Model_Product_Type_AbstractTestAbstract extends Mage_Catalog_Model_Product_Type_Abstract
-{
-}
-
-/**
  * @group module:Mage_Catalog
  */
 class Mage_Catalog_Model_Product_Type_AbstractTest extends PHPUnit_Framework_TestCase
@@ -44,7 +37,7 @@ class Mage_Catalog_Model_Product_Type_AbstractTest extends PHPUnit_Framework_Tes
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_AbstractTestAbstract;
+        $this->_model = $this->getMockForAbstractClass('Mage_Catalog_Model_Product_Type_Abstract');
     }
 
     public function testGetRelationInfo()

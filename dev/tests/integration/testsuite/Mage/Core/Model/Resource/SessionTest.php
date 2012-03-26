@@ -40,11 +40,6 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Resource_Session();
     }
 
-    public function testGetLifeTime()
-    {
-        $this->assertGreaterThan(0, $this->_model->getLifeTime());
-    }
-
     public function testHasConnection()
     {
         $this->assertTrue($this->_model->hasConnection());
@@ -70,5 +65,13 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
 
         $this->_model->destroy($sessionId);
         $this->assertEmpty($this->_model->read($sessionId));
+    }
+
+    public function testGc()
+    {
+        $this->_model->write('test', 'test');
+        $this->assertEquals('test', $this->_model->read('test'));
+        $this->_model->gc(-1);
+        $this->assertEmpty($this->_model->read('test'));
     }
 }

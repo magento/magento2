@@ -44,7 +44,7 @@ class Mage_Sales_Block_Order_Totals extends Mage_Core_Block_Template
     protected function _beforeToHtml()
     {
         $this->_initTotals();
-        foreach ($this->getChild() as $child) {
+        foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $child) {
             if (method_exists($child, 'initTotals')) {
                 $child->initTotals();
             }

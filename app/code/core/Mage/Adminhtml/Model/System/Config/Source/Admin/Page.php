@@ -94,8 +94,9 @@ class Mage_Adminhtml_Model_System_Config_Source_Admin_Page
         $parentArr = array();
         $sortOrder = 0;
         foreach ($parent->children() as $childName=>$child) {
-
-            if ($child->depends && !$this->_checkDepends($child->depends)) {
+            if ((1 == $child->disabled)
+                || ($child->depends && !$this->_checkDepends($child->depends))
+            ) {
                 continue;
             }
 

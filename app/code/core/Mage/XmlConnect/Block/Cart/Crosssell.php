@@ -83,8 +83,8 @@ class Mage_XmlConnect_Block_Cart_Crosssell extends Mage_Checkout_Block_Cart_Cros
                 $itemXmlObj->addChild('is_salable', (int)$product->isSalable());
             }
 
-            if ($this->getChild('product_price')) {
-                $this->getChild('product_price')->setProduct($product)->setProductXmlObj($itemXmlObj)
+            if ($this->getChildBlock('product_price')) {
+                $this->getChildBlock('product_price')->setProduct($product)->setProductXmlObj($itemXmlObj)
                     ->collectProductPrices();
             }
 

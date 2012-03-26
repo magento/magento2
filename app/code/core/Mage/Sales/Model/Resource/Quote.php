@@ -181,20 +181,23 @@ class Mage_Sales_Model_Resource_Quote extends Mage_Sales_Model_Resource_Abstract
      */
     public function markQuotesRecollectOnCatalogRules()
     {
-        $readAdapter     = $this->_getReadAdapter();
-        $selectProductId = $readAdapter->select()
-            ->from($this->getTable('catalogrule_product_price'), 'product_id')
-            ->distinct();
+        $tableQuote = $this->getTable('sales_flat_quote');
+        $subSelect = $this->_getReadAdapter()
+            ->select()
+            ->from(array('t2' => $this->getTable('sales_flat_quote_item')), array('entity_id' => 'quote_id'))
+            ->from(array('t3' => $this->getTable('catalogrule_product_price')), array())
+            ->where('t2.product_id = t3.product_id')
+            ->group('quote_id');
 
-        $selectQuoteId = $readAdapter->select()
-            ->from($this->getTable('sales_flat_quote_item'), 'quote_id')
-            ->where('product_id IN(?)', $selectProductId)
-            ->distinct();
+        $select = $this->_getReadAdapter()->select()->join(
+            array('t2' => $subSelect),
+            't1.entity_id = t2.entity_id',
+            array('trigger_recollect' => new Zend_Db_Expr('1'))
+        );
 
-        $data  = array('trigger_recollect' => 1);
-        $where = array('entity_id IN(?)' => $selectQuoteId);
+        $updateQuery = $select->crossUpdateFromSelect(array('t1' => $tableQuote));
 
-        $this->_getWriteAdapter()->update($this->getTable('sales_flat_quote'), $data, $where);
+        $this->_getWriteAdapter()->query($updateQuery);
 
         return $this;
     }
@@ -239,19 +242,26 @@ class Mage_Sales_Model_Resource_Quote extends Mage_Sales_Model_Resource_Abstract
     /**
      * Mark recollect contain product(s) quotes
      *
-     * @param array|int $productIds
+     * @param array|int|Zend_Db_Expr $productIds
      * @return Mage_Sales_Model_Resource_Quote
      */
     public function markQuotesRecollect($productIds)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getTable('sales_flat_quote_item'), 'quote_id')
-            ->where('product_id IN(?)', $productIds)
-            ->distinct(true);
+        $tableQuote = $this->getTable('sales_flat_quote');
+        $tableItem = $this->getTable('sales_flat_quote_item');
+        $subSelect = $this->_getReadAdapter()
+            ->select()
+            ->from($tableItem, array('entity_id' => 'quote_id'))
+            ->where('product_id IN ( ? )', $productIds)
+            ->group('quote_id');
 
-        $data  = array('trigger_recollect' => 1);
-        $where = array('entity_id IN(?)' => $select);
-        $this->_getWriteAdapter()->update($this->getTable('sales_flat_quote'), $data, $where);
+        $select = $this->_getReadAdapter()->select()->join(
+            array('t2' => $subSelect),
+            't1.entity_id = t2.entity_id',
+            array('trigger_recollect' => new Zend_Db_Expr('1'))
+        );
+        $updateQuery = $select->crossUpdateFromSelect(array('t1' => $tableQuote));
+        $this->_getWriteAdapter()->query($updateQuery);
 
         return $this;
     }

@@ -179,7 +179,7 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
 
         $filterableAttributes = $this->_getFilterableAttributes();
         foreach ($filterableAttributes as $attribute) {
-            $filters[] = $this->getChild($attribute->getAttributeCode() . '_filter');
+            $filters[] = $this->getChildBlock($attribute->getAttributeCode() . '_filter');
         }
 
         return $filters;
@@ -192,7 +192,7 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
      */
     protected function _getCategoryFilter()
     {
-        return $this->getChild('category_filter');
+        return $this->getChildBlock('category_filter');
     }
 
     /**
@@ -228,7 +228,7 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
      */
     protected function _getPriceFilter()
     {
-        return $this->getChild('_price_filter');
+        return $this->getChildBlock('_price_filter');
     }
 
     /**
@@ -238,6 +238,6 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
      */
     public function getClearUrl()
     {
-        return $this->getChild('layer_state')->getClearUrl();
+        return $this->getChildBlock('layer_state')->getClearUrl();
     }
 }

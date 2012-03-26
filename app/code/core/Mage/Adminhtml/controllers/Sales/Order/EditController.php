@@ -35,15 +35,6 @@ require_once('CreateController.php');
 class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Order_CreateController
 {
     /**
-     * Additional initialization
-     *
-     */
-    protected function _construct()
-    {
-        $this->setUsedModuleName('Mage_Sales');
-    }
-
-    /**
      * Start edit order initialization
      */
     public function startAction()

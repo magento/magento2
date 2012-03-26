@@ -31,7 +31,8 @@
  * @package Mage_Rule
  * @author Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Rule_Model_Resource_Rule_Collection_Abstract extends Mage_Core_Model_Resource_Db_Collection_Abstract
+abstract class Mage_Rule_Model_Resource_Rule_Collection_Abstract
+    extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     /**
      * Store associated with rule entities information map
@@ -108,18 +109,18 @@ abstract class Mage_Rule_Model_Resource_Rule_Collection_Abstract extends Mage_Co
         $entityInfo = $this->_getAssociatedEntityInfo('website');
         if (!$this->getFlag('is_website_table_joined')) {
             $this->setFlag('is_website_table_joined', true);
-            $this->getSelect()->joinInner(
-                array('website' => $this->getTable($entityInfo['associations_table'])),
-                'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
-                array()
+            if ($websiteId instanceof Mage_Core_Model_Website) {
+                $websiteId = $websiteId->getId();
+            }
+
+            $subSelect = $this->getConnection()->select()
+                ->from(array('website' => $this->getTable($entityInfo['associations_table'])), '')
+                ->where('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteId);
+            $this->getSelect()->exists(
+                $subSelect,
+                'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field']
             );
         }
-
-        if ($websiteId instanceof Mage_Core_Model_Website) {
-            $websiteId = $websiteId->getId();
-        }
-        $this->getSelect()->where('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteId);
-
         return $this;
     }
 

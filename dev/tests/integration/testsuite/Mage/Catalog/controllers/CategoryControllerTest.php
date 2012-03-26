@@ -46,9 +46,8 @@ class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_Controll
                 '$categoryId' => 5,
                 '$expectedProductCount' => 1,
                 array(
-                    'CATEGORY_5',
-                    'catalog_category_default',
-                    'catalog_category_layered_nochildren',
+                    'catalog_category_view_type_default',
+                    'catalog_category_view_type_default_without_children',
                 ),
                 array(
                     'categorypath-category-1-category-1-1-category-1-1-1-html',
@@ -63,8 +62,7 @@ class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_Controll
                 '$categoryId' => 4,
                 '$expectedProductCount' => 2,
                 array(
-                    'CATEGORY_4',
-                    'catalog_category_layered',
+                    'catalog_category_view_type_layered',
                 ),
                 array(
                     'categorypath-category-1-category-1-1-html',

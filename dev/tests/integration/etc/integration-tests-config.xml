@@ -38,5 +38,8 @@
                 </observers>
             </controller_front_init_before>
         </events>
+        <rewrites>
+            <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
+        </rewrites>
     </global>
 </config>

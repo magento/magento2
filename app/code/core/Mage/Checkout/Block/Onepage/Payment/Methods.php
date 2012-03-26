@@ -81,7 +81,7 @@ class Mage_Checkout_Block_Onepage_Payment_Methods extends Mage_Payment_Block_For
      */
     public function getMethodTitle(Mage_Payment_Model_Method_Abstract $method)
     {
-        $form = $this->getChild('payment.method.' . $method->getCode());
+        $form = $this->getChildBlock('payment.method.' . $method->getCode());
         if ($form && $form->hasMethodTitle()) {
             return $form->getMethodTitle();
         }
@@ -94,7 +94,7 @@ class Mage_Checkout_Block_Onepage_Payment_Methods extends Mage_Payment_Block_For
      */
     public function getMethodLabelAfterHtml(Mage_Payment_Model_Method_Abstract $method)
     {
-        if ($form = $this->getChild('payment.method.' . $method->getCode())) {
+        if ($form = $this->getChildBlock('payment.method.' . $method->getCode())) {
             return $form->getMethodLabelAfterHtml();
         }
     }

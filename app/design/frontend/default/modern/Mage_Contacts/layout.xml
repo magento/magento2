@@ -32,7 +32,7 @@
         </reference>
     </default>
 
-    <contacts_index_index translate="label">
+    <contacts_index_index translate="label" type="page" parent="cms_page_view">
         <label>Contact Us Form</label>
         <reference name="head">
             <action method="setTitle" translate="title" module="Mage_Contacts"><title>Contact Us</title></action>

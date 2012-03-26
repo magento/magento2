@@ -207,6 +207,14 @@
                     </checkout_allow_guest>
                 </observers>
             </checkout_allow_guest>
+            <product_option_renderer_init>
+                <observers>
+                    <downloadable_observer>
+                        <class>Mage_Downloadable_Model_Observer</class>
+                        <method>initOptionRenderer</method>
+                    </downloadable_observer>
+                </observers>
+            </product_option_renderer_init>
         </events>
     </frontend>
     <admin>

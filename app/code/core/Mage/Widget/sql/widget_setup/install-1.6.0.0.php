@@ -162,7 +162,7 @@ $table = $installer->getConnection()
     ->addColumn('layout_handle', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
         ), 'Layout Handle')
     ->addColumn('block_reference', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
-        ), 'Block Reference')
+        ), 'Container')
     ->addColumn('page_for', Varien_Db_Ddl_Table::TYPE_TEXT, 25, array(
         ), 'For instance entities')
     ->addColumn('entities', Varien_Db_Ddl_Table::TYPE_TEXT, '64k', array(

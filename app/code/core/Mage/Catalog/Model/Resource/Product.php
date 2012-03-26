@@ -102,11 +102,19 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
     public function getWebsiteIdsByProductIds($productIds)
     {
         $select = $this->_getWriteAdapter()->select()
-            ->from($this->_productWebsiteTable, array('product_id', 'website_ids' =>'GROUP_CONCAT(website_id)'))
-            ->where('product_id IN (?)', $productIds)
-            ->group('product_id');
+            ->from($this->_productWebsiteTable, array('product_id', 'website_id'))
+            ->where('product_id IN (?)', $productIds);
+        $productsWebsites = array();
+        foreach ($this->_getWriteAdapter()->fetchAll($select) as $productInfo) {
+            $productId = $productInfo['product_id'];
+            if (!isset($productsWebsites[$productId])) {
+                $productsWebsites[$productId] = array();
+            }
+            $productsWebsites[$productId][] = $productInfo['website_id'];
 
-        return $this->_getWriteAdapter()->fetchAll($select);
+        }
+
+        return $productsWebsites;
     }
 
     /**

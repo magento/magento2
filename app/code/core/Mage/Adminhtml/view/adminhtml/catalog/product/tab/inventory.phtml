@@ -107,6 +107,15 @@
             </td>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
         </tr>
+        <tr>
+            <td class="label"><label for="inventory_is_decimal_divided"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Can be Divided into Multiple Boxes for Shipping') ?></label></td>
+            <td class="value"><select id="inventory_is_decimal_divided" name="<?php echo $this->getFieldSuffix() ?>[stock_data][is_decimal_divided]" class="select" <?php echo $_readonly;?>>
+                <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('No') ?></option>
+                <option value="1"<?php if($this->getFieldValue('is_decimal_divided') == 1): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
+            </select>
+            </td>
+            <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+        </tr>
         <?php endif; ?>
 
         <tr>
@@ -187,8 +196,7 @@
     {
         if ($('inventory_use_config_manage_stock').checked) {
             var manageStock = $('inventory_manage_stock_default').value;
-        }
-        else {
+        } else {
             var manageStock = $('inventory_manage_stock').value;
         }
         if (el == $('inventory_manage_stock').up(1)) {
@@ -201,21 +209,16 @@
         }
         if (manageStock == 1) {
             el.show();
-        }
-        else {
+        } else {
             el.hide();
         }
         return;
     }
-    Event.observe($('inventory_manage_stock'), 'change', changeManageStockOption);
-    Event.observe($('inventory_use_config_manage_stock'), 'change', changeManageStockOption);
-    changeManageStockOption();
 
     function applyEnableQtyIncrements() {
         if ($('inventory_use_config_enable_qty_increments').checked) {
             var enableQtyIncrements = $('inventory_enable_qty_increments_default').value;
-        }
-        else {
+        } else {
             var enableQtyIncrements = $('inventory_enable_qty_increments').value;
         }
         if (enableQtyIncrements == 1) {
@@ -224,9 +227,37 @@
             $('inventory_qty_increments').up('tr').hide();
         }
     }
-    Event.observe($('inventory_enable_qty_increments'), 'change', applyEnableQtyIncrements);
-    Event.observe($('inventory_use_config_enable_qty_increments'), 'change', applyEnableQtyIncrements);
-    applyEnableQtyIncrements();
+
+    function applyEnableDecimalDivided() {
+        $('inventory_is_decimal_divided').up('tr').hide();
+        $('inventory_qty_increments').removeClassName('validate-digits').removeClassName('validate-number');
+        $('inventory_min_sale_qty').removeClassName('validate-digits').removeClassName('validate-number');
+        if ($('inventory_is_qty_decimal').value == 1) {
+            $('inventory_is_decimal_divided').up('tr').show();
+            $('inventory_qty_increments').addClassName('validate-number');
+            $('inventory_min_sale_qty').addClassName('validate-number');
+        } else {
+            $('inventory_qty_increments').addClassName('validate-digits');
+            $('inventory_min_sale_qty').addClassName('validate-digits');
+        }
+    }
+
+    Event.observe(window, 'load', function() {
+        if ($('inventory_manage_stock') && $('inventory_use_config_manage_stock')) {
+            Event.observe($('inventory_manage_stock'), 'change', changeManageStockOption);
+            Event.observe($('inventory_use_config_manage_stock'), 'change', changeManageStockOption);
+            changeManageStockOption();
+        }
+        if ($('inventory_enable_qty_increments') && $('inventory_use_config_enable_qty_increments')) {
+            Event.observe($('inventory_enable_qty_increments'), 'change', applyEnableQtyIncrements);
+            Event.observe($('inventory_use_config_enable_qty_increments'), 'change', applyEnableQtyIncrements);
+            applyEnableQtyIncrements();
+        }
+        if ($('inventory_is_qty_decimal') && $('inventory_qty_increments') && $('inventory_min_sale_qty')) {
+            Event.observe($('inventory_is_qty_decimal'), 'change', applyEnableDecimalDivided);
+            applyEnableDecimalDivided();
+        }
+    });
     //]]>
     </script>
     </fieldset>

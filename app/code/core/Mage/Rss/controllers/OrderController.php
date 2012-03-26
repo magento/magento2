@@ -32,8 +32,20 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Rss_OrderController extends Mage_Core_Controller_Front_Action
+class Mage_Rss_OrderController extends Mage_Rss_Controller_AdminhtmlAbstract
 {
+    /**
+     * Returns map of action to acl paths, needed to check user's access to a specific action
+     *
+     * @return array
+     */
+    protected function _getAdminAclMap()
+    {
+        return array(
+            'new' => 'sales/order'
+        );
+    }
+
     public function newAction()
     {
         $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
@@ -68,19 +80,5 @@ class Mage_Rss_OrderController extends Mage_Core_Controller_Front_Action
             }
         }
         $this->_forward('nofeed', 'index', 'rss');
-    }
-
-    /**
-     * Controller predispatch method to change area for some specific action.
-     *
-     * @return Mage_Rss_OrderController
-     */
-    public function preDispatch()
-    {
-        if ($this->getRequest()->getActionName() == 'new') {
-            $this->_currentArea = 'adminhtml';
-            Mage::helper('Mage_Rss_Helper_Data')->authAdmin('sales/order');
-        }
-        return parent::preDispatch();
     }
 }

@@ -84,4 +84,14 @@ class Mage_Wishlist_Block_Customer_Sharing extends Mage_Core_Block_Template
             return $this->escapeHtml($this->_enteredData[$key]);
         }
     }
+
+    /**
+     * Retrieve back button url
+     *
+     * @return string
+     */
+    public function getBackUrl()
+    {
+        return $this->getUrl('*/*/index');
+    }
 }

@@ -46,7 +46,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_reportDir = PATH_TO_SOURCE_CODE . '/dev/tests/static/report';
+        self::$_reportDir = Utility_Files::init()->getPathToSource() . '/dev/tests/static/report';
         if (!is_dir(self::$_reportDir)) {
             mkdir(self::$_reportDir, 0777);
         }
@@ -100,7 +100,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
             $result = array_merge($result, file($list));
         }
         $map = function($value) {
-            return trim($value) ? PATH_TO_SOURCE_CODE . '/' . trim($value) : '';
+            return trim($value) ? Utility_Files::init()->getPathToSource() . '/' . trim($value) : '';
         };
         return array_filter(array_map($map, $result), 'file_exists');
     }

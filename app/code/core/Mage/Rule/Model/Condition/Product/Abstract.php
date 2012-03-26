@@ -445,6 +445,9 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
         if ('category_ids' == $attrCode) {
             return $this->validateAttribute($object->getAvailableInCategories());
         } elseif (! isset($this->_entityAttributeValues[$object->getId()])) {
+            if (!$object->getResource()) {
+                return false;
+            }
             $attr = $object->getResource()->getAttribute($attrCode);
 
             if ($attr && $attr->getBackendType() == 'datetime' && !is_int($this->getValue())) {

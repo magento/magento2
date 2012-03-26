@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-.translate-inline { /* background:black; font-weight:bold; color:red; */ outline: dotted 1px red!important;}
+[translate], .translate-inline { /* background:black; font-weight:bold; color:red; */ outline: dotted 1px red!important;}
 * html .translate-inline,
 *+html .translate-inline{ border: dotted 1px red !important;}
 .translate-inline-script, .translate-inline-title { background:yellow; color:black; font-weight:bold; }
-#translate-inline-trig { position:absolute;left:-1000px; opacity:.8; filter:alpha(opacity=80); cursor:pointer; margin-top:10px; z-index:1000;}
+#translate-inline-trig { position:absolute;left:-1000px; opacity:.8; filter:alpha(opacity=80); cursor:pointer; margin-top:10px; z-index:2000;}
 
 .magento_table_container { background:#e7efef; margin:10px; padding:10px; }
 .magento_table_container table { width:100%; }

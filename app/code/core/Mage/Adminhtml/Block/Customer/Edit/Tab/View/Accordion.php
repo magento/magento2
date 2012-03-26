@@ -70,10 +70,8 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion extends Mage_Adminht
         }
 
         // count wishlist items
-        $wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist');
-        $wishlistCount = $wishlist->loadByCustomer($customer)
-            ->setSharedStoreIds($wishlist->getSharedStoreIds(false))
-            ->getItemCollection()
+        $wishlistCount = Mage::getModel('Mage_Wishlist_Model_Wishlist')->getCollection()
+            ->addCustomerIdFilter($customer->getId())
             ->addStoreData()
             ->getSize();
         // add wishlist ajax accordion

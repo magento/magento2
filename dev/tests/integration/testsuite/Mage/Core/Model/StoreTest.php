@@ -153,9 +153,6 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPriceFilter()
     {
-        if (!Magento_Test_Bootstrap::canTestHeaders()) {
-            $this->markTestSkipped('Currency operations use cookie and require ability to send headers.');
-        }
         $this->assertInstanceOf('Mage_Directory_Model_Currency_Filter', $this->_model->getPriceFilter());
     }
 

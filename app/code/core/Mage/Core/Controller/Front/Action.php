@@ -24,15 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
- * Base front controller
- *
- * @category   Mage
- * @package    Mage_Core
+ * Generic frontend controller
  */
 class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Action
 {
+    /**
+     * Session namespace to refer in other places
+     */
+    const SESSION_NAMESPACE = 'frontend';
+
     /**
      * Currently used area
      *
@@ -45,23 +46,10 @@ class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Acti
      *
      * @var string
      */
-    protected $_sessionNamespace = 'frontend';
+    protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     /**
-     * Predispatch: should set layout area
-     *
-     * @return Mage_Core_Controller_Front_Action
-     */
-    public function preDispatch()
-    {
-        $this->getLayout()->setArea($this->_currentArea);
-
-        parent::preDispatch();
-        return $this;
-    }
-
-    /**
-     * Postdispatch: should set last visited url
+     * Remember the last visited url in the session
      *
      * @return Mage_Core_Controller_Front_Action
      */
@@ -69,7 +57,7 @@ class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Acti
     {
         parent::postDispatch();
         if (!$this->getFlag('', self::FLAG_NO_START_SESSION )) {
-            Mage::getSingleton('Mage_Core_Model_Session')->setLastUrl(Mage::getUrl('*/*/*', array('_current'=>true)));
+            Mage::getSingleton('Mage_Core_Model_Session')->setLastUrl(Mage::getUrl('*/*/*', array('_current' => true)));
         }
         return $this;
     }
@@ -88,7 +76,7 @@ class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Acti
     }
 
     /**
-     * Declare headers and content file in responce for file download
+     * Declare headers and content file in response for file download
      *
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
@@ -146,6 +134,8 @@ class Mage_Core_Controller_Front_Action extends Mage_Core_Controller_Varien_Acti
                 if (!empty($content['rm'])) {
                     $ioAdapter->rm($file);
                 }
+
+                exit(0);
             } else {
                 $this->getResponse()->setBody($content);
             }

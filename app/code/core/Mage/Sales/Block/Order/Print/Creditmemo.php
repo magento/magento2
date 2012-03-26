@@ -84,7 +84,7 @@ class Mage_Sales_Block_Order_Print_Creditmemo extends Mage_Sales_Block_Items_Abs
      */
     public function getTotalsHtml($creditmemo)
     {
-        $totals = $this->getChild('creditmemo_totals');
+        $totals = $this->getChildBlock('creditmemo_totals');
         $html = '';
         if ($totals) {
             $totals->setCreditmemo($creditmemo);

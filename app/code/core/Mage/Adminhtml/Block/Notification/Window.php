@@ -53,17 +53,17 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
     {
         parent::_construct();
 
-        $this->setHeaderText(addslashes($this->__('Incoming Message')));
-        $this->setCloseText(addslashes($this->__('close')));
-        $this->setReadDetailsText(addslashes($this->__('Read details')));
-        $this->setNoticeText(addslashes($this->__('NOTICE')));
-        $this->setMinorText(addslashes($this->__('MINOR')));
-        $this->setMajorText(addslashes($this->__('MAJOR')));
-        $this->setCriticalText(addslashes($this->__('CRITICAL')));
+        $this->setHeaderText($this->escapeHtml($this->__('Incoming Message')));
+        $this->setCloseText($this->escapeHtml($this->__('close')));
+        $this->setReadDetailsText($this->escapeHtml($this->__('Read details')));
+        $this->setNoticeText($this->escapeHtml($this->__('NOTICE')));
+        $this->setMinorText($this->escapeHtml($this->__('MINOR')));
+        $this->setMajorText($this->escapeHtml($this->__('MAJOR')));
+        $this->setCriticalText($this->escapeHtml($this->__('CRITICAL')));
 
 
-        $this->setNoticeMessageText(addslashes($this->getLastNotice()->getTitle()));
-        $this->setNoticeMessageUrl(addslashes($this->getLastNotice()->getUrl()));
+        $this->setNoticeMessageText($this->escapeHtml($this->getLastNotice()->getTitle()));
+        $this->setNoticeMessageUrl($this->escapeUrl($this->getLastNotice()->getUrl()));
 
         switch ($this->getLastNotice()->getSeverity()) {
             default:

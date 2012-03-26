@@ -496,7 +496,6 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected function _renderOrders()
     {
         if (!$this->_isOrdersRendered) {
-            $this->_select->reset(Zend_Db_Select::ORDER);
             foreach ($this->_orders as $field => $direction) {
                 $this->_select->order(new Zend_Db_Expr($field . ' ' . $direction));
              }

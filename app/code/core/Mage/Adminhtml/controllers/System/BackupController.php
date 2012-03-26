@@ -86,8 +86,8 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
             $type = $this->getRequest()->getParam('type');
 
             if ($type == Mage_Backup_Helper_Data::TYPE_SYSTEM_SNAPSHOT
-                && $this->getRequest()->getParam('exclude_media'))
-            {
+                && $this->getRequest()->getParam('exclude_media')
+            ) {
                 $type = Mage_Backup_Helper_Data::TYPE_SNAPSHOT_WITHOUT_MEDIA;
             }
 
@@ -105,8 +105,8 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
                 if (!$turnedOn) {
                     $response->setError(
-                        Mage::helper('Mage_Backup_Helper_Data')->__("Warning! System couldn't put store on the maintenance mode.") . ' '
-                        . Mage::helper('Mage_Backup_Helper_Data')->__("Please deselect the sufficient check-box, if you want to continue backup's creation")
+                        Mage::helper('Mage_Backup_Helper_Data')->__('You do not have sufficient permissions to enable Maintenance Mode during this operation.')
+                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('Please either unselect the "Put store on the maintenance mode" checkbox or update your permissions to proceed with the backup."')
                     );
                     $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("System couldn't put store on the maintenance mode"));
                     return $this->getResponse()->setBody($response->toJson());
@@ -233,8 +233,8 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
 
                 if (!$turnedOn) {
                     $response->setError(
-                        Mage::helper('Mage_Backup_Helper_Data')->__("Warning! System couldn't put store on the maintenance mode.") . ' '
-                        . Mage::helper('Mage_Backup_Helper_Data')->__("Please deselect the sufficient check-box, if you want to continue rollback processing")
+                        Mage::helper('Mage_Backup_Helper_Data')->__('You do not have sufficient permissions to enable Maintenance Mode during this operation.')
+                            . ' ' . Mage::helper('Mage_Backup_Helper_Data')->__('Please either unselect the "Put store on the maintenance mode" checkbox or update your permissions to proceed with the rollback."')
                     );
                     $backupManager->setErrorMessage(Mage::helper('Mage_Backup_Helper_Data')->__("System couldn't put store on the maintenance mode"));
                     return $this->getResponse()->setBody($response->toJson());

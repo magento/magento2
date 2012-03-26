@@ -92,7 +92,8 @@
             <googleshopping>
                 <target_country>US</target_country>
                 <account_type>HOSTED_OR_GOOGLE</account_type>
-                <!-- Availabled target countries. Each country must have
+
+                <!-- Available target countries. Each country must have
                      language code (ISO 639-1) and currency code (ISO 3166)
                      according to Google Content documentation. -->
                 <allowed_countries>
@@ -102,12 +103,25 @@
                         <currency>AUD</currency>
                         <currency_name>Australian Dollar</currency_name>
                     </AU>
+                    <BR translate="name currency_name">
+                        <name>Brazil</name>
+                        <language>pt</language>
+                        <locale>pt_BR</locale>
+                        <currency>BRL</currency>
+                        <currency_name>Brazilian Real</currency_name>
+                    </BR>
                     <CN translate="name currency_name">
                         <name>China</name>
                         <language>zh_CN</language>
                         <currency>CNY</currency>
                         <currency_name>Chinese Yuan Renminbi</currency_name>
                     </CN>
+                    <FR translate="name currency_name">
+                        <name>France</name>
+                        <language>fr</language>
+                        <currency>EUR</currency>
+                        <currency_name>Euro</currency_name>
+                    </FR>
                     <DE translate="name currency_name">
                         <name>Germany</name>
                         <language>de</language>
@@ -115,25 +129,6 @@
                         <currency>EUR</currency>
                         <currency_name>Euro</currency_name>
                     </DE>
-                    <ES translate="name currency_name">
-                        <name>Spain</name>
-                        <language>es</language>
-                        <currency>EUR</currency>
-                        <currency_name>Euro</currency_name>
-                    </ES>
-                    <FR translate="name currency_name">
-                        <name>France</name>
-                        <language>fr</language>
-                        <currency>EUR</currency>
-                        <currency_name>Euro</currency_name>
-                    </FR>
-                    <GB translate="name currency_name">
-                        <name>United Kingdom</name>
-                        <language>en</language>
-                        <locale>en_GB</locale>
-                        <currency>GBP</currency>
-                        <currency_name>British Pound Sterling</currency_name>
-                    </GB>
                     <IT translate="name currency_name">
                         <name>Italy</name>
                         <language>it</language>
@@ -152,6 +147,26 @@
                         <currency>EUR</currency>
                         <currency_name>Euro</currency_name>
                     </NL>
+                    <ES translate="name currency_name">
+                        <name>Spain</name>
+                        <language>es</language>
+                        <currency>EUR</currency>
+                        <currency_name>Euro</currency_name>
+                    </ES>
+                    <CH translate="name currency_name">
+                        <name>Switzerland</name>
+                        <language>de</language>
+                        <locale>de_CH</locale>
+                        <currency>CHF</currency>
+                        <currency_name>Swiss Franc</currency_name>
+                    </CH>
+                    <GB translate="name currency_name">
+                        <name>United Kingdom</name>
+                        <language>en</language>
+                        <locale>en_GB</locale>
+                        <currency>GBP</currency>
+                        <currency_name>British Pound Sterling</currency_name>
+                    </GB>
                     <US translate="name currency_name">
                         <name>United States</name>
                         <language>en</language>

@@ -34,6 +34,11 @@
 class Mage_Catalog_Model_Product_Option_Type_Date extends Mage_Catalog_Model_Product_Option_Type_Default
 {
     /**
+     * @var mixed
+     */
+    protected $_formattedOptionValue = null;
+
+    /**
      * Validate user input for option
      *
      * @throws Mage_Core_Exception

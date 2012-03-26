@@ -28,7 +28,8 @@
 -->
 <layout version="0.1.0">
 
-    <shipping_tracking_ajax>
+    <shipping_tracking_ajax translate="label" type="page" parent="checkout_onepage_shippingmethod">
+        <label>Shipment Tracking Ajax</label>
         <reference name="root">
             <action method="setTemplate"><template></template></action>
         </reference>
@@ -36,7 +37,8 @@
             <block type="Mage_Shipping_Block_Tracking_Ajax" name="shipping.tracking.ajax" template="tracking/ajax.phtml" />
         </reference>
     </shipping_tracking_ajax>
-    <shipping_tracking_popup translate="label">
+
+    <shipping_tracking_popup translate="label" type="page" parent="checkout_onepage_shippingmethod">
         <label>Shipment Tracking Popup</label>
         <reference name="root">
             <action method="setTemplate"><template>popup.phtml</template></action>

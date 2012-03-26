@@ -42,7 +42,7 @@
         <update handle="SHORTCUT_uk_popup" />
     </checkout_cart_index>
 
-    <paypaluk_express_review translate="label" module="Mage_PaypalUk">
+    <paypaluk_express_review translate="label" module="Mage_PaypalUk" type="page" parent="default">
         <label>PayPal Express Order Review Form</label>
         <remove name="right"/>
         <remove name="left"/>
@@ -51,7 +51,7 @@
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Paypal_Block_Express_Review" name="paypal.express.review" template="express/review.phtml">
+            <block type="Mage_Paypal_Block_Express_Review" name="paypal.express.review" template="Mage_PaypalUk::express/review.phtml">
                 <action method="setPaypalActionPrefix"><prefix>paypaluk</prefix></action>
                 <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
                     <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
@@ -68,7 +68,7 @@
     </paypaluk_express_review>
 
     <paypal_express_review_details>
-        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="toHtml" template="express/review/details.phtml">
+        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="1" template="express/review/details.phtml">
             <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
             <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
             <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
@@ -78,14 +78,11 @@
 
     <catalog_product_view>
         <reference name="product.info.addtocart">
-            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypaluk.wrapper" translate="label">
-                <label>PayPal Express Checkout (Payflow Edition) Shortcut Wrapper</label>
-                <action method="setHtmlTagName"><tag>p</tag></action>
-                <action method="setElementClass"><class>paypal-logo</class></action>
+            <container name="product.info.addtocart.paypaluk.wrapper" label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="p" htmlClass="paypal-logo">
                 <block type="Mage_PaypalUk_Block_Express_Shortcut" name="product.info.addtocart.paypaluk" template="Mage_Paypal::express/shortcut.phtml">
                     <action method="setIsInCatalogProduct"><value>1</value></action>
                 </block>
-            </block>
+            </container>
         </reference>
         <update handle="SHORTCUT_uk_popup" />
     </catalog_product_view>
@@ -99,13 +96,9 @@
         </reference>
     </default>
 
-    <catalog_category_default>
+    <catalog_category_view>
         <update handle="SHORTCUT_uk_popup" />
-    </catalog_category_default>
-
-    <catalog_category_layered>
-        <update handle="SHORTCUT_uk_popup" />
-    </catalog_category_layered>
+    </catalog_category_view>
 
     <catalog_product_compare_index>
         <update handle="SHORTCUT_uk_popup" />
@@ -141,14 +134,19 @@
         <update handle="SHORTCUT_uk_popup" />
     </checkout_onepage_failure>
 
-    <SHORTCUT_uk_popup>
+    <SHORTCUT_uk_popup translate="label">
+        <label>PaypalUk Shortcut Popup</label>
         <reference name="product.tooltip">
-            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypaluk.wrapper" translate="label">
+            <container name="product.info.addtocart.paypaluk.wrapper" label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="div">
                 <block type="Mage_PaypalUk_Block_Express_Shortcut" name="product.info.addtocart.paypaluk" template="Mage_Paypal::express/shortcut.phtml">
                     <action method="setIsInCatalogProduct"><value>1</value></action>
                     <action method="setShowOrPosition"><value>after</value></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </SHORTCUT_uk_popup>
+
+    <paypaluk_express_review_details translate="label" type="page" parent="checkout_onepage_review">
+        <label>Paypal UK Express Review Details</label>
+    </paypaluk_express_review_details>
 </layout>

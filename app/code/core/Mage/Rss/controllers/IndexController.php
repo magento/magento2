@@ -33,6 +33,23 @@
 
 class Mage_Rss_IndexController extends Mage_Core_Controller_Front_Action
 {
+    /**
+     * Current wishlist
+     *
+     * @var Mage_Wishlist_Model_Wishlist
+     */
+    protected $_wishlist;
+
+    /**
+     * Current customer
+     *
+     * @var Mage_Customer_Model_Customer
+     */
+    protected $_customer;
+
+    /**
+     * Index action
+     */
     public function indexAction()
     {
         if (Mage::getStoreConfig('rss/config/active')) {
@@ -45,27 +62,99 @@ class Mage_Rss_IndexController extends Mage_Core_Controller_Front_Action
         }
     }
 
+    /**
+     * Display feed not found message
+     */
     public function nofeedAction()
     {
         $this->getResponse()->setHeader('HTTP/1.1','404 Not Found');
         $this->getResponse()->setHeader('Status','404 File not found');
         $this->loadLayout(false);
-           $this->renderLayout();
+        $this->renderLayout();
     }
 
+    /**
+     * Wishlist rss feed action
+     * Show all public wishlists and private wishlists that belong to current user
+     *
+     * @return mixed
+     */
     public function wishlistAction()
     {
-        if ( Mage::getSingleton('Mage_Customer_Model_Session')->authenticate($this) ) {
-            if (Mage::getStoreConfig('rss/wishlist/active')) {
-                $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
-                $this->loadLayout(false);
-                $this->renderLayout();
+        if (!Mage::getStoreConfig('rss/wishlist/active')) {
+            $this->getResponse()->setHeader('HTTP/1.1','404 Not Found');
+            $this->getResponse()->setHeader('Status','404 File not found');
+            $this->_forward('nofeed','index','rss');
+            return;
+        }
+
+        $wishlist = $this->_getWishlist();
+        if (!$wishlist) {
+            $this->_forward('nofeed','index','rss');
+            return;
+        }
+
+        if ($wishlist->getVisibility()) {
+            $this->_showWishlistRss();
+            return ;
+        } else if (Mage::getSingleton('Mage_Customer_Model_Session')->authenticate($this)
+            && $wishlist->getCustomerId() == $this->_getCustomer()->getId()
+        ) {
+            $this->_showWishlistRss();
+        } else {
+            $this->_forward('nofeed','index','rss');
+        }
+    }
+
+    /**
+     * Show wishlist rss
+     */
+    protected function _showWishlistRss()
+    {
+        $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
+        $this->loadLayout(false);
+        $this->renderLayout();
+    }
+
+    /**
+     * Retrieve Wishlist model
+     *
+     * @return Mage_Wishlist_Model_Wishlist
+     */
+    protected function _getWishlist()
+    {
+        if (is_null($this->_wishlist)) {
+            $this->_wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist');
+            $wishlistId = $this->getRequest()->getParam('wishlist_id');
+            if ($wishlistId) {
+                $this->_wishlist->load($wishlistId);
             } else {
-                $this->getResponse()->setHeader('HTTP/1.1','404 Not Found');
-                $this->getResponse()->setHeader('Status','404 File not found');
-                $this->_forward('nofeed','index','rss');
-                return;
+                if($this->_getCustomer()->getId()) {
+                    $this->_wishlist->loadByCustomer($this->_getCustomer());
+                }
             }
         }
+        return $this->_wishlist;
+    }
+
+    /**
+     * Retrieve Customer instance
+     *
+     * @return Mage_Customer_Model_Customer
+     */
+    protected function _getCustomer()
+    {
+        if (is_null($this->_customer)) {
+            $this->_customer = Mage::getModel('Mage_Customer_Model_Customer');
+
+            $params = Mage::helper('Mage_Core_Helper_Data')->urlDecode($this->getRequest()->getParam('data'));
+            $data   = explode(',', $params);
+            $customerId    = abs(intval($data[0]));
+            if ($customerId && ($customerId == Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerId()) ) {
+                $this->_customer->load($customerId);
+            }
+        }
+
+        return $this->_customer;
     }
 }

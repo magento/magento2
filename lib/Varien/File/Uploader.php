@@ -147,7 +147,7 @@ class Varien_File_Uploader
     function __construct($fileId)
     {
         $this->_setUploadFileId($fileId);
-        if( !file_exists($this->_file['tmp_name']) ) {
+        if(!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
             throw new Exception('File was not uploaded.', $code);
         } else {
@@ -245,24 +245,30 @@ class Varien_File_Uploader
      */
     protected function _validateFile()
     {
-        if( $this->_fileExists === false ) {
+        if ($this->_fileExists === false) {
             return;
         }
 
-        $filePath = $this->_file['tmp_name'];
-        $fileName = $this->_file['name'];
-
         //is file extension allowed
-        $fileExtension = substr($fileName, strrpos($fileName, '.')+1);
-        if (!$this->checkAllowedExtension($fileExtension)) {
+        if (!$this->checkAllowedExtension($this->getFileExtension())) {
             throw new Exception('Disallowed file type.');
         }
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
             if (is_object($params['object']) && method_exists($params['object'], $params['method'])) {
-                $params['object']->$params['method']($filePath);
+                $params['object']->$params['method']($this->_file['tmp_name']);
             }
         }
+    }
+
+    /**
+     * Returns extension of the uploaded file
+     *
+     * @return string
+     */
+    public function getFileExtension()
+    {
+        return $this->_fileExists ? pathinfo($this->_file['name'], PATHINFO_EXTENSION) : '';
     }
 
     /**

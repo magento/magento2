@@ -44,11 +44,16 @@
         </reference>
     </print>
 
-    <catalog_category_layered_nochildren translate="label">
-        <label>Catalog Category (Without Subcategories)</label>
+    <catalog_category_view_type_layered_without_children>
         <remove name="right.reports.product.viewed" />
         <reference name="right">
             <block type="Mage_Reports_Block_Product_Viewed" before="right.permanent.callout" name="left.reports.product.viewed" template="product_viewed.phtml" />
         </reference>
-    </catalog_category_layered_nochildren>
+    </catalog_category_view_type_layered_without_children>
+    <catalog_category_view_type_default_without_children>
+        <remove name="right.reports.product.viewed" />
+        <reference name="right">
+            <block type="Mage_Reports_Block_Product_Viewed" before="right.permanent.callout" name="left.reports.product.viewed" template="product_viewed.phtml" />
+        </reference>
+    </catalog_category_view_type_default_without_children>
 </layout>

@@ -793,6 +793,16 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
     }
 
     /**
+     * Force apply discount for parent item
+     *
+     * @return bool
+     */
+    public function getForceApplyDiscountToParentItem()
+    {
+        return false;
+    }
+
+    /**
      * Prepare Quote Item Quantity
      *
      * @param mixed $qty

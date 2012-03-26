@@ -89,7 +89,7 @@
     </adminhtml_cms_wysiwyg_images_index>
 
     <adminhtml_cms_wysiwyg_images_contents>
-        <block name="wysiwyg_images.files" type="Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content_Files" template="cms/browser/content/files.phtml" output="toHtml" />
+        <block name="wysiwyg_images.files" type="Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content_Files" template="cms/browser/content/files.phtml" output="1" />
     </adminhtml_cms_wysiwyg_images_contents>
 
 </layout>

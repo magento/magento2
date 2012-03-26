@@ -110,6 +110,17 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Account extends Mage_Adminhtml_Bloc
                 . '</script>'
             );
         }
+        $form->getElement('website_id')->setAfterElementHtml(
+            Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
+        );
+
+//        if (Mage::app()->isSingleStoreMode()) {
+//            $fieldset->removeField('website_id');
+//            $fieldset->addField('website_id', 'hidden', array(
+//                'name'      => 'website_id'
+//            ));
+//            $customer->setWebsiteId(Mage::app()->getStore(true)->getWebsiteId());
+//        }
 
         $customerStoreId = null;
         if ($customer->getId()) {

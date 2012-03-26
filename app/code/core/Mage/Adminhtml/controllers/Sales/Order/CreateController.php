@@ -40,6 +40,9 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
     protected function _construct()
     {
         $this->setUsedModuleName('Mage_Sales');
+
+        // During order creation in the backend admin has ability to add any products to order
+        Mage::helper('Mage_Catalog_Helper_Product')->setSkipSaleableCheck(true);
     }
 
     /**
@@ -161,9 +164,10 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
          */
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
+            $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
             if (is_null($syncFlag)
                 && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling()
-                && is_null($this->_getOrderCreateModel()->getShippingMethod())
+                && empty($shippingMethod)
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
             } else {
@@ -285,10 +289,14 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         }
 
         $data = $this->getRequest()->getPost('order');
-        if (!empty($data['coupon']['code'])) {
-            if ($this->_getQuote()->getCouponCode() !== $data['coupon']['code']) {
+        $couponCode = '';
+        if (isset($data) && isset($data['coupon']['code'])) {
+            $couponCode = trim($data['coupon']['code']);
+        }
+        if (!empty($couponCode)) {
+            if ($this->_getQuote()->getCouponCode() !== $couponCode) {
                 $this->_getSession()->addError(
-                    $this->__('"%s" coupon code is not valid.', $this->_getHelper()->escapeHtml($data['coupon']['code'])));
+                    $this->__('"%s" coupon code is not valid.', $this->_getHelper()->escapeHtml($couponCode)));
             } else {
                 $this->_getSession()->addSuccess($this->__('The coupon code has been accepted.'));
             }
@@ -402,7 +410,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
             }
         }
         $this->loadLayoutUpdates()->generateLayoutXml()->generateLayoutBlocks();
-        $result = $this->getLayout()->getBlock('content')->toHtml();
+        $result = $this->getLayout()->renderElement('content');
         if ($request->getParam('as_js_varname')) {
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->setUpdateResult($result);
             $this->_redirect('*/*/showUpdateResult');

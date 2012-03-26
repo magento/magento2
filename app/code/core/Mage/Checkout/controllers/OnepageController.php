@@ -92,19 +92,32 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
     }
 
     /**
+     * Render HTML based on requested layout handle name
+     *
+     * @param string $handle
+     * @return string
+     */
+    protected function _getHtmlByHandle($handle)
+    {
+        $layout = $this->getLayout();
+        $layout->getUpdate()->addPageHandles(array($handle));
+        $layout->getUpdate()->load();
+        $layout->generateXml();
+        $layout->generateBlocks();
+        $output = $layout->getOutput();
+        Mage::getSingleton('Mage_Core_Model_Translate_Inline')->processResponseBody($output);
+        return $output;
+    }
+
+
+    /**
      * Get shipping method step html
      *
      * @return string
      */
     protected function _getShippingMethodsHtml()
     {
-        $layout = $this->getLayout();
-        $update = $layout->getUpdate();
-        $update->load('checkout_onepage_shippingmethod');
-        $layout->generateXml();
-        $layout->generateBlocks();
-        $output = $layout->getOutput();
-        return $output;
+        return $this->_getHtmlByHandle('checkout_onepage_shippingmethod');
     }
 
     /**
@@ -114,25 +127,12 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
      */
     protected function _getPaymentMethodsHtml()
     {
-        $layout = $this->getLayout();
-        $update = $layout->getUpdate();
-        $update->load('checkout_onepage_paymentmethod');
-        $layout->generateXml();
-        $layout->generateBlocks();
-        $output = $layout->getOutput();
-        return $output;
+        return $this->_getHtmlByHandle('checkout_onepage_paymentmethod');
     }
 
     protected function _getAdditionalHtml()
     {
-        $layout = $this->getLayout();
-        $update = $layout->getUpdate();
-        $update->load('checkout_onepage_additional');
-        $layout->generateXml();
-        $layout->generateBlocks();
-        $output = $layout->getOutput();
-        Mage::getSingleton('Mage_Core_Model_Translate_Inline')->processResponseBody($output);
-        return $output;
+        return $this->_getHtmlByHandle('checkout_onepage_additional');
     }
 
     /**
@@ -142,7 +142,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
      */
     protected function _getReviewHtml()
     {
-        return $this->getLayout()->getBlock('root')->toHtml();
+        return $this->_getHtmlByHandle('checkout_onepage_review');
     }
 
     /**
@@ -196,6 +196,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         if ($this->_expireAjax()) {
             return;
         }
+        $this->addPageLayoutHandles();
         $this->loadLayout(false);
         $this->renderLayout();
     }
@@ -205,6 +206,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         if ($this->_expireAjax()) {
             return;
         }
+        $this->addPageLayoutHandles();
         $this->loadLayout(false);
         $this->renderLayout();
     }
@@ -214,6 +216,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         if ($this->_expireAjax()) {
             return;
         }
+        $this->addPageLayoutHandles();
         $this->loadLayout(false);
         $this->renderLayout();
     }
@@ -425,7 +428,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             // get section and redirect data
             $redirectUrl = $this->getOnepage()->getQuote()->getPayment()->getCheckoutRedirectUrl();
             if (empty($result['error']) && !$redirectUrl) {
-                $this->loadLayout('checkout_onepage_review');
                 $result['goto_section'] = 'review';
                 $result['update_section'] = array(
                     'name' => 'review',

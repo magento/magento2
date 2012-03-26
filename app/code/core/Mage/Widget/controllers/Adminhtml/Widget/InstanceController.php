@@ -72,8 +72,12 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
         $widgetInstance = Mage::getModel('Mage_Widget_Model_Widget_Instance');
 
         $instanceId = $this->getRequest()->getParam('instance_id', null);
-        $type = $this->getRequest()->getParam('instance_type', null);
+        $type = $this->getRequest()->getParam('type', null);
         $packageTheme = $this->getRequest()->getParam('package_theme', null);
+        if ($packageTheme) {
+            $packageTheme = str_replace('-', '/', $packageTheme);
+        }
+
         if ($instanceId) {
             $widgetInstance->load($instanceId);
             if (!$widgetInstance->getId()) {
@@ -266,13 +270,13 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
         $layout = $this->getRequest()->getParam('layout');
         $selected = $this->getRequest()->getParam('selected', null);
         $blocksChooser = $this->getLayout()
-            ->createBlock('Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Block')
+            ->createBlock('Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container')
+            ->setValue($selected)
             ->setArea($widgetInstance->getArea())
             ->setPackage($widgetInstance->getPackage())
             ->setTheme($widgetInstance->getTheme())
             ->setLayoutHandle($layout)
-            ->setSelected($selected)
-            ->setAllowedBlocks($widgetInstance->getWidgetSupportedBlocks());
+            ->setAllowedContainers($widgetInstance->getWidgetSupportedContainers());
         $this->setBody($blocksChooser->toHtml());
     }
 
@@ -289,7 +293,7 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
         $templateChooser = $this->getLayout()
             ->createBlock('Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Template')
             ->setSelected($selected)
-            ->setWidgetTemplates($widgetInstance->getWidgetSupportedTemplatesByBlock($block));
+            ->setWidgetTemplates($widgetInstance->getWidgetSupportedTemplatesByContainer($block));
         $this->setBody($templateChooser->toHtml());
     }
 

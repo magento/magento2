@@ -52,7 +52,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
      * If product out of stock, its item will be removed after load
      *
      * @var bool
-     */
+      */
     protected $_productInStock = false;
 
     /**
@@ -173,6 +173,11 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
         foreach ($storeIds as $id) {
             $productCollection->addStoreFilter($id);
         }
+
+        if ($this->_productVisible) {
+            $productCollection->setVisibility(Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInSiteIds());
+        }
+
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
@@ -180,11 +185,6 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
             ->addOptionsToResult()
             ->addUrlRewrite();
 
-        if ($this->_productVisible) {
-            $productCollection->setVisibility(
-                Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInSiteIds()
-            );
-        }
         if ($this->_productSalable) {
             $productCollection = Mage::helper('Mage_Adminhtml_Helper_Sales')->applySalableProductTypesFilter($productCollection);
         }
@@ -198,7 +198,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
-                if ($checkInStock && !$product->isSalable()) {
+                if ($checkInStock && !$product->isInStock()) {
                     $this->removeItemByKey($item->getId());
                 } else {
                     $product->setCustomOptions(array());
@@ -226,6 +226,24 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
     public function addWishlistFilter(Mage_Wishlist_Model_Wishlist $wishlist)
     {
         $this->addFieldToFilter('wishlist_id', $wishlist->getId());
+        return $this;
+    }
+
+    /**
+     * Add filtration by customer id
+     *
+     * @param int $customerId
+     * @return Mage_Wishlist_Model_Resource_Item_Collection
+     */
+    public function addCustomerIdFilter($customerId)
+    {
+        $this->getSelect()
+            ->join(
+                array('wishlist' => $this->getTable('wishlist')),
+                'main_table.wishlist_id = wishlist.wishlist_id',
+                array()
+            )
+            ->where('wishlist.customer_id = ?', $customerId);
         return $this;
     }
 

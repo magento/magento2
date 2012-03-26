@@ -58,10 +58,35 @@ class Magento_Test_Listener_Annotation_Isolation
     protected function _isolateApp()
     {
         if ($this->_hasNonIsolatedTests) {
-            Magento_Test_Bootstrap::getInstance()->cleanupCache();
+            $this->_cleanupCache();
             Magento_Test_Bootstrap::getInstance()->initialize();
             $this->_hasNonIsolatedTests = false;
         }
+    }
+
+    /**
+     * Remove cache polluted by other tests excluding performance critical cache (configuration, ddl)
+     */
+    protected function _cleanupCache()
+    {
+        /*
+         * Cache cleanup relies on the initialized config object, which could be polluted from within a test.
+         * For instance, any test could explicitly call Mage::reset() to destroy the config object.
+         */
+        $expectedOptions = Magento_Test_Bootstrap::getInstance()->getAppOptions();
+        $actualOptions = Mage::getConfig() ? Mage::getConfig()->getOptions()->getData() : array();
+        $isConfigPolluted = array_intersect_assoc($expectedOptions, $actualOptions) !== $expectedOptions;
+        if ($isConfigPolluted) {
+            Magento_Test_Bootstrap::getInstance()->initialize();
+        }
+        Mage::app()->getCache()->clean(
+            Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+            array(Mage_Core_Model_Config::CACHE_TAG,
+                Varien_Db_Adapter_Pdo_Mysql::DDL_CACHE_TAG,
+                'DB_PDO_MSSQL_DDL', // Varien_Db_Adapter_Pdo_Mssql::DDL_CACHE_TAG
+                'DB_ORACLE_DDL', // Varien_Db_Adapter_Oracle::DDL_CACHE_TAG
+            )
+        );
     }
 
     /**

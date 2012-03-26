@@ -47,12 +47,16 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
 
         $select = $this->_collection->getSelect();
         $this->assertEmpty($select->getPart(Zend_Db_Select::ORDER));
+
+        /* Direct access to select object is available and many places are using it for sort order declaration */
+        $select->order('select_field', Varien_Data_Collection::SORT_ORDER_ASC);
         $this->_collection->addOrder('some_field', Varien_Data_Collection::SORT_ORDER_ASC);
         $this->_collection->setOrder('other_field', Varien_Data_Collection::SORT_ORDER_ASC);
         $this->_collection->addOrder('other_field', Varien_Data_Collection::SORT_ORDER_DESC);
 
         $this->_collection->load();
         $selectOrders = $select->getPart(Zend_Db_Select::ORDER);
+        $this->assertEquals(array('select_field', 'ASC'), array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));

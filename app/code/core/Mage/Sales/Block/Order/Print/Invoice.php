@@ -85,7 +85,7 @@ class Mage_Sales_Block_Order_Print_Invoice extends Mage_Sales_Block_Items_Abstra
     public function getInvoiceTotalsHtml($invoice)
     {
         $html = '';
-        $totals = $this->getChild('invoice_totals');
+        $totals = $this->getChildBlock('invoice_totals');
         if ($totals) {
             $totals->setInvoice($invoice);
             $html = $totals->toHtml();

@@ -34,10 +34,10 @@
         </reference>
     </adminhtml_import_index>
     <adminhtml_import_validate>
-        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="toHtml"/>
+        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="1"/>
     </adminhtml_import_validate>
     <adminhtml_import_start>
-        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="toHtml"/>
+        <block type="Mage_ImportExport_Block_Adminhtml_Import_Frame_Result" template="import/frame/result.phtml" name="import.frame.result" alias="import_frame_result" output="1"/>
     </adminhtml_import_start>
     <adminhtml_import_busy>
         <reference name="content">
@@ -52,8 +52,8 @@
         </reference>
     </adminhtml_export_index>
     <adminhtml_export_getfilter>
-        <block type="Mage_Core_Block_Text_List" name="root">
+        <container name="root" label="Root">
             <block type="Mage_ImportExport_Block_Adminhtml_Export_Filter" name="export.filter"/>
-        </block>
+        </container>
     </adminhtml_export_getfilter>
 </layout>

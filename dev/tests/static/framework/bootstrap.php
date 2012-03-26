@@ -24,9 +24,6 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-if (!defined('PATH_TO_SOURCE_CODE')) {
-    define('PATH_TO_SOURCE_CODE', realpath(dirname(__FILE__) . '/../../../..'));
-}
 
 $includePath = array(
     __DIR__,
@@ -39,3 +36,5 @@ spl_autoload_register(function ($class) {
     $file = str_replace('_', '/', $class) . '.php';
     require_once $file;
 });
+
+Utility_Files::init(new Utility_Files(realpath(__DIR__ . '/../../../..')));

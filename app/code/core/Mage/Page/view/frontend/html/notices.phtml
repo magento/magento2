@@ -31,14 +31,31 @@
 ?>
 <?php if ($this->displayNoscriptNotice()): ?>
     <noscript>
-        <div class="noscript">
-            <div class="noscript-inner">
-                <p><strong><?php echo $this->__('JavaScript seems to be disabled in your browser.'); ?></strong></p>
-                <p><?php echo $this->__('You must have JavaScript enabled in your browser to utilize the functionality of this website.'); ?></p>
+        <div class="global-site-notice noscript">
+            <div class="notice-inner">
+                <p>
+                    <strong><?php echo $this->__('JavaScript seems to be disabled in your browser.'); ?></strong><br />
+                    <?php echo $this->__('You must have JavaScript enabled in your browser to utilize the functionality of this website.'); ?>
+                </p>
             </div>
         </div>
     </noscript>
 <?php endif; ?>
 <?php if ($this->displayDemoNotice()): ?>
-    <p class="demo-notice"><?php echo $this->__('This is a demo store. Any orders placed through this store will not be honored or fulfilled.') ?></p>
+    <div class="global-site-notice demo-notice">
+        <div class="notice-inner"><p><?php echo $this->__('This is a demo store. Any orders placed through this store will not be honored or fulfilled.') ?></p></div>
+    </div>
+<?php endif; ?>
+<?php if ($this->displayCookieRestrictionNotice()): ?>
+    <div class="global-site-notice notice-cookie" id="notice-cookie-block" style="display: none">
+        <div class="notice-inner">
+            <p><?php echo $this->__('This website requires cookies provide all of its features.  For more information on what data is contained in the cookies, please see our <a href="%s">privacy policy page</a> To accept cookies from this site, please click accept below.', $this->getPrivacyPolicyLink()) ?></p>
+            <div class="actions"><button class="button" onclick="Mage.Cookies.set('<?php echo Mage_Page_Helper_Data::IS_USER_ALLOWED_SAVE_COOKIE; ?>', '<?php echo $this->getAcceptedSaveCookiesWebsiteIds()?>'); window.location.reload()"><span><span><?php echo $this->__('Allow');?></span></span></button></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    /* <![CDATA[ */
+    $('notice-cookie-block').show();
+    /* ]]> */
+    </script>
 <?php endif; ?>

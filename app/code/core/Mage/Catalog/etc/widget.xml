@@ -75,9 +75,9 @@
                 <type>text</type>
             </cache_lifetime>
         </parameters>
-        <supported_blocks>
+        <supported_containers>
             <left_column>
-                <block_name>left</block_name>
+                <container_name>left</container_name>
                 <template>
                     <default>list_default</default>
                     <names_only>list_names</names_only>
@@ -85,21 +85,21 @@
                 </template>
             </left_column>
             <main_content>
-                <block_name>content</block_name>
+                <container_name>content</container_name>
                 <template>
                     <grid>default</grid>
                     <list>list</list>
                 </template>
             </main_content>
             <right_column>
-                <block_name>right</block_name>
+                <container_name>right</container_name>
                 <template>
                     <default>list_default</default>
                     <names_only>list_names</names_only>
                     <images_only>list_images</images_only>
                 </template>
             </right_column>
-        </supported_blocks>
+        </supported_containers>
     </new_products>
 
     <catalog_product_link type="Mage_Catalog_Block_Product_Widget_Link" translate="name description" module="Mage_Catalog">

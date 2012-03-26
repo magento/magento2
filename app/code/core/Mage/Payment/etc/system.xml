@@ -445,6 +445,180 @@
                         </model>
                     </fields>
                 </purchaseorder>
+                <banktransfer translate="label">
+                    <label>Bank Transfer Payment</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Order_Status_New</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>50</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>51</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <instructions translate="label">
+                            <label>Instructions</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>62</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </instructions>
+                        <min_order_total translate="label">
+                            <label>Minimum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>98</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_order_total>
+                        <max_order_total translate="label">
+                            <label>Maximum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>99</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_order_total>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                    </fields>
+                </banktransfer>
+                <cashondelivery translate="label">
+                    <label>Cash On Delivery Payment</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Order_Status_New</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>50</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>51</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <instructions translate="label">
+                            <label>Instructions</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>62</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </instructions>
+                        <min_order_total translate="label">
+                            <label>Minimum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>98</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_order_total>
+                        <max_order_total translate="label">
+                            <label>Maximum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>99</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_order_total>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                    </fields>
+                </cashondelivery>
             </groups>
         </payment>
     </sections>

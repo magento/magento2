@@ -41,6 +41,13 @@
         <resources>
             <admin>
                 <children>
+                    <promo>
+                        <children>
+                            <quote translate="title" module="Mage_SalesRule">
+                                <title>Shopping Cart Price Rules</title>
+                            </quote>
+                        </children>
+                    </promo>
                     <system>
                         <children>
                             <config>

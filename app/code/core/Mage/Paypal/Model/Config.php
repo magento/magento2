@@ -107,6 +107,14 @@ class Mage_Paypal_Model_Config
     const AUTHORIZATION_AMOUNT_FULL = 2;
 
     /**
+     * Require Billing Address
+     * @var int
+     */
+    const REQUIRE_BILLING_ADDRESS_NO = 0;
+    const REQUIRE_BILLING_ADDRESS_ALL = 1;
+    const REQUIRE_BILLING_ADDRESS_VIRTUAL = 2;
+
+    /**
      * Fraud management actions
      * @var string
      */
@@ -856,6 +864,20 @@ class Mage_Paypal_Model_Config
     }
 
     /**
+     * Require Billing Address source getter
+     *
+     * @return array
+     */
+    public function getRequireBillingAddressOptions()
+    {
+        return array(
+            self::REQUIRE_BILLING_ADDRESS_ALL       => Mage::helper('Mage_Paypal_Helper_Data')->__('Yes'),
+            self::REQUIRE_BILLING_ADDRESS_NO        => Mage::helper('Mage_Paypal_Helper_Data')->__('No'),
+            self::REQUIRE_BILLING_ADDRESS_VIRTUAL   => Mage::helper('Mage_Paypal_Helper_Data')->__('For Virtual Quotes Only'),
+        );
+    }
+
+    /**
      * Mapper from PayPal-specific payment actions to Magento payment actions
      *
      * @return string|null
@@ -1189,6 +1211,7 @@ class Mage_Paypal_Model_Config
             case 'solution_type':
             case 'visible_on_cart':
             case 'visible_on_product':
+            case 'require_billing_address':
             case 'authorization_honor_period':
             case 'order_valid_period':
             case 'child_authorization_number':

@@ -57,6 +57,24 @@ class Mage_Wishlist_Model_Resource_Wishlist extends Mage_Core_Model_Resource_Db_
     }
 
     /**
+     * Prepare wishlist load select query
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param mixed $object
+     * @return Zend_Db_Select
+     */
+    protected function _getLoadSelect($field, $value, $object)
+    {
+        $select = parent::_getLoadSelect($field, $value, $object);
+        if ($field == $this->_customerIdFieldName) {
+            $select->order('wishlist_id ' . Zend_Db_Select::SQL_ASC)
+                ->limit(1);
+        }
+        return $select;
+    }
+
+    /**
      * Getter for customer ID field name
      *
      * @return string

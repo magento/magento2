@@ -105,7 +105,7 @@ Layout handle for budle products
         </reference>
     </adminhtml_customer_wishlist>
 
-    <PRODUCT_TYPE_bundle>
+    <catalog_product_view_type_bundle>
         <reference name="product.composite.fieldset">
             <block type="Mage_Bundle_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Bundle" before="product.composite.fieldset.options" name="product.composite.fieldset.bundle" template="product/composite/fieldset/options/bundle.phtml">
                 <action method="addRenderer"><type>select</type><block>Mage_Bundle_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Options_Type_Select</block></action>
@@ -114,5 +114,5 @@ Layout handle for budle products
                 <action method="addRenderer"><type>checkbox</type><block>Mage_Bundle_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Options_Type_Checkbox</block></action>
             </block>
         </reference>
-    </PRODUCT_TYPE_bundle>
+    </catalog_product_view_type_bundle>
 </layout>

@@ -102,7 +102,7 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
         $this->_initLayout()
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Variable_Edit'))
             ->_addJs($this->getLayout()->createBlock('Mage_Core_Block_Template', '', array(
-                'template' => 'system/variable/js.phtml'
+                'template' => 'Mage_Adminhtml::system/variable/js.phtml'
             )))
             ->renderLayout();
     }

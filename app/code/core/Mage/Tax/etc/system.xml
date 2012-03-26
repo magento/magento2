@@ -267,7 +267,7 @@
                     </fields>
                 </cart_display>
                 <sales_display translate="label">
-                    <label>Orders, Invoices, Creditmemos Display Settings</label>
+                    <label>Orders, Invoices, Credit Memos Display Settings</label>
                     <sort_order>60</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>

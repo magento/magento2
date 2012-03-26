@@ -37,20 +37,18 @@ class Mage_CatalogRule_Helper_Data extends Mage_Core_Helper_Abstract
      * @param  float $price
      * @return float|int
      */
-    public function calcPriceRule ($actionOperator, $ruleAmount, $price)
+    public function calcPriceRule($actionOperator, $ruleAmount, $price)
     {
         $priceRule = 0;
         switch ($actionOperator) {
             case 'to_fixed':
-                $priceRule = $ruleAmount;
+                $priceRule = min($ruleAmount, $price);
                 break;
             case 'to_percent':
                 $priceRule = $price * $ruleAmount / 100;
                 break;
             case 'by_fixed':
-                $priceRule = $price - $ruleAmount;
-                // Price can not be negative
-                $priceRule = ($priceRule < 0) ? 0 : $priceRule;
+                $priceRule = max(0, $price - $ruleAmount);
                 break;
             case 'by_percent':
                 $priceRule = $price * (1 - $ruleAmount / 100);

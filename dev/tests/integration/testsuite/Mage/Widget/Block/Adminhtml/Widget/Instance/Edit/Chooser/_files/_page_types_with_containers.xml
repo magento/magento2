@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Mage_Core
+ * @subpackage  integration_tests
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layouts>
+    <non_page_handle_with_own_containers>
+        <container name="container_one" label="Container One"/>
+    </non_page_handle_with_own_containers>
+
+    <root_page_without_containers type="page">
+        <label>Root Page without Containers</label>
+    </root_page_without_containers>
+    <root_page_without_own_containers type="page">
+        <label>Root Page without Own Containers</label>
+    </root_page_without_own_containers>
+    <root_page_with_own_containers type="page">
+        <label>Root Page with Own Containers</label>
+        <container name="container_two" label="Container Two"/>
+    </root_page_with_own_containers>
+    <root_page_with_imported_containers type="page">
+        <label>Root Page with Imported Containers</label>
+        <update handle="non_page_handle_with_own_containers"/>
+    </root_page_with_imported_containers>
+
+    <child_page_without_containers type="page" parent="root_page_without_own_containers">
+        <label>Child Page without Containers</label>
+    </child_page_without_containers>
+    <child_page_with_own_containers type="page" parent="root_page_without_own_containers">
+        <label>Child Page with Own Containers</label>
+        <container name="container_three" label="Container Three"/>
+    </child_page_with_own_containers>
+    <child_page_with_inherited_containers type="page" parent="root_page_with_own_containers">
+        <label>Child Page with Inherited Containers</label>
+    </child_page_with_inherited_containers>
+    <child_page_with_inherited_imported_containers type="page" parent="root_page_with_imported_containers">
+        <label>Child Page with Inherited Imported Containers</label>
+    </child_page_with_inherited_imported_containers>
+</layouts>

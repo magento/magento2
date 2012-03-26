@@ -242,7 +242,7 @@ class Mage_Catalog_Model_Resource_Url extends Mage_Core_Model_Resource_Db_Abstra
     public function prepareRewrites($storeId, $categoryIds = null, $productIds = null)
     {
         $rewrites   = array();
-        $adapter    = $this->_getReadAdapter();
+        $adapter    = $this->_getWriteAdapter();
         $select     = $adapter->select()
             ->from($this->getMainTable())
             ->where('store_id = :store_id')
@@ -296,11 +296,15 @@ class Mage_Catalog_Model_Resource_Url extends Mage_Core_Model_Resource_Db_Abstra
     public function saveRewrite($rewriteData, $rewrite)
     {
         $adapter = $this->_getWriteAdapter();
+        try {
+            $adapter->insertOnDuplicate($this->getMainTable(), $rewriteData);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('An error occurred while saving the URL rewrite'));
+        }
+
         if ($rewrite && $rewrite->getId()) {
             if ($rewriteData['request_path'] != $rewrite->getRequestPath()) {
-                $where = array($this->getIdFieldName() . '=?' => $rewrite->getId());
-                $adapter->update($this->getMainTable(), $rewriteData, $where);
-
                 // Update existing rewrites history and avoid chain redirects
                 $where = array('target_path = ?' => $rewrite->getRequestPath());
                 if ($rewrite->getStoreId()) {
@@ -311,13 +315,6 @@ class Mage_Catalog_Model_Resource_Url extends Mage_Core_Model_Resource_Db_Abstra
                     array('target_path' => $rewriteData['request_path']),
                     $where
                 );
-            }
-        } else {
-            try {
-                $adapter->insert($this->getMainTable(), $rewriteData);
-            } catch (Exception $e) {
-                Mage::logException($e);
-                Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('An error occurred while saving the URL rewrite'));
             }
         }
         unset($rewriteData);

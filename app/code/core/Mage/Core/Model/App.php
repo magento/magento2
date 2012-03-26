@@ -138,7 +138,7 @@ class Mage_Core_Model_App
     /**
      * Cache object
      *
-     * @var Zend_Cache_Core
+     * @var Mage_Core_Model_Cache
      */
     protected $_cache;
 

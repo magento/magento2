@@ -115,7 +115,7 @@
                             <?php if($_item->getMessage(false)): ?>
                                 <?php foreach ($_item->getMessage(false) as $message): ?>
                                 <div class="<?php if($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
-                                    <div style="font-size:95%"><?php echo $message; ?></div>
+                                    <div style="font-size:95%"><?php echo Mage::helper('Mage_Core_Helper_Data')->escapeHtml($message); ?></div>
                                 </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -397,7 +397,16 @@
                                 <?php if($this->getCustomerId() && $this->getMoveToCustomerStorage()): ?>
                                     <option value="cart"><?php echo $this->helper('Mage_Sales_Helper_Data')->__('Move to Shopping Cart') ?></option>
                                     <?php if ($this->isMoveToWishlistAllowed($_item)): ?>
-                                        <option value="wishlist"><?php echo $this->helper('Mage_Sales_Helper_Data')->__('Move to Wishlist') ?></option>
+                                        <?php $wishlists = $this->getCustomerWishlists();?>
+                                        <?php if (count($wishlists) <= 1):?>
+                                            <option value="wishlist"><?php echo $this->helper('Mage_Sales_Helper_Data')->__('Move to Wishlist') ?></option>
+                                        <?php else: ?>
+                                            <optgroup label="<?php echo $this->helper('Mage_Sales_Helper_Data')->__('Move to Wishlist') ?>">
+                                                <?php foreach ($wishlists as $wishlist):?>
+                                                    <option value="wishlist_<?php echo $wishlist->getId();?>"><?php echo $this->escapeHtml($wishlist->getName());?></option>
+                                                <?php endforeach;?>
+                                            </optgroup>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </select>

@@ -24,7 +24,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php  $_order = $this->getOrder() ?>
+<?php /** @var $this Mage_Sales_Block_Order_Info */ ?>
+<?php $_order = $this->getOrder() ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h1>
@@ -63,11 +64,11 @@
     <div class="col-2">
         <div class="box">
             <div class="box-title">
-                <h2><?php echo $this->__('Shipping Method') ?><?php /* | <a href="#"><?php echo $this->__('Track Order') ?></a>*/ ?></h2>
+                <h2><?php echo $this->__('Shipping Method') ?></h2>
             </div>
             <div class="box-content">
                 <?php if ($_order->getShippingDescription()): ?>
-                    <?php echo $_order->getShippingDescription() ?>
+                    <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
                 <?php else: ?>
                     <p><?php echo $this->helper('Mage_Sales_Helper_Data')->__('No shipping information available'); ?></p>
                 <?php endif; ?>

@@ -45,7 +45,11 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = new Mage_Catalog_Helper_Product_View;
-        $this->_controller = new Mage_Catalog_ProductController(new Magento_Test_Request, new Magento_Test_Response);
+        $request = new Magento_Test_Request();
+        $request->setRouteName('catalog')
+            ->setControllerName('product')
+            ->setActionName('view');
+        $this->_controller = new Mage_Catalog_ProductController($request, new Magento_Test_Response);
     }
 
     /**
@@ -56,18 +60,22 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
         Mage::getSingleton('Mage_Catalog_Model_Session')->unsLastViewedProductId();
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testInitProductLayout()
     {
         $uniqid = uniqid();
         $product = new Mage_Catalog_Model_Product;
         $product->setTypeId(Mage_Catalog_Model_Product_Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
+        Mage::register('product', $product);
+
         $this->_helper->initProductLayout($product, $this->_controller);
         $rootBlock = $this->_controller->getLayout()->getBlock('root');
         $this->assertInstanceOf('Mage_Page_Block_Html', $rootBlock);
         $this->assertContains("product-{$uniqid}", $rootBlock->getBodyClass());
         $handles = $this->_controller->getLayout()->getUpdate()->getHandles();
-        $this->arrayHasKey('PRODUCT_99', $handles);
-        $this->arrayHasKey('PRODUCT_TYPE_simple', $handles);
+        $this->assertContains('catalog_product_view_type_simple', $handles);
     }
 
     /**

@@ -45,7 +45,7 @@
         <?php foreach ($rates as $rate): ?>
         <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>"<?php if (!$this->getIsPlaneMode()):?> style="display:none;"<?php endif;?>>
             <td <?php echo $this->getLabelProperties()?>>
-                <?php echo $rate['title']; ?>
+                <?php echo $this->escapeHtml($rate['title']); ?>
                 <?php if (!is_null($rate['percent'])): ?>
                     (<?php echo (float)$rate['percent']; ?>%)
                 <?php endif; ?>

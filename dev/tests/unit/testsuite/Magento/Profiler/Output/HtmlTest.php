@@ -67,7 +67,8 @@ class Magento_Profiler_Output_HtmlTest extends PHPUnit_Framework_TestCase
         ob_start();
         $this->_object->display();
         $actualHtml = ob_get_clean();
-        $expectedHtmlFile = __DIR__ . '/../_files/output.html';
-        $this->assertStringEqualsFile($expectedHtmlFile, $actualHtml);
+        $expectedString = file_get_contents(__DIR__ . '/../_files/output.html');
+        $expectedString = ltrim(preg_replace('/^<!--.+?-->/s', '', $expectedString));
+        $this->assertEquals($expectedString, $actualHtml);
     }
 }

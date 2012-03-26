@@ -421,29 +421,29 @@ Validation.addAllThese([
     ['required-entry', 'This is a required field.', function(v) {
                 return !Validation.get('IsEmpty').test(v);
             }],
-    ['validate-number', 'Please enter a valid number in this field.', function(v, elm) {
-                if (elm.hasClassName('required-entry') && !Validation.get('required-entry').test(v)) {
-                    return true; // hardcode, should be achieved by CSS classes ordering
-                }
-
-                return !Validation.get('IsEmpty').test(v)
-                    && !isNaN(parseNumber(v)) && /^\s*-?\d*([.,]\d*)?\s*$/.test(v);
+    ['validate-number', 'Please enter a valid number in this field.', function(v) {
+                return Validation.get('IsEmpty').test(v)
+                    || (!isNaN(parseNumber(v)) && /^\s*-?\d*(\.\d*)?\s*$/.test(v));
             }],
     ['validate-number-range', 'The value is not within the specified range.', function(v, elm) {
+                if (Validation.get('IsEmpty').test(v)) {
+                    return true;
+                }
+
                 var numValue = parseNumber(v);
-                if (Validation.get('IsEmpty').test(v) || isNaN(numValue)) {
+                if (isNaN(numValue)) {
                     return false;
                 }
 
-                var reRange = /^number-range-([-\d.,]+)-([-\d.,]+)$/,
+                var reRange = /^number-range-(-?[\d.,]+)?-(-?[\d.,]+)?$/,
                     result = true;
 
                 $w(elm.className).each(function(name) {
-                    var m = reRange.exec(name), min, max;
+                    var m = reRange.exec(name);
                     if (m) {
-                        min = parseNumber(m[1]);
-                        max = parseNumber(m[2]);
-                        result = result && numValue >= min && numValue <= max;
+                        result = result
+                            && (m[1] == null || m[1] == '' || numValue >= parseNumber(m[1]))
+                            && (m[2] == null || m[2] == '' || numValue <= parseNumber(m[2]));
                     }
                 });
 
@@ -453,16 +453,27 @@ Validation.addAllThese([
                 return Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
             }],
     ['validate-digits-range', 'The value is not within the specified range.', function(v, elm) {
-                var result = Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
-                var reRange = new RegExp(/^digits-range-[0-9]+-[0-9]+$/);
-                $w(elm.className).each(function(name, index) {
-                    if (name.match(reRange) && result) {
-                        var min = parseInt(name.split('-')[2], 10);
-                        var max = parseInt(name.split('-')[3], 10);
-                        var val = parseInt(v, 10);
-                        result = (v >= min) && (v <= max);
+                if (Validation.get('IsEmpty').test(v)) {
+                    return true;
+                }
+
+                var numValue = parseNumber(v);
+                if (isNaN(numValue)) {
+                    return false;
+                }
+
+                var reRange = /^digits-range-(-?\d+)?-(-?\d+)?$/,
+                    result = true;
+
+                $w(elm.className).each(function(name) {
+                    var m = reRange.exec(name);
+                    if (m) {
+                        result = result
+                            && (m[1] == null || m[1] == '' || numValue >= parseNumber(m[1]))
+                            && (m[2] == null || m[2] == '' || numValue <= parseNumber(m[2]));
                     }
                 });
+
                 return result;
             }],
     ['validate-alpha', 'Please use letters only (a-z or A-Z) in this field.', function (v) {
@@ -472,10 +483,10 @@ Validation.addAllThese([
                 return Validation.get('IsEmpty').test(v) ||  /^[a-z]+[a-z0-9_]+$/.test(v)
             }],
     ['validate-alphanum', 'Please use only letters (a-z or A-Z) or numbers (0-9) only in this field. No spaces or other characters are allowed.', function(v) {
-                return Validation.get('IsEmpty').test(v) ||  /^[a-zA-Z0-9]+$/.test(v) /*!/\W/.test(v)*/
+                return Validation.get('IsEmpty').test(v) || /^[a-zA-Z0-9]+$/.test(v)
             }],
     ['validate-alphanum-with-spaces', 'Please use only letters (a-z or A-Z), numbers (0-9) or spaces only in this field.', function(v) {
-                    return Validation.get('IsEmpty').test(v) ||  /^[a-zA-Z0-9 ]+$/.test(v) /*!/\W/.test(v)*/
+                    return Validation.get('IsEmpty').test(v) || /^[a-zA-Z0-9 ]+$/.test(v)
             }],
     ['validate-street', 'Please use only letters (a-z or A-Z) or numbers (0-9) or spaces and # only in this field.', function(v) {
                 return Validation.get('IsEmpty').test(v) ||  /^[ \w]{3,}([A-Za-z]\.)?([ \w]*\#\d+)?(\r\n| )[ \w]{3,}/.test(v)
@@ -599,14 +610,23 @@ Validation.addAllThese([
                     return false;
                 }
             }],
-    ['validate-not-negative-number', 'Please enter a valid number in this field.', function(v, elm) {
-                if (elm.hasClassName('required-entry') && !Validation.get('required-entry').test(v)) {
-                    return true; // hardcode, should be achieved by CSS classes ordering
+    ['validate-not-negative-number', 'Please enter a number 0 or greater in this field.', function(v) {
+                if (Validation.get('IsEmpty').test(v)) {
+                    return true;
                 }
-
                 v = parseNumber(v);
-                return !isNaN(v) && v>=0;
+                return !isNaN(v) && v >= 0;
             }],
+    ['validate-zero-or-greater', 'Please enter a number 0 or greater in this field.', function(v) {
+            return Validation.get('validate-not-negative-number').test(v);
+        }],
+    ['validate-greater-than-zero', 'Please enter a number greater than 0 in this field.', function(v) {
+            if (Validation.get('IsEmpty').test(v)) {
+                return true;
+            }
+            v = parseNumber(v);
+            return !isNaN(v) && v > 0;
+        }],
     ['validate-state', 'Please select State/Province.', function(v) {
                 return (v!=0 || v == '');
             }],
@@ -614,18 +634,6 @@ Validation.addAllThese([
                 if (!Validation.get('validate-password').test(v)) return false;
                 if (Validation.get('IsEmpty').test(v) && v != '') return false;
                 return true;
-            }],
-    ['validate-greater-than-zero', 'Please enter a number greater than 0 in this field.', function(v) {
-                if(v.length)
-                    return parseNumber(v) > 0;
-                else
-                    return true;
-            }],
-    ['validate-zero-or-greater', 'Please enter a number 0 or greater in this field.', function(v) {
-                if(v.length)
-                    return parseNumber(v) >= 0;
-                else
-                    return true;
             }],
     ['validate-cc-number', 'Please enter a valid credit card number.', function(v, elm) {
                 // remove non-numerics

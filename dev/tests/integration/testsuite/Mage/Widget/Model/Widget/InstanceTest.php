@@ -31,18 +31,76 @@
 class Mage_Widget_Model_Widget_InstanceTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Mage_Widget_Model_Widget_Instance
+     */
+    protected $_model;
+
+    protected function setUp()
+    {
+        $this->_model = new Mage_Widget_Model_Widget_Instance;
+    }
+
+    public function testSetGetType()
+    {
+        $this->assertEmpty($this->_model->getType());
+        $this->assertSame('test', $this->_model->setType('test')->getType());
+        $this->assertSame('test', $this->_model->getInstanceType());
+    }
+
+    public function testGetPackageGetThemeDefault()
+    {
+        $this->assertEquals(Mage_Core_Model_Design_Package::DEFAULT_PACKAGE, $this->_model->getPackage());
+        $this->assertEquals(Mage_Core_Model_Design_Package::DEFAULT_THEME, $this->_model->getTheme());
+    }
+
+    public function testGetPackageGetTheme()
+    {
+        $this->_model->setPackageTheme('some_package/some_theme');
+        $this->assertEquals('some_package', $this->_model->getPackage());
+        $this->assertEquals('some_theme', $this->_model->getTheme());
+    }
+
+    /**
      * @return Mage_Widget_Model_Widget_Instance
      */
     public function testGetWidgetConfig()
     {
-        $model = new Mage_Widget_Model_Widget_Instance;
-        $config = $model->setType('Mage_Catalog_Block_Product_Widget_New')->getWidgetConfig();
+        $config = $this->_model->setType('Mage_Catalog_Block_Product_Widget_New')->getWidgetConfig();
         $this->assertInstanceOf('Varien_Simplexml_Element', $config);
         /** @var Varien_Simplexml_Element $config */
         $element = $config->xpath('/widgets/new_products/parameters/template/values/list');
         $this->assertArrayHasKey(0, $element);
         $this->assertInstanceOf('Varien_Simplexml_Element', $element[0]);
-        return $model;
+        return $this->_model;
+    }
+
+    /**
+     * @return Mage_Widget_Model_Widget_Instance
+     */
+    public function testGetWidgetSupportedContainers()
+    {
+        $this->_model->setType('Mage_Catalog_Block_Product_Widget_New');
+        $containers = $this->_model->getWidgetSupportedContainers();
+        $this->assertInternalType('array', $containers);
+        $this->assertContains('left', $containers);
+        $this->assertContains('content', $containers);
+        $this->assertContains('right', $containers);
+        return $this->_model;
+    }
+
+    /**
+     * @param Mage_Widget_Model_Widget_Instance $model
+     * @depends testGetWidgetSupportedContainers
+     */
+    public function testGetWidgetSupportedTemplatesByContainer($model)
+    {
+        $templates = $model->getWidgetSupportedTemplatesByContainer('content');
+        $this->assertNotEmpty($templates);
+        $this->assertInternalType('array', $templates);
+        foreach ($templates as $row) {
+            $this->assertArrayHasKey('value', $row);
+            $this->assertArrayHasKey('label', $row);
+        }
     }
 
     /**
@@ -56,17 +114,5 @@ class Mage_Widget_Model_Widget_InstanceTest extends PHPUnit_Framework_TestCase
         $result = $model->generateLayoutUpdateXml('content');
         $this->assertContains('<reference name="content">', $result);
         $this->assertContains('<block type="' . $model->getType() . '"', $result);
-    }
-
-    public function testSetGetType()
-    {
-        $model = new Mage_Widget_Model_Widget_Instance();
-        $this->assertEmpty($model->getType());
-
-        $model->setType('test-test');
-        $this->assertEquals('test/test', $model->getType());
-
-        $model->setData('instance_type', 'test-test');
-        $this->assertEquals('test/test', $model->getType());
     }
 }

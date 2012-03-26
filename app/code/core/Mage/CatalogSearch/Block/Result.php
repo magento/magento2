@@ -97,7 +97,7 @@ class Mage_CatalogSearch_Block_Result extends Mage_Core_Block_Template
      */
     public function getListBlock()
     {
-        return $this->getChild('search_result_list');
+        return $this->getChildBlock('search_result_list');
     }
 
     /**

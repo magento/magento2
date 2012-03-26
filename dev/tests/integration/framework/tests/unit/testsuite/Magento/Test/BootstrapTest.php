@@ -200,7 +200,7 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         $this->_callBootstrapConstructor();
     }
 
-    public function testConstructorDestructorCleanupNone()
+    public function testConstructorCleanupNone()
     {
         $this->_db
             ->expects($this->never())
@@ -215,32 +215,29 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             ->method('_cleanupFilesystem')
         ;
         $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_NONE);
-        $this->_bootstrap->__destruct();
     }
 
-    public function testConstructorDestructorCleanupUninstall()
+    public function testConstructorCleanupUninstall()
     {
         $this->_db
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('cleanup')
         ;
         $this->_bootstrap
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('_cleanupFilesystem')
         ;
         $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_UNINSTALL);
-        $this->_bootstrap->__destruct();
     }
 
-    public function testConstructorDestructorCleanupRestoreDb()
+    public function testConstructorCleanupRestoreDb()
     {
         $this->_db
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('restoreBackup')
             ->with(Magento_Test_Bootstrap::DB_BACKUP_NAME)
         ;
         $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_RESTORE_DB);
-        $this->_bootstrap->__destruct();
     }
 
     /**

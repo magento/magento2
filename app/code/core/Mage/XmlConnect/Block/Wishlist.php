@@ -96,8 +96,8 @@ class Mage_XmlConnect_Block_Wishlist extends Mage_Wishlist_Block_Customer_Wishli
                 $addedDate = $wishlistXmlObj->escapeXml($this->getFormatedDate($item->getAddedAt()));
                 $itemXmlObj->addChild('added_date', $addedDate);
 
-                if ($this->getChild('product_price')) {
-                    $this->getChild('product_price')->setProduct($item->getProduct())->setProductXmlObj($itemXmlObj)
+                if ($this->getChildBlock('product_price')) {
+                    $this->getChildBlock('product_price')->setProduct($item->getProduct())->setProductXmlObj($itemXmlObj)
                         ->collectProductPrices();
                 }
 

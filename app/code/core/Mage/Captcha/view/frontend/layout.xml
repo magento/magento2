@@ -28,7 +28,7 @@
 <layout version="0.1.0">
     <customer_account_login>
         <reference name="customer_form_login">
-            <block type="Mage_Core_Block_Text_List" name="form.additional.info">
+            <container name="form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -37,12 +37,12 @@
                     <action method="setImgWidth"><width>230</width></action>
                     <action method="setImgHeight"><width>50</width></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </customer_account_login>
     <customer_account_forgotpassword>
         <reference name="forgotPassword">
-            <block type="Mage_Core_Block_Text_List" name="form.additional.info">
+            <container name="form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -51,12 +51,12 @@
                     <action method="setImgWidth"><width>230</width></action>
                     <action method="setImgHeight"><width>50</width></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </customer_account_forgotpassword>
     <customer_account_create>
         <reference name="customer_form_register">
-            <block type="Mage_Core_Block_Text_List" name="form.additional.info">
+            <container name="form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -65,12 +65,12 @@
                     <action method="setImgWidth"><width>230</width></action>
                     <action method="setImgHeight"><width>50</width></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </customer_account_create>
     <checkout_onepage_index>
         <reference name="checkout.onepage.login">
-            <block type="Mage_Core_Block_Text_List" name="form.additional.info">
+            <container name="form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -79,10 +79,10 @@
                     <action method="setImgWidth"><width>230</width></action>
                     <action method="setImgHeight"><width>50</width></action>
                 </block>
-            </block>
+            </container>
         </reference>
         <reference name="checkout.onepage.billing">
-            <block type="Mage_Core_Block_Text_List" name="form.additional.info">
+            <container name="form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha.guest.checkout">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -99,7 +99,7 @@
                     <action method="setImgWidth"><width>230</width></action>
                     <action method="setImgHeight"><width>50</width></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </checkout_onepage_index>
 </layout>

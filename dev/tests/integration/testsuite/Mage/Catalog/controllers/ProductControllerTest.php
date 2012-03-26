@@ -64,8 +64,7 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
 
         /* Layout updates */
         $handles = Mage::app()->getLayout()->getUpdate()->getHandles();
-        $this->assertContains('PRODUCT_TYPE_simple', $handles);
-        $this->assertContains('PRODUCT_1', $handles);
+        $this->assertContains('catalog_product_view_type_simple', $handles);
 
         $responseBody = $this->getResponse()->getBody();
         /* Product info */

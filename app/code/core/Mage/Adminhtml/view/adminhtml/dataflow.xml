@@ -30,7 +30,7 @@
 
     <adminhtml_system_convert_gui_run>
         <remove name="root"/>
-        <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="toHtml" template="admin/page.phtml">
+        <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="1" template="admin/page.phtml">
             <block type="Mage_Adminhtml_Block_Page_Head" name="convert_root_head" as="head" template="page/head.phtml">
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
@@ -38,13 +38,13 @@
                 <action method="addJs"><file>mage/translate.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/tools.js</file></action>
             </block>
-            <block type="Mage_Adminhtml_Block_System_Convert_Profile_Run" name="system_convert_profile_run" template="system/convert/profile/process.phtml" output="toHtml"/>
+            <block type="Mage_Adminhtml_Block_System_Convert_Profile_Run" name="system_convert_profile_run" template="system/convert/profile/process.phtml" output="1"/>
         </block>
     </adminhtml_system_convert_gui_run>
     
     <adminhtml_system_convert_profile_run>
         <remove name="root"/>
-        <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="toHtml" template="admin/page.phtml">
+        <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="1" template="admin/page.phtml">
             <block type="Mage_Adminhtml_Block_Page_Head" name="convert_root_head" as="head" template="page/head.phtml">
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
@@ -52,7 +52,7 @@
                 <action method="addJs"><file>mage/translate.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/tools.js</file></action>
             </block>
-            <block type="Mage_Adminhtml_Block_System_Convert_Profile_Run" name="system_convert_profile_run" template="system/convert/profile/process.phtml" output="toHtml"/>
+            <block type="Mage_Adminhtml_Block_System_Convert_Profile_Run" name="system_convert_profile_run" template="system/convert/profile/process.phtml" output="1"/>
         </block>
     </adminhtml_system_convert_profile_run>
 

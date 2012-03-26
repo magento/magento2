@@ -37,6 +37,9 @@ AdminBackup.prototype = {
         $('use-ftp-checkbox-row').hide();
         $('use_ftp').checked = false;
         $('ftp-credentials-container').hide();
+        $$('#ftp-credentials-container input').each(function(item) {
+            item.removeClassName('required-entry');
+        });
         $('backup_maintenance_mode').checked = false;
         $('rollback_maintenance_mode').checked = false;
         $('exclude_media').checked = false;

@@ -273,10 +273,8 @@ class Mage_Tax_Model_Sales_Total_Quote_Subtotal extends Mage_Sales_Model_Quote_A
             $item->getOriginalPrice();
             $item->setCustomPrice($price);
             $item->setBaseCustomPrice($basePrice);
-        } else {
-            $item->setConvertedPrice($price);
         }
-        $item->setPrice($price);
+        $item->setPrice($basePrice);
         $item->setBasePrice($basePrice);
         $item->setRowTotal($subtotal);
         $item->setBaseRowTotal($baseSubtotal);
@@ -386,10 +384,8 @@ class Mage_Tax_Model_Sales_Total_Quote_Subtotal extends Mage_Sales_Model_Quote_A
             $item->getOriginalPrice();
             $item->setCustomPrice($price);
             $item->setBaseCustomPrice($basePrice);
-        } else {
-            $item->setConvertedPrice($price);
         }
-        $item->setPrice($price);
+        $item->setPrice($basePrice);
         $item->setBasePrice($basePrice);
         $item->setRowTotal($subtotal);
         $item->setBaseRowTotal($baseSubtotal);

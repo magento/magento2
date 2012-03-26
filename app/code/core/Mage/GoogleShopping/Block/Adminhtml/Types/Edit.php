@@ -45,7 +45,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Types_Edit extends Mage_Adminhtml_Bloc
         $this->_updateButton('save', 'label', $this->__('Save Mapping'));
         $this->_updateButton('save', 'id', 'save_button');
         $this->_updateButton('delete', 'label', $this->__('Delete Mapping'));
-        if(!$model->getId()) {
+        if ($model && !$model->getId()) {
             $this->_removeButton('delete');
         }
     }

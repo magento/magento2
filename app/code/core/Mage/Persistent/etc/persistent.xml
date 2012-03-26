@@ -34,12 +34,6 @@
                 <method>emulateWelcomeBlock</method>
                 <block_type>Mage_Page_Block_Html_Header</block_type>
             </welcome>
-            <account_links>
-                <name_in_layout>account.links</name_in_layout>
-                <class>Mage_Persistent_Model_Observer</class>
-                <method>emulateAccountLinks</method>
-                <block_type>Mage_Page_Block_Template_Links</block_type>
-            </account_links>
             <top_links>
                 <name_in_layout>top.links</name_in_layout>
                 <class>Mage_Persistent_Model_Observer</class>

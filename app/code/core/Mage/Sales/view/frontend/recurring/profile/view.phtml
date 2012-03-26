@@ -48,12 +48,15 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 
 <!-- info tabs -->
-<?php $infoTabs = $this->getChildGroup('info_tabs'); ?>
+<?php $layout = $this->getLayout(); ?>
+<?php $infoTabs = $this->getGroupChildNames('info_tabs'); ?>
 <dl class="order-info">
     <dt><?php echo $this->__('About This Profile:') ?></dt>
     <dd>
         <ul id="order-info-tabs">
-        <?php foreach ($infoTabs as $block): ?>
+        <?php foreach ($infoTabs as $elementName): ?>
+            <?php $block = $layout->getBlock($elementName); ?>
+            <?php if (!$block) continue; ?>
             <?php if ($this->getObjectData($block, 'is_view_current')): ?>
                 <li class="current"><strong><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></strong></li>
             <?php else: ?>
@@ -66,11 +69,13 @@
 
 <!-- info blocks in 2 columns -->
 <?php for ($i = 1; $i <= 5; $i++):?>
-    <?php $infoBlocks = $this->getChildGroup("info_blocks_row_{$i}"); ?>
+    <?php $infoBlocks = $this->getGroupChildNames("info_blocks_row_{$i}"); ?>
     <?php if ($infoBlocks):?>
 <div class="col2-set order-info-box">
         <?php for ($j = 1; $j <= 2; $j++):?>
-            <?php foreach ($infoBlocks as $alias => $block):?>
+            <?php foreach ($infoBlocks as $elementName):?>
+        <?php $block = $layout->getBlock($elementName); ?>
+        <?php if (!$block) continue; ?>
 <?php if ($j == $this->getObjectData($block, 'view_column')):?>
     <div class="col-<?php echo $j?>">
         <div class="info-box">
@@ -78,7 +83,7 @@
                 <h2><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></h2>
             </div>
             <div class="box-content">
-                <?php $html = $this->getChildHtml($alias) ?>
+                <?php $html = $layout->renderElement($elementName); ?>
                 <?php echo ($html ? $html : $this->__('No information available.')) ; ?>
             </div>
         </div>
@@ -91,7 +96,7 @@
 <?php endfor;?>
 
 <!-- table data block -->
-<?php $table = $this->getChild('table') ?>
+<?php $table = $this->getChildBlock('table') ?>
 <?php if ($table):?>
 <div>
     <h2 class="table-caption"><?php echo $this->escapeHtml($this->getObjectData($table, 'view_label')) ?></h2>

@@ -36,6 +36,11 @@ class Mage_Catalog_Block_Product_Price extends Mage_Core_Block_Template
     protected $_priceDisplayType = null;
     protected $_idSuffix = '';
 
+    /**
+     * Retrieve product
+     *
+     * @return Mage_Catalog_Model_Product
+     */
     public function getProduct()
     {
         $product = $this->_getData('product');

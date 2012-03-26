@@ -56,8 +56,16 @@ class Mage_Rss_Block_Wishlist extends Mage_Wishlist_Block_Abstract
     {
         if (is_null($this->_wishlist)) {
             $this->_wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist');
-            if ($this->_getCustomer()->getId()) {
-                $this->_wishlist->loadByCustomer($this->_getCustomer());
+            $wishlistId = $this->getRequest()->getParam('wishlist_id');
+            if ($wishlistId) {
+                $this->_wishlist->load($wishlistId);
+                if ($this->_wishlist->getCustomerId() != $this->_getCustomer()->getId()) {
+                    $this->_wishlist->unsetData();
+                }
+            } else {
+                if($this->_getCustomer()->getId()) {
+                    $this->_wishlist->loadByCustomer($this->_getCustomer());
+                }
             }
         }
         return $this->_wishlist;
@@ -85,6 +93,16 @@ class Mage_Rss_Block_Wishlist extends Mage_Wishlist_Block_Abstract
     }
 
     /**
+     * Build wishlist rss feed title
+     *
+     * @return string
+     */
+    protected function _getTitle()
+    {
+        return Mage::helper('Mage_Rss_Helper_Data')->__('%s\'s Wishlist', $this->_getCustomer()->getName());
+    }
+
+    /**
      * Render block HTML
      *
      * @return string
@@ -99,7 +117,7 @@ class Mage_Rss_Block_Wishlist extends Mage_Wishlist_Block_Abstract
                 'code'  => $this->_getWishlist()->getSharingCode()
             ));
 
-            $title  = Mage::helper('Mage_Rss_Helper_Data')->__('%s\'s Wishlist', $this->_getCustomer()->getName());
+            $title  = $this->_getTitle();
             $lang   = Mage::getStoreConfig('general/locale/code');
 
             $rssObj->_addHeader(array(

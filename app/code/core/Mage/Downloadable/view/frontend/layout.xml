@@ -34,7 +34,7 @@
         </reference>
     </customer_account>
 
-    <downloadable_customer_products translate="label">
+    <downloadable_customer_products translate="label" type="page" parent="customer_account">
         <label>Customer My Account Downloadable Items</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -52,7 +52,7 @@
     </checkout_cart_index>
 
     <checkout_onepage_review>
-        <reference name="root">
+        <reference name="order_review">
             <action method="addItemRender"><type>downloadable</type><block>Mage_Downloadable_Block_Checkout_Cart_Item_Renderer</block><template>checkout/onepage/review/item.phtml</template></action>
         </reference>
     </checkout_onepage_review>
@@ -104,7 +104,7 @@
         </reference>
     </paypaluk_express_review>
     <paypaluk_express_review_details>
-        <reference name="root">
+        <reference name="order_review">
             <action method="addItemRender"><type>downloadable</type><block>Mage_Downloadable_Block_Checkout_Cart_Item_Renderer</block><template>checkout/onepage/review/item.phtml</template></action>
         </reference>
     </paypaluk_express_review_details>
@@ -126,12 +126,6 @@
             <action method="addItemRender"><type>downloadable</type><block>Mage_Downloadable_Block_Sales_Order_Item_Renderer_Downloadable</block><template>sales/order/creditmemo/items/renderer/downloadable.phtml</template></action>
         </reference>
     </sales_order_creditmemo>
-
-    <wishlist_index_index>
-        <reference name="customer.wishlist">
-            <action method="addOptionsRenderCfg"><type>downloadable</type><helper>Mage_Downloadable_Helper_Catalog_Product_Configuration</helper></action>
-        </reference>
-    </wishlist_index_index>
 
 <!--
 Print pages
@@ -220,7 +214,7 @@ Emails
         </reference>
     </sales_email_order_creditmemo_items>
 
-    <PRODUCT_TYPE_downloadable translate="label" module="Mage_Downloadable">
+    <catalog_product_view_type_downloadable translate="label" module="Mage_Downloadable" type="page" parent="catalog_product_view">
         <label>Catalog Product View (Downloadable)</label>
         <reference name="product.info">
             <block type="Mage_Downloadable_Block_Catalog_Product_View_Type" name="product.info.downloadable" as="product_type_data" template="catalog/product/type.phtml">
@@ -232,6 +226,6 @@ Emails
             <block type="Mage_Downloadable_Block_Catalog_Product_Links" name="product.info.downloadable.options" as="type_downloadable_options" before="-" template="catalog/product/links.phtml"/>
             <action method="insert"><block>product.info.downloadable.options</block></action>
         </reference>
-    </PRODUCT_TYPE_downloadable>
+    </catalog_product_view_type_downloadable>
 
 </layout>

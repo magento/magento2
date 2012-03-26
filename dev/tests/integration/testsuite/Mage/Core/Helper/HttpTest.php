@@ -57,8 +57,9 @@ class Mage_Core_Helper_HttpTest extends PHPUnit_Framework_TestCase
 
     public function testGetHttpMethods()
     {
+        $host = 'localhost';
         $this->assertEquals(false, $this->_helper->getHttpAcceptCharset());
-        $this->assertEquals(false, $this->_helper->getHttpHost());
+        $this->assertEquals($host, $this->_helper->getHttpHost());
         $this->assertEquals(false, $this->_helper->getHttpReferer());
         $this->assertEquals(false, $this->_helper->getHttpAcceptLanguage());
         $this->assertEquals(false, $this->_helper->getHttpUserAgent());

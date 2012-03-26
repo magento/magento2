@@ -194,9 +194,9 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
                 'ru_RU',
             ),
             'lib skin file inside theme' => array(
-                'jquery/jquery-no-conflict.js',
+                'mage/jquery-no-conflict.js',
                 array('_skin' => 'theme_nested_skin'),
-                $prefix . 'custom_theme/skin/theme_nested_skin/jquery/jquery-no-conflict.js',
+                $prefix . 'custom_theme/skin/theme_nested_skin/mage/jquery-no-conflict.js',
             ),
             'primary theme fallback - same theme & default skin' => array(
                 'fixture_script_two.js',
@@ -214,9 +214,9 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
                 $prefix . 'default/skin/default/fixture_script_four.js',
             ),
             'lib fallback' => array(
-                'jquery/jquery-no-conflict.js',
+                'mage/jquery-no-conflict.js',
                 array('_skin' => 'default'),
-                '%s/pub/js/jquery/jquery-no-conflict.js',
+                '%s/pub/js/mage/jquery-no-conflict.js',
             ),
         );
     }

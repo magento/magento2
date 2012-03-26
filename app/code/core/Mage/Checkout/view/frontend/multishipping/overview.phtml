@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this Mage_Checkout_Block_Multishipping_Overview */ ?>
 <div class="multiple-checkout">
     <div class="page-title">
         <h1><?php echo $this->__('Review Order') ?></h1>
@@ -81,7 +82,7 @@
                         <div class="box-content">
                             <?php if($_rate=$this->getShippingAddressRate($_address)): ?>
                             <p>
-                            <?php echo $_rate->getCarrierTitle() ?> - <?php echo $_rate->getMethodTitle() ?>
+                            <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?> - <?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                             <?php $_excl = $this->getShippingPriceExclTax($_address); ?>
                             <?php $_incl = $this->getShippingPriceInclTax($_address); ?>
                             <?php echo $_excl; ?>

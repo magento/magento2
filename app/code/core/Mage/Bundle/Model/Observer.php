@@ -253,4 +253,17 @@ class Mage_Bundle_Model_Observer
         }
         return $this;
     }
+
+    /**
+     * Initialize product options renderer with bundle specific params
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Bundle_Model_Observer
+     */
+    public function initOptionRenderer(Varien_Event_Observer $observer)
+    {
+        $block = $observer->getBlock();
+        $block->addOptionsRenderCfg('bundle', 'Mage_Bundle_Helper_Catalog_Product_Configuration');
+        return $this;
+    }
 }

@@ -54,7 +54,7 @@ class Mage_Adminhtml_Block_Notification_Security extends Mage_Adminhtml_Block_Te
         if ($this->_isFileAccessible()) {
             return true;
         }
-        $adminSessionLifetime = (int)Mage::getStoreConfig('admin/security/session_cookie_lifetime');
+        $adminSessionLifetime = (int)Mage::getStoreConfig('admin/security/session_lifetime');
         Mage::app()->saveCache(true, self::VERIFICATION_RESULT_CACHE_KEY, array(), $adminSessionLifetime);
         return false;
     }

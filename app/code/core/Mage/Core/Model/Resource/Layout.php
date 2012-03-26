@@ -85,4 +85,25 @@ class Mage_Core_Model_Resource_Layout extends Mage_Core_Model_Resource_Db_Abstra
         }
         return $result;
     }
+
+    /**
+     * Update a "layout update link" if relevant data is provided
+     *
+     * @param Mage_Core_Model_Abstract $object
+     * @return Mage_Core_Model_Resource_Layout
+     */
+    protected function _afterSave(Mage_Core_Model_Abstract $object)
+    {
+        $data = $object->getData();
+        if (isset($data['store_id']) && isset($data['area']) && isset($data['package']) && isset($data['theme'])) {
+            $this->_getWriteAdapter()->insertOnDuplicate($this->getTable('core_layout_link'), array(
+                'store_id' => $data['store_id'],
+                'area' => $data['area'],
+                'package' => $data['package'],
+                'theme' => $data['theme'],
+                'layout_update_id' => $object->getId(),
+            ));
+        }
+        return parent::_afterSave($object);
+    }
 }

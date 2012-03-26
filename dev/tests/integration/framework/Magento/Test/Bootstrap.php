@@ -199,6 +199,17 @@ class Magento_Test_Bootstrap
         $this->_installDir = "{$tmpDir}/sandbox-{$this->_dbVendorName}-{$sandboxUniqueId}";
         $this->_installEtcDir = $this->_installDir . '/etc';
 
+        $this->_options = array(
+            'etc_dir'     => $this->_installEtcDir,
+            'var_dir'     => $this->_installDir,
+            'tmp_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'tmp',
+            'cache_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'cache',
+            'log_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'log',
+            'session_dir' => $this->_installDir . DIRECTORY_SEPARATOR . 'session',
+            'media_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'media',
+            'upload_dir'  => $this->_installDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'upload',
+        );
+
         $this->_db = $this->_instantiateDb();
 
         $this->_cleanupAction = $cleanupAction;
@@ -229,11 +240,8 @@ class Magento_Test_Bootstrap
 
     /**
      * Initialize an already installed Magento application
-     *
-     * @param string $scopeCode
-     * @param string $scopeType
      */
-    public function initialize($scopeCode = '', $scopeType = 'store')
+    public function initialize()
     {
         if (!class_exists('Mage', false)) {
             require_once $this->_magentoDir . '/app/bootstrap.php';
@@ -244,28 +252,9 @@ class Magento_Test_Bootstrap
                 Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
             }
         }
-        $this->_options = array(
-            'etc_dir'     => $this->_installEtcDir,
-            'var_dir'     => $this->_installDir,
-            'tmp_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'tmp',
-            'cache_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'cache',
-            'log_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'log',
-            'session_dir' => $this->_installDir . DIRECTORY_SEPARATOR . 'session',
-            'media_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'media',
-            'upload_dir'  => $this->_installDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'upload',
-        );
-
         Mage::setIsDeveloperMode($this->_developerMode);
-        Mage::app($scopeCode, $scopeType, $this->_options);
-    }
-
-    /**
-     * Remove cached configuration and reinitialize the application
-     */
-    public function refreshConfiguration()
-    {
-        Mage::app()->cleanCache(array(Mage_Core_Model_Config::CACHE_TAG));
-        $this->initialize();
+        Mage::$headersSentThrowsException = false;
+        Mage::app('', 'store', $this->_options);
     }
 
     /**
@@ -291,14 +280,6 @@ class Magento_Test_Bootstrap
     public function getAppOptions()
     {
         return $this->_options;
-    }
-
-    /**
-     * Perform requested cleanup operations
-     */
-    public function __destruct()
-    {
-        $this->_cleanup();
     }
 
     /**
@@ -391,6 +372,8 @@ class Magento_Test_Bootstrap
      */
     protected function _emulateEnvironment()
     {
+        // emulate HTTP request
+        $_SERVER['HTTP_HOST'] = 'localhost';
         // emulate entry point to ensure that tests generate invariant URLs
         $_SERVER['SCRIPT_FILENAME'] = 'index.php';
         // prevent session_start, because it may rely on cookies
@@ -502,7 +485,7 @@ class Magento_Test_Bootstrap
         $this->initialize();
         /**
          * Initialization of front controller with all routers.
-         * Should be here as needed only once after installation process. 
+         * Should be here as needed only once after installation process.
          */
         Mage::app()->getFrontController();
     }
@@ -531,22 +514,5 @@ class Magento_Test_Bootstrap
             $result = array_merge($result, $files);
         }
         return $result;
-    }
-
-    /**
-     * Removes cache polluted by other tests. Leaves performance critical cache (configuration, ddl) untouched.
-     *
-     * @return null
-     */
-    public function cleanupCache()
-    {
-        Mage::app()->getCache()->clean(
-            Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-            array(Mage_Core_Model_Config::CACHE_TAG,
-                Varien_Db_Adapter_Pdo_Mysql::DDL_CACHE_TAG,
-                'DB_PDO_MSSQL_DDL', // Varien_Db_Adapter_Pdo_Mssql::DDL_CACHE_TAG
-                'DB_ORACLE_DDL', // Varien_Db_Adapter_Oracle::DDL_CACHE_TAG
-            )
-        );
     }
 }

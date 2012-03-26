@@ -805,7 +805,7 @@ class Mage_Catalog_Block_Product_List_Toolbar extends Mage_Core_Block_Template
      */
     public function getPagerHtml()
     {
-        $pagerBlock = $this->getChild('product_list_toolbar_pager');
+        $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
         if ($pagerBlock instanceof Varien_Object) {
 

@@ -312,11 +312,20 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
+                        <display_product_count translate="label">
+                            <label>Display Product Count</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>5</sort_order>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </display_product_count>
                         <price_range_calculation translate="label">
                             <label>Price Navigation Step Calculation</label>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Price_Step</source_model>
-                            <sort_order>1</sort_order>
+                            <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -325,7 +334,7 @@
                             <label>Default Price Navigation Step</label>
                             <frontend_type>text</frontend_type>
                             <validate>validate-number validate-number-range number-range-0.01-1000000000</validate>
-                            <sort_order>2</sort_order>
+                            <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -336,7 +345,7 @@
                             <comment>Maximum number of price intervals is 100</comment>
                             <frontend_type>text</frontend_type>
                             <validate>validate-digits validate-digits-range digits-range-2-100</validate>
-                            <sort_order>3</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -347,22 +356,22 @@
                             <comment>This setting will be applied when all prices in the specific price interval are equal.</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
-                            <sort_order>4</sort_order>
+                            <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <depends><price_range_calculation>auto</price_range_calculation></depends>
+                            <depends><price_range_calculation>improved</price_range_calculation></depends>
                         </one_price_interval>
                         <interval_division_limit translate="label comment">
                             <label>Interval Division Limit</label>
                             <comment>Please specify the number of products, that will not be divided into subintervals.</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>5</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
-                            <depends><price_range_calculation>auto</price_range_calculation></depends>
+                            <depends><price_range_calculation>improved</price_range_calculation></depends>
                         </interval_division_limit>
                     </fields>
                 </layered_navigation>

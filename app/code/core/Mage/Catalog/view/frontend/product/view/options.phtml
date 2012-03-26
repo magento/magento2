@@ -104,12 +104,12 @@
 
     Product.Options = Class.create();
     Product.Options.prototype = {
-        initialize : function(config){
+        initialize : function(config) {
             this.config = config;
             this.reloadPrice();
             document.observe("dom:loaded", this.reloadPrice.bind(this));
         },
-        reloadPrice : function(){
+        reloadPrice : function() {
             var config = this.config;
             var skipIds = [];
             $$('body .product-custom-option').each(function(element){
@@ -172,7 +172,7 @@
             });
         }
     }
-    function validateOptionsCallback(elmId, result){
+    function validateOptionsCallback(elmId, result) {
         var container = $(elmId).up('ul.options-list');
         if (result == 'failed') {
             container.removeClassName('validation-passed');

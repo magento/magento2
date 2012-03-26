@@ -46,7 +46,7 @@ class Mage_XmlConnect_Block_Cart_Paypal_Mecl_Details extends Mage_Paypal_Block_E
             $this->getItemXml($_item, $itemsXmlObj);
         }
 
-        $reviewXmlObj->appendChild($this->getChild('totals')->setReturnObjectFlag(true)->_toHtml());
+        $reviewXmlObj->appendChild($this->getChildBlock('totals')->setReturnObjectFlag(true)->_toHtml());
 
         return $reviewXmlObj;
     }

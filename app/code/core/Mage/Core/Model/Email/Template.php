@@ -71,11 +71,12 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
 {
     /**
      * Configuration path for default email templates
-     *
      */
-    const XML_PATH_TEMPLATE_EMAIL          = 'global/template/email';
-    const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
-    const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+    const XML_PATH_TEMPLATE_EMAIL               = 'global/template/email';
+    const XML_PATH_SENDING_SET_RETURN_PATH      = 'system/smtp/set_return_path';
+    const XML_PATH_SENDING_RETURN_PATH_EMAIL    = 'system/smtp/return_path_email';
+    const XML_PATH_DESIGN_EMAIL_LOGO            = 'design/email/logo';
+    const XML_PATH_DESIGN_EMAIL_LOGO_ALT        = 'design/email/logo_alt';
 
     protected $_templateFilter;
     protected $_preprocessFlag = false;
@@ -100,7 +101,44 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
     }
 
     /**
-     * Get new Zend_Mail instance
+     * Return logo URL for emails
+     * Take logo from skin if custom logo is undefined
+     *
+     * @param  Mage_Core_Model_Store|int|string $store
+     * @return string
+     */
+    protected function _getLogoUrl($store)
+    {
+        $store = Mage::app()->getStore($store);
+        $fileName = $store->getConfig(self::XML_PATH_DESIGN_EMAIL_LOGO);
+        if ($fileName) {
+            $uploadDir = Mage_Adminhtml_Model_System_Config_Backend_Email_logo::UPLOAD_DIR;
+            $fullFileName = Mage::getBaseDir('media') . DS . $uploadDir . DS . $fileName;
+            if (file_exists($fullFileName)) {
+                return Mage::getBaseUrl('media') . $uploadDir . '/' . $fileName;
+            }
+        }
+        return Mage::getDesign()->getSkinUrl('Mage_Core::logo_email.gif');
+    }
+
+    /**
+     * Return logo alt for emails
+     *
+     * @param  Mage_Core_Model_Store|int|string $store
+     * @return string
+     */
+    protected function _getLogoAlt($store)
+    {
+        $store = Mage::app()->getStore($store);
+        $alt = $store->getConfig(self::XML_PATH_DESIGN_EMAIL_LOGO_ALT);
+        if ($alt) {
+            return $alt;
+        }
+        return $store->getFrontendName();
+    }
+
+    /**
+     * Retrieve mail object instance
      *
      * @return Zend_Mail
      */
@@ -307,12 +345,19 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         $processor->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain());
 
-        if(!$this->_preprocessFlag) {
+        if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
         }
 
-        if(isset($variables['subscriber']) && ($variables['subscriber'] instanceof Mage_Newsletter_Model_Subscriber)) {
+        if (isset($variables['subscriber']) && ($variables['subscriber'] instanceof Mage_Newsletter_Model_Subscriber)) {
             $processor->setStoreId($variables['subscriber']->getStoreId());
+        }
+
+        if (!isset($variables['logo_url'])) {
+            $variables['logo_url'] = $this->_getLogoUrl($processor->getStoreId());
+        }
+        if (!isset($variables['logo_alt'])) {
+            $variables['logo_alt'] = $this->_getLogoAlt($processor->getStoreId());
         }
 
         $processor->setIncludeProcessor(array($this, 'getInclude'))
@@ -493,8 +538,8 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         }
 
         if (!is_array($sender)) {
-            $this->setSenderName(Mage::getStoreConfig('trans_email/ident_'.$sender.'/name', $storeId));
-            $this->setSenderEmail(Mage::getStoreConfig('trans_email/ident_'.$sender.'/email', $storeId));
+            $this->setSenderName(Mage::getStoreConfig('trans_email/ident_' . $sender . '/name', $storeId));
+            $this->setSenderEmail(Mage::getStoreConfig('trans_email/ident_' . $sender . '/email', $storeId));
         } else {
             $this->setSenderName($sender['name']);
             $this->setSenderEmail($sender['email']);
@@ -503,7 +548,6 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         if (!isset($vars['store'])) {
             $vars['store'] = Mage::app()->getStore($storeId);
         }
-
         $this->setSentSuccess($this->send($email, $name, $vars));
         return $this;
     }

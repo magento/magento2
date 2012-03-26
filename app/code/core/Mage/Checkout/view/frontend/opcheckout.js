@@ -136,7 +136,7 @@ Checkout.prototype = {
             this.gotoSection('billing');
         }
         else{
-            alert(Translator.translate('Please choose to register or to checkout as a guest'));
+            alert(Translator.translate('Please choose to register or to checkout as a guest').stripTags());
             return false;
         }
         document.body.fire('login:setMethod', {method : this.method});
@@ -545,7 +545,7 @@ ShippingMethod.prototype = {
     validate: function() {
         var methods = document.getElementsByName('shipping_method');
         if (methods.length==0) {
-            alert(Translator.translate('Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.'));
+            alert(Translator.translate('Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.').stripTags());
             return false;
         }
 
@@ -558,7 +558,7 @@ ShippingMethod.prototype = {
                 return true;
             }
         }
-        alert(Translator.translate('Please specify shipping method.'));
+        alert(Translator.translate('Please specify shipping method.').stripTags());
         return false;
     },
 
@@ -732,7 +732,7 @@ Payment.prototype = {
         }
         var methods = document.getElementsByName('payment[method]');
         if (methods.length==0) {
-            alert(Translator.translate('Your order cannot be completed at this time as there is no payment methods available for it.'));
+            alert(Translator.translate('Your order cannot be completed at this time as there is no payment methods available for it.').stripTags());
             return false;
         }
         for (var i=0; i<methods.length; i++) {
@@ -744,7 +744,7 @@ Payment.prototype = {
         if (result) {
             return true;
         }
-        alert(Translator.translate('Please specify payment method.'));
+        alert(Translator.translate('Please specify payment method.').stripTags());
         return false;
     },
 

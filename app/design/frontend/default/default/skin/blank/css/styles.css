@@ -425,6 +425,13 @@ tr.summary-details-excluded { font-style:italic; }
 
 /* Demo Notice */
 .demo-notice { margin:0; padding:6px 10px; background:#d75f07; font-size:12px; line-height:1.15; text-align:center; color:#fff; }
+
+/* Cookie Notice */
+.notice-cookie { border-bottom:1px solid #cfcfcf; background:#ffff90; font-size:12px; line-height:1.25; text-align:center; color:#2f2f2f; }
+.notice-cookie .notice-inner { width:870px; margin:0 auto; padding:12px 0 12px 80px; background:url(../images/i_notice.gif) 20px 25px no-repeat; text-align:left; }
+.notice-cookie .notice-inner p { margin:0 0 10px; border:1px dotted #cccc73; padding:10px; }
+.notice-cookie .notice-inner .actions { }
+
 /* ======================================================================================= */
 
 

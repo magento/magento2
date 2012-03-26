@@ -43,22 +43,14 @@
                         <div class="fields">
                             <label for="shipping:company"><?php echo $this->__('Company') ?></label>
                             <div class="input-box">
-                                <input type="text" id="shipping:company" name="shipping[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text" onchange="shipping.setSameAsBilling(false);" />
+                                <input type="text" id="shipping:company" name="shipping[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('company') ?>" onchange="shipping.setSameAsBilling(false);" />
                             </div>
                         </div>
-            <?php if(false): ?>
-                        <div class="fields">
-                            <label for="shipping:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
-                            <div class="input-box">
-                                <input type="text" name="shipping[email]" id="shipping:email" value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
-                            </div>
-                        </div>
-            <?php endif ?>
                     </li>
                     <li class="wide">
                         <label for="shipping:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
                         <div class="input-box">
-                            <input type="text" title="<?php echo $this->__('Street Address') ?>" name="shipping[street][]" id="shipping:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" onchange="shipping.setSameAsBilling(false);" />
+                            <input type="text" title="<?php echo $this->__('Street Address') ?>" name="shipping[street][]" id="shipping:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('street') ?>" onchange="shipping.setSameAsBilling(false);" />
                         </div>
                         </li>
             <?php for ($_i=2, $_n=$this->helper('Mage_Customer_Helper_Address')->getStreetLines(); $_i<=$_n; $_i++): ?>
@@ -71,14 +63,14 @@
                     <li class="wide">
                         <label for="billing:vat_id"><?php echo $this->__('VAT Number'); ?></label>
                         <div class="input-box">
-                            <input type="text" id="shipping:vat_id" name="shipping[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()); ?>" title="<?php echo $this->__('VAT Number'); ?>" class="input-text" />
+                            <input type="text" id="shipping:vat_id" name="shipping[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()); ?>" title="<?php echo $this->__('VAT Number'); ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('vat_id') ?>" />
                         </div>
                     </li>
                     <li class="fields">
                         <div class="field">
                             <label for="shipping:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
                             <div class="input-box">
-                                <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text required-entry" id="shipping:city" onchange="shipping.setSameAsBilling(false);" />
+                                <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('city') ?>" id="shipping:city" onchange="shipping.setSameAsBilling(false);" />
                             </div>
                         </div>
                         <div class="field">
@@ -92,7 +84,7 @@
                                     $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                                 //]]>
                                 </script>
-                                <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
+                                <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                             </div>
                         </div>
                     </li>
@@ -100,7 +92,7 @@
                         <div class="field">
                             <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
                             <div class="input-box">
-                                <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry" onchange="shipping.setSameAsBilling(false);" />
+                                <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('postcode') ?>" onchange="shipping.setSameAsBilling(false);" />
                             </div>
                         </div>
                         <div class="field">
@@ -114,13 +106,13 @@
                         <div class="field">
                             <label for="shipping:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
                             <div class="input-box">
-                                <input type="text" name="shipping[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" id="shipping:telephone" onchange="shipping.setSameAsBilling(false);" />
+                                <input type="text" name="shipping[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('telephone') ?>" id="shipping:telephone" onchange="shipping.setSameAsBilling(false);" />
                             </div>
                         </div>
                         <div class="field">
                             <label for="shipping:fax"><?php echo $this->__('Fax') ?></label>
                             <div class="input-box">
-                                <input type="text" name="shipping[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text" id="shipping:fax" onchange="shipping.setSameAsBilling(false);" />
+                                <input type="text" name="shipping[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('fax') ?>" id="shipping:fax" onchange="shipping.setSameAsBilling(false);" />
                             </div>
                         </div>
                     </li>
@@ -155,6 +147,6 @@
     //shippingForm.setElementsRelation('shipping:country_id', 'shipping:region', '<?php echo $this->getUrl('directory/json/childRegion') ?>', '<?php echo $this->__('Select State/Province...') ?>');
     $('shipping-address-select') && shipping.newAddress(!$('shipping-address-select').value);
 
-    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
+    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, 'shipping:postcode');
 //]]>
 </script>

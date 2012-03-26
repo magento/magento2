@@ -153,6 +153,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main
                 'title'     => Mage::helper('Mage_Widget_Helper_Data')->__('Assign to Store Views'),
                 'required'  => true,
                 'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(false, true),
+                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
         }
 
@@ -162,7 +163,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main
             'title' => Mage::helper('Mage_Widget_Helper_Data')->__('Sort Order'),
             'class' => '',
             'required' => false,
-            'note' => Mage::helper('Mage_Widget_Helper_Data')->__('Sort Order of widget instances in the same block reference')
+            'note' => Mage::helper('Mage_Widget_Helper_Data')->__('Sort Order of widget instances in the same container')
         ));
 
         /* @var $layoutBlock Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout */

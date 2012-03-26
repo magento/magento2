@@ -111,8 +111,8 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
 
         $this->_addElementTypes($fieldset);
 
-        $fieldset->addField('instance_type', 'select', array(
-            'name'  => 'instance_type',
+        $fieldset->addField('type', 'select', array(
+            'name'  => 'type',
             'label' => Mage::helper('Mage_Widget_Helper_Data')->__('Type'),
             'title' => Mage::helper('Mage_Widget_Helper_Data')->__('Type'),
             'class' => '',
@@ -130,7 +130,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
             ->createBlock('Mage_Adminhtml_Block_Widget_Button')
             ->setData(array(
                 'label'     => Mage::helper('Mage_Widget_Helper_Data')->__('Continue'),
-                'onclick'   => "setSettings('" . $this->getContinueUrl() . "', 'instance_type', 'package_theme')",
+                'onclick'   => "setSettings('" . $this->getContinueUrl() . "', 'type', 'package_theme')",
                 'class'     => 'save'
             ));
         $fieldset->addField('continue_button', 'note', array(
@@ -151,7 +151,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
     {
         return $this->getUrl('*/*/*', array(
             '_current' => true,
-            'instance_type' => '{{instance_type}}',
+            'type' => '{{type}}',
             'package_theme' => '{{package_theme}}'
         ));
     }

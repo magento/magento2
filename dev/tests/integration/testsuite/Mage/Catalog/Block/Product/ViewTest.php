@@ -58,7 +58,7 @@ class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase
         $layout = new Mage_Core_Model_Layout();
         $headBlock = new Mage_Core_Block_Template();
         $layout->addBlock($headBlock, 'head');
-        $this->_block->setLayout($layout);
+        $layout->addBlock($this->_block);
 
         $this->assertNotEmpty($headBlock->getTitle());
         $this->assertEquals($this->_product->getMetaTitle(), $headBlock->getTitle());

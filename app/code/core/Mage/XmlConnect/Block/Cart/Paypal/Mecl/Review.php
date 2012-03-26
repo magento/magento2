@@ -87,7 +87,7 @@ class Mage_XmlConnect_Block_Cart_Paypal_Mecl_Review extends Mage_Paypal_Block_Ex
                 'payer_email'   => $this->__('Payer Email: %s', $this->getBillingAddress()->getEmail())
         ));
 
-        $this->getChild('details')->addDetailsToXmlObj($reviewXmlObj);
+        $this->getChildBlock('details')->addDetailsToXmlObj($reviewXmlObj);
 
         return $reviewXmlObj->asNiceXml();
     }

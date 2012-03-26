@@ -35,6 +35,16 @@
 class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
 {
     /**
+     * Retrieve block title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->__('My Wishlist <small>(%d)</small>', $this->getItemCount());
+    }
+
+    /**
      * Add sidebar conditions to collection
      *
      * @param  Mage_Wishlist_Model_Resource_Item_Collection $collection
@@ -57,7 +67,7 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
      */
     protected function _toHtml()
     {
-        if (($this->getCustomWishlist() && $this->getItemCount()) || $this->hasWishlistItems()) {
+        if ($this->getItemCount()) {
             return parent::_toHtml();
         }
 
@@ -67,6 +77,7 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
     /**
      * Can Display wishlist
      *
+     * @deprecated after 1.6.2.0
      * @return bool
      */
     public function getCanDisplayWishlist()
@@ -75,19 +86,19 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
     }
 
     /**
-     * Retrieve Wishlist model
+     * Retrieve Wishlist Product Items collection
      *
-     * @return Mage_Wishlist_Model_Wishlist
+     * @return Mage_Wishlist_Model_Resource_Item_Collection
      */
-    protected function _getWishlist()
+    public function getWishlistItems()
     {
-
-        if (!$this->getCustomWishlist() || !is_null($this->_wishlist)) {
-            return parent::_getWishlist();
+        if (is_null($this->_collection)) {
+            $this->_collection = clone $this->_createWishlistItemCollection();
+            $this->_collection->clear();
+            $this->_prepareCollection($this->_collection);
         }
 
-        $this->_wishlist = $this->getCustomWishlist();
-        return $this->_wishlist;
+        return $this->_collection;
     }
 
     /**
@@ -97,10 +108,16 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
      */
     public function getItemCount()
     {
-        if ($this->getCustomWishlist()) {
-            return $this->getCustomWishlist()->getItemsCount();
-        }
+        return $this->_getHelper()->getItemCount();
+    }
 
-        return $this->getWishlistItemsCount();
+    /**
+     * Check whether user has items in his wishlist
+     *
+     * @return bool
+     */
+    public function hasWishlistItems()
+    {
+        return $this->getItemCount() > 0;
     }
 }

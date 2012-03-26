@@ -57,7 +57,7 @@
             <div id="order-shipping_method" class="box-right"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 
-        <?php if($this->getChild('card_validation')): ?>
+        <?php if($this->getChildBlock('card_validation')): ?>
         <div class="clear"></div>
         <div id="order-methods">
             <div id="order-card_validation" class="box-left payments"><?php echo $this->getChildHtml('card_validation') ?></div>

@@ -26,6 +26,9 @@
  */
 
 require __DIR__ . '/Magento/Test/Bootstrap.php';
+require __DIR__ . '/../../static/testsuite/Utility/Classes.php';
+
+Utility_Files::init(new Utility_Files(realpath(__DIR__ . '/../../../..')));
 
 $baseDir = dirname(__DIR__);
 
@@ -37,6 +40,7 @@ set_include_path(implode(
     PATH_SEPARATOR,
     array(
         "$baseDir/framework",
+        "$baseDir/testsuite",
         get_include_path()
     )
 ));

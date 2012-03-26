@@ -483,6 +483,16 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                         </solution_type>
+                        <require_billing_address translate="label comment">
+                            <label>Require Customer's Billing Address</label>
+                            <comment>This feature needs be enabled first for the merchant account through PayPal technical support.</comment>
+                            <config_path>payment/paypal_express/require_billing_address</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Paypal_Model_System_Config_Source_RequireBillingAddress</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </require_billing_address>
                         <allow_ba_signup translate="label comment tooltip">
                             <label>Billing Agreement Signup </label>
                             <comment>Whether to create a billing agreement, if there are no active billing agreements available.</comment>
@@ -1932,6 +1942,15 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                         </debug>
+                        <display_ec translate="label">
+                            <label>Display Express Checkout in the Payment Information step</label>
+                            <config_path>payment/hosted_pro/display_ec</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                        </display_ec>
                     </fields>
                 </hosted_pro>
             </groups>

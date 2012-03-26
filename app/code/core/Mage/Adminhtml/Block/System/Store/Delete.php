@@ -68,7 +68,7 @@ class Mage_Adminhtml_Block_System_Store_Delete extends Mage_Adminhtml_Block_Widg
     public function getHeaderText()
     {
         return Mage::helper('Mage_Adminhtml_Helper_Data')->__("Delete %s '%s'", $this->getStoreTypeTitle(),
-            $this->escapeHtml($this->getChild('form')->getDataObject()->getName()));
+            $this->escapeHtml($this->getChildBlock('form')->getDataObject()->getName()));
     }
 
     /**

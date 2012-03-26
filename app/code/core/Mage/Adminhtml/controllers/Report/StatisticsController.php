@@ -106,7 +106,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
             'refunded'    => 'Mage_Sales_Model_Resource_Report_Refunded',
             'coupons'     => 'Mage_SalesRule_Model_Resource_Report_Rule',
             'bestsellers' => 'Mage_Sales_Model_Resource_Report_Bestsellers',
-            'viewed'      => 'Mage_Sales_Model_Resource_Report_Product_Viewed',
+            'viewed'      => 'Mage_Reports_Model_Resource_Report_Product_Viewed',
         );
         $out = array();
         foreach ($codes as $code) {

@@ -85,7 +85,9 @@ class Mage_SalesRule_Model_Quote_Discount extends Mage_Sales_Model_Quote_Address
                 $eventArgs['item'] = $item;
                 Mage::dispatchEvent('sales_quote_address_discount_item', $eventArgs);
 
-                if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                if ($item->getHasChildren() && $item->isChildrenCalculated()
+                    && !$item->getForceApplyDiscountToParentItem()
+                ) {
                     foreach ($item->getChildren() as $child) {
                         $this->_calculator->process($child);
                         $eventArgs['item'] = $child;

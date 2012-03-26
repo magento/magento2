@@ -27,6 +27,8 @@
 (function(){
     var last = null;
     var ie7 = @if(@_jscript_version==5.7) 1 @end + 0;
+    var ie8 = @if(@_jscript_version==5.8) 1 @end + 0;
+    if (ie7 || ie8) {
     if (ie7) {
         var eDefer = Function.prototype.defer;
         Function.prototype.defer = function() {

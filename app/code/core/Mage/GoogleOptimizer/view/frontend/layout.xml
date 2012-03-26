@@ -44,7 +44,7 @@ Product view
         </reference>
     </catalog_product_view>
 
-    <catalog_category_default>
+    <catalog_category_view>
         <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Category" before="-" name="googleoptimizer.control.script">
                 <action method="setScriptType"><scriptType>control_script</scriptType></action>
@@ -55,22 +55,9 @@ Product view
                 <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
             </block>
         </reference>
-    </catalog_category_default>
+    </catalog_category_view>
 
-    <catalog_category_layered>
-        <reference name="head">
-            <block type="Mage_GoogleOptimizer_Block_Code_Category" before="-" name="googleoptimizer.control.script">
-                <action method="setScriptType"><scriptType>control_script</scriptType></action>
-            </block>
-        </reference>
-        <reference name="before_body_end">
-            <block type="Mage_GoogleOptimizer_Block_Code_Category" after="-" name="googleoptimizer.tracking.script">
-                <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
-            </block>
-        </reference>
-    </catalog_category_layered>
-
-    <cms_page>
+    <cms_page_view>
         <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Page" before="-" name="googleoptimizer.control.script">
                 <action method="setScriptType"><scriptType>control_script</scriptType></action>
@@ -81,7 +68,7 @@ Product view
                 <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
             </block>
         </reference>
-    </cms_page>
+    </cms_page_view>
 
     <checkout_cart_index>
         <reference name="before_body_end">

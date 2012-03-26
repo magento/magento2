@@ -26,7 +26,8 @@
 ?>
 <?php /* @var $this Mage_Downloadable_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Downloadable */ ?>
 <?php $_linksPurchasedSeparately = $this->getLinksPurchasedSeparately(); ?>
-<?php if ($this->getProduct()->isSaleable() && $this->hasLinks()):?>
+<?php $_skipSaleableCheck = Mage::helper('Mage_Catalog_Helper_Product')->getSkipSaleableCheck(); ?>
+<?php if (($this->getProduct()->isSaleable() || $_skipSaleableCheck) && $this->hasLinks()):?>
 
 <div id="catalog_product_composite_configure_fields_downloadable" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Downloadable Information') ?></h4>

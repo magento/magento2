@@ -69,7 +69,7 @@
                                 <tr>
                                     <?php if ($this->displayCustomsValue()): ?>
                                         <th><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Customs Value') ?></th>
-                                        <td><?php echo $this->displayPrice($params->getCustomsValue()) ?></td>
+                                        <td><?php echo $this->displayCustomsPrice($params->getCustomsValue()) ?></td>
                                     <?php else: ?>
                                         <th><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Total Weight') ?></th>
                                         <td><?php echo $params->getWeight() .' '. Mage::helper('Mage_Usa_Helper_Data')->getMeasureWeightName($params->getWeightUnits()) ?></td>
@@ -85,7 +85,7 @@
                                     <?php if ($params->getContentType() != null): ?>
                                         <th><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Contents') ?></th>
                                         <?php if ($params->getContentType() == 'OTHER'): ?>
-                                            <td><?php echo $params->getContentTypeOther() ?></td>
+                                            <td><?php echo $this->escapeHtml($params->getContentTypeOther()) ?></td>
                                         <?php else: ?>
                                             <td><?php echo $this->getContentTypeByCode($params->getContentType()) ?></td>
                                         <?php endif; ?>
@@ -170,7 +170,7 @@
                                             <?php echo $item->getWeight(); ?>
                                         </td>
                                         <?php if ($this->displayCustomsValue()): ?>
-                                            <td class="a-right"><?php echo $this->displayPrice($item->getCustomsValue()) ?></td>
+                                            <td class="a-right"><?php echo $this->displayCustomsPrice($item->getCustomsValue()) ?></td>
                                         <?php endif; ?>
                                         <td class="a-right">
                                             <?php echo $this->getQtyOrderedItem($item->getOrderItemId()); ?>

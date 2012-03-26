@@ -34,32 +34,33 @@
 
 class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
+    /**
+     * Prepare rating edit form
+     *
+     * @return Mage_Adminhtml_Block_Rating_Edit_Tab_Form
+     */
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form();
         $this->setForm($form);
-        $defaultStore = Mage::app()->getStore(0);
 
         $fieldset = $form->addFieldset('rating_form', array(
             'legend'=>Mage::helper('Mage_Rating_Helper_Data')->__('Rating Title')
         ));
 
         $fieldset->addField('rating_code', 'text', array(
-            'name'      => 'rating_code',
-            'label'     => Mage::helper('Mage_Rating_Helper_Data')->__('Default Value'),
-            'class'     => 'required-entry',
-            'required'  => true,
-
+            'name' => 'rating_code',
+            'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Default Value'),
+            'class' => 'required-entry',
+            'required' => true,
         ));
 
-//        if (!Mage::app()->isSingleStoreMode()) {
-            foreach(Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreCollection() as $store) {
-                $fieldset->addField('rating_code_' . $store->getId(), 'text', array(
-                    'label'     => $store->getName(),
-                    'name'      => 'rating_codes['. $store->getId() .']',
-                ));
-            }
-//        }
+        foreach (Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreCollection() as $store) {
+            $fieldset->addField('rating_code_' . $store->getId(), 'text', array(
+                'label' => $store->getName(),
+                'name' => 'rating_codes[' . $store->getId() . ']',
+            ));
+        }
 
         if (Mage::getSingleton('Mage_Adminhtml_Model_Session')->getRatingData()) {
             $form->setValues(Mage::getSingleton('Mage_Adminhtml_Model_Session')->getRatingData());
@@ -68,8 +69,7 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
                $this->_setRatingCodes($data['rating_codes']);
             }
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->setRatingData(null);
-        }
-        elseif (Mage::registry('rating_data')) {
+        } elseif (Mage::registry('rating_data')) {
             $form->setValues(Mage::registry('rating_data')->getData());
             if (Mage::registry('rating_data')->getRatingCodes()) {
                $this->_setRatingCodes(Mage::registry('rating_data')->getRatingCodes());
@@ -85,46 +85,43 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
             $i = 1;
             foreach ($collection->getItems() as $item) {
                 $fieldset->addField('option_code_' . $item->getId() , 'hidden', array(
-                    'required'  => true,
-                    'name'      => 'option_title[' . $item->getId() . ']',
-                    'value'     => ($item->getCode()) ? $item->getCode() : $i,
+                    'required' => true,
+                    'name' => 'option_title[' . $item->getId() . ']',
+                    'value' => ($item->getCode()) ? $item->getCode() : $i,
                 ));
 
                 $i ++;
             }
-        }
-        else {
-            for ($i=1; $i<=5; $i++ ) {
+        } else {
+            for ($i = 1; $i <= 5; $i++) {
                 $fieldset->addField('option_code_' . $i, 'hidden', array(
-                    'required'  => true,
-                    'name'      => 'option_title[add_' . $i . ']',
-                    'value'     => $i,
+                    'required' => true,
+                    'name' => 'option_title[add_' . $i . ']',
+                    'value' => $i,
                 ));
             }
         }
 
-//        if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset = $form->addFieldset('visibility_form', array(
-                'legend'    => Mage::helper('Mage_Rating_Helper_Data')->__('Rating Visibility'))
-            );
-            $fieldset->addField('stores', 'multiselect', array(
-                'label'     => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
-//                'required'  => true,
-                'name'      => 'stores[]',
-                'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
-            ));
+        $fieldset = $form->addFieldset('visibility_form', array(
+            'legend' => Mage::helper('Mage_Rating_Helper_Data')->__('Rating Visibility')
+        ));
 
-            if (Mage::registry('rating_data')) {
-                $form->getElement('stores')->setValue(Mage::registry('rating_data')->getStores());
-            }
-//        }
-//        else {
-//            $fieldset->addField('stores', 'hidden', array(
-//                'name'      => 'stores[]',
-//                'value'     => Mage::app()->getStore(true)->getId()
-//            ));
-//        }
+        $fieldset->addField('stores', 'multiselect', array(
+            'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
+            'name' => 'stores[]',
+            'values' => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
+            'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
+        ));
+
+        $fieldset->addField('position', 'text', array(
+            'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Sort Order'),
+            'name' => 'position',
+        ));
+
+        if (Mage::registry('rating_data')) {
+            $form->getElement('position')->setValue(Mage::registry('rating_data')->getPosition());
+            $form->getElement('stores')->setValue(Mage::registry('rating_data')->getStores());
+        }
 
         return parent::_prepareForm();
     }

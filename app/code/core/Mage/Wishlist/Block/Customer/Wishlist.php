@@ -35,18 +35,9 @@
 class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
 {
     /*
-     * List of product type configuration to render options list
+     * List of product options rendering configurations by product type
      */
     protected $_optionsCfg = array();
-
-    /*
-     * Constructor of block - adds default renderer for product configuration
-     */
-    public function _construct()
-    {
-        parent::_construct();
-        $this->addOptionsRenderCfg('default','Mage_Catalog_Helper_Product_Configuration','options_list.phtml');
-    }
 
     /**
      * Add wishlist conditions to collection
@@ -81,15 +72,13 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
      */
     public function getBackUrl()
     {
-        if ($this->getRefererUrl()) {
-            return $this->getRefererUrl();
-        }
         return $this->getUrl('customer/account/');
     }
 
     /**
      * Sets all options render configurations
      *
+     * @deprecated after 1.6.2.0
      * @param null|array $optionCfg
      * @return Mage_Wishlist_Block_Customer_Wishlist
      */
@@ -102,6 +91,7 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
     /**
      * Returns all options render configurations
      *
+     * @deprecated after 1.6.2.0
      * @return array
      */
     public function getOptionsRenderCfgs()
@@ -111,8 +101,8 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
 
     /*
      * Adds config for rendering product type options
-     * If template is null - later default will be used
      *
+     * @deprecated after 1.6.2.0
      * @param string $productType
      * @param string $helperName
      * @param null|string $template
@@ -127,6 +117,7 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
     /**
      * Returns html for showing item options
      *
+     * @deprecated after 1.6.2.0
      * @param string $productType
      * @return array|null
      */
@@ -144,6 +135,7 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
     /**
      * Returns html for showing item options
      *
+     * @deprecated after 1.6.2.0
      * @param Mage_Wishlist_Model_Item $item
      * @return string
      */
@@ -159,7 +151,7 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
             Mage::throwException($this->__("Helper for wishlist options rendering doesn't implement required interface."));
         }
 
-        $block = $this->getChild('item_options');
+        $block = $this->getChildBlock('item_options');
         if (!$block) {
             return '';
         }
@@ -180,23 +172,9 @@ class Mage_Wishlist_Block_Customer_Wishlist extends Mage_Wishlist_Block_Abstract
     }
 
     /**
-     * Returns default description to show in textarea field
-     *
-     * @param Mage_Wishlist_Model_Item $item
-     * @return string
-     */
-    public function getCommentValue(Mage_Wishlist_Model_Item $item)
-    {
-        if ($this->hasDescription($item)) {
-            return  $this->getEscapedDescription($item);
-        }
-
-        return Mage::helper('Mage_Wishlist_Helper_Data')->defaultCommentString();
-    }
-
-    /**
      * Returns qty to show visually to user
      *
+     * @deprecated after 1.6.2.0
      * @param Mage_Wishlist_Model_Item $item
      * @return float
      */

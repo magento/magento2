@@ -284,7 +284,6 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
     /**
      * Constructor.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -377,9 +376,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
         foreach ($collection as $category) {
             $structure = explode('/', $category->getPath());
             $pathSize  = count($structure);
-            if ($pathSize > 2) {
+            if ($pathSize > 1) {
                 $path = array();
-                for ($i = 2; $i < $pathSize; $i++) {
+                for ($i = 1; $i < $pathSize; $i++) {
                     $path[] = $collection->getItemById($structure[$i])->getName();
                 }
                 $this->_categories[implode('/', $path)] = $category->getId();
@@ -640,20 +639,15 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      */
     protected function _saveCustomOptions()
     {
-        $productTable   = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_entity');
-        $optionTable    = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option');
-        $priceTable     = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option_price');
-        $titleTable     = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option_title');
-        $typePriceTable = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option_type_price');
-        $typeTitleTable = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option_type_title');
-        $typeValueTable = Mage::getSingleton('Mage_Core_Model_Resource')
-                ->getTableName('catalog_product_option_type_value');
+        /** @var $coreResource Mage_Core_Model_Resource */
+        $coreResource   = Mage::getSingleton('Mage_Core_Model_Resource');
+        $productTable   = $coreResource->getTableName('catalog_product_entity');
+        $optionTable    = $coreResource->getTableName('catalog_product_option');
+        $priceTable     = $coreResource->getTableName('catalog_product_option_price');
+        $titleTable     = $coreResource->getTableName('catalog_product_option_title');
+        $typePriceTable = $coreResource->getTableName('catalog_product_option_type_price');
+        $typeTitleTable = $coreResource->getTableName('catalog_product_option_type_title');
+        $typeValueTable = $coreResource->getTableName('catalog_product_option_type_value');
         $nextOptionId   = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($optionTable);
         $nextValueId    = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($typeValueTable);
         $priceIsGlobal  = Mage::helper('Mage_Catalog_Helper_Data')->isPriceGlobal();
@@ -818,10 +812,12 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             // if complex options does not contain values - ignore them
             foreach ($customOptions[$optionTable] as $key => $optionData) {
                 if ($typeSpecific[$optionData['type']] === true
-                        && !isset($customOptions[$typeValueTable][$optionData['option_id']])) {
+                        && !isset($customOptions[$typeValueTable][$optionData['option_id']])
+                ) {
                     unset($customOptions[$optionTable][$key], $customOptions[$titleTable][$optionData['option_id']]);
                 }
             }
+
             if ($customOptions[$optionTable]) {
                 $this->_connection->insertMultiple($optionTable, $customOptions[$optionTable]);
             } else {
@@ -1540,27 +1536,28 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
     protected function _saveStockItem()
     {
         $defaultStockData = array(
-            'manage_stock'                       => 1,
-            'use_config_manage_stock'            => 1,
-            'qty'                                => 0,
-            'min_qty'                            => 0,
-            'use_config_min_qty'                 => 1,
-            'min_sale_qty'                       => 1,
-            'use_config_min_sale_qty'            => 1,
-            'max_sale_qty'                       => 10000,
-            'use_config_max_sale_qty'            => 1,
-            'is_qty_decimal'                     => 0,
-            'backorders'                         => 0,
-            'use_config_backorders'              => 1,
-            'notify_stock_qty'                   => 1,
-            'use_config_notify_stock_qty'        => 1,
-            'enable_qty_increments'              => 0,
-            'use_config_enable_qty_inc'          => 1,
-            'qty_increments'                     => 0,
-            'use_config_qty_increments'          => 1,
-            'is_in_stock'                        => 0,
-            'low_stock_date'                     => null,
-            'stock_status_changed_auto'          => 0
+            'manage_stock'                  => 1,
+            'use_config_manage_stock'       => 1,
+            'qty'                           => 0,
+            'min_qty'                       => 0,
+            'use_config_min_qty'            => 1,
+            'min_sale_qty'                  => 1,
+            'use_config_min_sale_qty'       => 1,
+            'max_sale_qty'                  => 10000,
+            'use_config_max_sale_qty'       => 1,
+            'is_qty_decimal'                => 0,
+            'backorders'                    => 0,
+            'use_config_backorders'         => 1,
+            'notify_stock_qty'              => 1,
+            'use_config_notify_stock_qty'   => 1,
+            'enable_qty_increments'         => 0,
+            'use_config_enable_qty_inc'     => 1,
+            'qty_increments'                => 0,
+            'use_config_qty_increments'     => 1,
+            'is_in_stock'                   => 0,
+            'low_stock_date'                => null,
+            'stock_status_changed_auto'     => 0,
+            'is_decimal_divided'            => 0
         );
 
         $entityTable = Mage::getResourceModel('Mage_CatalogInventory_Model_Resource_Stock_Item')->getMainTable();

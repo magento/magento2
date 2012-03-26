@@ -52,7 +52,7 @@ class Mage_XmlConnect_Block_Catalog_Category extends Mage_XmlConnect_Block_Catal
         $categoryModel  = Mage::getModel('Mage_Catalog_Model_Category')->load($categoryId);
         if ($categoryModel->getId()) {
             $hasMoreProductItems = 0;
-            $productListBlock = $this->getChild('product_list');
+            $productListBlock = $this->getChildBlock('product_list');
             if ($productListBlock && $categoryModel->getLevel() > 1) {
                 $layer = Mage::getSingleton('Mage_Catalog_Model_Layer');
                 $productsXmlObj = $productListBlock->setCategory($categoryModel)->setLayer($layer)
@@ -60,7 +60,7 @@ class Mage_XmlConnect_Block_Catalog_Category extends Mage_XmlConnect_Block_Catal
                 $hasMoreProductItems = (int)$productListBlock->getHasProductItems();
             }
 
-            $infoBlock = $this->getChild('category_info');
+            $infoBlock = $this->getChildBlock('category_info');
             if ($infoBlock) {
                 $categoryInfoXmlObj = $infoBlock->setCategory($categoryModel)->getCategoryInfoXmlObject();
                 $categoryInfoXmlObj->addChild('has_more_items', $hasMoreProductItems);

@@ -99,7 +99,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
 
             /** @var $resultBlock Mage_ImportExport_Block_Adminhtml_Import_Frame_Result */
             $resultBlock = $this->getLayout()->getBlock('import.frame.result');
-
+            /** @var $importModel Mage_ImportExport_Model_Import */
             $importModel = Mage::getModel('Mage_ImportExport_Model_Import');
 
             try {

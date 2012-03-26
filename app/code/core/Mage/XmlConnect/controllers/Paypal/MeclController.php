@@ -180,8 +180,8 @@ class Mage_XmlConnect_Paypal_MeclController extends Mage_XmlConnect_Controller_A
                 $detailsBlock->setPaypalMessages($messageArray);
             }
 
-            $detailsBlock->setQuote($this->_getQuote())->getChild('details')->setQuote($this->_getQuote())
-                ->getChild('totals')->setQuote($this->_getQuote());
+            $detailsBlock->setQuote($this->_getQuote())->getChildBlock('details')->setQuote($this->_getQuote())
+                ->getChildBlock('totals')->setQuote($this->_getQuote());
             $this->renderLayout();
             return;
         } catch (Mage_Core_Exception $e) {

@@ -129,7 +129,8 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
             $websiteId = Mage::app()->getStore(true)->getWebsiteId();
             $fieldset->addField('website_ids', 'hidden', array(
                 'name'     => 'website_ids[]',
-                'value'    => $websiteId
+                'value'    => $websiteId,
+                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
             $model->setWebsiteIds($websiteId);
         } else {
@@ -138,7 +139,8 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
                 'label'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Websites'),
                 'title'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Websites'),
                 'required' => true,
-                'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteValuesForForm()
+                'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteValuesForForm(),
+                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
         }
 

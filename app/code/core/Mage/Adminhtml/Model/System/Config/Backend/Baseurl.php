@@ -31,7 +31,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_Baseurl extends Mage_Core_Model
     {
         $value = $this->getValue();
 
-        if (!preg_match('#^{{((un)?secure_)?base_url}}#', $value)) {
+        if (!preg_match('#^{{((un)?secure_)?(base|public)_url}}#', $value)) {
             $parsedUrl = parse_url($value);
             if (!isset($parsedUrl['scheme']) || !isset($parsedUrl['host'])) {
                 Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('The %s you entered is invalid. Please make sure that it follows "http://domain.com/" format.', $this->getFieldConfig()->label));

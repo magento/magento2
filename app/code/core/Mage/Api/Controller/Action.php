@@ -25,24 +25,32 @@
  */
 
 /**
- * Base api controller
- *
- * @category   Mage
- * @package    Mage_Api
-*/
+ * Generic API controller
+ */
 class Mage_Api_Controller_Action extends Mage_Core_Controller_Front_Action
 {
+    /**
+     * Currently used area
+     *
+     * @var string
+     */
+    protected $_currentArea = 'adminhtml';
+
+    /**
+     * Use 'admin' store and prevent the session from starting
+     *
+     * @return Mage_Api_Controller_Action
+     */
     public function preDispatch()
     {
-        $this->getLayout()->setArea('adminhtml');
         Mage::app()->setCurrentStore('admin');
-        $this->setFlag('', self::FLAG_NO_START_SESSION, 1); // Do not start standart session
+        $this->setFlag('', self::FLAG_NO_START_SESSION, 1);
         parent::preDispatch();
         return $this;
     }
 
     /**
-     * Retrive webservice server
+     * Retrieve webservice server
      *
      * @return Mage_Api_Model_Server
      */

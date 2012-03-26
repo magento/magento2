@@ -24,15 +24,21 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
+/**
+ * Fedex method source implementation
+ *
+ * @category   Mage
+ * @package    Mage_Usa
+ * @author     Magento Core Team <core@magentocommerce.com>
+ */
 class Mage_Usa_Model_Shipping_Carrier_Fedex_Source_Method
 {
     public function toOptionArray()
     {
         $fedex = Mage::getSingleton('Mage_Usa_Model_Shipping_Carrier_Fedex');
         $arr = array();
-        foreach ($fedex->getCode('method') as $k=>$v) {
-            $arr[] = array('value'=>$k, 'label'=>$v);
+        foreach ($fedex->getCode('method') as $k => $v) {
+            $arr[] = array('value' => $k, 'label' => $v);
         }
         return $arr;
     }

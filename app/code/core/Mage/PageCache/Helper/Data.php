@@ -34,7 +34,7 @@
 class Mage_PageCache_Helper_Data extends Mage_Core_Helper_Abstract
 {
     /**
-     * Pathes to external cache config options
+     * Paths to external cache config options
      */
     const XML_PATH_EXTERNAL_CACHE_ENABLED  = 'system/external_page_cache/enabled';
     const XML_PATH_EXTERNAL_CACHE_LIFETIME = 'system/external_page_cache/cookie_lifetime';
@@ -47,10 +47,36 @@ class Mage_PageCache_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Cookie name for disabling external caching
-     *
-     * @var string
      */
     const NO_CACHE_COOKIE = 'external_no_cache';
+
+    /**
+     * Cookie name for locking the NO_CACHE_COOKIE for modification
+     */
+    const NO_CACHE_LOCK_COOKIE = 'external_no_cache_cookie_locked';
+
+    /**
+     * @var bool
+     */
+    protected $_isNoCacheCookieLocked = false;
+
+    /**
+     * Initialize 'no cache' cookie locking
+     */
+    function __construct()
+    {
+        $this->_isNoCacheCookieLocked = (bool)$this->_getCookie()->get(self::NO_CACHE_LOCK_COOKIE);
+    }
+
+    /**
+     * Retrieve the cookie model instance
+     *
+     * @return Mage_Core_Model_Cookie
+     */
+    protected function _getCookie()
+    {
+        return Mage::getSingleton('Mage_Core_Model_Cookie');
+    }
 
     /**
      * Check whether external cache is enabled
@@ -93,21 +119,60 @@ class Mage_PageCache_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Disable caching on external storage side by setting special cookie
+     * Disable caching on external storage side by setting special cookie, if the cookie has not been locked
      *
-     * @return void
+     * @param int|null $lifetime
+     * @return Mage_PageCache_Helper_Data
      */
-    public function setNoCacheCookie()
+    public function setNoCacheCookie($lifetime = null)
     {
-        $cookie   = Mage::getSingleton('Mage_Core_Model_Cookie');
-        $lifetime = Mage::getStoreConfig(self::XML_PATH_EXTERNAL_CACHE_LIFETIME);
-        $noCache  = $cookie->get(self::NO_CACHE_COOKIE);
-
-        if ($noCache) {
-            $cookie->renew(self::NO_CACHE_COOKIE, $lifetime);
-        } else {
-            $cookie->set(self::NO_CACHE_COOKIE, 1, $lifetime);
+        if ($this->_isNoCacheCookieLocked) {
+            return $this;
         }
+        $lifetime = $lifetime !== null ? $lifetime : Mage::getStoreConfig(self::XML_PATH_EXTERNAL_CACHE_LIFETIME);
+        if ($this->_getCookie()->get(self::NO_CACHE_COOKIE)) {
+            $this->_getCookie()->renew(self::NO_CACHE_COOKIE, $lifetime);
+        } else {
+            $this->_getCookie()->set(self::NO_CACHE_COOKIE, '1', $lifetime);
+        }
+        return $this;
+    }
+
+    /**
+     * Remove the 'no cache' cookie, if it has not been locked
+     *
+     * @return Mage_PageCache_Helper_Data
+     */
+    public function removeNoCacheCookie()
+    {
+        if (!$this->_isNoCacheCookieLocked) {
+            $this->_getCookie()->delete(self::NO_CACHE_COOKIE);
+        }
+        return $this;
+    }
+
+    /**
+     * Disable modification of the 'no cache' cookie
+     *
+     * @return Mage_PageCache_Helper_Data
+     */
+    public function lockNoCacheCookie()
+    {
+        $this->_getCookie()->set(self::NO_CACHE_LOCK_COOKIE, '1', 0);
+        $this->_isNoCacheCookieLocked = true;
+        return $this;
+    }
+
+    /**
+     * Enable modification of the 'no cache' cookie
+     *
+     * @return Mage_PageCache_Helper_Data
+     */
+    public function unlockNoCacheCookie()
+    {
+        $this->_getCookie()->delete(self::NO_CACHE_LOCK_COOKIE);
+        $this->_isNoCacheCookieLocked = false;
+        return $this;
     }
 
     /**

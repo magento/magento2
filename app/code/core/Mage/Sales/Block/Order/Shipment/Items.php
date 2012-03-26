@@ -60,7 +60,7 @@ class Mage_Sales_Block_Order_Shipment_Items extends Mage_Sales_Block_Items_Abstr
     public function getCommentsHtml($shipment)
     {
         $html = '';
-        $comments = $this->getChild('shipment_comments');
+        $comments = $this->getChildBlock('shipment_comments');
         if ($comments) {
             $comments->setEntity($shipment)
                 ->setTitle(Mage::helper('Mage_Sales_Helper_Data')->__('About Your Shipment'));

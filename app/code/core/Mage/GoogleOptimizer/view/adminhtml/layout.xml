@@ -74,7 +74,7 @@ Layout handle for cms page
                     </params>
                 </action>
                 <action method="ifGoogleOptimizerEnabledAppend">
-                    <container>js</container>
+                    <containerBlock>js</containerBlock>
                     <name>googleoptimizer_js</name>
                     <type>Mage_GoogleOptimizer_Block_Js</type>
                     <attributes>

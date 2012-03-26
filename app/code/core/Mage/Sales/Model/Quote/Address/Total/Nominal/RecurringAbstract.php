@@ -65,7 +65,10 @@ abstract class Mage_Sales_Model_Quote_Address_Total_Nominal_RecurringAbstract
             if ($item->getProduct()->isRecurring()) {
                 $profileData = $item->getProduct()->getRecurringProfile();
                 if (!empty($profileData[$this->_profileDataKey])) {
-                    $item->setData($this->_itemRowTotalKey, $profileData[$this->_profileDataKey]);
+                    $item->setData(
+                        $this->_itemRowTotalKey,
+                        $address->getQuote()->getStore()->convertPrice($profileData[$this->_profileDataKey])
+                    );
                     $this->_afterCollectSuccess($address, $item);
                 }
             }

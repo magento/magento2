@@ -64,8 +64,18 @@ AdminOrder.prototype = {
                 searchAreaId = this.getAreaId('search');
             searchButton.onClick = function() {
                 $(searchAreaId).show();
-                this.remove();
+                var el = this;
+                window.setTimeout(function () {
+                    el.remove();
+                }, 10);
             }
+
+            this.dataArea.onLoad = this.dataArea.onLoad.wrap(function(proceed) {
+                proceed();
+                this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
+                this._parent.itemsArea.onLoad();
+            });
+
             this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                 proceed();
                 if (!$(searchAreaId).visible()) {
@@ -73,6 +83,7 @@ AdminOrder.prototype = {
                 }
             });
             this.areasLoaded();
+            this.itemsArea.onLoad();
         }).bind(this));
     },
 
@@ -1155,12 +1166,14 @@ AdminOrder.prototype = {
                         }
                     } else if (response.success) {
                         message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                        groupChangeRequired = true;
                     } else {
                         message = parameters.vatValidationFailedMessage;
+                        groupChangeRequired = true;
                     }
 
                 } catch (e) {
-                    message = parameters.vatValidationFailedMessage;
+                    message = parameters.vatErrorMessage;
                 }
                 if (!groupChangeRequired) {
                     alert(message);
@@ -1230,7 +1243,8 @@ ControlButton.prototype = {
     initialize: function(label){
         this._label = label;
         this._node = new Element('button', {
-            'class': 'scalable add'
+            'class': 'scalable add',
+            'type':  'button'
         });
     },
 

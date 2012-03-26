@@ -56,18 +56,18 @@
     </adminhtml_extension_custom_edit>
     
     <adminhtml_extension_custom_loadtab>
-        <block type="Mage_Core_Block_Text_List" name="root">
+        <container name="root" label="Root">
             <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Load" name="connect_extension_load_local_package_grid"
                 template="extension/custom/load.phtml">
                 <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Grid" name="local_package_grid" />
             </block>
-        </block>
+        </container>
     </adminhtml_extension_custom_loadtab>
     
     <adminhtml_extension_custom_grid>
-        <block type="Mage_Core_Block_Text_List" name="root">
+        <container name="root" label="Root">
             <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Grid" name="connect_extension_edit_local_package_grid" />
-        </block>
+        </container>
     </adminhtml_extension_custom_grid>
 </layout>
 

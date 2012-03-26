@@ -95,8 +95,8 @@
                 <totals>
                     <weee>
                         <class>Mage_Weee_Model_Total_Invoice_Weee</class>
-                        <after>subtotal,tax</after>
-                        <before>grand_total</before>
+                        <after>subtotal</after>
+                        <before>tax,discount,grand_total</before>
                     </weee>
                 </totals>
             </order_invoice>
@@ -104,8 +104,8 @@
                 <totals>
                     <weee>
                         <class>Mage_Weee_Model_Total_Creditmemo_Weee</class>
-                        <after>subtotal,tax</after>
-                        <before>grand_total</before>
+                        <after>subtotal</after>
+                        <before>tax,discount,grand_total</before>
                     </weee>
                 </totals>
             </order_creditmemo>

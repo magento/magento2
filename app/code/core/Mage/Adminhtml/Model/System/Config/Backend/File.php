@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * System config file field backend model
  *
@@ -34,6 +33,12 @@
  */
 class Mage_Adminhtml_Model_System_Config_Backend_File extends Mage_Core_Model_Config_Data
 {
+    /**
+     * Upload max file size in kilobytes
+     *
+     * @var int
+     */
+    protected $_maxFileSize = 0;
 
     /**
      * Save uploaded file before saving config value
@@ -60,6 +65,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_File extends Mage_Core_Model_Co
                 $uploader = new Mage_Core_Model_File_Uploader($file);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
+                $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
 
             } catch (Exception $e) {
@@ -77,6 +83,19 @@ class Mage_Adminhtml_Model_System_Config_Backend_File extends Mage_Core_Model_Co
         }
 
         return $this;
+    }
+
+    /**
+     * Validation callback for checking max file size
+     *
+     * @param  string $filePath Path to temporary uploaded file
+     * @throws Mage_Core_Exception
+     */
+    public function validateMaxSize($filePath)
+    {
+        if ($this->_maxFileSize > 0 && filesize($filePath) > ($this->_maxFileSize * 1024)) {
+            throw Mage::exception('Mage_Core', Mage::helper('Mage_Adminhtml_Helper_Data')->__('Uploaded file is larger than %.2f kilobytes allowed by server', $this->_maxFileSize));
+        }
     }
 
     /**

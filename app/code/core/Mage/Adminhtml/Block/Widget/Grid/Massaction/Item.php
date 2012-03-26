@@ -100,7 +100,7 @@ class Mage_Adminhtml_Block_Widget_Grid_Massaction_Item extends Mage_Adminhtml_Bl
      */
     public function getAdditionalActionBlock()
     {
-        return $this->getChild('additional_action');
+        return $this->getChildBlock('additional_action');
     }
 
     /**

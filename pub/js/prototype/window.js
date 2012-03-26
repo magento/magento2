@@ -1435,11 +1435,18 @@ var Dialog = {
 
     var okButtonClass = "class ='" + (parameters.buttonClass ? parameters.buttonClass + " " : "") + " ok_button'" 
     var cancelButtonClass = "class ='" + (parameters.buttonClass ? parameters.buttonClass + " " : "") + " cancel_button'" 
-    var content = "\
+/*     var content = "\
       <div class='" + parameters.className + "_message'>" + content  + "</div>\
         <div class='" + parameters.className + "_buttons'>\
           <input type='button' value='" + okLabel + "' onclick='Dialog.okCallback()' " + okButtonClass + "/>\
           <input type='button' value='" + cancelLabel + "' onclick='Dialog.cancelCallback()' " + cancelButtonClass + "/>\
+        </div>\
+    "; */
+    var content = "\
+      <div class='" + parameters.className + "_message'>" + content  + "</div>\
+        <div class='" + parameters.className + "_buttons'>\
+          <button type='button' title='" + okLabel + "' onclick='Dialog.okCallback()' " + okButtonClass + "><span><span><span>" + okLabel + "</span></span></span></button>\
+          <button type='button' title='" + cancelLabel + "' onclick='Dialog.cancelCallback()' " + cancelButtonClass + "><span><span><span>" + cancelLabel + "</span></span></span></button>\
         </div>\
     ";
     return this._openDialog(content, parameters)
@@ -1463,10 +1470,15 @@ var Dialog = {
     parameters.className = parameters.className || "alert";
     
     var okButtonClass = "class ='" + (parameters.buttonClass ? parameters.buttonClass + " " : "") + " ok_button'" 
-    var content = "\
+/*     var content = "\
       <div class='" + parameters.className + "_message'>" + content  + "</div>\
         <div class='" + parameters.className + "_buttons'>\
           <input type='button' value='" + okLabel + "' onclick='Dialog.okCallback()' " + okButtonClass + "/>\
+        </div>";   */
+    var content = "\
+      <div class='" + parameters.className + "_message'>" + content  + "</div>\
+        <div class='" + parameters.className + "_buttons'>\
+          <button type='button' title='" + okLabel + "' onclick='Dialog.okCallback()' " + okButtonClass + "><span><span><span>" + okLabel + "</span></span></span></button>\
         </div>";                  
     return this._openDialog(content, parameters)
   },

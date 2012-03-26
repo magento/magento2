@@ -673,6 +673,9 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
             $stockData['min_qty'] = 0;
         }
+        if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
+            $stockData['is_decimal_divided'] = 0;
+        }
     }
 
     public function categoriesJsonAction()

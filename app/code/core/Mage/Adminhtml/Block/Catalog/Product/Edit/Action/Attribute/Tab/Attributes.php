@@ -95,8 +95,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes
      */
     protected function _getAdditionalElementHtml($element)
     {
+        // Add name attribute to checkboxes that correspond to multiselect elements
+        $nameAttributeHtml = ($element->getExtType() === 'multiple') ? 'name="' . $element->getId() . '_checkbox"'
+            : '';
         return '<span class="attribute-change-checkbox"><input type="checkbox" id="' . $element->getId()
-             . '-checkbox" onclick="toogleFieldEditMode(this, \'' . $element->getId()
+             . '-checkbox" ' . $nameAttributeHtml . ' onclick="toogleFieldEditMode(this, \'' . $element->getId()
              . '\')" /><label for="' . $element->getId() . '-checkbox">' . Mage::helper('Mage_Catalog_Helper_Data')->__('Change')
              . '</label></span>
                 <script type="text/javascript">initDisableFields(\''.$element->getId().'\')</script>';

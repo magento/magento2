@@ -62,7 +62,7 @@ class Mage_XmlConnect_Block_Catalog_Search extends Mage_XmlConnect_Block_Catalog
         /**
          * Products
          */
-        $productListBlock = $this->getChild('product_list');
+        $productListBlock = $this->getChildBlock('product_list');
         if ($productListBlock) {
             $layer = Mage::getSingleton('Mage_CatalogSearch_Model_Layer');
             $productsXmlObj = $productListBlock->setLayer($layer)

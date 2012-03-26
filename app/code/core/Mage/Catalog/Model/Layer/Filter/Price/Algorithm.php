@@ -33,30 +33,27 @@
  */
 class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
 {
-    const MIN_POSSIBLE_PRICE = .01;
+    /**
+     * Rounding factor coefficient
+     */
     const TEN_POWER_ROUNDING_FACTOR = 4;
+
+    /**
+     * Interval deflection coefficient
+     */
     const INTERVAL_DEFLECTION_LIMIT = .3;
 
     /**
-     * Sorted array of all products prices
-     *
-     * @var array
+     * Standard normal distribution's  a/2 quantile
+     * Depends on predefined a. In case of a=0.05
      */
-    protected $_prices = null;
+    const STANDARD_NORMAL_DISTRIBUTION = 1.96;
 
     /**
-     * Number of segmentation intervals
-     *
-     * @var null|int
+     * Min and Max number of intervals
      */
-    protected $_intervalsNumber = null;
-
-    /**
-     * Upper limits of skipped quantiles
-     *
-     * @var array
-     */
-    protected $_skippedQuantilesUpperLimits = array();
+    const MIN_INTERVALS_NUMBER = 2;
+    const MAX_INTERVALS_NUMBER = 10;
 
     /**
      * Upper prices limit
@@ -73,15 +70,91 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
     protected $_lowerLimit = null;
 
     /**
-     * Search index of price, that satisfy conditions to be less or greater-or-equal than $value
+     * Number of segmentation intervals
+     *
+     * @var null|int
+     */
+    protected $_intervalsNumber = null;
+
+    /**
+     * Upper limits of skipped quantiles
+     *
+     * @var array
+     */
+    protected $_skippedQuantilesUpperLimits = array();
+
+    /**
+     * Total count of prices
+     *
+     * @var int
+     */
+    protected $_count = 0;
+
+    /**
+     * Prices model
+     *
+     * @var null|Mage_Catalog_Model_Layer_Filter_Price
+     */
+    protected $_pricesModel = null;
+
+    /**
+     * Current quantile interval
+     *
+     * @var array [from, to]
+     */
+    protected $_quantileInterval = array(0, 0);
+
+    /**
+     * Prices of current quantile
+     *
+     * @var array
+     */
+    protected $_prices = array();
+
+    /**
+     * Max price
+     *
+     * @var float
+     */
+    protected $_maxPrice = 0;
+
+    /**
+     * Min price
+     *
+     * @var float
+     */
+    protected $_minPrice = 0;
+
+    /**
+     * Last price query limiter
+     *
+     * @var array [index, value]
+     */
+    protected $_lastPriceLimiter = array(null, 0);
+
+    /**
+     * Set lower and upper limit for algorithm
+     *
+     * @param null|float $lowerLimit
+     * @param null|float $upperLimit
+     * @return Mage_Catalog_Model_Layer_Filter_Price_Algorithm
+     */
+    public function setLimits($lowerLimit = null, $upperLimit = null)
+    {
+        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
+        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
+        return $this;
+    }
+
+    /**
+     * Search first index of price, that satisfy conditions to be 'greater or equal' than $value
      * Returns -1 if index was not found
      *
      * @param float $value
      * @param null|array $limits search [from, to]
-     * @param bool $isLess (to be less or greater-or-equal)
      * @return int
      */
-    protected function _binarySearch($value, $limits = null, $isLess = true)
+    protected function _binarySearch($value, $limits = null)
     {
         if (empty($this->_prices)) {
             return -1;
@@ -97,95 +170,65 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             $limits[1] = count($this->_prices) - 1;
         }
 
-        if ($limits[0] > $limits[1]
-            || ($isLess && $this->_prices[$limits[1]] < $value)
-            || (!$isLess && $this->_prices[$limits[0]] >= $value)
-        ) {
+        if ($limits[0] > $limits[1] || $this->_prices[$limits[1]] < $value) {
             return -1;
         }
 
         if ($limits[1] - $limits[0] <= 1) {
-            if ($isLess) {
-                return ($this->_prices[$limits[0]] < $value) ? $limits[1] : $limits[0];
-            } else {
-                return ($this->_prices[$limits[1]] >= $value) ? $limits[0] : $limits[1];
-            }
+            return ($this->_prices[$limits[0]] < $value) ? $limits[1] : $limits[0];
         }
 
         $separator = floor(($limits[0] + $limits[1]) / 2);
-        if ($isLess) {
-            if ($this->_prices[$separator] < $value) {
-                $limits[0] = $separator + 1;
-            } else {
-                $limits[1] = $separator;
-            }
+        if ($this->_prices[$separator] < $value) {
+            $limits[0] = $separator + 1;
         } else {
-            if ($this->_prices[$separator] >= $value) {
-                $limits[1] = $separator - 1;
-            } else {
-                $limits[0] = $separator;
-            }
+            $limits[1] = $separator;
         }
 
-        return $this->_binarySearch($value, array($limits[0], $limits[1]), $isLess);
+        return $this->_binarySearch($value, array($limits[0], $limits[1]));
     }
 
     /**
-     * Check prices to be in limits interval
+     * Set prices statistics
      *
+     * @param float $min
+     * @param float $max
+     * @param float $standardDeviation
+     * @param int $count
      * @return Mage_Catalog_Model_Layer_Filter_Price_Algorithm
      */
-    protected function _checkPrices()
+    public function setStatistics($min, $max, $standardDeviation, $count)
     {
-        if (is_null($this->_prices)) {
+        $this->_count = $count;
+        $this->_minPrice = $min;
+        $this->_maxPrice = $max;
+        $priceRange = $max - $min;
+        if ($count < 2 || ($priceRange <= 0)) {
+            //Same price couldn't be separated with several intervals
+            $this->_intervalsNumber = 1;
             return $this;
         }
 
-        if (!is_null($this->_upperLimit) || !is_null($this->_lowerLimit)) {
-            $right = is_null($this->_upperLimit)
-                ? (count($this->_prices) - 1)
-                : $this->_binarySearch($this->_upperLimit, null, false);
-            $left = is_null($this->_lowerLimit)
-                ? 0
-                : $this->_binarySearch($this->_lowerLimit, array(0, $right));
-            if ($left > $right) {
-                $this->_prices = array();
-            } else {
-                $this->_prices = array_slice($this->_prices, $left, $right - $left + 1);
-            }
+        if ($standardDeviation <= 0) {
+            $intervalsNumber = pow(10, self::TEN_POWER_ROUNDING_FACTOR);
+        } else {
+            $intervalsNumber = $priceRange * pow($count, 1 / 3) / (3.5 * $standardDeviation);
         }
+        $this->_intervalsNumber = max(ceil($intervalsNumber), self::MIN_INTERVALS_NUMBER);
+        $this->_intervalsNumber = (int)min($this->_intervalsNumber, self::MAX_INTERVALS_NUMBER);
+
         return $this;
     }
 
     /**
-     * Set lower and upper limit for algorithm
+     * Set prices model
      *
-     * @param null|float $lowerLimit
-     * @param null|float $upperLimit
+     * @param Mage_Catalog_Model_Layer_Filter_Price $pricesModel
      * @return Mage_Catalog_Model_Layer_Filter_Price_Algorithm
      */
-    public function setLimits($lowerLimit = null, $upperLimit = null)
+    public function setPricesModel($pricesModel)
     {
-        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
-        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
-        $this->_checkPrices();
-        return $this;
-    }
-
-    /**
-     * Set products prices
-     *
-     * @param array $prices due to performance issue prices should be sorted (by DBMS engine)
-     * @return Mage_Catalog_Model_Layer_Filter_Price_Algorithm
-     */
-    public function setPrices(array $prices)
-    {
-        $this->_prices = $prices;
-
-        $this->_checkPrices();
-        $this->_intervalsNumber = null;
-        $this->_skippedQuantilesUpperLimits = array();
-
+        $this->_pricesModel = $pricesModel;
         return $this;
     }
 
@@ -200,30 +243,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             return $this->_intervalsNumber;
         }
 
-        $pricesCount = count($this->_prices);
-        $priceRange = empty($this->_prices) ? 0 : ($this->_prices[count($this->_prices) - 1] - $this->_prices[0]);
-        if ($pricesCount < 2 || ($priceRange == 0)) {
-            //Same price couldn't be separated with several intervals
-            $this->_intervalsNumber = 1;
-            return $this->_intervalsNumber;
-        }
-
-        $sum = 0;
-        $sumSquares = 0;
-        foreach ($this->_prices as $price) {
-            $sum += $price;
-            $sumSquares += $price * $price;
-        }
-
-        if ($pricesCount * $sumSquares - $sum * $sum <= 0) {
-            $intervalsNumber = 1000;
-        } else {
-            $intervalsNumber = $priceRange * pow($pricesCount, 5 / 6)
-                * sqrt(($pricesCount - 1) / ($pricesCount * $sumSquares - $sum * $sum)) / 3.5;
-        }
-        $this->_intervalsNumber = min(max(ceil($intervalsNumber), 2), 10);
-
-        return $this->_intervalsNumber;
+        return 1;
     }
 
     /**
@@ -248,7 +268,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             return 0;
         }
 
-        return $quantileNumber * count($this->_prices) / $this->getIntervalsNumber() - .5;
+        return $quantileNumber * $this->_count / $this->getIntervalsNumber() - .5;
     }
 
     /**
@@ -262,16 +282,15 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
         if ($quantileNumber < 1 || $quantileNumber >= $this->getIntervalsNumber()) {
             return null;
         }
-        $pricesCount = count($this->_prices);
         $quantile = $this->_getQuantile($quantileNumber);
-        $deflectionLimit = floor($pricesCount / 2 / $this->getIntervalsNumber());
+        $deflectionLimit = floor($this->_count / 2 / $this->getIntervalsNumber());
         $limits = array(
             min(floor($quantile - $deflectionLimit), floor($quantile)),
             max(ceil($quantile + $deflectionLimit - 1), ceil($quantile)),
         );
 
-        $deflection = $this->_getStandardNormalDistribution()
-            * sqrt($pricesCount * $quantileNumber * ($this->getIntervalsNumber() - $quantileNumber))
+        $deflection = self::STANDARD_NORMAL_DISTRIBUTION
+            * sqrt($this->_count * $quantileNumber * ($this->getIntervalsNumber() - $quantileNumber))
             / $this->getIntervalsNumber();
         $left = max(floor($quantile - $deflection - 1), $limits[0], 0);
         if (array_key_exists($quantileNumber - 1, $this->_skippedQuantilesUpperLimits)
@@ -279,73 +298,8 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
         ) {
             $left = $this->_skippedQuantilesUpperLimits[$quantileNumber - 1];
         }
-        $right = min(ceil($quantile + $deflection), $limits[1], $pricesCount - 1);
+        $right = min(ceil($quantile + $deflection), $limits[1], $this->_count - 1);
         return array($left, $right);
-     }
-
-    /**
-     * Get standard normal distribution
-     *
-     * @return float
-     */
-    protected function _getStandardNormalDistribution()
-    {
-        return 1.96;
-    }
-
-    /**
-     * Find max rounding factor with given price range
-     *
-     * @param float $lowerPrice
-     * @param float $upperPrice
-     * @param bool $returnEmpty whether empty result is acceptable
-     * @param null|float $roundingFactor if given, checks for range to contain the factor
-     * @return false|array
-     */
-    protected function _findRoundPrice($lowerPrice, $upperPrice, $returnEmpty = true, $roundingFactor = null)
-    {
-        $lowerPrice = round($lowerPrice, 3);
-        $upperPrice = round($upperPrice, 3);
-
-        if (!is_null($roundingFactor)) {
-            // Can't separate if prices are equal
-            if ($lowerPrice >= $upperPrice) {
-                if ($lowerPrice > $upperPrice || $returnEmpty) {
-                    return false;
-                }
-            }
-            // round is used for such examples: (1194.32 / 0.02) or (5 / 100000)
-            $lowerDivision = ceil(round($lowerPrice / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
-            $upperDivision = floor(round($upperPrice / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
-
-            $result = array();
-            for ($i = $lowerDivision; $i <= $upperDivision; ++$i) {
-                $result[] = round($i * $roundingFactor, 2);
-            }
-
-            return $result;
-        }
-
-        $result = array();
-        $tenPower = pow(10, self::TEN_POWER_ROUNDING_FACTOR);
-        $roundingFactorCoefficients = array(10, 5, 2);
-        while ($tenPower >= self::MIN_POSSIBLE_PRICE) {
-            if ($tenPower == self::MIN_POSSIBLE_PRICE) {
-                $roundingFactorCoefficients[] = 1;
-            }
-            foreach ($roundingFactorCoefficients as $roundingFactorCoefficient) {
-                $roundingFactorCoefficient *= $tenPower;
-                $roundPrices = $this->_findRoundPrice(
-                    $lowerPrice, $upperPrice, $returnEmpty, $roundingFactorCoefficient
-                );
-                if ($roundPrices) {
-                    $result[round($roundingFactorCoefficient / self::MIN_POSSIBLE_PRICE)] = $roundPrices;
-                }
-            }
-            $tenPower /= 10;
-        }
-
-        return empty($result) ? array(1 => array()) : $result;
     }
 
     /**
@@ -381,33 +335,70 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             return null;
         }
 
+        $prices = array();
         $quantileInterval = $this->_getQuantileInterval($quantileNumber);
+        $intervalPricesCount = $quantileInterval[1] - $quantileInterval[0] + 1;
+        $offset = $quantileInterval[0];
+        if (!is_null($this->_lastPriceLimiter[0])) {
+            $offset -= $this->_lastPriceLimiter[0];
+        }
+        if ($offset < 0) {
+            $intervalPricesCount += $offset;
+            $prices = array_slice(
+                $this->_prices,
+                $this->_lastPriceLimiter[0] + $offset - $this->_quantileInterval[0],
+                -$offset
+            );
+            $offset = 0;
+        }
+        $lowerPrice = $this->_lastPriceLimiter[1];
+        if (!is_null($this->_lowerLimit)) {
+            $lowerPrice = max($lowerPrice, $this->_lowerLimit);
+        }
+        if ($intervalPricesCount >= 0) {
+            $prices = array_merge($prices, $this->_pricesModel->loadPrices(
+                $intervalPricesCount + 1,
+                $offset,
+                $lowerPrice,
+                $this->_upperLimit
+            ));
+        }
+        $lastPrice = $prices[$intervalPricesCount - 1];
         $bestRoundPrice = array();
-
-        if ($this->_prices[$quantileInterval[0]] == $this->_prices[$quantileInterval[1]]) {
-            if ($quantileNumber == 1) {
-                $index = $this->_binarySearch(
-                    $this->_prices[$quantileInterval[1]],
-                    array(0, $quantileInterval[0]),
-                    false
-                );
-                if ($index != -1) {
+        if ($lastPrice == $prices[0]) {
+            if ($quantileNumber == 1 && $offset) {
+                $additionalPrices = $this->_pricesModel
+                    ->loadPreviousPrices($lastPrice, $quantileInterval[0], $this->_lowerLimit);
+                if ($additionalPrices) {
+                    $quantileInterval[0] -= count($additionalPrices);
+                    $prices = array_merge($additionalPrices, $prices);
                     $bestRoundPrice = $this->_findRoundPrice(
-                        $this->_prices[$index] + self::MIN_POSSIBLE_PRICE / 10,
-                        $this->_prices[$quantileInterval[1]],
+                        $prices[0] + Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE / 10,
+                        $lastPrice,
                         false
                     );
                 }
             }
             if ($quantileNumber == $this->getIntervalsNumber() - 1) {
-                $index = $this->_binarySearch(
-                    $this->_prices[$quantileInterval[0]] + self::MIN_POSSIBLE_PRICE / 10,
-                    array($quantileInterval[1])
-                );
-                if ($index != -1) {
+                $pricesCount = count($prices);
+                if ($prices[$pricesCount - 1] > $lastPrice) {
+                    $additionalPrices = array($prices[$pricesCount - 1]);
+                } else {
+                    $additionalPrices = $this->_pricesModel->loadNextPrices(
+                        $lastPrice,
+                        $this->_count - $quantileInterval[0] - count($prices),
+                        $this->_upperLimit
+                    );
+                }
+                if ($additionalPrices) {
+                    $quantileInterval[1] = $quantileInterval[0] + count($prices) - 1;
+                    if ($prices[$pricesCount - 1] <= $lastPrice) {
+                        $quantileInterval[1] += count($additionalPrices);
+                        $prices = array_merge($prices, $additionalPrices);
+                    }
                     $upperBestRoundPrice = $this->_findRoundPrice(
-                        $this->_prices[$quantileInterval[0]] + self::MIN_POSSIBLE_PRICE / 10,
-                        $this->_prices[$index],
+                        $lastPrice + Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE / 10,
+                        $prices[count($prices) - 1],
                         false
                     );
                     $this->_mergeRoundPrices($bestRoundPrice, $upperBestRoundPrice);
@@ -415,14 +406,22 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             }
         } else {
             $bestRoundPrice = $this->_findRoundPrice(
-                $this->_prices[$quantileInterval[0]] + self::MIN_POSSIBLE_PRICE / 10,
-                $this->_prices[$quantileInterval[1]]
+                $prices[0] + Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE / 10,
+                $lastPrice
             );
         }
+
+        $this->_quantileInterval = $quantileInterval;
+        $this->_prices = $prices;
 
         if (empty($bestRoundPrice)) {
             $this->_skippedQuantilesUpperLimits[$quantileNumber] = $quantileInterval[1];
             return $bestRoundPrice;
+        }
+
+        $pricesCount = count($prices);
+        if ($prices[$pricesCount - 1] > $lastPrice) {
+            $this->_lastPriceLimiter = array($quantileInterval[0] + $pricesCount - 1, $prices[$pricesCount - 1]);
         }
 
         ksort($bestRoundPrice, SORT_NUMERIC);
@@ -437,18 +436,78 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
     }
 
     /**
+     * Find max rounding factor with given price range
+     *
+     * @param float $lowerPrice
+     * @param float $upperPrice
+     * @param bool $returnEmpty whether empty result is acceptable
+     * @param null|float $roundingFactor if given, checks for range to contain the factor
+     * @return false|array
+     */
+    protected function _findRoundPrice($lowerPrice, $upperPrice, $returnEmpty = true, $roundingFactor = null)
+    {
+        $lowerPrice = round($lowerPrice, 3);
+        $upperPrice = round($upperPrice, 3);
+
+        if (!is_null($roundingFactor)) {
+            // Can't separate if prices are equal
+            if ($lowerPrice >= $upperPrice) {
+                if ($lowerPrice > $upperPrice || $returnEmpty) {
+                    return false;
+                }
+            }
+            // round is used for such examples: (1194.32 / 0.02) or (5 / 100000)
+            $lowerDivision = ceil(round($lowerPrice / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
+            $upperDivision = floor(round($upperPrice / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
+
+            $result = array();
+            if ($upperDivision <= 0 || $upperDivision - $lowerDivision > 10) {
+                return $result;
+            }
+
+            for ($i = $lowerDivision; $i <= $upperDivision; ++$i) {
+                $result[] = round($i * $roundingFactor, 2);
+            }
+
+            return $result;
+        }
+
+        $result = array();
+        $tenPower = pow(10, self::TEN_POWER_ROUNDING_FACTOR);
+        $roundingFactorCoefficients = array(10, 5, 2);
+        while ($tenPower >= Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE) {
+            if ($tenPower == Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE) {
+                $roundingFactorCoefficients[] = 1;
+            }
+            foreach ($roundingFactorCoefficients as $roundingFactorCoefficient) {
+                $roundingFactorCoefficient *= $tenPower;
+                $roundPrices = $this->_findRoundPrice(
+                    $lowerPrice, $upperPrice, $returnEmpty, $roundingFactorCoefficient
+                );
+                if ($roundPrices) {
+                    $index = round($roundingFactorCoefficient
+                        / Mage_Catalog_Model_Resource_Layer_Filter_Price::MIN_POSSIBLE_PRICE);
+                    $result[$index] = $roundPrices;
+                }
+            }
+            $tenPower /= 10;
+        }
+
+        return empty($result) ? array(1 => array()) : $result;
+    }
+
+    /**
      * Get separator nearest to quantile among the separators
      *
      * @param int $quantileNumber
      * @param array $separators
-     * @param int $priceIndex
-     * @return bool|array [separatorPrice, pricesCount]
+     * @return bool|array [deflection, separatorPrice, $priceIndex]
      */
-    protected function _findBestSeparator($quantileNumber, $separators, $priceIndex)
+    protected function _findBestSeparator($quantileNumber, $separators)
     {
         $result = false;
 
-        $i = $priceIndex;
+        $i = 0;
         $pricesCount = count($this->_prices);
         while ($i < $pricesCount && !empty($separators)) {
             $i = $this->_binarySearch($separators[0], array($i));
@@ -458,9 +517,10 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
 
             $separator = array_shift($separators);
 
-            $deflection = abs(($quantileNumber + 1) * $pricesCount - $i * $this->_getCalculatedIntervalsNumber());
+            $deflection = abs($quantileNumber * $this->_count
+                - ($this->_quantileInterval[0] + $i) * $this->_getCalculatedIntervalsNumber());
             if (!$result || $deflection < $result[0]) {
-                $result = array($deflection, $separator, $i - $priceIndex);
+                $result = array($deflection, $separator, $i);
             }
         }
 
@@ -474,67 +534,74 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
      */
     public function calculateSeparators()
     {
-        $this->_checkPrices();
-        $separators = array();
-        for ($i = 1; $i < $this->getIntervalsNumber(); ++$i) {
-            $separators[] = $this->_findPriceSeparator($i);
-        }
-        $pricesCount = count($this->_prices);
-
-        $i = 0;
         $result = array();
+        $lastCount = 0;
+        $intervalFirstPrice = $this->_minPrice;
         $lastSeparator = is_null($this->_lowerLimit) ? 0 : $this->_lowerLimit;
-        $quantile = 0;
-        $pricesPerInterval = $pricesCount / $this->_getCalculatedIntervalsNumber();
-        while (!empty($separators) && ($i < $pricesCount)) {
-            while (!empty($separators) && empty($separators[0])) {
-                array_shift($separators);
-            }
-            if (empty($separators)) {
-                break;
-            }
 
+        for ($i = 1; $i < $this->getIntervalsNumber(); ++$i) {
+            $separator = $this->_findPriceSeparator($i);
+            if (empty($separator)) {
+                continue;
+            }
+            if ($this->_quantileInterval[0] == 0) {
+                $intervalFirstPrice = $this->_prices[0];
+            }
             $separatorCandidate = false;
+            $newIntervalFirstPrice = $intervalFirstPrice;
             $newLastSeparator = $lastSeparator;
-            while (!empty($separators[0]) && !array_key_exists($quantile, $result)) {
-                $separatorsPortion = array_shift($separators[0]);
-                $bestSeparator = $this->_findBestSeparator($quantile, $separatorsPortion, $i);
+
+            $pricesPerInterval = $this->_count / $this->_getCalculatedIntervalsNumber();
+            while (!empty($separator) && !array_key_exists($i, $result)) {
+                $separatorsPortion = array_shift($separator);
+                $bestSeparator = $this->_findBestSeparator($i, $separatorsPortion);
                 if ($bestSeparator && $bestSeparator[2] > 0) {
-                    $isEqualPrice = ($this->_prices[$i] == $this->_prices[$i + $bestSeparator[2] - 1])
-                        ? $this->_prices[$i]
+                    $isEqualPrice = ($intervalFirstPrice == $this->_prices[$bestSeparator[2] - 1])
+                        ? $this->_prices[0]
                         : false;
+                    $count = $bestSeparator[2] + $this->_quantileInterval[0] - $lastCount;
                     $separatorData = array(
                         'from'  => ($isEqualPrice !== false) ? $isEqualPrice : $lastSeparator,
                         'to'    => ($isEqualPrice !== false) ? $isEqualPrice : $bestSeparator[1],
-                        'count' => $bestSeparator[2],
+                        'count' => $count,
                     );
-                    if (abs(1 - $bestSeparator[2] / $pricesPerInterval) <= self::INTERVAL_DEFLECTION_LIMIT) {
+                    if (abs(1 - $count / $pricesPerInterval) <= self::INTERVAL_DEFLECTION_LIMIT) {
                         $newLastSeparator = $bestSeparator[1];
-                        $result[$quantile] = $separatorData;
+                        $newIntervalFirstPrice = $this->_prices[$bestSeparator[2]];
+                        $result[$i] = $separatorData;
                     } elseif (!$separatorCandidate || $bestSeparator[0] < $separatorCandidate[0]) {
-                        $separatorCandidate = array($bestSeparator[0], $separatorData, $bestSeparator[1]);
+                        $separatorCandidate = array(
+                            $bestSeparator[0],
+                            $separatorData,
+                            $bestSeparator[1],
+                            $this->_prices[$bestSeparator[2]]
+                        );
                     }
                 }
             }
 
-            if (!array_key_exists($quantile, $result) && $separatorCandidate) {
+            if (!array_key_exists($i, $result) && $separatorCandidate) {
                 $newLastSeparator = $separatorCandidate[2];
-                $result[$quantile] = $separatorCandidate[1];
+                $newIntervalFirstPrice = $separatorCandidate[3];
+                $result[$i] = $separatorCandidate[1];
             }
 
-            if (array_key_exists($quantile, $result)) {
+            if (array_key_exists($i, $result)) {
                 $lastSeparator = $newLastSeparator;
-                $i = $this->_binarySearch($lastSeparator, array($i));
-                array_shift($separators);
+                $intervalFirstPrice = $newIntervalFirstPrice;
+                $priceIndex = $this->_binarySearch($lastSeparator);
+                $lastCount += $result[$i]['count'];
+                if ($priceIndex != -1 && $lastSeparator > $this->_lastPriceLimiter[1]) {
+                    $this->_lastPriceLimiter = array($priceIndex + $this->_quantileInterval[0], $lastSeparator);
+                }
             }
-            ++$quantile;
         }
-        if ($i < $pricesCount) {
-            $isEqualPrice = ($this->_prices[$i] == $this->_prices[$pricesCount - 1]) ? $this->_prices[$i] : false;
-            $result[$quantile] = array(
+        if ($this->_lastPriceLimiter[0] < $this->_count) {
+            $isEqualPrice = ($intervalFirstPrice == $this->_maxPrice) ? $intervalFirstPrice : false;
+            $result[$this->getIntervalsNumber()] = array(
                 'from'  => $isEqualPrice ? $isEqualPrice : $lastSeparator,
                 'to'    => $isEqualPrice ? $isEqualPrice : (is_null($this->_upperLimit) ? '' : $this->_upperLimit),
-                'count' => $pricesCount - $i,
+                'count' => $this->_count - $lastCount,
             );
         }
 

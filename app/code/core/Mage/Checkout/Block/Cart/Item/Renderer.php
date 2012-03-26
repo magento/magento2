@@ -43,6 +43,20 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
     protected $_productThumbnail = null;
 
     /**
+     * Whether qty will be converted to number
+     *
+     * @var bool
+     */
+    protected $_strictQtyMode = true;
+
+    /**
+     * Check, whether product URL rendering should be ignored
+     *
+     * @var bool
+     */
+    protected $_ignoreProductUrl = false;
+
+    /**
      * Set item for render
      *
      * @param   Mage_Sales_Model_Quote_Item $item
@@ -144,10 +158,14 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
     /**
      * Check Product has URL
      *
-     * @return this
+     * @return bool
      */
     public function hasProductUrl()
     {
+        if ($this->_ignoreProductUrl) {
+            return false;
+        }
+
         if ($this->_productUrl || $this->getItem()->getRedirectUrl()) {
             return true;
         }
@@ -255,6 +273,7 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
             return $this->getData('delete_url');
         }
 
+        $encodedUrl = $this->helper('Mage_Core_Helper_Url')->getEncodedUrl();
         return $this->getUrl(
             'checkout/cart/delete',
             array(
@@ -267,11 +286,14 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
     /**
      * Get quote item qty
      *
-     * @return mixed
+     * @return float|int|string
      */
     public function getQty()
     {
-        return $this->getItem()->getQty()*1;
+        if (!$this->_strictQtyMode && (string)$this->getItem()->getQty() == '') {
+            return '';
+        }
+        return $this->getItem()->getQty() * 1;
     }
 
     /**
@@ -395,5 +417,29 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
             ->setTemplate('product/price_msrp_item.phtml')
             ->setProduct($item->getProduct())
             ->toHtml();
+    }
+
+    /**
+     * Set qty mode to be strict or not
+     *
+     * @param bool $strict
+     * @return Mage_Checkout_Block_Cart_Item_Renderer
+     */
+    public function setQtyMode($strict)
+    {
+        $this->_strictQtyMode = $strict;
+        return $this;
+    }
+
+    /**
+     * Set ignore product URL rendering
+     *
+     * @param bool $ignore
+     * @return Mage_Checkout_Block_Cart_Item_Renderer
+     */
+    public function setIgnoreProductUrl($ignore = true)
+    {
+        $this->_ignoreProductUrl = $ignore;
+        return $this;
     }
 }

@@ -89,19 +89,6 @@ class Mage_Customer_Model_Observer
     }
 
     /**
-     * Before load layout event handler
-     *
-     * @param Varien_Event_Observer $observer
-     */
-    public function beforeLoadLayout($observer)
-    {
-        $loggedIn = Mage::getSingleton('Mage_Customer_Model_Session')->isLoggedIn();
-
-        $observer->getEvent()->getLayout()->getUpdate()
-           ->addHandle('customer_logged_' . ($loggedIn ? 'in' : 'out'));
-    }
-
-    /**
      * Address before save event handler
      *
      * @param Varien_Event_Observer $observer

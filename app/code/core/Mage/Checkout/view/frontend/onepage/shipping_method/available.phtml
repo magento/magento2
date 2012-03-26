@@ -24,20 +24,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if (!($_shippingRateGroups = $this->getShippingRates())): ?>
+<?php /** @var $this Mage_Checkout_Block_Onepage_Shipping_Method_Available */ ?>
+<?php $_shippingRateGroups = $this->getShippingRates(); ?>
+<?php if (!$_shippingRateGroups): ?>
     <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else: ?>
     <dl class="sp-methods">
     <?php $shippingCodePrice = array(); ?>
     <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><?php echo $this->getCarrierName($code) ?></dt>
+        <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
         <dd>
             <ul>
             <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                 <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
                 <li>
                    <?php if ($_rate->getErrorMessage()): ?>
-                    <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
+                    <ul class="messages"><li class="error-msg"><ul><li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li></ul></li></ul>
                    <?php else: ?>
                         <?php if ($_sole) : ?>
                         <span class="no-display"><input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" checked="checked" /></span>
@@ -53,7 +55,7 @@
                         <?php endif; ?>
 
                         <?php endif; ?>
-                        <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
+                        <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                         <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()); ?>
                         <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
                         <?php echo $_excl; ?>

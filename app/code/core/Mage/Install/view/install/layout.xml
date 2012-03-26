@@ -29,10 +29,10 @@
 <layout>
     <install_wizard>
         <!-- Mage_Install -->
-        <block type="Mage_Core_Block_Template" name="root" output="toHtml">
+        <block type="Mage_Core_Block_Template" name="root" output="1">
             <action method="setTemplate"><template>Mage_Install::page.phtml</template></action>
-            <block type="Mage_Core_Block_Text_List" name="left" as="left"/>
-            <block type="Mage_Core_Block_Text_List" name="content" as="content" />
+            <container name="left" as="left" label="Left Column"/>
+            <container name="content" as="content" label="Content"/>
         </block>
         <block type="Mage_Install_Block_Db_Main" name="database" as="database"/>
     </install_wizard>

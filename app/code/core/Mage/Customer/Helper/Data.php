@@ -40,12 +40,17 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
     const REFERER_QUERY_PARAM_NAME = 'referer';
 
     /**
+     * Route for customer account login page
+     */
+    const ROUTE_ACCOUNT_LOGIN = 'customer/account/login';
+
+    /**
      * Config name for Redirect Customer to Account Dashboard after Logging in setting
      */
     const XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD = 'customer/startup/redirect_dashboard';
 
     /**
-     * Config pathes to VAT related customer groups
+     * Config paths to VAT related customer groups
      */
     const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
     const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
@@ -128,7 +133,7 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retrieve current (loggined) customer object
+     * Retrieve current (logged in) customer object
      *
      * @return Mage_Customer_Model_Customer
      */
@@ -168,21 +173,32 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getLoginUrl()
     {
+        return $this->_getUrl(self::ROUTE_ACCOUNT_LOGIN, $this->getLoginUrlParams());
+    }
+
+    /**
+     * Retrieve parameters of customer login url
+     *
+     * @return array
+     */
+    public function getLoginUrlParams()
+    {
         $params = array();
 
         $referer = $this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME);
 
-        if (!$referer && !Mage::getStoreConfigFlag(self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD)) {
-            if (!Mage::getSingleton('Mage_Customer_Model_Session')->getNoReferer()) {
-                $referer = Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
-                $referer = Mage::helper('Mage_Core_Helper_Data')->urlEncode($referer);
-            }
+        if (!$referer && !Mage::getStoreConfigFlag(self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD)
+            && !Mage::getSingleton('Mage_Customer_Model_Session')->getNoReferer()
+        ) {
+            $referer = Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
+            $referer = Mage::helper('Mage_Core_Helper_Data')->urlEncode($referer);
         }
+
         if ($referer) {
             $params = array(self::REFERER_QUERY_PARAM_NAME => $referer);
         }
 
-        return $this->_getUrl('customer/account/login', $params);
+        return $params;
     }
 
     /**
@@ -453,9 +469,9 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
 
             $requestParams = array();
             $requestParams['countryCode'] = $countryCode;
-            $requestParams['vatNumber'] = $vatNumber;
+            $requestParams['vatNumber'] = str_replace(array(' ', '-'), array('', ''), $vatNumber);
             $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $requestParams['requesterVatNumber'] = $requesterVatNumber;
+            $requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
 
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);

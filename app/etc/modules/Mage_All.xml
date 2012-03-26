@@ -101,6 +101,7 @@
             <depends>
                 <Mage_Eav/>
                 <Mage_Dataflow/>
+                <Mage_Directory/>
             </depends>
         </Mage_Customer>
         <Mage_Catalog>

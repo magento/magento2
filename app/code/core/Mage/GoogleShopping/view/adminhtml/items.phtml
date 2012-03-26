@@ -47,7 +47,7 @@
 
 <script type="text/javascript">
 //<![CDATA[
-var productsGridElement = $('<?php echo $this->getChild('product')->getId() ?>');
+var productsGridElement = $('<?php echo $this->getChildBlock('product')->getId() ?>');
 productsGridElement.hide();
 $('products_grid_button').observe('click', function (event) {
     var element = event.element();

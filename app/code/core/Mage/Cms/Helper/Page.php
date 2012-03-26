@@ -88,10 +88,7 @@ class Mage_Cms_Helper_Page extends Mage_Core_Helper_Abstract
                 Mage::getDesign()->setDesignTheme($page->getCustomTheme());
             }
         }
-
-        $action->getLayout()->getUpdate()
-            ->addHandle('default')
-            ->addHandle('cms_page');
+        $action->addPageLayoutHandles(array('id' => $page->getIdentifier()));
 
         $action->addActionLayoutHandles();
         if ($page->getRootTemplate()) {

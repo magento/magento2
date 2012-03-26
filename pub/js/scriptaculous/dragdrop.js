@@ -1,7 +1,6 @@
-// script.aculo.us dragdrop.js v1.8.2, Tue Nov 18 18:30:58 +0100 2008
+// script.aculo.us dragdrop.js v1.9.0, Thu Dec 23 16:54:48 -0500 2010
 
-// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005-2008 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
+// Copyright (c) 2005-2010 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
 // For details, see the script.aculo.us web site: http://script.aculo.us/
@@ -136,7 +135,7 @@ var Draggables = {
       this.eventKeypress  = this.keyPress.bindAsEventListener(this);
 
       Event.observe(document, "mouseup", this.eventMouseUp);
-      Event.observe(draggable.element, "mousemove", this.eventMouseMove);
+      Event.observe(document, "mousemove", this.eventMouseMove);
       Event.observe(document, "keypress", this.eventKeypress);
     }
     this.drags.push(draggable);
@@ -146,7 +145,7 @@ var Draggables = {
     this.drags = this.drags.reject(function(d) { return d==draggable });
     if(this.drags.length == 0) {
       Event.stopObserving(document, "mouseup", this.eventMouseUp);
-      Event.stopObserving(draggable.element, "mousemove", this.eventMouseMove);
+      Event.stopObserving(document, "mousemove", this.eventMouseMove);
       Event.stopObserving(document, "keypress", this.eventKeypress);
     }
   },
@@ -313,7 +312,7 @@ var Draggable = Class.create({
         tag_name=='TEXTAREA')) return;
 
       var pointer = [Event.pointerX(event), Event.pointerY(event)];
-      var pos     = Position.cumulativeOffset(this.element);
+      var pos     = this.element.cumulativeOffset();
       this.offset = [0,1].map( function(i) { return (pointer[i] - pos[i]) });
 
       Draggables.activate(this);
@@ -375,7 +374,7 @@ var Draggable = Class.create({
       if (this.options.scroll == window) {
         with(this._getWindowScroll(this.options.scroll)) { p = [ left, top, left+width, top+height ]; }
       } else {
-        p = Position.page(this.options.scroll);
+        p = Position.page(this.options.scroll).toArray();
         p[0] += this.options.scroll.scrollLeft + Position.deltaX;
         p[1] += this.options.scroll.scrollTop + Position.deltaY;
         p.push(p[0]+this.options.scroll.offsetWidth);
@@ -456,7 +455,7 @@ var Draggable = Class.create({
   },
 
   draw: function(point) {
-    var pos = Position.cumulativeOffset(this.element);
+    var pos = this.element.cumulativeOffset();
     if(this.options.ghosting) {
       var r   = Position.realOffset(this.element);
       pos[0] += r[0] - Position.deltaX; pos[1] += r[1] - Position.deltaY;
@@ -732,7 +731,7 @@ var Sortable = {
     }
 
     // keep reference
-    this.sortables[element.id] = options;
+    this.sortables[element.identify()] = options;
 
     // for onupdate
     Draggables.addObserver(new SortableObserver(element, options.onUpdate));
@@ -827,7 +826,7 @@ var Sortable = {
           hide().addClassName('dropmarker').setStyle({position:'absolute'});
       document.getElementsByTagName("body").item(0).appendChild(Sortable._marker);
     }
-    var offsets = Position.cumulativeOffset(dropon);
+    var offsets = dropon.cumulativeOffset();
     Sortable._marker.setStyle({left: offsets[0]+'px', top: offsets[1] + 'px'});
 
     if(position=='after')

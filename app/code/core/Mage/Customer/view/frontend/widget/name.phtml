@@ -66,7 +66,7 @@ For checkout/onepage/shipping.phtml:
     <div class="field name-firstname">
         <label for="<?php echo $this->getFieldId('firstname')?>" class="required"><em>*</em><?php echo $this->getStoreLabel('firstname') ?></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $this->getFieldId('firstname')?>" name="<?php echo $this->getFieldName('firstname')?>" value="<?php echo $this->escapeHtml($this->getObject()->getFirstname()) ?>" title="<?php echo $this->getStoreLabel('firstname') ?>" class="input-text required-entry" <?php echo $this->getFieldParams() ?> />
+            <input type="text" id="<?php echo $this->getFieldId('firstname')?>" name="<?php echo $this->getFieldName('firstname')?>" value="<?php echo $this->escapeHtml($this->getObject()->getFirstname()) ?>" title="<?php echo $this->getStoreLabel('firstname') ?>" maxlength="255" class="input-text <?php echo $this->getAttributeValidationClass('firstname') ?>" <?php echo $this->getFieldParams() ?> />
         </div>
     </div>
 <?php if ($this->showMiddlename()): ?>
@@ -74,14 +74,14 @@ For checkout/onepage/shipping.phtml:
     <div class="field name-middlename">
         <label for="<?php echo $this->getFieldId('middlename')?>"<?php echo $isMiddlenameRequired ? ' class="required"' : '' ?>><?php echo $isMiddlenameRequired ? '<em>*</em>' : '' ?><?php echo $this->getStoreLabel('middlename') ?></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $this->getFieldId('middlename')?>" name="<?php echo $this->getFieldName('middlename')?>" value="<?php echo $this->escapeHtml($this->getObject()->getMiddlename()) ?>" title="<?php echo $this->getStoreLabel('middlename') ?>" class="input-text<?php echo $isMiddlenameRequired ? ' required-entry' : '' ?>" <?php echo $this->getFieldParams() ?> />
+            <input type="text" id="<?php echo $this->getFieldId('middlename')?>" name="<?php echo $this->getFieldName('middlename')?>" value="<?php echo $this->escapeHtml($this->getObject()->getMiddlename()) ?>" title="<?php echo $this->getStoreLabel('middlename') ?>" class="input-text <?php echo $this->getAttributeValidationClass('middlename') ?>" <?php echo $this->getFieldParams() ?> />
         </div>
     </div>
 <?php endif; ?>
     <div class="field name-lastname">
         <label for="<?php echo $this->getFieldId('lastname')?>" class="required"><em>*</em><?php echo $this->getStoreLabel('lastname') ?></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $this->getFieldId('lastname')?>" name="<?php echo $this->getFieldName('lastname')?>" value="<?php echo $this->escapeHtml($this->getObject()->getLastname()) ?>" title="<?php echo $this->getStoreLabel('lastname') ?>" class="input-text required-entry" <?php echo $this->getFieldParams() ?> />
+            <input type="text" id="<?php echo $this->getFieldId('lastname')?>" name="<?php echo $this->getFieldName('lastname')?>" value="<?php echo $this->escapeHtml($this->getObject()->getLastname()) ?>" title="<?php echo $this->getStoreLabel('lastname') ?>" maxlength="255" class="input-text <?php echo $this->getAttributeValidationClass('lastname') ?>" <?php echo $this->getFieldParams() ?> />
         </div>
     </div>
 <?php if ($this->showSuffix()): ?>

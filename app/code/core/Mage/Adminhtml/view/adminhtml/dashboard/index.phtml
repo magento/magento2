@@ -25,18 +25,18 @@
  */
 ?>
 
-<?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
+<?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
 <script type="text/javascript">
 //<![CDATA[
 function changeDiagramsPeriod(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-<?php foreach ($this->getChild('diagrams')->getTabsIds() as $tabId): ?>
+<?php foreach ($this->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
     ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
     ajaxBlockUrl = '<?php echo $this->getUrl('*/*/ajaxBlock', array('_current' => true, 'block' => '', 'period' => '')) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
-            tabContentElementId = '<?php echo $this->getChild('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+            tabContentElementId = '<?php echo $this->getChildBlock('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
             try {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
@@ -116,7 +116,7 @@ function toggleCal(id) {
             <td>
                 <div class="entry-edit" style="border:1px solid #ccc;">
                     <?php echo $this->getChildHtml('diagrams') ?>
-                    <?php if (is_array($this->getChild('diagrams')->getTabsIds())) : ?>
+                    <?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
                         <div id="diagram_tab_content"></div>
                     <?php endif; ?>
                     <div style="margin:20px;">

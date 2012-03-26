@@ -36,6 +36,13 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     const XML_PATH_USE_PRODUCT_CANONICAL_TAG    = 'catalog/seo/product_canonical_tag';
 
     /**
+     * Flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
+     *
+     * @var boolean
+     */
+    protected $_skipSaleableCheck = false;
+
+    /**
      * Cache for product rewrite suffix
      *
      * @var array
@@ -307,6 +314,8 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
             if ($product->canBeShowInCategory($lastId)) {
                 $categoryId = $lastId;
             }
+        } elseif (!$product->canBeShowInCategory($categoryId)) {
+            $categoryId = null;
         }
 
         if ($categoryId) {
@@ -436,4 +445,27 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
         return $product;
     }
 
+    /**
+     * Set flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
+     *
+     * For instance, during order creation in the backend admin has ability to add any products to order
+     *
+     * @param bool $skipSaleableCheck
+     * @return Mage_Catalog_Helper_Product
+     */
+    public function setSkipSaleableCheck($skipSaleableCheck = false)
+    {
+        $this->_skipSaleableCheck = $skipSaleableCheck;
+        return $this;
+    }
+
+    /**
+     * Get flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
+     *
+     * @return boolean
+     */
+    public function getSkipSaleableCheck()
+    {
+        return $this->_skipSaleableCheck;
+    }
 }

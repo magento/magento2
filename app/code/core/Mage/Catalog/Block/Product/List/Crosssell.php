@@ -61,9 +61,8 @@ class Mage_Catalog_Block_Product_List_Crosssell extends Mage_Catalog_Block_Produ
 
         $this->_itemCollection = $product->getCrossSellProductCollection()
             ->addAttributeToSelect(Mage::getSingleton('Mage_Catalog_Model_Config')->getProductAttributes())
-            ->addAttributeToSort('position', 'asc')
-            ->addStoreFilter()
-            ->setVisibility(Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInCatalogIds());
+            ->setPositionOrder()
+            ->addStoreFilter();
 
         $this->_itemCollection->load();
 

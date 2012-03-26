@@ -51,6 +51,9 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
         $this->renderLayout();
     }
 
+    /**
+     * Update product attributes
+     */
     public function saveAction()
     {
         if (!$this->_validateProducts()) {
@@ -95,7 +98,13 @@ class Mage_Adminhtml_Catalog_Product_Action_AttributeController extends Mage_Adm
                             $value = null;
                         }
                         $attributesData[$attributeCode] = $value;
-                    } else if ($attribute->getFrontendInput() == 'multiselect') {
+                    } elseif ($attribute->getFrontendInput() == 'multiselect') {
+                        // Check if 'Change' checkbox has been checked by admin for this attribute
+                        $isChanged = (bool)$this->getRequest()->getPost($attributeCode . '_checkbox');
+                        if (!$isChanged) {
+                            unset($attributesData[$attributeCode]);
+                            continue;
+                        }
                         if (is_array($value)) {
                             $value = implode(',', $value);
                         }

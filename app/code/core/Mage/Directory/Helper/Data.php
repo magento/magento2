@@ -36,6 +36,16 @@ class Mage_Directory_Helper_Data extends Mage_Core_Helper_Abstract
      */
     const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
 
+    /*
+     * Path to config value, which lists countries, for which state is required.
+     */
+    const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
+
+    /*
+     * Path to config value, which detects whether or not display the state for the country, if it is not required
+     */
+    const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
+
     /**
      * Country collection
      *
@@ -122,7 +132,12 @@ class Mage_Directory_Helper_Data extends Mage_Core_Helper_Abstract
                 $collection = Mage::getModel('Mage_Directory_Model_Region')->getResourceCollection()
                     ->addCountryFilter($countryIds)
                     ->load();
-                $regions = array();
+                $regions = array(
+                    'config' => array(
+                        'show_all_regions' => $this->getShowNonRequiredState(),
+                        'regions_required' => $this->getCountriesWithStatesRequired()
+                    )
+                );
                 foreach ($collection as $region) {
                     if (!$region->getRegionId()) {
                         continue;
@@ -193,5 +208,45 @@ class Mage_Directory_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $this->getCountriesWithOptionalZip();
         return in_array($countryCode, $this->_optionalZipCountries);
+    }
+
+    /**
+     * Returns the list of countries, for which region is required
+     *
+     * @param boolean $asJson
+     * @return array
+     */
+    public function getCountriesWithStatesRequired($asJson = false)
+    {
+        $countryList = explode(',', Mage::getStoreConfig(self::XML_PATH_STATES_REQUIRED));
+        if ($asJson) {
+            return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($countryList);
+        }
+        return $countryList;
+    }
+
+    /**
+     * Return flag, which indicates whether or not non required state should be shown
+     *
+     * @return bool
+     */
+    public function getShowNonRequiredState()
+    {
+        return (boolean)Mage::getStoreConfig(self::XML_PATH_DISPLAY_ALL_STATES);
+    }
+
+    /**
+     * Returns flag, which indicates whether region is required for specified country
+     *
+     * @param string $countryId
+     * @return bool
+     */
+    public function isRegionRequired($countryId)
+    {
+        $countyList = $this->getCountriesWithStatesRequired();
+        if(!is_array($countyList)) {
+            return false;
+        }
+        return in_array($countryId, $countyList);
     }
 }

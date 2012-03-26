@@ -184,7 +184,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     public function getDirectOutput()
     {
         if ($this->getLayout()) {
-            return $this->getLayout()->getDirectOutput();
+            return $this->getLayout()->isDirectOutput();
         }
         return false;
     }

@@ -25,6 +25,7 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
+<?php if ($_order): ?>
 <table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
     <thead>
         <tr>
@@ -69,4 +70,5 @@
     </tbody>
 </table>
     <?php endif; ?>
+<?php endif; ?>
 <?php endif; ?>

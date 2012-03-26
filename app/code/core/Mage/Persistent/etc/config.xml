@@ -85,14 +85,6 @@
                     </persistent>
                 </observers>
             </controller_front_send_response_after>
-            <controller_action_layout_load_before>
-                <observers>
-                    <persistent>
-                        <class>Mage_Persistent_Model_Observer</class>
-                        <method>createPersistentHandleLayout</method>
-                    </persistent>
-                </observers>
-            </controller_action_layout_load_before>
             <controller_action_predispatch_customer_account_loginPost>
                 <observers>
                     <persistent>

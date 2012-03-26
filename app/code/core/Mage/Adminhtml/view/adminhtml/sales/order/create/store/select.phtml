@@ -25,26 +25,30 @@
  */
 ?>
 <?php /* @var $this Mage_Adminhtml_Block_Sales_Order_Create_Store_Select */ ?>
-<?php echo $this->getHintHtml() ?>
-<?php foreach ($this->getWebsiteCollection() as $_website): ?>
-    <?php $showWebsite=false; ?>
-    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-        <?php $showGroup=false; ?>
-        <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-            <?php if ($showWebsite == false): ?>
-                <?php $showWebsite = true; ?>
-                <h3><?php echo $this->escapeHtml($_website->getName()) ?></h3>
+<div class="storeScope">
+    <?php echo $this->getHintHtml() ?>
+    <div class="tree-storeScope">
+    <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+        <?php $showWebsite=false; ?>
+        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+            <?php $showGroup=false; ?>
+            <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                <?php if ($showWebsite == false): ?>
+                    <?php $showWebsite = true; ?>
+                    <h3><?php echo $this->escapeHtml($_website->getName()) ?></h3>
+                <?php endif; ?>
+                <?php if ($showGroup == false): ?>
+                    <?php $showGroup = true; ?>
+                    <h4 style="margin-left:12px;"><?php echo $this->escapeHtml($_group->getName()) ?></h4>
+                <?php endif; ?>
+                <span class="field-row" style="margin-left:28px;">
+                    <input type="radio" id="store_<?php echo $_store->getId() ?>" class="radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
+                    <label for="store_<?php echo $_store->getId() ?>" class="inline"><?php echo $this->escapeHtml($_store->getName()) ?></label>
+                </span>
+            <?php endforeach; ?>
+            <?php if ($showGroup): ?>
             <?php endif; ?>
-            <?php if ($showGroup == false): ?>
-                <?php $showGroup = true; ?>
-                <h4 style="margin-left:12px;"><?php echo $this->escapeHtml($_group->getName()) ?></h4>
-            <?php endif; ?>
-            <span class="field-row" style="margin-left:28px;">
-                <input type="radio" id="store_<?php echo $_store->getId() ?>" class="radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
-                <label for="store_<?php echo $_store->getId() ?>" class="inline"><?php echo $this->escapeHtml($_store->getName()) ?></label>
-            </span>
         <?php endforeach; ?>
-        <?php if ($showGroup): ?>
-        <?php endif; ?>
     <?php endforeach; ?>
-<?php endforeach; ?>
+    </div>
+</div>

@@ -57,7 +57,7 @@ class Mage_Adminhtml_Block_Customer_Online extends Mage_Adminhtml_Block_Template
 
     public function getFilterFormHtml()
     {
-        return $this->getChild('filterForm')->toHtml();
+        return $this->getChildBlock('filterForm')->toHtml();
     }
 
 }

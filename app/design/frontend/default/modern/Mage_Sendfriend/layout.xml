@@ -26,7 +26,7 @@
  */
 -->
 <layout version="0.1.0">
-    <sendfriend_product_send translate="label">
+    <sendfriend_product_send translate="label" type="page" parent="catalog_product_view">
         <label>Catalog Product Email to a Friend</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>

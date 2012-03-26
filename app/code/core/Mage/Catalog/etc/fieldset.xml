@@ -53,6 +53,13 @@
                         <virtual/>
                     </product_type>
                 </is_qty_decimal>
+                <is_decimal_divided>
+                    <inventory>1</inventory>
+                    <product_type>
+                        <simple/>
+                        <virtual/>
+                    </product_type>
+                </is_decimal_divided>
                 <backorders>
                     <inventory>1</inventory>
                     <use_config>1</use_config>

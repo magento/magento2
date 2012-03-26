@@ -108,6 +108,8 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $originalText
+     * @param string $expectedText
      * @dataProvider processResponseBodyDataProvider
      */
     public function testProcessResponseBody($originalText, $expectedText)
@@ -115,7 +117,7 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
         $actualText = $originalText;
         $this->_model->processResponseBody($actualText);
         $this->markTestIncomplete('Bug MAGE-2494');
-        $this->assertEquals($expectedText, $actualText);
+        $this->assertXmlStringEqualsXmlString($expectedText, $actualText);
     }
 
     public function processResponseBodyDataProvider()

@@ -120,4 +120,16 @@ abstract class Mage_Core_Model_Message_Abstract
     {
         return $this->_isSticky;
     }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Mage_Core_Model_Message_Abstract
+     */
+    public function setCode($code)
+    {
+        $this->_code = $code;
+        return $this;
+    }
 }

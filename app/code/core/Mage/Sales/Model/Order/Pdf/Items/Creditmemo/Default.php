@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Sales Order Creditmemo Pdf default items renderer
  *
@@ -34,6 +33,9 @@
  */
 class Mage_Sales_Model_Order_Pdf_Items_Creditmemo_Default extends Mage_Sales_Model_Order_Pdf_Items_Abstract
 {
+    /**
+     * Draw process
+     */
     public function draw()
     {
         $order  = $this->getOrder();
@@ -42,25 +44,20 @@ class Mage_Sales_Model_Order_Pdf_Items_Creditmemo_Default extends Mage_Sales_Mod
         $page   = $this->getPage();
         $lines  = array();
 
-        $leftBound  =  35;
-        $rightBound = 565;
-
-        $x = $leftBound;
         // draw Product name
         $stringHelper = Mage::helper('Mage_Core_Helper_String');
         $lines[0] = array(array(
-            'text' => $stringHelper->str_split($item->getName(), 60, true, true),
-            'feed' => $x,
+            'text' => Mage::helper('Mage_Core_Helper_String')->str_split($item->getName(), 35, true, true),
+            'feed' => 35,
         ));
 
-        $x += 220;
         // draw SKU
         $lines[0][] = array(
-            'text'  => $stringHelper->str_split($this->getSku($item), 25),
-            'feed'  => $x
+            'text'  => Mage::helper('Mage_Core_Helper_String')->str_split($this->getSku($item), 17),
+            'feed'  => 255,
+            'align' => 'right'
         );
 
-        $x += 100;
         // draw Total (ex)
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
@@ -69,7 +66,7 @@ class Mage_Sales_Model_Order_Pdf_Items_Creditmemo_Default extends Mage_Sales_Mod
                 // draw Subtotal label
                 $lines[$i][] = array(
                     'text'  => $priceData['label'],
-                    'feed'  => $x,
+                    'feed'  => 330,
                     'align' => 'right',
                     'width' => 50,
                 );
@@ -78,51 +75,43 @@ class Mage_Sales_Model_Order_Pdf_Items_Creditmemo_Default extends Mage_Sales_Mod
             // draw Subtotal
             $lines[$i][] = array(
                 'text'  => $priceData['subtotal'],
-                'feed'  => $x,
+                'feed'  => 330,
                 'font'  => 'bold',
                 'align' => 'right',
-                'width' => 50,
             );
             $i++;
         }
 
-        $x += 50;
         // draw Discount
         $lines[0][] = array(
             'text'  => $order->formatPriceTxt(-$item->getDiscountAmount()),
-            'feed'  => $x,
+            'feed'  => 380,
             'font'  => 'bold',
-            'align' => 'right',
-            'width' => 50,
+            'align' => 'right'
         );
 
-        $x += 50;
         // draw QTY
         $lines[0][] = array(
-            'text'  => $item->getQty()*1,
-            'feed'  => $x,
+            'text'  => $item->getQty() * 1,
+            'feed'  => 445,
             'font'  => 'bold',
-            'align' => 'center',
-            'width' => 30,
+            'align' => 'right',
         );
 
-        $x += 30;
         // draw Tax
         $lines[0][] = array(
             'text'  => $order->formatPriceTxt($item->getTaxAmount()),
-            'feed'  => $x,
+            'feed'  => 495,
             'font'  => 'bold',
-            'align' => 'right',
-            'width' => 45,
+            'align' => 'right'
         );
 
-        $x += 45;
         // draw Subtotal
         $subtotal = $item->getRowTotal()
             + $item->getTaxAmount() + $item->getHiddenTaxAmount() - $item->getDiscountAmount();
         $lines[0][] = array(
             'text'  => $order->formatPriceTxt($subtotal),
-            'feed'  => $rightBound,
+            'feed'  => 565,
             'font'  => 'bold',
             'align' => 'right'
         );
@@ -133,23 +122,23 @@ class Mage_Sales_Model_Order_Pdf_Items_Creditmemo_Default extends Mage_Sales_Mod
             foreach ($options as $option) {
                 // draw options label
                 $lines[][] = array(
-                    'text' => $stringHelper->str_split(strip_tags($option['label']), 70, true, true),
+                    'text' => Mage::helper('Mage_Core_Helper_String')->str_split(strip_tags($option['label']), 40, true, true),
                     'font' => 'italic',
-                    'feed' => $leftBound
+                    'feed' => 35
                 );
 
                 // draw options value
                 $_printValue = isset($option['print_value']) ? $option['print_value'] : strip_tags($option['value']);
                 $lines[][] = array(
-                    'text' => $stringHelper->str_split($_printValue, 50, true, true),
-                    'feed' => $leftBound + 5
+                    'text' => Mage::helper('Mage_Core_Helper_String')->str_split($_printValue, 30, true, true),
+                    'feed' => 40
                 );
             }
         }
 
         $lineBlock = array(
             'lines'  => $lines,
-            'height' => 10
+            'height' => 20
         );
 
         $page = $pdf->drawLineBlocks($page, array($lineBlock), array('table_header' => true));

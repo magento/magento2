@@ -1,3 +1,4 @@
+app/code/core/Mage/DesignEditor/view
 dev/tests/integration/framework/tests/unit/testsuite/Magento/Test/TestSuite/_files
 dev/tests/integration/testsuite/integrity/modular/TemplateFilesTest.php
 dev/tests/integration/testsuite/integrity/theme/TemplateFilesTest.php

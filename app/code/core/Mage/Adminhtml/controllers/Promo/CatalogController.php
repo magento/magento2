@@ -33,6 +33,13 @@
  */
 class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_Action
 {
+    /**
+     * Dirty rules notice message
+     *
+     * @var string
+     */
+    protected $_dirtyRulesNoticeMessage;
+
     protected function _initAction()
     {
         $this->loadLayout()
@@ -48,10 +55,9 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
     {
         $this->_title($this->__('Promotions'))->_title($this->__('Catalog Price Rules'));
 
-        if (Mage::app()->loadCache('catalog_rules_dirty')) {
-            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addNotice(
-                Mage::helper('Mage_CatalogRule_Helper_Data')->__('There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.')
-            );
+        $dirtyRules = Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf();
+        if ($dirtyRules->getState()) {
+            Mage::getSingleton('Mage_Adminhtml_Model_Session')->addNotice($this->getDirtyRulesNoticeMessage());
         }
 
         $this->_initAction()
@@ -157,7 +163,9 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
                 } else {
-                    Mage::app()->saveCache(1, 'catalog_rules_dirty');
+                    Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
+                        ->setState(1)
+                        ->save();
                     if ($this->getRequest()->getParam('back')) {
                         $this->_redirect('*/*/edit', array('id' => $model->getId()));
                         return;
@@ -187,7 +195,9 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
                 $model = Mage::getModel('Mage_CatalogRule_Model_Rule');
                 $model->load($id);
                 $model->delete();
-                Mage::app()->saveCache(1, 'catalog_rules_dirty');
+                Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
+                    ->setState(1)
+                    ->save();
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
                     Mage::helper('Mage_CatalogRule_Helper_Data')->__('The rule has been deleted.')
                 );
@@ -279,7 +289,9 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
         $errorMessage = Mage::helper('Mage_CatalogRule_Helper_Data')->__('Unable to apply rules.');
         try {
             Mage::getModel('Mage_CatalogRule_Model_Rule')->applyAll();
-            Mage::app()->removeCache('catalog_rules_dirty');
+            Mage::getModel('Mage_CatalogRule_Model_Flag')->loadSelf()
+                ->setState(0)
+                ->save();
             $this->_getSession()->addSuccess(Mage::helper('Mage_CatalogRule_Helper_Data')->__('The rules have been applied.'));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($errorMessage . ' ' . $e->getMessage());
@@ -292,5 +304,26 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
     protected function _isAllowed()
     {
         return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('promo/catalog');
+    }
+
+    /**
+     * Set dirty rules notice message
+     *
+     * @param string $dirtyRulesNoticeMessage
+     */
+    public function setDirtyRulesNoticeMessage($dirtyRulesNoticeMessage)
+    {
+        $this->_dirtyRulesNoticeMessage = $dirtyRulesNoticeMessage;
+    }
+
+    /**
+     * Get dirty rules notice message
+     *
+     * @return string
+     */
+    public function getDirtyRulesNoticeMessage()
+    {
+        $defaultMessage = Mage::helper('Mage_CatalogRule_Helper_Data')->__('There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.');
+        return $this->_dirtyRulesNoticeMessage ? $this->_dirtyRulesNoticeMessage : $defaultMessage;
     }
 }

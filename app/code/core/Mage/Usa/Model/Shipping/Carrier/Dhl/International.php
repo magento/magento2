@@ -574,7 +574,10 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_International
                 continue;
             }
 
-            $qty = $item->getQty();
+            $qty            = $item->getQty();
+            $changeQty      = true;
+            $checkWeight    = true;
+            $decimalItems   = array();
 
             if ($item->getParentItem()) {
                 if (!$item->getParentItem()->getProduct()->getShipmentType()) {
@@ -587,19 +590,51 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_International
 
             $itemWeight = $item->getWeight();
             if ($item->getIsQtyDecimal() && $item->getProductType() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
-                $itemWeight = $itemWeight * $item->getQty();
+                $stockItem = $item->getProduct()->getStockItem();
+                if ($stockItem->getIsDecimalDivided()) {
+                   if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
+                        $itemWeight = $itemWeight * $stockItem->getQtyIncrements();
+                        $qty        = round(($item->getWeight() / $itemWeight) * $qty);
+                        $changeQty  = false;
+                   } else {
+                       $itemWeight = $this->_getWeight($itemWeight * $item->getQty());
+                       $maxWeight  = $this->_getWeight($this->_maxWeight, true);
+                       if ($itemWeight > $maxWeight) {
+                           $qtyItem = floor($itemWeight / $maxWeight);
+                           $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
+                           $weightItem = Mage::helper('Mage_Core_Helper_Data')->getExactDivision($itemWeight, $maxWeight);
+                           if ($weightItem) {
+                               $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
+                           }
+                           $checkWeight = false;
+                       } else {
+                           $itemWeight = $itemWeight * $item->getQty();
+                       }
+                   }
+                } else {
+                    $itemWeight = $itemWeight * $item->getQty();
+                }
             }
 
-            if ($this->_getWeight($itemWeight) > $this->_getWeight($this->_maxWeight, true)) {
+            if ($checkWeight && $this->_getWeight($itemWeight) > $this->_getWeight($this->_maxWeight, true)) {
                 return array();
             }
 
-            if (!$item->getParentItem() && $item->getIsQtyDecimal()
+            if ($changeQty && !$item->getParentItem() && $item->getIsQtyDecimal()
                 && $item->getProductType() != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
             ) {
                 $qty = 1;
             }
-            $fullItems = array_merge($fullItems, array_fill(0, $qty, $this->_getWeight($itemWeight)));
+
+            if (!empty($decimalItems)) {
+                foreach ($decimalItems as $decimalItem) {
+                    $fullItems = array_merge($fullItems,
+                        array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight'])
+                    );
+                }
+            } else {
+                $fullItems = array_merge($fullItems, array_fill(0, $qty, $this->_getWeight($itemWeight)));
+            }
         }
         sort($fullItems);
 

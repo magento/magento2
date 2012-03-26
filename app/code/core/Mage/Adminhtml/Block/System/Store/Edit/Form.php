@@ -110,8 +110,10 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form extends Mage_Adminhtml_Block_W
 
             if (Mage::registry('store_action') == 'edit') {
                 $groups = Mage::getModel('Mage_Core_Model_Store_Group')->getCollection()
-                    ->addWebsiteFilter($websiteModel->getId())->toOptionArray();
-                //array_unshift($groups, array('label'=>'', 'value'=>0));
+                    ->addWebsiteFilter($websiteModel->getId())
+                    ->setWithoutStoreViewFilter()
+                    ->toOptionArray();
+
                 $fieldset->addField('website_default_group_id', 'select', array(
                     'name'      => 'website[default_group_id]',
                     'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Default Store'),

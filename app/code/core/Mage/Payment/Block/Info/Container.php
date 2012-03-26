@@ -83,7 +83,7 @@ class Mage_Payment_Block_Info_Container extends Mage_Core_Block_Template
     {
         if ($info = $this->getPaymentInfo()) {
             if ($info->getMethodInstance()->getCode() == $method) {
-                $this->getChild($this->_getInfoBlockName())->setTemplate($template);
+                $this->getChildBlock($this->_getInfoBlockName())->setTemplate($template);
             }
         }
         return $this;

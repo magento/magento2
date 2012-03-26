@@ -33,7 +33,8 @@
         </reference>
     </customer_account>
 
-    <sales_recurring_profile_index>
+    <sales_recurring_profile_index translate="label" type="page" parent="customer_account_index">
+        <label>Recurring Profile</label>
         <update handle="customer_account"/>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
@@ -49,7 +50,8 @@
         </reference>
     </sales_recurring_profile_index>
 
-    <sales_recurring_profile_view__tabs>
+    <sales_recurring_profile_view__tabs translate="label" type="page" parent="sales_recurring_profile_index">
+        <label>Recurring Profile View Tabs</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
         </reference>
@@ -85,7 +87,8 @@
         </reference>
     </sales_recurring_profile_view__tabs>
 
-    <sales_recurring_profile_view>
+    <sales_recurring_profile_view translate="label" type="page" parent="sales_recurring_profile_view__tabs">
+        <label>Recurring Profile View</label>
         <update handle="customer_account"/>
         <update handle="sales_recurring_profile_view__tabs"/>
         <reference name="sales.recurring.profile.view.tab.profile">
@@ -142,7 +145,8 @@
     </sales_recurring_profile_history>
 -->
 
-    <sales_recurring_profile_orders>
+    <sales_recurring_profile_orders translate="label" type="page" parent="sales_recurring_profile_view__tabs">
+        <label>Recurring Profile Orders List</label>
         <update handle="customer_account"/>
         <update handle="sales_recurring_profile_view__tabs"/>
         <reference name="sales.recurring.profile.view.tab.orders">

@@ -126,14 +126,6 @@
             <customer>/customer/</customer>
         </secure_url>
         <events>
-            <controller_action_layout_load_before>
-                <observers>
-                    <customer_is_logged_in_observer>
-                        <class>Mage_Customer_Model_Observer</class>
-                        <method>beforeLoadLayout</method>
-                    </customer_is_logged_in_observer>
-                </observers>
-            </controller_action_layout_load_before>
             <sales_model_service_quote_submit_after>
                 <observers>
                     <restore_customer_group_id>

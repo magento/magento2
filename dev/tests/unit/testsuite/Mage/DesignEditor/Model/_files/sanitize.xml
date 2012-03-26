@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Mage_DesignEditor
+ * @subpackage  unit_tests
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout>
+    <block name="root" type="Mage_Core_Block_Template" template="template.phtml">
+        <block name="head" type="Mage_Page_Block_Html_Head">
+            <action method="safeMethod"><arg>1</arg></action>
+        </block>
+        <block name="custom.safe" type="Namespace_Module_Block_Safe"/>
+        <container name="content">
+            <block name="custom.not_safe" type="Namespace_Module_Block_NotSafe">
+                <action method="setTemplate"><arg>some_template.phtml</arg></action>
+            </block>
+            <block type="Mage_Page_Block_Safe"/>
+        </container>
+    </block>
+    <reference name="head">
+        <action method="safeMethod"><arg>1</arg></action>
+    </reference>
+    <reference name="custom.not_safe">
+        <action method="rogueMethod"><block>1</block></action>
+    </reference>
+</layout>

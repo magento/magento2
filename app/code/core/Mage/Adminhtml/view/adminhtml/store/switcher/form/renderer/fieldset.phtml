@@ -37,8 +37,9 @@
 <?php if (!$_element->getNoContainer()): ?>
     <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
 <?php endif; ?>
+<div class="storeScope">
     <?php echo $this->getHintHtml() ?>
-    <div class="hor-scroll">
+    <div class="tree-storeScope">
         <?php if ($_element->getComment()): ?>
             <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
         <?php endif; ?>
@@ -52,6 +53,7 @@
         </table>
         <?php endif; ?>
     </div>
+</div>
     <?php echo $_element->getSubFieldsetHtml() ?>
 <?php if (!$_element->getNoContainer()): ?>
     </div>

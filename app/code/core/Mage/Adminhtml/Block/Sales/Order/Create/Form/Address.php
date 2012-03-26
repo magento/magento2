@@ -166,7 +166,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
                 }
             }
         }
-        if (!$this->_form->getElement('country_id')->getValue()) {
+        if (is_null($this->_form->getElement('country_id')->getValue())) {
             $this->_form->getElement('country_id')->setValue(
                 Mage::helper('Mage_Core_Helper_Data')->getDefaultCountry($this->getStore())
             );

@@ -115,7 +115,7 @@ var templateText =
 <?php endforeach; ?>
             '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
             '<td class="a-center"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/><\/td>'+
-            '<td class="a-left">'+
+            '<td class="a-left" id="delete_button_container_{{id}}">'+
                 '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
                 <?php if (!$this->getReadOnly()):?>
                     '<?php echo $this->getDeleteButtonHtml() ?>'+
@@ -129,16 +129,21 @@ var attributeOption = {
     templateText : templateText,
     itemCount : 0,
     totalItems : 0,
+    isReadOnly: <?php echo (int)$this->getReadOnly(); ?>,
     add : function(data) {
         this.template = new Template(this.templateText, this.templateSyntax);
+        var isNewOption = false;
         if(!data.id){
             data = {};
             data.id  = 'option_'+this.itemCount;
+            isNewOption = true;
         }
         if (!data.intype)
             data.intype = optionDefaultInputType;
-
         Element.insert(this.table, {after: this.template.evaluate(data)});
+        if (isNewOption && !this.isReadOnly) {
+            this.enableNewOptionDeleteButton(data.id);
+        }
         this.bindRemoveButtons();
         this.itemCount++;
         this.totalItems++;
@@ -177,6 +182,12 @@ var attributeOption = {
         } else {
             $('option-count-check').value = '';
         }
+    },
+    enableNewOptionDeleteButton: function(id) {
+        $$('#delete_button_container_' + id + ' button').each(function(button) {
+            button.enable();
+            button.removeClassName('disabled');
+        });
     },
     bindRemoveButtons : function(){
         var buttons = $$('.delete-option');

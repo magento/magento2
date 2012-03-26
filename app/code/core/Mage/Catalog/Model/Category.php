@@ -364,23 +364,6 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     }
 
     /**
-     * Retrieve Layout Update Handle name
-     *
-     * @return string
-     */
-    public function getLayoutUpdateHandle()
-    {
-        $layout = 'catalog_category_';
-        if ($this->getIsAnchor()) {
-            $layout .= 'layered';
-        }
-        else {
-            $layout .= 'default';
-        }
-        return $layout;
-    }
-
-    /**
      * Return store id.
      *
      * If store id is underfined for category return current active store id

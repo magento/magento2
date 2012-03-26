@@ -61,7 +61,7 @@ class Mage_Sales_Block_Order_Creditmemo_Items extends Mage_Sales_Block_Items_Abs
      */
     public function getTotalsHtml($creditmemo)
     {
-        $totals = $this->getChild('creditmemo_totals');
+        $totals = $this->getChildBlock('creditmemo_totals');
         $html = '';
         if ($totals) {
             $totals->setCreditmemo($creditmemo);
@@ -79,7 +79,7 @@ class Mage_Sales_Block_Order_Creditmemo_Items extends Mage_Sales_Block_Items_Abs
     public function getCommentsHtml($creditmemo)
     {
         $html = '';
-        $comments = $this->getChild('creditmemo_comments');
+        $comments = $this->getChildBlock('creditmemo_comments');
         if ($comments) {
             $comments->setEntity($creditmemo)
                 ->setTitle(Mage::helper('Mage_Sales_Helper_Data')->__('About Your Refund'));

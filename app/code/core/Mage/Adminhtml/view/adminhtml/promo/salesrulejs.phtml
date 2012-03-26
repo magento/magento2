@@ -57,6 +57,7 @@ function handleCouponTypeChange() {
 
 function refreshCouponCodesGrid(grid, gridMassAction, transport) {
     grid.reload();
+    gridMassAction.unselectAll();
 }
 
 function generateCouponCodes(idPrefix, generateUrl, grid) {

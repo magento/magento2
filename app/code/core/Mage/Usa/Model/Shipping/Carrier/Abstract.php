@@ -108,12 +108,16 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
     }
 
     /**
-     * Check if zip code option required
+     * Determine whether zip-code is required for the country of destination
      *
-     * @return boolean
+     * @param Mage_Shipping_Model_Rate_Request|null $request
+     * @return bool
      */
-    public function isZipCodeRequired()
+    public function isZipCodeRequired(Mage_Shipping_Model_Rate_Request $request = null)
     {
+        if ($request instanceof Mage_Shipping_Model_Rate_Request) {
+            return !Mage::helper('Mage_Directory_Helper_Data')->isZipCodeOptional($request->getDestCountryId());
+        }
         return true;
     }
 
@@ -128,14 +132,37 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
     }
 
     /**
-     * Some carriers need to override this method to get the correct quote
+     * Return items for further shipment rate evaluation. We need to pass children of a bundle instead passing the
+     * bundle itself, otherwise we may not get a rate at all (e.g. when total weight of a bundle exceeds max weight
+     * despite each item by itself is not)
      *
      * @param Mage_Shipping_Model_Rate_Request $request
      * @return array
      */
     public function getAllItems(Mage_Shipping_Model_Rate_Request $request)
     {
-        return $request->getAllItems();
+        $items = array();
+        if ($request->getAllItems()) {
+            foreach ($request->getAllItems() as $item) {
+                /* @var $item Mage_Sales_Model_Quote_Item */
+                if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
+                    // Don't process children here - we will process (or already have processed) them below
+                    continue;
+                }
+
+                if ($item->getHasChildren() && $item->isShipSeparately()) {
+                    foreach ($item->getChildren() as $child) {
+                        if (!$child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
+                            $items[] = $child;
+                        }
+                    }
+                } else {
+                    // Ship together - count compound item as one solid
+                    $items[] = $item;
+                }
+            }
+        }
+        return $items;
     }
 
     /**
@@ -151,22 +178,36 @@ abstract class Mage_Usa_Model_Shipping_Carrier_Abstract extends Mage_Shipping_Mo
             return $this;
         }
 
-        $maxAllowedWeight = (float) $this->getConfigData('max_package_weight');
-        $errorMsg = '';
-        $configErrorMsg = $this->getConfigData('specificerrmsg');
-        $defaultErrorMsg = Mage::helper('Mage_Shipping_Helper_Data')->__('The shipping module is not available.');
-        $showMethod = $this->getConfigData('showmethod');
+        $maxAllowedWeight   = (float) $this->getConfigData('max_package_weight');
+        $errorMsg           = '';
+        $configErrorMsg     = $this->getConfigData('specificerrmsg');
+        $defaultErrorMsg    = Mage::helper('Mage_Shipping_Helper_Data')->__('The shipping module is not available.');
+        $showMethod         = $this->getConfigData('showmethod');
 
         foreach ($this->getAllItems($request) as $item) {
             if ($item->getProduct() && $item->getProduct()->getId()) {
-                if ($item->getProduct()->getWeight() * $item->getQty() > $maxAllowedWeight) {
+                $weight         = $item->getProduct()->getWeight();
+                $stockItem      = $item->getProduct()->getStockItem();
+                $doValidation   = true;
+
+                if ($stockItem->getIsQtyDecimal() && $stockItem->getIsDecimalDivided()) {
+                    if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
+                        $weight = $weight * $stockItem->getQtyIncrements();
+                    } else {
+                        $doValidation = false;
+                    }
+                } elseif ($stockItem->getIsQtyDecimal() && !$stockItem->getIsDecimalDivided()) {
+                    $weight = $weight * $item->getQty();
+                }
+
+                if ($doValidation && $weight > $maxAllowedWeight) {
                     $errorMsg = ($configErrorMsg) ? $configErrorMsg : $defaultErrorMsg;
                     break;
                 }
             }
         }
 
-        if (!$errorMsg && !$request->getDestPostcode() && $this->isZipCodeRequired()) {
+        if (!$errorMsg && !$request->getDestPostcode() && $this->isZipCodeRequired($request)) {
             $errorMsg = Mage::helper('Mage_Shipping_Helper_Data')->__('This shipping method is not available, please specify ZIP-code');
         }
 

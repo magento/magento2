@@ -40,25 +40,25 @@ Product view
 <!--
 Additional block dependent on product type
 -->
-    <PRODUCT_TYPE_simple>
+    <catalog_product_view_type_simple>
         <reference name="product.info.simple.extra">
             <block type="Mage_CatalogInventory_Block_Stockqty_Default" template="stockqty/default.phtml"/>
         </reference>
-    </PRODUCT_TYPE_simple>
-    <PRODUCT_TYPE_virtual>
+    </catalog_product_view_type_simple>
+    <catalog_product_view_type_virtual>
         <reference name="product.info.virtual.extra">
             <block type="Mage_CatalogInventory_Block_Stockqty_Default" template="stockqty/default.phtml"/>
         </reference>
-    </PRODUCT_TYPE_virtual>
-    <PRODUCT_TYPE_grouped>
+    </catalog_product_view_type_virtual>
+    <catalog_product_view_type_grouped>
         <reference name="product.info.grouped.extra">
             <block type="Mage_CatalogInventory_Block_Stockqty_Type_Grouped" template="stockqty/composite.phtml"/>
         </reference>
-    </PRODUCT_TYPE_grouped>
-    <PRODUCT_TYPE_configurable>
+    </catalog_product_view_type_grouped>
+    <catalog_product_view_type_configurable>
         <reference name="product.info.configurable.extra">
             <block type="Mage_CatalogInventory_Block_Stockqty_Type_Configurable" template="stockqty/composite.phtml"/>
         </reference>
-    </PRODUCT_TYPE_configurable>
+    </catalog_product_view_type_configurable>
 
 </layout>

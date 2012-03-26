@@ -68,29 +68,33 @@ class Mage_Catalog_Block_Product_ListTest extends PHPUnit_Framework_TestCase
      */
     public function testToolbarCoverage()
     {
-        $this->_block->setLayout(new Mage_Core_Model_Layout());
+        $parent = $this->_getLayout()->createBlock('Mage_Catalog_Block_Product_List', 'parent');
 
         /* Prepare toolbar block */
-        $toolbar = $this->_block->getToolbarBlock();
+        $toolbar = $parent->getToolbarBlock();
         $this->assertInstanceOf('Mage_Catalog_Block_Product_List_Toolbar', $toolbar, 'Default Toolbar');
 
-        $this->_block->setChild('toolbar', $toolbar);
+        $parent->setChild('toolbar', $toolbar);
         /* In order to initialize toolbar collection block toHtml should be called before toolbar toHtml */
-        $this->assertEmpty($this->_block->toHtml(), 'Block HTML'); /* Template not specified */
-        $this->assertEquals('grid', $this->_block->getMode(), 'Default Mode'); /* default mode */
-        $this->assertNotEmpty($this->_block->getToolbarHtml(), 'Toolbar HTML'); /* toolbar for one simple product */
+        $this->assertEmpty($parent->toHtml(), 'Block HTML'); /* Template not specified */
+        $this->assertEquals('grid', $parent->getMode(), 'Default Mode'); /* default mode */
+        $this->assertNotEmpty($parent->getToolbarHtml(), 'Toolbar HTML'); /* toolbar for one simple product */
     }
 
 
     public function testGetAdditionalHtmlEmpty()
     {
+        $this->_block->setLayout($this->_getLayout());
         $this->assertEmpty($this->_block->getAdditionalHtml());
     }
 
     public function testGetAdditionalHtml()
     {
-        $this->_block->setChild('additional', new Mage_Core_Block_Text(array('text' => 'test')));
-        $this->assertEquals('test', $this->_block->getAdditionalHtml());
+        $layout = $this->_getLayout();
+        $parent = $layout->createBlock('Mage_Catalog_Block_Product_List');
+        $childBlock = $layout->createBlock('Mage_Core_Block_Text', 'test', array('text' => 'test'));
+        $layout->setChild($parent->getNameInLayout(), $childBlock->getNameInLayout(), 'additional');
+        $this->assertEquals('test', $parent->getAdditionalHtml());
     }
 
     public function testSetCollection()
@@ -112,5 +116,10 @@ class Mage_Catalog_Block_Product_ListTest extends PHPUnit_Framework_TestCase
         $category->setDefaultSortBy('name');
         $this->_block->prepareSortableFieldsByCategory($category);
         $this->assertEquals('name', $this->_block->getSortBy());
+    }
+
+    protected function _getLayout()
+    {
+        return Mage::app()->getLayout();
     }
 }

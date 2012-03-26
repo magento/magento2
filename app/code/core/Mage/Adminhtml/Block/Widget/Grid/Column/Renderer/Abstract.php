@@ -105,7 +105,6 @@ abstract class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 
     public function renderHeader()
     {
-        $out = '';
         if (false !== $this->getColumn()->getGrid()->getSortable() && false !== $this->getColumn()->getSortable()) {
             $className = 'not-sort';
             $dir = strtolower($this->getColumn()->getDir());
@@ -116,8 +115,7 @@ abstract class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
             $out = '<a href="#" name="' . $this->getColumn()->getId() . '" title="' . $nDir
                    . '" class="' . $className . '"><span class="sort-title">'
                    . $this->getColumn()->getHeader().'</span></a>';
-        }
-        else {
+        } else {
             $out = $this->getColumn()->getHeader();
         }
         return $out;
@@ -126,13 +124,6 @@ abstract class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
     public function renderProperty()
     {
         $out = '';
-        /**
-         * Now we generate 2 "col" definition instead span=2
-         */
-//        if ($this->getColumn()->getEditable() && !$this->getColumn()->getEditOnly()) {
-//            $out .= ' span="2"';
-//        }
-
         $width = $this->_defaultWidth;
 
         if ($this->getColumn()->hasData('width')) {

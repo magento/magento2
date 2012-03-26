@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Sales Order Invoice Pdf default items renderer
  *
@@ -66,7 +65,7 @@ class Mage_Bundle_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Bundle_Model_
             if (!isset($drawItems[$optionId])) {
                 $drawItems[$optionId] = array(
                     'lines'  => array(),
-                    'height' => 10
+                    'height' => 15
                 );
             }
 
@@ -74,13 +73,13 @@ class Mage_Bundle_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Bundle_Model_
                 if ($_prevOptionId != $attributes['option_id']) {
                     $line[0] = array(
                         'font'  => 'italic',
-                        'text'  => $stringHelper->str_split($attributes['option_label'], 70, true, true),
+                        'text'  => Mage::helper('Mage_Core_Helper_String')->str_split($attributes['option_label'], 45, true, true),
                         'feed'  => 35
                     );
 
                     $drawItems[$optionId] = array(
                         'lines'  => array($line),
-                        'height' => 10
+                        'height' => 15
                     );
 
                     $line = array();
@@ -98,14 +97,14 @@ class Mage_Bundle_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Bundle_Model_
                 $name = $_item->getName();
             }
             $line[] = array(
-                'text'  => $stringHelper->str_split($name, 55, true, true),
+                'text'  => Mage::helper('Mage_Core_Helper_String')->str_split($name, 35, true, true),
                 'feed'  => $feed
             );
 
             // draw SKUs
             if (!$_item->getOrderItem()->getParentItem()) {
                 $text = array();
-                foreach ($stringHelper->str_split($item->getSku(), 30) as $part) {
+                foreach (Mage::helper('Mage_Core_Helper_String')->str_split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
                 $line[] = array(
@@ -156,17 +155,19 @@ class Mage_Bundle_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Bundle_Model_
                 foreach ($options['options'] as $option) {
                     $lines = array();
                     $lines[][] = array(
-                        'text'  => $stringHelper->str_split(strip_tags($option['label']), 70, true, true),
+                        'text'  => Mage::helper('Mage_Core_Helper_String')->str_split(strip_tags($option['label']), 40, true, true),
                         'font'  => 'italic',
                         'feed'  => 35
                     );
 
                     if ($option['value']) {
                         $text = array();
-                        $_printValue = isset($option['print_value']) ? $option['print_value'] : strip_tags($option['value']);
+                        $_printValue = isset($option['print_value'])
+                            ? $option['print_value']
+                            : strip_tags($option['value']);
                         $values = explode(', ', $_printValue);
                         foreach ($values as $value) {
-                            foreach ($stringHelper->str_split($value, 50, true, true) as $_value) {
+                            foreach (Mage::helper('Mage_Core_Helper_String')->str_split($value, 30, true, true) as $_value) {
                                 $text[] = $_value;
                             }
                         }
@@ -179,7 +180,7 @@ class Mage_Bundle_Model_Sales_Order_Pdf_Items_Invoice extends Mage_Bundle_Model_
 
                     $drawItems[] = array(
                         'lines'  => $lines,
-                        'height' => 10
+                        'height' => 15
                     );
                 }
             }

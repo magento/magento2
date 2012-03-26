@@ -94,4 +94,15 @@ class Mage_Core_Model_Observer
 
         return $this;
     }
+
+    /**
+     * Cron job method to clean old cache resources
+     *
+     * @param Mage_Cron_Model_Schedule $schedule
+     */
+    public function cleanCache(Mage_Cron_Model_Schedule $schedule)
+    {
+        Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_OLD);
+        Mage::dispatchEvent('core_clean_cache');
+    }
 }

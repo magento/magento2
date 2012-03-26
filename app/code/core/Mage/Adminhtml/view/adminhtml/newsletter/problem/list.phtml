@@ -63,7 +63,7 @@
         },
 
         unsubscribe: function () {
-            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
+            var elements = $$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._unsubscribe = '1';
             serializedElements.form_key = FORM_KEY;
@@ -76,7 +76,7 @@
         },
 
         deleteSelected: function () {
-            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
+            var elements = $$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._delete = '1';
             serializedElements.form_key = FORM_KEY;

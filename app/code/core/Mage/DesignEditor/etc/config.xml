@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_DesignEditor>
+            <version>1.0.0.0</version>
+        </Mage_DesignEditor>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <designeditor module="Mage_DesignEditor">
+                    <file>layout.xml</file>
+                </designeditor>
+            </updates>
+        </layout>
+        <routers>
+            <designeditor>
+                <use>standard</use>
+                <args>
+                    <module>Mage_DesignEditor</module>
+                    <frontName>design</frontName>
+                </args>
+            </designeditor>
+        </routers>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <designeditor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>preDispatch</method>
+                    </designeditor>
+                </observers>
+            </controller_action_predispatch>
+            <controller_action_layout_load_before>
+                <observers>
+                    <designeditor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>addToolbar</method>
+                    </designeditor>
+                </observers>
+            </controller_action_layout_load_before>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <designeditor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>setDesignEditorFlag</method>
+                    </designeditor>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+            <core_layout_render_element>
+                <observers>
+                    <designeditor>
+                        <type>singleton</type>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>wrapPageElement</method>
+                    </designeditor>
+                </observers>
+            </core_layout_render_element>
+        </events>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <designeditor module="Mage_DesignEditor">
+                    <file>layout.xml</file>
+                </designeditor>
+            </updates>
+        </layout>
+        <events>
+            <admin_session_user_logout>
+                <observers>
+                    <designeditor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>adminSessionUserLogout</method>
+                    </designeditor>
+                </observers>
+            </admin_session_user_logout>
+        </events>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <mage_designeditor before="Mage_Adminhtml">Mage_DesignEditor_Adminhtml</mage_designeditor>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

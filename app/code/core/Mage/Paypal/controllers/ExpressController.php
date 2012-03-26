@@ -48,7 +48,7 @@ class Mage_Paypal_ExpressController extends Mage_Paypal_Controller_Express_Abstr
      *
      * @var string
      */
-    protected $_checkoutType = 'paypal/express_checkout';
+    protected $_checkoutType = 'Mage_Paypal_Model_Express_Checkout';
 
     /**
      * Redirect to login page

@@ -49,5 +49,5 @@ class Mage_PaypalUk_ExpressController extends Mage_Paypal_Controller_Express_Abs
      *
      * @var string
      */
-    protected $_checkoutType = 'paypaluk/express_checkout';
+    protected $_checkoutType = 'Mage_PaypalUk_Model_Express_Checkout';
 }

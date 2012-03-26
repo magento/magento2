@@ -1165,9 +1165,8 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
                         break;
                 }
                 if ($temporaryObject->getExecTime()) {
-                    $message->setExecTime(
-                        Mage::getSingleton('Mage_Core_Model_Date')->gmtDate(null, $temporaryObject->getExecTime())
-                    );
+                    $execTime = Mage::getSingleton('Mage_Core_Model_Date')->gmtDate(null, $temporaryObject->getExecTime());
+                    $message->setExecTime($execTime ? $execTime : Mage::getSingleton('Mage_Core_Model_Date')->gmtDate());
                 } else {
                     $message->setExecTime(new Zend_Db_Expr('NULL'));
                 }

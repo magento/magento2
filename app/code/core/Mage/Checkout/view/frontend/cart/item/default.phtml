@@ -62,9 +62,9 @@ $canApplyMsrp = Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($_item->g
             <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $message['text'] ?></p>
         <?php endforeach; ?>
         <?php endif; ?>
-        <?php $addtInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
-        <?php if ($addtInfoBlock): ?>
-            <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
+        <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addInfoBlock): ?>
+            <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif;?>
     </td>
     <td class="a-center">
@@ -75,7 +75,7 @@ $canApplyMsrp = Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($_item->g
     <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllowInCart()) : ?>
     <td class="a-center">
         <?php if ($isVisibleProduct): ?>
-        <input type="checkbox" value="1" name="cart[<?php echo $_item->getId() ?>][wishlist]" title="<?php echo $this->__('Move to Wishlist') ?>" class="checkbox" />
+        <a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getMoveFromCartUrl($_item->getId()); ?>" class="link-wishlist use-ajax"><?php echo $this->__('Move'); ?></a>
         <?php endif ?>
     </td>
     <?php endif ?>
@@ -181,7 +181,7 @@ $canApplyMsrp = Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($_item->g
     <td class="a-center">
         <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" />
     </td>
-    <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartPriceExclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
+    <?php if (($this->helper('Mage_Tax_Helper_Data')->displayCartPriceExclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
     <td class="a-right">
         <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <span class="cart-tax-total" onclick="taxToggle('esubtotal-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
@@ -226,7 +226,7 @@ $canApplyMsrp = Mage::helper('Mage_Catalog_Helper_Data')->canApplyMsrp($_item->g
         <?php endif; ?>
     </td>
     <?php endif; ?>
-    <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartPriceInclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
+    <?php if (($this->helper('Mage_Tax_Helper_Data')->displayCartPriceInclTax() || $this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
     <td>
         <?php $_incl = $this->helper('Mage_Checkout_Helper_Data')->getSubtotalInclTax($_item); ?>
         <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>

@@ -61,8 +61,9 @@ class Mage_Customer_Block_Address_Edit extends Mage_Directory_Block_Data
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             $headBlock->setTitle($this->getTitle());
         }
+
         if ($postedData = Mage::getSingleton('Mage_Customer_Model_Session')->getAddressFormData(true)) {
-            $this->_address->setData($postedData);
+            $this->_address->addData($postedData);
         }
     }
 

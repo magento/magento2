@@ -93,7 +93,7 @@ class Varien_Data_Form extends Varien_Data_Form_Abstract
      */
     public function getHtmlAttributes()
     {
-        return array('id', 'name', 'method', 'action', 'enctype', 'class', 'onsubmit');
+        return array('id', 'name', 'method', 'action', 'enctype', 'class', 'onsubmit', 'target');
     }
 
     /**

@@ -161,4 +161,13 @@ class Mage_Adminhtml_Block_Sales_Order_View_Info extends Mage_Adminhtml_Block_Sa
         $url = $this->getUrl('*/sales_order/address', array('address_id'=>$address->getId()));
         return '<a href="'.$url.'">' . $label . '</a>';
     }
+
+    /**
+     * Whether Customer IP address should be displayed on sales documents
+     * @return bool
+     */
+    public function shouldDisplayCustomerIp()
+    {
+        return !Mage::getStoreConfigFlag('sales/general/hide_customer_ip', $this->getOrder()->getStoreId());
+    }
 }

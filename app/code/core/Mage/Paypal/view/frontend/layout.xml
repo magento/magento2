@@ -43,7 +43,7 @@
         <update handle="SHORTCUT_popup" />
     </checkout_cart_index>
 
-    <paypal_express_review translate="label">
+    <paypal_express_review translate="label" type="page" parent="default">
         <label>PayPal Express Order Review Form</label>
         <remove name="right"/>
         <remove name="left"/>
@@ -53,6 +53,9 @@
         </reference>
         <reference name="content">
             <block type="Mage_Paypal_Block_Express_Review" name="paypal.express.review" template="express/review.phtml">
+                <block type="Mage_Paypal_Block_Express_Review_Billing" name="express.review.billing" as="billing" template="express/review/address.phtml"/>
+                <block type="Mage_Paypal_Block_Express_Review_Shipping" name="express.review.shipping" as="shipping" template="express/review/address.phtml"/>
+                <block type="Mage_Paypal_Block_Express_Review" name="express.review.shipping.method" as="shipping_method" template="express/review/shipping/method.phtml"/>
                 <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
                     <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
                     <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
@@ -65,11 +68,12 @@
         <reference name="head">
             <action method="addJs"><file>Mage_Paypal::review.js</file></action>
         </reference>
-        <block type="Mage_Core_Block_Text_List" name="additional.product.info" />
+        <container name="additional.product.info" label="Additional Product Info"/>
     </paypal_express_review>
 
-    <paypal_express_review_details>
-        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="toHtml" template="express/review/details.phtml">
+    <paypal_express_review_details translate="label" type="page" parent="checkout_onepage_review">
+        <label>Paypal Express Review Details</label>
+        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="1" template="express/review/details.phtml">
             <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
             <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
             <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
@@ -90,12 +94,11 @@ Available logo types can be assigned with action="setLogoType":
 -->
     <catalog_product_view>
         <reference name="product.info.addtocart">
-            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypal.wrapper" translate="label">
-                <label>PayPal Express Checkout Shortcut Wrapper</label>
+            <container name="product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" htmlTag="div">
                 <block type="Mage_Paypal_Block_Express_Shortcut" name="product.info.addtocart.paypal" template="express/shortcut.phtml">
                     <action method="setIsInCatalogProduct"><value>1</value></action>
                 </block>
-            </block>
+            </container>
         </reference>
         <update handle="SHORTCUT_popup" />
         <reference name="right">
@@ -105,19 +108,12 @@ Available logo types can be assigned with action="setLogoType":
         </reference>
     </catalog_product_view>
 
-    <catalog_category_default>
+    <catalog_category_view>
         <update handle="SHORTCUT_popup" />
         <reference name="right">
             <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
         </reference>
-    </catalog_category_default>
-
-    <catalog_category_layered>
-        <update handle="SHORTCUT_popup" />
-        <reference name="right">
-            <block type="Mage_Paypal_Block_Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
-        </reference>
-    </catalog_category_layered>
+    </catalog_category_view>
 
     <catalog_product_compare_index>
         <update handle="SHORTCUT_popup" />
@@ -176,26 +172,55 @@ Available logo types can be assigned with action="setLogoType":
         </reference>
     </checkout_onepage_review>
 
-    <paypal_payflow_link_iframe>
-        <block type="Mage_Paypal_Block_Payflow_Link_Iframe" name="payflow.link.iframe" template="payflowlink/form.phtml" />
-    </paypal_payflow_link_iframe>
+    <paypal_payflowadvanced_cancelpayment translate="label" type="page" parent="paypal_payflowadvanced_form">
+        <label>Paypal Payflow Advanced Cancel Payment</label>
+        <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/redirect.phtml" output="1"/>
+    </paypal_payflowadvanced_cancelpayment>
 
-    <paypal_payflow_advanced_iframe>
-        <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/form.phtml" />
-    </paypal_payflow_advanced_iframe>
+    <paypal_payflowadvanced_returnurl translate="label" type="page" parent="paypal_payflowadvanced_form">
+        <label>Paypal Payflow Advanced Return URL</label>
+        <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/redirect.phtml" output="1"/>
+    </paypal_payflowadvanced_returnurl>
 
-    <paypal_hosted_pro_iframe>
-        <block type="Mage_Paypal_Block_Hosted_Pro_Iframe" name="hosted.pro.iframe" template="hss/form.phtml"/>
-    </paypal_hosted_pro_iframe>
+    <paypal_payflowadvanced_form translate="label" type="page" parent="paypal_payflow_form">
+        <label>Paypal Payflow Advanced Form</label>
+        <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/form.phtml" output="1"/>
+    </paypal_payflowadvanced_form>
 
-    <SHORTCUT_popup>
+    <paypal_hostedpro_cancel translate="label" type="page" parent="checkout_onepage_paymentmethod">
+        <label>Paypal Hosted Pro Frame</label>
+        <block type="Mage_Paypal_Block_Hosted_Pro_Iframe" name="hosted.pro.iframe" template="hss/redirect.phtml" output="1"/>
+    </paypal_hostedpro_cancel>
+
+    <paypal_standard_redirect translate="label" type="page" parent="checkout_onepage_paymentmethod">
+        <label>Paypal Standard Redirect</label>
+        <block type="Mage_Paypal_Block_Standard_Redirect" name="standard.redirect" output="1"/>
+    </paypal_standard_redirect>
+
+    <SHORTCUT_popup translate="label">
+        <label>Paypal Shortcut Popup</label>
         <reference name="product.tooltip">
-            <block type="Mage_Page_Block_Html_Wrapper" name="product.info.addtocart.paypal.wrapper" translate="label">
+            <container name="product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" htmlTag="div">
                 <block type="Mage_Paypal_Block_Express_Shortcut" name="product.info.addtocart.paypal" template="express/shortcut.phtml">
                     <action method="setIsInCatalogProduct"><value>1</value></action>
                     <action method="setShowOrPosition"><value>after</value></action>
                 </block>
-            </block>
+            </container>
         </reference>
     </SHORTCUT_popup>
+
+    <paypal_payflow_form translate="label" type="page" parent="checkout_onepage_paymentmethod">
+        <label>Paypal Payflow Form</label>
+        <block type="Mage_Paypal_Block_Payflow_Link_Iframe" output="1" name="payflow.link.iframe" template="payflowlink/form.phtml" />
+    </paypal_payflow_form>
+
+    <paypal_payflow_cancelpayment translate="label" type="page" parent="paypal_payflow_form">
+        <label>Paypal Payflow Cancel Payment</label>
+        <block type="Mage_Paypal_Block_Payflow_Link_Iframe" output="1" name="payflow.link.iframe" template="payflowlink/redirect.phtml" />
+    </paypal_payflow_cancelpayment>
+
+    <paypal_payflow_returnurl translate="label" type="page" parent="paypal_payflow_form">
+        <label>Paypal Payflow Return URL</label>
+        <block type="Mage_Paypal_Block_Payflow_Link_Iframe" output="1" name="payflow.link.iframe" template="payflowlink/redirect.phtml" />
+    </paypal_payflow_returnurl>
 </layout>

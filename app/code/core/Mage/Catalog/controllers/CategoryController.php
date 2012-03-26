@@ -88,15 +88,14 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
             Mage::getSingleton('Mage_Catalog_Model_Session')->setLastViewedCategoryId($category->getId());
 
             $update = $this->getLayout()->getUpdate();
-            $update->addHandle('default');
-
-            if (!$category->hasChildren()) {
-                $update->addHandle('catalog_category_layered_nochildren');
+            if ($category->getIsAnchor()) {
+                $type = $category->hasChildren() ? 'layered' : 'layered_without_children';
+            } else {
+                $type = $category->hasChildren() ? 'default' : 'default_without_children';
             }
-
-            $this->addActionLayoutHandles();
-            $update->addHandle($category->getLayoutUpdateHandle());
-            $update->addHandle('CATEGORY_' . $category->getId());
+            $this->addPageLayoutHandles(
+                array('type' => $type, 'id' => $category->getId())
+            );
             $this->loadLayoutUpdates();
 
             // apply custom layout update once layout is loaded

@@ -119,7 +119,7 @@ class Mage_SalesRule_Model_Resource_Rule_Collection extends Mage_Rule_Model_Reso
      * @param string|null $now
      * @use $this->addWebsiteFilter()
      *
-     * @return Mage_SalesRule_Model_Mysql4_Rule_Collection
+     * @return Mage_SalesRule_Model_Resource_Rule_Collection
      */
     public function addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now = null)
     {

@@ -75,7 +75,7 @@
                      <tr>
                          <td style="padding-right: 8px;"><label for="backup_name" class="nobr"><?php echo $this->__('Backup Name')?></label></td>
                          <td>
-                             <input type="text" name="backup_name" id="backup_name" class="validate-alphanum-with-spaces" style="width: 343px"/>
+                             <input type="text" name="backup_name" id="backup_name" class="validate-alphanum-with-spaces validate-length maximum-length-50" style="width: 343px" maxlength="50" />
                              <p class="note"><span><?php echo $this->__('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'); ?></span></p>
                          </td>
                      </tr>

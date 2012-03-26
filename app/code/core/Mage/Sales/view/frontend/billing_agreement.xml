@@ -27,7 +27,8 @@
 
 -->
 <layout version="0.1.0">
-    <sales_billing_agreement_index>
+    <sales_billing_agreement_index translate="label" type="page" parent="customer_account_index">
+        <label>Billing Agreement</label>
         <update handle="customer_account"/>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
@@ -37,7 +38,8 @@
         </reference>
     </sales_billing_agreement_index>
 
-    <sales_billing_agreement_view>
+    <sales_billing_agreement_view translate="label" type="page" parent="sales_billing_agreement_index">
+        <label>Billing Agreement View</label>
         <update handle="customer_account"/>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>

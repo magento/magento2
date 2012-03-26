@@ -41,7 +41,7 @@ class Mage_Checkout_Model_Type_Onepage
      *
      * @var string
      */
-    private $_customerEmailExistsMessage = '';
+    protected $_customerEmailExistsMessage = '';
 
     /**
      * @var Mage_Customer_Model_Session
@@ -253,7 +253,7 @@ class Mage_Checkout_Model_Type_Onepage
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
             $addressErrors  = $addressForm->validateData($addressData);
             if ($addressErrors !== true) {
-                return array('error' => 1, 'message' => $addressErrors);
+                return array('error' => 1, 'message' => array_values($addressErrors));
             }
             $addressForm->compactData($addressData);
             //unset billing address attributes which were not shown in form

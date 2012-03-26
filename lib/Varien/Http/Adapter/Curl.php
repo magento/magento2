@@ -52,8 +52,20 @@ class Varien_Http_Adapter_Curl implements Zend_Http_Client_Adapter_Interface
      *
      * @var array
      */
-    protected $_allowedParams = array('timeout' => CURLOPT_TIMEOUT, 'maxredirects' => CURLOPT_MAXREDIRS,
-        'proxy' => CURLOPT_PROXY, 'ssl_cert' => CURLOPT_SSLCERT, 'userpwd' => CURLOPT_USERPWD);
+    protected $_allowedParams = array(
+        'timeout' => CURLOPT_TIMEOUT,
+        'maxredirects' => CURLOPT_MAXREDIRS,
+        'proxy' => CURLOPT_PROXY,
+        'ssl_cert' => CURLOPT_SSLCERT,
+        'userpwd' => CURLOPT_USERPWD
+    );
+
+    /**
+     * Array of CURL options
+     *
+     * @var array
+     */
+    protected $_options = array();
 
     /**
      * Apply current configuration array to transport resource
@@ -66,11 +78,47 @@ class Varien_Http_Adapter_Curl implements Zend_Http_Client_Adapter_Interface
             return $this;
         }
 
+        // apply additional options to cURL
+        foreach ($this->_options as $option => $value) {
+            curl_setopt($this->_getResource(), $option, $value);
+        }
+
+        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
+        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
+
+        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
+        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
+
         foreach ($this->_config as $param => $curlOption) {
             if (array_key_exists($param, $this->_allowedParams)) {
                 curl_setopt($this->_getResource(), $this->_allowedParams[$param], $this->_config[$param]);
             }
         }
+        return $this;
+    }
+
+    /**
+     * Set array of additional cURL options
+     *
+     * @param array $options
+     * @return Varien_Http_Adapter_Curl
+     */
+    public function setOptions(array $options = array())
+    {
+        $this->_options = $options;
+        return $this;
+    }
+
+    /**
+     * Add additional option to cURL
+     *
+     * @param  int $option      the CURLOPT_* constants
+     * @param  mixed $value
+     * @return Varien_Http_Adapter_Curl
+     */
+    public function addOption($option, $value)
+    {
+        $this->_options[$option] = $value;
         return $this;
     }
 
@@ -97,18 +145,7 @@ class Varien_Http_Adapter_Curl implements Zend_Http_Client_Adapter_Interface
      */
     public function connect($host, $port = 80, $secure = false)
     {
-        //curl_setopt();
-        if (isset($this->_config['timeout'])) {
-            curl_setopt($this->_getResource(), CURLOPT_TIMEOUT, $this->_config['timeout']);
-        }
-        if (isset($this->_config['maxredirects'])) {
-            curl_setopt($this->_getResource(), CURLOPT_MAXREDIRS, $this->_config['maxredirects']);
-        }
-        if (isset($this->_config['proxy'])) {
-            curl_setopt($this->_getResource(), CURLOPT_PROXY, $this->_config['proxy']);
-        }
-
-        return $this;
+        return $this->_applyConfig();
     }
 
     /**
@@ -148,12 +185,6 @@ class Varien_Http_Adapter_Curl implements Zend_Http_Client_Adapter_Interface
          */
         $header = isset($this->_config['header']) ? $this->_config['header'] : true;
         curl_setopt($this->_getResource(), CURLOPT_HEADER, $header);
-
-        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
-
-        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
-        curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
 
         return $body;
     }

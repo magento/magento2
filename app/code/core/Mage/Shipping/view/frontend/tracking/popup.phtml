@@ -23,9 +23,9 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* @var $this Mage_Shipping_Block_Tracking_Popup */
 ?>
-<?php  $_results = $this->getTrackingInfo() ?>
+<?php /** @var $this Mage_Shipping_Block_Tracking_Popup */ ?>
+<?php $_results = $this->getTrackingInfo(); ?>
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('Tracking Information'); ?></h1>
     <button class="button" onclick="window.close(); window.opener.focus();"><span><span><?php echo $this->__('Close Window') ?></span></span></button>
@@ -45,12 +45,12 @@
                 <?php if(is_object($track)): ?>
                     <tr>
                         <th class="label"><?php echo $this->__('Tracking Number:'); ?></th>
-                        <td class="value"><?php echo $track->getTracking(); ?></td>
+                        <td class="value"><?php echo $this->escapeHtml($track->getTracking()); ?></td>
                     </tr>
                     <?php if ($track->getCarrierTitle()): ?>
                     <tr>
                         <th class="label"><?php echo $this->__('Carrier:'); ?></th>
-                        <td class="value"><?php echo $track->getCarrierTitle(); ?></td>
+                        <td class="value"><?php echo $this->escapeHtml($track->getCarrierTitle()); ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if($track->getErrorMessage()): ?>
@@ -66,7 +66,7 @@
                     <?php elseif($track->getUrl()): ?>
                     <tr>
                         <th class="label"><?php echo $this->__('Track:'); ?></th>
-                        <td class="value"><a href="<?php echo $track->getUrl(); ?>" onclick="this.target='_blank'"><?php echo $track->getUrl(); ?></a></td>
+                        <td class="value"><a href="<?php echo $this->escapeHtml($track->getUrl()); ?>" onclick="this.target='_blank'"><?php echo $this->escapeHtml($track->getUrl()); ?></a></td>
                     </tr>
                     <?php else: ?>
                         <?php if ($track->getStatus()): ?>

@@ -81,16 +81,24 @@ class Mage_Adminhtml_Permissions_UserController extends Mage_Adminhtml_Controlle
 
         Mage::register('permissions_user', $model);
 
+        if (isset($id)) {
+            $breadcrumb = $this->__('Edit User');
+        } else {
+            $breadcrumb = $this->__('New User');
+        }
         $this->_initAction()
-            ->_addBreadcrumb($id ? $this->__('Edit User') : $this->__('New User'), $id ? $this->__('Edit User') : $this->__('New User'))
-            ->_addContent($this->getLayout()
-                ->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit')
-                ->setData('action', $this->getUrl('*/permissions_user/save')))
+            ->_addBreadcrumb($breadcrumb, $breadcrumb)
+            ->_addContent(
+                $this->getLayout()
+                    ->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit')
+                    ->setData('action', $this->getUrl('*/permissions_user/save'))
+            )
             ->_addLeft($this->getLayout()->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit_Tabs'));
 
-        $this->_addJs($this->getLayout()
-            ->createBlock('Mage_Adminhtml_Block_Template')
-            ->setTemplate('permissions/user_roles_grid_js.phtml')
+        $this->_addJs(
+            $this->getLayout()
+                ->createBlock('Mage_Adminhtml_Block_Template')
+                ->setTemplate('permissions/user_roles_grid_js.phtml')
         );
         $this->renderLayout();
     }
@@ -147,7 +155,7 @@ class Mage_Adminhtml_Permissions_UserController extends Mage_Adminhtml_Controlle
                 }
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The user has been saved.'));
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setUserData(false);
-                $this->_redirect('*/*/edit', array('user_id' => $model->getUserId()));
+                $this->_redirect('*/*/');
                 return;
             } catch (Mage_Core_Exception $e) {
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
@@ -198,7 +206,9 @@ class Mage_Adminhtml_Permissions_UserController extends Mage_Adminhtml_Controlle
 
         Mage::register('permissions_user', $model);
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit_Tab_Roles')->toHtml()
+            $this->getLayout()
+                ->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit_Tab_Roles')
+                ->toHtml()
         );
     }
 

@@ -81,7 +81,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Select extends
 
     public function getPriceTypeSelectHtml()
     {
-        $this->getChild('option_price_type')
+        $this->getChildBlock('option_price_type')
             ->setData('id', 'product_option_{{id}}_select_{{select_id}}_price_type')
             ->setName('product[options][{{id}}][values][{{select_id}}][price_type]');
 

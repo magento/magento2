@@ -50,6 +50,6 @@ class Mage_Adminhtml_Block_Permissions_Roles extends Mage_Adminhtml_Block_Templa
      */
     public function getGridHtml()
     {
-        return $this->getChild('grid')->toHtml();
+        return $this->getChildBlock('grid')->toHtml();
     }
 }

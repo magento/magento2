@@ -664,20 +664,6 @@ Product.OptionsPrice.prototype = {
                     _priceInclTax += parseFloat(_productPrice) * (100 + this.currentTax) / 100;
                 }
 
-                var subPrice = 0;
-                var subPriceincludeTax = 0;
-                Object.values(this.customPrices).each(function(el){
-                    if (el.excludeTax && el.includeTax) {
-                        subPrice += el.excludeTax;
-                        subPriceincludeTax += el.includeTax;
-                    } else {
-                        subPrice += el.price;
-                        subPriceincludeTax += el.price;
-                    }
-                });
-                price += subPrice;
-                _priceInclTax += subPriceincludeTax;
-
                 if (this.specialTaxPrice == 'true') {
                     var excl = price;
                     var incl = _priceInclTax;
@@ -691,6 +677,20 @@ Product.OptionsPrice.prototype = {
                     var excl = price;
                     var incl = excl + tax;
                 }
+
+                var subPrice = 0;
+                var subPriceincludeTax = 0;
+                Object.values(this.customPrices).each(function(el){
+                    if (el.excludeTax && el.includeTax) {
+                        subPrice += parseFloat(el.excludeTax);
+                        subPriceincludeTax += parseFloat(el.includeTax);
+                    } else {
+                        subPrice += parseFloat(el.price);
+                        subPriceincludeTax += parseFloat(el.price);
+                    }
+                });
+                excl += subPrice;
+                incl += subPriceincludeTax;
 
                 if (typeof this.exclDisposition == 'undefined') {
                     excl += parseFloat(_plusDisposition);

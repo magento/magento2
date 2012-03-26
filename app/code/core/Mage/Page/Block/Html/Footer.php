@@ -75,17 +75,4 @@ class Mage_Page_Block_Html_Footer extends Mage_Core_Block_Template
 
         return $this->_copyright;
     }
-
-    /**
-     * Retrieve child block HTML, sorted by default
-     *
-     * @param   string $name
-     * @param   boolean $useCache
-     * @return  string
-     */
-    public function getChildHtml($name='', $useCache=true, $sorted=true)
-    {
-        return parent::getChildHtml($name, $useCache, $sorted);
-    }
-
 }

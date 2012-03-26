@@ -46,7 +46,7 @@
         </reference>
     </default>
 
-    <catalogsearch_result_index translate="label" module="Mage_CatalogSearch">
+    <catalogsearch_result_index translate="label" module="Mage_CatalogSearch" type="page" parent="default">
         <label>Quick Search Form</label>
         <reference name="root">
             <action method="setTemplate"><template>3columns.phtml</template></action>
@@ -74,7 +74,7 @@
         </reference>
     </catalogsearch_result_index>
 
-    <catalogsearch_advanced_index translate="label" module="Mage_CatalogSearch">
+    <catalogsearch_advanced_index translate="label" module="Mage_CatalogSearch" type="page" parent="default">
         <label>Advanced Search Form</label>
         <!-- Mage_Catalogsearch -->
         <reference name="root">
@@ -96,7 +96,7 @@
 Advanced search results
 -->
 
-    <catalogsearch_advanced_result translate="label" module="Mage_CatalogSearch">
+    <catalogsearch_advanced_result translate="label" module="Mage_CatalogSearch" type="page" parent="catalogsearch_advanced_index">
         <label>Advanced Search Result</label>
         <update handle="page_two_columns_right" />
         <!-- Mage_Catalogsearch -->
@@ -123,7 +123,7 @@ Advanced search results
         </reference>
     </catalogsearch_advanced_result>
 
-    <catalogsearch_term_popular translate="label" module="Mage_CatalogSearch">
+    <catalogsearch_term_popular translate="label" module="Mage_CatalogSearch" type="page" parent="default">
         <label>Popular Search Terms</label>
         <remove name="right"/>
         <remove name="left"/>
@@ -139,4 +139,10 @@ Advanced search results
         </reference>
     </catalogsearch_term_popular>
 
+    <catalogsearch_ajax_suggest translate="label" module="Mage_CatalogSearch" type="page" parent="ajax_index">
+        <label>Catalog Quick Search Form Suggestions</label>
+        <reference name="root">
+            <block type="Mage_CatalogSearch_Block_Autocomplete" name="autocomplete" />
+        </reference>
+    </catalogsearch_ajax_suggest>
 </layout>

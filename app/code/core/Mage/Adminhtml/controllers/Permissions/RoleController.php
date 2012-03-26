@@ -219,7 +219,7 @@ class Mage_Adminhtml_Permissions_RoleController extends Mage_Adminhtml_Controlle
         }
 
         //$this->getResponse()->setRedirect($this->getUrl("*/*/editrole/rid/$rid"));
-        $this->_redirect('*/*/editrole', array('rid' => $rid));
+        $this->_redirect('*/*/');
         return;
     }
 

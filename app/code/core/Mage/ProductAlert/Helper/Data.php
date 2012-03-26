@@ -97,4 +97,24 @@ class Mage_ProductAlert_Helper_Data extends Mage_Core_Helper_Url
         }
         return $block;
     }
+
+    /**
+     * Check whether stock alert is allowed
+     *
+     * @return bool
+     */
+    public function isStockAlertAllowed()
+    {
+        return Mage::getStoreConfigFlag(Mage_ProductAlert_Model_Observer::XML_PATH_STOCK_ALLOW);
+    }
+
+    /**
+     * Check whether price alert is allowed
+     *
+     * @return bool
+     */
+    public function isPriceAlertAllowed()
+    {
+        return Mage::getStoreConfigFlag(Mage_ProductAlert_Model_Observer::XML_PATH_PRICE_ALLOW);
+    }
 }

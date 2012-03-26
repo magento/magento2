@@ -38,11 +38,11 @@ class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
      */
     public function cancelPaymentAction()
     {
+        $this->loadLayout(false);
         $gotoSection = $this->_cancelPayment();
-        $redirectBlock = $this->_getIframeBlock()
-            ->setGotoSection($gotoSection)
-            ->setTemplate('payflowlink/redirect.phtml');
-        $this->getResponse()->setBody($redirectBlock->toHtml());
+        $redirectBlock = $this->getLayout()->getBlock('payflow.link.iframe');
+        $redirectBlock->setGotoSection($gotoSection);
+        $this->renderLayout();
     }
 
     /**
@@ -50,8 +50,8 @@ class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
      */
     public function returnUrlAction()
     {
-        $redirectBlock = $this->_getIframeBlock()
-            ->setTemplate('paypal/payflowlink/redirect.phtml');
+        $this->loadLayout(false);
+        $redirectBlock = $this->getLayout()->getBlock('payflow.link.iframe');
 
         $session = $this->_getCheckout();
         if ($session->getLastRealOrderId()) {
@@ -73,7 +73,7 @@ class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        $this->getResponse()->setBody($redirectBlock->toHtml());
+        $this->renderLayout();
     }
 
     /**
@@ -81,8 +81,7 @@ class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
      */
     public function formAction()
     {
-        $this->getResponse()
-            ->setBody($this->_getIframeBlock()->toHtml());
+        $this->loadLayout(false)->renderLayout();
     }
 
     /**
@@ -146,17 +145,5 @@ class Mage_Paypal_PayflowController extends Mage_Core_Controller_Front_Action
     protected function _getCheckout()
     {
         return Mage::getSingleton('Mage_Checkout_Model_Session');
-    }
-
-    /**
-     * Get iframe block
-     *
-     * @return Mage_Paypal_Block_Payflow_Link_Iframe
-     */
-    protected function _getIframeBlock()
-    {
-        $this->loadLayout('paypal_payflow_link_iframe');
-        return $this->getLayout()
-            ->getBlock('payflow.link.iframe');
     }
 }

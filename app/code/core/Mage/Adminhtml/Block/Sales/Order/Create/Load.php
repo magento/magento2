@@ -37,12 +37,9 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Load extends Mage_Core_Block_Templ
     protected function _toHtml()
     {
         $result = array();
-        foreach ($this->getSortedChildren() as $name) {
-            if (!$block = $this->getChild($name)) {
-                $result[$name] = Mage::helper('Mage_Sales_Helper_Data')->__('Invalid block: %s.', $name);
-            } else {
-                $result[$name] = $block->toHtml();
-            }
+        $layout = $this->getLayout();
+        foreach ($this->getChildNames() as $name) {
+            $result[$name] = $layout->renderElement($name);
         }
         $resultJson = Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result);
         $jsVarname = $this->getRequest()->getParam('as_js_varname');

@@ -54,25 +54,29 @@ class Mage_Rss_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Authenticate admin and check ACL
+     * Authenticates admin user and checks ACL. Returns user model upon successful authentication.
+     * If user authentication fails, then shows error and exits php instantly.
      *
      * @param string $path
+     * @return Mage_Admin_Model_User
      */
     public function authAdmin($path)
     {
         $session = Mage::getSingleton('Mage_Rss_Model_Session');
         if ($session->isAdminLoggedIn()) {
-            return;
+            return $session->getAdmin();
         }
+
         list($username, $password) = $this->authValidate();
         Mage::getSingleton('Mage_Adminhtml_Model_Url')->setNoSecret(true);
         $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
         $user = $adminSession->login($username, $password);
-        //$user = Mage::getModel('Mage_Admin_Model_User')->login($username, $password);
-        if($user && $user->getId() && $user->getIsActive() == '1' && $adminSession->isAllowed($path)){
+        if ($user && $user->getIsActive() == '1' && $adminSession->isAllowed($path)){
             $session->setAdmin($user);
+            return $user;
         } else {
-            $this->authFailed();
+            // Error is shown and exit() is called
+            Mage::helper('Mage_Core_Helper_Http')->authFailed();
         }
     }
 

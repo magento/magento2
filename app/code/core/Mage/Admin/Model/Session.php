@@ -34,6 +34,7 @@
  */
 class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
 {
+    const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
      * Whether it is the first page after successfull login
@@ -72,52 +73,56 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
     }
 
     /**
-     * Try to login user in admin
+     * Try to login user in admin. Possible results:
+     * - Mage_Admin_Model_User - user logged in and appropriate model is loaded
+     * - false - user not logged in
      *
      * @param  string $username
      * @param  string $password
-     * @param  Mage_Core_Controller_Request_Http $request
-     * @return Mage_Admin_Model_User|null
+     * @return Mage_Admin_Model_User|bool
      */
-    public function login($username, $password, $request = null)
+    public function login($username, $password)
     {
         if (empty($username) || empty($password)) {
-            return;
+            return false;
         }
 
         try {
             /** @var $user Mage_Admin_Model_User */
             $user = Mage::getModel('Mage_Admin_Model_User');
             $user->login($username, $password);
-            if ($user->getId()) {
-                $this->renewSession();
-
-                if (Mage::getSingleton('Mage_Adminhtml_Model_Url')->useSecretKey()) {
-                    Mage::getSingleton('Mage_Adminhtml_Model_Url')->renewSecretUrls();
-                }
-                $this->setIsFirstPageAfterLogin(true);
-                $this->setUser($user);
-                $this->setAcl(Mage::getResourceModel('Mage_Admin_Model_Resource_Acl')->loadAcl());
-
-                $requestUri = $this->_getRequestUri($request);
-                if ($requestUri) {
-                    Mage::dispatchEvent('admin_session_user_login_success', array('user' => $user));
-                    header('Location: ' . $requestUri);
-                    exit;
-                }
-            } else {
+            if (!$user->getId()) {
                 Mage::throwException(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Invalid User Name or Password.'));
             }
+
+            $this->renewSession();
+
+            if (Mage::getSingleton('Mage_Adminhtml_Model_Url')->useSecretKey()) {
+                Mage::getSingleton('Mage_Adminhtml_Model_Url')->renewSecretUrls();
+            }
+            $this->setIsFirstPageAfterLogin(true);
+            $this->setUser($user);
+            $this->setAcl(Mage::getResourceModel('Mage_Admin_Model_Resource_Acl')->loadAcl());
+            $this->setUpdatedAt(time());
+
+            Mage::dispatchEvent('admin_session_user_login_success', array('user' => $user));
+
+            return $user;
         } catch (Mage_Core_Exception $e) {
             Mage::dispatchEvent('admin_session_user_login_failed',
                 array('user_name' => $username, 'exception' => $e));
-            if ($request && !$request->getParam('messageSent')) {
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
-                $request->setParam('messageSent', true);
-            }
+            return false;
         }
+    }
 
-        return $user;
+    /**
+     * Log out the user from the admin
+     */
+    public function logout()
+    {
+        $this->unsetAll();
+        $this->getCookie()->delete($this->getSessionName());
+        Mage::dispatchEvent('admin_session_user_logout');
     }
 
     /**
@@ -184,7 +189,19 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
      */
     public function isLoggedIn()
     {
-        return $this->getUser() && $this->getUser()->getId();
+        $lifetime = Mage::getStoreConfig(self::XML_PATH_SESSION_LIFETIME);
+        $currentTime = time();
+
+        /* Validate admin session lifetime that should be more than 60 seconds */
+        if ($lifetime >= 60 && ($this->getUpdatedAt() < $currentTime - $lifetime)) {
+            return false;
+        }
+
+        if ($this->getUser() && $this->getUser()->getId()) {
+            $this->setUpdatedAt($currentTime);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -210,22 +227,5 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
     {
         $this->_isFirstPageAfterLogin = (bool)$value;
         return $this->setIsFirstVisit($this->_isFirstPageAfterLogin);
-    }
-
-    /**
-     * Custom REQUEST_URI logic
-     *
-     * @param Mage_Core_Controller_Request_Http $request
-     * @return string|null
-     */
-    protected function _getRequestUri($request = null)
-    {
-        if (Mage::getSingleton('Mage_Adminhtml_Model_Url')->useSecretKey()) {
-            return Mage::getSingleton('Mage_Adminhtml_Model_Url')->getUrl('*/*/*', array('_current' => true));
-        } elseif ($request) {
-            return $request->getRequestUri();
-        } else {
-            return null;
-        }
     }
 }

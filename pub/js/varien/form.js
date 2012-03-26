@@ -168,6 +168,8 @@ RegionUpdater.prototype = {
         this.regionTextEl = $(regionTextEl);
         this.regionSelectEl = $(regionSelectEl);
         this.zipEl = $(zipEl);
+        this.config = regions['config'];
+        delete regions.config;
         this.regions = regions;
 
         this.disableAction = (typeof disableAction=='undefined') ? 'hide' : disableAction;
@@ -180,17 +182,75 @@ RegionUpdater.prototype = {
         Event.observe(this.countryEl, 'change', this.update.bind(this));
     },
 
+    _checkRegionRequired: function()
+    {
+        var label, wildCard;
+        var elements = [this.regionTextEl, this.regionSelectEl];
+        var that = this;
+        if (typeof this.config == 'undefined') {
+            return;
+        }
+        var regionRequired = this.config.regions_required.indexOf(this.countryEl.value) >= 0;
+
+        elements.each(function(currentElement) {
+            Validation.reset(currentElement);
+            label = $$('label[for="' + currentElement.id + '"]')[0];
+            if (label) {
+                wildCard = label.down('em') || label.down('span.required');
+                if (!that.config.show_all_regions) {
+                    if (regionRequired) {
+                        label.up().show();
+                    } else {
+                        label.up().hide();
+                    }
+                }
+            }
+
+            if (label && wildCard) {
+                if (!regionRequired) {
+                    wildCard.hide();
+                    if (label.hasClassName('required')) {
+                        label.removeClassName('required');
+                    }
+                } else if (regionRequired) {
+                    wildCard.show();
+                    if (!label.hasClassName('required')) {
+                        label.addClassName('required')
+                    }
+                }
+            }
+
+            if (!regionRequired) {
+                if (currentElement.hasClassName('required-entry')) {
+                    currentElement.removeClassName('required-entry');
+                }
+                if ('select' == currentElement.tagName.toLowerCase() &&
+                    currentElement.hasClassName('validate-select')) {
+                    currentElement.removeClassName('validate-select');
+                }
+            } else {
+                if (!currentElement.hasClassName('required-entry')) {
+                    currentElement.addClassName('required-entry');
+                }
+                if ('select' == currentElement.tagName.toLowerCase() &&
+                    !currentElement.hasClassName('validate-select')) {
+                    currentElement.addClassName('validate-select');
+                }
+            }
+        });
+    },
+
     update: function()
     {
         if (this.regions[this.countryEl.value]) {
             var i, option, region, def;
 
+            def = this.regionSelectEl.getAttribute('defaultValue');
             if (this.regionTextEl) {
-                def = this.regionTextEl.value.toLowerCase();
+                if (!def) {
+                    def = this.regionTextEl.value.toLowerCase();
+                }
                 this.regionTextEl.value = '';
-            }
-            if (!def) {
-                def = this.regionSelectEl.getAttribute('defaultValue');
             }
 
             this.regionSelectEl.options.length = 1;
@@ -208,7 +268,9 @@ RegionUpdater.prototype = {
                     this.regionSelectEl.appendChild(option);
                 }
 
-                if (regionId==def || region.name.toLowerCase()==def || region.code.toLowerCase()==def) {
+                if (regionId==def || (region.name && region.name.toLowerCase()==def) ||
+                    (region.name && region.code.toLowerCase()==def)
+                ) {
                     this.regionSelectEl.value = regionId;
                 }
             }
@@ -247,6 +309,7 @@ RegionUpdater.prototype = {
             this.setMarkDisplay(this.regionSelectEl, false);
         }
 
+        this._checkRegionRequired();
         // Make Zip and its label required/optional
         var zipUpdater = new ZipUpdater(this.countryEl.value, this.zipEl);
         zipUpdater.update();

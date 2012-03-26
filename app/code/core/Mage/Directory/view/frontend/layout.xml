@@ -37,21 +37,11 @@ Category default layout
         </reference>
     </default>
 
-    <catalog_category_default>
+    <catalog_category_view>
         <reference name="left">
             <block type="Mage_Directory_Block_Currency" name="currency" before="catalog.leftnav" template="currency.phtml"/>
         </reference>
-    </catalog_category_default>
-
-<!--
-Category layered navigation layout
--->
-
-    <catalog_category_layered>
-        <reference name="left">
-            <block type="Mage_Directory_Block_Currency" name="currency" before="catalog.leftnav" template="currency.phtml"/>
-        </reference>
-    </catalog_category_layered>
+    </catalog_category_view>
 
 <!--
 Catalog Search layout

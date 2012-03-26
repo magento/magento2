@@ -122,7 +122,6 @@ class Mage_Catalog_Model_Layer_Filter_Attribute extends Mage_Catalog_Model_Layer
         $options = $attribute->getFrontend()->getSelectOptions();
         $optionsCount = $this->_getResource()->getCount($this);
         $data = array();
-
         foreach ($options as $option) {
             if (is_array($option['value'])) {
                 continue;

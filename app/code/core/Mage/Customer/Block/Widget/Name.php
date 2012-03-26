@@ -192,6 +192,22 @@ class Mage_Customer_Block_Widget_Name extends Mage_Customer_Block_Widget_Abstrac
     }
 
     /**
+     * Get string with frontend validation classes
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    public function getAttributeValidationClass($attributeCode)
+    {
+        $attribute = $this->_getAttribute($attributeCode);
+        if (!$attribute) {
+            return '';
+        }
+
+        return $attribute->getFrontend()->getClass();
+    }
+
+    /**
      * Retrieve store attribute label
      *
      * @param string $attributeCode

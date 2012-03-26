@@ -107,7 +107,8 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
     /**
      * Remove indexer namespace from event
      *
-     * @return  Mage_Index_Model_Process
+     * @param Mage_Index_Model_Event $event
+     * @return Mage_Index_Model_Process
      */
     protected function _resetEventNamespace($event)
     {
@@ -120,6 +121,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      * Register data required by process in event object
      *
      * @param Mage_Index_Model_Event $event
+     * @return Mage_Index_Model_Process
      */
     public function register(Mage_Index_Model_Event $event)
     {

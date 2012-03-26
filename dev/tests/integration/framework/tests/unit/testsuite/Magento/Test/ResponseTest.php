@@ -34,4 +34,3 @@ class Magento_Test_ResponseTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($response->canSendHeaders(false));
     }
 }
-

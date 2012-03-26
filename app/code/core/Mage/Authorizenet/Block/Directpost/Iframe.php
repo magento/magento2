@@ -34,41 +34,19 @@
 class Mage_Authorizenet_Block_Directpost_Iframe extends Mage_Core_Block_Template
 {
     /**
-     * Request params
-     * @var array
-     */
-    protected $_params = array();
-
-    /**
-     * Internal constructor
-     * Set template for iframe
+     * Preparing global layout
      *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('directpost/iframe.phtml');
-    }
-
-    /**
-     * Set output params
+     * You can redefine this method in child classes for changing layout
      *
-     * @param array $params
-     * @return Mage_Authorizenet_Block_Directpost_Iframe
+     * @return Mage_Core_Block_Abstract
      */
-    public function setParams($params)
+    protected function _prepareLayout()
     {
-        $this->_params = $params;
-        return $this;
-    }
-
-    /**
-     * Get params
-     *
-     * @return array
-     */
-    public function getParams()
-    {
-        return $this->_params;
+        $params = Mage::registry(Mage_Authorizenet_Directpost_PaymentController::REGISTRY_FORM_PARAMS_KEY);
+        if (is_null($params)) {
+            $params = array();
+        }
+        $this->setParams($params);
+        return parent::_prepareLayout();
     }
 }

@@ -50,12 +50,12 @@ class Mage_Paypal_HostedproController extends Mage_Core_Controller_Front_Action
      */
     public function cancelAction()
     {
+        $this->loadLayout(false);
         $gotoSection = $this->_cancelPayment();
-        $redirectBlock = $this->_getIframeBlock()
-            ->setGotoSection($gotoSection)
-            ->setTemplate('hss/redirect.phtml');
+        $redirectBlock = $this->getLayout()->getBlock('hosted.pro.iframe');
+        $redirectBlock->setGotoSection($gotoSection);
         //TODO: clarify return logic whether customer will be returned in iframe or in parent window
-        $this->getResponse()->setBody($redirectBlock->toHtml());
+        $this->renderLayout();
     }
 
     /**
@@ -102,17 +102,5 @@ class Mage_Paypal_HostedproController extends Mage_Core_Controller_Front_Action
     protected function _getCheckout()
     {
         return Mage::getSingleton('Mage_Checkout_Model_Session');
-    }
-
-    /**
-     * Get iframe block
-     *
-     * @return Mage_Paypal_Block_Hosted_Pro_Iframe
-     */
-    protected function _getIframeBlock()
-    {
-        $this->loadLayout('paypal_hosted_pro_iframe');
-        return $this->getLayout()
-            ->getBlock('hosted.pro.iframe');
     }
 }

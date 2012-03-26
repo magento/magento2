@@ -27,6 +27,7 @@
 
 -->
 <layout version="0.1.0">
+
     <customer_account_login>
         <reference name="customer_form_login">
             <action method="setTemplate"><template>Mage_Persistent::customer/form/login.phtml</template></action>
@@ -54,9 +55,4 @@
             <block type="Mage_Core_Block_Template" name="persistent.remember.me.tooltip" template="Mage_Persistent::remember_me_tooltip.phtml" />
         </reference>
     </checkout_onepage_index>
-    <customer_logged_out>
-        <reference name="right">
-            <block type="Mage_Sales_Block_Reorder_Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
-        </reference>
-    </customer_logged_out>
 </layout>
