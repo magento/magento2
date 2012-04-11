@@ -778,6 +778,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 ->load($id);
             $sku = $product->getSku();
             try {
+                Mage::dispatchEvent('catalog_controller_product_delete', array('product' => $product));
                 $product->delete();
                 $this->_getSession()->addSuccess($this->__('The product has been deleted.'));
             } catch (Exception $e) {
