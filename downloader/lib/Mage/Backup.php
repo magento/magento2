@@ -48,7 +48,7 @@ class Mage_Backup
      */
     static public function getBackupInstance($type)
     {
-        $class = 'Mage_Backup_' . $type;
+        $class = 'Mage_Backup_' . ucfirst($type);
 
         if (!in_array($type, self::$_allowedBackupTypes) || !class_exists($class, true)){
             throw new Mage_Exception('Current implementation not supported this type (' . $type . ') of backup.');

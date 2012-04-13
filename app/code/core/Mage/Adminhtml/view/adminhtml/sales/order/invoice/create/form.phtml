@@ -53,7 +53,7 @@
             </div>
             <fieldset>
                 <div>
-                    <strong><?php echo $_order->getShippingDescription() ?></strong>
+                    <strong><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></strong>
                     <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Total Shipping Charges'); ?>:
 
                     <?php if ($this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()): ?>
@@ -99,13 +99,15 @@
 <script type="text/javascript">
 //<![CDATA[
     var createShipment = $('invoice_do_shipment');
-    createShipment.observe('click', function(e){
-        if (createShipment.checked) {
-            document.getElementById('tracking').style.display = 'block';
-        } else {
-            document.getElementById('tracking').style.display = 'none'
-        }
-    })
+    if (createShipment) {
+        createShipment.observe('click', function(e){
+            if (createShipment.checked) {
+                document.getElementById('tracking').style.display = 'block';
+            } else {
+                document.getElementById('tracking').style.display = 'none'
+            }
+        })
+    }
 
     /*forced creating of shipment*/
     var forcedShipmentCreate = <?php echo $this->getForcedShipmentCreate() ?>;

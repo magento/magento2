@@ -119,6 +119,10 @@ class Mage_Backup_Filesystem_Helper
         $iterator = new Mage_Backup_Filesystem_Iterator_Filter($filesystemIterator, $skipFiles);
 
         foreach ($iterator as $item) {
+            if ($item->isLink()) {
+                continue;
+            }
+
             if (($infoOptions & self::INFO_WRITABLE) && !$item->isWritable()) {
                 $info['writable'] = false;
             }

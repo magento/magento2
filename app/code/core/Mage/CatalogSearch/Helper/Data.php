@@ -103,10 +103,9 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isMinQueryLength()
     {
-        if (Mage::helper('Mage_Core_Helper_String')->strlen($this->getQueryText()) < $this->getMinQueryLength()) {
-            return true;
-        }
-        return false;
+        $minQueryLength = $this->getMinQueryLength();
+        $thisQueryLength = Mage::helper('Mage_Core_Helper_String')->strlen($this->getQueryText());
+        return !$thisQueryLength || $minQueryLength !== '' && $thisQueryLength < $minQueryLength;
     }
 
     /**
@@ -116,23 +115,19 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getQueryText()
     {
-        if (is_null($this->_queryText)) {
+        if (!isset($this->_queryText)) {
             $this->_queryText = $this->_getRequest()->getParam($this->getQueryParamName());
             if ($this->_queryText === null) {
                 $this->_queryText = '';
             } else {
-                if (is_array($this->_queryText)) {
-                    $this->_queryText = null;
-                }
-                $this->_queryText = trim($this->_queryText);
-                $this->_queryText = Mage::helper('Mage_Core_Helper_String')->cleanString($this->_queryText);
+                /* @var $stringHelper Mage_Core_Helper_String */
+                $stringHelper = Mage::helper('Mage_Core_Helper_String');
+                $this->_queryText = is_array($this->_queryText) ? ''
+                    : $stringHelper->cleanString(trim($this->_queryText));
 
-                if (Mage::helper('Mage_Core_Helper_String')->strlen($this->_queryText) > $this->getMaxQueryLength()) {
-                    $this->_queryText = Mage::helper('Mage_Core_Helper_String')->substr(
-                        $this->_queryText,
-                        0,
-                        $this->getMaxQueryLength()
-                    );
+                $maxQueryLength = $this->getMaxQueryLength();
+                if ($maxQueryLength !== '' && $stringHelper->strlen($this->_queryText) > $maxQueryLength) {
+                    $this->_queryText = $stringHelper->substr($this->_queryText, 0, $maxQueryLength);
                     $this->_isMaxLength = true;
                 }
             }
@@ -211,7 +206,7 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
      * Retrieve minimum query length
      *
      * @param mixed $store
-     * @return int
+     * @return int|string
      */
     public function getMinQueryLength($store = null)
     {
@@ -222,7 +217,7 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
      * Retrieve maximum query length
      *
      * @param mixed $store
-     * @return int
+     * @return int|string
      */
     public function getMaxQueryLength($store = null)
     {
@@ -286,27 +281,21 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
             $this->addNoteMessage($this->__('Maximum Search query length is %s. Your query was cut.', $this->getMaxQueryLength()));
         }
 
-        $searchType = Mage::getStoreConfig(Mage_CatalogSearch_Model_Fulltext::XML_PATH_CATALOG_SEARCH_TYPE);
-        if ($searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_COMBINE
-            && $searchType != Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_LIKE
-        ) {
-            return $this;
-        }
-
         /* @var $stringHelper Mage_Core_Helper_String */
         $stringHelper = Mage::helper('Mage_Core_Helper_String');
-        $wordsFull = $stringHelper->splitWords($this->getQueryText(), true);
-        $wordsLike = $stringHelper->splitWords($this->getQueryText(), true, $this->getMaxQueryWords());
-        if (count($wordsFull) <= count($wordsLike)) {
-            return $this;
-        }
 
-        if (count($wordsFull) > count($wordsLike)) {
-            $wordsCut = array_diff($wordsFull, $wordsLike);
-            $wordsCut = array_map(array($this, 'escapeHtml'), $wordsCut);
-            $this->addNoteMessage(
-                $this->__('Maximum words count is %1$s. In your search query was cut next part: %2$s.', $this->getMaxQueryWords(), join(' ', $wordsCut))
-            );
+        $searchType = Mage::getStoreConfig(Mage_CatalogSearch_Model_Fulltext::XML_PATH_CATALOG_SEARCH_TYPE);
+        if ($searchType == Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_COMBINE
+            || $searchType == Mage_CatalogSearch_Model_Fulltext::SEARCH_TYPE_LIKE
+        ) {
+            $wordsFull = $stringHelper->splitWords($this->getQueryText(), true);
+            $wordsLike = $stringHelper->splitWords($this->getQueryText(), true, $this->getMaxQueryWords());
+            if (count($wordsFull) > count($wordsLike)) {
+                $wordsCut = array_map(array($this, 'escapeHtml'), array_diff($wordsFull, $wordsLike));
+                $this->addNoteMessage(
+                    $this->__('Maximum words count is %1$s. In your search query was cut next part: %2$s.', $this->getMaxQueryWords(), join(' ', $wordsCut))
+                );
+            }
         }
         return $this;
     }
@@ -322,7 +311,7 @@ class Mage_CatalogSearch_Helper_Data extends Mage_Core_Helper_Abstract
     public function prepareIndexdata($index, $separator = ' ')
     {
         $_index = array();
-        foreach ($index as $key => $value) {
+        foreach ($index as $value) {
             if (!is_array($value)) {
                 $_index[] = $value;
             }

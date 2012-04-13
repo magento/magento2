@@ -322,11 +322,24 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('Admin', $baseUrl);
     }
 
+    /**
+     * Test shouldUrlBeSecure() function for "Use Secure URLs in Frontend" = Yes/No
+     */
     public function testShouldUrlBeSecure()
     {
+        $this->markTestIncomplete('Bug MAGE-6271');
         $model = $this->_createModel(true);
-        $this->assertFalse($model->shouldUrlBeSecure('/'));
-        $this->assertTrue($model->shouldUrlBeSecure('/checkout/onepage'));
+
+        $store = Mage::app()->getStore();
+        $oldValue = (string)$store->getConfig('web/secure/use_in_frontend');
+        foreach (array(0, 1) as $newValue) {
+            $store->setConfig('web/secure/use_in_frontend', $newValue);
+            $model->reinit();
+            $this->assertFalse($model->shouldUrlBeSecure('/'));
+            $this->assertEquals($model->shouldUrlBeSecure('/checkout/onepage'), (bool)$newValue);
+        }
+
+        $store->setConfig('web/secure/use_in_frontend', $oldValue);
     }
 
     public function testGetTablePrefix()

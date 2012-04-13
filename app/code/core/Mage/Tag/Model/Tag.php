@@ -162,12 +162,6 @@ class Mage_Tag_Model_Tag extends Mage_Core_Model_Abstract
         return $this;
     }
 
-    public function productEventAggregate($observer)
-    {
-        $this->_getProductEventTagsCollection($observer)->walk('aggregate');
-        return $this;
-    }
-
     /**
      * Product delete event action
      *

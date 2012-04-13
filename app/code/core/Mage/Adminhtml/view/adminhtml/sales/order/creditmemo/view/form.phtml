@@ -50,7 +50,7 @@
             <h4 class="icon-head head-shipping-method"><?php echo $this->helper('Mage_Sales_Helper_Data')->__('Shipping Information') ?></h4>
         </div>
         <fieldset>
-            <strong><?php echo $_order->getShippingDescription() ?></strong>
+            <strong><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></strong>
             <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Total Shipping Charges'); ?>:
 
             <?php if ($this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()): ?>

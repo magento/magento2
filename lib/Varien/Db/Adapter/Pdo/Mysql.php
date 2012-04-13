@@ -400,7 +400,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         if (is_string($sql) && $this->getTransactionLevel() > 0) {
             $startSql = strtolower(substr(ltrim($sql), 0, 3));
             if (in_array($startSql, $this->_ddlRoutines)) {
-                throw new Zend_Db_Adapter_Exception('DDL statements are not allowed in transactions');
+                trigger_error(Varien_Db_Adapter_Interface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }

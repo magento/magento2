@@ -41,6 +41,7 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new Mage_Core_Model_Layout_Structure;
+        $this->_model->insertContainer('', 'root');
     }
 
     public function testGetParentName()
@@ -79,6 +80,14 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($child, $this->_model->getChildName($parent, $alias));
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testSetChildEmpty()
+    {
+        $this->_model->setChild('parent', '', 'alias');
+    }
+
     public function testGetChildBeforeParent()
     {
         $parent = 'parent';
@@ -115,15 +124,18 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
         $this->_model->renameElement($name1, $name2);
         $this->assertFalse($this->_model->hasElement($name1));
         $this->assertTrue($this->_model->hasElement($name2));
+        $this->_model->renameElement($name2, '');
+        $this->assertTrue($this->_model->hasElement($name2));
+        $this->assertFalse($this->_model->hasElement(''));
     }
 
     public function testGetElementAttribute()
     {
         $name = 'name';
         $options = array('attribute' => 'value');
-        $this->_model->insertElement('', $name, 'block', '', '', '', $options);
+        $this->_model->insertElement('', $name, 'block', '', null, true, $options);
         $this->assertEquals($options['attribute'], $this->_model->getElementAttribute($name, 'attribute'));
-        $this->assertFalse($this->_model->getElementAttribute($name, 'invalid_attribute'));
+        $this->assertEquals('', $this->_model->getElementAttribute($name, 'invalid_attribute'));
     }
 
     public function testMove()
@@ -182,22 +194,22 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider elementsDataProvider
      */
-    public function testInsertElement($parentName, $name, $type, $alias = '', $after = true, $sibling = '',
+    public function testInsertElement($parentName, $name, $type, $alias = '', $sibling = '', $after = true,
         $options = array(), $expected
     ) {
-        $this->_model->insertElement($parentName, $name, $type, $alias, $after, $sibling, $options);
+        $this->_model->insertElement($parentName, $name, $type, $alias, $sibling, $after, $options);
         $this->assertEquals($expected, $this->_model->hasElement($name));
     }
 
     public function elementsDataProvider()
     {
         return array(
-            array('root', 'name', 'block', 'alias', true, 'sibling', array('htmlTag' => 'div'), true),
-            array('root', 'name', 'container', 'alias', true, 'sibling', array('htmlTag' => 'div'), true),
-            array('', 'name', 'block', 'alias', true, 'sibling', array('htmlTag' => 'div'), true),
-            array('root', 'name', 'invalid_type', 'alias', true, 'sibling', array('htmlTag' => 'div'), false),
-            array('root', 'name', 'block', 'alias', false, 'sibling', array('htmlTag' => 'div'), true),
-            array('root', 'name', 'block', 'alias', true, 'sibling', array(), true),
+            array('root', 'name', 'block', 'alias', 'sibling', true, array('htmlTag' => 'div'), true),
+            array('root', 'name', 'container', 'alias', 'sibling', true, array('htmlTag' => 'div'), true),
+            array('', 'name', 'block', 'alias', 'sibling', true, array('htmlTag' => 'div'), true),
+            array('root', 'name', 'invalid_type', 'alias', 'sibling', true, array('htmlTag' => 'div'), false),
+            array('root', 'name', 'block', 'alias', 'sibling', false, array('htmlTag' => 'div'), true),
+            array('root', 'name', 'block', 'alias', 'sibling', true, array(), true),
         );
     }
 
@@ -215,44 +227,38 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
 
     public function testInsertElementWithoutAlias()
     {
-        $root = 'root';
         $name = 'name';
-
-        $this->_model->insertContainer('', $root);
-        $this->_model->insertElement($root, $name, 'block');
+        $this->_model->insertElement('root', $name, 'block');
         $alias = $this->_model->getElementAlias($name);
         $this->assertEquals($name, $alias);
 
-        $foundName = $this->_model->getChildName($root, $alias);
+        $foundName = $this->_model->getChildName('root', $alias);
         $this->assertEquals($name, $foundName);
     }
 
     public function testInsertElementOrder()
     {
-        $root = 'root';
         $name1 = 'name1';
         $name2 = 'name2';
         $name3 = 'name3';
         $name4 = 'name4';
         $name5 = 'name5';
 
-        $this->_model->insertElement('', $root, 'container');
-
-        $this->_model->insertElement($root, $name1, 'block');
-        $this->_model->insertElement($root, $name2, 'block', '', true, $name1);
-        $children = $this->_model->getChildNames($root);
+        $this->_model->insertElement('root', $name1, 'block');
+        $this->_model->insertElement('root', $name2, 'block', '', $name1, true);
+        $children = $this->_model->getChildNames('root');
         $this->assertEquals(array($name1, $name2), $children);
 
-        $this->_model->insertElement($root, $name3, 'block', '', false, $name1);
-        $children = $this->_model->getChildNames($root);
+        $this->_model->insertElement('root', $name3, 'block', '', $name1, false);
+        $children = $this->_model->getChildNames('root');
         $this->assertEquals(array($name3, $name1, $name2), $children);
 
-        $this->_model->insertElement($root, $name4, 'block');
-        $children = $this->_model->getChildNames($root);
+        $this->_model->insertElement('root', $name4, 'block');
+        $children = $this->_model->getChildNames('root');
         $this->assertEquals(array($name3, $name1, $name2, $name4), $children);
 
-        $this->_model->insertElement($root, $name5, 'block', '', false);
-        $children = $this->_model->getChildNames($root);
+        $this->_model->insertElement('root', $name5, 'block', '', 'unknown_element', false);
+        $children = $this->_model->getChildNames('root');
         $this->assertEquals(array($name5, $name3, $name1, $name2, $name4), $children);
     }
 
@@ -290,14 +296,12 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
 
     public function testGetChildrenCount()
     {
-        $root = 'root';
         $child = 'block';
-        $this->_model->insertBlock('', $root);
-        $this->assertEquals(0, $this->_model->getChildrenCount($root));
-        $this->_model->insertBlock($root, $child);
-        $this->assertEquals(1, $this->_model->getChildrenCount($root));
-        $this->_model->unsetChild($root, $child);
-        $this->assertEquals(0, $this->_model->getChildrenCount($root));
+        $this->assertEquals(0, $this->_model->getChildrenCount('root'));
+        $this->_model->insertBlock('root', $child);
+        $this->assertEquals(1, $this->_model->getChildrenCount('root'));
+        $this->_model->unsetChild('root', $child);
+        $this->assertEquals(0, $this->_model->getChildrenCount('root'));
     }
 
     /**
@@ -315,9 +319,9 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
         $this->_model->insertBlock($parent, $child1);
         $this->assertEmpty($this->_model->getGroupChildNames($parent, $group1));
         $this->assertEmpty($this->_model->getGroupChildNames($parent, $group2));
-        $this->_model->addToParentGroup($child1, $parent, $group1);
+        $this->_model->addToParentGroup($child1, $group1);
         $this->_model->insertBlock($parent, $child2);
-        $this->_model->addToParentGroup($child2, $parent, $group2);
+        $this->_model->addToParentGroup($child2, $group2);
         $this->assertEquals(array($child1), $this->_model->getGroupChildNames($parent, $group1));
         $this->assertEquals(array($child2), $this->_model->getGroupChildNames($parent, $group2));
     }
@@ -364,5 +368,119 @@ class Mage_Core_Model_Layout_StructureTest extends PHPUnit_Framework_TestCase
         // container under container
         $this->assertEquals('container2', $this->_model->insertContainer('container1', 'container2'));
         $this->assertTrue($this->_model->isManipulationAllowed('container2'));
+    }
+
+    public function testSortElementsAtTop()
+    {
+        $this->_model->insertBlock('root', 'element1');
+        $this->_model->insertBlock('root', 'element2');
+        $this->_model->insertBlock('root', 'element3', '', '-', false);
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element3', 'element1', 'element2'),
+            $this->_model->getChildNames('root')
+        );
+    }
+
+    public function testSortElementsAtBottom()
+    {
+        $this->_model->insertBlock('root', 'element1');
+        $this->_model->insertBlock('root', 'element2', '', '-');
+        $this->_model->insertBlock('root', 'element3');
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element1', 'element3', 'element2'),
+            $this->_model->getChildNames('root')
+        );
+    }
+
+    public function testSortElementsAfterFurtherCreated()
+    {
+        $this->_model->insertBlock('root', 'element1', '', 'element2');
+        $this->_model->insertBlock('root', 'element2');
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element2', 'element1'),
+            $this->_model->getChildNames('root')
+        );
+    }
+
+    public function testSortElementsBeforeFurtherCreatedAndDeeper()
+    {
+        $this->_model->insertBlock('root', 'element1');
+        $this->_model->insertBlock('root', 'element2');
+        $this->_model->insertBlock('element2', 'element2_1');
+        $this->_model->insertBlock('element2', 'element2_2', '', 'element2_4', false);
+        $this->_model->insertBlock('element2', 'element2_3');
+        $this->_model->insertBlock('element2', 'element2_4');
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element1', 'element2'),
+            $this->_model->getChildNames('root')
+        );
+        $this->assertEquals(
+            array(),
+            $this->_model->getChildNames('element1')
+        );
+        $this->assertEquals(
+            array('element2_1', 'element2_3', 'element2_2', 'element2_4'),
+            $this->_model->getChildNames('element2')
+        );
+    }
+
+    public function testSortElementsBeforeElementWhichIsAfter()
+    {
+        $this->markTestIncomplete('MAGETWO-839');
+
+        $this->_model->insertBlock('root', 'element1', '', 'element2', false);
+        $this->_model->insertBlock('root', 'element2', '', 'element3', true);
+        $this->_model->insertBlock('root', 'element3', '', '-', false);
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element3', 'element1', 'element2'),
+            $this->_model->getChildNames('root')
+        );
+    }
+
+    public function testSortElementsAfterElementWhichIsAfter()
+    {
+        $this->markTestIncomplete('MAGETWO-839');
+
+        $this->_model->insertBlock('root', 'element1', '', 'element3', false);
+        $this->_model->insertBlock('root', 'element2', '', 'element1', false);
+        $this->_model->insertBlock('root', 'element3', '', 'element_non_existing', false);
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element3', 'element2', 'element1'),
+            $this->_model->getChildNames('root')
+        );
+    }
+
+    public function testSortElementsBeforePreviousElement()
+    {
+        $this->markTestIncomplete('MAGETWO-839');
+
+        $this->_model->insertBlock('root', 'element1', '', 'element2', true);
+        $this->_model->insertBlock('root', 'element2', '', 'element3', true);
+        $this->_model->insertBlock('root', 'element3');
+
+        $this->_model->sortElements();
+
+        $this->assertEquals(
+            array('element2', 'element1', 'element3'),
+            $this->_model->getChildNames('root')
+        );
     }
 }

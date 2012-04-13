@@ -155,6 +155,26 @@ class Mage_Directory_Model_Resource_Region_Collection extends Mage_Core_Model_Re
     }
 
     /**
+     * Filter region by its code or name
+     *
+     * @param string|array $region
+     * @return Mage_Directory_Model_Resource_Region_Collection
+     */
+    public function addRegionCodeOrNameFilter($region)
+    {
+        if (!empty($region)) {
+            if (is_array($region)) {
+                $this->addFieldToFilter('main_table.code', array('in' => $region));
+                $this->addFieldToFilter('main_table.default_name', array('in' => $region));
+            } else {
+                $this->addFieldToFilter('main_table.code', $region);
+                $this->addFieldToFilter('main_table.default_name', $region);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Convert collection items to select options array
      *
      * @return array

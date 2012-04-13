@@ -30,6 +30,7 @@
         <h2><?php echo $this->__('New Products') ?></h2>
     </div>
     <div class="widget-products">
+        <?php echo $this->getPagerHtml() ?>
         <ol class="products-list">
         <?php $i=0; foreach ($_products->getItems() as $_product): ?>
             <li class="item<?php echo (++$i == count($_products))?' last':''; ?>">

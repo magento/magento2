@@ -27,6 +27,12 @@
 
 class Mage_Weee_Model_Total_Invoice_Weee extends Mage_Sales_Model_Order_Invoice_Total_Abstract
 {
+    /**
+     * Weee tax collector
+     *
+     * @param Mage_Sales_Model_Order_Invoice $invoice
+     * @return Mage_Weee_Model_Total_Invoice_Weee
+     */
     public function collect(Mage_Sales_Model_Order_Invoice $invoice)
     {
         $store = $invoice->getStore();
@@ -38,34 +44,32 @@ class Mage_Weee_Model_Total_Invoice_Weee extends Mage_Sales_Model_Order_Invoice_
             $orderItem = $item->getOrderItem();
             $orderItemQty = $orderItem->getQtyOrdered();
 
-            if ($orderItemQty) {
-                if ($orderItem->isDummy()) {
-                    continue;
-                }
-
-                $weeeTaxAmount = $item->getWeeeTaxAppliedAmount()*$item->getQty();
-                $baseWeeeTaxAmount = $item->getBaseWeeeTaxAppliedAmount()*$item->getQty();
-
-                $item->setWeeeTaxAppliedRowAmount($weeeTaxAmount);
-                $item->setBaseWeeeTaxAppliedRowAmnt($baseWeeeTaxAmount);
-                $newApplied = array();
-                $applied = Mage::helper('Mage_Weee_Helper_Data')->getApplied($item);
-                foreach ($applied as $one) {
-                    $one['base_row_amount'] = $one['base_amount']*$item->getQty();
-                    $one['row_amount'] = $one['amount']*$item->getQty();
-                    $one['base_row_amount_incl_tax'] = $one['base_amount_incl_tax']*$item->getQty();
-                    $one['row_amount_incl_tax'] = $one['amount_incl_tax']*$item->getQty();
-
-                    $newApplied[] = $one;
-                }
-                Mage::helper('Mage_Weee_Helper_Data')->setApplied($item, $newApplied);
-
-                $item->setWeeeTaxRowDisposition($item->getWeeeTaxDisposition()*$item->getQty());
-                $item->setBaseWeeeTaxRowDisposition($item->getBaseWeeeTaxDisposition()*$item->getQty());
-
-                $totalTax += $weeeTaxAmount;
-                $baseTotalTax += $baseWeeeTaxAmount;
+            if (!$orderItemQty || $orderItem->isDummy()) {
+                continue;
             }
+
+            $weeeTaxAmount = $item->getWeeeTaxAppliedAmount() * $item->getQty();
+            $baseWeeeTaxAmount = $item->getBaseWeeeTaxAppliedAmount() * $item->getQty();
+
+            $item->setWeeeTaxAppliedRowAmount($weeeTaxAmount);
+            $item->setBaseWeeeTaxAppliedRowAmount($baseWeeeTaxAmount);
+            $newApplied = array();
+            $applied = Mage::helper('Mage_Weee_Helper_Data')->getApplied($item);
+            foreach ($applied as $one) {
+                $one['base_row_amount'] = $one['base_amount'] * $item->getQty();
+                $one['row_amount'] = $one['amount'] * $item->getQty();
+                $one['base_row_amount_incl_tax'] = $one['base_amount_incl_tax'] * $item->getQty();
+                $one['row_amount_incl_tax'] = $one['amount_incl_tax'] * $item->getQty();
+
+                $newApplied[] = $one;
+            }
+            Mage::helper('Mage_Weee_Helper_Data')->setApplied($item, $newApplied);
+
+            $item->setWeeeTaxRowDisposition($item->getWeeeTaxDisposition() * $item->getQty());
+            $item->setBaseWeeeTaxRowDisposition($item->getBaseWeeeTaxDisposition() * $item->getQty());
+
+            $totalTax += $weeeTaxAmount;
+            $baseTotalTax += $baseWeeeTaxAmount;
         }
 
         /*
@@ -79,7 +83,8 @@ class Mage_Weee_Model_Total_Invoice_Weee extends Mage_Sales_Model_Order_Invoice_
         $order = $invoice->getOrder();
         if (Mage::helper('Mage_Weee_Helper_Data')->includeInSubtotal($store)) {
             $allowedSubtotal = $order->getSubtotal() - $order->getSubtotalInvoiced() - $invoice->getSubtotal();
-            $allowedBaseSubtotal = $order->getBaseSubtotal() -$order->getBaseSubtotalInvoiced() - $invoice->getBaseSubtotal();
+            $allowedBaseSubtotal = $order->getBaseSubtotal() - $order->getBaseSubtotalInvoiced()
+                - $invoice->getBaseSubtotal();
             $totalTax = min($allowedSubtotal, $totalTax);
             $baseTotalTax = min($allowedBaseSubtotal, $baseTotalTax);
 

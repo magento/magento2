@@ -42,6 +42,11 @@ class Mage_Core_Model_Translate
     const CONFIG_KEY_DESIGN_THEME   = 'theme';
 
     /**
+     * Default translation string
+     */
+    const DEFAULT_STRING = 'Translate String';
+
+    /**
      * Locale name
      *
      * @var string

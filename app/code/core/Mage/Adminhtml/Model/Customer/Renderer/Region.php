@@ -92,7 +92,9 @@ class Mage_Adminhtml_Model_Customer_Renderer_Region implements Varien_Data_Form_
                  . $element->serialize($htmlAttributes) .'>' . "\n";
             foreach ($regionCollection as $region) {
                 $selected = ($regionId==$region['value']) ? ' selected="selected"' : '';
-                $html.= '<option value="'.(int)$region['value'].'"'.$selected.'>'.$region['label'].'</option>';
+                $html.= '<option value="' . (int)$region['value'] . '"' . $selected . '>'
+                    . Mage::helper('Mage_Adminhtml_Helper_Data')->escapeHtml(Mage::helper('Mage_Directory_Helper_Data')->__($region['label']))
+                    . '</option>';
             }
             $html.= '</select>' . "\n";
 
@@ -109,7 +111,8 @@ class Mage_Adminhtml_Model_Customer_Renderer_Region implements Varien_Data_Form_
             $element->setRequired(false);
             $html.= '<td class="value">';
             $html .= '<input id="' . $regionHtmlId . '" name="' . $regionHtmlName
-                 . '" value="' . $element->getEscapedValue() . '" ' . $element->serialize($htmlAttributes) . "/>" . "\n";
+                . '" value="' . $element->getEscapedValue() . '" '
+                . $element->serialize($htmlAttributes) . "/>" . "\n";
             $html .= '<input type="hidden" name="' . $regionIdHtmlName . '" id="' . $regionIdHtmlId . '" value=""/>';
             $html .= '</td>'."\n";
         }

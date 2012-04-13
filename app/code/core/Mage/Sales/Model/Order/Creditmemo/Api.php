@@ -56,9 +56,9 @@ class Mage_Sales_Model_Order_Creditmemo_Api extends Mage_Sales_Model_Api_Resourc
      * @param array|null $filter
      * @return array
      */
-    public function items($filter = null)
+    public function items($filters = null)
     {
-        $filter = $this->_prepareListFilter($filter);
+        $filter = $this->_prepareListFilter($filters);
         try {
             $result = array();
             /** @var $creditmemoModel Mage_Sales_Model_Order_Creditmemo */
@@ -115,14 +115,15 @@ class Mage_Sales_Model_Order_Creditmemo_Api extends Mage_Sales_Model_Api_Resourc
         foreach ($creditmemo->getCommentsCollection() as $comment) {
             $result['comments'][] = $this->_getAttributes($comment, 'creditmemo_comment');
         }
+
         return $result;
     }
 
     /**
      * Create new credit memo for order
      *
-     * @param string $orderIncrementId
-     * @param array $data array('qtys' => array('sku1' => qty1, ... , 'skuN' => qtyN),
+     * @param string $creditmemoIncrementId
+     * @param array $creditmemoData array('qtys' => array('sku1' => qty1, ... , 'skuN' => qtyN),
      *      'shipping_amount' => value, 'adjustment_positive' => value, 'adjustment_negative' => value)
      * @param string|null $comment
      * @param bool $notifyCustomer
@@ -130,23 +131,23 @@ class Mage_Sales_Model_Order_Creditmemo_Api extends Mage_Sales_Model_Api_Resourc
      * @param string $refundToStoreCreditAmount
      * @return string $creditmemoIncrementId
      */
-    public function create($orderIncrementId, $data = null, $comment = null, $notifyCustomer = false,
+    public function create($creditmemoIncrementId, $creditmemoData = null, $comment = null, $notifyCustomer = false,
         $includeComment = false, $refundToStoreCreditAmount = null)
     {
         /** @var $order Mage_Sales_Model_Order */
-        $order = Mage::getModel('Mage_Sales_Model_Order')->load($orderIncrementId, 'increment_id');
+        $order = Mage::getModel('Mage_Sales_Model_Order')->load($creditmemoIncrementId, 'increment_id');
         if (!$order->getId()) {
             $this->_fault('order_not_exists');
         }
         if (!$order->canCreditmemo()) {
             $this->_fault('cannot_create_creditmemo');
         }
-        $data = $this->_prepareCreateData($data);
+        $creditmemoData = $this->_prepareCreateData($creditmemoData);
 
         /** @var $service Mage_Sales_Model_Service_Order */
         $service = Mage::getModel('Mage_Sales_Model_Service_Order', $order);
         /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
-        $creditmemo = $service->prepareCreditmemo($data);
+        $creditmemo = $service->prepareCreditmemo($creditmemoData);
 
         // refund to Store Credit
         if ($refundToStoreCreditAmount) {

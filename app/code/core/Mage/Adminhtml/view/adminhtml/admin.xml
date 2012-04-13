@@ -27,6 +27,19 @@
 -->
 
 <layout>
+    <!-- admin acl users edit page -->
+    <adminhtml_permissions_user_edit>
+        <reference name="left">
+            <block type="Mage_Adminhtml_Block_Permissions_User_Edit_Tabs" name="adminhtml.permissions.user.edit.tabs"/>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Permissions_User_Edit" name="adminhtml.permissions.user.edit"/>
+        </reference>
+        <reference name="js">
+            <block type="Mage_Adminhtml_Block_Template" name="adminhtml.permissions.user.roles.grid.js" template="permissions/user_roles_grid_js.phtml"/>
+        </reference>
+    </adminhtml_permissions_user_edit>
+
     <!-- admin acl roles grid page -->
     <adminhtml_permissions_role_index>
         <reference name="content">

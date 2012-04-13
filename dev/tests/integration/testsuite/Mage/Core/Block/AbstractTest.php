@@ -180,6 +180,14 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertNotContains($nameOne, $parent->getChildNames());
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testSetChildNull()
+    {
+        $this->_block->setLayout(new Mage_Core_Model_Layout)->setChild('alias', null);
+    }
+
     public function testUnsetCallChild()
     {
         $blockParent = $this->_createBlockWithLayout('parent', 'parent');
@@ -246,8 +254,8 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $blockTwo = $this->_createBlockWithLayout('block2', 'block2', 'Mage_Core_Block_Text');
         $blockOne->setText('one');
         $blockTwo->setText('two');
-        $parent->insert($blockTwo, '', false, 'block2'); // make block2 1st
-        $parent->insert($blockOne, '', false, 'block1'); // make block1 1st
+        $parent->insert($blockTwo, '-', false, 'block2'); // make block2 1st
+        $parent->insert($blockOne, '-', false, 'block1'); // make block1 1st
 
         $this->assertEquals('one', $parent->getChildHtml('block1'));
         $this->assertEquals('two', $parent->getChildHtml('block2'));
@@ -282,9 +290,9 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $block4->setText('four');
 
         $parent1->insert($parent2);
-        $parent2->insert($block1, '', false, 'block1');
-        $parent2->insert($block2, '', false, 'block2');
-        $parent2->insert($block3, '', true, 'block3');
+        $parent2->insert($block1, '-', false, 'block1');
+        $parent2->insert($block2, '-', false, 'block2');
+        $parent2->insert($block3, '-', true, 'block3');
         $parent1->insert($block4);
         $this->assertEquals('twoonethree', $parent1->getChildChildHtml('parent2'));
     }
@@ -354,7 +362,27 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $blockFour = $this->_createBlockWithLayout($name4);
         $parent->insert($blockFour, $name1, true);
         $this->assertSame(3, array_search($name4, $parent->getChildNames()));
+    }
 
+    public function testInsertWithoutCreateBlock()
+    {
+        $parent = $this->_createBlockWithLayout('parent', 'parent');
+        $this->assertFalse($parent->insert('block'));
+        $this->assertFalse($parent->getLayout()->hasElement('block'));
+    }
+
+    public function testInsertContainer()
+    {
+        $parentName = 'parent';
+        $name = 'container';
+        $parent = $this->_createBlockWithLayout($parentName, $parentName);
+        $layout = $parent->getLayout();
+
+        $this->assertFalse($parent->insert($name));
+        $this->assertEmpty($layout->getChildNames($parentName));
+        $layout->insertContainer('', $name);
+        $parent->insert($name);
+        $this->assertEquals(array($name), $layout->getChildNames($parentName));
     }
 
     public function testAppend()

@@ -74,7 +74,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Source_Abstract
     /**
      * Get a text for option value
      *
-     * @param  string|integer $value
+     * @param  string|int $value
      * @return string|bool
      */
     public function getOptionText($value)
@@ -142,5 +142,16 @@ abstract class Mage_Eav_Model_Entity_Attribute_Source_Abstract
     public function getFlatUpdateSelect($store)
     {
         return null;
+    }
+
+    /**
+     * Get a text for index option value
+     *
+     * @param string|int $value
+     * @return string|bool
+     */
+    public function getIndexOptionText($value)
+    {
+        return $this->getOptionText($value);
     }
 }

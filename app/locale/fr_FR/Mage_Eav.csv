@@ -61,6 +61,7 @@
 "Entity is not initialized","Entité non initialisée"
 "Entity object is undefined","Objet de l'entité non défini"
 "Failed to load node %s from config","Echec du chargement de %s depuis la configuration"
+"For internal use. Must be unique with no spaces. Maximum length of attribute code must be less then %s symbols","Pour usage interne. Doit être unique, sans espaces. La longueur maximale du code des attributs doit être inférieure à %s symboles"
 "Form Element with the same attribute","Élément de formulaire avec le même attribut"
 "Form Fieldset with the same code","Formulaire de champ avec le même code"
 "Form Type with the same code","Type de formulaire avec le même code"

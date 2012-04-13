@@ -134,7 +134,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Frontend_Abstract
     }
 
     /**
-     * Retreive frontend class
+     * Retrieve frontend class
      *
      * @return string
      */

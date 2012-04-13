@@ -24,8 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /** @var $this Mage_Shipping_Block_Tracking_Popup */ ?>
-<?php $_results = $this->getTrackingInfo() ?>
+<?php  $_results = $this->getTrackingInfo() ?>
 <div class="shipping-tracking">
 <div class="button-set">
 <button class="form-button" onclick="window.close();window.opener.focus();"><span><?php echo $this->__('Close Window') ?></span></button>
@@ -42,7 +41,7 @@
             <?php if(is_object($track)): ?>
             <tr>
                 <td class="first label"><?php echo $this->__('Tracking Number:'); ?></td>
-                <td><?php echo $this->escapeHtml($track->getTracking()); ?></td>
+                <td><?php echo $track->getTracking(); ?></td>
             </tr>
             <?php if ($track->getCarrierTitle()): ?>
             <tr>
@@ -63,7 +62,7 @@
             <?php elseif($track->getUrl()): ?>
             <tr>
                 <td class="first label"><?php echo $this->__('Track:'); ?></td>
-                <td><a href="<?php echo $this->escapeHtml($track->getUrl()); ?>" target="_blank"><?php echo $this->escapeHtml($track->getUrl()); ?></a></td>
+                <td><a href="<?php echo $track->getUrl(); ?>" target="_blank"><?php echo $track->getUrl(); ?></a></td>
             </tr>
             <?php else: ?>
                 <?php if ($track->getStatus()): ?>

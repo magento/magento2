@@ -101,6 +101,7 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle extends Mage_Catalog_Bl
             $defaultValues       = array();
         }
 
+        $position = 0;
         foreach ($optionsArray as $_option) {
             /* @var $_option Mage_Bundle_Model_Option */
             if (!$_option->getSelections()) {
@@ -111,7 +112,8 @@ class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle extends Mage_Catalog_Bl
             $option = array (
                 'selections' => array(),
                 'title'      => $_option->getTitle(),
-                'isMulti'    => in_array($_option->getType(), array('multi', 'checkbox'))
+                'isMulti'    => in_array($_option->getType(), array('multi', 'checkbox')),
+                'position'   => $position++
             );
 
             $selectionCount = count($_option->getSelections());

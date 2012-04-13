@@ -55,7 +55,9 @@ class Mage_Sales_Model_Order_Api_V2 extends Mage_Sales_Model_Order_Api
                 'billing_lastname', "{{billing_lastname}}", array('billing_lastname'=>"$billingAliasName.lastname")
             )
             ->addExpressionFieldToSelect(
-                'shipping_firstname', "{{shipping_firstname}}", array('shipping_firstname'=>"$shippingAliasName.firstname")
+                'shipping_firstname',
+                "{{shipping_firstname}}",
+                array('shipping_firstname'=>"$shippingAliasName.firstname")
             )
             ->addExpressionFieldToSelect(
                 'shipping_lastname', "{{shipping_lastname}}", array('shipping_lastname'=>"$shippingAliasName.lastname")
@@ -63,30 +65,40 @@ class Mage_Sales_Model_Order_Api_V2 extends Mage_Sales_Model_Order_Api
             ->addExpressionFieldToSelect(
                     'billing_name',
                     "CONCAT({{billing_firstname}}, ' ', {{billing_lastname}})",
-                    array('billing_firstname'=>"$billingAliasName.firstname", 'billing_lastname'=>"$billingAliasName.lastname")
+                    array(
+                        'billing_firstname'=>"$billingAliasName.firstname",
+                        'billing_lastname'=>"$billingAliasName.lastname"
+                    )
             )
             ->addExpressionFieldToSelect(
                     'shipping_name',
                     'CONCAT({{shipping_firstname}}, " ", {{shipping_lastname}})',
-                    array('shipping_firstname'=>"$shippingAliasName.firstname", 'shipping_lastname'=>"$shippingAliasName.lastname")
+                    array(
+                        'shipping_firstname'=>"$shippingAliasName.firstname",
+                        'shipping_lastname'=>"$shippingAliasName.lastname"
+                    )
             );
 
         $preparedFilters = array();
         if (isset($filters->filter)) {
-            foreach ($filters->filter as $_filter) {
-                $preparedFilters[][$_filter->key] = $_filter->value;
+            foreach ($filters->filter as $_filterKey => $_filterValue) {
+                if (is_object($_filterValue)) {
+                    $preparedFilters[][$_filterValue->key] = $_filterValue->value;
+                } else {
+                    $preparedFilters[][$_filterKey] = $_filterValue;
+                }
             }
         }
         if (isset($filters->complex_filter)) {
-            foreach ($filters->complex_filter as $_filter) {
+            foreach ($filters->complex_filter as $_key => $_filter) {
                 $_value = $_filter->value;
                 if(is_object($_value)) {
                     $preparedFilters[][$_filter->key] = array(
                         $_value->key => $_value->value
                     );
                 } elseif(is_array($_value)) {
-                    $preparedFilters[][$_filter->key] = array(
-                        $_value['key'] => $_value['value']
+                    $preparedFilters[][$_key] = array(
+                        $_filter->key => $_value
                     );
                 } else {
                     $preparedFilters[][$_filter->key] = $_value;

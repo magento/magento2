@@ -38,7 +38,7 @@
         <?php $_samples = $this->getSamples() ?>
         <?php foreach ($_samples as $_sample): ?>
             <dd>
-                <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $_sample->getTitle() ?></a>
+                <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo  $this->escapeHtml($_sample->getTitle()) ?></a>
             </dd>
         <?php endforeach; ?>
     </dl>

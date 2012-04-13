@@ -88,8 +88,9 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <auto_group_assign translate="label">
+                        <auto_group_assign translate="label comment">
                             <label>Enable Automatic Assignment to Customer Group</label>
+                            <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
                             <sort_order>10</sort_order>
@@ -175,6 +176,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </viv_disable_auto_group_assign_default>
+                        <vat_frontend_visibility translate="label">
+                            <label>Show VAT Number on Frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>58</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </vat_frontend_visibility>
                         <email_domain translate="label">
                             <label>Default Email Domain</label>
                             <frontend_type>text</frontend_type>
@@ -458,18 +468,8 @@
         </customer>
         <general>
             <groups>
-                <country>
-                    <fields>
-                        <eu_countries>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Customer_GroupAutoAssign</backend_model>
-                        </eu_countries>
-                    </fields>
-                </country>
                 <store_information>
                     <fields>
-                        <merchant_country>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Customer_GroupAutoAssign</backend_model>
-                        </merchant_country>
                         <validate_vat_number translate="button_label">
                             <label></label>
                             <button_label>Validate VAT Number</button_label>
@@ -477,7 +477,7 @@
                             <sort_order>28</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_store>0</show_in_store>
                         </validate_vat_number>
                     </fields>
                 </store_information>

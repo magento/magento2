@@ -364,8 +364,8 @@
         <td class="a-right last">
             <?php if ($this->canShowPriceInfo($_item)): ?>
                 <?php echo $this->displayPrices(
-                    $_item->getBaseRowTotal() - $_item->getBaseDiscountAmount() + $_item->getBaseTaxAmount() + $_item->getBaseWeeeTaxAppliedRowAmnt(),
-                    $_item->getRowTotal() - $_item->getDiscountAmount() + $_item->getTaxAmount() + $_item->getWeeeTaxAppliedRowAmount()
+                    max(0, $_item->getBaseRowTotal() - $_item->getBaseDiscountAmount() + $_item->getBaseTaxAmount() + $_item->getBaseWeeeTaxAppliedRowAmnt()),
+                    max(0, $_item->getRowTotal() - $_item->getDiscountAmount() + $_item->getTaxAmount() + $_item->getWeeeTaxAppliedRowAmount())
                 ); ?>
             <?php else: ?>
                 &nbsp;

@@ -401,7 +401,9 @@ addressesModel.prototype = {
                             }
                             data[id] = values.join(', ');
                         } else {
-                            data[id] = fields[i].options[fields[i].selectedIndex].text.escapeHTML();
+                            var option = fields[i].options[fields[i].selectedIndex],
+                                text   = option.value == '0' || option.value == '' ? '' : option.text;
+                            data[id] = text.escapeHTML();
                         }
                     } else if (value !== null) {
                         data[id] = value.escapeHTML();

@@ -112,6 +112,7 @@
                         <import_csv>var/import/*/*.csv</import_csv>
                     </available>
                 </importexport_local_valid_paths>
+                <bunch_size>100</bunch_size>
             </file>
         </general>
     </default>

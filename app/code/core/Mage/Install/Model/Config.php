@@ -39,6 +39,12 @@ class Mage_Install_Model_Config extends Varien_Simplexml_Config
     const XML_PATH_CHECK_WRITEABLE  = 'check/filesystem/writeable';
     const XML_PATH_CHECK_EXTENSIONS = 'check/php/extensions';
 
+    protected $_optionsMapping = array(self::XML_PATH_CHECK_WRITEABLE => array(
+        'app_etc' => 'etc_dir',
+        'var'     => 'var_dir',
+        'media'   => 'media_dir',
+    ));
+
     public function __construct()
     {
         parent::__construct();
@@ -76,6 +82,8 @@ class Mage_Install_Model_Config extends Varien_Simplexml_Config
      *      )
      * )
      *
+     * @deprecated since 1.7.1.0
+     *
      * @return array
      */
     public function getPathForCheck()
@@ -89,6 +97,29 @@ class Mage_Install_Model_Config extends Varien_Simplexml_Config
         }
 
         return $res;
+    }
+
+    /**
+     * Retrieve writable full paths for checking
+     *
+     * @return array
+     */
+    public function getWritableFullPathsForCheck()
+    {
+        $paths = array();
+        $items = (array) $this->getNode(self::XML_PATH_CHECK_WRITEABLE);
+        foreach ($items as $nodeKey => $item) {
+            $value = (array)$item;
+            if (isset($this->_optionsMapping[self::XML_PATH_CHECK_WRITEABLE][$nodeKey])) {
+                $configKey = $this->_optionsMapping[self::XML_PATH_CHECK_WRITEABLE][$nodeKey];
+                $value['path'] = Mage::app()->getConfig()->getOptions()->getData($configKey);
+            } else {
+                $value['path'] = dirname(Mage::getRoot()) . $value['path'];
+            }
+            $paths[$nodeKey] = $value;
+        }
+
+        return $paths;
     }
 
     /**

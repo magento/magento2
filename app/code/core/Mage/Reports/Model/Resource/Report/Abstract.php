@@ -105,7 +105,11 @@ abstract class Mage_Reports_Model_Resource_Report_Abstract extends Mage_Core_Mod
      */
     protected function _truncateTable($table)
     {
-        $this->_getWriteAdapter()->truncateTable($table);
+        if ($this->_getWriteAdapter()->getTransactionLevel() > 0) {
+            $this->_getWriteAdapter()->delete($table);
+        } else {
+            $this->_getWriteAdapter()->truncateTable($table);
+        }
         return $this;
     }
 

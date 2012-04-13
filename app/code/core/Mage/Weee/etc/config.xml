@@ -95,8 +95,8 @@
                 <totals>
                     <weee>
                         <class>Mage_Weee_Model_Total_Invoice_Weee</class>
-                        <after>subtotal</after>
-                        <before>tax,discount,grand_total</before>
+                        <after>subtotal,tax,discount,grand_total,cost_total,shipping</after>
+                        <before></before>
                     </weee>
                 </totals>
             </order_invoice>

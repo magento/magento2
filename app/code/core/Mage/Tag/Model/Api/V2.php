@@ -46,7 +46,7 @@ class Mage_Tag_Model_Api_V2 extends Mage_Tag_Model_Api
         foreach ($result as $key => $tag) {
             $result[$key] = Mage::helper('Mage_Api_Helper_Data')->wsiArrayPacker($tag);
         }
-        return $result;
+        return array_values($result);
     }
 
     /**

@@ -36,9 +36,7 @@ Product view
             <block type="Mage_GoogleOptimizer_Block_Code_Product" before="-" name="googleoptimizer.control.script">
                 <action method="setScriptType"><scriptType>control_script</scriptType></action>
             </block>
-        </reference>
-        <reference name="before_body_end">
-            <block type="Mage_GoogleOptimizer_Block_Code_Product" after="-" name="googleoptimizer.tracking.script">
+            <block type="Mage_GoogleOptimizer_Block_Code_Product" after="googleoptimizer.control.script" name="googleoptimizer.tracking.script">
                 <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
             </block>
         </reference>
@@ -49,9 +47,7 @@ Product view
             <block type="Mage_GoogleOptimizer_Block_Code_Category" before="-" name="googleoptimizer.control.script">
                 <action method="setScriptType"><scriptType>control_script</scriptType></action>
             </block>
-        </reference>
-        <reference name="before_body_end">
-            <block type="Mage_GoogleOptimizer_Block_Code_Category" after="-" name="googleoptimizer.tracking.script">
+            <block type="Mage_GoogleOptimizer_Block_Code_Category" after="googleoptimizer.control.script" name="googleoptimizer.tracking.script">
                 <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
             </block>
         </reference>
@@ -62,16 +58,14 @@ Product view
             <block type="Mage_GoogleOptimizer_Block_Code_Page" before="-" name="googleoptimizer.control.script">
                 <action method="setScriptType"><scriptType>control_script</scriptType></action>
             </block>
-        </reference>
-        <reference name="before_body_end">
-            <block type="Mage_GoogleOptimizer_Block_Code_Page" after="-" name="googleoptimizer.tracking.script">
+            <block type="Mage_GoogleOptimizer_Block_Code_Page" after="googleoptimizer.control.script" name="googleoptimizer.tracking.script">
                 <action method="setScriptType"><scriptType>tracking_script</scriptType></action>
             </block>
         </reference>
     </cms_page_view>
 
     <checkout_cart_index>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>checkout_cart</pageType></action>
@@ -80,7 +74,7 @@ Product view
     </checkout_cart_index>
 
     <checkout_onepage_index>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>checkout_onepage</pageType></action>
@@ -89,7 +83,7 @@ Product view
     </checkout_onepage_index>
 
     <checkout_onepage_success>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>checkout_onepage_success</pageType></action>
@@ -98,7 +92,7 @@ Product view
     </checkout_onepage_success>
 
     <checkout_multishipping_success>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>checkout_multishipping_success</pageType></action>
@@ -107,7 +101,7 @@ Product view
     </checkout_multishipping_success>
 
     <checkout_multishipping>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>checkout_multishipping</pageType></action>
@@ -116,7 +110,7 @@ Product view
     </checkout_multishipping>
 
     <customer_account_create>
-        <reference name="before_body_end">
+        <reference name="head">
             <block type="Mage_GoogleOptimizer_Block_Code_Conversion" after="-" name="googleoptimizer.conversion.script">
                 <action method="setScriptType"><scriptType>conversion_script</scriptType></action>
                 <action method="setPageType"><pageType>customer_account_create</pageType></action>

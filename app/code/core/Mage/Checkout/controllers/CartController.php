@@ -521,18 +521,20 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
         }
 
         try {
+            $codeLength = strlen($couponCode);
+            $isCodeLengthValid = $codeLength && $codeLength <= Mage_Checkout_Helper_Cart::COUPON_CODE_MAX_LENGTH;
+
             $this->_getQuote()->getShippingAddress()->setCollectShippingRates(true);
-            $this->_getQuote()->setCouponCode(strlen($couponCode) ? $couponCode : '')
+            $this->_getQuote()->setCouponCode($isCodeLengthValid ? $couponCode : '')
                 ->collectTotals()
                 ->save();
 
-            if (strlen($couponCode)) {
-                if ($couponCode == $this->_getQuote()->getCouponCode()) {
+            if ($codeLength) {
+                if ($isCodeLengthValid && $couponCode == $this->_getQuote()->getCouponCode()) {
                     $this->_getSession()->addSuccess(
                         $this->__('Coupon code "%s" was applied.', Mage::helper('Mage_Core_Helper_Data')->escapeHtml($couponCode))
                     );
-                }
-                else {
+                } else {
                     $this->_getSession()->addError(
                         $this->__('Coupon code "%s" is not valid.', Mage::helper('Mage_Core_Helper_Data')->escapeHtml($couponCode))
                     );

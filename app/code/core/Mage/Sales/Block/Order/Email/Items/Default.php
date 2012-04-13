@@ -65,7 +65,8 @@ class Mage_Sales_Block_Order_Email_Items_Default extends Mage_Core_Block_Templat
     public function getValueHtml($value)
     {
         if (is_array($value)) {
-            return sprintf('%d', $value['qty']) . ' x ' . $this->escapeHtml($value['title']) . " " . $this->getItem()->getOrder()->formatPrice($value['price']);
+            return sprintf('%d', $value['qty']) . ' x ' . $this->escapeHtml($value['title']) . " "
+                . $this->getItem()->getOrder()->formatPrice($value['price']);
         } else {
             return $this->escapeHtml($value);
         }

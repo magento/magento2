@@ -383,17 +383,18 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
     {
         $orderIds = $this->getRequest()->getPost('order_ids', array());
         $countHoldOrder = 0;
-        $countNonHoldOrder = 0;
+
         foreach ($orderIds as $orderId) {
             $order = Mage::getModel('Mage_Sales_Model_Order')->load($orderId);
             if ($order->canHold()) {
                 $order->hold()
                     ->save();
                 $countHoldOrder++;
-            } else {
-                $countNonHoldOrder++;
             }
         }
+
+        $countNonHoldOrder = count($orderIds) - $countHoldOrder;
+
         if ($countNonHoldOrder) {
             if ($countHoldOrder) {
                 $this->_getSession()->addError($this->__('%s order(s) were not put on hold.', $countNonHoldOrder));

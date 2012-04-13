@@ -36,13 +36,10 @@ class Mage_Rss_OrderControllerTest extends Magento_Test_TestCase_ControllerAbstr
         $this->dispatch('rss/order/new/');
     }
 
-    /**
-     * @magentoDataFixture adminUserFixture
-     */
     public function testNewActionLoggedUser()
     {
         $admin = new Mage_Admin_Model_User;
-        $admin->loadByUsername(Mage_Admin_Utility_User::CRED_USERNAME);
+        $admin->loadByUsername(Magento_Test_Bootstrap::ADMIN_NAME);
         $session = Mage::getSingleton('Mage_Rss_Model_Session');
         $session->setAdmin($admin);
 
@@ -73,17 +70,5 @@ class Mage_Rss_OrderControllerTest extends Magento_Test_TestCase_ControllerAbstr
 
         $body = $response->getBody();
         $this->assertContains('<rss', $body);
-    }
-
-    public static function adminUserFixture()
-    {
-        Mage_Admin_Utility_User::getInstance()
-            ->createAdmin();
-    }
-
-    public static function adminUserFixtureRollback()
-    {
-        Mage_Admin_Utility_User::getInstance()
-            ->destroyAdmin();
     }
 }

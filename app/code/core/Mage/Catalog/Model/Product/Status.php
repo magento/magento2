@@ -63,7 +63,7 @@ class Mage_Catalog_Model_Product_Status extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Retrieve resource model wraper
+     * Retrieve resource model wrapper
      *
      * @return Mage_Catalog_Model_Resource_Product_Status
      */

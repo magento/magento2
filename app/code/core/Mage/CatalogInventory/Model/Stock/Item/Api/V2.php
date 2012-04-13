@@ -68,6 +68,14 @@ class Mage_CatalogInventory_Model_Stock_Item_Api_V2 extends Mage_CatalogInventor
             $stockData['use_config_manage_stock'] = $data->use_config_manage_stock;
         }
 
+        if (isset($data->use_config_backorders)) {
+            $stockData['use_config_backorders'] = $data->use_config_backorders;
+        }
+
+        if (isset($data->backorders)) {
+            $stockData['backorders'] = $data->backorders;
+        }
+
         $product->setStockData($stockData);
 
         try {

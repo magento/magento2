@@ -67,6 +67,11 @@ class Mage_CatalogSearch_Model_Advanced extends Mage_Core_Model_Abstract
     protected $_engine = null;
 
     /**
+     * @var Mage_CatalogSearch_Model_Resource_Advanced_Collection
+     */
+    protected $_productCollection;
+
+    /**
      * Initialize resource model
      *
      */

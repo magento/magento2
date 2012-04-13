@@ -323,8 +323,9 @@ class Mage_Catalog_Model_Category_Api extends Mage_Catalog_Model_Api_Resource
             }
 
             $category->save();
-        }
-        catch (Mage_Core_Exception $e) {
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('data_invalid', $e->getMessage());
+        } catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
             $this->_fault('data_invalid', $e->getMessage());
         }
 
@@ -371,6 +372,10 @@ class Mage_Catalog_Model_Category_Api extends Mage_Catalog_Model_Api_Resource
      */
     public function delete($categoryId)
     {
+        if (Mage_Catalog_Model_Category::TREE_ROOT_ID == $categoryId) {
+            $this->_fault('not_deleted', 'Cannot remove the system category.');
+        }
+
         $category = $this->_initCategory($categoryId);
 
         try {

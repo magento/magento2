@@ -358,7 +358,7 @@ One page checkout progress block
     <checkout_onepage_progress translate="label" type="page" parent="ajax_index">
         <label>One Page Checkout Progress</label>
         <reference name="root">
-            <block type="Mage_Checkout_Block_Onepage_Progress" name="process" template="onepage/progress.phtml">
+            <block type="Mage_Checkout_Block_Onepage_Progress" name="progress" template="onepage/progress.phtml">
                 <block type="Mage_Checkout_Block_Onepage_Payment_Info" name="payment_info">
                     <action method="setInfoTemplate"><method></method><template></template></action>
                 </block>

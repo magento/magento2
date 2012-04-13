@@ -19,6 +19,7 @@
 "Schedule Ahead for","Plan vooruit voor"
 "Success History Lifetime","Succesgeschiedenis levensduur"
 "Too late for the schedule.","Te laat voor schema."
+"Unable to delete the cron task.","Kon de cron taak niet verwijderen."
 "Unable to save the cron expression.","Niet in staat om de cron expressie op te slaan."
 "Unknown error.","Onbekende fout."
 "Weekly","Wekelijks"

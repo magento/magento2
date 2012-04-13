@@ -50,13 +50,26 @@
                     </store_not_exists>
                 </faults>
             </core_store>
+            <core_magento translate="title" module="Mage_Core">
+                <model>Mage_Core_Model_Magento_Api</model>
+                <title>Magento info API</title>
+                <acl>core/magento</acl>
+                <methods>
+                    <info translate="title" module="Mage_Core">
+                        <title>Get info about current Magento installation</title>
+                        <acl>core/magento/info</acl>
+                    </info>
+                </methods>
+            </core_magento>
         </resources>
         <resources_alias>
             <store>core_store</store>
+            <magento>core_magento</magento>
         </resources_alias>
         <v2>
             <resources_function_prefix>
                 <store>store</store>
+                <magento>magento</magento>
             </resources_function_prefix>
         </v2>
         <rest>
@@ -77,6 +90,12 @@
                             <title>List of stores</title>
                         </list>
                     </store>
+                    <magento translate="title" module="Mage_Core">
+                        <title>Magento info</title>
+                        <info translate="title" module="Mage_Core">
+                            <title>Retrieve info about current Magento installation</title>
+                        </info>
+                    </magento>
                 </core>
             </resources>
         </acl>

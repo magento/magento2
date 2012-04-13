@@ -39,7 +39,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
     {
         /* Point application to predefined layout fixtures */
         Mage::getConfig()->setOptions(array(
-            'design_dir' => __DIR__ . '/_files/design',
+            'design_dir' => dirname(__FILE__) . '/_files/design',
         ));
         Mage::getDesign()->setDesignTheme('test/default/default');
 
@@ -65,24 +65,29 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArea, $layout->getArea());
     }
 
-    /**
-     * @expectedException Magento_Exception
-     */
-    public function testConstructorWrongStructure()
-    {
-        new Mage_Core_Model_Layout(array('structure' => false));
-    }
-
     public function constructorDataProvider()
     {
         return array(
             'default area'  => array(array(), Mage_Core_Model_Design_Package::DEFAULT_AREA),
             'frontend area' => array(array('area' => 'frontend'), 'frontend'),
             'backend area'  => array(array('area' => 'adminhtml'), 'adminhtml'),
-            'structure'     => array(
-                array('structure' => new Mage_Core_Model_Layout_Structure), Mage_Core_Model_Design_Package::DEFAULT_AREA
-            ),
         );
+    }
+
+    public function testConstructorStructure()
+    {
+        $structure = new Mage_Core_Model_Layout_Structure;
+        $structure->insertContainer('', 'test.container');
+        $layout = new Mage_Core_Model_Layout(array('structure' => $structure));
+        $this->assertTrue($layout->hasElement('test.container'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructorWrongStructure()
+    {
+        new Mage_Core_Model_Layout(array('structure' => false));
     }
 
     public function testGetUpdate()
@@ -106,7 +111,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
     {
         $this->_layout->generateXml();
         /* Generate fixture
-        file_put_contents(__DIR__ . '/_files/_layout_update.xml', $this->_model->getNode()->asNiceXml());
+        file_put_contents(dirname(__FILE__) . '/_files/_layout_update.xml', $this->_model->getNode()->asNiceXml());
         */
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/_layout_update.xml', $this->_layout->getXmlString());
 
@@ -122,6 +127,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
             'notification_survey',
             'notification_security',
             'messages',
+            'ANONYMOUS_0',
             'index_notifications',
             'index_notifications_copy'
         );
@@ -230,7 +236,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($name1, $this->_layout->getChildName($parentName, 'alias1'));
 
         $name2 = 'block2';
-        $block2 = $this->_layout->addBlock(new Mage_Core_Block_Text, $name2, $parentName, 'alias2', true, $name1);
+        $block2 = $this->_layout->addBlock(new Mage_Core_Block_Text, $name2, $parentName, 'alias2', $name1, true);
         $this->assertInstanceOf('Mage_Core_Block_Text', $block2);
         $this->assertEquals(array($name1, $name2), $this->_layout->getChildNames($parentName));
         $this->assertTrue($this->_layout->hasElement($name2));

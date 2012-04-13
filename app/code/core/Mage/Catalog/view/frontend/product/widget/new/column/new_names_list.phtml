@@ -31,6 +31,7 @@
             <strong><span><?php echo $this->__('New Products') ?></span></strong>
         </div>
         <div class="block-content">
+            <?php echo $this->getPagerHtml() ?>
             <?php $suffix = $this->getNameInLayout(); ?>
             <ol id="widget-new-products-<?php echo $suffix; ?>">
             <?php foreach ($_products->getItems() as $_product): ?>

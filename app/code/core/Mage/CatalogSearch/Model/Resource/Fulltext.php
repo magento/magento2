@@ -682,7 +682,7 @@ class Mage_CatalogSearch_Model_Resource_Fulltext extends Mage_Core_Model_Resourc
             }
 
             $attribute->setStoreId($storeId);
-            $value = $attribute->getSource()->getOptionText($value);
+            $value = $attribute->getSource()->getIndexOptionText($value);
 
             if (is_array($value)) {
                 $value = implode($this->_separator, $value);

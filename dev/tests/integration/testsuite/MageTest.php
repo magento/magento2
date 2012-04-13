@@ -37,7 +37,7 @@ class MageTest extends PHPUnit_Framework_TestCase
      */
     public function testReset()
     {
-        Mage::setRoot(__DIR__);
+        Mage::setRoot(dirname(__FILE__));
         $this->assertNotNull(Mage::getRoot());
         Mage::reset();
         $this->assertNull(Mage::getRoot());

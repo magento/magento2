@@ -38,9 +38,10 @@
     <div class="map-popup-content" id="map-popup-content">
         <div class="map-popup-checkout">
             <form action="" method="POST" id="product_addtocart_form_from_popup">
-                <?php echo $this->getChildHtml('product.info.addtocart.paypal.wrapper') ?>
-                <?php echo $this->getChildHtml('product.info.addtocart.paypaluk.wrapper') ?>
                 <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id" />
+                <div class="additional-addtocart-box">
+                    <?php echo $this->getChildHtml(); ?>
+                </div>
                 <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" id="map-popup-button"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
             </form>
         </div>

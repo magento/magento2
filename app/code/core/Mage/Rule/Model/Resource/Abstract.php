@@ -64,15 +64,17 @@ abstract class Mage_Rule_Model_Resource_Abstract extends Mage_Core_Model_Resourc
      */
     public function _beforeSave(Mage_Core_Model_Abstract $object)
     {
-        if ($object->getFromDate() instanceof Zend_Date) {
-            $object->setFromDate($object->getFromDate()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
-        } else {
+        $fromDate = $object->getFromDate();
+        if ($fromDate instanceof Zend_Date) {
+            $object->setFromDate($fromDate->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
+        } elseif (!is_string($fromDate) || empty($fromDate)) {
             $object->setFromDate(null);
         }
 
-        if ($object->getToDate() instanceof Zend_Date) {
-            $object->setToDate($object->getToDate()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
-        } else {
+        $toDate = $object->getToDate();
+        if ($toDate instanceof Zend_Date) {
+            $object->setToDate($toDate->toString(Varien_Date::DATETIME_INTERNAL_FORMAT));
+        } elseif (!is_string($toDate) || empty($toDate)) {
             $object->setToDate(null);
         }
 

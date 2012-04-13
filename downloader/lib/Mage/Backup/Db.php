@@ -34,7 +34,7 @@
 class Mage_Backup_Db extends Mage_Backup_Abstract
 {
     /**
-     * Implementation Rollback functionality for Db
+     * Implements Rollback functionality for Db
      *
      * @return bool
      */
@@ -48,20 +48,10 @@ class Mage_Backup_Db extends Mage_Backup_Abstract
         $archiveManager = new Mage_Archive();
         $source = $archiveManager->unpack($this->getBackupPath(), $this->getBackupsDir());
 
-        $this->getResourceModel()->beginTransaction();
-
-        $file = fopen($source, "r");
-        $query = '';
-        while(!feof($file)) {
-            $line = fgets($file);
-            $query .= $line;
-            if ($this->_isLineLastInCommand($line)){
-                $this->getResourceModel()->runCommand($query);
-                $query = '';
-            }
+        $file = new Mage_Backup_Filesystem_Iterator_File($source);
+        foreach ($file as $statement) {
+            $this->getResourceModel()->runCommand($statement);
         }
-        fclose($file);
-        $this->getResourceModel()->commitTransaction();
         @unlink($source);
 
         $this->_lastOperationSucceed = true;
@@ -70,7 +60,7 @@ class Mage_Backup_Db extends Mage_Backup_Abstract
     }
 
     /**
-     * Check is line a last in sql command
+     * Checks whether the line is last in sql command
      *
      * @param $line
      * @return bool
@@ -92,9 +82,9 @@ class Mage_Backup_Db extends Mage_Backup_Abstract
     }
 
     /**
-     * Implementation Create Backup functionality for Db
+     * Implements Create Backup functionality for Db
      *
-     * @return boolean
+     * @return bool
      */
     public function create()
     {
@@ -124,6 +114,6 @@ class Mage_Backup_Db extends Mage_Backup_Abstract
      */
     public function getType()
     {
-        return "db";
+        return 'db';
     }
 }

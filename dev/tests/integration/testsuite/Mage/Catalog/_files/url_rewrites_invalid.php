@@ -28,7 +28,7 @@
 /**
  * Extends valid Url rewrites
  */
-require __DIR__ . '/url_rewrites.php';
+require dirname(__FILE__) . '/url_rewrites.php';
 
 /**
  * Invalid rewrite for product assigned to different category

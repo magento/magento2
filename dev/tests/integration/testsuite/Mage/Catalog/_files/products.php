@@ -29,6 +29,7 @@ $product = new Mage_Catalog_Model_Product();
 $product->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId(4)
+    ->setWebsiteIds(array(1))
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)

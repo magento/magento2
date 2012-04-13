@@ -58,29 +58,16 @@ class Mage_Rss_Helper_DataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture adminUserFixture
      * @magentoAppIsolation enabled
      */
     public function testAuthAdminLogin()
     {
-        $_SERVER['PHP_AUTH_USER'] = Mage_Admin_Utility_User::CRED_USERNAME;
-        $_SERVER['PHP_AUTH_PW'] = Mage_Admin_Utility_User::CRED_PASSWORD;
+        $_SERVER['PHP_AUTH_USER'] = Magento_Test_Bootstrap::ADMIN_NAME;
+        $_SERVER['PHP_AUTH_PW'] = Magento_Test_Bootstrap::ADMIN_PASSWORD;
         $this->assertInstanceOf('Mage_Admin_Model_User', $this->_helper->authAdmin(''));
 
         $response = Mage::app()->getResponse();
         $code = $response->getHttpResponseCode();
         $this->assertFalse(($code >= 300) && ($code < 400));
-    }
-
-    public static function adminUserFixture()
-    {
-        Mage_Admin_Utility_User::getInstance()
-            ->createAdmin();
-    }
-
-    public static function adminUserFixtureRollback()
-    {
-        Mage_Admin_Utility_User::getInstance()
-            ->destroyAdmin();
     }
 }

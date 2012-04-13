@@ -133,27 +133,31 @@ function toggleValueElements(checkbox, container, excludedElements, checked){
         var isDisabled = (checked != undefined ? checked : checkbox.checked);
         elems.each(function (elem) {
             if (checkByProductPriceType(elem)) {
-                var isIgnored = false;
-                for (var i = 0; i < ignoredElements.length; i++) {
-                    if (elem == ignoredElements[i]) {
-                        isIgnored = true;
-                        break;
-                    }
-                }
-                if (isIgnored) {
+                var i = ignoredElements.length;
+                while (i-- && elem != ignoredElements[i]);
+                if (i != -1) {
                     return;
                 }
-                elem.disabled=isDisabled;
+
+                elem.disabled = isDisabled;
                 if (isDisabled) {
                     elem.addClassName('disabled');
                 } else {
                     elem.removeClassName('disabled');
                 }
-                if(elem.tagName == 'IMG') {
+                if (elem.nodeName.toLowerCase() == 'img') {
                     isDisabled ? elem.hide() : elem.show();
                 }
             }
-        })
+        });
+        if (navigator && navigator.userAgent.indexOf('Chrome') != -1) {
+            // fix chrome bug: rerender page updating parent content
+            var p = elems[0].nodeName.toLowerCase() == 'img'
+                ? elems[1].parentNode
+                : elems[0].parentNode;
+
+            p.innerHTML += '';
+        }
     }
 }
 

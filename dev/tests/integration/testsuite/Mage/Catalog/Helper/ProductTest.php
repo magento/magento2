@@ -45,12 +45,15 @@ class Mage_Catalog_Helper_ProductTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProductUrl()
     {
+        $expectedUrl = 'http://localhost/index.php/simple-product.html';
+
         // product as object
         $product = new Mage_Catalog_Model_Product;
-        $this->assertStringEndsWith('/catalog/product/view/', $this->_helper->getProductUrl($product));
+        $product->load(1);
+        $this->assertEquals($expectedUrl, $this->_helper->getProductUrl($product));
 
         // product as ID
-        $this->assertStringEndsWith('/catalog/product/view/id/1/s/simple-product/', $this->_helper->getProductUrl(1));
+        $this->assertEquals($expectedUrl, $this->_helper->getProductUrl(1));
     }
 
     public function testGetPrice()

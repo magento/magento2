@@ -156,12 +156,13 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $elementName
+     * @param string $elementHtml
      * @param string $expectedOutput
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      * @dataProvider wrapPageElementDataProvider
      */
-    public function testWrapPageElement($elementName, $expectedOutput)
+    public function testWrapPageElement($elementName, $elementHtml, $expectedOutput)
     {
         // create a layout object mock with fixture data
         $structure = new Mage_Core_Model_Layout_Structure;
@@ -174,8 +175,7 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $layoutMock->getUpdate()->addHandle('test_handle')->load();
         $layoutMock->generateXml()->generateBlocks();
 
-        $expectedContent = 'test_content';
-        $transport = new Varien_Object(array('output' => $expectedContent));
+        $transport = new Varien_Object(array('output' => $elementHtml));
         $observer = new Varien_Event_Observer(array(
             'event' => new Varien_Event(array(
                 'structure' => $structure,
@@ -186,7 +186,8 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
         ));
 
         $this->_observer->wrapPageElement($observer);
-        $this->assertStringMatchesFormat(sprintf($expectedOutput, $expectedContent), $transport->getData('output'));
+        $actualOutput = $transport->getData('output');
+        $this->assertXmlStringEqualsXmlString("<root>$expectedOutput</root>", "<root>$actualOutput</root>");
     }
 
     /**
@@ -195,11 +196,50 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     public function wrapPageElementDataProvider()
     {
         return array(
-            array('test.text',
-                '<div class="vde_element_wrapper">%%w<div class="vde_element_title">test.text</div>%%w%s%%w</div>'
+            'non-draggable block' => array(
+                'non_draggable_block',
+                '<b>Non-Draggable Block</b>',
+                '<b>Non-Draggable Block</b>',
             ),
-            array('toolbar', '%s'),
-            array('test.text3', '%s'),
+            'non-draggable VDE block' => array(
+                'non_draggable_vde_block',
+                '<b>Non-Draggable VDE Block</b>',
+                '<b>Non-Draggable VDE Block</b>',
+            ),
+            'draggable block' => array(
+                'draggable_block',
+                '<b>Draggable Block</b>',
+                '<div id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr" class="vde_element_wrapper vde_draggable">
+                    <div class="vde_element_title">draggable_block</div>
+                    <b>Draggable Block</b>
+                </div>',
+            ),
+            'non-draggable container' => array(
+                'non_draggable_container',
+                '<b>Non-Draggable Container Text</b>',
+                '<div id="vde_element_bm9uX2RyYWdnYWJsZV9jb250YWluZXI" class="vde_element_wrapper vde_container">
+                    <div class="vde_element_title">Non-Draggable Container</div>
+                    <b>Non-Draggable Container Text</b>
+                </div>',
+            ),
+            'draggable container' => array(
+                'draggable_container',
+                '<b>Draggable Container Text</b>',
+                '<div id="vde_element_ZHJhZ2dhYmxlX2NvbnRhaW5lcg"
+                    class="vde_element_wrapper vde_draggable vde_container">
+                    <div class="vde_element_title">Draggable Container</div>
+                    <b>Draggable Container Text</b>
+                </div>',
+            ),
+            'VDE toolbar injection' => array(
+                'after_body_start',
+                '<b>Page Top Container Text</b>',
+                '<div>VDE Toolbar</div>
+                <div id="vde_element_YWZ0ZXJfYm9keV9zdGFydA" class="vde_element_wrapper vde_container">
+                    <div class="vde_element_title">Page Top</div>
+                    <b>Page Top Container Text</b>
+                </div>',
+            ),
         );
     }
 

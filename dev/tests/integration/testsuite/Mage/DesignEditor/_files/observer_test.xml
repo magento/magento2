@@ -26,16 +26,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout>
+<layouts>
     <test_handle>
+        <block type="Mage_Core_Block_Text" name="non_draggable_block"/>
         <container name="root">
-            <block type="Mage_Core_Block_Text" name="test.text">
-                <action method="setText"><value>txt</value></action>
-            </block>
-            <block type="Mage_DesignEditor_Block_Toolbar" name="toolbar" template="toolbar.phtml"/>
-            <block type="Mage_Core_Block_Text" name="test.text2">
-                <block type="Mage_Core_Block_Text" name="test.text3"/>
-            </block>
+            <block type="Mage_Core_Block_Text" name="draggable_block"/>
+            <container name="draggable_container" label="Draggable Container"/>
+            <block type="Mage_DesignEditor_Block_Toolbar" name="non_draggable_vde_block" template="toolbar.phtml"/>
         </container>
+        <container name="non_draggable_container" label="Non-Draggable Container"/>
+        <block type="Mage_Core_Block_Text" name="design_editor_toolbar">
+            <action method="setText"><text><![CDATA[<div>VDE Toolbar</div>]]></text></action>
+        </block>
+        <container name="after_body_start" label="Page Top"/>
     </test_handle>
-</layout>
+</layouts>

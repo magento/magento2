@@ -48,7 +48,7 @@
         <script type="text/javascript">
             <?php if ($this->helper('Mage_Catalog_Helper_Data')->isShowPriceOnGesture($_product)): ?>
                 var productLink = {
-                    url: "<?php echo $_product->getAddToCartUrl() ?>",
+                    url: "<?php echo $_product->isSalable() ? $_product->getAddToCartUrl() : '' ?>",
                     notUseForm: true
                 };
                 var newLink = Catalog.Map.addHelpLink(

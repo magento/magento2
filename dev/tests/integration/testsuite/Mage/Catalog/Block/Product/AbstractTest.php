@@ -44,11 +44,6 @@ class Mage_Catalog_Block_Product_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected $_product;
 
-    /**
-     * @var string
-     */
-    protected static $_mediaDir;
-
     protected function setUp()
     {
         $this->_block = $this->getMockForAbstractClass('Mage_Catalog_Block_Product_Abstract');

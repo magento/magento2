@@ -343,6 +343,7 @@ final class Mage
      * Get base URL path by type
      *
      * @param string $type
+     * @param null|bool $secure
      * @return string
      */
     public static function getBaseUrl($type = Mage_Core_Model_Store::URL_TYPE_LINK, $secure = null)
@@ -404,18 +405,17 @@ final class Mage
      * Dispatch event
      *
      * Calls all observer callbacks registered for this event
-     * and multiobservers matching event name pattern
+     * and multiple observers matching event name pattern
      *
      * @param string $name
-     * @param array $args
+     * @param array $data
      * @return Mage_Core_Model_App
      */
     public static function dispatchEvent($name, array $data = array())
     {
         Magento_Profiler::start('EVENT:' . $name);
         $result = self::app()->dispatchEvent($name, $data);
-        #$result = self::registry('events')->dispatch($name, $data);
-        Magento_Profiler::stop('EVENT:' . $name);
+        Magento_Profiler::stop('DISPATCH EVENT:'.$name);
         return $result;
     }
 
@@ -425,7 +425,7 @@ final class Mage
      * @link    Mage_Core_Model_Config::getModelInstance
      * @param   string $modelClass
      * @param   array|object $arguments
-     * @return  Mage_Core_Model_Abstract
+     * @return  Mage_Core_Model_Abstract|false
      */
     public static function getModel($modelClass = '', $arguments = array())
     {
@@ -559,6 +559,7 @@ final class Mage
      *
      * @param string $message
      * @param string $messageStorage
+     * @throws Mage_Core_Exception
      */
     public static function throwException($message, $messageStorage = null)
     {

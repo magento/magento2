@@ -52,13 +52,15 @@
                             </h2>
                             <?php echo $this->getPriceHtml($product) ?>
                             <?php echo $this->getDetailsHtml($item) ?>
-                            <?php if ($item->canHaveQty() && $isVisibleProduct): ?>
-                                <b><?php echo $this->__('Qty') ?>:</b>
-                                <input type="text" class="input-text qty" name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>" />
+                            <?php if ($isVisibleProduct): ?>
+                                <span class="qty-holder">
+                                    <b><?php echo $this->__('Qty') ?>:</b>
+                                    <input type="text" class="input-text qty" name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>" />
+                                </span>
                             <?php endif; ?>
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
-                                <button type="button" title="<?php echo $this->__('Add to Cart') ?>" onclick="addWItemToCart(<?php echo $item->getId(); ?>)" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                                    <button type="button" title="<?php echo $this->__('Add to Cart') ?>" onclick="addWItemToCart(<?php echo $item->getId(); ?>)" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
                                 <?php endif ?>
                             <?php else: ?>
                                 <span><?php echo $this->__('Out of stock') ?></span>
@@ -71,6 +73,9 @@
             <ul class="buttons-set">
                 <li>
                     <button type="submit" class="update-wishlist" title="<?php echo $this->__('Update Wishlist') ?>" name="do"><?php echo $this->__('Update Wishlist') ?></button>
+                </li>
+                <li class="remove-all-button">
+                    <a href="#"><?php echo $this->__('Remove All')?></a>
                 </li>
                 <?php if($this->isSaleable()):?>
                     <li><span class="add-all-to-cart" title="<?php echo $this->__('Add All to Cart') ?>" onclick="addAllWItemsToCart()"><?php echo $this->__('Add All to Cart') ?></span></li>

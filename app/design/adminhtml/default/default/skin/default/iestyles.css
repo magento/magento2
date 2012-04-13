@@ -60,7 +60,7 @@ ul.tabs li a,
 .centinel .authentication,
 .paypal-payment-notice,
 .product-options .options-list li,
-.storeScope { zoom:1; }
+.store-scope { zoom:1; }
 
 .clear { display:block; clear:both; height:0; font-size:0; line-height:0; overflow:hidden; }
 

@@ -31,8 +31,6 @@ Supported layout update handles (action):
 
 Supported layout update handles (special):
 - default
-- catalog_category_default
-- catalog_category_layered
 - catalog_product_view
 
 -->
@@ -44,6 +42,9 @@ Default layout, loads most of the pages
 
     <default>
         <!-- Mage_Catalog -->
+        <reference name="top.menu">
+            <block type="Mage_Catalog_Block_Navigation" name="catalog.topnav" template="navigation/top.phtml"/>
+        </reference>
         <reference name="header">
             <block type="Mage_Catalog_Block_Product_Compare_Sidebar" name="catalogCompareLink" template="product/compare/sidebar.phtml"/>
         </reference>
@@ -203,6 +204,7 @@ Product view
                 </block>
                 <block type="Mage_Catalog_Block_Product_View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
                 <block type="Mage_Catalog_Block_Product_View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
+                <block type="Mage_Catalog_Block_Product_View" name="product.info.addtocart.bottom" as="addtocartbottom" template="product/view/addtocartbottom.phtml"/>
 
                 <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
 
@@ -219,23 +221,23 @@ Product view
                     </block>
                 <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml" translate="label">
                     <label>Bottom Block Options Wrapper</label>
-                    <action method="insert"><block>product.tierprices</block></action>
+                    <action method="insert"><element>product.tierprices</element></action>
                     <block type="Mage_Catalog_Block_Product_View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
-                    <action method="append"><block>product.info.addtocart</block></action>
-                    <action method="append"><block>product.info.addto</block></action>
+                    <action method="append"><element>product.info.addtocart.bottom</element></action>
+                    <action method="append"><element>product.info.addto</element></action>
                 </block>
 
                 <block type="Mage_Core_Block_Template_Facade" name="product.info.container1" as="container1">
                     <action method="setDataByKey"><key>alias_in_layout</key><value>container1</value></action>
                     <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><block>product.info.options.wrapper</block></action>
-                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                    <action method="append"><element>product.info.options.wrapper</element></action>
+                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
                 </block>
                 <block type="Mage_Core_Block_Template_Facade" name="product.info.container2" as="container2">
                     <action method="setDataByKey"><key>alias_in_layout</key><value>container2</value></action>
                     <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><block>product.info.options.wrapper</block></action>
-                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                    <action method="append"><element>product.info.options.wrapper</element></action>
+                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
                 </block>
                 <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
                 <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>

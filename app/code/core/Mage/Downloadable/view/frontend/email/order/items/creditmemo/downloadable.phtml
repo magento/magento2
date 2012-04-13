@@ -41,7 +41,7 @@
         <dl style="margin:0; padding:0;">
             <dt><strong><em><?php echo $this->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
-                <dd style="margin:0; padding:0 0 0 9px;"><?php echo $link->getLinkTitle() ?></dd>
+                <dd style="margin:0; padding:0 0 0 9px;"><?php echo $this->escapeHtml($link->getLinkTitle()) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>

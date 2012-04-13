@@ -172,18 +172,12 @@ Customer account pages, rendered for all tabs in dashboard
             <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account"/>
         </reference>
 
-        <reference name="left">
+        <reference name="content">
             <block type="Mage_Customer_Block_Account_Navigation" name="customer_account_navigation" before="-" template="account/navigation.phtml">
                 <action method="addLink" translate="label" module="Mage_Customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
                 <action method="addLink" translate="label" module="Mage_Customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
                 <action method="addLink" translate="label" module="Mage_Customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
             </block>
-            <block type="Mage_Checkout_Block_Cart_Sidebar" name="cart_sidebar" template="cart/sidebar.phtml">
-                <action method="addItemRender"><type>simple</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>cart/sidebar/default.phtml</template></action>
-            </block>
-            <block type="Mage_Catalog_Block_Product_Compare_Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
             <remove name="tags_popular"/>
 
         </reference>

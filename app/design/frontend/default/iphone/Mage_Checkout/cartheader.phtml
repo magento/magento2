@@ -55,17 +55,6 @@
                             <col width="*" />
                             <col width="30" />
                         </colgroup>
-                    <?php $mergedCells = ($this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices() ? 2 : 1); ?>
-                        <thead>
-                            <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
-                            <tr>
-                                <th class="a-right"><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(false) ?></th>
-                                <th><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(true) ?></th>
-                                <th class="a-right"><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(false) ?></th>
-                                <th><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(true) ?></th>
-                            </tr>
-                            <?php endif; ?>
-                        </thead>
                         <tbody>
                         <?php foreach($this->getItems() as $_item): ?>
                             <?php echo $this->getItemHtml($_item) ?>
@@ -74,7 +63,15 @@
                     </table>
                 </div>
             </form>
-            <?php echo $this->getChildHtml('coupon') ?>
+            <div class="remove-all-button">
+                <a href="#"><?php echo $this->__('Remove All')?></a>
+            </div>
+
+            <div class="deals">
+                <?php echo $this->getChildHtml('coupon') ?>
+                <?php echo $this->getChildHtml('giftcards') ?>
+            </div>
+
             <div class="cart-footer">
                 <div class="totals">
                     <?php echo $this->getChildHtml('totals'); ?>
@@ -90,6 +87,7 @@
                 <?php endif; ?>
                 <button type="submit" title="<?php echo $this->__('Update Cart') ?>" id="update-cart"><?php echo $this->__('Update Cart') ?></button>
             </div>
+
             <script type="text/javascript">
             document.observe("dom:loaded", function() {
                 $("update-cart").observe("click", function() {

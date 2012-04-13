@@ -46,19 +46,47 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
         $this->_updateButton('delete', 'label', Mage::helper('Mage_Review_Helper_Data')->__('Delete Review'));
 
         if( $this->getRequest()->getParam('productId', false) ) {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/catalog_product/edit', array('id' => $this->getRequest()->getParam('productId', false))) .'\')' );
+            $this->_updateButton(
+                'back',
+                'onclick',
+                'setLocation(\''
+                    . $this->getUrl(
+                        '*/catalog_product/edit',
+                        array('id' => $this->getRequest()->getParam('productId', false))
+                    )
+                    .'\')'
+            );
         }
 
         if( $this->getRequest()->getParam('customerId', false) ) {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/customer/edit', array('id' => $this->getRequest()->getParam('customerId', false))) .'\')' );
+            $this->_updateButton(
+                'back',
+                'onclick',
+                'setLocation(\''
+                    . $this->getUrl(
+                        '*/customer/edit',
+                        array('id' => $this->getRequest()->getParam('customerId', false))
+                    )
+                    .'\')'
+            );
         }
 
         if( $this->getRequest()->getParam('ret', false) == 'pending' ) {
             $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/*/pending') .'\')' );
-            $this->_updateButton('delete', 'onclick', 'deleteConfirm(\'' . Mage::helper('Mage_Review_Helper_Data')->__('Are you sure you want to do this?') . '\', \'' . $this->getUrl('*/*/delete', array(
-                $this->_objectId => $this->getRequest()->getParam($this->_objectId),
-                'ret'           => 'pending',
-            )) .'\')' );
+            $this->_updateButton(
+                'delete',
+                'onclick',
+                'deleteConfirm('
+                    . '\'' . Mage::helper('Mage_Review_Helper_Data')->__('Are you sure you want to do this?').'\' '
+                    . '\'' . $this->getUrl(
+                        '*/*/delete',
+                        array(
+                            $this->_objectId => $this->getRequest()->getParam($this->_objectId),
+                            'ret'           => 'pending',
+                        )
+                    ) . '\''
+                    . ')'
+            );
             Mage::register('ret', 'pending');
         }
 
@@ -71,9 +99,20 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
         $this->_formInitScripts[] = '
             var review = {
                 updateRating: function() {
-                        elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
+                        elements = [
+                            $("select_stores"),
+                            $("rating_detail").getElementsBySelector("input[type=\'radio\']")
+                        ].flatten();
                         $(\'save_button\').disabled = true;
-                        new Ajax.Updater("rating_detail", "'.$this->getUrl('*/*/ratingItems', array('_current'=>true)).'", {parameters:Form.serializeElements(elements), evalScripts:true, onComplete:function(){ $(\'save_button\').disabled = false; } });
+                        new Ajax.Updater(
+                            "rating_detail",
+                            "' . $this->getUrl('*/*/ratingItems', array('_current'=>true)).'",
+                            {
+                                parameters:Form.serializeElements(elements),
+                                evalScripts:true,
+                                onComplete:function(){ $(\'save_button\').disabled = false; }
+                            }
+                        );
                     }
            }
            Event.observe(window, \'load\', function(){

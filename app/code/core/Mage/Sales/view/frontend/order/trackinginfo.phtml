@@ -27,14 +27,13 @@
 <span class="field-row grid" id="shipment_tracking_info">
 
 <?php if($this->trackingInfo): ?>
-
-    <strong><?php echo $this->trackingInfo->getCarrierTitle() ?></strong> - <?php echo $this->trackingInfo->getTracking() ?>
+    <strong><?php echo $this->escapeHtml($this->trackingInfo->getCarrierTitle()) ?></strong> - <?php echo $this->trackingInfo->getTracking() ?>
     <div class="info">
         <?php if ($this->trackingInfo->getErrorMessage()): ?>
-            <?php echo $this->trackingInfo->getErrorMessage() ?>
+            <?php echo $this->escapeHtml($this->trackingInfo->getErrorMessage()) ?>
         <?php else: ?>
             <?php if ($this->trackingInfo->getUrl()): ?>
-                Please, visit for more info: <a href="<?php echo $this->trackingInfo->getUrl() ?>" target="_blank"><?php echo $this->trackingInfo->getCarrierTitle() ?></a><br />
+                Please, visit for more info: <a href="<?php echo $this->trackingInfo->getUrl() ?>" target="_blank"><?php echo $this->escapeHtml($this->trackingInfo->getCarrierTitle()) ?></a><br />
             <?php endif; ?>
 
             <?php if ($this->trackingInfo->getStatus()): ?>

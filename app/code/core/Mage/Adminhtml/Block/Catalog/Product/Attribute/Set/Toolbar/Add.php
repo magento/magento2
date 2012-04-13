@@ -44,7 +44,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mag
             $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
                 ->setData(array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
-                    'onclick'   => 'addSet.submit();',
+                    'onclick'   => 'if (addSet.submit()) disableElements(\'save\');',
                     'class' => 'save'
         )));
         $this->setChild('back_button',
@@ -81,6 +81,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mag
         return $this->getChildHtml('setForm');
     }
 
+    /**
+     * Return id of form, used by this block
+     *
+     * @return string
+     */
     protected function getFormId()
     {
         return $this->getChildBlock('setForm')->getForm()->getId();

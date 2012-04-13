@@ -77,13 +77,22 @@ class Mage_Api_Model_Server_Adapter_Soap
     }
 
     /**
-     * Retrive webservice api controller
+     * Retrive webservice api controller. If no controller have been set - emulate it by the use of Varien_Object
      *
-     * @return Mage_Api_Controller_Action
+     * @return Mage_Api_Controller_Action|Varien_Object
      */
     public function getController()
     {
-        return $this->getData('controller');
+        $controller = $this->getData('controller');
+
+        if (null === $controller) {
+            $controller = new Varien_Object(
+                array('request' => Mage::app()->getRequest(), 'response' => Mage::app()->getResponse())
+            );
+
+            $this->setData('controller', $controller);
+        }
+        return $controller;
     }
 
     /**
@@ -181,7 +190,7 @@ class Mage_Api_Model_Server_Adapter_Soap
     /**
      *  Check whether Soap extension is loaded
      *
-     *  @return	  boolean
+     *  @return boolean
      */
     protected function _extensionLoaded()
     {
@@ -199,7 +208,9 @@ class Mage_Api_Model_Server_Adapter_Soap
         $urlModel = Mage::getModel('Mage_Core_Model_Url')
                 ->setUseSession(false);
 
-        $wsdlUrl = ($params !== null)? $urlModel->getUrl('*/*/*', $params) : $urlModel->getUrl('*/*/*');
+        $wsdlUrl = $params !== null
+                   ? $urlModel->getUrl('*/*/*', array('_current' => true, '_query' => $params))
+                   : $urlModel->getUrl('*/*/*');
 
         if( $withAuth ) {
             $phpAuthUser = $this->getController()->getRequest()->getServer('PHP_AUTH_USER', false);
@@ -227,9 +238,12 @@ class Mage_Api_Model_Server_Adapter_Soap
         do {
             $retry = false;
             try {
-                $this->_soap = new Zend_Soap_Server($this->getWsdlUrl(array("wsdl" => 1)), array('encoding' => $apiConfigCharset));
+                $this->_soap = new Zend_Soap_Server(
+                    $this->getWsdlUrl(array("wsdl" => 1)), array('encoding' => $apiConfigCharset)
+                );
             } catch (SoapFault $e) {
-                if (false !== strpos($e->getMessage(), "can't import schema from 'http://schemas.xmlsoap.org/soap/encoding/'")) {
+                $importMessage = "can't import schema from 'http://schemas.xmlsoap.org/soap/encoding/'";
+                if (false !== strpos($e->getMessage(), $importMessage)) {
                     $retry = true;
                     sleep(1);
                 } else {

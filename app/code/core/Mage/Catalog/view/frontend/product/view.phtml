@@ -87,7 +87,7 @@
             <?php echo $this->getChildHtml('other');?>
 
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                <?php echo $this->getChildChildHtml('container1') ?>
             <?php endif;?>
 
         </div>
@@ -98,7 +98,7 @@
 
         <div class="clearer"></div>
         <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+            <?php echo $this->getChildChildHtml('container2') ?>
         <?php endif;?>
     </form>
     <script type="text/javascript">
@@ -134,6 +134,13 @@
                 delete Validation.methods['required-entry'];
                 delete Validation.methods['validate-one-required'];
                 delete Validation.methods['validate-one-required-by-name'];
+                // Remove custom datetime validators
+                for (var methodName in Validation.methods) {
+                    if (methodName.match(/^validate-datetime-.*/i)) {
+                        delete Validation.methods[methodName];
+                    }
+                }
+
                 if (this.validator.validate()) {
                     if (url) {
                         this.form.action = url;

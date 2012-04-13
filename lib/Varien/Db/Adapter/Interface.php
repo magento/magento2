@@ -59,6 +59,11 @@ interface Varien_Db_Adapter_Interface
     const INTERVAL_YEAR         = 'YEARS';
 
     /**
+     * Error message for DDL query in transactions
+     */
+    const ERROR_DDL_MESSAGE = 'DDL statements are not allowed in transactions';
+
+    /**
      * Begin new DB transaction for connection
      *
      * @return Varien_Db_Adapter_Pdo_Mysql
@@ -980,4 +985,11 @@ interface Varien_Db_Adapter_Interface
      * @return mixed
      */
     public function decodeVarbinary($value);
+
+    /**
+     * Get adapter transaction level state. Return 0 if all transactions are complete
+     *
+     * @return int
+     */
+    public function getTransactionLevel();
 }

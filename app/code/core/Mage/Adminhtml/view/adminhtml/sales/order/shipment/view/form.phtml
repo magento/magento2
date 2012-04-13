@@ -51,7 +51,7 @@
                 <a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Mage_Shipping_Helper_Data')->getTrackingPopupUrlBySalesModel($this->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo $this->__('Track this shipment') ?>"><?php echo $this->__('Track this shipment') ?></a>
                 <br/>
                 <?php endif; ?>
-                <strong><?php echo $_order->getShippingDescription() ?></strong>
+                <strong><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></strong>
                 <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Total Shipping Charges'); ?>:
 
                 <?php if ($this->helper('Mage_Tax_Helper_Data')->displayShippingPriceIncludingTax()): ?>

@@ -228,11 +228,11 @@ class Mage_Adminhtml_Block_System_Config_Form extends Mage_Adminhtml_Block_Widge
      */
     protected function _getDependence()
     {
-        if (!$this->getChildBlock('element_dependense')){
-            $this->setChild('element_dependense',
+        if (!$this->getChildBlock('element_dependence')){
+            $this->setChild('element_dependence',
                 $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Form_Element_Dependence'));
         }
-        return $this->getChildBlock('element_dependense');
+        return $this->getChildBlock('element_dependence');
     }
 
     /**

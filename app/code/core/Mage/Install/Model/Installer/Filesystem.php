@@ -33,8 +33,12 @@
  */
 class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Installer_Abstract
 {
+    /**#@+
+     * @deprecated since 1.7.1.0
+     */
     const MODE_WRITE = 'write';
     const MODE_READ  = 'read';
+    /**#@- */
 
     public function __construct()
     {
@@ -60,13 +64,13 @@ class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Install
     protected function _checkFilesystem()
     {
         $res = true;
-        $config = Mage::getSingleton('Mage_Install_Model_Config')->getPathForCheck();
+        $config = Mage::getSingleton('Mage_Install_Model_Config')->getWritableFullPathsForCheck();
 
-        if (isset($config['writeable'])) {
-            foreach ($config['writeable'] as $item) {
-                $recursive = isset($item['recursive']) ? $item['recursive'] : false;
-                $existence = isset($item['existence']) ? $item['existence'] : false;
-                $checkRes = $this->_checkPath($item['path'], $recursive, $existence, 'write');
+        if (is_array($config)) {
+            foreach ($config as $item) {
+                $recursive = isset($item['recursive']) ? (bool)$item['recursive'] : false;
+                $existence = isset($item['existence']) ? (bool)$item['existence'] : false;
+                $checkRes = $this->_checkFullPath($item['path'], $recursive, $existence);
                 $res = $res && $checkRes;
             }
         }
@@ -76,6 +80,7 @@ class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Install
     /**
      * Check file system path
      *
+     * @deprecated since 1.7.1.0
      * @param   string $path
      * @param   bool $recursive
      * @param   bool $existence
@@ -84,33 +89,36 @@ class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Install
      */
     protected function _checkPath($path, $recursive, $existence, $mode)
     {
-        $res = true;
-        $fullPath = dirname(Mage::getRoot()) . $path;
-        if ($mode == self::MODE_WRITE) {
-            $setError = false;
-            if ($existence) {
-                if ((is_dir($fullPath) && !is_dir_writeable($fullPath)) || !is_writable($fullPath)) {
-                    $setError = true;
-                }
-            }
-            else {
-                if (file_exists($fullPath) && !is_writable($fullPath)) {
-                    $setError = true;
-                }
-            }
+        return $this->_checkFullPath(dirname(Mage::getRoot()) . $path, $recursive, $existence);
+    }
 
-            if ($setError) {
-                $this->_getInstaller()->getDataModel()->addError(
-                    Mage::helper('Mage_Install_Helper_Data')->__('Path "%s" must be writable.', $fullPath)
-                );
-                $res = false;
-            }
+    /**
+     * Check file system full path
+     *
+     * @param  string $fullPath
+     * @param  bool $recursive
+     * @param  bool $existence
+     * @return bool
+     */
+    protected function _checkFullPath($fullPath, $recursive, $existence)
+    {
+        $res = true;
+        $setError = $existence && (is_dir($fullPath) && !is_dir_writeable($fullPath) || !is_writable($fullPath))
+            || !$existence && file_exists($fullPath) && !is_writable($fullPath);
+
+        if ($setError) {
+            $this->_getInstaller()->getDataModel()->addError(
+                Mage::helper('Mage_Install_Helper_Data')->__('Path "%s" must be writable.', $fullPath)
+            );
+            $res = false;
         }
 
         if ($recursive && is_dir($fullPath)) {
+            $skipFileNames = array('.svn', '.htaccess');
             foreach (new DirectoryIterator($fullPath) as $file) {
-                if (!$file->isDot() && $file->getFilename() != '.svn' && $file->getFilename() != '.htaccess') {
-                    $res = $res && $this->_checkPath($path . DS . $file->getFilename(), $recursive, $existence, $mode);
+                $fileName = $file->getFilename();
+                if (!$file->isDot() && !in_array($fileName, $skipFileNames)) {
+                    $res = $this->_checkFullPath($fullPath . DS . $fileName, $recursive, $existence) && $res;
                 }
             }
         }

@@ -268,7 +268,7 @@ ul.tabs a.subitem               { padding-left:2.2em; }
 ul.tabs span.changed,
 ul.tabs span.error              { float:right; background:0; padding:0; }
 ul.tabs a.changed span.changed  { background:url(images/fam_bullet_disk.gif) 0 0 no-repeat !important; width:16px; height:16px; }
-ul.tabs a.error span.error      { background:url(images/fam_bullet_error.gif) 0 0 no-repeat !important; width:16px; height:16px; }
+ul.tabs a.error span.error      { background:url(Mage_Adminhtml::images/fam_bullet_error.gif) 0 0 no-repeat !important; width:16px; height:16px; }
 ul.tabs a.changed               { font-style:italic; }
 
 /* Horizontal Tabs */
@@ -281,8 +281,8 @@ ul.tabs-horiz li a.active       { border-bottom:1px solid #fff; background:#fff;
 
 /* MESSAGES
 *******************************************************************************/
-.notification-global { padding:5px 27px 5px 47px; background:#fff9e9 url(images/error_msg_icon.gif) 27px 5px no-repeat; border-bottom:1px solid #eee2be; border-top:1px solid #eee2be; font-size:11px; line-height:16px; margin:0 0 -3px; color:#444; position:relative; }
-.notification-global-notice { background-image:url(images/note_msg_icon.gif); }
+.notification-global { padding:5px 27px 5px 47px; background:#fff9e9 url(Mage_Adminhtml::images/error_msg_icon.gif) 27px 5px no-repeat; border-bottom:1px solid #eee2be; border-top:1px solid #eee2be; font-size:11px; line-height:16px; margin:0 0 -3px; color:#444; position:relative; }
+.notification-global-notice { background-image:url(Mage_Adminhtml::images/note_msg_icon.gif); }
 .notification-global .label { color:#eb5e00; }
 .notification-global .clickable { cursor:pointer; }
 .notification-global span.critical { color:#d20000; }
@@ -296,10 +296,10 @@ a.error span,
 .messages ul { border:0 !important; }
 .messages li { min-height:23px !important; margin-bottom:11px !important; padding:8px 8px 2px 32px !important; font-size:.95em !important; font-weight:bold !important; }
 .messages ul li { margin:0 0 3px 0 !important; border:0 !important; padding:0 !important; }
-.error-msg { border:1px solid #f16048 !important; color:#df280a !important; background:#faebe7 url(images/error_msg_icon.gif) no-repeat 10px 10px !important; }
-.success-msg { border:1px solid #95a486 !important; color:#3d6611 !important; background:#eff5ea url(images/success_msg_icon.gif) no-repeat 10px 10px !important; }
-.notice-msg { border:1px solid #ffd967 !important; background:#fffbf0 url(images/note_msg_icon.gif) no-repeat 10px 10px !important; color:#3d6611 !important; }
-.warning-msg { border:1px solid #666e73 !important; background:#e6e6e6 url(images/warning_msg_icon.gif) no-repeat 10px 10px !important; color:#000000 !important; }
+.error-msg { border:1px solid #f16048 !important; color:#df280a !important; background:#faebe7 url(Mage_Adminhtml::images/error_msg_icon.gif) no-repeat 10px 10px !important; }
+.success-msg { border:1px solid #95a486 !important; color:#3d6611 !important; background:#eff5ea url(Mage_Adminhtml::images/success_msg_icon.gif) no-repeat 10px 10px !important; }
+.notice-msg { border:1px solid #ffd967 !important; background:#fffbf0 url(Mage_Adminhtml::images/note_msg_icon.gif) no-repeat 10px 10px !important; color:#3d6611 !important; }
+.warning-msg { border:1px solid #666e73 !important; background:#e6e6e6 url(Mage_Adminhtml::images/warning_msg_icon.gif) no-repeat 10px 10px !important; color:#000000 !important; }
 .validation-advice { clear:both; min-height:15px; margin:3px 0 0 9px; background:url(images/validation_advice_bg.gif) no-repeat 2px 1px; padding-left:16px; font-size:.95em; font-weight:bold; line-height:1.25em; }
 .staging-datetime-advice .validation-advice { background-position:right center; padding:0 16px 0 0; }
 input.validation-failed, textarea.validation-failed { background:#fef0ed; border:1px dashed #d6340e; }
@@ -385,10 +385,6 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 
 .columns .form-list             { width:auto; }
 .columns .form-list td.value    { width:280px; padding-right:5px !important; }
-.columns .form-list td.value  { white-space:nowrap; }
-.columns .form-list td.value > * { white-space:normal; }
-.columns .form-list td.value > strong,
-.columns .form-list td.value > button { display:block; }
 .columns .form-list td.value .next-toinput { width:75px; display:inline; margin-right:5px; }
 .columns .form-list td.value .next-toselect input.input-text { width:195px!important; display:inline; }
 
@@ -423,9 +419,9 @@ span.delete-file                { padding:0; }
 .content-header .form-buttons button { margin-bottom:3px; }
 .sub-btn-set { border:1px solid #ddd; border-width:0 1px; background:url(images/sub_button_bg.gif) repeat; padding:3px 10px; text-align:right; }
 button,
-.form-button { border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502; padding:0 7px 1px 7px; background:#ffac47 url(images/btn_bg.gif) repeat-x 0 100%; color:#fff; font:bold 12px arial, helvetica, sans-serif; cursor:pointer; text-align:center !important; white-space:nowrap; }
-button:hover                    { background:#f77c16 url(images/btn_over_bg.gif) repeat-x 0 0; }
-button:active                   { background:#f77c16 url(images/btn_on_bg.gif) repeat-x 0 0; }
+.form-button { border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502; padding:0 7px 1px 7px; background:#ffac47 url(Mage_Adminhtml::images/btn_bg.gif) repeat-x 0 100%; color:#fff; font:bold 12px arial, helvetica, sans-serif; cursor:pointer; text-align:center !important; white-space:nowrap; }
+button:hover                    { background:#f77c16 url(Mage_Adminhtml::images/btn_over_bg.gif) repeat-x 0 0; }
+button:active                   { background:#f77c16 url(Mage_Adminhtml::images/btn_on_bg.gif) repeat-x 0 0; }
 button span                     { line-height:1.35em; background-repeat:no-repeat; background-position:0 50%; }
 button span span                { background:none !important; padding:0 !important; margin:0 !important; display:inline !important; }
 button.delete,
@@ -471,6 +467,8 @@ button.disabled:hover,
 button.disabled:active { border-color:#777 #505050 #505050 #777; background:#919191 url(images/btn_bg-disabled.gif) 0 0 repeat-x; color:#fff; cursor:default; opacity:.8; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)"; }
 button.add.disabled span { background-image:url(images/add_btn_icon-disabled.gif); }
 
+button.loading > span { padding-left:20px; background-image: url(images/btn_loading-icon.gif) !important;}
+
 button.icon-btn { width:32px !important; }
 button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0; overflow:hidden; }
 
@@ -481,14 +479,18 @@ button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0;
 /* SWITCHER
 *******************************************************************************/
 .switcher { margin-bottom:10px; border:1px solid #cddddd; background:#e7efef; padding:10px; }
-.side-col .switcher select { width:100%; }
+.side-col .switcher { padding-right:26px; }
+.side-col .switcher label { display:block; }
+.side-col .switcher .link-store-scope { float:right; margin-right:-19px; margin-left:3px; }
+.side-col .switcher select { width:100%; float:left; }
 /*.side-col .switcher     { margin-right:20px; margin-bottom:20px; }*/
 .catalog-categories .side-col .switcher { margin-right:0; margin-bottom:15px; }
-.link-storeScope { display:inline-block; vertical-align:middle; margin:0 0 1px; width:16px; height:16px; background:url(images/i_question-mark.png) 0 0 no-repeat; text-decoration:none !important; text-indent:-999em; overflow:hidden; }
-.form-list td.value .link-storeScope { vertical-align:top; margin-top:6px; }
-.storeScope .link-storeScope { float:left; margin-right:10px; }
-.storeScope .tree-storeScope { float:left; padding:7px 10px; border:1px dotted #dedede; }
-.storeScope table.stores-tree { float:left; width:auto !important; }
+.link-store-scope { display:inline-block; vertical-align:middle; margin:0 0 1px; width:16px; height:16px; background:url(images/i_question-mark.png) 0 0 no-repeat; text-decoration:none !important; text-indent:-999em; overflow:hidden; }
+.store-scope .link-store-scope { float:left; margin-right:10px; }
+.store-scope .tree-store-scope { float:left; padding:7px 10px; border:1px dotted #dedede; }
+.store-scope table.stores-tree { float:left; width:auto !important; }
+.form-list td.value .store-scope { white-space:nowrap; }
+.form-list td.value .link-store-scope { float:none; margin-right:0; vertical-align:top; margin-top:6px; }
 
 
 /* SPACE
@@ -951,7 +953,7 @@ ul.tabs a.paypal-section:hover { background:url(images/tabs_span_bg.gif) repeat-
 .packed-window { background:#fafafa; border:1px solid #d6d6d6; left:50%; margin:-200px 0 0 -471px; position:fixed; top:50%; width:1100px; z-index:400; -webkit-box-shadow: 0px 3px 5px #ccc; -moz-box-shadow:0px 3px 5px #ccc; box-shadow:0px 3px 5px #ccc; z-index:400; }
 .packaging-window .entry-edit-head { padding:3px 5px; }
 .packaging-window .entry-edit-head button { float:right; }
-.packaging-window .messages { border:1px solid #f16048; color:#df280a; background:#faebe7 url(images/error_msg_icon.gif) no-repeat 10px 10px; font-weight:bold; margin-bottom:10px; padding:10px 10px 10px 35px; }
+.packaging-window .messages { border:1px solid #f16048; color:#df280a; background:#faebe7 url(Mage_Adminhtml::images/error_msg_icon.gif) no-repeat 10px 10px; font-weight:bold; margin-bottom:10px; padding:10px 10px 10px 35px; }
 .packaging-window .validation-failed { background:#fef0eD; border:1px dashed #D6340E; }
 .packaging-window .packaging-content { overflow:auto; height:400px; height:auto !important; max-height:400px; margin:0 0 10px; padding:10px 10px 0; }
 .packaging-window .package-block { background:#f6f6f6; border:2px solid #d4d4d4; margin:0 0 10px; padding:10px; }
@@ -1008,6 +1010,7 @@ ul.tabs a.paypal-section:hover { background:url(images/tabs_span_bg.gif) repeat-
 .x-tree-node-ct { overflow:hidden; }
 
 /* Product - Websites */
+.website-name .checkbox                 { vertical-align:top; margin-top:2px; }
 .webiste-groups                         { padding:10px 20px; }
 .group-stores                           { padding:2px 10px; }
 
@@ -1484,6 +1487,7 @@ ul.super-product-attributes { padding-left:15px; }
 .normal             { font-weight:normal !important; }
 
 /* Clear */ /* This keeps our HTML free of buncha clearing elements */
+.side-col .switcher:after,
 .message-popup .message-popup-head:after,
 .message-popup .message-popup-content .message:after,
 .login-form .form-buttons:after,
@@ -1516,4 +1520,4 @@ div.actions:after,
 .files .row:after,
 .files-wide .row:after,
 .grid tr.filter .range .range-line:after,
-.storeScope:after { display:block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }
+.store-scope:after { display:block; clear:both; content:"."; font-size:0; line-height:0; height:0; overflow:hidden; }

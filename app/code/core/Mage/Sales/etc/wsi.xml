@@ -907,6 +907,22 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="salesOrderShipmentSendInfoRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                        <xsd:element minOccurs="1" maxOccurs="1" name="shipmentIncrementId" type="xsd:string" />
+                        <xsd:element minOccurs="0" maxOccurs="1" name="comment" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="salesOrderShipmentSendInfoResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:int" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
             <xsd:element name="salesOrderShipmentAddCommentRequestParam">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -1209,6 +1225,12 @@
     <wsdl:message name="salesOrderShipmentRemoveTrackResponse">
         <wsdl:part name="parameters" element="typens:salesOrderShipmentRemoveTrackResponseParam" />
     </wsdl:message>
+    <wsdl:message name="salesOrderShipmentSendInfoRequest">
+        <wsdl:part name="parameters" element="typens:salesOrderShipmentSendInfoRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="salesOrderShipmentSendInfoResponse">
+        <wsdl:part name="parameters" element="typens:salesOrderShipmentSendInfoResponseParam" />
+    </wsdl:message>
     <wsdl:message name="salesOrderShipmentGetCarriersRequest">
         <wsdl:part name="parameters" element="typens:salesOrderShipmentGetCarriersRequestParam" />
     </wsdl:message>
@@ -1347,6 +1369,11 @@
             <wsdl:documentation>Remove tracking number</wsdl:documentation>
             <wsdl:input message="typens:salesOrderShipmentRemoveTrackRequest" />
             <wsdl:output message="typens:salesOrderShipmentRemoveTrackResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="salesOrderShipmentSendInfo">
+            <wsdl:documentation>Send shipment info</wsdl:documentation>
+            <wsdl:input message="typens:salesOrderShipmentSendInfoRequest" />
+            <wsdl:output message="typens:salesOrderShipmentSendInfoResponse" />
         </wsdl:operation>
         <wsdl:operation name="salesOrderShipmentGetCarriers">
             <wsdl:documentation>Retrieve list of allowed carriers for order</wsdl:documentation>
@@ -1516,6 +1543,15 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="salesOrderShipmentRemoveTrack">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="salesOrderShipmentSendInfo">
             <soap:operation soapAction="" />
             <wsdl:input>
                 <soap:body use="literal" />

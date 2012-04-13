@@ -197,7 +197,7 @@ class Mage_Payment_Model_Method_Cc extends Mage_Payment_Model_Method_Abstract
             'SM' => '/^[0-9]{3,4}$/', // Switch or Maestro
             'SO' => '/^[0-9]{3,4}$/', // Solo
             'OT' => '/^[0-9]{3,4}$/',
-            'JCB' => '/^[0-9]{4}$/' //JCB
+            'JCB' => '/^[0-9]{3,4}$/' //JCB
         );
         return $verificationExpList;
     }

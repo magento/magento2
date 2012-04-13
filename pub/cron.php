@@ -38,6 +38,8 @@ $_SERVER['SCRIPT_FILENAME'] = str_replace(basename(__FILE__), 'index.php', $_SER
 
 Mage::app('admin')->setUseSessionInUrl(false);
 
+umask(0);
+
 try {
     Mage::getConfig()->init()->loadEventObservers('crontab');
     Mage::app()->addEventArea('crontab');

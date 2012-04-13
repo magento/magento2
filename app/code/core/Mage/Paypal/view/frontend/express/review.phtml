@@ -161,6 +161,7 @@ PayPalExpressAjax = new OrderReviewController($('order_review_form'), $('review_
 );
 PayPalExpressAjax.addPleaseWait($('review-please-wait'));
 PayPalExpressAjax.setShippingAddressContainer($('shipping-address'));
+PayPalExpressAjax.setShippingMethodContainer('shipping-method-container');
 PayPalExpressAjax.shippingMethodsUpdateUrl = '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>';
 PayPalExpressAjax.setUpdateButton($('update_order'),'<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>','details-reload');
 if ($('billing:as_shipping')) {

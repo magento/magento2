@@ -149,6 +149,13 @@
         </layout>
     </adminhtml>
     <default>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <captcha_folder>captcha</captcha_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
         <admin>
             <captcha>
                 <type>zend</type>

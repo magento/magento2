@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                    <?php echo $this->getChildChildHtml('container1') ?>
                 <?php endif;?>
                 <?php if (!$this->hasOptions() && $_product->getTypeId() != Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) :?>
                     <?php echo $this->getChildHtml('addto') ?>
@@ -96,8 +96,9 @@
                         </div>
                 <?php endforeach;?>
             </div>
+            <?php echo $this->getChildHtml('giftcard_form'); ?>
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                <?php echo $this->getChildChildHtml('container2') ?>
             <?php endif;?>
         </form>
     </div>
@@ -122,12 +123,16 @@
             }
             var e = null;
             try {
-                var originalImg = $$('.product-image-wrap .product-image img')[0];
-                originalImg.up('.product-image-wrap').insert(originalImg.clone().addClassName('cloned'));
-                setTimeout(function () {$$('.cloned')[0].setStyle({'webkitTransform' : 'translate3d(' + (document.body.offsetWidth - 190) + 'px, -150px, 2px) scale(0) rotate(200deg)'});}, 1);
-                $$('.product-image-wrap .cloned')[0].observe('webkitTransitionEnd', function(e) {
+                if ( window.WebKitCSSMatrix ) {
+                    var originalImg = $$('.product-image-wrap .product-image img')[0];
+                    originalImg.up('.product-image-wrap').insert(originalImg.clone().addClassName('cloned'));
+                    setTimeout(function () {$$('.cloned')[0].setStyle({'webkitTransform' : 'translate3d(' + (document.body.offsetWidth - 190) + 'px, -150px, 2px) scale(0) rotate(200deg)'});}, 1);
+                    $$('.product-image-wrap .cloned')[0].observe('webkitTransitionEnd', function(e) {
+                        this.form.submit();
+                    }.bind(this));
+                } else {
                     this.form.submit();
-                }.bind(this));
+                }
             } catch (e) {
             }
             this.form.action = oldUrl;
@@ -147,6 +152,13 @@
             delete Validation.methods['required-entry'];
             delete Validation.methods['validate-one-required'];
             delete Validation.methods['validate-one-required-by-name'];
+            // Remove custom datetime validators
+            for (var methodName in Validation.methods) {
+                if (methodName.match(/^validate-datetime-.*/i)) {
+                    delete Validation.methods[methodName];
+                }
+            }
+
             if (this.validator.validate()) {
                 if (url) {
                     this.form.action = url;

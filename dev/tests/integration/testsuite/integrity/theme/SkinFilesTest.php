@@ -58,9 +58,9 @@ class Integrity_Theme_SkinFilesTest extends Magento_Test_TestCase_IntegrityAbstr
             $content = file_get_contents($skinFile);
             preg_match_all(Mage_Core_Model_Design_Package::REGEX_CSS_RELATIVE_URLS, $content, $matches);
             foreach ($matches[1] as $relativePath) {
-                $path = $this->_getNotRelativePath($relativePath, $file);
+                $path = $this->_addCssDirectory($relativePath, $file);
                 $pathFile = Mage::getDesign()->getSkinFile($path, $params);
-                if (!file_exists($pathFile)) {
+                if (!is_file($pathFile)) {
                     $errors[] = $relativePath;
                 }
             }
@@ -70,9 +70,20 @@ class Integrity_Theme_SkinFilesTest extends Magento_Test_TestCase_IntegrityAbstr
         }
     }
 
-    protected function _getNotRelativePath($path, $sourceFile)
+    /**
+     * Analyze path to a file in CSS url() directive and add the original CSS-file relative path to it
+     *
+     * @param string $relativePath
+     * @param string $sourceFile
+     * @return string
+     * @throws Exception if the specified relative path cannot be apparently resolved
+     */
+    protected function _addCssDirectory($relativePath, $sourceFile)
     {
-        $file = dirname($sourceFile) . '/' . $path;
+        if (strpos($relativePath, '::') > 0) {
+            return $relativePath;
+        }
+        $file = dirname($sourceFile) . '/' . $relativePath;
         $parts = explode('/', $file);
         $result = array();
         foreach ($parts as $part) {

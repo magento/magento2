@@ -110,7 +110,7 @@ class Mage_DesignEditor_Model_Observer
     }
 
     /**
-     * Wrap each element of a page that is being rendered, with a block-level HTML-element to hightligt it in VDE
+     * Wrap each element of a page that is being rendered, with a block-level HTML-element to highlight it in VDE
      *
      * Subscriber to event 'core_layout_render_element'
      *
@@ -133,18 +133,34 @@ class Mage_DesignEditor_Model_Observer
         $structure = $event->getData('structure');
         /** @var $layout Mage_Core_Model_Layout */
         $layout = $event->getData('layout');
-        $name = $event->getData('element_name');
+        $elementName = $event->getData('element_name');
         /** @var $transport Varien_Object */
         $transport = $event->getData('transport');
 
-        $block = $layout->getBlock($name);
+        $block = $layout->getBlock($elementName);
         $isVdeToolbar = ($block && 0 === strpos(get_class($block), 'Mage_DesignEditor_Block_'));
+        $isDraggable = $structure->isManipulationAllowed($elementName) && !$isVdeToolbar;
 
-        if ($structure->isManipulationAllowed($name) && !$isVdeToolbar) {
+        $isContainer = $layout->isContainer($elementName);
+        $elementTitle = $isContainer ? $structure->getElementAttribute($elementName, 'label') : $elementName;
+
+        if ($isDraggable || $isContainer) {
+            $elementId = 'vde_element_' . rtrim(strtr(base64_encode($elementName), '+/', '-_'), '=');
             $this->_wrappingRenderer->setData(array(
-                'element_name' => $name, 'element_html' => $transport->getData('output')
+                'element_id'    => $elementId,
+                'element_title' => $elementTitle,
+                'element_html'  => $transport->getData('output'),
+                'is_draggable'  => $isDraggable,
+                'is_container'  => $isContainer,
             ));
             $transport->setData('output', $this->_wrappingRenderer->toHtml());
+        }
+
+        /* Inject toolbar at the very beginning of the page */
+        if ($elementName == 'after_body_start') {
+            $elementHtml = $transport->getData('output');
+            $toolbarHtml = $layout->renderElement('design_editor_toolbar');
+            $transport->setData('output', $toolbarHtml . $elementHtml);
         }
     }
 

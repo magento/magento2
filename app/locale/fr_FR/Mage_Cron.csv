@@ -19,6 +19,7 @@
 "Schedule Ahead for","Calendrier à venir pour"
 "Success History Lifetime","Historique des réussites"
 "Too late for the schedule.","Trop tard pour la planification"
+"Unable to delete the cron task.","Impossible de supprimer la tâche cron."
 "Unable to save the cron expression.","Impossible de sauvegarder l'expression cron."
 "Unknown error.","Erreur inconnue."
 "Weekly","Toutes les semaines"

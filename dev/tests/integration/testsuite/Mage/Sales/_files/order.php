@@ -25,17 +25,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$billingAddress = new Mage_Sales_Model_Order_Address();
-$billingAddress->setRegion('CA')
-    ->setPostcode('11111')
-    ->setFirstname('firstname')
-    ->setLastname('lastname')
-    ->setStreet('street')
-    ->setCity('Los Angeles')
-    ->setEmail('admin@example.com')
-    ->setTelephone('1111111111')
-    ->setCountryId('US')
-    ->setAddressType('billing');
+$addressData = include(__DIR__ . '/address_data.php');
+$billingAddress = new Mage_Sales_Model_Order_Address($addressData);
+$billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)

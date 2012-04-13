@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Review statuses collection
  *
@@ -49,7 +48,7 @@ class Mage_Review_Model_Resource_Review_Status_Collection extends Mage_Core_Mode
     {
         $this->_init('Mage_Review_Model_Review_Status', 'Mage_Review_Model_Resource_Review_Status');
     }
-    
+
     /**
      * Convert items array to array for select options
      *

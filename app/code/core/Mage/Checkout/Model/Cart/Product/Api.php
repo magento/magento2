@@ -34,20 +34,15 @@
 
 class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resource_Product
 {
+    /**
+     * Base preparation of product data
+     *
+     * @param mixed $data
+     * @return null|array
+     */
     protected function _prepareProductsData($data)
     {
-        if (!is_array($data)) {
-            return null;
-        }
-
-        $_data = array();
-        if (is_array($data) && is_null($data[0])) {
-            $_data[] = $data;
-        } else {
-            $_data = $data;
-        }
-
-        return $_data;
+        return is_array($data) ? $data : null;
     }
 
     /**
@@ -133,7 +128,8 @@ class Mage_Checkout_Model_Cart_Product_Api extends Mage_Checkout_Model_Api_Resou
             }
 
             /** @var $quoteItem Mage_Sales_Model_Quote_Item */
-            $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem, $this->_getProductRequest($productItem));
+            $quoteItem = $this->_getQuoteItemByProduct($quote, $productByItem,
+                $this->_getProductRequest($productItem));
             if (is_null($quoteItem->getId())) {
                 $errors[] = Mage::helper('Mage_Checkout_Helper_Data')->__("One item of products is not belong any of quote item");
                 continue;

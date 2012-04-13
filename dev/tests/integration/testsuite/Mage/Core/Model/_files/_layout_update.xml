@@ -52,15 +52,21 @@
          <block type="Mage_Adminhtml_Block_Notification_Security" name="notification_security" as="notification_security" template="notification/security.phtml"/>
       </block>
       <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>
+      <block type="Mage_Core_Block_Text" as="no_name"/>
+       <action method="insert" ignore="1"><element>some_element_1</element></action>
+       <action method="append" ignore="1"><element>some_element_2</element></action>
    </block>
    <update handle="layout_test_handle_sample"/>
    <remove name="header"/>
    <remove name="menu"/>
-   <reference name="root">
+    <remove name="some_element_1"/>
+    <remove name="some_element_2"/>
+    <reference name="root">
       <action method="setTemplate">
          <template>popup.phtml</template>
       </action>
    </reference>
+    <reference name="some_element_1" ignore="1"/>
     <reference name="notifications">
        <block type="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications" template="index/notifications.phtml" before="-"/>
        <block class="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications_copy" template="index/notifications.phtml" after="-"/>

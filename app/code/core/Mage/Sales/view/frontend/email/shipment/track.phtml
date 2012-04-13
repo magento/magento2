@@ -37,8 +37,8 @@
     <tbody>
     <?php $i=0; foreach ($_shipment->getAllTracks() as $_item): $i++ ?>
         <tr <?php echo $i%2?'bgcolor="#F6F6F6"':'' ?>>
-            <td align="left" valign="top" style="padding:3px 9px"><?php echo $_item->getTitle() ?></td>
-            <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getNumber() ?></td>
+            <td align="left" valign="top" style="padding:3px 9px"><?php echo $this->escapeHtml($_item->getTitle()) ?></td>
+            <td align="center" valign="top" style="padding:3px 9px"><?php echo $this->escapeHtml($_item->getNumber()) ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>

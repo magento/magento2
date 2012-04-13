@@ -70,9 +70,6 @@ class Mage_CatalogInventory_Block_Qtyincrements extends Mage_Core_Block_Template
     {
         if ($this->_qtyIncrements === null) {
             $this->_qtyIncrements = $this->_getProduct()->getStockItem()->getQtyIncrements();
-            if (!$this->_qtyIncrements) {
-                $this->_qtyIncrements = $this->_getProduct()->getStockItem()->getDefaultQtyIncrements();
-            }
             if (!$this->_getProduct()->isSaleable()) {
                 $this->_qtyIncrements = false;
             }

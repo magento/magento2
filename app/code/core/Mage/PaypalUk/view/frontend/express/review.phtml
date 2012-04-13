@@ -59,7 +59,7 @@
                                     <option value=""><?php echo $this->__('Please select a shipping method...') ?></option>
                                 <?php endif;?>
                                 <?php foreach ($groups as $code => $rates):?>
-                                    <optgroup label="<?php echo $this->getCarrierName($code) ?>" style="font-style:normal;">
+                                    <optgroup label="<?php echo $this->escapeHtml($this->getCarrierName($code)) ?>" style="font-style:normal;">
                                     <?php foreach ($rates as $rate):?>
                                         <option value="<?php echo $this->renderShippingRateValue($rate)?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : '' ;?>>
                                             <?php echo $this->renderShippingRateOption($rate)?>

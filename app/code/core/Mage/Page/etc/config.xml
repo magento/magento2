@@ -119,7 +119,7 @@
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright" module="Mage_Page">
-                <copyright>&amp;copy; 2008 Magento Demo Store. All Rights Reserved.</copyright>
+                <copyright>&amp;copy; 2012 Magento Demo Store. All Rights Reserved.</copyright>
             </footer>
         </design>
         <system>

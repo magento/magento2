@@ -63,9 +63,7 @@ Customer account home dashboard layout
         </reference>
     </customer_account_index>
 
-    <catalog_product_view translate="label">
-        <label>Catalog Product View</label>
-         <!-- Mage_Tag -->
+    <catalog_product_view>
          <reference name="product.info.tabs">
             <action method="addTab" translate="title" module="Mage_Tag"><alias>product.tags</alias><title>Product Tags</title><block>Mage_Tag_Block_Product_List</block><template>list.phtml</template></action>
         </reference>

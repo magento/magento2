@@ -36,11 +36,6 @@ class Mage_Adminhtml_Block_Review_Add_Form extends Mage_Adminhtml_Block_Widget_F
 {
     protected function _prepareForm()
     {
-        $statuses = Mage::getModel('Mage_Review_Model_Review')
-            ->getStatusCollection()
-            ->load()
-            ->toOptionArray();
-
         $form = new Varien_Data_Form();
 
         $fieldset = $form->addFieldset('add_review_form', array('legend' => Mage::helper('Mage_Review_Helper_Data')->__('Review Details')));
@@ -61,20 +56,21 @@ class Mage_Adminhtml_Block_Review_Add_Form extends Mage_Adminhtml_Block_Widget_F
             'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Status'),
             'required'  => true,
             'name'      => 'status_id',
-            'values'    => $statuses,
+            'values'    => Mage::helper('Mage_Review_Helper_Data')->getReviewStatusesOptionArray(),
         ));
 
         /**
          * Check is single store mode
          */
         if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset->addField('select_stores', 'multiselect', array(
+            $field = $fieldset->addField('select_stores', 'multiselect', array(
                 'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Visible In'),
                 'required'  => true,
                 'name'      => 'select_stores[]',
                 'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
         }
 
         $fieldset->addField('nickname', 'text', array(
@@ -97,7 +93,7 @@ class Mage_Adminhtml_Block_Review_Add_Form extends Mage_Adminhtml_Block_Widget_F
             'name'      => 'detail',
             'title'     => Mage::helper('Mage_Review_Helper_Data')->__('Review'),
             'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Review'),
-            'style'     => 'width: 98%; height: 600px;',
+            'style'     => 'height: 600px;',
             'required'  => true,
         ));
 

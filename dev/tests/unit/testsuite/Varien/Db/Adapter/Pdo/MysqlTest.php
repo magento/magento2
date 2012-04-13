@@ -31,15 +31,20 @@
 class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Error message for DDL query in transactions
+     * Custom error handler message
      */
-    const ERROR_DDL_MESSAGE = 'DDL statements are not allowed in transactions';
+    const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
      * Adapter for test
      * @var Varien_Db_Adapter_Pdo_Mysql
      */
     private $_adapter;
+
+    /*
+     * Mock DB adapter for DDL query tests
+     */
+    private $_mockAdapter;
 
     /**
      * Setup
@@ -53,6 +58,16 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
                 'password' => 'not_valid',
             )
         );
+
+        $this->_mockAdapter = $this->getMock(
+            'Varien_Db_Adapter_Pdo_Mysql',
+            array('beginTransaction', 'getTransactionLevel'),
+            array(), '', false
+        );
+
+        $this->_mockAdapter->expects($this->any())
+             ->method('getTransactionLevel')
+             ->will($this->returnValue(1));
     }
 
     /**
@@ -84,10 +99,12 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
             array(1e-10, 0),
             array(7.9, 8),
             array(PHP_INT_MAX, PHP_INT_MAX),
-            array(PHP_INT_MAX+1, '2147483648'),
+            array(2147483647 + 1, '2147483648'),
+            array(9223372036854775807 + 1, '9223372036854775808'),
             array(9223372036854775807, '9223372036854775807'),
             array(9223372036854775807.3423424234, '9223372036854775807'),
-            array(PHP_INT_MAX*pow(10, 10)+12, '21474836470000000012'),
+            array(2147483647 * pow(10, 10)+12, '21474836470000000012'),
+            array(9223372036854775807 * pow(10, 10)+12, '92233720368547758080000000000'),
             array((0.099999999999999999999999995+0.2+0.3+0.4+0.5)*10, '15'),
             array('21474836470000000012', '21474836470000000012'),
             array(0x5468792130ABCDEF, '6082244480221302255')
@@ -95,63 +112,63 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test DDL query in transaction
+     * Test not DDL query inside transaction
+     *
+     * @dataProvider sqlQueryProvider
      */
-    public function testCheckDdlTransaction()
+    public function testCheckNotDdlTransaction($query)
     {
-        $mockAdapter = $this->getMock(
-            'Varien_Db_Adapter_Pdo_Mysql',
-            array('beginTransaction', 'getTransactionLevel'),
-            array(), '', false
-        );
-
-        $mockAdapter->expects($this->any())
-             ->method('getTransactionLevel')
-             ->will($this->returnValue(1));
-
-        $mockAdapter->beginTransaction();
         try {
-            $mockAdapter->query("CREATE table user");
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertEquals($e->getMessage(), self::ERROR_DDL_MESSAGE);
-        }
-
-        try {
-            $mockAdapter->query("ALTER table user");
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertEquals($e->getMessage(), self::ERROR_DDL_MESSAGE);
-        }
-
-        try {
-            $mockAdapter->query("TRUNCATE table user");
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertEquals($e->getMessage(), self::ERROR_DDL_MESSAGE);
-        }
-
-        try {
-            $mockAdapter->query("RENAME table user");
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertEquals($e->getMessage(), self::ERROR_DDL_MESSAGE);
-        }
-
-        try {
-            $mockAdapter->query("DROP table user");
-        } catch (Zend_Db_Adapter_Exception $e) {
-            $this->assertEquals($e->getMessage(), self::ERROR_DDL_MESSAGE);
-        }
-
-        try {
-            $mockAdapter->query("SELECT * FROM user");
+            $this->_mockAdapter->query($query);
         } catch (Exception $e) {
-            $this->assertFalse($e instanceof Zend_Db_Adapter_Exception);
+            $this->assertNotContains($e->getMessage(), Varien_Db_Adapter_Interface::ERROR_DDL_MESSAGE);
         }
 
-        $select = new Zend_Db_Select($mockAdapter);
+        $select = new Zend_Db_Select($this->_mockAdapter);
         $select->from('user');
         try {
-            $mockAdapter->query($select);
+            $this->_mockAdapter->query($select);
         } catch (Exception $e) {
-            $this->assertFalse($e instanceof Zend_Db_Adapter_Exception);
+            $this->assertNotContains($e->getMessage(), Varien_Db_Adapter_Interface::ERROR_DDL_MESSAGE);
         }
+    }
+
+    /**
+     * Test DDL query inside transaction in Developer mode
+     *
+     * @dataProvider ddlSqlQueryProvider
+     * @expectedException PHPUnit_Framework_Error
+     * @expectedExceptionMessage DDL statements are not allowed in transactions
+     */
+    public function testCheckDdlTransaction($ddlQuery)
+    {
+        $this->_mockAdapter->query($ddlQuery);
+    }
+
+    /**
+     * Data Provider for testCheckDdlTransaction
+     */
+    public static function ddlSqlQueryProvider()
+    {
+        return array(
+            array('CREATE table user sasdasd'),
+            array('ALTER table user'),
+            array('TRUNCATE table user'),
+            array('RENAME table user'),
+            array('DROP table user'),
+        );
+    }
+
+    /**
+     * Data Provider for testCheckNotDdlTransaction
+     */
+    public static function sqlQueryProvider()
+    {
+        return array(
+            array('SELECT * FROM user'),
+            array('UPDATE user'),
+            array('DELETE from user'),
+            array('INSERT into user'),
+        );
     }
 }

@@ -476,7 +476,7 @@ class Mage_Usa_Model_Shipping_Carrier_Ups
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($method);
                 $method_arr = $this->getCode('method', $method);
-                $rate->setMethodTitle(Mage::helper('Mage_Usa_Helper_Data')->__($method_arr));
+                $rate->setMethodTitle($method_arr);
                 $rate->setCost($costArr[$method]);
                 $rate->setPrice($price);
                 $result->append($rate);

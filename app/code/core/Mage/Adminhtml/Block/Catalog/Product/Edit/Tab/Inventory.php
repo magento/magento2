@@ -142,4 +142,14 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Inventory extends Mage_Admin
     {
         return $this->getProduct()->getTypeInstance()->canUseQtyDecimals();
     }
+
+    /**
+     * Check if product type is virtual
+     *
+     * @return boolean
+     */
+    public function isVirtual()
+    {
+        return $this->getProduct()->getIsVirtual();
+    }
 }

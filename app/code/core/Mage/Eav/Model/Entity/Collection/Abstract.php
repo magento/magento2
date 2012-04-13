@@ -427,7 +427,8 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
         if ($joinType !== false && !$this->getEntity()->getAttribute($attribute)->isStatic()) {
             $this->_addAttributeJoin($attribute, $joinType);
         } elseif ('*' === $attribute) {
-            $attributes = $this->getEntity()
+            $entity = clone $this->getEntity();
+            $attributes = $entity
                 ->loadAllAttributes()
                 ->getAttributesByCode();
             foreach ($attributes as $attrCode=>$attr) {

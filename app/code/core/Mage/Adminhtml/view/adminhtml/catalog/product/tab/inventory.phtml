@@ -107,6 +107,8 @@
             </td>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
         </tr>
+
+        <?php if (!$this->isVirtual()) : ?>
         <tr>
             <td class="label"><label for="inventory_is_decimal_divided"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Can be Divided into Multiple Boxes for Shipping') ?></label></td>
             <td class="value"><select id="inventory_is_decimal_divided" name="<?php echo $this->getFieldSuffix() ?>[stock_data][is_decimal_divided]" class="select" <?php echo $_readonly;?>>
@@ -116,6 +118,8 @@
             </td>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
         </tr>
+        <?php endif; ?>
+
         <?php endif; ?>
 
         <tr>
@@ -180,60 +184,57 @@
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
         </tr>
         </table>
-    <script type="text/javascript">
-    //<![CDATA[
-    var cataloginventoryNotManagestockFields = {
-        inventory_min_sale_qty: true,
-        inventory_max_sale_qty: true,
-        inventory_qty_increments: true
-    };
+    </fieldset>
+</div>
+<script type="text/javascript">
+//<![CDATA[
     function changeManageStockOption()
     {
-        $$('#table_cataloginventory tr').each(manageStockEach);
-        return true;
-    }
-    function manageStockEach(el)
-    {
-        if ($('inventory_use_config_manage_stock').checked) {
-            var manageStock = $('inventory_manage_stock_default').value;
-        } else {
-            var manageStock = $('inventory_manage_stock').value;
-        }
-        if (el == $('inventory_manage_stock').up(1)) {
-            return;
-        }
-        for(field in cataloginventoryNotManagestockFields) {
-            if ($(field) && ($(field).up(1) == el)) {
+        var manageStock = $('inventory_use_config_manage_stock').checked
+            ? $('inventory_manage_stock_default').value
+            : $('inventory_manage_stock').value;
+        var catalogInventoryNotManageStockFields = {
+            inventory_min_sale_qty: true,
+            inventory_max_sale_qty: true,
+            inventory_enable_qty_increments : true,
+            inventory_qty_increments: true
+        };
+
+        $$('#table_cataloginventory tr').each(function(el) {
+            if (el == $('inventory_manage_stock').up(1)) {
                 return;
             }
-        }
-        if (manageStock == 1) {
-            el.show();
-        } else {
-            el.hide();
-        }
-        return;
+
+            for (field in catalogInventoryNotManageStockFields) {
+                if ($(field) && ($(field).up(1) == el)) {
+                    return;
+                }
+            }
+
+            el[manageStock == 1 ? 'show' : 'hide']();
+        });
+
+        return true;
     }
 
     function applyEnableQtyIncrements() {
-        if ($('inventory_use_config_enable_qty_increments').checked) {
-            var enableQtyIncrements = $('inventory_enable_qty_increments_default').value;
-        } else {
-            var enableQtyIncrements = $('inventory_enable_qty_increments').value;
-        }
-        if (enableQtyIncrements == 1) {
-            $('inventory_qty_increments').up('tr').show();
-        } else {
-            $('inventory_qty_increments').up('tr').hide();
-        }
+        var enableQtyIncrements = $('inventory_use_config_enable_qty_increments').checked
+            ? $('inventory_enable_qty_increments_default').value
+            : $('inventory_enable_qty_increments').value;
+
+        $('inventory_qty_increments').up('tr')[enableQtyIncrements == 1 ? 'show' : 'hide']();
     }
 
     function applyEnableDecimalDivided() {
+    <?php if (!$this->isVirtual()) : ?>
         $('inventory_is_decimal_divided').up('tr').hide();
+        <?php endif; ?>
         $('inventory_qty_increments').removeClassName('validate-digits').removeClassName('validate-number');
         $('inventory_min_sale_qty').removeClassName('validate-digits').removeClassName('validate-number');
         if ($('inventory_is_qty_decimal').value == 1) {
+        <?php if (!$this->isVirtual()) : ?>
             $('inventory_is_decimal_divided').up('tr').show();
+            <?php endif; ?>
             $('inventory_qty_increments').addClassName('validate-number');
             $('inventory_min_sale_qty').addClassName('validate-number');
         } else {
@@ -258,7 +259,5 @@
             applyEnableDecimalDivided();
         }
     });
-    //]]>
-    </script>
-    </fieldset>
-</div>
+//]]>
+</script>

@@ -81,17 +81,13 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     public static function loginAdmin()
     {
-        Mage_Admin_Utility_User::getInstance()
-            ->createAdmin();
         self::$_adminSession = new Mage_Admin_Model_Session();
-        self::$_adminSession->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        self::$_adminSession->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
 
     public static function loginAdminRollback()
     {
         self::$_adminSession->logout();
-        Mage_Admin_Utility_User::getInstance()
-            ->destroyAdmin();
     }
 
     /**

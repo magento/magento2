@@ -49,9 +49,9 @@
         ul = $('recipients_options');
         var li_mail = Element.extend(document.createElement("LI"));
         li_mail.addClassName('fields additional-row');
-        li_mail.innerHTML = '<p><a href="delete_email" title="<?php echo $this->__('Remove Email') ?>" onclick="remove_recipient('+i+'); return false" class="btn-remove"><?php echo $this->__('Remove Email') ?>"<\/a><\/p>'
-        li_mail.innerHTML += '<div class="field"><label for="recipients_name'+i+'" class="required"><em>*<\/em><?php echo $this->__('Name:') ?><\/label><div class="input-box"><input name="recipients[name][]" type="text" class="input-text required-entry" id="recipients_name'+i+'" /><\/div>';
-        li_mail.innerHTML += '<div class="field"><label for="recipients_email'+i+'" class="required"><em>*<\/em><?php echo $this->__('Email Address:') ?><\/label><div class="input-box"><input name="recipients[email][]" value="" title="<?php echo $this->__('Email Address') ?>" id="recipients_email'+i+'" type="text" class="input-text required-entry validate-email" /><\/div><\/div>';
+        li_mail.innerHTML = '<p><a href="delete_email" title="<?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>" onclick="remove_recipient('+i+'); return false" class="btn-remove"><?php echo $this->jsQuoteEscape($this->__('Remove Email')) ?>"<\/a><\/p>'
+        li_mail.innerHTML += '<div class="field"><label for="recipients_name'+i+'" class="required"><em>*<\/em><?php echo $this->jsQuoteEscape($this->__('Name:')) ?><\/label><div class="input-box"><input name="recipients[name][]" type="text" class="input-text required-entry" id="recipients_name'+i+'" /><\/div>';
+        li_mail.innerHTML += '<div class="field"><label for="recipients_email'+i+'" class="required"><em>*<\/em><?php echo $this->jsQuoteEscape($this->__('Email Address:')) ?><\/label><div class="input-box"><input name="recipients[email][]" value="" title="<?php echo $this->jsQuoteEscape($this->__('Email Address')) ?>" id="recipients_email'+i+'" type="text" class="input-text required-entry validate-email" /><\/div><\/div>';
         i++;
         recipCount++;
         if(recipCount>=maxRecip && maxRecip != 0) {

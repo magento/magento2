@@ -63,6 +63,7 @@
                         <min_query_length translate="label">
                             <label>Minimal Query Length</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -71,6 +72,7 @@
                         <max_query_length translate="label">
                             <label>Maximum Query Length</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -79,6 +81,7 @@
                         <max_query_words translate="label comment">
                             <label>Maximum Query Words Count</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
                             <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -98,6 +101,7 @@
                         <use_layered_navigation_count translate="label comment">
                             <label>Apply Layered Navigation if Search Results are Less Than</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

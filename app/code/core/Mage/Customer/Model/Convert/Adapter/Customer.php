@@ -711,35 +711,4 @@ class Mage_Customer_Model_Convert_Adapter_Customer
     {
         return $this->_customerId;
     }
-
-    /* ########### THE CODE BELOW AT THIS METHOD IS NOT USED ############# */
-
-    public function saveRow__OLD()
-    {
-
-        $mem = memory_get_usage(); $origMem = $mem; $memory = $mem;
-        $customer = $this->getCustomer();
-        @set_time_limit(240);
-        $row = $args;
-        $newMem = memory_get_usage(); $memory .= ', '.($newMem-$mem); $mem = $newMem;
-        $customer->importFromTextArray($row);
-
-        if (!$customer->getData()) {
-            return;
-        }
-
-        $newMem = memory_get_usage(); $memory .= ', '.($newMem-$mem); $mem = $newMem;
-        try {
-            $customer->save();
-            $this->_customerId = $customer->getId();
-            $customer->unsetData();
-            $customer->cleanAllAddresses();
-            $customer->unsetSubscription();
-            $newMem = memory_get_usage(); $memory .= ', '.($newMem-$mem); $mem = $newMem;
-
-        } catch (Exception $e) {
-        }
-        unset($row);
-        return array('memory'=>$memory);
-    }
 }

@@ -222,16 +222,6 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
     }
 
     /**
-     * Retrieve Price Filter block
-     *
-     * @return Mage_Catalog_Block_Layer_Filter_Price
-     */
-    protected function _getPriceFilter()
-    {
-        return $this->getChildBlock('_price_filter');
-    }
-
-    /**
      * Get url for 'Clear All' link
      *
      * @return string

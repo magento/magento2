@@ -319,9 +319,9 @@
             <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
         <?php endif; ?>
         <?php if (Mage::helper('Mage_Weee_Helper_Data')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
-            <?php echo $this->formatPrice($_rowTotalWithoutDiscount+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?>
+            <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition())); ?>
         <?php else: ?>
-            <?php echo $this->formatPrice($_rowTotalWithoutDiscount) ?>
+            <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
         <?php endif; ?>
 
 

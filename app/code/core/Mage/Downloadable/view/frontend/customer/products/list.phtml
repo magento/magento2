@@ -57,7 +57,7 @@
                 <tr>
                     <td><a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('View Order') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a></td>
                     <td><span class="nobr"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></span></td>
-                    <td><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $_item->getLinkTitle() ?></a></td>
+                    <td><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $this->escapeHtml($_item->getLinkTitle()) ?></a></td>
                     <td><em><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__(ucfirst($_item->getStatus())) ?></em></td>
                     <td><?php echo $this->getRemainingDownloads($_item) ?></td>
                 </tr>

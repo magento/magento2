@@ -57,6 +57,14 @@
                     </designeditor>
                 </observers>
             </controller_action_predispatch>
+            <controller_action_layout_generate_blocks_before>
+                <observers>
+                    <designeditor>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>disableBlocksOutputCaching</method>
+                    </designeditor>
+                </observers>
+            </controller_action_layout_generate_blocks_before>
             <controller_action_layout_load_before>
                 <observers>
                     <designeditor>

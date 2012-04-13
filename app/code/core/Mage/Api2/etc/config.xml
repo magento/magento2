@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Api2
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Mage_Api2>
+            <version>1.0.0.0</version>
+        </Mage_Api2>
+    </modules>
+    <global>
+        <cache>
+            <types>
+                <config_api2 translate="label,description" module="Mage_Api2">
+                    <label>Web Services Configuration</label>
+                    <description>Web Services definition files (api2.xml).</description>
+                    <tags>CONFIG_API2</tags>
+                </config_api2>
+            </types>
+        </cache>
+        <resources>
+            <api2_setup>
+                <setup>
+                    <module>Mage_Api2</module>
+                    <class>Mage_Api2_Model_Resource_Setup</class>
+                </setup>
+            </api2_setup>
+        </resources>
+        <events>
+            <admin_user_save_after>
+                <observers>
+                    <api2>
+                        <class>Mage_Api2_Model_Observer</class>
+                        <method>saveAdminToRoleRelation</method>
+                    </api2>
+                </observers>
+            </admin_user_save_after>
+        </events>
+        <api2>
+            <auth_adapters>
+                <oauth module="Mage_Api2" translate="label">
+                    <model>Mage_Api2_Model_Auth_Adapter_Oauth</model>
+                    <label>OAuth</label>
+                    <enabled>1</enabled>
+                    <order>10</order>
+                </oauth>
+            </auth_adapters>
+            <user_types>
+                <admin>
+                    <model>Mage_Api2_Model_Auth_User_Admin</model>
+                    <allowed>1</allowed>
+                </admin>
+                <customer>
+                    <model>Mage_Api2_Model_Auth_User_Customer</model>
+                    <allowed>1</allowed>
+                </customer>
+                <guest>
+                    <model>Mage_Api2_Model_Auth_User_Guest</model>
+                    <allowed>1</allowed>
+                </guest>
+            </user_types>
+            <request>
+                <interpreters>
+                    <!-- JSON -->
+                    <application_json>
+                        <type>application/json</type>
+                        <model>Mage_Api2_Model_Request_Interpreter_Json</model>
+                    </application_json>
+
+                    <!-- QUERY -->
+                    <text_plain>
+                        <type>text/plain</type>
+                        <model>Mage_Api2_Model_Request_Interpreter_Query</model>
+                    </text_plain>
+
+                    <!-- XML -->
+                    <application_xml>
+                        <type>application/xml</type>
+                        <model>Mage_Api2_Model_Request_Interpreter_Xml</model>
+                    </application_xml>
+                    <application_xhtml_xml>
+                        <type>application/xhtml+xml</type>
+                        <model>Mage_Api2_Model_Request_Interpreter_Xml</model>
+                    </application_xhtml_xml>
+                    <text_xml>
+                        <type>text/xml</type>
+                        <model>Mage_Api2_Model_Request_Interpreter_Xml</model>
+                    </text_xml>
+                </interpreters>
+            </request>
+            <response>
+                <renders>
+                    <!-- JSON -->
+                    <default>
+                        <type>*/*</type>
+                        <model>Mage_Api2_Model_Renderer_Json</model>
+                    </default>
+                    <application_json>
+                        <type>application/json</type>
+                        <model>Mage_Api2_Model_Renderer_Json</model>
+                    </application_json>
+
+                    <!-- QUERY -->
+                    <text_plain>
+                        <type>text/plain</type>
+                        <model>Mage_Api2_Model_Renderer_Query</model>
+                    </text_plain>
+
+                    <!-- XML -->
+                    <text_xml>
+                        <type>text/xml</type>
+                        <model>Mage_Api2_Model_Renderer_Xml</model>
+                    </text_xml>
+                    <application_xml>
+                        <type>application/xml</type>
+                        <model>Mage_Api2_Model_Renderer_Xml</model>
+                    </application_xml>
+                    <application_xhtml_xml>
+                        <type>application/xhtml+xml</type>
+                        <model>Mage_Api2_Model_Renderer_Xml</model>
+                    </application_xhtml_xml>
+                </renders>
+            </response>
+        </api2>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <api2 before="Mage_Adminhtml">Mage_Api2_Adminhtml</api2>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <api2 module="Mage_Api2">
+                    <file>layout.xml</file>
+                </api2>
+            </updates>
+        </layout>
+        <events>
+            <catalog_entity_attribute_save_after>
+                <observers>
+                    <api2>
+                        <class>Mage_Api2_Model_Observer</class>
+                        <method>catalogAttributeSaveAfter</method>
+                    </api2>
+                </observers>
+            </catalog_entity_attribute_save_after>
+        </events>
+    </adminhtml>
+</config>

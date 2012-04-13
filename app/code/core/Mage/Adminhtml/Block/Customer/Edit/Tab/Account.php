@@ -110,9 +110,8 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Account extends Mage_Adminhtml_Bloc
                 . '</script>'
             );
         }
-        $form->getElement('website_id')->setAfterElementHtml(
-            Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
-        );
+        $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+        $form->getElement('website_id')->setRenderer($renderer);
 
 //        if (Mage::app()->isSingleStoreMode()) {
 //            $fieldset->removeField('website_id');

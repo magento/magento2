@@ -115,7 +115,7 @@ class Utility_Classes
         $classes = self::getXmlNodeValues($xml, '
             /config//resource_adapter | /config/*[not(name()="sections")]//class | //model
                 | //backend_model | //source_model | //price_model | //model_token | //writer_model | //clone_model
-                | //frontend_model | //admin_renderer | //renderer'
+                | //frontend_model | //working_model | //admin_renderer | //renderer'
         );
         $classes = array_merge($classes, self::getXmlAttributeValues($xml, '//@backend_model', 'backend_model'));
         $nodes = $xml->xpath('/logging/*/expected_models/* | /logging/*/actions/*/expected_models/*') ?: array();

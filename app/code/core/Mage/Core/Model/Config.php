@@ -626,7 +626,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      *
      * @param   string $path
      * @param   string $scope
-     * @param   string $scopeCode
+     * @param   string|int $scopeCode
      * @return Mage_Core_Model_Config_Element
      */
     public function getNode($path=null, $scope='', $scopeCode=null)
@@ -1278,7 +1278,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      *
      * @param string $modelClass
      * @param array|object $constructArguments
-     * @return Mage_Core_Model_Abstract
+     * @return Mage_Core_Model_Abstract|false
      */
     public function getModelInstance($modelClass='', $constructArguments=array())
     {
@@ -1289,10 +1289,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             Magento_Profiler::stop('FACTORY:' . $className);
             return $obj;
         } else {
-            /* throw Mage::exception(
-                'Mage_Core',
-                Mage::helper('Mage_Core_Helper_Data')->__('Model class does not exist: %s.', $modelClass)
-            ); */
             return false;
         }
     }
@@ -1397,18 +1393,23 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     }
 
     /**
-     * Check security requirements for url
+     * Check whether given path should be secure according to configuration security requirements for URL
+     * "Secure" should not be confused with https protocol, it is about web/secure/*_url settings usage only
      *
      * @param string $url
      * @return bool
      */
     public function shouldUrlBeSecure($url)
     {
+        if (!Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_SECURE_IN_FRONTEND)) {
+            return false;
+        }
+
         if (!isset($this->_secureUrlCache[$url])) {
             $this->_secureUrlCache[$url] = false;
             $secureUrls = $this->getNode('frontend/secure_url');
             foreach ($secureUrls->children() as $match) {
-                if (strpos($url, (string)$match)===0) {
+                if (strpos($url, (string)$match) === 0) {
                     $this->_secureUrlCache[$url] = true;
                     break;
                 }

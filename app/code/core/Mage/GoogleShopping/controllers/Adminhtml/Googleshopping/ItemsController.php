@@ -101,22 +101,55 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
     }
 
     /**
+     * Retrieve synchronization process mutex
+     *
+     * @return Mage_GoogleShopping_Model_Flag
+     */
+    protected function _getFlag()
+    {
+        return Mage::getSingleton('Mage_GoogleShopping_Model_Flag')->loadSelf();
+    }
+
+    /**
      * Add (export) several products to Google Content
      */
     public function massAddAction()
     {
-        $storeId = $this->_getStore()->getId();
-        $productIds = $this->getRequest()->getParam('product', null);
-
-        try {
-            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
-                ->addProducts($productIds, $storeId);
-        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_redirectToCaptcha($e);
+        $flag = $this->_getFlag();
+        if ($flag->isLocked()) {
             return;
         }
 
-        $this->_redirect('*/*/index', array('store'=>$storeId));
+        session_write_close();
+        ignore_user_abort(true);
+        set_time_limit(0);
+
+        $storeId = $this->_getStore()->getId();
+        $productIds = $this->getRequest()->getParam('product', null);
+        $notifier = Mage::getModel('Mage_AdminNotification_Model_Inbox');
+
+        try {
+            $flag->lock();
+            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
+                ->setFlag($flag)
+                ->addProducts($productIds, $storeId);
+        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
+            // Google requires CAPTCHA for login
+            $this->_getSession()->addError(Mage::helper('Mage_GoogleShopping_Helper_Data')->__($e->getMessage()));
+            $flag->unlock();
+            $this->_redirectToCaptcha($e);
+            return;
+        } catch (Exception $e) {
+            $flag->unlock();
+            $notifier->addMajor(
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while adding products to google shopping account.'),
+                $e->getMessage()
+            );
+            Mage::logException($e);
+            return;
+        }
+
+        $flag->unlock();
     }
 
     /**
@@ -124,18 +157,39 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
      */
     public function massDeleteAction()
     {
-        $itemIds = $this->getRequest()->getParam('item');
-
-        try {
-            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
-                ->deleteItems($itemIds);
-        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_redirectToCaptcha($e);
+        $flag = $this->_getFlag();
+        if ($flag->isLocked()) {
             return;
         }
 
-        $storeId = $this->_getStore()->getId();
-        $this->_redirect('*/*/index', array('store'=>$storeId));
+        session_write_close();
+        ignore_user_abort(true);
+        set_time_limit(0);
+
+        $itemIds = $this->getRequest()->getParam('item');
+
+        try {
+            $flag->lock();
+            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
+                ->setFlag($flag)
+                ->deleteItems($itemIds);
+        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
+            // Google requires CAPTCHA for login
+            $this->_getSession()->addError(Mage::helper('Mage_GoogleShopping_Helper_Data')->__($e->getMessage()));
+            $flag->unlock();
+            $this->_redirectToCaptcha($e);
+            return;
+        } catch (Exception $e) {
+            $flag->unlock();
+            Mage::getModel('Mage_AdminNotification_Model_Inbox')->addMajor(
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while deleting products from google shopping account.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('One or more products were not deleted from google shopping account. Refer to the log file for details.')
+            );
+            Mage::logException($e);
+            return;
+        }
+
+        $flag->unlock();
     }
 
     /**
@@ -143,18 +197,39 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
      */
     public function refreshAction()
     {
-        $itemIds = $this->getRequest()->getParam('item');
-
-        try {
-            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
-                ->synchronizeItems($itemIds);
-        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_redirectToCaptcha($e);
+        $flag = $this->_getFlag();
+        if ($flag->isLocked()) {
             return;
         }
 
-        $storeId = $this->_getStore()->getId();
-        $this->_redirect('*/*/index', array('store' => $storeId));
+        session_write_close();
+        ignore_user_abort(true);
+        set_time_limit(0);
+
+        $itemIds = $this->getRequest()->getParam('item');
+
+        try {
+            $flag->lock();
+            Mage::getModel('Mage_GoogleShopping_Model_MassOperations')
+                ->setFlag($flag)
+                ->synchronizeItems($itemIds);
+        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
+            // Google requires CAPTCHA for login
+            $this->_getSession()->addError(Mage::helper('Mage_GoogleShopping_Helper_Data')->__($e->getMessage()));
+            $flag->unlock();
+            $this->_redirectToCaptcha($e);
+            return;
+        } catch (Exception $e) {
+            $flag->unlock();
+            Mage::getModel('Mage_AdminNotification_Model_Inbox')->addMajor(
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('An error has occured while deleting products from google shopping account.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('One or more products were not deleted from google shopping account. Refer to the log file for details.')
+            );
+            Mage::logException($e);
+            return;
+        }
+
+        $flag->unlock();
     }
 
     /**
@@ -162,6 +237,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
      */
     public function confirmCaptchaAction()
     {
+
         $storeId = $this->_getStore()->getId();
         try {
             Mage::getModel('Mage_GoogleShopping_Model_Service')->getClient(
@@ -188,18 +264,42 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
     }
 
     /**
+     * Retrieve background process status
+     *
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function statusAction()
+    {
+        if ($this->getRequest()->isAjax()) {
+            $this->getResponse()->setHeader('Content-Type', 'application/json');
+            $params = array(
+                'is_running' => $this->_getFlag()->isLocked()
+            );
+            return $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode($params));
+        }
+    }
+
+    /**
      * Redirect user to Google Captcha challenge
      *
      * @param Zend_Gdata_App_CaptchaRequiredException $e
      */
     protected function _redirectToCaptcha($e)
     {
-        $this->_redirect('*/*/index',
-            array('store' => $this->_getStore()->getId(),
+        $redirectUrl = $this->getUrl(
+            '*/*/index',
+            array(
+                'store' => $this->_getStore()->getId(),
                 'captcha_token' => Mage::helper('Mage_Core_Helper_Data')->urlEncode($e->getCaptchaToken()),
                 'captcha_url' => Mage::helper('Mage_Core_Helper_Data')->urlEncode($e->getCaptchaUrl())
             )
         );
+        if ($this->getRequest()->isAjax()) {
+            $this->getResponse()->setHeader('Content-Type', 'application/json')
+                ->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array('redirect' => $redirectUrl)));
+        } else {
+            $this->_redirect($redirectUrl);
+        }
     }
 
     /**

@@ -73,7 +73,7 @@
                                 <?php else :?>
                                 <span class="no-display"><input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" checked="checked" class="radio" /></span>
                                 <?php endif;?>
-                                <label for="p_method_<?php echo $_code ?>"><?php echo $_method->getTitle() ?></label>
+                                <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
                             </dt>
                             <?php if($html = $this->getChildHtml('payment.method.'.$_code)) : ?>
                             <dd>

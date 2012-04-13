@@ -268,7 +268,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         if (!$layout) {
             return $this;
         }
-        if (!is_string($block)) {
+        if ($block instanceof self) {
             $block = $block->getNameInLayout();
         }
         $layout->setChild($this->getNameInLayout(), $block, $alias);
@@ -440,33 +440,45 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     }
 
     /**
-     * @param Mage_Core_Block_Abstract|string $block
-     * @param string $siblingName
+     * Insert child element into specified position
+     *
+     * @param Mage_Core_Block_Abstract|string $element
+     * @param string|null $siblingName
      * @param bool $after
      * @param string $alias
      * @return Mage_Core_Block_Abstract|bool
      */
-    public function insert($block, $siblingName = '', $after = false, $alias = '')
+    public function insert($element, $siblingName = null, $after = true, $alias = '')
     {
         $layout = $this->getLayout();
         if (!$layout) {
             return false;
         }
-        if ($block instanceof Mage_Core_Block_Abstract) {
-            $block = $block->getNameInLayout();
+        if ($element instanceof Mage_Core_Block_Abstract) {
+            $elementName = $element->getNameInLayout();
+        } else {
+            $elementName = $element;
         }
-        $this->getLayout()->insertBlock($this->getNameInLayout(), $block, $alias, $after, $siblingName);
+        if (!$layout->hasElement($elementName)) {
+            Mage::logException(new Magento_Exception('Attempt to insert non-existent element: ' . $elementName));
+            return false;
+        }
+        if ($layout->isContainer($elementName)) {
+            $this->getLayout()->insertContainer($this->getNameInLayout(), $elementName, $alias, $siblingName, $after);
+        } else {
+            $this->getLayout()->insertBlock($this->getNameInLayout(), $elementName, $alias, $siblingName, $after);
+        }
         return $this;
     }
 
     /**
-     * @param Mage_Core_Block_Abstract|string $block
+     * @param Mage_Core_Block_Abstract|string $element
      * @param string $alias
      * @return Mage_Core_Block_Abstract
      */
-    public function append($block, $alias = '')
+    public function append($element, $alias = '')
     {
-        return $this->insert($block, '', true, $alias);
+        return $this->insert($element, '', true, $alias);
     }
 
     /**
@@ -823,6 +835,19 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     public function escapeUrl($data)
     {
         return $this->helper('Mage_Core_Helper_Data')->escapeUrl($data);
+    }
+
+    /**
+     * Escape quotes inside html attributes
+     * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)
+     *
+     * @param  string $data
+     * @param  bool $addSlashes
+     * @return string
+     */
+    public function quoteEscape($data, $addSlashes = false)
+    {
+        return $this->helper('Mage_Core_Helper_Data')->quoteEscape($data, $addSlashes);
     }
 
     /**

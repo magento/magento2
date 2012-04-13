@@ -54,6 +54,7 @@
         <secure_url>
             <googlecheckout_redirect>/googlecheckout/redirect/</googlecheckout_redirect>
             <googlecheckout_beacon>/googlecheckout/api/beacon/</googlecheckout_beacon>
+            <googlecheckout_api>/googlecheckout/api/</googlecheckout_api>
         </secure_url>
         <translate>
             <modules>

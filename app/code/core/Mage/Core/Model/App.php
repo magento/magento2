@@ -813,9 +813,11 @@ class Mage_Core_Model_App
     /**
      * Retrieve application store object
      *
+     * @param null|string|bool|int|Mage_Core_Model_Store $id
      * @return Mage_Core_Model_Store
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function getStore($id=null)
+    public function getStore($id = null)
     {
         if (!Mage::isInstalled() || $this->getUpdateMode()) {
             return $this->_getDefaultStore();
@@ -825,13 +827,13 @@ class Mage_Core_Model_App
             return $this->_store;
         }
 
-        if (is_null($id) || ''===$id || $id === true) {
+        if (!isset($id) || ''===$id || $id === true) {
             $id = $this->_currentStore;
         }
         if ($id instanceof Mage_Core_Model_Store) {
             return $id;
         }
-        if (is_null($id)) {
+        if (!isset($id)) {
             $this->throwStoreException();
         }
 
@@ -1308,7 +1310,8 @@ class Mage_Core_Model_App
                 switch ($obs['type']) {
                     case 'disabled':
                         break;
-                    case 'object': case 'model':
+                    case 'object':
+                    case 'model':
                         $method = $obs['method'];
                         $observer->addData($args);
                         $object = Mage::getModel($obs['model']);
@@ -1328,11 +1331,13 @@ class Mage_Core_Model_App
     }
 
     /**
-     * Added not existin observers methods calls protection
+     * Performs non-existent observer method calls protection
      *
      * @param object $object
      * @param string $method
      * @param Varien_Event_Observer $observer
+     * @return Mage_Core_Model_App
+     * @throws Mage_Core_Exception
      */
     protected function _callObserverMethod($object, $method, $observer)
     {

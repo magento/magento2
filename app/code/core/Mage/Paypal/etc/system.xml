@@ -77,7 +77,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <sort_order>10</sort_order>
-                            <frontend_class>validate-email</frontend_class>
+                            <validate>validate-email</validate>
                         </business_account>
                     </fields>
                 </account>

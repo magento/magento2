@@ -591,7 +591,7 @@ class Mage_Core_Model_Cache
     }
 
     /**
-     * Save invalicated cache types
+     * Save invalidated cache types
      *
      * @param array $types
      * @return Mage_Core_Model_Cache
@@ -626,7 +626,7 @@ class Mage_Core_Model_Cache
      * Mark specific cache type(s) as invalidated
      *
      * @param string|array $typeCode
-     * @return
+     * @return Mage_Core_Model_Cache
      */
     public function invalidateType($typeCode)
     {
@@ -644,7 +644,8 @@ class Mage_Core_Model_Cache
     /**
      * Clean cached data for specific cache type
      *
-     * @param $typeCode
+     * @param string $typeCode
+     * @return Mage_Core_Model_Cache
      */
     public function cleanType($typeCode)
     {

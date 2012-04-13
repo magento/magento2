@@ -42,7 +42,7 @@
         </reference>
         <reference name="data">
             <block type="Mage_Centinel_Block_Adminhtml_Validation" as="card_validation" name="card_validation" template="Mage_Adminhtml::sales/order/create/abstract.phtml">
-                <block type="Mage_Centinel_Block_Adminhtml_Validation_Form" template="validation/form.phtml" name="form" />
+                <block type="Mage_Centinel_Block_Adminhtml_Validation_Form" template="validation/form.phtml" name="centinel.validation.form" as="form" />
             </block>
         </reference>
     </adminhtml_sales_order_create_index>

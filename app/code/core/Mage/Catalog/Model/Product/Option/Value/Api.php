@@ -187,7 +187,7 @@ class Mage_Catalog_Model_Product_Option_Value_Api extends Mage_Catalog_Model_Api
         }
 
         try {
-            $optionValue->deleteValues($valueId);
+            $optionValue->delete();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('not_deleted', $e->getMessage());
         }

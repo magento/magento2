@@ -34,11 +34,13 @@
 <link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
 <link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
 
-<script type="text/javascript">
+<script>
+//<![CDATA[
     addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
     function hideURLbar() {
         window.scrollTo(0, 1);
     }
+//]]>
 </script>
 
 <?php echo $this->getCssJsHtml() ?>

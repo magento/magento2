@@ -32,7 +32,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
  */
-class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Date extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Abstract
+class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Date
+    extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Abstract
 {
     protected $_locale;
 
@@ -48,17 +49,24 @@ class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Date extends Mage_Adminhtml
     {
         $htmlId = $this->_getHtmlId() . microtime(true);
         $format = $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-        $html = '<div class="range"><div class="range-line date">
-            <span class="label">' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('From').':</span>
-            <input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$htmlId.'_from" value="'.$this->getEscapedValue('from').'" class="input-text no-changes"/>
-            <img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle" id="'.$htmlId.'_from_trig" title="'.$this->escapeHtml(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Date selector')).'"/>
-            </div>';
-        $html.= '<div class="range-line date">
-            <span class="label">' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('To').' :</span>
-            <input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$htmlId.'_to" value="'.$this->getEscapedValue('to').'" class="input-text no-changes"/>
-            <img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle" id="'.$htmlId.'_to_trig" title="'.$this->escapeHtml(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Date selector')).'"/>
-            </div></div>';
-        $html.= '<input type="hidden" name="'.$this->_getHtmlName().'[locale]" value="'.$this->getLocale()->getLocaleCode().'"/>';
+        $html = '<div class="range"><div class="range-line date">'
+            . '<span class="label">' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('From').':</span>'
+            . '<input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$htmlId.'_from"'
+                . ' value="'.$this->getEscapedValue('from').'" class="input-text no-changes"/>'
+            . '<img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
+                . ' id="'.$htmlId.'_from_trig"'
+                . ' title="' . $this->escapeHtml(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Date selector')) . '"/>'
+            . '</div>';
+        $html.= '<div class="range-line date">'
+            . '<span class="label">' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('To').' :</span>'
+            . '<input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$htmlId.'_to"'
+                . ' value="'.$this->getEscapedValue('to').'" class="input-text no-changes"/>'
+            . '<img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
+                . ' id="'.$htmlId.'_to_trig"'
+                . ' title="'.$this->escapeHtml(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Date selector')).'"/>'
+            . '</div></div>';
+        $html.= '<input type="hidden" name="'.$this->_getHtmlName().'[locale]"'
+            . 'value="'.$this->getLocale()->getLocaleCode().'"/>';
         $html.= '<script type="text/javascript">
             Calendar.setup({
                 inputField : "'.$htmlId.'_from",
@@ -91,7 +99,8 @@ class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Date extends Mage_Adminhtml
 
                         $(item).setStyle({
                             "zIndex" : index + 1,
-                            "left" : offset[0] + scrollOffset[0] - dimensionsCalendar.width + dimensionsButton.width + "px",
+                            "left" : offset[0] + scrollOffset[0] - dimensionsCalendar.width
+                                + dimensionsButton.width + "px",
                             "top" : offset[1] + scrollOffset[1] + dimensionsButton.height + "px"
                         });
                     };
@@ -177,7 +186,9 @@ class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Date extends Mage_Adminhtml
             $dateObj = $this->getLocale()->date(null, null, $locale, false);
 
             //set default timezone for store (admin)
-            $dateObj->setTimezone(Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE));
+            $dateObj->setTimezone(
+                Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE)
+            );
 
             //set begining of day
             $dateObj->setHour(00);

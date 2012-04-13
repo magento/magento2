@@ -78,11 +78,19 @@
                     </googleshopping_observer>
                 </observers>
             </catalog_product_delete_before>
+            <controller_action_predispatch_adminhtml>
+                <observers>
+                    <googleshopping_observer>
+                        <class>Mage_GoogleShopping_Model_Observer</class>
+                        <method>checkSynchronizationOperations</method>
+                    </googleshopping_observer>
+                </observers>
+            </controller_action_predispatch_adminhtml>
         </events>
         <layout>
             <updates>
-                <googleshopping>
-                    <file>googleshopping.xml</file>
+                <googleshopping module="Mage_GoogleShopping">
+                    <file>layout.xml</file>
                 </googleshopping>
             </updates>
         </layout>

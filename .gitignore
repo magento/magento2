@@ -30,3 +30,6 @@
 /pub/media/downloadable/*
 /pub/media/xmlconnect/*
 /var/*
+dev/api-tests/config.php
+dev/api-tests/integration/tmp/*
+dev/api-tests/integration/framework/local-mysql.xml

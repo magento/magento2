@@ -55,7 +55,7 @@ class Mage_Catalog_Model_Product_Option_Type_Date extends Mage_Catalog_Model_Pro
         $dateValid = true;
         if ($this->_dateExists()) {
             if ($this->useCalendar()) {
-                $dateValid = isset($value['date']) && preg_match('/^[0-9]{1,4}.+[0-9]{1,4}.+[0-9]{1,4}$/', $value['date']);
+                $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
             } else {
                 $dateValid = isset($value['day']) && isset($value['month']) && isset($value['year'])
                     && $value['day'] > 0 && $value['month'] > 0 && $value['year'] > 0;
@@ -169,10 +169,12 @@ class Mage_Catalog_Model_Product_Option_Type_Date extends Mage_Catalog_Model_Pro
             $option = $this->getOption();
             if ($this->getOption()->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_DATE) {
                 $format = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);
-                $result = Mage::app()->getLocale()->date($optionValue, Zend_Date::ISO_8601, null, false)->toString($format);
+                $result = Mage::app()->getLocale()->date($optionValue, Zend_Date::ISO_8601, null, false)
+                    ->toString($format);
             } elseif ($this->getOption()->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_DATE_TIME) {
                 $format = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-                $result = Mage::app()->getLocale()->date($optionValue, Varien_Date::DATETIME_INTERNAL_FORMAT, null, false)->toString($format);
+                $result = Mage::app()->getLocale()
+                    ->date($optionValue, Varien_Date::DATETIME_INTERNAL_FORMAT, null, false)->toString($format);
             } elseif ($this->getOption()->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_TIME) {
                 $date = new Zend_Date($optionValue);
                 $result = date($this->is24hTimeFormat() ? 'H:i' : 'h:i a', $date->getTimestamp());
@@ -221,7 +223,7 @@ class Mage_Catalog_Model_Product_Option_Type_Date extends Mage_Catalog_Model_Pro
         }
 
         $date = new Zend_Date($timestamp);
-        return $date->toString(Varien_date::DATETIME_INTERNAL_FORMAT);
+        return $date->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
     }
 
     /**

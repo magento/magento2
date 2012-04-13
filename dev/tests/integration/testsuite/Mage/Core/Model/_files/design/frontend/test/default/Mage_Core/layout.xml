@@ -48,6 +48,9 @@
             </block>
 
             <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>
+            <block type="Mage_Core_Block_Text" as="no_name"/>
+            <action method="insert"><element>some_element_1</element></action>
+            <action method="append"><element>some_element_2</element></action>
         </block>
     </layout_test_handle_sample>
 
@@ -55,9 +58,12 @@
         <update handle="layout_test_handle_sample"/>
         <remove name="header"/>
         <remove name="menu"/>
+        <remove name="some_element_1"/>
+        <remove name="some_element_2"/>
         <reference name="root">
             <action method="setTemplate"><template>popup.phtml</template></action>
         </reference>
+        <reference name="some_element_1"/>
     </layout_test_handle_main>
 
 </layout>

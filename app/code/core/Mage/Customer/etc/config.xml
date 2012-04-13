@@ -175,6 +175,7 @@
                 <email_template>customer_create_account_email_template</email_template>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>
                 <email_confirmed_template>customer_create_account_email_confirmed_template</email_confirmed_template>
+                <vat_frontend_visibility>0</vat_frontend_visibility>
             </create_account>
             <default>
                 <group>1</group>

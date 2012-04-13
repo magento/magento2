@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Core>
-            <version>1.6.0.2</version>
+            <version>1.6.0.3</version>
         </Mage_Core>
     </modules>
     <global>
@@ -206,7 +206,9 @@
                 <media_database>default_setup</media_database>
                 <configuration_update_time>3600</configuration_update_time>
                 <allowed_resources>
-                    <skin_folder>skin</skin_folder>
+                    <compiled_css_folder>css</compiled_css_folder>
+                    <compiled_css_secure_folder>css_secure</compiled_css_secure_folder>
+                    <compiled_js_folder>js</compiled_js_folder>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
@@ -271,6 +273,7 @@
                 <cookie_lifetime>3600</cookie_lifetime>
                 <cookie_httponly>1</cookie_httponly>
                 <cookie_restriction>0</cookie_restriction>
+                <cookie_restriction_lifetime>31536000</cookie_restriction_lifetime>
             </cookie>
             <session>
                 <use_remote_addr>0</use_remote_addr>

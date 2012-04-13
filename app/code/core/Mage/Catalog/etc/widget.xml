@@ -32,10 +32,42 @@
         <is_email_compatible>1</is_email_compatible>
         <placeholder_image>Mage_Catalog::images/product_widget_new.gif</placeholder_image>
         <parameters>
-            <products_count translate="label">
+            <display_type translate="label description">
+                <required>1</required>
+                <visible>1</visible>
+                <label>Display Type</label>
+                <type>select</type>
+                <value>all_products</value>
+                <values>
+                    <default translate="label">
+                        <value>all_products</value>
+                        <label>All products</label>
+                    </default>
+                    <item translate="label">
+                        <value>new_products</value>
+                        <label>New products</label>
+                    </item>
+                </values>
+                <description>All products - recently added products, New products - products marked as new</description>
+            </display_type>
+            <show_pager translate="label">
+                <visible>1</visible>
+                <label>Display Page Control</label>
+                <type>select</type>
+                <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+            </show_pager>
+            <products_per_page translate="label">
                 <required>1</required>
                 <visible>1</visible>
                 <value>5</value>
+                <label>Number of Products per Page</label>
+                <type>text</type>
+                <depends><show_pager><value>1</value></show_pager></depends>
+            </products_per_page>
+            <products_count translate="label">
+                <required>1</required>
+                <visible>1</visible>
+                <value>10</value>
                 <label>Number of Products to Display</label>
                 <type>text</type>
             </products_count>

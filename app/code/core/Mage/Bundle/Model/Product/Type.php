@@ -312,6 +312,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
                         $selectionModel = Mage::getModel('Mage_Bundle_Model_Selection')
                             ->setData($selection)
                             ->setOptionId($options[$index]['option_id'])
+                            ->setWebsiteId(Mage::app()->getStore($product->getStoreId())->getWebsiteId())
                             ->setParentProductId($product->getId());
 
                         $selectionModel->isDeleted((bool)$selection['delete']);
@@ -889,16 +890,6 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
      * @return boolean true
      */
     public function getForceChildItemQtyChanges($product)
-    {
-        return true;
-    }
-
-    /**
-     * Force apply discount for parent item
-     *
-     * @return bool
-     */
-    public function getForceApplyDiscountToParentItem()
     {
         return true;
     }

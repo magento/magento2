@@ -1,4 +1,5 @@
 "<a href=""%s"" target=""_blank"">Link</a>","<a href=""%s"" target=""_blank"">Link</a>"
+"Actions XML is not valid.","Ações XML não é válido."
 "An error occurred while opening file: ""%s"".","Ocorreu um erro ao abrir o arquivo: ""%s""."
 "Could not load file: ""%s"".","Não foi possível carregar o arquivo: ""%s""."
 "Could not save file: %s.","Não foi possível salvar o arquivo: %s."
@@ -18,6 +19,7 @@
 "Method ""%s"" was not defined in adapter %s.","Método ""%s"" não definido no adaptador %s."
 "Please declare ""adapter"" and ""method"" nodes first.","Por favor declare em primeiro lugar os nós ""adaptador"" e ""método""."
 "Processed records: %s","Registros processados​​: %s"
+"Profile with the same name already exists.","Já existe um perfil com o mesmo nome."
 "Saved successfully: ""%s"" [%d byte(s)].","Salvo com sucesso: ""%s"" [%d byte(s)]."
 "Sheet 1","Folha 1"
 "Skip undefined row.","Pule linha indefinida."

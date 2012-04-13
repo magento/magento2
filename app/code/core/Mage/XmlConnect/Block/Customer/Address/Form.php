@@ -143,7 +143,7 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
         ));
         $addressFieldset->addField('street_2', 'text', array(
             'name' => 'street[]',
-            'label' => $this->__('Street Address 2'),
+            'label' => $this->__('Street Address %s', 2),
             'value' => isset($street2) ? $street2 : ''
         ));
         $addressFieldset->addField('city', 'text', array(

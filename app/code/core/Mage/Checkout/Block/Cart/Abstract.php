@@ -116,7 +116,7 @@ abstract class Mage_Checkout_Block_Cart_Abstract extends Mage_Core_Block_Templat
     /**
      * Get checkout session
      *
-     * @return Mage_Checkout_Model_session
+     * @return Mage_Checkout_Model_Session
      */
     public function getCheckout()
     {

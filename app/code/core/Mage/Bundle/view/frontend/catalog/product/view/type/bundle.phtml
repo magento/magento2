@@ -34,10 +34,12 @@
 //]]>
 </script>
 <?php endif; ?>
-<?php if ($_product->isAvailable()): ?>
-    <p class="availability in-stock"><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Availability:') ?> <span><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('In stock') ?></span></p>
-<?php else: ?>
-    <p class="availability out-of-stock"><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Availability:') ?> <span><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Out of stock') ?></span></p>
+<?php if ($this->displayProductStockStatus()): ?>
+    <?php if ($_product->isAvailable()): ?>
+        <p class="availability in-stock"><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Availability:') ?> <span><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('In stock') ?></span></p>
+    <?php else: ?>
+        <p class="availability out-of-stock"><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Availability:') ?> <span><?php echo $this->helper('Mage_Catalog_Helper_Data')->__('Out of stock') ?></span></p>
+    <?php endif; ?>
 <?php endif; ?>
 <div class="price-box-bundle">
     <?php echo $this->getPriceHtml($_product) ?>

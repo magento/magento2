@@ -52,7 +52,7 @@
                         <children>
                             <config>
                                 <children>
-                                    <promo  translate="title" module="Mage_SalesRule">
+                                    <promo translate="title" module="Mage_SalesRule">
                                         <title>Shopping Cart Price Rules</title>
                                     </promo>
                                 </children>
@@ -62,5 +62,5 @@
                 </children>
             </admin>
         </resources>
-     </acl>
+    </acl>
 </config>

@@ -35,7 +35,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      */
     public function testTableName($filePath)
     {
-        $tables = $this->_extractTables($filePath);
+        $tables = self::extractTables($filePath);
         $legacyTables = array();
         foreach ($tables as $table) {
             $tableName = $table['name'];
@@ -55,7 +55,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @param  string $filePath
      * @return array
      */
-    protected function _extractTables($filePath)
+    public static function extractTables($filePath)
     {
         $regexpMethods = array(
             '_getRegexpTableInMethods',
@@ -66,12 +66,12 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
         $result = array();
         $content = file_get_contents($filePath);
         foreach ($regexpMethods as $method) {
-            $regexp = $this->$method($filePath);
+            $regexp = self::$method($filePath);
             if (!preg_match_all($regexp, $content, $matches, PREG_SET_ORDER)) {
                 continue;
             }
 
-            $iterationResult = $this->_matchesToInformation($content, $matches);
+            $iterationResult = self::_matchesToInformation($content, $matches);
             $result = array_merge($result, $iterationResult);
         }
         return $result;
@@ -83,7 +83,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @param  string $filePath
      * @return string
      */
-    protected function _getRegexpTableInMethods($filePath)
+    protected static function _getRegexpTableInMethods($filePath)
     {
         $methods = array(
             'getTableName',
@@ -96,20 +96,21 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
             'updateTableRow',
             'updateTable',
             'tableExists',
-            'joinField',
+            array('name'=>'joinField', 'param_index' => 1),
             'joinTable',
             'getFkName',
+            array('name'=>'getFkName', 'param_index' => 2),
             'getIdxName',
             array('name' => 'addVirtualGridColumn', 'param_index' => 1)
         );
 
-        if ($this->_isResourceButNotCollection($filePath)) {
+        if (self::_isResourceButNotCollection($filePath)) {
             $methods[] = '_init';
         }
 
         $regexps = array();
         foreach ($methods as $method) {
-            $regexps[] = $this->_composeRegexpForMethod($method);
+            $regexps[] = self::_composeRegexpForMethod($method);
         }
         $result = '#->\s*(' . implode('|', $regexps) . ')#';
 
@@ -120,7 +121,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @param  string $filePath
      * @return bool
      */
-    protected function _isResourceButNotCollection($filePath)
+    protected static function _isResourceButNotCollection($filePath)
     {
         $filePath = str_replace('\\', '/', $filePath);
         $parts = explode('/', $filePath);
@@ -133,7 +134,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @param  string|array $method Method name, or array with method name and index of table parameter in signature
      * @return string
      */
-    protected function _composeRegexpForMethod($method)
+    protected static function _composeRegexpForMethod($method)
     {
         if (!is_array($method)) {
             $method = array('name' => $method, 'param_index' => 0);
@@ -157,7 +158,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getRegexpTableInArrays($filePath)
+    protected static function _getRegexpTableInArrays($filePath)
     {
         return '/[\'"](?:[a-z\d_]+_)?table[\'"]\s*=>\s*[\'"]([^\'"]+)/';
     }
@@ -169,7 +170,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getRegexpTableInProperties($filePath)
+    protected static function _getRegexpTableInProperties($filePath)
     {
         $properties = array(
             '_aggregationTable'
@@ -192,7 +193,7 @@ class Legacy_TableTest extends PHPUnit_Framework_TestCase
      * @param  array $matches
      * @return array
      */
-    protected function _matchesToInformation($content, $matches)
+    protected static function _matchesToInformation($content, $matches)
     {
         $result = array();
         $fromPos = 0;

@@ -129,7 +129,7 @@ class Mage_Catalog_Model_Resource_Attribute extends Mage_Eav_Model_Resource_Enti
         }
 
         $condition = array('entity_attribute_id = ?' => $object->getEntityAttributeId());
-        $this->_getWriteAdapter()->delete($this->getTable('entity_attribute'), $condition);
+        $this->_getWriteAdapter()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
     }

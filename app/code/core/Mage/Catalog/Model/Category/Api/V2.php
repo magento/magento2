@@ -76,13 +76,14 @@ class Mage_Catalog_Model_Category_Api_V2 extends Mage_Catalog_Model_Category_Api
     {
         $parent_category = $this->_initCategory($parentId, $store);
 
+        /* @var $category Mage_Catalog_Model_Category */
         $category = Mage::getModel('Mage_Catalog_Model_Category')
             ->setStoreId($this->_getStoreId($store));
 
         $category->addData(array('path'=>implode('/',$parent_category->getPathIds())));
 
         $category ->setAttributeSetId($category->getDefaultAttributeSetId());
-        /* @var $category Mage_Catalog_Model_Category */
+
 
         foreach ($category->getAttributes() as $attribute) {
             $_attrCode = $attribute->getAttributeCode();
@@ -153,8 +154,9 @@ class Mage_Catalog_Model_Category_Api_V2 extends Mage_Catalog_Model_Category_Api
                 }
             }
             $category->save();
-        }
-        catch (Mage_Core_Exception $e) {
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('data_invalid', $e->getMessage());
+        } catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
             $this->_fault('data_invalid', $e->getMessage());
         }
 

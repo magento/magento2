@@ -109,26 +109,27 @@ class Mage_Usa_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function displayGirthValue($shippingMethod)
     {
-        if (in_array($shippingMethod, array('usps_Priority Mail International',
-                                            'usps_Priority Mail International Small Flat Rate Box',
-                                            'usps_Priority Mail International Medium Flat Rate Box',
-                                            'usps_Priority Mail International Large Flat Rate Box',
-                                            'usps_Priority Mail International Flat Rate Envelope',
-                                            'usps_Express Mail International Flat Rate Envelope',
-                                            'usps_Express Mail Hold For Pickup',
-                                            'usps_Express Mail International',
-                                            'usps_First-Class Mail International Package',
-                                            'usps_First-Class Mail International Large Envelope',
-                                            'usps_First-Class Mail International',
-                                            'usps_Global Express Guaranteed (GXG)',
-                                            'usps_USPS GXG Envelopes',
-                                            'usps_Global Express Guaranteed Non-Document Non-Rectangular',
-                                            'usps_Media Mail',
-                                            'usps_Parcel Post',
-                                            'usps_Express Mail',
-                                            'usps_Priority Mail'
-                                            )
-        )) {
+        if (in_array($shippingMethod, array(
+            'usps_Priority Mail International',
+            'usps_Priority Mail International Small Flat Rate Box',
+            'usps_Priority Mail International Medium Flat Rate Box',
+            'usps_Priority Mail International Large Flat Rate Box',
+            'usps_Priority Mail International Flat Rate Envelope',
+            'usps_Express Mail International Flat Rate Envelope',
+            'usps_Express Mail Hold For Pickup',
+            'usps_Express Mail International',
+            'usps_First-Class Mail International Package',
+            'usps_First-Class Mail International Parcel',
+            'usps_First-Class Mail International Large Envelope',
+            'usps_First-Class Mail International',
+            'usps_Global Express Guaranteed (GXG)',
+            'usps_USPS GXG Envelopes',
+            'usps_Global Express Guaranteed Non-Document Non-Rectangular',
+            'usps_Media Mail',
+            'usps_Parcel Post',
+            'usps_Express Mail',
+            'usps_Priority Mail'
+        ))) {
             return true;
         } else {
             return false;

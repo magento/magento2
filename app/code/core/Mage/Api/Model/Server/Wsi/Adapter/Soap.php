@@ -77,21 +77,17 @@ class Mage_Api_Model_Server_WSI_Adapter_Soap extends Mage_Api_Model_Server_Adapt
                     ->clearHeaders()
                     ->setHeader('Content-Type','text/xml; charset='.$apiConfigCharset)
                     ->setBody(
-                        preg_replace(
-                            '/(\>\<)/i',
-                            ">\n<",
+                        str_replace(
+                            '<soap:operation soapAction=""></soap:operation>',
+                            "<soap:operation soapAction=\"\" />\n",
                             str_replace(
-                                    '<soap:operation soapAction=""></soap:operation>',
-                                    "<soap:operation soapAction=\"\" />\n",
-                                    str_replace(
-                                            '<soap:body use="literal"></soap:body>',
-                                            "<soap:body use=\"literal\" />\n",
-                                            preg_replace(
-                                                '/<\?xml version="([^\"]+)"([^\>]+)>/i',
-                                                '<?xml version="$1" encoding="'.$apiConfigCharset.'"?>',
-                                                $this->_soap->handle()
-                                            )
-                                    )
+                                '<soap:body use="literal"></soap:body>',
+                                "<soap:body use=\"literal\" />\n",
+                                preg_replace(
+                                    '/<\?xml version="([^\"]+)"([^\>]+)>/i',
+                                    '<?xml version="$1" encoding="'.$apiConfigCharset.'"?>',
+                                    $this->_soap->handle()
+                                )
                             )
                         )
                     );

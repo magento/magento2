@@ -24,6 +24,12 @@
                     <xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:storeEntity" />
                 </xsd:sequence>
             </xsd:complexType>
+            <xsd:complexType name="magentoInfoEntity">
+                <xsd:sequence>
+                    <xsd:element minOccurs="1" maxOccurs="1" name="magento_version" type="xsd:string" />
+                    <xsd:element minOccurs="1" maxOccurs="1" name="magento_edition" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
             <xsd:element name="storeListRequestParam">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -53,6 +59,20 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="magentoInfoRequestParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="sessionId" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="magentoInfoResponseParam">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:magentoInfoEntity" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:schema>
     </wsdl:types>
     <wsdl:message name="storeListRequest">
@@ -67,6 +87,12 @@
     <wsdl:message name="storeInfoResponse">
         <wsdl:part name="parameters" element="typens:storeInfoResponseParam" />
     </wsdl:message>
+    <wsdl:message name="magentoInfoRequest">
+        <wsdl:part name="parameters" element="typens:magentoInfoRequestParam" />
+    </wsdl:message>
+    <wsdl:message name="magentoInfoResponse">
+        <wsdl:part name="parameters" element="typens:magentoInfoResponseParam" />
+    </wsdl:message>
     <wsdl:portType name="{{var wsdl.handler}}PortType">
         <wsdl:operation name="storeList">
             <wsdl:documentation>List of stores</wsdl:documentation>
@@ -77,6 +103,11 @@
             <wsdl:documentation>Store view info</wsdl:documentation>
             <wsdl:input message="typens:storeInfoRequest" />
             <wsdl:output message="typens:storeInfoResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="magentoInfo">
+            <wsdl:documentation>Info about current Magento installation</wsdl:documentation>
+            <wsdl:input message="typens:magentoInfoRequest" />
+            <wsdl:output message="typens:magentoInfoResponse" />
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
@@ -91,6 +122,15 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="storeInfo">
+            <soap:operation soapAction="" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="magentoInfo">
             <soap:operation soapAction="" />
             <wsdl:input>
                 <soap:body use="literal" />

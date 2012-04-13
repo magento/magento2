@@ -43,6 +43,12 @@ class Magento_Test_Bootstrap
     const CLEANUP_RESTORE_DB = 'restoreDatabase';
 
     /**
+     * Predefined admin user credentials
+     */
+    const ADMIN_NAME = 'user';
+    const ADMIN_PASSWORD = 'password';
+
+    /**
      * @var Magento_Test_Bootstrap
      */
     private static $_instance;
@@ -343,8 +349,8 @@ class Magento_Test_Bootstrap
     protected function _instantiateDb()
     {
         $suffix = ucfirst($this->_dbVendorName);
-        require_once __DIR__ . '/Db/DbAbstract.php';
-        require_once __DIR__ . "/Db/{$suffix}.php";
+        require_once dirname(__FILE__) . '/Db/DbAbstract.php';
+        require_once dirname(__FILE__) . "/Db/{$suffix}.php";
         $class = "Magento_Test_Db_{$suffix}";
         $dbConfig = $this->_localXml->global->resources->default_setup->connection;
         $this->_ensureDirExists($this->_installDir);
@@ -478,6 +484,9 @@ class Magento_Test_Bootstrap
         }
         file_put_contents($targetLocalXml, $localXml, LOCK_EX);
 
+        /* Add predefined admin user to the system */
+        $this->_createAdminUser();
+
         /* Make a database backup to be able to restore it to initial state any time */
         $this->_db->createBackup(self::DB_BACKUP_NAME);
 
@@ -509,10 +518,41 @@ class Magento_Test_Bootstrap
         $result = array();
         $allPatterns = preg_split('/\s*;\s*/', trim($pattern), -1, PREG_SPLIT_NO_EMPTY);
         foreach ($allPatterns as $onePattern) {
-            $onePattern = __DIR__ . '/../../../' . $onePattern;
+            /** TODO: fix directory separators */
+            $onePattern = dirname(__FILE__) . '/../../../' . $onePattern;
             $files = glob($onePattern, GLOB_BRACE);
             $result = array_merge($result, $files);
         }
         return $result;
+    }
+
+    /**
+     * Creates predefined admin user to be used by tests, where admin session is required
+     */
+    protected function _createAdminUser()
+    {
+        $user = new Mage_Admin_Model_User();
+        $user->setData(array(
+            'firstname' => 'firstname',
+            'lastname'  => 'lastname',
+            'email'     => 'admin@example.com',
+            'username'  => self::ADMIN_NAME,
+            'password'  => self::ADMIN_PASSWORD,
+            'is_active' => 1
+        ));
+        $user->save();
+
+        $roleAdmin = new Mage_Admin_Model_Role();
+        $roleAdmin->load('Administrators', 'role_name');
+
+        $roleUser = new Mage_Admin_Model_Role();
+        $roleUser->setData(array(
+            'parent_id'  => $roleAdmin->getId(),
+            'tree_level' => $roleAdmin->getTreeLevel() + 1,
+            'role_type'  => Mage_Admin_Model_Acl::ROLE_TYPE_USER,
+            'user_id'    => $user->getId(),
+            'role_name'  => $user->getFirstname(),
+        ));
+        $roleUser->save();
     }
 }

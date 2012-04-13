@@ -72,25 +72,29 @@
     <div class="fieldset">
         <h2 class="legend"><?php echo $this->__('Address') ?></h2>
         <ul class="form-list">
+        <?php $_streetValidationClass = $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('street'); ?>
             <li class="wide">
                 <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
                 <div class="input-box">
-                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('street') ?>" />
+                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text <?php echo $_streetValidationClass ?>" />
                 </div>
             </li>
-        <?php for ($_i=2, $_n=$this->helper('Mage_Customer_Helper_Address')->getStreetLines(); $_i<=$_n; $_i++): ?>
+        <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+        <?php for ($_i = 2, $_n = $this->helper('Mage_Customer_Helper_Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
             <li class="wide">
                 <div class="input-box">
-                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" title="<?php echo $this->__('Street Address %s', $_i) ?>" id="street_<?php echo $_i?>" class="input-text" />
+                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" title="<?php echo $this->__('Street Address %s', $_i) ?>" id="street_<?php echo $_i ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                 </div>
             </li>
-        <?php endfor ?>
+        <?php endfor; ?>
+            <?php if ($this->helper('Mage_Customer_Helper_Address')->isVatAttributeVisible()) : ?>
             <li class="wide">
                 <label for="vat_id"><?php echo $this->__('VAT Number') ?></label>
                 <div class="input-box">
                     <input type="text" name="vat_id" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo $this->__('VAT Number') ?>" id="vat_id" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('vat_id') ?>" />
                 </div>
             </li>
+            <?php endif; ?>
             <li class="fields">
                 <div class="field">
                     <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
@@ -109,7 +113,7 @@
                             $('region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                         //]]>
                         </script>
-                        <input type="text" id="region" name="region" value="<?php echo $this->escape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" />
+                        <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" />
                     </div>
                 </div>
             </li>

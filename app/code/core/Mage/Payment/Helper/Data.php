@@ -118,13 +118,8 @@ class Mage_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     public function getInfoBlock(Mage_Payment_Model_Info $info)
     {
         $blockType = $info->getMethodInstance()->getInfoBlockType();
-        if ($this->getLayout()) {
-            $block = $this->getLayout()->createBlock($blockType);
-        }
-        else {
-            $className = Mage::getConfig()->getBlockClassName($blockType);
-            $block = new $className;
-        }
+        $layout = $this->getLayout() ?: Mage::app()->getLayout();
+        $block = $layout->createBlock($blockType);
         $block->setInfo($info);
         return $block;
     }

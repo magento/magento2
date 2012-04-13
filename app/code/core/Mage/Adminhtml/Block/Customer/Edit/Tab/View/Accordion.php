@@ -70,7 +70,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion extends Mage_Adminht
         }
 
         // count wishlist items
-        $wishlistCount = Mage::getModel('Mage_Wishlist_Model_Wishlist')->getCollection()
+        $wishlistCount = Mage::getModel('Mage_Wishlist_Model_Item')->getCollection()
             ->addCustomerIdFilter($customer->getId())
             ->addStoreData()
             ->getSize();

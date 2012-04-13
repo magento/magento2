@@ -27,12 +27,14 @@
 <script type="text/javascript">
 //<![CDATA[
 function setSettings(urlTemplate, typeElement, packageThemeElement) {
-    templateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
-    var template = new Template(urlTemplate, templateSyntax);
+    if (!editForm.validate()) {
+        return false;
+    }
     typeElement = $F(typeElement);
     packageThemeElement = $F(packageThemeElement).replace(/\//g, "-");
-    setLocation(template.evaluate({
-        'type':    typeElement,
+
+    setLocation(new Template(urlTemplate, /(^|.|\r|\n)({{(\w+)}})/).evaluate({
+        'type': typeElement,
         'package_theme': packageThemeElement
     }));
 }

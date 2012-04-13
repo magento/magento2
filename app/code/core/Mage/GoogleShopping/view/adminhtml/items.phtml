@@ -28,7 +28,6 @@
 <?php echo $this->getCaptchaHtml() ?>
 
 <?php echo $this->getStoreSwitcherHtml() ?>
-
 <div class="entry-edit">
     <div class="entry-edit-head">
         <div style="float: right;"></div>
@@ -44,14 +43,10 @@
     <?php echo $this->getChildHtml('product') ?>
 </div>
 
-
 <script type="text/javascript">
 //<![CDATA[
-var productsGridElement = $('<?php echo $this->getChildBlock('product')->getId() ?>');
-productsGridElement.hide();
-$('products_grid_button').observe('click', function (event) {
-    var element = event.element();
-    productsGridElement.visible() ? productsGridElement.hide() : productsGridElement.show();
-});
+Mage.GoogleShopping.isProcessRunning = <?php echo $this->isProcessRunning() ? 'true' : 'false'; ?>;
+Mage.GoogleShopping.statusUrl = '<?php echo $this->getStatusUrl(); ?>';
+Mage.GoogleShopping.runningMessage = '<?php echo $this->__('Google Shopping synchronization process is running');?>';
 //]]>
 </script>

@@ -107,7 +107,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
             'name' => 'description',
             'label' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Description'),
             'title' => Mage::helper('Mage_SalesRule_Helper_Data')->__('Description'),
-            'style' => 'width: 98%; height: 100px;',
+            'style' => 'height: 100px;',
         ));
 
         $fieldset->addField('is_active', 'select', array(
@@ -129,19 +129,19 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
             $websiteId = Mage::app()->getStore(true)->getWebsiteId();
             $fieldset->addField('website_ids', 'hidden', array(
                 'name'     => 'website_ids[]',
-                'value'    => $websiteId,
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
+                'value'    => $websiteId
             ));
             $model->setWebsiteIds($websiteId);
         } else {
-            $fieldset->addField('website_ids', 'multiselect', array(
+            $field = $fieldset->addField('website_ids', 'multiselect', array(
                 'name'     => 'website_ids[]',
                 'label'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Websites'),
                 'title'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Websites'),
                 'required' => true,
-                'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteValuesForForm(),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
+                'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteValuesForForm()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
         }
 
         $customerGroups = Mage::getResourceModel('Mage_Customer_Model_Resource_Group_Collection')->load()->toOptionArray();

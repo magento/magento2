@@ -54,7 +54,10 @@ class Mage_Catalog_Block_Navigation extends Mage_Core_Block_Template
     {
         $this->addData(array(
             'cache_lifetime'    => false,
-            'cache_tags'        => array(Mage_Catalog_Model_Category::CACHE_TAG, Mage_Core_Model_Store_Group::CACHE_TAG),
+            'cache_tags'        => array(
+                Mage_Catalog_Model_Category::CACHE_TAG,
+                Mage_Core_Model_Store_Group::CACHE_TAG
+            ),
         ));
     }
 
@@ -366,7 +369,8 @@ class Mage_Catalog_Block_Navigation extends Mage_Core_Block_Template
         }
 
         $html.= '>'."\n";
-        $html.= '<a href="'.$this->getCategoryUrl($category).'"><span>'.$this->escapeHtml($category->getName()).'</span></a>'."\n";
+        $html.= '<a href="'.$this->getCategoryUrl($category).'">'
+            . '<span>'.$this->escapeHtml($category->getName()).'</span></a>'."\n";
 
         if (in_array($category->getId(), $this->getCurrentCategoryPath())){
             $children = $category->getChildren();

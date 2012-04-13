@@ -34,6 +34,7 @@ class Mage_Core_Model_App_Area
     const AREA_GLOBAL   = 'global';
     const AREA_FRONTEND = 'frontend';
     const AREA_ADMIN    = 'admin';
+    const AREA_ADMINHTML = 'adminhtml';
 
     const PART_CONFIG   = 'config';
     const PART_EVENTS   = 'events';

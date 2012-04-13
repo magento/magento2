@@ -112,6 +112,7 @@
 "The page URL key contains capital letters or disallowed symbols.","页面 URL 密钥包含大写字母或不允许的符号。"
 "The page has been deleted.","页面已被删除。"
 "The page has been saved.","页面已保存。"
+"The static block content cannot contain  directive with its self.","静态块内容不能包含到自己的指令。"
 "This block no longer exists.","区块已不存在。"
 "This page no longer exists.","该页面已不存在。"
 "Title","标题"

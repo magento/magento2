@@ -55,7 +55,7 @@
         <dl class="item-options">
             <dt><?php echo $this->getLinksTitle() ?></dt>
             <?php foreach ($links as $link): ?>
-                <dd><?php echo $link->getTitle() ?></dd>
+                <dd><?php echo $this->escapeHtml($link->getTitle()) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
@@ -64,7 +64,7 @@
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
         <div class="shopping-cart-item-message <?php echo $message['type'] ?>">
-            * <?php echo $message['text'] ?>
+            * <?php echo $this->escapeHtml($message['text']) ?>
         </div>
         <?php endforeach; ?>
         <?php endif; ?>

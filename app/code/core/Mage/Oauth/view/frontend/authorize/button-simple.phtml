@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * "Grant Access" button
+ *
+ * @var $this Mage_Oauth_Block_Authorize_ButtonBaseAbstract
+ */
+$logo = $this->getSkinUrl('images/logo-large.gif', array('_area' => 'adminhtml', '_package' => 'default'));
+?>
+<div class="login-container">
+    <div class="login-box">
+        <div class="page-title">
+            <h1><?php echo $this->__('Authorize application') ?></h1>
+        </div>
+        <div class="form-box">
+            <div>
+                <div id="messages">
+                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                </div>
+                <?php if (!$this->getHasException()) : ?>
+                    <h2><?php echo $this->__('<strong>%s</strong> requests access to your account', $this->escapeHtml($this->getConsumer()->getName())); ?></h2>
+                    <p><?php echo $this->__('After authorization application will have access to you account.'); ?></p>
+                    <form id="oauth_authorize_confirm" action="<?php echo $this->getConfirmUrl() ?>" method="get">
+                        <input type="hidden" name="oauth_token" value="<?php echo $this->escapeHtml($this->getToken()) ?>">
+                        <button type="submit" class="button" title="<?php echo $this->__('Authorize') ?>">
+                            <span><span><?php echo $this->__('Authorize') ?></span></span></button>
+                    </form>
+                    <form id="oauth_authorize_reject" action="<?php echo $this->getRejectUrl() ?>" method="get">
+                        <input type="hidden" name="oauth_token" value="<?php echo $this->escapeHtml($this->getToken()) ?>">
+                        <button type="submit" class="button" title="<?php echo $this->__('Reject') ?>">
+                            <span><span><?php echo $this->__('Reject') ?></span></span></button>
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

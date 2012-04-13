@@ -825,7 +825,7 @@
         <part name="includeComment" type="xsd:int" />
     </message>
     <message name="salesOrderShipmentCreateResponse">
-        <part name="shipmentIncrementId" type="xsd:int" />
+        <part name="shipmentIncrementId" type="xsd:string" />
     </message>
     <message name="salesOrderShipmentAddCommentRequest">
         <part name="sessionId" type="xsd:string" />
@@ -846,6 +846,14 @@
     </message>
     <message name="salesOrderShipmentAddTrackResponse">
         <part name="result" type="xsd:int" />
+    </message>
+    <message name="salesOrderShipmentSendInfoRequest">
+        <part name="sessionId" type="xsd:string" />
+        <part name="shipmentIncrementId" type="xsd:string" />
+        <part name="comment" type="xsd:string" />
+    </message>
+    <message name="salesOrderShipmentSendInfoResponse">
+        <part name="result" type="xsd:boolean" />
     </message>
     <message name="salesOrderShipmentRemoveTrackRequest">
         <part name="sessionId" type="xsd:string" />
@@ -885,7 +893,7 @@
         <part name="includeComment" type="xsd:string" />
     </message>
     <message name="salesOrderInvoiceCreateResponse">
-        <part name="result" type="xsd:int" />
+        <part name="result" type="xsd:string" />
     </message>
     <message name="salesOrderInvoiceAddCommentRequest">
         <part name="sessionId" type="xsd:string" />
@@ -921,7 +929,7 @@
         <part name="refundToStoreCreditAmount" type="xsd:string" />
     </message>
     <message name="salesOrderCreditmemoCreateResponse">
-        <part name="result" type="xsd:int" />
+        <part name="result" type="xsd:string" />
     </message>
     <message name="salesOrderCreditmemoAddCommentRequest">
         <part name="sessionId" type="xsd:string" />
@@ -1016,6 +1024,11 @@
             <documentation>Add new tracking number</documentation>
             <input message="typens:salesOrderShipmentAddTrackRequest" />
             <output message="typens:salesOrderShipmentAddTrackResponse" />
+        </operation>
+        <operation name="salesOrderShipmentSendInfo">
+            <documentation>Send shipment info</documentation>
+            <input message="typens:salesOrderShipmentSendInfoRequest" />
+            <output message="typens:salesOrderShipmentSendInfoResponse" />
         </operation>
         <operation name="salesOrderShipmentRemoveTrack">
             <documentation>Remove tracking number</documentation>
@@ -1181,6 +1194,15 @@
             </output>
         </operation>
         <operation name="salesOrderShipmentAddTrack">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="salesOrderShipmentSendInfo">
             <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
             <input>
                 <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />

@@ -798,10 +798,10 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
      *
      * @param string $type
      * @param array $entityIds
-     * @param integer $sid
+     * @param integer $storeId
      * @return array
      */
-    protected function _getAttributeTypeValues($type, $entityIds, $sid)
+    protected function _getAttributeTypeValues($type, $entityIds, $storeId)
     {
         $select = $this->_getWriteAdapter()->select()
             ->from(
@@ -809,15 +809,17 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
                 array('entity_id', 'attribute_id')
             )
             ->joinLeft(
-                array('store' => $this->getTable('catalog_category_entity_' . $type)),
-                'store.entity_id = def.entity_id AND store.attribute_id = def.attribute_id AND store.store_id = '.$sid,
-                array('value' => $this->_getWriteAdapter()->getCheckSql('store.value_id > 0',
+                array('store' => $this->getTable(array('catalog_category_entity', $type))),
+                'store.entity_id = def.entity_id AND store.attribute_id = def.attribute_id '
+                    . 'AND store.store_id = ' . $storeId,
+                array('value' => $this->_getWriteAdapter()->getCheckSql(
+                    'store.value_id > 0',
                     $this->_getWriteAdapter()->quoteIdentifier('store.value'),
-                    $this->_getWriteAdapter()->quoteIdentifier('def.value'))
-                )
+                    $this->_getWriteAdapter()->quoteIdentifier('def.value')
+                ))
             )
             ->where('def.entity_id IN (?)', $entityIds)
-            ->where('def.store_id = ?', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            ->where('def.store_id IN (?)', array(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, $storeId));
         return $this->_getWriteAdapter()->fetchAll($select);
     }
 

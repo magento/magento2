@@ -28,8 +28,7 @@
 require realpath(dirname(dirname(dirname(__DIR__)))) . '/dev/tests/static/framework/bootstrap.php';
 
 // PHP code
-foreach (Util_Files::getPhpFiles() as $file) {
-    $file = array_shift($file);
+foreach (Utility_Files::init()->getPhpFiles(true, true, true, false) as $file) {
     $content = file_get_contents($file);
     $classes = Legacy_ClassesTest::collectPhpCodeClasses($content);
     $factoryNames = array_filter($classes, 'isFactoryName');
@@ -50,19 +49,14 @@ foreach (Util_Files::getPhpFiles() as $file) {
         addReplace($factoryName, $module, $name, 'getBlockSingleton(\'%s\'', '_Block_', $search, $replace);
         addReplace($factoryName, $module, $name, 'helper(\'%s\'', '_Helper_', $search, $replace);
     }
-    $newContent = str_replace($search, $replace, $content);
-    if ($newContent != $content) {
-        echo "{$file}\n";
-        print_r($factoryNames);
-        file_put_contents($file, $newContent);
-    }
+    replaceAndOutput($file, $search, $replace, $factoryNames);
 }
 
 // layouts
-foreach (Util_Files::getLayoutFiles() as $file) {
-    $file = array_shift($file);
+$layouts = Utility_Files::init()->getLayoutFiles(array(), false);
+foreach ($layouts as $file) {
     $xml = simplexml_load_file($file);
-    $classes = Util_Classes::collectLayoutClasses($xml);
+    $classes = Utility_Classes::collectLayoutClasses($xml);
     $factoryNames = array_filter($classes, 'isFactoryName');
     if (!$factoryNames) {
         continue;
@@ -73,13 +67,25 @@ foreach (Util_Files::getLayoutFiles() as $file) {
         list($module, $name) = getModuleName($factoryName);
         addReplace($factoryName, $module, $name, 'type="%s"', '_Block_', $search, $replace);
     }
-    $content = file_get_contents($file);
-    $newContent = str_replace($search, $replace, $content);
-    if ($newContent != $content) {
-        echo "{$file}\n";
-        print_r($factoryNames);
-        file_put_contents($file, $newContent);
+    replaceAndOutput($file, $search, $replace, $factoryNames);
+}
+
+// modules in configuration and layouts
+$configs = Utility_Files::init()->getConfigFiles('*.xml', array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'), false);
+foreach (array_merge($layouts, $configs) as $file) {
+    $modules = array_unique(Utility_Classes::getXmlAttributeValues(simplexml_load_file($file), '//@module', 'module'));
+    $factoryNames = array_filter($modules, 'isFactoryName');
+    if (!$factoryNames) {
+        continue;
     }
+    $search = array();
+    $replace = array();
+    foreach ($factoryNames as $factoryName) {
+        list($module,) = getModuleName($factoryName);
+        $search[] = 'module="' . $factoryName . '"';
+        $replace[] = 'module="' . implode('_', array_map('ucfirst', explode('_', $module))) . '"';
+    }
+    replaceAndOutput($file, $search, $replace, $factoryNames);
 }
 
 /**
@@ -135,4 +141,23 @@ function addReplace($factoryName, $module, $name, $pattern, $suffix, &$search, &
     $realName = implode('_', array_map('ucfirst', explode('_', $module . $suffix . $name)));
     $search[] = sprintf($pattern, "{$factoryName}");
     $replace[] = sprintf($pattern, "{$realName}");
+}
+
+/**
+ * Perform replacement if needed
+ *
+ * @param string $file
+ * @param array $search
+ * @param array $replace
+ * @param mixed $output
+ */
+function replaceAndOutput($file, $search, $replace, $output)
+{
+    $content = file_get_contents($file);
+    $newContent = str_replace($search, $replace, $content);
+    if ($newContent != $content) {
+        echo "{$file}\n";
+        print_r($output);
+        file_put_contents($file, $newContent);
+    }
 }

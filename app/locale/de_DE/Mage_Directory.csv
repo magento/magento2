@@ -2,6 +2,11 @@
 "Allowed Currencies","Zulässige Währungen"
 "Base Currency","Basiswährung"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","Die Basiswährung wird für alle Online-Transaktionen verwendet. Der Spielraum richtet sich nach dem Spielraum des Katalogpreises (""Katalog"" > ""Preis"" > ""Spielraum Katalogpreis"")."
+"Can\'t convert rate from ""%s-%s"".","Rate kann nicht von ""%s-%s"" konvertiert werden. 
+
+
+
+"
 "Cannot retrieve rate from %s.","Kurs von %s kann nicht abgefragt werden."
 "Connection Timeout in Seconds","Verbindungstimeout in Sekunden"
 "Continue &raquo;","&raquo; fortsetzen;"
@@ -14,6 +19,7 @@
 "Currency Update Warnings","Währung Aktualisierung Warnungen"
 "Default Display Currency","Angezeigte Standardwährung"
 "Directory","Verzeichnis"
+"Display not required State","Anzeige nicht erforderlich Status"
 "Enabled","Aktiviert"
 "Error Email Recipient","Fehler E-Mail Empfänger"
 "Error Email Sender","Fehler E-Mail Absender"
@@ -34,8 +40,9 @@
 "Select Your Currency","Wählen Sie Ihr Land aus"
 "Service","Service"
 "Start Time","Startzeit"
+"State is required for","Status ist erforderlich für"
 "State/Province","Bundesstaat/ Provinz"
-"Strikeiron Email Update Warnings","StrikeIron E-Mail Aktualisierung Warnungen"
+"States Options","Status-Optionen"
 "Unable to initialize the import model.","Import-Model konnte nicht initialisiert werden."
 "Undefined rate from ""%s-%s"".","Nicht definierter Satz von ""%s-%s""."
 "WARNING:","WARNUNG:"

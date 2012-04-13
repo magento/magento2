@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php if (!Mage::helper('Mage_Core_Helper_Cookie')->isUserNotAllowSaveCookie()): ?>
 <?php $accountId = Mage::getStoreConfig(Mage_GoogleAnalytics_Helper_Data::XML_PATH_ACCOUNT) ?>
 <!-- BEGIN GOOGLE ANALYTICS CODEs -->
 <script type="text/javascript">
@@ -41,3 +42,4 @@
 //]]>
 </script>
 <!-- END GOOGLE ANALYTICS CODE -->
+<?php endif; ?>

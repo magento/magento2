@@ -105,4 +105,22 @@ class Mage_Tag_Model_Resource_Popular_Collection extends Mage_Core_Model_Resourc
         $this->getSelect()->limit($limit);
         return $this;
     }
+
+    /**
+     * Get SQL for get record count
+     *
+     * @return Varien_Db_Select
+     */
+    public function getSelectCountSql()
+    {
+        $this->_renderFilters();
+        $select = clone $this->getSelect();
+        $select->reset(Zend_Db_Select::ORDER);
+        $select->reset(Zend_Db_Select::LIMIT_COUNT);
+        $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+
+        $countSelect = $this->getConnection()->select();
+        $countSelect->from(array('a' => $select), 'COUNT(popularity)');
+        return $countSelect;
+    }
 }

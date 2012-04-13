@@ -86,7 +86,7 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
 
     public function testAddImageToMediaGallery()
     {
-            $this->_model->addImageToMediaGallery(dirname(__DIR__) . '/_files/magento_image.jpg');
+            $this->_model->addImageToMediaGallery(dirname(dirname(__FILE__)) . '/_files/magento_image.jpg');
             $gallery = $this->_model->getData('media_gallery');
             $this->assertNotEmpty($gallery);
             $this->assertTrue(isset($gallery['images'][0]['file']));
@@ -101,11 +101,6 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
      */
     public function testDuplicate()
     {
-        $undo = function ($duplicate) {
-            Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
-            $duplicate->delete();
-        };
-
         $this->_model->load(1); // fixture
         $duplicate = $this->_model->duplicate();
         try {
@@ -113,11 +108,22 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
             $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
             $this->assertEquals(Mage_Catalog_Model_Product_Status::STATUS_DISABLED, $duplicate->getStatus());
-            $undo($duplicate);
+            $this->_undo($duplicate);
         } catch (Exception $e) {
-            $undo($duplicate);
+            $this->_undo($duplicate);
             throw $e;
         }
+    }
+
+    /**
+     * Delete model
+     *
+     * @param Mage_Core_Model_Abstract $duplicate
+     */
+    protected function _undo($duplicate)
+    {
+        Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $duplicate->delete();
     }
 
     /**
@@ -305,37 +311,44 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
     public function testReset()
     {
         $model = $this->_model;
-        $testCase = $this;
-        $assertEmpty = function() use ($model, $testCase) {
-            $testCase->assertEquals(array(), $model->getData());
-            $testCase->assertEquals(null, $model->getOrigData());
-            $testCase->assertEquals(array(), $model->getCustomOptions());
-            // impossible to test $_optionInstance
-            $testCase->assertEquals(array(), $model->getOptions());
-            $testCase->assertFalse($model->canAffectOptions());
-            // impossible to test $_errors
-        };
-        $assertEmpty();
+
+        $this->_assertEmpty($model);
 
         $this->_model->setData('key', 'value');
         $this->_model->reset();
-        $assertEmpty();
+        $this->_assertEmpty($model);
 
         $this->_model->setOrigData('key', 'value');
         $this->_model->reset();
-        $assertEmpty();
+        $this->_assertEmpty($model);
 
         $this->_model->addCustomOption('key', 'value');
         $this->_model->reset();
-        $assertEmpty();
+        $this->_assertEmpty($model);
 
         $this->_model->addOption(new Mage_Catalog_Model_Product_Option);
         $this->_model->reset();
-        $assertEmpty();
+        $this->_assertEmpty($model);
 
         $this->_model->canAffectOptions(true);
         $this->_model->reset();
-        $assertEmpty();
+        $this->_assertEmpty($model);
+    }
+
+    /**
+     * Check is model empty or not
+     *
+     * @param Mage_Core_Model_Abstract $model
+     */
+    protected function _assertEmpty($model)
+    {
+        $this->assertEquals(array(), $model->getData());
+        $this->assertEquals(null, $model->getOrigData());
+        $this->assertEquals(array(), $model->getCustomOptions());
+        // impossible to test $_optionInstance
+        $this->assertEquals(array(), $model->getOptions());
+        $this->assertFalse($model->canAffectOptions());
+        // impossible to test $_errors
     }
 
     /**

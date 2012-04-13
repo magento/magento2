@@ -72,6 +72,24 @@ class Mage_Api_Model_Config extends Varien_Simplexml_Config
     }
 
     /**
+     * Retrieve adapter aliases from config.
+     *
+     * @return array
+     */
+    public function getAdapterAliases()
+    {
+        $aliases = array();
+
+        foreach ($this->getNode('adapter_aliases')->children() as $alias => $adapter) {
+            $aliases[$alias] = array(
+                (string) $adapter->suggest_class, // model class name
+                (string) $adapter->suggest_method // model method name
+            );
+        }
+        return $aliases;
+    }
+
+    /**
      * Retrieve all adapters
      *
      * @return array

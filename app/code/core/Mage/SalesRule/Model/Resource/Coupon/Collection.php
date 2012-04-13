@@ -84,7 +84,7 @@ class Mage_SalesRule_Model_Resource_Coupon_Collection extends Mage_Core_Model_Re
      */
     public function addGeneratedCouponsFilter()
     {
-        $this->addFieldToFilter('is_primary', array('null' => 1));
+        $this->addFieldToFilter('is_primary', array('null' => 1))->addFieldToFilter('type', '1');
         return $this;
     }
 

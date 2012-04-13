@@ -61,7 +61,6 @@
     </global>
     <frontend>
         <secure_url>
-            <checkout>/checkout/cart</checkout>
             <checkout_onepage>/checkout/onepage</checkout_onepage>
             <checkout_multishipping>/checkout/multishipping</checkout_multishipping>
         </secure_url>

@@ -23,6 +23,12 @@
                     </restriction>
                 </complexContent>
             </complexType>
+            <complexType name="magentoInfoEntity">
+                <all>
+                    <element name="magento_version" type="xsd:string" />
+                    <element name="magento_edition" type="xsd:string" />
+                </all>
+            </complexType>
         </schema>
     </types>
     <message name="storeListRequest">
@@ -30,6 +36,12 @@
     </message>
     <message name="storeListResponse">
         <part name="stores" type="typens:storeEntityArray" />
+    </message>
+    <message name="magentoInfoRequest">
+        <part name="sessionId" type="xsd:string" />
+    </message>
+    <message name="magentoInfoResponse">
+        <part name="info" type="typens:magentoInfoEntity" />
     </message>
     <message name="storeInfoRequest">
         <part name="sessionId" type="xsd:string" />
@@ -49,6 +61,11 @@
             <input message="typens:storeInfoRequest" />
             <output message="typens:storeInfoResponse" />
         </operation>
+        <operation name="magentoInfo">
+            <documentation>Info about current Magento installation</documentation>
+            <input message="typens:magentoInfoRequest" />
+            <output message="typens:magentoInfoResponse" />
+        </operation>
     </portType>
     <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
@@ -62,6 +79,15 @@
             </output>
         </operation>
         <operation name="storeInfo">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="magentoInfo">
             <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
             <input>
                 <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />

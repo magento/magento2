@@ -49,6 +49,7 @@ class Legacy_ConfigTest extends PHPUnit_Framework_TestCase
             '/config/adminhtml/acl'                    => 'Move them to adminhtml.xml.',
             '/config/*/events/core_block_abstract_to_html_after' =>
                 'Event has been replaced with "core_layout_render_element"',
+            '/config/*/events/catalog_controller_product_delete' => '',
         );
         $xml = simplexml_load_file($file);
         foreach ($obsoleteNodes as $xpath => $suggestion) {

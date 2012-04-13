@@ -38,8 +38,8 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         Mage::getConfig()->setOptions(array(
-            'locale_dir' => __DIR__ . '/_files/locale',
-            'design_dir' => __DIR__ . '/_files/design',
+            'locale_dir' => dirname(__FILE__) . '/_files/locale',
+            'design_dir' => dirname(__FILE__) . '/_files/design',
         ));
         Mage::getDesign()->setArea('frontend')
             ->setDesignTheme('test/default/default');
@@ -87,7 +87,7 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
     public function testGetData()
     {
-        $expectedData = include(__DIR__ . '/Translate/_files/_translation_data.php');
+        $expectedData = include(dirname(__FILE__) . '/Translate/_files/_translation_data.php');
         $this->assertEquals($expectedData, $this->_model->getData());
     }
 

@@ -41,26 +41,16 @@ class Mage_Adminhtml_Utility_Controller extends Magento_Test_TestCase_Controller
     {
         parent::setUp();
 
-        Mage::getSingleton('Mage_Core_Model_Resource')->getConnection('write')
-            ->beginTransaction();
-
         Mage::getSingleton('Mage_Adminhtml_Model_Url')->turnOffSecretKey();
-        Mage_Admin_Utility_User::getInstance()
-            ->createAdmin();
 
         $this->_session = new Mage_Admin_Model_Session();
-        $this->_session->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        $this->_session->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
 
     protected function tearDown()
     {
         $this->_session->logout();
-        Mage_Admin_Utility_User::getInstance()
-            ->destroyAdmin();
         Mage::getSingleton('Mage_Adminhtml_Model_Url')->turnOnSecretKey();
-
-        Mage::getSingleton('Mage_Core_Model_Resource')->getConnection('write')
-            ->rollBack();
 
         parent::tearDown();
     }

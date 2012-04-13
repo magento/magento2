@@ -29,7 +29,7 @@
  * @see Mage_Payment_Block_Info
  */
 ?>
-<?php echo $this->getMethod()->getTitle() ?>{{pdf_row_separator}}
+<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>{{pdf_row_separator}}
 
 <?php if ($_specificInfo = $this->getSpecificInformation()):?>
 <?php foreach ($_specificInfo as $_label => $_value):?>

@@ -99,4 +99,23 @@ class Mage_GoogleShopping_Model_Observer
 
         return $items;
     }
+
+    /**
+     * Check if synchronize process is finished and generate notification message
+     *
+     * @param  Varien_Event_Observer $observer
+     * @return Mage_GoogleShopping_Model_Observer
+     */
+    public function checkSynchronizationOperations(Varien_Event_Observer $observer)
+    {
+        $flag = Mage::getSingleton('Mage_GoogleShopping_Model_Flag')->loadSelf();
+        if ($flag->isExpired()) {
+            Mage::getModel('Mage_AdminNotification_Model_Inbox')->addMajor(
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Google Shopping operation has expired.'),
+                Mage::helper('Mage_GoogleShopping_Helper_Data')->__('One or more google shopping synchronization operations failed because of timeout.')
+            );
+            $flag->unlock();
+        }
+        return $this;
+    }
 }

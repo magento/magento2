@@ -26,11 +26,9 @@
 
 
 $pageContent = <<<EOD
-<p>
-    <b>
-        Please replace this text with you Privacy Policy.
-        Please add any additional cookies your website uses below (e.g., Google Analytics)
-    </b>
+<p style="color: #ff0000; font-weight: bold; font-size: 13px">
+    Please replace this text with you Privacy Policy.
+    Please add any additional cookies your website uses below (e.g., Google Analytics)
 </p>
 <p>
     This privacy policy sets out how {{config path="general/store_information/name"}} uses and protects any information
@@ -148,7 +146,7 @@ $pageContent = <<<EOD
         </tr>
         <tr>
             <th>CATEGORY_INFO</th>
-            <td></td>
+            <td>Stores the category info on the page, that allows to display pages more quickly.</td>
         </tr>
         <tr>
             <th>COMPARE</th>
@@ -171,8 +169,12 @@ $pageContent = <<<EOD
             <td>An encrypted version of the customer group you belong to.</td>
         </tr>
         <tr>
+            <th>CUSTOMER_SEGMENT_IDS</th>
+            <td>Stores the Customer Segment ID</td>
+        </tr>
+        <tr>
             <th>EXTERNAL_NO_CACHE</th>
-            <td></td>
+            <td>A flag, which indicates whether caching is disabled or not.</td>
         </tr>
         <tr>
             <th>FRONTEND</th>
@@ -180,7 +182,7 @@ $pageContent = <<<EOD
         </tr>
         <tr>
             <th>GUEST-VIEW</th>
-            <td></td>
+            <td>Allows guests to edit their orders.</td>
         </tr>
         <tr>
             <th>LAST_CATEGORY</th>
@@ -192,11 +194,11 @@ $pageContent = <<<EOD
         </tr>
         <tr>
             <th>NEWMESSAGE</th>
-            <td></td>
+            <td>Indicates whether a new message has been received.</td>
         </tr>
         <tr>
             <th>NO_CACHE</th>
-            <td></td>
+            <td>Indicates whether it is allowed to use cache.</td>
         </tr>
         <tr>
             <th>PERSISTENT_SHOPPING_CART</th>

@@ -225,10 +225,12 @@ tinyMceWysiwygSetup.prototype =
             e.show();
         });
         if (Prototype.Browser.IE) {
-        	// workaround for ie textarea redraw bug
-        	window.setTimeout(function(){
-        		$(this.id).value = $(this.id).value;
-        	}.bind(this), 0);
+            // workaround for IE textarea redraw bug
+            window.setTimeout(function() {
+                if ($(this.id)) {
+                    $(this.id).value = $(this.id).value;
+                }
+            }.bind(this), 0);
         }
     },
 

@@ -115,12 +115,15 @@ class Utility_Files
 
             $files = array();
             if ($appCode) {
-                $files = array_merge($files, glob($this->_path . '/app/*.php', GLOB_NOSORT | GLOB_BRACE),
+                $files = array_merge(
+                    glob($this->_path . '/app/*.php', GLOB_NOSORT),
                     self::_getFiles(array("{$this->_path}/app/code/{$pool}/{$namespace}/{$module}"), '*.php')
                 );
             }
             if ($otherCode) {
-                $files = array_merge($files, glob($this->_path . '/pub/*.php', GLOB_NOSORT | GLOB_BRACE),
+                $files = array_merge($files,
+                    glob($this->_path . '/*.php', GLOB_NOSORT),
+                    glob($this->_path . '/pub/*.php', GLOB_NOSORT),
                     self::_getFiles(array("{$this->_path}/downloader"), '*.php'),
                     self::_getFiles(array("{$this->_path}/lib/{Mage,Magento,Varien}"), '*.php')
                 );
@@ -160,22 +163,24 @@ class Utility_Files
      *
      * @param string $fileNamePattern
      * @param array $excludedFileNames
+     * @param bool $asDataSet
      * @return array
      */
     public function getConfigFiles(
-        $fileNamePattern = '*.xml', $excludedFileNames = array('wsdl.xml', 'wsdl2.xml', 'wsi.xml')
+        $fileNamePattern = '*.xml', $excludedFileNames = array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'), $asDataSet = true
     ) {
         $cacheKey = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
-        if (isset(self::$_cache[$cacheKey])) {
-            return self::$_cache[$cacheKey];
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = glob($this->_path . "/app/code/*/*/*/etc/$fileNamePattern", GLOB_NOSORT | GLOB_BRACE);
+            $files = array_filter($files, function ($file) use ($excludedFileNames) {
+                return !in_array(basename($file), $excludedFileNames);
+            });
+            self::$_cache[$cacheKey] = $files;
         }
-        $files = glob($this->_path . "/app/code/*/*/*/etc/$fileNamePattern", GLOB_NOSORT | GLOB_BRACE);
-        $files = array_filter($files, function ($file) use ($excludedFileNames) {
-            return !in_array(basename($file), $excludedFileNames);
-        });
-        $result = self::composeDataSets($files);
-        self::$_cache[$cacheKey] = $result;
-        return $result;
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
     }
 
     /**
@@ -318,11 +323,18 @@ class Utility_Files
      */
     public function codePoolClassFileExists($class, &$path = '')
     {
-        $path = implode('/', explode('_', $class)) . '.php';
-        return file_exists($this->_path . "/app/code/core/{$path}")
-            || file_exists($this->_path . "/app/code/community/{$path}")
-            || file_exists($this->_path . "/app/code/local/{$path}")
-            || file_exists($this->_path . "/lib/{$path}")
-        ;
+        $path = implode(DIRECTORY_SEPARATOR, explode('_', $class)) . '.php';
+        $directories = array('/app/code/core/', '/app/code/community/', '/app/code/local/', '/lib/');
+        foreach ($directories as $dir) {
+            $fullPath = str_replace('/', DIRECTORY_SEPARATOR, $this->_path . $dir . $path);
+            /**
+             * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
+             * of file names
+             */
+            if (realpath($fullPath) == $fullPath) {
+                return true;
+            }
+        }
+        return false;
     }
 }

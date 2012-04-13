@@ -186,7 +186,7 @@ class Mage_Adminhtml_Permissions_RoleController extends Mage_Adminhtml_Controlle
         }
 
         try {
-            $roleName = Mage::helper('Mage_Adminhtml_Helper_Data')->stripTags($this->getRequest()->getParam('rolename', false));
+            $roleName = $this->getRequest()->getParam('rolename', false);
 
             $role->setName($roleName)
                  ->setPid($this->getRequest()->getParam('parent_id', false))

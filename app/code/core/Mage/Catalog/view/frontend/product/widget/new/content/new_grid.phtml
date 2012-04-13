@@ -30,6 +30,7 @@
         <h2><?php echo $this->__('New Products') ?></h2>
     </div>
     <div class="widget-products">
+    <?php echo $this->getPagerHtml() ?>
     <?php $_columnCount = $this->getColumnCount(); ?>
         <?php $i=0; foreach ($_products->getItems() as $_product): ?>
         <?php if ($i++%$_columnCount==0): ?>

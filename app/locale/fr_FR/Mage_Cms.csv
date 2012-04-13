@@ -112,6 +112,7 @@
 "The page URL key contains capital letters or disallowed symbols.","L'URL de la page contient des lettres capitales ou des symboles non autorisés."
 "The page has been deleted.","La page a été supprimée."
 "The page has been saved.","La page a été sauvegardée."
+"The static block content cannot contain  directive with its self.","Le bloc statique ne peut pas comporter une instruction avec lui-même. "
 "This block no longer exists.","Ce bloc n'existe plus."
 "This page no longer exists.","Cette page n'existe plus."
 "Title","Titre"

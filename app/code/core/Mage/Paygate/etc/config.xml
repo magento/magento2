@@ -52,6 +52,9 @@
         </translate>
     </adminhtml>
     <frontend>
+        <secure_url>
+            <authorizenet_paygate>/paygate/authorizenet_payment</authorizenet_paygate>
+        </secure_url>
         <translate>
             <modules>
                 <Mage_Paygate>

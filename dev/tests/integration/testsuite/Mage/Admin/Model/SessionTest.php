@@ -27,7 +27,6 @@
 
 /**
  * @group module:Mage_Admin
- * @magentoDataFixture Mage/Admin/_files/user.php
  */
 class Mage_Admin_Model_SessionTest extends PHPUnit_Framework_TestCase
 {
@@ -52,14 +51,14 @@ class Mage_Admin_Model_SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testLoginSuccessful()
     {
-        $result = $this->_model->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        $result = $this->_model->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
         $this->assertInstanceOf('Mage_Admin_Model_User', $result);
         $this->assertGreaterThan(time() - 10, $this->_model->getUpdatedAt());
     }
 
     public function testLogout()
     {
-        $this->_model->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        $this->_model->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
         $this->assertNotEmpty($this->_model->getData());
         $this->_model->getCookie()->set($this->_model->getSessionName(), 'session_id');
         $this->_model->logout();
@@ -73,7 +72,7 @@ class Mage_Admin_Model_SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testIsLoggedIn()
     {
-        $this->_model->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        $this->_model->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
         $this->assertTrue($this->_model->isLoggedIn());
 
         $this->_model->setUpdatedAt(time() - 101);
@@ -86,7 +85,7 @@ class Mage_Admin_Model_SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testIsLoggedInWithIgnoredLifetime()
     {
-        $this->_model->login(Mage_Admin_Utility_User::CRED_USERNAME, Mage_Admin_Utility_User::CRED_PASSWORD);
+        $this->_model->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
         $this->assertTrue($this->_model->isLoggedIn());
 
         $this->_model->setUpdatedAt(time() - 101);

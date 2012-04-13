@@ -26,6 +26,7 @@
  */
 return array(
     'Mage_Admin_Model_Acl_Role',
+    'Mage_Admin_Model_Observer',
     'Mage_Admin_Model_Resource_Acl_Role',
     'Mage_Admin_Model_Resource_Acl_Role_Collection',
     'Mage_Adminhtml_Block_Api_Edituser',
@@ -74,6 +75,9 @@ return array(
     'Mage_Ogone_Model_Resource_Api_Debug',
     'Mage_Page_Block_Html_Toplinks',
     'Mage_Page_Block_Html_Wrapper',
+    'Mage_Payment_Block_Info_Container' => array(
+        'suggestion' => 'Mage_Payment_Block_Info_ContainerAbstract'
+    ),
     'Mage_Poll_Block_Poll',
     'Mage_ProductAlert_Block_Price',
     'Mage_ProductAlert_Block_Stock',

@@ -31,6 +31,10 @@
 ?>
 <?php $_element = $this->getElement() ?>
 <?php $this->checkFieldDisable() ?>
+<?php
+    $elementToggleCode = $_element->getToggleCode() ? $_element->getToggleCode()
+        : 'toggleValueElements(this, this.parentNode.parentNode)';
+?>
 
 <?php if ($_element->getType()=='hidden'): ?>
 <tr>
@@ -48,7 +52,7 @@
     <td class="scope-label"><span class="nobr"><?php echo $this->getScopeLabel() ?></span></td>
     <?php if ($this->canDisplayUseDefault()): ?>
     <td class="value use-default">
-        <input <?php if($_element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="toggleValueElements(this, this.parentNode.parentNode)" value="<?php echo $this->getAttributeCode() ?>"/>
+        <input <?php if($_element->getReadonly()):?> disabled="disabled"<?php endif; ?> type="checkbox" name="use_default[]" id="<?php echo $_element->getHtmlId() ?>_default"<?php if ($this->usedDefault()): ?> checked="checked"<?php endif; ?> onclick="<?php echo $elementToggleCode; ?>" value="<?php echo $this->getAttributeCode() ?>"/>
         <label for="<?php echo $_element->getHtmlId() ?>_default" class="normal"><?php echo $this->__('Use Default Value') ?></label>
     </td>
     <?php endif; ?>

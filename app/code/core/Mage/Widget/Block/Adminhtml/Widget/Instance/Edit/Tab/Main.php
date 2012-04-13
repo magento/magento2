@@ -147,14 +147,15 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset->addField('store_ids', 'multiselect', array(
+            $field = $fieldset->addField('store_ids', 'multiselect', array(
                 'name'      => 'store_ids[]',
                 'label'     => Mage::helper('Mage_Widget_Helper_Data')->__('Assign to Store Views'),
                 'title'     => Mage::helper('Mage_Widget_Helper_Data')->__('Assign to Store Views'),
                 'required'  => true,
                 'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(false, true),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
         }
 
         $fieldset->addField('sort_order', 'text', array(

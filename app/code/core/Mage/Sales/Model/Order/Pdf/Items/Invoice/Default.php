@@ -68,18 +68,20 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
         // draw item Prices
         $i = 0;
         $prices = $this->getItemPricesForDisplay();
+        $feedPrice = 395;
+        $feedSubtotal = $feedPrice + 170;
         foreach ($prices as $priceData){
             if (isset($priceData['label'])) {
                 // draw Price label
                 $lines[$i][] = array(
                     'text'  => $priceData['label'],
-                    'feed'  => 360,
+                    'feed'  => $feedPrice,
                     'align' => 'right'
                 );
                 // draw Subtotal label
                 $lines[$i][] = array(
                     'text'  => $priceData['label'],
-                    'feed'  => 530,
+                    'feed'  => $feedSubtotal,
                     'align' => 'right'
                 );
                 $i++;
@@ -87,14 +89,14 @@ class Mage_Sales_Model_Order_Pdf_Items_Invoice_Default extends Mage_Sales_Model_
             // draw Price
             $lines[$i][] = array(
                 'text'  => $priceData['price'],
-                'feed'  => 360,
+                'feed'  => $feedPrice,
                 'font'  => 'bold',
                 'align' => 'right'
             );
             // draw Subtotal
             $lines[$i][] = array(
                 'text'  => $priceData['subtotal'],
-                'feed'  => 530,
+                'feed'  => $feedSubtotal,
                 'font'  => 'bold',
                 'align' => 'right'
             );

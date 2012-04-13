@@ -105,6 +105,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Austria</name>
+        <domestic>1</domestic>
     </AT>
     <AU>
         <currency>AUD</currency>
@@ -153,6 +154,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Belgium</name>
+        <domestic>1</domestic>
     </BE>
     <BF>
         <currency>XOF</currency>
@@ -166,6 +168,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Bulgaria</name>
+        <domestic>1</domestic>
     </BG>
     <BH>
         <currency>BHD</currency>
@@ -342,6 +345,7 @@
         <measure_unit>CM</measure_unit>
         <region>AP</region>
         <name>Cyprus</name>
+        <domestic>1</domestic>
     </CY>
     <CZ>
         <currency>CZK</currency>
@@ -349,6 +353,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Czech Republic, The</name>
+        <domestic>1</domestic>
     </CZ>
     <DE>
         <currency>EUR</currency>
@@ -356,6 +361,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Germany</name>
+        <domestic>1</domestic>
     </DE>
     <DJ>
         <currency>DJF</currency>
@@ -369,6 +375,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Denmark</name>
+        <domestic>1</domestic>
     </DK>
     <DM>
         <currency>XCD</currency>
@@ -404,6 +411,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Estonia</name>
+        <domestic>1</domestic>
     </EE>
     <EG>
         <currency>EGP</currency>
@@ -424,6 +432,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Spain</name>
+        <domestic>1</domestic>
     </ES>
     <ET>
         <currency>ETB</currency>
@@ -437,6 +446,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Finland</name>
+        <domestic>1</domestic>
     </FI>
     <FJ>
         <currency>FJD</currency>
@@ -469,6 +479,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>France</name>
+        <domestic>1</domestic>
     </FR>
     <GA>
         <currency>XAF</currency>
@@ -482,6 +493,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>United Kingdom</name>
+        <domestic>1</domestic>
     </GB>
     <GD>
         <currency>XCD</currency>
@@ -559,6 +571,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Greece</name>
+        <domestic>1</domestic>
     </GR>
     <GT>
         <currency>GTQ</currency>
@@ -621,6 +634,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Hungary</name>
+        <domestic>1</domestic>
     </HU>
     <IC>
         <currency>EUR</currency>
@@ -641,6 +655,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Ireland, Republic Of</name>
+        <domestic>1</domestic>
     </IE>
     <IL>
         <currency>ILS</currency>
@@ -682,6 +697,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Italy</name>
+        <domestic>1</domestic>
     </IT>
     <JE>
         <currency>GBP</currency>
@@ -840,6 +856,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Lithuania</name>
+        <domestic>1</domestic>
     </LT>
     <LU>
         <currency>EUR</currency>
@@ -847,6 +864,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Luxembourg</name>
+        <domestic>1</domestic>
     </LU>
     <LV>
         <currency>LVL</currency>
@@ -854,6 +872,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Latvia</name>
+        <domestic>1</domestic>
     </LV>
     <LY>
         <currency>LYD</currency>
@@ -962,6 +981,7 @@
         <measure_unit>CM</measure_unit>
         <region>AP</region>
         <name>Malta</name>
+        <domestic>1</domestic>
     </MT>
     <MU>
         <currency>MUR</currency>
@@ -1041,6 +1061,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Netherlands, The</name>
+        <domestic>1</domestic>
     </NL>
     <NO>
         <currency>NOK</currency>
@@ -1128,6 +1149,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Poland</name>
+        <domestic>1</domestic>
     </PL>
     <PR>
         <currency>USD</currency>
@@ -1142,6 +1164,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Portugal</name>
+        <domestic>1</domestic>
     </PT>
     <PW>
         <currency>USD</currency>
@@ -1176,6 +1199,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Romania</name>
+        <domestic>1</domestic>
     </RO>
     <RS>
         <currency>RSD</currency>
@@ -1229,6 +1253,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Sweden</name>
+        <domestic>1</domestic>
     </SE>
     <SG>
         <currency>SGD</currency>
@@ -1243,6 +1268,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Slovenia</name>
+        <domestic>1</domestic>
     </SI>
     <SK>
         <currency>EUR</currency>
@@ -1250,6 +1276,7 @@
         <measure_unit>CM</measure_unit>
         <region>EA</region>
         <name>Slovakia</name>
+        <domestic>1</domestic>
     </SK>
     <SL>
         <currency>SLL</currency>

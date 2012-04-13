@@ -595,7 +595,7 @@ final class Maged_Controller
         if (is_null($model)) {
             $class = 'Maged_Model';
         } else {
-            $class = 'Maged_Model_'.str_replace(' ', '_', ucwords(str_replace('_', ' ', $model)));
+            $class = 'Maged_Model_' . str_replace(' ', '_', ucwords(str_replace('_', ' ', $model)));
             if (!class_exists($class, false)) {
                 include_once str_replace('_', DIRECTORY_SEPARATOR, $class).'.php';
             }

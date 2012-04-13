@@ -61,6 +61,7 @@
 "Entity is not initialized","实体未初始化"
 "Entity object is undefined","实体对象未定义"
 "Failed to load node %s from config","从配置中加载节点 %s 出错"
+"For internal use. Must be unique with no spaces. Maximum length of attribute code must be less then %s symbols","仅限内部使用。必须具备唯一性且不包含空格。属性代码的长度最大值不能超过 %s 个符号。"
 "Form Element with the same attribute","使用相同属性的表单元素"
 "Form Fieldset with the same code","使用相同代码的表单字段集"
 "Form Type with the same code","使用相同代码的表单类型"

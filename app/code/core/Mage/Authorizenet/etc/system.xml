@@ -146,6 +146,7 @@
                         <merchant_email translate="label">
                             <label>Merchant's Email</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-email</validate>
                             <sort_order>130</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

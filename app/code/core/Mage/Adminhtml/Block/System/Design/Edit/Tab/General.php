@@ -33,14 +33,15 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
         $fieldset = $form->addFieldset('general', array('legend'=>Mage::helper('Mage_Core_Helper_Data')->__('General Settings')));
 
         if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset->addField('store_id', 'select', array(
+            $field = $fieldset->addField('store_id', 'select', array(
                 'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Store'),
                 'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Store'),
                 'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
                 'name'     => 'store_id',
                 'required' => true,
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
         } else {
             $fieldset->addField('store_id', 'hidden', array(
                 'name'      => 'store_id',

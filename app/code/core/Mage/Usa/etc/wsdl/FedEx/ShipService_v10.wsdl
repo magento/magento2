@@ -1,8 +1,8 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/ship/v9"
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/ship/v10"
              xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/"
-             targetNamespace="http://fedex.com/ws/ship/v9" name="ShipServiceDefinitions">
+             targetNamespace="http://fedex.com/ws/ship/v10" name="ShipServiceDefinitions">
   <types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/ship/v9">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/ship/v10">
       <xs:element name="CancelPendingShipmentReply" type="ns:CancelPendingShipmentReply"/>
       <xs:element name="CancelPendingShipmentRequest" type="ns:CancelPendingShipmentRequest"/>
       <xs:element name="CreatePendingShipmentReply" type="ns:CreatePendingShipmentReply"/>

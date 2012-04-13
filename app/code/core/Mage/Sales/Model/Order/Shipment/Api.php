@@ -131,8 +131,9 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
      * @param boolean $includeComment
      * @return string
      */
-    public function create($orderIncrementId, $itemsQty = array(), $comment = null, $email = false, $includeComment = false)
-    {
+    public function create($orderIncrementId, $itemsQty = array(), $comment = null, $email = false,
+        $includeComment = false
+    ) {
         $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($orderIncrementId);
 
         /**
@@ -239,6 +240,39 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
             $track->delete();
         } catch (Mage_Core_Exception $e) {
             $this->_fault('track_not_deleted', $e->getMessage());
+        }
+
+        return true;
+    }
+
+    /**
+     * Send email with shipment data to customer
+     *
+     * @param string $shipmentIncrementId
+     * @param string $comment
+     * @return bool
+     */
+    public function sendInfo($shipmentIncrementId, $comment = '')
+    {
+        /* @var $shipment Mage_Sales_Model_Order_Shipment */
+        $shipment = Mage::getModel('Mage_Sales_Model_Order_Shipment')->loadByIncrementId($shipmentIncrementId);
+
+        if (!$shipment->getId()) {
+            $this->_fault('not_exists');
+        }
+
+        try {
+            $shipment->sendEmail(true, $comment)
+                ->setEmailSent(true)
+                ->save();
+            $historyItem = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Status_History_Collection')
+                ->getUnnotifiedForInstance($shipment, Mage_Sales_Model_Order_Shipment::HISTORY_ENTITY_NAME);
+            if ($historyItem) {
+                $historyItem->setIsCustomerNotified(1);
+                $historyItem->save();
+            }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('data_invalid', $e->getMessage());
         }
 
         return true;

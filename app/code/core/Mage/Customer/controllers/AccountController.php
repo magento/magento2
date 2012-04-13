@@ -107,8 +107,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         $this->loadLayout();
         $this->_initLayoutMessages('Mage_Customer_Model_Session');
         $this->_initLayoutMessages('Mage_Catalog_Model_Session');
-
-        $this->getLayout()->addBlock('Mage_Customer_Block_Account_Dashboard', '', 'content');
         $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
         $this->renderLayout();
     }
@@ -181,7 +179,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         $session = $this->_getSession();
 
         if (!$session->getBeforeAuthUrl() || $session->getBeforeAuthUrl() == Mage::getBaseUrl()) {
-
             // Set default URL to redirect customer to
             $session->setBeforeAuthUrl(Mage::helper('Mage_Customer_Helper_Data')->getAccountUrl());
             // Redirect customer to the last page visited after logging in
@@ -221,7 +218,8 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
     public function logoutAction()
     {
         $this->_getSession()->logout()
-            ->setBeforeAuthUrl(Mage::getUrl());
+            ->renewSession()
+            ->setBeforeAuthUrl($this->_getRefererUrl());
 
         $this->_redirect('*/*/logoutSuccess');
     }

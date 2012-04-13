@@ -108,6 +108,17 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
     });
 }
 
+Ajax.Responders.register({
+    onComplete: function() {
+        if ($('promo_catalog_edit_tabs_coupons_section_content')
+            && $('promo_catalog_edit_tabs_coupons_section_content').visible()
+            && Ajax.activeRequestCount == 0
+        ) {
+            handleCouponsTabContentActivity();
+        }
+    }
+});
+
 document.observe("dom:loaded", handleCouponsTabContentActivity);
 document.observe("dom:loaded", handleCouponTypeChange);
 //]]>

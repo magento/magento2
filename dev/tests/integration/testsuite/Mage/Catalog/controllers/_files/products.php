@@ -51,7 +51,7 @@ $productOne->setId(1)
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
 
-    ->addImageToMediaGallery(__DIR__ . '/product_image.png', null, false, false)
+    ->addImageToMediaGallery(dirname(__FILE__) . '/product_image.png', null, false, false)
 
     ->save();
 

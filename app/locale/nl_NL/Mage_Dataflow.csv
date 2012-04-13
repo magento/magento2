@@ -1,4 +1,5 @@
 "<a href=""%s"" target=""_blank"">Link</a>","<a href=""%s"" target=""_blank"">Link</a>"
+"Actions XML is not valid.","XML acties is niet geldig."
 "An error occurred while opening file: ""%s"".","Een fout vond plaats bij het openen van bestand: ""%s""."
 "Could not load file: ""%s"".","Kan het bestand niet laden: ""%s""."
 "Could not save file: %s.","Kon bestand: %s niet opslaan."
@@ -18,6 +19,7 @@
 "Method ""%s"" was not defined in adapter %s.","Methode ""%s"" was niet gedefinieerd in adapter %s."
 "Please declare ""adapter"" and ""method"" nodes first.","Geeft eerst de ""adapter"" en ""methode"" nodes aan."
 "Processed records: %s","Verwerkte records: %s"
+"Profile with the same name already exists.","Profiel met dezelfde naam bestaat al."
 "Saved successfully: ""%s"" [%d byte(s)].","Succesvol opgeslagen: ""%s"" [%d byte(s)]."
 "Sheet 1","Blad 1"
 "Skip undefined row.","Ongedefinieerde rij overslaan."

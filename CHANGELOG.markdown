@@ -1,3 +1,19 @@
+Update as of 4/13/2012
+======================
+
+* Implemented a tool for migrating factory table names from 1.x to 2.x. The tool replaces table names by list of names associations
+* Changed Unit tests suite running from usage AllTests.php in each directory to configuration in phpunit.xml.dist. Now all tests in {{testsuite}} directory are launched, there is no necessity to add new tests to the config
+* Implemented in Visual Desig Editor:
+  * Containers highlighting
+  * Dropping of elements
+* Fixed some issues:
+  * Fixed sorting of elements in Layout in if element is added before its sibling
+  * Fixed broken Customer Registration page on Front-End and Back-End
+  * Fixed broken Order Create page on Back-End
+  * Replaced usages of deprecated Mage_Customer_Model_Address_Abstract::getFormated() to Mage_Customer_Model_Address_Abstract::format()
+  * Fixed elements' duplication on pages (downloadable, bundle product view)
+* Fetched updates from Magento 1 up to April 6 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details
+
 Update as of 3/26/2012
 ======================
 

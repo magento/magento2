@@ -196,14 +196,12 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
         $skipParams = array('handle', 'area');
 
         $params = $this->_getIncludeParameters($construction[2]);
-        $layout = Mage::getModel('Mage_Core_Model_Layout');
-        /* @var $layout Mage_Core_Model_Layout */
+        $layoutParams = array();
         if (isset($params['area'])) {
-            $layout->setArea($params['area']);
+            $layoutParams['area'] = $params['area'];
         }
-        else {
-            $layout->setArea(Mage::app()->getLayout()->getArea());
-        }
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout', $layoutParams);
 
         $layout->getUpdate()->addHandle($params['handle']);
         $layout->getUpdate()->load();
@@ -472,7 +470,9 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
             $variable = Mage::getModel('Mage_Core_Model_Variable')
                 ->setStoreId($this->getStoreId())
                 ->loadByCode($params['code']);
-            $mode = $this->getPlainTemplateMode()?Mage_Core_Model_Variable::TYPE_TEXT:Mage_Core_Model_Variable::TYPE_HTML;
+            $mode = $this->getPlainTemplateMode()
+                ? Mage_Core_Model_Variable::TYPE_TEXT
+                : Mage_Core_Model_Variable::TYPE_HTML;
             if ($value = $variable->getValue($mode)) {
                 $customVarValue = $value;
             }

@@ -62,7 +62,9 @@ class Mage_Bundle_Block_Checkout_Cart_Item_Renderer extends Mage_Checkout_Block_
      */
     protected function _getSelectionFinalPrice($selectionProduct)
     {
-        return $this->_configurationHelper->getSelectionFinalPrice($this->getItem(), $selectionProduct);
+        $helper = Mage::helper('Mage_Bundle_Helper_Catalog_Product_Configuration');
+        $result = $helper->getSelectionFinalPrice($this->getItem(), $selectionProduct);
+        return $result;
     }
 
     /**
@@ -88,23 +90,22 @@ class Mage_Bundle_Block_Checkout_Cart_Item_Renderer extends Mage_Checkout_Block_
     }
 
     /**
-     * Return cart backorder messages
+     * Return cart item error messages
      *
      * @return array
      */
     public function getMessages()
     {
-        $messages = $this->getData('messages');
-        if (is_null($messages)) {
-            $messages = array();
-        }
-        $options = $this->getItem()->getQtyOptions();
+        $messages = array();
+        $quoteItem = $this->getItem();
 
-        foreach ($options as $option) {
-            if ($option->getMessage()) {
+        // Add basic messages occuring during this page load
+        $baseMessages = $quoteItem->getMessage(false);
+        if ($baseMessages) {
+            foreach ($baseMessages as $message) {
                 $messages[] = array(
-                    'text' => $option->getMessage(),
-                    'type' => ($this->getItem()->getHasError()) ? 'error' : 'notice'
+                    'text' => $message,
+                    'type' => $quoteItem->getHasError() ? 'error' : 'notice'
                 );
             }
         }

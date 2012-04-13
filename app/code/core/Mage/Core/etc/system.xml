@@ -120,8 +120,8 @@
                         <email translate="label">
                             <label>Sender Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -150,8 +150,8 @@
                         <email translate="label">
                             <label>Sender Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -180,8 +180,8 @@
                         <email translate="label">
                             <label>Sender Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -210,8 +210,8 @@
                         <email translate="label">
                             <label>Sender Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -240,8 +240,8 @@
                         <email translate="label">
                             <label>Sender Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -690,7 +690,7 @@
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                         </merchant_country>
                         <merchant_vat_number translate="label">
@@ -699,7 +699,7 @@
                             <sort_order>27</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                         </merchant_vat_number>
                         <address translate="label">
@@ -798,8 +798,8 @@
                         <return_path_email translate="label">
                             <label>Return-Path Email</label>
                             <frontend_type>text</frontend_type>
-                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <validate>validate-email</validate>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Email_Address</backend_model>
                             <sort_order>80</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -1298,6 +1298,7 @@
                             <label>Cookie Restriction Mode</label>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Cookie</backend_model>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

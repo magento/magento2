@@ -12,6 +12,7 @@
 "AuthSub","AuthSub"
 "Available Products","Productos disponibles"
 "Base Currency should be set to %s for %s in system configuration. Otherwise item prices won't be correct in Google Base.","La divisa base debe definirse como %s para %s en la configuración del sistema. De lo contrario, los precios del artículo no serán correctos en Google Base."
+"Cannot update Google Base Item for Store '%s'","No se puede actualizar el artículo Google Base para la tienda '%s'"
 "Captcha confirmation error: %s","Error de confirmación de Captcha: %s"
 "Captcha has been confirmed.","Se confirmó Captcha."
 "Catalog","Catálogo"

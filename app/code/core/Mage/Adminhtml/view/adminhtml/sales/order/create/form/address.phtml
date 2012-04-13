@@ -64,7 +64,7 @@ endif; ?>
         </select>
         <br/>
         <?php if($this->getIsShipping()): ?>
-            <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing" onchange="order.setShippingAsBilling(this.checked)" <?php if($this->getIsAsBilling()): ?>checked<?php endif; ?>/>
+            <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing" onclick="order.setShippingAsBilling(this.checked)" <?php if($this->getIsAsBilling()): ?>checked<?php endif; ?>/>
             <label for="order-shipping_same_as_billing" class="no-float"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Same As Billing Address') ?></label>
         <?php else: ?>
             &nbsp;

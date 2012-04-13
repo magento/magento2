@@ -48,24 +48,18 @@ class Mage_Catalog_Model_Product_Attribute_Backend_MediaTest extends PHPUnit_Fra
      */
     protected static $_mediaDir;
 
-    /**
-     * @var string
-     */
-    protected static $_fixtureDir;
-
-
     public static function setUpBeforeClass()
     {
         self::$_mediaTmpDir = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')->getBaseTmpMediaPath();
-        self::$_fixtureDir        = realpath(__DIR__.'/../../../../_files');
+        $fixtureDir        = realpath(dirname(__FILE__).'/../../../../_files');
         self::$_mediaDir           = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')->getBaseMediaPath();
 
         mkdir(self::$_mediaTmpDir, 0777, true);
         mkdir(self::$_mediaDir, 0777, true);
 
-        copy(self::$_fixtureDir . "/magento_image.jpg", self::$_mediaTmpDir . "/magento_image.jpg");
-        copy(self::$_fixtureDir . "/magento_image.jpg", self::$_mediaDir . "/magento_image.jpg");
-        copy(self::$_fixtureDir . "/magento_small_image.jpg", self::$_mediaTmpDir . "/magento_small_image.jpg");
+        copy($fixtureDir . "/magento_image.jpg", self::$_mediaTmpDir . "/magento_image.jpg");
+        copy($fixtureDir . "/magento_image.jpg", self::$_mediaDir . "/magento_image.jpg");
+        copy($fixtureDir . "/magento_small_image.jpg", self::$_mediaTmpDir . "/magento_small_image.jpg");
     }
 
     public static function tearDownAfterClass()

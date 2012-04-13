@@ -718,7 +718,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     }
 
     /**
-     * Retrieve Name data wraper
+     * Retrieve Name data wrapper
      *
      * @return string
      */

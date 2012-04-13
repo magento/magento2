@@ -31,7 +31,12 @@
  */
 class Mage_Checkout_Helper_Cart extends Mage_Core_Helper_Url
 {
-    const XML_PATH_REDIRECT_TO_CART         = 'checkout/cart/redirect_to_cart';
+    const XML_PATH_REDIRECT_TO_CART = 'checkout/cart/redirect_to_cart';
+
+    /**
+     * Maximal coupon code length according to database table definitions (longer codes are truncated)
+     */
+    const COUPON_CODE_MAX_LENGTH = 255;
 
     /**
      * Retrieve cart instance

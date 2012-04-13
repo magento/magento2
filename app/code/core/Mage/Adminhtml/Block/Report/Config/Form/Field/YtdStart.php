@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Report_Config_Form_Field_YtdStart extends Mage_Adminh
         for ($i = 1; $i <= 12; $i++) {
             $_months[$i] = Mage::app()->getLocale()
                 ->date(mktime(null,null,null,$i))
-                ->get(Zend_date::MONTH_NAME);
+                ->get(Zend_Date::MONTH_NAME);
         }
 
         $_days = array();

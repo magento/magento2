@@ -172,6 +172,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
      */
     public function testDispatch()
     {
+        if (headers_sent()) {
+            $this->markTestSkipped('Can\' dispatch - headers already sent');
+        }
         $request = new Magento_Test_Request();
         $request->setDispatched();
 

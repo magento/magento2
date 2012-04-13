@@ -67,6 +67,7 @@
                         <recipient_email translate="label">
                             <label>Send Emails To</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-email</validate>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

@@ -39,10 +39,6 @@ class Mage_Adminhtml_Block_Review_Edit_Form extends Mage_Adminhtml_Block_Widget_
         $review = Mage::registry('review_data');
         $product = Mage::getModel('Mage_Catalog_Model_Product')->load($review->getEntityPkValue());
         $customer = Mage::getModel('Mage_Customer_Model_Customer')->load($review->getCustomerId());
-        $statuses = Mage::getModel('Mage_Review_Model_Review')
-            ->getStatusCollection()
-            ->load()
-            ->toOptionArray();
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -89,20 +85,21 @@ class Mage_Adminhtml_Block_Review_Edit_Form extends Mage_Adminhtml_Block_Widget_
             'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Status'),
             'required'  => true,
             'name'      => 'status_id',
-            'values'    => Mage::helper('Mage_Review_Helper_Data')->translateArray($statuses),
+            'values'    => Mage::helper('Mage_Review_Helper_Data')->getReviewStatusesOptionArray(),
         ));
 
         /**
          * Check is single store mode
          */
         if (!Mage::app()->isSingleStoreMode()) {
-            $fieldset->addField('select_stores', 'multiselect', array(
+            $field = $fieldset->addField('select_stores', 'multiselect', array(
                 'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Visible In'),
                 'required'  => true,
                 'name'      => 'stores[]',
                 'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
-                'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
             ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
             $review->setSelectStores($review->getStores());
         }
         else {

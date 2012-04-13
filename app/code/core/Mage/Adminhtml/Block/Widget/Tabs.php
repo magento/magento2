@@ -93,7 +93,7 @@ class Mage_Adminhtml_Block_Widget_Tabs extends Mage_Adminhtml_Block_Widget
      * Add new tab
      *
      * @param   string $tabId
-     * @param   array|Varien_Object $tab
+     * @param   array|Varien_Object|string $tab
      * @return  Mage_Adminhtml_Block_Widget_Tabs
      */
     public function addTab($tabId, $tab)

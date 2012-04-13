@@ -53,21 +53,27 @@ class Mage_GoogleCheckout_Block_Adminhtml_Shipping_Merchant
         return $html;
     }
 
-    protected function _getRowTemplateHtml($i=0)
+    /**
+     * Retrieve html template for shipping method row
+     *
+     * @param int $rowIndex
+     * @return string
+     */
+    protected function _getRowTemplateHtml($rowIndex = 0)
     {
         $html = '<li>';
         $html .= '<select name="' . $this->getElement()->getName() . '[method][]" ' . $this->_getDisabled() . '>';
         $html .= '<option value="">' . $this->__('* Select shipping method') . '</option>';
 
-        foreach ($this->getShippingMethods() as $carrierCode=>$carrier) {
-            $html .= '<optgroup label="' . $carrier['title']
+        foreach ($this->getShippingMethods() as $carrierCode => $carrier) {
+            $html .= '<optgroup label="' . $this->escapeHtml($carrier['title'])
                 . '" style="border-top:solid 1px black; margin-top:3px;">';
 
-            foreach ($carrier['methods'] as $methodCode=>$method) {
+            foreach ($carrier['methods'] as $methodCode => $method) {
                 $code = $carrierCode . '/' . $methodCode;
-                $html .= '<option value="' . $code . '" '
-                    . $this->_getSelected('method/' . $i, $code)
-                    . ' style="background:white;">' . $method['title'] . '</option>';
+                $html .= '<option value="' . $this->escapeHtml($code) . '" '
+                    . $this->_getSelected('method/' . $rowIndex, $code)
+                    . ' style="background:white;">' . $this->escapeHtml($method['title']) . '</option>';
             }
             $html .= '</optgroup>';
         }
@@ -77,7 +83,7 @@ class Mage_GoogleCheckout_Block_Adminhtml_Shipping_Merchant
         $html .= '<label>' . $this->__('Default price:') . '</label> ';
         $html .= '<input class="input-text" style="width:70px;" name="'
             . $this->getElement()->getName() . '[price][]" value="'
-            . $this->_getValue('price/' . $i) . '" ' . $this->_getDisabled() . '/> ';
+            . $this->_getValue('price/' . $rowIndex) . '" ' . $this->_getDisabled() . '/> ';
 
         $html .= $this->_getRemoveRowButtonHtml();
         $html .= '</div>';
@@ -152,7 +158,6 @@ class Mage_GoogleCheckout_Block_Adminhtml_Shipping_Merchant
                     ->setType('button')
                     ->setClass('add ' . $this->_getDisabled())
                     ->setLabel($this->__($title))
-                    //$this->__('Add')
                     ->setOnClick("Element.insert($('" . $container . "'), {bottom: $('" . $template . "').innerHTML})")
                     ->setDisabled($this->_getDisabled())
                     ->toHtml();
@@ -167,7 +172,6 @@ class Mage_GoogleCheckout_Block_Adminhtml_Shipping_Merchant
                     ->setType('button')
                     ->setClass('delete v-middle ' . $this->_getDisabled())
                     ->setLabel($this->__($title))
-                    //$this->__('Remove')
                     ->setOnClick("Element.remove($(this).up('" . $selector . "'))")
                     ->setDisabled($this->_getDisabled())
                     ->toHtml();

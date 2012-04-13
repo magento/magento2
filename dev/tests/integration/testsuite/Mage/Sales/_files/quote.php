@@ -54,4 +54,5 @@ $quote->setCustomerIsGuest(true)
     ->setReservedOrderId('test01')
     ->addProduct($product);
 $quote->getPayment()->setMethod('checkmo');
+$quote->setIsMultiShipping('1');
 $quote->save();

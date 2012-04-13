@@ -136,7 +136,11 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      */
     public function getArea()
     {
-        return $this->_getData('area');
+        $result = $this->_getData('area');
+        if (!$result && $this->getLayout()) {
+            $result = $this->getLayout()->getArea();
+        }
+        return $result;
     }
 
     /**

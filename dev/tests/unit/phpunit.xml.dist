@@ -28,7 +28,7 @@
 -->
 <phpunit bootstrap="./framework/bootstrap.php" clors="true">
     <testsuite name="Magento Unit Tests">
-        <file>testsuite/AllTests.php</file>
+        <directory suffix="Test.php">testsuite</directory>
     </testsuite>
     <filter>
         <whitelist>

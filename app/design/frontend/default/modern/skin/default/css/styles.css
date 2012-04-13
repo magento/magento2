@@ -1136,7 +1136,9 @@ tr.summary-details-excluded { font-style:italic; }
 .cart-table .btn-continue { float:left; }
 .cart-table .btn-continue span { background:none; padding:0; font:normal 11px/25px Arial, Helvetica, sans-serif; color:#4f8100; text-transform:none; text-decoration:underline; }
 .cart-table .btn-continue:hover span { text-decoration:none; }
-.cart-table .btn-update span {}
+.cart-table .btn-update,
+.cart-table .btn-empty { float:right; }
+.cart-table .btn-update { margin-left:7px; }
 
 /* Shopping Cart Collateral boxes */
 .cart .cart-collaterals { padding:25px 0 0; }

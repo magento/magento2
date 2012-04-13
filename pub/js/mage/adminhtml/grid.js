@@ -663,40 +663,23 @@ varienGridMassaction.prototype = {
         };
     },
     massSelect: function(evt) {
-        if(this.lastChecked.left !== false && this.lastChecked.top !== false) {
-            // Left mouse button and "Shift" key was pressed together
-            if(evt.button === 0 && evt.shiftKey === true) {
-                var clickedOffset = Event.element(evt).viewportOffset();
-
-                this.grid.rows.each(
-                    function(row) {
-                        var element = row.select('.massaction-checkbox')[0];
-                        var offset = element.viewportOffset();
-
-                        if(
-                            (
-                                // The checkbox is past the most recently clicked checkbox
-                                (offset.top < clickedOffset.top) &&
-                                // The checkbox is not past the "boundary" checkbox
-                                (offset.top > this.lastChecked.top || element == this.lastChecked.checkbox)
-                            )
-                            ||
-                            (
-                                // The checkbox is before the most recently clicked checkbox
-                                (offset.top > clickedOffset.top) &&
-                                // The checkbox is after the "boundary" checkbox
-                                (offset.top < this.lastChecked.top || element == this.lastChecked.checkbox)
-                            )
-                        ) {
-                            // Set the checkbox to the state of the most recently clicked checkbox
-                            element.checked = Event.element(evt).checked;
-
-                            this.setCheckbox(element);
-                        }
-                    }.bind(this)
-                );
-
-                this.updateCount();
+        if(this.lastChecked.left !== false
+            && this.lastChecked.top !== false
+            && evt.button === 0
+            && evt.shiftKey === true
+        ) {
+            var currentCheckbox = Event.element(evt);
+            var lastCheckbox = this.lastChecked.checkbox;
+            if (lastCheckbox != currentCheckbox) {
+                var start = this.getCheckboxOrder(lastCheckbox);
+                var finish = this.getCheckboxOrder(currentCheckbox);
+                if (start !== false && finish !== false) {
+                    this.selectCheckboxRange(
+                        Math.min(start, finish),
+                        Math.max(start, finish),
+                        currentCheckbox.checked
+                    );
+                }
             }
         }
 
@@ -705,6 +688,23 @@ varienGridMassaction.prototype = {
             top: Event.element(evt).viewportOffset().top,
             checkbox: Event.element(evt) // "boundary" checkbox
         };
+    },
+    getCheckboxOrder: function(curCheckbox) {
+        var order = false;
+        this.getCheckboxes().each(function(checkbox, key){
+            if (curCheckbox == checkbox) {
+                order = key;
+            }
+        });
+        return order;
+    },
+    selectCheckboxRange: function(start, finish, isChecked){
+        this.getCheckboxes().each((function(checkbox, key){
+            if (key >= start && key <= finish) {
+                checkbox.checked = isChecked;
+                this.setCheckbox(checkbox);
+            }
+        }).bind(this));
     }
 };
 

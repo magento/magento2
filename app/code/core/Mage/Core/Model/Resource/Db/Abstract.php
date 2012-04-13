@@ -551,7 +551,7 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
     /**
      * Check for unique values existence
      *
-     * @param Varien_Object $object
+     * @param Mage_Core_Model_Abstract $object
      * @return Mage_Core_Model_Resource_Db_Abstract
      * @throws Mage_Core_Exception
      */
@@ -583,7 +583,7 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
                     $select->where($unique['field'] . '=?', trim($data->getData($unique['field'])));
                 }
 
-                if ($object->getId()) {
+                if ($object->getId() || $object->getId() === '0') {
                     $select->where($this->getIdFieldName() . '!=?', $object->getId());
                 }
 

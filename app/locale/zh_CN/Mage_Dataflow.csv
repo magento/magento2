@@ -1,4 +1,5 @@
 "<a href=""%s"" target=""_blank"">Link</a>","<a href=""%s"" target=""_blank"">链接</a>"
+"Actions XML is not valid.","操作 XML 无效。"
 "An error occurred while opening file: ""%s"".","打开文件“%s” 时发生错误。"
 "Could not load file: ""%s"".","无法载入文件：“%s”。"
 "Could not save file: %s.","无法保存文件：%s。"
@@ -18,6 +19,7 @@
 "Method ""%s"" was not defined in adapter %s.","方法“%s”没有定义在适配器 %s 中。"
 "Please declare ""adapter"" and ""method"" nodes first.","请先声明“适配器”和“方法”节点。"
 "Processed records: %s","已处理记录：%s"
+"Profile with the same name already exists.","使用该名称的配置文件已存在。"
 "Saved successfully: ""%s"" [%d byte(s)].","保存成功：“%s” [%d 字节]。"
 "Sheet 1","表 1"
 "Skip undefined row.","跳过未定义行。"

@@ -513,10 +513,10 @@
         </reference>
         <reference name="root">
             <block type="Mage_Adminhtml_Block_Sales_Order_Create" name="content">
-                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Form" template="sales/order/create/form.phtml" name="form">
+                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Form" template="sales/order/create/form.phtml" name="order_create_form" as="form">
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Messages" name="message" />
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Customer" template="sales/order/create/abstract.phtml" name="customer">
-                        <block type="Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid" name="grid" />
+                        <block type="Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid" name="customer_grid" as="grid" />
                     </block>
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Store" template="sales/order/create/abstract.phtml" name="store">
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Store_Select" template="sales/order/create/store/select.phtml" name="select" />
@@ -535,21 +535,21 @@
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Address" template="sales/order/create/form/address.phtml" name="shipping_address" />
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Address" template="sales/order/create/form/address.phtml" name="billing_address" />
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method" template="sales/order/create/abstract.phtml" name="shipping_method">
-                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="order_create_shipping_form" as="form" />
                         </block>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method" template="sales/order/create/abstract.phtml" name="billing_method">
-                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="order_create_billing_form" as="form" />
                         </block>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
-                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="form" />
+                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="order_create_newsletter_form" as="form" />
                         </block>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search" template="sales/order/create/abstract.phtml" name="search">
-                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="grid" />
+                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="search_grid" as="grid" />
                         </block>
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items" template="sales/order/create/items.phtml" name="items">
                             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items_Grid" template="sales/order/create/items/grid.phtml" name="items_grid">
                                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
-                                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="form" />
+                                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="order_create_coupons_form" as="form" />
                                 </block>
                             </block>
                         </block>
@@ -597,21 +597,21 @@
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Address" template="sales/order/create/form/address.phtml" name="shipping_address" />
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Address" template="sales/order/create/form/address.phtml" name="billing_address" />
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method" template="sales/order/create/abstract.phtml" name="shipping_method">
-                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="order.create.shipping.method.form" as="form"/>
                 </block>
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method" template="sales/order/create/abstract.phtml" name="billing_method">
-                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="order.create.billing.method.form" as="form"/>
                 </block>
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
-                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="form" />
+                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="order.create.newsletter.form" as="form"/>
                 </block>
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search" template="sales/order/create/abstract.phtml" name="search">
-                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="grid" />
+                    <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="search.grid" as="grid" />
                 </block>
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items" template="sales/order/create/items.phtml" name="items">
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items_Grid" template="sales/order/create/items/grid.phtml" name="items_grid">
                         <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
-                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="form" />
+                            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="order.create.coupons.form" as="form"/>
                         </block>
                     </block>
                 </block>
@@ -667,7 +667,7 @@
     <adminhtml_sales_order_create_load_block_shipping_method>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method" template="sales/order/create/abstract.phtml" name="shipping_method">
-                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="form" />
+                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form" template="sales/order/create/shipping/method/form.phtml" name="order.create.shipping.method.form" as="form" />
             </block>
         </reference>
     </adminhtml_sales_order_create_load_block_shipping_method>
@@ -675,7 +675,7 @@
     <adminhtml_sales_order_create_load_block_billing_method>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method" template="sales/order/create/abstract.phtml" name="billing_method">
-                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Billing_Method_Form" template="sales/order/create/billing/method/form.phtml" name="order.create.billing.method.form" as="form" />
             </block>
         </reference>
     </adminhtml_sales_order_create_load_block_billing_method>
@@ -683,7 +683,7 @@
     <adminhtml_sales_order_create_load_block_newsletter>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter" template="sales/order/create/abstract.phtml" name="newsletter">
-                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="form" />
+                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Newsletter_Form" template="sales/order/create/newsletter/form.phtml" name="order.create.newsletter.form" as="form" />
             </block>
         </reference>
     </adminhtml_sales_order_create_load_block_newsletter>
@@ -691,14 +691,14 @@
     <adminhtml_sales_order_create_load_block_search>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search" template="sales/order/create/abstract.phtml" name="search">
-                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="grid" />
+                <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="search.grid" as="grid" />
             </block>
         </reference>
     </adminhtml_sales_order_create_load_block_search>
 
     <adminhtml_sales_order_create_load_block_search_grid>
         <reference name="content">
-            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="grid" />
+            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid" name="serach.grid" as="grid" />
         </reference>
     </adminhtml_sales_order_create_load_block_search_grid>
 
@@ -707,7 +707,7 @@
             <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items" template="sales/order/create/items.phtml" name="items">
                 <block type="Mage_Adminhtml_Block_Sales_Order_Create_Items_Grid" template="sales/order/create/items/grid.phtml" name="items_grid">
                     <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
-                        <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="form" />
+                        <block type="Mage_Adminhtml_Block_Sales_Order_Create_Coupons_Form" template="sales/order/create/coupons/form.phtml" name="order.create.coupons.form" as="form" />
                     </block>
                 </block>
             </block>
@@ -741,7 +741,7 @@
 
     <adminhtml_sales_order_create_load_block_customer_grid>
         <reference name="content">
-            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid" name="grid" />
+            <block type="Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid" name="customer.grid" as="grid" />
         </reference>
     </adminhtml_sales_order_create_load_block_customer_grid>
 

@@ -40,9 +40,28 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Fr
      */
     protected $_model;
 
+    /**
+     * Layer model
+     *
+     * @var Mage_Catalog_Model_Layer
+     */
+    protected $_layer;
+
+    /**
+     * Price filter model
+     *
+     * @var Mage_Catalog_Model_Layer_Filter_Price
+     */
+    protected $_filter;
+
     protected function setUp()
     {
         $this->_model = new Mage_Catalog_Model_Layer_Filter_Price_Algorithm();
+        $this->_layer = new Mage_Catalog_Model_Layer();
+        $this->_filter = new Mage_Catalog_Model_Layer_Filter_Price();
+        $this->_filter
+            ->setLayer($this->_layer)
+            ->setAttributeModel(new Varien_Object(array('attribute_code' => 'price')));
     }
 
     /**
@@ -50,20 +69,16 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Fr
      */
     public function testPricesSegmentation($categoryId, $intervalsNumber, $intervalItems)
     {
-        $this->markTestIncomplete('Bug MAGE-6498');
-        // ini_set('memory_limit', '128M');
-        $layer = new Mage_Catalog_Model_Layer();
-        $layer->setCurrentCategory($categoryId);
-        $filter = new Mage_Catalog_Model_Layer_Filter_Price();
-        $filter->setLayer($layer)->setAttributeModel(new Varien_Object(array('attribute_code' => 'price')));
-        $collection = $layer->getProductCollection();
-        $this->_model->setPricesModel($filter)->setStatistics(
+        $this->_layer->setCurrentCategory($categoryId);
+        $collection = $this->_layer->getProductCollection();
+
+        $memoryUsedBefore = memory_get_usage();
+        $this->_model->setPricesModel($this->_filter)->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
             $collection->getSize()
         );
-
         if (!is_null($intervalsNumber)) {
             $this->assertEquals($intervalsNumber, $this->_model->getIntervalsNumber());
         }
@@ -77,7 +92,9 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Fr
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);
             $this->assertEquals($intervalItems[$i]['count'], $items[$i]['count']);
         }
-        // ini_restore('memory_limit');
+
+        // Algorythm should use less than 10M
+        $this->assertLessThan(10 * 1024 * 1024, memory_get_usage() - $memoryUsedBefore);
     }
 
     public function pricesSegmentationDataProvider()

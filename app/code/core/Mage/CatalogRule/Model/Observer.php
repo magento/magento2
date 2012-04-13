@@ -149,7 +149,7 @@ class Mage_CatalogRule_Model_Observer
 
             $key = "$date|$wId|$gId|$pId";
         }
-        elseif ($product->getWebsiteId() != null && $product->getCustomerGroupId() != null) {
+        elseif (!is_null($product->getWebsiteId()) && !is_null($product->getCustomerGroupId())) {
             $wId = $product->getWebsiteId();
             $gId = $product->getCustomerGroupId();
             $pId = $product->getId();

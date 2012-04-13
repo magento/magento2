@@ -36,12 +36,7 @@
 </li>
 <li>
     <div class="captcha-image" id="captcha-image-box-<?php echo $this->getFormId()?>">
-        <script type="text/javascript">
-        //<![CDATA[
-            var captcha_image_<?php echo $this->getFormId()?> = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php echo $this->getFormId() ?>');
-        //]]>
-        </script>
-        <img id="catpcha-reload" class="captcha-reload" src="<?php echo $this->getSkinUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>" onclick="captcha_image_<?php echo $this->getFormId()?>.refresh(this)">
+        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getSkinUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>" onclick="$('<?php echo $this->getFormId()?>').captcha.refresh(this)">
         <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
         <?php if ($captcha->isCaseSensitive()) :?>
         <div class="captcha-note">
@@ -49,4 +44,7 @@
         </div>
         <?php endif; ?>
     </div>
+    <script type="text/javascript">//<![CDATA[
+        $('<?php echo $this->getFormId() ?>').captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php echo $this->getFormId() ?>');
+    //]]></script>
 </li>

@@ -558,7 +558,8 @@ class Error_Processor
      */
     protected function _validate()
     {
-        $email = eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $this->postData['email']);
+        $email = preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',
+            $this->postData['email']);
         return ($this->postData['firstName'] && $this->postData['lastName'] && $email);
     }
 
@@ -566,7 +567,7 @@ class Error_Processor
      * Skin setter
      *
      * @param string $value
-     * @param object $config
+     * @param stdClass $config
      */
     protected function _setSkin($value, stdClass $config = null)
     {

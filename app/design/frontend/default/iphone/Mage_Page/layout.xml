@@ -49,6 +49,7 @@ Default layout, loads most of the pages
                 <action method="addJs"><file>Mage_Page::js/cookies.js</file></action>
                 <action method="addJs"><file>js/iphone.js</file></action>
                 <action method="addJs"><file>js/dnd.js</file></action>
+                <action method="addJs"><file>js/modernizr.js</file></action>
 
                 <block type="Mage_Page_Block_Js_Cookie" name="js_cookies" template="js/cookie.phtml"/>
             </block>
@@ -61,9 +62,7 @@ Default layout, loads most of the pages
                 <block type="Mage_Page_Block_Template_Links" name="top.links" as="topLinks"/>
                 <block type="Mage_Page_Block_Switch" name="store_language" as="store_language" template="switch/languages.phtml"/>
                 <block type="Mage_Page_Block_Switch" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
-                <container name="top.menu" as="topMenu" label="Navigation Bar">
-                    <block type="Mage_Page_Block_Html_Topmenu" name="catalog.topnav" template="html/topmenu.phtml"/>
-                </container>
+                <container name="top.menu" as="topMenu" label="Navigation Bar"/>
                 <container name="top.container" as="topContainer" label="Page Header" htmlTag="div" htmlClass="top-container"/>
             </block>
 

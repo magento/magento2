@@ -42,7 +42,7 @@
             <dt><strong><em><?php echo $this->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
                 <dd style="margin:0; padding:0 0 0 9px;">
-                    <?php echo $link->getLinkTitle() ?>&nbsp;
+                    <?php echo $this->escapeHtml($link->getLinkTitle()) ?>&nbsp;
                     (<a href="<?php echo $this->getPurchasedLinkUrl($link) ?>" style="color:#1E7EC8;"><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('download') ?></a>)
                 </dd>
             <?php endforeach; ?>

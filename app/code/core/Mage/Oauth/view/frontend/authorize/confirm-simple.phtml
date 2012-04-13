@@ -1,0 +1,52 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Authorize confirmation simple template
+ *
+ * @var $this Mage_Oauth_Block_AuthorizeBaseAbstract
+ */
+?>
+<div class="login-container">
+    <div class="login-box">
+        <div class="page-title">
+            <h1><?php echo $this->__('Confirmation Of Authorization') ?></h1>
+        </div>
+        <div class="form-box">
+            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php if ($this->getVerifier()): ?>
+                <h2><?php echo $this->__('Authorization confirmed') ?></h2>
+                <p><?php echo $this->__('Give the verifier code to application administrator') ?></p>
+                <p style="font-size: 14px;"><?php echo $this->__('Verifier code: %s', $this->getVerifier()) ?></p>
+            <?php endif; ?>
+            <button type="submit" class="button"
+                    onclick="window.close();"
+                    title="<?php echo $this->__('Close') ?>">
+                <span><span><?php echo $this->__('Close') ?></span></span>
+            </button>
+        </div>
+    </div>
+</div>

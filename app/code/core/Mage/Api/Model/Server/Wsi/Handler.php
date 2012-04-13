@@ -91,11 +91,8 @@ class Mage_Api_Model_Server_WSI_Handler extends Mage_Api_Model_Server_Handler_Ab
      * @param string $apiKey
      * @return string
      */
-    public function login($username, $apiKey=null)
+    public function login($username, $apiKey = null)
     {
-
-        /** @todo implement WS-I support check */
-//
         if (is_object($username)) {
             $apiKey = $username->apiKey;
             $username = $username->username;
@@ -110,7 +107,7 @@ class Mage_Api_Model_Server_WSI_Handler extends Mage_Api_Model_Server_Handler_Ab
      * Return called class and method names
      *
      * @param String $apiPath
-     * @return Array 
+     * @return Array
      */
     protected function _getResourceName($apiPath){
 
@@ -139,7 +136,7 @@ class Mage_Api_Model_Server_WSI_Handler extends Mage_Api_Model_Server_Handler_Ab
 
     /**
      * Return an array of parameters for the callable method.
-     * 
+     *
      * @param String $modelName
      * @param String $methodName
      * @return Array of ReflectionParameter
@@ -171,7 +168,7 @@ class Mage_Api_Model_Server_WSI_Handler extends Mage_Api_Model_Server_Handler_Ab
                 if($parameter->isOptional()){
                     $callArgs[$pName] = $parameter->getDefaultValue();
                 } else {
-                    Mage::logException(new Exception("Required parameter \"$pName\" is missing.", 0, null));
+                    Mage::logException(new Exception("Required parameter \"$pName\" is missing.", 0));
                     $this->_fault('invalid_request_param');
                 }
             }

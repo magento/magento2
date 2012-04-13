@@ -74,7 +74,7 @@ class Mage_CatalogSearch_Block_Layer extends Mage_Catalog_Block_Layer_View
             ->getConfig(Mage_CatalogSearch_Model_Layer::XML_PATH_DISPLAY_LAYER_COUNT);
 
         if (!$availableResCount
-            || ($availableResCount>=$this->getLayer()->getProductCollection()->getSize())) {
+            || ($availableResCount > $this->getLayer()->getProductCollection()->getSize())) {
             return parent::canShowBlock();
         }
         return false;

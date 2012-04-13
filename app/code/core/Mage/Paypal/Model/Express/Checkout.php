@@ -357,6 +357,8 @@ class Mage_Paypal_Model_Express_Checkout
             ->callGetExpressCheckoutDetails();
         $quote = $this->_quote;
 
+        $this->_ignoreAddressValidation();
+
         // import billing address
         $billingAddress = $quote->getBillingAddress();
         $exportedBillingAddress = $this->_api->getExportedBillingAddress();
@@ -367,22 +369,7 @@ class Mage_Paypal_Model_Express_Checkout
         $quote->setCustomerLastname($billingAddress->getLastname());
         $quote->setCustomerSuffix($billingAddress->getSuffix());
         $quote->setCustomerNote($exportedBillingAddress->getData('note'));
-        foreach ($exportedBillingAddress->getExportedKeys() as $key) {
-            $oldData = $billingAddress->getDataUsingMethod($key);
-            $isEmpty = null;
-            if (is_array($oldData)) {
-                foreach($oldData as $val) {
-                    if(!empty($val)) {
-                        $isEmpty = false;
-                        break;
-                    }
-                    $isEmpty = true;
-                }
-            }
-            if (empty($oldData) || $isEmpty === true) {
-                $billingAddress->setDataUsingMethod($key, $exportedBillingAddress->getData($key));
-            }
-        }
+        $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
 
         // import shipping address
         $exportedShippingAddress = $this->_api->getExportedShippingAddress();
@@ -390,9 +377,7 @@ class Mage_Paypal_Model_Express_Checkout
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress) {
                 if ($exportedShippingAddress) {
-                    foreach ($exportedShippingAddress->getExportedKeys() as $key) {
-                        $shippingAddress->setDataUsingMethod($key, $exportedShippingAddress->getData($key));
-                    }
+                    $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
                     $shippingAddress->setCollectShippingRates(true);
                     $shippingAddress->setSameAsBilling(0);
                 }
@@ -411,7 +396,6 @@ class Mage_Paypal_Model_Express_Checkout
                 );
             }
         }
-        $this->_ignoreAddressValidation();
 
         // import payment info
         $payment = $quote->getPayment();
@@ -610,8 +594,8 @@ class Mage_Paypal_Model_Express_Checkout
         $this->_quote->getBillingAddress()->setShouldIgnoreValidation(true);
         if (!$this->_quote->getIsVirtual()) {
             $this->_quote->getShippingAddress()->setShouldIgnoreValidation(true);
-            if (!$this->_config->requireBillingAddress && !$this->getCustomerSession()->isLoggedIn()) {
-                $this->_quote->getBillingAddress()->setSameAsShipping(1);
+            if (!$this->_config->requireBillingAddress && !$this->_quote->getBillingAddress()->getEmail()) {
+                $this->_quote->getBillingAddress()->setSameAsBilling(1);
             }
         }
     }
@@ -674,6 +658,32 @@ class Mage_Paypal_Model_Express_Checkout
             }
         }
         return $this->_quote->getCheckoutMethod();
+    }
+
+    /**
+     * Sets address data from exported address
+     *
+     * @param Mage_Sales_Model_Quote_Address $address
+     * @param array $exportedAddress
+     */
+    protected function _setExportedAddressData($address, $exportedAddress)
+    {
+        foreach ($exportedAddress->getExportedKeys() as $key) {
+            $oldData = $address->getDataUsingMethod($key);
+            $isEmpty = null;
+            if (is_array($oldData)) {
+                foreach($oldData as $val) {
+                    if(!empty($val)) {
+                        $isEmpty = false;
+                        break;
+                    }
+                    $isEmpty = true;
+                }
+            }
+            if (empty($oldData) || $isEmpty === true) {
+                $address->setDataUsingMethod($key, $exportedAddress->getData($key));
+            }
+        }
     }
 
     /**

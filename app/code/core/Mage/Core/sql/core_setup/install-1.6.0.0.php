@@ -354,7 +354,7 @@ $table = $installer->getConnection()
         ), 'Key Id of Translation')
     ->addColumn('string', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
         'nullable'  => false,
-        'default'   => 'Translate String',
+        'default'   => Mage_Core_Model_Translate::DEFAULT_STRING,
         ), 'Translation String')
     ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,

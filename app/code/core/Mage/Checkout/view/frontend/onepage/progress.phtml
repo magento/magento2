@@ -71,7 +71,7 @@
             </dt>
             <dd class="complete">
                 <?php if ($this->getShippingMethod()): ?>
-                    <?php echo $this->getShippingDescription() ?>
+                    <?php echo $this->escapeHtml($this->getShippingDescription()) ?>
 
                     <?php $_excl = $this->getShippingPriceExclTax(); ?>
                     <?php $_incl = $this->getShippingPriceInclTax(); ?>

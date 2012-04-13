@@ -52,7 +52,7 @@ class Mage_Catalog_Model_Product_Type_Configurable_Price extends Mage_Catalog_Mo
         Mage::dispatchEvent('catalog_product_get_final_price', array('product' => $product, 'qty' => $qty));
         $finalPrice = $product->getData('final_price');
 
-        $finalPrice += $this->getTotalConfigurableItemsPrice($product, $qty);
+        $finalPrice += $this->getTotalConfigurableItemsPrice($product, $finalPrice);
         $finalPrice += $this->_applyOptionsPrice($product, $qty, $basePrice) - $basePrice;
         $finalPrice = max(0, $finalPrice);
 
@@ -64,10 +64,10 @@ class Mage_Catalog_Model_Product_Type_Configurable_Price extends Mage_Catalog_Mo
      * Get Total price for configurable items
      *
      * @param Mage_Catalog_Model_Product $product
-     * @param null|float $qty
+     * @param float $finalPrice
      * @return float
      */
-    public function getTotalConfigurableItemsPrice($product, $qty = null)
+    public function getTotalConfigurableItemsPrice($product, $finalPrice)
     {
         $price = 0.0;
 
@@ -81,7 +81,6 @@ class Mage_Catalog_Model_Product_Type_Configurable_Price extends Mage_Catalog_Mo
             $selectedAttributes = unserialize($product->getCustomOption('attributes')->getValue());
         }
 
-        $basePrice = $this->getBasePrice($product, $qty);
         foreach ($attributes as $attribute) {
             $attributeId = $attribute->getProductAttribute()->getId();
             $value = $this->_getValueByIndex(
@@ -91,7 +90,7 @@ class Mage_Catalog_Model_Product_Type_Configurable_Price extends Mage_Catalog_Mo
             $product->setParentId(true);
             if ($value) {
                 if ($value['pricing_value'] != 0) {
-                    $product->setConfigurablePrice($this->_calcSelectionPrice($value, $basePrice));
+                    $product->setConfigurablePrice($this->_calcSelectionPrice($value, $finalPrice));
                     Mage::dispatchEvent(
                         'catalog_product_type_configurable_price',
                         array('product' => $product)

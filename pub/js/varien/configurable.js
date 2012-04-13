@@ -40,12 +40,12 @@ Product.Config.prototype = {
         this.state      = new Hash();
         this.priceTemplate = new Template(this.config.template);
         this.prices     = config.prices;
-        
+
         // Set default values from config
         if (config.defaultValues) {
             this.values = config.defaultValues;
         }
-        
+
         // Overwrite defaults by url
         var separatorIndex = window.location.href.indexOf('#');
         if (separatorIndex != -1) {
@@ -58,7 +58,7 @@ Product.Config.prototype = {
                 this.values[i] = urlValues[i];
             }
         }
-        
+
         // Overwrite defaults by inputs values if needed
         if (config.inputsInitialized) {
             this.values = {};
@@ -69,8 +69,8 @@ Product.Config.prototype = {
                 }
             }.bind(this));
         }
-            
-        // Put events to check select reloads 
+
+        // Put events to check select reloads
         this.settings.each(function(element){
             Event.observe(element, 'change', this.configure.bind(this))
         }.bind(this));
@@ -105,7 +105,7 @@ Product.Config.prototype = {
         this.configureForValues();
         document.observe("dom:loaded", this.configureForValues.bind(this));
     },
-    
+
     configureForValues: function () {
         if (this.values) {
             this.settings.each(function(element){
@@ -168,7 +168,8 @@ Product.Config.prototype = {
         var attributeId = element.id.replace(/[a-z]*/, '');
         var options = this.getAttributeOptions(attributeId);
         this.clearSelect(element);
-        element.options[0] = new Option(this.config.chooseText, '');
+        element.options[0] = new Option('', '');
+        element.options[0].innerHTML = this.config.chooseText;
 
         var prevConfig = false;
         if(element.prevSetting){

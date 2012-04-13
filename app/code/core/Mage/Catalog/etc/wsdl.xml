@@ -198,6 +198,8 @@
                     <element name="name" type="xsd:string" minOccurs="0"/>
                     <element name="is_active" type="xsd:int" minOccurs="0"/>
                     <element name="position" type="xsd:int" minOccurs="0"/>
+                    <!-- position parameter is deprecated, category anyway will be positioned in the end of list
+                        and you can not set position directly, use catalog_category.move instead -->
                     <element name="available_sort_by" type="typens:ArrayOfString" minOccurs="0"/>
                     <element name="custom_design" type="xsd:string" minOccurs="0"/>
                     <element name="custom_design_apply" type="xsd:int" minOccurs="0"/>

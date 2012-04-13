@@ -89,6 +89,16 @@ class Mage_Adminhtml_Block_Page_Menu extends Mage_Adminhtml_Block_Template
     }
 
     /**
+     * Retrieve Adminhtml Menu array
+     *
+     * @return array
+     */
+    public function getMenuArray()
+    {
+        return $this->_buildMenuArray();
+    }
+
+    /**
      * Retrieve Title value for menu node
      *
      * @param Varien_Simplexml_Element $child
@@ -131,7 +141,7 @@ class Mage_Adminhtml_Block_Page_Menu extends Mage_Adminhtml_Block_Template
             }
 
             $aclResource = 'admin/' . ($child->resource ? (string)$child->resource : $path . $childName);
-            if (!$this->_checkAcl($aclResource)) {
+            if (!$this->_checkAcl($aclResource) || !$this->_isEnabledModuleOutput($child)) {
                 continue;
             }
 
@@ -318,5 +328,54 @@ class Mage_Adminhtml_Block_Page_Menu extends Mage_Adminhtml_Block_Template
     public function renderMenu()
     {
         return $this->_renderMenuLevel($this->_buildMenuArray());
+    }
+
+    /**
+     * Get menu level HTML code
+     *
+     * @param array $menu
+     * @param int $level
+     * @return string
+     */
+    public function getMenuLevel($menu, $level = 0)
+    {
+        $html = '<ul ' . (!$level ? 'id="nav"' : '') . '>' . PHP_EOL;
+        foreach ($menu as $item) {
+            $html .= '<li ' . (!empty($item['children']) ? 'onmouseover="Element.addClassName(this,\'over\')" '
+                . 'onmouseout="Element.removeClassName(this,\'over\')"' : '') . ' class="'
+                . (!$level && !empty($item['active']) ? ' active' : '') . ' '
+                . (!empty($item['children']) ? ' parent' : '')
+                . (!empty($level) && !empty($item['last']) ? ' last' : '')
+                . ' level' . $level . '"> <a href="' . $item['url'] . '" '
+                . (!empty($item['title']) ? 'title="' . $item['title'] . '"' : '') . ' '
+                . (!empty($item['click']) ? 'onclick="' . $item['click'] . '"' : '') . ' class="'
+                . ($level === 0 && !empty($item['active']) ? 'active' : '') . '"><span>'
+                . $this->escapeHtml($item['label']) . '</span></a>' . PHP_EOL;
+
+            if (!empty($item['children'])) {
+                $html .= $this->getMenuLevel($item['children'], $level + 1);
+            }
+            $html .= '</li>' . PHP_EOL;
+        }
+        $html .= '</ul>' . PHP_EOL;
+
+        return $html;
+    }
+
+    /**
+     * Check is module output enabled
+     *
+     * @param Varien_Simplexml_Element $child
+     * @return bool
+     */
+    protected function _isEnabledModuleOutput(Varien_Simplexml_Element $child)
+    {
+        $helperName      = 'Mage_Adminhtml_Helper_Data';
+        $childAttributes = $child->attributes();
+        if (isset($childAttributes['module'])) {
+            $helperName  = (string)$childAttributes['module'];
+        }
+
+        return Mage::helper($helperName)->isModuleOutputEnabled();
     }
 }

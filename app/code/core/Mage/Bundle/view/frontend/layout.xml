@@ -206,7 +206,6 @@ Additional block for bundle product type
                 <action method="addRenderer"><type>radio</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Radio</block></action>
                 <action method="addRenderer"><type>checkbox</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Checkbox</block></action>
             </block>
-            <action method="insert"><block>product.info.bundle.options</block></action>
         </reference>
         <reference name="product.info.options.wrapper.bottom">
             <remove name="product.tierprices" />

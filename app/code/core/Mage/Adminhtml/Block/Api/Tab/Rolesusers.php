@@ -51,10 +51,4 @@ class Mage_Adminhtml_Block_Api_Tab_Rolesusers extends Mage_Adminhtml_Block_Widge
     {
         return $this->getChildHtml('userGrid');
     }
-
-    protected function _getJsObjectName()
-    {
-        return $this->getChildBlock('userGrid')->getJsObjectName();
-    }
-
 }

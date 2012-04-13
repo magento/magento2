@@ -84,7 +84,7 @@ class Mage_Archive
         } else {
             $format = self::DEFAULT_ARCHIVER;
         }
-        $class = 'Mage_Archive_'.ucfirst($format);
+        $class = 'Mage_Archive_' . ucfirst($format);
         $this->_archiver = new $class();
         return $this->_archiver;
     }

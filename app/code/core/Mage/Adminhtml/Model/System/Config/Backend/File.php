@@ -48,10 +48,6 @@ class Mage_Adminhtml_Model_System_Config_Backend_File extends Mage_Core_Model_Co
     protected function _beforeSave()
     {
         $value = $this->getValue();
-        if (is_array($value) && !empty($value['delete'])) {
-            $this->setValue('');
-        }
-
         if ($_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value']){
 
             $uploadDir = $this->_getUploadDir();
@@ -79,6 +75,12 @@ class Mage_Adminhtml_Model_System_Config_Backend_File extends Mage_Core_Model_Co
                     $filename = $this->_prependScopeInfo($filename);
                 }
                 $this->setValue($filename);
+            }
+        } else {
+            if (is_array($value) && !empty($value['delete'])) {
+                $this->setValue('');
+            } else {
+                $this->unsValue();
             }
         }
 

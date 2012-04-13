@@ -531,10 +531,13 @@ abstract class Mage_Core_Controller_Varien_Action
                 if ($session->getCookieShouldBeReceived()) {
                     $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
                     $session->unsCookieShouldBeReceived();
-                } else {
-                    if (isset($_GET[$session->getSessionIdQueryParam()]) && Mage::app()->getUseSessionInUrl()) {
+                    $session->setSkipSessionIdFlag(true);
+                } elseif ($checkCookie) {
+                    if (isset($_GET[$session->getSessionIdQueryParam()]) && Mage::app()->getUseSessionInUrl()
+                        && $this->_sessionNamespace != Mage_Adminhtml_Controller_Action::SESSION_NAMESPACE
+                    ) {
                         $session->setCookieShouldBeReceived(true);
-                    } elseif ($checkCookie) {
+                    } else {
                         $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
                     }
                 }
@@ -773,7 +776,9 @@ abstract class Mage_Core_Controller_Varien_Action
     {
         /** @var $session Mage_Core_Model_Session */
         $session = Mage::getSingleton('Mage_Core_Model_Session', array('name' => $this->_sessionNamespace));
-        if ($session->getCookieShouldBeReceived() && Mage::app()->getUseSessionInUrl()) {
+        if ($session->getCookieShouldBeReceived() && Mage::app()->getUseSessionInUrl()
+            && $this->_sessionNamespace != Mage_Adminhtml_Controller_Action::SESSION_NAMESPACE
+        ) {
             $arguments += array('_query' => array(
                 $session->getSessionIdQueryParam() => $session->getSessionId()
             ));

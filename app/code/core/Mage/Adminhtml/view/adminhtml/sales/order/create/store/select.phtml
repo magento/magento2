@@ -25,9 +25,9 @@
  */
 ?>
 <?php /* @var $this Mage_Adminhtml_Block_Sales_Order_Create_Store_Select */ ?>
-<div class="storeScope">
+<div class="store-scope">
     <?php echo $this->getHintHtml() ?>
-    <div class="tree-storeScope">
+    <div class="tree-store-scope">
     <?php foreach ($this->getWebsiteCollection() as $_website): ?>
         <?php $showWebsite=false; ?>
         <?php foreach ($this->getGroupCollection($_website) as $_group): ?>

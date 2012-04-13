@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php echo $this->getMethod()->getTitle() ?>
+<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>
     {{pdf_row_separator}}
 <?php if($this->getInfo()->getAdditionalData()): ?>
     {{pdf_row_separator}}

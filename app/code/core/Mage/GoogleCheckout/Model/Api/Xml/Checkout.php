@@ -122,12 +122,17 @@ EOT;
             $weight     = (float) $item->getWeight();
             $weightUnit = self::ITEM_WEIGHT_UNIT;
 
+            $unitPrice = $item->getBaseCalculationPrice();
+            if (Mage::helper('Mage_Weee_Helper_Data')->includeInSubtotal()) {
+                $unitPrice += $item->getBaseWeeeTaxAppliedAmount();
+            }
+
             $xml .= <<<EOT
             <item>
                 <merchant-item-id><![CDATA[{$item->getSku()}]]></merchant-item-id>
                 <item-name><![CDATA[{$item->getName()}]]></item-name>
                 <item-description><![CDATA[{$item->getDescription()}]]></item-description>
-                <unit-price currency="{$this->getCurrency()}">{$item->getBaseCalculationPrice()}</unit-price>
+                <unit-price currency="{$this->getCurrency()}">{$unitPrice}</unit-price>
                 <quantity>{$item->getQty()}</quantity>
                 <item-weight unit="{$weightUnit}" value="{$weight}" />
                 <tax-table-selector>{$taxClass}</tax-table-selector>

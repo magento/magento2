@@ -149,6 +149,7 @@
         </routers>
         <secure_url>
             <downloadable>/downloadable/customer/</downloadable>
+            <downloadable_download>/downloadable/download/</downloadable_download>
         </secure_url>
         <translate>
             <modules>

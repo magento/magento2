@@ -114,6 +114,7 @@
                         <error_email translate="label">
                             <label>Error Email Recipient</label>
                             <frontend_type>text</frontend_type>
+                            <validate>validate-email</validate>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

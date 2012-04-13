@@ -41,6 +41,8 @@
  * @method Mage_Api_Model_Roles setUserId(int $value)
  * @method string getRoleName()
  * @method Mage_Api_Model_Roles setRoleName(string $value)
+ * @method string getName()
+ * @method Mage_Api_Model_Role setName() setName(string $name)
  *
  * @category    Mage
  * @package     Mage_Api
@@ -48,6 +50,14 @@
  */
 class Mage_Api_Model_Roles extends Mage_Core_Model_Abstract
 {
+    /**
+     * Filters
+     *
+     * @var array
+     */
+    protected $_filters;
+
+
     protected function _construct()
     {
         $this->_init('Mage_Api_Model_Resource_Roles');
@@ -84,8 +94,10 @@ class Mage_Api_Model_Roles extends Mage_Core_Model_Abstract
         return $this->getResource()->getRoleUsers($this);
     }
 
-    protected function _buildResourcesArray(Varien_Simplexml_Element $resource=null, $parentName=null, $level=0, $represent2Darray=null, $rawNodes = false, $module = 'Mage_Adminhtml')
-    {
+    protected function _buildResourcesArray(
+        Varien_Simplexml_Element $resource = null, $parentName = null, $level = 0, $represent2Darray = null,
+        $rawNodes = false, $module = 'Mage_Adminhtml'
+    ) {
         static $result;
 
         if (is_null($resource)) {
@@ -94,7 +106,9 @@ class Mage_Api_Model_Roles extends Mage_Core_Model_Abstract
             $level = -1;
         } else {
             $resourceName = $parentName;
-            if ($resource->getName()!='title' && $resource->getName()!='sort_order' && $resource->getName() != 'children') {
+            if ($resource->getName()!='title' && $resource->getName()!='sort_order'
+                && $resource->getName() != 'children'
+            ) {
                 $resourceName = (is_null($parentName) ? '' : $parentName.'/').$resource->getName();
 
                 //assigning module for its' children nodes
@@ -135,4 +149,33 @@ class Mage_Api_Model_Roles extends Mage_Core_Model_Abstract
         }
     }
 
+    /**
+     * Filter data before save
+     *
+     * @return Mage_Api_Model_Roles
+     */
+    protected function _beforeSave()
+    {
+        $this->filter();
+        parent::_beforeSave();
+        return $this;
+    }
+
+    /**
+     * Filter set data
+     *
+     * @return Mage_Api_Model_Roles
+     */
+    public function filter()
+    {
+        $data = $this->getData();
+        if (!$this->_filters || !$data) {
+            return $this;
+        }
+        /** @var $filter Mage_Core_Model_Input_Filter */
+        $filter = Mage::getModel('Mage_Core_Model_Input_Filter');
+        $filter->setFilters($this->_filters);
+        $this->setData($filter->filter($data));
+        return $this;
+    }
 }

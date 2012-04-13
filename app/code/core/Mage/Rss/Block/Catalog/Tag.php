@@ -38,7 +38,10 @@ class Mage_Rss_Block_Catalog_Tag extends Mage_Rss_Block_Catalog_Abstract
         /*
         * setting cache to save the rss for 10 minutes
         */
-        $this->setCacheKey('rss_catalog_tag_'.$this->getStoreId());
+        $tagModel = Mage::registry('tag_model');
+        if ($tagModel) {
+            $this->setCacheKey('rss_catalog_tag_' . $this->getStoreId() . '_' . $tagModel->getName());
+        }
         $this->setCacheLifetime(600);
     }
 
@@ -99,8 +102,8 @@ class Mage_Rss_Block_Catalog_Tag extends Mage_Rss_Block_Catalog_Abstract
         $allowedPriceInRss = $product->getAllowedPriceInRss();
 
         $product->unsetData()->load($args['row']['entity_id']);
-        $description = '<table><tr><td><a href="' . $product->getProductUrl() . '"><img src="'
-            . $this->helper('Mage_Catalog_Helper_Image')->init($product, 'thumbnail')->resize(75, 75)
+        $description = '<table><tr><td><a href="'.$product->getProductUrl().'">'
+            . '<img src="' . $this->helper('Mage_Catalog_Helper_Image')->init($product, 'thumbnail')->resize(75, 75)
             . '" border="0" align="left" height="75" width="75"></a></td>'
             . '<td  style="text-decoration:none;">'.$product->getDescription();
 
@@ -112,10 +115,10 @@ class Mage_Rss_Block_Catalog_Tag extends Mage_Rss_Block_Catalog_Abstract
 
         $rssObj = $args['rssObj'];
         $data = array(
-                'title'         => $product->getName(),
-                'link'          => $product->getProductUrl(),
-                'description'   => $description,
-            );
+            'title'         => $product->getName(),
+            'link'          => $product->getProductUrl(),
+            'description'   => $description,
+        );
         $rssObj->_addEntry($data);
     }
 }

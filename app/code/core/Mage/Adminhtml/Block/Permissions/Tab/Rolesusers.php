@@ -51,10 +51,4 @@ class Mage_Adminhtml_Block_Permissions_Tab_Rolesusers extends Mage_Adminhtml_Blo
     {
         return $this->getChildHtml('userGrid');
     }
-
-    protected function _getJsObjectName()
-    {
-        return $this->getChildBlock('userGrid')->getJsObjectName();
-    }
-
 }

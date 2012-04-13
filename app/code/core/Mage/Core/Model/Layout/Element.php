@@ -97,14 +97,11 @@ class Mage_Core_Model_Layout_Element extends Varien_Simplexml_Element
      */
     public function getSibling()
     {
-        $sibling = '';
+        $sibling = null;
         if ($this->getAttribute('before')) {
             $sibling = $this->getAttribute('before');
         } elseif ($this->getAttribute('after')) {
             $sibling = $this->getAttribute('after');
-        }
-        if ('-' === $sibling) {
-            $sibling = '';
         }
 
         return $sibling;

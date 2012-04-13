@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Sales
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <api2>
+        <resource_groups>
+            <sales translate="title" module="Mage_Api2">
+                <title>Sales</title>
+                <sort_order>130</sort_order>
+            </sales>
+        </resource_groups>
+        <resources>
+            <orders translate="title" module="Mage_Api2">
+                <group>sales</group>
+                <sort_order>10</sort_order>
+                <model>Mage_Sales_Model_Api2_Order</model>
+                <title>Orders</title>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                    <customer>
+                        <retrieve>1</retrieve>
+                    </customer>
+                </privileges>
+                <routes>
+                    <route_entity>
+                        <route>/orders/:id</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/orders</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <attributes translate="entity_id increment_id created_at status shipping_description _payment_method base_currency_code store_currency_code store_name remote_ip store_to_order_rate subtotal subtotal_incl_tax discount_amount base_grand_total grand_total shipping_amount shipping_tax_amount shipping_incl_tax tax_amount _tax_name _tax_rate coupon_code base_discount_amount base_subtotal base_shipping_amount base_shipping_tax_amount base_tax_amount total_paid base_total_paid total_refunded base_total_refunded base_subtotal_incl_tax base_total_due total_due shipping_discount_amount base_shipping_discount_amount discount_description customer_balance_amount base_customer_balance_amount base_customer_balance_amount _gift_message _order_comments customer_id" module="Mage_Api2">
+                    <entity_id>Order ID (internal)</entity_id>
+                    <increment_id>Order ID</increment_id>
+                    <created_at>Order Date</created_at>
+                    <status>Order Status</status>
+                    <shipping_description>Shipping Method</shipping_description>
+                    <_payment_method>Payment Method</_payment_method>
+                    <base_currency_code>Base Currency</base_currency_code>
+                    <store_currency_code>Order Currency</store_currency_code>
+                    <store_name>Store Name</store_name>
+                    <remote_ip>Placed from IP</remote_ip>
+                    <store_to_order_rate>Store Currency to Order Currency Rate</store_to_order_rate>
+                    <subtotal>Subtotal</subtotal>
+                    <subtotal_incl_tax>Subtotal Including Tax</subtotal_incl_tax>
+                    <discount_amount>Discount</discount_amount>
+                    <base_grand_total>Grand Total to Be Charged</base_grand_total>
+                    <grand_total>Grand Total</grand_total>
+                    <shipping_amount>Shipping Amount</shipping_amount>
+                    <shipping_tax_amount>Shipping Including Tax</shipping_tax_amount>
+                    <shipping_incl_tax>Shipping Tax</shipping_incl_tax>
+                    <tax_amount>Tax Amount</tax_amount>
+                    <_tax_name>Tax Name</_tax_name>
+                    <_tax_rate>Tax Rate</_tax_rate>
+                    <coupon_code>Coupon Code</coupon_code>
+                    <base_discount_amount>Base Discount</base_discount_amount>
+                    <base_subtotal>Base Subtotal</base_subtotal>
+                    <base_shipping_amount>Base Shipping</base_shipping_amount>
+                    <base_shipping_tax_amount>Base Shipping Tax</base_shipping_tax_amount>
+                    <base_tax_amount>Base Tax Amount</base_tax_amount>
+                    <total_paid>Total Paid</total_paid>
+                    <base_total_paid>Base Total Paid</base_total_paid>
+                    <total_refunded>Total Refunded</total_refunded>
+                    <base_total_refunded>Base Total Refunded</base_total_refunded>
+                    <base_subtotal_incl_tax>Base Subtotal Including Tax</base_subtotal_incl_tax>
+                    <base_total_due>Base Total Due</base_total_due>
+                    <total_due>Total Due</total_due>
+                    <shipping_discount_amount>Shipping Discount</shipping_discount_amount>
+                    <base_shipping_discount_amount>Base Shipping Discount</base_shipping_discount_amount>
+                    <discount_description>Discount Description</discount_description>
+                    <customer_balance_amount>Customer Balance</customer_balance_amount>
+                    <base_customer_balance_amount>Base Customer Balance</base_customer_balance_amount>
+                    <_gift_message>Gift Message</_gift_message>
+                    <_order_comments>Order Comments</_order_comments>
+                    <customer_id>Customer ID</customer_id>
+                </attributes>
+                <include_attributes>
+                    <customer>
+                        <read>
+                            <entity_id>1</entity_id>
+                            <increment_id>1</increment_id>
+                            <created_at>1</created_at>
+                            <status>1</status>
+                            <shipping_description>1</shipping_description>
+                            <_payment_method>1</_payment_method>
+                            <base_currency_code>1</base_currency_code>
+                            <store_currency_code>1</store_currency_code>
+                            <subtotal>1</subtotal>
+                            <subtotal_incl_tax>1</subtotal_incl_tax>
+                            <discount_amount>1</discount_amount>
+                            <base_grand_total>1</base_grand_total>
+                            <grand_total>1</grand_total>
+                            <shipping_amount>1</shipping_amount>
+                            <shipping_tax_amount>1</shipping_tax_amount>
+                            <shipping_incl_tax>1</shipping_incl_tax>
+                            <tax_amount>1</tax_amount>
+                            <_tax_name>1</_tax_name>
+                            <_tax_rate>1</_tax_rate>
+                            <_gift_message>1</_gift_message>
+                            <_order_comments>1</_order_comments>
+                        </read>
+                    </customer>
+                </include_attributes>
+                <force_attributes>
+                    <customer>
+                        <payment_method>1</payment_method>
+                        <addresses>1</addresses>
+                        <order_items>1</order_items>
+                        <gift_message_from>1</gift_message_from>
+                        <gift_message_to>1</gift_message_to>
+                        <gift_message_body>1</gift_message_body>
+                        <order_comments>1</order_comments>
+                        <tax_name>1</tax_name>
+                        <tax_rate>1</tax_rate>
+                    </customer>
+                    <admin>
+                        <payment_method>1</payment_method>
+                        <addresses>1</addresses>
+                        <order_items>1</order_items>
+                        <gift_message_from>1</gift_message_from>
+                        <gift_message_to>1</gift_message_to>
+                        <gift_message_body>1</gift_message_body>
+                        <order_comments>1</order_comments>
+                        <tax_name>1</tax_name>
+                        <tax_rate>1</tax_rate>
+                    </admin>
+                </force_attributes>
+                <versions>1</versions>
+            </orders>
+            <order_items translate="title" module="Mage_Api2">
+                <group>orders</group>
+                <sort_order>30</sort_order>
+                <model>Mage_Sales_Model_Api2_Order_Items</model>
+                <working_model>Mage_Sales_Model_Order_Item</working_model>
+                <title>Order Items</title>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                    <customer>
+                        <retrieve>1</retrieve>
+                    </customer>
+                </privileges>
+                <attributes translate="item_id name parent_item_id sku price price_incl_tax qty_ordered qty_invoiced qty_shipped qty_canceled qty_refunded row_total row_total_incl_tax base_price original_price base_original_price base_price_incl_tax tax_percent tax_amount base_tax_amount discount_amount base_discount_amount base_row_total base_row_total_incl_tax" module="Mage_Api2">
+                    <item_id>Order Item ID</item_id>
+                    <name>Product and Custom Options Name</name>
+                    <parent_item_id>Parent Order Item ID</parent_item_id>
+                    <sku>SKU</sku>
+                    <price>Price</price>
+                    <price_incl_tax>Price Including Tax</price_incl_tax>
+                    <qty_ordered>Ordered Qty</qty_ordered>
+                    <qty_invoiced>Invoiced Qty</qty_invoiced>
+                    <qty_shipped>Shipped Qty</qty_shipped>
+                    <qty_canceled>Canceled Qty</qty_canceled>
+                    <qty_refunded>Refunded Qty</qty_refunded>
+                    <row_total>Item Subtotal</row_total>
+                    <row_total_incl_tax>Item Subtotal Including Tax</row_total_incl_tax>
+                    <base_price>Base Price</base_price>
+                    <original_price>Original Price</original_price>
+                    <base_original_price>Base Original Price</base_original_price>
+                    <base_price_incl_tax>Base Price Including Tax</base_price_incl_tax>
+                    <tax_percent>Tax Percent</tax_percent>
+                    <tax_amount>Tax Amount</tax_amount>
+                    <base_tax_amount>Base Tax Amount</base_tax_amount>
+                    <discount_amount>Discount Amount</discount_amount>
+                    <base_discount_amount>Base Discount Amount</base_discount_amount>
+                    <base_row_total>Base Item Subtotal</base_row_total>
+                    <base_row_total_incl_tax>Base Item Subtotal Including Tax</base_row_total_incl_tax>
+                </attributes>
+                <include_attributes>
+                    <customer>
+                        <read>
+                            <item_id>1</item_id>
+                            <name>1</name>
+                            <parent_item_id>1</parent_item_id>
+                            <sku>1</sku>
+                            <price>1</price>
+                            <price_incl_tax>1</price_incl_tax>
+                            <qty_ordered>1</qty_ordered>
+                            <qty_invoiced>1</qty_invoiced>
+                            <qty_shipped>1</qty_shipped>
+                            <qty_canceled>1</qty_canceled>
+                            <qty_refunded>1</qty_refunded>
+                            <row_total>1</row_total>
+                            <row_total_incl_tax>1</row_total_incl_tax>
+                        </read>
+                    </customer>
+                </include_attributes>
+                <routes>
+                    <route_collection>
+                        <route>/orders/:id/items</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </order_items>
+            <order_addresses translate="title" module="Mage_Api2">
+                <group>orders</group>
+                <sort_order>40</sort_order>
+                <model>Mage_Sales_Model_Api2_Order_Address</model>
+                <working_model>Mage_Sales_Model_Order_Address</working_model>
+                <title>Order Addresses</title>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                    <customer>
+                        <retrieve>1</retrieve>
+                    </customer>
+                </privileges>
+                <routes>
+                    <route_entity>
+                        <route>/orders/:order_id/addresses/:address_type</route>
+                        <action_type>entity</action_type>
+                    </route_entity>
+                    <route_collection>
+                        <route>/orders/:order_id/addresses</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+                <attributes translate="lastname firstname middlename prefix suffix company street city region postcode country_id telephone address_type email" module="Mage_Api2">
+                    <lastname>Customer Last Name</lastname>
+                    <firstname>Customer First Name</firstname>
+                    <middlename>Customer Middle Name</middlename>
+                    <prefix>Customer Prefix</prefix>
+                    <suffix>Customer Suffix</suffix>
+                    <company>Company</company>
+                    <street>Street</street>
+                    <city>City</city>
+                    <region>State</region>
+                    <postcode>ZIP/Postal Code</postcode>
+                    <country_id>Country</country_id>
+                    <telephone>Phone Number</telephone>
+                    <address_type>Address Type</address_type>
+                    <email>Email</email>
+                </attributes>
+            </order_addresses>
+            <order_comments translate="title" module="Mage_Api2">
+                <group>orders</group>
+                <sort_order>60</sort_order>
+                <model>Mage_Sales_Model_Api2_Order_Comments</model>
+                <working_model>Mage_Sales_Model_Order_Status_History</working_model>
+                <title>Order Comments</title>
+                <privileges>
+                    <admin>
+                        <retrieve>1</retrieve>
+                    </admin>
+                    <customer>
+                        <retrieve>1</retrieve>
+                    </customer>
+                </privileges>
+                <force_attributes>
+                    <admin>
+                        <created_at>1</created_at>
+                        <comment>1</comment>
+                        <is_customer_notified>1</is_customer_notified>
+                        <is_visible_on_front>1</is_visible_on_front>
+                        <status>1</status>
+                    </admin>
+                    <customer>
+                        <created_at>1</created_at>
+                        <comment>1</comment>
+                    </customer>
+                </force_attributes>
+                <routes>
+                    <route_collection>
+                        <route>/orders/:id/comments</route>
+                        <action_type>collection</action_type>
+                    </route_collection>
+                </routes>
+                <versions>1</versions>
+            </order_comments>
+        </resources>
+    </api2>
+</config>

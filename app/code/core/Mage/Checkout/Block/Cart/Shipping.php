@@ -257,7 +257,7 @@ class Mage_Checkout_Block_Cart_Shipping extends Mage_Checkout_Block_Cart_Abstrac
     public function isZipCodeRequired()
     {
         foreach ($this->getCarriers() as $carrier) {
-            if ($carrier->isZipCodeRequired()) {
+            if ($carrier->isZipCodeRequired($this->getEstimateCountryId())) {
                 return true;
             }
         }

@@ -112,7 +112,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (Mage_Core_Exception $e) {
-                $this->_getSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while getting requested content. Please contact the store owner.'));
+                $this->_getSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
         return $this->_redirectReferer();
@@ -142,7 +142,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (Mage_Core_Exception $e) {
-                $this->_getCustomerSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('An error occurred while getting requested content. Please contact the store owner.'));
+                $this->_getCustomerSession()->addError(Mage::helper('Mage_Downloadable_Helper_Data')->__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
         return $this->_redirectReferer();

@@ -211,23 +211,23 @@ Product view
                     </block>
                 <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml" translate="label">
                     <label>Bottom Block Options Wrapper</label>
-                    <action method="insert"><block>product.tierprices</block></action>
+                    <action method="insert"><element>product.tierprices</element></action>
                     <block type="Mage_Catalog_Block_Product_View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
-                    <action method="append"><block>product.info.addtocart</block></action>
-                    <action method="append"><block>product.info.addto</block></action>
+                    <action method="append"><element>product.info.addtocart</element></action>
+                    <action method="append"><element>product.info.addto</element></action>
                 </block>
 
                 <block type="Mage_Core_Block_Template_Facade" name="product.info.container1" as="container1">
                     <action method="setDataByKey"><key>alias_in_layout</key><value>container1</value></action>
                     <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><block>product.info.options.wrapper</block></action>
-                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                    <action method="append"><element>product.info.options.wrapper</element></action>
+                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
                 </block>
                 <block type="Mage_Core_Block_Template_Facade" name="product.info.container2" as="container2">
                     <action method="setDataByKey"><key>alias_in_layout</key><value>container2</value></action>
                     <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><block>product.info.options.wrapper</block></action>
-                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                    <action method="append"><element>product.info.options.wrapper</element></action>
+                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
                 </block>
                 <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
                 <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>

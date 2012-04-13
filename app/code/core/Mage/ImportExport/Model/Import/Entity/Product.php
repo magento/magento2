@@ -63,6 +63,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
     const COL_ATTR_SET = '_attribute_set';
     const COL_TYPE     = '_type';
     const COL_CATEGORY = '_category';
+    const COL_ROOT_CATEGORY = '_root_category';
     const COL_SKU      = 'sku';
 
     /**
@@ -114,6 +115,13 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      * @var array
      */
     protected $_categories = array();
+
+    /**
+     * Categories text-path to ID hash with roots checking.
+     *
+     * @var array
+     */
+    protected $_categoriesWithRoots = array();
 
     /**
      * Customer groups ID-to-name.
@@ -211,9 +219,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      * @var array
      */
     protected $_particularAttributes = array(
-        '_store', '_attribute_set', '_type', '_category', '_product_websites', '_tier_price_website',
-        '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price', '_links_related_sku',
-        '_group_price_website', '_group_price_customer_group', '_group_price_price',
+        '_store', '_attribute_set', '_type', self::COL_CATEGORY, self::COL_ROOT_CATEGORY, '_product_websites',
+        '_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price',
+        '_links_related_sku', '_group_price_website', '_group_price_customer_group', '_group_price_price',
         '_links_related_position', '_links_crosssell_sku', '_links_crosssell_position', '_links_upsell_sku',
         '_links_upsell_position', '_custom_option_store', '_custom_option_type', '_custom_option_title',
         '_custom_option_is_required', '_custom_option_price', '_custom_option_sku', '_custom_option_max_characters',
@@ -381,7 +389,15 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                 for ($i = 1; $i < $pathSize; $i++) {
                     $path[] = $collection->getItemById($structure[$i])->getName();
                 }
-                $this->_categories[implode('/', $path)] = $category->getId();
+                $rootCategoryName = array_shift($path);
+                if (!isset($this->_categoriesWithRoots[$rootCategoryName])) {
+                    $this->_categoriesWithRoots[$rootCategoryName] = array();
+                }
+                $index = implode('/', $path);
+                $this->_categoriesWithRoots[$rootCategoryName][$index] = $category->getId();
+                if ($pathSize > 2) {
+                    $this->_categories[$index] = $category->getId();
+                }
             }
         }
         return $this;
@@ -491,7 +507,14 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      */
     protected function _isProductCategoryValid(array $rowData, $rowNum)
     {
-        if (!empty($rowData[self::COL_CATEGORY]) && !isset($this->_categories[$rowData[self::COL_CATEGORY]])) {
+        $emptyCategory = empty($rowData[self::COL_CATEGORY]);
+        $emptyRootCategory = empty($rowData[self::COL_ROOT_CATEGORY]);
+        $hasCategory = $emptyCategory ? false : isset($this->_categories[$rowData[self::COL_CATEGORY]]);
+        $category = $emptyRootCategory ? null : $this->_categoriesWithRoots[$rowData[self::COL_ROOT_CATEGORY]];
+        if (!$emptyCategory && !$hasCategory
+            || !$emptyRootCategory && !isset($category)
+            || !$emptyRootCategory && !$emptyCategory && !isset($category[$rowData[self::COL_CATEGORY]])
+        ) {
             $this->addRowError(self::ERROR_INVALID_CATEGORY, $rowNum);
             return false;
         }
@@ -1164,10 +1187,17 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                 if (!empty($rowData['_product_websites'])) { // 2. Product-to-Website phase
                     $websites[$rowSku][$this->_websiteCodeToId[$rowData['_product_websites']]] = true;
                 }
-                if (!empty($rowData[self::COL_CATEGORY])) { // 3. Categories phase
-                    $categories[$rowSku][$this->_categories[$rowData[self::COL_CATEGORY]]] = true;
+
+                // 3. Categories phase
+                $categoryPath = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
+                if (!empty($rowData[self::COL_ROOT_CATEGORY])) {
+                    $categoryId = $this->_categoriesWithRoots[$rowData[self::COL_ROOT_CATEGORY]][$categoryPath];
+                    $categories[$rowSku][$categoryId] = true;
+                } elseif (!empty($categoryPath)) {
+                    $categories[$rowSku][$this->_categories[$categoryPath]] = true;
                 }
-                if (!empty($rowData['_tier_price_website'])) { // 4. Tier prices phase
+
+                if (!empty($rowData['_tier_price_website'])) { // 4.1. Tier prices phase
                     $tierPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_tier_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_tier_price_customer_group'] == self::VALUE_ALL)
@@ -1178,7 +1208,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             ? 0 : $this->_websiteCodeToId[$rowData['_tier_price_website']]
                     );
                 }
-                if (!empty($rowData['_group_price_website'])) { // 5. Group prices phase
+                if (!empty($rowData['_group_price_website'])) { // 4.2. Group prices phase
                     $groupPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_group_price_customer_group'] == self::VALUE_ALL)

@@ -81,6 +81,18 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
         $this->assertContains('<meta name="description" content="Simple Product 1 Meta Description" />', $responseBody);
     }
 
+    /**
+     * @magentoDataFixture Mage/Catalog/_files/product_simple.php
+     */
+    public function testViewActionConfigurable()
+    {
+        $this->dispatch('catalog/product/view/id/1');
+        $html = $this->getResponse()->getBody();
+        $format = '%Alass="product-options" id="product-options-wrapper">%A'
+            . '<div class="product-options-bottom">%A';
+        $this->assertStringMatchesFormat($format, $html);
+    }
+
     public function testViewActionNoProductId()
     {
         $this->dispatch('catalog/product/view/id/');
@@ -116,6 +128,30 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
     public function testGalleryActionNoProduct()
     {
         $this->dispatch('catalog/product/gallery/id/');
+
+        $this->assert404NotFound();
+    }
+
+    /**
+     * @magentoDataFixture Mage/Catalog/controllers/_files/products.php
+     */
+    public function testImageAction()
+    {
+        $this->markTestSkipped("All logic has been cut to avoid possible malicious usage of the method");
+        ob_start();
+        /* Preceding slash in URL is required in this case */
+        $this->dispatch('/catalog/product/image' . $this->_getProductImageFile());
+        $imageContent = ob_get_clean();
+        /**
+         * Check against PNG file signature.
+         * @link http://www.libpng.org/pub/png/spec/1.2/PNG-Rationale.html#R.PNG-file-signature
+         */
+        $this->assertStringStartsWith(sprintf("%cPNG\r\n%c\n", 137, 26), $imageContent);
+    }
+
+    public function testImageActionNoImage()
+    {
+        $this->dispatch('catalog/product/image/');
 
         $this->assert404NotFound();
     }

@@ -101,7 +101,13 @@ class Mage_AdminNotification_Model_Resource_Inbox extends Mage_Core_Model_Resour
         foreach ($data as $item) {
             $select = $adapter->select()
                 ->from($this->getMainTable())
-                ->where('url=?', $item['url']);
+                ->where('title = ?', $item['title']);
+
+            if (empty($item['url'])) {
+                $select->where('url IS NULL');
+            } else {
+                $select->where('url = ?', $item['url']);
+            }
 
             if (isset($item['internal'])) {
                 $row = false;

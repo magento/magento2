@@ -101,14 +101,20 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
         $customerGroup = Mage::getModel('Mage_Customer_Model_Group');
         $id = $this->getRequest()->getParam('id');
         if (!is_null($id)) {
-            $customerGroup->load($id);
+            $customerGroup->load((int)$id);
         }
 
-        if ($taxClass = $this->getRequest()->getParam('tax_class')) {
+        $taxClass = (int)$this->getRequest()->getParam('tax_class');
+
+        if ($taxClass) {
             try {
-                $customerGroup->setCode($this->getRequest()->getParam('code'))
-                    ->setTaxClassId($taxClass)
-                    ->save();
+                $customerGroupCode = (string)$this->getRequest()->getParam('code');
+
+                if (!empty($customerGroupCode)) {
+                    $customerGroup->setCode($customerGroupCode);
+                }
+
+                $customerGroup->setTaxClassId($taxClass)->save();
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Customer_Helper_Data')->__('The customer group has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl('*/customer_group'));
                 return;
@@ -121,7 +127,6 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
         } else {
             $this->_forward('new');
         }
-
     }
 
     /**

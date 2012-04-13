@@ -25,8 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
-    '_anonSuffix' => array('class_scope' => 'Mage_Core_Block_Abstract'),
-    '_isAnonymous' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_anonSuffix',
+    '_isAnonymous',
     'decoratedIsFirst' => array('suggestion' => 'getDecoratedIsFirst'),
     'decoratedIsEven' => array('suggestion' => 'getDecoratedIsEven'),
     'decoratedIsOdd' => array('suggestion' => 'getDecoratedIsOdd'),
@@ -65,6 +65,6 @@ return array(
     '_track_id',
     '_order_id',
     '_ship_id',
-    '_sortedChildren' => array('class_scope' => 'Mage_Core_Block_Abstract'),
-    '_sortInstructions' => array('class_scope' => 'Mage_Core_Block_Abstract'),
+    '_sortedChildren',
+    '_sortInstructions',
 );

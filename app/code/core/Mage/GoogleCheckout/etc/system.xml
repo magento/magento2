@@ -79,7 +79,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment>Required for live Google Checkout transactions.</comment>
+                            <comment>Required for live Google Checkout transactions. Make sure that this option corresponds to Use Secure URLs in Frontend ("Web" > "Secure").</comment>
                         </use_secure_callback_url>
                         <debug translate="label">
                             <label>Debug</label>

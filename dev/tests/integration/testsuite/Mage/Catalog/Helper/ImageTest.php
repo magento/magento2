@@ -55,7 +55,7 @@ class Mage_Catalog_Helper_ImageTest extends PHPUnit_Framework_TestCase
         // image fixtures
         self::$_fixtureMediaDir = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')->getBaseMediaPath();
         mkdir(self::$_fixtureMediaDir . '/m/a', 0777, true);
-        $fixtureDir = dirname(__DIR__) . '/_files';
+        $fixtureDir = dirname(dirname(__FILE__)) . '/_files';
         copy("{$fixtureDir}/magento_image.jpg", self::$_fixtureMediaDir . '/m/a/magento_image.jpg');
         copy("{$fixtureDir}/magento_small_image.jpg", self::$_fixtureMediaDir . '/m/a/magento_small_image.jpg');
         copy("{$fixtureDir}/magento_thumbnail.jpg", self::$_fixtureMediaDir . '/m/a/magento_thumbnail.jpg');

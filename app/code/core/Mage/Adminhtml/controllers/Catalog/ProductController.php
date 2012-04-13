@@ -504,8 +504,12 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 }
             }
             $productData = $this->_filterDates($productData, $dateFields);
-
             $product->addData($productData);
+
+            /* set restrictions for date ranges */
+            $product->getResource()->getAttribute('special_from_date')
+                ->setMaxValue($product->getSpecialToDate());
+
             $product->validate();
             /**
              * @todo implement full validation process with errors returning which are ignoring now
@@ -852,7 +856,6 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 try {
                     foreach ($productIds as $productId) {
                         $product = Mage::getSingleton('Mage_Catalog_Model_Product')->load($productId);
-                        Mage::dispatchEvent('catalog_controller_product_delete', array('product' => $product));
                         $product->delete();
                     }
                     $this->_getSession()->addSuccess(

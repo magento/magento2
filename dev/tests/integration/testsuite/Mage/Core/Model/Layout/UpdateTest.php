@@ -39,7 +39,7 @@ class Mage_Core_Model_Layout_UpdateTest extends PHPUnit_Framework_TestCase
     {
         /* Point application to predefined layout fixtures */
         Mage::getConfig()->setOptions(array(
-            'design_dir' => dirname(__DIR__) . '/_files/design',
+            'design_dir' => dirname(dirname(__FILE__)) . '/_files/design',
         ));
         Mage::getDesign()->setDesignTheme('test/default/default');
         /* Disable loading and saving layout cache */

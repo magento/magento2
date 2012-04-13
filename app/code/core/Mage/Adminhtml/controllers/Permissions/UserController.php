@@ -87,19 +87,11 @@ class Mage_Adminhtml_Permissions_UserController extends Mage_Adminhtml_Controlle
             $breadcrumb = $this->__('New User');
         }
         $this->_initAction()
-            ->_addBreadcrumb($breadcrumb, $breadcrumb)
-            ->_addContent(
-                $this->getLayout()
-                    ->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit')
-                    ->setData('action', $this->getUrl('*/permissions_user/save'))
-            )
-            ->_addLeft($this->getLayout()->createBlock('Mage_Adminhtml_Block_Permissions_User_Edit_Tabs'));
+            ->_addBreadcrumb($breadcrumb, $breadcrumb);
 
-        $this->_addJs(
-            $this->getLayout()
-                ->createBlock('Mage_Adminhtml_Block_Template')
-                ->setTemplate('permissions/user_roles_grid_js.phtml')
-        );
+        $this->getLayout()->getBlock('adminhtml.permissions.user.edit')
+            ->setData('action', $this->getUrl('*/permissions_user/save'));
+
         $this->renderLayout();
     }
 

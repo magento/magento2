@@ -415,7 +415,7 @@ class Mage_Tax_Model_Resource_Calculation extends Mage_Core_Model_Resource_Db_Ab
             $adapter->quoteInto('calc_table.customer_tax_class_id = ?', $customerTaxClassId),
 
         );
-        if ($productTaxClass) {
+        if ($productTaxClass !== null) {
             $productTaxClassId = (int)$productTaxClass;
             $calcJoinConditions[] = $adapter->quoteInto('calc_table.product_tax_class_id = ?', $productTaxClassId);
         }

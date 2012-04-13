@@ -222,7 +222,12 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
         // prepare response object for event
         $response = new Varien_Object();
         $response->setAdditionalCalculations(array());
-        $table = self::INDEX_TABLE_ALIAS;
+        $tableAliases = array_keys($select->getPart(Zend_Db_Select::FROM));
+        if (in_array(self::INDEX_TABLE_ALIAS, $tableAliases)) {
+            $table = self::INDEX_TABLE_ALIAS;
+        } else {
+            $table = reset($tableAliases);
+        }
 
         // prepare event arguments
         $eventArgs = array(
@@ -893,9 +898,11 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
         $priceExpression = $this->getPriceExpression($select) . ' ' . $this->getAdditionalPriceExpression($select);
         $sqlEndPart = ') * ' . $this->getCurrencyRate() . ', 2)';
         $select = $this->_getSelectCountSql($select, false);
-        $select->columns('ROUND(MAX(' . $priceExpression . $sqlEndPart);
-        $select->columns('ROUND(MIN(' . $priceExpression . $sqlEndPart);
-        $select->columns($this->getConnection()->getStandardDeviationSql('ROUND((' . $priceExpression . $sqlEndPart));
+        $select->columns(array(
+            'max' => 'ROUND(MAX(' . $priceExpression . $sqlEndPart,
+            'min' => 'ROUND(MIN(' . $priceExpression . $sqlEndPart,
+            'std' => $this->getConnection()->getStandardDeviationSql('ROUND((' . $priceExpression . $sqlEndPart)
+        ));
         $select->where($this->getPriceExpression($select) . ' IS NOT NULL');
         $row = $this->getConnection()->fetchRow($select, $this->_bindParams, Zend_Db::FETCH_NUM);
         $this->_pricesCount = (int)$row[0];

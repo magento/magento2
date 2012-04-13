@@ -112,6 +112,7 @@
 "The page URL key contains capital letters or disallowed symbols.","De pagina-URL sleutel bevat hoofdletters of niet-toegestane symbolen."
 "The page has been deleted.","De pagina is verwijderd"
 "The page has been saved.","De pagina is opgeslagen"
+"The static block content cannot contain  directive with its self.","De inhoud van het statische blok mag geen richtlijn met zichzelf bevatten."
 "This block no longer exists.","Dit blok bestaat niet langer"
 "This page no longer exists.","Deze pagina bestaat niet langer"
 "Title","Titel"

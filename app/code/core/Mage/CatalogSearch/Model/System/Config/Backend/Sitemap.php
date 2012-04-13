@@ -28,7 +28,7 @@
  * Cache cleaner backend model
  *
  */
-class Mage_Catalogsearch_Model_System_Config_Backend_Sitemap extends Mage_Adminhtml_Model_System_Config_Backend_Cache
+class Mage_CatalogSearch_Model_System_Config_Backend_Sitemap extends Mage_Adminhtml_Model_System_Config_Backend_Cache
 {
     /**
      * Cache tags to clean

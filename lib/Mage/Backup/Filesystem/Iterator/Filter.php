@@ -44,7 +44,7 @@ class Mage_Backup_Filesystem_Iterator_Filter extends FilterIterator
      * Constructor
      *
      * @param Iterator $iterator
-     * @param array $skipFiles
+     * @param array $filters list of files to skip
      */
     public function __construct(Iterator $iterator, array $filters)
     {

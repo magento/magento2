@@ -353,7 +353,7 @@ class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                         'group'                      => 'Custom Design',
                     ),
                     'filter_price_range' => array(
-                        'type'                       => 'int',
+                        'type'                       => 'decimal',
                         'label'                      => 'Layered Navigation Price Step',
                         'input'                      => 'text',
                         'required'                   => false,

@@ -12,6 +12,7 @@
 "AuthSub","AuthSub"
 "Available Products","可用产品"
 "Base Currency should be set to %s for %s in system configuration. Otherwise item prices won't be correct in Google Base.","应在系统配置中将基本货币设置为 %s 的 %s，否则商品价格在Google Base中将不准确。"
+"Cannot update Google Base Item for Store '%s'","无法为店铺 '%s' 更新 Google Base 项"
 "Captcha confirmation error: %s","验证码有误：%s"
 "Captcha has been confirmed.","验证码已确认。"
 "Catalog","分类"

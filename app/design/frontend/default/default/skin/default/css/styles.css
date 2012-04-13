@@ -189,7 +189,6 @@ input.input-text:focus,select:focus,textarea:focus { background-color:#edf7fd; }
 .form-list li.additional-row .btn-remove { float:right; margin:5px 0 0; }
 .form-list .input-range input.input-text { width:74px; }
 
-
 .form-list-narrow li  { margin-bottom:0; } 
 .form-list-narrow li .input-box { margin-bottom:6px; }
 .form-list-narrow li.wide .input-box { width:260px; } 
@@ -1193,8 +1192,12 @@ tr.summary-details-excluded { font-style:italic; }
 .cart-table .item-msg { margin:5px 0; font-size:11px; font-weight:bold; color:#df280a; }
 .cart-table tfoot td { padding:5px 10px; }
 .cart-table .btn-continue { float:left; }
+.cart-table .btn-empty span,
 .cart-table .btn-continue span,
 .cart-table .btn-update span { border-color:#406a83; background:#618499; }
+.cart-table .btn-update,
+.cart-table .btn-empty { float:right; }
+.cart-table .btn-update { margin-left:10px; }
 
 /* Shopping Cart Collateral boxes */
 .cart .cart-collaterals { padding:25px 0 0; }

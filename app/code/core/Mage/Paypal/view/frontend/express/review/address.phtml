@@ -36,7 +36,7 @@
                     <div class="field">
                         <label for="<?php echo $prefix ?>:company"><?php echo $this->__('Company') ?></label>
                         <div class="input-box">
-                            <input type="text" id="<?php echo $prefix ?>:company" name="<?php echo $prefix ?>[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text" />
+                            <input type="text" id="<?php echo $prefix ?>:company" name="<?php echo $prefix ?>[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('company') ?>" />
                         </div>
                     </div>
         <?php if(!$this->isCustomerLoggedIn() && !$this->getHideEmailAddress()): ?>
@@ -46,32 +46,36 @@
                             <input type="text" name="<?php echo $prefix ?>[email]" id="<?php echo $prefix ?>:email" value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
                         </div>
                     </div>
-        <?php endif ?>
+        <?php endif; ?>
                 </li>
+        <?php $_streetValidationClass = $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('street'); ?>
                 <li class="wide">
                     <label for="<?php echo $prefix ?>:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
                     <div class="input-box">
-                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="<?php echo $prefix ?>[street][]" id="<?php echo $prefix ?>:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" />
+                        <input type="text" title="<?php echo $this->__('Street Address') ?>" name="<?php echo $prefix ?>[street][]" id="<?php echo $prefix ?>:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                     </div>
                 </li>
-        <?php for ($_i=2, $_n=$this->helper('Mage_Customer_Helper_Address')->getStreetLines(); $_i<=$_n; $_i++): ?>
+        <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+        <?php for ($_i = 2, $_n = $this->helper('Mage_Customer_Helper_Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
                 <li class="add-field">
                     <div class="input-box">
-                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>" name="<?php echo $prefix ?>[street][]" id="<?php echo $prefix ?>:street<?php echo $_i?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text" />
+                        <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>" name="<?php echo $prefix ?>[street][]" id="<?php echo $prefix ?>:street<?php echo $_i?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                     </div>
                 </li>
-        <?php endfor ?>
+        <?php endfor; ?>
+                <?php if ($this->helper('Mage_Customer_Helper_Address')->isVatAttributeVisible()) : ?>
                 <li class="wide">
                     <label for="<?php echo $prefix ?>:vat_id"><?php echo $this->__('VAT Number') ?></label>
                     <div class="input-box">
-                        <input type="text" id="<?php echo $prefix ?>:vat_id" name="<?php echo $prefix ?>[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo $this->__('VAT Number') ?>" class="input-text" />
+                        <input type="text" id="<?php echo $prefix ?>:vat_id" name="<?php echo $prefix ?>[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo $this->__('VAT Number') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('vat_id') ?>" />
                     </div>
                 </li>
+                <?php endif; ?>
                 <li class="fields">
                     <div class="field">
                         <label for="<?php echo $prefix ?>:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
                         <div class="input-box">
-                            <input type="text" title="<?php echo $this->__('City') ?>" name="<?php echo $prefix ?>[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text required-entry" id="<?php echo $prefix ?>:city" />
+                            <input type="text" title="<?php echo $this->__('City') ?>" name="<?php echo $prefix ?>[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('city') ?>" id="<?php echo $prefix ?>:city" />
                         </div>
                     </div>
                     <div class="field">
@@ -85,7 +89,7 @@
                                 $('<?php echo $prefix ?>:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                             //]]>
                             </script>
-                            <input type="text" id="<?php echo $prefix ?>:region" name="<?php echo $prefix ?>[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
+                            <input type="text" id="<?php echo $prefix ?>:region" name="<?php echo $prefix ?>[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                         </div>
                     </div>
                 </li>
@@ -93,7 +97,7 @@
                     <div class="field">
                         <label for="<?php echo $prefix ?>:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
                         <div class="input-box">
-                            <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="<?php echo $prefix ?>[postcode]" id="<?php echo $prefix ?>:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international required-entry" />
+                            <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="<?php echo $prefix ?>[postcode]" id="<?php echo $prefix ?>:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('postcode') ?>" />
                         </div>
                     </div>
                     <div class="field">
@@ -107,13 +111,13 @@
                     <div class="field">
                         <label for="<?php echo $prefix ?>:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
                         <div class="input-box">
-                            <input type="text" name="<?php echo $prefix ?>[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" id="<?php echo $prefix ?>:telephone" />
+                            <input type="text" name="<?php echo $prefix ?>[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('telephone') ?>" id="<?php echo $prefix ?>:telephone" />
                         </div>
                     </div>
                     <div class="field">
                         <label for="<?php echo $prefix ?>:fax"><?php echo $this->__('Fax') ?></label>
                         <div class="input-box">
-                            <input type="text" name="<?php echo $prefix ?>[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text" id="<?php echo $prefix ?>:fax" />
+                            <input type="text" name="<?php echo $prefix ?>[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('fax') ?>" id="<?php echo $prefix ?>:fax" />
                         </div>
                     </div>
                 </li>
@@ -122,7 +126,7 @@
                     <li class="control">
                         <div class="field">
                             <div class="input-box">
-                                <input type="checkbox" name="<?php echo $prefix ?>[as_shipping]" class="checkbox" value="1" title="<?php echo $this->__('Same as shipping') ?>" id="<?php echo $prefix ?>:as_shipping" <?php if ($this->getAddress()->getSameAsShipping()):?>checked="checked"<?php endif;?>/>
+                                <input type="checkbox" name="<?php echo $prefix ?>[as_shipping]" class="checkbox" value="1" title="<?php echo $this->__('Same as shipping') ?>" id="<?php echo $prefix ?>:as_shipping" <?php if ($this->getAddress()->getSameAsBilling()):?>checked="checked"<?php endif;?>/>
                             </div>
                             <label for="<?php echo $prefix ?>:as_shipping"><?php echo $this->__('Same as shipping') ?></label>
                         </div>
@@ -135,7 +139,7 @@
 </fieldset>
 <script type="text/javascript">
 //<![CDATA[
-    var <?php echo $prefix ?>RegionUpdater = new RegionUpdater('<?php echo $prefix ?>:country_id', '<?php echo $prefix ?>:region', '<?php echo $prefix ?>:region_id', countryRegions, undefined, '<?php echo $prefix ?>:postcode');
+    var <?php echo $prefix ?>RegionUpdater = new RegionUpdater('<?php echo $prefix ?>:country_id', '<?php echo $prefix ?>:region', '<?php echo $prefix ?>:region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, '<?php echo $prefix ?>:postcode');
     <?php echo $prefix ?>RegionUpdater.update();
 //]]>
 </script>

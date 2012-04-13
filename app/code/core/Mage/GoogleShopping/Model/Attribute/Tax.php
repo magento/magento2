@@ -34,6 +34,10 @@
 class Mage_GoogleShopping_Model_Attribute_Tax extends Mage_GoogleShopping_Model_Attribute_Default
 {
     /**
+     * Maximum number of tax rates per product supported by google shopping api
+     */
+    const RATES_MAX = 100;
+    /**
      * Set current attribute to entry (for specified product)
      *
      * @param Mage_Catalog_Model_Product $product
@@ -51,16 +55,51 @@ class Mage_GoogleShopping_Model_Attribute_Tax extends Mage_GoogleShopping_Model_
         $customerTaxClass = $calc->getDefaultCustomerTaxClass($product->getStoreId());
         $rates = $calc->getRatesByCustomerAndProductTaxClasses($customerTaxClass, $product->getTaxClassId());
         $targetCountry = Mage::getSingleton('Mage_GoogleShopping_Model_Config')->getTargetCountry($product->getStoreId());
+        $ratesTotal = 0;
         foreach ($rates as $rate) {
             if ($targetCountry == $rate['country']) {
-                $entry->addTax(array(
-                    'tax_rate' =>     $rate['value'] * 100,
-                    'tax_country' =>  empty($rate['country']) ? '*' : $rate['country'],
-                    'tax_region' =>   empty($rate['state']) ? '*' : $rate['state'],
-                ));
+                $regions = $this->_parseRegions($rate['state'], $rate['postcode']);
+                $ratesTotal += count($regions);
+                if ($ratesTotal > self::RATES_MAX) {
+                    Mage::throwException(Mage::helper('Mage_GoogleShopping_Helper_Data')->__("Google shopping only supports %d tax rates per product", self::RATES_MAX));
+                }
+                foreach ($regions as $region) {
+                    $entry->addTax(array(
+                        'tax_rate' =>     $rate['value'] * 100,
+                        'tax_country' =>  empty($rate['country']) ? '*' : $rate['country'],
+                        'tax_region' =>   $region
+                    ));
+                }
             }
         }
 
         return $entry;
+    }
+
+    /**
+     * Retrieve array of regions characterized by provided params
+     *
+     * @param string $state
+     * @param string $zip
+     * @return array
+     */
+    protected function _parseRegions($state, $zip)
+    {
+        return (!empty($zip) && $zip != '*') ? $this->_parseZip($zip) : (($state) ? array($state) : array('*'));
+    }
+
+    /**
+     * Retrieve array of regions characterized by provided zip code
+     *
+     * @param string $zip
+     * @return array
+     */
+    protected function _parseZip($zip)
+    {
+        if (strpos($zip, '-') == -1) {
+            return array($zip);
+        } else {
+            return Mage::helper('Mage_GoogleCheckout_Helper_Data')->zipRangeToZipPattern($zip);
+        }
     }
 }

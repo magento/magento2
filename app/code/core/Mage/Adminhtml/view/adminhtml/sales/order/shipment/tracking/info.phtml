@@ -30,7 +30,7 @@
         <?php echo $this->getTrackingInfo()->getErrorMessage() ?>
     <?php else: ?>
         <?php if ($this->getTrackingInfo()->getUrl()): ?>
-            Please, visit for more info: <a href="<?php echo $this->getTrackingInfo()->getUrl() ?>" target="_blank"><?php echo $this->trackingInfo->getCarrierTitle() ?></a><br/>
+            Please, visit for more info: <a href="<?php echo $this->getTrackingInfo()->getUrl() ?>" target="_blank"><?php echo $this->escapeHtml($this->trackingInfo->getCarrierTitle()) ?></a><br/>
         <?php endif; ?>
 
         <?php if ($this->getTrackingInfo()->getStatus()): ?>

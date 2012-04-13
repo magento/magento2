@@ -33,10 +33,12 @@
  */
 class Mage_Page_Block_Html_Notices extends Mage_Core_Block_Template
 {
+
     /**
-     * Path to configuration, check is enable cookie restriction mode
+     * Cookie restriction lifetime configuration path
      */
-    const XML_PATH_COOKIE_RESTRICTION  = 'web/cookie/cookie_restriction';
+    const XML_PATH_COOKIE_RESTRICTION_LIFETIME = 'web/cookie/cookie_restriction_lifetime';
+
 
     /**
      * Check if noscript notice should be displayed
@@ -59,6 +61,16 @@ class Mage_Page_Block_Html_Notices extends Mage_Core_Block_Template
     }
 
     /**
+     * Get cookie restriction lifetime (in seconds)
+     *
+     * @return int
+     */
+    public function getCookieRestrictionLifetime()
+    {
+        return (int)Mage::getStoreConfig(self::XML_PATH_COOKIE_RESTRICTION_LIFETIME);
+    }
+
+    /**
      * Check if cookie restriction notice should be displayed
      *
      * @return bool
@@ -78,29 +90,5 @@ class Mage_Page_Block_Html_Notices extends Mage_Core_Block_Template
     public function getPrivacyPolicyLink()
     {
         return Mage::getUrl('privacy-policy-cookie-restriction-mode');
-    }
-
-    /**
-     * Return serialzed list of accepted save cookie website
-     *
-     * @return string
-     */
-    public function getAcceptedSaveCookiesWebsiteIds()
-    {
-        $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        $acceptedSaveCookiesWebsites[Mage::app()->getWebsite()->getId()] = 1;
-        return serialize($acceptedSaveCookiesWebsites);
-    }
-
-    /**
-     * Get accepted save cookies websites
-     *
-     * @return array
-     */
-    protected function _getAcceptedSaveCookiesWebsites()
-    {
-        $serializedList = Mage::getSingleton('Mage_Core_Model_Cookie')->get(Mage_Page_Helper_Data::IS_USER_ALLOWED_SAVE_COOKIE);
-        $unSerializedList = unserialize($serializedList);
-        return is_array($unSerializedList) ? $unSerializedList : array();
     }
 }

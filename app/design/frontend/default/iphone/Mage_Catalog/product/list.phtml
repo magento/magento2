@@ -78,29 +78,6 @@
                 <?php endforeach ?>
             </ul>
         </div>
-        <script>
-            document.observe('dom:loaded', function() {
-                $$('.c-list .product-image').each(function(n) {
-                    var parent = n.up('a'),
-                        clone  = n.up().clone(true).addClassName('cloned');
-                    parent.insert(clone.wrap('div', {'class' : 'cloned-wrap'}));
-
-                    new webkit_draggable(clone.up(), { handle : clone.select('.product-image')[0], revert : true, scroll : true, onStart : function(r, e) {
-                            r.setStyle({'opacity':'100'});
-                        },
-                        onEnd : function(r, e) {
-                            r.setStyle({'opacity':'0'});
-                        }
-                    });
-                });
-                webkit_drop.add($('menu'),
-                {
-                    onDrop : function(elem, e) { e.preventDefault(); setLocation(elem.up('li').down('.actions li:last-child a').readAttribute('href')); elem.remove(); },
-                    onOver : function(elem, e) { e.preventDefault(); elem.down().addClassName('to-cart-animate'); },
-                    onOut  : function(elem) { elem.down().removeClassName('to-cart-animate'); }
-                });
-            });
-        </script>
     <?php else: ?>
         <div class="category-products">
             <?php $_collectionSize = $_productCollection->count() ?>
@@ -169,17 +146,17 @@
             </table>
         </div>
         <script>
-            document.observe('dom:loaded', function() {
+            document.observe('dom:loaded', function () {
                 $('c-grid').addClassName('ready');
 
-                $$('.c-grid .cloned-wrap').each(function(n) {
-                    new webkit_draggable(n, { handle : n.up('.cell').select('.product-image')[1], revert : true, scroll : true, onStart : function(r, e) {
-                            r.setStyle({'opacity':'100', 'visibility':'visible'}).down('.wrap').addClassName('drop-start');
-                        },
-                        onEnd : function(r, e) {
-                            r.setStyle({'opacity':'0', 'visibility':'hidden'}).down('.wrap').removeClassName('drop-start');
-                        }
-                    });
+                $('c-grid').on('click', ".i-flip", function(e, n) {
+                        var par = n.up('.flip-block');
+                        e.preventDefault();
+                        par.toggleClassName('active');
+                });
+
+                $('c-grid').select('.front').each(function (n) {
+                    n.setStyle({'height' :n.up('.cell').getDimensions().height - 1 + 'px'});
                 });
             });
         </script>

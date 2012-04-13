@@ -27,7 +27,6 @@
 
 /**
  * @group module:Mage_Admin
- * @magentoDataFixture Mage/Admin/_files/user.php
  */
 class Mage_Admin_Model_UserTest extends PHPUnit_Framework_TestCase
 {
@@ -48,7 +47,7 @@ class Mage_Admin_Model_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->_model->loadByUsername('non_existing_user');
         $this->assertNull($this->_model->getId(), 'The admin user has an unexpected ID');
-        $this->_model->loadByUsername(Mage_Admin_Utility_User::CRED_USERNAME);
+        $this->_model->loadByUsername(Magento_Test_Bootstrap::ADMIN_NAME);
         $this->assertNotEmpty($this->_model->getId(), 'The admin user should have been loaded');
     }
 }

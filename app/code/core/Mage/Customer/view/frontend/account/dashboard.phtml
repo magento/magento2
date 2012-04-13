@@ -35,6 +35,8 @@
         <div class="box-head">
             <h2><?php echo $this->__('Account Information') ?></h2>
         </div>
+        <?php /* Extensions placeholder */ ?>
+        <?php echo $this->getChildHtml('customer.account.dashboard.extra') ?>
         <?php echo $this->getChildHtml('info') ?>
         <?php echo $this->getChildHtml('address') ?>
     </div>

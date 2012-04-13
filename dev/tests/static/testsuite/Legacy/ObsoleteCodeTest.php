@@ -111,9 +111,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_classes*.php', $content, $file);
         foreach ($declarations as $entity => $suggestion) {
-            $this->assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS',
-                $content,
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Class '$entity' is obsolete. $suggestion"
             );
         }
@@ -127,8 +125,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_methods*.php', $content, $file);
         foreach ($declarations as $method => $suggestion) {
-            $this->assertNotRegExp('/[^a-z\d_]' . preg_quote($method, '/') . '\s*\(/iS',
-                $content, "Method '$method' is obsolete. $suggestion"
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($method, '/') . '\s*\(/iS', $content,
+                "Method '$method' is obsolete. $suggestion"
             );
         }
     }
@@ -138,10 +136,10 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
      */
     protected function _testObsoleteMethodArguments($content)
     {
-        $this->assertNotRegExp('/[^a-z\d_]getTypeInstance\s*\(\s*[^\)]+/iS', $content,
+        $this->_assertNotRegExp('/[^a-z\d_]getTypeInstance\s*\(\s*[^\)]+/iS', $content,
             'Backwards-incompatible change: method getTypeInstance() is not supposed to be invoked with any arguments.'
         );
-        $this->assertNotRegExp('/\->getUsedProductIds\(([^\)]+,\s*[^\)]+)?\)/', $content,
+        $this->_assertNotRegExp('/\->getUsedProductIds\(([^\)]+,\s*[^\)]+)?\)/', $content,
             'Backwards-incompatible change: method getUsedProductIds($product)'
             . ' must be invoked with one and only one argument - product model object'
         );
@@ -155,9 +153,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_properties*.php', $content, $file);
         foreach ($declarations as $entity => $suggestion) {
-            $this->assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS',
-                $content,
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Property '$entity' is obsolete. $suggestion"
             );
         }
@@ -169,9 +165,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteActions($content)
     {
         $suggestion = 'Resizing images upon the client request is obsolete, use server-side resizing instead';
-        $this->assertNotRegExp(
-            '#[^a-z\d_/]catalog/product/image[^a-z\d_/]#iS',
-            $content,
+        $this->_assertNotRegExp('#[^a-z\d_/]catalog/product/image[^a-z\d_/]#iS', $content,
             "Action 'catalog/product/image' is obsolete. $suggestion"
         );
     }
@@ -184,9 +178,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_constants*.php', $content, $file);
         foreach ($declarations as $entity => $suggestion) {
-            $this->assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS',
-                $content,
+            $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Constant '$entity' is obsolete. $suggestion"
             );
         }
@@ -197,9 +189,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
      */
     protected function _testObsoletePropertySkipCalculate($content)
     {
-        $this->assertNotRegExp(
-            '/[^a-z\d_]skipCalculate[^a-z\d_]/iS',
-            $content,
+        $this->_assertNotRegExp('/[^a-z\d_]skipCalculate[^a-z\d_]/iS', $content,
             "Configuration property 'skipCalculate' is obsolete."
         );
     }
@@ -288,5 +278,20 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
             }
         }
         return $result;
+    }
+
+    /**
+     * Custom replacement for assertNotRegexp()
+     *
+     * In this particular test the original assertNotRegexp() cannot be used
+     * because of too large text $content, which obfuscates tests output
+     *
+     * @param string $regex
+     * @param string $content
+     * @param string $message
+     */
+    protected function _assertNotRegexp($regex, $content, $message)
+    {
+        $this->assertSame(0, preg_match($regex, $content), $message);
     }
 }

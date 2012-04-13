@@ -30,30 +30,55 @@
  */
 class Mage_Checkout_OnepageControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
-    protected function _enableQuote()
+    protected function setUp()
     {
+        parent::setUp();
         $quote = new Mage_Sales_Model_Quote();
         $quote->load('test01', 'reserved_order_id');
         Mage::getSingleton('Mage_Checkout_Model_Session')->setQuoteId($quote->getId());
     }
 
+    /**
+     * Covers onepage payment.phtml templates
+     */
+    public function testIndexAction()
+    {
+        $this->dispatch('checkout/onepage/index');
+        $html = $this->getResponse()->getBody();
+        $this->assertContains('<li id="opc-payment"', $html);
+        $this->assertContains('<dl class="sp-methods" id="checkout-payment-method-load">', $html);
+        $this->assertContains('<form id="co-billing-form" action="">', $html);
+    }
+
+    /**
+     * Covers app/code/core/Mage/Checkout/Block/Onepage/Payment/Info.php
+     */
     public function testProgressAction()
     {
-        $this->_enableQuote();
+        $steps = array(
+            'payment' => array('is_show' => true, 'complete' => true),
+            'billing' => array('is_show' => true),
+            'shipping' => array('is_show' => true),
+            'shipping_method' => array('is_show' => true),
+        );
+        Mage::getSingleton('Mage_Checkout_Model_Session')->setSteps($steps);
+
         $this->dispatch('checkout/onepage/progress');
-        $this->assertContains('Checkout', $this->getResponse()->getBody());
+        $html = $this->getResponse()->getBody();
+        $this->assertContains('Checkout', $html);
+        $methodTitle = Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote()->getPayment()->getMethodInstance()
+            ->getTitle();
+        $this->assertContains('<p>' . $methodTitle . '</p>', $html);
     }
 
     public function testShippingMethodAction()
     {
-        $this->_enableQuote();
         $this->dispatch('checkout/onepage/shippingmethod');
         $this->assertContains('no quotes are available', $this->getResponse()->getBody());
     }
 
     public function testReviewAction()
     {
-        $this->_enableQuote();
         $this->dispatch('checkout/onepage/review');
         $this->assertContains('checkout-review', $this->getResponse()->getBody());
     }

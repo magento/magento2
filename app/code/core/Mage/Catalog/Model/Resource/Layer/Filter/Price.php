@@ -37,7 +37,7 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
     /**
      * Minimal possible price
      */
-    const MIN_POSSIBLE_PRICE = .0001;
+    const MIN_POSSIBLE_PRICE = .01;
 
     /**
      * Initialize connection and define main table name
@@ -220,9 +220,9 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
     {
         $currencyRate = $filter->getLayer()->getProductCollection()->getCurrencyRate();
         if ($decrease) {
-            return round(($price - (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate, 3);
+            return ($price - (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate;
         }
-        return round(($price + (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate, 3);
+        return ($price + (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate;
     }
 
     /**
@@ -248,14 +248,12 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
     public function getCount($filter, $range)
     {
         $select = $this->_getSelect($filter);
-        $priceExpression = $this->_getPriceExpression($filter, $select);
-        $rate = $filter->getCurrencyRate();
+        $priceExpression = $this->_getFullPriceExpression($filter, $select);
 
         /**
          * Check and set correct variable values to prevent SQL-injections
          */
-        $rate = floatval($rate);
-        $range = floatval($range) / $rate;
+        $range = floatval($range);
         if ($range == 0) {
             $range = 1;
         }
@@ -282,7 +280,8 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
      */
     public function applyFilterToCollection($filter, $range, $index)
     {
-        $priceExpr = $this->_getPriceExpression($filter);
+        $select = $filter->getLayer()->getProductCollection()->getSelect();
+        $priceExpr = $this->_getPriceExpression($filter, $select);
         $filter->getLayer()->getProductCollection()
             ->getSelect()
             ->where($priceExpr . ' >= ' . $this->_getComparingValue(($range * ($index - 1)), $filter))
@@ -305,7 +304,9 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
     {
         $select = $this->_getSelect($filter);
         $priceExpression = $this->_getPriceExpression($filter, $select);
-        $select->columns(array($this->_getFullPriceExpression($filter, $select)));
+        $select->columns(array(
+            'min_price_expr' => $this->_getFullPriceExpression($filter, $select)
+        ));
         if (!is_null($lowerPrice)) {
             $select->where("$priceExpression >= " . $this->_getComparingValue($lowerPrice, $filter));
         }
@@ -367,7 +368,9 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
         }
 
         $pricesSelect
-            ->columns(array($this->_getFullPriceExpression($filter, $pricesSelect)))
+            ->columns(array(
+                'min_price_expr' => $this->_getFullPriceExpression($filter, $pricesSelect)
+            ))
             ->where("$priceExpression >= " . $this->_getComparingValue($price, $filter));
         if (!is_null($upperPrice)) {
             $pricesSelect->where("$priceExpression < " . $this->_getComparingValue($upperPrice, $filter));

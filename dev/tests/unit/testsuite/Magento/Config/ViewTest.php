@@ -40,7 +40,7 @@ class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException Magento_Exception
      */
     public function testConstructException()
     {

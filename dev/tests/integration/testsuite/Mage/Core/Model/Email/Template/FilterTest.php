@@ -93,4 +93,68 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
             $this->assertEquals($expectedResult, $result);
         }
     }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @dataProvider layoutDirectiveDataProvider
+     *
+     * @param string $currentArea
+     * @param string $directiveParams
+     * @param string $expectedOutput
+     */
+    public function testLayoutDirective($currentArea, $directiveParams, $expectedOutput)
+    {
+        $this->_emulateCurrentArea($currentArea);
+        Mage::getConfig()->setOptions(array('design_dir' => dirname(__DIR__) . '/_files/design'));
+        Mage::getDesign()->setDesignTheme('test/default/default');
+
+        $actualOutput = $this->_model->layoutDirective(array(
+            '{{layout ' . $directiveParams . '}}',
+            'layout',
+            ' ' . $directiveParams,
+        ));
+        $this->assertEquals($expectedOutput, trim($actualOutput));
+    }
+
+    public function layoutDirectiveDataProvider()
+    {
+        $result = array(
+            /* if the area parameter is omitted, frontend layout updates are used regardless of the current area */
+            'area parameter - omitted' => array(
+                'adminhtml',
+                'handle="email_template_test_handle"',
+                'E-mail content for frontend/test/default theme',
+            ),
+            'area parameter - frontend' => array(
+                'adminhtml',
+                'handle="email_template_test_handle" area="frontend"',
+                'E-mail content for frontend/test/default theme',
+            ),
+            'area parameter - backend' => array(
+                'frontend',
+                'handle="email_template_test_handle" area="adminhtml"',
+                'E-mail content for adminhtml/test/default theme',
+            ),
+            'custom parameter' => array(
+                'frontend',
+                'handle="email_template_test_handle" template="sample_email_content_custom.phtml"',
+                'Custom E-mail content for frontend/test/default theme',
+            ),
+        );
+        return $result;
+    }
+
+    /**
+     * Emulate the current application area
+     *
+     * @param string $area
+     */
+    protected function _emulateCurrentArea($area)
+    {
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getSingleton('Mage_Core_Model_Layout', array('area' => $area));
+        $this->assertEquals($area, $layout->getArea());
+        $this->assertEquals($area, Mage::app()->getLayout()->getArea());
+        Mage::getDesign()->setArea($area);
+    }
 }

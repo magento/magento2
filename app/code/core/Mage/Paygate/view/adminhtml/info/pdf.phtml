@@ -30,7 +30,7 @@
     $showCount = count($cards) > 1;
 ?>
 
-<?php echo $this->getMethod()->getTitle() ?>{{pdf_row_separator}}
+<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>{{pdf_row_separator}}
 <?php foreach ($cards as $key => $card): ?>
     <?php if ($showCount): ?>
        <?php echo sprintf($this->__('Credit Card %s'), $key + 1); ?>

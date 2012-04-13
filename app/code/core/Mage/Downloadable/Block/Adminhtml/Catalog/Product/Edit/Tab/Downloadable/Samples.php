@@ -31,7 +31,8 @@
  * @package     Mage_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Samples extends Mage_Adminhtml_Block_Widget
+class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Samples
+    extends Mage_Adminhtml_Block_Widget
 {
     /**
      * Class constructor
@@ -93,7 +94,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
         foreach ($samples as $item) {
             $tmpSampleItem = array(
                 'sample_id' => $item->getId(),
-                'title' => $item->getTitle(),
+                'title' => $this->escapeHtml($item->getTitle()),
                 'sample_url' => $item->getSampleUrl(),
                 'sample_type' => $item->getSampleType(),
                 'sort_order' => $item->getSortOrder(),
@@ -177,7 +178,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     public function getConfigJson()
     {
-        $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()->getUrl('*/downloadable_file/upload', array('type' => 'samples', '_secure' => true)));
+        $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')
+            ->addSessionParam()
+            ->getUrl('*/downloadable_file/upload', array('type' => 'samples', '_secure' => true)));
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('samples');
         $this->getConfig()->setFilters(array(

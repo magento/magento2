@@ -12,6 +12,7 @@
 "AuthSub","AuthSub"
 "Available Products","Beschikbare Producten"
 "Base Currency should be set to %s for %s in system configuration. Otherwise item prices won't be correct in Google Base.","Basis munteenheid moet op %s gezet worden voor %s in systeemconfiguratie. Anders zullen prijzen van artikelen niet correct zijn in Google Base."
+"Cannot update Google Base Item for Store '%s'","Kan Google Base Item niet bijwerken voor Winkel '%s'"
 "Captcha confirmation error: %s","Captcha bevestigingsfout: %s"
 "Captcha has been confirmed.","Captcha is bevestigd."
 "Catalog","Catalogus"

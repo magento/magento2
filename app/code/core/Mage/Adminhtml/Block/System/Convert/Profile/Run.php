@@ -72,11 +72,11 @@ class Mage_Adminhtml_Block_System_Convert_Profile_Run extends Mage_Adminhtml_Blo
                     array(
                         'styles' => array(
                             'error' => array(
-                                'icon' => Mage::getDesign()->getSkinUrl('images/error_msg_icon.gif'),
+                                'icon' => Mage::getDesign()->getSkinUrl('Mage_Adminhtml::images/error_msg_icon.gif'),
                                 'bg'   => '#FDD'
                             ),
                             'message' => array(
-                                'icon' => Mage::getDesign()->getSkinUrl('images/fam_bullet_success.gif'),
+                                'icon' => Mage::getDesign()->getSkinUrl('Mage_Adminhtml::images/fam_bullet_success.gif'),
                                 'bg'   => '#DDF'
                             ),
                             'loader'  => Mage::getDesign()->getSkinUrl('images/ajax-loader.gif')
@@ -189,7 +189,7 @@ class Mage_Adminhtml_Block_System_Convert_Profile_Run extends Mage_Adminhtml_Blo
                 }
                 $exceptions[] = array(
                     "style"     => $liStyle,
-                    "src"       => Mage::getDesign()->getSkinUrl('images/'.$img),
+                    "src"       => Mage::getDesign()->getSkinUrl('Mage_Adminhtml::images/'.$img),
                     "message"   => $e->getMessage(),
                     "position" => $e->getPosition()
                 );

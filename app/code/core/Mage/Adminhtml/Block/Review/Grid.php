@@ -76,18 +76,6 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     protected function _prepareColumns()
     {
-        $statuses = Mage::getModel('Mage_Review_Model_Review')
-            ->getStatusCollection()
-            ->load()
-            ->toOptionArray();
-
-        $tmpArr = array();
-        foreach( $statuses as $key => $status ) {
-            $tmpArr[$status['value']] = $status['label'];
-        }
-
-        $statuses = $tmpArr;
-
         $this->addColumn('review_id', array(
             'header'        => Mage::helper('Mage_Review_Helper_Data')->__('ID'),
             'align'         => 'right',
@@ -110,7 +98,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'header'        => Mage::helper('Mage_Review_Helper_Data')->__('Status'),
                 'align'         => 'left',
                 'type'          => 'options',
-                'options'       => $statuses,
+                'options'       => Mage::helper('Mage_Review_Helper_Data')->getReviewStatuses(),
                 'width'         => '100px',
                 'filter_index'  => 'rt.status_id',
                 'index'         => 'status_id',
@@ -232,10 +220,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
             'confirm' => Mage::helper('Mage_Review_Helper_Data')->__('Are you sure?')
         ));
 
-        $statuses = Mage::getModel('Mage_Review_Model_Review')
-            ->getStatusCollection()
-            ->load()
-            ->toOptionArray();
+        $statuses = Mage::helper('Mage_Review_Helper_Data')->getReviewStatusesOptionArray();
         array_unshift($statuses, array('label'=>'', 'value'=>''));
         $this->getMassactionBlock()->addItem('update_status', array(
             'label'         => Mage::helper('Mage_Review_Helper_Data')->__('Update Status'),

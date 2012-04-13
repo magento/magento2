@@ -39,7 +39,7 @@ class Mage_Api_Model_Session extends Mage_Core_Model_Session_Abstract
     public function start($sessionName=null)
     {
 //        parent::start($sessionName=null);
-        $this->_currentSessId = md5(time() . $sessionName);
+        $this->_currentSessId = md5(time() . uniqid('', true) . $sessionName);
         $this->sessionIds[] = $this->getSessionId();
         return $this;
     }
@@ -83,10 +83,6 @@ class Mage_Api_Model_Session extends Mage_Core_Model_Session_Abstract
 
     public function login($username, $apiKey)
     {
-        if (empty($username) || empty($apiKey)) {
-            return;
-        }
-
         $user = Mage::getModel('Mage_Api_Model_User')
             ->setSessid($this->getSessionId())
             ->login($username, $apiKey);
@@ -157,7 +153,7 @@ class Mage_Api_Model_Session extends Mage_Core_Model_Session_Abstract
     /**
      *  Check session expiration
      *
-     *  @return	  boolean
+     *  @return  boolean
      */
     public function isSessionExpired ($user)
     {
@@ -187,7 +183,7 @@ class Mage_Api_Model_Session extends Mage_Core_Model_Session_Abstract
      *  Renew user by session ID if session not expired
      *
      *  @param    string $sessId
-     *  @return	  boolean
+     *  @return  boolean
      */
     protected function _renewBySessId ($sessId)
     {

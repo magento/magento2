@@ -58,28 +58,45 @@
     background-color: #fff;
 }
 
-.vde_marker {
-    display: none;
+.vde_element_wrapper {
+    margin-bottom: 1px;
+    padding: 4px;
+    border: 1px solid #4682B4;
 }
 
-.vde_element_wrapper {
-    border: 1px solid green;
-    padding: 2px;
+.vde_element_wrapper.vde_container {
+    padding-bottom: 3px;
+    border: 1px dashed #228B22;
+}
+.vde_container > .vde_element_title {
+    background-color: #228B22;
+}
+.vde_element_wrapper.vde_container.vde_draggable {
+    border-style: solid;
 }
 .vde_element_title {
-    background-color: green;
+    margin: -4px -4px 4px -4px;
     padding: 2px;
+    background-color: #4682B4;
     color: white;
     font-size: 11px;
     max-width: 150px;
     height: 13px;
+    overflow: hidden;
     text-align: left;
     line-height: 12px;
+    cursor: default;
+}
+
+.vde_container.vde_container_hover {
+    border-color: #006400;
+}
+.vde_container.vde_container_hover > .vde_element_title {
+    background-color: #006400;
 }
 
 .vde_placeholder {
-    position: absolute;
-    background-color: #ff9;
+    background-color: #F5F5DC;
 }
 
 .vde_toolbar_row {
@@ -91,10 +108,6 @@
     padding-left: 10px;
     padding-right: 10px;
     border-left: 1px solid black;
-}
-
-.ui-draggable-dragging {
-    z-index: 201;
 }
 
 #vde_toolbar:after,

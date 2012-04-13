@@ -1,0 +1,59 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="discount">
+    <h2><?php echo $this->__('Discount Codes') ?></h2>
+    <div class="discount-form">
+        <form id="discount-coupon-form" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post">
+            <label for="coupon_code"><?php echo $this->__('Enter your coupon code if you have one.') ?></label>
+            <input type="hidden" name="remove" id="remove-coupone" value="0" />
+            <div class="input-box">
+                <input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
+            </div>
+            <div class="buttons-set">
+                <button type="button" title="<?php echo $this->__('Apply Coupon') ?>" class="button" onclick="discountForm.submit(false)" value="<?php echo $this->__('Apply Coupon') ?>"><?php echo $this->__('Apply Coupon') ?></button>
+            </div>
+            <?php if(strlen($this->getCouponCode())): ?>
+                <a href="#" onclick="discountForm.submit(true); return false" value="<?php echo $this->__('Cancel Coupon') ?>"><?php echo $this->__('Cancel Coupon') ?></a>
+            <?php endif;?>
+        </form>
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+    var discountForm = new VarienForm('discount-coupon-form');
+    discountForm.submit = function (isRemove) {
+        if (isRemove) {
+            $('coupon_code').removeClassName('required-entry');
+            $('remove-coupone').value = "1";
+        } else {
+            $('coupon_code').addClassName('required-entry');
+            $('remove-coupone').value = "0";
+        }
+        return VarienForm.prototype.submit.bind(discountForm)();
+    }
+    //]]>
+    </script>
+</div>

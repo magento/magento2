@@ -251,7 +251,7 @@ class Mage_Adminhtml_Block_Store_Switcher extends Mage_Adminhtml_Block_Template
                 . ' href="'. $this->escapeUrl($url) . '"'
                 . ' onclick="this.target=\'_blank\'"'
                 . ' title="' . $this->__('What is this?') . '"'
-                . ' class="link-storeScope">'
+                . ' class="link-store-scope">'
                 . $this->__('What is this?')
                 . '</a>';
         }

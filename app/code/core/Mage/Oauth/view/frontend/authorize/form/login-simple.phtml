@@ -1,0 +1,75 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Simple login form template
+ *
+ * @var $this Mage_Oauth_Block_Authorize
+ */
+?>
+<div class="content-container">
+    <div class="login-box">
+        <div class="page-title">
+            <h1><?php echo $this->__('Log In') ?></h1>
+        </div>
+        <div class="form-box">
+            <?php echo $this->getMessagesBlock()->toHtml() ?>
+            <?php if (!$this->getHasException()) : ?>
+            <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="loginForm">
+                <fieldset class="fieldset">
+                    <h2 class="legend"><?php echo $this->getFormTitle() ?></h2>
+                    <p class="description"><?php echo $this->__('Log in to use <strong>%s</strong>', $this->getConsumer()->getName()) ?></p>
+                    <div class="login-form simple">
+                            <input type="hidden" name="oauth_token" value="<?php echo $this->escapeHtml($this->getToken()) ?>"/>
+                            <div class="input-box input-left">
+                                <label for="username">
+                                    <em class="required">*</em>&nbsp;<?php echo $this->getIdentityLabel(); ?>
+                                </label>
+                                <input type="text" id="username" name="login[username]" value="" class="required-entry input-text"/>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="input-box input-right">
+                                <label for="login">
+                                    <em class="required">*</em>&nbsp;<?php echo $this->__('Password') ?>
+                                </label>
+                                <input type="password" id="login" name="login[password]" class="required-entry input-text"
+                                       value=""/></div>
+                            <div class="clear"></div>
+                            <div class="form-buttons">
+                                <button type="submit" class="form-button"
+                                       title="<?php echo $this->__('Login') ?>"/><?php echo $this->__('Login') ?></button>
+                                <button type="button" onclick="document.location.href='<?php echo $this->getRejectUrl(); ?>';"
+                                        title="<?php echo $this->__('Reject') ?>"><?php echo $this->__('Reject') ?></button>
+                                <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            <?php endif; ?>
+        </div>
+        <div class="bottom"></div>
+    </div>
+</div>

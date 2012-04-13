@@ -67,7 +67,7 @@ class Mage_Paygate_Block_Authorizenet_Form_Cc extends Mage_Payment_Block_Form
      */
     public function getCancelUrl()
     {
-        return $this->getUrl('paygate/authorizenet_payment/cancel', array('_secure' => true));
+        return $this->getUrl('paygate/authorizenet_payment/cancel');
     }
 
     /**

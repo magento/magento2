@@ -31,14 +31,14 @@
         this._init(config);
         this._addListener();
         return this;
-    }
+    };
 
     DesignEditorSkinSelector.prototype._init = function (config) {
         this._skinControlSelector = '#' + config.selectId;
         this._backParams = config.backParams;
         this.changeSkinUrl = config.changeSkinUrl;
         return this;
-    }
+    };
 
     DesignEditorSkinSelector.prototype._addListener = function () {
         var thisObj = this;
@@ -46,7 +46,7 @@
             function () {thisObj.changeSkin()}
         );
         return this;
-    }
+    };
 
     DesignEditorSkinSelector.prototype.changeSkin = function () {
         var separator = /\?/.test(this.changeSkinUrl) ? '&' : '?';
@@ -60,97 +60,55 @@
 
         window.location.href = url;
         return this;
-    }
+    };
 
     /**
      * Class for design editor
      */
     DesignEditor = function () {
-        this._init();
-    }
+        this._enableDragDrop();
+    };
 
-    DesignEditor.prototype._init = function () {
-        this._dragged = null;
-        this._placeholder = null;
-        this._templatePlaceholder = '<div class="vde_placeholder"></div>';
-
-        this._enableDragging();
-        return this;
-    }
-
-    DesignEditor.prototype._enableDragging = function () {
+    DesignEditor.prototype._enableDragDrop = function () {
         var thisObj = this;
-        $('.vde_element_wrapper').draggable({
-            helper: 'clone',
+        /* Enable reordering of draggable children within their containers */
+        $('.vde_element_wrapper.vde_container').sortable({
+            items: '.vde_element_wrapper.vde_draggable',
+            tolerance: 'pointer',
             revert: true,
-            start: function (event, ui) {thisObj._onDragStarted(event, ui)},
-            stop: function (event, ui) {thisObj._onDragStopped(event, ui)}
-        });
+            helper: 'clone',
+            appendTo: 'body',
+            placeholder: 'vde_placeholder',
+            start: function(event, ui) {
+                thisObj._resizePlaceholder(ui.placeholder, ui.item);
+                thisObj._outlineDropContainer(this);
+                /* Enable dropping of the elements outside of their containers */
+                var otherContainers = $('.vde_element_wrapper.vde_container').not(ui.item);
+                $(this).sortable('option', 'connectWith', otherContainers);
+                otherContainers.sortable('refresh');
+            },
+            over: function(event, ui) {
+                thisObj._outlineDropContainer(this);
+            },
+            stop: function(event, ui) {
+                thisObj._removeDropContainerOutline();
+            }
+        }).disableSelection();
         return this;
-    }
+    };
 
-    DesignEditor.prototype._triggerStartedEvent = function () {
-        $(document).trigger('started.vde', this);
-        return this;
-    }
+    DesignEditor.prototype._resizePlaceholder = function (placeholder, element) {
+        placeholder.css({height: $(element).outerHeight(true) + 'px'});
+    };
 
-    DesignEditor.prototype._onDragStarted = function (event, ui) {
-        if (this._dragged) {
-            return this;
-        }
-        var dragged = $(event.target);
-        this._hideDragged(dragged)
-            ._resizeHelperSameAsDragged(ui.helper, dragged)
-            ._putPlaceholder();
-    }
+    DesignEditor.prototype._outlineDropContainer = function (container) {
+        this._removeDropContainerOutline();
+        $(container).addClass('vde_container_hover');
+    };
 
-    DesignEditor.prototype._onDragStopped = function (event, ui) {
-        if (!this._dragged) {
-            return this;
-        }
-        this._removePlaceholder()
-            ._showDragged();
-    }
-
-    DesignEditor.prototype._hideDragged = function (dragged) {
-        this._showDragged(); // Maybe some other dragged element was hidden before, just restore it
-        this._dragged = dragged;
-        this._dragged.css('visibility', 'hidden');
-        return this;
-    }
-
-    DesignEditor.prototype._showDragged = function () {
-        if (!this._dragged) {
-            return this;
-        }
-        this._dragged.css('visibility', 'visible');
-        this._dragged = null;
-        return this;
-    }
-
-    DesignEditor.prototype._resizeHelperSameAsDragged = function (helper, dragged) {
-        helper.height(dragged.height())
-            .width(dragged.width());
-        return this;
-    }
-
-    DesignEditor.prototype._putPlaceholder = function () {
-        if (!this._placeholder) {
-            this._placeholder = $(this._templatePlaceholder);
-        }
-        this._placeholder.css('height', this._dragged.outerHeight() + 'px')
-            .css('width', this._dragged.outerWidth() + 'px');
-        this._placeholder.insertBefore(this._dragged);
-        return this;
-    }
-
-    DesignEditor.prototype._removePlaceholder = function () {
-        if (!this._placeholder) {
-            return this;
-        }
-        this._placeholder.remove();
-        return this;
-    }
+    DesignEditor.prototype._removeDropContainerOutline = function () {
+        $('.vde_container_hover').removeClass('vde_container_hover');
+    };
 
     DesignEditor.prototype.highlight = function (isOn) {
         if (isOn) {
@@ -159,26 +117,28 @@
             this._turnHighlightingOff();
         }
         return this;
-    }
+    };
 
     DesignEditor.prototype._turnHighlightingOn = function () {
         $('.vde_element_wrapper').each(function () {
             var elem = $(this);
-            var children = elem.prop('vdeChildren');
-            elem.show().append(children).removeProp('vdeChildren');
+            var children = $('[vde_parent_element="' + elem.attr('id') + '"]');
+            children.removeAttr('vde_parent_element');
+            elem.show().append(children);
             elem.children('.vde_element_title').slideDown('fast');
         });
         return this;
-    }
+    };
 
     DesignEditor.prototype._turnHighlightingOff = function () {
         $('.vde_element_wrapper').each(function () {
             var elem = $(this);
             elem.children('.vde_element_title').slideUp('fast', function () {
                 var children = elem.children(':not(.vde_element_title)');
-                elem.after(children).hide().prop('vdeChildren', children);
+                children.attr('vde_parent_element', elem.attr('id'));
+                elem.after(children).hide();
             });
         });
         return this;
-    }
+    };
 })(jQuery);

@@ -56,7 +56,7 @@ class Mage_Paypal_Model_Hostedpro_Request extends Varien_Object
     protected $_buttonVarFormat = 'L_BUTTONVAR%d';
 
     /**
-     * Request Parameters wich dont have to wrap as button vars
+     * Request Parameters which dont have to wrap as button vars
      *
      * @var array
      */

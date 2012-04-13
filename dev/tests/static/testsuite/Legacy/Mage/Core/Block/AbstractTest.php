@@ -40,11 +40,19 @@ class Legacy_Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     {
         $result = Utility_Classes::getAllMatches(
             file_get_contents($file),
-            "/(->(getChildHtml|getChildChildHtml)\([^,)]+, ?[^,)]+, ?[^,)]+\))/i"
+            "/(->getChildHtml\([^,()]+, ?[^,()]+,)/i"
         );
         $this->assertEmpty(
             $result,
-            "3rd parameter is used while calling getChildHtml() in '$file': " . print_r($result, true)
+            "3rd parameter is not needed anymore for getChildHtml() in '$file': " . print_r($result, true)
+        );
+        $result = Utility_Classes::getAllMatches(
+            file_get_contents($file),
+            "/(->getChildChildHtml\([^,()]+, ?[^,()]+, ?[^,()]+,)/i"
+        );
+        $this->assertEmpty(
+            $result,
+            "4th parameter is not needed anymore for getChildChildHtml() in '$file': " . print_r($result, true)
         );
     }
 

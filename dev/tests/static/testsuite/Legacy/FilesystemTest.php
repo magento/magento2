@@ -42,13 +42,14 @@ class Legacy_FilesystemTest extends PHPUnit_Framework_TestCase
     public function relocationsDataProvider()
     {
         return array(
-            array('Relocated to pub/errors' => 'errors'),
-            array('Eliminated with Mage_Compiler' => 'includes'),
-            array('Relocated to pub/js' => 'js'),
-            array('Relocated to pub/media' => 'media'),
-            array('Eliminated as not needed' => 'pkginfo'),
-            array('Dissolved into themes under app/design ' => 'skin'),
-            array('Dissolved into different modules\' view/frontend' => 'app/design/frontend/base'),
+            'Relocated to pub/errors' => array('errors'),
+            'Eliminated with Mage_Compiler' => array('includes'),
+            'Relocated to pub/js' => array('js'),
+            'Relocated to pub/media' => array('media'),
+            'Eliminated as not needed' => array('pkginfo'),
+            'Dissolved into themes under app/design ' => array('skin'),
+            'Dissolved into different modules\' view/frontend' => array('app/design/frontend/base'),
+            'Dissolved into different modules\' view/email/*.html' => array('app/locale/en_US/template'),
         );
     }
 

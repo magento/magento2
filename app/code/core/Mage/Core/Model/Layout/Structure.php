@@ -84,7 +84,7 @@ class Mage_Core_Model_Layout_Structure
      */
     public function getParentName($name)
     {
-        $elements = $this->_getElementsByName($name);
+        $elements = $this->_getAllElementsByName($name);
         $length = $elements->length;
         if ($length) {
             if ($length > 1) {
@@ -113,27 +113,29 @@ class Mage_Core_Model_Layout_Structure
     }
 
     /**
-     * Move node to necessary parent node. If node doesn't exist, creates it
+     * Move node to necessary parent node. If node doesn't exist, create it
      *
      * @param string $parentName
      * @param string $elementName
      * @param string $alias
      * @return Mage_Core_Model_Layout_Structure
+     * @throws InvalidArgumentException
      */
     public function setChild($parentName, $elementName, $alias)
     {
+        if (!$elementName) {
+            throw new InvalidArgumentException('$elementName should be non-empty string');
+        }
         if (empty($alias)) {
             $alias = $elementName;
         }
         $element = $this->_getElementByName($elementName);
         if (!$element) {
             $this->insertBlock($parentName, $elementName, $alias);
-            return $this;
         } else {
             $element->setAttribute('alias', $alias);
+            $this->_move($element, $parentName);
         }
-
-        $this->_move($element, $parentName);
 
         return $this;
     }
@@ -171,7 +173,9 @@ class Mage_Core_Model_Layout_Structure
      */
     public function renameElement($oldName, $newName)
     {
-        $this->_setElementAttribute($oldName, 'name', $newName);
+        if (!empty($newName)) {
+            $this->_setElementAttribute($oldName, 'name', $newName);
+        }
         return $this;
     }
 
@@ -256,7 +260,7 @@ class Mage_Core_Model_Layout_Structure
      */
     public function unsetElement($name)
     {
-        foreach ($this->_getElementsByName($name) as $element) {
+        foreach ($this->_getAllElementsByName($name) as $element) {
             $element->parentNode->removeChild($element);
         }
 
@@ -286,12 +290,12 @@ class Mage_Core_Model_Layout_Structure
      * @param string $name
      * @param string $type
      * @param string $alias
-     * @param string $sibling
+     * @param string|null $sibling
      * @param bool $after
      * @param array $options
      * @return string|bool
      */
-    public function insertElement($parentName, $name, $type, $alias = '', $after = true, $sibling = '',
+    public function insertElement($parentName, $name, $type, $alias = '', $sibling = null, $after = true,
         $options = array()
     ) {
         if (!in_array($type, array(self::ELEMENT_TYPE_BLOCK, self::ELEMENT_TYPE_CONTAINER))) {
@@ -308,6 +312,14 @@ class Mage_Core_Model_Layout_Structure
         $child = $this->_getTempOrNewNode($name);
         $child->setAttribute('type', $type);
         $child->setAttribute('alias', $alias);
+        if ($sibling) {
+            if ($after) {
+                $attributeName = 'after';
+            } else {
+                $attributeName = 'before';
+            }
+            $child->setAttribute($attributeName, $sibling);
+        }
         foreach ($options as $optName => $value) {
             $child->setAttribute($optName, $value);
         }
@@ -315,12 +327,8 @@ class Mage_Core_Model_Layout_Structure
         $parentNode = $this->_findOrCreateParentNode($parentName);
         $this->_clearExistingChild($parentNode, $alias);
 
-        $siblingNode = $this->_getSiblingElement($parentNode, $after, $sibling);
-        if ($siblingNode) {
-            $parentNode->insertBefore($child, $siblingNode);
-        } else {
-            $parentNode->appendChild($child);
-        }
+        $siblingNode = $this->_getSiblingElement($parentNode, $sibling, $after);
+        $parentNode->insertBefore($child, $siblingNode);
 
         return $name;
     }
@@ -335,7 +343,7 @@ class Mage_Core_Model_Layout_Structure
     {
         $child = $this->_getElementByXpath("//element[not(@type) and @name='$name']");
         if (!$child) {
-            if ($length = $this->_getElementsByName($name)->length) {
+            if ($length = $this->_getAllElementsByName($name)->length) {
                 Mage::logException(new Magento_Exception("Element with name [$name] already exists (" . $length . ')'));
             }
             $child = $this->_dom->createElement('element');
@@ -367,34 +375,28 @@ class Mage_Core_Model_Layout_Structure
     }
 
     /**
-     * Get sibling element based on after and siblingName parameter
+     * Get sibling element based on $sibling and $after parameters
      *
      * @param DOMElement $parentNode
-     * @param string $after
-     * @param string $sibling
-     * @return DOMElement|bool
+     * @param string|null $sibling
+     * @param bool $after
+     * @return DOMElement|null
      */
-    protected function _getSiblingElement(DOMElement $parentNode, $after, $sibling)
+    protected function _getSiblingElement(DOMElement $parentNode, $sibling, $after)
     {
-        if (!$parentNode->hasChildNodes()) {
-            $sibling = '';
-        }
-        $siblingNode = false;
-        if ('' !== $sibling) {
-            $siblingNode = $this->_getChildElement($parentNode->getAttribute('name'), $sibling);
-            if ($siblingNode && $after) {
-                if (isset($siblingNode->nextSibling)) {
-                    $siblingNode = $siblingNode->nextSibling;
-                } else {
-                    $siblingNode = false;
-                }
-            }
-        }
-        if (!$after && !$siblingNode && isset($parentNode->firstChild)) {
-            $siblingNode = $parentNode->firstChild;
+        if (!$sibling || !$parentNode->hasChildNodes()) {
+            return null;
         }
 
-        return $siblingNode;
+        $siblingNode = null;
+        if ($sibling != '-') {
+            $siblingNode = $this->_getChildElement($parentNode->getAttribute('name'), $sibling);
+        }
+        if (!$siblingNode) {
+            return $after ? null : $parentNode->firstChild;
+        }
+
+        return $after ? $siblingNode->nextSibling : $siblingNode;
     }
 
     /**
@@ -420,14 +422,14 @@ class Mage_Core_Model_Layout_Structure
      * @param string $parentName
      * @param string $name
      * @param string $alias
-     * @param string $sibling
+     * @param string|null $sibling
      * @param bool $after
      * @param array $options
      * @return string|bool
      */
-    public function insertBlock($parentName, $name, $alias = '', $after = true, $sibling = '', $options = array())
+    public function insertBlock($parentName, $name, $alias = '', $sibling = null, $after = true, $options = array())
     {
-        return $this->insertElement($parentName, $name, self::ELEMENT_TYPE_BLOCK, $alias, $after, $sibling, $options);
+        return $this->insertElement($parentName, $name, self::ELEMENT_TYPE_BLOCK, $alias, $sibling, $after, $options);
     }
 
     /**
@@ -436,15 +438,15 @@ class Mage_Core_Model_Layout_Structure
      * @param string $parentName
      * @param string $name
      * @param string $alias
-     * @param string $sibling
+     * @param string|null $sibling
      * @param bool $after
      * @param array $options
      * @return string|bool
      */
-    public function insertContainer($parentName, $name, $alias = '', $after = true, $sibling = '', $options = array())
+    public function insertContainer($parentName, $name, $alias = '', $sibling = null, $after = true, $options = array())
     {
         return $this->insertElement(
-            $parentName, $name, self::ELEMENT_TYPE_CONTAINER, $alias, $after, $sibling, $options
+            $parentName, $name, self::ELEMENT_TYPE_CONTAINER, $alias, $sibling, $after, $options
         );
     }
 
@@ -456,7 +458,7 @@ class Mage_Core_Model_Layout_Structure
      */
     public function hasElement($name)
     {
-        return $this->_getElementsByName($name)->length > 0;
+        return $this->_getAllElementsByName($name)->length > 0;
     }
 
     /**
@@ -535,7 +537,7 @@ class Mage_Core_Model_Layout_Structure
      */
     public function isBlock($name)
     {
-        return $this->_findByXpath("//element[@name='$name' and @type='" .self::ELEMENT_TYPE_BLOCK. "']")->length > 0;
+        return $this->_findByXpath("//element[@name='$name' and @type='" . self::ELEMENT_TYPE_BLOCK. "']")->length > 0;
     }
 
     /**
@@ -546,7 +548,7 @@ class Mage_Core_Model_Layout_Structure
      */
     public function isContainer($name)
     {
-        return $this->_findByXpath("//element[@name='$name' and @type='" .self::ELEMENT_TYPE_CONTAINER. "']")
+        return $this->_findByXpath("//element[@name='$name' and @type='" . self::ELEMENT_TYPE_CONTAINER. "']")
             ->length > 0;
     }
 
@@ -591,7 +593,7 @@ class Mage_Core_Model_Layout_Structure
      */
     protected function _move($element, $newParent)
     {
-        $parentNode = $this->_findOrCreateParentNode($newParent);
+        $parentNode = $this->_getElementByName($newParent);
         if (!$parentNode) {
             throw new Magento_Exception(
                 "Can not move element [" . $element->getAttribute('name') . "]: parent is not found"
@@ -618,7 +620,7 @@ class Mage_Core_Model_Layout_Structure
      * @param string $name
      * @return DOMNodeList
      */
-    protected function _getElementsByName($name)
+    protected function _getAllElementsByName($name)
     {
         return $this->_findByXpath("//element[@name='$name']");
     }
@@ -655,5 +657,75 @@ class Mage_Core_Model_Layout_Structure
         } else {
             return null;
         }
+    }
+
+    /**
+     * Sort elements based on their "after" and "before" elements
+     *
+     * @return Mage_Core_Model_Layout_Structure
+     */
+    public function sortElements()
+    {
+        $this->_sortChildren($this->_dom->firstChild);
+        return $this;
+    }
+
+    /**
+     * Recursively goes through all levels of dom tree and sorts elements within a level based on "after" and "before"
+     * attributes
+     *
+     * @param DOMDocument $currentNode
+     * @return Mage_Core_Model_Layout_Structure
+     */
+    protected function _sortChildren($currentNode)
+    {
+        /**
+         * Important to put nodes in array, otherwise we can get unpredictable results with changing list
+         * while iterating over it
+         */
+        $childNodes = array();
+        foreach ($currentNode->childNodes as $node) {
+            $childNodes[] = $node;
+        }
+        foreach ($childNodes as $node) {
+            $this->_repositionNodeIfNeeded($node)
+                ->_sortChildren($node);
+        }
+        return $this;
+    }
+
+    /**
+     * Checks if node is marked with "before" or "after" attributes and repositions it to required place
+     *
+     * @param DOMElement $node
+     * @return Mage_Core_Model_Layout_Structure
+     */
+    protected function _repositionNodeIfNeeded($node)
+    {
+        $before = $node->getAttribute('before');
+        $after = $node->getAttribute('after');
+        $siblingName = $before ?: $after;
+        if (!$siblingName) {
+            return $this;
+        }
+
+        // Choose a node to insert before. "Null" will transform insertBefore() into appendChild().
+        $parentNode = $node->parentNode;
+        $insertBefore = null;
+        if ($siblingName === '-') {
+            if ($before) {
+                $insertBefore = $parentNode->firstChild;
+            }
+        } else {
+            $element = $this->_getElementByXpath($parentNode->getNodePath() . "/element[@name='{$siblingName}']");
+            if ($element) {
+                $insertBefore = $before ? $element : $element->nextSibling;
+            }
+        }
+
+        if ($node !== $insertBefore) {
+            $parentNode->insertBefore($node, $insertBefore);
+        }
+        return $this;
     }
 }

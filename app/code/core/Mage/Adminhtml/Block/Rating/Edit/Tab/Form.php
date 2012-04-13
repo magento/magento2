@@ -106,12 +106,13 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
             'legend' => Mage::helper('Mage_Rating_Helper_Data')->__('Rating Visibility')
         ));
 
-        $fieldset->addField('stores', 'multiselect', array(
+        $field = $fieldset->addField('stores', 'multiselect', array(
             'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
             'name' => 'stores[]',
-            'values' => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
-            'after_element_html' => Mage::getBlockSingleton('Mage_Adminhtml_Block_Store_Switcher')->getHintHtml()
+            'values' => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm()
         ));
+        $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+        $field->setRenderer($renderer);
 
         $fieldset->addField('position', 'text', array(
             'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Sort Order'),

@@ -1305,7 +1305,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
 
     /**
      * Check is a virtual product
-     * Data helper wraper
+     * Data helper wrapper
      *
      * @return bool
      */

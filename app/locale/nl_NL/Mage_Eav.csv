@@ -61,6 +61,7 @@
 "Entity is not initialized","Eenheid is niet geïnitialiseerd"
 "Entity object is undefined","Doel eenheid is niet gedefinieerd"
 "Failed to load node %s from config","Knooppunt %s van config laden mislukt"
+"For internal use. Must be unique with no spaces. Maximum length of attribute code must be less then %s symbols","Voor intern gebruik. Moet uniek zijn zonder spaties. Maximale lengte van attribuut code moet minder dan %s tekens zijn"
 "Form Element with the same attribute","Vorm element met zelfde attribuut"
 "Form Fieldset with the same code","Vorm Fieldset met zelfde code"
 "Form Type with the same code","Vorm Type met zelfde code"

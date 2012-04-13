@@ -24,21 +24,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="breadcrumbs">
-    <ul>
-        <li class="home">
-            <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><?php echo $this->__('Back') ?></a>
-        </li>
-        <li>
-            <strong><?php echo $this->__('Edit Account Information') ?></strong>
-        </li>
-    </ul>
-</div>
-<!--
 <div class="page-title">
-    <h1></h1>
+    <h1><?php echo $this->__('Edit Account Information') ?></h1>
 </div>
--->
 <div class="account-edit">
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">

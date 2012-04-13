@@ -184,17 +184,13 @@ class Mage_Review_Model_Resource_Review_Collection extends Mage_Core_Model_Resou
      */
     public function addStatusFilter($status)
     {
+        if (is_string($status)) {
+            $statuses = array_flip(Mage::helper('Mage_Review_Helper_Data')->getReviewStatuses());
+            $status = isset($statuses[$status]) ? $statuses[$status] : 0;
+        }
         if (is_numeric($status)) {
             $this->addFilter('status',
                 $this->getConnection()->quoteInto('main_table.status_id=?', $status),
-                'string');
-        } elseif (is_string($status)) {
-            $this->_select->join($this->_reviewStatusTable,
-                'main_table.status_id='.$this->_reviewStatusTable.'.status_id',
-                array('status_code'));
-
-            $this->addFilter('status',
-                $this->getConnection()->quoteInto($this->_reviewStatusTable.'.status_code=?', $status),
                 'string');
         }
         return $this;

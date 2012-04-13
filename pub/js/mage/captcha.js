@@ -51,19 +51,19 @@ Captcha.prototype = {
     }
 };
 
-document.observe('billing-request:completed', function(event){
-    if (window.checkout !== undefined){
+document.observe('billing-request:completed', function(event) {
+    if (typeof window.checkout != 'undefined') {
         if (window.checkout.method == 'guest' && $('guest_checkout')){
-            window.captcha_guest_checkout.refresh()
+            $('guest_checkout').captcha.refresh()
         }
-        if (window.checkout !== undefined && window.checkout.method== 'register' && $('register_during_checkout')){
-            window.captcha_register_during_checkout.refresh()
+        if (window.checkout.method == 'register' && $('register_during_checkout')){
+            $('register_during_checkout').captcha.refresh()
         }
     }
 });
 
 
-document.observe('login:setMethod', function(event){
+document.observe('login:setMethod', function(event) {
     switch(event.memo.method){
         case 'guest':
             if ($('register_during_checkout')) {

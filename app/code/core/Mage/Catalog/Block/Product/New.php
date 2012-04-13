@@ -29,13 +29,21 @@
  *
  * @category   Mage
  * @package    Mage_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Block_Product_New extends Mage_Catalog_Block_Product_Abstract
 {
-    protected $_productsCount = null;
+    /**
+     * Default value for products count that will be shown
+     */
+    const DEFAULT_PRODUCTS_COUNT = 10;
 
-    const DEFAULT_PRODUCTS_COUNT = 5;
+    /**
+     * Products count
+     *
+     * @var null
+     */
+    protected $_productsCount;
 
     /**
      * Initialize block's cache
@@ -75,11 +83,11 @@ class Mage_Catalog_Block_Product_New extends Mage_Catalog_Block_Product_Abstract
     }
 
     /**
-     * Prepare collection with new products and applied page limits.
+     * Prepare and return product collection
      *
-     * return Mage_Catalog_Block_Product_New
+     * @return Mage_Catalog_Model_Resource_Product_Collection|Object|Varien_Data_Collection
      */
-    protected function _beforeToHtml()
+    protected function _getProductCollection()
     {
         $todayStartOfDayDate  = Mage::app()->getLocale()->date()
             ->setTime('00:00:00')
@@ -89,6 +97,7 @@ class Mage_Catalog_Block_Product_New extends Mage_Catalog_Block_Product_Abstract
             ->setTime('23:59:59')
             ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
 
+        /** @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection');
         $collection->setVisibility(Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInCatalogIds());
 
@@ -114,8 +123,17 @@ class Mage_Catalog_Block_Product_New extends Mage_Catalog_Block_Product_Abstract
             ->setCurPage(1)
         ;
 
-        $this->setProductCollection($collection);
+        return $collection;
+    }
 
+    /**
+     * Prepare collection with new products
+     *
+     * @return Mage_Core_Block_Abstract
+     */
+    protected function _beforeToHtml()
+    {
+        $this->setProductCollection($this->_getProductCollection());
         return parent::_beforeToHtml();
     }
 

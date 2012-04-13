@@ -52,27 +52,4 @@ class Mage_Core_Model_Layout_ElementTest extends PHPUnit_Framework_TestCase
             array('<block />', ''),
         );
     }
-
-    /**
-     * @dataProvider siblingDataProvider
-     */
-    public function testGetSibling($xml, $expected)
-    {
-        $model = new Mage_Core_Model_Layout_Element($xml);
-        $this->assertEquals($expected, $model->getSibling());
-    }
-
-    public function siblingDataProvider()
-    {
-        return array(
-            array('<block name="name" before="-" />', ''),
-            array('<block name="name" before="" />', ''),
-            array('<block name="name" before="first" />', 'first'),
-            array('<block name="name" after="-" />', ''),
-            array('<block name="name" after="" />', ''),
-            array('<block name="name" after="last" />', 'last'),
-            array('<block name="name" before="first" after="last" />', 'first'),
-            array('<block name="name" after="last" before="first" />', 'first'),
-        );
-    }
 }

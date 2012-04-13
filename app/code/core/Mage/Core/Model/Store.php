@@ -565,9 +565,24 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
             || !$this->getConfig(self::XML_PATH_USE_REWRITES)
             || !Mage::isInstalled()
         ) {
-            $url .= basename($_SERVER['SCRIPT_FILENAME']) . '/';
+            if ($this->_isCustomEntryPoint()) {
+                $indexFileName = 'index.php';
+            } else {
+                $indexFileName = basename($_SERVER['SCRIPT_FILENAME']);
+            }
+            $url .= $indexFileName . '/';
         }
         return $url;
+    }
+
+    /**
+     * Check if used entry point is custom
+     *
+     * @return bool
+     */
+    protected function _isCustomEntryPoint()
+    {
+        return (bool)Mage::registry('custom_entry_point');
     }
 
     /**
@@ -654,7 +669,7 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Check if forntend URLs should be secure
+     * Check if frontend URLs should be secure
      *
      * @return boolean
      */

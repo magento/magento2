@@ -37,7 +37,7 @@ class Mage_Core_Model_Resource_Iterator extends Varien_Object
      * @param Zend_Db_Statement_Interface|Zend_Db_Select|string $query
      * @param array|string $callbacks
      * @param array $args
-     * @param Varien_Db_Adapter_interface $adapter
+     * @param Varien_Db_Adapter_Interface $adapter
      * @return Mage_Core_Model_Resource_Iterator
      */
     public function walk($query, array $callbacks, array $args=array(), $adapter = null)

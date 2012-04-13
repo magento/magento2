@@ -27,7 +27,7 @@
 <div class="content-header">
     <table cellspacing="0">
         <tr>
-            <td style="width:50%;"><h3 class="icon-head head-permissions-role"><?php echo ($this->getRoleId() > 0 ) ? ($this->__('Edit Role') . " '{$this->getRoleInfo()->getRoleName()}'") : $this->__('Add New Role') ?></h3></td>
+            <td style="width:50%;"><h3 class="icon-head head-permissions-role"><?php echo ($this->getRoleId() > 0 ) ? ($this->__('Edit Role') . " '{$this->escapeHtml($this->getRoleInfo()->getRoleName())}'") : $this->__('Add New Role') ?></h3></td>
             <td class="form-buttons">
                 <?php echo $this->getBackButtonHtml() ?>
                 <?php echo $this->getResetButtonHtml() ?>

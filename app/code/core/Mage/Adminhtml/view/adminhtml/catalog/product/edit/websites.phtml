@@ -38,9 +38,9 @@
             </li>
         </ul>
     <?php endif; ?>
-    <div class="storeScope">
+    <div class="store-scope">
         <?php echo $this->getHintHtml() ?>
-        <div class="tree-storeScope">
+        <div class="tree-store-scope">
             <?php foreach ($this->getWebsiteCollection() as $_website): ?>
             <div class="website-name">
                 <input name="product[website_ids][]" value="<?php echo $_website->getId() ?>" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?php echo $_website->getId() ?>" type="checkbox"<?php if($this->hasWebsite($_website->getId())): ?> checked="checked"<?php endif; ?> />

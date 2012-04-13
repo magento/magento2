@@ -24,5 +24,5 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<p><?php echo $this->getMethod()->getTitle() ?></p>
+<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
 <p><strong><?php echo $this->__('Purchase Order Number:') ?></strong> <span class="nobr"><?php echo $this->escapeHtml($this->getInfo()->getPoNumber()) ?></span></p>

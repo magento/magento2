@@ -51,8 +51,8 @@ class Mage_Core_Helper_JsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             '<script type="text/javascript">//<![CDATA['
-            . "\nvar Translator = new Translate({$this->_helper->getTranslateJson()});\n"
-            . '//]]></script>',
+                . "\nvar Translator = new Translate({$this->_helper->getTranslateJson()});\n"
+                . '//]]></script>',
             $this->_helper->getTranslatorScript()
         );
     }
