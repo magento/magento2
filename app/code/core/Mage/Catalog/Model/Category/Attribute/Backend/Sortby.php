@@ -44,13 +44,14 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Sortby
     public function validate($object)
     {
         $attributeCode = $this->getAttribute()->getName();
-        $postDataConfig = ($object->getData('use_post_data_config'))? $object->getData('use_post_data_config') : array();
-        
-        $isUseConfig = false;
+        $postDataConfig = $object->getData('use_post_data_config');
         if ($postDataConfig) {
             $isUseConfig = in_array($attributeCode, $postDataConfig);
+        } else {
+            $isUseConfig = false;
+            $postDataConfig = array();
         }
-        
+
         if ($this->getAttribute()->getIsRequired()) {
             $attributeValue = $object->getData($attributeCode);
             if ($this->getAttribute()->isValueEmpty($attributeValue)) {
@@ -69,7 +70,7 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Sortby
                 Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('The value of attribute "%s" must be unique.', $label));
             }
         }
-        
+
         if ($attributeCode == 'default_sort_by') {
             if ($available = $object->getData('available_sort_by')) {
                 if (!is_array($available)) {
@@ -78,16 +79,16 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Sortby
                 $data = (!in_array('default_sort_by', $postDataConfig))? $object->getData($attributeCode):
                        Mage::getStoreConfig("catalog/frontend/default_sort_by");
                 if (!in_array($data, $available)) {
-                    Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Default Product Listing Sort by not exists on Available Product Listing Sort By'));
+                    Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Default Product Listing Sort by does not exist in Available Product Listing Sort By.'));
                 }
             } else {
                 if (!in_array('available_sort_by', $postDataConfig)) {
-                    Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Default Product Listing Sort by not exists on Available Product Listing Sort By'));
+                    Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Default Product Listing Sort by does not exist in Available Product Listing Sort By.'));
                 }
             }
         }
 
-        return true;        
+        return true;
     }
 
     /**

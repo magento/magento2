@@ -29,7 +29,7 @@
     <sendfriend_product_send translate="label" type="page" parent="catalog_product_view">
         <label>Catalog Product Email to a Friend</label>
         <reference name="root">
-            <action method="setTemplate"><template>1column.phtml</template></action>
+            <action method="setMyClass"><value>send-to-friend</value></action>
         </reference>
         <reference name="head">
             <action method="addJs"><file>varien/product.js</file></action>

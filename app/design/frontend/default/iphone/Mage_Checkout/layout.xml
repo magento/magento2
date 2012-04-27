@@ -33,47 +33,11 @@ Default layout, loads most of the pages
 -->
 
     <default>
+
         <!-- Mage_Checkout -->
         <reference name="top.links">
             <block type="Mage_Checkout_Block_Links" name="checkout_cart_link">
-                <action method="addCartLink"></action>
                 <action method="addCheckoutLink"></action>
-            </block>
-        </reference>
-        <reference name="right">
-            <block type="Mage_Checkout_Block_Cart_Sidebar" name="cart_sidebar" template="cart/sidebar.phtml" before="-">
-                <action method="addItemRender"><type>simple</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>cart/sidebar/default.phtml</template></action>
-                <container name="cart_sidebar.extra_actions" as="extra_actions" label="Shopping Cart Sidebar Extra Actions" module="Mage_Checkout"/>
-            </block>
-        </reference>
-        <reference name="header">
-            <block type="Mage_Checkout_Block_Cart" name="checkout.cart" as="topCart">
-                <action method="setCartTemplate"><value>cartheader.phtml</value></action>
-                <action method="setEmptyTemplate"><value>cart/no_items_header.phtml</value></action>
-                <action method="chooseTemplate"/>
-                <action method="addItemRender"><type>simple</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>cart/item/default.phtml</template></action>
-                <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>cart/item/default.phtml</template></action>
-                <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>cart/item/default.phtml</template></action>
-                <remove name="checkout.cart.breadcrumbs"/>
-
-                <container name="checkout.cart.top_methods" as="top_methods" label="Payment Methods Before Checkout Button">
-                    <block type="Mage_Checkout_Block_Onepage_Link" name="checkout.cart.methods.onepage" template="onepage/link.phtml"/>
-                </container>
-
-                <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Form Before" htmlTag="div"/>
-
-                <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
-                    <block type="Mage_Checkout_Block_Onepage_Link" name="checkout.cart.methods.onepage" template="onepage/link.phtml"/>
-                    <block type="Mage_Checkout_Block_Multishipping_Link" name="checkout.cart.methods.multishipping" template="multishipping/link.phtml"/>
-                </container>
-
-                <block type="Mage_Checkout_Block_Cart_Coupon" name="checkout.cart.coupon" as="coupon" template="cart/coupon.phtml"/>
-                <block type="Mage_Checkout_Block_Cart_Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml"/>
-                <block type="Mage_Checkout_Block_Cart_Crosssell" name="checkout.cart.crosssell" as="crosssell" template="cart/crosssell.phtml"/>
-
-                <block type="Mage_Checkout_Block_Cart_Totals" name="checkout.cart.totals" as="totals" template="cart/totals.phtml"/>
             </block>
         </reference>
     </default>
@@ -103,12 +67,10 @@ Default layout, loads most of the pages
 
                 <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
                     <block type="Mage_Checkout_Block_Onepage_Link" name="checkout.cart.methods.onepage" template="onepage/link.phtml"/>
-                    <block type="Mage_Checkout_Block_Multishipping_Link" name="checkout.cart.methods.multishipping" template="multishipping/link.phtml"/>
                 </container>
 
                 <block type="Mage_Checkout_Block_Cart_Coupon" name="checkout.cart.coupon" as="coupon" template="cart/coupon.phtml"/>
-                <block type="Mage_Checkout_Block_Cart_Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml"/>
-                <block type="Mage_Checkout_Block_Cart_Crosssell" name="checkout.cart.crosssell" as="crosssell" template="cart/crosssell.phtml"/>
+
                 <block type="Mage_Checkout_Block_Cart_Totals" name="checkout.cart.totals" as="totals" template="cart/totals.phtml"/>
             </block>
         </reference>
@@ -323,12 +285,6 @@ One page checkout main layout
 
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
-        </reference>
-        <reference name="right">
-            <action method="unsetChildren"></action>
-            <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlId="checkout-progress-wrapper">
-                <block type="Mage_Checkout_Block_Onepage_Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
-            </container>
         </reference>
         <reference name="content">
             <block type="Mage_Checkout_Block_Onepage" name="checkout.onepage" template="onepage.phtml">

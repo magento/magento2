@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -40,125 +40,38 @@
     <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
 <?php else: ?>
     <?php echo $this->getToolbarHtml() ?>
-    <?php if($this->getMode()!='grid'): ?>
-        <div class="category-products">
-            <?php $_collectionSize = $_productCollection->count() ?>
-            <?php $_columnCount = $this->getColumnCount(); ?>
-            <ul class="c-list">
-                <?php $i=0; foreach ($_productCollection as $_product): ?>
-                    <li>
-                        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>">
-                            <div class="wrap">
-                                <div class="product-image">
-                                    <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_product, 'small_image')->resize($_imageSize); ?>" width="65" height="65" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
-                                </div>
-                                <div class="product-shop">
-                                    <header>
-                                        <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                                        <?php echo $this->getPriceHtml($_product, true) ?>
-                                        <?php if(!$_product->isSaleable()): ?>
-                                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
-                                        <?php endif; ?>
-                                    </header>
-                                </div>
+    <div class="category-products">
+        <?php $_collectionSize = $_productCollection->count() ?>
+        <?php $_columnCount = $this->getColumnCount(); ?>
+        <ul class="c-list">
+            <?php $i=0; foreach ($_productCollection as $_product): ?>
+                <li>
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>">
+                        <div class="wrap">
+                            <div class="product-image">
+                                <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_product, 'small_image')->resize(130); ?>" width="65" height="65" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
                             </div>
-                        </a>
-                        <div class="actions">
-                            <ul>
-                                <li><a href="<?php echo $_product->getProductUrl() ?>" class="i-view-details"><i></i><?php echo $this->__('View Details') ?></a></li>
-                                <li><a href="<?php echo $this->getUrl('catalog/product/gallery', array('id'=>$_product->getId())) ?>" class="i-view-gallery"><i></i><?php echo $this->__('View Gallery') ?></a></li>
-                                <li><a href="<?php echo $this->helper('Mage_Catalog_Helper_Product')->getEmailToFriendUrl($_product) ?>" class="i-send-friend"><i></i><?php echo $this->__('Tell a Friend') ?></a></li>
-                                <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
-                                    <li><a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getAddUrl($_product) ?>" class="i-send-wishlist"><i></i><?php echo $this->__('Add to Wishlist') ?></a></li>
-                                <?php endif; ?>
-                                <li><a href="<?php echo $this->getAddToCartUrl($_product) ?>" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>'); return false;" class="i-add-to-cart"><i></i><?php echo $this->__('Add to Cart') ?></a></li>
-                            </ul>
+                            <div class="product-shop">
+                                <header>
+                                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                                    <?php echo $this->getPriceHtml($_product, true) ?>
+                                </header>
+                            </div>
                         </div>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-        </div>
-    <?php else: ?>
-        <div class="category-products">
-            <?php $_collectionSize = $_productCollection->count() ?>
-            <?php $_columnCount = $this->getColumnCount(); ?>
-            <table class="c-grid" cellspacing="0">
-                <tbody>
-                <?php $index = 1 ?>
-                <?php $i=0; foreach ($_productCollection as $key=>$_product): ?>
-                    <?php if ($index % 2): ?>
-                    <tr>
-                    <?php endif; ?>
-                        <div class="cell">
-                            <div class="position-wrap">
-                                <div class="cloned-wrap">
-                                    <div class="wrap">
-                                        <div class="product-image">
-                                            <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_product, 'small_image')->resize($_imageSize); ?>" width="65" height="65" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
-                                        </div>
-                                        <div class="product-shop">
-                                            <header>
-                                                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                                                <?php echo $this->getPriceHtml($_product, true) ?>
-                                                <?php if(!$_product->isSaleable()): ?>
-                                                    <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
-                                                <?php endif; ?>
-                                            </header>
-                                        </div>
-                                    </div>
-                                    <div class="product-shop">
-                                        <header>
-                                            <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                                            <?php echo $this->getPriceHtml($_product, true) ?>
-                                            <?php if(!$_product->isSaleable()): ?>
-                                                <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
-                                            <?php endif; ?>
-                                        </header>
-                                    </div>
-                                    <div class="front">
-                                        <span class="i-flip"></span>
-                                        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>">
-                                            <div class="wrap">
-                                                <div class="product-image">
-                                                    <img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_product, 'small_image')->resize($_imageSize); ?>" width="65" height="65" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
-                                                </div>
-                                                <div class="product-shop">
-                                                    <header>
-                                                        <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                                                        <?php echo $this->getPriceHtml($_product, true) ?>
-                                                        <?php if(!$_product->isSaleable()): ?>
-                                                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
-                                                        <?php endif; ?>
-                                                    </header>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </a>
-                        </td>
-                    <?php if ($i % 2): ?>
-                    </tr>
-                    <?php endif; ?>
-                    <?php $index++ ?>
-                <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
-        <script>
-            document.observe('dom:loaded', function () {
-                $('c-grid').addClassName('ready');
-
-                $('c-grid').on('click', ".i-flip", function(e, n) {
-                        var par = n.up('.flip-block');
-                        e.preventDefault();
-                        par.toggleClassName('active');
-                });
-
-                $('c-grid').select('.front').each(function (n) {
-                    n.setStyle({'height' :n.up('.cell').getDimensions().height - 1 + 'px'});
-                });
-            });
-        </script>
-    <?php endif; ?>
+                    </a>
+                    <div class="actions" style="display:none;">
+                        <ul>
+                            <li><a href="<?php echo $_product->getProductUrl() ?>" class="i-view-details"><i></i><?php echo $this->__('View Details') ?></a></li>
+                            <li><a href="<?php echo $this->getUrl('catalog/product/gallery', array('id'=>$_product->getId())) ?>" class="i-view-gallery"><i></i><?php echo $this->__('View Gallery') ?></a></li>
+                            <li><a href="<?php echo $this->helper('Mage_Catalog_Helper_Product')->getEmailToFriendUrl($_product) ?>" class="i-send-friend"><i></i><?php echo $this->__('Tell a Friend') ?></a></li>
+                            <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
+                                <li><a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getAddUrl($_product) ?>" class="i-send-wishlist"><i></i><?php echo $this->__('Add to Wishlist') ?></a></li>
+                            <?php endif; ?>
+                            <li><a href="<?php echo $this->getAddToCartUrl($_product) ?>" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>'); return false;" class="i-add-to-cart"><i></i><?php echo $this->__('Add to Cart') ?></a></li>
+                        </ul>
+                    </div>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    </div>
 <?php endif; ?>

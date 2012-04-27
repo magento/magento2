@@ -293,17 +293,12 @@ class Mage_XmlConnect_Block_Checkout_Payment_Method_List extends Mage_Payment_Bl
     /**
      * Check and prepare payment method model
      *
-     * @param mixed $method
+     * @param Mage_Payment_Model_Method_Abstract $method
      * @return bool
      */
     protected function _canUseMethod($method)
     {
-        if (!($method instanceof Mage_Payment_Model_Method_Abstract)
-            || !$method->canUseCheckout()
-            || !$method->isAvailable($this->getQuote())
-        ) {
-            return false;
-        }
-        return parent::_canUseMethod($method);
+        return ($method instanceof Mage_Payment_Model_Method_Abstract) && $method->canUseCheckout()
+            && $method->isAvailable($this->getQuote()) && parent::_canUseMethod($method);
     }
 }

@@ -242,4 +242,60 @@ class Mage_Oauth_Helper_Data extends Mage_Core_Helper_Abstract
             )
         );
     }
+
+    /**
+     * Is current authorize page is simple
+     *
+     * @return boolean
+     */
+    protected function _getIsSimple()
+    {
+        $simple = false;
+        if (stristr($this->_getRequest()->getActionName(), 'simple')
+            || !is_null($this->_getRequest()->getParam('simple', null))
+        ) {
+            $simple = true;
+        }
+
+        return $simple;
+    }
+
+    /**
+     * Get authorize endpoint url
+     *
+     * @param string $userType
+     * @return string
+     */
+    public function getAuthorizeUrl($userType)
+    {
+        $simple = $this->_getIsSimple();
+
+        if (Mage_Oauth_Model_Token::USER_TYPE_CUSTOMER == $userType) {
+            if ($simple) {
+                $route = self::ENDPOINT_AUTHORIZE_CUSTOMER_SIMPLE;
+            } else {
+                $route = self::ENDPOINT_AUTHORIZE_CUSTOMER;
+            }
+        } elseif (Mage_Oauth_Model_Token::USER_TYPE_ADMIN == $userType) {
+            if ($simple) {
+                $route = self::ENDPOINT_AUTHORIZE_ADMIN_SIMPLE;
+            } else {
+                $route = self::ENDPOINT_AUTHORIZE_ADMIN;
+            }
+        } else {
+            throw new Exception('Invalid user type.');
+        }
+
+        return $this->_getUrl($route, array('_query' => array('oauth_token' => $this->getOauthToken())));
+    }
+
+    /**
+     * Retrieve oauth_token param from request
+     *
+     * @return string|null
+     */
+    public function getOauthToken()
+    {
+        return $this->_getRequest()->getParam('oauth_token', null);
+    }
 }

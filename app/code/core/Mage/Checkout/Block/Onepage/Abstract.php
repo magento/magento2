@@ -159,7 +159,7 @@ abstract class Mage_Checkout_Block_Onepage_Abstract extends Mage_Core_Block_Temp
             ->setValue($countryId)
             ->setOptions($this->getCountryOptions());
         if ($type === 'shipping') {
-            $select->setExtraParams('onchange="shipping.setSameAsBilling(false);"');
+            $select->setExtraParams('onchange="if(window.shipping)shipping.setSameAsBilling(false);"');
         }
 
         return $select->getHtml();

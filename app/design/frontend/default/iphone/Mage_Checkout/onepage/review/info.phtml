@@ -19,48 +19,29 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php echo $this->getChildHtml('items_before'); ?>
 <div id="checkout-review-table-wrapper">
-    <table class="data-table" id="checkout-review-table">
-        <col />
-        <col width="1" />
-        <col width="1" />
-        <col width="1" />
+    <table class="data-table cart-table-items" id="checkout-review-table">
+        <?php echo $this->getChildHtml('totals'); ?>
         <thead>
             <tr>
                 <th><?php echo $this->__('Product Name') ?></th>
-                <th class="a-center"><?php echo $this->__('Price') ?></th>
-                <th class="a-center"><?php echo $this->__('Qty') ?></th>
-                <th class="a-center"><?php echo $this->__('Subtotal') ?></th>
+                <th class="a-right"><?php echo $this->__('Subtotal') ?></th>
             </tr>
-            <?php if ($this->helper('Mage_Tax_Helper_Data')->displayCartBothPrices()): ?>
-                <!--
-                <tr>
-                    <th class="a-right"><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(false) ?></th>
-                    <th><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(true) ?></th>
-                    <th class="a-right"><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(false) ?></th>
-                    <th><?php echo $this->helper('Mage_Tax_Helper_Data')->getIncExcTaxLabel(true) ?></th>
-                </tr>
-                -->
-            <?php endif; ?>
         </thead>
-        <?php echo $this->getChildHtml('totals'); ?>
-        <tbody>
         <?php foreach($this->getItems() as $_item): ?>
             <?php echo $this->getItemHtml($_item)?>
         <?php endforeach ?>
-        </tbody>
     </table>
 </div>
 <?php echo $this->getChildHtml('items_after'); ?>
 <script type="text/javascript">
 //<![CDATA[
-    decorateTable('checkout-review-table');
     truncateOptions();
 //]]>
 </script>

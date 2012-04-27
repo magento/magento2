@@ -48,16 +48,14 @@ class Mage_Checkout_Block_Multishipping_Billing extends Mage_Payment_Block_Form_
     }
 
     /**
-     * Check and prepare payment method model
+     * Check payment method model
      *
+     * @param Mage_Payment_Model_Method_Abstract|null $method
      * @return bool
      */
     protected function _canUseMethod($method)
     {
-        if (!$method->canUseForMultishipping()) {
-            return false;
-        }
-        return parent::_canUseMethod($method);
+        return $method && $method->canUseForMultishipping() && parent::_canUseMethod($method);
     }
 
     /**

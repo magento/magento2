@@ -201,7 +201,7 @@ abstract class Mage_Catalog_Model_Api2_Product_Rest extends Mage_Catalog_Model_A
                 $this->_critical(self::RESOURCE_NOT_FOUND);
             }
             // check if product belongs to website current
-            if ($this->getRequest()->getParam('store')) {
+            if ($this->_getStore()->getId()) {
                 $isValidWebsite = in_array($this->_getStore()->getWebsiteId(), $product->getWebsiteIds());
                 if (!$isValidWebsite) {
                     $this->_critical(self::RESOURCE_NOT_FOUND);
@@ -211,7 +211,8 @@ abstract class Mage_Catalog_Model_Api2_Product_Rest extends Mage_Catalog_Model_A
             if ($this->getApiUser()->getType() != Mage_Api2_Model_Auth_User_Admin::USER_TYPE) {
                 // check if product assigned to any website and can be shown
                 if ((!Mage::app()->isSingleStoreMode() && !count($product->getWebsiteIds()))
-                    || !$productHelper->canShow($product)) {
+                    || !$productHelper->canShow($product)
+                ) {
                     $this->_critical(self::RESOURCE_NOT_FOUND);
                 }
             }

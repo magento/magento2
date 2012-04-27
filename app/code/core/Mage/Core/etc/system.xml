@@ -1054,7 +1054,7 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <use_store translate="label">
+                        <use_store translate="label comment">
                             <label>Add Store Code to Urls</label>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
@@ -1063,6 +1063,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <comment><![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]></comment>
                         </use_store>
                         <redirect_to_base translate="label">
                             <label>Auto-redirect to Base URL</label>

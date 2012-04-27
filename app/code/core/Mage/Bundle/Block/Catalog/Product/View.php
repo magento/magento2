@@ -37,30 +37,35 @@ class Mage_Bundle_Block_Catalog_Product_View extends Mage_Catalog_Block_Product_
     /**
      * Get tier prices (formatted)
      *
-     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Catalog_Model_Product|null $product
      * @return array
      */
     public function getTierPrices($product = null)
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
-        $prices  = $product->getFormatedTierPrice();
-
-        $taxHelper = Mage::helper('Mage_Tax_Helper_Data');
 
         $res = array();
+
+        $prices = $product->getFormatedTierPrice();
         if (is_array($prices)) {
+            $store = Mage::app()->getStore();
+            $helper = Mage::helper('Mage_Tax_Helper_Data');
+            $specialPrice = $product->getSpecialPrice() ? 100 - $product->getSpecialPrice() : 0;
             foreach ($prices as $price) {
-                $price['price_qty'] = $price['price_qty']*1;
-                $price['savePercent'] = ceil(100 - $price['price']);
-                $price['formated_price'] = Mage::app()->getStore()->formatPrice(
-                    Mage::app()->getStore()->convertPrice($taxHelper->getPrice($product, $price['website_price']))
-                );
-                $price['formated_price_incl_tax'] = Mage::app()->getStore()->formatPrice(
-                    Mage::app()->getStore()->convertPrice($taxHelper->getPrice($product, $price['website_price'], true))
-                );
-                $res[] = $price;
+                if ($specialPrice < $price['price']) {
+                    $price['price_qty'] += 0;
+                    $price['savePercent'] = ceil(100 - $price['price']);
+
+                    $priceExclTax = $helper->getPrice($product, $price['website_price']);
+                    $price['formated_price'] = $store->formatPrice($store->convertPrice($priceExclTax));
+
+                    $priceInclTax = $helper->getPrice($product, $price['website_price'], true);
+                    $price['formated_price_incl_tax'] = $store->formatPrice($store->convertPrice($priceInclTax));
+
+                    $res[] = $price;
+                }
             }
         }
 

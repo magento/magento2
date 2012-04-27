@@ -197,7 +197,7 @@ OrderReviewController.prototype = {
         var newId = el.id.replace('shipping:','billing:');
         if (newId && $(newId) && $(newId).type != 'hidden') {
             $(newId).value = el.value;
-            $(newId).setAttribute('readonly', 'readonly');
+            $(newId).setAttribute('readOnly', 'readonly');
             $(newId).addClassName('local-validation');
             $(newId).setStyle({opacity:.5});
             $(newId).disable();
@@ -219,7 +219,7 @@ OrderReviewController.prototype = {
             this._clearValidation('billing');
         } else {
             $$('[id^="billing:"]').invoke('enable');
-            $$('[id^="billing:"]').invoke('removeAttribute', 'readonly');
+            $$('[id^="billing:"]').each(function(el){el.removeAttribute("readOnly");});
             $$('[id^="billing:"]').invoke('removeClassName', 'local-validation');
             $$('[id^="billing:"]').invoke('setStyle', {opacity:1});
         }

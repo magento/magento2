@@ -62,11 +62,13 @@ class Mage_CatalogSearch_Model_Advanced extends Mage_Core_Model_Abstract
     /**
      * Current search engine
      *
-     * @var object | Mage_CatalogSearch_Model_Resource_Fulltext_Engine
+     * @var object|Mage_CatalogSearch_Model_Resource_Fulltext_Engine
      */
-    protected $_engine = null;
+    protected $_engine;
 
     /**
+     * Found products collection
+     *
      * @var Mage_CatalogSearch_Model_Resource_Advanced_Collection
      */
     protected $_productCollection;

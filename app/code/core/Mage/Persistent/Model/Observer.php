@@ -331,7 +331,7 @@ class Mage_Persistent_Model_Observer
 
         /** @var $controllerAction Mage_Core_Controller_Front_Action */
         $controllerAction = $observer->getEvent()->getControllerAction();
-        if (is_callable(array($controllerAction, 'redirectLogin'))) {
+        if (method_exists($controllerAction, 'redirectLogin')) {
             Mage::getSingleton('Mage_Core_Model_Session')->addNotice(
                 Mage::helper('Mage_Persistent_Helper_Data')->__('To proceed to Checkout, please log in using your email address.')
             );

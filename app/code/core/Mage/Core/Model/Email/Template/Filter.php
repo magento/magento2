@@ -179,7 +179,7 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
         if (isset($blockParameters['output'])) {
             $method = $blockParameters['output'];
         }
-        if (!isset($method) || !is_string($method) || !is_callable(array($block, $method))) {
+        if (!isset($method) || !is_string($method) || !method_exists($block, $method)) {
             $method = 'toHtml';
         }
         return $block->$method();

@@ -25,43 +25,53 @@
  */
 ?>
 <?php /** @var $this Mage_DesignEditor_Block_Toolbar_PageType */ ?>
-<div id="vde_page_types_hierarchy">
-    <?php echo $this->renderPageTypes(); ?>
-</div>
-<div>
-    <?php echo $this->__('Page Type:'); ?>
-    <button id="vde_page_types_control"><?php echo $this->__('Select a Page Type'); ?></button>
+<div id="vde_page_types_hierarchy" class="vde_toolbar_cell">
+    <div class="vde_toolbar_cell_title">
+        <?php echo $this->__('Page:'); ?>
+        <span class="vde_toolbar_cell_value"><?php echo $this->getSelectedPageTypeLabel(); ?></span>
+    </div>
+    <div class="vde_toolbar_cell_content">
+        <div id="vde_page_types_tree"><?php echo $this->renderPageTypes(); ?></div>
+    </div>
 </div>
 <script type="text/javascript">
 (function ($) {
     $(document).ready(function () {
-        $("#vde_page_types_hierarchy").jstree({
+        var treeElement = $("#vde_page_types_tree");
+        treeElement.jstree({
             ui: {
                 select_limit: 1,
                 selected_parent_close: false
+            },
+            themes: {
+                dots: false,
+                icons: false
             }
         }).bind('select_node.jstree', function (e, data) {
             var selectedListItem = data.rslt.obj;
-            $('#vde_page_types_control').text(selectedListItem.children('a').text());
-            if ($(this).is(':visible')) {
-                $(this).hide();
+            var cellElement = $(this).parents('.vde_toolbar_cell');
+            cellElement.find('.vde_toolbar_cell_value').text($.trim(selectedListItem.children('a').text()));
+            if (cellElement.hasClass('active')) {
+                cellElement.removeClass('active');
                 window.location = selectedListItem.children('a').attr('href');
             }
         });
-        $('#vde_page_types_control').bind('click', function (event) {
-            var controlPos = $(this).offset();
-            var controlHeight = $(this).outerHeight();
-            $("#vde_page_types_hierarchy").css({
-                left: controlPos.left,
-                top: controlPos.top + controlHeight
-            }).slideToggle();
-        });
         <?php if ($this->getSelectedPageType()) : ?>
-        $("#vde_page_types_hierarchy").bind('loaded.jstree', function (e, data) {
+        treeElement.bind('loaded.jstree', function (e, data) {
             var treeInstance = data.inst;
             treeInstance.select_node($(this).find('li[rel="<?php echo $this->getSelectedPageType(); ?>"]'));
         });
         <?php endif; ?>
+        $('#vde_page_types_hierarchy').one('activate_toolbar_cell.vde', function () {
+            /* At the time of applying the scroll bar, the underlying element should be visible */
+            treeElement.slimScroll({
+                color: '#cccccc',
+                alwaysVisible: true,
+                opacity: 1,
+                height: 'auto',
+                size: 9
+            });
+        });
     });
 })(jQuery);
 </script>

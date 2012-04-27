@@ -42,6 +42,13 @@ class Mage_Reports_Model_Resource_Order_Collection extends Mage_Sales_Model_Reso
     protected $_isLive   = false;
 
     /**
+     * Sales amount expression
+     *
+     * @var string
+     */
+    protected $_salesAmountExpression;
+
+    /**
      * Check range for live mode
      *
      * @param unknown_type $range
@@ -85,6 +92,40 @@ class Mage_Reports_Model_Resource_Order_Collection extends Mage_Sales_Model_Reso
     }
 
     /**
+     * Get sales amount expression
+     *
+     * @return string
+     */
+    protected function _getSalesAmountExpression()
+    {
+        if (is_null($this->_salesAmountExpression)) {
+            $adapter = $this->getConnection();
+            $expressionTransferObject = new Varien_Object(array(
+                'expression' => '%s - %s - %s - (%s - %s - %s)',
+                'arguments' => array(
+                    $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
+                    $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
+                    $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
+                    $adapter->getIfNullSql('main_table.base_total_refunded', 0),
+                    $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
+                    $adapter->getIfNullSql('main_table.base_shipping_refunded', 0),
+                )
+            ));
+
+            Mage::dispatchEvent('sales_prepare_amount_expression', array(
+                'collection' => $this,
+                'expression_object' => $expressionTransferObject,
+            ));
+            $this->_salesAmountExpression = vsprintf(
+                $expressionTransferObject->getExpression(),
+                $expressionTransferObject->getArguments()
+            );
+        }
+
+        return $this->_salesAmountExpression;
+    }
+
+    /**
      * Prepare report summary from live data
      *
      * @param string $range
@@ -103,14 +144,7 @@ class Mage_Reports_Model_Resource_Order_Collection extends Mage_Sales_Model_Reso
          */
         $this->getSelect()->reset(Zend_Db_Select::COLUMNS);
 
-        $expression = sprintf('%s - %s - %s - (%s - %s - %s)',
-            $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
-            $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
-            $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
-            $adapter->getIfNullSql('main_table.base_total_refunded', 0),
-            $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
-            $adapter->getIfNullSql('main_table.base_shipping_refunded', 0)
-        );
+        $expression = $this->_getSalesAmountExpression();
         if ($isFilter == 0) {
             $this->getSelect()->columns(array(
                 'revenue' => new Zend_Db_Expr(
@@ -387,21 +421,12 @@ class Mage_Reports_Model_Resource_Order_Collection extends Mage_Sales_Model_Reso
 
         $adapter = $this->getConnection();
 
-        $baseTotalInvoiced    = $adapter->getIfNullSql('main_table.base_total_invoiced', 0);
-        $baseTotalRefunded    = $adapter->getIfNullSql('main_table.base_total_refunded', 0);
         $baseTaxInvoiced      = $adapter->getIfNullSql('main_table.base_tax_invoiced', 0);
         $baseTaxRefunded      = $adapter->getIfNullSql('main_table.base_tax_refunded', 0);
         $baseShippingInvoiced = $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0);
         $baseShippingRefunded = $adapter->getIfNullSql('main_table.base_shipping_refunded', 0);
 
-        $revenueExp = sprintf('%s - %s - %s - (%s - %s - %s)',
-            $baseTotalInvoiced,
-            $baseTaxInvoiced,
-            $baseShippingInvoiced,
-            $baseTotalRefunded,
-            $baseTaxRefunded,
-            $baseShippingRefunded
-        );
+        $revenueExp = $this->_getSalesAmountExpression();
         $taxExp = sprintf('%s - %s', $baseTaxInvoiced, $baseTaxRefunded);
         $shippingExp = sprintf('%s - %s', $baseShippingInvoiced, $baseShippingRefunded);
 
@@ -503,14 +528,7 @@ class Mage_Reports_Model_Resource_Order_Collection extends Mage_Sales_Model_Reso
             $this->setMainTable('sales_flat_order');
             $this->removeAllFieldsFromSelect();
 
-            $expr = sprintf('%s - %s - %s - (%s - %s - %s)',
-                $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
-                $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
-                $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
-                $adapter->getIfNullSql('main_table.base_total_refunded', 0),
-                $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
-                $adapter->getIfNullSql('main_table.base_shipping_refunded', 0)
-            );
+            $expr = $this->_getSalesAmountExpression();
 
             if ($isFilter == 0) {
                 $expr = '(' . $expr . ') * main_table.base_to_global_rate';

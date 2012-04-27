@@ -391,13 +391,23 @@
 
 <?php else: /* if (!$_product->isGrouped()): */ ?>
     <?php
-    $_exclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue);
-    $_inclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue, true);
+        $showMinPrice = $this->getDisplayMinimalPrice();
+        if ($showMinPrice && $_minimalPriceValue) {
+            $_exclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue);
+            $_inclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue, true);
+            $price    = $showMinPrice ? $_minimalPriceValue : 0;
+        } else {
+            $price    = $_product->getFinalPrice();
+            $_exclTax = $_taxHelper->getPrice($_product, $price);
+            $_inclTax = $_taxHelper->getPrice($_product, $price, true);
+        }
     ?>
-    <?php if ($this->getDisplayMinimalPrice() && $_minimalPriceValue): ?>
+    <?php if ($price): ?>
         <div class="price-box">
-            <p class="minimal-price">
+            <p<?php if ($showMinPrice): ?> class="minimal-price"<?php endif ?>>
+                <?php if ($showMinPrice): ?>
                 <span class="price-label"><?php echo $this->__('Starting at:') ?></span>
+                <?php endif ?>
                 <?php if ($_taxHelper->displayBothPrices()): ?>
                     <span class="price-excluding-tax">
                         <span class="label"><?php echo $this->helper('Mage_Tax_Helper_Data')->__('Excl. Tax:') ?></span>

@@ -242,9 +242,6 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
             $this->_getOrderCreateModel()->moveQuoteItem($moveItemId, $moveTo);
         }
 
-        /*if ($paymentData = $this->getRequest()->getPost('payment')) {
-            $this->_getOrderCreateModel()->setPaymentData($paymentData);
-        }*/
         if ($paymentData = $this->getRequest()->getPost('payment')) {
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
         }
@@ -481,7 +478,13 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
     {
         try {
             $this->_processActionData('save');
-            if ($paymentData = $this->getRequest()->getPost('payment')) {
+            $paymentData = $this->getRequest()->getPost('payment');
+            if ($paymentData) {
+                $paymentData['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_INTERNAL
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
                 $this->_getOrderCreateModel()->setPaymentData($paymentData);
                 $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
             }

@@ -1,3 +1,12 @@
+Update as of 4/26/2012
+======================
+* Introduced `Mage_Backend` module and relocated backend area routing model there (was `Mage_Core_Controller_Varien_Router_Admin`). The "adminhtml" area is also declared in the `Mage_Backend` module.
+* Introduced declaration of application area in config.xml with the following requirements:
+  * Must declare with a router class in `config/global/areas/<area_code>/routers/<router_code>/class`
+  * May declare `config/global/areas/<area_code>/base_controller`, which would enforce any controllers that serve in this area, to be descendants of the specified class
+* Refined styling of the visual design editor toolbar. Subtle improvements of toolbar usability.
+* Fetched updates from Magento 1.x up to April 11 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details
+
 Update as of 4/13/2012
 ======================
 

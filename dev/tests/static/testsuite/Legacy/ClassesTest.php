@@ -139,6 +139,9 @@ class Legacy_ClassesTest extends PHPUnit_Framework_TestCase
         }
         $classes = array_merge($classes, Utility_Classes::getXmlAttributeValues($xml, '/layout//@module', 'module'));
         $this->_assertNonFactoryName(array_unique($classes));
+
+        $tabs = Utility_Classes::getXmlNodeValues($xml, '/layout//action[@method="addTab"]/block');
+        $this->_assertNonFactoryName(array_unique($tabs), true);
     }
 
     /**
@@ -155,9 +158,10 @@ class Legacy_ClassesTest extends PHPUnit_Framework_TestCase
      * Suppressing "unused variable" because of the "catch" block
      *
      * @param array $names
+     * @param bool $softComparison
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _assertNonFactoryName($names)
+    protected function _assertNonFactoryName($names, $softComparison = false)
     {
         if (!$names) {
             return;
@@ -165,8 +169,12 @@ class Legacy_ClassesTest extends PHPUnit_Framework_TestCase
         $factoryNames = array();
         foreach ($names as $name) {
             try {
-                $this->assertFalse(false === strpos($name, '_'));
-                $this->assertRegExp('/^([A-Z][A-Za-z\d_]+)+$/', $name);
+                if ($softComparison) {
+                    $this->assertNotRegExp('/\//', $name);
+                } else {
+                    $this->assertFalse(false === strpos($name, '_'));
+                    $this->assertRegExp('/^([A-Z][A-Za-z\d_]+)+$/', $name);
+                }
             } catch (PHPUnit_Framework_AssertionFailedError $e) {
                 $factoryNames[] = $name;
             }

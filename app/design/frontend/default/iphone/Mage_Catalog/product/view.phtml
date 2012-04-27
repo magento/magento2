@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -38,76 +38,78 @@
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view">
-    <div class="product-essential">
-        <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
             <input type="hidden" name="related_product" id="related-products-field" value="" />
-            <div class="product-shop">
-                <div class="wrap">
-                    <div class="product-image-and-actions">
-                        <?php echo $this->getChildHtml('media') ?>
-                    </div>
-                    <div class="product-desc">
-                        <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                        <?php echo $this->getChildHtml('product_type_data') ?>
-                        <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-                        <?php if (!$this->hasOptions()):?>
-                            <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) :?>
-                            <fieldset class="add-to-cart-box">
-                                <?php if($_product->isSaleable()): ?>
-                                    <?php echo $this->getChildHtml('addtocart') ?>
-                                <?php endif; ?>
-                            </fieldset>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    </div>
+        </div>
+        <div class="product-essential">
+
+                <div class="product-img-box">
+                    <?php echo $this->getChildHtml('media') ?>
                 </div>
-                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                    <?php echo $this->getChildChildHtml('container1') ?>
-                <?php endif;?>
-                <?php if (!$this->hasOptions() && $_product->getTypeId() != Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) :?>
-                    <?php echo $this->getChildHtml('addto') ?>
-                <?php endif; ?>
-                <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) :?>
-                    <div class="grouped-grid">
-                        <?php echo $this->getChildHtml('product_type_data_grid') ?>
-                        <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) :?>
-                        <fieldset class="add-to-cart-box">
+
+                <div class="product-shop">
+                    <div class="product-main-info">
+                        <div class="product-name">
+                            <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                        </div>
+                        <?php echo $this->getChildHtml('alert_urls') ?>
+                        <?php echo $this->getChildHtml('product_type_data') ?>
+                    </div>
+                    <?php echo $this->getTierPriceHtml() ?>
+                    <?php echo $this->getChildHtml('extrahint') ?>
+
+                    <?php if (!$this->hasOptions()):?>
+                        <div class="add-to-box">
                             <?php if($_product->isSaleable()): ?>
                                 <?php echo $this->getChildHtml('addtocart') ?>
                             <?php endif; ?>
-                        </fieldset>
-                        <?php endif; ?>
-                    </div>
-                    <?php echo $this->getChildHtml('addto') ?>
-                <?php endif; ?>
-            </div>
-            <div class="product-collateral">
-                <?php $layout = $this->getLayout(); ?>
-                <?php foreach ($this->getGroupChildNames('detailed_info') as $name):?>
-                        <?php $html = $layout->renderElement($name); ?>
-                        <?php if (!$html) continue; ?>
-                        <?php $alias = $layout->getElementAlias($name); ?>
-                        <div class="box-collateral <?php echo "box-{$alias}"?>">
-                            <?php if ($title = $this->getChildData($alias, 'title')):?>
-                            <h2><?php echo $this->escapeHtml($title); ?></h2>
-                            <?php endif;?>
-                            <?php echo $html; ?>
                         </div>
-                <?php endforeach;?>
+                        <?php echo $this->getChildHtml('extra_buttons') ?>
+                    <?php else:?>
+                        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+                            <div class="options-container-small">
+                                <?php echo $this->getChildChildHtml('container1') ?>
+                            </div>
+                        <?php endif;?>
+                    <?php endif; ?>
+
+                    <?php echo $this->getChildHtml('other');?>
+                </div>
+
+        </div>
+
+        <div class="product-collateral">
+
+            <?php $layout = $this->getLayout(); ?>
+            <?php foreach ($this->getGroupChildNames('detailed_info', 'getChildHtml') as $name):?>
+            <?php $html = $layout->renderElement($name); ?>
+            <?php $alias = $layout->getElementAlias($name); ?>
+            <div class="box-collateral <?php echo "box-{$alias}"?>">
+                <?php if ($title = $this->getChildData($alias, 'title')):?>
+                <h2><?php echo $this->escapeHtml($title); ?></h2>
+                <?php endif;?>
+                <?php echo $html; ?>
             </div>
-            <?php echo $this->getChildHtml('giftcard_form'); ?>
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php if ($alias == 'description'): ?>
+                <div class="product-add-to"><?php echo $this->getChildHtml('addto') ?></div>
+            <?php endif; ?>
+            <?php endforeach;?>
+
+        </div>
+
+        <div class="product-review"><?php echo $this->getReviewsSummaryHtml($_product, false, true)?></div>
+
+        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+            <div class="options-container-big">
                 <?php echo $this->getChildChildHtml('container2') ?>
-            <?php endif;?>
-        </form>
-    </div>
-    <div class="product-collateral">
-        <?php if ($this->getChildHtml('upsell_products')):?>
-            <div class="collateral-box"><?php echo $this->getChildHtml('upsell_products') ?></div>
+            </div>
         <?php endif;?>
-        <?php echo $this->getChildHtml('product_additional_data') ?>
-    </div>
+    </form>
+    <?php echo $this->getChildHtml('upsell_products') ?>
+    <?php echo $this->getChildHtml('productTagList') ?>
+    <?php echo $this->getChildHtml('product_additional_data') ?>
 </div>
 
 <script type="text/javascript">
@@ -123,16 +125,27 @@
             }
             var e = null;
             try {
-                if ( window.WebKitCSSMatrix ) {
-                    var originalImg = $$('.product-image-wrap .product-image img')[0];
-                    originalImg.up('.product-image-wrap').insert(originalImg.clone().addClassName('cloned'));
-                    setTimeout(function () {$$('.cloned')[0].setStyle({'webkitTransform' : 'translate3d(' + (document.body.offsetWidth - 190) + 'px, -150px, 2px) scale(0) rotate(200deg)'});}, 1);
-                    $$('.product-image-wrap .cloned')[0].observe('webkitTransitionEnd', function(e) {
-                        this.form.submit();
-                    }.bind(this));
+                var transformValue = {};
+
+                if ( Modernizr.csstransforms3d ) {
+                    transformValue[Modernizr.prefixed('transform')] = 'translate3d(-82px, -106px, 2px) scale(0) rotate(200deg)';
+                } else if ( Modernizr.csstransforms ) {
+                    transformValue[Modernizr.prefixed('transform')] = 'translate(-82px, -106px) scale(0) rotate(200deg)';
                 } else {
                     this.form.submit();
+                    return false;
                 }
+
+                var originalImg = $$('.product-image-wrap .product-image img')[0];
+                originalImg.up('.product-image-wrap').insert(originalImg.clone().addClassName('cloned'));
+
+                setTimeout(function () {
+                    $$('.cloned')[0].setStyle(transformValue);
+                }, 1);
+                $$('.product-image-wrap .cloned')[0].observe(transEndEventName, function(e) {
+                    this.form.submit();
+                }.bind(this));
+
             } catch (e) {
             }
             this.form.action = oldUrl;
@@ -152,13 +165,6 @@
             delete Validation.methods['required-entry'];
             delete Validation.methods['validate-one-required'];
             delete Validation.methods['validate-one-required-by-name'];
-            // Remove custom datetime validators
-            for (var methodName in Validation.methods) {
-                if (methodName.match(/^validate-datetime-.*/i)) {
-                    delete Validation.methods[methodName];
-                }
-            }
-
             if (this.validator.validate()) {
                 if (url) {
                     this.form.action = url;

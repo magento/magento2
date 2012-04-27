@@ -154,9 +154,20 @@ abstract class Mage_Core_Controller_Varien_Action
     {
     }
 
+    /**
+     * Set currently used area code
+     * @param string $areaCode
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function setCurrentArea($areaCode)
+    {
+        $this->_currentArea = $areaCode;
+        return $this;
+    }
+
     public function hasAction($action)
     {
-        return is_callable(array($this, $this->getActionMethodName($action)));
+        return method_exists($this, $this->getActionMethodName($action));
     }
 
     /**
@@ -430,8 +441,7 @@ abstract class Mage_Core_Controller_Varien_Action
     {
         try {
             $actionMethodName = $this->getActionMethodName($action);
-
-            if (!is_callable(array($this, $actionMethodName))) {
+            if (!method_exists($this, $actionMethodName)) {
                 $actionMethodName = 'norouteAction';
             }
 
@@ -861,8 +871,6 @@ abstract class Mage_Core_Controller_Varien_Action
         if ($url = $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {
             $refererUrl = Mage::helper('Mage_Core_Helper_Data')->urlDecode($url);
         }
-
-        $refererUrl = Mage::helper('Mage_Core_Helper_Data')->escapeUrl($refererUrl);
 
         if (!$this->_isUrlInternal($refererUrl)) {
             $refererUrl = Mage::app()->getStore()->getBaseUrl();

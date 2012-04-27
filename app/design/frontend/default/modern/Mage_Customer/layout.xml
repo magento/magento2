@@ -131,6 +131,29 @@ New customer registration
         </reference>
     </customer_account_forgotpassword>
 
+    <customer_account_resetpassword translate="label">
+        <label>Reset a Password</label>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="head">
+            <action method="setTitle" translate="title" module="Mage_Customer">
+                <title>Reset a Password</title>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>1column.phtml</template>
+            </action>
+            <action method="setHeaderTitle" translate="title" module="Mage_Customer">
+                <title>Reset a Password</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Customer_Block_Account_Resetpassword" name="resetPassword" template="form/resetforgottenpassword.phtml"/>
+        </reference>
+    </customer_account_resetpassword>
+
     <customer_account_confirmation translate="label" type="page" parent="customer_account">
         <label>Customer Account Confirmation</label>
         <remove name="right"/>

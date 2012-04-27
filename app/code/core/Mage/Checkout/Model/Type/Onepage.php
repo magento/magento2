@@ -537,6 +537,12 @@ class Mage_Checkout_Model_Type_Onepage
             $quote->getShippingAddress()->setCollectShippingRates(true);
         }
 
+        $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
+            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+            | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+            | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
+
         $payment = $quote->getPayment();
         $payment->importData($data);
 

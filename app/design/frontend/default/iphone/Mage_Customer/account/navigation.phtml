@@ -19,44 +19,18 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="block block-account" id="account-navigation">
-    <div class="block-title">
-        <strong><span><?php echo $this->__('My Account'); ?></span></strong>
-    </div>
-    <div class="block-content">
-        <ul>
-            <?php $_links = $this->getLinks(); ?>
-            <?php $_index = 1; ?>
-            <?php $_count = count($_links); ?>
-            <?php foreach ($_links as $_link): ?>
-                <?php $_last = ($_index++ >= $_count); ?>
-                <?php if ($this->isActive($_link)): ?>
-                    <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
-                <?php else: ?>
-                    <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-    <a href="#" class="back" id="hide-links">Back</a>
-</div>
-<a href="#" class="show-links" id="show-links">Show()</a>
-<script type="text/javascript">
-//<![CDATA[
-    document.observe('dom:loaded', function () {
-        $('show-links').observe('click', function (e) {
-            $('account-navigation').setStyle({ 'left' : 0 });
-            e.preventDefault();
-        });
-        $('hide-links').observe('click', function (e) {
-            $('account-navigation').setStyle({ 'left' : '-100%' });
-            e.preventDefault();
-        });
-    });
-//]]>
-</script>
+<?php $_links = $this->getLinks(); ?>
+<?php $_index = 1; ?>
+<?php $_count = count($_links); ?>
+<?php foreach ($_links as $_link): ?>
+    <?php if ($this->isActive($_link)): ?>
+        <li class="account-links"><strong><?php echo $_link->getLabel() ?></strong></li>
+    <?php else: ?>
+        <li class="account-links"><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+    <?php endif; ?>
+<?php endforeach; ?>

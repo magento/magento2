@@ -96,6 +96,7 @@
                 <charset>UTF-8</charset>
                 <session_timeout>3600</session_timeout>
                 <compliance_wsi>0</compliance_wsi>
+                <wsdl_cache_enabled>0</wsdl_cache_enabled>
             </config>
         </api>
     </default>

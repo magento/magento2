@@ -219,22 +219,16 @@ abstract class Mage_Dataflow_Model_Convert_Action_Abstract
     public function run(array $args=array())
     {
         if ($method = $this->getParam('method')) {
-//            print $method;
-            if (!is_callable(array($this->getContainer(), $method))) {
-                $this->getContainer()->addException('Unable to run action method: '.$method, Mage_Dataflow_Model_Convert_Exception::FATAL);
+            if (!method_exists($this->getContainer(), $method)) {
+                $this->getContainer()->addException(
+                    'Unable to run action method: ' . $method,
+                    Mage_Dataflow_Model_Convert_Exception::FATAL
+                );
             }
-
-//            printf('<pre>call %s::%s()</pre>', __CLASS__, __FUNCTION__);
-//            printf('<pre>call %s::%s()</pre>', get_class($this->getContainer()), $method);
-
-//            print '<pre>CONTAINER = ';
-//            print get_class($this->getContainer());
-//            print '</pre>';
 
             $this->getContainer()->addException('Starting '.get_class($this->getContainer()).' :: '.$method);
 
             if ($this->getParam('from')) {
-//                print '$this->getParam(\'from\') = ' . $this->getParam('from');
                 $this->getContainer()->setData($this->getContainer($this->getParam('from'))->getData());
             }
 

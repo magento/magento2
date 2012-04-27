@@ -72,6 +72,9 @@
     <validate-date translate="message" module="Mage_Core">
         <message>Please enter a valid date.</message>
     </validate-date>
+    <validate-date-range translate="message" module="Mage_Core">
+        <message>The From Date value should be less than or equal to the To Date value.</message>
+    </validate-date-range>
     <validate-email translate="message" module="Mage_Core">
         <message>Please enter a valid email address. For example johndoe@domain.com.</message>
     </validate-email>

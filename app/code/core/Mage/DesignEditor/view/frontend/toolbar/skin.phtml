@@ -25,24 +25,23 @@
  */
 ?>
 <?php /** @var $this Mage_DesignEditor_Block_Toolbar_Skin */ ?>
-<div class="skin-selector">
-    <?php echo Mage::helper('Mage_DesignEditor_Helper_Data')->__('Skin:'); ?>
-    <select id="<?php echo $this->getSelectHtmlId(); ?>">
-        <?php foreach ($this->getOptions() as $optGroup): ?>
-            <optgroup label="<?php echo $this->escapeHtml($optGroup['label']) ?>">
+<div id="skin_selector" class="vde_toolbar_cell">
+    <div class="vde_toolbar_cell_title">
+        <?php echo Mage::helper('Mage_DesignEditor_Helper_Data')->__('Theme:'); ?>
+        <span class="vde_toolbar_cell_value"><?php echo Mage::getDesign()->getDesignTheme(); ?></span>
+    </div>
+    <div class="vde_toolbar_cell_content">
+        <dl id="<?php echo $this->getSelectHtmlId(); ?>">
+            <?php foreach ($this->getOptions() as $optGroup): ?>
+                <dt class="vde_cell_list_group"><?php echo $this->escapeHtml($optGroup['label']) ?></dt>
                 <?php foreach ($optGroup['value'] as $option): ?>
-                    <?php $selected = $this->isSkinSelected($option['value']) ? 'selected="selected"' : ''; ?>
-                    <option value="<?php echo $this->escapeHtml($option['value']); ?>" <?php echo $selected; ?>>
-                        <?php echo $this->escapeHtml($option['label']); ?>
-                    </option>
+                    <?php $checked = $this->isSkinSelected($option['value']) ? ' checked' : '' ?>
+                    <dd class="vde_cell_list_item<?php echo $checked ?>">
+                        <?php $url = $this->getUrl('design/editor/skin', array('_query' => array('skin' => $option['value']))) ?>
+                        <a href="<?php echo $url?>"><?php echo $this->escapeHtml($option['label']); ?></a>
+                    </dd>
                 <?php endforeach; ?>
-            </optgroup>
-        <?php endforeach; ?>
-    </select>
+            <?php endforeach; ?>
+        </dl>
+    </div>
 </div>
-
-<script type="text/javascript">
-jQuery(document).ready(function () {
-    new DesignEditorSkinSelector(<?php echo $this->getJsonConfig() ?>);
-});
-</script>

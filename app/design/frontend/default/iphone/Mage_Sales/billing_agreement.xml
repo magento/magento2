@@ -43,6 +43,7 @@
         <update handle="customer_account"/>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
+            <action method="setMyClass"><value>billing-agreement-view</value></action>
         </reference>
         <reference name="my.account.wrapper">
             <block type="Mage_Sales_Block_Billing_Agreement_View" name="customer.account.billing.agreement" template="billing/agreement/view.phtml"/>

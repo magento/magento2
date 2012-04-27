@@ -290,7 +290,7 @@ Multi address shipping checkout success
 One page checkout main layout
 -->
 
-    <checkout_onepage_index translate="label" type="page" parent="checkout_cart_index">
+    <checkout_onepage_index translate="label" type="page" parent="default">
         <label>One Page Checkout</label>
         <!-- Mage_Checkout -->
         <remove name="right"/>
@@ -393,7 +393,7 @@ One page checkout order review block
         </reference>
     </checkout_onepage_review>
 
-    <checkout_onepage_success translate="label" type="page" parent="checkout_onepage_index">
+    <checkout_onepage_success translate="label" type="page" parent="default">
         <label>One Page Checkout Success</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>
@@ -403,7 +403,7 @@ One page checkout order review block
         </reference>
     </checkout_onepage_success>
 
-    <checkout_onepage_failure translate="label" type="page" parent="checkout_onepage_index">
+    <checkout_onepage_failure translate="label" type="page" parent="default">
         <label>One Page Checkout Failure</label>
         <reference name="root">
             <action method="setTemplate"><template>2columns-left.phtml</template></action>

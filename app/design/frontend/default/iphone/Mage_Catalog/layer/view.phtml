@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -32,23 +32,24 @@
  */
 ?>
 <?php if($this->canShowBlock()): ?>
-<div class="filters-block-wrap">
-    <div class="filters-block">
-        <h3><?php echo $this->__('Shop By') ?></h3>
-        <div class="block-content">
-            <?php echo $this->getStateHtml() ?>
-            <?php if($this->canShowOptions()): ?>
-                <?php $_filters = $this->getFilters() ?>
-                <?php foreach ($_filters as $_filter): ?>
+<div class="filters-block">
+    <?php echo $this->getStateHtml() ?>
+    <?php if ($this->getLayer()->getState()->getFilters()): ?>
+        <div class="actions"><a href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a></div>
+    <?php endif; ?>
+    <div class="block-content">
+    <?php if($this->canShowOptions()): ?>
+            <h3><?php echo $this->__('Shop By') ?></h3>
+            <?php $_filters = $this->getFilters() ?>
+            <?php foreach ($_filters as $_filter): ?>
                 <?php if($_filter->getItemsCount()): ?>
                 <dl>
                     <dt><?php echo $this->__($_filter->getName()) ?></dt>
                     <dd><?php echo $_filter->getHtml() ?></dd>
                 </dl>
                 <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
+            <?php endforeach; ?>
+    <?php endif; ?>
     </div>
 </div>
 <?php endif; ?>

@@ -65,8 +65,9 @@
             <adminhtml>
                 <use>admin</use>
                 <args>
-                    <module>Mage_Adminhtml</module>
-                    <frontName>admin</frontName>
+                    <modules>
+                        <Mage_Adminhtml>Mage_Adminhtml</Mage_Adminhtml>
+                    </modules>
                 </args>
             </adminhtml>
         </routers>

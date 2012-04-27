@@ -407,18 +407,28 @@ class Mage_Tag_Model_Resource_Product_Collection extends Mage_Catalog_Model_Reso
     }
 
     /**
-     * Set attribute order
+     * Treat "order by" items as attributes to sort
      *
-     * @param string $attribute
-     * @param string $dir
      * @return Mage_Tag_Model_Resource_Product_Collection
      */
-    public function setOrder($attribute, $dir = 'desc')
+    protected function _renderOrders()
     {
-        if ($attribute == 'popularity') {
-            $this->getSelect()->order($attribute . ' ' . $dir);
-        } else {
-            parent::setOrder($attribute, $dir);
+        if (!$this->_isOrdersRendered) {
+            parent::_renderOrders();
+
+            $orders = $this->getSelect()
+                ->getPart(Zend_Db_Select::ORDER);
+
+            $appliedOrders = array();
+            foreach ($orders as $order) {
+                $appliedOrders[$order[0]] = true;
+            }
+
+            foreach ($this->_orders as $field => $direction) {
+                if (empty($appliedOrders[$field])) {
+                    $this->_select->order(new Zend_Db_Expr($field . ' ' . $direction));
+                }
+            }
         }
         return $this;
     }

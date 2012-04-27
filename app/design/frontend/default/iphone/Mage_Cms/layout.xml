@@ -55,6 +55,9 @@ Default layout, loads most of the pages
 
     <cms_index_index translate="label" type="page" parent="cms_page_view">
         <label>CMS Home Page</label>
+        <reference name="root">
+            <container name="homepage.banner" label="Home Page Banner(Mobile)" htmlTag="div" htmlClass="front-banner"/>
+        </reference>
         <reference name="content">
             <block type="Mage_Catalog_Block_Navigation" name="hp_nav" template="navigation/top.phtml" />
         </reference>

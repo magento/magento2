@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 MediabrowserUtility = {
-    openDialog: function(url, width, height, title) {
+    openDialog: function(url, width, height, title, options) {
         if ($('browser_window') && typeof(Windows) != 'undefined') {
             Windows.focus('browser_window');
             return;
         }
-        this.dialogWindow = Dialog.info(null, {
+        this.dialogWindow = Dialog.info(null, Object.extend({
             closable:     true,
             resizable:    false,
             draggable:    true,
@@ -38,13 +38,13 @@ MediabrowserUtility = {
             top:          50,
             width:        width || 950,
             height:       height || 600,
-            zIndex:       1000,
+            zIndex:       options && options.zIndex || 1000,
             recenterAuto: false,
             hideEffect:   Element.hide,
             showEffect:   Element.show,
             id:           'browser_window',
             onClose: this.closeDialog.bind(this)
-        });
+        }, options || {}));
         new Ajax.Updater('modal_dialog_message', url, {evalScripts: true});
     },
     closeDialog: function(window) {

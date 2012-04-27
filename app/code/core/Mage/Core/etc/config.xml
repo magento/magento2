@@ -236,10 +236,6 @@
         </trans_email>
         <web>
             <routers>
-                <admin>
-                    <area>admin</area>
-                    <class>Mage_Core_Controller_Varien_Router_Admin</class>
-                </admin>
                 <standard>
                     <area>frontend</area>
                     <class>Mage_Core_Controller_Varien_Router_Standard</class>
@@ -334,10 +330,6 @@
         <default>
             <web>
                 <routers>
-                    <admin>
-                        <area>admin</area>
-                        <class>Mage_Core_Controller_Varien_Router_Admin</class>
-                    </admin>
                     <standard>
                         <area>frontend</area>
                         <class>Mage_Core_Controller_Varien_Router_Standard</class>

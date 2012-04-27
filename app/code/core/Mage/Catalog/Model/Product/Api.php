@@ -187,6 +187,11 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
             $product->setStockData(array('use_config_manage_stock' => 0));
         }
 
+        foreach ($product->getMediaAttributes() as $mediaAttribute) {
+            $mediaAttrCode = $mediaAttribute->getAttributeCode();
+            $product->setData($mediaAttrCode, 'no_selection');
+        }
+
         $this->_prepareDataForSave($product, $productData);
 
         try {

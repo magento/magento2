@@ -82,8 +82,8 @@ class Mage_Sales_Model_Order_Creditmemo_Total_Discount extends Mage_Sales_Model_
             }
         }
 
-        $creditmemo->setDiscountAmount($totalDiscountAmount);
-        $creditmemo->setBaseDiscountAmount($baseTotalDiscountAmount);
+        $creditmemo->setDiscountAmount(-$totalDiscountAmount);
+        $creditmemo->setBaseDiscountAmount(-$baseTotalDiscountAmount);
 
         $creditmemo->setGrandTotal($creditmemo->getGrandTotal() - $totalDiscountAmount);
         $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() - $baseTotalDiscountAmount);

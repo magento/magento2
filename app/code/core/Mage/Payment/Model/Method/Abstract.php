@@ -31,9 +31,9 @@
  */
 abstract class Mage_Payment_Model_Method_Abstract extends Varien_Object
 {
-    const ACTION_ORDER              = 'order';
-    const ACTION_AUTHORIZE          = 'authorize';
-    const ACTION_AUTHORIZE_CAPTURE  = 'authorize_capture';
+    const ACTION_ORDER             = 'order';
+    const ACTION_AUTHORIZE         = 'authorize';
+    const ACTION_AUTHORIZE_CAPTURE = 'authorize_capture';
 
     const STATUS_UNKNOWN    = 'UNKNOWN';
     const STATUS_APPROVED   = 'APPROVED';
@@ -41,6 +41,19 @@ abstract class Mage_Payment_Model_Method_Abstract extends Varien_Object
     const STATUS_DECLINED   = 'DECLINED';
     const STATUS_VOID       = 'VOID';
     const STATUS_SUCCESS    = 'SUCCESS';
+
+    /**
+     * Bit masks to specify different payment method checks.
+     * @see Mage_Payment_Model_Method_Abstract::isApplicableToQuote
+     */
+    const CHECK_USE_FOR_COUNTRY       = 1;
+    const CHECK_USE_FOR_CURRENCY      = 2;
+    const CHECK_USE_CHECKOUT          = 4;
+    const CHECK_USE_FOR_MULTISHIPPING = 8;
+    const CHECK_USE_INTERNAL          = 16;
+    const CHECK_ORDER_TOTAL_MIN_MAX   = 32;
+    const CHECK_RECURRING_PROFILES    = 64;
+    const CHECK_ZERO_TOTAL            = 128;
 
     protected $_code;
     protected $_formBlockType = 'Mage_Payment_Block_Form';
@@ -631,15 +644,69 @@ abstract class Mage_Payment_Model_Method_Abstract extends Varien_Object
             'quote'           => $quote,
         ));
 
-        // disable method if it cannot implement recurring profiles management and there are recurring items in quote
-        if ($checkResult->isAvailable) {
-            $implementsRecurring = $this->canManageRecurringProfiles();
-            // the $quote->hasRecurringItems() causes big performance impact, thus it has to be called last
-            if ($quote && !$implementsRecurring && $quote->hasRecurringItems()) {
-                $checkResult->isAvailable = false;
-            }
+        if ($checkResult->isAvailable && $quote) {
+            $checkResult->isAvailable = $this->isApplicableToQuote($quote, self::CHECK_RECURRING_PROFILES);
         }
         return $checkResult->isAvailable;
+    }
+
+    /**
+     * Check whether payment method is applicable to quote
+     * Purposed to allow use in controllers some logic that was implemented in blocks only before
+     *
+     * @param Mage_Sales_Model_Quote $quote
+     * @param int|null $checksBitMask
+     * @return bool
+     */
+    public function isApplicableToQuote($quote, $checksBitMask)
+    {
+        if ($checksBitMask & self::CHECK_USE_FOR_COUNTRY) {
+            if (!$this->canUseForCountry($quote->getBillingAddress()->getCountry())) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_USE_FOR_CURRENCY) {
+            if (!$this->canUseForCurrency($quote->getStore()->getBaseCurrencyCode())) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_USE_CHECKOUT) {
+            if (!$this->canUseCheckout()) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_USE_FOR_MULTISHIPPING) {
+            if (!$this->canUseForMultishipping()) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_USE_INTERNAL) {
+            if (!$this->canUseInternal()) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_ORDER_TOTAL_MIN_MAX) {
+            $total = $quote->getBaseGrandTotal();
+            $minTotal = $this->getConfigData('min_order_total');
+            $maxTotal = $this->getConfigData('max_order_total');
+            if (!empty($minTotal) && $total < $minTotal || !empty($maxTotal) && $total > $maxTotal) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_RECURRING_PROFILES) {
+            if (!$this->canManageRecurringProfiles() && $quote->hasRecurringItems()) {
+                return false;
+            }
+        }
+        if ($checksBitMask & self::CHECK_ZERO_TOTAL) {
+            $total = $quote->getBaseSubtotal() + $quote->getShippingAddress()->getBaseShippingAmount();
+            if ($total < 0.0001 && $this->getCode() != 'free'
+                && !($this->canManageRecurringProfiles() && $quote->hasRecurringItems())
+            ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

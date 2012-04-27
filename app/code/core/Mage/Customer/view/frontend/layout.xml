@@ -161,7 +161,7 @@ New customer registration
             <action method="setHeaderTitle" translate="title" module="Mage_Customer"><title>Send confirmation link</title></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Core_Block_Template" name="accountConfirmation" template="Mage_customer::form/confirmation.phtml"/>
+            <block type="Mage_Core_Block_Template" name="accountConfirmation" template="Mage_Customer::form/confirmation.phtml"/>
         </reference>
     </customer_account_confirmation>
 

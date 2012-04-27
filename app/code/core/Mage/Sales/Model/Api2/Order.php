@@ -117,9 +117,9 @@ class Mage_Sales_Model_Api2_Order extends Mage_Api2_Model_Resource
     {
         $addresses = array();
 
-        if ($this->_isSubCallAllowed('order_addresses')) {
+        if ($this->_isSubCallAllowed('order_address')) {
             /** @var $addressesFilter Mage_Api2_Model_Acl_Filter */
-            $addressesFilter = $this->_getSubModel('order_addresses', array())->getFilter();
+            $addressesFilter = $this->_getSubModel('order_address', array())->getFilter();
             // do addresses request if at least one attribute allowed
             if ($addressesFilter->getAllowedAttributes()) {
                 /* @var $collection Mage_Sales_Model_Resource_Order_Address_Collection */
@@ -174,9 +174,9 @@ class Mage_Sales_Model_Api2_Order extends Mage_Api2_Model_Resource
     {
         $comments = array();
 
-        if ($this->_isOrderCommentsAllowed() && $this->_isSubCallAllowed('order_comments')) {
+        if ($this->_isOrderCommentsAllowed() && $this->_isSubCallAllowed('order_comment')) {
             /** @var $commentsFilter Mage_Api2_Model_Acl_Filter */
-            $commentsFilter = $this->_getSubModel('order_comments', array())->getFilter();
+            $commentsFilter = $this->_getSubModel('order_comment', array())->getFilter();
             // do comments request if at least one attribute allowed
             if ($commentsFilter->getAllowedAttributes()) {
                 foreach ($this->_getCommentsCollection($orderIds)->getItems() as $item) {
@@ -212,9 +212,9 @@ class Mage_Sales_Model_Api2_Order extends Mage_Api2_Model_Resource
     {
         $items = array();
 
-        if ($this->_isSubCallAllowed('order_items')) {
+        if ($this->_isSubCallAllowed('order_item')) {
             /** @var $itemsFilter Mage_Api2_Model_Acl_Filter */
-            $itemsFilter = $this->_getSubModel('order_items', array())->getFilter();
+            $itemsFilter = $this->_getSubModel('order_item', array())->getFilter();
             // do items request if at least one attribute allowed
             if ($itemsFilter->getAllowedAttributes()) {
                 /* @var $collection Mage_Sales_Model_Resource_Order_Item_Collection */

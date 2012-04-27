@@ -459,7 +459,13 @@ class Mage_XmlConnect_CheckoutController extends Mage_XmlConnect_Controller_Acti
                     return;
                 }
             }
-            if ($data = $this->getRequest()->getPost('payment', false)) {
+            $data = $this->getRequest()->getPost('payment', array());
+            if ($data) {
+                $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
             $this->getOnepage()->saveOrder();

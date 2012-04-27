@@ -71,6 +71,15 @@ $('product_bundle_container').select('input', 'select', 'textarea', 'button').ea
     }
 });
 <?php endif; ?>
+Validation.add('validate-greater-zero-based-on-option', '<?php echo $this->__('Please enter a number greater 0 in this field.') ?>', function(v, el) {
+    var optionType = $(el).up('div.grid').previous('table.option-header').select('select.select-product-option-type')[0],
+        v = Number(v) || 0;
+
+    if (optionType && (optionType.value == 'checkbox' || optionType.value == 'multi') && v <= 0) {
+        return false;
+    }
+    return true;
+});
 </script>
 
 <div><input type="hidden" name="affect_bundle_product_selections" value="1" /></div>

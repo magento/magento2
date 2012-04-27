@@ -100,23 +100,30 @@ class Mage_Oauth_AuthorizeController extends Mage_Core_Controller_Front_Action
      */
     protected function _initConfirmPage($simple = false)
     {
-        $this->loadLayout();
+        /** @var $helper Mage_Oauth_Helper_Data */
+        $helper = Mage::helper('Mage_Oauth_Helper_Data');
 
         /** @var $session Mage_Customer_Model_Session */
         $session = Mage::getSingleton($this->_sessionName);
+        if (!$session->getCustomerId()) {
+            $session->addError($this->__('Please login to proceed authorization.'));
+            $url = $helper->getAuthorizeUrl(Mage_Oauth_Model_Token::USER_TYPE_CUSTOMER);
+            $this->_redirectUrl($url);
+            return $this;
+        }
+
+        $this->loadLayout();
+
+        /** @var $block Mage_Oauth_Block_Authorize */
+        $block = $this->getLayout()->getBlock('oauth.authorize.confirm');
+        $block->setIsSimple($simple);
+
         try {
             /** @var $server Mage_Oauth_Model_Server */
             $server = Mage::getModel('Mage_Oauth_Model_Server');
 
-            /** @var $block Mage_Oauth_Block_Authorize */
-            $block = $this->getLayout()->getBlock('oauth.authorize.confirm');
-            $block->setIsSimple($simple);
-
             /** @var $token Mage_Oauth_Model_Token */
             $token = $server->authorizeToken($session->getCustomerId(), Mage_Oauth_Model_Token::USER_TYPE_CUSTOMER);
-
-            /** @var $helper Mage_Oauth_Helper_Data */
-            $helper = Mage::helper('Mage_Oauth_Helper_Data');
 
             if (($callback = $helper->getFullCallbackUrl($token))) { //false in case of OOB
                 $this->_redirectUrl($callback . ($simple ? '&simple=1' : ''));

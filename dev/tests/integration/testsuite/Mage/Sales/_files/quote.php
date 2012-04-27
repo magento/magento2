@@ -48,10 +48,20 @@ $product->setTypeId('simple')
     ->save();
 $product->load(1);
 
+$addressData = include(__DIR__ . '/address_data.php');
+$billingAddress = new Mage_Sales_Model_Quote_Address($addressData);
+$billingAddress->setAddressType('billing');
+
+$shippingAddress = clone $billingAddress;
+$shippingAddress->setId(null)
+    ->setAddressType('shipping');
+
 $quote = new Mage_Sales_Model_Quote();
 $quote->setCustomerIsGuest(true)
     ->setStoreId(Mage::app()->getStore()->getId())
     ->setReservedOrderId('test01')
+    ->setBillingAddress($billingAddress)
+    ->setShippingAddress($shippingAddress)
     ->addProduct($product);
 $quote->getPayment()->setMethod('checkmo');
 $quote->setIsMultiShipping('1');

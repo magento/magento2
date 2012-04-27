@@ -69,6 +69,7 @@ Product reviews page
         <label>Catalog Product Reviews List</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
+            <action method="setMyClass"><value>review-product-page</value></action>
         </reference>
         <reference name="head">
             <action method="addJs"><file>varien/product.js</file></action>
@@ -76,21 +77,6 @@ Product reviews page
         </reference>
         <reference name="content">
             <block type="Mage_Review_Block_Product_View" name="product.info" template="Mage_Catalog::product/view.phtml">
-                <block type="Mage_Catalog_Block_Product_View_Media" name="product.info.media" as="media" template="product/view/media.phtml">
-                    <action method="disableGallery"/>
-                </block>
-                <block type="Mage_Catalog_Block_Product_View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
-                <block type="Mage_Catalog_Block_Product_View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml">
-                    <!-- workaround: a better place for this code is in paypal.xml -->
-                    <container name="review.product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" module="Mage_Paypal" htmlTag="div">
-                        <block type="Mage_Paypal_Block_Express_Shortcut" name="review.product.info.addtocart.paypal" template="express/shortcut.phtml">
-                            <action method="setIsInCatalogProduct"><value>1</value></action>
-                        </block>
-                    </container>
-                </block>
-
-                <block type="Mage_Catalog_Block_Product_View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
-                <block type="Mage_Core_Block_Template" name="product.info.other" as="other" template="Mage_Review::product/view/other.phtml"/>
                 <block type="Mage_Page_Block_Html_Pager" name="product_review_list.toolbar" />
                 <block type="Mage_Core_Block_Template" name="product_review_list.count" template="Mage_Review::product/view/count.phtml" />
                 <block type="Mage_Review_Block_Product_View_List" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml">

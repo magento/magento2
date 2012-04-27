@@ -133,14 +133,17 @@ Product.Zoom.prototype = {
         this.imageZoom = this.floorZoom+(v*(this.ceilingZoom-this.floorZoom));
 
         if (overSize) {
-            if (this.imageDim.width > this.containerDim.width) {
+            if (this.imageDim.width > this.imageDim.height) {
                 this.imageEl.style.width = (this.imageZoom*this.containerDim.width)+'px';
-            } else if (this.imageDim.height > this.containerDim.height) {
+            } else {
                 this.imageEl.style.height = (this.imageZoom*this.containerDim.height)+'px';
             }
-
-            if(this.containerDim.ratio){
-                this.imageEl.style.height = (this.imageZoom*this.containerDim.width*this.containerDim.ratio)+'px'; // for safari
+            if (this.containerDim.ratio) {
+                if (this.imageDim.width > this.imageDim.height) {
+                    this.imageEl.style.height = (this.imageZoom*this.containerDim.width*this.containerDim.ratio)+'px'; // for safari
+                } else {
+                    this.imageEl.style.width = (this.imageZoom*this.containerDim.height*this.containerDim.ratio)+'px'; // for safari
+                }
             }
         } else {
             this.slider.setDisabled();

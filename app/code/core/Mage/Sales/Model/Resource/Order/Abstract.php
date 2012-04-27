@@ -433,7 +433,7 @@ abstract class Mage_Sales_Model_Resource_Order_Abstract extends Mage_Sales_Model
      *
      * @param string $field
      * @param int $entityId
-     * @return int
+     * @return Mage_Sales_Model_Resource_Order_Abstract
      */
     public function updateOnRelatedRecordChanged($field, $entityId)
     {
@@ -445,13 +445,13 @@ abstract class Mage_Sales_Model_Resource_Order_Abstract extends Mage_Sales_Model
         $this->joinVirtualGridColumnsToSelect('main_table', $select, $column);
         $fieldsToUpdate = $adapter->fetchRow($select);
         if ($fieldsToUpdate) {
-            return $adapter->update(
+            $adapter->update(
                 $this->getGridTable(),
                 $fieldsToUpdate,
                 $adapter->quoteInto($this->getGridTable() . '.' . $field . ' = ?', $entityId)
             );
         }
-        return 0;
+        return $this;
     }
 }
 

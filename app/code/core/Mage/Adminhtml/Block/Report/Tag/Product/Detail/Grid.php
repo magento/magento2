@@ -75,7 +75,7 @@ class Mage_Adminhtml_Block_Report_Tag_Product_Detail_Grid extends Mage_Adminhtml
             $this->addColumn('visible', array(
                 'header'    => Mage::helper('Mage_Reports_Helper_Data')->__('Visible In'),
                 'sortable'  => false,
-                'index'     =>  'stores',
+                'index'     => 'stores',
                 'type'      => 'store',
                 'store_view'=> true
             ));

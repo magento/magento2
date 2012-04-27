@@ -1293,7 +1293,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     public function getIsSalable()
     {
         $productType = $this->getTypeInstance();
-        if (is_callable(array($productType, 'getIsSalable'))) {
+        if (method_exists($productType, 'getIsSalable')) {
             return $productType->getIsSalable($this);
         }
         if ($this->hasData('is_salable')) {
@@ -1836,7 +1836,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         $products = $this->_getResource()->getProductsSku($productIds);
         if (count($products)) {
             foreach ($products as $product) {
-                if (empty($product['sku'])) {
+                if (!strlen($product['sku'])) {
                     return false;
                 }
             }

@@ -19,13 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<table class="data-table" id="my-orders-table" summary="<?php echo $this->__('Items Ordered') ?>" cellspacing="0" cellpadding="0">
+<table class="data-table" id="my-orders-table" summary="<?php echo $this->__('Items Ordered') ?>">
     <tfoot>
         <?php echo $this->getChildHtml('order_totals') ?>
     </tfoot>
@@ -34,40 +34,6 @@
             <?php $_count = $_items->count(); ?>
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getParentItem()) continue; ?>
-        <tbody class="collapsed">
-            <?php echo $this->getItemHtml($_item) ?>
-            <?php if($this->helper('Mage_GiftMessage_Helper_Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
-            <tr class="border<?php echo ($_index++ > $_count ?' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" style="display:none;">
-                <?php $_giftMessage=$this->helper('Mage_GiftMessage_Helper_Message')->getGiftMessageForEntity($_item); ?>
-                <td class="gift-message-row" colspan="2">
-                    <a href="#" title="<?php echo $this->__('Close') ?>" onclick="return giftMessageToogle('<?php echo $_item->getId() ?>');" class="btn-close"><?php echo $this->__('Close') ?></a>
-                    <dl class="gift-message">
-                        <dt><strong><?php echo $this->__('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                        <dt><strong><?php echo $this->__('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
-                        <dd><?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getEscapedGiftMessage($_item) ?></dd>
-                    </dl>
-                </td>
-            </tr>
-            <?php endif ?>
-        </tbody>
+        <?php echo $this->getItemHtml($_item) ?>
         <?php endforeach; ?>
 </table>
-<script type="text/javascript">
-    document.observe("dom:loaded", function() {
-        $('my-orders-table').on('click', 'tbody tr:fisrt-child', function(e, elem) {
-
-            var tbody = elem.up('tbody');
-
-            if ( !tbody.hasClassName('collapsed') ) {
-                tbody.toggleClassName('collapsed');
-                return
-            }
-
-            $('my-orders-table').select('tbody').each(function (tbody) {
-                tbody.addClassName('collapsed');
-            });
-
-            tbody.removeClassName('collapsed');
-        });
-    });
-</script>

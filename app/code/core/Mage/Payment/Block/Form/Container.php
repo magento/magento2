@@ -27,6 +27,8 @@
 /**
  * Base container block for payment methods forms
  *
+ * @method Mage_Sales_Model_Quote getQuote()
+ *
  * @category   Mage
  * @package    Mage_Payment
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -51,27 +53,18 @@ class Mage_Payment_Block_Form_Container extends Mage_Core_Block_Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * Check payment method model
+     *
+     * @param Mage_Payment_Model_Method_Abstract $method
+     * @return bool
+     */
     protected function _canUseMethod($method)
     {
-        if (!$method->canUseForCountry($this->getQuote()->getBillingAddress()->getCountry())) {
-            return false;
-        }
-
-        if (!$method->canUseForCurrency($this->getQuote()->getStore()->getBaseCurrencyCode())) {
-            return false;
-        }
-
-        /**
-         * Checking for min/max order total for assigned payment method
-         */
-        $total = $this->getQuote()->getBaseGrandTotal();
-        $minTotal = $method->getConfigData('min_order_total');
-        $maxTotal = $method->getConfigData('max_order_total');
-
-        if((!empty($minTotal) && ($total < $minTotal)) || (!empty($maxTotal) && ($total > $maxTotal))) {
-            return false;
-        }
-        return true;
+        return $method->isApplicableToQuote($this->getQuote(), Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+            | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+        );
     }
 
     /**
@@ -79,6 +72,7 @@ class Mage_Payment_Block_Form_Container extends Mage_Core_Block_Template
      *
      * Redeclare this method in child classes for declaring method info instance
      *
+     * @param Mage_Payment_Model_Method_Abstract $method
      * @return bool
      */
     protected function _assignMethod($method)
@@ -105,26 +99,24 @@ class Mage_Payment_Block_Form_Container extends Mage_Core_Block_Template
     }
 
     /**
-     * Retrieve availale payment methods
+     * Retrieve available payment methods
      *
      * @return array
      */
     public function getMethods()
     {
         $methods = $this->getData('methods');
-        if (is_null($methods)) {
+        if ($methods === null) {
             $quote = $this->getQuote();
             $store = $quote ? $quote->getStoreId() : null;
-            $methods = $this->helper('Mage_Payment_Helper_Data')->getStoreMethods($store, $quote);
-            $total = $quote->getBaseSubtotal() + $quote->getShippingAddress()->getBaseShippingAmount();
-            foreach ($methods as $key => $method) {
-                if ($this->_canUseMethod($method)
-                    && ($total != 0
-                        || $method->getCode() == 'free'
-                        || ($quote->hasRecurringItems() && $method->canManageRecurringProfiles()))) {
+            $methods = array();
+            foreach ($this->helper('Mage_Payment_Helper_Data')->getStoreMethods($store, $quote) as $method) {
+                if ($this->_canUseMethod($method) && $method->isApplicableToQuote(
+                    $quote,
+                    Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL
+                )) {
                     $this->_assignMethod($method);
-                } else {
-                    unset($methods[$key]);
+                    $methods[] = $method;
                 }
             }
             $this->setData('methods', $methods);

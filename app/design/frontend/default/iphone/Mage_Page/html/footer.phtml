@@ -26,5 +26,5 @@
 ?>
 <footer>
     <?php echo $this->getChildHtml() ?>
-    <p class="legality"><?php echo $this->getCopyright() ?></p>
 </footer>
+<address class="copyright"><span class="logo"><img src="<?php echo $this->getSkinUrl(Mage::getStoreConfig('design/header/logo_src'))?>" width="21" alt=""/></span><?php echo $this->getCopyright() ?></address>

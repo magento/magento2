@@ -30,7 +30,7 @@
 ?>
 <?php if ($this->getTotals()): ?>
 <tfoot>
-    <?php $_colspan = 3; ?>
+    <?php $_colspan = 0; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>

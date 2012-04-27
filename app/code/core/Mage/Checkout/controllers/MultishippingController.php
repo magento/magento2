@@ -388,26 +388,6 @@ class Mage_Checkout_MultishippingController extends Mage_Checkout_Controller_Act
         $this->renderLayout();
     }
 
-//    public function billingPostAction()
-//    {
-//        if(!$this->_validateBilling()) {
-//            return;
-//        }
-//
-//        $payment = $this->getRequest()->getPost('payment');
-//        try {
-//            $this->_getCheckout()->setPaymentMethod($payment);
-//            $this->_getState()->setActiveStep(
-//                Mage_Checkout_Model_Type_Multishipping_State::STEP_OVERVIEW
-//            );
-//            $this->_redirect('*/*/overview');
-//        }
-//        catch (Exception $e) {
-//            $this->_getCheckoutSession()->addError($e->getMessage());
-//            $this->_redirect('*/*/billing');
-//        }
-//    }
-
     /**
      * Validation of selecting of billing address
      *
@@ -445,7 +425,12 @@ class Mage_Checkout_MultishippingController extends Mage_Checkout_Controller_Act
         $this->_getState()->setActiveStep(Mage_Checkout_Model_Type_Multishipping_State::STEP_OVERVIEW);
 
         try {
-            $payment = $this->getRequest()->getPost('payment');
+            $payment = $this->getRequest()->getPost('payment', array());
+            $payment['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_MULTISHIPPING
+                | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+                | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+                | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+                | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
             $this->_getCheckout()->setPaymentMethod($payment);
 
             $this->_getState()->setCompleteStep(

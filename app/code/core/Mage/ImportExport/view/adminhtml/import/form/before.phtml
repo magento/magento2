@@ -107,7 +107,14 @@
                     break;
                 case 'innerHTML':
                 case 'value':
-                    $H(pair.value).each(function(val) {if ($(val.key)) $(val.key)[pair.key] = val.value;});
+                    $H(pair.value).each(function(val) {
+                        var el = $(val.key);
+                        if (el) {
+                            el[pair.key] = val.value;
+                            // if element does not visible
+                            el.offsetWidth || el.up('div.entry-edit').show();
+                        }
+                    });
                     break;
                 case 'removeClassName':
                 case 'addClassName':

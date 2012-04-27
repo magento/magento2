@@ -955,10 +955,10 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $sku = $rowData[self::COL_SKU];
                 }
                 foreach ($this->_linkNameToId as $linkName => $linkId) {
+                    $productId    = $this->_newSku[$sku]['entity_id'];
+                    $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
-                        $productId    = $this->_newSku[$sku]['entity_id'];
-                        $productIds[] = $productId;
-                        $linkedSku    = $rowData[$linkName . 'sku'];
+                        $linkedSku = $rowData[$linkName . 'sku'];
 
                         if ((isset($this->_newSku[$linkedSku]) || isset($this->_oldSku[$linkedSku]))
                                 && $linkedSku != $sku) {
@@ -992,7 +992,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             if (Mage_ImportExport_Model_Import::BEHAVIOR_APPEND != $this->getBehavior() && $productIds) {
                 $adapter->delete(
                     $mainTable,
-                    $adapter->quoteInto('product_id IN (?)', array_keys($productIds))
+                    $adapter->quoteInto('product_id IN (?)', array_unique($productIds))
                 );
             }
             if ($linkRows) {

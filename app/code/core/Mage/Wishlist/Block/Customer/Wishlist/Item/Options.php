@@ -84,34 +84,56 @@ class Mage_Wishlist_Block_Customer_Wishlist_Item_Options extends Mage_Wishlist_B
     }
 
     /**
+     * Retrieve product configured options
+     *
+     * @return array
+     */
+    public function getConfiguredOptions()
+    {
+        $item = $this->getItem();
+        $data = $this->getOptionsRenderCfg($item->getProduct()->getTypeId());
+        if (empty($data['helper'])
+            || !$this->helper($data['helper']) instanceof Mage_Catalog_Helper_Product_Configuration_Interface
+        ) {
+            Mage::throwException($this->__("Helper for wishlist options rendering doesn't implement required interface."));
+        }
+
+        return $this->helper($data['helper'])->getOptions($item);
+    }
+
+    /**
+     * Retrieve block template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        $template = parent::getTemplate();
+        if ($template) {
+            return $template;
+        }
+
+        $item = $this->getItem();
+        if (!$item) {
+            return '';
+        }
+        $data = $this->getOptionsRenderCfg($item->getProduct()->getTypeId());
+        if (empty($data['template'])) {
+            $data = $this->getOptionsRenderCfg('default');
+        }
+
+        return empty($data['template']) ? '' : $data['template'];
+    }
+
+    /**
      * Render block html
      *
      * @return string
      */
     protected function _toHtml()
     {
-        $cfg = $this->getOptionsRenderCfg($this->getItem()->getProduct()->getTypeId());
-        if (!$cfg) {
-            return '';
-        }
+        $this->setOptionList($this->getConfiguredOptions());
 
-        $helper = Mage::helper($cfg['helper']);
-        if (!($helper instanceof Mage_Catalog_Helper_Product_Configuration_Interface)) {
-            Mage::throwException($this->__("Helper for wishlist options rendering doesn't implement required interface."));
-        }
-
-        if ($cfg['template']) {
-            $template = $cfg['template'];
-        } else {
-            $cfgDefault = $this->getOptionsRenderCfg('default');
-            if (!$cfgDefault) {
-                return '';
-            }
-            $template = $cfgDefault['template'];
-        }
-
-        $this->setTemplate($template)
-            ->setOptionList($helper->getOptions($this->getItem()));
         return parent::_toHtml();
     }
 }

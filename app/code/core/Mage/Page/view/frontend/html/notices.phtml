@@ -50,11 +50,19 @@
     <div class="global-site-notice notice-cookie" id="notice-cookie-block" style="display: none">
         <div class="notice-inner">
             <p><?php echo $this->__('This website requires cookies to provide all of its features. For more information on what data is contained in the cookies, please see our <a href="%s">Privacy Policy page</a>. To accept cookies from this site, please click the Allow button below.', $this->getPrivacyPolicyLink()) ?></p>
-            <div class="actions"><button class="button" onclick="Mage.Cookies.set('<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>', '<?php echo Mage::helper('Mage_Core_Helper_Cookie')->getAcceptedSaveCookiesWebsiteIds()?>', new Date(new Date().getTime() + <?php echo $this->getCookieRestrictionLifetime() ?> * 1000)); window.location.reload()"><span><span><?php echo $this->__('Allow');?></span></span></button></div>
+            <div class="actions"><button class="button" onclick="allowSaveCookie()"><span><span><?php echo $this->__('Allow');?></span></span></button></div>
         </div>
     </div>
     <script type="text/javascript">
     /* <![CDATA[ */
+    function allowSaveCookie() {
+        Mage.Cookies.set('<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>', '<?php echo Mage::helper('Mage_Core_Helper_Cookie')->getAcceptedSaveCookiesWebsiteIds()?>', new Date(new Date().getTime() + <?php echo Mage::helper('Mage_Core_Helper_Cookie')->getCookieRestrictionLifetime() ?> * 1000));
+        if (Mage.Cookies.get('<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>')) {
+            window.location.reload();
+        } else {
+            window.location.href = '<?php echo Mage::getUrl('cms/index/noCookies')?>';
+        }
+    }
     $('notice-cookie-block').show();
     /* ]]> */
     </script>

@@ -39,10 +39,8 @@ class Mage_DesignEditor_Block_Toolbar_PageTypeTest extends PHPUnit_Framework_Tes
     {
         $layoutUtility = new Mage_Core_Utility_Layout($this);
         $pageTypesFixture = __DIR__ . '/../../../Core/Model/Layout/_files/_page_types.xml';
-        $layout = $layoutUtility->getLayoutFromFixture($pageTypesFixture);
-        $layout->getUpdate()->addPageHandles(array('catalog_product_view_type_simple'));
         $this->_block = new Mage_DesignEditor_Block_Toolbar_PageType();
-        $this->_block->setLayout($layout);
+        $this->_block->setLayout($layoutUtility->getLayoutFromFixture($pageTypesFixture));
     }
 
     public function testRenderPageTypes()
@@ -52,9 +50,32 @@ class Mage_DesignEditor_Block_Toolbar_PageTypeTest extends PHPUnit_Framework_Tes
         $this->assertXmlStringEqualsXmlFile($expected, $actual);
     }
 
-    public function testGetSelectedPageType()
+    public function testGetSelectedPageTypeFromPageHandles()
     {
+        $this->_block->getLayout()->getUpdate()->addPageHandles(array('catalog_product_view_type_simple'));
         $this->assertEquals('catalog_product_view_type_simple', $this->_block->getSelectedPageType());
+    }
+
+    public function testGetSelectedPageTypeFromHandles()
+    {
+        $this->_block->getLayout()->getUpdate()->addHandle(array(
+            'catalog_product_view',
+            'catalog_product_view_type_grouped',
+            'not_a_page_type',
+        ));
+        $this->assertEquals('catalog_product_view_type_grouped', $this->_block->getSelectedPageType());
+    }
+
+    public function testGetSelectedPageTypeLabel()
+    {
+        $this->assertFalse($this->_block->getSelectedPageTypeLabel());
+        $this->_block->setSelectedPageType('default');
+        $this->assertEquals('All Pages', $this->_block->getSelectedPageTypeLabel());
+    }
+
+    public function testSetSelectedPageType()
+    {
+        $this->assertFalse($this->_block->getSelectedPageType());
         $this->_block->setSelectedPageType('catalog_product_view_type_configurable');
         $this->assertEquals('catalog_product_view_type_configurable', $this->_block->getSelectedPageType());
     }

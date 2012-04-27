@@ -19,35 +19,29 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php if(count($this->getItemCollection()->getItems())): ?>
-    <div class="up-sell-box carousel">
-        <div class="controls">
-            <span class="prev disabled"></span>
-            <span class="next"></span>
-        </div>
-        <h2 class="up-sell-heading"><?php echo $this->__('You May Also Like') ?></h2>
-        <ul class="up-sell carousel-items"><!-
-            <?php $this->resetItemsIterator() ?>
-            <?php for($_i=0;$_i<$this->getRowCount();$_i++): ?>
-                <?php for($_j=0;$_j<$this->getColumnCount();$_j++): ?>
-                    <?php if($_link=$this->getIterableItem()): ?>
-                        -><li>
-                            <a href="<?php echo $_link->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_link->getName()) ?>">
-                                <div class="product-image"><img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_link, 'small_image')->resize($this->getVar('product_upsell_small_image_size', 'Mage_Catalog')) ?>" alt="<?php echo $this->escapeHtml($_link->getName()) ?>" title="<?php echo $this->escapeHtml($_link->getName()) ?>"></div>
-                                <h5><?php echo $this->escapeHtml($_link->getName()) ?></h5>
-                                <div class="price-box">
-                                    <span class="regular-price"><span class="price"><?php echo $this->getPriceHtml($_link, true, '-upsell') ?></span></span>
-                                </div>
-                            </a>
-                        </li><!-
-                    <?php endif; ?>
-                <?php endfor; ?>
-            <?php endfor; ?>
-        -></ul>
+<div class="box-collateral box-up-sell">
+    <div class="box-title">
+        <h2><?php echo $this->__('You May Also Like') ?></h2>
     </div>
+    <ul class="products-grid" id="upsell-product-list"><!-
+    <?php $this->resetItemsIterator() ?>
+    <?php for($_i=0;$_i<$this->getRowCount();$_i++): ?>
+        <?php for($_j=0;$_j<$this->getColumnCount();$_j++): ?>
+            <?php if($_link=$this->getIterableItem()): ?>
+            -><li class="item">
+                <a href="<?php echo $_link->getProductUrl() ?>" class="product-image"><img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($_link, 'small_image')->resize(135) ?>" width="135" height="135" alt="<?php echo $this->escapeHtml($_link->getName()) ?>" title="<?php echo $this->escapeHtml($_link->getName()) ?>" /></a>
+                <h3 class="product-name"><a href="<?php echo $_link->getProductUrl() ?>"><?php echo $this->escapeHtml($_link->getName()) ?></a></h3>
+                <?php echo $this->getPriceHtml($_link, true, '-upsell') ?>
+            </li><!-
+            <?php endif; ?>
+        <?php endfor; ?>
+    <?php endfor; ?>
+    -></ul>
+</div>
 <?php endif ?>

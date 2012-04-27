@@ -68,7 +68,7 @@ class Mage_Dataflow_Model_Convert_Parser_Xml_Excel extends Mage_Dataflow_Model_C
             return $this;
         }
 
-        if (!is_callable(array($adapter, $adapterMethod))) {
+        if (!method_exists($adapter, $adapterMethod)) {
             $message = Mage::helper('Mage_Dataflow_Helper_Data')->__('Method "%s" was not defined in adapter %s.', $adapterMethod, $adapterName);
             $this->addException($message, Mage_Dataflow_Model_Convert_Exception::FATAL);
             return $this;

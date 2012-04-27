@@ -34,29 +34,15 @@
 
     <contacts_index_index translate="label" type="page" parent="default">
         <label>Contact Us Form</label>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="Mage_Contacts"><title>Contact Us</title></action>
+        </reference>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
             <action method="setHeaderTitle" translate="title" module="Mage_Contacts"><title>Contact Us</title></action>
         </reference>
         <reference name="content">
             <block type="Mage_Core_Block_Template" name="contactForm" template="Mage_Contacts::form.phtml"/>
-            <block type="Mage_Page_Block_Html_Breadcrumbs" name="breadcrumbs" as="breadcrumbs" before="-">
-                <action method="addCrumb" translate="crumbName" module="Mage_Catalog">
-                    <crumbName>home</crumbName>
-                    <crumbInfo>
-                        <label>Home</label>
-                        <title>Home</title>
-                        <link>/</link>
-                    </crumbInfo>
-                </action>
-                <action method="addCrumb" translate="crumbName" module="Mage_Catalog">
-                    <crumbName>categories</crumbName>
-                    <crumbInfo>
-                        <label>Categories</label>
-                        <title>Categories</title>
-                    </crumbInfo>
-                </action>
-            </block>
         </reference>
     </contacts_index_index>
 </layout>

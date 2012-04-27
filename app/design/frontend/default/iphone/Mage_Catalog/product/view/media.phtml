@@ -36,18 +36,16 @@
 ?>
 <div class="product-image-wrap">
     <div class="product-image">
-        <span class="prev"></span>
-        <span class="next"></span>
         <ul><!--
             --><li>
                 <?php
-                    $_img = '<a href="'.$this->getGalleryUrl($_image).'"><img src="'.$this->helper('Mage_Catalog_Helper_Image')->init($_product, 'image')->resize(480).'" width="240" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" /></a>';
+                    $_img = '<a href="'.$this->getGalleryUrl().'"><img src="'.$this->helper('Mage_Catalog_Helper_Image')->init($_product, 'image')->resize(290).'" width="145" alt="'.$this->escapeHtml($this->getImageLabel()).'" title="'.$this->escapeHtml($this->getImageLabel()).'" /></a>';
                     echo $_helper->productAttribute($_product, $_img, 'image');
                 ?>
             </li><!--
             <?php if (count($this->getGalleryImages()) > 0): ?>
                 <?php foreach ($this->getGalleryImages() as $_image): ?>
-                    --><li><a href="<?php echo $this->getGalleryUrl($_image) ?>" title="<?php echo $this->escapeHtml($_image->getLabel()) ?>"><img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(300); ?>" width="150" height="150" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" /></a></li><!--
+                    --><li><a href="<?php echo $this->getGalleryUrl($_image) ?>" title="<?php echo $this->escapeHtml($_image->getLabel()) ?>"><img src="<?php echo $this->helper('Mage_Catalog_Helper_Image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(290); ?>" width="145" height="145" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" /></a></li><!--
                 <?php endforeach; ?>
             <?php endif; ?>
         --></ul>

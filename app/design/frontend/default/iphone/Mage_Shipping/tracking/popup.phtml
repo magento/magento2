@@ -46,7 +46,7 @@
             <?php if ($track->getCarrierTitle()): ?>
             <tr>
                 <td class="first label"><?php echo $this->__('Carrier:'); ?></td>
-                <td><?php echo $this->escapeHtml($track->getCarrierTitle()); ?></td>
+                <td><?php echo $track->getCarrierTitle(); ?></td>
             </tr>
             <?php endif; ?>
             <?php if($track->getErrorMessage()): ?>

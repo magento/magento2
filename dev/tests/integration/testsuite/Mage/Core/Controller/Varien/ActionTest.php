@@ -252,4 +252,30 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         }
         $this->assertFalse($caughtException, $message);
     }
+
+    public function controllerAreaSetDataProvider()
+    {
+        return array(
+            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend', 'frontend'),
+            'adminhtml' => array('Mage_Core_Controller_Front_Action', 'adminhtml', 'adminhtml'),
+            'test' => array('Mage_Core_Controller_Front_Action', 'test', 'test'),
+
+        );
+    }
+
+    /**
+     * @param string $controllerClass
+     * @param string $setArea
+     * @param string $expectedArea
+     * @dataProvider controllerAreaSetDataProvider
+     * @magentoAppIsolation enabled
+     */
+    public function testSetCurrentArea($controllerClass, $setArea, $expectedArea)
+    {
+        /** @var $controller Mage_Core_Controller_Varien_Action */
+        $controller = new $controllerClass(new Magento_Test_Request(), new Magento_Test_Response());
+        $this->assertInstanceOf($controllerClass, $controller->setCurrentArea($setArea));
+        $this->assertEquals($expectedArea, $controller->getLayout()->getArea());
+    }
+
 }

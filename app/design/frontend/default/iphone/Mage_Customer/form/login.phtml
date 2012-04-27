@@ -31,37 +31,55 @@
  * @see Mage_Customer_Block_Form_Login
  */
 ?>
-<div class="login-box">
-    <div class="registered-users">
-        <h1><?php echo $this->__('Log in') ?></h1>
-        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
-            <h2><?php echo $this->__('Registered Users') ?></h2>
-            <ul class="form-list">
-                <li>
-                    <label for="email"><?php echo $this->__('Enter your email') ?>:</label>
-                    <input type="email" class="required-entry validate-email" name="login[username]" id="email" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" placeholder="<?php echo $this->__('Email Address') ?>" />
-                </li>
-                <li>
-                    <label for="pass"><?php echo $this->__('Enter your password') ?>:</label>
-                    <input type="password" class="required-entry validate-password" name="login[password]" id="pass" placeholder="<?php echo $this->__('Password') ?>" />
-                </li>
-                <?php echo $this->getChildHtml('form.additional.info'); ?>
-            </ul>
-            <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot your password?') ?></a>
-            <div class="login-button">
-                <input type="submit" value="<?php echo $this->__('Log In') ?>" />
+<div class="account-login">
+    <div class="page-title">
+        <h1><?php echo $this->__('Login or Create an Account') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php /* Extensions placeholder */ ?>
+    <?php echo $this->getChildHtml('customer.form.login.extra')?>
+    <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+        <div class="col2-set">
+            <div class="col-1 registered-users">
+                <div class="content">
+                    <h2><?php echo $this->__('Registered Customers') ?></h2>
+                    <ul class="form-list">
+                        <li>
+                            <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="login[username]" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+                            </div>
+                        </li>
+                        <li>
+                            <label for="pass" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                            <div class="input-box">
+                                <input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+                            </div>
+                        </li>
+                        <li class="note">
+                            <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="f-left"><?php echo $this->__('Forgot Your Password?') ?></a>
+                        </li>
+                        <?php echo $this->getChildHtml('form.additional.info'); ?>
+                        <li class="buttons-set">
+                            <button type="submit" class="button" title="<?php echo $this->__('Login') ?>" name="send" id="send2"><?php echo $this->__('Login') ?></button>
+                        </li>
+                    </ul>
+                    <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+                </div>
             </div>
-        </form>
-    </div>
-    <div class="new-users">
-        <h2><?php echo $this->__('New Customers') ?></h2>
-        <a href="<?php echo $this->getCreateAccountUrl() ?>"><input type="submit" value="<?php echo $this->__('Create an Account') ?>" /></a>
-        <p><?php echo $this->__('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
-    </div>
+            <div class="col-2 new-users">
+                <div class="content">
+                    <h2><?php echo $this->__('New Customers') ?></h2>
+                    <div class="buttons-set">
+                        <button type="button" title="<?php echo $this->__('Create an Account') ?>" class="button" onclick="window.location='<?php echo $this->getCreateAccountUrl() ?>';"><span><span><?php echo $this->__('Create an Account') ?></span></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
 </div>
-<script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('login-form', true);
-//]]>
-</script>

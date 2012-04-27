@@ -323,23 +323,27 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test shouldUrlBeSecure() function for "Use Secure URLs in Frontend" = Yes/No
+     * Test shouldUrlBeSecure() function for "Use Secure URLs in Frontend" = Yes
+     *
+     * @magentoConfigFixture current_store web/secure/use_in_frontend 1
      */
-    public function testShouldUrlBeSecure()
+    public function testShouldUrlBeSecureWhenSecureUsedInFrontend()
     {
-        $this->markTestIncomplete('Bug MAGE-6271');
         $model = $this->_createModel(true);
+        $this->assertFalse($model->shouldUrlBeSecure('/'));
+        $this->assertTrue($model->shouldUrlBeSecure('/checkout/onepage'));
+    }
 
-        $store = Mage::app()->getStore();
-        $oldValue = (string)$store->getConfig('web/secure/use_in_frontend');
-        foreach (array(0, 1) as $newValue) {
-            $store->setConfig('web/secure/use_in_frontend', $newValue);
-            $model->reinit();
-            $this->assertFalse($model->shouldUrlBeSecure('/'));
-            $this->assertEquals($model->shouldUrlBeSecure('/checkout/onepage'), (bool)$newValue);
-        }
-
-        $store->setConfig('web/secure/use_in_frontend', $oldValue);
+    /**
+     * Test shouldUrlBeSecure() function for "Use Secure URLs in Frontend" = No
+     *
+     * @magentoConfigFixture current_store web/secure/use_in_frontend 0
+     */
+    public function testShouldUrlBeSecureWhenSecureNotUsedInFrontend()
+    {
+        $model = $this->_createModel(true);
+        $this->assertFalse($model->shouldUrlBeSecure('/'));
+        $this->assertFalse($model->shouldUrlBeSecure('/checkout/onepage'));
     }
 
     public function testGetTablePrefix()
@@ -399,5 +403,58 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
             $model->init(self::$_options);
         }
         return $model;
+    }
+
+    /**
+     * Check if areas loaded correctly from configuration
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Mage/Core/_files/load_configuration.php
+     */
+    public function testGetAreas()
+    {
+        $allowedAreas = Mage::app()->getConfig()->getAreas();
+        $this->assertNotEmpty($allowedAreas, 'Areas are not initialized');
+
+        $this->assertArrayHasKey('test_area1', $allowedAreas, 'Test area #1 is not loaded');
+
+        $testAreaExpected = array(
+            'base_controller' => 'Mage_Core_Controller_Varien_Action',
+            'routers'         => array(
+                'test_router1' => array(
+                    'class'   => 'Mage_Core_Controller_Varien_Router_Default'
+                ),
+                'test_router2' => array(
+                    'class'   => 'Mage_Core_Controller_Varien_Router_Default'
+                )
+            )
+        );
+        $this->assertEquals($testAreaExpected, $allowedAreas['test_area1'], 'Test area is not loaded correctly');
+
+        $this->assertArrayNotHasKey('test_area2', $allowedAreas, 'Test area #2 is loaded by mistake');
+        $this->assertArrayNotHasKey('test_area3', $allowedAreas, 'Test area #3 is loaded by mistake');
+        $this->assertArrayNotHasKey('test_area4', $allowedAreas, 'Test area #4 is loaded by mistake');
+        $this->assertArrayNotHasKey('test_area5', $allowedAreas, 'Test area #5 is loaded by mistake');
+    }
+
+    /**
+     * Check if routers loaded correctly from configuration
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Mage/Core/_files/load_configuration.php
+     */
+    public function testGetRouters()
+    {
+        $loadedRouters = Mage::app()->getConfig()->getRouters();
+        $this->assertArrayHasKey('test_router1', $loadedRouters, 'Test router #1 is not initialized in test area.');
+        $this->assertArrayHasKey('test_router2', $loadedRouters, 'Test router #2 is not initialized in test area.');
+
+        $testRouterExpected = array(
+            'class'           => 'Mage_Core_Controller_Varien_Router_Default',
+            'area'            => 'test_area1',
+            'base_controller' => 'Mage_Core_Controller_Varien_Action'
+        );
+        $this->assertEquals($testRouterExpected, $loadedRouters['test_router1'], 'Test router is not loaded correctly');
+        $this->assertEquals($testRouterExpected, $loadedRouters['test_router2'], 'Test router is not loaded correctly');
     }
 }

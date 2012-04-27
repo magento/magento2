@@ -648,7 +648,7 @@ class Mage_Bundle_Model_Product_Type extends Mage_Catalog_Model_Product_Type_Abs
 
                 $beforeQty = 0;
                 $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
-                if ($customOption) {
+                if ($customOption && $customOption->getProduct()->getId() == $selection->getId()) {
                     $beforeQty = (float)$customOption->getValue();
                 }
                 $product->addCustomOption('product_qty_' . $selection->getId(), $qty + $beforeQty, $selection);

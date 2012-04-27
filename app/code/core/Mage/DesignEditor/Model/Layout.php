@@ -42,6 +42,16 @@ class Mage_DesignEditor_Model_Layout
         'Mage_DesignEditor_Block_',
         'Mage_Checkout_Block_Onepage_',
         'Mage_Paypal_Block_Express_Review_Details',
+        'Mage_Poll_Block_ActivePoll',
+        'Mage_Sales_Block_Guest_Links',
+        'Mage_Catalog_Block_Product_Compare_Sidebar',
+        'Mage_Checkout_Block_Cart_Sidebar',
+        'Mage_Wishlist_Block_Customer_Sidebar',
+        'Mage_Reports_Block_Product_Viewed',
+        'Mage_Reports_Block_Product_Compared',
+        'Mage_Sales_Block_Reorder_Sidebar',
+        'Mage_Paypal_Block_Express_Shortcut',
+        'Mage_PaypalUk_Block_Express_Shortcut',
     );
 
     /**

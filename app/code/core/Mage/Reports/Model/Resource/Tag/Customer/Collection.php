@@ -68,21 +68,4 @@ class Mage_Reports_Model_Resource_Tag_Customer_Collection extends Mage_Tag_Model
 
         return $countSelect;
     }
-
-    /**
-     * Set order
-     *
-     * @param string $attribute
-     * @param string $dir
-     * @return Mage_Reports_Model_Resource_Tag_Customer_Collection
-     */
-    public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
-    {
-        if (in_array($attribute, array('taged'))) {
-            $this->getSelect()->order($attribute . ' ' . $dir);
-        } else {
-            parent::setOrder($attribute, $dir);
-        }
-        return $this;
-    }
 }

@@ -75,8 +75,6 @@ class Mage_Rss_Block_Catalog_NotifyStock extends Mage_Rss_Block_Abstract
         );
         $rssObj->_addHeader($data);
 
-        $configManageStock = (int) Mage::getStoreConfigFlag(
-            Mage_CatalogInventory_Model_Stock_Item::XML_PATH_MANAGE_STOCK);
         $globalNotifyStockQty = (float) Mage::getStoreConfig(
             Mage_CatalogInventory_Model_Stock_Item::XML_PATH_NOTIFY_STOCK_QTY);
         Mage::helper('Mage_Rss_Helper_Data')->disableFlat();
@@ -84,29 +82,18 @@ class Mage_Rss_Block_Catalog_NotifyStock extends Mage_Rss_Block_Abstract
         $product = Mage::getModel('Mage_Catalog_Model_Product');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
         $collection = $product->getCollection();
-        $stockItemTable = $collection->getTable('cataloginventory_stock_item');
-
-        $adapter = $collection->getConnection();
-        $stockItemWhere = '({{table}}.low_stock_date is not null) '
-            . " AND ( ({{table}}.use_config_manage_stock=1 AND {$configManageStock}=1)"
-            . " AND {{table}}.qty < "
-            . $adapter->getCheckSql("{$stockItemTable}.use_config_notify_stock_qty = 1", $globalNotifyStockQty,
-                '{{table}}.notify_stock_qty')
-            . ' OR ({{table}}.use_config_manage_stock=0 AND {{table}}.manage_stock=1) )';
-
+        Mage::getResourceModel('Mage_CatalogInventory_Model_Resource_Stock')->addLowStockFilter($collection, array(
+            'qty',
+            'notify_stock_qty',
+            'low_stock_date',
+            'use_config' => 'use_config_notify_stock_qty'
+        ));
         $collection
             ->addAttributeToSelect('name', true)
-            ->joinTable('cataloginventory_stock_item', 'product_id=entity_id',
-                array(
-                     'qty'=>'qty',
-                     'notify_stock_qty'=>'notify_stock_qty',
-                     'use_config' => 'use_config_notify_stock_qty',
-                     'low_stock_date' => 'low_stock_date'),
-                $stockItemWhere, 'inner')
+            ->addAttributeToFilter('status',
+                array('in' => Mage::getSingleton('Mage_Catalog_Model_Product_Status')->getVisibleStatusIds())
+            )
             ->setOrder('low_stock_date');
-
-        $collection->addAttributeToFilter('status',
-            array('in' => Mage::getSingleton('Mage_Catalog_Model_Product_Status')->getVisibleStatusIds()));
         Mage::dispatchEvent('rss_catalog_notify_stock_collection_select', array('collection' => $collection));
 
         /*

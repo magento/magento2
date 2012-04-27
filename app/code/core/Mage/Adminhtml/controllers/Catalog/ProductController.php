@@ -507,8 +507,13 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $product->addData($productData);
 
             /* set restrictions for date ranges */
-            $product->getResource()->getAttribute('special_from_date')
+            $resource = $product->getResource();
+            $resource->getAttribute('special_from_date')
                 ->setMaxValue($product->getSpecialToDate());
+            $resource->getAttribute('news_from_date')
+                ->setMaxValue($product->getNewsToDate());
+            $resource->getAttribute('custom_design_from')
+                ->setMaxValue($product->getCustomDesignTo());
 
             $product->validate();
             /**

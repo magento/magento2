@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -49,50 +49,23 @@
     <?php if( $this->isExpanded() ): ?>
     <div class="sorter">
         <div class="sort-by">
-            <label><?php echo $this->__('Sort By') ?></label>
-            <select onchange="setLocation(this.value)">
+            <?php if($this->getCurrentDirection() == 'desc'): ?>
+                <a class="order asc" href="<?php echo $this->getOrderUrl(null, 'asc') ?>" title="<?php echo $this->__('Set Ascending Direction') ?>">&nbsp;</a>
+            <?php else: ?>
+                <a class="order desc" href="<?php echo $this->getOrderUrl(null, 'desc') ?>" title="<?php echo $this->__('Set Descending Direction') ?>">&nbsp;</a>
+            <?php endif; ?>
+            <label for="sort_by"><?php echo $this->__('Sort') ?></label>
+            <span class="sort-by-wrap">
+            <select id="sort_by" onchange="setLocation(this.value)">
             <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
                 <option value="<?php echo $this->getOrderUrl($_key, 'asc') ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
                     <?php echo $this->__($_order) ?>
                 </option>
             <?php endforeach; ?>
             </select>
-            <?php if($this->getCurrentDirection() == 'desc'): ?>
-                <a class="order asc" href="<?php echo $this->getOrderUrl(null, 'asc') ?>" title="<?php echo $this->__('Set Ascending Direction') ?>">&nbsp;</a>
-            <?php else: ?>
-                <a class="order desc" href="<?php echo $this->getOrderUrl(null, 'desc') ?>" title="<?php echo $this->__('Set Descending Direction') ?>">&nbsp;</a>
-            <?php endif; ?>
+            </span>
         </div>
     </div>
     <?php endif; ?>
 </div>
-<?php if( $this->isExpanded() ): ?>
-    <div class="toolbar">
-        <div class="limiter">
-            <label><?php echo $this->__('Show') ?></label>
-            <select onchange="setLocation(this.value)">
-            <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
-                <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
-                    <?php echo $_limit ?>
-                </option>
-            <?php endforeach; ?>
-            </select> <?php echo $this->__('per page') ?>
-        </div>
-        <?php if( $this->isEnabledViewSwitcher() ): ?>
-        <p class="view-mode">
-            <?php $_modes = $this->getModes(); ?>
-            <?php if($_modes && count($_modes)>1): ?>
-            <label><?php echo $this->__('View as') ?>&nbsp;</label>
-            <?php foreach ($this->getModes() as $_code=>$_label): ?>
-                <?php if($this->isModeActive($_code)): ?>
-                    <strong title="<?php echo $_label ?>" class="disabled <?php echo strtolower($_code); ?>"><?php echo $_label ?></strong>&nbsp;
-                <?php else: ?>
-                    <a href="<?php echo $this->getModeUrl($_code) ?>" title="<?php echo $_label ?>" class="<?php echo strtolower($_code); ?>"><?php echo $_label ?></a>&nbsp;
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <?php endif; ?>
-        </p>
-    </div>
-<?php endif; ?>
-<?php endif; ?>
 <?php endif ?>

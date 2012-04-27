@@ -56,12 +56,10 @@ class Mage_SalesRule_Model_Rule_Condition_Product extends Mage_Rule_Model_Condit
      */
     public function validate(Varien_Object $object)
     {
-        $product = false;
-        if ($object->getProduct() instanceof Mage_Catalog_Model_Product) {
-            $product = $object->getProduct();
-        } else {
-            $product = Mage::getModel('Mage_Catalog_Model_Product')
-                ->load($object->getProductId());
+        /** @var Mage_Catalog_Model_Product $product */
+        $product = $object->getProduct();
+        if (!($product instanceof Mage_Catalog_Model_Product)) {
+            $product = Mage::getModel('Mage_Catalog_Model_Product')->load($object->getProductId());
         }
 
         $product
@@ -69,6 +67,12 @@ class Mage_SalesRule_Model_Rule_Condition_Product extends Mage_Rule_Model_Condit
             ->setQuoteItemPrice($object->getPrice()) // possible bug: need to use $object->getBasePrice()
             ->setQuoteItemRowTotal($object->getBaseRowTotal());
 
-        return parent::validate($product);
+        $valid = parent::validate($product);
+        if (!$valid && $product->getTypeId() == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE) {
+            $children = $object->getChildren();
+            $valid = $children && $this->validate($children[0]);
+        }
+
+        return $valid;
     }
 }

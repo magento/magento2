@@ -83,14 +83,24 @@ class Mage_Page_Block_Html_Pager extends Mage_Core_Block_Template
         $this->setTemplate('Mage_Page::html/pager.phtml');
     }
 
+    /**
+     * Return current page
+     *
+     * @return int
+     */
     public function getCurrentPage()
     {
-        if ($page = (int) $this->getRequest()->getParam($this->getPageVarName())) {
-            return $page;
+        if (is_object($this->_collection)) {
+            return $this->_collection->getCurPage();
         }
-        return 1;
+        return (int) $this->getRequest()->getParam($this->getPageVarName(), 1);
     }
 
+    /**
+     * Return current page limit
+     *
+     * @return int
+     */
     public function getLimit()
     {
         if ($this->_limit !== null) {
@@ -118,6 +128,12 @@ class Mage_Page_Block_Html_Pager extends Mage_Core_Block_Template
         return $this;
     }
 
+    /**
+     * Set collection for pagination
+     *
+     * @param  Varien_Data_Collection $collection
+     * @return Mage_Page_Block_Html_Pager
+     */
     public function setCollection($collection)
     {
         $this->_collection = $collection
@@ -238,7 +254,9 @@ class Mage_Page_Block_Html_Pager extends Mage_Core_Block_Template
         }
         else {
             $half = ceil($this->_displayPages / 2);
-            if ($collection->getCurPage() >= $half && $collection->getCurPage() <= $collection->getLastPageNumber() - $half) {
+            if ($collection->getCurPage() >= $half
+                && $collection->getCurPage() <= $collection->getLastPageNumber() - $half
+            ) {
                 $start  = ($collection->getCurPage() - $half) + 1;
                 $finish = ($start + $this->_displayPages) - 1;
             }
@@ -501,7 +519,9 @@ class Mage_Page_Block_Html_Pager extends Mage_Core_Block_Template
             }
             else {
                 $half = ceil($this->getFrameLength() / 2);
-                if ($collection->getCurPage() >= $half && $collection->getCurPage() <= $collection->getLastPageNumber() - $half) {
+                if ($collection->getCurPage() >= $half
+                    && $collection->getCurPage() <= $collection->getLastPageNumber() - $half
+                ) {
                     $start  = ($collection->getCurPage() - $half) + 1;
                     $end = ($start + $this->getFrameLength()) - 1;
                 }

@@ -29,13 +29,15 @@
 <head>
     <?php echo $this->getChildHtml('head') ?>
 </head>
-<body <?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<body <?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> onunload="">
     <?php echo $this->getChildHtml('after_body_start') ?>
     <?php echo $this->getChildHtml('global_notices') ?>
     <?php echo $this->getChildHtml('header') ?>
 
-    <section role="main">
+    <section role="main" class="<?php echo $this->getMyClass() ?>">
         <?php echo $this->getChildHtml('breadcrumbs') ?>
+        <?php echo $this->getChildHtml('global_messages') ?>
+        <?php echo $this->getChildHtml('homepage.banner') ?>
         <?php echo $this->getChildHtml('content') ?>
     </section>
 

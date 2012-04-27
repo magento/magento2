@@ -47,18 +47,14 @@ Default layout, loads most of the pages
 -->
 
     <default>
+        <!-- Mage_Customer -->
         <reference name="top.links">
-            <block type="Mage_Customer_Block_Account_Link" name="account_links">
-                <action method="addAccountLink"><target>top.links</target><position>10</position></action>
-                <action method="addAuthLink"><target>top.links</target><position>100</position></action>
-            </block>
+            <action method="addLink" translate="label title" module="Mage_Customer"><label>My Account</label><url helper="Mage_Customer_Helper_Data::getAccountUrl"/><title>My Account</title><prepare/><urlParams/><position>10</position></action>
+        </reference>
+        <reference name="account.links">
+            <action method="addLink" translate="label title before_text" module="Mage_Customer"><label>Register</label><url helper="Mage_Customer_Helper_Data::getRegisterUrl" /><title>Register</title><prepare/><urlParams/><position>100</position></action>
         </reference>
     </default>
-
-
-<!--
-Layout for customer login page
--->
 
     <customer_account_login translate="label" type="page" parent="customer_account">
         <label>Customer Account Login Form</label>
@@ -117,6 +113,9 @@ New customer registration
         <remove name="right"/>
         <remove name="left"/>
 
+        <reference name="head">
+            <action method="setTitle" translate="title" module="Mage_Customer"><title>Forgot Your Password</title></action>
+        </reference>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
             <action method="setHeaderTitle" translate="title" module="Mage_Customer"><title>Password forgotten</title></action>
@@ -125,6 +124,29 @@ New customer registration
             <block type="Mage_Customer_Block_Account_Forgotpassword" name="forgotPassword" template="form/forgotpassword.phtml"/>
         </reference>
     </customer_account_forgotpassword>
+
+    <customer_account_resetpassword translate="label">
+        <label>Reset a Password</label>
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <reference name="head">
+            <action method="setTitle" translate="title" module="Mage_Customer">
+                <title>Reset a Password</title>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>1column.phtml</template>
+            </action>
+            <action method="setHeaderTitle" translate="title" module="Mage_Customer">
+                <title>Reset a Password</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Customer_Block_Account_Resetpassword" name="resetPassword" template="form/resetforgottenpassword.phtml"/>
+        </reference>
+    </customer_account_resetpassword>
 
     <customer_account_confirmation translate="label" type="page" parent="customer_account">
         <label>Customer Account Confirmation</label>
@@ -168,18 +190,18 @@ Customer account pages, rendered for all tabs in dashboard
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
 
-        <reference name="content">
-            <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account"/>
-        </reference>
-
-        <reference name="content">
+        <reference name="top.links">
             <block type="Mage_Customer_Block_Account_Navigation" name="customer_account_navigation" before="-" template="account/navigation.phtml">
+                <action method="setPosition"><value>20</value></action>
                 <action method="addLink" translate="label" module="Mage_Customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
                 <action method="addLink" translate="label" module="Mage_Customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
                 <action method="addLink" translate="label" module="Mage_Customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
             </block>
-            <remove name="tags_popular"/>
+            <action method="addLinkBlock"><blockName>customer_account_navigation</blockName></action>
+        </reference>
 
+        <reference name="content">
+            <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account"/>
         </reference>
     </customer_account>
 

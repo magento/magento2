@@ -182,6 +182,13 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     protected $_allowedModules = array();
 
     /**
+     * Areas allowed to use
+     *
+     * @var array
+     */
+    protected $_allowedAreas = null;
+
+    /**
      * Class construct
      *
      * @param mixed $sourceData
@@ -1525,5 +1532,74 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function getResourceModelClassName($modelClass)
     {
         return $this->getModelClassName($modelClass);
+    }
+
+    /**
+     *  Get allowed areas
+     *
+     * @return array
+     */
+    public function getAreas()
+    {
+        if (is_null($this->_allowedAreas) ) {
+            $this->_loadAreas();
+        }
+
+        return $this->_allowedAreas;
+    }
+
+    /**
+     * Load allowed areas from config
+     *
+     * @return Mage_Core_Model_Config
+     */
+    protected function _loadAreas()
+    {
+        $this->_allowedAreas = array();
+        $nodeAreas = $this->getNode('global/areas');
+        if (is_object($nodeAreas)) {
+            foreach ($nodeAreas->asArray() as $areaCode => $areaInfo) {
+                if (empty($areaCode)
+                    || (!isset($areaInfo['base_controller']) || empty($areaInfo['base_controller']))
+                    || (!isset($areaInfo['routers']) || !is_array($areaInfo['routers']))
+                ) {
+                    continue;
+                }
+
+                foreach ($areaInfo['routers'] as $routerKey => $routerInfo) {
+                    if (empty($routerKey) || !isset($routerInfo['class'])) {
+                        unset($areaInfo[$routerKey]);
+                    }
+                }
+                if (empty($areaInfo['routers'])) {
+                    continue;
+                }
+
+                $this->_allowedAreas[$areaCode] = array(
+                    'base_controller' => $areaInfo['base_controller'],
+                    'routers' => $areaInfo['routers']
+                );
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get routers from config
+     *
+     * @return array
+     */
+    public function getRouters()
+    {
+        $routers = array();
+        foreach ($this->getAreas() as $areaCode => $areaInfo) {
+            foreach ($areaInfo['routers'] as $routerKey => $routerInfo ) {
+                $routerInfo['area'] = $areaCode;
+                $routerInfo['base_controller'] = $areaInfo['base_controller'];
+                $routers[$routerKey] = $routerInfo;
+            }
+        }
+        return $routers;
     }
 }

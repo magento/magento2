@@ -131,9 +131,9 @@ class Varien_Filter_Template implements Zend_Filter_Interface
                     continue;
                 }
                 try {
-					$replacedValue = call_user_func($callback, $construction);
+                    $replacedValue = call_user_func($callback, $construction);
                 } catch (Exception $e) {
-                	throw $e;
+                    throw $e;
                 }
                 $value = str_replace($construction[0], $replacedValue, $value);
             }
@@ -149,8 +149,8 @@ class Varien_Filter_Template implements Zend_Filter_Interface
             return $construction[0];
         }
 
-    	$replacedValue = $this->_getVariable($construction[2], '');
-    	return $replacedValue;
+        $replacedValue = $this->_getVariable($construction[2], '');
+        return $replacedValue;
     }
 
     public function includeDirective($construction)
@@ -212,9 +212,9 @@ class Varien_Filter_Template implements Zend_Filter_Interface
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
-        	if (substr($value, 0, 1) === '$') {
-        	    $params[$key] = $this->_getVariable(substr($value, 1), null);
-        	}
+            if (substr($value, 0, 1) === '$') {
+                $params[$key] = $this->_getVariable(substr($value, 1), null);
+            }
         }
         return $params;
     }
@@ -238,24 +238,22 @@ class Varien_Filter_Template implements Zend_Filter_Interface
             if ($i == 0 && isset($this->_templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] =& $this->_templateVars[$stackVars[$i]['name']];
-            } else if (isset($stackVars[$i-1]['variable'])
-                       && $stackVars[$i-1]['variable'] instanceof Varien_Object) {
+            } elseif (isset($stackVars[$i-1]['variable']) && $stackVars[$i-1]['variable'] instanceof Varien_Object) {
                 // If object calling methods or getting properties
-                if($stackVars[$i]['type'] == 'property') {
-                    $caller = "get" . uc_words($stackVars[$i]['name'], '');
-                    if(is_callable(array($stackVars[$i-1]['variable'], $caller))) {
-                        // If specified getter for this property
-                        $stackVars[$i]['variable'] = $stackVars[$i-1]['variable']->$caller();
-                    } else {
-                        $stackVars[$i]['variable'] = $stackVars[$i-1]['variable']
-                                                        ->getData($stackVars[$i]['name']);
-                    }
-                } else if ($stackVars[$i]['type'] == 'method') {
+                if ($stackVars[$i]['type'] == 'property') {
+                    $caller = 'get' . uc_words($stackVars[$i]['name'], '');
+                    $stackVars[$i]['variable'] = method_exists($stackVars[$i-1]['variable'], $caller)
+                        ? $stackVars[$i-1]['variable']->$caller()
+                        : $stackVars[$i-1]['variable']->getData($stackVars[$i]['name']);
+                } elseif ($stackVars[$i]['type'] == 'method') {
                     // Calling of object method
-                    if (is_callable(array($stackVars[$i-1]['variable'], $stackVars[$i]['name'])) || substr($stackVars[$i]['name'],0,3) == 'get') {
-                        $stackVars[$i]['variable'] = call_user_func_array(array($stackVars[$i-1]['variable'],
-                                                                                $stackVars[$i]['name']),
-                                                                          $stackVars[$i]['args']);
+                    if (method_exists($stackVars[$i-1]['variable'], $stackVars[$i]['name'])
+                        || substr($stackVars[$i]['name'], 0, 3) == 'get'
+                    ) {
+                        $stackVars[$i]['variable'] = call_user_func_array(
+                            array($stackVars[$i-1]['variable'], $stackVars[$i]['name']),
+                            $stackVars[$i]['args']
+                        );
                     }
                 }
                 $last = $i;

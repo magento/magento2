@@ -619,7 +619,7 @@ class Mage_Catalog_Model_Resource_Category extends Mage_Catalog_Model_Resource_A
             ->addAttributeToSelect('custom_layout_update')
             ->addAttributeToSelect('custom_apply_to_products')
             ->addFieldToFilter('entity_id', array('in' => $pathIds))
-            ->addFieldToFilter('custom_use_parent_settings', 0)
+            ->addAttributeToFilter('custom_use_parent_settings', array(array('eq' => 0), array('null' => 0)), 'left')
             ->addFieldToFilter('level', array('neq' => 0))
             ->setOrder('level', 'DESC')
             ->load();

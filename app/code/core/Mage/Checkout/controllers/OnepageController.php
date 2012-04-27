@@ -312,8 +312,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             return;
         }
         if ($this->getRequest()->isPost()) {
-//            $postData = $this->getRequest()->getPost('billing', array());
-//            $data = $this->_filterPostData($postData);
             $data = $this->getRequest()->getPost('billing', array());
             $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
 
@@ -323,7 +321,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
 
             if (!isset($result['error'])) {
-                /* check quote for virtual */
                 if ($this->getOnepage()->getQuote()->isVirtual()) {
                     $result['goto_section'] = 'payment';
                     $result['update_section'] = array(
@@ -383,9 +380,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost('shipping_method', '');
             $result = $this->getOnepage()->saveShippingMethod($data);
-            /*
-            $result will have erro data if shipping method is empty
-            */
+            // $result will contain error data if shipping method is empty
             if(!$result) {
                 Mage::dispatchEvent('checkout_controller_onepage_save_shipping_method',
                         array('request'=>$this->getRequest(),
@@ -420,8 +415,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
                 return;
             }
 
-            // set payment to quote
-            $result = array();
             $data = $this->getRequest()->getPost('payment', array());
             $result = $this->getOnepage()->savePayment($data);
 
@@ -507,9 +500,17 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
                     return;
                 }
             }
-            if ($data = $this->getRequest()->getPost('payment', false)) {
+
+            $data = $this->getRequest()->getPost('payment', array());
+            if ($data) {
+                $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+                    | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
+
             $this->getOnepage()->saveOrder();
 
             $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();

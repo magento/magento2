@@ -934,7 +934,7 @@ AdminOrder.prototype = {
         else {
             new Ajax.Request(url, {parameters:params,loaderArea: indicator});
         }
-        if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items' != -1)) {
+        if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items') != -1) {
             productConfigure.clean('quote_items');
         }
     },
@@ -952,14 +952,17 @@ AdminOrder.prototype = {
         if(typeof this.loadingAreas == 'string'){
             this.loadingAreas = [this.loadingAreas];
         }
-        if(this.loadingAreas.indexOf('message'==-1)) this.loadingAreas.push('message');
+        if(this.loadingAreas.indexOf('message') == -1) {
+            this.loadingAreas.push('message');
+        }
+
         for(var i=0; i<this.loadingAreas.length; i++){
             var id = this.loadingAreas[i];
             if($(this.getAreaId(id))){
                 if ('message' != id || response[id]) {
                     var wrapper = new Element('div');
                     wrapper.update(response[id] ? response[id] : '');
-                    $(this.getAreaId(id)).update(wrapper);
+                    $(this.getAreaId(id)).update(Prototype.Browser.IE ? wrapper.outerHTML : wrapper);
                 }
                 if ($(this.getAreaId(id)).callback) {
                     this[$(this.getAreaId(id)).callback]();
@@ -1105,7 +1108,6 @@ AdminOrder.prototype = {
         }
 
         var parentEl = el.up(1);
-        var parentPos = Element.cumulativeOffset(parentEl);
         if (show) {
             parentEl.removeClassName('ignore-validate');
         }
@@ -1125,6 +1127,7 @@ AdminOrder.prototype = {
             });
         }
 
+        parentEl.setStyle({position: 'relative'});
         el.setStyle({
             display: show ? 'none' : '',
             position: 'absolute',
@@ -1132,8 +1135,8 @@ AdminOrder.prototype = {
             opacity: 0.8,
             width: parentEl.getWidth() + 'px',
             height: parentEl.getHeight() + 'px',
-            top: parentPos[1] + 'px',
-            left: parentPos[0] + 'px'
+            top: 0,
+            left: 0
         });
     },
 

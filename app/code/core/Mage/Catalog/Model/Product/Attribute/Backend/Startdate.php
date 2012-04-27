@@ -97,7 +97,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Startdate extends Mage_Eav_Mo
             $maxValue = $date->timestamp($maxDate);
 
             if ($value > $maxValue) {
-                $message = Mage::helper('Mage_Catalog_Helper_Data')->__('The From Date value should be less than the To Date value.');
+                $message = Mage::helper('Mage_Catalog_Helper_Data')->__('The From Date value should be less than or equal to the To Date value.');
                 $eavExc  = new Mage_Eav_Model_Entity_Attribute_Exception($message);
                 $eavExc->setAttributeCode($attr->getName());
                 throw $eavExc;

@@ -28,34 +28,25 @@
  */
 ?>
 <?php $_cartItems = $this->helper('Mage_Checkout_Helper_Cart')->getSummaryCount(); ?>
+<div class="header-bg">
+    <a class="header-logo" href="<?php echo $this->getUrl('') ?>"></a>
+</div>
 <header>
-    <div class="store-logo">
-        <a href="<?php echo $this->getUrl('') ?>" id="home-link">
-            <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
-        </a>
-    </div>
     <div class="menu-wrapper">
         <dl id="menu">
-            <dt class="search dropdown"><a href="#">Search</a></dt>
-            <dd class="search-box">
-               <?php echo $this->getChildHtml('topSearch') ?>
-            </dd>
-            <dt class="cart">
-                <span>Cart</span>
-                <?php echo $_cartItems > 0 ? '<span>'.$_cartItems.'</span>' : ''; ?>
-            </dt>
             <dt class="menu dropdown"><a href="#">Menu</a></dt>
             <dd class="menu-box">
-                <ul>
-                    <li class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></li>
-                    <?php echo $this->getChildHtml('topLinks') ?>
-                    <?php echo $this->getChildHtml('store_switcher') ?>
-                    <?php echo $this->getChildHtml('store_language') ?>
-                    <?php echo $this->getChildHtml('catalogCompareLink') ?>
-                </ul>
+                <?php echo $this->getChildHtml('topLinks') ?>
+                <?php echo $this->getChildHtml('checkoutLinks') ?>
+                <?php echo $this->getChildHtml('accountLinks') ?>
             </dd>
+            <dt class="cart-icon <?php echo $this->getInCart() ? 'active' : '' ?>">
+                <a href="<?php echo $this->getUrl('checkout/cart'); ?>">Cart</a>
+                <?php echo $_cartItems > 0 ? '<span>'.$_cartItems.'</span>' : ''; ?>
+            </dt>
+            <dd></dd>
         </dl>
+        <div class="search"><?php echo $this->getChildHtml('topSearch') ?></div>
     </div>
-    <?php echo $this->getChildHtml('accountLinks') ?>
 </header>
 <?php echo $this->getChildHtml('topCart') ?>

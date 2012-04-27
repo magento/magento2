@@ -19,113 +19,51 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     default_iphone
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Wishlist_Block_Customer_Wishlist */
 ?>
 <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
-<div class="my-wishlist">
-    <h1><?php echo $this->__('My Wishlist') ?></h1>
+    <div class="my-wishlist">
+        <div class="page-title title-buttons">
+            <h1><?php echo $this->getTitle(); ?></h1>
+        </div>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 
-    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-    <?php if ($this->hasWishlistItems()): ?>
-        <form id="wishlist-view-form" action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
-            <span id="remove-all-wishlist" class="remove-all item-remove"><img src="<?php echo $this->getSkinUrl('images/btn_trash.png') ?>" width="10" height="10" alt="<?php echo $this->__('Remove All')?>" /></span>
-            <?php echo $this->getBlockHtml('formkey')?>
-            <ul id="wishlist-list">
-                <?php foreach ($this->getWishlistItems() as $item): ?>
-                    <?php
-                        $product = $item->getProduct();
-                        $isVisibleProduct = $product->isVisibleInSiteVisibility();
-                    ?>
-                    <li>
-                            <a href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>"><img src="<?php echo $this->getImageUrl($product); ?>" width="<?php echo $this->getImageSize()?>" height="<?php echo $this->getImageSize()?>" alt="<?php echo $this->escapeHtml($item->getName()) ?>" /></a>
-                         <div class="wishlist-item">
-                            <h2>
-                                <a href="<?php echo $this->getItemRemoveUrl($item) ?>" title="<?php echo $this->__('Remove') ?>" onclick="return confirmRemoveWishlistItem();" class="btn-remove"><img src="<?php echo $this->getSkinUrl('images/btn_trash.png') ?>" width="10" height="10" alt="<?php echo $this->__('Remove item')?>" /></a>
-                                <?php if ($isVisibleProduct): ?>
-                                    <a class="btn-edit" href="<?php echo $this->getItemConfigureUrl($item) ?>"><?php echo $this->__('E') ?></a>
-                                <?php endif ?>
-                                <a href="<?php echo $this->getProductUrl($item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a>
-                            </h2>
-                            <?php echo $this->getPriceHtml($product) ?>
-                            <?php echo $this->getDetailsHtml($item) ?>
-                            <?php if ($isVisibleProduct): ?>
-                                <span class="qty-holder">
-                                    <b><?php echo $this->__('Qty') ?>:</b>
-                                    <input type="text" class="input-text qty" name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>" />
-                                </span>
-                            <?php endif; ?>
-                            <?php if ($product->isSaleable()): ?>
-                                <?php if ($isVisibleProduct): ?>
-                                    <button type="button" title="<?php echo $this->__('Add to Cart') ?>" onclick="addWItemToCart(<?php echo $item->getId(); ?>)" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
-                                <?php endif ?>
-                            <?php else: ?>
-                                <span><?php echo $this->__('Out of stock') ?></span>
-                            <?php endif; ?>
-                            <textarea style="display:none;" name="description[<?php echo $item->getWishlistItemId() ?>]" rows="3" cols="5" onfocus="focusComment(this)" onblur="focusComment(this)" title="<?php echo $this->__('Comment') ?>"><?php echo $this->getCommentValue($item); ?></textarea>
-                        </div>
-                    </li>
-                <?php endforeach ?>
-            </ul>
-            <ul class="buttons-set">
-                <li>
-                    <button type="submit" class="update-wishlist" title="<?php echo $this->__('Update Wishlist') ?>" name="do"><?php echo $this->__('Update Wishlist') ?></button>
-                </li>
-                <li class="remove-all-button">
-                    <a href="#"><?php echo $this->__('Remove All')?></a>
-                </li>
-                <?php if($this->isSaleable()):?>
-                    <li><span class="add-all-to-cart" title="<?php echo $this->__('Add All to Cart') ?>" onclick="addAllWItemsToCart()"><?php echo $this->__('Add All to Cart') ?></span></li>
-                <?php endif;?>
-            </ul>
+        <form id="wishlist-view-form" action="<?php echo $this->getUrl('*/*/update', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>" method="post">
+            <?php echo $this->getChildHtml('top'); ?>
+            <fieldset>
+                <?php if ($this->hasWishlistItems()): ?>
+                    <?php echo $this->getBlockHtml('formkey');?>
+                    <?php $this->getChildBlock('items')->setItems($this->getWishlistItems()); ?>
+                    <?php echo $this->getChildHtml('items');?>
+                <?php else: ?>
+                    <p class="wishlist-empty"><?php echo $this->__('You have no items in your wishlist.') ?></p>
+                <?php endif ?>
+                <div class="buttons-set">
+                    <?php echo $this->getChildHtml('control_buttons');?>
+                </div>
+            </fieldset>
         </form>
-    <?php else: ?>
-        <p style="padding:0 10px;"><?php echo $this->__('You have no items in your wishlist.') ?></p>
-    <?php endif ?>
-    <script type="text/javascript">
-    //<![CDATA[
-    function confirmRemoveWishlistItem() {
-        return confirm('<?php echo $this->__('Are you sure you want to remove this product from your wishlist?') ?>');
-    }
 
-    function focusComment(obj) {
-        if( obj.value == '<?php echo $this->helper('Mage_Wishlist_Helper_Data')->defaultCommentString() ?>' ) {
-            obj.value = '';
-        } else if( obj.value == '' ) {
-            obj.value = '<?php echo $this->helper('Mage_Wishlist_Helper_Data')->defaultCommentString() ?>';
+        <script type="text/javascript">
+        //<![CDATA[
+        var wishlistForm = new Validation($('wishlist-view-form'));
+        function addAllWItemsToCart() {
+            var url = '<?php echo $this->getUrl('*/*/allcart', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>';
+            var separator = (url.indexOf('?') >= 0) ? '&' : '?';
+            $$('#wishlist-view-form .qty').each(
+                function (input, index) {
+                    url += separator + input.name + '=' + encodeURIComponent(input.value);
+                    separator = '&';
+                }
+            );
+            setLocation(url);
         }
-    }
-
-    function addWItemToCart(itemId) {
-        var url = '<?php echo $this->getItemAddToCartUrl('%item%') ?>';
-        url = url.gsub('%item%', itemId);
-        var form = $('wishlist-view-form');
-        if (form) {
-            var input = form['qty[' + itemId + ']'];
-            if (input) {
-                var separator = (url.indexOf('?') >= 0) ? '&' : '?';
-                url += separator + input.name + '=' + encodeURIComponent(input.value);
-            }
-        }
-        setLocation(url);
-    }
-
-    function addAllWItemsToCart() {
-        var url = '<?php echo $this->getUrl('*/*/allcart') ?>';
-        var separator = (url.indexOf('?') >= 0) ? '&' : '?';
-        $$('#wishlist-view-form .qty').each(
-            function (input, index) {
-                url += separator + input.name + '=' + encodeURIComponent(input.value);
-                separator = '&';
-            }
-        );
-        setLocation(url);
-    }
-    //]]>
-    </script>
-</div>
-<a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a>
+        //]]>
+        </script>
+    </div>
+    <?php echo $this->getChildHtml('bottom'); ?>
 <?php endif ?>

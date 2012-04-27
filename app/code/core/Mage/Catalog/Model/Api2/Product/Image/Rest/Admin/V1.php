@@ -75,7 +75,8 @@ class Mage_Catalog_Model_Api2_Product_Image_Rest_Admin_V1 extends Mage_Catalog_M
                 $this->_critical($e->getMessage(), Mage_Api2_Model_Server::HTTP_INTERNAL_ERROR);
             }
             $product = $this->_getProduct();
-            $imageFileUri = $this->_getMediaGallery()->addImage($product, $apiTempDir . DS . $imageFileName);
+            $imageFileUri = $this->_getMediaGallery()
+                ->addImage($product, $apiTempDir . DS . $imageFileName, null, false, false);
             $ioAdapter->rmdir($apiTempDir, true);
             // updateImage() must be called to add image data that is missing after addImage() call
             $this->_getMediaGallery()->updateImage($product, $imageFileUri, $data);

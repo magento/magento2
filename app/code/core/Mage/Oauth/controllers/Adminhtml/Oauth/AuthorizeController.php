@@ -154,11 +154,20 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizeController extends Mage_Adminhtml_Cont
      */
     protected function _initConfirmPage($simple = false)
     {
+        /** @var $helper Mage_Oauth_Helper_Data */
+        $helper = Mage::helper('Mage_Oauth_Helper_Data');
+
         /** @var $session Mage_Admin_Model_Session */
         $session = Mage::getSingleton($this->_sessionName);
 
-        /** @var $server Mage_Oauth_Model_Server */
-        $server = Mage::getModel('Mage_Oauth_Model_Server');
+        /** @var $user Mage_Admin_Model_User */
+        $user = $session->getData('user');
+        if (!$user) {
+            $session->addError($this->__('Please login to proceed authorization.'));
+            $url = $helper->getAuthorizeUrl(Mage_Oauth_Model_Token::USER_TYPE_ADMIN);
+            $this->_redirectUrl($url);
+            return $this;
+        }
 
         $this->loadLayout();
 
@@ -167,19 +176,17 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizeController extends Mage_Adminhtml_Cont
         $block->setIsSimple($simple);
 
         try {
-            /** @var $user Mage_Admin_Model_User */
-            $user = $session->getData('user');
-            $token = $server->authorizeToken($user->getId(), Mage_Oauth_Model_Token::USER_TYPE_ADMIN);
+            /** @var $server Mage_Oauth_Model_Server */
+            $server = Mage::getModel('Mage_Oauth_Model_Server');
 
-            /** @var $helper Mage_Oauth_Helper_Data */
-            $helper = Mage::helper('Mage_Oauth_Helper_Data');
+            $token = $server->authorizeToken($user->getId(), Mage_Oauth_Model_Token::USER_TYPE_ADMIN);
 
             if (($callback = $helper->getFullCallbackUrl($token))) { //false in case of OOB
                 $this->getResponse()->setRedirect($callback . ($simple ? '&simple=1' : ''));
                 return $this;
             } else {
-                $session->addSuccess($this->__('Authorization confirmed.'));
                 $block->setVerifier($token->getVerifier());
+                $session->addSuccess($this->__('Authorization confirmed.'));
             }
         } catch (Mage_Core_Exception $e) {
             $block->setHasException(true);

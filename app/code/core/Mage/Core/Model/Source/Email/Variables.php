@@ -115,7 +115,7 @@ class Mage_Core_Model_Source_Email_Variables
         foreach ($this->_configVariables as $variable) {
             $optionArray[] = array(
                 'value' => '{{config path="' . $variable['value'] . '"}}',
-                'label' => Mage::helper('Mage_Core_Helper_Data')->__('%s', $variable['label'])
+                'label' => $variable['label']
             );
         }
         if ($withGroup && $optionArray) {

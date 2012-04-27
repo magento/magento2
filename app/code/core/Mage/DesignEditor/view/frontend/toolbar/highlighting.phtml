@@ -24,15 +24,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div>
-    <input type="checkbox" checked="checked" id="vde_highlighting"/>
-    <label for="vde_highlighting"><?php echo $this->__('Highlight elements'); ?></label>
+<div class="vde_toolbar_cell">
+    <div class="vde_toolbar_cell_title"><?php echo $this->__('View Options'); ?></div>
+    <div class="vde_toolbar_cell_content">
+            <div id="vde_highlighting" class="vde_cell_list_item checked"><?php echo $this->__('Highlight Elements'); ?></div>
+    </div>
 </div>
 
 <script type="text/javascript">
-    jQuery(document).ready(function () {
-        jQuery('#vde_highlighting').on('click', null, function (event) {
-            designEditor.highlight(jQuery(this).prop('checked'));
-        });
+jQuery(document).ready(function () {
+    jQuery('#vde_highlighting').click(function(){
+        jQuery(this).toggleClass('checked');
+        designEditor.highlight(jQuery(this).hasClass('checked'));
     });
+});
 </script>

@@ -83,9 +83,8 @@ class Mage_Sales_Model_Order_Invoice_Total_Discount extends Mage_Sales_Model_Ord
             }
         }
 
-
-        $invoice->setDiscountAmount($totalDiscountAmount);
-        $invoice->setBaseDiscountAmount($baseTotalDiscountAmount);
+        $invoice->setDiscountAmount(-$totalDiscountAmount);
+        $invoice->setBaseDiscountAmount(-$baseTotalDiscountAmount);
 
         $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount);
         $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $baseTotalDiscountAmount);

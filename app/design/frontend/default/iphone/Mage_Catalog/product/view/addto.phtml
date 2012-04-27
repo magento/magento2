@@ -27,17 +27,12 @@
 
 <?php $_product = $this->getProduct(); ?>
 <?php $_wishlistSubmitUrl = $this->helper('Mage_Wishlist_Helper_Data')->getAddUrl($_product); ?>
-<ul class="product-actions">
-    <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
-        <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, '<?php echo $_wishlistSubmitUrl ?>'); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
-    <?php endif; ?>
-    <?php
-        $_compareUrl = $this->helper('Mage_Catalog_Helper_Product_Compare')->getAddUrl($_product);
-    ?>
-    <?php if($_compareUrl) : ?>
-        <li><a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
-    <?php endif; ?>
-    <?php if ($this->canEmailToFriend()): ?>
-        <li><a href="<?php echo $this->helper('Mage_Catalog_Helper_Product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to Friend') ?></a></li>
-    <?php endif; ?>
+
+<ul class="add-to-links">
+<?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
+    <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+<?php endif; ?>
+<?php if ($this->canEmailToFriend()): ?>
+    <li><a href="<?php echo $this->helper('Mage_Catalog_Helper_Product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to Friend') ?></a></li>
+<?php endif; ?>
 </ul>
