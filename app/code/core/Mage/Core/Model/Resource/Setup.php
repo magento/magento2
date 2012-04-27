@@ -218,6 +218,7 @@ class Mage_Core_Model_Resource_Setup
      */
     static public function applyAllUpdates()
     {
+    	Mage::dispatchEvent('apply_db_schema_updates_before');
         Mage::app()->setUpdateMode(true);
         self::$_hadUpdates = false;
 
@@ -243,6 +244,7 @@ class Mage_Core_Model_Resource_Setup
         }
 
         Mage::app()->setUpdateMode(false);
+        Mage::dispatchEvent('apply_db_schema_updates_after');
         self::$_schemaUpdatesChecked = true;
         return true;
     }
