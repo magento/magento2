@@ -302,4 +302,9 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             'media' => array('media_dir'),
         );
     }
+
+    public function testGetTmpDir()
+    {
+        $this->assertEquals(self::$_tmpDir, $this->_bootstrap->getTmpDir());
+    }
 }

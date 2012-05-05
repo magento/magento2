@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Page
- */
 class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
 {
     /**

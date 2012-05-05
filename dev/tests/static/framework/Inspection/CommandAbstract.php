@@ -36,6 +36,21 @@ abstract class Inspection_CommandAbstract
     protected $_reportFile;
 
     /**
+     * @var int
+     */
+    protected $_lastExitCode;
+
+    /**
+     * @var string
+     */
+    protected $_lastOutput;
+
+    /**
+     * @var string
+     */
+    protected $_lastRunMessage;
+
+    /**
      * Constructor
      *
      * @param string $reportFile Destination file to write inspection report to
@@ -54,8 +69,13 @@ abstract class Inspection_CommandAbstract
      */
     public function run(array $whiteList, array $blackList = array())
     {
+        if (file_exists($this->_reportFile)) {
+            unlink($this->_reportFile);
+        }
         $shellCmd = $this->_buildShellCmd($whiteList, $blackList);
-        return ($this->_execShellCmd($shellCmd) !== false);
+        $result = $this->_execShellCmd($shellCmd);
+        $this->_generateLastRunMessage();
+        return $result !== false;
     }
 
     /**
@@ -117,8 +137,37 @@ abstract class Inspection_CommandAbstract
     protected function _execShellCmd($shellCmd)
     {
         $output = array();
-        exec($shellCmd . ' 2>&1', $output, $exitCode);
-        $output = implode(PHP_EOL, $output);
-        return ($exitCode === 0 ? $output : false);
+        exec($shellCmd . ' 2>&1', $output, $this->_lastExitCode);
+        $this->_lastOutput = implode(PHP_EOL, $output);
+        return ($this->_lastExitCode === 0 ? $this->_lastOutput : false);
+    }
+
+    /**
+     * Generate message about last execution result, prepared for output to a user
+     *
+     * @return Inspection_CommandAbstract
+     */
+    protected function _generateLastRunMessage()
+    {
+        if ($this->_lastExitCode === null) {
+            $this->_lastRunMessage = "Nothing was executed.";
+        } else if (!$this->_lastExitCode) {
+            $this->_lastRunMessage = 'Success reported.';
+        } else if (file_exists($this->_reportFile)) {
+            $this->_lastRunMessage = "See detailed report in '{$this->_reportFile}'.";
+        } else {
+            $this->_lastRunMessage = 'Command-line tool reports: ' . $this->_lastOutput;
+        }
+        return $this;
+    }
+
+    /**
+     * Return message from the last run of the command
+     *
+     * @return string
+     */
+    public function getLastRunMessage()
+    {
+        return $this->_lastRunMessage;
     }
 }

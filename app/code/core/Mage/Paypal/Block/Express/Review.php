@@ -152,7 +152,7 @@ class Mage_Paypal_Block_Express_Review extends Mage_Core_Block_Template
                 );
             }
         }
-        return sprintf($format, $rate->getMethodTitle(), $price, $renderedInclTax);
+        return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
     }
 
     /**

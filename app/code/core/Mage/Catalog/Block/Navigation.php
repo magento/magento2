@@ -227,7 +227,8 @@ class Mage_Catalog_Block_Navigation extends Mage_Core_Block_Template
         $html = array();
 
         // get all children
-        if (Mage::helper('Mage_Catalog_Helper_Category_Flat')->isEnabled()) {
+        // If Flat Data enabled then use it but only on frontend
+        if (Mage::helper('Mage_Catalog_Helper_Category_Flat')->isAvailable() && !Mage::app()->getStore()->isAdmin()) {
             $children = (array)$category->getChildrenNodes();
             $childrenCount = count($children);
         } else {
@@ -362,34 +363,33 @@ class Mage_Catalog_Block_Navigation extends Mage_Core_Block_Template
             return $html;
         }
 
-        $html.= '<li';
+        $html .= '<li';
 
         if ($this->isCategoryActive($category)) {
-            $html.= ' class="active"';
+            $html .= ' class="active"';
         }
 
-        $html.= '>'."\n";
-        $html.= '<a href="'.$this->getCategoryUrl($category).'">'
-            . '<span>'.$this->escapeHtml($category->getName()).'</span></a>'."\n";
+        $html .= '>' . "\n";
+        $html .= '<a href="'.$this->getCategoryUrl($category).'">'
+            . '<span>' . $this->escapeHtml($category->getName()) . '</span></a>' . "\n";
 
-        if (in_array($category->getId(), $this->getCurrentCategoryPath())){
+        if (in_array($category->getId(), $this->getCurrentCategoryPath())) {
             $children = $category->getChildren();
             $hasChildren = $children && $children->count();
 
             if ($hasChildren) {
                 $htmlChildren = '';
                 foreach ($children as $child) {
-                    $htmlChildren.= $this->drawOpenCategoryItem($child);
+                    $htmlChildren .= $this->drawOpenCategoryItem($child);
                 }
 
                 if (!empty($htmlChildren)) {
-                    $html.= '<ul>'."\n"
-                            .$htmlChildren
-                            .'</ul>';
+                    $html .= '<ul>' . "\n" . $htmlChildren . '</ul>';
                 }
             }
         }
-        $html.= '</li>'."\n";
+        $html .= '</li>'."\n";
+
         return $html;
     }
 

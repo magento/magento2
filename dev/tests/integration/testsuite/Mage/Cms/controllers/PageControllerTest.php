@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Cms_PageController.
- *
- * @group module:Mage_Cms
  */
 class Mage_Cms_PageControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

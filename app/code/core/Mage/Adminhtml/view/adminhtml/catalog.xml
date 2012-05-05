@@ -68,7 +68,7 @@
         </reference>
         <reference name="js">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
-            <block type="Mage_Core_Block_Template" name="catalog.wysiwyg.js" template="MAge_Adminhtml::catalog/wysiwyg/js.phtml"/>
+            <block type="Mage_Core_Block_Template" name="catalog.wysiwyg.js" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
         </reference>
     </adminhtml_catalog_product_edit>
 

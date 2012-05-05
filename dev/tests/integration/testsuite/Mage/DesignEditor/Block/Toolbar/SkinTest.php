@@ -27,8 +27,6 @@
 
 /**
  * Test for skin block functioning
- *
- * @group module:Mage_DesignEditor
  */
 class Mage_DesignEditor_Block_Toolbar_SkinTest extends PHPUnit_Framework_TestCase
 {

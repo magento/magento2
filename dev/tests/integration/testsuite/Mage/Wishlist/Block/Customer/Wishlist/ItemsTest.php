@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Wishlist
- */
 class Mage_Wishlist_Block_Customer_Wishlist_ItemsTest extends PHPUnit_Framework_TestCase
 {
     public function testGetColumns()

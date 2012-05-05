@@ -152,6 +152,10 @@ body {
 .vde_placeholder {
     background-color: #F5F5DC;
 }
+.vde_wrapper_hidden , .vde_wrapper_hidden .vde_element_title {
+    display: none;
+}
+
 .vde_toolbar_cell_title {
     font-weight: bold;
     cursor: pointer;

@@ -148,7 +148,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Default logo, will be used in PDF and HTML documents.&lt;br /&gt;(jpeg, tiff, png) If you see image distortion in PDF, try to use larger image</comment>
+                            <comment><![CDATA[Default logo, will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If you see image distortion in PDF, try to use larger image]]></comment>
                         </logo>
                         <logo_html translate="label comment">
                             <label>Logo for HTML Print View</label>
@@ -160,7 +160,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Logo for HTML documents only. If empty, default will be used.&lt;br /&gt;(jpeg, gif, png)</comment>
+                            <comment><![CDATA[Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)]]></comment>
                         </logo_html>
                         <address translate="label">
                             <label>Address</label>

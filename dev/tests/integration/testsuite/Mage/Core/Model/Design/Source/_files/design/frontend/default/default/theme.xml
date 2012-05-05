@@ -35,7 +35,7 @@
                 <magento_version from="0.0.0.1" to="0.0.0.1"/>
             </requirements>
         </theme>
-        <theme code="g" version="0.0.0.1">
+        <theme code="g" version="0.0.0.1" parent="default">
             <title>A</title>
             <requirements>
                 <magento_version from="0.0.0.1" to="0.0.0.1"/>

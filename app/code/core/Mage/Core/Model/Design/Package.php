@@ -319,13 +319,14 @@ class Mage_Core_Model_Design_Package
             $dir = Mage::getBaseDir('design');
             $dirs = array();
             $area = $params['_area'];
+            $package = $params['_package'];
             $theme = $params['_theme'];
             $module = $params['_module'];
 
-            do {
-                $dirs[] = "{$dir}/{$area}/{$params['_package']}/{$theme}";
-                $theme = $this->_getInheritedTheme($theme);
-            } while ($theme);
+            while ($theme) {
+                $dirs[] = "{$dir}/{$area}/{$package}/{$theme}";
+                list($package, $theme) = $this->_getInheritedTheme($area, $package, $theme);
+            }
 
             $moduleDir = $module ? array(Mage::getConfig()->getModuleDir('view', $module) . "/{$area}") : array();
             Magento_Profiler::stop(__METHOD__);
@@ -399,11 +400,13 @@ class Mage_Core_Model_Design_Package
         $dir = Mage::getBaseDir('design');
         $locale = Mage::app()->getLocale()->getLocaleCode();
         $dirs = array();
+        $area = $params['_area'];
+        $package = $params['_package'];
         $theme = $params['_theme'];
-        do {
-            $dirs[] = "{$dir}/{$params['_area']}/{$params['_package']}/{$theme}/locale/{$locale}";
-            $theme = $this->_getInheritedTheme($theme);
-        } while ($theme);
+        while ($theme) {
+            $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/locale/{$locale}";
+            list($package, $theme) = $this->_getInheritedTheme($area, $package, $theme);
+        }
 
         return $this->_fallback($file, $dirs);
     }
@@ -532,15 +535,15 @@ class Mage_Core_Model_Design_Package
         $locale = Mage::app()->getLocale()->getLocaleCode();
 
         $dirs = array();
-        do {
+        while ($theme) {
             $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/skin/{$skin}/locale/{$locale}";
             $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/skin/{$skin}";
             if ($skin != $defaultSkin) {
                 $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/skin/{$defaultSkin}/locale/{$locale}";
                 $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/skin/{$defaultSkin}";
             }
-            $theme = $this->_getInheritedTheme($theme);
-        } while ($theme);
+            list($package, $theme) = $this->_getInheritedTheme($area, $package, $theme);
+        }
 
         return $this->_fallback(
             $file,
@@ -684,12 +687,14 @@ class Mage_Core_Model_Design_Package
         }
 
         $fileMTime = filemtime($file);
-        /* Validate if file not exists or was updated */
+
+        /* Validate whether file needs to be published */
         if (!file_exists($publicFile) || $fileMTime != filemtime($publicFile)) {
             $publicDir = dirname($publicFile);
             if (!is_dir($publicDir)) {
                 mkdir($publicDir, 0777, true);
             }
+
             /* Process relative urls for CSS files */
             if ($isCssFile) {
                 $content = $this->_getPublicCssContent($file, dirname($publicFile), $skinFile, $params);
@@ -704,6 +709,9 @@ class Mage_Core_Model_Design_Package
             if (is_file($publicFile)) {
                 touch($publicFile, $fileMTime);
             }
+        } else if ($isCssFile && Mage::getIsDeveloperMode()) {
+            // Trigger related skin files publication, if CSS file itself has not been changed
+            $this->_getPublicCssContent($file, dirname($publicFile), $skinFile, $params);
         }
         return $publicFile;
 
@@ -1036,15 +1044,22 @@ class Mage_Core_Model_Design_Package
      * If the specified theme inherits other theme the result is the name of inherited theme.
      * If the specified theme does not inherit other theme the result is false.
      *
+     * @param string $area
+     * @param string $package
      * @param string $theme
-     * @return bool|string
+     * @return array|false
      */
-    protected function _getInheritedTheme($theme)
+    protected function _getInheritedTheme($area, $package, $theme)
     {
-        if ($theme == self::DEFAULT_THEME_NAME) {
+        $parentTheme = $this->getThemeConfig($area)->getParentTheme($package, $theme);
+        if (!$parentTheme) {
             return false;
         }
-        return self::DEFAULT_THEME_NAME;
+        $result = explode('/', $parentTheme, 2);
+        if (count($result) > 1) {
+            return $result;
+        }
+        return array($package, $parentTheme);
     }
 
     /**
@@ -1133,15 +1148,18 @@ class Mage_Core_Model_Design_Package
                  * Join to theme inherited skins
                  */
                 if ($addInheritedSkins) {
+                    $currentPackage = $packageName;
                     $currentTheme = $themeName;
-                    while ($inheritedTheme = $this->_getInheritedTheme($currentTheme)) {
-                        if (!isset($areaStructure[$packageName][$inheritedTheme])) {
+                    while ($inheritedPackageTheme = $this->_getInheritedTheme($area, $currentPackage, $currentTheme)) {
+                        list($inheritedPackage, $inheritedTheme) = $inheritedPackageTheme;
+                        if (!isset($areaStructure[$inheritedPackage][$inheritedTheme])) {
                             break;
                         }
                         $areaStructure[$packageName][$themeName] = array_merge(
                             $areaStructure[$packageName][$themeName],
-                            $areaStructure[$packageName][$inheritedTheme]
+                            $areaStructure[$inheritedPackage][$inheritedTheme]
                         );
+                        $currentPackage = $inheritedPackage;
                         $currentTheme = $inheritedTheme;
                     }
                 }
@@ -1220,7 +1238,7 @@ class Mage_Core_Model_Design_Package
     {
         if (!isset($this->_themeConfigs[$area])) {
             $themeConfigFiles = glob(Mage::getBaseDir('design') . "/{$area}/*/*/theme.xml", GLOB_NOSORT);
-            $this->_themeConfigs[$area] = new Magento_Config_Theme($themeConfigFiles);
+            $this->_themeConfigs[$area] = new Magento_Config_Theme($themeConfigFiles, Mage::app()->getCache());
         }
         return $this->_themeConfigs[$area];
     }
@@ -1264,7 +1282,7 @@ class Mage_Core_Model_Design_Package
         }
 
         /** @var Magento_Config_View $config */
-        $config = new Magento_Config_View($files);
+        $config = new Magento_Config_View($files, Mage::app()->getCache());
         $this->_viewConfigs[$key] = $config;
         return $config;
     }

@@ -1,3 +1,4 @@
+<!--
 /**
  * Magento
  *
@@ -18,9 +19,20 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Core
+ * @package     Design
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* scripts.js */
+-->
+<design>
+    <package code="default">
+        <title>Default</title>
+        <theme version="2.0.0.0" code="default">
+            <title>Default</title>
+            <requirements>
+                <magento_version from="2.0.0.0-dev1" to="*"/>
+            </requirements>
+        </theme>
+    </package>
+</design>

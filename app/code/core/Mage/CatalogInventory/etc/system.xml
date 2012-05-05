@@ -93,7 +93,7 @@
                     </fields>
                 </options>
                 <item_options translate="label comment">
-                    <comment>&lt;strong&gt;Note&lt;/strong&gt; that these settings are applicable to cart line items, not the whole cart.</comment>
+                    <comment><![CDATA[<strong>Note</strong> that these settings are applicable to cart line items, not the whole cart.]]></comment>
                     <label>Product Stock Options</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>10</sort_order>

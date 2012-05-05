@@ -41,6 +41,28 @@ class Magento_Config_View extends Magento_Config_XmlAbstract
     }
 
     /**
+     * Extract configuration data from the DOM structure
+     *
+     * @param DOMDocument $dom
+     * @return array
+     */
+    protected function _extractData(DOMDocument $dom)
+    {
+        $result = array();
+        /** @var $varsNode DOMElement */
+        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $varsNode) {
+            $moduleName = $varsNode->getAttribute('module');
+            /** @var $varNode DOMElement */
+            foreach ($varsNode->getElementsByTagName('var') as $varNode) {
+                $varName = $varNode->getAttribute('name');
+                $varValue = $varNode->nodeValue;
+                $result[$moduleName][$varName] = $varValue;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Get a list of variables in scope of specified module
      *
      * Returns array(<var_name> => <var_value>)
@@ -50,30 +72,19 @@ class Magento_Config_View extends Magento_Config_XmlAbstract
      */
     public function getVars($module)
     {
-        $result = array();
-        $xPath = new DOMXPath($this->_dom);
-        /** @var DOMElement $item */
-        foreach ($xPath->query("/view/vars[@module='{$module}']/var") as $item) {
-            $result[$item->getAttribute('name')] = (string)$item->nodeValue;
-        }
-        return $result;
+        return isset($this->_data[$module]) ? $this->_data[$module] : array();
     }
 
     /**
      * Get value of a configuration option variable
      *
      * @param string $module
-     * @param string $name
-     * @return bool|string
+     * @param string $var
+     * @return string|false
      */
-    public function getVarValue($module, $name)
+    public function getVarValue($module, $var)
     {
-        $xPath = new DOMXPath($this->_dom);
-        /** @var DOMElement $item */
-        foreach ($xPath->query("/view/vars[@module='{$module}']/var[@name='{$name}']") as $item) {
-            return (string)$item->nodeValue;
-        }
-        return false;
+        return isset($this->_data[$module][$var]) ? $this->_data[$module][$var] : false;
     }
 
     /**

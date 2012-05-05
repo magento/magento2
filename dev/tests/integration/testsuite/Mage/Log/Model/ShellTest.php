@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Log
- */
 class Mage_Log_Model_ShellTest extends PHPUnit_Framework_TestCase
 {
     /**

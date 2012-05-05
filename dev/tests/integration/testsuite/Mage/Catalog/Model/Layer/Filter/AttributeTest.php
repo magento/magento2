@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Layer_Filter_Attribute.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
  */
 class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_TestCase

@@ -476,7 +476,7 @@ class Mage_Catalog_Model_Convert_Adapter_Product
 
         $stockItems = Mage::registry('current_imported_inventory');
         if ($collections) foreach ($collections as $storeId=>$collection) {
-            $this->addException(Mage::helper('Mage_Catalog_Helper_Data')->__('Records for "'.$stores[$storeId].'" store found.'));
+            $this->addException(Mage::helper('Mage_Catalog_Helper_Data')->__('Records for "%s" store found.', $stores[$storeId]));
 
             if (!$collection instanceof Mage_Catalog_Model_Entity_Product_Collection) {
                 $this->addException(

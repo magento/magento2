@@ -27,9 +27,6 @@
 
 require Mage::getBaseDir() . '/app/code/core/Mage/Catalog/controllers/ProductController.php';
 
-/**
- * @group module:Mage_Catalog
- */
 class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
 {
     /**

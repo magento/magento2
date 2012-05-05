@@ -396,7 +396,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
             $this->getResponse()->setBody($e->getMessage());
         }
         catch (Exception $e){
-            $this->getResponse()->setBody(Mage::helper('Mage_Catalog_Helper_Data')->__('Category move error'.$e));
+            $this->getResponse()->setBody(Mage::helper('Mage_Catalog_Helper_Data')->__('Category move error %s', $e));
             Mage::logException($e);
         }
 

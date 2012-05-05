@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_CatalogSearch
- */
 class Mage_CatalogSearch_AjaxControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
     /**

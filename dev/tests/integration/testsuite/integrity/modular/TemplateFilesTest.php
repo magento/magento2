@@ -41,8 +41,8 @@ class Integrity_Modular_TemplateFilesTest extends PHPUnit_Framework_TestCase
     {
         $params = array(
             '_area'    => $area,
-            '_package' => 'nonexisting_package', // intentionally to make sure the module files will be requested
-            '_theme'   => 'nonexisting_theme',
+            '_package' => false, // intentionally to make sure the module files will be requested
+            '_theme'   => false,
             '_module'  => $module
         );
         $file = Mage::getDesign()->getTemplateFilename($template, $params);

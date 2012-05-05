@@ -55,7 +55,11 @@
  */
 class Mage_Sales_Model_Order_Shipment_Track extends Mage_Sales_Model_Abstract
 {
-    const CUSTOM_CARRIER_CODE   = 'custom';
+    /**
+     * Code of custom carrier
+     */
+    const CUSTOM_CARRIER_CODE = 'custom';
+
     protected $_shipment = null;
 
     protected $_eventPrefix = 'sales_order_shipment_track';
@@ -116,6 +120,11 @@ class Mage_Sales_Model_Order_Shipment_Track extends Mage_Sales_Model_Abstract
         return $this->_shipment;
     }
 
+    /**
+     * Check whether custom carrier was used for this track
+     *
+     * @return bool
+     */
     public function isCustom()
     {
         return $this->getCarrierCode() == self::CUSTOM_CARRIER_CODE;

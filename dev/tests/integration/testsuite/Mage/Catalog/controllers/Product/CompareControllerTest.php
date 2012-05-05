@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Product_CompareController.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/controllers/_files/products.php
  */
 class Mage_Catalog_Product_CompareControllerTest extends Magento_Test_TestCase_ControllerAbstract

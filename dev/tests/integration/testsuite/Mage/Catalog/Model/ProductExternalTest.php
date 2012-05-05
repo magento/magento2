@@ -29,7 +29,6 @@
  * Tests product model:
  * - external interaction is tested
  *
- * @group module:Mage_Catalog
  * @see Mage_Catalog_Model_ProductTest
  * @see Mage_Catalog_Model_ProductPriceTest
  * @magentoDataFixture Mage/Catalog/_files/categories.php

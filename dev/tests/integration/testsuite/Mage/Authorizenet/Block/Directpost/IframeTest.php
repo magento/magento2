@@ -19,27 +19,32 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento
+ * @package     Magento_Adminhtml
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Class that provides the test suite that includes only tests relevant to the current set of enabled modules
+ * @group module:Mage_Authorizenet
  */
-class AllRelevantTests
+class Mage_Authorizenet_Block_Directpost_IframeTest extends PHPUnit_Framework_TestCase
 {
-    public static function suite()
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testToHtml()
     {
-        $fileIteratorFactory = new File_Iterator_Factory();
-        $suite = new Magento_Test_TestSuite_ModuleGroups(false);
-        $suite->addTestFiles(
-            $fileIteratorFactory->getFileIterator(
-                array(__DIR__),
-                array('Test.php')
-            )
-        );
-        return $suite;
+        $xssString = '</script><script>alert("XSS")</script>';
+        $block = new Mage_Authorizenet_Block_Directpost_Iframe();
+        $block->setTemplate('directpost/iframe.phtml');
+        $block->setParams(array(
+            'redirect' => $xssString,
+            'redirect_parent' => $xssString,
+            'error_msg' => $xssString,
+        ));
+        $content = $block->toHtml();
+        $this->assertNotContains($xssString, $content, 'Params mast be escaped');
+        $this->assertContains(htmlspecialchars($xssString), $content, 'Content must present');
     }
 }

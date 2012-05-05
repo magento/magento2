@@ -60,7 +60,7 @@ class Mage_Core_Model_Design_Source_Design extends Mage_Eav_Model_Entity_Attribu
             foreach ($themes as $themeCode => $skins) {
                 $optGroup = array(
                     'label' => $config->getPackageTitle($packageCode)
-                        . ' / ' . $config->getThemeTitle($themeCode, $packageCode),
+                        . ' / ' . $config->getThemeTitle($packageCode, $themeCode),
                     'value' => array()
                 );
                 foreach ($skins as $skinName => $value) {
@@ -107,7 +107,7 @@ class Mage_Core_Model_Design_Source_Design extends Mage_Eav_Model_Entity_Attribu
         foreach (Mage::getDesign()->getDesignEntitiesStructure('frontend') as $package => $themes) {
             $optGroup = array('label' => $config->getPackageTitle($package), 'value' => array());
             foreach (array_keys($themes) as $theme) {
-                $label = $this->_prepareLabel($config->getThemeTitle($theme, $package), $package, $theme);
+                $label = $this->_prepareLabel($config->getThemeTitle($package, $theme), $package, $theme);
                 $optGroup['value'][] = array('label' => $label, 'value' => "{$package}/{$theme}");
             }
             $this->_sortByKey($optGroup['value'], 'label'); // order by theme title

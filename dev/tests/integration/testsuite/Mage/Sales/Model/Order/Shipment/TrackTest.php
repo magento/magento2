@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Sales
- */
 class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -47,5 +44,13 @@ class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCa
         $this->_model->setNumber('test');
         $this->assertEquals('test', $this->_model->getNumber());
         $this->assertEquals('test', $this->_model->getTrackNumber());
+    }
+
+    public function testIsCustom()
+    {
+        $this->_model->setCarrierCode('ups');
+        $this->assertFalse($this->_model->isCustom());
+        $this->_model->setCarrierCode('custom');
+        $this->assertTrue($this->_model->isCustom());
     }
 }

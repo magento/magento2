@@ -62,7 +62,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Code Sniffer command is not available.');
         }
         $cmd->setExtensions(array('php', 'phtml'));
-        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), "See detailed report in '{$reportFile}'.");
+        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), $cmd->getLastRunMessage());
     }
 
     public function testCodeMess()
@@ -72,7 +72,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$cmd->canRun()) {
             $this->markTestSkipped('PHP Mess Detector command line is not available.');
         }
-        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), "See detailed report in '{$reportFile}'.");
+        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), $cmd->getLastRunMessage());
     }
 
     public function testCopyPaste()
@@ -82,7 +82,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$cmd->canRun()) {
             $this->markTestSkipped('PHP Copy/Paste Detector command line is not available.');
         }
-        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), "See detailed report in '{$reportFile}'.");
+        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), $cmd->getLastRunMessage());
     }
 
     /**

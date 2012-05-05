@@ -29,7 +29,6 @@
  * Test class for Mage_Catalog_Model_Category.
  * - general behaviour is tested
  *
- * @group module:Mage_Catalog
  * @see Mage_Catalog_Model_CategoryTreeTest
  * @magentoDataFixture Mage/Catalog/_files/categories.php
  */

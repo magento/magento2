@@ -163,13 +163,8 @@ class Mage_Directory_Model_Resource_Region_Collection extends Mage_Core_Model_Re
     public function addRegionCodeOrNameFilter($region)
     {
         if (!empty($region)) {
-            if (is_array($region)) {
-                $this->addFieldToFilter('main_table.code', array('in' => $region));
-                $this->addFieldToFilter('main_table.default_name', array('in' => $region));
-            } else {
-                $this->addFieldToFilter('main_table.code', $region);
-                $this->addFieldToFilter('main_table.default_name', $region);
-            }
+            $condition = is_array($region) ? array('in' => $region) : $region;
+            $this->addFieldToFilter(array('main_table.code', 'main_table.default_name'), array($condition, $condition));
         }
         return $this;
     }

@@ -339,7 +339,6 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
 
     public function reorderAction()
     {
-//        $this->_initSession();
         $this->_getSession()->clear();
         $orderId = $this->getRequest()->getParam('order_id');
         $order = Mage::getModel('Mage_Sales_Model_Order')->load($orderId);
@@ -496,7 +495,11 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
 
             $this->_getSession()->clear();
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The order has been created.'));
-            $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
+            if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/view')) {
+                $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
+            } else {
+                $this->_redirect('*/sales_order/index');
+            }
         } catch (Mage_Payment_Model_Info_Exception $e) {
             $this->_getOrderCreateModel()->saveQuote();
             $message = $e->getMessage();
@@ -527,6 +530,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         $action = strtolower($this->getRequest()->getActionName());
         switch ($action) {
             case 'index':
+            case 'save':
                 $aclResource = 'sales/order/actions/create';
                 break;
             case 'reorder':
@@ -534,9 +538,6 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
                 break;
             case 'cancel':
                 $aclResource = 'sales/order/actions/cancel';
-                break;
-            case 'save':
-                $aclResource = 'sales/order/actions/edit';
                 break;
             default:
                 $aclResource = 'sales/order/actions';

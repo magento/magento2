@@ -126,6 +126,9 @@
  * @method Mage_Sales_Model_Quote_Item setHiddenTaxAmount(float $value)
  * @method float getBaseHiddenTaxAmount()
  * @method Mage_Sales_Model_Quote_Item setBaseHiddenTaxAmount(float $value)
+ * @method null|bool getHasConfigurationUnavailableError()
+ * @method Mage_Sales_Model_Quote_Item setHasConfigurationUnavailableError(bool $value)
+ * @method Mage_Sales_Model_Quote_Item unsHasConfigurationUnavailableError()
  *
  * @category    Mage
  * @package     Mage_Sales
@@ -343,23 +346,6 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     public function setQtyOptions($qtyOptions)
     {
         return $this->setData('qty_options', $qtyOptions);
-    }
-
-    /**
-     * Checking item data
-     *
-     * @return Mage_Sales_Model_Quote_Item_Abstract
-     */
-    public function checkData()
-    {
-        $parent = parent::checkData();
-        if ($this->getProduct()->getHasError()) {
-            $this->setHasError(true);
-            $this->setMessage(Mage::helper('Mage_Sales_Helper_Data')->__('Item options declaration error.'));
-            $this->getQuote()->setHasError(true);
-            $this->getQuote()->addMessage($this->getProduct()->getMessage(), 'options');
-        }
-        return $parent;
     }
 
     /**
@@ -623,11 +609,9 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
      * Exemple: cataloginventory decimal qty validation may change qty to int,
      * so need to change quote item qty option value.
      *
-     * @param array         $options
      * @param Varien_Object $option
-     * @param mixed         $value
-     *
-     * @return object       Mage_Catalog_Model_Product_Type_Abstract
+     * @param int|float|null $value
+     * @return Mage_Sales_Model_Quote_Item
      */
     public function updateQtyOption(Varien_Object $option, $value)
     {

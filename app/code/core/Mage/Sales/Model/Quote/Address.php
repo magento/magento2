@@ -110,6 +110,8 @@
  * @method Mage_Sales_Model_Quote_Address setCustomerNotes(string $value)
  * @method string getDiscountDescription()
  * @method Mage_Sales_Model_Quote_Address setDiscountDescription(string $value)
+ * @method null|array getDiscountDescriptionArray()
+ * @method Mage_Sales_Model_Quote_Address setDiscountDescriptionArray(array $value)
  * @method float getShippingDiscountAmount()
  * @method Mage_Sales_Model_Quote_Address setShippingDiscountAmount(float $value)
  * @method float getBaseShippingDiscountAmount()

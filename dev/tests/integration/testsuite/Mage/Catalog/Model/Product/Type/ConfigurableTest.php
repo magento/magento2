@@ -26,7 +26,6 @@
  */
 
 /**
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_configurable.php
  */
 class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework_TestCase

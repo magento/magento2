@@ -26,9 +26,6 @@
  */
 
 /**
- * @group module:Mage_Wishlist
- */
-/**
  * Test class for Mage_Wishlist_Block_Customer_Wishlist_Item_Options.
  */
 class Mage_Wishlist_Block_Customer_Wishlist_Item_OptionsTest extends PHPUnit_Framework_TestCase

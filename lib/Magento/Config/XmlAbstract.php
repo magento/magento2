@@ -31,22 +31,37 @@
 abstract class Magento_Config_XmlAbstract
 {
     /**
-     * @var DOMDocument
+     * Data extracted from the merged configuration files
+     *
+     * @var array
      */
-    protected $_dom = null;
+    protected $_data;
 
     /**
      * Instantiate with the list of files to merge
      *
      * @param array $configFiles
+     * @param Zend_Cache_Core $cache
      * @throws Magento_Exception
      */
-    public function __construct(array $configFiles)
+    public function __construct(array $configFiles, Zend_Cache_Core $cache = null)
     {
         if (empty($configFiles)) {
             throw new Magento_Exception('There must be at least one configuration file specified.');
         }
-        $this->_merge($configFiles);
+        $cacheId = null;
+        if ($cache) {
+            $cacheId = 'CONFIG_XML_' . md5(implode('|', $configFiles));
+            $cachedData = $cache->load($cacheId);
+            if ($cachedData !== false) {
+                $this->_data = unserialize($cachedData);
+                return;
+            }
+        }
+        $this->_data = $this->_extractData($this->_merge($configFiles));
+        if ($cache) {
+            $cache->save(serialize($this->_data), $cacheId);
+        }
     }
 
     /**
@@ -57,9 +72,18 @@ abstract class Magento_Config_XmlAbstract
     abstract public function getSchemaFile();
 
     /**
+     * Extract configuration data from the DOM structure
+     *
+     * @param DOMDocument $dom
+     * @return array
+     */
+    abstract protected function _extractData(DOMDocument $dom);
+
+    /**
      * Merge the config XML-files
      *
      * @param array $configFiles
+     * @return DOMDocument
      * @throws Magento_Exception if a non-existing or invalid XML-file passed
      */
     protected function _merge($configFiles)
@@ -79,7 +103,7 @@ abstract class Magento_Config_XmlAbstract
                 throw new Magento_Exception($message);
             }
         }
-        $this->_dom = $domConfig->getDom();
+        return $domConfig->getDom();
     }
 
     /**

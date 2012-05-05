@@ -84,9 +84,18 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
     protected $_inactiveCategoryIds      = null;
 
     /**
-     * Is rebuild
+     * Store flag which defines if Catalog Category Flat Data has been initialized
      *
-     * @var boolean
+     * @var bool|null
+     */
+    protected $_isBuilt                  = null;
+
+    /**
+     * Store flag which defines if Catalog Category Flat Data has been initialized
+     *
+     * @deprecated after 1.7.0.0 use $this->_isBuilt instead
+     *
+     * @var bool|null
      */
     protected $_isRebuilt                = null;
 
@@ -420,13 +429,13 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
     }
 
     /**
-     * Check if category flat data is rebuilt
+     * Check if Catalog Category Flat Data has been initialized
      *
      * @return bool
      */
-    public function isRebuilt()
+    public function isBuilt()
     {
-        if ($this->_isRebuilt === null) {
+        if ($this->_isBuilt === null) {
             $defaultStoreView = Mage::app()->getDefaultStoreView();
             if ($defaultStoreView === null) {
                 $defaultStoreId = Mage_Core_Model_App::ADMIN_STORE_ID;
@@ -437,18 +446,18 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
                 ->from($this->getMainStoreTable($defaultStoreId), 'entity_id')
                 ->limit(1);
             try {
-                $this->_isRebuilt = (bool) $this->_getReadAdapter()->fetchOne($select);
+                $this->_isBuilt = (bool)$this->_getReadAdapter()->fetchOne($select);
             } catch (Exception $e) {
-                $this->_isRebuilt = false;
+                $this->_isBuilt = false;
             }
         }
-        return $this->_isRebuilt;
+        return $this->_isBuilt;
     }
 
     /**
      * Rebuild flat data from eav
      *
-     * @param unknown_type $stores
+     * @param array|null $stores
      * @return Mage_Catalog_Model_Resource_Category_Flat
      */
     public function rebuild($stores = null)
@@ -1429,5 +1438,17 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
             throw $e;
         }
         return $this;
+    }
+
+    /**
+     * Check if Catalog Category Flat Data has been initialized
+     *
+     * @deprecated use Mage_Catalog_Model_Resource_Category_Flat::isBuilt() instead
+     *
+     * @return bool
+     */
+    public function isRebuilt()
+    {
+        return $this->isBuilt();
     }
 }

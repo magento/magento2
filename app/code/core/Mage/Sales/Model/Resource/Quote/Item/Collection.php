@@ -201,7 +201,7 @@ class Mage_Sales_Model_Resource_Quote_Item_Collection extends Mage_Core_Model_Re
                 $optionProductIds   = array();
                 foreach ($item->getOptions() as $option) {
                     /**
-                     * Call type specified logic for product associated with quote item
+                     * Call type-specific logic for product associated with quote item
                      */
                     $product->getTypeInstance()->assignProductToOption(
                             $productCollection->getItemById($option->getProductId()),
@@ -222,9 +222,8 @@ class Mage_Sales_Model_Resource_Quote_Item_Collection extends Mage_Core_Model_Re
                         }
                     }
                 }
-                $item->setQtyOptions($qtyOptions);
 
-                $item->setProduct($product);
+                $item->setQtyOptions($qtyOptions)->setProduct($product);
             } else {
                 $item->isDeleted(true);
                 $recollectQuote = true;

@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Block_Product_New.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/products_new.php
  */
 class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase

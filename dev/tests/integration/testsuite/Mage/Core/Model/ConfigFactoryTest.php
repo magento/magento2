@@ -29,7 +29,6 @@
  * Second part of Mage_Core_Model_Config testing:
  * - Mage factory behaviour is tested
  *
- * @group module:Mage_Core
  * @see Mage_Core_Model_ConfigTest
  */
 class Mage_Core_Model_ConfigFactoryTest extends PHPUnit_Framework_TestCase

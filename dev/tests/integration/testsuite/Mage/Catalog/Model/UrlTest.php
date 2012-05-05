@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Url.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/url_rewrites.php
  */
 class Mage_Catalog_Model_UrlTest extends PHPUnit_Framework_TestCase

@@ -68,12 +68,6 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'title'    => $helper->__('Select File to Import'),
             'required' => true
         ));
-        /*$fieldset->addField(Mage_ImportExport_Model_Import::FIELD_NAME_IMG_ARCHIVE_FILE, 'file', array(
-            'name'     => Mage_ImportExport_Model_Import::FIELD_NAME_IMG_ARCHIVE_FILE,
-            'label'    => $helper->__('Select Image Archive File to Import'),
-            'title'    => $helper->__('Select Image Archive File to Import'),
-            'required' => false
-        ));*/
 
         $form->setUseContainer(true);
         $this->setForm($form);

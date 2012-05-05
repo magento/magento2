@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Phoenix_Moneybookers
- */
 class Phoenix_Moneybookers_ProcessingControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
     public function testCancelActionRedirect()

@@ -69,6 +69,13 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
     protected $_cartFixedRuleUsedForAddress = array();
 
     /**
+     * Skip action rules validation flag
+     *
+     * @var bool
+     */
+    protected $_skipActionsValidation = false;
+
+    /**
      * Init validator
      * Init process load collection of rules for specific website,
      * customer group and coupon code
@@ -197,6 +204,36 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Set skip actions validation flag
+     *
+     * @param   boolean $flag
+     * @return  Mage_SalesRule_Model_Validator
+     */
+    public function setSkipActionsValidation($flag)
+    {
+        $this->_skipActionsValidation = $flag;
+        return $this;
+    }
+
+    /**
+     * Can apply rules check
+     *
+     * @param   Mage_Sales_Model_Quote_Item_Abstract $item
+     * @return  bool
+     */
+    public function canApplyRules(Mage_Sales_Model_Quote_Item_Abstract $item)
+    {
+        $address = $this->_getAddress($item);
+        foreach ($this->_getRules() as $rule) {
+            if (!$this->_canProcessRule($rule, $address) || !$rule->getActions()->validate($item)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Quote item free shipping ability check
      * This process not affect information about applied rules, coupon code etc.
      * This information will be added during discount amounts processing
@@ -282,7 +319,7 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
                 continue;
             }
 
-            if (!$rule->getActions()->validate($item)) {
+            if (!$this->_skipActionsValidation && !$rule->getActions()->validate($item)) {
                 continue;
             }
 
@@ -376,7 +413,6 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
 
                         //get discount for original price
                         $originalDiscountAmount = min($itemOriginalPrice * $qty, $quoteAmount);
-                        $baseOriginalDiscountAmount = $quote->getStore()->roundPrice($originalDiscountAmount);
                         $baseOriginalDiscountAmount = $quote->getStore()->roundPrice($baseItemOriginalPrice);
 
                         $cartRules[$rule->getId()] -= $baseDiscountAmount;
@@ -786,14 +822,16 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
      */
     public function prepareDescription($address, $separator=', ')
     {
-        $description = $address->getDiscountDescriptionArray();
-
-        if (is_array($description) && !empty($description)) {
-            $description = array_unique($description);
-            $description = implode($separator, $description);
-        } else {
-            $description = '';
+        $descriptionArray = $address->getDiscountDescriptionArray();
+        /** @see Mage_SalesRule_Model_Validator::_getAddress */
+        if (!$descriptionArray && $address->getQuote()->getItemVirtualQty() > 0) {
+            $descriptionArray = $address->getQuote()->getBillingAddress()->getDiscountDescriptionArray();
         }
+
+        $description = $descriptionArray && is_array($descriptionArray)
+            ? implode($separator, array_unique($descriptionArray))
+            :  '';
+
         $address->setDiscountDescription($description);
         return $this;
     }

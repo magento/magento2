@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Block_Product_View.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_simple.php
  */
 class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase

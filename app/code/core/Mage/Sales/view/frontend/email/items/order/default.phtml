@@ -34,7 +34,7 @@
             <?php foreach ($this->getItemOptions() as $option): ?>
             <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
             <dd style="margin:0; padding:0 0 0 9px;">
-                <?php echo (isset($option['print_value']) ? $option['print_value'] : nl2br($this->escapeHtml($option['value']))) ?>
+                <?php echo nl2br($option['value']) ?>
             </dd>
             <?php endforeach; ?>
         </dl>

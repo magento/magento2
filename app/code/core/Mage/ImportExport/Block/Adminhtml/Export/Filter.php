@@ -84,9 +84,9 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
         }
 
 
-        return '<strong>' . $this->_helper->__('From') . ':</strong>&nbsp;'
+        return '<strong>' . Mage::helper('Mage_ImportExport_Helper_Data')->__('From') . ':</strong>&nbsp;'
             . $dateBlock->setValue($fromValue)->getHtml()
-            . '&nbsp;<strong>' . $this->_helper->__('To') . ':</strong>&nbsp;'
+            . '&nbsp;<strong>' . Mage::helper('Mage_ImportExport_Helper_Data')->__('To') . ':</strong>&nbsp;'
             . $dateBlock->setId($dateBlock->getId() . '_to')->setValue($toValue)->getHtml();
     }
 
@@ -140,7 +140,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
                 ->setValue($value)
                 ->getHtml();
         } else {
-            return $this->_helper->__('Attribute does not has options, so filtering is impossible');
+            return Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute does not has options, so filtering is impossible');
         }
     }
 
@@ -161,10 +161,10 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             $toValue   = $this->_helper->escapeHtml(next($value));
         }
 
-        return '<strong>' . $this->_helper->__('From') . ':</strong>&nbsp;'
+        return '<strong>' . Mage::helper('Mage_ImportExport_Helper_Data')->__('From') . ':</strong>&nbsp;'
              . '<input type="text" name="' . $name . '[]" class="input-text input-text-range"'
              . ' value="' . $fromValue . '"/>&nbsp;'
-             . '<strong>' . $this->_helper->__('To')
+             . '<strong>' . Mage::helper('Mage_ImportExport_Helper_Data')->__('To')
              . ':</strong>&nbsp;<input type="text" name="' . $name
              . '[]" class="input-text input-text-range" value="' . $toValue . '" />';
     }
@@ -205,7 +205,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
                 ->setValue($value)
                 ->getHtml();
         } else {
-            return $this->_helper->__('Attribute does not has options, so filtering is impossible');
+            return Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute does not has options, so filtering is impossible');
         }
     }
 
@@ -219,7 +219,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
         parent::_prepareColumns();
 
         $this->addColumn('skip', array(
-            'header'     => $this->_helper->__('Skip'),
+            'header'     => Mage::helper('Mage_ImportExport_Helper_Data')->__('Skip'),
             'type'       => 'checkbox',
             'name'       => 'skip',
             'field_name' => Mage_ImportExport_Model_Export::FILTER_ELEMENT_SKIP . '[]',
@@ -229,16 +229,16 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             'index'      => 'attribute_id'
         ));
         $this->addColumn('frontend_label', array(
-            'header'   => $this->_helper->__('Attribute Label'),
+            'header'   => Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute Label'),
             'index'    => 'frontend_label',
             'sortable' => false,
         ));
         $this->addColumn('attribute_code', array(
-            'header' => $this->_helper->__('Attribute Code'),
+            'header' => Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute Code'),
             'index'  => 'attribute_code'
         ));
         $this->addColumn('filter', array(
-            'header'         => $this->_helper->__('Filter'),
+            'header'         => Mage::helper('Mage_ImportExport_Helper_Data')->__('Filter'),
             'sortable'       => false,
             'filter'         => false,
             'frame_callback' => array($this, 'decorateFilter')
@@ -291,7 +291,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
                 $cell = $this->_getNumberFromToHtmlWithValue($row, $value);
                 break;
             default:
-                $cell = $this->_helper->__('Unknown attribute filter type');
+                $cell = Mage::helper('Mage_ImportExport_Helper_Data')->__('Unknown attribute filter type');
         }
         return $cell;
     }

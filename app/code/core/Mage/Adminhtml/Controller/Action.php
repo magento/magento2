@@ -160,10 +160,6 @@ class Mage_Adminhtml_Controller_Action extends Mage_Backend_Controller_ActionAbs
     public function preDispatch()
     {
         Mage::app()->setCurrentStore('admin');
-        $this->_areaDesign = (string)Mage::getConfig()->getNode(
-            $this->_currentArea . '/' . Mage_Core_Model_Design_Package::XML_PATH_THEME
-        ) ?: 'default/default/default'; // always override frontend theme
-
         Mage::dispatchEvent('adminhtml_controller_action_predispatch_start', array());
         parent::preDispatch();
         $_isValidFormKey = true;

@@ -41,6 +41,7 @@ class Mage_DesignEditor_Model_Layout
         'Mage_Page_Block_',
         'Mage_DesignEditor_Block_',
         'Mage_Checkout_Block_Onepage_',
+        'Mage_Customer_Block_Account_Navigation',
         'Mage_Paypal_Block_Express_Review_Details',
         'Mage_Poll_Block_ActivePoll',
         'Mage_Sales_Block_Guest_Links',

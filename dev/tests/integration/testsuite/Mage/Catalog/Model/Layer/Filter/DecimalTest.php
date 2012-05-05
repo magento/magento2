@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Layer_Filter_Decimal.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/Model/Layer/Filter/_files/attribute_weight_filterable.php
  * @magentoDataFixture Mage/Catalog/_files/categories.php
  */

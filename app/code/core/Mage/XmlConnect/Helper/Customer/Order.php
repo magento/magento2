@@ -203,7 +203,7 @@ class Mage_XmlConnect_Helper_Customer_Order extends Mage_Core_Helper_Abstract
             $weeeXml->addCustomChild(
                 'total',
                 $this->formatPrice($renderer, $total),
-                array('label' => $renderer->helper('Mage_Weee_Helper_Data')->__('Total'))
+                array('label' => Mage::helper('Mage_Weee_Helper_Data')->__('Total'))
             );
         }
     }

@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_Model_Product_Attribute_Backend_Media.
- *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_simple.php
  */
 class Mage_Catalog_Model_Product_Attribute_Backend_MediaTest extends PHPUnit_Framework_TestCase

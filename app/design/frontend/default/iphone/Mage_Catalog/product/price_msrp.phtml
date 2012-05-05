@@ -43,4 +43,5 @@
             <?php $_msrpPrice = $this->helper('Mage_Core_Helper_Data')->currency($_product->getMsrp(),true,true) ?>
             <span class="old-price" id="product-price-<?php echo $_product->getId() ?><?php echo $this->getIdSuffix() ?>"><?php echo $_msrpPrice ?></span>
         <?php endif; ?>
+        <?php echo $this->__('Click for price') ?>
     </div>

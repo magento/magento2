@@ -324,11 +324,11 @@ document.observe("dom:loaded", function() {
 
     $$("#nav a").each(function(sliderLink) {
         if (sliderLink.next(0) !== undefined) {
-            sliderLink.href = "#";
             sliderLink.clonedSubmenuList = sliderLink.next(0);
 
             sliderLink.observe('click', function(e) {
 
+                e.preventDefault();
                 var transformValue = {}
 
                 //homeLink.hasClassName('disabled') ? homeLink.removeClassName('disabled') : '';
@@ -349,6 +349,7 @@ document.observe("dom:loaded", function() {
                     this.clonedSubmenuList.insert({
                         top: subcategoryHeader
                     });
+                    subcategoryHeader.insert({ after : new Element('li').update('<a href="' + sliderLink.href + '"><span>All Products</span></a>') });
 
                     this.clonedSubmenuList.firstDescendant().firstDescendant().observe('click', function(e) {
                         if (last) {
@@ -386,7 +387,6 @@ document.observe("dom:loaded", function() {
                 $("nav-container").setStyle(transformValue);
 
                 sliderPosition = sliderPosition - document.body.offsetWidth;
-                e.preventDefault();
             });
         };
     });

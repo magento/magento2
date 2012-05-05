@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_Model_Layer_Filter_Item.
- *
- * @group module:Mage_Catalog
  */
 class Mage_Catalog_Model_Layer_Filter_ItemTest extends PHPUnit_Framework_TestCase
 {

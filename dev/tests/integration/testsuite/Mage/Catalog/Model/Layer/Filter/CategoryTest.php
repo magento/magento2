@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Layer_Filter_Category.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/categories.php
  */
 class Mage_Catalog_Model_Layer_Filter_CategoryTest extends PHPUnit_Framework_TestCase

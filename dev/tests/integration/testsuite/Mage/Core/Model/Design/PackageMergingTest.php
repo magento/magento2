@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Core
- */
 class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -61,7 +58,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
 
         $pub = Mage::getBaseDir('media');
         $this->_pubMerged = "{$pub}/skin/_merged";
-        $this->_pubLib = Mage::getBaseDir('js');;
+        $this->_pubLib = Mage::getBaseDir('js');
         // emulate source skin
         $this->_skinFixture = dirname(__DIR__) . '/_files/skin';
     }

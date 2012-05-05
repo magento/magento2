@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_ProductController.
- *
- * @group module:Mage_Catalog
  */
 class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

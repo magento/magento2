@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Seo_SitemapController.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/categories.php
  */
 class Mage_Catalog_Seo_SitemapControllerTest extends Magento_Test_TestCase_ControllerAbstract

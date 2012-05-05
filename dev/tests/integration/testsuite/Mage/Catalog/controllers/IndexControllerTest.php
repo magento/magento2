@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_IndexController.
- *
- * @group module:Mage_Catalog
  */
 class Mage_Catalog_IndexControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

@@ -110,13 +110,13 @@ class Mage_Catalog_Model_Product_Option_Type_Select extends Mage_Catalog_Model_P
     }
 
     /**
-     * Return wrong product configuration message
+     * Return currently unavailable product configuration message
      *
      * @return string
      */
     protected function _getWrongConfigurationMessage()
     {
-        return Mage::helper('Mage_Catalog_Helper_Data')->__('Some of the products below do not have all the required options. Please edit them and configure all the required options.');
+        return Mage::helper('Mage_Catalog_Helper_Data')->__('Some of the selected item options are not currently available.');
     }
 
     /**
@@ -210,6 +210,7 @@ class Mage_Catalog_Model_Product_Option_Type_Select extends Mage_Catalog_Model_P
      * Return Price for selected option
      *
      * @param string $optionValue Prepared for cart option value
+     * @param float $basePrice
      * @return float
      */
     public function getOptionPrice($optionValue, $basePrice)

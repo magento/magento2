@@ -26,9 +26,6 @@
  */
 
 /**
- * @group module:Mage_Core
- */
-/**
  * Test class for Mage_Core_Model_Layout_Element
  */
 class Mage_Core_Model_Layout_ElementTest extends PHPUnit_Framework_TestCase

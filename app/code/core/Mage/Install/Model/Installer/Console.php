@@ -392,7 +392,9 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             /**
              * Prepare encryption key and validate it
              */
-            $encryptionKey = empty($this->_args['encryption_key']) ? md5(time()) : $this->_args['encryption_key'];
+            $encryptionKey = empty($this->_args['encryption_key'])
+                ? md5(Mage::helper('Mage_Core_Helper_Data')->getRandomString(10))
+                : $this->_args['encryption_key'];
             $this->_getDataModel()->setEncryptionKey($encryptionKey);
             $installer->validateEncryptionKey($encryptionKey);
 

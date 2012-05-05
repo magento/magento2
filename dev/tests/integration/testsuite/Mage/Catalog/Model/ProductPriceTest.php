@@ -29,7 +29,6 @@
  * Tests product model:
  * - pricing behaviour is tested
  *
- * @group module:Mage_Catalog
  * @see Mage_Catalog_Model_ProductTest
  * @see Mage_Catalog_Model_ProductExternalTest
  */

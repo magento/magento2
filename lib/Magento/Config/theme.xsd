@@ -72,6 +72,7 @@
         </xs:sequence>
         <xs:attribute name="version" type="version" use="required"/>
         <xs:attribute name="code" type="xs:string" use="required"/>
+        <xs:attribute name="parent" type="xs:string"/>
     </xs:complexType>
 
     <xs:simpleType name="version">

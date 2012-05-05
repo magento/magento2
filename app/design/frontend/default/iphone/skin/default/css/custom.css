@@ -34,6 +34,7 @@ body > footer ul,
 body > address.copyright { background-color:#e76212; }
 
 /* Button Color */
+.map-popup-checkout button,
 .more-button,
 .btn-checkout,
 .account-login button,

@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Block_Product_Abstract.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_simple.php
  * @magentoDataFixture Mage/Catalog/_files/product_image.php
  */

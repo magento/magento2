@@ -29,9 +29,11 @@
  *
  * @method Mage_Catalog_Model_Resource_Product getResource()
  * @method Mage_Catalog_Model_Resource_Product _getResource()
+ * @method Mage_Catalog_Model_Product setHasError(bool $value)
+ * @method null|bool getHasError()
  *
- * @category   Mage
- * @package    Mage_Catalog
+ * @category    Mage
+ * @package     Mage_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract

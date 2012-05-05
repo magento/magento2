@@ -127,13 +127,6 @@ abstract class Mage_Core_Controller_Varien_Action
     protected $_removeDefaultTitle = false;
 
     /**
-     * Custom design parameters for current area
-     *
-     * @var string
-     */
-    protected $_areaDesign = null;
-
-    /**
      * Constructor
      *
      * @param Zend_Controller_Request_Abstract $request
@@ -554,17 +547,9 @@ abstract class Mage_Core_Controller_Varien_Action
             }
         }
 
-        Mage::app()->loadArea($this->getLayout()->getArea());
-        $areaDesign = $this->_areaDesign ?: Mage::getStoreConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME);
-        $design = Mage::getDesign()->setDesignTheme($areaDesign, $this->getLayout()->getArea());
-
-        if ($this->_currentArea == Mage_Core_Model_App_Area::AREA_FRONTEND) {
-            if (!$this->_applyUserAgentDesignException($design)) {
-                Mage::getSingleton('Mage_Core_Model_Design')
-                    ->loadChange(Mage::app()->getStore()->getStoreId())
-                    ->changeDesign($design);
-            }
-        }
+        $area = Mage::app()->getArea($this->getLayout()->getArea());
+        $area->load();
+        $area->detectDesign($this->getRequest());
 
         if ($this->getFlag('', self::FLAG_NO_COOKIES_REDIRECT)
             && Mage::getStoreConfig('web/browser_capabilities/cookies')
@@ -583,35 +568,6 @@ abstract class Mage_Core_Controller_Varien_Action
             array('controller_action' => $this));
         Mage::dispatchEvent('controller_action_predispatch_' . $this->getFullActionName(),
             array('controller_action' => $this));
-    }
-
-    /**
-     * Analyze user-agent information to override custom design settings
-     *
-     * @param Mage_Core_Model_Design_Package $design
-     * @return bool
-     */
-    protected function _applyUserAgentDesignException(Mage_Core_Model_Design_Package $design)
-    {
-        if (empty($_SERVER['HTTP_USER_AGENT'])) {
-            return false;
-        }
-        try {
-            $expressions = Mage::getStoreConfig('design/theme/ua_regexp');
-            if (!$expressions) {
-                return false;
-            }
-            $expressions = unserialize($expressions);
-            foreach ($expressions as $rule) {
-                if (preg_match($rule['regexp'], $_SERVER['HTTP_USER_AGENT'])) {
-                    $design->setDesignTheme($rule['value']);
-                    return true;
-                }
-            }
-        } catch (Exception $e) {
-            Mage::logException($e);
-        }
-        return false;
     }
 
     /**

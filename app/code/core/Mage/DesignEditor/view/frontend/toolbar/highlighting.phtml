@@ -27,7 +27,9 @@
 <div class="vde_toolbar_cell">
     <div class="vde_toolbar_cell_title"><?php echo $this->__('View Options'); ?></div>
     <div class="vde_toolbar_cell_content">
-            <div id="vde_highlighting" class="vde_cell_list_item checked"><?php echo $this->__('Highlight Elements'); ?></div>
+            <div id="vde_highlighting" class="vde_cell_list_item<?php if (!Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled()) echo ' checked'; ?>">
+                <?php echo $this->__('Highlight Elements'); ?>
+            </div>
     </div>
 </div>
 

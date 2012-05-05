@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_ProductController (downloadable product type)
- *
- * @group module:Mage_Downloadable
  */
 class Mage_Downloadable_ProductControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

@@ -86,12 +86,20 @@ class Mage_SalesRule_Model_Quote_Discount extends Mage_Sales_Model_Quote_Address
                 Mage::dispatchEvent('sales_quote_address_discount_item', $eventArgs);
 
                 if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                    $isMatchedParent = $this->_calculator->canApplyRules($item);
+                    $this->_calculator->setSkipActionsValidation($isMatchedParent);
                     foreach ($item->getChildren() as $child) {
                         $this->_calculator->process($child);
+                        if ($isMatchedParent) {
+                            $this->_recalculateChildDiscount($child);
+                        }
+
                         $eventArgs['item'] = $child;
                         Mage::dispatchEvent('sales_quote_address_discount_item', $eventArgs);
+
                         $this->_aggregateItemDiscount($child);
                     }
+                    $this->_calculator->setSkipActionsValidation(false);
                 } else {
                     $this->_calculator->process($item);
                     $this->_aggregateItemDiscount($item);
@@ -124,6 +132,24 @@ class Mage_SalesRule_Model_Quote_Discount extends Mage_Sales_Model_Quote_Address
     {
         $this->_addAmount(-$item->getDiscountAmount());
         $this->_addBaseAmount(-$item->getBaseDiscountAmount());
+        return $this;
+    }
+
+    /**
+     * Recalculate child discount. Separate discount between children
+     *
+     * @param   Mage_Sales_Model_Quote_Item_Abstract $child
+     * @return  Mage_SalesRule_Model_Quote_Discount
+     */
+    protected function _recalculateChildDiscount($child)
+    {
+        $item = $child->getParentItem();
+        $prices = array('base' => $item->getBaseOriginalPrice(), 'current' => $item->getPrice());
+        $keys = array('discount_amount', 'original_discount_amount');
+        foreach ($keys as $key) {
+            $child->setData($key, $child->getData($key) * $child->getPrice() / $prices['current']);
+            $child->setData('base_' . $key, $child->getData('base_' . $key) * $child->getPrice() / $prices['base']);
+        }
         return $this;
     }
 

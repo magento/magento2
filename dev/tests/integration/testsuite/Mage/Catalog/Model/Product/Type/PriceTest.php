@@ -26,7 +26,6 @@
  */
 
 /**
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_simple.php
  */
 class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCase

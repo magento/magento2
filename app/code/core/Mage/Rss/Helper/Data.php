@@ -111,7 +111,7 @@ class Mage_Rss_Helper_Data extends Mage_Core_Helper_Abstract
     {
         /* @var $flatHelper Mage_Catalog_Helper_Product_Flat */
         $flatHelper = Mage::helper('Mage_Catalog_Helper_Product_Flat');
-        if ($flatHelper->isEnabled()) {
+        if ($flatHelper->isAvailable()) {
             /* @var $emulationModel Mage_Core_Model_App_Emulation */
             $emulationModel = Mage::getModel('Mage_Core_Model_App_Emulation');
             // Emulate admin environment to disable using flat model - otherwise we won't get global stats

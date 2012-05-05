@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Widget
- */
 class Mage_Widget_Adminhtml_Widget_InstanceControllerTest extends Mage_Adminhtml_Utility_Controller
 {
     protected function setUp()

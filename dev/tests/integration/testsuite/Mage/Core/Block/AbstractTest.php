@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Core
- */
 class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -472,6 +469,11 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Isolation level has been raised in order to flush themes configuration in-memory cache
+     *
+     * @magentoAppIsolation enabled
+     */
     public function testGetSkinUrl()
     {
         $this->assertStringStartsWith('http://localhost/pub/media/skin/frontend/', $this->_block->getSkinUrl());

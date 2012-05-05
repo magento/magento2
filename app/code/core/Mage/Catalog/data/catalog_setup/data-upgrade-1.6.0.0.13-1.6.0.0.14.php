@@ -62,7 +62,7 @@ if ($attributeTableOld != $attributeTableNew) {
 }
 
 Mage::getModel('Mage_Index_Model_Indexer')
-    ->getProcessByCode('catalog_category_flat')
+    ->getProcessByCode(Mage_Catalog_Helper_Category_Flat::CATALOG_CATEGORY_FLAT_PROCESS_CODE)
     ->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
 
 $installer->endSetup();

@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Block_Product_List_Crosssell.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/products_crosssell.php
  */
 class Mage_Catalog_Block_Product_List_CrosssellTest extends PHPUnit_Framework_TestCase

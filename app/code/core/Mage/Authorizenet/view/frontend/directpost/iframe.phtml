@@ -25,11 +25,12 @@
  */
 
 /**
- * @see Mage_Authorizenet_Block_Directpost_Iframe
+ * @var $this Mage_Authorizenet_Block_Directpost_Iframe
  */
 ?>
 <?php
 $_params = $this->getParams();
+/* @var $_helper Mage_Authorizenet_Helper_Data  */
 $_helper = $this->helper('Mage_Authorizenet_Helper_Data');
 ?>
 <html>
@@ -37,13 +38,13 @@ $_helper = $this->helper('Mage_Authorizenet_Helper_Data');
 <script type="text/javascript">
 //<![CDATA[
 <?php if (isset($_params['redirect'])): ?>
-window.location="<?php echo $_params['redirect'] ?>";
+window.location="<?php echo $this->escapeUrl($_params['redirect']) ?>";
 <?php endif; ?>
 <?php if (isset($_params['redirect_parent'])): ?>
-window.top.location="<?php echo $_params['redirect_parent'] ?>";
+window.top.location="<?php echo $this->escapeUrl($_params['redirect_parent']) ?>";
 <?php endif; ?>
 <?php if (isset($_params['error_msg'])): ?>
-window.top.directPostModel.showError("<?php echo $_params['error_msg'] ?>");
+window.top.directPostModel.showError(<?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($_params['error_msg']) ?>);
 <?php if (isset($_params['x_invoice_num'])): ?>
 window.top.directPostModel.successUrl="<?php echo $_helper->getSuccessOrderUrl($_params) ?>";
 <?php endif; ?>

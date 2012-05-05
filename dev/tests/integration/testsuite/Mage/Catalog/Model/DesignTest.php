@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_Model_Design.
- *
- * @group module:Mage_Catalog
  */
 class Mage_Catalog_Model_DesignTest extends PHPUnit_Framework_TestCase
 {

@@ -52,9 +52,10 @@ class Mage_Bundle_Block_Catalog_Product_View extends Mage_Catalog_Block_Product_
         if (is_array($prices)) {
             $store = Mage::app()->getStore();
             $helper = Mage::helper('Mage_Tax_Helper_Data');
-            $specialPrice = $product->getSpecialPrice() ? 100 - $product->getSpecialPrice() : 0;
+            $specialPrice = $product->getSpecialPrice();
+            $defaultDiscount = max($product->getGroupPrice(), $specialPrice ? 100 - $specialPrice : 0);
             foreach ($prices as $price) {
-                if ($specialPrice < $price['price']) {
+                if ($defaultDiscount < $price['price']) {
                     $price['price_qty'] += 0;
                     $price['savePercent'] = ceil(100 - $price['price']);
 

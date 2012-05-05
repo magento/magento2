@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_ProductController (bundle product type)
- *
- * @group module:Mage_Bundle
  */
 class Mage_Bundle_ProductControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

@@ -338,7 +338,7 @@ class Mage_CatalogInventory_Model_Resource_Stock extends Mage_Core_Model_Resourc
         $this->_initConfig();
         $adapter = $collection->getSelect()->getAdapter();
         $qtyIf = $adapter->getCheckSql(
-            'invtr.use_config_notify_stock_qty',
+            'invtr.use_config_notify_stock_qty > 0',
             $this->_configNotifyStockQty,
             'invtr.notify_stock_qty'
         );

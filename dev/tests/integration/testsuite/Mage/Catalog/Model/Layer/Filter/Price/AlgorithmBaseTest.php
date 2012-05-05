@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Layer_Filter_Price.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/Model/Layer/Filter/Price/_files/products_base.php
  */
 class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Framework_TestCase

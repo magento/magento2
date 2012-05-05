@@ -27,7 +27,7 @@
 <design>
     <package code="default">
         <title>Default</title>
-        <theme version="2.0.0.0" code="iphone">
+        <theme version="2.0.0.0" code="iphone" parent="default">
             <title>Iphone</title>
             <requirements>
                 <magento_version from="2.0.0.0-dev1" to="*"/>

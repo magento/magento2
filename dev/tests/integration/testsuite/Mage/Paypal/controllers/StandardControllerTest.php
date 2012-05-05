@@ -26,7 +26,6 @@
  */
 
 /**
- * @group module:Mage_Paypal
  * @magentoDataFixture Mage/Sales/_files/order.php
  */
 class Mage_Paypal_StandardControllerTest extends Magento_Test_TestCase_ControllerAbstract

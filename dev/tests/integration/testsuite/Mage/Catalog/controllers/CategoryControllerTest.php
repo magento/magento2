@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_CategoryController.
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/categories.php
  */
 class Mage_Catalog_CategoryControllerTest extends Magento_Test_TestCase_ControllerAbstract

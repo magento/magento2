@@ -23,18 +23,4 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-@import url(../frontend/package/default/theme/en_US/recursive.css);
-@import url("../frontend/package/default/theme/en_US/css/deep/recursive.css");
-/* Import directives above popped up. */
-/* calendar.css */
-body {background: url(../frontend/package/default/theme/en_US/css/body.gif);}
-p {background: url(../frontend/package/default/theme/en_US/css/1.gif);}
-h1 {background: url('../frontend/package/default/theme/en_US/h1.gif');}
-h2 {background: url(../frontend/package/default/theme/en_US/images/h2.gif);}
-
-ul {background: url(/absolute.gif);}
-ol {background: url(http://example.com/absolute.gif);}
-li {background: url(https://example.com/absolute.gif);}
-
-ol.valid {background: url(../frontend/package/default/theme/en_US/Namespace_Module/absolute_valid_module.gif)} /* theme file modular */
-ol.favicon {background: url(../frontend/package/default/theme/en_US/Mage_Page/favicon.ico)} /* base file */
+.sub {font-size: 100px}

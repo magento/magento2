@@ -27,8 +27,6 @@
 
 /**
  * Test class for Mage_Catalog_Model_Category_Attribute_Api.
- *
- * @group module:Mage_Catalog
  */
 class Mage_Catalog_Model_Category_Attribute_ApiTest extends PHPUnit_Framework_TestCase
 {

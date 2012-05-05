@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Widget
- */
 class Mage_Widget_Model_Widget_InstanceTest extends PHPUnit_Framework_TestCase
 {
     /**

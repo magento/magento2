@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Core
- */
 class Mage_Core_Helper_DataTest extends PHPUnit_Framework_TestCase
 {
     const DATE_TIMEZONE = 'America/Los_Angeles'; // hardcoded in the installation

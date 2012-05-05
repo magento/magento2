@@ -26,9 +26,6 @@
  */
 
 /**
- * @group module:Mage_Paypal
- */
-/**
  * Test class for Mage_Paypal_Block_Express_Review
  */
 class Mage_Paypal_Block_Express_ReviewTest extends PHPUnit_Framework_TestCase

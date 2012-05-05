@@ -25,9 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Xmlconnect
- */
 class Mage_XmlConnect_Model_Catalog_Category_ImageTest extends PHPUnit_Framework_TestCase
 {
     /**

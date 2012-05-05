@@ -27,8 +27,6 @@
 
 /**
  * Test for skin changing observer
- *
- * @group module:Mage_DesignEditor
  */
 class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
 {

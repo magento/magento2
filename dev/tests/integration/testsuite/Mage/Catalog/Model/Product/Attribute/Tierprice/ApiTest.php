@@ -28,7 +28,6 @@
 /**
  * Test class for Mage_Catalog_Model_Product_Attribute_Tierprice_Api
  *
- * @group module:Mage_Catalog
  * @magentoDataFixture Mage/Catalog/_files/product_simple.php
  */
 class Mage_Catalog_Model_Product_Attribute_Tierprice_ApiTest extends PHPUnit_Framework_TestCase

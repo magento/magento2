@@ -28,8 +28,6 @@
 /**
  * As far none class is present as separate bundle product,
  * this test is clone of Mage_Catalog_Model_Product with product type "bundle"
- *
- * @group module:Mage_Bundle
  */
 class Mage_Bundle_Model_ProductTest extends PHPUnit_Framework_TestCase
 {

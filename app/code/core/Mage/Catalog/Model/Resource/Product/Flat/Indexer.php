@@ -121,9 +121,6 @@ class Mage_Catalog_Model_Resource_Product_Flat_Indexer extends Mage_Index_Model_
             foreach (Mage::app()->getStores() as $store) {
                 $this->rebuild($store->getId());
             }
-            $flag = $this->getFlatHelper()->getFlag();
-            $flag->setIsBuild(true)->save();
-
             return $this;
         }
 
@@ -137,6 +134,8 @@ class Mage_Catalog_Model_Resource_Product_Flat_Indexer extends Mage_Index_Model_
         $this->updateRelationProducts($storeId);
         $this->cleanRelationProducts($storeId);
 
+        $flag = $this->getFlatHelper()->getFlag();
+        $flag->setIsBuilt(true)->save();
         return $this;
     }
 
@@ -1322,8 +1321,6 @@ class Mage_Catalog_Model_Resource_Product_Flat_Indexer extends Mage_Index_Model_
                 throw $e;
            }
         }
-        $flag = $this->getFlatHelper()->getFlag();
-        $flag->setIsBuild(true)->save();
 
         return $this;
     }
