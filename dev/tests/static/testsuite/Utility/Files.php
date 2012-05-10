@@ -332,7 +332,12 @@ class Utility_Files
              * of file names
              */
             if (realpath($fullPath) == $fullPath) {
-                return true;
+                $fileContent = file_get_contents($fullPath);
+                if (strpos($fileContent, $class) !== false
+                    && preg_match('/class\s*' . preg_quote($class) . '/', $fileContent)
+                ) {
+                    return true;
+                }
             }
         }
         return false;

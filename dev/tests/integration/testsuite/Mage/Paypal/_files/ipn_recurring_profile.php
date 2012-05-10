@@ -18,41 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Payment
+ * @category    Magento
+ * @package     Mage_Paypal
+ * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Cash on delivery payment method model
- */
-class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method_Abstract
-{
-
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code  = 'cashondelivery';
-
-    /**
-     * Cash On Delivery payment block paths
-     *
-     * @var string
-     */
-    protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
-
-    /**
-     * Get instructions text from config
-     *
-     * @return string
-     */
-    public function getInstructions()
-    {
-        return trim($this->getConfigData('instructions'));
-    }
-
-}
+return array (
+    'mc_gross'             => '100.00',
+    'invoice'              => '100000001',
+    'payment_status'       => 'Completed',
+    'mc_currency'          => 'USD',
+    'receiver_email'       => 'merchant_2012050718_biz@example.com',
+    'period_type'          => 'Trial',
+    'txn_type'             => 'recurring_payment',
+    'recurring_payment_id' => 'I-C76MC3FM2HBX',
+    'rp_invoice_id'        => '5-33949e201adc4b03fbbceafccba893ce',
+);

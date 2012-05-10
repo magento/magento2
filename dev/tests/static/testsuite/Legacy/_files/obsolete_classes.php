@@ -78,6 +78,9 @@ return array(
     'Mage_Payment_Block_Info_Container' => array(
         'suggestion' => 'Mage_Payment_Block_Info_ContainerAbstract'
     ),
+    'Mage_Payment_Block_Info_Banktransfer' => array(
+        'suggestion' => 'Mage_Payment_Block_Info_Instructions'
+    ),
     'Mage_Poll_Block_Poll',
     'Mage_ProductAlert_Block_Price',
     'Mage_ProductAlert_Block_Stock',

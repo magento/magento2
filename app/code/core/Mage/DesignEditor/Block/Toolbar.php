@@ -55,4 +55,17 @@ class Mage_DesignEditor_Block_Toolbar extends Mage_Core_Block_Template
             ->getMessages(true)
             ->getItems();
     }
+
+    /**
+     * Get configuration options for Visual Design Editor as JSON
+     *
+     * @return string
+     */
+    public function getOptionsJson()
+    {
+        $options = array(
+            'cookie_highlighting_name' => Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING,
+        );
+        return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($options);
+    }
 }

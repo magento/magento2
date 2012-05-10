@@ -127,7 +127,7 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setStoreId(1)
     ->setWebsiteIds(array(1))
     ->setName('Simple Product Two')
-    ->setSku('simple_product_two')
+    ->setSku('12345') // SKU intentionally contains digits only
     ->setPrice(45.67)
     ->setWeight(56)
     ->setCategoryIds(array(5))

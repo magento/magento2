@@ -36,9 +36,7 @@
 <script type="text/javascript">
 (function ($) {
     $(document).ready(function () {
-        designEditor = new DesignEditor({
-            'cookie_highlighting_name': '<?php echo Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING; ?>'
-        });
+        designEditor = new DesignEditor(<?php echo $this->getOptionsJson(); ?>);
 
         $('.vde_toolbar_cell_title').click(function(){
             var cellElement = $(this).parents('.vde_toolbar_cell');

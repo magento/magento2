@@ -41,27 +41,14 @@ abstract class Magento_Config_XmlAbstract
      * Instantiate with the list of files to merge
      *
      * @param array $configFiles
-     * @param Zend_Cache_Core $cache
-     * @throws Magento_Exception
+     * @throws InvalidArgumentException
      */
-    public function __construct(array $configFiles, Zend_Cache_Core $cache = null)
+    public function __construct(array $configFiles)
     {
         if (empty($configFiles)) {
-            throw new Magento_Exception('There must be at least one configuration file specified.');
-        }
-        $cacheId = null;
-        if ($cache) {
-            $cacheId = 'CONFIG_XML_' . md5(implode('|', $configFiles));
-            $cachedData = $cache->load($cacheId);
-            if ($cachedData !== false) {
-                $this->_data = unserialize($cachedData);
-                return;
-            }
+            throw new InvalidArgumentException('There must be at least one configuration file specified.');
         }
         $this->_data = $this->_extractData($this->_merge($configFiles));
-        if ($cache) {
-            $cache->save(serialize($this->_data), $cacheId);
-        }
     }
 
     /**

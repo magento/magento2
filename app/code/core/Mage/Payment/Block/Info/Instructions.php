@@ -25,34 +25,37 @@
  */
 
 /**
- * Cash on delivery payment method model
+ * Block for Bank Transfer payment generic info
  */
-class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method_Abstract
+class Mage_Payment_Block_Info_Instructions extends Mage_Payment_Block_Info
 {
-
     /**
-     * Payment method code
+     * Instructions text
      *
      * @var string
      */
-    protected $_code  = 'cashondelivery';
+    protected $_instructions;
+
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setTemplate('info/instructions.phtml');
+    }
 
     /**
-     * Cash On Delivery payment block paths
-     *
-     * @var string
-     */
-    protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
-
-    /**
-     * Get instructions text from config
+     * Get instructions text from order payment
+     * (or from config, if instructions are missed in payment)
      *
      * @return string
      */
     public function getInstructions()
     {
-        return trim($this->getConfigData('instructions'));
+        if (is_null($this->_instructions)) {
+            $this->_instructions = $this->getInfo()->getAdditionalInformation('instructions');
+            if(empty($this->_instructions)) {
+                $this->_instructions = $this->getMethod()->getInstructions();
+            }
+        }
+        return $this->_instructions;
     }
-
 }

@@ -28,9 +28,9 @@
 -->
 <design>
     <package code="a">
-        <title>Z</title>
-        <theme code="d" version="0.0.0.1" parent="default">
-            <title>Z</title>
+        <title>Package A</title>
+        <theme code="d" version="0.0.0.1">
+            <title>Theme D</title>
             <requirements>
                 <magento_version from="0.0.0.1" to="0.0.0.1"/>
             </requirements>

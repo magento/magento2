@@ -50,6 +50,8 @@ abstract class Mage_Core_Controller_Varien_Action
     const PARAM_NAME_BASE64_URL         = 'r64';
     const PARAM_NAME_URL_ENCODED        = 'uenc';
 
+    const XML_PAGE_TYPE_RENDER_INHERITED = 'dev/page_type/render_inherited';
+
     /**
      * Request object
      *
@@ -298,10 +300,10 @@ abstract class Mage_Core_Controller_Varien_Action
      */
     public function addActionLayoutHandles()
     {
-        /*
-         * @todo Use addPageLayoutHandles() as soon as page type inheritance declarations are correct
-         */
-        $this->getLayout()->getUpdate()->addHandle($this->getDefaultLayoutHandle());
+        $isRenderByInherited = Mage::getStoreConfig(self::XML_PAGE_TYPE_RENDER_INHERITED);
+        if (!$isRenderByInherited || !$this->addPageLayoutHandles()) {
+            $this->getLayout()->getUpdate()->addHandle($this->getDefaultLayoutHandle());
+        }
         return $this;
     }
 

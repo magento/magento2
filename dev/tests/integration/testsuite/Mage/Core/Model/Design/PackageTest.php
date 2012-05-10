@@ -110,12 +110,25 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetLocaleFileName()
+    /**
+     * @param string $file
+     * @expectedException Magento_Exception
+     * @dataProvider extractScopeExceptionDataProvider
+     */
+    public function testExtractScopeException($file)
     {
-        $this->assertFileExists($this->_model->getLocaleFileName('translate.csv'));
-        $this->assertFileExists($this->_model->getLocaleFileName('fallback.csv', array(
-            '_package' => 'package', '_theme' => 'custom_theme'
-        )));
+        $this->_model->getFilename($file, array());
+    }
+
+    public function extractScopeExceptionDataProvider()
+    {
+        return array(
+            array('::no_scope.ext'),
+            array('./file.ext'),
+            array('../file.ext'),
+            array('dir/./file.ext'),
+            array('dir/../file.ext'),
+        );
     }
 
     public function testGetOptimalCssUrls()

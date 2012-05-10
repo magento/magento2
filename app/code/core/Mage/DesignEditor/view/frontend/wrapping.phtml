@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /** @var $this Mage_Core_Block_Template */ ?>
+<?php /** @var $this Mage_DesignEditor_Block_Template */ ?>
 <?php
 $elementId = $this->getElementId();
 $elementHtml = $this->getElementHtml();
-$hideWrapping = Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled();
+$hideWrapping = $this->isHighlightingDisabled();
 $cssClass = 'vde_element_wrapper'
     . ($this->getIsDraggable() ? ' vde_draggable' : '')
     . ($this->getIsContainer() ? ' vde_container' : '')
@@ -40,7 +40,7 @@ $cssClass = 'vde_element_wrapper'
         <?php echo $elementHtml; ?>
     <?php endif; ?>
 </div>
-<?php if ($hideWrapping && $elementHtml) : ?>
+<?php if ($hideWrapping && strlen($elementHtml)) : ?>
     <!--start_<?php echo $elementId; ?>-->
     <?php echo $elementHtml; ?>
     <!--end_<?php echo $elementId; ?>-->

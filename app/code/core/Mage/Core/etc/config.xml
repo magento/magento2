@@ -194,6 +194,9 @@
             <js>
                 <merge_files>0</merge_files>
             </js>
+            <page_type>
+                <render_inherited>0</render_inherited>
+            </page_type>
         </dev>
         <system>
             <smtp>

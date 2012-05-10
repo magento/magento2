@@ -353,7 +353,7 @@ return array(
     'useValidateHttpXForwardedFor' => array('class_scope' => 'Mage_Core_Model_Session_Abstract'),
     'useValidateHttpUserAgent' => array('class_scope' => 'Mage_Core_Model_Session_Abstract'),
     'updateTable' => array('class_scope' => 'Mage_Core_Model_Resource_Setup'),
-    'urlEscape' => array('suggestion' => 'urlEscape'),
+    'urlEscape' => array('suggestion' => 'escapeUrl'),
     'validateDataArray' => array('class_scope' => 'Varien_Convert_Container_Abstract'),
     'validateFile' => array('class_scope' => 'Mage_Core_Model_Design_Package'),
     'validateOrder' => array('class_scope' => 'Mage_Checkout_Model_Type_Onepage'),

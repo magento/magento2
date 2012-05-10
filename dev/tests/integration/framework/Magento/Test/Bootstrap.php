@@ -260,10 +260,7 @@ class Magento_Test_Bootstrap
             require_once $this->_magentoDir . '/app/bootstrap.php';
         } else {
             $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
-            Mage::reset();
-            Varien_Data_Form::setElementRenderer(null);
-            Varien_Data_Form::setFieldsetRenderer(null);
-            Varien_Data_Form::setFieldsetElementRenderer(null);
+            $this->_resetApp();
             if ($resource) {
                 Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
             }
@@ -296,6 +293,17 @@ class Magento_Test_Bootstrap
     public function getAppOptions()
     {
         return $this->_options;
+    }
+
+    /**
+     * Reset application global state
+     */
+    protected function _resetApp()
+    {
+        Mage::reset();
+        Varien_Data_Form::setElementRenderer(null);
+        Varien_Data_Form::setFieldsetRenderer(null);
+        Varien_Data_Form::setFieldsetElementRenderer(null);
     }
 
     /**

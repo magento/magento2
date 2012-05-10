@@ -38,7 +38,7 @@
         $.extend(this._options, defaultOptions, opts);
 
         if (Mage.Cookies.get(this._options['cookie_highlighting_name']) == 'off') {
-            this._addParentMarkers();
+            this._processMarkers();
         }
         this._enableDragDrop();
     };
@@ -95,7 +95,7 @@
 
     DesignEditor.prototype._turnHighlightingOn = function () {
         var thisObj = this;
-        Mage.Cookies.set(this._options['cookie_highlighting_name'], "on");
+        Mage.Cookies.clear(this._options['cookie_highlighting_name']);
         $('.vde_element_wrapper').each(function () {
             $(this)
                 .append(thisObj._getChildren($(this).attr('id')))
@@ -123,39 +123,39 @@
         return this;
     };
 
-    DesignEditor.prototype._addParentMarkers = function () {
+    DesignEditor.prototype._processMarkers = function () {
         var thisObj = this;
-        var parentsStack = [];
-        var currentParent;
+        var parentsIdsStack = [];
+        var currentParentId;
         $('*').contents().each(function(){
             if (this.nodeType == Node.COMMENT_NODE) {
                 if (this.data.substr(0, 9) == 'start_vde') {
-                    currentParent = this.data.substr(6, this.data.length);
-                    parentsStack.push(currentParent);
+                    currentParentId = this.data.substr(6, this.data.length);
+                    parentsIdsStack.push(currentParentId);
                     this.parentNode.removeChild(this);
                 } else if (this.data.substr(0, 7) == 'end_vde') {
-                    if (this.data.substr(4, this.data.length) !== currentParent) {
-                        throw "Could not find closing element for opened '" + currentParent + "' element";
+                    if (this.data.substr(4, this.data.length) !== currentParentId) {
+                        throw "Could not find closing element for opened '" + currentParentId + "' element";
                     }
-                    parentsStack.pop();
-                    currentParent = parentsStack[parentsStack.length - 1];
+                    parentsIdsStack.pop();
+                    currentParentId = parentsIdsStack[parentsIdsStack.length - 1];
                     this.parentNode.removeChild(this);
                 }
-            } else if (undefined !== currentParent) {
-                thisObj._storeChild(currentParent, this);
+            } else if (currentParentId) {
+                thisObj._storeChild(currentParentId, this);
             }
         });
     };
 
     DesignEditor.prototype._storeChild = function (parentId, child) {
-        if (undefined == this._children[parentId]) {
+        if (!this._children[parentId]) {
             this._children[parentId] = [];
         }
         this._children[parentId].push(child);
     };
 
     DesignEditor.prototype._getChildren = function (parentId) {
-        if (undefined == this._children[parentId]) {
+        if (!this._children[parentId]) {
             return [];
         }
         return this._children[parentId];

@@ -124,11 +124,26 @@ class Mage_Catalog_Model_Category_ApiTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAssignProduct()
+    /**
+     * @param int $categoryId
+     * @param int|string $productId
+     * @param string|null $identifierType
+     * @dataProvider assignProductDataProvider
+     */
+    public function testAssignProduct($categoryId, $productId, $identifierType = null)
     {
-        $this->assertEmpty($this->_model->assignedProducts(6));
-        $this->assertTrue($this->_model->assignProduct(6, 1));
-        $this->assertNotEmpty($this->_model->assignedProducts(6));
+        $this->assertEmpty($this->_model->assignedProducts($categoryId));
+        $this->assertTrue($this->_model->assignProduct($categoryId, $productId, null, $identifierType));
+        $this->assertNotEmpty($this->_model->assignedProducts($categoryId));
+    }
+
+    public function assignProductDataProvider()
+    {
+        return array(
+            'product id'           => array(1, 1),
+            'product sku implicit' => array(6, 'simple'),
+            'product sku explicit' => array(7, 12345, 'sku'),
+        );
     }
 
     /**

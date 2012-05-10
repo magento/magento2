@@ -18,41 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Payment
+ * @category    Magento
+ * @package     Mage_DesignEditor
+ * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Cash on delivery payment method model
- */
-class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method_Abstract
+class Mage_DesignEditor_Block_TemplateTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code  = 'cashondelivery';
-
-    /**
-     * Cash On Delivery payment block paths
-     *
-     * @var string
-     */
-    protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
-
-    /**
-     * Get instructions text from config
-     *
-     * @return string
-     */
-    public function getInstructions()
+    public function testIsHighlightingDisabled()
     {
-        return trim($this->getConfigData('instructions'));
+        $block = new Mage_DesignEditor_Block_Template;
+        $this->assertFalse($block->isHighlightingDisabled());
+        Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'off');
+        $this->assertTrue($block->isHighlightingDisabled());
+        Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'on');
+        $this->assertFalse($block->isHighlightingDisabled());
     }
-
 }

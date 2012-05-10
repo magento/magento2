@@ -28,30 +28,18 @@
 class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Path to skin directory of Magento installation
+     * Path to the public directory for skin files
+     *
      * @var string
      */
     protected static $_skinPublicDir;
 
     /**
      * Path for temporary fixture files. Used to test publishing changed files.
+     *
      * @var string
      */
     protected static $_fixtureTmpDir;
-
-    protected static $_cssFiles = array(
-        'css/file.css',
-        'recursive.css',
-        'recursive.gif',
-        'css/deep/recursive.css',
-        'recursive2.gif',
-        'css/body.gif',
-        'css/1.gif',
-        'h1.gif',
-        'images/h2.gif',
-        'Namespace_Module/absolute_valid_module.gif',
-        'Mage_Page/favicon.ico', // non-fixture file from real module
-    );
 
     /**
      * @var Mage_Core_Model_Design_Package
@@ -69,6 +57,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         Mage::app()->getConfig()->getOptions()->setDesignDir(
             dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design'
         );
+
         $this->_model = new Mage_Core_Model_Design_Package();
         $this->_model->setDesignTheme('test/default/default', 'frontend');
     }
@@ -80,21 +69,34 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     }
 
     /**
-     * @dataProvider getSkinUrlDataProvider
+     * Test that URL for a skin file meets expectations
+     *
+     * @param string $file
+     * @param string $expectedUrl
+     * @param string|null $locale
      */
-    public function testGetSkinUrl($file, $expectedName, $locale = null)
+    protected function _testGetSkinUrl($file, $expectedUrl, $locale = null)
     {
         Mage::app()->getLocale()->setLocale($locale);
         $url = $this->_model->getSkinUrl($file);
-        $this->assertStringEndsWith($expectedName, $url);
+        $this->assertStringEndsWith($expectedUrl, $url);
         $skinFile = $this->_model->getSkinFile($file);
         $this->assertFileExists($skinFile);
     }
 
     /**
+     * @magentoConfigFixture default/design/theme/allow_skin_files_duplication 1
+     * @dataProvider getSkinUrlFilesDuplicationDataProvider
+     */
+    public function testGetSkinUrlFilesDuplication($file, $expectedUrl, $locale = null)
+    {
+        $this->_testGetSkinUrl($file, $expectedUrl, $locale);
+    }
+
+    /**
      * @return array
      */
-    public function getSkinUrlDataProvider()
+    public function getSkinUrlFilesDuplicationDataProvider()
     {
         return array(
             'theme file' => array(
@@ -125,9 +127,9 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      * @magentoConfigFixture default/design/theme/allow_skin_files_duplication 0
      * @dataProvider testGetSkinUrlNoFilesDuplicationDataProvider
      */
-    public function testGetSkinUrlNoFilesDuplication($file, $expectedName, $locale = null)
+    public function testGetSkinUrlNoFilesDuplication($file, $expectedUrl, $locale = null)
     {
-        $this->testGetSkinUrl($file, $expectedName, $locale);
+        $this->_testGetSkinUrl($file, $expectedUrl, $locale);
     }
 
     /**
@@ -191,30 +193,8 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     public function getSkinUrlDataExceptionProvider()
     {
         return array(
-            'non-existing theme file'  => array('path/to/nonexisting-file.ext'),
-            'non-existing module file' => array('Some_Module::path/to/nonexisting-file.ext'),
-        );
-    }
-
-
-    /**
-     * @param string $file
-     * @expectedException Magento_Exception
-     * @dataProvider findFileExceptionDataProvider
-     */
-    public function testFindFileException($file)
-    {
-        $this->_model->getTemplateFilename($file);
-    }
-
-    public function findFileExceptionDataProvider()
-    {
-        return array(
-            array('::no_scope.ext'),
-            array('./file.ext'),
-            array('../file.ext'),
-            array('dir/./file.ext'),
-            array('dir/../file.ext'),
+            'non-existing theme file'  => array('path/to/non-existing-file.ext'),
+            'non-existing module file' => array('Some_Module::path/to/non-existing-file.ext'),
         );
     }
 
@@ -226,43 +206,25 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      * @param string $theme
      * @param string $skin
      * @param string $file
+     * @param string $expectedFile
      * @dataProvider publishSkinFileDataProvider
      */
-    public function testPublishSkinFile($application, $package, $theme, $skin, $file)
+    public function testPublishSkinFile($file, $designParams, $expectedFile)
     {
-        // determine path where a published file is to be expected
-        $expectedModule = false;
-        $targetFile   = $file;
-        if (false !== strpos($file, '::')) {
-            $targetFile = explode('::', $file);
-            $expectedModule = $targetFile[0];
-            $targetFile = $targetFile[1];
-        }
-        $path = array(Mage::getBaseDir('media'), 'skin', $application, $package, $theme, $skin, 'en_US');
-        if ($expectedModule) {
-            $path[] = $expectedModule;
-        }
-        $path[] = $targetFile;
-        $targetFile = implode(DIRECTORY_SEPARATOR, $path);
+        $expectedFile = self::$_skinPublicDir . '/' . $expectedFile;
 
         // test doesn't make sense if the original file doesn't exist or the target file already exists
-        $params = array(
-            '_area'    => $application,
-            '_package' => $package,
-            '_theme'   => $theme,
-            '_skin'    => $skin,
-        );
-        $originalFile = $this->_model->getSkinFile($file, $params);
+        $originalFile = $this->_model->getSkinFile($file, $designParams);
         $this->assertFileExists($originalFile);
 
         // getSkinUrl() will trigger publication in development mode
-        $this->assertFileNotExists($targetFile, 'Please verify isolation from previous test(s).');
-        $this->_model->getSkinUrl($file, $params);
-        $this->assertFileExists($targetFile);
+        $this->assertFileNotExists($expectedFile, 'Please verify isolation from previous test(s).');
+        $this->_model->getSkinUrl($file, $designParams);
+        $this->assertFileExists($expectedFile);
 
         // as soon as the files are published, they must have the same mtime as originals
-        $this->assertEquals(filemtime($originalFile), filemtime($targetFile),
-            "These files mtime must be equal: {$originalFile} / {$targetFile}"
+        $this->assertEquals(filemtime($originalFile), filemtime($expectedFile),
+            "These files mtime must be equal: {$originalFile} / {$expectedFile}"
         );
     }
 
@@ -271,9 +233,23 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      */
     public function publishSkinFileDataProvider()
     {
+        $designParams = array(
+            '_area'    => 'frontend',
+            '_package' => 'test',
+            '_theme'   => 'default',
+            '_skin'    => 'default',
+        );
         return array(
-            array('frontend', 'test', 'default', 'default', 'images/logo_email.gif'),
-            array('frontend', 'test', 'default', 'default', 'Mage_Page::favicon.ico'),
+            'skin file' => array(
+                'images/logo_email.gif',
+                $designParams,
+                'frontend/test/default/default/en_US/images/logo_email.gif',
+            ),
+            'skin modular file' => array(
+                'Mage_Page::favicon.ico',
+                $designParams,
+                'frontend/test/default/default/en_US/Mage_Page/favicon.ico',
+            ),
         );
     }
 
@@ -282,17 +258,26 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      */
     public function testPublishCssFileFromTheme()
     {
+        $expectedFiles = array(
+            'css/file.css',
+            'recursive.css',
+            'recursive.gif',
+            'css/deep/recursive.css',
+            'recursive2.gif',
+            'css/body.gif',
+            'css/1.gif',
+            'h1.gif',
+            'images/h2.gif',
+            'Namespace_Module/absolute_valid_module.gif',
+            'Mage_Page/favicon.ico', // non-fixture file from real module
+        );
         $publishedDir = self::$_skinPublicDir . '/frontend/package/default/theme/en_US';
         $this->assertFileNotExists($publishedDir, 'Please verify isolation from previous test(s).');
-        $this->_model->getSkinUrl('css/file.css', array(
-            '_package' => 'package',
-            '_skin' => 'theme',
-        ));
-        foreach (self::$_cssFiles as $file) {
+        $this->_model->getSkinUrl('css/file.css', array('_package' => 'package', '_skin' => 'theme'));
+        foreach ($expectedFiles as $file) {
             $this->assertFileExists("{$publishedDir}/{$file}");
         }
         $this->assertFileNotExists("{$publishedDir}/absolute.gif");
-        $this->assertFileNotExists(dirname($publishedDir) . '/access_violation.php');
     }
 
     /**

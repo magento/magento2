@@ -403,10 +403,10 @@ class Mage_Core_Model_Design_Package
         $area = $params['_area'];
         $package = $params['_package'];
         $theme = $params['_theme'];
-        while ($theme) {
+        do {
             $dirs[] = "{$dir}/{$area}/{$package}/{$theme}/locale/{$locale}";
             list($package, $theme) = $this->_getInheritedTheme($area, $package, $theme);
-        }
+        } while ($theme);
 
         return $this->_fallback($file, $dirs);
     }
@@ -1236,11 +1236,13 @@ class Mage_Core_Model_Design_Package
      */
     public function getThemeConfig($area)
     {
-        if (!isset($this->_themeConfigs[$area])) {
-            $themeConfigFiles = glob(Mage::getBaseDir('design') . "/{$area}/*/*/theme.xml", GLOB_NOSORT);
-            $this->_themeConfigs[$area] = new Magento_Config_Theme($themeConfigFiles, Mage::app()->getCache());
+        if (isset($this->_themeConfigs[$area])) {
+            return $this->_themeConfigs[$area];
         }
-        return $this->_themeConfigs[$area];
+        $configFiles = glob(Mage::getBaseDir('design') . "/{$area}/*/*/theme.xml", GLOB_NOSORT);
+        $config = new Magento_Config_Theme($configFiles);
+        $this->_themeConfigs[$area] = $config;
+        return $config;
     }
 
     /**
@@ -1275,14 +1277,13 @@ class Mage_Core_Model_Design_Package
             return $this->_viewConfigs[$key];
         }
 
-        $files = Mage::getConfig()->getModuleConfigurationFiles('view.xml');
-        $themeFile = $this->getFilename('view.xml', array());
-        if (file_exists($themeFile)) {
-            $files[] = $themeFile;
+        $configFiles = Mage::getConfig()->getModuleConfigurationFiles('view.xml');
+        $themeConfigFile = $this->getFilename('view.xml', array());
+        if (file_exists($themeConfigFile)) {
+            $configFiles[] = $themeConfigFile;
         }
+        $config = new Magento_Config_View($configFiles);
 
-        /** @var Magento_Config_View $config */
-        $config = new Magento_Config_View($files, Mage::app()->getCache());
         $this->_viewConfigs[$key] = $config;
         return $config;
     }

@@ -39,7 +39,7 @@ class Mage_Payment_Block_InfoTest extends PHPUnit_Framework_TestCase
 
         $paymentInfoBank = new Mage_Payment_Model_Info;
         $paymentInfoBank->setMethodInstance(new Mage_Payment_Model_Method_Banktransfer);
-        $childBank = $layout->addBlock('Mage_Payment_Block_Info_Banktransfer', 'child.one', 'block');
+        $childBank = $layout->addBlock('Mage_Payment_Block_Info_Instructions', 'child.one', 'block');
         $childBank->setInfo($paymentInfoBank)
             ->setArea('adminhtml');
 

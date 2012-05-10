@@ -18,41 +18,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Payment
+ * @category    Magento
+ * @package     Mage_Paypal
+ * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Cash on delivery payment method model
- */
-class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method_Abstract
-{
+$addressData = include(__DIR__ . '/address_data.php');
+$billingAddress = new Mage_Sales_Model_Order_Address($addressData);
+$billingAddress->setAddressType('billing');
 
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code  = 'cashondelivery';
+$shippingAddress = clone $billingAddress;
+$shippingAddress->setId(null)
+    ->setAddressType('shipping');
 
-    /**
-     * Cash On Delivery payment block paths
-     *
-     * @var string
-     */
-    protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
+$payment = new Mage_Sales_Model_Order_Payment();
+$payment->setMethod(Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS);
 
-    /**
-     * Get instructions text from config
-     *
-     * @return string
-     */
-    public function getInstructions()
-    {
-        return trim($this->getConfigData('instructions'));
-    }
-
-}
+$order = new Mage_Sales_Model_Order();
+$order->setIncrementId('100000001')
+    ->setSubtotal(100)
+    ->setBaseSubtotal(100)
+    ->setBaseGrandTotal(100)
+    ->setBaseCurrencyCode('USD')
+    ->setCustomerIsGuest(true)
+    ->setStoreId(1)
+    ->setEmailSent(1)
+    ->setBillingAddress($billingAddress)
+    ->setShippingAddress($shippingAddress)
+    ->setPayment($payment);
+$order->save();

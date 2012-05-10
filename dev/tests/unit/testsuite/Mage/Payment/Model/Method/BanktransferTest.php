@@ -18,41 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
+ * @category    Magento
  * @package     Mage_Payment
+ * @subpackage  unit_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Cash on delivery payment method model
- */
-class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method_Abstract
+class Mage_Payment_Model_Method_BanktransferTest extends PHPUnit_Framework_TestCase
 {
-
     /**
-     * Payment method code
-     *
-     * @var string
+     * @var Mage_Payment_Model_Method_Banktransfer
      */
-    protected $_code  = 'cashondelivery';
+    protected $_object;
 
-    /**
-     * Cash On Delivery payment block paths
-     *
-     * @var string
-     */
-    protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
-
-    /**
-     * Get instructions text from config
-     *
-     * @return string
-     */
-    public function getInstructions()
+    protected function setUp()
     {
-        return trim($this->getConfigData('instructions'));
+        $this->_object = new Mage_Payment_Model_Method_Banktransfer;
     }
 
+    public function testGetInfoBlockType()
+    {
+        $this->assertEquals('Mage_Payment_Block_Info_Instructions', $this->_object->getInfoBlockType());
+    }
 }

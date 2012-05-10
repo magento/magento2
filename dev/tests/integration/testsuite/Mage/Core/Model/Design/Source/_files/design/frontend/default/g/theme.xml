@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 /**
  * Magento
  *
@@ -18,27 +19,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     Mage_DesignEditor
+ * @category    Magento
+ * @package     Magento_Core
+ * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php /** @var $this Mage_DesignEditor_Block_Template */ ?>
-<div class="vde_toolbar_cell">
-    <div class="vde_toolbar_cell_title"><?php echo $this->__('View Options'); ?></div>
-    <div class="vde_toolbar_cell_content">
-            <div id="vde_highlighting" class="vde_cell_list_item<?php if (!$this->isHighlightingDisabled()) echo ' checked'; ?>">
-                <?php echo $this->__('Highlight Elements'); ?>
-            </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-jQuery(document).ready(function () {
-    jQuery('#vde_highlighting').click(function(){
-        jQuery(this).toggleClass('checked');
-        designEditor.highlight(jQuery(this).hasClass('checked'));
-    });
-});
-</script>
+-->
+<design>
+    <package code="default">
+        <title>Default</title>
+        <theme code="g" version="0.0.0.1" parent="default">
+            <title>Theme G</title>
+            <requirements>
+                <magento_version from="0.0.0.1" to="0.0.0.1"/>
+            </requirements>
+        </theme>
+    </package>
+</design>

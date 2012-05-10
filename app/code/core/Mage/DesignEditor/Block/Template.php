@@ -19,43 +19,23 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Payment
+ * @package     Mage_DesignEditor
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Block for Bank Transfer payment generic info
+ * Extended template block for Visual Design Editor
  */
-class Mage_Payment_Block_Info_Banktransfer extends Mage_Payment_Block_Info
+class Mage_DesignEditor_Block_Template extends Mage_Core_Block_Template
 {
     /**
-     * Instructions text
+     * Check whether highlighting of elements is disabled or not
      *
-     * @var string
+     * @return bool
      */
-    protected $_instructions;
-
-    protected function _construct()
+    public function isHighlightingDisabled()
     {
-        parent::_construct();
-        $this->setTemplate('info/banktransfer.phtml');
-    }
-
-    /**
-     * Get instructions text from order payment
-     * (or from config, if instructions are missed in payment)
-     *
-     * @return string
-     */
-    public function getInstructions()
-    {
-        if (is_null($this->_instructions)) {
-            $this->_instructions = $this->getInfo()->getAdditionalInformation('instructions');
-            if(empty($this->_instructions)) {
-                $this->_instructions = $this->getMethod()->getInstructions();
-            }
-        }
-        return $this->_instructions;
+        return Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled();
     }
 }

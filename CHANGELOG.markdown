@@ -1,3 +1,16 @@
+Update as of 5/09/2012
+======================
+* Implemented configuration option that enables the page types hierarchy usage during the page generation
+* Removed theme/view config files caching in favour of the view files map to be implemented in the future
+* Fixed some issues:
+  * Fixed persistent elements highlighting for the Visual Design Editor
+  * Fixed instruction text absence for the "Cash On Delivery Payment" payment method
+  * Fixed suggestion text for the 'urlEscape' method in the legacy test
+  * Fixed "Manage Currency Symbols" system configuration page
+  * Fixed currency validation for the PayPal Website Payments Standard
+  * Fixed Web API for product to category assignment by SKU containing digits only
+* Implemented new tests
+
 Update as of 5/05/2012
 ======================
 * Added theme inheritance ability

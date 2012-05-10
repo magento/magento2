@@ -101,6 +101,48 @@ class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestC
     }
 
     /**
+     * Test for the locale translation files fallback
+     *
+     * @param string $file
+     * @param array $designParams
+     * @param string|null $expectedFilename
+     *
+     * @dataProvider getLocaleFileFallbackDataProvider
+     */
+    public function testLocaleFileFallback($file, array $designParams, $expectedFilename)
+    {
+        $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
+        $actualFilename = $this->_model->getLocaleFileName($file, $designParams);
+        if ($expectedFilename) {
+            $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
+            $this->assertFileExists($actualFilename);
+        } else {
+            $this->assertFileNotExists($actualFilename);
+        }
+    }
+
+    public function getLocaleFileFallbackDataProvider()
+    {
+        return array(
+            'no default theme inheritance' => array(
+                'fixture_translate.csv',
+                array('_package' => 'package', '_theme' => 'standalone_theme'),
+                null
+            ),
+            'parent theme' => array(
+                'fixture_translate_two.csv',
+                array('_package' => 'package', '_theme' => 'custom_theme_descendant'),
+                "%s/frontend/package/custom_theme/locale/en_US/fixture_translate_two.csv",
+            ),
+            'grandparent theme' => array(
+                'fixture_translate.csv',
+                array('_package' => 'package', '_theme' => 'custom_theme_descendant'),
+                "%s/frontend/package/default/locale/en_US/fixture_translate.csv",
+            ),
+        );
+    }
+
+    /**
      * Test for the skin files fallback according to the themes inheritance
      *
      * @param string $skinFile
