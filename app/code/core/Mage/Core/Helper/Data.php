@@ -38,6 +38,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
     const XML_PATH_CACHE_BETA_TYPES             = 'global/cache/betatypes';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
+    const XML_PATH_IMAGE_ADAPTER                = 'dev/image/adapter';
 
     const CHARS_LOWERS                          = 'abcdefghijklmnopqrstuvwxyz';
     const CHARS_UPPERS                          = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -59,6 +60,11 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * Const for correct dividing decimal values
      */
     const DIVIDE_EPSILON = 10000;
+
+    /**
+     * Config path to mail sending setting that shows if email communications are disabled
+     */
+    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
     /**
      * @var Mage_Core_Model_Encryption
@@ -785,5 +791,15 @@ XML;
         }
 
         return $remainder;
+    }
+
+    /**
+     * Returns image adapter type
+     *
+     * @return string
+     */
+    public function getImageAdapterType()
+    {
+        return Mage::getStoreConfig(self::XML_PATH_IMAGE_ADAPTER);
     }
 }

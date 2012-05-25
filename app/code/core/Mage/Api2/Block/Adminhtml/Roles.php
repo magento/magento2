@@ -40,7 +40,7 @@ class Mage_Api2_Block_Adminhtml_Roles extends Mage_Adminhtml_Block_Widget_Grid_C
     {
         parent::__construct();
 
-        $this->_blockGroup = 'api2';
+        $this->_blockGroup = 'Mage_Api2';
         $this->_controller = 'adminhtml_roles';
         $this->_headerText = Mage::helper('Mage_Adminhtml_Helper_Data')->__('REST Roles');
 

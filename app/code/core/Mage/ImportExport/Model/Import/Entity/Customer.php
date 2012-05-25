@@ -206,6 +206,13 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
     protected $_websiteIdToCode = array();
 
     /**
+     * Invalid flag for next address rows
+     *
+     * @var boolean
+     */
+    protected $_errorRow = false;
+
+    /**
      * Constructor.
      *
      * @return void
@@ -236,7 +243,8 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (self::SCOPE_DEFAULT == $this->getRowScope($rowData) && $this->validateRow($rowData, $rowNum)) {
-                    $idToDelete[] = $this->_oldCustomers[$rowData[self::COL_EMAIL]][$rowData[self::COL_WEBSITE]];
+                    $emailToLower = strtolower($rowData[self::COL_EMAIL]);
+                    $idToDelete[] = $this->_oldCustomers[$emailToLower][$rowData[self::COL_WEBSITE]];
                 }
             }
             if ($idToDelete) {
@@ -311,6 +319,7 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
     {
         foreach (Mage::getResourceModel('Mage_Customer_Model_Resource_Customer_Collection') as $customer) {
             $email = $customer->getEmail();
+            $email = strtolower($email);
 
             if (!isset($this->_oldCustomers[$email])) {
                 $this->_oldCustomers[$email] = array();
@@ -384,8 +393,9 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
                                         ? now() : gmstrftime($strftimeFormat, strtotime($rowData['created_at'])),
                         'updated_at' => now()
                     );
-                    if (isset($this->_oldCustomers[$rowData[self::COL_EMAIL]][$rowData[self::COL_WEBSITE]])) { // edit
-                        $entityId = $this->_oldCustomers[$rowData[self::COL_EMAIL]][$rowData[self::COL_WEBSITE]];
+                    $emailToLower = strtolower($rowData[self::COL_EMAIL]);
+                    if (isset($this->_oldCustomers[$emailToLower][$rowData[self::COL_WEBSITE]])) { // edit
+                        $entityId = $this->_oldCustomers[$emailToLower][$rowData[self::COL_WEBSITE]];
                         $entityRow['entity_id'] = $entityId;
                         $entityRowsUp[] = $entityRow;
                     } else { // create
@@ -394,11 +404,11 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
                         $entityRow['entity_type_id']   = $this->_entityTypeId;
                         $entityRow['attribute_set_id'] = 0;
                         $entityRow['website_id']       = $this->_websiteCodeToId[$rowData[self::COL_WEBSITE]];
-                        $entityRow['email']            = $rowData[self::COL_EMAIL];
+                        $entityRow['email']            = $emailToLower;
                         $entityRow['is_active']        = 1;
                         $entityRowsIn[]                = $entityRow;
 
-                        $this->_newCustomers[$rowData[self::COL_EMAIL]][$rowData[self::COL_WEBSITE]] = $entityId;
+                        $this->_newCustomers[$emailToLower][$rowData[self::COL_WEBSITE]] = $entityId;
                     }
                     // attribute values
                     foreach (array_intersect_key($rowData, $this->_attributes) as $attrCode => $value) {
@@ -490,6 +500,7 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
      */
     public function getCustomerId($email, $websiteCode)
     {
+        $email = strtolower($email);
         if (isset($this->_oldCustomers[$email][$websiteCode])) {
             return $this->_oldCustomers[$email][$websiteCode];
         } elseif (isset($this->_newCustomers[$email][$websiteCode])) {
@@ -518,6 +529,9 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
      */
     public function getRowScope(array $rowData)
     {
+        if (!isset($rowData[self::COL_EMAIL])) {
+            return self::SCOPE_ADDRESS;
+        }
         return strlen(trim($rowData[self::COL_EMAIL])) ? self::SCOPE_DEFAULT : self::SCOPE_ADDRESS;
     }
 
@@ -533,6 +547,26 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
     }
 
     /**
+     * Set row as invalid for next address rows
+     *
+     * @param boolean $error
+     */
+    public function setRowError($error)
+    {
+        $this->_errorRow = $error;
+    }
+
+    /**
+     * Get error row flag
+     *
+     * @return boolean
+     */
+    public function getRowError()
+    {
+        return $this->_errorRow;
+    }
+
+    /**
      * Validate data row.
      *
      * @param array $rowData
@@ -541,8 +575,8 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
      */
     public function validateRow(array $rowData, $rowNum)
     {
-        static $email   = null; // e-mail is remembered through all customer rows
-        static $website = null; // website is remembered through all customer rows
+        $email   = null;
+        $website = null;
 
         if (isset($this->_validatedRows[$rowNum])) { // check that row is already validated
             return !isset($this->_invalidRows[$rowNum]);
@@ -551,25 +585,25 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
 
         $rowScope = $this->getRowScope($rowData);
 
-        if (self::SCOPE_DEFAULT == $rowScope) {
-            $this->_processedEntitiesCount ++;
-        }
         // BEHAVIOR_DELETE use specific validation logic
         if (Mage_ImportExport_Model_Import::BEHAVIOR_DELETE == $this->getBehavior()) {
+            $email = strtolower($rowData[self::COL_EMAIL]);
             if (self::SCOPE_DEFAULT == $rowScope
-                    && !isset($this->_oldCustomers[$rowData[self::COL_EMAIL]][$rowData[self::COL_WEBSITE]])) {
+                    && !isset($this->_oldCustomers[$email][$rowData[self::COL_WEBSITE]])) {
                 $this->addRowError(self::ERROR_EMAIL_SITE_NOT_FOUND, $rowNum);
             }
         } elseif (self::SCOPE_DEFAULT == $rowScope) { // row is SCOPE_DEFAULT = new customer block begins
-            $email   = $rowData[self::COL_EMAIL];
+            $this->_processedEntitiesCount++;
+            $email   = strtolower($rowData[self::COL_EMAIL]);
             $website = $rowData[self::COL_WEBSITE];
+            $this->setRowError(false);
 
             if (!Zend_Validate::is($email, 'EmailAddress')) {
                 $this->addRowError(self::ERROR_INVALID_EMAIL, $rowNum);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(self::ERROR_INVALID_WEBSITE, $rowNum);
             } else {
-                if (isset($this->_newCustomers[$email][$website])) {
+                if (isset($this->_newCustomers[strtolower($rowData[self::COL_EMAIL])][$website])) {
                     $this->addRowError(self::ERROR_DUPLICATE_EMAIL_SITE, $rowNum);
                 }
                 $this->_newCustomers[$email][$website] = false;
@@ -596,12 +630,12 @@ class Mage_ImportExport_Model_Import_Entity_Customer extends Mage_ImportExport_M
                 }
             }
             if (isset($this->_invalidRows[$rowNum])) {
-                $email = false; // mark row as invalid for next address rows
+                $this->setRowError(true); // mark row as invalid for next address rows
             }
         } else {
-            if (null === $email) { // first row is not SCOPE_DEFAULT
+            if (0 == $this->_processedEntitiesCount && is_null($email)) { // first row is not SCOPE_DEFAULT
                 $this->addRowError(self::ERROR_EMAIL_IS_EMPTY, $rowNum);
-            } elseif (false === $email) { // SCOPE_DEFAULT row is invalid
+            } elseif ($this->getRowError()) { // SCOPE_DEFAULT row is invalid
                 $this->addRowError(self::ERROR_ROW_IS_ORPHAN, $rowNum);
             }
         }

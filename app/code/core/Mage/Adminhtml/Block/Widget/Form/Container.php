@@ -78,7 +78,9 @@ class Mage_Adminhtml_Block_Widget_Form_Container extends Mage_Adminhtml_Block_Wi
 
     protected function _prepareLayout()
     {
-        if ($this->_blockGroup && $this->_controller && $this->_mode) {
+        if ($this->_blockGroup && $this->_controller && $this->_mode
+            && !$this->_layout->getChildName($this->_nameInLayout, 'form')
+        ) {
             $this->setChild(
                 'form',
                 $this->getLayout()->createBlock($this->_blockGroup

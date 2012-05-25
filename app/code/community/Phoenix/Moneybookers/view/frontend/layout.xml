@@ -27,7 +27,7 @@
 
 -->
 <layout version="0.1.0">
-    <moneybookers_processing_payment translate="label" type="page" parent="checkout_onepage_paymentmethod">
+    <moneybookers_processing_payment translate="label" type="page" parent="default">
         <label>Moneybookers Payment</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>

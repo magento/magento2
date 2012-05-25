@@ -34,11 +34,6 @@ class Mage_Paypal_Model_IpnTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
-            $this->markTestIncomplete(
-                'Currently "Mage/Paypal/_files/recurring_profile.php" data fixture causes problem on some db vendors.'
-            );
-        }
         $this->_model = new Mage_Paypal_Model_Ipn();
     }
 

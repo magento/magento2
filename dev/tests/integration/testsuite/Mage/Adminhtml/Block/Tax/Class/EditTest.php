@@ -31,7 +31,7 @@ class Mage_Adminhtml_Block_Tax_Class_EditTest extends PHPUnit_Framework_TestCase
     {
         $layout = new Mage_Core_Model_Layout();
         $block = $layout->createBlock('Mage_Adminhtml_Block_Tax_Class_Edit', 'block');
-        $childBlock = $layout->addBlock('Mage_Core_Block_Template', 'form', 'block');
+        $childBlock = $block->getChildBlock('form');
 
         $expected = 'a_class_type';
         $this->assertNotEquals($expected, $childBlock->getClassType());

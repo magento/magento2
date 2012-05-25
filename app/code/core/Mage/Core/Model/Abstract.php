@@ -286,7 +286,6 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             return $this;
         }
         $this->_getResource()->beginTransaction();
-        $dataCommited = false;
         try {
             $this->_beforeSave();
             if ($this->_dataSaveAllowed) {
@@ -296,14 +295,10 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             $this->_getResource()->addCommitCallback(array($this, 'afterCommitCallback'))
                 ->commit();
             $this->_hasDataChanges = false;
-            $dataCommited = true;
         } catch (Exception $e) {
             $this->_getResource()->rollBack();
             $this->_hasDataChanges = true;
             throw $e;
-        }
-        if ($dataCommited) {
-            $this->afterCommitCallback();
         }
         return $this;
     }

@@ -66,28 +66,28 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
     public function pageAction()
     {
         try {
-            $pageType = $this->getRequest()->getParam('page_type');
+            $handle = $this->getRequest()->getParam('handle');
 
             // page type format
-            if (!$pageType || !preg_match('/^[a-z][a-z\d]*(_[a-z][a-z\d]*)*$/i', $pageType)) {
-                Mage::throwException($this->__('Invalid page type specified.'));
+            if (!$handle || !preg_match('/^[a-z][a-z\d]*(_[a-z][a-z\d]*)*$/i', $handle)) {
+                Mage::throwException($this->__('Invalid page handle specified.'));
             }
 
             // whether such page type exists
-            if (!$this->getLayout()->getUpdate()->pageTypeExists($pageType)) {
-                Mage::throwException($this->__("Specified page type doesn't exist: '{$pageType}'."));
+            if (!$this->getLayout()->getUpdate()->pageHandleExists($handle)) {
+                Mage::throwException($this->__("Specified page handle doesn't exist: '{$handle}'."));
             }
 
-            $this->_fullActionName = $pageType;
+            $this->_fullActionName = $handle;
             $this->addPageLayoutHandles();
             $this->loadLayoutUpdates();
             $this->generateLayoutXml();
             Mage::getModel('Mage_DesignEditor_Model_Layout')->sanitizeLayout($this->getLayout()->getNode());
             $this->generateLayoutBlocks();
 
-            $blockPageTypes = $this->getLayout()->getBlock('design_editor_toolbar_page_types');
-            if ($blockPageTypes) {
-                $blockPageTypes->setSelectedPageType($pageType);
+            $blockHierarchy = $this->getLayout()->getBlock('design_editor_toolbar_handles_hierarchy');
+            if ($blockHierarchy) {
+                $blockHierarchy->setSelectedHandle($handle);
             }
             $blockBreadcrumbs = $this->getLayout()->getBlock('design_editor_toolbar_breadcrumbs');
             if ($blockBreadcrumbs) {

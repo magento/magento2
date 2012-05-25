@@ -69,6 +69,15 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     }
 
     /**
+     * @magentoAppIsolation enabled
+     */
+    public function testGetPublicSkinDir()
+    {
+        Mage::app()->getConfig()->getOptions()->setMediaDir(__DIR__);
+        $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'skin', $this->_model->getPublicSkinDir());
+    }
+
+    /**
      * Test that URL for a skin file meets expectations
      *
      * @param string $file

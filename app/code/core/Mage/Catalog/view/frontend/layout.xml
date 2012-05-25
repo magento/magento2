@@ -198,39 +198,26 @@ Product view
 
                 <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
 
-                <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml" translate="label">
-                    <label>Info Column Options Wrapper</label>
-                    <block type="Mage_Core_Block_Template" name="options_js" template="Mage_Catalog::product/view/options/js.phtml"/>
-                    <block type="Mage_Catalog_Block_Product_View_Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
-                        <action method="addOptionRenderer"><type>text</type><block>Mage_Catalog_Block_Product_View_Options_Type_Text</block><template>product/view/options/type/text.phtml</template></action>
-                        <action method="addOptionRenderer"><type>file</type><block>Mage_Catalog_Block_Product_View_Options_Type_File</block><template>product/view/options/type/file.phtml</template></action>
-                        <action method="addOptionRenderer"><type>select</type><block>Mage_Catalog_Block_Product_View_Options_Type_Select</block><template>product/view/options/type/select.phtml</template></action>
-                        <action method="addOptionRenderer"><type>date</type><block>Mage_Catalog_Block_Product_View_Options_Type_Date</block><template>product/view/options/type/date.phtml</template></action>
-                </block>
+                <block type="Mage_Core_Block_Template" name="product.info.container" as="options_container">
+                    <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml" translate="label">
+                        <label>Info Column Options Wrapper</label>
+                        <block type="Mage_Core_Block_Template" name="options_js" template="Mage_Catalog::product/view/options/js.phtml"/>
+                        <block type="Mage_Catalog_Block_Product_View_Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
+                            <action method="addOptionRenderer"><type>text</type><block>Mage_Catalog_Block_Product_View_Options_Type_Text</block><template>product/view/options/type/text.phtml</template></action>
+                            <action method="addOptionRenderer"><type>file</type><block>Mage_Catalog_Block_Product_View_Options_Type_File</block><template>product/view/options/type/file.phtml</template></action>
+                            <action method="addOptionRenderer"><type>select</type><block>Mage_Catalog_Block_Product_View_Options_Type_Select</block><template>product/view/options/type/select.phtml</template></action>
+                            <action method="addOptionRenderer"><type>date</type><block>Mage_Catalog_Block_Product_View_Options_Type_Date</block><template>product/view/options/type/date.phtml</template></action>
+                        </block>
                         <block type="Mage_Core_Block_Html_Calendar" name="html_calendar" as="html_calendar" template="Mage_Page::js/calendar.phtml"/>
                     </block>
-                <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml" translate="label">
-                    <label>Bottom Block Options Wrapper</label>
-                    <action method="insert"><element>product.tierprices</element></action>
-                    <block type="Mage_Catalog_Block_Product_View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
-                    <action method="append"><element>product.info.addtocart</element></action>
-                    <action method="append"><element>product.info.addto</element></action>
+                    <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml" translate="label">
+                        <label>Bottom Block Options Wrapper</label>
+                        <block type="Mage_Catalog_Block_Product_View" name="product.tierprices.additional" as="product.tierprices" template="product/view/tierprices.phtml"/>
+                        <block type="Mage_Catalog_Block_Product_View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
+                        <block type="Mage_Catalog_Block_Product_View" name="product.info.addtocart.additional" as="addtocart" template="product/view/addtocart.phtml"/>
+                        <block type="Mage_Catalog_Block_Product_View" name="product.info.addto.additional" as="addto" template="product/view/addto.phtml"/>
+                    </block>
                 </block>
-
-                <block type="Mage_Core_Block_Template_Facade" name="product.info.container1" as="container1">
-                    <action method="setDataByKey"><key>alias_in_layout</key><value>container1</value></action>
-                    <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><element>product.info.options.wrapper</element></action>
-                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
-                </block>
-                <block type="Mage_Core_Block_Template_Facade" name="product.info.container2" as="container2">
-                    <action method="setDataByKey"><key>alias_in_layout</key><value>container2</value></action>
-                    <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
-                    <action method="append"><element>product.info.options.wrapper</element></action>
-                    <action method="append"><element>product.info.options.wrapper.bottom</element></action>
-                </block>
-                <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
-                <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
             </block>
         </reference>
         <reference name="right">

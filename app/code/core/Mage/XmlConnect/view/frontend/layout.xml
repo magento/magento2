@@ -37,13 +37,13 @@
 
     <!-- Catalog -->
 
-    <xmlconnect_catalog_filters translate="label" parent="xmlconnect_catalog_category">
+    <xmlconnect_catalog_filters translate="label">
         <label>XML Connect Catalog Filters</label>
         <block type="Mage_XmlConnect_Block_Catalog_Filters" name="xmlconnect.catalog.filters" output="1"/>
     </xmlconnect_catalog_filters>
 
     <!-- Category -->
-    <xmlconnect_catalog_category translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_catalog_category translate="label">
         <label>XML Connect Catalog Category</label>
         <block type="Mage_XmlConnect_Block_Catalog_Category" name="xmlconnect.catalog.category" output="1">
             <block type="Mage_XmlConnect_Block_Catalog_Product_List" name="xmlconnect.catalog.product.list" as="product_list" output="">
@@ -59,7 +59,7 @@
 
     <!-- Product -->
 
-    <xmlconnect_catalog_product translate="label" parent="xmlconnect_catalog_category">
+    <xmlconnect_catalog_product translate="label">
         <label>XML Connect Catalog Product</label>
         <block type="Mage_XmlConnect_Block_Catalog_Product" name="xmlconnect.catalog.product" output="1">
             <block type="Mage_XmlConnect_Block_Catalog_Product_Related" name="xmlconnect.product.related" as="related_products" output=""/>
@@ -82,7 +82,7 @@
         </block>
     </xmlconnect_catalog_product>
 
-    <xmlconnect_catalog_productoptions translate="label" parent="xmlconnect_catalog_product">
+    <xmlconnect_catalog_productoptions translate="label">
         <label>XML Connect Catalog Product Options</label>
         <block type="Mage_XmlConnect_Block_Catalog_Product_Options" name="xmlconnect.catalog.product.options" output="1">
             <action method="addRenderer"><type>simple</type><renderer>Mage_XmlConnect_Block_Catalog_Product_Options_Simple</renderer></action>
@@ -94,24 +94,24 @@
         </block>
     </xmlconnect_catalog_productoptions>
 
-    <xmlconnect_catalog_productgallery translate="label" parent="xmlconnect_catalog_product">
+    <xmlconnect_catalog_productgallery translate="label">
         <label>XML Connect Catalog Product Gallery</label>
         <block type="Mage_XmlConnect_Block_Catalog_Product_Gallery" name="xmlconnect.catalog.product.gallery" output="1"/>
     </xmlconnect_catalog_productgallery>
 
-    <xmlconnect_catalog_productreview translate="label" parent="xmlconnect_catalog_product">
+    <xmlconnect_catalog_productreview translate="label">
         <label>XML Connect Catalog Product Review</label>
         <block type="Mage_XmlConnect_Block_Catalog_Product_Review" name="xmlconnect.catalog.product.review" output="1"/>
     </xmlconnect_catalog_productreview>
 
-    <xmlconnect_catalog_productreviews translate="label" parent="xmlconnect_catalog_product">
+    <xmlconnect_catalog_productreviews translate="label">
         <label>XML Connect Catalog Product Review List</label>
         <block type="Mage_XmlConnect_Block_Catalog_Product_Review_List" name="xmlconnect.catalog.product.reviews" output="1"/>
     </xmlconnect_catalog_productreviews>
 
     <!-- Search -->
 
-    <xmlconnect_catalog_search translate="label" parent="xmlconnect_catalog_category">
+    <xmlconnect_catalog_search translate="label">
         <label>XML Connect Catalog Search</label>
         <block type="Mage_XmlConnect_Block_Catalog_Search" name="xmlconnect.catalog.search" output="1">
             <block type="Mage_XmlConnect_Block_Catalog_Product_List" name="xmlconnect.catalog.product.list" as="product_list" output="">
@@ -123,13 +123,13 @@
         </block>
     </xmlconnect_catalog_search>
 
-    <xmlconnect_catalog_searchsuggest translate="label" parent="xmlconnect_catalog_search">
+    <xmlconnect_catalog_searchsuggest translate="label">
          <label>XML Connect Catalog Search Suggest</label>
         <block type="Mage_XmlConnect_Block_Catalog_Search_Suggest" name="xmlconnect.catalog.search.suggest" output="1"/>
     </xmlconnect_catalog_searchsuggest>
 
     <!-- Shopping Cart -->
-    <xmlconnect_cart_index translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_cart_index translate="label">
         <label>XML Connect Cart</label>
         <block type="Mage_XmlConnect_Block_Cart" name="xmlconnect.cart" output="1">
             <action method="addItemRender"><type>simple</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>cart/item/default.phtml</template></action>
@@ -141,7 +141,7 @@
         </block>
     </xmlconnect_cart_index>
 
-    <xmlconnect_cart_info translate="label" parent="xmlconnect_cart_index">
+    <xmlconnect_cart_info translate="label">
         <label>XML Connect Cart Info</label>
         <block type="Mage_XmlConnect_Block_Cart_Info" name="xmlconnect.cart.info" as="cart_info" output="1">
             <block type="Mage_XmlConnect_Block_Cart_Totals" name="xmlconnect.cart.totals" as="totals"/>
@@ -150,12 +150,12 @@
 
     <!-- Customer -->
 
-    <xmlconnect_customer_form translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_customer_form translate="label">
         <label>XML Connect Customer Form</label>
         <block type="Mage_XmlConnect_Block_Customer_Form" name="xmlconnect.customer.form" output="1"/>
     </xmlconnect_customer_form>
 
-    <xmlconnect_wishlist_index translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_wishlist_index translate="label">
         <label>XML Connect Wishlist</label>
         <block type="Mage_XmlConnect_Block_Wishlist" name="xmlconnect.wishlist" output="1">
             <block type="Mage_XmlConnect_Block_Catalog_Product_Price" name="xmlconnect.catalog.product.price" as="product_price" output="">
@@ -165,22 +165,22 @@
         </block>
     </xmlconnect_wishlist_index>
 
-    <xmlconnect_customer_address translate="label" parent="xmlconnect_customer_form">
+    <xmlconnect_customer_address translate="label">
         <label>XML Connect Customer Address</label>
         <block type="Mage_XmlConnect_Block_Customer_Address_List" name="xmlconnect.customer.address.list" output="1"/>
     </xmlconnect_customer_address>
 
-    <xmlconnect_customer_addressform translate="label" parent="xmlconnect_customer_address">
+    <xmlconnect_customer_addressform translate="label">
         <label>XML Connect Customer Address Form</label>
         <block type="Mage_XmlConnect_Block_Customer_Address_Form" name="xmlconnect.customer.address.form" output="1"/>
     </xmlconnect_customer_addressform>
 
-    <xmlconnect_customer_orderlist translate="label" parent="xmlconnect_customer_form">
+    <xmlconnect_customer_orderlist translate="label">
         <label>XML Connect Customer Order List</label>
         <block type="Mage_XmlConnect_Block_Customer_Order_List" name="xmlconnect.customer.order.list" output="1"/>
     </xmlconnect_customer_orderlist>
 
-    <xmlconnect_customer_orderdetails translate="label" parent="xmlconnect_customer_orderlist">
+    <xmlconnect_customer_orderdetails translate="label">
         <label>XML Connect Customer Order Details</label>
         <block type="Mage_XmlConnect_Block_Customer_Order_Details" name="xmlconnect.customer.order.details" output="1">
             <block type="Mage_XmlConnect_Block_Customer_Order_Items" name="xmlconnect.customer.order.items" as="order_items" output="">
@@ -197,66 +197,66 @@
         </block>
     </xmlconnect_customer_orderdetails>
 
-    <xmlconnect_customer_storecredit translate="label" parent="xmlconnect_customer_form">
+    <xmlconnect_customer_storecredit translate="label">
         <label>XML Connect Customer Store Credit</label>
         <block type="Mage_XmlConnect_Block_Customer_Storecredit" name="xmlconnect.customer.storecredit" output="1"/>
     </xmlconnect_customer_storecredit>
 
-    <xmlconnect_customer_giftcardcheck translate="label" parent="xmlconnect_customer_form">
+    <xmlconnect_customer_giftcardcheck translate="label">
         <label>XML Connect Customer Gift Card Check</label>
         <block type="Mage_XmlConnect_Block_Customer_GiftcardCheck" name="xmlconnect.customer.giftcardCheck" output="1"/>
     </xmlconnect_customer_giftcardcheck>
 
     <!-- Configuration -->
 
-    <xmlconnect_configuration_index translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_configuration_index translate="label">
         <label>XML Connect Configuration</label>
         <block type="Mage_XmlConnect_Block_Configuration" name="xmlconnect.configuration" output="1"/>
     </xmlconnect_configuration_index>
 
     <!-- Checkout (OnePage) -->
 
-    <xmlconnect_checkout_index translate="label" parent="xmlconnect_cart_index">
+    <xmlconnect_checkout_index translate="label">
         <label>XML Connect Checkout</label>
         <block type="Mage_XmlConnect_Block_Checkout_Address_Billing" name="xmlconnect.checkout.address.billing" output="1">
             <block type="Mage_XmlConnect_Block_Customer_Address_List" name="xmlconnect.customer.address.list" as="address_list" output=""/>
         </block>
     </xmlconnect_checkout_index>
 
-    <xmlconnect_checkout_billingaddress translate="label" parent="xmlconnect_checkout_index">
+    <xmlconnect_checkout_billingaddress translate="label">
         <label>XML Connect Checkout Billing Address</label>
         <block type="Mage_XmlConnect_Block_Checkout_Address_Billing" name="xmlconnect.checkout.address.billing" output="1">
             <block type="Mage_XmlConnect_Block_Customer_Address_List" name="xmlconnect.customer.address.list" as="address_list" output=""/>
         </block>
     </xmlconnect_checkout_billingaddress>
 
-    <xmlconnect_checkout_newbillingaddressform translate="label" parent="xmlconnect_checkout_billingaddress">
+    <xmlconnect_checkout_newbillingaddressform translate="label">
         <label>XML Connect Checkout New Billing Address</label>
         <block type="Mage_XmlConnect_Block_Checkout_Address_Form" name="xmlconnect.checkout.new.billing.address.form" output="1">
             <action method="setType"><type>billing</type></action>
         </block>
     </xmlconnect_checkout_newbillingaddressform>
 
-    <xmlconnect_checkout_shippingaddress translate="label" parent="xmlconnect_checkout_index">
+    <xmlconnect_checkout_shippingaddress translate="label">
         <label>XML Connect Checkout Shipping Address</label>
         <block type="Mage_XmlConnect_Block_Checkout_Address_Shipping" name="xmlconnect.checkout.address.shipping" output="1">
             <block type="Mage_XmlConnect_Block_Customer_Address_List" name="xmlconnect.customer.address.list" as="address_list" output=""/>
         </block>
     </xmlconnect_checkout_shippingaddress>
 
-    <xmlconnect_checkout_newshippingaddressform translate="label" parent="xmlconnect_checkout_shippingaddress">
+    <xmlconnect_checkout_newshippingaddressform translate="label">
         <label>XML Connect Checkout New Shipping Address</label>
         <block type="Mage_XmlConnect_Block_Checkout_Address_Form" name="xmlconnect.checkout.new.billing.address.form" output="1">
             <action method="setType"><type>shipping</type></action>
         </block>
     </xmlconnect_checkout_newshippingaddressform>
 
-    <xmlconnect_checkout_shippingmethods translate="label" parent="xmlconnect_checkout_index">
+    <xmlconnect_checkout_shippingmethods translate="label">
         <label>XML Connect Checkout Shipping Method List</label>
         <block type="Mage_XmlConnect_Block_Checkout_Shipping_Method_Available" name="xmlconnect.checkout.shipping.method.available" output="1"/>
     </xmlconnect_checkout_shippingmethods>
 
-    <xmlconnect_checkout_paymentmethods translate="label" parent="xmlconnect_checkout_index">
+    <xmlconnect_checkout_paymentmethods translate="label">
         <label>XML Connect Checkout Payment Method List</label>
         <block type="Mage_XmlConnect_Block_Checkout_Payment_Method_List" name="xmlconnect.checkout.payment.method.list" output="1">
             <block type="Mage_XmlConnect_Block_Checkout_Payment_Method_Ccsave" name="xmlconnect.checkout.method.ccsave" as="payment_ccsave" output=""/>
@@ -268,7 +268,7 @@
         </block>
     </xmlconnect_checkout_paymentmethods>
 
-    <xmlconnect_checkout_orderreview translate="label" parent="xmlconnect_checkout_index">
+    <xmlconnect_checkout_orderreview translate="label">
         <label>XML Connect Order Review</label>
         <block type="Mage_XmlConnect_Block_Checkout_Order_Review" name="xmlconnect.checkout.order.review" output="1">
             <block type="Mage_XmlConnect_Block_Checkout_Order_Review_Info" name="xmlconnect.checkout.order.info" as="order_products">
@@ -286,19 +286,19 @@
 
     <!-- Checkout with PayPal MEP -->
 
-    <xmlconnect_paypal_mep_shippingmethods translate="label" parent="xmlconnect_checkout_shippingmethods">
+    <xmlconnect_paypal_mep_shippingmethods translate="label">
         <label>XML Connect Paypal MEP Shipping Method List</label>
         <block type="Mage_XmlConnect_Block_Checkout_Shipping_Method_Available" name="xmlconnect.checkout.shipping.method.available" output="1"/>
     </xmlconnect_paypal_mep_shippingmethods>
 
-    <xmlconnect_paypal_mep_carttotals translate="label" parent="xmlconnect_checkout_paymentmethods">
+    <xmlconnect_paypal_mep_carttotals translate="label">
         <label>XML Connect Paypal MEP Cart Totals</label>
         <block type="Mage_XmlConnect_Block_Cart_Paypal_Mep_Totals" name="xmlconnect.cart.paypal.mep.totals" output="1"/>
     </xmlconnect_paypal_mep_carttotals>
 
     <!-- Checkout with PayPal MECL -->
 
-    <xmlconnect_paypal_mecl_review translate="label" parent="xmlconnect_checkout_orderreview">
+    <xmlconnect_paypal_mecl_review translate="label">
         <label>XML Connect Paypal MECL Review</label>
         <block type="Mage_XmlConnect_Block_Cart_Paypal_Mecl_Review" name="xmlconnect.cart.paypal.mecl.review" output="1">
             <block type="Mage_XmlConnect_Block_Cart_Paypal_Mecl_Details" name="xmlconnect.cart.paypal.mecl.details" as="details">
@@ -310,28 +310,28 @@
         </block>
     </xmlconnect_paypal_mecl_review>
 
-    <xmlconnect_paypal_mecl_shippingmethods translate="label" parent="xmlconnect_checkout_shippingmethods">
+    <xmlconnect_paypal_mecl_shippingmethods translate="label">
         <label>XML Connect Paypal MECL Shipping Method List</label>
         <block type="Mage_XmlConnect_Block_Cart_Paypal_Mecl_Shippingmethods" name="xmlconnect.cart.paypal.mecl.shippingmethods" output="1"></block>
     </xmlconnect_paypal_mecl_shippingmethods>
 
     <!-- Cms -->
 
-    <xmlconnect_cms_page translate="label" parent="xmlconnect_index_index">
+    <xmlconnect_cms_page translate="label">
         <label>XML Connect CMS Page</label>
         <block type="Mage_XmlConnect_Block_Cms_Page" name="xmlconnect.cms.page" output="1"/>
     </xmlconnect_cms_page>
 
     <!-- Payment bridge -->
 
-    <xmlconnect_pbridge_result translate="label" parent="xmlconnect_checkout_paymentmethods">
+    <xmlconnect_pbridge_result translate="label">
         <label>XML Connect Payment Bridge Result</label>
         <block type="Mage_XmlConnect_Block_Checkout_Pbridge_Result" name="xmlconnect.checkout.pbridge.result" template="pbridge/result.phtml" output="1" />
     </xmlconnect_pbridge_result>
 
     <!-- Product review -->
 
-    <xmlconnect_review_form translate="label" parent="xmlconnect_customer_form">
+    <xmlconnect_review_form translate="label">
         <label>XML Connect Review Form</label>
         <block type="Mage_XmlConnect_Block_Review_Form" name="xmlconnect.review.form" output="1"/>
     </xmlconnect_review_form>

@@ -254,4 +254,14 @@ class Mage_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_Abstrac
 
         return $qty;
     }
+
+    /**
+     * Get container name, where product options should be displayed
+     *
+     * @return string
+     */
+    public function getOptionsContainer()
+    {
+        return $this->getProduct()->getOptionsContainer() == 'container1' ? 'container1' : 'container2';
+    }
 }

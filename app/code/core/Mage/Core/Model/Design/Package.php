@@ -736,7 +736,17 @@ class Mage_Core_Model_Design_Package
      */
     protected function _buildPublicSkinFilename($file)
     {
-        return Mage::getBaseDir('media')  . DIRECTORY_SEPARATOR . 'skin' . DIRECTORY_SEPARATOR . $file;
+        return $this->getPublicSkinDir() . DIRECTORY_SEPARATOR . $file;
+    }
+
+    /**
+     * Return directory for skin files publication
+     *
+     * @return string
+     */
+    public function getPublicSkinDir()
+    {
+        return Mage::getBaseDir('media')  . DIRECTORY_SEPARATOR . 'skin';
     }
 
     /**

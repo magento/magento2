@@ -1,3 +1,33 @@
+Update as of 5/23/2012
+======================
+* Published performance tests (`dev/tests/performance`)
+* Implemented support of ImageMagick library for processing images
+* Distinguished "Page Fragments" and "Pages" in layout handles declaration
+* Reduced performance drop caused by introducing containers
+* Implemented Magento_Data_Structure library which is used to handle structure of layout elements
+* Fixed some issues:
+  * Fixed error on saving newsletter template
+  * Fixed some checkout issues:
+    * order is not placed if 3D Secure is used
+    * transaction is not created if PayPal Standard is used
+    * "Purchase Order Number" field is not displayed
+    * failed checkout on concurrent user requests
+  * Fixed incorrect shipment creation: shipping and tracking information was not saved
+  * Fixed broken category page when "Use Flat Catalog Product" is enabled
+  * Fixed incorrect applying of discount to a sub-product, if more two rules are being applied
+  * Fixed broken "Edit" product link in Wishlist and Shopping Cart
+  * Fixed broken installation when "pub/media" is not writable
+  * Fixed resetting Design Theme configuration option when User-Agent Exception is added
+  * Fixed error while running unit tests, when Zend Framework is installed with PEAR
+  * Fixed incorrect processing of "before" and "after" layout instructions in case, when the instruction refers to a node, which is not processed yet
+  * Fixed broken import/export functionality
+  * Fixed broken Web Services pages in Admin Panel
+  * Fixed broken creation of URL rewrite
+  * Fixed error in Weee module caused broken view pages of configurable products with recurring profile or downloadable/bundle product
+  * Fixed error on submitting XML Connect application
+  * Fixed broken design when database is used as media storage
+* Other small changes
+
 Update as of 5/09/2012
 ======================
 * Implemented configuration option that enables the page types hierarchy usage during the page generation

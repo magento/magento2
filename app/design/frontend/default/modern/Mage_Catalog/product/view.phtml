@@ -80,8 +80,8 @@
             <?php endif;?>
 
             <?php echo $this->getChildHtml('other');?>
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php echo $this->getChildChildHtml('container1') ?>
+            <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getOptionsContainer() == 'container1'):?>
+                <?php echo $this->getChildChildHtml('options_container') ?>
             <?php endif;?>
 
         </div>
@@ -91,8 +91,8 @@
         </div>
 
         <div class="clearer"></div>
-        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-            <?php echo $this->getChildChildHtml('container2') ?>
+        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getOptionsContainer() == 'container2'):?>
+            <?php echo $this->getChildChildHtml('options_container') ?>
         <?php endif;?>
     </form>
     <script type="text/javascript">

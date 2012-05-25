@@ -176,6 +176,9 @@ class Mage_Install_Model_Installer extends Varien_Object
             $setupModel->setConfigData(Mage_Adminhtml_Block_Dashboard::XML_PATH_ENABLE_CHARTS, 0);
         }
 
+        if (!empty($data['admin_no_form_key'])) {
+            $setupModel->setConfigData('admin/security/use_form_key', 0);
+        }
 
         $unsecureBaseUrl = Mage::getBaseUrl('web');
         if (!empty($data['unsecure_base_url'])) {
@@ -210,7 +213,30 @@ class Mage_Install_Model_Installer extends Varien_Object
             $setupModel->setConfigData(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_ALLOW, $locale['currency']);
         }
 
+        if (!empty($data['order_increment_prefix'])) {
+            $this->_setOrderIncrementPrefix($setupModel, $data['order_increment_prefix']);
+        }
+
         return $this;
+    }
+
+    /**
+     * Set order number prefix
+     *
+     * @param Mage_Core_Model_Resource_Setup $setupModel
+     * @param string $orderIncrementPrefix
+     */
+    protected function _setOrderIncrementPrefix(Mage_Core_Model_Resource_Setup $setupModel, $orderIncrementPrefix)
+    {
+        $select = $setupModel->getConnection()->select()
+            ->from($setupModel->getTable('eav_entity_type'), 'entity_type_id')
+            ->where('entity_type_code=?', 'order');
+        $data = array(
+            'entity_type_id' => $setupModel->getConnection()->fetchOne($select),
+            'store_id' => '1',
+            'increment_prefix' => $orderIncrementPrefix,
+        );
+        $setupModel->getConnection()->insert($setupModel->getTable('eav_entity_store'), $data);
     }
 
     /**
@@ -314,8 +340,12 @@ class Mage_Install_Model_Installer extends Varien_Object
     public function finish()
     {
         Mage::getSingleton('Mage_Install_Model_Installer_Config')->replaceTmpInstallDate();
+
+        /* Switch application to installed mode */
+        Mage::reset();
         Mage::app()->cleanCache();
 
+        /* Enable all cache types */
         $cacheData = array();
         foreach (Mage::helper('Mage_Core_Helper_Data')->getCacheTypes() as $type => $label) {
             $cacheData[$type] = 1;

@@ -59,4 +59,7 @@
     <child_page_with_inherited_imported_containers type="page" parent="root_page_with_imported_containers">
         <label>Child Page with Inherited Imported Containers</label>
     </child_page_with_inherited_imported_containers>
+    <catalogsearch_ajax_suggest translate="label" type="fragment" owner="root_page_with_own_containers">
+        <label>Catalog Quick Search Form Suggestions</label>
+    </catalogsearch_ajax_suggest>
 </layouts>

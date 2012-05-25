@@ -26,7 +26,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<phpunit bootstrap="./framework/bootstrap.php" clors="true">
+<phpunit bootstrap="./framework/bootstrap.php">
     <testsuite name="Magento Unit Tests">
         <directory suffix="Test.php">testsuite</directory>
     </testsuite>

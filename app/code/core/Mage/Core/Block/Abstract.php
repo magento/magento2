@@ -95,7 +95,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      *
      * @param array $data
      */
-    public function __construct(array $data= array())
+    public function __construct(array $data = array())
     {
         parent::__construct($data);
         $this->_construct();
@@ -198,20 +198,6 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     }
 
     /**
-     * Returns block alias
-     *
-     * @return string
-     */
-    public function getBlockAlias()
-    {
-        $layout = $this->getLayout();
-        if (!$layout) {
-            return '';
-        }
-        return $layout->getElementAlias($this->getNameInLayout());
-    }
-
-    /**
      * Sets/changes name of a block in layout
      *
      * @param string $name
@@ -221,6 +207,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     {
         $layout = $this->getLayout();
         if (!empty($this->_nameInLayout) && $layout) {
+            if ($name === $this->_nameInLayout) {
+                return $this;
+            }
             $layout->renameElement($this->_nameInLayout, $name);
         }
         $this->_nameInLayout = $name;
@@ -268,10 +257,14 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         if (!$layout) {
             return $this;
         }
+        $thisName = $this->getNameInLayout();
+        if ($layout->getChildName($thisName, $alias)) {
+            $this->unsetChild($alias);
+        }
         if ($block instanceof self) {
             $block = $block->getNameInLayout();
         }
-        $layout->setChild($this->getNameInLayout(), $block, $alias);
+        $layout->setChild($thisName, $block, $alias);
 
         return $this;
     }
@@ -385,7 +378,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         $out = '';
         if ($alias) {
             $childName = $layout->getChildName($name, $alias);
-            $out = $layout->renderElement($childName, $useCache);
+            if ($childName) {
+                $out = $layout->renderElement($childName, $useCache);
+            }
         } else {
             foreach ($layout->getChildNames($name) as $child) {
                 $out .= $layout->renderElement($child, $useCache);
@@ -410,6 +405,9 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
             return '';
         }
         $childName = $layout->getChildName($this->getNameInLayout(), $alias);
+        if (!$childName) {
+            return '';
+        }
         $out = '';
         if ($childChildAlias) {
             $childChildName = $layout->getChildName($childName, $childChildAlias);
@@ -442,13 +440,15 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     /**
      * Insert child element into specified position
      *
+     * By default inserts as first element into children list
+     *
      * @param Mage_Core_Block_Abstract|string $element
-     * @param string|null $siblingName
+     * @param string|int|null $siblingName
      * @param bool $after
      * @param string $alias
      * @return Mage_Core_Block_Abstract|bool
      */
-    public function insert($element, $siblingName = null, $after = true, $alias = '')
+    public function insert($element, $siblingName = 0, $after = true, $alias = '')
     {
         $layout = $this->getLayout();
         if (!$layout) {
@@ -459,26 +459,21 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         } else {
             $elementName = $element;
         }
-        if (!$layout->hasElement($elementName)) {
-            Mage::logException(new Magento_Exception('Attempt to insert non-existent element: ' . $elementName));
-            return false;
-        }
-        if ($layout->isContainer($elementName)) {
-            $this->getLayout()->insertContainer($this->getNameInLayout(), $elementName, $alias, $siblingName, $after);
-        } else {
-            $this->getLayout()->insertBlock($this->getNameInLayout(), $elementName, $alias, $siblingName, $after);
-        }
+        $layout->setChild($this->_nameInLayout, $elementName, $alias);
+        $layout->reorderChild($this->_nameInLayout, $elementName, $siblingName, $after);
         return $this;
     }
 
     /**
+     * Append element to the end of children list
+     *
      * @param Mage_Core_Block_Abstract|string $element
      * @param string $alias
      * @return Mage_Core_Block_Abstract
      */
     public function append($element, $alias = '')
     {
-        return $this->insert($element, '', true, $alias);
+        return $this->insert($element, null, true, $alias);
     }
 
     /**

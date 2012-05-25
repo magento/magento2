@@ -50,7 +50,7 @@ abstract class Mage_Core_Controller_Varien_Action
     const PARAM_NAME_BASE64_URL         = 'r64';
     const PARAM_NAME_URL_ENCODED        = 'uenc';
 
-    const XML_PAGE_TYPE_RENDER_INHERITED = 'dev/page_type/render_inherited';
+    const XML_PAGE_TYPE_RENDER_INHERITED = 'global/dev/page_type/render_inherited';
 
     /**
      * Request object
@@ -300,8 +300,8 @@ abstract class Mage_Core_Controller_Varien_Action
      */
     public function addActionLayoutHandles()
     {
-        $isRenderByInherited = Mage::getStoreConfig(self::XML_PAGE_TYPE_RENDER_INHERITED);
-        if (!$isRenderByInherited || !$this->addPageLayoutHandles()) {
+        $renderInherited = (string) Mage::app()->getConfig()->getNode(self::XML_PAGE_TYPE_RENDER_INHERITED);
+        if (!$renderInherited || !$this->addPageLayoutHandles()) {
             $this->getLayout()->getUpdate()->addHandle($this->getDefaultLayoutHandle());
         }
         return $this;
@@ -377,7 +377,7 @@ abstract class Mage_Core_Controller_Varien_Action
 
         // generate blocks from xml layout
         Magento_Profiler::start('layout_generate_blocks');
-        $this->getLayout()->generateBlocks();
+        $this->getLayout()->generateElements();
         Magento_Profiler::stop('layout_generate_blocks');
 
         if(!$this->getFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT)) {

@@ -292,7 +292,7 @@ class Mage_Adminhtml_Block_System_Config_Form extends Mage_Adminhtml_Block_Widge
 
                 $id = $section->getName() . '_' . $group->getName() . '_' . $fieldPrefix . $e->getName();
 
-                if (isset($this->_configData[$path])) {
+                if (array_key_exists($path, $this->_configData)) {
                     $data = $this->_configData[$path];
                     $inherit = false;
                 } else {

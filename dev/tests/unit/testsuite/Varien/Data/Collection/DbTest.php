@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
+class Varien_Data_Collection_DbTest extends Magento_Test_TestCase_ZendDbAdapterAbstract
 {
     /**
      * @var Varien_Data_Collection_Db
@@ -79,35 +79,6 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('other_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
-    }
-
-    /**
-     * Create an adapter mock object
-     *
-     * @param string $adapterClass
-     * @param array $mockMethods
-     * @param array|null $constructArgs
-     * @param string $mockStatementMethods
-     * @return Zend_Db_Adapter_Abstract|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getAdapterMock($adapterClass, $mockMethods, $constructArgs = array(),
-        $mockStatementMethods = 'execute'
-    ) {
-        if (null == $constructArgs) {
-            $adapter = $this->getMock($adapterClass, $mockMethods, array(), '', false);
-        } else {
-            $adapter = $this->getMock($adapterClass, $mockMethods, $constructArgs);
-        }
-        if (null !== $mockStatementMethods) {
-            $statement = $this->getMock('Zend_Db_Statement', array_merge((array)$mockStatementMethods,
-                    array('closeCursor', 'columnCount', 'errorCode', 'errorInfo', 'fetch', 'nextRowset', 'rowCount')
-                ), array(), '', false
-            );
-            $adapter->expects($this->any())
-                    ->method('query')
-                    ->will($this->returnValue($statement));
-        }
-        return $adapter;
     }
 
     /**

@@ -271,14 +271,14 @@ class Varien_Image
     }
 
     /**
-     * Set watermark heigth
+     * Set watermark height
      *
-     * @param int $heigth
+     * @param int $height
      * @return Varien_Image
      */
-    public function setWatermarkHeigth($heigth)
+    public function setWatermarkHeight($height)
     {
-        $this->_getAdapter()->setWatermarkHeigth($heigth);
+        $this->_getAdapter()->setWatermarkHeight($height);
         return $this;
     }
 

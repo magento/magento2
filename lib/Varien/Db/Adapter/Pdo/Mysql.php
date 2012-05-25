@@ -336,29 +336,16 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     public function raw_query($sql)
     {
-        $lostConnectionMessage = 'SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query';
-        $tries = 0;
-        do {
-            $retry = false;
-            try {
-                $result = $this->query($sql);
-            } catch (Exception $e) {
-                // Convert to PDOException to maintain backwards compatibility with usage of MySQL adapter
-                if ($e instanceof Zend_Db_Statement_Exception) {
-                    $e = $e->getPrevious();
-                    if (!($e instanceof PDOException)) {
-                        $e = new PDOException($e->getMessage(), $e->getCode());
-                    }
-                }
-                // Check to reconnect
-                if ($tries < 10 && $e->getMessage() == $lostConnectionMessage) {
-                    $retry = true;
-                    $tries++;
-                } else {
-                    throw $e;
-                }
+        try {
+            $result = $this->query($sql);
+        } catch (Zend_Db_Statement_Exception $e) {
+            // Convert to PDOException to maintain backwards compatibility with usage of MySQL adapter
+            $e = $e->getPrevious();
+            if (!($e instanceof PDOException)) {
+                $e = new PDOException($e->getMessage(), $e->getCode());
             }
-        } while ($retry);
+            throw $e;
+        }
 
         return $result;
     }
@@ -411,22 +398,47 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @param string|Zend_Db_Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
-     * @return Zend_Db_Pdo_Statement
+     * @return Zend_Db_Statement_Pdo
      * @throws Zend_Db_Adapter_Exception To re-throw PDOException.
      */
     public function query($sql, $bind = array())
     {
-        $this->_debugTimer();
-        try {
-            $this->_checkDdlTransaction($sql);
-            $this->_prepareQuery($sql, $bind);
-            $result = parent::query($sql, $bind);
-        } catch (Exception $e) {
-            $this->_debugStat(self::DEBUG_QUERY, $sql, $bind);
-            $this->_debugException($e);
-        }
-        $this->_debugStat(self::DEBUG_QUERY, $sql, $bind, $result);
-        return $result;
+        $connectionErrors = array(
+            2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+            2013  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
+        );
+        $tries = 0;
+        do {
+            $retry = false;
+            $this->_debugTimer();
+            try {
+                $this->_checkDdlTransaction($sql);
+                $this->_prepareQuery($sql, $bind);
+                $result = parent::query($sql, $bind);
+                $this->_debugStat(self::DEBUG_QUERY, $sql, $bind, $result);
+                return $result;
+            } catch (Exception $e) {
+                $pdoException = null;
+                if ($e instanceof PDOException) {
+                    $pdoException = $e;
+                } elseif (($e instanceof Zend_Db_Statement_Exception) && ($e->getPrevious() instanceof PDOException)) {
+                    $pdoException = $e->getPrevious();
+                }
+
+                // Check to reconnect
+                if ($pdoException && ($tries < 10) && in_array($pdoException->errorInfo[1], $connectionErrors)) {
+                    $retry = true;
+                    $tries++;
+                    $this->closeConnection();
+                    $this->_connect();
+                }
+
+                if (!$retry) {
+                    $this->_debugStat(self::DEBUG_QUERY, $sql, $bind);
+                    $this->_debugException($e);
+                }
+            }
+        } while ($retry);
     }
 
     /**

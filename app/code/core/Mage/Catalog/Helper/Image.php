@@ -624,7 +624,8 @@ class Mage_Catalog_Helper_Image extends Mage_Core_Helper_Abstract
             Mage::throwException($this->__('Disallowed file type.'));
         }
 
-        $_processor = new Varien_Image($filePath);
+        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+        $_processor = new Varien_Image($filePath, $adapter);
         return $_processor->getMimeType() !== null;
     }
 

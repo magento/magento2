@@ -270,4 +270,17 @@ class Mage_Newsletter_Model_Template extends Mage_Core_Model_Template
 
         return $this->getData('template_text');
     }
+
+    /**
+     * Check if template can be added to newsletter queue
+     *
+     * @return boolean
+     */
+    public function isValidForSend()
+    {
+        return !Mage::getStoreConfigFlag(Mage_Core_Helper_Data::XML_PATH_SYSTEM_SMTP_DISABLE)
+            && $this->getTemplateSenderName()
+            && $this->getTemplateSenderEmail()
+            && $this->getTemplateSubject();
+    }
 }

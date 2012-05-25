@@ -62,7 +62,7 @@
                 <observers>
                     <weee>
                         <class>Mage_Weee_Model_Observer</class>
-                        <method>updateCofigurableProductOptions</method>
+                        <method>updateConfigurableProductOptions</method>
                     </weee>
                 </observers>
             </catalog_product_view_config>

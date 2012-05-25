@@ -36,8 +36,43 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
             $this->_redirect('/');
             return;
         }
+
+        if (!$this->_verifySkin()) {
+            return;
+        }
+
         $this->setFlag('', self::FLAG_NO_CHECK_INSTALLATION, true);
         return parent::preDispatch();
+    }
+
+    /**
+     * Verify that the folder for skin publication is writable. Web installation is unable to proceed without write
+     * permissions.
+     *
+     * @return bool
+     */
+    protected  function _verifySkin()
+    {
+        $pubSkin = Mage::getDesign()->getPublicSkinDir();
+
+        if (is_dir($pubSkin)) {
+            $isWritable = is_writable($pubSkin);
+        } else {
+            $isWritable = @mkdir($pubSkin, 0777, true);
+            if ($isWritable) {
+                rmdir($pubSkin);
+            }
+        }
+
+        if (!$isWritable) {
+            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
+            $this->getResponse()->setHeader('Content-Type', 'text/plain;charset=UTF-8')
+                ->setHttpResponseCode(503)
+                ->setBody("To proceed with installation, ensure that the path '{$pubSkin}' is writable.")
+            ;
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -32,6 +32,7 @@ if (!is_writable(TESTS_TEMP_DIR)) {
 
 $includePaths = array(
     get_include_path(),
+    "./framework",
     './testsuite',
     '../../../lib',
     '../../../app/code/core',
@@ -48,7 +49,11 @@ function magentoAutoloadForUnitTests($class)
         $fileName = $path . DIRECTORY_SEPARATOR . $file;
         if (file_exists($fileName)) {
             include $file;
+            if (class_exists($class, false)) {
+                return true;
+            }
         }
+
     }
     return false;
 }

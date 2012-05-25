@@ -28,7 +28,7 @@
 -->
 <layouts>
     <a_handle>
-        <container name="container1">
+        <container name="container1" label="Container 1">
             <block type="Mage_Core_Block_Template" name="block1" template="Mage_Core::test.phtml">
                 <action method="setTestValue"><value>1</value></action>
             </block>

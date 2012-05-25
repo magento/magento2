@@ -60,7 +60,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Edit extends Mage_Adminhtml_Bloc
     public function __construct()
     {
         parent::__construct();
-        $this->_blockGroup = 'oauth';
+        $this->_blockGroup = 'Mage_Oauth';
         $this->_controller = 'adminhtml_oauth_consumer';
         $this->_mode = 'edit';
 

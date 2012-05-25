@@ -84,7 +84,7 @@ class Mage_Sales_Model_Resource_Order_Payment_Transaction extends Mage_Sales_Mod
                 'order_id = ?'      => (int)$orderId,
                 'parent_txn_id = ?' => $txnId
             );
-            $adapter->update($this->getMainTable(), 
+            $adapter->update($this->getMainTable(),
                 array('parent_id' => $id),
                 $where
             );
@@ -98,15 +98,21 @@ class Mage_Sales_Model_Resource_Order_Payment_Transaction extends Mage_Sales_Mod
      * @param int $orderId
      * @param int $paymentId
      * @param string $txnId
+     * @return Mage_Sales_Model_Order_Payment_Transaction
      */
-    public function loadObjectByTxnId(Mage_Sales_Model_Order_Payment_Transaction $transaction, $orderId, $paymentId, 
-        $txnId)
-    {
+    public function loadObjectByTxnId(Mage_Sales_Model_Order_Payment_Transaction $transaction, $orderId, $paymentId,
+        $txnId
+    ) {
         $select = $this->_getLoadByUniqueKeySelect($orderId, $paymentId, $txnId);
         $data   = $this->_getWriteAdapter()->fetchRow($select);
+        if (!$data) {
+            return $transaction;
+        }
         $transaction->setData($data);
         $this->unserializeFields($transaction);
         $this->_afterLoad($transaction);
+
+        return $transaction;
     }
 
     /**

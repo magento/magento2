@@ -73,6 +73,11 @@
                     <existence>1</existence>
                     <recursive>1</recursive>
                 </media>
+                <skin>
+                    <path>/pub/media/skin</path>
+                    <existence>0</existence>
+                    <recursive>0</recursive>
+                </skin>
             </writeable>
         </filesystem>
         <php>

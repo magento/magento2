@@ -157,7 +157,7 @@ Onepage Checkout Review Page
         </reference>
     </paypal_express_review>
     <paypal_express_review_details>
-        <reference name="root">
+        <reference name="paypal.express.review.details">
             <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
         </reference>
     </paypal_express_review_details>
@@ -200,7 +200,7 @@ Additional block for bundle product type
             </block>
         </reference>
         <reference name="product.info.options.wrapper">
-            <block type="Mage_Bundle_Block_Catalog_Product_View_Type_Bundle" name="product.info.bundle.options" as="type_bundle_options" template="catalog/product/view/type/bundle/options.phtml">
+            <block type="Mage_Bundle_Block_Catalog_Product_View_Type_Bundle" name="product.info.bundle.options" as="type_bundle_options" template="catalog/product/view/type/bundle/options.phtml" before="-">
                 <action method="addRenderer"><type>select</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Select</block></action>
                 <action method="addRenderer"><type>multi</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Multi</block></action>
                 <action method="addRenderer"><type>radio</type><block>Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Radio</block></action>
@@ -209,7 +209,7 @@ Additional block for bundle product type
         </reference>
         <reference name="product.info.options.wrapper.bottom">
             <remove name="product.tierprices" />
-            <block type="Mage_Bundle_Block_Catalog_Product_View" name="bundle.tierprices" as="tierprices" before="-" template="catalog/product/view/tierprices.phtml"/>
+            <block type="Mage_Bundle_Block_Catalog_Product_View" name="bundle.tierprices" as="tierprices" before="-" template="Mage_Catalog::product/view/tierprices.phtml"/>
             <block type="Mage_CatalogInventory_Block_Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
         </reference>
         <reference name="product.clone_prices">

@@ -68,11 +68,13 @@
     </paypaluk_express_review>
 
     <paypal_express_review_details>
-        <block type="Mage_Paypal_Block_Express_Review_Details" name="root" output="1" template="express/review/details.phtml">
-            <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
-            <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
-            <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
-            <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+            <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" template="express/review/details.phtml">
+                <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Configurable</block><template>onepage/review/item.phtml</template></action>
+                <block type="Mage_Checkout_Block_Cart_Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+            </block>
         </block>
     </paypal_express_review_details>
 
@@ -146,7 +148,8 @@
         </reference>
     </SHORTCUT_uk_popup>
 
-    <paypaluk_express_review_details translate="label" type="page" parent="checkout_onepage_review">
+    <paypaluk_express_review_details translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal UK Express Review Details</label>
+        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml" />
     </paypaluk_express_review_details>
 </layout>

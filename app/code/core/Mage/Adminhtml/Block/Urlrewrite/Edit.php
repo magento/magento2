@@ -156,7 +156,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
     {
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
 
-        $this->setChild('form', Mage::getBlockSingleton('Mage_Adminhtml_Block_Urlrewrite_Edit_Form'));
+        $this->setChild('form', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Edit_Form'));
         if ($this->getUrlrewriteId()) {
             $this->_addButton('reset', array(
                 'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Reset'),

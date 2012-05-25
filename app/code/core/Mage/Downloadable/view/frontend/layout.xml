@@ -93,7 +93,7 @@
         </reference>
     </paypal_express_review>
     <paypal_express_review_details>
-        <reference name="root">
+        <reference name="paypal.express.review.details">
             <action method="addItemRender"><type>downloadable</type><block>Mage_Downloadable_Block_Checkout_Cart_Item_Renderer</block><template>checkout/onepage/review/item.phtml</template></action>
         </reference>
     </paypal_express_review_details>

@@ -230,7 +230,7 @@ Layout handle for grouped products
     </adminhtml_catalog_product_supergroup>
 
     <adminhtml_catalog_product_supergroupgridonly>
-        <container name="root" label="Root">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group" name="catalog.product.edit.tab.super.group" />
         </container>
     </adminhtml_catalog_product_supergroupgridonly>
@@ -241,7 +241,7 @@ Layout handle for configurable products
     <adminhtml_catalog_product_configurable_new>
         <remove name="product_tabs"/>
         <reference name="left">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs_Configurable" name="configurable_product_tabs"></block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs_Configurable" name="configurable_product_tabs"/>
         </reference>
     </adminhtml_catalog_product_configurable_new>
 

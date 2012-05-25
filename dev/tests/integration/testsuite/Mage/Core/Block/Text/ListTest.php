@@ -62,7 +62,7 @@ class Mage_Core_Block_Text_ListTest extends PHPUnit_Framework_TestCase
     {
         $listName = $this->_block->getNameInLayout();
         $block1 = $this->_layout->addBlock('Mage_Core_Block_Text', '', $listName);
-        $this->_layout->insertContainer($listName, 'container');
+        $this->_layout->addContainer('container', 'Container', array(), $listName);
         $block2 = $this->_layout->addBlock('Mage_Core_Block_Text', '', 'container');
         $block3 = $this->_layout->addBlock('Mage_Core_Block_Text', '', $listName);
         $block1->setText('text1');

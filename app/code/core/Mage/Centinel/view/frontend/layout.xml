@@ -27,14 +27,18 @@
 
 -->
 <layout version="0.1.0">
-    <centinel_index_authenticationstart translate="label" type="page" parent="checkout_onepage_paymentmethod">
+    <centinel_index_authenticationstart translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Centinel Authentication Start</label>
-        <block type="Mage_Centinel_Block_Authentication_Start" name="root" output="1" template="authentication/start.phtml"/>
+        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+            <block type="Mage_Centinel_Block_Authentication_Start" template="authentication/start.phtml"/>
+        </block>
     </centinel_index_authenticationstart>
 
-    <centinel_index_authenticationcomplete translate="label" type="page" parent="centinel_index_authenticationstart">
+    <centinel_index_authenticationcomplete translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Centinel Authentication Finish</label>
-        <block type="Mage_Centinel_Block_Authentication_Complete" name="root" output="1" template="authentication/complete.phtml"/>
+        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+            <block type="Mage_Centinel_Block_Authentication_Complete" template="authentication/complete.phtml"/>
+        </block>
     </centinel_index_authenticationcomplete>
 
     <checkout_multishipping_overview>
@@ -49,7 +53,7 @@
         </reference>
     </checkout_multishipping_overview>
 
-    <checkout_onepage_savepayment>
+    <checkout_onepage_review>
         <reference name="checkout.onepage.review.info.items.before">
             <block type="Mage_Centinel_Block_Authentication" name="centinel.frame" template="authentication.phtml">
                 <action method="addRelatedBlock"><blockId>checkout-review-submit</blockId></action>
@@ -57,7 +61,7 @@
                 <action method="setAuthenticationStartMode"><mode>instant</mode></action>
             </block>
         </reference>
-    </checkout_onepage_savepayment>
+    </checkout_onepage_review>
 
     <checkout_onepage_index>
         <reference name="head">

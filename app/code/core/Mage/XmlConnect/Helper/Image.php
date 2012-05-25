@@ -199,7 +199,8 @@ class Mage_XmlConnect_Helper_Image extends Mage_Core_Helper_Abstract
             }
         }
 
-        $image = new Varien_Image($file);
+        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+        $image = new Varien_Image($file, $adapter);
         $width = $image->getOriginalWidth();
         $height = $image->getOriginalHeight();
 
@@ -453,7 +454,8 @@ class Mage_XmlConnect_Helper_Image extends Mage_Core_Helper_Abstract
         $file = $imageUrl[count($imageUrl)-1];
         $filePath = $this->getDefaultSizeUploadDir() . DS . $file;
         if (!file_exists($customDir . DS . $file)) {
-            $image = new Varien_Image($filePath);
+            $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+            $image = new Varien_Image($filePath, $adapter);
             $widthOriginal = $image->getOriginalWidth();
             $heightOriginal = $image->getOriginalHeight();
 

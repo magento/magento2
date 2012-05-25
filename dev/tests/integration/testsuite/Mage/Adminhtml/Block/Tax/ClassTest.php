@@ -31,10 +31,9 @@ class Mage_Adminhtml_Block_Tax_ClassTest extends PHPUnit_Framework_TestCase
     {
         $layout = new Mage_Core_Model_Layout();
         $block = $layout->createBlock('Mage_Adminhtml_Block_Tax_Class', 'block');
-        $childBlock = $layout->addBlock('Mage_Core_Block_Template', 'grid', 'block');
-
+        $childBlock = $block->getChildBlock('grid');
         $expected = Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT;
-        $this->assertNotEquals($expected, $childBlock->getClassType());
+        $this->assertNull($childBlock->getClassType());
         $block->setClassType($expected);
         $this->assertEquals($expected, $childBlock->getClassType());
     }

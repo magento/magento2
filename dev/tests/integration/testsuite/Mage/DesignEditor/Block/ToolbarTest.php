@@ -40,7 +40,6 @@ class Mage_DesignEditor_Block_ToolbarTest extends PHPUnit_Framework_TestCase
             'block',
             array('template' => 'toolbar.phtml')
         );
-        $layout->insertBlock('', 'block', 'block');
     }
 
     /**

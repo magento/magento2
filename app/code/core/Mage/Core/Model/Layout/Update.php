@@ -33,6 +33,12 @@ class Mage_Core_Model_Layout_Update
     const LAYOUT_GENERAL_CACHE_TAG = 'LAYOUT_GENERAL_CACHE_TAG';
 
     /**
+     * Available item type names
+     */
+    const TYPE_PAGE = 'page';
+    const TYPE_FRAGMENT = 'fragment';
+
+    /**
      * @var string
      */
     private $_area;
@@ -166,24 +172,24 @@ class Mage_Core_Model_Layout_Update
     /**
      * Add handle(s) to update
      *
-     * @param array|string $handle
+     * @param array|string $handleName
      * @return Mage_Core_Model_Layout_Update
      */
-    public function addHandle($handle)
+    public function addHandle($handleName)
     {
-        if (is_array($handle)) {
-            foreach ($handle as $h) {
-                $this->_handles[$h] = 1;
+        if (is_array($handleName)) {
+            foreach ($handleName as $n) {
+                $this->_handles[$n] = 1;
             }
         } else {
-            $this->_handles[$handle] = 1;
+            $this->_handles[$handleName] = 1;
         }
         return $this;
     }
 
-    public function removeHandle($handle)
+    public function removeHandle($handleName)
     {
-        unset($this->_handles[$handle]);
+        unset($this->_handles[$handleName]);
         return $this;
     }
 
@@ -201,23 +207,79 @@ class Mage_Core_Model_Layout_Update
      */
     public function addPageHandles(array $handlesToTry)
     {
-        foreach ($handlesToTry as $pageHandle) {
-            $handleWithParents = $this->getPageLayoutHandles($pageHandle);
-            if ($handleWithParents) {
-                /* replace existing page handles with the new ones */
-                foreach ($this->_pageHandles as $pageHandle) {
-                    $this->removeHandle($pageHandle);
-                }
-                $this->_pageHandles = $handleWithParents;
-                $this->addHandle($handleWithParents);
-                return true;
+        foreach ($handlesToTry as $handleName) {
+            if (!$this->pageHandleExists($handleName)) {
+                continue;
             }
+            $handles = $this->getPageHandleParents($handleName);
+            $handles[] = $handleName;
+
+            /* replace existing page handles with the new ones */
+            foreach ($this->_pageHandles as $handleName) {
+                $this->removeHandle($handleName);
+            }
+            $this->_pageHandles = $handles;
+            $this->addHandle($handles);
+            return true;
         }
         return false;
     }
 
     /**
-     * Retrieve page handle names sorted from parent to child
+     * Retrieve the all parent handles ordered from parent to child. The $isPageTypeOnly parameters controls,
+     * whether only page type parent relation is processed.
+     *
+     * @param string $handleName
+     * @param bool $isPageTypeOnly
+     * @return array
+     */
+    public function getPageHandleParents($handleName, $isPageTypeOnly = true)
+    {
+        $result = array();
+        $node = $this->_getPageHandleNode($handleName);
+        while ($node) {
+            $parentItem = $node->getAttribute('parent');
+            if (!$parentItem && !$isPageTypeOnly) {
+                $parentItem = $node->getAttribute('owner');
+            }
+            $node = $this->_getPageHandleNode($parentItem);
+            if ($node) {
+                $result[] = $parentItem;
+            }
+        }
+        return array_reverse($result);
+    }
+
+    /**
+     * Whether a page handle is declared in the system or not
+     *
+     * @param string $handleName
+     * @return bool
+     */
+    public function pageHandleExists($handleName)
+    {
+        return (bool)$this->_getPageHandleNode($handleName);
+    }
+
+    /**
+     * Get handle xml node by handle name
+     *
+     * @param string $handleName
+     * @return Varien_Simplexml_Element|null
+     */
+    protected function _getPageHandleNode($handleName)
+    {
+        /* quick validation for non-existing page types */
+        if (!$handleName || !isset($this->getFileLayoutUpdatesXml()->$handleName)) {
+            return null;
+        }
+        $condition = '@type="' . self::TYPE_PAGE . '" or @type="' . self::TYPE_FRAGMENT . '"';
+        $nodes = $this->getFileLayoutUpdatesXml()->xpath("/layouts/{$handleName}[$condition][1]");
+        return $nodes ? reset($nodes) : null;
+    }
+
+    /**
+     * Retrieve used page handle names sorted from parent to child
      *
      * @return array
      */
@@ -227,70 +289,18 @@ class Mage_Core_Model_Layout_Update
     }
 
     /**
-     * Retrieve the page layout handle along with all parent handles ordered from parent to child
-     *
-     * @param string $pageHandle
-     * @return array
-     */
-    public function getPageLayoutHandles($pageHandle)
-    {
-        $result = array();
-        while ($this->pageTypeExists($pageHandle)) {
-            array_unshift($result, $pageHandle);
-            $pageHandle = $this->getPageTypeParent($pageHandle);
-        }
-        return $result;
-    }
-
-    /**
-     * Retrieve recursively all children of a page type
-     *
-     * @param string $parentName
-     * @return array
-     */
-    protected function _getPageTypeChildren($parentName)
-    {
-        $result = array();
-        $xpath = '/layouts/*[@type="page" and ' . ($parentName ? "@parent='$parentName'" : 'not(@parent)') . ']';
-        $pageTypeNodes = $this->getFileLayoutUpdatesXml()->xpath($xpath) ?: array();
-        /** @var $pageTypeNode Varien_Simplexml_Element */
-        foreach ($pageTypeNodes as $pageTypeNode) {
-            $pageTypeName = $pageTypeNode->getName();
-            $result[$pageTypeName] = array(
-                'name'     => $pageTypeName,
-                'label'    => (string)$pageTypeNode->label,
-                'children' => $this->_getPageTypeChildren($pageTypeName),
-            );
-        }
-        return $result;
-    }
-
-    /**
-     * @param string $pageTypeName
-     * @return Varien_Simplexml_Element
-     */
-    protected function _getPageTypeNode($pageTypeName)
-    {
-        /* quick validation for non-existing page types */
-        if (!$pageTypeName || !isset($this->getFileLayoutUpdatesXml()->$pageTypeName)) {
-            return null;
-        }
-        $nodes = $this->getFileLayoutUpdatesXml()->xpath("/layouts/{$pageTypeName}[@type='page'][1]");
-        return $nodes ? reset($nodes) : null;
-    }
-
-    /**
-     * Retrieve all page types in the system represented as a hierarchy
+     * Retrieve full hierarchy of types and fragment types in the system
      *
      * Result format:
      * array(
-     *     'page_type_1' => array(
-     *         'name'     => 'page_type_1',
-     *         'label'    => 'Page Type 1',
+     *     'handle_name_1' => array(
+     *         'name'     => 'handle_name_1',
+     *         'label'    => 'Handle Name 1',
      *         'children' => array(
-     *             'page_type_2' => array(
-     *                 'name'     => 'page_type_2',
-     *                 'label'    => 'Page Type 2',
+     *             'handle_name_2' => array(
+     *                 'name'     => 'handle_name_2',
+     *                 'label'    => 'Handle Name 2',
+     *                 'type'     => self::TYPE_PAGE or self::TYPE_FRAGMENT,
      *                 'children' => array(
      *                     // ...
      *                 )
@@ -303,44 +313,68 @@ class Mage_Core_Model_Layout_Update
      *
      * @return array
      */
-    public function getPageTypesHierarchy()
+    public function getPageHandlesHierarchy()
     {
-        return $this->_getPageTypeChildren('');
+        return $this->_getPageHandleChildren('');
     }
 
     /**
-     * Whether a page type is declared in the system or not
+     * Retrieve recursively all children of a page handle
      *
-     * @param string $pageType
-     * @return bool
+     * @param string $parentName
+     * @return array
      */
-    public function pageTypeExists($pageType)
+    protected function _getPageHandleChildren($parentName)
     {
-        return (bool)$this->_getPageTypeNode($pageType);
+        $result = array();
+
+        $conditions = array(
+            '(@type="' . self::TYPE_PAGE . '" and ' . ($parentName ? "@parent='$parentName'" : 'not(@parent)') . ')'
+        );
+        if ($parentName) {
+            $conditions[] = '(@type="' . self::TYPE_FRAGMENT . '" and @owner="' . $parentName . '")';
+        }
+        $xpath = '/layouts/*[' . implode(' or ', $conditions) . ']';
+        $nodes = $this->getFileLayoutUpdatesXml()->xpath($xpath) ?: array();
+        /** @var $node Varien_Simplexml_Element */
+        foreach ($nodes as $node) {
+            $name = $node->getName();
+            $info = array(
+                'name'      => $name,
+                'label'     => (string)$node->label,
+                'type'      => $node->getAttribute('type'),
+                'children'  => array()
+            );
+            if ($info['type'] == self::TYPE_PAGE) {
+                $info['children'] = $this->_getPageHandleChildren($name);
+            }
+            $result[$name] = $info;
+        }
+        return $result;
     }
 
     /**
-     * Retrieve the label for a page type
+     * Retrieve the label for a page handle
      *
-     * @param string $pageType
+     * @param string $handleName
+     * @return string|null
+     */
+    public function getPageHandleLabel($handleName)
+    {
+        $node = $this->_getPageHandleNode($handleName);
+        return $node ? (string)$node->label : null;
+    }
+
+    /**
+     * Retrieve the type of a page handle
+     *
+     * @param string $handleName
      * @return string|bool
      */
-    public function getPageTypeLabel($pageType)
+    public function getPageHandleType($handleName)
     {
-        $pageTypeNode = $this->_getPageTypeNode($pageType);
-        return $pageTypeNode ? (string)$pageTypeNode->label : false;
-    }
-
-    /**
-     * Retrieve the name of the parent for a page type
-     *
-     * @param string $pageType
-     * @return string|null|false
-     */
-    public function getPageTypeParent($pageType)
-    {
-        $pageTypeNode = $this->_getPageTypeNode($pageType);
-        return $pageTypeNode ? $pageTypeNode->getAttribute('parent') : false;
+        $node = $this->_getPageHandleNode($handleName);
+        return $node ? $node->getAttribute('type') : null;
     }
 
     /**

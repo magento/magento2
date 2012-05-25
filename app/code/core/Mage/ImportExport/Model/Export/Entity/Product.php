@@ -453,9 +453,11 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
         }
 
         $categoryId = array_shift($rowCategories[$productId]);
-        $dataRow[self::COL_ROOT_CATEGORY] = $this->_rootCategories[$categoryId];
-        if (isset($this->_categories[$categoryId])) {
-            $dataRow[self::COL_CATEGORY] = $this->_categories[$categoryId];
+        if ($categoryId) {
+            $dataRow[self::COL_ROOT_CATEGORY] = $this->_rootCategories[$categoryId];
+            if (isset($this->_categories[$categoryId])) {
+                $dataRow[self::COL_CATEGORY] = $this->_categories[$categoryId];
+            }
         }
 
         return true;

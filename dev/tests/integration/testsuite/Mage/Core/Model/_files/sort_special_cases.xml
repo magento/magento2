@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Core
+ * @subpackage  integration_tests
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layouts>
+    <before_after>
+        <container name="root" label="Root">
+            <block type="Mage_Core_Block_Text" name="element1" before="element2">
+                <action method="setText"><text>1</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element2" after="element3">
+                <action method="setText"><text>2</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element3" after="-">
+                <action method="setText"><text>3</text></action>
+            </block>
+        </container>
+    </before_after>
+    <before_before>
+        <container name="root" label="Root">
+            <block type="Mage_Core_Block_Text" name="element1" before="element3">
+                <action method="setText"><text>1</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element2" before="element1">
+                <action method="setText"><text>2</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element3" before="element_non_existing">
+                <!-- element_non_existing doesn't exist, so element3 is generated at the end -->
+                <action method="setText"><text>3</text></action>
+            </block>
+        </container>
+    </before_before>
+    <after_after>
+        <container name="root" label="Root">
+            <block type="Mage_Core_Block_Text" name="element1" after="element3">
+                <action method="setText"><text>1</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element2" after="element1">
+                <action method="setText"><text>2</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element3" after="element_non_existing">
+                <action method="setText"><text>3</text></action>
+            </block>
+        </container>
+    </after_after>
+    <after_previous>
+        <container name="root" label="Root">
+            <block type="Mage_Core_Block_Text" name="element1" after="element2">
+                <action method="setText"><text>1</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element2" after="element3">
+                <action method="setText"><text>2</text></action>
+            </block>
+            <block type="Mage_Core_Block_Text" name="element3">
+                <!-- neither "before" or "after" specified, therefore insert before all elements -->
+                <action method="setText"><text>3</text></action>
+            </block>
+        </container>
+    </after_previous>
+</layouts>

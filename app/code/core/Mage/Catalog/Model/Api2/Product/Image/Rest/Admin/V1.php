@@ -69,7 +69,8 @@ class Mage_Catalog_Model_Api2_Product_Image_Rest_Admin_V1 extends Mage_Catalog_M
 
             // try to create Image object to check if image data is valid
             try {
-                new Varien_Image($apiTempDir . DS . $imageFileName);
+                $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+                new Varien_Image($apiTempDir . DS . $imageFileName, $adapter);
             } catch (Exception $e) {
                 $ioAdapter->rmdir($apiTempDir, true);
                 $this->_critical($e->getMessage(), Mage_Api2_Model_Server::HTTP_INTERNAL_ERROR);

@@ -52,7 +52,7 @@
         </reference>
     </adminhtml_export_index>
     <adminhtml_export_getfilter>
-        <container name="root" label="Root">
+        <container name="root" label="Root" output="1">
             <block type="Mage_ImportExport_Block_Adminhtml_Export_Filter" name="export.filter"/>
         </container>
     </adminhtml_export_getfilter>

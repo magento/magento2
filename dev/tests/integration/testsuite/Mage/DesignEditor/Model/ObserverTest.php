@@ -252,20 +252,18 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     protected function _wrapElement($elementName, $elementHtml)
     {
         // create a layout object mock with fixture data
-        $structure = new Mage_Core_Model_Layout_Structure;
         $utility = new Mage_Core_Utility_Layout($this);
         $layoutMock = $utility->getLayoutFromFixture(
-            __DIR__ . '/../_files/observer_test.xml', array(array('structure' => $structure))
+            __DIR__ . '/../_files/observer_test.xml', array(array('structure' => new Magento_Data_Structure))
         );
 
         // load the fixture data. This will populate layout structure as well
         $layoutMock->getUpdate()->addHandle('test_handle')->load();
-        $layoutMock->generateXml()->generateBlocks();
+        $layoutMock->generateXml()->generateElements();
 
         $transport = new Varien_Object(array('output' => $elementHtml));
         $observer = new Varien_Event_Observer(array(
             'event' => new Varien_Event(array(
-                'structure' => $structure,
                 'layout' => $layoutMock,
                 'element_name' => $elementName,
                 'transport' => $transport,

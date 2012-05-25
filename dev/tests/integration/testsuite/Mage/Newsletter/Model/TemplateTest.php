@@ -70,4 +70,31 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertStringEndsWith($expectedTemplateText, $this->_model->getProcessedTemplate());
         $this->_model->revertDesign();
     }
+
+    public function getIsValidToSendDataProvider()
+    {
+        return array(
+            array('john.doe@example.com', 'john.doe', 'Test Subject', true),
+            array('john.doe@example.com', 'john.doe', '', false),
+            array('john.doe@example.com', '', 'Test Subject', false),
+            array('john.doe@example.com', '', '', false),
+            array('', 'john.doe', 'Test Subject', false),
+            array('', '', 'Test Subject', false),
+            array('', 'john.doe', '', false),
+            array('', '', '', false),
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store system/smtp/disable 0
+     * @magentoAppIsolation enabled
+     * @dataProvider getIsValidToSendDataProvider
+     */
+    public function testIsValidToSend($senderEmail, $senderName, $subject, $isValid)
+    {
+        $this->_model->setTemplateSenderEmail($senderEmail)
+            ->setTemplateSenderName($senderName)
+            ->setTemplateSubject($subject);
+        $this->assertSame($isValid, $this->_model->isValidForSend());
+    }
 }

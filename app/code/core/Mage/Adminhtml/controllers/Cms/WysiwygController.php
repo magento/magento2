@@ -43,12 +43,13 @@ class Mage_Adminhtml_Cms_WysiwygController extends Mage_Adminhtml_Controller_Act
         $directive = $this->getRequest()->getParam('___directive');
         $directive = Mage::helper('Mage_Core_Helper_Data')->urlDecode($directive);
         $url = Mage::getModel('Mage_Core_Model_Email_Template_Filter')->filter($directive);
+        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
         try {
-            $image = Varien_Image_Adapter::factory('GD2');
+            $image = Varien_Image_Adapter::factory($adapter);
             $image->open($url);
             $image->display();
         } catch (Exception $e) {
-            $image = Varien_Image_Adapter::factory('GD2');
+            $image = Varien_Image_Adapter::factory($adapter);
             $image->open(Mage::getSingleton('Mage_Cms_Model_Wysiwyg_Config')->getSkinImagePlaceholderUrl());
             $image->display();
             /*

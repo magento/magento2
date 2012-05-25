@@ -38,7 +38,7 @@ class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adm
      */
     public function __construct()
     {
-        $this->_blockGroup = 'currencysymbol_system';
+        $this->_blockGroup = 'Mage_CurrencySymbol_System';
         $this->_controller = 'adminhtml_system_currencysymbol';
         parent::__construct();
     }

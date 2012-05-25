@@ -163,7 +163,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
      * @param array $expected
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store dev/page_type/render_inherited 1
+     * @magentoConfigFixture global/dev/page_type/render_inherited 1
      * @dataProvider addActionLayoutHandlesInheritedDataProvider
      */
     public function testAddActionLayoutHandlesInherited($route, $controller, $action, $expected)
@@ -195,7 +195,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
         $this->_model->getRequest()->setRouteName('test')
             ->setControllerName('controller')
             ->setActionName('action');
-        $result = $this->_model->addPageLayoutHandles(array());
+        $result = $this->_model->addPageLayoutHandles();
         $this->assertFalse($result);
         $this->assertEmpty($this->_model->getLayout()->getUpdate()->getHandles());
 

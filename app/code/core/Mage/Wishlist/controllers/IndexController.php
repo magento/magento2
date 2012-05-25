@@ -33,6 +33,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Wishlist_IndexController extends Mage_Wishlist_Controller_Abstract
+    implements Mage_Catalog_Controller_Product_View_Interface
 {
     /**
      * Action list where need check enabled cookie

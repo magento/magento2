@@ -100,7 +100,7 @@ class Mage_XmlConnect_Model_Catalog_Category_Image extends Mage_Catalog_Model_Pr
             $miscParams[] = $this->getWatermarkImageOpacity();
             $miscParams[] = $this->getWatermarkPosition();
             $miscParams[] = $this->getWatermarkWidth();
-            $miscParams[] = $this->getWatermarkHeigth();
+            $miscParams[] = $this->getWatermarkHeight();
         }
 
         $path[] = md5(implode('_', $miscParams));

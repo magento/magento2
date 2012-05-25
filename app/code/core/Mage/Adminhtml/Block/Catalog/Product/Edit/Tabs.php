@@ -57,6 +57,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ->setSortOrder()
                 ->load();
 
+            $tabAttributesBlock = $this->getLayout()->createBlock(
+                $this->getAttributeTabBlock(), 'adminhtml.catalog.product.edit.tab.attributes'
+            );
             foreach ($groupCollection as $group) {
                 $attributes = $product->getAttributes($group->getId(), true);
                 // do not add groups without attributes
@@ -73,10 +76,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
 
                 $this->addTab('group_'.$group->getId(), array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__($group->getAttributeGroupName()),
-                    'content'   => $this->_translateHtml($this->getLayout()->createBlock($this->getAttributeTabBlock(),
-                        'adminhtml.catalog.product.edit.tab.attributes')->setGroup($group)
-                            ->setGroupAttributes($attributes)
-                            ->toHtml()),
+                    'content'   => $this->_translateHtml($tabAttributesBlock->setGroup($group)
+                        ->setGroupAttributes($attributes)
+                        ->toHtml()
+                    ),
                 ));
             }
 

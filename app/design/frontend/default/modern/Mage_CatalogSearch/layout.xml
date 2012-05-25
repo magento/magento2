@@ -140,10 +140,10 @@ Advanced search results
         </reference>
     </catalogsearch_term_popular>
 
-    <catalogsearch_ajax_suggest translate="label" module="Mage_CatalogSearch" type="page" parent="ajax_index">
+    <catalogsearch_ajax_suggest translate="label" module="Mage_CatalogSearch" type="fragment" owner="default">
         <label>Catalog Quick Search Form Suggestions</label>
-        <reference name="root">
+        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_CatalogSearch_Block_Autocomplete" name="autocomplete"/>
-        </reference>
+        </block>
     </catalogsearch_ajax_suggest>
 </layout>

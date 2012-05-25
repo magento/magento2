@@ -29,8 +29,7 @@
 <div class="entry-edit"><div class="entry-edit-head"><h4><?php echo $this->helper('Mage_Sales_Helper_Data')->__('Customer\'s Current Activities') ?></h4></div></div>
 <div class="create-order-sidebar-container">
 <?php echo $this->getChildHtml('top_button'); ?>
-<?php foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $_child): ?>
-    <?php $_alias = $_child->getBlockAlias(); ?>
+<?php foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $_alias => $_child): ?>
     <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
         <div id="order-sidebar_<?php echo $_alias ?>">
             <?php if($this->canDisplay($_child)): ?>

@@ -43,6 +43,7 @@ class Mage_Tag_Block_Customer_ViewTest extends PHPUnit_Framework_TestCase
         $layout->addBlock($this->_block, 'test');
         $expected = uniqid();
         $toolbar = new Mage_Core_Block_Text(array('current_mode' => $expected));
+        $this->_block->unsetChild('toolbar');
         $layout->addBlock($toolbar, 'toolbar', 'test');
         $this->assertEquals($expected, $this->_block->getMode());
     }

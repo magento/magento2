@@ -321,11 +321,26 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     {
         if ($this->isEnabledFlat()) {
             $this->_init('Mage_Catalog_Model_Product', 'Mage_Catalog_Model_Resource_Product_Flat');
-        }
-        else {
+        } else {
             $this->_init('Mage_Catalog_Model_Product', 'Mage_Catalog_Model_Resource_Product');
         }
         $this->_initTables();
+    }
+
+    /**
+     * Standard resource collection initalization
+     * Needed for child classes
+     *
+     * @param string $model
+     * @param string $entityModel
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function _init($model, $entityModel)
+    {
+        if ($this->isEnabledFlat()) {
+            $entityModel = 'Mage_Catalog_Model_Resource_Product_Flat';
+        }
+        return parent::_init($model, $entityModel);
     }
 
     /**
@@ -335,23 +350,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     protected function _initTables()
     {
         $this->_productWebsiteTable = $this->getResource()->getTable('catalog_product_website');
-        $this->_productCategoryTable= $this->getResource()->getTable('catalog_category_product');
-    }
-
-    /**
-     * Standard resource collection initalization
-     *
-     * @param string $model
-     * @param unknown_type $entityModel
-     * @return Mage_Catalog_Model_Resource_Product_Collection
-     */
-    protected function _init($model, $entityModel)
-    {
-        if ($this->isEnabledFlat()) {
-            $entityModel = 'catalog/product_flat';
-        }
-
-        return parent::_init($model, $entityModel);
+        $this->_productCategoryTable = $this->getResource()->getTable('catalog_category_product');
     }
 
     /**

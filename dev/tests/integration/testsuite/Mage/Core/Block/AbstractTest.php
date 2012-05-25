@@ -65,26 +65,6 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertSame($parentBlock, $childBlock->getParentBlock());
     }
 
-    public function testGetBlockAlias()
-    {
-        // Without layout
-        $this->assertEmpty($this->_block->getBlockAlias());
-        $this->assertInternalType('string', $this->_block->getBlockAlias());
-
-        // Without alias
-        $block1 = $this->_createBlockWithLayout('name1');
-        $this->assertEquals('name1', $block1->getBlockAlias());
-        // With alias
-        $block2 = $this->_createBlockWithLayout('name2', 'alias');
-        $this->assertEquals('alias', $block2->getBlockAlias());
-        // Change block's alias while changing parent
-        $blockParent = $this->_createBlockWithLayout('parent', 'parent');
-        $blockChild = $this->_createBlockWithLayout('child', 'child');
-        $this->assertEquals('child', $blockChild->getBlockAlias());
-        $blockParent->setChild('parent_child', $blockChild);
-        $this->assertEquals('parent_child', $blockChild->getBlockAlias());
-    }
-
     public function testSetGetNameInLayout()
     {
         // Basic setting/getting
@@ -178,7 +158,7 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Magento_Exception
      */
     public function testSetChildNull()
     {
@@ -348,24 +328,26 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $name2 = 'block_two';
         $blockTwo = $this->_createBlockWithLayout($name2);
         $parent->insert($blockTwo, 'wrong_sibling', false);
-        $this->assertSame(0, array_search($name2, $parent->getChildNames()));
+        $this->assertSame(1, array_search($name2, $parent->getChildNames()));
 
         $name3 = 'block_three';
         $blockThree = $this->_createBlockWithLayout($name3);
         $parent->insert($blockThree, $name2, false);
-        $this->assertSame(0, array_search($name3, $parent->getChildNames()));
+        $this->assertSame(1, array_search($name3, $parent->getChildNames()));
 
         $name4 = 'block_four';
         $blockFour = $this->_createBlockWithLayout($name4);
         $parent->insert($blockFour, $name1, true);
-        $this->assertSame(3, array_search($name4, $parent->getChildNames()));
+        $this->assertSame(1, array_search($name4, $parent->getChildNames()));
     }
 
+    /**
+     * @expectedException Magento_Exception
+     */
     public function testInsertWithoutCreateBlock()
     {
         $parent = $this->_createBlockWithLayout('parent', 'parent');
-        $this->assertFalse($parent->insert('block'));
-        $this->assertFalse($parent->getLayout()->hasElement('block'));
+        $parent->insert('block');
     }
 
     public function testInsertContainer()
@@ -375,9 +357,8 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $parent = $this->_createBlockWithLayout($parentName, $parentName);
         $layout = $parent->getLayout();
 
-        $this->assertFalse($parent->insert($name));
         $this->assertEmpty($layout->getChildNames($parentName));
-        $layout->insertContainer('', $name);
+        $layout->addContainer($name, 'Container');
         $parent->insert($name);
         $this->assertEquals(array($name), $layout->getChildNames($parentName));
     }
@@ -665,7 +646,6 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
             $name = uniqid('block.');
             if ($layout) {
                 $block = $layout->createBlock($className, $name);
-                $layout->insertBlock('', $name, $name);
             } else {
                 $block = new $className;
                 $block->setNameInLayout($name);

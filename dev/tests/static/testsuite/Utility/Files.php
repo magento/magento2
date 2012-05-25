@@ -333,9 +333,7 @@ class Utility_Files
              */
             if (realpath($fullPath) == $fullPath) {
                 $fileContent = file_get_contents($fullPath);
-                if (strpos($fileContent, $class) !== false
-                    && preg_match('/class\s*' . preg_quote($class) . '/', $fileContent)
-                ) {
+                if (strpos($fileContent, 'class ' . $class) !== false) {
                     return true;
                 }
             }
