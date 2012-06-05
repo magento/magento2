@@ -36,6 +36,9 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 {
     const CACHE_TAG         = 'CONFIG';
 
+    const DEPENDS_TYPE_SOFT = 'soft';
+    const DEPENDS_TYPE_HARD = 'hard';
+
     /**
      * Flag which allow use cache logic
      *
@@ -800,7 +803,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             $depends = array();
             if ($moduleNode->depends) {
                 foreach ($moduleNode->depends->children() as $depend) {
-                    $depends[$depend->getName()] = true;
+                    if ($depend->getAttribute('type') == self::DEPENDS_TYPE_SOFT) {
+                        $depends[$depend->getName()] = self::DEPENDS_TYPE_SOFT;
+                    } else {
+                        $depends[$depend->getName()] = self::DEPENDS_TYPE_HARD;
+                    }
                 }
             }
             $moduleDepends[$moduleName] = array(
@@ -844,8 +851,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     {
         foreach ($modules as $moduleName => $moduleProps) {
             $depends = $moduleProps['depends'];
-            foreach ($moduleProps['depends'] as $depend => $true) {
-                if ($moduleProps['active'] && ((!isset($modules[$depend])) || empty($modules[$depend]['active']))) {
+            foreach ($moduleProps['depends'] as $depend => $dependType) {
+                if ( $moduleProps['active']
+                  && $dependType == self::DEPENDS_TYPE_HARD
+                  && ((!isset($modules[$depend])) || empty($modules[$depend]['active']))
+                ) {
                     Mage::throwException(
                         Mage::helper('Mage_Core_Helper_Data')->__('Module "%1$s" requires module "%2$s".', $moduleName, $depend)
                     );
@@ -869,7 +879,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 
         $definedModules = array();
         foreach ($modules as $moduleProp) {
-            foreach ($moduleProp['depends'] as $dependModule => $true) {
+            foreach ($moduleProp['depends'] as $dependModule => $dependType) {
                 if (!isset($definedModules[$dependModule])) {
                     Mage::throwException(
                         Mage::helper('Mage_Core_Helper_Data')->__('Module "%1$s" cannot depend on "%2$s".', $moduleProp['module'], $dependModule)
