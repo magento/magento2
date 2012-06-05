@@ -27,7 +27,7 @@
 /**
  * Design editor session model
  */
-class Mage_DesignEditor_Model_Session extends Mage_Admin_Model_Session
+class Mage_DesignEditor_Model_Session extends Mage_Backend_Model_Auth_Session
 {
     /**
      * Session key that indicates whether the design editor is active

@@ -313,7 +313,7 @@ One page checkout progress block
 
     <checkout_onepage_progress translate="label" type="fragment" owner="checkout_onepage_index">
         <label>One Page Checkout Progress</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Checkout_Block_Onepage_Progress" name="progress" template="onepage/progress.phtml">
                 <block type="Mage_Checkout_Block_Onepage_Payment_Info" name="payment_info">
                     <action method="setInfoTemplate"><method></method><template></template></action>
@@ -327,7 +327,7 @@ One page checkout payment methods block
 -->
     <checkout_onepage_paymentmethod translate="label" type="fragment" owner="checkout_onepage_index">
         <label>One Page Checkout Choose Payment Method</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Checkout_Block_Onepage_Payment_Methods" name="payment_method" template="onepage/payment/methods.phtml">
                 <action method="setMethodFormTemplate"><method>purchaseorder</method><template>Mage_Payment::form/purchaseorder.phtml</template></action>
             </block>
@@ -341,14 +341,14 @@ One page checkout shipping methods block
 
     <checkout_onepage_shippingmethod translate="label" type="fragment" owner="checkout_onepage_index">
         <label>One Page Checkout Choose Shipping Method</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Checkout_Block_Onepage_Shipping_Method_Available" name="shipping_method" template="onepage/shipping_method/available.phtml"/>
         </block>
     </checkout_onepage_shippingmethod>
 
     <checkout_onepage_additional translate="label" type="fragment" owner="checkout_onepage_index">
         <label>One Page Checkout Additional Address Form</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Checkout_Block_Onepage_Shipping_Method_Additional" name="shipping_method_additional" template="onepage/shipping_method/additional.phtml">
                 <action method="setDontDisplayContainer"><param>1</param></action>
             </block>
@@ -361,7 +361,7 @@ One page checkout order review block
 
     <checkout_onepage_review translate="label" type="fragment" owner="checkout_onepage_index">
         <label>One Page Checkout Overview</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Checkout_Block_Onepage_Review_Info" name="order_review" template="onepage/review/info.phtml">
                 <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
                 <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>

@@ -54,8 +54,10 @@ class Mage_DesignEditor_EditorControllerTest extends Magento_Test_TestCase_Contr
     {
         return array(
             'no handle type'      => array('', 'Invalid page handle specified.'),
-            'invalid handle' => array('1nvalid_handle', 'Invalid page handle specified.'),
-            'non-existing handle' => array('non_existing_handle', 'Specified page handle doesn\'t exist: %s'),
+            'invalid handle'      => array('1nvalid_handle', 'Invalid page handle specified.'),
+            'non-existing handle' => array(
+                'non_existing_handle', 'Specified page type or page fragment type doesn\'t exist: %s'
+            ),
         );
     }
 

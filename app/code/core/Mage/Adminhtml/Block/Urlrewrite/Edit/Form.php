@@ -100,7 +100,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
         $isFilterAllowed = false;
         // get store switcher or a hidden field with its id
         if (!Mage::app()->isSingleStoreMode()) {
-            $stores  = Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm();
+            $stores  = Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm();
             $entityStores = array();
             $noStoreError = false;
 

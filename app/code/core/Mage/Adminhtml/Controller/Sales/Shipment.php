@@ -114,6 +114,6 @@ class Mage_Adminhtml_Controller_Sales_Shipment extends Mage_Adminhtml_Controller
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/shipment');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/shipment');
     }
 }

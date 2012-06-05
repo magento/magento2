@@ -31,7 +31,7 @@
             <active>true</active>
             <codePool>core</codePool>
             <depends>
-                <Mage_Core/>
+                <Mage_Directory/>
             </depends>
         </Mage_Backend>
     </modules>

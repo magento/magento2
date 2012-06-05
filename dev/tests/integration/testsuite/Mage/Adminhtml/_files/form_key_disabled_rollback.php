@@ -25,4 +25,4 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-Mage::getSingleton('Mage_Adminhtml_Model_Url')->turnOnSecretKey();
+Mage::getSingleton('Mage_Backend_Model_Url')->turnOnSecretKey();

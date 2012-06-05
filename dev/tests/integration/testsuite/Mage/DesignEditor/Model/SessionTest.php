@@ -28,7 +28,7 @@
 class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Admin_Model_Session
+     * @var Mage_Backend_Model_Auth_Session
      */
     protected static $_adminSession;
 
@@ -78,13 +78,16 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     public static function loginAdmin()
     {
-        self::$_adminSession = new Mage_Admin_Model_Session();
-        self::$_adminSession->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
+        $auth = new Mage_Backend_Model_Auth();
+        self::$_adminSession = $auth->getAuthStorage();
+        $auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
 
     public static function loginAdminRollback()
     {
-        self::$_adminSession->logout();
+        $auth = new Mage_Backend_Model_Auth();
+        $auth->setAuthStorage(self::$_adminSession);
+        $auth->logout();
     }
 
     /**

@@ -61,7 +61,7 @@ class Mage_Rss_Helper_DataTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['PHP_AUTH_USER'] = Magento_Test_Bootstrap::ADMIN_NAME;
         $_SERVER['PHP_AUTH_PW'] = Magento_Test_Bootstrap::ADMIN_PASSWORD;
-        $this->assertInstanceOf('Mage_Admin_Model_User', $this->_helper->authAdmin(''));
+        $this->assertInstanceOf('Mage_User_Model_User', $this->_helper->authAdmin(''));
 
         $response = Mage::app()->getResponse();
         $code = $response->getHttpResponseCode();

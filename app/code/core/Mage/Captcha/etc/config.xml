@@ -64,14 +64,14 @@
                     </captcha>
                 </observers>
             </controller_action_predispatch_customer_account_createpost>
-            <controller_action_predispatch_adminhtml_index_forgotpassword>
+            <controller_action_predispatch_adminhtml_auth_forgotpassword>
                 <observers>
                     <captcha>
                         <class>Mage_Captcha_Model_Observer</class>
                         <method>checkUserForgotPasswordBackend</method>
                     </captcha>
                 </observers>
-            </controller_action_predispatch_adminhtml_index_forgotpassword>
+            </controller_action_predispatch_adminhtml_auth_forgotpassword>
             <admin_user_authenticate_before>
                 <observers>
                     <captcha>
@@ -100,14 +100,14 @@
                     </captcha_reset_attempt>
                 </observers>
             </customer_customer_authenticated>
-            <admin_session_user_login_success>
+            <backend_auth_user_login_success>
                 <observers>
                     <captcha_reset_attempt>
                         <class>Mage_Captcha_Model_Observer</class>
                         <method>resetAttemptForBackend</method>
                     </captcha_reset_attempt>
                 </observers>
-            </admin_session_user_login_success>
+            </backend_auth_user_login_success>
         </events>
     </global>
     <frontend>

@@ -116,7 +116,10 @@ class Mage_Catalog_Model_Resource_Product_Option_Value extends Mage_Core_Model_R
                 foreach ($storeIds as $storeId) {
                     if ($priceType == 'fixed') {
                         $storeCurrency = Mage::app()->getStore($storeId)->getBaseCurrencyCode();
-                        $rate = Mage::getModel('Mage_Directory_Model_Currency')->load($baseCurrency)->getRate($storeCurrency);
+                        /** @var $currencyModel Mage_Directory_Model_Currency */
+                        $currencyModel = Mage::getModel('Mage_Directory_Model_Currency');
+                        $currencyModel->load($baseCurrency);
+                        $rate = $currencyModel->getRate($storeCurrency);
                         if (!$rate) {
                             $rate = 1;
                         }

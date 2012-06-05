@@ -25,104 +25,12 @@
  */
 
 /**
- * Form element dependencies mapper
- * Assumes that one element may depend on other element values.
- * Will toggle as "enabled" only if all elements it depends from toggle as true.
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Form_Element_Dependence extends Mage_Adminhtml_Block_Abstract
+class Mage_Adminhtml_Block_Widget_Form_Element_Dependence extends Mage_Backend_Block_Widget_Form_Element_Dependence
 {
-    /**
-     * name => id mapper
-     * @var array
-     */
-    protected $_fields = array();
 
-    /**
-     * Dependencies mapper (by names)
-     * array(
-     *     'dependent_name' => array(
-     *         'depends_from_1_name' => 'mixed value',
-     *         'depends_from_2_name' => 'some another value',
-     *         ...
-     *     )
-     * )
-     * @var array
-     */
-    protected $_depends = array();
-
-    /**
-     * Additional configuration options for the dependencies javascript controller
-     *
-     * @var array
-     */
-    protected $_configOptions = array();
-
-    /**
-     * Add name => id mapping
-     *
-     * @param string $fieldId - element ID in DOM
-     * @param string $fieldName - element name in their fieldset/form namespace
-     * @return Mage_Adminhtml_Block_Widget_Form_Element_Dependence
-     */
-    public function addFieldMap($fieldId, $fieldName)
-    {
-        $this->_fields[$fieldName] = $fieldId;
-        return $this;
-    }
-
-    /**
-     * Register field name dependence one from each other by specified values
-     *
-     * @param string $fieldName
-     * @param string $fieldNameFrom
-     * @param string|array $refValues
-     * @return Mage_Adminhtml_Block_Widget_Form_Element_Dependence
-     */
-    public function addFieldDependence($fieldName, $fieldNameFrom, $refValues)
-    {
-        $this->_depends[$fieldName][$fieldNameFrom] = $refValues;
-        return $this;
-    }
-
-    /**
-     * Add misc configuration options to the javascript dependencies controller
-     *
-     * @param array $options
-     * @return Mage_Adminhtml_Block_Widget_Form_Element_Dependence
-     */
-    public function addConfigOptions(array $options)
-    {
-        $this->_configOptions = array_merge($this->_configOptions, $options);
-        return $this;
-    }
-
-    /**
-     * HTML output getter
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        if (!$this->_depends) {
-            return '';
-        }
-        return '<script type="text/javascript"> new FormElementDependenceController('
-            . $this->_getDependsJson()
-            . ($this->_configOptions ? ', ' . Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->_configOptions) : '')
-            . '); </script>';
-    }
-
-    /**
-     * Field dependences JSON map generator
-     * @return string
-     */
-    protected function _getDependsJson()
-    {
-        $result = array();
-        foreach ($this->_depends as $to => $row) {
-            foreach ($row as $from => $value) {
-                $result[$this->_fields[$to]][$this->_fields[$from]] = $value;
-            }
-        }
-        return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result);
-    }
 }

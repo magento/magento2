@@ -71,7 +71,7 @@ class Mage_GoogleOptimizer_Helper_Data extends Mage_Core_Helper_Abstract
         }
         $stores = array_merge(
             array(0),
-            array_keys(Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreCollection())
+            array_keys(Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreCollection())
         );
         foreach ($stores as $store) {
             if ($this->isOptimizerActive($store)) {

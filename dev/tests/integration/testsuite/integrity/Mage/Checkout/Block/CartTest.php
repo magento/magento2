@@ -50,7 +50,7 @@ class Integrity_Mage_Checkout_Block_CartTest extends PHPUnit_Framework_TestCase
             $blockNode = $blockNode[0];
             preg_match('/^(.+?_.+?)_/', $blockNode['type'], $matches);
             $params['_module'] = $matches[1];
-            $this->assertFileExists(Mage::getDesign()->getTemplateFilename($template, $params));
+            $this->assertFileExists(Mage::getDesign()->getFilename($template, $params));
         }
     }
 

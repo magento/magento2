@@ -46,6 +46,7 @@ return array(
     'CONFIG_XML_PATH_DISPLAY_FULL_SUMMARY',
     'CONFIG_XML_PATH_DISPLAY_ZERO_TAX',
     'EXCEPTION_CODE_IS_GROUPED_PRODUCT',
+    'REGISTRY_FORM_PARAMS_KEY' => array('suggestion' => 'direct value'),
     'TYPE_TINYINT' => array('suggestion' => 'Varien_Db_Ddl_Table::TYPE_SMALLINT'),
     'TYPE_CHAR' => array('suggestion' => 'Varien_Db_Ddl_Table::TYPE_TEXT'),
     'TYPE_VARCHAR' => array('suggestion' => 'Varien_Db_Ddl_Table::TYPE_TEXT'),

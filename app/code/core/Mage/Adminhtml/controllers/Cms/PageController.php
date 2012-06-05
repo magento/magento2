@@ -225,13 +225,13 @@ class Mage_Adminhtml_Cms_PageController extends Mage_Adminhtml_Controller_Action
         switch ($this->getRequest()->getActionName()) {
             case 'new':
             case 'save':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page/save');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/page/save');
                 break;
             case 'delete':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page/delete');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/page/delete');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/page');
                 break;
         }
     }

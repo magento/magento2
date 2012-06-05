@@ -29,8 +29,6 @@ class Mage_XmlConnect_Model_ApplicationTest extends PHPUnit_Framework_TestCase
 {
     public function testPrepareSubmitParams()
     {
-        $this->markTestIncomplete('MAGETWO-1083: Fails on Windows');
-
         /** @var $model Mage_XmlConnect_Model_Application */
         $model = $this->getMock(
             'Mage_XmlConnect_Model_Application',

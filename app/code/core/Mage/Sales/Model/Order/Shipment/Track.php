@@ -198,15 +198,15 @@ class Mage_Sales_Model_Order_Shipment_Track extends Mage_Sales_Model_Abstract
      *
      * Retains previous data in the object.
      *
-     * @param array $arr
+     * @param array $data
      * @return Mage_Sales_Model_Order_Shipment_Track
      */
-    public function addData(array $arr)
+    public function addData(array $data)
     {
-        if (array_key_exists('number', $arr)) {
-            $this->setNumber($arr['number']);
-            unset($arr['number']);
+        if (array_key_exists('number', $data)) {
+            $this->setNumber($data['number']);
+            unset($data['number']);
         }
-        return parent::addData($arr);
+        return parent::addData($data);
     }
 }

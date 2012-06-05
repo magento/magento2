@@ -73,8 +73,8 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      */
     public function testGetPublicSkinDir()
     {
-        Mage::app()->getConfig()->getOptions()->setMediaDir(__DIR__);
-        $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'skin', $this->_model->getPublicSkinDir());
+        Mage::app()->getConfig()->getOptions()->setSkinDir(__DIR__);
+        $this->assertEquals(__DIR__, $this->_model->getPublicSkinDir());
     }
 
     /**

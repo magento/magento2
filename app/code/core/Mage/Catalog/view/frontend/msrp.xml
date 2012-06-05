@@ -74,16 +74,16 @@ Default layout, loads most of the pages
         <update handle="MAP_popup" />
     </tag_customer_view>
 
-    <MAP_popup translate="label" type="page" parent="catalog_product_view">
+    <MAP_popup translate="label">
         <label>Catalog MAP Popup</label>
         <reference name="head">
             <action method="addJs" ifconfig="sales/msrp/enabled"><file>Mage_Catalog::msrp.js</file></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Core_Block_Template" template="Mage_Catalog::msrp/popup.phtml" name="product.tooltip"></block>
+            <block type="Mage_Core_Block_Template" template="Mage_Catalog::msrp/popup.phtml" name="product.tooltip"/>
         </reference>
     </MAP_popup>
-    <MAP_price_msrp_item translate="label" type="page" parent="catalog_product_view">
+    <MAP_price_msrp_item translate="label">
         <label>Catalog MAP Price MSRP Item</label>
         <reference name="catalog_product_price_template">
             <action method="addPriceBlockType"><type>msrp</type><block>Mage_Catalog_Block_Product_Price</block><template>product/price_msrp_item.phtml</template></action>
@@ -92,7 +92,7 @@ Default layout, loads most of the pages
             <action method="addPriceBlockType"><type>msrp</type><block>Mage_Catalog_Block_Product_Price</block><template>product/price_msrp_item.phtml</template></action>
         </reference>
     </MAP_price_msrp_item>
-    <MAP_price_msrp_wishlist_item translate="label" type="page" parent="wishlist_index_index">
+    <MAP_price_msrp_wishlist_item translate="label">
         <label>Catalog MAP Price MSRP Wishlist Item</label>
         <reference name="catalog_product_price_template">
             <action method="addPriceBlockType"><type>msrp</type><block>Mage_Catalog_Block_Product_Price</block><template>Mage_Wishlist::render/item/price_msrp_item.phtml</template></action>

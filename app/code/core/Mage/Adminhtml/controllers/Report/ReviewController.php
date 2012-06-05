@@ -162,13 +162,13 @@ class Mage_Adminhtml_Report_ReviewController extends Mage_Adminhtml_Controller_A
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/review/customer');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/review/customer');
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/review/product');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/review/product');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/review');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/review');
                 break;
         }
     }

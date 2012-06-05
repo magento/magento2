@@ -25,18 +25,13 @@
  */
 
 /**
- * Country grid filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Country extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select
+class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Country
+    extends Mage_Backend_Block_Widget_Grid_Column_Filter_Country
 {
-    protected function _getOptions()
-    {
-        $options = Mage::getResourceModel('Mage_Directory_Model_Resource_Country_Collection')
-            ->load()
-            ->toOptionArray(false);
-        array_unshift($options, array('value'=>'', 'label'=>Mage::helper('Mage_Cms_Helper_Data')->__('All Countries')));
-        return $options;
-    }
+
 }

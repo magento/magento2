@@ -36,7 +36,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
     /**
      * Admin session model
      *
-     * @var null|Mage_Admin_Model_Session
+     * @var null|Mage_Backend_Model_Auth_Session
      */
     protected $_adminSession = null;
 
@@ -192,12 +192,12 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
     /**
      * Retrieve admin session model
      *
-     * @return Mage_Admin_Model_Session
+     * @return Mage_Backend_Model_Auth_Session
      */
     protected function _getSession()
     {
         if (is_null($this->_adminSession)) {
-            $this->_adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+            $this->_adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
         return $this->_adminSession;
     }

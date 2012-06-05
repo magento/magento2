@@ -45,8 +45,8 @@ class Mage_Adminhtml_Block_System_Config_Switcher extends Mage_Adminhtml_Block_T
         $curWebsite = $this->getRequest()->getParam('website');
         $curStore   = $this->getRequest()->getParam('store');
 
-        $storeModel = Mage::getSingleton('Mage_Adminhtml_Model_System_Store');
-        /* @var $storeModel Mage_Adminhtml_Model_System_Store */
+        $storeModel = Mage::getSingleton('Mage_Core_Model_System_Store');
+        /* @var $storeModel Mage_Core_Model_System_Store */
 
         $url = Mage::getModel('Mage_Adminhtml_Model_Url');
 

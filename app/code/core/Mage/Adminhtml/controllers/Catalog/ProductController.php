@@ -1063,7 +1063,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/products');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('catalog/products');
     }
 
     /**

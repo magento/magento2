@@ -265,8 +265,8 @@ class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_
      */
     protected function _isAllowed()
     {
-        /** @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('Mage_Admin_Model_Session');
+        /** @var $session Mage_Backend_Model_Auth_Session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         return $session->isAllowed('system/api/roles_rest');
     }
 
@@ -275,8 +275,8 @@ class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_
      */
     public function rolesGridAction()
     {
-        /** @var $model Mage_Admin_Model_User */
-        $model = Mage::getModel('Mage_Admin_Model_User');
+        /** @var $model Mage_User_Model_User */
+        $model = Mage::getModel('Mage_User_Model_User');
         $model->load($this->getRequest()->getParam('user_id'));
 
         Mage::register('permissions_user', $model);

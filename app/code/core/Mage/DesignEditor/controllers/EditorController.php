@@ -75,7 +75,9 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
 
             // whether such page type exists
             if (!$this->getLayout()->getUpdate()->pageHandleExists($handle)) {
-                Mage::throwException($this->__("Specified page handle doesn't exist: '{$handle}'."));
+                Mage::throwException(
+                    $this->__("Specified page type or page fragment type doesn't exist: '{$handle}'.")
+                );
             }
 
             $this->_fullActionName = $handle;

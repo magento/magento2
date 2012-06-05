@@ -78,6 +78,7 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
     const URL_TYPE_WEB                    = 'web';
     const URL_TYPE_JS                     = 'js';
     const URL_TYPE_MEDIA                  = 'media';
+    const URL_TYPE_SKIN                   = 'skin';
 
     /**
      * Code constants
@@ -532,6 +533,12 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
                 case self::URL_TYPE_JS:
                     $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool) $secure;
                     $url = $this->getConfig('web/' . ($secure ? 'secure' : 'unsecure') . '/base_public_url') . 'js/';
+                    break;
+
+                case self::URL_TYPE_SKIN:
+                    $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool) $secure;
+                    $url = $this->getConfig('web/' . ($secure ? 'secure' : 'unsecure') . '/base_public_url')
+                        . 'media/skin/';
                     break;
 
                 case self::URL_TYPE_MEDIA:

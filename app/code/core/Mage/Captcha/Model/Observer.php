@@ -162,12 +162,13 @@ class Mage_Captcha_Model_Observer
     {
         $formId = 'backend_login';
         $captchaModel = Mage::helper('Mage_Captcha_Helper_Data')->getCaptcha($formId);
-        $loginParams = Mage::app()->getRequest()->getPost('login');
-        $login = is_array($loginParams) && array_key_exists('username', $loginParams) ? $loginParams['username'] : null;
+        $login = $observer->getEvent()->getUsername();
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString(Mage::app()->getRequest(), $formId))) {
                 $captchaModel->logAttempt($login);
-                Mage::throwException(Mage::helper('Mage_Captcha_Helper_Data')->__('Incorrect CAPTCHA.'));
+                throw new Mage_Backend_Model_Auth_Plugin_Exception(
+                    Mage::helper('Mage_Captcha_Helper_Data')->__('Incorrect CAPTCHA.')
+                );
             }
         }
         $captchaModel->logAttempt($login);

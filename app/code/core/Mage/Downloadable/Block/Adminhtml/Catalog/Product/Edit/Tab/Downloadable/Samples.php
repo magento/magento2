@@ -35,6 +35,13 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
     extends Mage_Adminhtml_Block_Widget
 {
     /**
+     * Block config data
+     *
+     * @var Varien_Object
+     */
+    protected $_config;
+
+    /**
      * Class constructor
      *
      */
@@ -172,7 +179,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
     }
 
     /**
-     * Retrive config json
+     * Retrieve config json
      *
      * @return string
      */
@@ -196,13 +203,13 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
     }
 
     /**
-     * Retrive config object
+     * Retrieve config object
      *
-     * @return Varien_Config
+     * @return Varien_Object
      */
     public function getConfig()
     {
-        if(is_null($this->_config)) {
+        if (is_null($this->_config)) {
             $this->_config = new Varien_Object();
         }
 

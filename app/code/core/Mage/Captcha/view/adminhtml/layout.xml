@@ -26,7 +26,7 @@
  */
 -->
 <layout version="0.1.0">
-    <adminhtml_index_login>
+    <adminhtml_auth_login>
         <reference name="form.additional.info">
             <block type="Mage_Captcha_Block_Captcha" name="captcha">
                 <action method="setFormId"><formId>backend_login</formId></action>
@@ -34,8 +34,8 @@
                 <action method="setImgHeight"><width>50</width></action>
             </block>
         </reference>
-    </adminhtml_index_login>
-    <adminhtml_index_forgotpassword>
+    </adminhtml_auth_login>
+    <adminhtml_auth_forgotpassword>
         <reference name="form.additional.info">
             <block type="Mage_Captcha_Block_Captcha" name="captcha">
                 <action method="setFormId"><formId>backend_forgotpassword</formId></action>
@@ -43,5 +43,5 @@
                 <action method="setImgHeight"><width>50</width></action>
             </block>
         </reference>
-    </adminhtml_index_forgotpassword>
+    </adminhtml_auth_forgotpassword>
 </layout>

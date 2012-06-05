@@ -45,4 +45,4 @@ $order->setIncrementId('100000001')
     ->setShippingAddress($shippingAddress)
     ->setPayment($payment)
 ;
-$order->save()->afterCommitCallback();
+$order->save();

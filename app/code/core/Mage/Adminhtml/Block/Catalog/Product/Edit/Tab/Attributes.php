@@ -99,7 +99,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
 
             // Add new attribute button if it is not an image tab
             if (!$form->getElement('media_gallery')
-                && Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/attributes/attributes')
+                && Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('catalog/attributes/attributes')
             ) {
                 $headerBar = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes_Create');
 

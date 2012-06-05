@@ -358,7 +358,7 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/tools/backup');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('system/tools/backup');
     }
 
     /**

@@ -33,6 +33,9 @@
             <depends>
                 <Mage_Core/>
             </depends>
+            <depends>
+                <Mage_User/>
+            </depends>
         </Mage_Oauth>
     </modules>
 </config>

@@ -54,6 +54,11 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
     const ENGINE_MEMORY = 'MEMORY';
 
     /**
+     * Maximum number of connection retries
+     */
+    const MAX_CONNECTION_RETRIES = 10;
+
+    /**
      * Default class name for a DB statement.
      *
      * @var string
@@ -407,7 +412,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2013  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
         );
-        $tries = 0;
+        $triesCount = 0;
         do {
             $retry = false;
             $this->_debugTimer();
@@ -418,6 +423,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 $this->_debugStat(self::DEBUG_QUERY, $sql, $bind, $result);
                 return $result;
             } catch (Exception $e) {
+                /** @var $pdoException PDOException */
                 $pdoException = null;
                 if ($e instanceof PDOException) {
                     $pdoException = $e;
@@ -426,9 +432,11 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 }
 
                 // Check to reconnect
-                if ($pdoException && ($tries < 10) && in_array($pdoException->errorInfo[1], $connectionErrors)) {
+                if ($pdoException && $triesCount < self::MAX_CONNECTION_RETRIES
+                    && in_array($pdoException->errorInfo[1], $connectionErrors)
+                ) {
                     $retry = true;
-                    $tries++;
+                    $triesCount++;
                     $this->closeConnection();
                     $this->_connect();
                 }

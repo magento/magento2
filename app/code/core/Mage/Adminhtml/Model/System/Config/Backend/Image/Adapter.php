@@ -48,7 +48,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_Image_Adapter extends Mage_Core
         try {
             $adapter->checkDependencies();
         } catch (Exception $e) {
-            $message = Mage::helper('Mage_Core_Helper_Data')->__('Unable to use choosen image adapter because of some dependies are missed');
+            $message = Mage::helper('Mage_Core_Helper_Data')->__('The specified image adapter cannot be used because of some missed dependencies.');
             throw new Mage_Core_Exception($message);
         }
 

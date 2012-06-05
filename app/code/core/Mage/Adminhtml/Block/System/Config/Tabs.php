@@ -205,8 +205,8 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         $curWebsite = $this->getRequest()->getParam('website');
         $curStore   = $this->getRequest()->getParam('store');
 
-        $storeModel = Mage::getSingleton('Mage_Adminhtml_Model_System_Store');
-        /* @var $storeModel Mage_Adminhtml_Model_System_Store */
+        $storeModel = Mage::getSingleton('Mage_Core_Model_System_Store');
+        /* @var $storeModel Mage_Core_Model_System_Store */
 
         $url = Mage::getModel('Mage_Adminhtml_Model_Url');
 
@@ -329,7 +329,7 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         }
 
         if (!$permissions) {
-            $permissions = Mage::getSingleton('Mage_Admin_Model_Session');
+            $permissions = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
 
         $showTab = false;

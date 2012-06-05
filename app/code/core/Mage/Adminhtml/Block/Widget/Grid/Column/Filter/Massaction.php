@@ -25,21 +25,13 @@
  */
 
 /**
- * Massaction grid column filter
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Massaction extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Checkbox
+class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Massaction
+    extends Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction
 {
-    public function getCondition()
-    {
-        if ($this->getValue()) {
-            return array('in'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
-        }
-        else {
-            return array('nin'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
-        }
-    }
+
 }

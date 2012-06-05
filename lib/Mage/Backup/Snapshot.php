@@ -129,6 +129,28 @@ class Mage_Backup_Snapshot extends Mage_Backup_Filesystem
     }
 
     /**
+     * Set Db backup manager
+     *
+     * @param Mage_Backup_Abstract $manager
+     * @return Mage_Backup_Snapshot
+     */
+    public function setDbBackupManager(Mage_Backup_Abstract $manager)
+    {
+        $this->_dbBackupManager = $manager;
+        return $this;
+    }
+
+    /**
+     * Get Db Backup Filemane
+     *
+     * @return string
+     */
+    public function getDbBackupFilename()
+    {
+        return $this->_getDbBackupManager()->getBackupFilename();
+    }
+
+    /**
      * Remove Db backup after added it to the snapshot
      *
      * @return Mage_Backup_Snapshot

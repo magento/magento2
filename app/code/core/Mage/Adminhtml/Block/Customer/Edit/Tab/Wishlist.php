@@ -246,7 +246,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Wishlist extends Mage_Adminhtml_Blo
      */
     public function getGridParentHtml()
     {
-        $templateName = Mage::getDesign()->getTemplateFilename($this->_parentTemplate, array('_relative'=>true));
+        $templateName = Mage::getDesign()->getFilename($this->_parentTemplate, array('_relative' => true));
         return $this->fetchView($templateName);
     }
 

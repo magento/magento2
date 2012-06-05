@@ -42,7 +42,7 @@ class Mage_AdminNotification_Model_Observer
     public function preDispatch(Varien_Event_Observer $observer)
     {
 
-        if (Mage::getSingleton('Mage_Admin_Model_Session')->isLoggedIn()) {
+        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isLoggedIn()) {
 
             $feedModel  = Mage::getModel('Mage_AdminNotification_Model_Feed');
             /* @var $feedModel Mage_AdminNotification_Model_Feed */

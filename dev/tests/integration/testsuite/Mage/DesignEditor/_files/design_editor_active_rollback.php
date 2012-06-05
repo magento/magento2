@@ -25,5 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 $session = new Mage_DesignEditor_Model_Session();
+$auth = new Mage_Backend_Model_Auth();
+$auth->setAuthStorage($session);
 $session->deactivateDesignEditor();
-$session->logout();
+$auth->logout();

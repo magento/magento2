@@ -43,7 +43,7 @@
       </option>
     <?php endforeach ?>
     </select>
-    <?php if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/store')): ?>
+    <?php if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('system/store')): ?>
     <p style="margin:10px 0 0;">
         <a href="<?php echo $this->getUrl('*/system_store') ?>"><?php echo $this->__('Manage Stores') ?></a>
     </p>

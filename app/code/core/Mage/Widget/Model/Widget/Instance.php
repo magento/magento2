@@ -450,7 +450,7 @@ class Mage_Widget_Model_Widget_Instance extends Mage_Core_Model_Abstract
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
-        $templateFilename = Mage::getSingleton('Mage_Core_Model_Design_Package')->getTemplateFilename($templatePath, array(
+        $templateFilename = Mage::getSingleton('Mage_Core_Model_Design_Package')->getFilename($templatePath, array(
             '_area'    => $this->getArea(),
             '_package' => $this->getPackage(),
             '_theme'   => $this->getTheme(),

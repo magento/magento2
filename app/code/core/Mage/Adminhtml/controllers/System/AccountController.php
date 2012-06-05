@@ -49,10 +49,10 @@ class Mage_Adminhtml_System_AccountController extends Mage_Adminhtml_Controller_
      */
     public function saveAction()
     {
-        $userId = Mage::getSingleton('Mage_Admin_Model_Session')->getUser()->getId();
+        $userId = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser()->getId();
         $pwd    = null;
 
-        $user = Mage::getModel('Mage_Admin_Model_User')->load($userId);
+        $user = Mage::getModel('Mage_User_Model_User')->load($userId);
 
         $user->setId($userId)
             ->setUsername($this->getRequest()->getParam('username', false))
@@ -91,6 +91,6 @@ class Mage_Adminhtml_System_AccountController extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/myaccount');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('system/myaccount');
     }
 }

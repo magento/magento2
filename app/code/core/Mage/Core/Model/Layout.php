@@ -121,16 +121,22 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     protected $_nameIncrement = 0;
 
     /**
+     * Information about structural elements, scheduled for creation
+     *
      * @var array
      */
     protected $_scheduledStructure = array();
 
     /**
+     * Materialized paths for overlapping workaround of scheduled structural elements
+     *
      * @var array
      */
     protected $_scheduledPaths = array();
 
     /**
+     * Full information about elements to be populated in the layout structure after generating structure
+     *
      * @var array
      */
     protected $_scheduledElements = array();
@@ -226,7 +232,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             foreach ($ignoreNodes as $block) {
                 $acl = (string)$attributes->acl;
                 if ($block->getAttribute('ignore') !== null || ($acl
-                    && Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed($acl))) {
+                    && Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($acl))) {
                     continue;
                 }
                 if (!isset($block->attributes()->ignore)) {
@@ -266,8 +272,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             if ($type == self::TYPE_BLOCK) {
                 $this->_generateBlock($node);
                 foreach ($actions as $action) {
-                    list($node, $parent) = $action;
-                    $this->_generateAction($node, $parent);
+                    list($actionNode, $parent) = $action;
+                    $this->_generateAction($actionNode, $parent);
                 }
             } else {
                 $this->_generateContainer((string)$node['name'], (string)$node[self::CONTAINER_OPT_LABEL],
@@ -323,7 +329,6 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      *
      * @param Mage_Core_Model_Layout_Element $node
      * @param Mage_Core_Model_Layout_Element $parent
-     * @throws Magento_Exception
      * @see _scheduleElement() where the _scheduledStructure is used
      */
     protected function _scheduleStructure($node, $parent)
@@ -362,13 +367,11 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     protected function _beforeAfterToSibling($node)
     {
         $result = array(null, true);
-        if (isset($node['after']) || isset($node['before'])) {
-            if (isset($node['after'])) {
-                $result[0] = (string)$node['after'];
-            } elseif (isset($node['before'])) {
-                $result[0] = (string)$node['before'];
-                $result[1] = false;
-            }
+        if (isset($node['after'])) {
+            $result[0] = (string)$node['after'];
+        } elseif (isset($node['before'])) {
+            $result[0] = (string)$node['before'];
+            $result[1] = false;
         }
         return $result;
     }
@@ -407,7 +410,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     {
         $row = $this->_scheduledStructure[$key];
         list($type, $alias, $parentName, $siblingName, $isAfter, $node) = $row;
-        $name = $this->_createElement(is_int($key) ? '' : $key, $type);
+        $name = $this->_createStructuralElement(is_int($key) ? '' : $key, $type);
         if ($parentName) {
             // recursively populate parent first
             if (isset($this->_scheduledStructure[$parentName])) {
@@ -437,7 +440,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     }
 
     /**
-     * Create element structural element ad hoc
+     * Register an element in structure
      *
      * Will assign an "anonymous" name to the element, if provided with an empty name
      *
@@ -445,7 +448,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      * @param string $type
      * @return string
      */
-    protected function _createElement($name, $type)
+    protected function _createStructuralElement($name, $type)
     {
         if (empty($name)) {
             $name = 'ANONYMOUS_' . $this->_nameIncrement++;
@@ -584,6 +587,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
         if (is_numeric($offsetOrSibling)) {
             $offset = (int)abs($offsetOrSibling) * ($after ? 1 : -1);
             $this->_structure->reorderChild($parentName, $childName, $offset);
+        } elseif (null === $offsetOrSibling) {
+            $this->_structure->reorderChild($parentName, $childName, null);
         } else {
             $children = $this->getChildNames($parentName);
             $sibling = $this->_filterSearchMinus($offsetOrSibling, $children, $after);
@@ -618,8 +623,6 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
                 return array_pop($haystack);
             }
             return array_shift($haystack);
-        } elseif (empty($needle)) {
-            return array_pop($haystack);
         }
         return $needle;
     }
@@ -993,7 +996,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      */
     public function createBlock($type, $name = '', array $attributes = array())
     {
-        $name = $this->_createElement($name, self::TYPE_BLOCK);
+        $name = $this->_createStructuralElement($name, self::TYPE_BLOCK);
         return $this->_createBlock($type, $name, $attributes);
     }
 
@@ -1033,7 +1036,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
         if (empty($name) && $block instanceof Mage_Core_Block_Abstract) {
             $name = $block->getNameInLayout();
         }
-        $name = $this->_createElement($name, self::TYPE_BLOCK);
+        $name = $this->_createStructuralElement($name, self::TYPE_BLOCK);
         if ($parent) {
             $this->_structure->setAsChild($name, $parent, $alias);
         }
@@ -1051,7 +1054,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      */
     public function addContainer($name, $label, array $options = array(), $parent = '', $alias = '')
     {
-        $name = $this->_createElement($name, self::TYPE_CONTAINER);
+        $name = $this->_createStructuralElement($name, self::TYPE_CONTAINER);
         $this->_generateContainer($name, $label, $options);
         if ($parent) {
             $this->_structure->setAsChild($name, $parent, $alias);

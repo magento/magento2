@@ -82,4 +82,27 @@ class Mage_Checkout_OnepageControllerTest extends Magento_Test_TestCase_Controll
         $this->dispatch('checkout/onepage/review');
         $this->assertContains('checkout-review', $this->getResponse()->getBody());
     }
+
+    /**
+     * @dataProvider paymentMethodData
+     * @param array $paymentPostData
+     * @param string $expectedMethodCode
+     */
+    public function testSaveOrderActionPaymentMethod($paymentPostData, $expectedMethodCode)
+    {
+        $this->getRequest()->setPost('payment', $paymentPostData);
+        $this->dispatch('checkout/onepage/saveorder');
+        $this->assertEquals(
+            $expectedMethodCode,
+            Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote()->getPayment()->getMethod()
+        );
+    }
+
+    public static function paymentMethodData()
+    {
+        return array(
+            array(array('_' => '123'), 'free'),
+            array(array('method' => 'checkmo'), 'checkmo'),
+        );
+    }
 }

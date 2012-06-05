@@ -43,5 +43,27 @@
                 </routers>
             </adminhtml>
         </areas>
+        <backend>
+            <auth/>
+        </backend>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Mage_Backend</module>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <backend module='Mage_Backend'>
+                    <file>layout.xml</file>
+                </backend>
+            </updates>
+        </layout>
+    </adminhtml>
 </config>

@@ -126,8 +126,8 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
             Mage::getStoreConfig(self::XML_PATH_ALLOWED_CURRENCIES, null)
         );
 
-        /* @var $storeModel Mage_Adminhtml_Model_System_Store */
-        $storeModel = Mage::getSingleton('Mage_Adminhtml_Model_System_Store');
+        /* @var $storeModel Mage_Core_Model_System_Store */
+        $storeModel = Mage::getSingleton('Mage_Core_Model_System_Store');
         foreach ($storeModel->getWebsiteCollection() as $website) {
             $websiteShow = false;
             foreach ($storeModel->getGroupCollection() as $group) {

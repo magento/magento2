@@ -182,6 +182,6 @@ class Mage_Adminhtml_Tax_Class_CustomerController extends Mage_Adminhtml_Control
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/tax/classes_customer');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/tax/classes_customer');
     }
 }

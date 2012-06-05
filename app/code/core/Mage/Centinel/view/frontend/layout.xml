@@ -29,14 +29,14 @@
 <layout version="0.1.0">
     <centinel_index_authenticationstart translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Centinel Authentication Start</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Centinel_Block_Authentication_Start" template="authentication/start.phtml"/>
         </block>
     </centinel_index_authenticationstart>
 
     <centinel_index_authenticationcomplete translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Centinel Authentication Finish</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Centinel_Block_Authentication_Complete" template="authentication/complete.phtml"/>
         </block>
     </centinel_index_authenticationcomplete>

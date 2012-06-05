@@ -41,7 +41,7 @@ class Mage_Api2_Model_Observer
      */
     public function saveAdminToRoleRelation(Varien_Event_Observer $observer)
     {
-        /** @var $user Mage_Admin_Model_User Object */
+        /** @var $user Mage_User_Model_User Object */
         $user = $observer->getObject();
 
         if ($user->hasData('api2_roles')) {

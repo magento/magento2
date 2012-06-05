@@ -75,8 +75,8 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      */
     protected function _compareColors($colorBefore, $colorAfter)
     {
-        // get different epsilon for 8 bit (max value = 255) & 16 bit (max value = 65535) images (eps = 0.05%)
-        $eps = max($colorAfter) > 255 ? 3300 : 15;
+        // get different epsilon for 8 bit (max value = 255) & 16 bit (max value = 65535) images (eps = 5%)
+        $eps = max($colorAfter) > 255 ? 3500 : 20;
 
         $result = true;
         foreach ($colorAfter as $i => $v) {
@@ -178,6 +178,7 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     public function openDataProvider()
     {
         return $this->_prepareData(array(
+            array(null),
             array($this->_getFixture('image_adapters_test.png')),
             array($this->_getFixture('image_adapters_test.tiff')),
             array($this->_getFixture('image_adapters_test.bmp'))
@@ -287,6 +288,10 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
             array(
                 $this->_getFixture('image_adapters_test.png'),
                 array(null, null)
+            ),
+            array(
+                $this->_getFixture('image_adapters_test.png'),
+                array(-100, -50)
             )
         ));
     }

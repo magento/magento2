@@ -107,6 +107,6 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_View extends Mage_Adminhtml_B
      */
     protected function _isAllowed($action)
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed($action);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($action);
     }
 }

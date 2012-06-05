@@ -24,41 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
- * Adminhtml Widget Tab Interface
- *
- * @category    Mage
- * @package     Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-interface Mage_Adminhtml_Block_Widget_Tab_Interface
+interface Mage_Adminhtml_Block_Widget_Tab_Interface extends Mage_Backend_Block_Widget_Tab_Interface
 {
-    /**
-     * Return Tab label
-     *
-     * @return string
-     */
-    public function getTabLabel();
 
-    /**
-     * Return Tab title
-     *
-     * @return string
-     */
-    public function getTabTitle();
-
-    /**
-     * Can show tab in tabs
-     *
-     * @return boolean
-     */
-    public function canShowTab();
-
-    /**
-     * Tab is hidden
-     *
-     * @return boolean
-     */
-    public function isHidden();
 }

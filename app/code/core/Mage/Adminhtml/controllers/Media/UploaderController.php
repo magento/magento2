@@ -50,6 +50,6 @@ class Mage_Adminhtml_Media_UploaderController extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('media');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('media');
     }
 }

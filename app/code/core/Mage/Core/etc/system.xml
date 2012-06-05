@@ -575,6 +575,7 @@
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Image_Adapter</source_model>
                             <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Image_Adapter</backend_model>
+                            <comment>When the adapter was changed, please, flush Catalog Images Cache</comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

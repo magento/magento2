@@ -78,6 +78,6 @@ class Mage_Adminhtml_Catalog_Product_GalleryController extends Mage_Adminhtml_Co
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/products');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('catalog/products');
     }
 } // Class Mage_Adminhtml_Catalog_Product_GalleryController End

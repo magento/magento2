@@ -42,7 +42,7 @@ class Mage_Core_Model_Observer
      */
     public function addSynchronizeNotification(Varien_Event_Observer $observer)
     {
-        $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+        $adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         if (!$adminSession->hasSyncProcessStopWatch()) {
             $flag = Mage::getSingleton('Mage_Core_Model_File_Storage')->getSyncFlag();
             $state = $flag->getState();

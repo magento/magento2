@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Sales_Order extends Mage_Adminhtml_Block_Widget_Grid_
         $this->_headerText = Mage::helper('Mage_Sales_Helper_Data')->__('Orders');
         $this->_addButtonLabel = Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order');
         parent::__construct();
-        if (!Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/create')) {
+        if (!Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/create')) {
             $this->_removeButton('add');
         }
     }

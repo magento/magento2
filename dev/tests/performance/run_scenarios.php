@@ -32,17 +32,16 @@ $configFile = __DIR__ . '/config.php';
 $configFile = file_exists($configFile) ? $configFile : "$configFile.dist";
 $config = require($configFile);
 $installOptions = isset($config['install_options']) ? $config['install_options'] : array();
-$scenarioFiles = glob(__DIR__ . '/' . $config['scenarios'], GLOB_BRACE);
+$scenarioFilesPattern = __DIR__ . '/' . $config['scenarios'];
+$scenarioFiles = glob($scenarioFilesPattern, GLOB_BRACE);
 $scenarioParams = $config['scenario_params'];
 $fixtureFiles = glob(__DIR__ . '/' . $config['fixtures'], GLOB_BRACE);
 $reportDir = __DIR__ . '/' . $config['report_dir'];
 
 /* Validate scenarios existence */
-foreach ($scenarioFiles as $scenarioFile) {
-    if (!file_exists($scenarioFile)) {
-        echo "Scenario file '$scenarioFile' does not exist." . PHP_EOL;
-        exit(1);
-    }
+if (!$scenarioFiles) {
+    echo "No scenario files match '$scenarioFilesPattern' pattern." . PHP_EOL;
+    exit(1);
 }
 
 /* Validate scenario params */

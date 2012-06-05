@@ -280,6 +280,6 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/sitemap');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('catalog/sitemap');
     }
 }

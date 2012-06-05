@@ -25,6 +25,7 @@
  */
 
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
+define('DS', DIRECTORY_SEPARATOR);
 
 if (!is_writable(TESTS_TEMP_DIR)) {
     throw new Exception(TESTS_TEMP_DIR . ' must be writable.');

@@ -86,7 +86,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
      */
     protected function _isAllowedAction($action)
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page/' . $action);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/page/' . $action);
     }
 
     /**

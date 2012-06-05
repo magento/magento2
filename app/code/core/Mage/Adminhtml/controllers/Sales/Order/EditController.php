@@ -81,6 +81,6 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/edit');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/edit');
     }
 }

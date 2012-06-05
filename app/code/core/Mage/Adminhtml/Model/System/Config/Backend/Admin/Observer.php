@@ -37,8 +37,8 @@ class Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer
             return;
         }
 
-        /** @var $adminSession Mage_Admin_Model_Session */
-        $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+        /** @var $adminSession Mage_Backend_Model_Auth_Session */
+        $adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         $adminSession->unsetAll();
         $adminSession->getCookie()->delete($adminSession->getSessionName());
 

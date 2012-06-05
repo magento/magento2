@@ -101,14 +101,14 @@
             </updates>
         </layout>
         <events>
-            <admin_session_user_logout>
+            <backend_auth_user_logout>
                 <observers>
                     <designeditor>
                         <class>Mage_DesignEditor_Model_Observer</class>
                         <method>adminSessionUserLogout</method>
                     </designeditor>
                 </observers>
-            </admin_session_user_logout>
+            </backend_auth_user_logout>
         </events>
     </adminhtml>
     <admin>

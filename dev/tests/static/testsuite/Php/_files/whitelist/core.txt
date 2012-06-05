@@ -1,11 +1,12 @@
 app/bootstrap.php
 app/code/core/Mage/Adminhtml/Model/Observer.php
+app/code/core/Mage/Core/Block/Abstract.php
 app/code/core/Mage/Core/Model/Design.php
 app/code/core/Mage/Core/Model/ShellAbstract.php
 app/code/core/Mage/Core/Model/Layout.php
 app/code/core/Mage/Core/Model/Layout/Structure.php
 app/code/core/Mage/Core/Model/Layout/Update.php
-app/code/core/Mage/Core/Block/Abstract.php
+app/code/core/Mage/Core/Model/Fallback.php
 app/code/core/Mage/DesignEditor
 app/code/core/Mage/Index/Model/Indexer/Abstract.php
 app/code/core/Mage/Index/Model/Shell.php
@@ -13,6 +14,7 @@ app/code/core/Mage/Log/Model/Resource/Helper
 app/code/core/Mage/Log/Model/Resource/Shell.php
 app/code/core/Mage/Log/Model/Shell.php
 app/code/core/Mage/Rss/Controller/AdminhtmlAbstract.php
+app/code/core/Mage/User
 dev/shell
 dev/tests/integration
 dev/tests/static

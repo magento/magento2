@@ -32,7 +32,7 @@
         <p class="super">
             <?php echo $this->__("Logged in as %s", $this->escapeHtml($this->getUser()->getUsername())) ?><span class="separator">|</span><?php echo $this->formatDate(null, 'full') ?><span class="separator">|</span><a href="http://golinks.magento.com/CE15" onclick="this.target='_blank'" class="go-try"><?php echo $this->__('Try Magento Go for Free') ?></a><span class="separator">|</span><a href="<?php echo $this->getLogoutLink() ?>" class="link-logout"><?php echo $this->__('Log Out') ?></a>
         </p>
-        <?php if ( Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('admin/global_search') ): ?>
+        <?php if ( Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('admin/global_search') ): ?>
         <fieldset>
             <legend>Search</legend>
             <span id="global_search_indicator" class="autocomplete-indicator" style="display: none">

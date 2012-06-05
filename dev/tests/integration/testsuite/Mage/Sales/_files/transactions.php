@@ -38,4 +38,4 @@ $order->setIncrementId('100000001')
 $payment->setTransactionId('trx1');
 $payment->addTransaction(Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH);
 
-$order->save()->afterCommitCallback();
+$order->save();

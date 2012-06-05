@@ -39,8 +39,19 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
     {
         $xml = $this->_composeXml($area, $package, $theme);
 
-        $xpath = '/layouts/*[(@type) or (@parent) or (@owner)]'; // Bugs with xpath, added brackets to overcome
-        $handles = $xml->xpath($xpath) ?: array();
+        /**
+         * There could be used an xpath "/layouts/*[@type or @owner or @parent]", but it randomly produced bugs, by
+         * selecting all nodes in depth. Thus it was refactored into manual nodes extraction.
+         */
+        $handles = array();
+        foreach ($xml->children() as $handleNode) {
+            if ($handleNode->getAttribute('type')
+                || $handleNode->getAttribute('owner')
+                || $handleNode->getAttribute('parent')
+            ) {
+                $handles[] = $handleNode;
+            }
+        }
 
         /** @var Mage_Core_Model_Layout_Element $node */
         $errors = array();

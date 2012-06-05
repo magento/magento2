@@ -252,18 +252,11 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             /**
              * Install configuration
              */
-            // TODO fix wizard and simplify this everywhere
             $installer->installConfig($this->_getDataModel()->getConfigData());
 
             if ($this->hasErrors()) {
                 return false;
             }
-
-            /**
-             * Reinitialize configuration (to use new config data)
-             */
-            Mage::app()->cleanCache();
-            Mage::getConfig()->reinit();
 
             /**
              * Install database

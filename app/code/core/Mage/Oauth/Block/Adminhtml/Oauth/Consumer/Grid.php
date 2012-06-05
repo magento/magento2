@@ -52,8 +52,8 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Grid extends Mage_Adminhtml_Bloc
         $this->setDefaultSort('entity_id')
             ->setDefaultDir(Varien_Db_Select::SQL_DESC);
 
-        /** @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('Mage_Admin_Model_Session');
+        /** @var $session Mage_Backend_Model_Auth_Session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         $this->_editAllow = $session->isAllowed('system/oauth/consumer/edit');
     }
 

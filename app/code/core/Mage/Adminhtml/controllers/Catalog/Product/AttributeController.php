@@ -169,7 +169,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
-            /** @var $session Mage_Admin_Model_Session */
+            /** @var $session Mage_Backend_Model_Auth_Session */
             $session = Mage::getSingleton('Mage_Adminhtml_Model_Session');
 
             $redirectBack   = $this->getRequest()->getParam('back', false);
@@ -341,6 +341,6 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/attributes/attributes');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('catalog/attributes/attributes');
     }
 }

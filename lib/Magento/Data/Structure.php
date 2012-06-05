@@ -10,7 +10,7 @@
 class Magento_Data_Structure
 {
     /**
-     * Reserved keys
+     * Reserved keys for storing structural relations
      */
     const PARENT   = 'parent';
     const CHILDREN = 'children';
@@ -48,7 +48,8 @@ class Magento_Data_Structure
             }
             $this->_assertParentRelation($id);
             if (isset($element[self::GROUPS])) {
-                $groups = $this->_assertArray($element[self::GROUPS]);
+                $groups = $element[self::GROUPS];
+                $this->_assertArray($groups);
                 foreach ($groups as $groupName => $group) {
                     $this->_assertArray($group);
                     if ($group !== array_flip($group)) {
@@ -85,7 +86,8 @@ class Magento_Data_Structure
 
         // element presence in its children
         if (isset($element[self::CHILDREN])) {
-            $children = $this->_assertArray($element[self::CHILDREN]);
+            $children = $element[self::CHILDREN];
+            $this->_assertArray($children);
             if ($children !== array_flip(array_flip($children))) {
                 throw new Magento_Exception('Invalid format of children: ' . var_export($children, 1));
             }
@@ -117,7 +119,7 @@ class Magento_Data_Structure
      *
      * @param string $id
      * @param array $data
-     * @throws Magento_Exception if an element with this name already exists
+     * @throws Magento_Exception if an element with this id already exists
      */
     public function createElement($id, array $data)
     {
@@ -180,7 +182,7 @@ class Magento_Data_Structure
     }
 
     /**
-     * Set an arbitrary value to specified element
+     * Set an arbitrary value to specified element attribute
      *
      * @param string $elementId
      * @param string $attribute
@@ -262,12 +264,15 @@ class Magento_Data_Structure
      * @param string $elementId
      * @param string $parentId
      * @param string $alias
-     * @param int|null $offset
-     * @see _insertChild() for offset explanation
+     * @param int|null $position
+     * @see _insertChild() for position explanation
      * @throws Magento_Exception if attempting to set parent as child to its child (recursively)
      */
-    public function setAsChild($elementId, $parentId, $alias = '', $offset = null)
+    public function setAsChild($elementId, $parentId, $alias = '', $position = null)
     {
+        if ($elementId == $parentId) {
+            throw new Magento_Exception("The '{$elementId}' cannot be set as child to itself.");
+        }
         if ($this->_isParentRecursively($elementId, $parentId)) {
             throw new Magento_Exception("The '{$elementId}' is a parent of '{$parentId}' recursively, "
                 . "therefore '{$elementId}' cannot be set as child to it."
@@ -275,7 +280,7 @@ class Magento_Data_Structure
         }
         $this->unsetChild($elementId);
         unset($this->_elements[$parentId][self::CHILDREN][$elementId]);
-        $this->_insertChild($parentId, $elementId, $offset, $alias);
+        $this->_insertChild($parentId, $elementId, $position, $alias);
     }
 
     /**
@@ -286,7 +291,7 @@ class Magento_Data_Structure
      *   1 argument: element ID which is supposedly a child of some element
      *   2 arguments: parent element ID and child alias
      *
-     * @param string $elementId element or parent element
+     * @param string $elementId ID of an element or its parent element
      * @param string|null $alias
      */
     public function unsetChild($elementId, $alias = null)
@@ -307,31 +312,28 @@ class Magento_Data_Structure
     }
 
     /**
-     * Reorder a child element into designated position
+     * Reorder a child element relatively to specified position
      *
-     * Returns new position of the reordered element (not the actual internal offset)
+     * Returns new position of the reordered element
      *
      * @param string $parentId
      * @param string $childId
-     * @param int|null $offset
+     * @param int|null $position
      * @return int
-     * @throws Magento_Exception if specified elements have no parent-child relation
-     * @see _insertChild() for offset explanation
+     * @see _insertChild() for position explanation
      */
-    public function reorderChild($parentId, $childId, $offset)
+    public function reorderChild($parentId, $childId, $position)
     {
         $alias = $this->getChildAlias($parentId, $childId);
-        if (false === $alias) {
-            throw new Magento_Exception("The '{$childId}' is not a descendant of '{$parentId}'.");
-        }
         $currentOffset = $this->_getChildOffset($parentId, $childId);
-        if ($offset > 0) {
-            if ($offset >= $currentOffset + 1) {
+        $offset = $position;
+        if ($position > 0) {
+            if ($position >= $currentOffset + 1) {
                 $offset -= 1;
             }
-        } elseif ($offset < 0) {
-            if ($offset < (($currentOffset + 1) - count($this->_elements[$parentId][self::CHILDREN]))) {
-                if ($offset === -1) {
+        } elseif ($position < 0) {
+            if ($position < (($currentOffset + 1) - count($this->_elements[$parentId][self::CHILDREN]))) {
+                if ($position === -1) {
                     $offset = null;
                 } else {
                     $offset += 1;
@@ -350,6 +352,7 @@ class Magento_Data_Structure
      *    1,  2 -- set after the sibling towards end -- by 1, by 2 positions, etc
      *   -1, -2 -- set before the sibling towards start -- by 1, by 2 positions, etc...
      *
+     * Both $childId and $siblingId must be children of the specified $parentId
      * Returns new position of the reordered element
      *
      * @param string $parentId
@@ -357,18 +360,15 @@ class Magento_Data_Structure
      * @param string $siblingId
      * @param int $offset
      * @return int
-     * @throws Magento_Exception if both siblings are not descendants of the specified parent
      */
     public function reorderToSibling($parentId, $childId, $siblingId, $offset)
     {
-        $alias = $this->getChildAlias($parentId, $childId);
-        if (false === $alias || false === $this->getChildAlias($parentId, $siblingId)) {
-            throw new Magento_Exception("The '{$siblingId}' is not a descendant of '{$parentId}'.");
-        }
+        $this->_getChildOffset($parentId, $childId);
         if ($childId === $siblingId) {
             $newOffset = $this->_getRelativeOffset($parentId, $siblingId, $offset);
             return $this->reorderChild($parentId, $childId, $newOffset);
         }
+        $alias = $this->getChildAlias($parentId, $childId);
         $this->unsetChild($childId);
         $newOffset = $this->_getRelativeOffset($parentId, $siblingId, $offset);
         $this->_insertChild($parentId, $childId, $newOffset, $alias);
@@ -376,17 +376,17 @@ class Magento_Data_Structure
     }
 
     /**
-     * Get offset of a target element relatively to sibling ID under the same parent
+     * Calculate new offset for placing an element relatively specified sibling under the same parent
      *
      * @param string $parentId
      * @param string $siblingId
-     * @param int $offset
+     * @param int $delta
      * @return int
      */
-    private function _getRelativeOffset($parentId, $siblingId, $offset)
+    private function _getRelativeOffset($parentId, $siblingId, $delta)
     {
-        $newOffset = $this->_getChildOffset($parentId, $siblingId) + $offset;
-        if ($offset < 0) {
+        $newOffset = $this->_getChildOffset($parentId, $siblingId) + $delta;
+        if ($delta < 0) {
             $newOffset += 1;
         }
         if ($newOffset < 0) {
@@ -494,35 +494,39 @@ class Magento_Data_Structure
     }
 
     /**
-     * Calculate a relative offset of a child element in specified parent.
+     * Calculate a relative offset of a child element in specified parent
      *
      * @param string $parentId
      * @param string $childId
      * @return int
+     * @throws Magento_Exception if specified elements have no parent-child relation
      */
     protected function _getChildOffset($parentId, $childId)
     {
         $index = array_search($childId, array_keys($this->getChildren($parentId)));
-        return false === $index ? 0 : $index;
+        if (false === $index) {
+            throw new Magento_Exception("The '{$childId}' is not a child of '{$parentId}'.");
+        }
+        return $index;
     }
 
     /**
-     * Traverse through hierarchy and detect if an element is a recursive child of specified potential parent
+     * Traverse through hierarchy and detect if the "potential parent" is a parent recursively to specified "child"
      *
-     * @param string $elementId
+     * @param string $childId
      * @param string $potentialParentId
      * @return bool
      */
-    private function _isParentRecursively($elementId, $potentialParentId)
+    private function _isParentRecursively($childId, $potentialParentId)
     {
         $parentId = $this->getParentId($potentialParentId);
         if (!$parentId) {
             return false;
         }
-        if ($parentId === $elementId) {
+        if ($parentId === $childId) {
             return true;
         }
-        return $this->_isParentRecursively($elementId, $parentId);
+        return $this->_isParentRecursively($childId, $parentId);
     }
 
     /**
@@ -537,8 +541,8 @@ class Magento_Data_Structure
      *  -1, -2 -- before last, before second last, etc...
      *   null  -- set as last
      *
-     * @param $targetParentId
-     * @param $elementId
+     * @param string $targetParentId
+     * @param string $elementId
      * @param int|null $offset
      * @param string $alias
      * @throws Magento_Exception
@@ -589,10 +593,9 @@ class Magento_Data_Structure
     }
 
     /**
-     * Check if it is an array and return it
+     * Check if it is an array
      *
      * @param array $value
-     * @return array
      * @throws Magento_Exception
      */
     private function _assertArray($value)
@@ -600,6 +603,5 @@ class Magento_Data_Structure
         if (!is_array($value)) {
             throw new Magento_Exception("An array expected: " . var_export($value, 1));
         }
-        return $value;
     }
 }

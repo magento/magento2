@@ -137,10 +137,22 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
 
     /**
      * Class constructor
+     *
+     * @param array $arguments
+     * @throws InvalidArgumentException
      */
-    public function __construct()
+    public function __construct(array $arguments = array())
     {
-        $this->_resources = Mage::getSingleton('Mage_Core_Model_Resource');
+        if (isset($arguments['resource'])) {
+            $this->_resources = $arguments['resource'];
+        } else {
+            $this->_resources = Mage::getSingleton('Mage_Core_Model_Resource');
+        }
+        if (!($this->_resources instanceof Mage_Core_Model_Resource)) {
+            throw new InvalidArgumentException(
+                'Argument "resource" is expected to be an instance of "Mage_Core_Model_Resource".'
+            );
+        }
         parent::__construct();
     }
 
@@ -263,21 +275,20 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
      * Get connection by name or type
      *
      * @param string $connectionName
-     * @return Zend_Db_Adapter_Abstract
+     * @return Varien_Db_Adapter_Interface|bool
      */
     protected function _getConnection($connectionName)
     {
         if (isset($this->_connections[$connectionName])) {
             return $this->_connections[$connectionName];
         }
-        if (!empty($this->_resourcePrefix)) {
-            $this->_connections[$connectionName] = $this->_resources->getConnection(
-                $this->_resourcePrefix . '_' . $connectionName);
-        } else {
-            $this->_connections[$connectionName] = $this->_resources->getConnection($connectionName);
+        $connectionNameFull = ($this->_resourcePrefix ? $this->_resourcePrefix . '_' : '') . $connectionName;
+        $connectionInstance = $this->_resources->getConnection($connectionNameFull);
+        // cache only active connections to detect inactive ones as soon as they become active
+        if ($connectionInstance) {
+            $this->_connections[$connectionName] = $connectionInstance;
         }
-
-        return $this->_connections[$connectionName];
+        return $connectionInstance;
     }
 
     /**

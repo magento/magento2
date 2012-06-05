@@ -73,7 +73,7 @@
 
     <paypal_express_review_details translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Express Review Details</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Express_Review_Details" name="paypal.express.review.details" template="express/review/details.phtml">
                 <action method="addItemRender"><type>default</type><block>Mage_Checkout_Block_Cart_Item_Renderer</block><template>onepage/review/item.phtml</template></action>
                 <action method="addItemRender"><type>grouped</type><block>Mage_Checkout_Block_Cart_Item_Renderer_Grouped</block><template>onepage/review/item.phtml</template></action>
@@ -176,35 +176,35 @@ Available logo types can be assigned with action="setLogoType":
 
     <paypal_payflowadvanced_cancelpayment translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Advanced Cancel Payment</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/redirect.phtml"/>
         </block>
     </paypal_payflowadvanced_cancelpayment>
 
     <paypal_payflowadvanced_returnurl translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Advanced Return URL</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/redirect.phtml"/>
         </block>
     </paypal_payflowadvanced_returnurl>
 
     <paypal_payflowadvanced_form translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Advanced Form</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Advanced_Iframe" name="payflow.advanced.iframe" template="payflowadvanced/form.phtml"/>
         </block>
     </paypal_payflowadvanced_form>
 
     <paypal_hostedpro_cancel translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Hosted Pro Frame</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Hosted_Pro_Iframe" name="hosted.pro.iframe" template="hss/redirect.phtml"/>
         </block>
     </paypal_hostedpro_cancel>
 
     <paypal_standard_redirect translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Standard Redirect</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Standard_Redirect" name="standard.redirect"/>
         </block>
     </paypal_standard_redirect>
@@ -223,21 +223,21 @@ Available logo types can be assigned with action="setLogoType":
 
     <paypal_payflow_form translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Form</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Link_Iframe" name="payflow.link.iframe" template="payflowlink/form.phtml" />
         </block>
     </paypal_payflow_form>
 
     <paypal_payflow_cancelpayment translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Cancel Payment</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Link_Iframe" name="payflow.link.iframe" template="payflowlink/redirect.phtml" />
         </block>
     </paypal_payflow_cancelpayment>
 
     <paypal_payflow_returnurl translate="label" type="fragment" owner="checkout_onepage_index">
         <label>Paypal Payflow Return URL</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Paypal_Block_Payflow_Link_Iframe" name="payflow.link.iframe" template="payflowlink/redirect.phtml" />
         </block>
     </paypal_payflow_returnurl>

@@ -88,20 +88,6 @@
                     <action>adminhtml/system_variable</action>
                     <sort_order>65</sort_order>
                 </variable>
-                <acl translate="title">
-                    <title>Permissions</title>
-                    <sort_order>70</sort_order>
-                    <children>
-                        <users translate="title">
-                            <title>Users</title>
-                            <action>adminhtml/permissions_user</action>
-                        </users>
-                        <roles translate="title">
-                            <title>Roles</title>
-                            <action>adminhtml/permissions_role</action>
-                        </roles>
-                    </children>
-                </acl>
                 <cache translate="title">
                     <title>Cache Management</title>
                     <action>adminhtml/cache</action>
@@ -136,20 +122,6 @@
                         <title>System</title>
                         <sort_order>90</sort_order>
                         <children>
-                            <acl translate="title">
-                                <title>Permissions</title>
-                                <sort_order>0</sort_order>
-                                <children>
-                                    <roles translate="title">
-                                        <title>Roles</title>
-                                        <sort_order>10</sort_order>
-                                    </roles>
-                                    <users translate="title">
-                                        <title>Users</title>
-                                        <sort_order>20</sort_order>
-                                    </users>
-                                </children>
-                            </acl>
                             <store translate="title">
                                 <title>Manage Stores</title>
                             </store>

@@ -42,9 +42,16 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
      *
      * @covers Varien_Db_Adapter_Pdo_Mysql::raw_query
      * @covers Varien_Db_Adapter_Pdo_Mysql::query
+     * @throws Exception
      */
     public function testWaitTimeout()
     {
+        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            $this->markTestSkipped('Test is designed to run on MySQL only.');
+        }
+        if (!($this->_getConnection() instanceof Varien_Db_Adapter_Pdo_Mysql)) {
+            $this->markTestSkipped('This test is for Varien_Db_Adapter_Pdo_Mysql');
+        }
         try {
             $defaultWaitTimeout = $this->_getWaitTimeout();
             $minWaitTimeout = 1;
@@ -60,8 +67,8 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($defaultWaitTimeout, $this->_getWaitTimeout(), 'Default wait timeout was not restored');
         } catch (Exception $e) {
             // Reset connection on failure to restore global variables
-            $this->_connection->closeConnection();
-            $this->fail($e->getMessage());
+            $this->_getConnection()->closeConnection();
+            throw $e;
         }
     }
 

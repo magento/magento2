@@ -42,28 +42,71 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
     protected $_adminhtmlConfig;
 
     /**
-     * Load config from merged adminhtml.xml files
+     * Main Application object
+     *
+     * @var Mage_Core_Model_App
      */
-    public function __construct()
+    protected $_app;
+
+    /**
+     * Main Application config
+     *
+     * @var Mage_Core_Model_Config
+     */
+    protected $_appConfig;
+
+    /**
+     * List of helpers by module
+     *
+     * @var array
+     */
+    protected $_helpers = array();
+
+    /**
+     * Load config from merged adminhtml.xml files
+     * @param array $arguments
+     */
+    public function __construct(array $arguments = array())
     {
+        $this->_app = isset($arguments['app']) ? $arguments['app'] : Mage::app();
+        $this->_appConfig = isset($arguments['appConfig']) ? $arguments['appConfig'] : Mage::getConfig();
+        if (isset($arguments['helpers'])) {
+            $this->_helpers = $arguments['helpers'];
+        }
+
+
         parent::__construct();
         $this->setCacheId('adminhtml_acl_menu_config');
 
         /* @var $adminhtmlConfig Varien_Simplexml_Config */
-        $adminhtmlConfig = Mage::app()->loadCache($this->getCacheId());
+        $adminhtmlConfig = $this->_app->loadCache($this->getCacheId());
         if ($adminhtmlConfig) {
             $this->_adminhtmlConfig = new Varien_Simplexml_Config($adminhtmlConfig);
         } else {
             $adminhtmlConfig = new Varien_Simplexml_Config;
             $adminhtmlConfig->loadString('<?xml version="1.0"?><config></config>');
-            Mage::getConfig()->loadModulesConfiguration('adminhtml.xml', $adminhtmlConfig);
+            $this->_appConfig->loadModulesConfiguration('adminhtml.xml', $adminhtmlConfig);
             $this->_adminhtmlConfig = $adminhtmlConfig;
 
-            if (Mage::app()->useCache('config')) {
-                Mage::app()->saveCache($adminhtmlConfig->getXmlString(), $this->getCacheId(),
+            if ($this->_app->useCache('config')) {
+                $this->_app->saveCache($adminhtmlConfig->getXmlString(), $this->getCacheId(),
                     array(Mage_Core_Model_Config::CACHE_TAG));
             }
         }
+    }
+
+    /**
+     * Retrieve base helper by module
+     *
+     * @param string $module
+     * @return Mage_Core_Helper_Abstract
+     */
+    protected function _getHelper($module)
+    {
+        if (isset($this->_helpers[$module])) {
+            return $this->_helpers[$module];
+        }
+        return Mage::helper($module);
     }
 
     /**
@@ -107,6 +150,138 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
             $this->loadAclResources($acl, $res, $resourceName);
         }
         return $this;
+    }
+
+    /**
+     * Retrieve Acl Resource Tree with module and path information
+     *
+     * @return Varien_Simplexml_Element
+     */
+    public function getAclResourceTree()
+    {
+        return $this->_walkResourceTree();
+    }
+
+    /**
+     * Retrieve flat Acl Resource list with level information
+     * @param bool $shortFormat
+     * @return array
+     */
+    public function getAclResourceList($shortFormat = false)
+    {
+        return $this->_flattenResourceTree(null, null, 0, 'Mage_Backend', $shortFormat);
+    }
+
+    /**
+     * Decorate acl resource tree
+     *
+     * @param  Varien_Simplexml_Element $resource
+     * @param  null $parentName
+     * @param  string $module
+     * @return Varien_Simplexml_Element
+     */
+    protected function _walkResourceTree(Varien_Simplexml_Element $resource = null,
+        $parentName = null, $module = 'Mage_Backend')
+    {
+        $resourceName = $parentName;
+        if (is_null($resource)) {
+            $resource = $this->getAdminhtmlConfig()->getNode('acl/resources');
+            $resourceName = null;
+            $level = -1;
+        } else {
+            if (!$this->_isServiceElement($resource)) {
+                $resourceName = $this->_buildFullResourceName($resource, $parentName);
+                //assigning module for its' children nodes
+                if ($resource->getAttribute('module')) {
+                    $module = (string)$resource->getAttribute('module');
+
+                }
+                $resource->addAttribute('aclpath', $resourceName);
+                $resource->addAttribute('module_c', $module);
+            }
+        }
+
+        //check children and run recursion if they exists
+        $children = $resource->children();
+        foreach ($children as $key => $child) {
+            if (1 == $child->disabled) {
+                $resource->{$key} = null;
+                continue;
+            }
+            $this->_walkResourceTree($child, $resourceName, $module);
+        }
+        return $resource;
+    }
+
+    /**
+     * Flatten acl resources tree
+     *
+     * @param null|Varien_Simplexml_Element $resource
+     * @param null $parentName
+     * @param int $level
+     * @param string $module
+     * @param bool $shortFormat
+     * @return array
+     */
+    protected function _flattenResourceTree(Varien_Simplexml_Element $resource = null,
+        $parentName = null, $level = 0, $module = 'Mage_Backend', $shortFormat = false)
+    {
+        $result = array();
+        $resourceName = $parentName;
+        if (is_null($resource)) {
+            $resource = $this->getAdminhtmlConfig()->getNode('acl/resources');
+            $resourceName = null;
+            $level = -1;
+        } else {
+            if (!$this->_isServiceElement($resource)) {
+                $resourceName = $this->_buildFullResourceName($resource, $parentName);
+
+                if ($shortFormat) {
+                    $result[] = $resourceName;
+                } else {
+                    if ($resource->getAttribute('module')) {
+                        $module = (string)$resource->getAttribute('module');
+                    }
+                    $result[$resourceName]['name']  = $this->_getHelper($module)->__((string)$resource->title);
+                    $result[$resourceName]['level'] = $level;
+                }
+            }
+        }
+        //check children and run recursion if they exists
+        $children = $resource->children();
+        foreach ($children as $key => $child) {
+            if (1 == $child->disabled) {
+                continue;
+            }
+            $result = array_merge(
+                $this->_flattenResourceTree($child, $resourceName, $level + 1, $module, $shortFormat),
+                $result
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * Check whether provided element is a service element of Admin Xml configuration
+     *
+     * @param Varien_Simplexml_Element $resource
+     * @return bool
+     */
+    protected function _isServiceElement(Varien_Simplexml_Element $resource)
+    {
+        return in_array($resource->getName(), array('title', 'sort_order', 'children', 'disabled'));
+    }
+
+    /**
+     * Build acl resource name with path to parent
+     *
+     * @param Varien_Simplexml_Element $resource
+     * @param string $path
+     * @return string
+     */
+    protected function _buildFullResourceName(Varien_Simplexml_Element $resource, $path = null)
+    {
+        return (is_null($path) ? '' : $path . '/') . $resource->getName();
     }
 
     /**
@@ -172,6 +347,6 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
         if ($menuNode->getAttribute('module')) {
             $moduleName = (string)$menuNode->getAttribute('module');
         }
-        return Mage::helper($moduleName)->__((string)$menuNode->title);
+        return $this->_getHelper($moduleName)->__((string)$menuNode->title);
     }
 }

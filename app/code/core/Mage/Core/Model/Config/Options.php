@@ -73,6 +73,7 @@ class Mage_Core_Model_Config_Options extends Varien_Object
         $this->_data['pub_dir']     = $root . DIRECTORY_SEPARATOR . 'pub';
         $this->_data['js_dir']      = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'js';
         $this->_data['media_dir']   = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'media';
+        $this->_data['skin_dir']    = $this->_data['media_dir'] . DIRECTORY_SEPARATOR . 'skin';
         $this->_data['var_dir']     = $this->getVarDir();
         $this->_data['tmp_dir']     = $this->_data['var_dir'] . DIRECTORY_SEPARATOR . 'tmp';
         $this->_data['cache_dir']   = $this->_data['var_dir'] . DIRECTORY_SEPARATOR . 'cache';
@@ -187,6 +188,16 @@ class Mage_Core_Model_Config_Options extends Varien_Object
     public function getJsDir()
     {
         return $this->_data['js_dir'];
+    }
+
+    /**
+     * Media folder paths getter
+     *
+     * @return string
+     */
+    public function getSkinDir()
+    {
+        return $this->_data['skin_dir'];
     }
 
     /**

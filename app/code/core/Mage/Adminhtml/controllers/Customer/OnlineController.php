@@ -49,6 +49,6 @@ class Mage_Adminhtml_Customer_OnlineController extends Mage_Adminhtml_Controller
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('customer/online');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('customer/online');
     }
 }

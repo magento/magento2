@@ -119,7 +119,11 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'),
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, false, true,  'http://localhost/pub/media/'),
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, true,  false, 'http://localhost/pub/media/'),
-            array(Mage_Core_Model_Store::URL_TYPE_MEDIA, true,  true,  'http://localhost/pub/media/')
+            array(Mage_Core_Model_Store::URL_TYPE_MEDIA, true,  true,  'http://localhost/pub/media/'),
+            array(Mage_Core_Model_Store::URL_TYPE_SKIN, false, false, 'http://localhost/pub/media/skin/'),
+            array(Mage_Core_Model_Store::URL_TYPE_SKIN, false, true,  'http://localhost/pub/media/skin/'),
+            array(Mage_Core_Model_Store::URL_TYPE_SKIN, true,  false, 'http://localhost/pub/media/skin/'),
+            array(Mage_Core_Model_Store::URL_TYPE_SKIN, true,  true,  'http://localhost/pub/media/skin/')
         );
     }
 

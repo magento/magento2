@@ -26,7 +26,7 @@
  */
 
 /**
- * @magentoDataFixture Mage/Sales/_files/order.php
+ * @magentoDataFixture Mage/Sales/_files/order_commit_workaround.php
  */
 class Mage_Paypal_PayflowControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {

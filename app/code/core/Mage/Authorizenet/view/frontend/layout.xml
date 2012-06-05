@@ -43,14 +43,14 @@
 
     <authorizenet_directpost_payment_redirect translate="label" type="fragment" owner="checkout_onepage_index">
         <label>AuthorizeNet Directpost Redirect</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Authorizenet_Block_Directpost_Iframe" name="iframe" template="directpost/iframe.phtml"/>
         </block>
     </authorizenet_directpost_payment_redirect>
 
     <authorizenet_directpost_payment_response translate="label" type="fragment" owner="checkout_onepage_index">
         <label>AuthorizeNet Directpost Response</label>
-        <block type="Mage_Page_Block_Html" label="Root" name="root" output="1" template="page_fragment.phtml">
+        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_fragment.phtml">
             <block type="Mage_Authorizenet_Block_Directpost_Iframe" name="iframe" template="directpost/iframe.phtml"/>
         </block>
     </authorizenet_directpost_payment_response>

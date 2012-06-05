@@ -86,12 +86,13 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     /**
      * Open image for processing
      *
-     * @throws RuntimeException if image format is unsupported
+     * @throws RuntimeException
      * @param string $filename
      */
     public function open($filename)
     {
         $this->_fileName = $filename;
+        $this->_checkCanProcess();
         $this->_getFileAttributes();
 
         try {
@@ -108,7 +109,6 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
      * Save image to specific path.
      * If some folders of path does not exist they will be created
      *
-     * @throws Exception  if destination path is not writable
      * @param string $destination
      * @param string $newName
      */
@@ -161,21 +161,22 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
+        $this->_checkCanProcess();
         $dims = $this->_adaptResizeValues($frameWidth, $frameHeight);
 
-        if ($dims['dst']['width'] > $this->_imageHandler->getImageWidth() ||
-            $dims['dst']['height'] > $this->_imageHandler->getImageHeight()
-        ) {
-            $this->_imageHandler->sampleImage($dims['dst']['width'], $dims['dst']['height']);
-        } else {
-            $this->_imageHandler->resizeImage(
-                $dims['dst']['width'],
-                $dims['dst']['height'],
-                Imagick::FILTER_LANCZOS,
-                self::BLUR_FACTOR,
-                true
-            );
-        }
+        $newImage = new Imagick();
+        $newImage->newImage(
+            $dims['frame']['width'],
+            $dims['frame']['height'],
+            $this->_imageHandler->getImageBackgroundColor()
+        );
+
+        $this->_imageHandler->resizeImage(
+            $dims['dst']['width'],
+            $dims['dst']['height'],
+            Imagick::FILTER_CUBIC,
+            self::BLUR_FACTOR
+        );
 
         if ($this->_imageHandler->getImageWidth() < $this->_options['small_image']['width']
             || $this->_imageHandler->getImageHeight() < $this->_options['small_image']['height']
@@ -185,6 +186,18 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
                 $this->_options['sharpen']['deviation']
             );
         }
+
+        $newImage->compositeImage(
+            $this->_imageHandler,
+            Imagick::COMPOSITE_OVER,
+            $dims['dst']['x'],
+            $dims['dst']['y']
+        );
+
+        $newImage->setImageFormat($this->_imageHandler->getImageFormat());
+        $this->_imageHandler->clear();
+        $this->_imageHandler->destroy();
+        $this->_imageHandler = $newImage;
 
         $this->refreshImageDimensions();
     }
@@ -196,6 +209,7 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
      */
     public function rotate($angle)
     {
+        $this->_checkCanProcess();
         // compatibility with GD2 adapter
         $angle = 360 - $angle;
         $pixel = new ImagickPixel;
@@ -216,7 +230,9 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
      */
     public function crop($top = 0, $left = 0, $right = 0, $bottom = 0)
     {
-        if ($left == 0 && $top == 0 && $right == 0 && $bottom == 0) {
+        if ($left == 0 && $top == 0 && $right == 0 && $bottom == 0
+            || !$this->_canProcess()
+        ) {
             return false;
         }
 
@@ -231,15 +247,17 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     /**
      * Add watermark to image
      *
-     * @throws RuntimeException
      * @param string $imagePath
      * @param int $positionX
      * @param int $positionY
-     * @param int $watermarkImageOpacity
+     * @param int $opacity
      * @param bool $isWaterMarkTile
+     * @throws RuntimeException
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $isWaterMarkTile = false)
     {
+        $this->_checkCanProcess();
+
         $opacity = $this->getWatermarkImageOpacity()
             ? $this->getWatermarkImageOpacity()
             : $opacity;
@@ -247,13 +265,24 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
         $opacity = (float)number_format($opacity / 100, 1);
         $watermark = new Imagick($imagePath);
 
-        $iterator = $watermark->getPixelIterator();
+        if ($this->getWatermarkWidth() &&
+            $this->getWatermarkHeight() &&
+            $this->getWatermarkPosition() != self::POSITION_STRETCH
+        ) {
+            $watermark->resizeImage(
+                $this->getWatermarkWidth(),
+                $this->getWatermarkHeight(),
+                Imagick::FILTER_CUBIC,
+                self::BLUR_FACTOR
+            );
+        }
 
         if (method_exists($watermark, 'setImageOpacity')) {
             // available from imagick 6.2.9
             $watermark->setImageOpacity($opacity);
         } else {
             // go to each pixel and make it transparent
+            $iterator = $watermark->getPixelIterator();
             foreach ($iterator as $y => $pixels) {
                 foreach ($pixels as $x => $pixel) {
                     $watermark->paintTransparentImage($pixel, $opacity, 65535);
@@ -316,6 +345,7 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
 
         // merge layers
         $this->_imageHandler->flattenImages();
+        $watermark->clear();
         $watermark->destroy();
     }
 
@@ -377,5 +407,19 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
         $pixel = $this->_imageHandler->getImagePixelColor($x, $y);
 
         return explode(',', $pixel->getColorAsString());
+    }
+
+    /**
+     * Check whether the adapter can work with the image
+     *
+     * @throws Exception
+     * @return bool
+     */
+    protected function _checkCanProcess()
+    {
+        if (!$this->_canProcess()) {
+            throw new Exception('Image is not readable or file name is empty.');
+        }
+        return true;
     }
 }

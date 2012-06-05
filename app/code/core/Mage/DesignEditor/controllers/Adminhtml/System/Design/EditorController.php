@@ -80,6 +80,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/design/editor');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('system/design/editor');
     }
 }

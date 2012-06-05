@@ -35,6 +35,13 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     extends Mage_Adminhtml_Block_Template
 {
     /**
+     * Block config data
+     *
+     * @var Varien_Object
+     */
+    protected $_config;
+
+    /**
      * Purchased Separately Attribute cache
      *
      * @var Mage_Catalog_Model_Resource_Eav_Attribute
@@ -220,7 +227,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     }
 
     /**
-     * Return formated price with two digits after decimal point
+     * Return formatted price with two digits after decimal point
      *
      * @param decimal $value
      * @return decimal
@@ -244,7 +251,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      * Prepare block Layout
      *
      */
-     protected function _prepareLayout()
+    protected function _prepareLayout()
     {
         $this->setChild(
             'upload_button',
@@ -268,8 +275,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     }
 
     /**
-     * Retrive config json
+     * Retrieve config json
      *
+     * @param string $type
      * @return string
      */
     public function getConfigJson($type='links')
@@ -291,13 +299,13 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     }
 
     /**
-     * Retrive config object
+     * Retrieve config object
      *
-     * @return Varien_Config
+     * @return Varien_Object
      */
     public function getConfig()
     {
-        if(is_null($this->_config)) {
+        if (is_null($this->_config)) {
             $this->_config = new Varien_Object();
         }
 

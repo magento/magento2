@@ -25,73 +25,12 @@
  */
 
 /**
- * Adminhtml image gallery item renderer
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Form_Element_Gallery extends Mage_Adminhtml_Block_Template implements Varien_Data_Form_Element_Renderer_Interface
+class Mage_Adminhtml_Block_Widget_Form_Element_Gallery extends Mage_Backend_Block_Widget_Form_Element_Gallery
 {
 
-    protected $_element = null;
-
-    public function __construct()
-    {
-        $this->setTemplate('widget/form/element/gallery.phtml');
-    }
-
-    public function render(Varien_Data_Form_Element_Abstract $element)
-    {
-        $this->setElement($element);
-        return $this->toHtml();
-    }
-
-    public function setElement(Varien_Data_Form_Element_Abstract $element)
-    {
-        $this->_element = $element;
-        return $this;
-    }
-
-    public function getElement()
-    {
-        return $this->_element;
-    }
-
-    public function getValues()
-    {
-        return $this->getElement()->getValue();
-    }
-
-    protected function _prepareLayout()
-    {
-        $this->setChild('delete_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Delete'),
-                    'onclick'   => "deleteImage(#image#)",
-                    'class' => 'delete'
-                )));
-
-        $this->setChild('add_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add New Image'),
-                    'onclick'   => 'addNewImage()',
-                    'class' => 'add'
-                )));
-        return parent::_prepareLayout();
-    }
-
-    public function getAddButtonHtml()
-    {
-        return $this->getChildHtml('add_button');
-    }
-
-    public function getDeleteButtonHtml($image)
-    {
-        return str_replace('#image#', $image, $this->getChildHtml('delete_button'));
-    }
-
 }
-

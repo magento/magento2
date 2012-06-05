@@ -39,7 +39,7 @@ class Mage_Adminhtml_Block_Customer_Edit extends Mage_Adminhtml_Block_Widget_For
         $this->_controller = 'customer';
 
         if ($this->getCustomerId() &&
-            Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/create')) {
+            Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/create')) {
             $this->_addButton('order', array(
                 'label' => Mage::helper('Mage_Customer_Helper_Data')->__('Create Order'),
                 'onclick' => 'setLocation(\'' . $this->getCreateOrderUrl() . '\')',

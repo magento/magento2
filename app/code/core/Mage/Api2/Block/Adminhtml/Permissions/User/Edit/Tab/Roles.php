@@ -132,7 +132,7 @@ class Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
         if (null === $this->_selectedRoles) {
             $userRoles = array();
 
-            /* @var $user Mage_Admin_Model_User */
+            /* @var $user Mage_User_Model_User */
             $user = Mage::registry('permissions_user');
             if ($user->getId()) {
                 /** @var $collection Mage_Api2_Model_Resource_Acl_Global_Role_Collection */

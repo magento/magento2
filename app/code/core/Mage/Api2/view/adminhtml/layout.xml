@@ -36,7 +36,7 @@
         <reference name="left">
             <block type="Mage_Api2_Block_Adminhtml_Roles_Tabs" name="adminhtml.role.edit.tabs">
                 <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Info" name="adminhtml.role.edit.tab.info"/>
-                <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Resources" name="adminhtml.role.edit.tab.resources" template="Mage_Adminhtml::permissions/rolesedit.phtml"/>
+                <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Resources" name="adminhtml.role.edit.tab.resources" template="Mage_User::role/edit.phtml"/>
                 <action method="addTab">
                     <id>api2_role_section_info</id>
                     <block>adminhtml.role.edit.tab.info</block>
@@ -61,7 +61,7 @@
         <reference name="left">
             <block type="Mage_Api2_Block_Adminhtml_Roles_Tabs" name="adminhtml.role.edit.tabs">
                 <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Info" name="adminhtml.role.edit.tab.info"/>
-                <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Resources" name="adminhtml.role.edit.tab.resources" template="Mage_Adminhtml::permissions/rolesedit.phtml"/>
+                <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Resources" name="adminhtml.role.edit.tab.resources" template="Mage_User::role/edit.phtml"/>
                 <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Users" name="adminhtml.role.edit.tab.users"/>
                 <action method="addTab">
                     <id>api2_role_section_info</id>
@@ -101,19 +101,19 @@
     </adminhtml_api2_role_usersgrid>
 
     <!-- admin acl users edit page -->
-    <adminhtml_permissions_user_edit>
-        <reference name="adminhtml.permissions.user.edit.tabs">
-            <block type="Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles" name="adminhtml.permissions.user.edit.tab.roles"/>
+    <adminhtml_user_edit>
+        <reference name="adminhtml.user.edit.tabs">
+            <block type="Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles" name="adminhtml.user.edit.tab.roles"/>
             <action method="addTabAfter">
                 <id>api2_roles_section</id>
-                <block>adminhtml.permissions.user.edit.tab.roles</block>
+                <block>adminhtml.user.edit.tab.roles</block>
                 <after>roles_section</after>
             </action>
         </reference>
         <reference name="js">
-            <block type="Mage_Adminhtml_Block_Template" name="adminhtml.permissions.user.edit.tab.roles.js" template="Mage_Api2::permissions/user/edit/tab/roles/js.phtml"/>
+            <block type="Mage_Adminhtml_Block_Template" name="adminhtml.user.edit.tab.roles.js" template="Mage_Api2::permissions/user/edit/tab/roles/js.phtml"/>
         </reference>
-    </adminhtml_permissions_user_edit>
+    </adminhtml_user_edit>
 
     <!-- ACL attributes -->
     <adminhtml_api2_attribute_index>

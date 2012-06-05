@@ -312,6 +312,6 @@ class Mage_Adminhtml_System_Convert_ProfileController extends Mage_Adminhtml_Con
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('admin/system/convert/profiles');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('admin/system/convert/profiles');
     }
 }

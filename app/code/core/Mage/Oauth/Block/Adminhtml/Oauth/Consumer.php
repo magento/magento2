@@ -45,8 +45,8 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer extends Mage_Adminhtml_Block_Wid
         $this->_headerText = Mage::helper('Mage_Adminhtml_Helper_Data')->__('OAuth Consumers');
 
         //check allow edit
-        /** @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('Mage_Admin_Model_Session');
+        /** @var $session Mage_Backend_Model_Auth_Session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         if (!$session->isAllowed('system/oauth/consumer/edit')) {
             $this->_removeButton('add');
         }

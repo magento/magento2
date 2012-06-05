@@ -53,8 +53,8 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Admin_Token_Grid extends Mage_Adminhtml_B
      */
     protected function _prepareCollection()
     {
-        /** @var $user Mage_Admin_Model_User */
-        $user = Mage::getSingleton('Mage_Admin_Model_Session')->getData('user');
+        /** @var $user Mage_User_Model_User */
+        $user = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getData('user');
 
         /** @var $collection Mage_Oauth_Model_Resource_Token_Collection */
         $collection = Mage::getModel('Mage_Oauth_Model_Token')->getCollection();

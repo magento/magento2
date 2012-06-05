@@ -200,6 +200,6 @@ class Mage_Adminhtml_Cms_BlockController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/block');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/block');
     }
 }

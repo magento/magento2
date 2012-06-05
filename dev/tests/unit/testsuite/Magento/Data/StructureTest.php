@@ -189,7 +189,6 @@ class Magento_Data_StructureTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAttributeNoElementException()
     {
-        $this->_populateSampleStructure();
         $this->_structure->setAttribute('non-existing', 'foo', 'bar');
     }
 
@@ -290,16 +289,30 @@ class Magento_Data_StructureTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $elementId
+     * @param string $parentId
      * @expectedException Magento_Exception
+     * @dataProvider setAsChildExceptionDataProvider
      */
-    public function testSetAsChildException()
+    public function testSetAsChildException($elementId, $parentId)
     {
         $this->_structure->createElement('one', array());
         $this->_structure->createElement('two', array());
         $this->_structure->createElement('three', array());
         $this->_structure->setAsChild('three', 'two');
         $this->_structure->setAsChild('two', 'one');
-        $this->_structure->setAsChild('one', 'three');
+        $this->_structure->setAsChild($elementId, $parentId);
+    }
+
+    /**
+     * @return array
+     */
+    public function setAsChildExceptionDataProvider()
+    {
+        return array(
+            array('one', 'three'),
+            array('one', 'one'),
+        );
     }
 
     public function testUnsetChild()
@@ -430,6 +443,10 @@ class Magento_Data_StructureTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_structure->getChildAlias('one', 'nonexistent'));
     }
 
+    /**
+     * @covers Magento_Data_Structure::addToParentGroup
+     * @covers Magento_Data_Structure::getGroupChildNames
+     */
     public function testGroups()
     {
         // non-existing element
@@ -449,11 +466,23 @@ class Magento_Data_StructureTest extends PHPUnit_Framework_TestCase
 
         // group getter
         $this->_structure->createElement('three', array());
+        $this->_structure->createElement('four', array());
         $this->_structure->setAsChild('three', 'one', 'th');
+        $this->_structure->setAsChild('four', 'one');
         $this->_structure->addToParentGroup('three', 'group1');
-        $this->_structure->addToParentGroup('three', 'group2');
+        $this->_structure->addToParentGroup('four', 'group2');
         $this->assertSame(array('two', 'three'), $this->_structure->getGroupChildNames('one', 'group1'));
-        $this->assertSame(array('two', 'three'), $this->_structure->getGroupChildNames('one', 'group2'));
+        $this->assertSame(array('two', 'four'), $this->_structure->getGroupChildNames('one', 'group2'));
+
+        // unset a child
+        $this->_structure->unsetChild('one', 'two');
+        $this->assertSame(array('three'), $this->_structure->getGroupChildNames('one', 'group1'));
+        $this->assertSame(array('four'), $this->_structure->getGroupChildNames('one', 'group2'));
+
+        // return child back
+        $this->_structure->setAsChild('two', 'one');
+        $this->assertSame(array('two', 'three'), $this->_structure->getGroupChildNames('one', 'group1'));
+        $this->assertSame(array('two', 'four'), $this->_structure->getGroupChildNames('one', 'group2'));
     }
 
     /**

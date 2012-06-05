@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Catalog_Search_Edit_Form extends Mage_Adminhtml_Block
                 'name'      => 'store_id',
                 'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Store'),
                 'title'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Store'),
-                'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(true, false),
+                'values'    => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(true, false),
                 'required'  => true,
             ));
             $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');

@@ -390,6 +390,10 @@ abstract class Varien_Image_Adapter_Abstract
                 'y' => $dstY,
                 'width'  => $dstWidth,
                 'height' => $dstHeight
+            ),
+            'frame' => array( // size for new image
+                'width'  => $frameWidth,
+                'height' => $frameHeight
             )
         );
     }
@@ -455,5 +459,15 @@ abstract class Varien_Image_Adapter_Abstract
         }
 
         return $fileName;
+    }
+
+    /**
+     * Checks is adapter can work with image
+     *
+     * @return bool
+     */
+    protected function _canProcess()
+    {
+        return !empty($this->_fileName);
     }
 }
