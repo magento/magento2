@@ -127,7 +127,7 @@ Category default layout
         </reference>
     </catalog_category_view_type_layered>
 
-    <catalog_category_view_type_layered_without_children>
+    <catalog_category_view_type_layered_without_children translate="label" type="page" parent="catalog_category_view_type_layered">
         <label>Anchor Catalog Category Without Subcategories</label>
         <remove name="right.reports.product.viewed"/>
         <reference name="left">

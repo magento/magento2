@@ -70,7 +70,7 @@ Customer account home dashboard layout
 Wishlist pages
 -->
 
-    <wishlist_index_index translate="label">
+    <wishlist_index_index translate="label" type="page" parent="customer_account_index">
         <label>Customer My Account My Wishlist</label>
         <!-- Mage_Wishlist -->
         <update handle="customer_account"/>
@@ -106,7 +106,7 @@ Wishlist pages
         </reference>
     </wishlist_index_index>
 
-    <wishlist_index_share translate="label">
+    <wishlist_index_share translate="label" type="page" parent="wishlist_index_index">
         <label>Customer My Account Wishlist Sharing Form</label>
         <!-- Mage_Wishlist -->
         <update handle="customer_account" />
@@ -118,7 +118,7 @@ Wishlist pages
         </reference>
     </wishlist_index_share>
 
-    <wishlist_index_configure translate="label">
+    <wishlist_index_configure translate="label" type="page" parent="wishlist_index_index">
         <label>Configure Wishlist Item</label>
         <update handle="catalog_product_view" />
         <reference name="product.info">
@@ -130,7 +130,7 @@ Wishlist pages
         </reference>
     </wishlist_index_configure>
 
-    <wishlist_shared_index translate="label">
+    <wishlist_shared_index translate="label" type="page" parent="wishlist_index_share">
         <label>Customer Shared Wishlist View</label>
         <!-- Mage_Wishlist -->
         <reference name="content">

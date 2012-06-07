@@ -43,6 +43,7 @@ $order->setIncrementId('100000001')
     ->setCustomerIsGuest(true)
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
+    ->setStoreId(Mage::app()->getStore()->getId())
     ->setPayment($payment)
 ;
 $order->save();

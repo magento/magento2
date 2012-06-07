@@ -28,7 +28,7 @@
 /**
  * @group integrity
  */
-class Integrity_Modular_TemplateFilesTest extends PHPUnit_Framework_TestCase
+class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_IntegrityAbstract
 {
     /**
      * @param string $module
@@ -56,6 +56,9 @@ class Integrity_Modular_TemplateFilesTest extends PHPUnit_Framework_TestCase
     {
         $templates = array();
         foreach (Utility_Classes::collectModuleClasses('Block') as $blockClass => $module) {
+            if (!in_array($module, $this->_getEnabledModules())) {
+                continue;
+            }
             $class = new ReflectionClass($blockClass);
             if ($class->isAbstract() || !$class->isSubclassOf('Mage_Core_Block_Template')) {
                 continue;

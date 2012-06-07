@@ -92,11 +92,11 @@ getFinalPrice() - used in shopping cart calculations
                 )
             )
             ->addAttributeToSort('news_from_date','desc')
-            ->addAttributeToSelect(array('name', 'short_description', 'description', 'thumbnail'), 'inner')
+            ->addAttributeToSelect(array('name', 'short_description', 'description'), 'inner')
             ->addAttributeToSelect(
                 array(
                     'price', 'special_price', 'special_from_date', 'special_to_date',
-                    'msrp_enabled', 'msrp_display_actual_price_type', 'msrp'
+                    'msrp_enabled', 'msrp_display_actual_price_type', 'msrp', 'thumbnail'
                 ),
                 'left'
             )

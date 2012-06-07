@@ -49,19 +49,6 @@ Customer account home dashboard layout
 
     </customer_account_index>
 
-
-<!--
-Product reviews page (?)
--->
-
-    <reviews translate="label">
-        <label>Review</label>
-        <!-- Mage_Review -->
-        <reference name="root">
-            <action method="setTemplate"><template>2columns-left.phtml</template></action>
-        </reference>
-    </reviews>
-
 <!--
 Product reviews page
 -->

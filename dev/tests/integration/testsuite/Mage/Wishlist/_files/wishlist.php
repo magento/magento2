@@ -42,4 +42,4 @@ $item = $wishlist->addNewItem($product, new Varien_Object(array(
 //    'validate_datetime_2' => '',
 //    'qty' => '1',
 )));
-$wishlist->save();
+$wishlist->setSharingCode('fixture_unique_code')->save();

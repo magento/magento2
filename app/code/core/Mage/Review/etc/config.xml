@@ -71,16 +71,6 @@
                 </args>
             </review>
         </routers>
-        <events>
-            <review_save_after>
-                <observers>
-                    <rss>
-                        <class>Mage_Rss_Model_Observer</class>
-                        <method>reviewSaveAfter</method>
-                    </rss>
-                </observers>
-            </review_save_after>
-        </events>
         <translate>
             <modules>
                 <Mage_Review>

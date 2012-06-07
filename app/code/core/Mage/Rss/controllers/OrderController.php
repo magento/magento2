@@ -32,18 +32,52 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Rss_OrderController extends Mage_Rss_Controller_AdminhtmlAbstract
+class Mage_Rss_OrderController extends Mage_Core_Controller_Front_Action
 {
-    /**
-     * Returns map of action to acl paths, needed to check user's access to a specific action
-     *
-     * @return array
-     */
-    protected function _getAdminAclMap()
+    public function preDispatch()
     {
-        return array(
-            'new' => 'sales/order'
-        );
+        if ('new' === $this->getRequest()->getActionName()) {
+            $this->setCurrentArea('adminhtml');
+            if (!self::authenticateAndAuthorizeAdmin($this, 'sales/order')) {
+                return;
+            }
+        }
+        parent::preDispatch();
+    }
+
+    /**
+     * Check if admin is logged in and authorized to access resource by specified ACL path
+     *
+     * If not authenticated, will try to do it using credentials from HTTP-request
+     *
+     * @param Mage_Core_Controller_Front_Action $controller
+     * @param string $aclResource
+     * @return bool
+     */
+    public static function authenticateAndAuthorizeAdmin(Mage_Core_Controller_Front_Action $controller, $aclResource)
+    {
+        /** @var $auth Mage_Backend_Model_Auth */
+        $auth = Mage::getModel('Mage_Backend_Model_Auth');
+        $session = $auth->getAuthStorage();
+
+        // try to login using HTTP-authentication
+        if (!$session->isLoggedIn()) {
+            list($login, $password) = Mage::helper('Mage_Core_Helper_Http')
+                ->getHttpAuthCredentials($controller->getRequest());
+            try {
+                $auth->login($login, $password);
+            } catch (Mage_Backend_Model_Auth_Exception $e) {
+                Mage::logException($e);
+            }
+        }
+
+        // verify if logged in and authorized
+        if (!$session->isLoggedIn() || !$session->isAllowed($aclResource)) {
+            Mage::helper('Mage_Core_Helper_Http')->failHttpAuthentication($controller->getResponse(), 'RSS Feeds');
+            $controller->setFlag('', self::FLAG_NO_DISPATCH, true);
+            return false;
+        }
+        return true;
     }
 
     public function newAction()
@@ -51,17 +85,6 @@ class Mage_Rss_OrderController extends Mage_Rss_Controller_AdminhtmlAbstract
         $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
         $this->loadLayout(false);
         $this->renderLayout();
-    }
-
-    public function customerAction()
-    {
-        if (Mage::app()->getStore()->isCurrentlySecure()) {
-            $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
-            Mage::helper('Mage_Rss_Helper_Data')->authFrontend();
-        } else {
-            $this->_redirect('rss/order/customer', array('_secure'=>true));
-            return $this;
-        }
     }
 
     /**

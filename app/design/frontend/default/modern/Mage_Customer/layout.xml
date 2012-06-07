@@ -131,7 +131,7 @@ New customer registration
         </reference>
     </customer_account_forgotpassword>
 
-    <customer_account_resetpassword translate="label">
+    <customer_account_resetpassword translate="label" type="page" parent="customer_account">
         <label>Reset a Password</label>
         <remove name="right"/>
         <remove name="left"/>

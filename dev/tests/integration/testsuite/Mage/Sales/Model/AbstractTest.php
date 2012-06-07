@@ -27,7 +27,7 @@
 class Mage_Sales_Model_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Mage/Sales/_files/order_commit_workaround.php
+     * @magentoDataFixture Mage/Sales/_files/order.php
      */
     public function testAfterCommitCallbackOrderGrid()
     {

@@ -92,12 +92,12 @@
 
     <adminhtml_api2_role_grid>
         <remove name="root"/>
-        <block type="Mage_Api2_Block_Adminhtml_Roles_Grid" name="api2_roles.grid" output="toHtml"/>
+        <block type="Mage_Api2_Block_Adminhtml_Roles_Grid" name="api2_roles.grid" output="1"/>
     </adminhtml_api2_role_grid>
 
     <adminhtml_api2_role_usersgrid>
         <remove name="root"/>
-        <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Users" name="adminhtml.role.edit.tab.users" output="toHtml"/>
+        <block type="Mage_Api2_Block_Adminhtml_Roles_Tab_Users" name="adminhtml.role.edit.tab.users" output="1"/>
     </adminhtml_api2_role_usersgrid>
 
     <!-- admin acl users edit page -->

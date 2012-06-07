@@ -136,8 +136,7 @@
         <update handle="SHORTCUT_uk_popup" />
     </checkout_onepage_failure>
 
-    <SHORTCUT_uk_popup translate="label">
-        <label>PaypalUk Shortcut Popup</label>
+    <SHORTCUT_uk_popup>
         <reference name="product.tooltip">
             <container name="product.info.addtocart.paypaluk.wrapper" label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="div">
                 <block type="Mage_PaypalUk_Block_Express_Shortcut" name="product.info.addtocart.paypaluk" template="Mage_Paypal::express/shortcut.phtml">

@@ -87,44 +87,4 @@ class Inspection_CopyPasteDetector_Command extends Inspection_CommandAbstract
             . ' ' . $whiteList
         ;
     }
-
-    /**
-     * Runs command and produces report in html format
-     *
-     * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @return bool
-     */
-    public function run(array $whiteList, array $blackList = array())
-    {
-        $result = parent::run($whiteList, $blackList);
-        if ($result) {
-            $generateHtmlResult = $this->_generateHtmlReport();
-            if ($generateHtmlResult === false) {
-                $result = false;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Generate HTML representation for an existing XML report using XSLT transformation
-     *
-     * @return bool|null
-     */
-    protected function _generateHtmlReport()
-    {
-        if ($this->_execShellCmd('xsltproc --version') === false) {
-            return null;
-        }
-        $xsltFile = __DIR__ . '/html_report.xslt';
-        $result = $this->_execShellCmd(sprintf(
-            "xsltproc %s %s > %s",
-            escapeshellarg($xsltFile),
-            escapeshellarg($this->_reportFile),
-            escapeshellarg("{$this->_reportFile}.html")
-        ));
-        $this->_generateLastRunMessage();
-        return ($result !== false);
-    }
 }

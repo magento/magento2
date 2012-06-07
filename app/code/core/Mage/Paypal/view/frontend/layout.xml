@@ -209,8 +209,7 @@ Available logo types can be assigned with action="setLogoType":
         </block>
     </paypal_standard_redirect>
 
-    <SHORTCUT_popup translate="label">
-        <label>Paypal Shortcut Popup</label>
+    <SHORTCUT_popup>
         <reference name="product.tooltip">
             <container name="product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper" htmlTag="div">
                 <block type="Mage_Paypal_Block_Express_Shortcut" name="product.info.addtocart.paypal" template="express/shortcut.phtml">

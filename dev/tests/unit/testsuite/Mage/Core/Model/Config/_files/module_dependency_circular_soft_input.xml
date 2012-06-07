@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /**
  * Magento
  *
@@ -18,10 +19,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     base_default
+ * @category    Magento
+ * @package     unit_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<p>There was no RSS feed enabled.</p>
+-->
+<config>
+    <modules>
+        <Fixture_ModuleOne>
+            <active>true</active>
+            <depends>
+                <Fixture_ModuleTwo type="soft"/>
+            </depends>
+        </Fixture_ModuleOne>
+        <Fixture_ModuleTwo>
+            <active>true</active>
+            <depends>
+                <Fixture_ModuleOne type="soft"/>
+            </depends>
+        </Fixture_ModuleTwo>
+    </modules>
+</config>

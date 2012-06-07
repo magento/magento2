@@ -34,7 +34,7 @@
         </reference>
     </default>
 
-    <catalogsearch_result_index translate="label">
+    <catalogsearch_result_index translate="label" module="Mage_CatalogSearch" type="page" parent="default">
         <label>Quick Search Form</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>

@@ -66,7 +66,7 @@ Customer account home dashboard layout
 
     </customer_account_index>
 
-    <sales_order_history translate="label">
+    <sales_order_history translate="label" type="page" parent="sales_order_view">
         <label>Customer My Account Order History</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -78,9 +78,9 @@ Customer account home dashboard layout
     </sales_order_history>
 
 
-    <sales_order_view translate="label">
-        <label>Customer My Account Order View</label>
+    <sales_order_view translate="label" type="page" parent="default">
         <update handle="customer_account"/>
+        <label>Customer My Account Order View</label>
         <reference name="my.account.wrapper">
             <block type="Mage_Sales_Block_Order_Info" as="info" name="sales.order.info">
                 <block type="Mage_Sales_Block_Order_Info_Buttons" as="buttons" name="sales.order.info.buttons" />
@@ -106,7 +106,7 @@ Customer account home dashboard layout
         <container name="additional.product.info" label="Additional Product Info"/>
     </sales_order_view>
 
-    <sales_order_invoice translate="label">
+    <sales_order_invoice translate="label" type="page" parent="sales_order_view">
         <label>Customer My Account Order Invoice View</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -135,7 +135,7 @@ Customer account home dashboard layout
         <container name="additional.product.info" label="Additional Product Info" />
     </sales_order_invoice>
 
-    <sales_order_shipment translate="label">
+    <sales_order_shipment translate="label" type="page" parent="sales_order_view">
         <label>Customer My Account Order Shipment View</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -158,7 +158,7 @@ Customer account home dashboard layout
         <container name="additional.product.info" label="Additional Product Info" />
     </sales_order_shipment>
 
-    <sales_order_creditmemo translate="label">
+    <sales_order_creditmemo translate="label" type="page" parent="sales_order_view">
         <label>Customer My Account Order Creditmemo View</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -194,7 +194,7 @@ Customer account home dashboard layout
         </reference>
     </sales_order_reorder>
 
-    <sales_order_print translate="label">
+    <sales_order_print translate="label" type="page" parent="print">
         <label>Sales Order Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print" name="sales.order.print" template="order/print.phtml">
@@ -212,7 +212,7 @@ Customer account home dashboard layout
         <container name="additional.product.info" label="Additional Product Info" />
     </sales_order_print>
 
-    <sales_order_printinvoice translate="label">
+    <sales_order_printinvoice translate="label" type="page" parent="sales_order_print">
         <label>Sales Invoice Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print_Invoice" name="sales.order.print.invoice" template="order/print/invoice.phtml">
@@ -228,7 +228,7 @@ Customer account home dashboard layout
         <container name="additional.product.info" label="Additional Product Info" />
     </sales_order_printinvoice>
 
-    <sales_order_printshipment translate="label">
+    <sales_order_printshipment translate="label" type="page" parent="sales_order_print">
         <label>Sales Shipment Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print_Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">
@@ -308,7 +308,7 @@ Email layouts section
 Guest
 -->
 
-    <sales_guest_form translate="label">
+    <sales_guest_form translate="label" type="page" parent="sales_guest_view">
         <label>Returns</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
@@ -319,8 +319,8 @@ Guest
     </sales_guest_form>
 
 
-    <sales_guest_view translate="label">
-        <label>Customer My Account Order View</label>
+    <sales_guest_view translate="label" type="page" parent="default">
+        <label>Guest Order View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -348,8 +348,8 @@ Guest
         </reference>
     </sales_guest_view>
 
-    <sales_guest_invoice translate="label">
-        <label>Customer My Account Order Invoice View</label>
+    <sales_guest_invoice translate="label" type="page" parent="sales_guest_view">
+        <label>Guest Order Invoice View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -378,8 +378,8 @@ Guest
         </reference>
     </sales_guest_invoice>
 
-    <sales_guest_shipment translate="label">
-        <label>Customer My Account Order Shipment View</label>
+    <sales_guest_shipment translate="label" type="page" parent="sales_guest_view">
+        <label>Guest Order Shipment View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -402,8 +402,8 @@ Guest
         </reference>
     </sales_guest_shipment>
 
-    <sales_guest_creditmemo translate="label">
-        <label>Customer My Account Order Creditmemo View</label>
+    <sales_guest_creditmemo translate="label" type="page" parent="sales_guest_view">
+        <label>Guest Order Creditmemo View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -441,7 +441,7 @@ Guest
         </reference>
     </sales_guest_reorder>
 
-    <sales_guest_print translate="label">
+    <sales_guest_print translate="label" type="page" parent="print">
         <label>Sales Order Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print" name="sales.order.print" template="order/print.phtml">
@@ -458,7 +458,7 @@ Guest
         </reference>
     </sales_guest_print>
 
-    <sales_guest_printinvoice translate="label">
+    <sales_guest_printinvoice translate="label" type="page" parent="sales_guest_print">
         <label>Sales Invoice Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print_Invoice" name="sales.order.print.invoice" template="order/print/invoice.phtml">
@@ -473,7 +473,7 @@ Guest
         </reference>
     </sales_guest_printinvoice>
 
-    <sales_guest_printshipment translate="label">
+    <sales_guest_printshipment translate="label" type="page" parent="sales_guest_print">
         <label>Sales Shipment Print View</label>
         <reference name="content">
             <block type="Mage_Sales_Block_Order_Print_Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">

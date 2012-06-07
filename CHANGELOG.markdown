@@ -1,3 +1,13 @@
+Update as of 6/7/2012
+=====================
+* Fixed various crashes of visual design editor
+* Fixed some layouts that caused visual design editor toolbar disappearing, also fixed some confusing page type labels
+* Eliminated "after commit callback" workaround from integration tests by implementing "transparent transactions" capability in integration testing framework
+* Refactored admin authentication/authorization in RSS module. Removed program termination and covered the controllers with tests
+* Removed HTML-report feature of copy-paste detector which never worked anyway (`dev/tests/static/framework/Inspection/CopyPasteDetector/html_report.xslt` and all related code)
+* Github requests:
+** [#19](https://github.com/magento/magento2/pull/19) Implemented "soft" dependency between modules and performed several improvements in the related code, covered with tests
+
 Update as of 5/31/2012
 ======================
 * Implemented backend authentication independent of `Mage_Adminhtml` module. Authentication can be disabled

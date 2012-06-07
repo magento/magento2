@@ -65,14 +65,6 @@
                     </checkConnection>
                 </observers>
             </controller_action_predispatch>
-            <mage_run_exception>
-                <observers>
-                    <install_failure>
-                        <class>Mage_Install_Model_Observer</class>
-                        <method>installFailure</method>
-                    </install_failure>
-                </observers>
-            </mage_run_exception>
             <core_locale_set_locale>
                 <observers>
                     <bind_locale>

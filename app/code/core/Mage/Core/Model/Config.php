@@ -753,21 +753,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     }
 
     /**
-     * Define if module is allowed
-     *
-     * @param  string $moduleName
-     * @return bool
-     */
-    protected function _isAllowedModule($moduleName)
-    {
-        if (empty($this->_allowedModules)) {
-            return true;
-        } else {
-            return in_array($moduleName, $this->_allowedModules);
-        }
-    }
-
-    /**
      * Load declared modules configuration
      *
      * @return  Mage_Core_Model_Config
@@ -776,110 +761,23 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     {
         $moduleFiles = $this->_getDeclaredModuleFiles();
         if (!$moduleFiles) {
-            return ;
+            return $this;
         }
 
         Magento_Profiler::start('load_modules_declaration');
 
-        $unsortedConfig = new Mage_Core_Model_Config_Base();
-        $unsortedConfig->loadString('<config/>');
-        $fileConfig = new Mage_Core_Model_Config_Base();
-
-        // load modules declarations
-        foreach ($moduleFiles as $file) {
-            $fileConfig->loadFile($file);
+        $unsortedConfig = new Mage_Core_Model_Config_Base('<config/>');
+        foreach ($moduleFiles as $oneConfigFile) {
+            $fileConfig = new Mage_Core_Model_Config_Base($oneConfigFile);
             $unsortedConfig->extend($fileConfig);
         }
 
-        $moduleDepends = array();
-        foreach ($unsortedConfig->getNode('modules')->children() as $moduleName => $moduleNode) {
-            if (!$this->_isAllowedModule($moduleName)) {
-                continue;
-            }
-
-            $depends = array();
-            if ($moduleNode->depends) {
-                foreach ($moduleNode->depends->children() as $depend) {
-                    $depends[$depend->getName()] = true;
-                }
-            }
-            $moduleDepends[$moduleName] = array(
-                'module'    => $moduleName,
-                'depends'   => $depends,
-                'active'    => ('true' === (string)$moduleNode->active ? true : false),
-            );
-        }
-
-        // check and sort module dependence
-        $moduleDepends = $this->_sortModuleDepends($moduleDepends);
-
-        // create sorted config
-        $sortedConfig = new Mage_Core_Model_Config_Base();
-        $sortedConfig->loadString('<config><modules/></config>');
-
-        foreach ($unsortedConfig->getNode()->children() as $nodeName => $node) {
-            if ($nodeName != 'modules') {
-                $sortedConfig->getNode()->appendChild($node);
-            }
-        }
-
-        foreach ($moduleDepends as $moduleProp) {
-            $node = $unsortedConfig->getNode('modules/'.$moduleProp['module']);
-            $sortedConfig->getNode('modules')->appendChild($node);
-        }
+        $sortedConfig = new Mage_Core_Model_Config_Module($unsortedConfig, $this->_allowedModules);
 
         $this->extend($sortedConfig);
 
         Magento_Profiler::stop('load_modules_declaration');
         return $this;
-    }
-
-    /**
-     * Sort modules and check depends
-     *
-     * @param array $modules
-     * @return array
-     */
-    protected function _sortModuleDepends($modules)
-    {
-        foreach ($modules as $moduleName => $moduleProps) {
-            $depends = $moduleProps['depends'];
-            foreach ($moduleProps['depends'] as $depend => $true) {
-                if ($moduleProps['active'] && ((!isset($modules[$depend])) || empty($modules[$depend]['active']))) {
-                    Mage::throwException(
-                        Mage::helper('Mage_Core_Helper_Data')->__('Module "%1$s" requires module "%2$s".', $moduleName, $depend)
-                    );
-                }
-                $depends = array_merge($depends, $modules[$depend]['depends']);
-            }
-            $modules[$moduleName]['depends'] = $depends;
-        }
-        $modules = array_values($modules);
-
-        $size = count($modules) - 1;
-        for ($i = $size; $i >= 0; $i--) {
-            for ($j = $size; $i < $j; $j--) {
-                if (isset($modules[$i]['depends'][$modules[$j]['module']])) {
-                    $value       = $modules[$i];
-                    $modules[$i] = $modules[$j];
-                    $modules[$j] = $value;
-                }
-            }
-        }
-
-        $definedModules = array();
-        foreach ($modules as $moduleProp) {
-            foreach ($moduleProp['depends'] as $dependModule => $true) {
-                if (!isset($definedModules[$dependModule])) {
-                    Mage::throwException(
-                        Mage::helper('Mage_Core_Helper_Data')->__('Module "%1$s" cannot depend on "%2$s".', $moduleProp['module'], $dependModule)
-                    );
-                }
-            }
-            $definedModules[$moduleProp['module']] = true;
-        }
-
-        return $modules;
     }
 
     /**

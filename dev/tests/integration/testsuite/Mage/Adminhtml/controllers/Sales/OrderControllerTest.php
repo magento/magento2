@@ -34,7 +34,7 @@ class Mage_Adminhtml_Sales_OrderControllerTest extends Mage_Adminhtml_Utility_Co
     }
 
     /**
-     * @magentoDataFixture Mage/Sales/_files/order_commit_workaround.php
+     * @magentoDataFixture Mage/Sales/_files/order.php
      */
     public function testIndexActionWithOrder()
     {
@@ -43,7 +43,7 @@ class Mage_Adminhtml_Sales_OrderControllerTest extends Mage_Adminhtml_Utility_Co
     }
 
     /**
-     * @magentoDataFixture Mage/Sales/_files/order_commit_workaround.php
+     * @magentoDataFixture Mage/Sales/_files/order.php
      */
     public function testOrderViewAction()
     {

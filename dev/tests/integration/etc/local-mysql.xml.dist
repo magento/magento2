@@ -55,6 +55,15 @@
             </default_setup>
         </resources>
         <session_save><![CDATA[files]]></session_save>
+        <resource>
+            <connection>
+                <types>
+                    <pdo_mysql>
+                        <adapter><![CDATA[Magento_Test_Db_Adapter_Mysql]]></adapter>
+                    </pdo_mysql>
+                </types>
+            </connection>
+        </resource>
     </global>
     <admin>
         <routers>

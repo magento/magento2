@@ -56,14 +56,7 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
         /** @var Mage_Core_Model_Layout_Element $node */
         $errors = array();
         foreach ($handles as $node) {
-            $error = $this->_validatePageNodeInHierarchy($node, $xml);
-            if ($error) {
-                $index = $node->getName();
-                if (!isset($errors[$index])) {
-                    $errors[$index] = array();
-                }
-                $errors[$index][] = $error;
-            }
+            $this->_collectHierarchyErrors($node, $xml, $errors);
         }
 
         if ($errors) {
@@ -90,49 +83,25 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Validates node's declared position in hierarchy. Returns error description, if something is wrong.
+     * Validate node's declared position in hierarchy and add errors to the specified array if found
      *
      * @param SimpleXMLElement $node
      * @param Mage_Core_Model_Layout_Element $xml
-     * @return string|false
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param array &$errors
      */
-    protected function _validatePageNodeInHierarchy($node, $xml)
+    protected function _collectHierarchyErrors($node, $xml, &$errors)
     {
-        $type = $node->getAttribute('type');
-        $parent = $node->getAttribute('parent');
-        $owner = $node->getAttribute('owner');
-
-        switch ($type) {
-            case Mage_Core_Model_Layout_Update::TYPE_PAGE:
-                if ($owner) {
-                    return 'Attribute "owner" is not appropriate for page types';
-                }
-                $refName = $parent;
-                break;
-            case Mage_Core_Model_Layout_Update::TYPE_FRAGMENT:
-                if ($parent) {
-                    return 'Attribute "parent" is not appropriate for page fragment types';
-                }
-                if (!$owner) {
-                    return 'No owner specified for page fragment type handle';
-                }
-                $refName = $owner;
-                break;
-            default:
-                return "Unknown handle type: {$type}";
-        }
-
+        $name = $node->getName();
+        $refName = $node->getAttribute('type') == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT
+            ? $node->getAttribute('owner') : $node->getAttribute('parent');
         if ($refName) {
             $refNode = $xml->xpath("/layouts/{$refName}");
-            if (!$refNode || !count($refNode)) {
-                return "Node '{$refName}', referenced in hierarchy, does not exist";
-            }
-            if ($refNode[0]->getAttribute('type') == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
-                return "Page fragment type '{$refName}', cannot be an ancestor in a hierarchy";
+            if (!$refNode) {
+                $errors[$name][] = "Node '{$refName}', referenced in hierarchy, does not exist";
+            } elseif ($refNode[0]->getAttribute('type') == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
+                $errors[$name][] = "Page fragment type '{$refName}', cannot be an ancestor in a hierarchy";
             }
         }
-        return false;
     }
 
     /**

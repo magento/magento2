@@ -29,7 +29,7 @@
  * Tests transaction model:
  *
  * @see Mage_Sales_Model_Order_Payment_Transaction
- * @magentoDataFixture Mage/Sales/_files/transactions_commit_workaround.php
+ * @magentoDataFixture Mage/Sales/_files/transactions.php
  */
 class Mage_Sales_Model_Order_Payment_TransactionTest extends PHPUnit_Framework_TestCase
 {

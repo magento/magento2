@@ -86,7 +86,7 @@ Category default layout
 Category layered navigation layout
 -->
 
-    <catalog_category_view_type_layered translate="label">
+    <catalog_category_view_type_layered translate="label" type="page" parent="catalog_category_view">
         <label>Catalog Category (Anchor)</label>
         <reference name="content">
             <block type="Mage_Catalog_Block_Category_View" name="category.products" template="category/view.phtml">

@@ -26,7 +26,7 @@
  */
 
 /**
- * @magentoDataFixture Mage/Sales/_files/order_commit_workaround.php
+ * @magentoDataFixture Mage/Sales/_files/order.php
  */
 class Mage_Paypal_StandardControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
@@ -35,7 +35,7 @@ class Mage_Paypal_StandardControllerTest extends Magento_Test_TestCase_Controlle
         $order = new Mage_Sales_Model_Order();
         $order->load('100000001', 'increment_id');
         $order->getPayment()->setMethod(Mage_Paypal_Model_Config::METHOD_WPS);
-        $order->save()->afterCommitCallback();
+        $order->save();
 
         $session = Mage::getSingleton('Mage_Checkout_Model_Session');
         $session->setLastRealOrderId($order->getRealOrderId())

@@ -43,7 +43,15 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     protected $_runCode     = '';
     protected $_runScope    = 'store';
     protected $_runOptions  = array();
+
+    /**
+     * @var Magento_Test_Request
+     */
     protected $_request;
+
+    /**
+     * @var Magento_Test_Response
+     */
     protected $_response;
 
     /**
@@ -85,7 +93,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     /**
      * Request getter
      *
-     * @return Mage_Core_Controller_Request_Http
+     * @return Magento_Test_Request
      */
     public function getRequest()
     {
@@ -115,6 +123,28 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     {
         $this->assertEquals('noRoute', $this->getRequest()->getActionName());
         $this->assertContains('404 Not Found', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Analyze response object and look for header with specified name, and assert a regex towards its value
+     *
+     * @param string $headerName
+     * @param string $valueRegex
+     * @throws PHPUnit_Framework_AssertionFailedError when header not found
+     */
+    public function assertHeaderPcre($headerName, $valueRegex)
+    {
+        $headerFound = false;
+        $headers = $this->getResponse()->getHeaders();
+        foreach ($headers as $header) {
+            if ($header['name'] === $headerName) {
+                $headerFound = true;
+                $this->assertRegExp($valueRegex, $header['value']);
+            }
+        }
+        if (!$headerFound) {
+            $this->fail("Header '{$headerName}' was not found. Headers dump:\n" . var_export($headers, 1));
+        }
     }
 
     /**

@@ -30,8 +30,4 @@
     <default>
         <block name="formkey" type="Mage_Core_Block_Template" template="Mage_Core::formkey.phtml" />
     </default>
-
-    <calendar translate="label">
-        <label>Calendar</label>
-    </calendar>
 </layout>

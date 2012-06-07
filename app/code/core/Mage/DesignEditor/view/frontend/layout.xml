@@ -27,7 +27,6 @@
 -->
 <layout>
     <design_editor_toolbar>
-        <label>Design Editor Toolbar</label>
         <reference name="head">
             <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
@@ -53,7 +52,6 @@
     </design_editor_toolbar>
 
     <design_editor_page>
-        <label>Design Editor Page Blocks Management Page</label>
         <reference name="root">
             <action method="setTemplate"><template>Mage_DesignEditor::page.phtml</template></action>
             <block type="Mage_Page_Block_Html_Head" name="head" as="head"/>

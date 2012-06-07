@@ -659,25 +659,10 @@ final class Mage
             Magento_Profiler::stop('mage');
         } catch (Mage_Core_Model_Session_Exception $e) {
             header('Location: ' . self::getBaseUrl());
-            die();
         } catch (Mage_Core_Model_Store_Exception $e) {
-            require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . '404.php');
-            die();
+            require_once(self::getBaseDir() . '/pub/errors/404.php');
         } catch (Exception $e) {
-            if (self::isInstalled() || self::$_isDownloader) {
-                self::printException($e);
-                exit();
-            }
-            try {
-                self::dispatchEvent('mage_run_exception', array('exception' => $e));
-                if (!headers_sent()) {
-                    header('Location:' . self::getUrl('install'));
-                } else {
-                    self::printException($e);
-                }
-            } catch (Exception $ne) {
-                self::printException($ne, $e->getMessage());
-            }
+            self::printException($e);
         }
     }
 

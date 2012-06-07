@@ -19,10 +19,35 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Mage_Paypal
+ * @package     Magento_Test
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require __DIR__ . '/order_express.php';
-$order->afterCommitCallback();
+
+/**
+ * "Transparent" DB transaction hack for integration tests
+ */
+interface Magento_Test_Db_Adapter_TransactionInterface
+{
+    /**
+     * Increment "transparent" transaction counter and start real transaction
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function beginTransparentTransaction();
+
+    /**
+     * Decrement "transparent" transaction counter and commit real transaction
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function commitTransparentTransaction();
+
+    /**
+     * Decrement "transparent" transaction counter and rollback real transaction
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function rollbackTransparentTransaction();
+}

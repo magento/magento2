@@ -1,6 +1,7 @@
 app/bootstrap.php
 app/code/core/Mage/Adminhtml/Model/Observer.php
 app/code/core/Mage/Core/Block/Abstract.php
+app/code/core/Mage/Core/Model/Config/Module.php
 app/code/core/Mage/Core/Model/Design.php
 app/code/core/Mage/Core/Model/ShellAbstract.php
 app/code/core/Mage/Core/Model/Layout.php

@@ -138,6 +138,60 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Suppressing PHPMD because of complex logic of validation. The problem is architectural, rather than in the test
+     *
+     * @param string $file
+     * @dataProvider layoutFilesDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function testHandleDeclaration($file)
+    {
+        if (strpos($file, 'Mage/XmlConnect')) {
+            $this->markTestSkipped('Mage_XmlConnect module support is abandoned.');
+        }
+        $issues = array();
+        $xml = simplexml_load_file($file);
+        $handles = $xml->xpath('/layout/*');
+        /** @var $node SimpleXMLElement */
+        foreach ($handles as $node) {
+            $handleMessage = "Handle '{$node->getName()}':";
+            $type = $node['type'];
+            $parent = $node['parent'];
+            $owner = $node['owner'];
+            if ($type) {
+                switch ($type) {
+                    case 'page':
+                        if ($owner) {
+                            $issues[] = "{$handleMessage} attribute 'owner' is inappropriate for page types";
+                        }
+                        break;
+                    case 'fragment':
+                        if ($parent) {
+                            $issues[] = "{$handleMessage} attribute 'parent' is inappropriate for page fragment types";
+                        }
+                        if (!$owner) {
+                            $issues[] = "{$handleMessage} no 'owner' specified for page fragment type";
+                        }
+                        break;
+                    default:
+                        $issues[] = "{$handleMessage} unknown type '{$type}'";
+                        break;
+                }
+            } else {
+                if ($node->xpath('child::label')) {
+                    $issues[] = "{$handleMessage} 'label' child node is defined, but 'type' attribute is not";
+                }
+                if ($parent || $owner) {
+                    $issues[] = "{$handleMessage} 'parent' or 'owner' is defined, but 'type' is not";
+                }
+            }
+        }
+        if (!empty($issues)) {
+            $this->fail(sprintf("Issues found in handle declaration:\n%s\n", implode("\n", $issues)));
+        }
+    }
+
+    /**
      * Suppressing PHPMD issues because this test is complex and it is not reasonable to separate it
      *
      * @param string $file
@@ -192,29 +246,6 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
         }
         if ($errors) {
             $this->fail(implode("\n\n", $errors));
-        }
-    }
-
-    /**
-     * @param string $file
-     * @dataProvider layoutFilesDataProvider
-     */
-    public function testAjaxHandles($file)
-    {
-        $issues = array();
-        $xml = simplexml_load_file($file);
-        $handles = $xml->xpath('/layout//*[@parent="ajax_index"]');
-        if ($handles) {
-            foreach ($handles as $handle) {
-                if (!$handle->xpath('reference[@name="root"]')) {
-                    $issues[] = $handle->getName();
-                }
-            }
-        }
-        if (!empty($issues)) {
-            $this->fail(
-                sprintf('Hadle(s) "%s" in "%s" must contain reference to root', implode(', ', $issues), $file)
-            );
         }
     }
 

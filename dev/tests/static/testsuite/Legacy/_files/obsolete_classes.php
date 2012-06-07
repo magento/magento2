@@ -125,6 +125,8 @@ return array(
     'Mage_Reports_Model_Resource_Invoiced_Collection',
     'Mage_Reports_Model_Resource_Refunded_Collection',
     'Mage_Reports_Model_Resource_Shipping_Collection',
+    'Mage_Rss_Model_Observer',
+    'Mage_Rss_Model_Session' => array('suggestion' => 'Mage_Backend_Model_Auth and Mage_Backend_Model_Auth_Session'),
     'Mage_Sales_Block_Order_Details',
     'Mage_Sales_Block_Order_Tax',
     'Mage_Sales_Model_Entity_Order',

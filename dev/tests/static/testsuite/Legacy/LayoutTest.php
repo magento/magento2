@@ -107,20 +107,20 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_testObsoleteReferences($layoutXml);
 
         $selectorHeadBlock = '(name()="block" or name()="reference") and (@name="head" or @name="convert_root_head")';
-        $this->assertEmpty(
+        $this->assertSame(array(),
             $layoutXml->xpath(
                 '//*[' . $selectorHeadBlock . ']/action[@method="addItem"]'
             ),
             "Mage_Page_Block_Html_Head::addItem is obsolete. $suggestion"
         );
-        $this->assertEmpty(
+        $this->assertSame(array(),
             $layoutXml->xpath(
                 '//action[@method="addJs" or @method="addCss"]/parent::*[not(' . $selectorHeadBlock . ')]'
             ),
             "Calls addCss/addJs are allowed within the 'head' block only. Verify integrity of the nodes nesting."
         );
-        $this->assertEmpty(
-            $layoutXml->xpath('/layout/*[@output="toHtml"]'), 'output="toHtml" is obsolete. Use output="1"'
+        $this->assertSame(array(),
+            $layoutXml->xpath('/layout//*[@output="toHtml"]'), 'output="toHtml" is obsolete. Use output="1"'
         );
         foreach ($layoutXml as $handle) {
             $this->assertNotContains($handle->getName(), $this->_obsoleteNodes, 'Layout handle was removed.');
@@ -135,7 +135,8 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
                 . 'there is no solution to get rid of it right now.'
             );
         }
-        $this->assertEmpty($layoutXml->xpath('/layout//block[@type="Mage_Core_Block_Text_List"]'),
+        $this->assertSame(array(),
+            $layoutXml->xpath('/layout//block[@type="Mage_Core_Block_Text_List"]'),
             'The class Mage_Core_Block_Text_List is not supposed to be used in layout anymore.'
         );
     }
