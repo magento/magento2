@@ -604,7 +604,7 @@ class Mage_Core_Model_App
 
     /**
      * Init store, group and website collections
-     *
+     * Sets $this->_website to the default website.
      */
     protected function _initStores()
     {
