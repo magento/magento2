@@ -54,7 +54,7 @@ class Phoenix_Moneybookers_Helper_Data extends Mage_Payment_Helper_Data
         $translate->setTranslateInline(false);
 
         Mage::getModel('Mage_Core_Model_Email_Template')
-            ->setDesignConfig(array('area' => 'frontend', 'store' => $storeId))
+            ->setDesignConfig(array('area' => Mage_Core_Model_App_Area::AREA_FRONTEND, 'store' => $storeId))
             ->sendTransactional(
                 'moneybookers_activateemail',
                 Mage::getStoreConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_IDENTITY, $storeId),

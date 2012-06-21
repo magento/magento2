@@ -576,7 +576,7 @@ class Mage_Core_Model_Layout_Update
      */
     protected function _loadFileLayoutUpdatesXml()
     {
-        $layoutParams = array('_area' => $this->_area, '_package' => $this->_package, '_theme' => $this->_theme);
+        $layoutParams = array('area' => $this->_area, 'package' => $this->_package, 'theme' => $this->_theme);
 
         /*
          * Allow to modify declared layout updates.
@@ -601,7 +601,7 @@ class Mage_Core_Model_Layout_Update
                 continue;
             }
             /* Resolve layout update filename with fallback to the module */
-            $filename = Mage::getDesign()->getFilename($file, $layoutParams + array('_module' => $module));
+            $filename = Mage::getDesign()->getFilename($file, $layoutParams + array('module' => $module));
             if (!is_readable($filename)) {
                 throw new Magento_Exception("Layout update file '{$filename}' doesn't exist or isn't readable.");
             }

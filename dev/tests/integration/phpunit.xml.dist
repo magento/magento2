@@ -79,6 +79,6 @@
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Magento_Test_Listener"/>
+        <listener class="Magento_Test_Event_PhpUnit"/>
     </listeners>
 </phpunit>

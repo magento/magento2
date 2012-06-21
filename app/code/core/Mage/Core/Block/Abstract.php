@@ -708,21 +708,10 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     }
 
     /**
-     * Return block helper
-     *
-     * @param string $type
-     * @return Mage_Core_Block_Abstract
-     */
-    public function getHelper($type)
-    {
-        return $this->getLayout()->getBlockSingleton($type);
-    }
-
-    /**
-     * Returns helper object
+     * Return helper object
      *
      * @param string $name
-     * @return Mage_Core_Block_Abstract
+     * @return Mage_Core_Helper_Abstract
      */
     public function helper($name)
     {

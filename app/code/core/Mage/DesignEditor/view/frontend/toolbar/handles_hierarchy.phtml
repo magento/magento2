@@ -31,47 +31,6 @@
         <span class="vde_toolbar_cell_value"><?php echo $this->getSelectedHandleLabel(); ?></span>
     </div>
     <div class="vde_toolbar_cell_content">
-        <div id="vde_handles_tree"><?php echo $this->renderHierarchy(); ?></div>
+        <div id="vde_handles_tree"<?php if ($this->getSelectedHandle()) : ?> data-selected="li[rel='<?php echo $this->getSelectedHandle(); ?>']"<?php endif; ?>><?php echo $this->renderHierarchy(); ?></div>
     </div>
 </div>
-<script type="text/javascript">
-(function ($) {
-    $(document).ready(function () {
-        var treeElement = $("#vde_handles_tree");
-        treeElement.jstree({
-            ui: {
-                select_limit: 1,
-                selected_parent_close: false
-            },
-            themes: {
-                dots: false,
-                icons: false
-            }
-        }).bind('select_node.jstree', function (e, data) {
-            var selectedListItem = data.rslt.obj;
-            var cellElement = $(this).parents('.vde_toolbar_cell');
-            cellElement.find('.vde_toolbar_cell_value').text($.trim(selectedListItem.children('a').text()));
-            if (cellElement.hasClass('active')) {
-                cellElement.removeClass('active');
-                window.location = selectedListItem.children('a').attr('href');
-            }
-        });
-        <?php if ($this->getSelectedHandle()) : ?>
-        treeElement.bind('loaded.jstree', function (e, data) {
-            var treeInstance = data.inst;
-            treeInstance.select_node($(this).find('li[rel="<?php echo $this->getSelectedHandle(); ?>"]'));
-        });
-        <?php endif; ?>
-        $('#vde_handles_hierarchy').one('activate_toolbar_cell.vde', function () {
-            /* At the time of applying the scroll bar, the underlying element should be visible */
-            treeElement.slimScroll({
-                color: '#cccccc',
-                alwaysVisible: true,
-                opacity: 1,
-                height: 'auto',
-                size: 9
-            });
-        });
-    });
-})(jQuery);
-</script>

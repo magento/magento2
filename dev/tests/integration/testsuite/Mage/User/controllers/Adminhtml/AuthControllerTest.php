@@ -71,7 +71,7 @@ class Mage_User_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Contr
     {
         $this->getRequest()->setPost('email', 'test@test.com');
         $this->dispatch('admin/auth/forgotpassword');
-        $this->assertRedirect(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
+        $this->assertRedirect($this->equalTo(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl()));
     }
 
     /**
@@ -141,7 +141,7 @@ class Mage_User_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Contr
 
         $this->dispatch('admin/auth/resetpasswordpost');
 
-        $this->assertRedirect(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
+        $this->assertRedirect($this->equalTo(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl()));
 
         $user = Mage::getModel('Mage_User_Model_User')
             ->loadByUsername('dummy_username');
@@ -159,7 +159,7 @@ class Mage_User_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Contr
         $this->getRequest()->setQuery('token', 'dummy')->setQuery('id', 1);
         $this->dispatch('admin/auth/resetpasswordpost');
 
-        $this->assertRedirect(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
+        $this->assertRedirect($this->equalTo(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl()));
     }
 
     /**

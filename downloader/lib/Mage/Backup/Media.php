@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category     Mage
- * @package      Mage_Backup
+ * @category    Mage
+ * @package     Mage_Backup
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,31 +34,27 @@
 class Mage_Backup_Media extends Mage_Backup_Abstract
 {
     /**
-     * Snapshot backup manager innstance
+     * Snapshot backup manager instance
      *
      * @var Mage_Backup_Snapshot
      */
-    protected $_snapshot;
+    protected $_snapshotManager;
 
     /**
-     * Set snapshot backup manager
-     * @param Mage_Backup_Snapshot $snapshot
+     * Initialize backup manager instance
+     *
+     * @param Mage_Backup_Snapshot|null $snapshotManager
      */
-    public function setSnapshotManager($snapshot)
+    public function __construct($snapshotManager = null)
     {
-        $this->_snapshot = $snapshot;
-    }
-
-    /**
-     * Get snapshot backup manager
-     * @return Mage_Backup_Snapshot
-     */
-    public function getSnapshotManager()
-    {
-        if (null === $this->_snapshot) {
-            $this->_snapshot = new Mage_Backup_Snapshot();
+        if ($snapshotManager !== null) {
+            if (!$snapshotManager instanceof Mage_Backup_Snapshot) {
+                throw new Mage_Exception('Snapshot manager must be instance of Mage_Backup_Snapshot');
+            }
+            $this->_snapshotManager = $snapshotManager;
+        } else {
+            $this->_snapshotManager = new Mage_Backup_Snapshot();
         }
-        return $this->_snapshot;
     }
 
     /**
@@ -70,7 +66,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
     public function rollback()
     {
         $this->_prepareIgnoreList();
-        return $this->getSnapshotManager()->rollback();
+        return $this->_snapshotManager->rollback();
     }
 
     /**
@@ -82,7 +78,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
     public function create()
     {
         $this->_prepareIgnoreList();
-        return $this->getSnapshotManager()->create();
+        return $this->_snapshotManager->create();
     }
 
     /**
@@ -103,17 +99,18 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     protected function _prepareIgnoreList()
     {
+        $rootDir = $this->_snapshotManager->getRootDir();
         $map = array(
-            $this->getSnapshotManager()->getRootDir() => array('media', 'var', 'pub'),
-            $this->getSnapshotManager()->getRootDir() . DS . 'pub' => array('media'),
-            $this->getSnapshotManager()->getRootDir() . DS . 'var' => array($this->getSnapshotManager()->getDbBackupFilename()),
+            $rootDir => array('media', 'var', 'pub'),
+            $rootDir . DIRECTORY_SEPARATOR . 'pub' => array('media'),
+            $rootDir . DIRECTORY_SEPARATOR . 'var' => array($this->_snapshotManager->getDbBackupFilename()),
         );
 
         foreach($map as $path => $whiteList) {
             foreach (new DirectoryIterator($path) as $item) {
                 $filename = $item->getFilename();
                 if (!$item->isDot() && !in_array($filename, $whiteList)) {
-                    $this->getSnapshotManager()->addIgnorePaths($item->getPathname());
+                    $this->_snapshotManager->addIgnorePaths($item->getPathname());
                 }
             }
         }
@@ -129,7 +126,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function setBackupExtension($backupExtension)
     {
-        $this->getSnapshotManager()->setBackupExtension($backupExtension);
+        $this->_snapshotManager->setBackupExtension($backupExtension);
         return $this;
     }
 
@@ -141,7 +138,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function setResourceModel($resourceModel)
     {
-        $this->getSnapshotManager()->setResourceModel($resourceModel);
+        $this->_snapshotManager->setResourceModel($resourceModel);
         return $this;
     }
 
@@ -153,7 +150,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function setTime($time)
     {
-        $this->getSnapshotManager()->setTime($time);
+        $this->_snapshotManager->setTime($time);
         return $this;
     }
 
@@ -165,7 +162,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function setBackupsDir($backupsDir)
     {
-        $this->getSnapshotManager()->setBackupsDir($backupsDir);
+        $this->_snapshotManager->setBackupsDir($backupsDir);
         return $this;
     }
 
@@ -177,7 +174,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function addIgnorePaths($paths)
     {
-        $this->getSnapshotManager()->addIgnorePaths($paths);
+        $this->_snapshotManager->addIgnorePaths($paths);
         return $this;
     }
 
@@ -190,7 +187,7 @@ class Mage_Backup_Media extends Mage_Backup_Abstract
      */
     public function setRootDir($rootDir)
     {
-        $this->getSnapshotManager()->setRootDir($rootDir);
+        $this->_snapshotManager->setRootDir($rootDir);
         return $this;
     }
 }

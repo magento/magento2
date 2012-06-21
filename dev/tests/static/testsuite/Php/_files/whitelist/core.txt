@@ -7,7 +7,9 @@ app/code/core/Mage/Core/Model/ShellAbstract.php
 app/code/core/Mage/Core/Model/Layout.php
 app/code/core/Mage/Core/Model/Layout/Structure.php
 app/code/core/Mage/Core/Model/Layout/Update.php
-app/code/core/Mage/Core/Model/Fallback.php
+app/code/core/Mage/Core/Model/Design/Fallback
+app/code/core/Mage/Core/Model/Design/Fallback.php
+app/code/core/Mage/Core/Model/Design/FallbackInterface.php
 app/code/core/Mage/DesignEditor
 app/code/core/Mage/Index/Model/Indexer/Abstract.php
 app/code/core/Mage/Index/Model/Shell.php

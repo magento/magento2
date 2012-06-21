@@ -118,7 +118,15 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
     public function getParentTheme($package, $theme)
     {
         $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['parent'];
+        $parentTheme = $this->_data[$package]['themes'][$theme]['parent'];
+        if (!$parentTheme) {
+            return null;
+        }
+        $result = explode('/', $parentTheme, 2);
+        if (count($result) > 1) {
+            return $result;
+        }
+        return array($package, $parentTheme);
     }
 
     /**

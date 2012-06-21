@@ -106,6 +106,6 @@ class Magento_Test_TestCase_ControllerAbstractTest extends Magento_Test_TestCase
         $setRedirectMethod = new ReflectionMethod('Zend_Controller_Response_Http', 'setRedirect');
         $setRedirectMethod->invoke($this->getResponse(), 'http://magentocommerce.com');
         $this->assertRedirect();
-        $this->assertRedirect('http://magentocommerce.com');
+        $this->assertRedirect($this->equalTo('http://magentocommerce.com'));
     }
 }

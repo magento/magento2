@@ -61,6 +61,16 @@
                     <label>Customers</label>
                 </customer>
             </export_entities>
+            <export_customer_entities>
+                <customer translate="label">
+                    <model_token>Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer</model_token>
+                    <label>Customers Main File</label>
+                </customer>
+                <customer_address translate="label">
+                    <model_token>Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address</model_token>
+                    <label>Customer Addresses</label>
+                </customer_address>
+            </export_customer_entities>
             <export_file_formats>
                 <csv translate="label">
                     <model_token>Mage_ImportExport_Model_Export_Adapter_Csv</model_token>

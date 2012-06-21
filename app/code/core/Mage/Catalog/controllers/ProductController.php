@@ -30,7 +30,8 @@
  * @category   Mage
  * @package    Mage_Catalog
  */
-class Mage_Catalog_ProductController extends Mage_Core_Controller_Front_Action
+class Mage_Catalog_ProductController
+    extends Mage_Core_Controller_Front_Action
     implements Mage_Catalog_Controller_Product_View_Interface
 {
     /**
@@ -40,8 +41,8 @@ class Mage_Catalog_ProductController extends Mage_Core_Controller_Front_Action
      */
     protected function _initProduct()
     {
-        $categoryId = (int) $this->getRequest()->getParam('category', false);
-        $productId  = (int) $this->getRequest()->getParam('id');
+        $categoryId = (int)$this->getRequest()->getParam('category', false);
+        $productId  = (int)$this->getRequest()->getParam('id');
 
         $params = new Varien_Object();
         $params->setCategoryId($categoryId);

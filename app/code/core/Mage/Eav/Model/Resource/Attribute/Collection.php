@@ -72,6 +72,16 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
     abstract protected function _getEavWebsiteTable();
 
     /**
+     * Get default attribute entity type code
+     *
+     * @return string
+     */
+    public function getEntityTypeCode()
+    {
+        return $this->_getEntityTypeCode();
+    }
+
+    /**
      * Return eav entity type instance
      *
      * @return Mage_Eav_Model_Entity_Type
@@ -79,7 +89,8 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
     public function getEntityType()
     {
         if ($this->_entityType === null) {
-            $this->_entityType = Mage::getSingleton('Mage_Eav_Model_Config')->getEntityType($this->_getEntityTypeCode());
+            $this->_entityType = Mage::getSingleton('Mage_Eav_Model_Config')
+                ->getEntityType($this->_getEntityTypeCode());
         }
         return $this->_entityType;
     }

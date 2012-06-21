@@ -119,10 +119,10 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     public function getFilenameDataProvider()
     {
         return array(
-            array('theme_file.txt', array('_module' => 'Mage_Catalog')),
+            array('theme_file.txt', array('module' => 'Mage_Catalog')),
             array('Mage_Catalog::theme_file.txt', array()),
             array('Mage_Catalog::theme_file_with_2_dots..txt', array()),
-            array('Mage_Catalog::theme_file.txt', array('_module' => 'Overriden_Module')),
+            array('Mage_Catalog::theme_file.txt', array('module' => 'Overriden_Module')),
         );
     }
 
@@ -256,16 +256,18 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento_Config_View', $config);
         $this->assertEquals(array('var1' => 'value1', 'var2' => 'value2'), $config->getVars('Namespace_Module'));
     }
-    /*
-    * @covers Mage_Core_Model_Design_Package::getPublicSkinDir
-    */
-    public function testGetPublicSkinDir()
+
+    /**
+     * @param string $file
+     * @param string $result
+     * @covers Mage_Core_Model_Design_Package::getSkinUrl
+     * @dataProvider getSkinUrlDataProvider
+     * @magentoConfigFixture current_store dev/static/sign 0
+     */
+    public function testGetSkinUrl($devMode, $file, $result)
     {
-        $this->assertTrue(strpos(
-                $this->_model->getPublicSkinDir(),
-                DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'skin'
-            ) !== false
-        );
+        Mage::setIsDeveloperMode($devMode);
+        $this->assertEquals($this->_model->getSkinUrl($file), $result);
     }
 
     /**
@@ -273,11 +275,19 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
      * @param string $result
      * @covers Mage_Core_Model_Design_Package::getSkinUrl
      * @dataProvider getSkinUrlDataProvider
+     * @magentoConfigFixture current_store dev/static/sign 1
      */
-    public function testGetSkinUrl($devMode, $file, $result)
+    public function testGetSkinUrlSigned($devMode, $file, $result)
     {
         Mage::setIsDeveloperMode($devMode);
-        $this->assertEquals($this->_model->getSkinUrl($file), $result);
+        $url = $this->_model->getSkinUrl($file);
+        $this->assertEquals(strpos($url, $result), 0);
+        $lastModified = array();
+        preg_match('/.*\?(.*)$/i', $url, $lastModified);
+        $this->assertArrayHasKey(1, $lastModified);
+        $this->assertEquals(10, strlen($lastModified[1]));
+        $this->assertLessThanOrEqual(time(), $lastModified[1]);
+        $this->assertGreaterThan(1970, date('Y', $lastModified[1]));
     }
 
     /**

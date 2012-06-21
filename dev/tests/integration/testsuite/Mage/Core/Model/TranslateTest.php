@@ -144,6 +144,39 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoConfigFixture global/locale/inheritance/en_AU en_UK
+     * @magentoConfigFixture global/locale/inheritance/en_UK en_US
+     * @dataProvider translateWithLocaleInheritanceDataProvider
+     */
+    public function testTranslateWithLocaleInheritance($inputText, $expectedTranslation)
+    {
+        $model = new Mage_Core_Model_Translate();
+        $model->setLocale('en_AU');
+        $model->init('frontend');
+        $this->assertEquals($expectedTranslation, $model->translate(array($inputText)));
+    }
+
+    public function translateWithLocaleInheritanceDataProvider()
+    {
+        return array(
+            array(
+                new Mage_Core_Model_Translate_Expr(
+                    'Text with different translation on different modules',
+                    'Mage_Core'
+                ),
+                'Text translation by Mage_Core module in en_UK'
+            ),
+            array(
+                new Mage_Core_Model_Translate_Expr(
+                    'Original value for Mage_Core module',
+                    'Mage_Core'
+                ),
+                'Translated value for Mage_Core module in en_AU'
+            ),
+        );
+    }
+
     public function testGetSetTranslateInline()
     {
         $this->assertEquals(true, $this->_model->getTranslateInline());

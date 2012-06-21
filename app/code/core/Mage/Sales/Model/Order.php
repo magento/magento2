@@ -931,12 +931,12 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     /**
      * Retrieve order shipping address
      *
-     * @return Mage_Sales_Model_Order_Address
+     * @return Mage_Sales_Model_Order_Address|bool
      */
     public function getShippingAddress()
     {
         foreach ($this->getAddressesCollection() as $address) {
-            if ($address->getAddressType()=='shipping' && !$address->isDeleted()) {
+            if ($address->getAddressType() == 'shipping' && !$address->isDeleted()) {
                 return $address;
             }
         }
@@ -1254,6 +1254,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
         try {
             // Retrieve specified view block from appropriate design package (depends on emulated store)
             $paymentBlock = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($this->getPayment())
+                ->setArea('frontend')
                 ->setIsSecureMode(true);
             $paymentBlock->getMethod()->setStore($storeId);
             $paymentBlockHtml = $paymentBlock->toHtml();
@@ -1739,7 +1740,8 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     public function getOrderCurrency()
     {
         if (is_null($this->_orderCurrency)) {
-            $this->_orderCurrency = Mage::getModel('Mage_Directory_Model_Currency')->load($this->getOrderCurrencyCode());
+            $this->_orderCurrency = Mage::getModel('Mage_Directory_Model_Currency');
+            $this->_orderCurrency->load($this->getOrderCurrencyCode());
         }
         return $this->_orderCurrency;
     }

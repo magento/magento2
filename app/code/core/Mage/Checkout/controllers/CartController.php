@@ -27,7 +27,8 @@
 /**
  * Shopping cart controller
  */
-class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
+class Mage_Checkout_CartController
+    extends Mage_Core_Controller_Front_Action
     implements Mage_Catalog_Controller_Product_View_Interface
 {
     /**
@@ -293,7 +294,9 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());
 
-            Mage::helper('Mage_Catalog_Helper_Product_View')->prepareAndRender($quoteItem->getProduct()->getId(), $this, $params);
+            Mage::helper('Mage_Catalog_Helper_Product_View')->prepareAndRender(
+                $quoteItem->getProduct()->getId(), $this, $params
+            );
         } catch (Exception $e) {
             $this->_getSession()->addError($this->__('Cannot configure product.'));
             Mage::logException($e);

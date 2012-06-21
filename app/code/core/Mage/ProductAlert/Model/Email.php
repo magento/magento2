@@ -231,7 +231,9 @@ class Mage_ProductAlert_Model_Email extends Mage_Core_Model_Abstract
         if (is_null($this->_website) || is_null($this->_customer)) {
             return false;
         }
-        if (($this->_type == 'price' && count($this->_priceProducts) == 0) || ($this->_type == 'stock' && count($this->_stockProducts) == 0)) {
+        if (($this->_type == 'price' && count($this->_priceProducts) == 0)
+            || ($this->_type == 'stock' && count($this->_stockProducts) == 0)
+        ) {
             return false;
         }
         if (!$this->_website->getDefaultGroup() || !$this->_website->getDefaultGroup()->getDefaultStore()) {
@@ -280,7 +282,7 @@ class Mage_ProductAlert_Model_Email extends Mage_Core_Model_Abstract
 
         Mage::getModel('Mage_Core_Model_Email_Template')
             ->setDesignConfig(array(
-                'area'  => 'frontend',
+                'area'  => Mage_Core_Model_App_Area::AREA_FRONTEND,
                 'store' => $storeId
             ))->sendTransactional(
                 $templateId,

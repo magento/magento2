@@ -54,6 +54,7 @@
     <adminhtml_export_getfilter>
         <container name="root" label="Root" output="1">
             <block type="Mage_ImportExport_Block_Adminhtml_Export_Filter" name="export.filter"/>
+            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::export/form/filter/after.phtml" name="export.form.after" alias="form_after"/>
         </container>
     </adminhtml_export_getfilter>
 </layout>

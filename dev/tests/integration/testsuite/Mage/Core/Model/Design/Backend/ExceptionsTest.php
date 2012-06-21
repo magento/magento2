@@ -42,7 +42,7 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
 
     /**
      * Basic test, checks that saved value contains all required entries and is saved as an array
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testSaveValueIsFormedNicely()
     {
@@ -64,7 +64,7 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
     }
 
     /**
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testSaveEmptyValueIsSkipped()
     {
@@ -86,7 +86,7 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
      * @param array $designException
      * @param string $regexp
      * @dataProvider saveExceptionDataProvider
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testSaveException($designException, $regexp)
     {
@@ -128,7 +128,7 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
      * @var array $value
      * @expectedException Mage_Core_Exception
      * @dataProvider saveWrongExceptionDataProvider
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testSaveWrongException($value)
     {
@@ -173,12 +173,5 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
         );
 
         return $result;
-    }
-
-    /**
-     * Empty fixture that guarantee data isolation
-     */
-    public static function emptyFixture()
-    {
     }
 }

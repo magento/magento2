@@ -26,7 +26,8 @@
  */
 
 /**
- * "Transparent" DB transaction hack for integration tests
+ * DB adapter transaction interface that allows starting transaction with adjusted level,
+ * transparently to the application
  */
 interface Magento_Test_Db_Adapter_TransactionInterface
 {

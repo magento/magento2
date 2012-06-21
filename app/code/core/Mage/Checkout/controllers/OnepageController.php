@@ -505,9 +505,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
 
             $data = $this->getRequest()->getPost('payment', array());
             if ($data) {
-                if (!isset($data['method'])) {
-                    $data['method'] = 'free';
-                }
                 $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
                     | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
                     | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY

@@ -25,11 +25,6 @@
  */
 
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
-define('DS', DIRECTORY_SEPARATOR);
-
-if (!is_writable(TESTS_TEMP_DIR)) {
-    throw new Exception(TESTS_TEMP_DIR . ' must be writable.');
-}
 
 $includePaths = array(
     get_include_path(),
@@ -41,7 +36,6 @@ $includePaths = array(
 );
 set_include_path(implode(PATH_SEPARATOR, $includePaths));
 spl_autoload_register('magentoAutoloadForUnitTests');
-register_shutdown_function('magentoCleanTmpForUnitTests');
 
 function magentoAutoloadForUnitTests($class)
 {
@@ -59,20 +53,8 @@ function magentoAutoloadForUnitTests($class)
     return false;
 }
 
-function magentoCleanTmpForUnitTests()
-{
-    $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator(TESTS_TEMP_DIR),
-        RecursiveIteratorIterator::CHILD_FIRST
-    );
-    foreach ($files as $file) {
-        if (strpos($file->getFilename(), '.') === 0) {
-            continue;
-        }
-        if ($file->isDir()) {
-            rmdir($file->getRealPath());
-        } else {
-            unlink($file->getRealPath());
-        }
-    }
-}
+$tmpDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp';
+$instance = new Magento_Test_Environment($tmpDir);
+Magento_Test_Environment::setInstance($instance);
+$instance->cleanTmpDir()
+    ->cleanTmpDirOnShutdown();

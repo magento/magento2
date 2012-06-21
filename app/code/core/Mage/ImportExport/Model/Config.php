@@ -47,7 +47,9 @@ class Mage_ImportExport_Model_Config
 
         foreach (Mage::getConfig()->getNode($configKey)->asCanonicalArray() as $entityType => $entityParams) {
             if (empty($entityParams['model_token'])) {
-                Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Node does not has model token tag'));
+                Mage::throwException(
+                    Mage::helper('Mage_ImportExport_Helper_Data')->__('Node does not has model token tag')
+                );
             }
             $entities[$entityType] = array(
                 'model' => $entityParams['model_token'],
@@ -70,7 +72,10 @@ class Mage_ImportExport_Model_Config
         $options = array();
 
         if ($withEmpty) {
-            $options[] = array('label' => Mage::helper('Mage_ImportExport_Helper_Data')->__('-- Please Select --'), 'value' => '');
+            $options[] = array(
+                'label' => Mage::helper('Mage_ImportExport_Helper_Data')->__('-- Please Select --'),
+                'value' => ''
+            );
         }
         foreach (self::getModels($configKey) as $type => $params) {
             $options[] = array('value' => $type, 'label' => $params['label']);

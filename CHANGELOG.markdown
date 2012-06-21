@@ -1,3 +1,24 @@
+Update as of 6/20/2012
+=====================
+* Implemented locale translation inheritance
+* Implemented new format for exporting customer data
+* Added initial Javascript code for globalization and localization
+* Added initial Javascript unit tests
+* Implemented file signature for urls of static files - better CDN support
+* Implemented optional tracking of changes in view files fallback - cached by default, tracked in developer mode
+* Introduced `@magentoDbIsolation` annotation in integration tests - isolates DB modifications made by tests
+* Started refactoring of Visual Design Editor Javascript architecture
+* Github requests:
+  * [#25](https://github.com/magento/magento2/issues/25) Removed unused `Mage_Core_Block_Abstract::getHelper()` method
+* Fixed:
+  * "$_FILES array is empty" messages in exception log upon installation
+  * Long attribute table aliases, that were producing errors at DB with lower identifier limitation than MySQL
+  * Watermark opacity function did not work with ImageMagick
+  * `Magento_Test_TestCase_ControllerAbstract::assertRedirect` was used in a wrong way
+  * Inability to reorder a downloadable product
+  * ACL tables aliases interference with other table aliases
+* Several tests are made incomplete temporary, appropriate bugs to be fixed in the nearest future
+
 Update as of 6/7/2012
 =====================
 * Fixed various crashes of visual design editor

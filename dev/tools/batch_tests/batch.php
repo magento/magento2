@@ -26,6 +26,7 @@
  */
 
 $tests = array(
+    '../../tests/unit/framework/tests/unit' => '',
     '../../tests/unit' => '',
     '../../tests/static/framework/tests/unit' => '',
     '../../tests/integration/framework/tests/unit' => '',

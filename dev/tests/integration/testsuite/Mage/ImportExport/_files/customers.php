@@ -25,6 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+$customers = array();
+
 $customer = new Mage_Customer_Model_Customer();
 
 $customer->setWebsiteId(1)
@@ -42,6 +44,7 @@ $customer->setWebsiteId(1)
     ->setDefaultShipping(1);
 $customer->isObjectNew(true);
 $customer->save();
+$customers[] = $customer;
 
 $customer = new Mage_Customer_Model_Customer();
 $customer->setWebsiteId(1)
@@ -59,6 +62,7 @@ $customer->setWebsiteId(1)
     ->setDefaultShipping(1);
 $customer->isObjectNew(true);
 $customer->save();
+$customers[] = $customer;
 
 $customer = new Mage_Customer_Model_Customer();
 $customer->setWebsiteId(1)
@@ -76,3 +80,6 @@ $customer->setWebsiteId(1)
     ->setDefaultShipping(1);
 $customer->isObjectNew(true);
 $customer->save();
+$customers[] = $customer;
+
+Mage::register('_fixture/Mage_ImportExport_Customer_Collection', $customers);

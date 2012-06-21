@@ -73,8 +73,8 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
      */
     public function testGetPublicSkinDir()
     {
-        Mage::app()->getConfig()->getOptions()->setSkinDir(__DIR__);
-        $this->assertEquals(__DIR__, $this->_model->getPublicSkinDir());
+        Mage::app()->getConfig()->getOptions()->setMediaDir(__DIR__);
+        $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'skin', $this->_model->getPublicSkinDir());
     }
 
     /**
@@ -169,7 +169,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     public function testGetSkinUrlNoFilesDuplicationWithCaching()
     {
         Mage::app()->getLocale()->setLocale('en_US');
-        $skinParams = array('_package' => 'test', '_theme' => 'default', '_skin' => 'default');
+        $skinParams = array('package' => 'test', 'theme' => 'default', 'skin' => 'default');
         $cacheKey = 'frontend/test/default/default/en_US';
         Mage::app()->cleanCache();
 
@@ -243,10 +243,10 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     public function publishSkinFileDataProvider()
     {
         $designParams = array(
-            '_area'    => 'frontend',
-            '_package' => 'test',
-            '_theme'   => 'default',
-            '_skin'    => 'default',
+            'area'    => 'frontend',
+            'package' => 'test',
+            'theme'   => 'default',
+            'skin'    => 'default',
         );
         return array(
             'skin file' => array(
@@ -282,7 +282,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         );
         $publishedDir = self::$_skinPublicDir . '/frontend/package/default/theme/en_US';
         $this->assertFileNotExists($publishedDir, 'Please verify isolation from previous test(s).');
-        $this->_model->getSkinUrl('css/file.css', array('_package' => 'package', '_skin' => 'theme'));
+        $this->_model->getSkinUrl('css/file.css', array('package' => 'package', 'skin' => 'theme'));
         foreach ($expectedFiles as $file) {
             $this->assertFileExists("{$publishedDir}/{$file}");
         }
@@ -324,10 +324,10 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
             'frontend' => array(
                 'widgets.css',
                 array(
-                    '_area'    => 'frontend',
-                    '_package' => 'default',
-                    '_skin'    => 'default',
-                    '_module'  => 'Mage_Reports',
+                    'area'    => 'frontend',
+                    'package' => 'default',
+                    'skin'    => 'default',
+                    'module'  => 'Mage_Reports',
                 ),
                 'frontend/default/default/default/en_US/Mage_Reports/widgets.css',
                 array(
@@ -340,11 +340,11 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
             'adminhtml' => array(
                 'Mage_Paypal::boxes.css',
                 array(
-                    '_area'    => 'adminhtml',
-                    '_package' => 'package',
-                    '_theme'   => 'test',
-                    '_skin'    => 'default',
-                    '_module'  => false,
+                    'area'    => 'adminhtml',
+                    'package' => 'package',
+                    'theme'   => 'test',
+                    'skin'    => 'default',
+                    'module'  => false,
                 ),
                 'adminhtml/package/test/default/en_US/Mage_Paypal/boxes.css',
                 array(
@@ -361,9 +361,33 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
 
 
     /**
-     * Test that modified CSS file and changed resources are re-published
+     * Test that modified CSS file and changed resources are re-published in developer mode
      */
-    public function testPublishResourcesAndCssWhenChangedCss()
+    public function testPublishResourcesAndCssWhenChangedCssDevMode()
+    {
+        if (!Mage::getIsDeveloperMode()) {
+            $this->markTestSkipped('Valid in developer mode only');
+        }
+        $this->_testPublishResourcesAndCssWhenChangedCss(true);
+    }
+
+    /**
+     * Test that modified CSS file and changed resources are not re-published in usual mode
+     */
+    public function testNotPublishResourcesAndCssWhenChangedCssUsualMode()
+    {
+        if (Mage::getIsDeveloperMode()) {
+            $this->markTestSkipped('Valid in non-developer mode only');
+        }
+        $this->_testPublishResourcesAndCssWhenChangedCss(false);
+    }
+
+    /**
+     * Tests what happens when CSS file and its resources are changed - whether they are re-published or not
+     *
+     * @param bool $expectedPublished
+     */
+    protected function _testPublishResourcesAndCssWhenChangedCss($expectedPublished)
     {
         $fixtureSkinPath = self::$_fixtureTmpDir . '/frontend/test/default/skin/default/';
         $publishedPath = self::$_skinPublicDir . '/frontend/test/default/default/en_US/';
@@ -385,16 +409,51 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
         );
         $this->_model->getSkinUrl('style.css');
 
-        $this->assertFileEquals($fixtureSkinPath . 'style.css', $publishedPath . 'style.css');
-        $this->assertFileEquals($fixtureSkinPath . 'sub.css', $publishedPath . 'sub.css');
-        $this->assertFileEquals($fixtureSkinPath . 'images/rectangle.gif', $publishedPath . 'images/rectangle.gif');
+        $assertFileComparison = $expectedPublished ? 'assertFileEquals' : 'assertFileNotEquals';
+        $this->$assertFileComparison($fixtureSkinPath . 'style.css', $publishedPath . 'style.css');
+        $this->$assertFileComparison($fixtureSkinPath . 'sub.css', $publishedPath . 'sub.css');
+        if ($expectedPublished) {
+            $this->assertFileEquals(
+                $fixtureSkinPath . 'images/rectangle.gif', $publishedPath . 'images/rectangle.gif'
+            );
+        } else {
+            $this->assertFileNotExists($publishedPath . 'images/rectangle.gif');
+        }
+    }
+
+
+    /**
+     * Test changed resources, referenced in non-modified CSS file, are re-published
+     * @magentoAppIsolation enabled
+     */
+    public function testPublishChangedResourcesWhenUnchangedCssDevMode()
+    {
+        if (!Mage::getIsDeveloperMode()) {
+            $this->markTestSkipped('Valid in developer mode only');
+        }
+
+        $this->_testPublishChangedResourcesWhenUnchangedCss(true);
     }
 
     /**
      * Test changed resources, referenced in non-modified CSS file, are re-published
      * @magentoAppIsolation enabled
      */
-    public function testPublishChangedResourcesWhenUnchangedCss()
+    public function testNotPublishChangedResourcesWhenUnchangedCssUsualMode()
+    {
+        if (Mage::getIsDeveloperMode()) {
+            $this->markTestSkipped('Valid in non-developer mode only');
+        }
+
+        $this->_testPublishChangedResourcesWhenUnchangedCss(false);
+    }
+
+    /**
+     * Tests what happens when CSS file and its resources are changed - whether they are re-published or not
+     *
+     * @param bool $expectedPublished
+     */
+    protected function _testPublishChangedResourcesWhenUnchangedCss($expectedPublished)
     {
         $fixtureSkinPath = self::$_fixtureTmpDir . '/frontend/test/default/skin/default/';
         $publishedPath = self::$_skinPublicDir . '/frontend/test/default/default/en_US/';
@@ -412,19 +471,11 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
             FILE_APPEND
         );
 
-        // Without developer mode nothing must be re-published
-        Mage::setIsDeveloperMode(false);
         $this->_model->getSkinUrl('style.css');
 
-        $this->assertFileNotEquals($fixtureSkinPath . 'sub.css', $publishedPath . 'sub.css');
-        $this->assertFileNotEquals($fixtureSkinPath . 'images/rectangle.gif', $publishedPath . 'images/square.gif');
-
-        // With developer mode all changed files must be re-published
-        Mage::setIsDeveloperMode(true);
-        $this->_model->getSkinUrl('style.css');
-
-        $this->assertFileEquals($fixtureSkinPath . 'sub.css', $publishedPath . 'sub.css');
-        $this->assertFileEquals($fixtureSkinPath . 'images/rectangle.gif', $publishedPath . 'images/square.gif');
+        $assertFileComparison = $expectedPublished ? 'assertFileEquals' : 'assertFileNotEquals';
+        $this->$assertFileComparison($fixtureSkinPath . 'sub.css', $publishedPath . 'sub.css');
+        $this->$assertFileComparison($fixtureSkinPath . 'images/rectangle.gif', $publishedPath . 'images/square.gif');
     }
 
     /**

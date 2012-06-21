@@ -41,17 +41,17 @@ class Integrity_Theme_SkinFilesTest extends Magento_Test_TestCase_IntegrityAbstr
     public function testSkinFilesFromThemes($application, $package, $theme, $skin, $file)
     {
         $params = array(
-            '_area'    => $application,
-            '_package' => $package,
-            '_theme'   => $theme,
-            '_skin'    => $skin
+            'area'    => $application,
+            'package' => $package,
+            'theme'   => $theme,
+            'skin'    => $skin
         );
         $skinFile = Mage::getDesign()->getSkinFile($file, $params);
         $this->assertFileExists($skinFile);
 
         $fileParts = explode(Mage_Core_Model_Design_Package::SCOPE_SEPARATOR, $file);
         if (count($fileParts) > 1) {
-            $params['_module'] = $fileParts[0];
+            $params['module'] = $fileParts[0];
         }
         if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
             $errors = array();

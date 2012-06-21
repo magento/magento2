@@ -101,8 +101,10 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      *
      * By default is looking for first argument as array and assigns it as object attributes
      * This behavior may change in child classes
+     *
+     * @param array $data
      */
-    public function __construct(array $data= array())
+    public function __construct(array $data = array())
     {
         parent::__construct($data);
         $this->_construct();
@@ -113,7 +115,6 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
      */
     protected function _construct()
     {
-
     }
 
     /**

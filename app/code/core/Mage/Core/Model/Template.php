@@ -87,7 +87,7 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
      *
      * @param array $data
      */
-    public function __construct(array $data= array())
+    public function __construct(array $data = array())
     {
         $this->_area = isset($data['area']) ? $data['area'] : null;
         $this->_store = isset($data['store']) ? $data['store'] : null;
@@ -134,11 +134,11 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
      */
     public function getDesignConfig()
     {
-        if (is_null($this->_designConfig)) {
-            if (is_null($this->_area)) {
+        if ($this->_designConfig === null) {
+            if ($this->_area === null) {
                 $this->_area = Mage::getDesign()->getArea();
             }
-            if (is_null($this->_store)) {
+            if ($this->_store === null) {
                 $this->_store = Mage::app()->getStore()->getId();
             }
             $this->_designConfig = new Varien_Object(array(

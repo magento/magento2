@@ -33,13 +33,6 @@
  */
 abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framework_TestCase
 {
-
-    const MODE_EQUALS       = 1;
-    const MODE_START_WITH   = 2;
-    const MODE_END_WITH     = 3;
-    const MODE_CONTAINS     = 4;
-
-
     protected $_runCode     = '';
     protected $_runScope    = 'store';
     protected $_runOptions  = array();
@@ -150,101 +143,26 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     /**
      * Assert that there is a redirect to expected URL.
      * Omit expected URL to check that redirect to wherever has been occurred.
+     * Examples of usage:
+     * $this->assertRedirect($this->equalTo($expectedUrl));
+     * $this->assertRedirect($this->stringStartsWith($expectedUrlPrefix));
+     * $this->assertRedirect($this->stringEndsWith($expectedUrlSuffix));
+     * $this->assertRedirect($this->stringContains($expectedUrlSubstring));
      *
-     * @param string|null $expectedUrl
-     * @param int $checkMode - const
+     * @param PHPUnit_Framework_Constraint|null $urlConstraint
      */
-    public function assertRedirect($expectedUrl = null, $checkMode = self::MODE_EQUALS)
+    public function assertRedirect(PHPUnit_Framework_Constraint $urlConstraint = null)
     {
         $this->assertTrue($this->getResponse()->isRedirect());
-
-        if ($expectedUrl) {
-            switch ($checkMode) {
-                case self::MODE_START_WITH: {
-                    $this->_assertUrlStartsWith($expectedUrl);
-                } break;
-
-                case self::MODE_END_WITH: {
-                    $this->_assertUrlEndsWith($expectedUrl);
-                } break;
-
-                case self::MODE_CONTAINS: {
-                    $this->_assertUrlContains($expectedUrl);
-                } break;
-
-                default: {
-                    $this->_assertUrlEquals($expectedUrl);
-                } break;
+        if ($urlConstraint) {
+            $actualUrl = '';
+            foreach ($this->getResponse()->getHeaders() as $header) {
+                if ($header['name'] == 'Location') {
+                    $actualUrl = $header['value'];
+                    break;
+                }
             }
+            $this->assertThat($actualUrl, $urlConstraint, 'Redirection URL does not match expectations');
         }
-    }
-
-    /**
-     * Assert that there is a redirect to URL that start with expected part
-     *
-     * @param string $expectedUrl
-     */
-    protected function _assertUrlStartsWith($expectedUrl)
-    {
-        $isRedirected = false;
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header['name'] == 'Location') {
-                $this->assertStringStartsWith($expectedUrl, $header['value'], 'Incorrect redirection URL');
-                $isRedirected = true;
-                break;
-            }
-        }
-        $this->assertTrue($isRedirected, 'There is no redirection to expected page');
-    }
-
-    /**
-     * Assert that there is a redirect to URL that ends with expected part
-     *
-     * @param string $expectedUrl
-     */
-    protected function _assertUrlEndsWith($expectedUrl)
-    {
-        $isRedirected = false;
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header['name'] == 'Location') {
-                $this->assertStringEndsWith($expectedUrl, $header['value'], 'Incorrect redirection URL');
-                $isRedirected = true;
-                break;
-            }
-        }
-        $this->assertTrue($isRedirected, 'There is no redirection to expected page');
-    }
-
-    /**
-     * Assert that there is a redirect to expected URL
-     *
-     * @param string $expectedUrl
-     */
-    protected function _assertUrlEquals($expectedUrl)
-    {
-        $expected = array(
-            'name'    => 'Location',
-            'value'   => $expectedUrl,
-            'replace' => true,
-        );
-        $this->assertContains($expected, $this->getResponse()->getHeaders());
-    }
-
-    /**
-     * Assert that there is a redirect to URL that contains expected part
-     *
-     * @param string $expectedUrl
-     */
-    protected function _assertUrlContains($expectedUrl)
-    {
-        $isRedirected = false;
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header['name'] == 'Location') {
-                $this->assertContains($expectedUrl, $header['value'], 'Incorrect page url');
-                $isRedirected = true;
-                break;
-            }
-        }
-        $this->assertTrue($isRedirected, 'There is no redirection to expected page');
     }
 }
