@@ -37,6 +37,11 @@ class Mage_Eav_Model_Resource_Entity_Attribute_CollectionTest extends PHPUnit_Fr
         $this->_model = new Mage_Eav_Model_Resource_Entity_Attribute_Collection();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testSetAttributeSetExcludeFilter()
     {
         $collection = new Mage_Eav_Model_Resource_Entity_Attribute_Collection();

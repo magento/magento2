@@ -55,6 +55,11 @@ class Mage_Core_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_dateTime->setTimezone(new DateTimeZone(self::DATE_TIMEZONE));
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     public function testGetEncryptor()
     {
         $this->assertInstanceOf('Mage_Core_Model_Encryption', $this->_helper->getEncryptor());

@@ -44,6 +44,10 @@ class Mage_ImportExport_Model_Source_Import_Behavior
 
         return array(
             array(
+                'value' => '',
+                'label' => $helper->__('-- Please Select --')
+            ),
+            array(
                 'value' => Mage_ImportExport_Model_Import::BEHAVIOR_APPEND,
                 'label' => $helper->__('Append Complex Data')
             ),

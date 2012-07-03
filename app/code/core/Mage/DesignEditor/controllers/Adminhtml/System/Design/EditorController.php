@@ -36,7 +36,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
     {
         $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
         $this->loadLayout();
-        $this->_setActiveMenu('system/design/editor');
+        $this->_setActiveMenu('Mage_DesignEditor::system_design_editor');
         $this->renderLayout();
     }
 

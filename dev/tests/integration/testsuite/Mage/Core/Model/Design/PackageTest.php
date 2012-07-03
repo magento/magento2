@@ -61,6 +61,11 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         $this->_model->setDesignTheme('test/default/default', 'frontend');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testSetGetArea()
     {
         $this->assertEquals(Mage_Core_Model_Design_Package::DEFAULT_AREA, $this->_model->getArea());

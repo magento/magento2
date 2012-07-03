@@ -39,7 +39,12 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
             'base_controller' => 'Mage_Backend_Controller_ActionAbstract'
         );
         $this->_model = new Mage_Backend_Controller_Router_Default($options);
-        $this->_model->setFront(Mage::app()->getFrontController());
+        $this->_model->setFront(new Mage_Core_Controller_Varien_Front());
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
     }
 
     /**
@@ -61,8 +66,9 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
             'controller' => 'index',
             'action' => 'index'
         );
+        $this->assertEmpty($this->_model->getFront()->getDefault());
         $this->_model->fetchDefault();
-        $this->assertEquals($default, Mage::app()->getFrontController()->getDefault());
+        $this->assertEquals($default, $this->_model->getFront()->getDefault());
     }
 
     /**

@@ -34,7 +34,7 @@
 class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
     /**
-     * Add fieldset
+     * Add fieldsets
      *
      * @return Mage_ImportExport_Block_Adminhtml_Import_Edit_Form
      */
@@ -47,22 +47,65 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'method'  => 'post',
             'enctype' => 'multipart/form-data'
         ));
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => $helper->__('Import Settings')));
-        $fieldset->addField('entity', 'select', array(
+
+        // base fieldset
+        $fieldsets['base'] = $form->addFieldset('base_fieldset', array('legend' => $helper->__('Import Settings')));
+        $fieldsets['base']->addField('entity', 'select', array(
             'name'     => 'entity',
             'title'    => $helper->__('Entity Type'),
             'label'    => $helper->__('Entity Type'),
             'required' => true,
+            'onchange' => 'editForm.handleEntityTypeSelector();',
             'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Entity')->toOptionArray()
         ));
-        $fieldset->addField('behavior', 'select', array(
+        $fieldsets['base']->addField('behavior', 'select', array(
             'name'     => 'behavior',
             'title'    => $helper->__('Import Behavior'),
             'label'    => $helper->__('Import Behavior'),
             'required' => true,
             'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Behavior')->toOptionArray()
         ));
-        $fieldset->addField(Mage_ImportExport_Model_Import::FIELD_NAME_SOURCE_FILE, 'file', array(
+
+        // fieldset for format version
+        $fieldsets['version'] = $form->addFieldset('import_format_version_fieldset',
+            array(
+                'legend' => $helper->__('Import Format Version'),
+                'style'  => 'display:none'
+            )
+        );
+        $fieldsets['version']->addField('file_format_version', 'select', array(
+            'name'     => 'file_format_version',
+            'title'    => $helper->__('Import Format Version'),
+            'label'    => $helper->__('Import Format Version'),
+            'required' => true,
+            'onchange' => 'editForm.handleImportFormatVersionSelector();',
+            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Format_Version')->toOptionArray()
+        ));
+
+        // fieldset for customer entity
+        $fieldsets['customer'] = $form->addFieldset('customer_entity_fieldset',
+            array(
+                'legend' => $helper->__('Customer Entity Type'),
+                'style'  => 'display:none'
+            )
+        );
+        $fieldsets['customer']->addField('customer_entity', 'select', array(
+            'name'     => 'customer_entity',
+            'title'    => $helper->__('Customer Entity Type'),
+            'label'    => $helper->__('Customer Entity Type'),
+            'required' => false,
+            'disabled' => true,
+            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Customer_Entity')->toOptionArray()
+        ));
+
+        // fieldset for file uploading
+        $fieldsets['upload'] = $form->addFieldset('upload_file_fieldset',
+            array(
+                'legend' => $helper->__('File to Import'),
+                'style'  => 'display:none'
+            )
+        );
+        $fieldsets['upload']->addField(Mage_ImportExport_Model_Import::FIELD_NAME_SOURCE_FILE, 'file', array(
             'name'     => Mage_ImportExport_Model_Import::FIELD_NAME_SOURCE_FILE,
             'label'    => $helper->__('Select File to Import'),
             'title'    => $helper->__('Select File to Import'),

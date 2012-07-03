@@ -60,15 +60,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <system>
-            <children>
-                <adminnotification translate="title" module="Mage_AdminNotification">
-                    <title>Notifications</title>
-                    <action>adminhtml/notification</action>
-                    <sort_order>15</sort_order>
-                </adminnotification>
-            </children>
-        </system>
-    </menu>
 </config>

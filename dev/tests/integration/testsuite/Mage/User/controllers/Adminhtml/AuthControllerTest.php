@@ -37,6 +37,13 @@ class Mage_User_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Contr
      */
     protected $_auth;
 
+
+    protected function tearDown()
+    {
+        $this->_auth = null;
+        parent::tearDown();
+    }
+
     protected  function _login()
     {
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();

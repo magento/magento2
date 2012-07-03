@@ -1,3 +1,22 @@
+Update as of 7/3/2012
+=====================
+* Refactored backend (admin) menu generation:
+  * Menu is separated from `adminhtml.xml` files into `menu.xml` files
+  * Rendering menu became responsibility of `Mage_Backend` instead of `Mage_Adminhtml` module
+  * Implemented XML-Schema for `menu.xml`
+  * Actions with menu items defined in schema: add, remove, move, update, change parent and position
+* Refactored customers import feature. New ability to provide import data in 3 files: master file (key customer information) + address file (customer id + address info) + financial file (customer id + reward points & store credit)
+* Optimized memory consumption in integration tests:
+  * Found and eliminated memory leaks in `Mage_Core_Model_App_Area`, `Mage_Core_Model_Layout`
+  * Manually unset objects from PHPUnit test case object in `tearDown()` in integration tests. Garbage collector didn't purge them because of these references
+  * Disabled running `integrity` test suite by default in integration tests
+* Improvements in visual design editor JavaScript:
+  * eliminated dependency of code on HTML-literals, reduced code coupling between templates and JavaScript files
+  * implemented blocking unwanted JavaScript activity in visual design editor mode
+* Various fixes in UX, code stability, modularity
+* GitHub requests:
+  * [#23](https://github.com/magento/magento2/pull/23) -- added `Mage_Customer_Block_Account_Navigation::removeLink()`
+
 Update as of 6/20/2012
 =====================
 * Implemented locale translation inheritance
@@ -8,7 +27,7 @@ Update as of 6/20/2012
 * Implemented optional tracking of changes in view files fallback - cached by default, tracked in developer mode
 * Introduced `@magentoDbIsolation` annotation in integration tests - isolates DB modifications made by tests
 * Started refactoring of Visual Design Editor Javascript architecture
-* Github requests:
+* GitHub requests:
   * [#25](https://github.com/magento/magento2/issues/25) Removed unused `Mage_Core_Block_Abstract::getHelper()` method
 * Fixed:
   * "$_FILES array is empty" messages in exception log upon installation
@@ -26,8 +45,8 @@ Update as of 6/7/2012
 * Eliminated "after commit callback" workaround from integration tests by implementing "transparent transactions" capability in integration testing framework
 * Refactored admin authentication/authorization in RSS module. Removed program termination and covered the controllers with tests
 * Removed HTML-report feature of copy-paste detector which never worked anyway (`dev/tests/static/framework/Inspection/CopyPasteDetector/html_report.xslt` and all related code)
-* Github requests:
-** [#19](https://github.com/magento/magento2/pull/19) Implemented "soft" dependency between modules and performed several improvements in the related code, covered with tests
+* GitHub requests:
+  * [#19](https://github.com/magento/magento2/pull/19) Implemented "soft" dependency between modules and performed several improvements in the related code, covered with tests
 
 Update as of 5/31/2012
 ======================

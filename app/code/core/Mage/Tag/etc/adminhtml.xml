@@ -26,52 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog>
-            <children>
-                <tag translate="title" module="Mage_Tag">
-                    <title>Tags</title>
-                    <children>
-                        <!--
-                            childrens should be in the order (All Tags, Pending Tags)
-                            for correct menu building in "None Secret Key" mode
-                        -->
-                        <all translate="title" module="Mage_Tag">
-                            <title>All Tags</title>
-                            <action>adminhtml/tag/index</action>
-                        </all>
-                        <pending translate="title" module="Mage_Tag">
-                            <title>Pending Tags</title>
-                            <action>adminhtml/tag/pending</action>
-                        </pending>
-                    </children>
-                    <sort_order>60</sort_order>
-                </tag>
-             </children>
-        </catalog>
-        <report translate="title" module="Mage_Reports">
-            <children>
-                <tags translate="title" module="Mage_Tag">
-                    <title>Tags</title>
-                    <sort_order>50</sort_order>
-                    <children>
-                        <customer translate="title" module="Mage_Tag">
-                            <title>Customers</title>
-                            <action>adminhtml/report_tag/customer</action>
-                        </customer>
-                        <product translate="title" module="Mage_Tag">
-                            <title>Products</title>
-                            <action>adminhtml/report_tag/product</action>
-                        </product>
-                        <popular translate="title" module="Mage_Tag">
-                            <title>Popular</title>
-                            <action>adminhtml/report_tag/popular</action>
-                        </popular>
-                    </children>
-                </tags>
-            </children>
-        </report>
-    </menu>
     <acl>
         <resources>
             <admin>

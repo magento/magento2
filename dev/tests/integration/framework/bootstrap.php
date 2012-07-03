@@ -114,7 +114,7 @@ Magento_Test_Bootstrap::setInstance(new Magento_Test_Bootstrap(
     $localXmlFile,
     $globalEtcFiles,
     $moduleEtcFiles,
-     'etc/integration-tests-config.xml',
+    'etc/integration-tests-config.xml',
     $testsTmpDir,
     $cleanupAction,
     $developerMode

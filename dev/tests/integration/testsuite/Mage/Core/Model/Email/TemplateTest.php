@@ -47,6 +47,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+        $this->_mail = null;
+    }
+
     /**
      * Return a disposable Zend_Mail instance
      *

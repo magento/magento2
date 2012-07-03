@@ -42,6 +42,11 @@ class Mage_DesignEditor_Block_ToolbarTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     /**
      * Isolation has been raised because block pollutes the registry
      *

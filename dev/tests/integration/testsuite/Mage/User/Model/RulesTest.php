@@ -40,6 +40,11 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_User_Model_Rules;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @magentoDbIsolation enabled
      */

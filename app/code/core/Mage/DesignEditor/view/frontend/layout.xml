@@ -28,6 +28,7 @@
 <layout>
     <design_editor_toolbar>
         <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/settimeout_override.js</file></action>
             <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>

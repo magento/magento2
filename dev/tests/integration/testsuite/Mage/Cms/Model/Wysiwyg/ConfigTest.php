@@ -37,6 +37,11 @@ class Mage_Cms_Model_Wysiwyg_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Cms_Model_Wysiwyg_Config;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * Tests that config returns valid config array in it
      */

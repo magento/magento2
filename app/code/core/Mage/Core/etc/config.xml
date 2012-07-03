@@ -294,7 +294,7 @@
         </web>
         <admin>
             <startup>
-                <page>dashboard</page>
+                <menu_item_id>dashboard</menu_item_id>
             </startup>
             <url>
                 <use_custom>0</use_custom>

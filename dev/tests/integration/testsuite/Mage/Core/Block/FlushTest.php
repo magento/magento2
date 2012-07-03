@@ -43,6 +43,12 @@ class Mage_Core_Block_FlushTest extends PHPUnit_Framework_TestCase
         $this->_block = $this->_layout->createBlock('Mage_Core_Block_Flush');
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+        $this->_layout = null;
+    }
+
     public function testToHtml()
     {
         $children = array(

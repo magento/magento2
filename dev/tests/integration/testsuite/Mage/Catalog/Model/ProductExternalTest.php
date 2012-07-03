@@ -45,6 +45,11 @@ class Mage_Catalog_Model_ProductExternalTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Catalog_Model_Product;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetStoreId()
     {
         $this->assertEquals(Mage::app()->getStore()->getId(), $this->_model->getStoreId());

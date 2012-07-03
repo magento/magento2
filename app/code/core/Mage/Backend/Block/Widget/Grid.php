@@ -464,7 +464,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
             } else {
                 $cond = $column->getFilter()->getCondition();
                 if ($field && isset($cond)) {
-                    $this->getCollection()->addFieldToFilter($field , $cond);
+                    $this->getCollection()->addFieldToFilter($field, $cond);
                 }
             }
         }

@@ -26,53 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog>
-            <children>
-                <reviews_ratings translate="title" module="Mage_Review">
-                    <title>Reviews and Ratings</title>
-                    <children>
-                        <reviews translate="title" module="Mage_Review">
-                            <title>Customer Reviews</title>
-                            <children>
-                                <pending translate="title" module="Mage_Review">
-                                    <title>Pending Reviews</title>
-                                    <action>adminhtml/catalog_product_review/pending/</action>
-                                </pending>
-                                <all translate="title" module="Mage_Review">
-                                    <title>All Reviews</title>
-                                    <action>adminhtml/catalog_product_review/</action>
-                                </all>
-                            </children>
-                        </reviews>
-                        <ratings translate="title" module="Mage_Review">
-                            <title>Manage Ratings</title>
-                            <action>adminhtml/rating/</action>
-                        </ratings>
-                    </children>
-                    <sort_order>50</sort_order>
-                </reviews_ratings>
-            </children>
-         </catalog>
-        <report>
-            <children>
-                <review translate="title" module="Mage_Reports">
-                    <title>Reviews</title>
-                    <sort_order>55</sort_order>
-                    <children>
-                        <customer translate="title" module="Mage_Review">
-                            <title>Customers Reviews</title>
-                            <action>adminhtml/report_review/customer</action>
-                        </customer>
-                        <product translate="title" module="Mage_Review">
-                            <title>Products Reviews</title>
-                            <action>adminhtml/report_review/product</action>
-                        </product>
-                    </children>
-                </review>
-            </children>
-        </report>
-    </menu>
     <acl>
         <resources>
             <admin>

@@ -34,7 +34,12 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_App_Area('frontend', new Mage_Core_Model_App);
+        $this->_model = new Mage_Core_Model_App_Area('frontend');
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
     }
 
     /**
@@ -60,7 +65,7 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
      */
     public function testDetectDesignGlobalConfig()
     {
-        $model = new Mage_Core_Model_App_Area('adminhtml', new Mage_Core_Model_App);
+        $model = new Mage_Core_Model_App_Area('adminhtml');
         $model->detectDesign();
         $this->assertEquals('default/default/default', Mage::getDesign()->getDesignTheme());
     }
@@ -110,7 +115,7 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     public function testDetectDesignNonFrontend()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox';
-        $model = new Mage_Core_Model_App_Area('install', new Mage_Core_Model_App);
+        $model = new Mage_Core_Model_App_Area('install');
         $model->detectDesign(new Zend_Controller_Request_Http);
         $this->assertNotEquals('default/modern/default', Mage::getDesign()->getDesignTheme());
         $this->assertNotEquals('default/default/blue', Mage::getDesign()->getDesignTheme());

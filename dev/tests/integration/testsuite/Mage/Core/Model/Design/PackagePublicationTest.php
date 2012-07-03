@@ -66,6 +66,7 @@ class Mage_Core_Model_Design_PackagePublicationTest extends PHPUnit_Framework_Te
     {
         Varien_Io_File::rmdirRecursive(self::$_skinPublicDir);
         Varien_Io_File::rmdirRecursive(self::$_fixtureTmpDir);
+        $this->_model = null;
     }
 
     /**

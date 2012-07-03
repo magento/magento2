@@ -42,7 +42,6 @@ class Mage_Core_Block_TextTest extends PHPUnit_Framework_TestCase
         $this->_block = null;
     }
 
-
     public function testSetGetText()
     {
         $this->_block->setText('text');

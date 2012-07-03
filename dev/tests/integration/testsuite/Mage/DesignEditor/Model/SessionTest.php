@@ -42,6 +42,11 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_DesignEditor_Model_Session();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testIsDesignEditorActiveFalse()
     {
         $this->assertFalse($this->_model->isDesignEditorActive());

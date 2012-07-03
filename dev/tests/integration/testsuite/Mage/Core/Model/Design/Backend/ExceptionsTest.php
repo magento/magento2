@@ -40,6 +40,11 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
         $this->_model->setPath('design/theme/ua_regexp');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * Basic test, checks that saved value contains all required entries and is saved as an array
      * @magentoDbIsolation enabled

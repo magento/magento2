@@ -42,6 +42,11 @@ class Mage_Core_Helper_AbstractTest extends PHPUnit_Framework_TestCase
         ;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * @covers Mage_Core_Helper_Abstract::isModuleEnabled
      * @covers Mage_Core_Helper_Abstract::isModuleOutputEnabled

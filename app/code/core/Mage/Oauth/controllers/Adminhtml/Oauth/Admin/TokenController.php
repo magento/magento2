@@ -36,6 +36,18 @@
 class Mage_Oauth_Adminhtml_Oauth_Admin_TokenController extends Mage_Adminhtml_Controller_Action
 {
     /**
+     * Perform layout initialization actions
+     *
+     * @return Mage_Oauth_Adminhtml_Oauth_ConsumerController
+     */
+    protected function  _initAction()
+    {
+        $this->loadLayout()
+            ->_setActiveMenu('Mage_Oauth::system_api_oauth_admin_token');
+        return $this;
+    }
+
+    /**
      * Init titles
      *
      * @return Mage_Oauth_Adminhtml_Oauth_Admin_TokenController
@@ -54,7 +66,7 @@ class Mage_Oauth_Adminhtml_Oauth_Admin_TokenController extends Mage_Adminhtml_Co
      */
     public function indexAction()
     {
-        $this->loadLayout();
+        $this->_initAction();
         $this->renderLayout();
     }
 

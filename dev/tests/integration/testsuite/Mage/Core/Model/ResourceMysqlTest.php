@@ -40,6 +40,11 @@ class Mage_Core_Model_ResourceMysqlTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Resource();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetConnectionTypeInstance()
     {
         $this->assertInstanceOf(

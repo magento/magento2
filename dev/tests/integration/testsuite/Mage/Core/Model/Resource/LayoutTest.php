@@ -37,6 +37,11 @@ class Mage_Core_Model_Resource_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Resource_Layout();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testFetchUpdatesByHandle()
     {
         $this->assertEmpty($this->_model->fetchUpdatesByHandle('test', array('test' => 'test')));

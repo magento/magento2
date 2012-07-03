@@ -38,6 +38,11 @@ class Mage_Customer_Model_FormTest extends PHPUnit_Framework_TestCase
         $this->_model->setFormCode('customer_account_create');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetAttributes()
     {
         $attributes = $this->_model->getAttributes();

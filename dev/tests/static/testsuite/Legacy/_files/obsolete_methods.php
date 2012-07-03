@@ -222,6 +222,7 @@ return array(
     'getLocaleBaseDir' => array('class_scope' => 'Mage_Core_Model_Design_Package'),
     'getMail' => array('class_scope' => 'Mage_Newsletter_Model_Template'),
     'getMaxQueryLenght',
+    'getMenuItemLabel' => array('class_scope' => 'Mage_Admin_Model_Config'),
     'getMergedCssUrl',
     'getMergedJsUrl',
     'getMinQueryLenght',

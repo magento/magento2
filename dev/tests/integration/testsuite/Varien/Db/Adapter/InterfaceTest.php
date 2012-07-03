@@ -74,6 +74,7 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection->dropTable($this->_tableName);
         $this->_connection->resetDdlCache($this->_tableName);
+        $this->_connection = null;
     }
 
     protected function assertPreConditions()

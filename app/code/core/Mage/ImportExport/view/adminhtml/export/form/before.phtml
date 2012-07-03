@@ -25,7 +25,7 @@
  */
 ?>
 <?php
-    $exportVersionTwo = (int) Mage_ImportExport_Model_Source_Export_Format_Version::EXPORT_VERSION_2;
+    $exportVersionTwo = (int) Mage_ImportExport_Model_Source_Format_Version::VERSION_2;
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -75,13 +75,13 @@
     {
         if ($('file_format_version') && $F('file_format_version')) {
             switch ($F('file_format_version')) {
-                case '<?php echo Mage_ImportExport_Model_Source_Export_Format_Version::EXPORT_VERSION_1 ?>':
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_1 ?>':
                     $('head-customer_entity_fieldset').hide();
                     $('customer_entity_fieldset').hide();
                     $('customer_entity').selectedIndex = 0;
                     this.getFilter();
                     break;
-                case '<?php echo Mage_ImportExport_Model_Source_Export_Format_Version::EXPORT_VERSION_2 ?>':
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_2 ?>':
                     this.getCustomerFilter();
                     $('head-customer_entity_fieldset').show();
                     $('customer_entity_fieldset').show();

@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_Report_Product_Viewed_Grid extends Mage_Adminhtml_Blo
      *
      * @var string
      */
-    protected $_resourceCollectionName  = 'Mage_Reports_Model_Resource_Product_Viewed_Collection';
+    protected $_resourceCollectionName  = 'Mage_Reports_Model_Resource_Report_Product_Viewed_Collection';
 
     /**
      * Init grid parameters

@@ -53,7 +53,7 @@ class Mage_Adminhtml_Catalog_Product_AttributeController extends Mage_Adminhtml_
             $this->loadLayout('popup');
         } else {
             $this->loadLayout()
-                ->_setActiveMenu('catalog/attributes')
+                ->_setActiveMenu('Mage_Catalog::catalog_attributes')
                 ->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'))
                 ->_addBreadcrumb(
                     Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Product Attributes'),

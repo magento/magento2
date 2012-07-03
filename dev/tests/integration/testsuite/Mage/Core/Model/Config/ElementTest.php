@@ -60,6 +60,11 @@ XML
         );
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testIs()
     {
         $element = $this->_model->is_test;

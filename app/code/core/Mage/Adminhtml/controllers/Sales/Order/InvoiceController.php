@@ -147,7 +147,7 @@ class Mage_Adminhtml_Sales_Order_InvoiceController extends Mage_Adminhtml_Contro
             $this->_title(sprintf("#%s", $invoice->getIncrementId()));
 
             $this->loadLayout()
-                ->_setActiveMenu('sales/order');
+                ->_setActiveMenu('Mage_Sales::sales_order');
             $this->getLayout()->getBlock('sales_invoice_view')
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
             $this->renderLayout();
@@ -183,7 +183,7 @@ class Mage_Adminhtml_Sales_Order_InvoiceController extends Mage_Adminhtml_Contro
             }
 
             $this->loadLayout()
-                ->_setActiveMenu('sales/order')
+                ->_setActiveMenu('Mage_Sales::sales_order')
                 ->renderLayout();
         } else {
             $this->_redirect('*/sales_order/view', array('order_id'=>$this->getRequest()->getParam('order_id')));

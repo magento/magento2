@@ -50,6 +50,14 @@ class Mage_Sales_Block_Order_Creditmemo_ItemsTest extends PHPUnit_Framework_Test
         $this->_creditmemo = new Mage_Sales_Model_Order_Creditmemo;
     }
 
+
+    protected function tearDown()
+    {
+        $this->_layout = null;
+        $this->_block = null;
+        $this->_creditmemo = null;
+    }
+
     public function testGetTotalsHtml()
     {
         $childBlock = $this->_layout->addBlock('Mage_Core_Block_Text', 'creditmemo_totals', 'block');

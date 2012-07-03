@@ -28,7 +28,7 @@
 <layout>
     <adminhtml_import_index>
         <reference name="content">
-            <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::import/form/before.phtml" name="import.form.before" alias="form_before"/>
+            <block type="Mage_ImportExport_Block_Adminhtml_Import_Before" template="Mage_ImportExport::import/form/before.phtml" name="import.form.before" alias="form_before"/>
             <block type="Mage_ImportExport_Block_Adminhtml_Import_Edit" name="import.form.container"/>
             <block type="Mage_Adminhtml_Block_Template" template="Mage_ImportExport::import/form/after.phtml" name="import.form.after" alias="form_after"/>
         </reference>

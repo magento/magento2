@@ -45,6 +45,11 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_User_Model_User;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @magentoDbIsolation enabled
      */

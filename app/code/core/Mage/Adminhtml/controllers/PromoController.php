@@ -37,7 +37,7 @@ class Mage_Adminhtml_PromoController extends Mage_Adminhtml_Controller_Action
     public function indexAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('promo');
+        $this->_setActiveMenu('Mage_CatalogRule::promo');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Promotions'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Promo'));
         $this->renderLayout();
     }

@@ -48,6 +48,11 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
         $this->_model->init('frontend');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetModulesConfig()
     {
         /** @var $modulesConfig Mage_Core_Model_Config_Element */

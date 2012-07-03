@@ -54,6 +54,12 @@ class Mage_Catalog_Model_Layer_Filter_CategoryTest extends PHPUnit_Framework_Tes
         ));
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+        $this->_category = null;
+    }
+
     public function testGetResetValue()
     {
         $this->assertNull($this->_model->getResetValue());

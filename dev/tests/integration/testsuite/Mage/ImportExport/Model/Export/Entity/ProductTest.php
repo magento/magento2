@@ -72,6 +72,7 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
         ini_set('display_errors', $this->_oldDisplayErrors);
         error_reporting($this->_oldErrorLevel);
         Mage::setIsDeveloperMode($this->_oldIsDeveloperMode);
+        $this->_model = null;
 
         parent::tearDown();
     }

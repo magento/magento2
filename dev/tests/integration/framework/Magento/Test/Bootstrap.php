@@ -308,6 +308,12 @@ class Magento_Test_Bootstrap
      */
     protected function _resetApp()
     {
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::registry('_singleton/Mage_Core_Model_Layout');
+        if ($layout) {
+            /* Force to cleanup circular references */
+            $layout->__destruct();
+        }
         Mage::reset();
         Varien_Data_Form::setElementRenderer(null);
         Varien_Data_Form::setFieldsetRenderer(null);

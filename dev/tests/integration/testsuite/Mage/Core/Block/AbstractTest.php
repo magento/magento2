@@ -46,6 +46,12 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+        $this->_layout = null;
+    }
+
     public function testGetRequest()
     {
         $this->assertInstanceOf('Mage_Core_Controller_Request_Http', $this->_block->getRequest());

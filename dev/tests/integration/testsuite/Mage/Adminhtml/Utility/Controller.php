@@ -56,6 +56,9 @@ class Mage_Adminhtml_Utility_Controller extends Magento_Test_TestCase_Controller
     protected function tearDown()
     {
         $this->_auth->logout();
+        $this->_auth = null;
+        $this->_session = null;
+
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOnSecretKey();
 
         parent::tearDown();

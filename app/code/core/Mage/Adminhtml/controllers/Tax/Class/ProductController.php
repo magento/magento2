@@ -166,7 +166,7 @@ class Mage_Adminhtml_Tax_Class_ProductController extends Mage_Adminhtml_Controll
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('sales/tax/tax_class_product')
+            ->_setActiveMenu('Mage_Tax::sales_tax_classes_product')
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Sales'), Mage::helper('Mage_Tax_Helper_Data')->__('Sales'))
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Tax'), Mage::helper('Mage_Tax_Helper_Data')->__('Tax'))
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Manage Product Tax Classes'), Mage::helper('Mage_Tax_Helper_Data')->__('Manage Product Tax Classes'))

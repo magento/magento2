@@ -133,7 +133,7 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
             $this->loadLayout();
             $this->getLayout()->getBlock('sales_shipment_view')
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
-            $this->_setActiveMenu('sales/order')
+            $this->_setActiveMenu('Mage_Sales::sales_order')
                 ->renderLayout();
         } else {
             $this->_forward('noRoute');
@@ -165,7 +165,7 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
             }
 
             $this->loadLayout()
-                ->_setActiveMenu('sales/order')
+                ->_setActiveMenu('Mage_Sales::sales_order')
                 ->renderLayout();
         } else {
             $this->_redirect('*/sales_order/view', array('order_id'=>$this->getRequest()->getParam('order_id')));

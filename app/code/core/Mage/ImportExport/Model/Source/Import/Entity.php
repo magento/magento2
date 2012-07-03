@@ -40,13 +40,8 @@ class Mage_ImportExport_Model_Source_Import_Entity
      */
     public function toOptionArray()
     {
-        $options = array();
-        $entities = Mage_ImportExport_Model_Import::CONFIG_KEY_ENTITIES;
-        $comboOptions = Mage_ImportExport_Model_Config::getModelsComboOptions($entities);
-
-        foreach ($comboOptions as $option) {
-           $options[] = $option;
-        }
-        return $options;
+        return Mage_ImportExport_Model_Config::getModelsComboOptions(
+            Mage_ImportExport_Model_Import::CONFIG_KEY_ENTITIES, true
+        );
     }
 }

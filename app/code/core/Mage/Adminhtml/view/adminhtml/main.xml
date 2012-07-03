@@ -101,7 +101,6 @@ Supported layout update handles (special):
 
             <block type="Mage_Adminhtml_Block_Page_Notices" name="global_notices" as="global_notices" template="page/notices.phtml" />
             <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header"></block>
-            <block type="Mage_Adminhtml_Block_Page_Menu" name="menu" as="menu"></block>
             <container name="notifications" as="notifications" label="Notifications">
                 <block type="Mage_Adminhtml_Block_Notification_Baseurl" name="notification_baseurl" as="notification_baseurl" template="notification/baseurl.phtml"></block>
                 <block type="Mage_Adminhtml_Block_Cache_Notifications" name="cache_notifications" template="system/cache/notifications.phtml"></block>

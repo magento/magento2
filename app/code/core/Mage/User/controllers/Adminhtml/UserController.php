@@ -29,7 +29,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('system/acl')
+            ->_setActiveMenu('Mage_User::system_acl_users')
             ->_addBreadcrumb($this->__('System'), $this->__('System'))
             ->_addBreadcrumb($this->__('Permissions'), $this->__('Permissions'))
             ->_addBreadcrumb($this->__('Users'), $this->__('Users'))

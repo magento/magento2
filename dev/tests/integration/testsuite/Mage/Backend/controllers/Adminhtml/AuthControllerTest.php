@@ -41,10 +41,12 @@ class Mage_Backend_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Co
      */
     protected $_auth;
 
-    /**
-     * @var Mage_User_Model_User
-     */
-    protected static $_newUser;
+    protected function tearDown()
+    {
+        $this->_session = null;
+        $this->_auth = null;
+        parent::tearDown();
+    }
 
     /**
      * Performs user login
@@ -174,24 +176,6 @@ class Mage_Backend_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Co
         $this->getRequest()->setPost($params);
         $this->dispatch('admin/auth/login');
         $this->assertContains('Invalid User Name or Password', $this->getResponse()->getBody());
-    }
-
-    public static function userDataFixture()
-    {
-        self::$_newUser = new Mage_User_Model_User;
-        self::$_newUser->setFirstname('admin_role')
-            ->setUsername('test2')
-            ->setPassword(Magento_Test_Bootstrap::ADMIN_PASSWORD)
-            ->setIsActive(1)
-            ->save();
-
-        self::$_newUser = new Mage_User_Model_User;
-        self::$_newUser->setFirstname('admin_role')
-            ->setUsername('test3')
-            ->setPassword(Magento_Test_Bootstrap::ADMIN_PASSWORD)
-            ->setIsActive(0)
-            ->setRoleId(1)
-            ->save();
     }
 
     public function incorrectLoginDataProvider()

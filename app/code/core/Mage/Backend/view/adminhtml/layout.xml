@@ -26,6 +26,17 @@
  */
  -->
 <layout>
+    <default>
+        <reference name="root" after="header">
+            <block type="Mage_Backend_Block_Menu" name="menu" as="menu" template="Mage_Backend::menu.phtml">
+                <block type="Mage_Backend_Block_Menu_Container" name="menu_container_renderer" template="Mage_Backend::menu/container.phtml" />
+                <block type="Mage_Backend_Block_Menu_Item" name="menu_item_renderer" template="Mage_Backend::menu/item.phtml" />
+                <action method="setContainerRendererBlock"><renderer>menu_container_renderer</renderer></action>
+                <action method="setItemRendererBlock"><renderer>menu_item_renderer</renderer></action>
+            </block>
+        </reference>
+    </default>
+
     <adminhtml_auth_login>
         <container name="root" label="Root" output="1">
             <block type="Mage_Backend_Block_Template" name="content" template="admin/login.phtml">

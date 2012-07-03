@@ -51,6 +51,7 @@ return array(
     'Mage_Adminhtml_Block_Api_Edituser',
     'Mage_Adminhtml_Block_Api_Tab_Userroles',
     'Mage_Adminhtml_Block_Catalog',
+    'Mage_Adminhtml_Block_Page_Menu' => array('suggestion' => 'Mage_Backend_Block_Menu'),
     'Mage_Adminhtml_Block_Permissions_User',
     'Mage_Adminhtml_Block_Permissions_User_Grid',
     'Mage_Adminhtml_Block_Permissions_User_Edit',
@@ -123,6 +124,10 @@ return array(
     'Mage_ProductAlert_Block_Stock',
     'Mage_Reports_Model_Resource_Coupons_Collection',
     'Mage_Reports_Model_Resource_Invoiced_Collection',
+    'Mage_Reports_Model_Resource_Product_Ordered_Collection',
+    'Mage_Reports_Model_Resource_Product_Viewed_Collection' => array(
+        'suggestion' => 'Mage_Reports_Model_Resource_Report_Product_Viewed_Collection'
+    ),
     'Mage_Reports_Model_Resource_Refunded_Collection',
     'Mage_Reports_Model_Resource_Shipping_Collection',
     'Mage_Rss_Model_Observer',

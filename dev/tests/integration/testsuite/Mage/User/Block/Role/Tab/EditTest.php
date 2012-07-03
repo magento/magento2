@@ -44,6 +44,11 @@ class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
         $this->_block = new Mage_User_Block_Role_Tab_Edit();
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testConstructor()
     {
         $this->assertNotEmpty($this->_block->getSelectedResources());

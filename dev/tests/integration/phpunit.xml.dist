@@ -31,6 +31,7 @@
     <testsuites>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+            <exclude>testsuite/integrity</exclude>
         </testsuite>
     </testsuites>
      <!-- Code coverage filters -->

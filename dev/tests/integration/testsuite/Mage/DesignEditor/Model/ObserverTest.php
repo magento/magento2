@@ -48,6 +48,11 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_eventObserver->setEvent(new Varien_Event(array('layout' => Mage::app()->getLayout())));
     }
 
+    protected function tearDown()
+    {
+        $this->_observer = null;
+    }
+
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php

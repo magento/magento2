@@ -26,26 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog>
-            <children>
-                <googleshopping translate="title" module="Mage_GoogleShopping">
-                    <title>Google Content</title>
-                    <children>
-                        <types translate="title" module="Mage_GoogleShopping">
-                            <title>Manage Attributes</title>
-                            <action>adminhtml/googleshopping_types</action>
-                        </types>
-                        <items translate="title" module="Mage_GoogleShopping">
-                            <title>Manage Items</title>
-                            <action>adminhtml/googleshopping_items</action>
-                        </items>
-                    </children>
-                    <sort_order>70</sort_order>
-                </googleshopping>
-             </children>
-        </catalog>
-    </menu>
     <acl>
         <resources>
             <admin>

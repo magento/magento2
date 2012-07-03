@@ -26,17 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <sales>
-            <children>
-                <checkoutagreement translate="title" module="Mage_Checkout">
-                    <sort_order>100</sort_order>
-                    <title>Terms and conditions</title>
-                    <action>adminhtml/checkout_agreement/</action>
-                </checkoutagreement>
-            </children>
-         </sales>
-    </menu>
     <acl>
         <resources>
             <admin>

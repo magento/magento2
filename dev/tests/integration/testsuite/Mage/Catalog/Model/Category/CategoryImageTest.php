@@ -55,8 +55,13 @@ class Mage_Catalog_Model_Category_CategoryImageTest extends PHPUnit_Framework_Te
     public static function tearDownAfterClass()
     {
         Mage::app()->getStore()->setConfig('dev/log/active', self::$_oldLogActive);
+        self::$_oldLogActive = null;
+
         Mage::app()->getStore()->setConfig('dev/log/exception_file', self::$_oldExceptionFile);
+        self::$_oldExceptionFile = null;
+
         Mage::getConfig()->setNode('global/log/core/writer_model', self::$_oldWriterModel);
+        self::$_oldWriterModel = null;
 
         Stub_Mage_Catalog_Model_CategoryTest_Zend_Log_Writer_Stream::$exceptions = array();
 

@@ -37,6 +37,11 @@ class Mage_Catalog_Helper_Product_CompareTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Catalog_Helper_Product_Compare;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * @magentoDataFixture Mage/Catalog/_files/two_products.php
      */

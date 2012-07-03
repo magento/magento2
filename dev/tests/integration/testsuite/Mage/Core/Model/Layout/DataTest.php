@@ -32,6 +32,11 @@ class Mage_Core_Model_Layout_DataTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testConstructor()
     {
         $this->_model = new Mage_Core_Model_Layout_Data();

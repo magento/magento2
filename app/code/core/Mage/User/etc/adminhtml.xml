@@ -26,27 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <system>
-            <children>
-                <acl translate="title" module="Mage_User">
-                    <title>Permissions</title>
-                    <sort_order>70</sort_order>
-                    <children>
-                        <users translate="title">
-                            <title>Users</title>
-                            <action>adminhtml/user</action>
-                        </users>
-                        <roles translate="title">
-                            <title>Roles</title>
-                            <action>adminhtml/user_role</action>
-                        </roles>
-                    </children>
-                </acl>
-            </children>
-        </system>
-    </menu>
-
     <acl>
         <resources>
             <admin>

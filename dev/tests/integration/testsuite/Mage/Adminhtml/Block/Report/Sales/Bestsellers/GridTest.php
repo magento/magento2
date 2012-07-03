@@ -37,6 +37,11 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_GridTest extends PHPUnit_Fra
         $this->_block = new Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid;
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetResourceCollectionName()
     {
         $collectionName = $this->_block->getResourceCollectionName();

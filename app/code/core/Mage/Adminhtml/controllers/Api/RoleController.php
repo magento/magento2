@@ -37,7 +37,7 @@ class Mage_Adminhtml_Api_RoleController extends Mage_Adminhtml_Controller_Action
     protected function _initAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('system/services/roles');
+        $this->_setActiveMenu('Mage_Api::system_api_roles');
         $this->_addBreadcrumb($this->__('Web services'), $this->__('Web services'));
         $this->_addBreadcrumb($this->__('Permissions'), $this->__('Permissions'));
         $this->_addBreadcrumb($this->__('Roles'), $this->__('Roles'));

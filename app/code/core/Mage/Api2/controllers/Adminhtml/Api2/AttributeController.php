@@ -42,7 +42,7 @@ class Mage_Api2_Adminhtml_Api2_AttributeController extends Mage_Adminhtml_Contro
              ->_title($this->__('Web Services'))
              ->_title($this->__('REST Attributes'));
 
-        $this->loadLayout()->_setActiveMenu('system/services/attributes');
+        $this->loadLayout()->_setActiveMenu('Mage_Api2::system_api_rest_attributes');
 
         $this->_addBreadcrumb($this->__('Web services'), $this->__('Web services'))
             ->_addBreadcrumb($this->__('REST Attributes'), $this->__('REST Attributes'))
@@ -57,7 +57,7 @@ class Mage_Api2_Adminhtml_Api2_AttributeController extends Mage_Adminhtml_Contro
     public function editAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('system/services/attributes');
+            ->_setActiveMenu('Mage_Api2::system_api_rest_attributes');
 
         $type = $this->getRequest()->getParam('type');
 

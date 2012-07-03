@@ -955,7 +955,7 @@
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
-                        <page translate="label">
+                        <menu_item_id translate="label">
                             <label>Startup Page</label>
                             <frontend_type>select</frontend_type>
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Admin_Page</source_model>
@@ -963,7 +963,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </page>
+                        </menu_item_id>
                     </fields>
                 </startup>
                 <url translate="label">

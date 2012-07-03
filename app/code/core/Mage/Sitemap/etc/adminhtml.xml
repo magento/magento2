@@ -26,17 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog>
-            <children>
-                <sitemap translate="title" module="Mage_Sitemap">
-                    <title>Google Sitemap</title>
-                    <sort_order>180</sort_order>
-                    <action>adminhtml/sitemap/</action>
-                </sitemap>
-            </children>
-        </catalog>
-    </menu>
     <acl>
         <resources>
             <admin>

@@ -43,7 +43,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('promo/catalog')
+            ->_setActiveMenu('Mage_CatalogRule::promo_catalog')
             ->_addBreadcrumb(
                 Mage::helper('Mage_CatalogRule_Helper_Data')->__('Promotions'),
                 Mage::helper('Mage_CatalogRule_Helper_Data')->__('Promotions')

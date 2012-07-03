@@ -80,12 +80,12 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
 
     /**
      * Define active menu item in menu block
-     * @param $menuPath
+     * @param string $itemId current active menu item
      * @return Mage_Backend_Controller_ActionAbstract
      */
-    protected function _setActiveMenu($menuPath)
+    protected function _setActiveMenu($itemId)
     {
-        $this->getLayout()->getBlock('menu')->setActive($menuPath);
+        $this->getLayout()->getBlock('menu')->setActive($itemId);
         return $this;
     }
 

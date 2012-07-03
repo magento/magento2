@@ -75,7 +75,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Edit_Form extends Mage_Backend_Bl
             'label'    => $helper->__('Export Format Version'),
             'required' => false,
             'onchange' => 'editForm.handleExportFormatVersionSelector();',
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Export_Format_Version')->toOptionArray()
+            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Format_Version')->toOptionArray()
         ));
         $fieldsets['customer'] = $form->addFieldset('customer_entity_fieldset',
             array(

@@ -37,6 +37,11 @@ class Mage_Customer_Model_GroupTest extends PHPUnit_Framework_TestCase
         $this->_model= new Mage_Customer_Model_Group();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testCRUD()
     {
         $this->_model->setCustomerGroupCode('test');

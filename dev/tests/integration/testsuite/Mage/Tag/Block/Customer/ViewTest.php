@@ -37,6 +37,11 @@ class Mage_Tag_Block_Customer_ViewTest extends PHPUnit_Framework_TestCase
         $this->_block = new Mage_Tag_Block_Customer_View();
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetMode()
     {
         $layout = new Mage_Core_Model_Layout;

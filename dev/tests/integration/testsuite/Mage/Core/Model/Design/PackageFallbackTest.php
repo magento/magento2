@@ -48,6 +48,11 @@ class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestC
         $this->_model->setDesignTheme('test/default/default', 'frontend');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetFilename()
     {
         $expected = '%s/frontend/test/default/Mage_Catalog/theme_template.phtml';

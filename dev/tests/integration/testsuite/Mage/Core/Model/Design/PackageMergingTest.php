@@ -65,6 +65,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     protected function tearDown()
     {
         Varien_Io_File::rmdirRecursive(self::$_skinPublicDir);
+        $this->_model = null;
     }
 
     /**

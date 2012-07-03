@@ -37,6 +37,11 @@ class Mage_Core_Helper_Url_RewriteTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Core_Helper_Url_Rewrite();
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * @dataProvider requestPathDataProvider
      */

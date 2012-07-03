@@ -35,7 +35,7 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address
     extends Mage_ImportExport_Model_Export_Entity_V2_Eav_Abstract
 {
     /**#@+
-     * Permanent column names.
+     * Permanent column names
      *
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
@@ -44,6 +44,23 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address
     const COL_WEBSITE = '_website';
     const COL_ADDRESS_ID = '_entity_id';
     /**#@-*/
+
+    /**#@+
+     * Particular columns that contains of customer default addresses
+     */
+    const COLUMN_NAME_DEFAULT_BILLING  = '_address_default_billing_';
+    const COLUMN_NAME_DEFAULT_SHIPPING = '_address_default_shipping_';
+    /**#@-*/
+
+    /**
+     * Default addresses column names to appropriate customer attribute code
+     *
+     * @var array
+     */
+    protected static $_defaultAddressAttributeMapping = array(
+        self::COLUMN_NAME_DEFAULT_BILLING  => 'default_billing',
+        self::COLUMN_NAME_DEFAULT_SHIPPING => 'default_shipping'
+    );
 
     /**
      * Constructor
@@ -57,10 +74,22 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address
         $this->_permanentAttributes = array(self::COL_WEBSITE, self::COL_EMAIL, self::COL_ADDRESS_ID);
 
         $this->_initWebsites(true);
+        $this->setFileName($this->getEntityTypeCode());
     }
 
     /**
-     * Export process.
+     * Customer default addresses column name to customer attribute mapping array
+     *
+     * @static
+     * @return array
+     */
+    public static function getDefaultAddressAttributeMapping()
+    {
+        return self::$_defaultAddressAttributeMapping;
+    }
+
+    /**
+     * Export process
      *
      * @return string
      */
@@ -87,7 +116,7 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address
         $customerCollection = $exportCustomer->filterEntityCollection($customerCollection);
 
         // Get customer default addresses column name to customer attribute mapping array.
-        $defaultAddressMap = Mage_ImportExport_Model_Import_Entity_Customer_Address::getDefaultAddressAttrMapping();
+        $defaultAddressMap = self::getDefaultAddressAttributeMapping();
         $customerCollection->addAttributeToSelect($defaultAddressMap);
 
         $customers = $customerCollection->getItems();

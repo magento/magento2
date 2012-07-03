@@ -51,6 +51,11 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_layout->getUpdate()->load('layout_test_handle_extra');
     }
 
+    protected function tearDown()
+    {
+        $this->_layout = null;
+    }
+
     /**
      * @param array $inputArguments
      * @param string $expectedArea
@@ -85,6 +90,14 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
     public function testConstructorWrongStructure()
     {
         new Mage_Core_Model_Layout(array('structure' => false));
+    }
+
+    public function testDestructor()
+    {
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'test');
+        $this->assertNotEmpty($this->_layout->getAllBlocks());
+        $this->_layout->__destruct();
+        $this->assertEmpty($this->_layout->getAllBlocks());
     }
 
     public function testGetUpdate()

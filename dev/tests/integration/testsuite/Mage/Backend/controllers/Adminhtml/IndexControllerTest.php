@@ -36,6 +36,12 @@ class Mage_Backend_Adminhtml_IndexControllerTest extends Magento_Test_TestCase_C
      */
     protected $_auth;
 
+    protected function tearDown()
+    {
+        $this->_auth = null;
+        parent::tearDown();
+    }
+
     /**
      * Performs user login
      */

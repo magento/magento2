@@ -50,6 +50,13 @@ class Mage_Sales_Block_Order_Invoice_ItemsTest extends PHPUnit_Framework_TestCas
         $this->_invoice = new Mage_Sales_Model_Order_Invoice;
     }
 
+    protected function tearDown()
+    {
+        $this->_layout = null;
+        $this->_block = null;
+        $this->_invoice = null;
+    }
+
     public function testGetInvoiceTotalsHtml()
     {
         $childBlock = $this->_layout->addBlock('Mage_Core_Block_Text', 'invoice_totals', 'block');

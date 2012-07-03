@@ -37,6 +37,11 @@ class Mage_Core_Model_Resource_TransactionTest extends PHPUnit_Framework_TestCas
         $this->_model = new Mage_Core_Model_Resource_Transaction();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testSaveDelete()
     {
         $first  = new Mage_Core_Model_Store_Group();

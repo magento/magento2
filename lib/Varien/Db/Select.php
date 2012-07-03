@@ -102,18 +102,14 @@ class Varien_Db_Select extends Zend_Db_Select
      *
      * @param string   $cond  The WHERE condition.
      * @param string   $value OPTIONAL A single value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
-     * @return Varien_Db_Select This Zend_Db_Select object.
+     * @param string|int|null $type  OPTIONAL The type of the given value
+     * @return Varien_Db_Select
      */
     public function where($cond, $value = null, $type = null)
     {
-        if (is_null($value) && is_null($type)) {
+        if ($value === null && $type === null) {
             $value = '';
-        }
-        /**
-         * Additional internal type used for really null value
-         */
-        if ($type == self::TYPE_CONDITION) {
+        } elseif ($type == self::TYPE_CONDITION) {
             $type = null;
         }
         if (is_array($value)) {

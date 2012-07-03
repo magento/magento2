@@ -42,15 +42,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <cms>
-            <children>
-                <widget_instance translate="title" module="Mage_Widget">
-                    <title>Widgets</title>
-                    <sort_order>15</sort_order>
-                    <action>adminhtml/widget_instance</action>
-                </widget_instance>
-            </children>
-        </cms>
-    </menu>
 </config>

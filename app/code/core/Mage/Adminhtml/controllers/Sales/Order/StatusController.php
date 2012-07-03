@@ -64,7 +64,7 @@ class Mage_Adminhtml_Sales_Order_StatusController extends Mage_Adminhtml_Control
     public function indexAction()
     {
         $this->_title($this->__('Sales'))->_title($this->__('Order Statuses'));
-        $this->loadLayout()->_setActiveMenu('system')->renderLayout();
+        $this->loadLayout()->_setActiveMenu('Mage_Adminhtml::system')->renderLayout();
     }
 
     /**

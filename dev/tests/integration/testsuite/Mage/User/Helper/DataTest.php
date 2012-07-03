@@ -41,6 +41,11 @@ class Mage_User_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = Mage::helper('Mage_User_Helper_Data');
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * Test generate unique token for reset password confirmation link
      *

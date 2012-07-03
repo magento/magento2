@@ -72,6 +72,12 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
         $this->_runOptions['response']  = $this->getResponse();
     }
 
+    protected function tearDown()
+    {
+        $this->_request = null;
+        $this->_response = null;
+    }
+
     /**
      * Run request
      *

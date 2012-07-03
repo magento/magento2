@@ -180,6 +180,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      *
      * @param Zend_Db_Adapter_Abstract $conn
      * @return Varien_Data_Collection_Db
+     * @throws Zend_Exception
      */
     public function setConnection($conn)
     {
@@ -374,28 +375,24 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      *
      * @see self::_getConditionSql for $condition
      *
-     * @param   string|array $field
-     * @param   null|string|array $condition
-     *
-     * @return  Mage_Eav_Model_Entity_Collection_Abstract
+     * @param string|array $field
+     * @param null|string|array $condition
+     * @return Varien_Data_Collection_Db
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if (!is_array($field)) {
-            $resultCondition = $this->_translateCondition($field, $condition);
-        } else {
+        if (is_array($field)) {
             $conditions = array();
-            foreach ($field as $key => $currField) {
-                $conditions[] = $this->_translateCondition(
-                    $currField,
-                    isset($condition[$key]) ? $condition[$key] : null
-                );
+            foreach ($field as $key => $value) {
+                $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
 
-            $resultCondition = '(' . join(') ' . Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+            $resultCondition = '(' . implode(') ' . Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+        } else {
+            $resultCondition = $this->_translateCondition($field, $condition);
         }
 
-        $this->_select->where($resultCondition);
+        $this->_select->where($resultCondition, null, Varien_Db_Select::TYPE_CONDITION);
 
         return $this;
     }

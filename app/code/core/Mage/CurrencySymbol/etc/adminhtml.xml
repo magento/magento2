@@ -26,28 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <system>
-            <children>
-                <currency translate="title" module="Mage_CurrencySymbol">
-                    <title>Manage Currency</title>
-                    <children>
-                        <rates translate="title">
-                            <title>Rates</title>
-                            <action>adminhtml/system_currency</action>
-                            <sort_order>50</sort_order>
-                        </rates>
-                        <symbols translate="title">
-                            <title>Symbols</title>
-                            <action>adminhtml/system_currencysymbol</action>
-                            <sort_order>100</sort_order>
-                        </symbols>
-                    </children>
-                    <sort_order>50</sort_order>
-                </currency>
-            </children>
-        </system>
-    </menu>
     <acl>
         <resources>
             <admin>

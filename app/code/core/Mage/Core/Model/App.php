@@ -805,7 +805,7 @@ class Mage_Core_Model_App
     public function getArea($code)
     {
         if (!isset($this->_areas[$code])) {
-            $this->_areas[$code] = new Mage_Core_Model_App_Area($code, $this);
+            $this->_areas[$code] = new Mage_Core_Model_App_Area($code);
         }
         return $this->_areas[$code];
     }

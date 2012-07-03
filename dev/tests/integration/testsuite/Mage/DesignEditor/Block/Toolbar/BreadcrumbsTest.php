@@ -42,6 +42,11 @@ class Mage_DesignEditor_Block_Toolbar_BreadcrumbsTest extends PHPUnit_Framework_
         $this->_block->setLayout($layoutUtility->getLayoutFromFixture($pageTypesFixture));
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     /**
      * Set the current route/controller/action
      *

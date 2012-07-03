@@ -65,7 +65,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('customer/manage');
+        $this->_setActiveMenu('Mage_Customer::customer_manage');
 
         /**
          * Append customers block to content
@@ -146,7 +146,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('customer/new');
+        $this->_setActiveMenu('Mage_Customer::customer');
 
         $this->renderLayout();
     }

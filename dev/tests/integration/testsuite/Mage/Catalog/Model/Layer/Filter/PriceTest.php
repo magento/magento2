@@ -49,6 +49,11 @@ class Mage_Catalog_Model_Layer_Filter_PriceTest extends PHPUnit_Framework_TestCa
         ));
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation auto
      */

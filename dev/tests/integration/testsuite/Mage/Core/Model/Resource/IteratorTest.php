@@ -44,6 +44,11 @@ class Mage_Core_Model_Resource_IteratorTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Resource_Iterator();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testWalk()
     {
         $collection = new Mage_Core_Model_Resource_Store_Collection();

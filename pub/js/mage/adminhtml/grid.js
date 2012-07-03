@@ -160,16 +160,13 @@ varienGrid.prototype = {
         }
     },
     reload:function (url, onSuccessCallback) {
-        if (!this.reloadParams) {
-            this.reloadParams = {form_key:FORM_KEY};
-        } else {
-            this.reloadParams.form_key = FORM_KEY;
-        }
+        this.reloadParams = this.reloadParams || {};
+        this.reloadParams.form_key = FORM_KEY;
         url = url || this.url;
         if(this.useAjax){
             new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
                 loaderArea: this.containerId,
-                parameters: this.reloadParams || {},
+                parameters: this.reloadParams,
                 evalScripts: true,
                 onFailure: this._processFailure.bind(this),
                 onComplete: this.initGridAjax.bind(this),
@@ -458,7 +455,6 @@ varienGridMassaction.prototype = {
         this.getOldCallback('init_row')(grid, row);
     },
     onGridRowClick: function(grid, evt) {
-
         var tdElement = Event.findElement(evt, 'td');
         var trElement = Event.findElement(evt, 'tr');
 
@@ -577,8 +573,7 @@ varienGridMassaction.prototype = {
         }.bind(this));
         return result;
     },
-    getCheckboxesValuesAsString: function()
-    {
+    getCheckboxesValuesAsString: function() {
         return this.getCheckboxesValues().join(',');
     },
     setCheckbox: function(checkbox) {

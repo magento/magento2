@@ -37,6 +37,11 @@ class Mage_PageCache_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_PageCache_Helper_Data;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     public function testSetNoCacheCookie()
     {
         /** @var $cookie Mage_Core_Model_Cookie */

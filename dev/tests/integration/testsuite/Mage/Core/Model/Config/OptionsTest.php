@@ -57,6 +57,11 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Config_Options;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testConstruct()
     {
         $data = $this->_model->getData();

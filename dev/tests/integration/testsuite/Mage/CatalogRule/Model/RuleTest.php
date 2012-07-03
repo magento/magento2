@@ -40,12 +40,9 @@ class Mage_CatalogRule_Model_RuleTest extends PHPUnit_Framework_TestCase
         $this->_object = new Mage_CatalogRule_Model_Rule();
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
+        $this->_object = null;
     }
 
     /**
