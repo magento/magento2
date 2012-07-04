@@ -182,6 +182,7 @@ class Mage_Adminhtml_Cms_Wysiwyg_ImagesController extends Mage_Adminhtml_Control
      */
     public function thumbnailAction()
     {
+        $this->getResponse()->disableOutput();
         $file = $this->getRequest()->getParam('file');
         $file = Mage::helper('Mage_Cms_Helper_Wysiwyg_Images')->idDecode($file);
         $thumb = $this->getStorage()->resizeOnTheFly($file);

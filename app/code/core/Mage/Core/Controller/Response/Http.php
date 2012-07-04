@@ -40,6 +40,20 @@ class Mage_Core_Controller_Response_Http extends Zend_Controller_Response_Http
     protected static $_transportObject = null;
 
     /**
+     * @var bool
+     */
+    protected $_isOutputDisabled = false;
+
+    /**
+     * Disable response output; useful for situations where the response was already rendered such as
+     * with an image library that uses direct output.
+     */
+    public function disableOutput()
+    {
+        $this->_isOutputDisabled = true;
+    }
+
+    /**
      * Fixes CGI only one Status header allowed bug
      *
      * @link  http://bugs.php.net/bug.php?id=36705
@@ -77,10 +91,15 @@ class Mage_Core_Controller_Response_Http extends Zend_Controller_Response_Http
         return parent::sendHeaders();
     }
 
+    /**
+     * Dispatch an event before the response is rendered and only render response if it is not disabled.
+     */
     public function sendResponse()
     {
         Mage::dispatchEvent('http_response_send_before', array('response'=>$this));
-        return parent::sendResponse();
+        if ( ! $this->_isOutputDisabled) {
+            return parent::sendResponse();
+        }
     }
 
     /**
