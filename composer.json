@@ -1,0 +1,8 @@
+{
+    "name": "magento/magento-ce",
+    "require": {
+        "php": ">=5.3.0"
+    }
+    "homepage": "http://magentocommerce.com",
+    "license": "OSL"
+}
