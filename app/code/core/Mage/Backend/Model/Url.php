@@ -149,12 +149,20 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
     {
         $salt = Mage::getSingleton('Mage_Core_Model_Session')->getFormKey();
 
-        $p = explode('/', trim($this->getRequest()->getOriginalPathInfo(), '/'));
+        $request = $this->getRequest();
         if (!$controller) {
-            $controller = !empty($p[1]) ? $p[1] : $this->getRequest()->getControllerName();
+            if ($request->getBeforeForwardInfo('controller_name') !== null) {
+                $controller = $request->getBeforeForwardInfo('controller_name');
+            } else {
+                $controller = $request->getControllerName();
+            }
         }
         if (!$action) {
-            $action = !empty($p[2]) ? $p[2] : $this->getRequest()->getActionName();
+            if ($request->getBeforeForwardInfo('action_name') !== null) {
+                $action = $request->getBeforeForwardInfo('action_name');
+            } else {
+                $action = $request->getActionName();
+            }
         }
 
         $secret = $controller . $action . $salt;
