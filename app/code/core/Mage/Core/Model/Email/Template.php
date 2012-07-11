@@ -73,6 +73,7 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
      * Configuration path for default email templates
      */
     const XML_PATH_TEMPLATE_EMAIL               = 'global/template/email';
+    const XML_PATH_MAIL_FACTORY                 = 'global/email/factory_helper';
     const XML_PATH_SENDING_SET_RETURN_PATH      = 'system/smtp/set_return_path';
     const XML_PATH_SENDING_RETURN_PATH_EMAIL    = 'system/smtp/return_path_email';
     const XML_PATH_DESIGN_EMAIL_LOGO            = 'design/email/logo';
@@ -140,11 +141,20 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
     /**
      * Retrieve mail object instance
      *
+     * Configure the factory helper at global/email/factory_helper using the format class::method.
+     * Default is Mage_Core_Helper_Mail::getMailer.
+     *
      * @return Zend_Mail
      */
     protected function _getMail()
     {
-        return new Zend_Mail('utf-8');
+        $factory = Mage::getConfig()->getNode(self::XML_PATH_MAIL_FACTORY);
+        $parts = explode('::', (string) $factory);
+        if (count($parts) != 2) {
+            throw new Exception(sprintf('Failed to get mail factory class and method.'));
+        }
+        $mailer = call_user_func(array(Mage::helper($parts[0]), $parts[1]));
+        return $mailer;
     }
 
     /**
@@ -349,25 +359,31 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
             $variables['this'] = $this;
         }
 
-        if (isset($variables['subscriber']) && ($variables['subscriber'] instanceof Mage_Newsletter_Model_Subscriber)) {
-            $processor->setStoreId($variables['subscriber']->getStoreId());
-        }
-
-        if (!isset($variables['logo_url'])) {
-            $variables['logo_url'] = $this->_getLogoUrl($processor->getStoreId());
-        }
-        if (!isset($variables['logo_alt'])) {
-            $variables['logo_alt'] = $this->_getLogoAlt($processor->getStoreId());
-        }
-
-        $processor->setIncludeProcessor(array($this, 'getInclude'))
-            ->setVariables($variables);
+        $processor->setIncludeProcessor(array($this, 'getInclude'));
 
         $this->_applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)
-                ->filter($this->getPreparedTemplateText());
+            $processor->setStoreId($storeId);
+            $transport = new Varien_Object(array(
+                'variables' => new Varien_Object($variables),
+                'template_text' => $this->getPreparedTemplateText(),
+                'store_id' => $storeId
+            ));
+            // Use observer to modify variables and template processor settings
+            Mage::dispatchEvent('email_template_filter_before', array(
+                'processor' => $processor,
+                'transport' => $transport
+            ));
+            if (!isset($variables['logo_url'])) {
+                $variables['logo_url'] = $this->_getLogoUrl($transport->getStoreId());
+            }
+            if (!isset($variables['logo_alt'])) {
+                $variables['logo_alt'] = $this->_getLogoAlt($transport->getStoreId());
+            }
+
+            $processedResult = $processor->setVariables($transport->getVariables()->getData())
+                    ->filter($transport->getTemplateText());
         } catch (Exception $e) {
             $this->_cancelDesignConfig();
             throw $e;
@@ -486,6 +502,13 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         $result = false;
         $this->_sendingException = null;
         try {
+            // Note: the email body already has been processed, changes to variables will have no effect
+            Mage::dispatchEvent('email_template_send_before', array(
+                'mailer' => $mail,
+                'variables' => new Varien_Object($variables),
+                'template' => $this,
+                'store_id' => $this->getDesignConfig()->getStore()
+            ));
             $mail->send();
             $result = true;
         } catch (Exception $e) {
