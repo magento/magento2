@@ -48,7 +48,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      * array(
      *      $sectionName => $recursionLevel
      * )
-     * Recursion level provide availability cache subnodes separatly
+     * Recursion level provide availability cache subnodes separately
      *
      * @var array
      */
@@ -147,7 +147,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     protected $_cachePartsForSave = array();
 
     /**
-     * Empty configuration object for loading and megring configuration parts
+     * Empty configuration object for loading and merging configuration parts
      *
      * @var Mage_Core_Model_Config_Base
      */
@@ -159,6 +159,20 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      * @var bool
      */
     protected $_isLocalConfigLoaded = false;
+
+    /**
+     * Ordered list of config files loaded as the local configuration
+     *
+     * @var array
+     */
+    protected $_localConfigFiles = null;
+
+    /**
+     * Temporary model cache to avoid multiple parsing of local.xml files.
+     *
+     * @var Mage_Core_Model_Config_Base
+     */
+    protected $_localConfigMergeCache = null;
 
     /**
      * Flag which allow to use modules from local code pool
@@ -253,11 +267,13 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 
         $cacheLoad = $this->loadModulesCache();
         if ($cacheLoad) {
+            $this->_cleanLoadCache();
             return $this;
         }
         $this->loadModules();
         $this->loadDb();
         $this->saveCache();
+        $this->_cleanLoadCache();
         return $this;
     }
 
@@ -269,16 +285,29 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function loadBase()
     {
         $etcDir = $this->getOptions()->getEtcDir();
-        $files = glob($etcDir.DS.'*.xml');
-        $this->loadFile(current($files));
-        while ($file = next($files)) {
-            $merge = clone $this->_prototype;
-            $merge->loadFile($file);
-            $this->extend($merge);
-        }
-        if (in_array($etcDir.DS.'local.xml', $files)) {
-            $this->_isLocalConfigLoaded = true;
-        }
+        $localConfigs = $this->_getLocalConfigFiles();
+
+        $files = glob($etcDir . DS . '*.xml');
+        $file = current($files);
+        do {
+            // Skip local.xml config files initially
+            if (in_array($file, $localConfigs)) {
+                continue;
+            }
+            if ($this->getNode()) {
+                // Extend current XML with following files
+                $merge = clone $this->_prototype;
+                $merge->loadFile($file);
+                $this->extend($merge);
+            } else {
+                // Load the first file directly
+                $this->loadFile($file);
+            }
+        } while ($file = next($files));
+
+        // Load local.xml configuration files last so they have a higher priority
+        $this->loadLocalConfig();
+
         return $this;
     }
 
@@ -315,20 +344,85 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $this->_loadDeclaredModules();
 
         $resourceConfig = sprintf('config.%s.xml', $this->_getResourceConnectionModel('core'));
-        $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this);
+        $this->loadModulesConfiguration(array('config.xml', $resourceConfig), $this);
 
         /**
          * Prevent local.xml directives overwriting
          */
-        $mergeConfig = clone $this->_prototype;
-        $this->_isLocalConfigLoaded = $mergeConfig->loadFile($this->getOptions()->getEtcDir().DS.'local.xml');
-        if ($this->_isLocalConfigLoaded) {
-            $this->extend($mergeConfig);
-        }
+        $this->loadLocalConfig();
 
         $this->applyExtends();
         Magento_Profiler::stop('load_modules');
         Magento_Profiler::stop('config');
+        return $this;
+    }
+
+    /**
+     * Return a list of local.xml config files
+     *
+     * The environment dependant local configuration file can be specified
+     * using the environment variable $_SERVER['MAGE_APPLICATION_ENV'];
+     *
+     * @return array
+     */
+    protected function _getLocalConfigFiles()
+    {
+        if (!isset($this->_localConfigFiles)) {
+            $this->_localConfigFiles = array($this->getOptions()->getEtcDir() . DS . 'local.xml');
+            $env = false;
+            if (isset($_SERVER) && is_array($_SERVER) && isset($_SERVER['MAGE_APPLICATION_ENV'])) {
+                $env = $_SERVER['MAGE_APPLICATION_ENV'];
+            }
+            if (isset($env) && is_string($env)) {
+                if (preg_match('/^[a-z0-9_-]+$/', $env)) {
+                    $file = $this->getOptions()->getEtcDir() . DS . 'local.' . $env . '.xml';
+                    if (file_exists($file)) {
+                        $this->_localConfigFiles[] = $file;
+                    }
+                }
+            }
+        }
+        return $this->_localConfigFiles;
+    }
+
+    /**
+     * Load the local.xml file, followed by a local.$env.xml file if configured
+     *
+     * @return Mage_Core_Model_Config
+     */
+    public function loadLocalConfig()
+    {
+        if (is_null($this->_localConfigMergeCache)) {
+            $this->_localConfigMergeCache = clone $this->_prototype;
+            foreach ($this->_getLocalConfigFiles() as $file) {
+                if ($this->_localConfigMergeCache->getNode()) {
+                    $mergeConfig = clone $this->_prototype;
+                    $result = $mergeConfig->loadFile($file);
+                    if ($result) {
+                        $this->_localConfigMergeCache->extend($mergeConfig);
+                    }
+                } else {
+                    $result = $this->_localConfigMergeCache->loadFile($file);
+                }
+                // At least one local.xml config file needs to be loaded
+                $this->_isLocalConfigLoaded = $this->_isLocalConfigLoaded || $result;
+            }
+        }
+        if ($this->_isLocalConfigLoaded) {
+            $this->extend($this->_localConfigMergeCache);
+        }
+        return $this;
+    }
+
+    /**
+     * Unset the local config merge cache instance
+     *
+     * @return Mage_Core_Model_Config
+     * @see self::loadLocalConfig()
+     */
+    protected function _cleanLoadCache()
+    {
+        $this->_localConfigMergeCache = null;
         return $this;
     }
 
