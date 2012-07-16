@@ -640,6 +640,9 @@ class Mage_Core_Model_Resource_Setup
 
                 if ($result) {
                     $this->_setResourceVersion($actionType, $file['toVersion']);
+                    Mage::log(sprintf('Update script execution: Success - File: %s', $fileName), Zend_Log::NOTICE);
+                } else {
+                    Mage::log(sprintf('Update script execution: Failure - File: %s', $fileName), Zend_Log::NOTICE);
                 }
             } catch (Exception $e) {
                 printf('<pre>%s</pre>', print_r($e, true));
