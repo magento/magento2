@@ -358,17 +358,16 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             return false;
         }
         $dbConfig = Mage::getConfig()->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
-        if ($dbConfig->model != 'mysql4') {
-            $this->addError('Database uninstall is supported for the MySQL only.');
+        $modelName = 'Mage_Install_Model_Installer_Db_' . ucfirst($dbConfig->model);
+
+        if (!Magento_Autoload::getInstance()->classExists($modelName)) {
+            $this->addError('Database uninstall is not supported for the ' . ucfirst($dbConfig->model) . '.');
             return false;
         }
 
-        /* Cleanup database */
-        $resourceModel = new Mage_Core_Model_Resource;
-        $dbConnection = $resourceModel->getConnection(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
-        $dbConnection->query("DROP DATABASE `$dbConfig->dbname`");
-        $dbConnection->query("CREATE DATABASE `$dbConfig->dbname`");
-
+        /** @var $resourceModel Mage_Install_Model_Installer_Db_Abstract */
+        $resourceModel = Mage::getModel($modelName);
+        $resourceModel->cleanUpDatabase($dbConfig);
 
         /* Remove temporary directories */
         $configOptions = Mage::app()->getConfig()->getOptions();
@@ -378,7 +377,6 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             $configOptions->getExportDir(),
             $configOptions->getLogDir(),
             $configOptions->getVarDir() . '/report',
-            $configOptions->getMediaDir() . '/skin',
         );
         foreach ($dirsToRemove as $dir) {
             Varien_Io_File::rmdirRecursive($dir);

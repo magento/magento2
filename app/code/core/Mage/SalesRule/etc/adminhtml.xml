@@ -26,17 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <promo>
-            <children>
-                <quote translate="title" module="Mage_SalesRule">
-                    <title>Shopping Cart Price Rules</title>
-                    <action>adminhtml/promo_quote/</action>
-                    <depends><module>Mage_Sales</module></depends>
-                </quote>
-            </children>
-         </promo>
-    </menu>
     <acl>
         <resources>
             <admin>

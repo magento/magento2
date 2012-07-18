@@ -333,20 +333,4 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
     {
         return $this->_adminhtmlConfig;
     }
-
-    /**
-     * Get menu item label by item path
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getMenuItemLabel($path)
-    {
-        $moduleName = 'Mage_Adminhtml_Helper_Data';
-        $menuNode = $this->getAdminhtmlConfig()->getNode('menu/' . str_replace('/', '/children/', trim($path, '/')));
-        if ($menuNode->getAttribute('module')) {
-            $moduleName = (string)$menuNode->getAttribute('module');
-        }
-        return $this->_getHelper($moduleName)->__((string)$menuNode->title);
-    }
 }

@@ -26,11 +26,7 @@
 ?>
 
 <div class="nav-bar">
-<!-- menu start -->
-<?php echo $this->getMenuLevel($this->getMenuArray()); ?>
-<!-- menu end -->
-
+    <?php echo $this->renderMenuContainer($this->getMenuModel()); ?>
     <a id="page-help-link" href="<?php echo Mage::helper('Mage_Backend_Helper_Data')->getPageHelpUrl() ?>"><?php echo $this->__('Get help for this page') ?></a>
     <script type="text/javascript">$('page-help-link').target = 'magento_page_help'</script>
-
 </div>

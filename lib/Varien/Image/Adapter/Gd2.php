@@ -311,22 +311,21 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
     /**
      * Add watermark to image
      *
-     * @throws RuntimeException
      * @param string $imagePath
      * @param int $positionX
      * @param int $positionY
-     * @param int $watermarkImageOpacity
-     * @param bool $isWaterMarkTile
+     * @param int $opacity
+     * @param bool $tile
      */
-    public function watermark($watermarkImage, $positionX=0, $positionY=0, $watermarkImageOpacity=30, $repeat=false)
+    public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
-        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType, ) = $this->_getImageOptions($watermarkImage);
+        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType, ) = $this->_getImageOptions($imagePath);
         $this->_getFileAttributes();
         $watermark = call_user_func($this->_getCallback(
             'create',
             $watermarkFileType,
             'Unsupported watermark image format.'
-        ), $watermarkImage);
+        ), $imagePath);
 
         $merged = false;
 
@@ -352,7 +351,7 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
         }
 
         if( $this->getWatermarkPosition() == self::POSITION_TILE ) {
-            $repeat = true;
+            $tile = true;
         } elseif( $this->getWatermarkPosition() == self::POSITION_STRETCH ) {
 
             $newWatermark = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
@@ -424,7 +423,7 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
             );
         }
 
-        if( $repeat === false && $merged === false ) {
+        if( $tile === false && $merged === false ) {
             imagecopymerge(
                 $this->_imageHandler,
                 $watermark,

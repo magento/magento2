@@ -53,6 +53,11 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_LayoutTest extend
         ;
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testToHtml()
     {
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/page_types_select.html', $this->_block->toHtml());

@@ -26,21 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <report>
-            <children>
-                <salesroot translate="title">
-                    <children>
-                        <paypal_settlement_reports translate="title">
-                            <title>PayPal Settlement Reports</title>
-                            <action>adminhtml/paypal_reports</action>
-                            <sort_order>100</sort_order>
-                        </paypal_settlement_reports>
-                    </children>
-                </salesroot>
-            </children>
-        </report>
-    </menu>
     <acl>
         <resources>
             <admin>

@@ -89,6 +89,9 @@
             <page_type>
                 <render_inherited>0</render_inherited>
             </page_type>
+            <design_fallback>
+                <allow_map_update>1</allow_map_update>
+            </design_fallback>
         </dev>
     </global>
     <frontend>
@@ -291,7 +294,7 @@
         </web>
         <admin>
             <startup>
-                <page>dashboard</page>
+                <menu_item_id>dashboard</menu_item_id>
             </startup>
             <url>
                 <use_custom>0</use_custom>

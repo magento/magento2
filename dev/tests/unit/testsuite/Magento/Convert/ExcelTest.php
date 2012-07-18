@@ -99,7 +99,7 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
     {
         $ioFile = new Varien_Io_File();
 
-        $path = TESTS_TEMP_DIR;
+        $path = Magento_Test_Environment::getInstance()->getTmpDir();
         $name = md5(microtime());
         $file = $path . DIRECTORY_SEPARATOR . $name . '.xml';
 

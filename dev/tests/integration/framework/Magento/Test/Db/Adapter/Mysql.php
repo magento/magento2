@@ -26,7 +26,7 @@
  */
 
 /**
- * See Magento_Test_Db_TransactionInterface
+ * See Magento_Test_Db_Adapter_TransactionInterface
  */
 class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
     implements Magento_Test_Db_Adapter_TransactionInterface
@@ -34,7 +34,7 @@ class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
     /**
      * @var int
      */
-    protected $_transparentLevel = 0;
+    protected $_levelAdjustment = 0;
 
     /**
      * See Magento_Test_Db_Adapter_TransactionInterface
@@ -43,7 +43,7 @@ class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
      */
     public function beginTransparentTransaction()
     {
-        $this->_transparentLevel += 1;
+        $this->_levelAdjustment += 1;
         return $this->beginTransaction();
     }
 
@@ -54,7 +54,7 @@ class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
      */
     public function commitTransparentTransaction()
     {
-        $this->_transparentLevel -= 1;
+        $this->_levelAdjustment -= 1;
         return $this->commit();
     }
 
@@ -65,7 +65,7 @@ class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
      */
     public function rollbackTransparentTransaction()
     {
-        $this->_transparentLevel -= 1;
+        $this->_levelAdjustment -= 1;
         return $this->rollback();
     }
 
@@ -76,6 +76,6 @@ class Magento_Test_Db_Adapter_Mysql extends Varien_Db_Adapter_Pdo_Mysql
      */
     public function getTransactionLevel()
     {
-        return parent::getTransactionLevel() - $this->_transparentLevel;
+        return parent::getTransactionLevel() - $this->_levelAdjustment;
     }
 }

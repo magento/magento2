@@ -37,6 +37,11 @@ class Mage_Core_Model_EncryptionTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Encryption();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testEncryptDecrypt()
     {
         $this->assertEquals('', $this->_model->decrypt($this->_model->encrypt('')));

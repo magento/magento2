@@ -40,6 +40,11 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
         $this->_model = new Mage_Catalog_Model_Product_Type_Price;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetPrice()
     {
         $this->assertEquals('test', $this->_model->getPrice(new Varien_Object(array('price' => 'test'))));

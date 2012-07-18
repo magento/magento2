@@ -33,11 +33,15 @@
         <div id="export_filter_grid_container" class="fieldset"><!-- --></div>
     </form>
     <div class="a-right">
-        <button class="scalable" type="button" onclick="getFile();"><span><span><span><?php echo $this->__('Continue') ?></span></span></span></button>
+        <button class="scalable" type="button" onclick="getFile();"><span><span><span><?php
+            echo $this->__('Continue')
+        ?></span></span></span></button>
     </div>
 </div>
 <script type="text/javascript">
 //<![CDATA[
    $('entity').selectedIndex = 0; // forced resetting entity selector after page refresh
+   $('file_format_version').selectedIndex = 0; // forced resetting file format version selector after page refresh
+   $('customer_entity').selectedIndex = 0; // forced resetting customer entity selector after page refresh
 //]]>
 </script>

@@ -38,8 +38,7 @@ class Mage_Backup_NomediaTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
 
-        $model = new Mage_Backup_Nomedia();
-        $model->setSnapshotManager($snapshot);
+        $model = new Mage_Backup_Nomedia($snapshot);
 
         $rootDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
         $model->setRootDir($rootDir);
@@ -51,7 +50,7 @@ class Mage_Backup_NomediaTest extends PHPUnit_Framework_TestCase
                 $rootDir . DIRECTORY_SEPARATOR . 'media',
                 $rootDir . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . 'media',
             ),
-            $model->getSnapshotManager()->getIgnorePaths()
+            $snapshot->getIgnorePaths()
         );
     }
 }

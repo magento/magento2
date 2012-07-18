@@ -38,7 +38,7 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
         $this->_title($this->__('Dashboard'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('dashboard');
+        $this->_setActiveMenu('Mage_Adminhtml::dashboard');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Dashboard'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Dashboard'));
         $this->renderLayout();
     }

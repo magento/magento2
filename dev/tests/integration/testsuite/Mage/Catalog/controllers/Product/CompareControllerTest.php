@@ -108,7 +108,7 @@ class Mage_Catalog_Product_CompareControllerTest extends Magento_Test_TestCase_C
 
         $this->dispatch('catalog/product_compare/index/items/2');
 
-        $this->assertRedirect('http://localhost/index.php/catalog/product_compare/index/');
+        $this->assertRedirect($this->equalTo('http://localhost/index.php/catalog/product_compare/index/'));
 
         $this->_assertCompareListEquals(array(2));
     }

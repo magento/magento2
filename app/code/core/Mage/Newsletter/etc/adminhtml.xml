@@ -26,30 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <newsletter translate="title" module="Mage_Newsletter">
-            <title>Newsletter</title>
-            <sort_order>60</sort_order>
-            <children>
-                <template translate="title" module="Mage_Newsletter">
-                    <title>Newsletter Templates</title>
-                    <action>adminhtml/newsletter_template/</action>
-                </template>
-                <queue translate="title" module="Mage_Newsletter">
-                    <title>Newsletter Queue</title>
-                    <action>adminhtml/newsletter_queue/</action>
-                </queue>
-                <subscriber translate="title" module="Mage_Newsletter">
-                    <title>Newsletter Subscribers</title>
-                    <action>adminhtml/newsletter_subscriber/</action>
-                </subscriber>
-                <problem translate="title" module="Mage_Newsletter">
-                    <title>Newsletter Problem Reports</title>
-                    <action>adminhtml/newsletter_problem/</action>
-                </problem>
-            </children>
-        </newsletter>
-    </menu>
     <acl>
         <resources>
             <admin>

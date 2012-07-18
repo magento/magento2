@@ -26,24 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <cms translate="title" module="Mage_Cms">
-            <title>CMS</title>
-            <sort_order>70</sort_order>
-            <children>
-                <page translate="title" module="Mage_Cms">
-                    <title>Pages</title>
-                    <action>adminhtml/cms_page</action>
-                    <sort_order>0</sort_order>
-                </page>
-                <block translate="title" module="Mage_Cms">
-                    <title>Static Blocks</title>
-                    <action>adminhtml/cms_block</action>
-                    <sort_order>10</sort_order>
-                </block>
-            </children>
-         </cms>
-    </menu>
     <acl>
         <resources>
             <admin>

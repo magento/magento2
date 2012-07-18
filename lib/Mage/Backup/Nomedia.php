@@ -51,9 +51,10 @@ class Mage_Backup_Nomedia extends Mage_Backup_Media
      */
     protected function _prepareIgnoreList()
     {
-        $this->getSnapshotManager()->addIgnorePaths(array(
-            $this->getSnapshotManager()->getRootDir() . DS . 'media',
-            $this->getSnapshotManager()->getRootDir() . DS . 'pub' . DS . 'media',
+        $rootDir = $this->_snapshotManager->getRootDir();
+        $this->_snapshotManager->addIgnorePaths(array(
+            $rootDir . DIRECTORY_SEPARATOR . 'media',
+            $rootDir . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . 'media',
         ));
         return $this;
     }

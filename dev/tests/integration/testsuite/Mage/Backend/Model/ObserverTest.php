@@ -37,6 +37,11 @@ class Mage_Backend_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Backend_Model_Observer();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testActionPreDispatchAdminNotLogged()
     {
         $this->markTestSkipped('Skipped because of authentication process moved into base controller.');

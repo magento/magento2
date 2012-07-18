@@ -26,59 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <sales translate="title" module="Mage_Sales">
-            <title>Sales</title>
-            <sort_order>20</sort_order>
-            <depends><module>Mage_Sales</module></depends>
-            <children>
-                <order translate="title" module="Mage_Sales">
-                    <title>Orders</title>
-                    <action>adminhtml/sales_order</action>
-                    <sort_order>10</sort_order>
-                </order>
-                <invoice translate="title" module="Mage_Sales">
-                    <title>Invoices</title>
-                    <action>adminhtml/sales_invoice</action>
-                    <sort_order>20</sort_order>
-                </invoice>
-                <shipment translate="title" module="Mage_Sales">
-                    <title>Shipments</title>
-                    <action>adminhtml/sales_shipment</action>
-                    <sort_order>30</sort_order>
-                </shipment>
-                <creditmemo translate="title" module="Mage_Sales">
-                    <title>Credit Memos</title>
-                    <action>adminhtml/sales_creditmemo</action>
-                    <sort_order>40</sort_order>
-                </creditmemo>
-                <transactions translate="title" module="Mage_Sales">
-                    <title>Transactions</title>
-                    <action>adminhtml/sales_transactions</action>
-                    <sort_order>50</sort_order>
-                </transactions>
-                <recurring_profile translate="title" module="Mage_Sales">
-                    <title>Recurring Profiles (beta)</title>
-                    <action>adminhtml/sales_recurring_profile</action>
-                    <sort_order>60</sort_order>
-                </recurring_profile>
-                <billing_agreement translate="title" module="Mage_Sales">
-                    <title>Billing Agreements</title>
-                    <action>adminhtml/sales_billing_agreement</action>
-                    <sort_order>70</sort_order>
-                </billing_agreement>
-            </children>
-         </sales>
-         <system>
-            <children>
-                <order_statuses translate="title" module="Mage_Sales">
-                    <title>Order Statuses</title>
-                    <action>adminhtml/sales_order_status</action>
-                    <sort_order>105</sort_order>
-                </order_statuses>
-            </children>
-         </system>
-    </menu>
     <acl>
         <resources>
             <admin>

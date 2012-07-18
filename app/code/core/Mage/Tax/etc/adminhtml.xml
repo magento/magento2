@@ -26,38 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <sales>
-            <children>
-                <tax translate="title" module="Mage_Tax">
-                    <title>Tax</title>
-                    <sort_order>500</sort_order>
-                    <children>
-                        <rules translate="title" module="Mage_Tax">
-                            <title>Manage Tax Rules</title>
-                            <action>adminhtml/tax_rule</action>
-                        </rules>
-                        <rates translate="title" module="Mage_Tax">
-                            <title>Manage Tax Zones &amp; Rates</title>
-                            <action>adminhtml/tax_rate</action>
-                        </rates>
-                        <import_export translate="title" module="Mage_Tax">
-                            <title>Import / Export Tax Rates</title>
-                            <action>adminhtml/tax_rate/importExport</action>
-                        </import_export>
-                        <classes_customer translate="title" module="Mage_Tax">
-                            <title>Customer Tax Classes</title>
-                            <action>adminhtml/tax_class_customer</action>
-                        </classes_customer>
-                        <classes_product translate="title" module="Mage_Tax">
-                            <title>Product Tax Classes</title>
-                            <action>adminhtml/tax_class_product</action>
-                        </classes_product>
-                    </children>
-                </tax>
-            </children>
-        </sales>
-    </menu>
     <acl>
         <resources>
             <admin>

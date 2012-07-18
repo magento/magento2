@@ -26,20 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <system>
-            <children>
-                <tools>
-                    <children>
-                        <backup translate="title" module="Mage_Backup">
-                            <title>Backups</title>
-                            <action>adminhtml/system_backup</action>
-                        </backup>
-                    </children>
-                </tools>
-            </children>
-        </system>
-    </menu>
     <acl>
         <resources>
             <admin>

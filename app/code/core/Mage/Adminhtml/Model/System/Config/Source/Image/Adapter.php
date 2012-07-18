@@ -36,7 +36,7 @@ class Mage_Adminhtml_Model_System_Config_Source_Image_Adapter
     {
         return array(
             Varien_Image_Adapter::ADAPTER_IM  => Mage::helper('Mage_Adminhtml_Helper_Data')->__('ImageMagick'),
-            Varien_Image_Adapter::ADAPTER_GD2 => Mage::helper('Mage_Adminhtml_Helper_Data')->__('PHP Gd 2'),
+            Varien_Image_Adapter::ADAPTER_GD2 => Mage::helper('Mage_Adminhtml_Helper_Data')->__('PHP GD2'),
         );
     }
 }

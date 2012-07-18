@@ -29,7 +29,7 @@ class Mage_Adminhtml_Api_UserController extends Mage_Adminhtml_Controller_Action
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('system/services/users')
+            ->_setActiveMenu('Mage_Api::system_api_users')
             ->_addBreadcrumb($this->__('Web Services'), $this->__('Web Services'))
             ->_addBreadcrumb($this->__('Permissions'), $this->__('Permissions'))
             ->_addBreadcrumb($this->__('Users'), $this->__('Users'))

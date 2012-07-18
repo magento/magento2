@@ -42,6 +42,11 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_ApiTest extends PHPUnit_Fra
         $this->_model = new Mage_Catalog_Model_Product_Attribute_Tierprice_Api;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testInfo()
     {
         $info = $this->_model->info(1);

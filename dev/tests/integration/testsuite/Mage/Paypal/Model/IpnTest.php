@@ -37,6 +37,11 @@ class Mage_Paypal_Model_IpnTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Paypal_Model_Ipn();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @param string $currencyCode
      * @dataProvider currencyProvider

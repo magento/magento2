@@ -199,7 +199,10 @@ class Mage_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
         $total = $checkout->getStoreCurrencyCode() . ' ' . $checkout->getGrandTotal();
 
         foreach ($sendTo as $recipient) {
-            $mailTemplate->setDesignConfig(array('area'=>'frontend', 'store'=>$checkout->getStoreId()))
+            $mailTemplate->setDesignConfig(array(
+                'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
+                'store' => $checkout->getStoreId()
+            ))
                 ->sendTransactional(
                     $template,
                     Mage::getStoreConfig('checkout/payment_failed/identity', $checkout->getStoreId()),

@@ -26,17 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <cms>
-            <children>
-                <poll translate="title" module="Mage_Poll">
-                    <title>Polls</title>
-                    <action>adminhtml/poll</action>
-                    <sort_order>20</sort_order>
-                </poll>
-            </children>
-         </cms>
-    </menu>
     <acl>
         <resources>
             <admin>

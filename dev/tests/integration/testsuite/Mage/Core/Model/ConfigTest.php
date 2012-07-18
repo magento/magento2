@@ -187,7 +187,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = $this->_createModel(true)->loadModulesConfiguration('adminhtml.xml');
         $this->assertInstanceOf('Mage_Core_Model_Config_Base', $config);
-        $this->assertInstanceOf('Mage_Core_Model_Config_Element', $config->getNode('menu'));
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $config->getNode('acl'));
     }
 

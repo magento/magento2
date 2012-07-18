@@ -88,7 +88,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     public function indexAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/mobile');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_mobile');
         $this->renderLayout();
     }
 
@@ -101,7 +101,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     {
         Mage::getSingleton('Mage_Adminhtml_Model_Session')->setData('new_application', true);
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/mobile');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_mobile');
         $this->renderLayout();
     }
 
@@ -130,7 +130,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
             }
 
             $this->loadLayout();
-            $this->_setActiveMenu('xmlconnect/mobile');
+            $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_mobile');
             $this->renderLayout();
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -190,7 +190,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
             $app->setDevtype($deviceTitle);
             $app->loadSubmit();
             $this->loadLayout();
-            $this->_setActiveMenu('xmlconnect/mobile');
+            $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_mobile');
             $this->renderLayout();
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -786,7 +786,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     public function historyAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/history');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_history');
         $this->renderLayout();
     }
 
@@ -798,7 +798,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     public function gridAction()
     {
         $this->loadLayout(false);
-        $this->_setActiveMenu('xmlconnect/mobile');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_mobile');
         $this->renderLayout();
     }
 
@@ -957,7 +957,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     public function queueAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/queue');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_queue');
         $this->renderLayout();
     }
 
@@ -1223,7 +1223,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
     public function templateAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/template');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_templates');
         $this->renderLayout();
     }
 
@@ -1254,7 +1254,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
         }
 
         $this->loadLayout();
-        $this->_setActiveMenu('xmlconnect/templates');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_templates');
         $this->renderLayout();
     }
 
@@ -1344,7 +1344,7 @@ class Mage_XmlConnect_Adminhtml_MobileController extends Mage_Adminhtml_Controll
         );
         $this->_addBreadcrumb($title, $title);
 
-        $this->_setActiveMenu('xmlconnect/queue');
+        $this->_setActiveMenu('Mage_XmlConnect::xmlconnect_queue');
         $this->renderLayout();
     }
 

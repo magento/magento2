@@ -40,16 +40,13 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_User_Model_Rules;
     }
 
-    /**
-     * Empty fixture to wrap tests in db transaction
-     */
-    public static function emptyFixture()
+    protected function tearDown()
     {
-
+        $this->_model = null;
     }
 
     /**
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testCRUD()
     {
@@ -65,7 +62,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testInitialUserPermissions()
     {
@@ -82,7 +79,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers Mage_User_Model_Rules::saveRel
-     * @magentoDataFixture emptyFixture
+     * @magentoDbIsolation enabled
      */
     public function testSetAllowForAllResources()
     {

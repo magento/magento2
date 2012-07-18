@@ -45,6 +45,11 @@ class Mage_Catalog_Model_AbstractTest extends PHPUnit_Framework_TestCase
         $collectionProperty->setValue($this->_model, 'Mage_Catalog_Model_Resource_Product_Collection');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @covers Mage_Catalog_Model_Abstract::lockAttribute
      * @covers Mage_Catalog_Model_Abstract::unlockAttribute

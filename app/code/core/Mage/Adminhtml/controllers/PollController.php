@@ -39,7 +39,7 @@ class Mage_Adminhtml_PollController extends Mage_Adminhtml_Controller_Action
         $this->_title($this->__('CMS'))->_title($this->__('Polls'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('cms/poll');
+        $this->_setActiveMenu('Mage_Poll::cms_poll');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Poll Manager'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Poll Manager'));
 
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Poll_Poll'));
@@ -59,7 +59,7 @@ class Mage_Adminhtml_PollController extends Mage_Adminhtml_Controller_Action
             Mage::register('poll_data', $pollModel);
 
             $this->loadLayout();
-            $this->_setActiveMenu('cms/poll');
+            $this->_setActiveMenu('Mage_Poll::cms_poll');
             $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Poll Manager'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Poll Manager'), $this->getUrl('*/*/'));
             $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Edit Poll'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Edit Poll'));
 

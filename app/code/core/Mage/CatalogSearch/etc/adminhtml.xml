@@ -26,17 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog>
-            <children>
-                <search translate="title" module="Mage_CatalogSearch">
-                    <title>Search Terms</title>
-                    <action>adminhtml/catalog_search/</action>
-                    <sort_order>40</sort_order>
-                </search>
-            </children>
-        </catalog>
-    </menu>
     <acl>
         <resources>
             <admin>

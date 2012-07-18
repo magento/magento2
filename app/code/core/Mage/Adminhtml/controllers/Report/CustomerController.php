@@ -53,7 +53,7 @@ class Mage_Adminhtml_Report_CustomerController extends Mage_Adminhtml_Controller
              ->_title($this->__('New Accounts'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/customer/accounts')
+            ->_setActiveMenu('Mage_Reports::report_customers_accounts')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('New Accounts'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('New Accounts'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Customer_Accounts'))
             ->renderLayout();
@@ -90,7 +90,7 @@ class Mage_Adminhtml_Report_CustomerController extends Mage_Adminhtml_Controller
              ->_title($this->__('Customers by Number of Orders'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/customer/orders')
+            ->_setActiveMenu('Mage_Reports::report_customers_orders')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customers by Number of Orders'),
                 Mage::helper('Mage_Reports_Helper_Data')->__('Customers by Number of Orders'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Customer_Orders'))
@@ -128,7 +128,7 @@ class Mage_Adminhtml_Report_CustomerController extends Mage_Adminhtml_Controller
              ->_title($this->__('Customers by Orders Total'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/customer/totals')
+            ->_setActiveMenu('Mage_Reports::report_customers_totals')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customers by Orders Total'),
                 Mage::helper('Mage_Reports_Helper_Data')->__('Customers by Orders Total'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Customer_Totals'))

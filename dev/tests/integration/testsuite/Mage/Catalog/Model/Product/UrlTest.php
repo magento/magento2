@@ -42,6 +42,11 @@ class Mage_Catalog_Model_Product_UrlTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Catalog_Model_Product_Url;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetUrlInstance()
     {
         $instance = $this->_model->getUrlInstance();

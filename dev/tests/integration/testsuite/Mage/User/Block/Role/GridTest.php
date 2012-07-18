@@ -41,6 +41,11 @@ class Mage_User_Block_Role_GridTest extends PHPUnit_Framework_TestCase
         $this->_block = $layout->createBlock('Mage_User_Block_Role_Grid');
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testPreparedCollection()
     {
         $this->_block->toHtml();

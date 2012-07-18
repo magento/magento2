@@ -40,10 +40,10 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
     public function testAllTemplates($module, $template, $class, $area)
     {
         $params = array(
-            '_area'    => $area,
-            '_package' => false, // intentionally to make sure the module files will be requested
-            '_theme'   => false,
-            '_module'  => $module
+            'area'    => $area,
+            'package' => false, // intentionally to make sure the module files will be requested
+            'theme'   => false,
+            'module'  => $module
         );
         $file = Mage::getDesign()->getFilename($template, $params);
         $this->assertFileExists($file, "Block class: {$class}");

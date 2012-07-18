@@ -24,10 +24,111 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php
+    $exportVersionTwo = (int) Mage_ImportExport_Model_Source_Format_Version::VERSION_2;
+?>
 <script type="text/javascript">
 //<![CDATA[
     /**
-     * Post form data and process response via AJAX.
+     * Handle value change in entity type selector
+     *
+     * @return void
+     */
+    varienForm.prototype.handleEntityTypeSelector = function()
+    {
+        if ($('entity') && $F('entity')) {
+            $('head-export_format_version_fieldset').hide();
+            $('export_format_version_fieldset').hide();
+            $('file_format_version').selectedIndex = 0;
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').selectedIndex = 0;
+
+            switch ($F('entity')) {
+                case 'customer':
+                    $('export_filter_grid_container').update();
+                    $('export_filter_container').hide();
+                    $('head-export_format_version_fieldset').show();
+                    $('export_format_version_fieldset').show();
+                    break;
+                default:
+                    this.getFilter();
+                    break;
+            }
+        } else {
+            $('export_filter_container').hide();
+            $('head-export_format_version_fieldset').hide();
+            $('export_format_version_fieldset').hide();
+            $('file_format_version').selectedIndex = 0;
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').selectedIndex = 0;
+        }
+    };
+
+    /**
+     * Handle value change in export format version selector
+     *
+     * @return void
+     */
+    varienForm.prototype.handleExportFormatVersionSelector = function()
+    {
+        if ($('file_format_version') && $F('file_format_version')) {
+            switch ($F('file_format_version')) {
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_1 ?>':
+                    $('head-customer_entity_fieldset').hide();
+                    $('customer_entity_fieldset').hide();
+                    $('customer_entity').selectedIndex = 0;
+                    this.getFilter();
+                    break;
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_2 ?>':
+                    this.getCustomerFilter();
+                    $('head-customer_entity_fieldset').show();
+                    $('customer_entity_fieldset').show();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $('export_filter_container').hide();
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').selectedIndex = 0;
+        }
+    };
+
+    /**
+     *  Handle value change in entity type selector
+     *
+     * @return void
+     */
+    varienForm.prototype.handleCustomerEntityTypeSelector = function()
+    {
+        if (!$('customer_entity') || $F('customer_entity') == 'customer') {
+            $$('col:first-child').each(function(el) {
+                el.show();
+            });
+            $$('th.no-link:first-child').each(function(el) {
+                el.show();
+            });
+            $$('td.a-center').each(function(el) {
+                el.show();
+            });
+        } else {
+            $$('col:first-child').each(function(el) {
+                el.hide();
+            });
+            $$('th.no-link:first-child').each(function(el) {
+                el.hide();
+            });
+            $$('td.a-center').each(function(el) {
+                el.hide();
+            });
+        }
+    };
+
+    /**
+     * Post form data and process response via AJAX
      *
      * @return void
      */
@@ -39,7 +140,34 @@
 
             new Ajax.Request(url, {
                 method:      'post',
-                //parameters:  $(this.formId).serialize(),
+                evalScripts: true,
+                onComplete:  function(transport) {
+                    var responseText = transport.responseText.replace(/>\s+</g, '><');
+                    $('export_filter_grid_container').update(responseText);
+                    $('export_filter_container').show();
+                }
+            });
+        } else {
+            $('export_filter_container').hide();
+        }
+    };
+
+    /**
+     * Post form data and process response via AJAX.
+     *
+     * @return void
+     */
+    varienForm.prototype.getCustomerFilter = function()
+    {
+        if ($('entity') && $F('entity')) {
+            var url = "<?php echo $this->getUrl('*/*/getFilter') ?>";
+            url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity');
+            // because we didn't get instructions from UX team, we will use filter by customer attributes
+            // for all customer entity types for now
+            url += '/' + 'customer_entity/customer';
+
+            new Ajax.Request(url, {
+                method:      'post',
                 evalScripts: true,
                 onComplete:  function(transport) {
                     var responseText = transport.responseText.replace(/>\s+</g, '><');
@@ -59,10 +187,17 @@
      */
     function getFile()
     {
-        if ($('entity') && $('file_format')) {
+        if ($('entity') && $('entity')) {
             var form      = $('export_filter_form');
             var oldAction = form.action;
-            form.action   = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity') + '/file_format/' + $F('file_format');
+            var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity')
+                + '/file_format/' + $F('file_format');
+            if ($F('entity') == 'customer' && $('file_format_version')
+                    && $F('file_format_version') == <?php echo $exportVersionTwo ?>
+            ) {
+                url += '/customer_entity/' + $F('customer_entity');
+            }
+            form.action = url;
             form.submit();
             form.action   = oldAction;
         } else {

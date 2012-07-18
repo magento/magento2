@@ -698,7 +698,7 @@ class Mage_Core_Model_Locale
             $this->_emulatedLocales[] = clone $this->getLocale();
             $this->_locale = new Zend_Locale(Mage::getStoreConfig(self::XML_PATH_DEFAULT_LOCALE, $storeId));
             $this->_localeCode = $this->_locale->toString();
-            Mage::getSingleton('Mage_Core_Model_Translate')->setLocale($this->_locale)->init('frontend', true);
+            Mage::getSingleton('Mage_Core_Model_Translate')->setLocale($this->_localeCode)->init('frontend', true);
         }
         else {
             $this->_emulatedLocales[] = false;
@@ -711,10 +711,11 @@ class Mage_Core_Model_Locale
      */
     public function revert()
     {
-        if ($locale = array_pop($this->_emulatedLocales)) {
+        $locale = array_pop($this->_emulatedLocales);
+        if ($locale) {
             $this->_locale = $locale;
             $this->_localeCode = $this->_locale->toString();
-            Mage::getSingleton('Mage_Core_Model_Translate')->setLocale($this->_locale)->init('adminhtml', true);
+            Mage::getSingleton('Mage_Core_Model_Translate')->setLocale($this->_localeCode)->init('adminhtml', true);
         }
     }
 

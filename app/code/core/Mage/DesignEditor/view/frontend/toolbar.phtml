@@ -35,23 +35,6 @@
 
 <script type="text/javascript">
 (function ($) {
-    $(document).ready(function () {
-        designEditor = new DesignEditor(<?php echo $this->getOptionsJson(); ?>);
-
-        $('.vde_toolbar_cell_title').click(function(){
-            var cellElement = $(this).parents('.vde_toolbar_cell');
-            var active = cellElement.hasClass('active');
-            $('.vde_toolbar_cell').removeClass('active');
-            if (!active) {
-                cellElement.addClass('active');
-                cellElement.trigger('activate_toolbar_cell.vde');
-            }
-        });
-        $(document).bind('mousedown', function (e) {
-            if (!$(e.target).parents('.vde_toolbar_cell').length) {
-                $('.vde_toolbar_cell').removeClass('active');
-            }
-        });
-    });
+    $( document ).ready( function( ){ $( window ).vde_page(<?php echo $this->getOptionsJson(); ?>); } );
 })(jQuery);
 </script>

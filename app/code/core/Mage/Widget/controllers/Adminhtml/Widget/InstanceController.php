@@ -51,7 +51,7 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('cms/widgets')
+            ->_setActiveMenu('Mage_Widget::cms_widget_instance')
             ->_addBreadcrumb(Mage::helper('Mage_Widget_Helper_Data')->__('CMS'),
                 Mage::helper('Mage_Widget_Helper_Data')->__('CMS'))
             ->_addBreadcrumb(Mage::helper('Mage_Widget_Helper_Data')->__('Manage Widget Instances'),

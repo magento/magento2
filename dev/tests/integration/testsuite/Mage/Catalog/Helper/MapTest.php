@@ -37,6 +37,11 @@ class Mage_Catalog_Helper_MapTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Catalog_Helper_Map;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     public function testGetCategoryUrl()
     {
         $this->assertStringEndsWith('/catalog/seo_sitemap/category/', $this->_helper->getCategoryUrl());

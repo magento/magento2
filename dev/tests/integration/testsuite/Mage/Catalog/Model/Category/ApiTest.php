@@ -43,6 +43,11 @@ class Mage_Catalog_Model_Category_ApiTest extends PHPUnit_Framework_TestCase
         Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testLevel()
     {
         $default = $this->_model->level();

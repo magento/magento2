@@ -45,18 +45,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <report>
-            <children>
-                <products>
-                    <children>
-                        <downloads translate="title" module="Mage_Reports">
-                            <title>Downloads</title>
-                            <action>adminhtml/report_product/downloads</action>
-                        </downloads>
-                    </children>
-                </products>
-            </children>
-        </report>
-    </menu>
 </config>

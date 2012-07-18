@@ -61,6 +61,11 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
         ));
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testApplyInvalid()
     {
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());

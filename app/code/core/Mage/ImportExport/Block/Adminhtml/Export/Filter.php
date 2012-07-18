@@ -42,8 +42,6 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
 
     /**
      * Set grid parameters.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -140,7 +138,8 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
                 ->setValue($value)
                 ->getHtml();
         } else {
-            return Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute does not has options, so filtering is impossible');
+            return Mage::helper('Mage_ImportExport_Helper_Data')
+                ->__('Attribute does not has options, so filtering is impossible');
         }
     }
 
@@ -205,14 +204,15 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
                 ->setValue($value)
                 ->getHtml();
         } else {
-            return Mage::helper('Mage_ImportExport_Helper_Data')->__('Attribute does not has options, so filtering is impossible');
+            return Mage::helper('Mage_ImportExport_Helper_Data')
+                ->__('Attribute does not has options, so filtering is impossible');
         }
     }
 
     /**
      * Add columns to grid
      *
-     * @return Mage_Adminhtml_Block_Widget_Grid
+     * @return Mage_ImportExport_Block_Adminhtml_Export_Filter
      */
     protected function _prepareColumns()
     {
@@ -321,7 +321,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
     /**
      * Get row edit URL.
      *
-     * @return string
+     * @return string|boolean
      */
     public function getRowUrl($row)
     {
@@ -331,10 +331,10 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
     /**
      * Prepare collection by setting page number, sorting etc..
      *
-     * @param Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection
+     * @param Varien_Data_Collection $collection
      * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
      */
-    public function prepareCollection(Mage_Eav_Model_Resource_Entity_Attribute_Collection $collection)
+    public function prepareCollection(Varien_Data_Collection $collection)
     {
         $this->_collection = $collection;
 

@@ -50,54 +50,44 @@ class Mage_Backup_MediaTest extends PHPUnit_Framework_TestCase
         return $snapshot;
     }
 
-    public function testCreate()
+    /**
+     * @param string $action
+     * @dataProvider actionProvider
+     */
+    public function testAction($action)
     {
         $snapshot = $this->_getSnapshotMock();
 
-        $model = new Mage_Backup_Media();
-        $model->setSnapshotManager($snapshot);
+        $model = new Mage_Backup_Media($snapshot);
 
         $rootDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
         $model->setRootDir($rootDir);
 
-        $this->assertTrue($model->create());
-
-        $this->assertEquals(
-            array(
-                $rootDir . DIRECTORY_SEPARATOR . 'code',
-                $rootDir . DIRECTORY_SEPARATOR .'var' . DIRECTORY_SEPARATOR . 'tmp',
-            ),
-            $model->getSnapshotManager()->getIgnorePaths()
-        );
-    }
-
-    public function testRollback()
-    {
-        $snapshot = $this->_getSnapshotMock();
-
-        $model = new Mage_Backup_Media();
-        $model->setSnapshotManager($snapshot);
-
-        $rootDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
-        $model->setRootDir($rootDir);
-
-        $this->assertTrue($model->rollback());
+        $this->assertTrue($model->$action());
 
         $this->assertEquals(
             array(
                 $rootDir . DIRECTORY_SEPARATOR . 'code',
                 $rootDir . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'tmp',
             ),
-            $model->getSnapshotManager()->getIgnorePaths()
+            $snapshot->getIgnorePaths()
         );
     }
 
-    public function getSetGetSnapshotManager()
+    /**
+     * @expectedException Mage_Exception
+     */
+    public function testConstruct()
     {
-        $snapshot = new Mage_Backup_Snapshot();
-        $model = new Mage_Backup_Media();
-        $this->assertInstanceOf('Mage_Backup_Media', $model->setSnapshotManager($snapshot));
-        $this->assertEquals($snapshot, $model->getSnapshotManager());
+        new Mage_Backup_Media(new StdClass);
+    }
+
+    public static function actionProvider()
+    {
+        return array(
+            array('create'),
+            array('rollback'),
+        );
     }
 
     /**
@@ -113,8 +103,7 @@ class Mage_Backup_MediaTest extends PHPUnit_Framework_TestCase
             ->with($parameter)
             ->will($this->returnValue($snapshot));
 
-        $model = new Mage_Backup_Media();
-        $model->setSnapshotManager($snapshot);
+        $model = new Mage_Backup_Media($snapshot);
         $this->assertEquals($model, $model->$method($parameter));
     }
 

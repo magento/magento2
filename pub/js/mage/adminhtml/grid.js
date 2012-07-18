@@ -25,13 +25,13 @@
 var varienGrid = new Class.create();
 
 varienGrid.prototype = {
-    initialize : function(containerId, url, pageVar, sortVar, dirVar, filterVar){
+    initialize:function (containerId, url, pageVar, sortVar, dirVar, filterVar) {
         this.containerId = containerId;
         this.url = url;
         this.pageVar = pageVar || false;
         this.sortVar = sortVar || false;
-        this.dirVar  = dirVar || false;
-        this.filterVar  = filterVar || false;
+        this.dirVar = dirVar || false;
+        this.filterVar = filterVar || false;
         this.tableSufix = '_table';
         this.useAjax = false;
         this.rowClickCallback = false;
@@ -43,73 +43,73 @@ varienGrid.prototype = {
 
         this.reloadParams = false;
 
-        this.trOnMouseOver  = this.rowMouseOver.bindAsEventListener(this);
-        this.trOnMouseOut   = this.rowMouseOut.bindAsEventListener(this);
-        this.trOnClick      = this.rowMouseClick.bindAsEventListener(this);
-        this.trOnDblClick   = this.rowMouseDblClick.bindAsEventListener(this);
-        this.trOnKeyPress   = this.keyPress.bindAsEventListener(this);
+        this.trOnMouseOver = this.rowMouseOver.bindAsEventListener(this);
+        this.trOnMouseOut = this.rowMouseOut.bindAsEventListener(this);
+        this.trOnClick = this.rowMouseClick.bindAsEventListener(this);
+        this.trOnDblClick = this.rowMouseDblClick.bindAsEventListener(this);
+        this.trOnKeyPress = this.keyPress.bindAsEventListener(this);
 
-        this.thLinkOnClick      = this.doSort.bindAsEventListener(this);
+        this.thLinkOnClick = this.doSort.bindAsEventListener(this);
         this.initGrid();
     },
-    initGrid : function(){
-        if(this.preInitCallback){
+    initGrid:function () {
+        if (this.preInitCallback) {
             this.preInitCallback(this);
         }
-        if($(this.containerId+this.tableSufix)){
-            this.rows = $$('#'+this.containerId+this.tableSufix+' tbody tr');
-            for (var row=0; row<this.rows.length; row++) {
-                if(row%2==0){
+        if ($(this.containerId + this.tableSufix)) {
+            this.rows = $$('#' + this.containerId + this.tableSufix + ' tbody tr');
+            for (var row = 0; row < this.rows.length; row++) {
+                if (row % 2 == 0) {
                     Element.addClassName(this.rows[row], 'even');
                 }
 
-                Event.observe(this.rows[row],'mouseover',this.trOnMouseOver);
-                Event.observe(this.rows[row],'mouseout',this.trOnMouseOut);
-                Event.observe(this.rows[row],'click',this.trOnClick);
-                Event.observe(this.rows[row],'dblclick',this.trOnDblClick);
+                Event.observe(this.rows[row], 'mouseover', this.trOnMouseOver);
+                Event.observe(this.rows[row], 'mouseout', this.trOnMouseOut);
+                Event.observe(this.rows[row], 'click', this.trOnClick);
+                Event.observe(this.rows[row], 'dblclick', this.trOnDblClick);
             }
         }
-        if(this.sortVar && this.dirVar){
-            var columns = $$('#'+this.containerId+this.tableSufix+' thead a');
+        if (this.sortVar && this.dirVar) {
+            var columns = $$('#' + this.containerId + this.tableSufix + ' thead a');
 
-            for(var col=0; col<columns.length; col++){
-                Event.observe(columns[col],'click',this.thLinkOnClick);
+            for (var col = 0; col < columns.length; col++) {
+                Event.observe(columns[col], 'click', this.thLinkOnClick);
             }
         }
         this.bindFilterFields();
         this.bindFieldsChange();
-        if(this.initCallback){
+        if (this.initCallback) {
             try {
                 this.initCallback(this);
             }
             catch (e) {
-                if(console) {
+                if (console) {
                     console.log(e);
                 }
             }
         }
     },
-    initGridAjax: function () {
+    initGridAjax:function () {
         this.initGrid();
         this.initGridRows();
     },
-    initGridRows: function() {
-        if(this.initRowCallback){
-            for (var row=0; row<this.rows.length; row++) {
+    initGridRows:function () {
+        if (this.initRowCallback) {
+            for (var row = 0; row < this.rows.length; row++) {
                 try {
                     this.initRowCallback(this, this.rows[row]);
                 } catch (e) {
-                    if(console) {
+                    if (console) {
                         console.log(e);
                     }
                 }
             }
         }
     },
-    getContainerId : function(){
+    getContainerId:function () {
         return this.containerId;
     },
-    rowMouseOver : function(event){
+    rowMouseOver:function (event) {
         var element = Event.findElement(event, 'tr');
 
         if (!element.title) return;
@@ -123,29 +123,30 @@ varienGrid.prototype = {
             }
         }
     },
-    rowMouseOut : function(event){
+    rowMouseOut:function (event) {
         var element = Event.findElement(event, 'tr');
         Element.removeClassName(element, 'on-mouse');
     },
-    rowMouseClick : function(event){
-        if(this.rowClickCallback){
-            try{
+    rowMouseClick:function (event) {
+        if (this.rowClickCallback) {
+            try {
                 this.rowClickCallback(this, event);
             }
-            catch(e){}
+            catch (e) {
+            }
         }
         varienGlobalEvents.fireEvent('gridRowClick', event);
     },
-    rowMouseDblClick : function(event){
+    rowMouseDblClick:function (event) {
         varienGlobalEvents.fireEvent('gridRowDblClick', event);
     },
-    keyPress : function(event){
+    keyPress:function (event) {
 
     },
-    doSort : function(event){
+    doSort:function (event) {
         var element = Event.findElement(event, 'a');
 
-        if(element.name && element.title){
+        if (element.name && element.title) {
             this.addVarToUrl(this.sortVar, element.name);
             this.addVarToUrl(this.dirVar, element.title);
             this.reload(this.url);
@@ -153,23 +154,19 @@ varienGrid.prototype = {
         Event.stop(event);
         return false;
     },
-    loadByElement : function(element){
-        if(element && element.name){
+    loadByElement:function (element) {
+        if (element && element.name) {
             this.reload(this.addVarToUrl(element.name, element.value));
         }
     },
-    reload : function(url){
-        if (!this.reloadParams) {
-            this.reloadParams = {form_key: FORM_KEY};
-        }
-        else {
-            this.reloadParams.form_key = FORM_KEY;
-        }
+    reload:function (url, onSuccessCallback) {
+        this.reloadParams = this.reloadParams || {};
+        this.reloadParams.form_key = FORM_KEY;
         url = url || this.url;
         if(this.useAjax){
             new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
                 loaderArea: this.containerId,
-                parameters: this.reloadParams || {},
+                parameters: this.reloadParams,
                 evalScripts: true,
                 onFailure: this._processFailure.bind(this),
                 onComplete: this.initGridAjax.bind(this),
@@ -199,6 +196,10 @@ varienGrid.prototype = {
                             } else {
                                 $$('div[id="'+this.containerId+'"]')[0].update(responseText);
                             }
+                        }
+                        if (onSuccessCallback && typeof(onSuccessCallback) === "function") {
+                            // execute the callback, passing parameters as necessary
+                            onSuccessCallback();
                         }
                     } catch (e) {
                         var divId = $(this.containerId);
@@ -237,20 +238,20 @@ varienGrid.prototype = {
         }
         this.initGrid();
     },*/
-    _processFailure : function(transport){
+    _processFailure:function (transport) {
         location.href = BASE_URL;
     },
-    _addVarToUrl : function(url, varName, varValue){
-        var re = new RegExp('\/('+varName+'\/.*?\/)');
+    _addVarToUrl:function (url, varName, varValue) {
+        var re = new RegExp('\/(' + varName + '\/.*?\/)');
         var parts = url.split(new RegExp('\\?'));
         url = parts[0].replace(re, '/');
-        url+= varName+'/'+varValue+'/';
-        if(parts.size()>1) {
-            url+= '?' + parts[1];
+        url += varName + '/' + varValue + '/';
+        if (parts.size() > 1) {
+            url += '?' + parts[1];
         }
         return url;
     },
-    addVarToUrl : function(varName, varValue){
+    addVarToUrl:function (varName, varValue) {
         this.url = this._addVarToUrl(this.url, varName, varValue);
         return this.url;
     },
@@ -279,51 +280,51 @@ varienGrid.prototype = {
             Event.observe(dataElements[i], 'change', dataElements[i].setHasChanges.bind(dataElements[i]));
         }
     },
-    filterKeyPress : function(event){
-        if(event.keyCode==Event.KEY_RETURN){
+    filterKeyPress:function (event) {
+        if (event.keyCode == Event.KEY_RETURN) {
             this.doFilter();
         }
     },
-    doFilter : function(){
-        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+    doFilter:function (callback) {
+        var filters = $$('#' + this.containerId + ' .filter input', '#' + this.containerId + ' .filter select');
         var elements = [];
-        for(var i in filters){
-            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+        for (var i in filters) {
+            if (filters[i].value && filters[i].value.length) elements.push(filters[i]);
         }
         if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
-            this.reload(this.addVarToUrl(this.filterVar, encode_base64(Form.serializeElements(elements))));
+            this.reload(this.addVarToUrl(this.filterVar, encode_base64(Form.serializeElements(elements))), callback);
         }
     },
-    resetFilter : function(){
-        this.reload(this.addVarToUrl(this.filterVar, ''));
+    resetFilter:function (callback) {
+        this.reload(this.addVarToUrl(this.filterVar, ''), callback);
     },
-    checkCheckboxes : function(element){
-        elements = Element.select($(this.containerId), 'input[name="'+element.name+'"]');
-        for(var i=0; i<elements.length;i++){
+    checkCheckboxes:function (element) {
+        elements = Element.select($(this.containerId), 'input[name="' + element.name + '"]');
+        for (var i = 0; i < elements.length; i++) {
             this.setCheckboxChecked(elements[i], element.checked);
         }
     },
-    setCheckboxChecked : function(element, checked){
+    setCheckboxChecked:function (element, checked) {
         element.checked = checked;
         element.setHasChanges({});
-        if(this.checkboxCheckCallback){
-            this.checkboxCheckCallback(this,element,checked);
+        if (this.checkboxCheckCallback) {
+            this.checkboxCheckCallback(this, element, checked);
         }
     },
-    inputPage : function(event, maxNum){
+    inputPage:function (event, maxNum) {
         var element = Event.element(event);
         var keyCode = event.keyCode || event.which;
-        if(keyCode==Event.KEY_RETURN){
+        if (keyCode == Event.KEY_RETURN) {
             this.setPage(element.value);
         }
         /*if(keyCode>47 && keyCode<58){
 
-        }
-        else{
-             Event.stop(event);
-        }*/
+         }
+         else{
+         Event.stop(event);
+         }*/
     },
-    setPage : function(pageNumber){
+    setPage:function (pageNumber) {
         this.reload(this.addVarToUrl(this.pageVar, pageNumber));
     }
 };
@@ -454,7 +455,6 @@ varienGridMassaction.prototype = {
         this.getOldCallback('init_row')(grid, row);
     },
     onGridRowClick: function(grid, evt) {
-
         var tdElement = Event.findElement(evt, 'td');
         var trElement = Event.findElement(evt, 'tr');
 
@@ -573,8 +573,7 @@ varienGridMassaction.prototype = {
         }.bind(this));
         return result;
     },
-    getCheckboxesValuesAsString: function()
-    {
+    getCheckboxesValuesAsString: function() {
         return this.getCheckboxesValues().join(',');
     },
     setCheckbox: function(checkbox) {

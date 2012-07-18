@@ -45,6 +45,11 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Catalog_Model_Product;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public static function tearDownAfterClass()
     {
         $config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');

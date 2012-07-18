@@ -470,12 +470,25 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
             $stores = array($stores);
         }
 
+        $this->_createTables($stores);
+        $this->_populateFlatTables($stores);
+
+        return $this;
+    }
+
+    /**
+     * Populate category flat tables with data
+     *
+     * @param array $stores
+     * @return Mage_Catalog_Model_Resource_Category_Flat
+     */
+    protected function _populateFlatTables($stores)
+    {
         $rootId = Mage_Catalog_Model_Category::TREE_ROOT_ID;
         $categories = array();
         $categoriesIds = array();
         /* @var $store Mage_Core_Model_Store */
         foreach ($stores as $store) {
-            $this->_createTable($store->getId());
 
             if (!isset($categories[$store->getRootCategoryId()])) {
                 $select = $this->_getWriteAdapter()->select()
@@ -528,20 +541,25 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
     }
 
     /**
-     * Create Flate Table(s)
+     * Create category flat table for specified store.
+     * Table is created only if DDL operations are allowed
      *
-     * @param array|int $stores
+     * @param int $store
      * @return Mage_Catalog_Model_Resource_Category_Flat
      */
-    public function createTable($stores)
+    public function createTable($store)
     {
-        return $this->_createTable($stores);
+        if ($this->_getWriteAdapter()->getTransactionLevel() > 0) {
+            return $this;
+        }
+        return $this->_createTable($store);
     }
 
     /**
-     * Creating table and adding attributes as fields to table
+     * Create table and add attributes as fields for specified store.
+     * This routine assumes that DDL operations are allowed
      *
-     * @param array|integer $store
+     * @param int $store
      * @return Mage_Catalog_Model_Resource_Category_Flat
      */
     protected function _createTable($store)
@@ -1409,13 +1427,21 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
     }
 
     /**
-     * Creating table and adding attributes as fields to table for all stores
+     * Create category flat tables and add attributes as fields.
+     * Tables are created only if DDL operations are allowed
      *
+     * @param array $stores if empty, create tables for all stores of the application
      * @return Mage_Catalog_Model_Resource_Category_Flat
      */
-    protected function _createTables()
+    protected function _createTables($stores = array())
     {
-        foreach (Mage::app()->getStores() as $store) {
+        if ($this->_getWriteAdapter()->getTransactionLevel() > 0) {
+            return $this;
+        }
+        if (empty($stores)) {
+            $stores = Mage::app()->getStores();
+        }
+        foreach ($stores as $store) {
             $this->_createTable($store->getId());
         }
         return $this;

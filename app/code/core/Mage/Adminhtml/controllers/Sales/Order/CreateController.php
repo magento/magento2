@@ -332,7 +332,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         $this->_initSession();
         $this->loadLayout();
 
-        $this->_setActiveMenu('sales/order')
+        $this->_setActiveMenu('Mage_Sales::sales_order')
             ->renderLayout();
     }
 

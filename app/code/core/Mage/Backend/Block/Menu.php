@@ -38,6 +38,17 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
 {
     const CACHE_TAGS = 'BACKEND_MAINMENU';
 
+
+    /**
+     * @var string
+     */
+    protected $_containerRendererBlock;
+
+    /**
+     * @var string
+     */
+    protected $_itemRendererBlock;
+
     /**
      * Backend URL instance
      *
@@ -46,13 +57,19 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     protected $_url;
 
     /**
+     * Current selected item
+     *
+     * @var Mage_Backend_Model_Menu_Item|null|bool
+     */
+    protected $_activeItemModel = null;
+
+    /**
      * Initialize template and cache settings
      *
      */
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('Mage_Backend::menu.phtml');
         $this->_url = Mage::getModel('Mage_Backend_Model_Url');
         $this->setCacheTags(array(self::CACHE_TAGS));
     }
@@ -89,161 +106,6 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     }
 
     /**
-     * Retrieve Adminhtml Menu array
-     *
-     * @return array
-     */
-    public function getMenuArray()
-    {
-        return $this->_buildMenuArray();
-    }
-
-    /**
-     * Retrieve Title value for menu node
-     *
-     * @param Varien_Simplexml_Element $child
-     * @return string
-     */
-    protected function _getHelperValue(Varien_Simplexml_Element $child)
-    {
-        $helperName         = 'Mage_Backend_Helper_Data';
-        $titleNodeName      = 'title';
-        $childAttributes    = $child->attributes();
-        if (isset($childAttributes['module'])) {
-            $helperName     = (string)$childAttributes['module'];
-        }
-//        if (isset($childAttributes['translate'])) {
-//            $titleNodeName  = (string)$childAttributes['translate'];
-//        }
-
-        return Mage::helper($helperName)->__((string)$child->$titleNodeName);
-    }
-
-    /**
-     * Recursive Build Menu array
-     *
-     * @param Varien_Simplexml_Element $parent
-     * @param string $path
-     * @param int $level
-     * @return array
-     */
-    protected function _buildMenuArray(Varien_Simplexml_Element $parent=null, $path='', $level=0)
-    {
-        if (is_null($parent)) {
-            $parent = Mage::getSingleton('Mage_Admin_Model_Config')->getAdminhtmlConfig()->getNode('menu');
-        }
-
-        $parentArr = array();
-        $sortOrder = 0;
-        foreach ($parent->children() as $childName => $child) {
-            if (1 == $child->disabled) {
-                continue;
-            }
-
-            $aclResource = 'admin/' . ($child->resource ? (string)$child->resource : $path . $childName);
-            if (!$this->_checkAcl($aclResource) || !$this->_isEnabledModuleOutput($child)) {
-                continue;
-            }
-
-            if ($child->depends && !$this->_checkDepends($child->depends)) {
-                continue;
-            }
-
-            $menuArr = array();
-
-            $menuArr['label'] = $this->_getHelperValue($child);
-
-            $menuArr['sort_order'] = $child->sort_order ? (int)$child->sort_order : $sortOrder;
-
-            if ($child->action) {
-                $menuArr['url'] = $this->_url->getUrl((string)$child->action, array('_cache_secret_key' => true));
-            } else {
-                $menuArr['url'] = '#';
-                $menuArr['click'] = 'return false';
-            }
-
-            $menuArr['active'] = ($this->getActive()==$path.$childName)
-                || (strpos($this->getActive(), $path.$childName.'/')===0);
-
-            $menuArr['level'] = $level;
-
-            if ($child->children) {
-                $menuArr['children'] = $this->_buildMenuArray($child->children, $path.$childName.'/', $level+1);
-            }
-            $parentArr[$childName] = $menuArr;
-
-            $sortOrder++;
-        }
-
-        uasort($parentArr, array($this, '_sortMenu'));
-
-        while (list($key, $value) = each($parentArr)) {
-            $last = $key;
-        }
-        if (isset($last)) {
-            $parentArr[$last]['last'] = true;
-        }
-
-        return $parentArr;
-    }
-
-    /**
-     * Sort menu comparison function
-     *
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function _sortMenu($a, $b)
-    {
-        return $a['sort_order']<$b['sort_order'] ? -1 : ($a['sort_order']>$b['sort_order'] ? 1 : 0);
-    }
-
-    /**
-     * Check Depends
-     *
-     * @param Varien_Simplexml_Element $depends
-     * @return bool
-     */
-    protected function _checkDepends(Varien_Simplexml_Element $depends)
-    {
-        if ($depends->module) {
-            $modulesConfig = Mage::getConfig()->getNode('modules');
-            foreach ($depends->module as $module) {
-                if (!$modulesConfig->$module || !$modulesConfig->$module->is('active')) {
-                    return false;
-                }
-            }
-        }
-
-        if ($depends->config) {
-            foreach ($depends->config as $path) {
-                if (!Mage::getStoreConfigFlag((string)$path)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check is Allow menu item for admin user
-     *
-     * @param string $resource
-     * @return bool
-     */
-    protected function _checkAcl($resource)
-    {
-        try {
-            $res =  Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($resource);
-        } catch (Exception $e) {
-            return false;
-        }
-        return $res;
-    }
-
-    /**
      * Processing block html after rendering
      *
      * @param   string $html
@@ -251,7 +113,11 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
      */
     protected function _afterToHtml($html)
     {
-        $html = preg_replace_callback('#'.Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME.'/\$([^\/].*)/([^\$].*)\$#U', array($this, '_callbackSecretKey'), $html);
+        $html = preg_replace_callback(
+            '#'.Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME.'/\$([^\/].*)/([^\$].*)\$#U',
+            array($this, '_callbackSecretKey'),
+            $html
+        );
 
         return $html;
     }
@@ -269,105 +135,82 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     }
 
     /**
-     * Render HTML menu recursively starting from the specified level
-     *
-     * @param array $menu
-     * @param int $level
-     * @return string
+     * Get menu config model
+     * @return Mage_Backend_Model_Menu
      */
-    protected function _renderMenuLevel(array $menu, $level = 0)
+    public function getMenuModel()
     {
-        $result = '<ul' . (!$level ? ' id="nav"' : '') . '>';
-        foreach ($menu as $item) {
-            $hasChildren = !empty($item['children']);
-            $cssClasses = array('level' . $level);
-            if (!$level && !empty($item['active'])) {
-                $cssClasses[] = 'active';
-            }
-            if ($hasChildren) {
-                $cssClasses[] = 'parent';
-            }
-            if (!empty($level) && !empty($item['last'])) {
-                $cssClasses[] = 'last';
-            }
-            $result .= '<li'
-                . ($hasChildren ? ' onmouseover="Element.addClassName(this,\'over\')"' : '')
-                . ($hasChildren ? ' onmouseout="Element.removeClassName(this,\'over\')"' : '')
-                . ' class="' . implode(' ', $cssClasses) . '">'
-                . '<a'
-                . ' href="' . $item['url'] . '"'
-                . (!empty($item['title']) ? ' title="' . $item['title'] . '"' : '')
-                . (!empty($item['click']) ? ' onclick="' . $item['click'] . '"' : '')
-                . ($level === 0 && !empty($item['active']) ? ' class="active"' : '')
-                . '>'
-                . '<span>' . Mage::helper('Mage_Backend_Helper_Data')->escapeHtml($item['label']) . '</span>'
-                . '</a>'
-            ;
-            if ($hasChildren) {
-                $result .= $this->_renderMenuLevel($item['children'], $level + 1);
-            }
-            $result .= '</li>';
-        }
-        $result .= '</ul>';
-        return $result;
+        return Mage::getSingleton('Mage_Backend_Model_Menu_Config')->getMenu();
     }
 
     /**
-     * Render HTML menu
-     *
-     * @return string
+     * Render menu container
+     * @param $menu
+     * @param $level
+     * @return string HTML
      */
-    public function renderMenu()
+    public function renderMenuContainer($menu, $level = 0)
     {
-        return $this->_renderMenuLevel($this->_buildMenuArray());
+        $block = $this->getChildBlock($this->getContainerRendererBlock());
+        $block->setMenu($menu);
+        $block->setLevel($level);
+        $block->setMenuBlock($this);
+        return $block->toHtml();
     }
 
     /**
-     * Get menu level HTML code
-     *
-     * @param array $menu
-     * @param int $level
+     * Set container renderer block name
+     * @param string $renderer
+     * @return Mage_Backend_Block_Menu
+     */
+    public function setContainerRendererBlock($renderer)
+    {
+        $this->_containerRendererBlock = $renderer;
+        return $this;
+    }
+
+    /**
+     * Get container renderer block name
      * @return string
      */
-    public function getMenuLevel($menu, $level = 0)
+    public function getContainerRendererBlock()
     {
-        $html = '<ul ' . (!$level ? 'id="nav"' : '') . '>' . PHP_EOL;
-        foreach ($menu as $item) {
-            $html .= '<li ' . (!empty($item['children']) ? 'onmouseover="Element.addClassName(this,\'over\')" '
-                . 'onmouseout="Element.removeClassName(this,\'over\')"' : '') . ' class="'
-                . (!$level && !empty($item['active']) ? ' active' : '') . ' '
-                . (!empty($item['children']) ? ' parent' : '')
-                . (!empty($level) && !empty($item['last']) ? ' last' : '')
-                . ' level' . $level . '"> <a href="' . $item['url'] . '" '
-                . (!empty($item['title']) ? 'title="' . $item['title'] . '"' : '') . ' '
-                . (!empty($item['click']) ? 'onclick="' . $item['click'] . '"' : '') . ' class="'
-                . ($level === 0 && !empty($item['active']) ? 'active' : '') . '"><span>'
-                . $this->escapeHtml($item['label']) . '</span></a>' . PHP_EOL;
+        return $this->_containerRendererBlock;
+    }
 
-            if (!empty($item['children'])) {
-                $html .= $this->getMenuLevel($item['children'], $level + 1);
+    /**
+     * Set item renderer block name
+     * @param string $renderer
+     * @return Mage_Backend_Block_Menu
+     */
+    public function setItemRendererBlock($renderer)
+    {
+        $this->_itemRendererBlock = $renderer;
+        return $this;
+    }
+
+    /**
+     * Get item renderer block name
+     * @return string
+     */
+    public function getItemRendererBlock()
+    {
+        return $this->_itemRendererBlock;
+    }
+
+    /**
+     * Get current selected menu item
+     *
+     * @return Mage_Backend_Model_Menu_Item|null|bool
+     */
+    public function getActiveItemModel()
+    {
+        if (is_null($this->_activeItemModel)) {
+            $this->_activeItemModel = $this->getMenuModel()->get($this->getActive());
+            if (false == ($this->_activeItemModel instanceof Mage_Backend_Model_Menu_Item)) {
+                $this->_activeItemModel = false;
             }
-            $html .= '</li>' . PHP_EOL;
         }
-        $html .= '</ul>' . PHP_EOL;
-
-        return $html;
-    }
-
-    /**
-     * Check is module output enabled
-     *
-     * @param Varien_Simplexml_Element $child
-     * @return bool
-     */
-    protected function _isEnabledModuleOutput(Varien_Simplexml_Element $child)
-    {
-        $helperName      = 'Mage_Backend_Helper_Data';
-        $childAttributes = $child->attributes();
-        if (isset($childAttributes['module'])) {
-            $helperName  = (string)$childAttributes['module'];
-        }
-
-        return Mage::helper($helperName)->isModuleOutputEnabled();
+        return $this->_activeItemModel;
     }
 }

@@ -49,6 +49,11 @@ class Mage_Core_Model_Layout_UpdateTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetElementClass()
     {
         $this->assertEquals('Mage_Core_Model_Layout_Element', $this->_model->getElementClass());

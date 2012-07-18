@@ -42,7 +42,7 @@ class Mage_User_Adminhtml_User_RoleController extends Mage_Backend_Controller_Ac
     protected function _initAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('system/acl');
+        $this->_setActiveMenu('Mage_User::system_acl_roles');
         $this->_addBreadcrumb($this->__('System'), $this->__('System'));
         $this->_addBreadcrumb($this->__('Permissions'), $this->__('Permissions'));
         $this->_addBreadcrumb($this->__('Roles'), $this->__('Roles'));

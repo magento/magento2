@@ -45,12 +45,14 @@ class Mage_Customer_Model_Resource_Address_Collection extends Mage_Eav_Model_Ent
     /**
      * Set customer filter
      *
-     * @param Mage_Customer_Model_Customer $customer
+     * @param Mage_Customer_Model_Customer|array $customer
      * @return Mage_Customer_Model_Resource_Address_Collection
      */
     public function setCustomerFilter($customer)
     {
-        if ($customer->getId()) {
+        if (is_array($customer)) {
+            $this->addAttributeToFilter('parent_id', array('in' => $customer));
+        } elseif ($customer->getId()) {
             $this->addAttributeToFilter('parent_id', $customer->getId());
         } else {
             $this->addAttributeToFilter('parent_id', '-1');

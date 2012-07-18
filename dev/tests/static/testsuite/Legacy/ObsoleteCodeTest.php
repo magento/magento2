@@ -143,6 +143,11 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
             'Backwards-incompatible change: method getUsedProductIds($product)'
             . ' must be invoked with one and only one argument - product model object'
         );
+
+        $this->_assertNotRegExp('#->_setActiveMenu\([\'"]([\w\d/_]+)[\'"]\)#Ui', $content,
+            'Backwards-incompatible change: method _setActiveMenu()'
+            . ' must be invoked with menu item identifier than xpath for menu item'
+        );
     }
 
     /**

@@ -53,7 +53,7 @@ class Mage_ImportExport_Adminhtml_ExportController extends Mage_Adminhtml_Contro
     {
         $this->_title($this->__('Import/Export'))
             ->loadLayout()
-            ->_setActiveMenu('system/importexport');
+            ->_setActiveMenu('Mage_ImportExport::system_convert_export');
 
         return $this;
     }
@@ -128,13 +128,15 @@ class Mage_ImportExport_Adminhtml_ExportController extends Mage_Adminhtml_Contro
                 $attrFilterBlock = $this->getLayout()->getBlock('export.filter');
                 /** @var $export Mage_ImportExport_Model_Export */
                 $export = Mage::getModel('Mage_ImportExport_Model_Export');
+                $export->setData($data);
 
                 $export->filterAttributeCollection(
                     $attrFilterBlock->prepareCollection(
-                        $export->setData($data)->getEntityAttributeCollection()
+                        $export->getEntityAttributeCollection()
                     )
                 );
-                return $this->renderLayout();
+                $this->renderLayout();
+                return;
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }

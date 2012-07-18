@@ -47,6 +47,10 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
         Mage::app()->getStore($this->_storeId)->setConfig('dev/translate_inline/active', true);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
 
     public function testIsAllowed()
     {

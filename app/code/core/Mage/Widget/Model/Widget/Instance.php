@@ -345,10 +345,10 @@ class Mage_Widget_Model_Widget_Instance extends Mage_Core_Model_Abstract
                 ->getXmlElementByType($this->getType());
             if ($this->_widgetConfigXml) {
                 $configFile = Mage::getDesign()->getFilename('widget.xml', array(
-                    '_area'    => $this->getArea(),
-                    '_package' => $this->getPackage(),
-                    '_theme'   => $this->getTheme(),
-                    '_module'  => Mage::getConfig()->determineOmittedNamespace(
+                    'area'    => $this->getArea(),
+                    'package' => $this->getPackage(),
+                    'theme'   => $this->getTheme(),
+                    'module'  => Mage::getConfig()->determineOmittedNamespace(
                         preg_replace('/^(.+?)\/.+$/', '\\1', $this->getType()), true
                     ),
                 ));
@@ -451,10 +451,10 @@ class Mage_Widget_Model_Widget_Instance extends Mage_Core_Model_Abstract
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
         $templateFilename = Mage::getSingleton('Mage_Core_Model_Design_Package')->getFilename($templatePath, array(
-            '_area'    => $this->getArea(),
-            '_package' => $this->getPackage(),
-            '_theme'   => $this->getTheme(),
-            '_module'  => Mage_Core_Block_Abstract::extractModuleName($this->getType()),
+            'area'    => $this->getArea(),
+            'package' => $this->getPackage(),
+            'theme'   => $this->getTheme(),
+            'module'  => Mage_Core_Block_Abstract::extractModuleName($this->getType()),
         ));
         if (!$this->getId() && !$this->isCompleteToCreate()
             || ($templatePath && !is_readable($templateFilename)))

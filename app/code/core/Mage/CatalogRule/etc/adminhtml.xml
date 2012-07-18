@@ -26,19 +26,6 @@
  */
 -->
 <config>
-    <menu>
-         <promo translate="title" module="Mage_CatalogRule">
-            <title>Promotions</title>
-            <sort_order>50</sort_order>
-            <children>
-                <catalog translate="title" module="Mage_CatalogRule">
-                    <title>Catalog Price Rules</title>
-                    <action>adminhtml/promo_catalog/</action>
-                    <depends><module>Mage_Catalog</module></depends>
-                </catalog>
-            </children>
-         </promo>
-     </menu>
      <acl>
         <resources>
             <admin>

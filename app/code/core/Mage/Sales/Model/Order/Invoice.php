@@ -738,9 +738,10 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
     /**
      * Send email with invoice data
      *
-     * @param boolean $notifyCustomer
+     * @param bool $notifyCustomer
      * @param string $comment
      * @return Mage_Sales_Model_Order_Invoice
+     * @throws Exception
      */
     public function sendEmail($notifyCustomer = true, $comment = '')
     {
@@ -764,10 +765,12 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
 
         try {
             // Retrieve specified view block from appropriate design package (depends on emulated store)
-            $paymentBlock = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($order->getPayment())
-                ->setIsSecureMode(true);
+            $paymentBlock = $this->getPaymentInfoBlock()
+                ?: Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($order->getPayment());
             $paymentBlock->getMethod()->setStore($storeId);
-            $paymentBlockHtml = $paymentBlock->toHtml();
+            $paymentBlockHtml = $paymentBlock->setArea(Mage_Core_Model_App_Area::AREA_FRONTEND)
+                ->setIsSecureMode(true)
+                ->toHtml();
         } catch (Exception $exception) {
             // Stop store emulation process
             $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
@@ -813,13 +816,12 @@ class Mage_Sales_Model_Order_Invoice extends Mage_Sales_Model_Abstract
         $mailer->setStoreId($storeId);
         $mailer->setTemplateId($templateId);
         $mailer->setTemplateParams(array(
-                'order'        => $order,
-                'invoice'      => $this,
-                'comment'      => $comment,
-                'billing'      => $order->getBillingAddress(),
-                'payment_html' => $paymentBlockHtml
-            )
-        );
+            'order'        => $order,
+            'invoice'      => $this,
+            'comment'      => $comment,
+            'billing'      => $order->getBillingAddress(),
+            'payment_html' => $paymentBlockHtml
+        ));
         $mailer->send();
         $this->setEmailSent(true);
         $this->_getResource()->saveAttribute($this, 'email_sent');

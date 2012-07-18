@@ -40,6 +40,11 @@ class Mage_DesignEditor_Block_Toolbar_HandlesHierarchyTest extends PHPUnit_Frame
         $this->_block->setLayout($layoutUtility->getLayoutFromFixture($pageTypesFixture));
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testRenderHierarchy()
     {
         $expected = __DIR__ . '/_files/_handles_hierarchy.html';

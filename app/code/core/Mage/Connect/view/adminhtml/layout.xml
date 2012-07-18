@@ -56,7 +56,7 @@
     </adminhtml_extension_custom_edit>
     
     <adminhtml_extension_custom_loadtab>
-        <container name="root" label="Root">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Load" name="connect_extension_load_local_package_grid"
                 template="extension/custom/load.phtml">
                 <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Grid" name="local_package_grid" />
@@ -65,9 +65,8 @@
     </adminhtml_extension_custom_loadtab>
     
     <adminhtml_extension_custom_grid>
-        <container name="root" label="Root">
+        <container name="root" label="Root" output="1">
             <block type="Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Grid" name="connect_extension_edit_local_package_grid" />
         </container>
     </adminhtml_extension_custom_grid>
 </layout>
-

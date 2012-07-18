@@ -199,7 +199,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         }
 
         $this->loadLayout();
-        $this->_setActiveMenu('catalog/categories');
+        $this->_setActiveMenu('Mage_Catalog::catalog_categories');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true)
             ->setContainerCssClass('catalog-categories');
 

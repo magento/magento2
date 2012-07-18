@@ -38,6 +38,11 @@ class Mage_Core_Model_WebsiteTest extends PHPUnit_Framework_TestCase
         $this->_model->load(1);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testLoad()
     {
         /* Test loading by id */

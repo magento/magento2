@@ -58,6 +58,13 @@ class Mage_Tag_Block_Product_ResultTest extends PHPUnit_Framework_TestCase
         $this->_layout->addBlock($this->_child, 'search_result_list', 'test');
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+        $this->_layout = null;
+        $this->_child = null;
+    }
+
     public function testSetListOrders()
     {
         $this->assertEmpty($this->_child->getData('available_orders'));

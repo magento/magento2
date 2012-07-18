@@ -65,6 +65,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     protected function tearDown()
     {
         Varien_Io_File::rmdirRecursive(self::$_skinPublicDir);
+        $this->_model = null;
     }
 
     /**
@@ -87,6 +88,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
      * @dataProvider mergeFilesDataProvider
      * @magentoConfigFixture current_store dev/css/merge_css_files 1
      * @magentoConfigFixture current_store dev/js/merge_files 1
+     * @magentoConfigFixture current_store dev/static/sign 0
      * @magentoAppIsolation enabled
      */
     public function testMergeFiles($contentType, $files, $expectedFilename, $related = array())
@@ -99,6 +101,42 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
         $this->assertArrayHasKey(0, $result);
         $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
         $this->assertEquals($expectedFilename, basename($result[0]));
+        foreach ($related as $file) {
+            $this->assertFileExists(
+                self::$_skinPublicDir . '/frontend/package/default/theme/en_US/' . $file
+            );
+        }
+    }
+
+    /**
+     * @param string $contentType
+     * @param array $files
+     * @param string $expectedFilename
+     * @param array $related
+     * @dataProvider mergeFilesDataProvider
+     * @magentoConfigFixture current_store dev/css/merge_css_files 1
+     * @magentoConfigFixture current_store dev/js/merge_files 1
+     * @magentoConfigFixture current_store dev/static/sign 1
+     * @magentoAppIsolation enabled
+     */
+    public function testMergeFilesSigned($contentType, $files, $expectedFilename, $related = array())
+    {
+        if ($contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS) {
+            $result = $this->_model->getOptimalCssUrls($files);
+        } else {
+            $result = $this->_model->getOptimalJsUrls($files);
+        }
+        $this->assertArrayHasKey(0, $result);
+        $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
+        $mergedFileName = basename($result[0]);
+        $mergedFileName = preg_replace('/\?.*$/i', '', $mergedFileName);
+        $this->assertEquals($expectedFilename, $mergedFileName);
+        $lastModified = array();
+        preg_match('/.*\?(.*)$/i', $result[0], $lastModified);
+        $this->assertArrayHasKey(1, $lastModified);
+        $this->assertEquals(10, strlen($lastModified[1]));
+        $this->assertLessThanOrEqual(time(), $lastModified[1]);
+        $this->assertGreaterThan(1970, date('Y', $lastModified[1]));
         foreach ($related as $file) {
             $this->assertFileExists(
                 self::$_skinPublicDir . '/frontend/package/default/theme/en_US/' . $file

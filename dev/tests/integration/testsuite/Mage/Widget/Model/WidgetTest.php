@@ -37,6 +37,11 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Widget_Model_Widget;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetWidgetsArray()
     {
         $declaredWidgets = $this->_model->getWidgetsArray();
@@ -53,17 +58,23 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $type
      * @param string $expectedFile
+     * @return string
+     *
      * @dataProvider getPlaceholderImageUrlDataProvider
      * @magentoAppIsolation enabled
      */
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
         Mage::getDesign()->setDesignTheme('default/default/default', 'adminhtml');
+        $expectedPubFile = Mage::getBaseDir('media') . "/skin/adminhtml/default/default/default/en_US/{$expectedFile}";
+        if (file_exists($expectedPubFile)) {
+            unlink($expectedPubFile);
+        }
+
         $url = $this->_model->getPlaceholderImageUrl($type);
         $this->assertStringEndsWith($expectedFile, $url);
-        $this->assertFileExists(
-            Mage::getBaseDir('media') . "/skin/adminhtml/default/default/default/en_US/{$expectedFile}"
-        );
+        $this->assertFileExists($expectedPubFile);
+        return $expectedPubFile;
     }
 
     /**
@@ -81,5 +92,23 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
                 'Mage_Widget/placeholder.gif'
             ),
         );
+    }
+
+    /**
+     * Tests, that skin file is found anywhere in skin folders, not only in module directory.
+     *
+     * @magentoAppIsolation enabled
+     */
+    public function testGetPlaceholderImageUrlAtSkin()
+    {
+        Mage::getConfig()->getOptions()->setDesignDir(dirname(__DIR__) . '/_files/design');
+        $actualFile = $this->testGetPlaceholderImageUrl(
+            'Mage_Catalog_Block_Product_Widget_New',
+            'Mage_Catalog/images/product_widget_new.gif'
+        );
+
+        $expectedFile = dirname(__DIR__)
+            . '/_files/design/adminhtml/default/default/skin/default/Mage_Catalog/images/product_widget_new.gif';
+        $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

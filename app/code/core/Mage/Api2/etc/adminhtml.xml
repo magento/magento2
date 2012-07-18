@@ -70,24 +70,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <system>
-            <children>
-                <api>
-                    <children>
-                        <rest_roles translate="title" module="Mage_Api2">
-                            <title>REST - Roles</title>
-                            <sort_order>30</sort_order>
-                            <action>adminhtml/api2_role</action>
-                        </rest_roles>
-                        <rest_attributes translate="title" module="Mage_Api2">
-                            <title>REST - Attributes</title>
-                            <sort_order>40</sort_order>
-                            <action>adminhtml/api2_attribute</action>
-                        </rest_attributes>
-                    </children>
-                </api>
-            </children>
-        </system>
-    </menu>
 </config>

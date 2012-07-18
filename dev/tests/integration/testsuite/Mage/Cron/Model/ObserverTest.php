@@ -38,6 +38,11 @@ class Mage_Cron_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_model->dispatch('this argument is not used');
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testDispatchScheduled()
     {
         $collection = new Mage_Cron_Model_Resource_Schedule_Collection;

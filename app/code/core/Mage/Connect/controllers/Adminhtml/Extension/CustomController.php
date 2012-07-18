@@ -58,7 +58,7 @@ class Mage_Connect_Adminhtml_Extension_CustomController extends Mage_Adminhtml_C
              ->_title($this->__('Edit Extension'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('system/extension/custom');
+        $this->_setActiveMenu('Mage_Connect::system_extensions_custom');
         $this->renderLayout();
     }
 

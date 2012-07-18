@@ -175,8 +175,7 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
             }
             ksort($elements, $this->_sortChildrenDirection);
             $elements = array_values($elements);
-        }
-        else {
+        } else {
             foreach ($this->getElements() as $element) {
                 $elements[] = $element;
             }

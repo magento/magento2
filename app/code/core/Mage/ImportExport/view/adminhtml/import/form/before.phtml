@@ -34,6 +34,131 @@
     varienForm.prototype.ifrElemName = 'import_post_target_frame';
 
     /**
+     * Handle value change in entity type selector
+     *
+     * @return void
+     */
+    varienForm.prototype.handleEntityTypeSelector = function()
+    {
+        if ($('entity') && $F('entity')) {
+            $('head-import_format_version_fieldset').hide();
+            $('import_format_version_fieldset').hide();
+            $('file_format_version').selectedIndex = 0;
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').disable();
+            $('customer_entity').selectedIndex = 0;
+            $('head-upload_file_fieldset').hide();
+            $('upload_file_fieldset').hide();
+            this.showAllBehaviours();
+
+            switch ($F('entity')) {
+                case 'customer':
+                    $('head-import_format_version_fieldset').show();
+                    $('import_format_version_fieldset').show();
+                    $('file_format_version').addClassName('required-entry');
+                    break;
+                case 'catalog_product':
+                    $('head-upload_file_fieldset').show();
+                    $('upload_file_fieldset').show();
+                    $('file_format_version').removeClassName('required-entry');
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $('head-import_format_version_fieldset').hide();
+            $('import_format_version_fieldset').hide();
+            $('file_format_version').selectedIndex = 0;
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').disable();
+            $('customer_entity').selectedIndex = 0;
+            $('head-upload_file_fieldset').hide();
+            $('upload_file_fieldset').hide();
+            this.showAllBehaviours();
+        }
+    };
+
+    /**
+     * Handle value change in import format version selector
+     *
+     * @return void
+     */
+    varienForm.prototype.handleImportFormatVersionSelector = function()
+    {
+        if ($('file_format_version') && $F('file_format_version')) {
+            var allowedBehaviours = [];
+            <?php
+                $importVersion = array(
+                    1 => Mage_ImportExport_Model_Source_Format_Version::VERSION_1,
+                    2 => Mage_ImportExport_Model_Source_Format_Version::VERSION_2,
+                );
+            ?>
+            switch ($F('file_format_version')) {
+                case '<?php echo $importVersion[1] ?>':
+                    $('head-customer_entity_fieldset').hide();
+                    $('customer_entity_fieldset').hide();
+                    $('customer_entity').disable();
+                    $('customer_entity').selectedIndex = 0;
+                    allowedBehaviours = <?php echo $this->getJsAllowedCustomerBehaviours($importVersion[1]) ?>;
+                    break;
+                case '<?php echo $importVersion[2] ?>':
+                    $('head-customer_entity_fieldset').show();
+                    $('customer_entity_fieldset').show();
+                    $('customer_entity').enable();
+                    allowedBehaviours = <?php echo $this->getJsAllowedCustomerBehaviours($importVersion[2]) ?>;
+                    break;
+                default:
+                    break;
+            }
+
+            // hide not allowed behaviours
+            if ($('behavior')) {
+                var behaviourLength = $('behavior').length;
+                var behaviourOptions = $('behavior').options;
+
+                for (var i = 0; i < behaviourLength; i++) {
+                    if (allowedBehaviours.include(behaviourOptions[i].value)) {
+                        behaviourOptions[i].show();
+                    } else if (behaviourOptions[i].value != '') {
+                        behaviourOptions[i].hide();
+                        if (behaviourOptions[i].selected) {
+                            $('behavior').selectedIndex = 0;
+                        }
+                    }
+                }
+            }
+
+            $('head-upload_file_fieldset').show();
+            $('upload_file_fieldset').show();
+        } else {
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').disable();
+            $('customer_entity').selectedIndex = 0;
+            $('head-upload_file_fieldset').hide();
+            $('upload_file_fieldset').hide();
+        }
+    };
+
+    /**
+     * Show all available behaviours
+     *
+     * @return void
+     */
+    varienForm.prototype.showAllBehaviours = function()
+    {
+        if ($('behavior')) {
+            var behaviourLength = $('behavior').length;
+            var behaviourOptions = $('behavior').options;
+            for (var i = 0; i < behaviourLength; i++) {
+                behaviourOptions[i].show();
+            }
+        }
+    };
+
+    /**
      * Post form data to dynamic iframe.
      *
      * @param string newActionUrl OPTIONAL Change form action to this if specified
@@ -45,7 +170,8 @@
             // create dynamic frame
             if (!$(this.ifrElemName)) {
                 $('html-body').insert({
-                    bottom:'<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName + '" style="display:none;"/>'
+                    bottom:'<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName
+                        + '" style="display:none;"/>'
                 });
             }
 
@@ -55,7 +181,7 @@
             var oldTarget   = formElem.target;
             var oldAction   = formElem.action;
 
-            Element.clonePosition(loadingMask, $$('#html-body .wrapper')[0], {offsetLeft:-2})
+            Element.clonePosition(loadingMask, $$('#html-body .wrapper')[0], {offsetLeft:-2});
             toggleSelectsUnderBlock(loadingMask, false);
             loadingMask.show();
             setLoaderPosition();

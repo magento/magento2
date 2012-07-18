@@ -114,6 +114,7 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             ($localXmlFile ? $localXmlFile : self::$_localXmlFile),
             self::$_globalEtcFiles,
             self::$_moduleEtcFiles,
+            '',
             self::$_tmpDir,
             $cleanupAction
         );

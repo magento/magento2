@@ -155,4 +155,12 @@ abstract class Mage_Install_Model_Installer_Db_Abstract
         }
         return $extensions;
     }
+
+    /**
+     * Clean database
+     *
+     * @param SimpleXMLElement $config
+     * @return Mage_Install_Model_Installer_Db_Abstract
+     */
+    abstract public function cleanUpDatabase(SimpleXMLElement $config);
 }

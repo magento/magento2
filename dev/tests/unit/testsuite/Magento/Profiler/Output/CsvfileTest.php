@@ -60,7 +60,8 @@ class Magento_Profiler_Output_CsvfileTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         do {
-            $this->_actualCsvFile = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . md5(time() + microtime(true));
+            $this->_actualCsvFile = Magento_Test_Environment::getInstance()->getTmpDir()
+                . DIRECTORY_SEPARATOR . md5(time() + microtime(true));
         } while (file_exists($this->_actualCsvFile));
     }
 

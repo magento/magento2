@@ -49,7 +49,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
              ->_title($this->__('Customer Shopping Carts'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/shopcart/customer')
+            ->_setActiveMenu('Mage_Reports::report_shopcart_customer')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Shopcart_Customer'))
             ->renderLayout();
@@ -86,7 +86,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
              ->_title($this->__('Products in Carts'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/shopcart/product')
+            ->_setActiveMenu('Mage_Reports::report_shopcart_product')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Products Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Products Report'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Shopcart_Product'))
             ->renderLayout();
@@ -123,7 +123,7 @@ class Mage_Adminhtml_Report_ShopcartController extends Mage_Adminhtml_Controller
              ->_title($this->__('Abandoned Carts'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/shopcart/abandoned')
+            ->_setActiveMenu('Mage_Reports::report_shopcart_abandoned')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Abandoned Carts'), Mage::helper('Mage_Reports_Helper_Data')->__('Abandoned Carts'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Shopcart_Abandoned'))
             ->renderLayout();

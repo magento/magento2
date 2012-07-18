@@ -39,16 +39,22 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Image extends Mage_Eav_Model
      * Save uploaded file and set its name to category
      *
      * @param Varien_Object $object
+     * @return Mage_Catalog_Model_Category_Attribute_Backend_Image
      */
     public function afterSave($object)
     {
         $value = $object->getData($this->getAttribute()->getName());
 
+        // if no image was set - nothing to do
+        if (empty($value) && empty($_FILES)) {
+            return $this;
+        }
+
         if (is_array($value) && !empty($value['delete'])) {
             $object->setData($this->getAttribute()->getName(), '');
             $this->getAttribute()->getEntity()
                 ->saveAttribute($object, $this->getAttribute()->getName());
-            return;
+            return $this;
         }
 
         $path = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'category' . DS;
@@ -66,7 +72,7 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Image extends Mage_Eav_Model
                 Mage::logException($e);
             }
             /** @TODO ??? */
-            return;
         }
+        return $this;
     }
 }

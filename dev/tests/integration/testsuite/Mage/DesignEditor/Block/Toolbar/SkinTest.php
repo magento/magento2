@@ -40,6 +40,11 @@ class Mage_DesignEditor_Block_Toolbar_SkinTest extends PHPUnit_Framework_TestCas
         $this->_block = new Mage_DesignEditor_Block_Toolbar_Skin();
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetOptions()
     {
         Mage::getConfig()->getOptions()->setDesignDir(__DIR__ . '/../../../Core/Model/Design/Source/_files/design');

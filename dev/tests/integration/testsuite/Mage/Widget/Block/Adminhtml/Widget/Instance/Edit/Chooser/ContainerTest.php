@@ -37,6 +37,11 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_ContainerTest ext
         $this->_block = new Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container;
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testSetGetAllowedContainers()
     {
         $this->assertEmpty($this->_block->getAllowedContainers());

@@ -42,7 +42,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/googleshopping/items')
+            ->_setActiveMenu('Mage_GoogleShopping::catalog_googleshopping_items')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'))
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'));
         return $this;

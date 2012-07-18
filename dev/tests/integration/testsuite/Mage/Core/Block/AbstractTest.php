@@ -46,6 +46,12 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+        $this->_layout = null;
+    }
+
     public function testGetRequest()
     {
         $this->assertInstanceOf('Mage_Core_Controller_Request_Http', $this->_block->getRequest());
@@ -463,12 +469,6 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $messages = new Mage_Core_Block_Messages;
         $this->_block->setMessagesBlock($messages);
         $this->assertSame($messages, $this->_block->getMessagesBlock());
-    }
-
-    public function testGetHelper()
-    {
-        $this->_block->setLayout(new Mage_Core_Model_Layout);
-        $this->assertInstanceOf('Mage_Core_Block_Text', $this->_block->getHelper('Mage_Core_Block_Text'));
     }
 
     public function testHelper()

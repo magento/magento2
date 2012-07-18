@@ -26,30 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <customer translate="title" module="Mage_Customer">
-            <title>Customers</title>
-            <sort_order>40</sort_order>
-            <!-- action>adminhtml/customer/</action -->
-            <children>
-                <manage translate="title" module="Mage_Customer">
-                    <title>Manage Customers</title>
-                    <action>adminhtml/customer/</action>
-                    <sort_order>0</sort_order>
-                </manage>
-                <group translate="title" module="Mage_Customer">
-                    <title>Customer Groups</title>
-                    <action>adminhtml/customer_group/</action>
-                    <sort_order>10</sort_order>
-                </group>
-                <online translate="title" module="Mage_Customer">
-                    <title>Online Customers</title>
-                    <action>adminhtml/customer_online/</action>
-                    <sort_order>100</sort_order>
-                </online>
-            </children>
-         </customer>
-    </menu>
     <acl>
         <resources>
             <admin>

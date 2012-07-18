@@ -49,6 +49,11 @@ class Mage_Core_Model_ConfigFactoryTest extends PHPUnit_Framework_TestCase
         $this->_model->init(self::$_options);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * @dataProvider classNameRewriteDataProvider
      */

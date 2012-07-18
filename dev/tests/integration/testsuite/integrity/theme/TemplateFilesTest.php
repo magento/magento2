@@ -39,10 +39,10 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
         foreach ($this->templatesDataProvider() as $template) {
             list($area, $package, $theme, $module, $file, $xml) = $template;
             $params = array(
-                '_area'     => $area,
-                '_package'  => $package,
-                '_theme'    => $theme,
-                '_module'   => $module
+                'area'     => $area,
+                'package'  => $package,
+                'theme'    => $theme,
+                'module'   => $module
             );
             try {
                 $templateFilename = Mage::getDesign()->getFilename($file, $params);

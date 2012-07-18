@@ -72,29 +72,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <system>
-            <children>
-                <api>
-                    <children>
-                        <oauth_consumer translate="title" module="Mage_Oauth">
-                            <title>REST - OAuth Consumers</title>
-                            <sort_order>50</sort_order>
-                            <action>adminhtml/oauth_consumer</action>
-                        </oauth_consumer>
-                        <oauth_authorized_tokens translate="title" module="Mage_Oauth">
-                            <title>REST - OAuth Authorized Tokens</title>
-                            <sort_order>60</sort_order>
-                            <action>adminhtml/oauth_authorizedTokens</action>
-                        </oauth_authorized_tokens>
-                        <oauth_admin_token translate="title" module="Mage_Oauth">
-                            <title>REST - My Apps</title>
-                            <sort_order>70</sort_order>
-                            <action>adminhtml/oauth_admin_token</action>
-                        </oauth_admin_token>
-                    </children>
-                </api>
-            </children>
-        </system>
-    </menu>
 </config>

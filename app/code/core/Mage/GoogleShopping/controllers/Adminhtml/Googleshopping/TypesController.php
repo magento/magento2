@@ -73,7 +73,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_TypesController extends Mage_
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/googleshopping/types')
+            ->_setActiveMenu('Mage_GoogleShopping::catalog_googleshopping_types')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'))
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'));
         return $this;

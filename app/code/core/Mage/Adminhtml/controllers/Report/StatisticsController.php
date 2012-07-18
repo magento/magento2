@@ -179,7 +179,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
         $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Refresh Statistics'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/statistics/refreshstatistics')
+            ->_setActiveMenu('Mage_Reports::report_statistics')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh Statistics'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh Statistics'))
             ->renderLayout();
     }

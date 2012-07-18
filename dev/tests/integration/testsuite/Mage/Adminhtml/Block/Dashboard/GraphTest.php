@@ -38,6 +38,11 @@ class Mage_Adminhtml_Block_Dashboard_GraphTest extends PHPUnit_Framework_TestCas
         $this->_block->setDataHelperName('Mage_Adminhtml_Helper_Dashboard_Order');
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetChartUrl()
     {
         $this->assertStringStartsWith('http://chart.apis.google.com/chart', $this->_block->getChartUrl());

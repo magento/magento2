@@ -34,8 +34,8 @@
         <input name="<?php echo Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId()?>]" type="text" class="input-text required-entry" id="captcha_<?php echo $this->getFormId() ?>" />
     </div>
 </li>
-<li>
-    <div class="captcha-image" id="captcha-image-box-<?php echo $this->getFormId()?>">
+<li id="captcha-image-box-<?php echo $this->getFormId()?>">
+    <div class="captcha-image">
         <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getSkinUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>" onclick="$('<?php echo $this->getFormId()?>').captcha.refresh(this)">
         <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
         <?php if ($captcha->isCaseSensitive()) :?>

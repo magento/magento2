@@ -59,26 +59,4 @@
             </admin>
         </resources>
     </acl>
-    <menu>
-        <system>
-            <children>
-                <api translate="title" module="Mage_Api">
-                    <title>Web Services</title>
-                    <sort_order>25</sort_order>
-                    <children>
-                        <users translate="title">
-                            <title>SOAP/XML-RPC - Users</title>
-                            <action>adminhtml/api_user</action>
-                            <sort_order>10</sort_order>
-                        </users>
-                        <roles translate="title">
-                            <title>SOAP/XML-RPC - Roles</title>
-                            <action>adminhtml/api_role</action>
-                            <sort_order>20</sort_order>
-                        </roles>
-                    </children>
-                </api>
-            </children>
-        </system>
-    </menu>
 </config>

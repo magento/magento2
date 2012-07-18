@@ -37,6 +37,11 @@ class Mage_Core_Model_DesignTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Design();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testLoadChange()
     {
         $this->_model->loadChange(1);

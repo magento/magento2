@@ -63,12 +63,14 @@
     </adminhtml_tag_pending>
 
     <adminhtml_tag_ajaxgrid>
+        <update handle="formkey"/>
         <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Tag_Grid" name="adminhtml.tag.tag.grid"/>
         </container>
     </adminhtml_tag_ajaxgrid>
 
     <adminhtml_tag_ajaxpendinggrid>
+        <update handle="formkey"/>
         <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Tag_Grid_Pending" name="adminhtml.tag.grid.pending"/>
         </container>

@@ -32,6 +32,7 @@
             <codePool>core</codePool>
             <depends>
                 <Mage_Customer />
+                <Mage_Checkout />
                 <Mage_Adminhtml />
             </depends>
         </Mage_Captcha>

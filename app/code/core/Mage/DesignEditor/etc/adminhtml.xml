@@ -26,21 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <system>
-            <children>
-                <design>
-                    <children>
-                        <editor translate="title" module="Mage_DesignEditor">
-                            <title>Editor</title>
-                            <action>adminhtml/system_design_editor</action>
-                            <sort_order>20</sort_order>
-                        </editor>
-                    </children>
-                </design>
-            </children>
-        </system>
-    </menu>
     <acl>
         <resources>
             <admin>

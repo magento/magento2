@@ -119,8 +119,9 @@ class Magento_Config_ThemeTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('default', 'default', null),
-            array('default', 'test',    'default'),
-            array('default', 'test2',   'test'),
+            array('default', 'test', array('default', 'default')),
+            array('default', 'test2', array('default', 'test')),
+            array('test', 'external_package_descendant', array('default', 'test2')),
         );
     }
 

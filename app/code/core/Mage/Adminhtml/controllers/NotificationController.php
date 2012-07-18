@@ -39,7 +39,7 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
         $this->_title($this->__('System'))->_title($this->__('Notifications'));
 
         $this->loadLayout()
-            ->_setActiveMenu('system/notification')
+            ->_setActiveMenu('Mage_AdminNotification::system_adminnotification')
             ->_addBreadcrumb(Mage::helper('Mage_AdminNotification_Helper_Data')->__('Messages Inbox'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Messages Inbox'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Notification_Inbox'))
             ->renderLayout();

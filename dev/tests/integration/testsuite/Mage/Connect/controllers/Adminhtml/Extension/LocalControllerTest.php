@@ -34,6 +34,6 @@ class Mage_Connect_Adminhtml_Extension_LocalControllerTest extends Mage_Adminhtm
     {
         $expected = '?return=' . urlencode(Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl());
         $this->dispatch('admin/extension_local/index');
-        $this->assertRedirect($expected, self::MODE_END_WITH);
+        $this->assertRedirect($this->stringEndsWith($expected));
     }
 }

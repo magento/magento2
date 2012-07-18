@@ -27,7 +27,6 @@
 
 /**
  * Test class for Mage_Backend_Controller_ActionAbstract.
- *
  */
 class Mage_Backend_Controller_ActionAbstractTest extends Mage_Adminhtml_Utility_Controller
 {
@@ -40,14 +39,14 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Adminhtml_Utility_
     {
         $expected = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/dashboard');
         $this->dispatch('/admin');
-        $this->assertRedirect($expected, self::MODE_START_WITH);
+        $this->assertRedirect($this->stringStartsWith($expected));
     }
 
     /**
      * Check login redirection
      *
      * @covers Mage_Backend_Controller_ActionAbstract::_initAuthentication
-     * @magentoDataFixture emptyDataFixture
+     * @magentoDbIsolation enabled
      */
     public function testInitAuthentication()
     {
@@ -66,16 +65,6 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Adminhtml_Utility_
         $this->dispatch($url);
 
         $expected = 'admin/system_account/index';
-        $this->assertRedirect($expected, self::MODE_CONTAINS);
-    }
-
-    /**
-     * Empty data fixture to provide support of transaction
-     * @static
-     *
-     */
-    public static function emptyDataFixture()
-    {
-
+        $this->assertRedirect($this->stringContains($expected));
     }
 }

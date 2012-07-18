@@ -262,42 +262,28 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
      * Initialize creation data from existing order
      *
      * @param Mage_Sales_Model_Order $order
-     * @return unknown
+     * @return Mage_Adminhtml_Model_Sales_Order_Create
      */
     public function initFromOrder(Mage_Sales_Model_Order $order)
     {
-        if (!$order->getReordered()) {
-            $this->getSession()->setOrderId($order->getId());
-        } else {
-            $this->getSession()->setReordered($order->getId());
-        }
+        $session = $this->getSession();
+        $session->setData($order->getReordered() ? 'reordered' : 'order_id', $order->getId());
+        $session->setCurrencyId($order->getOrderCurrencyCode());
+        /* Check if we edit guest order */
+        $session->setCustomerId($order->getCustomerId() ?: false);
+        $session->setStoreId($order->getStoreId());
 
-        /**
-         * Check if we edit quest order
-         */
-        $this->getSession()->setCurrencyId($order->getOrderCurrencyCode());
-        if ($order->getCustomerId()) {
-            $this->getSession()->setCustomerId($order->getCustomerId());
-        } else {
-            $this->getSession()->setCustomerId(false);
-        }
-
-        $this->getSession()->setStoreId($order->getStoreId());
-
-        /**
-         * Initialize catalog rule data with new session values
-         */
+        /* Initialize catalog rule data with new session values */
         $this->initRuleData();
         foreach ($order->getItemsCollection(
             array_keys(Mage::getConfig()->getNode('adminhtml/sales/order/create/available_product_types')->asArray()),
             true
-            ) as $orderItem) {
+        ) as $orderItem) {
             /* @var $orderItem Mage_Sales_Model_Order_Item */
             if (!$orderItem->getParentItem()) {
-                if ($order->getReordered()) {
-                    $qty = $orderItem->getQtyOrdered();
-                } else {
-                    $qty = $orderItem->getQtyOrdered() - $orderItem->getQtyShipped() - $orderItem->getQtyInvoiced();
+                $qty = $orderItem->getQtyOrdered();
+                if (!$order->getReordered()) {
+                    $qty -= $orderItem->getQtyShipped() + $orderItem->getQtyInvoiced();
                 }
 
                 if ($qty > 0) {
@@ -309,52 +295,44 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
             }
         }
 
-        $addressDiff = array_diff_assoc(
-            $order->getShippingAddress()->getData(),
-            $order->getBillingAddress()->getData()
-        );
-        unset($addressDiff['address_type'], $addressDiff['entity_id']);
-        $order->getShippingAddress()->setSameAsBilling(empty($addressDiff));
+        $shippingAddress = $order->getShippingAddress();
+        if ($shippingAddress) {
+            $addressDiff = array_diff_assoc($shippingAddress->getData(), $order->getBillingAddress()->getData());
+            unset($addressDiff['address_type'], $addressDiff['entity_id']);
+            $shippingAddress->setSameAsBilling(empty($addressDiff));
+        }
 
         $this->_initBillingAddressFromOrder($order);
         $this->_initShippingAddressFromOrder($order);
 
-        if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+        $quote = $this->getQuote();
+        if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
             $this->setShippingAsBilling(1);
         }
 
         $this->setShippingMethod($order->getShippingMethod());
-        $this->getQuote()->getShippingAddress()->setShippingDescription($order->getShippingDescription());
+        $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
-        $this->getQuote()->getPayment()->addData($order->getPayment()->getData());
-
+        $quote->getPayment()->addData($order->getPayment()->getData());
 
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {
-            $this->getQuote()->setCouponCode($orderCouponCode);
+            $quote->setCouponCode($orderCouponCode);
         }
 
-        if ($this->getQuote()->getCouponCode()) {
-            $this->getQuote()->collectTotals();
+        if ($quote->getCouponCode()) {
+            $quote->collectTotals();
         }
 
-        Mage::helper('Mage_Core_Helper_Data')->copyFieldset(
-            'sales_copy_order',
-            'to_edit',
-            $order,
-            $this->getQuote()
-        );
+        Mage::helper('Mage_Core_Helper_Data')->copyFieldset('sales_copy_order', 'to_edit', $order, $quote);
 
-        Mage::dispatchEvent('sales_convert_order_to_quote', array(
-            'order' => $order,
-            'quote' => $this->getQuote()
-        ));
+        Mage::dispatchEvent('sales_convert_order_to_quote', array('order' => $order, 'quote' => $quote));
 
         if (!$order->getCustomerId()) {
-            $this->getQuote()->setCustomerIsGuest(true);
+            $quote->setCustomerIsGuest(true);
         }
 
-        if ($this->getSession()->getUseOldShippingMethod(true)) {
+        if ($session->getUseOldShippingMethod(true)) {
             /*
              * if we are making reorder or editing old order
              * we need to show old shipping as preselected
@@ -369,11 +347,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
             $this->collectRates();
         }
 
-        // Make collect rates when user click "Get shipping methods and rates" in order creating
-        // $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
-        // $this->getQuote()->getShippingAddress()->collectShippingRates();
-
-        $this->getQuote()->save();
+        $quote->save();
 
         return $this;
     }
@@ -391,14 +365,15 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
 
     protected function _initShippingAddressFromOrder(Mage_Sales_Model_Order $order)
     {
-        $this->getQuote()->getShippingAddress()
+        $orderShippingAddress = $order->getShippingAddress();
+        $quoteShippingAddress = $this->getQuote()->getShippingAddress()
             ->setCustomerAddressId('')
-            ->setSameAsBilling($order->getShippingAddress()->getSameAsBilling());
+            ->setSameAsBilling($orderShippingAddress && $orderShippingAddress->getSameAsBilling());
         Mage::helper('Mage_Core_Helper_Data')->copyFieldset(
             'sales_copy_order_shipping_address',
             'to_order',
-            $order->getShippingAddress(),
-            $this->getQuote()->getShippingAddress()
+            $orderShippingAddress,
+            $quoteShippingAddress
         );
     }
 

@@ -350,12 +350,16 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit extends Mage_Adminhtml_Blo
         $result = $urlParams = $prefixParts = array();
         $scopeLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('GLOBAL');
         if ($paths) {
+            /** @var $menu Mage_Backend_Model_Menu */
+            $menu = Mage::getSingleton('Mage_Backend_Model_Menu_Config')->getMenu();
+            $item = $menu->get('Mage_Adminhtml::system');
             // create prefix path parts
             $prefixParts[] = array(
-                'title' => Mage::getSingleton('Mage_Admin_Model_Config')->getMenuItemLabel('system'),
+                'title' => $item->getModuleHelper()->__($item->getTitle()),
             );
+            $item = $menu->get('Mage_Adminhtml::system_config');
             $prefixParts[] = array(
-                'title' => Mage::getSingleton('Mage_Admin_Model_Config')->getMenuItemLabel('system/config'),
+                'title' => $item->getModuleHelper()->__($item->getTitle()),
                 'url' => $this->getUrl('adminhtml/system_config/'),
             );
 

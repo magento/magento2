@@ -70,7 +70,7 @@ class Mage_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Ord
         $this->loadLayout();
 
         $this->_initSession()
-            ->_setActiveMenu('sales/order')
+            ->_setActiveMenu('Mage_Sales::sales_order')
             ->renderLayout();
     }
 

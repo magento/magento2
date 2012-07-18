@@ -52,7 +52,9 @@ class Mage_Directory_Model_Observer
         }
 
         try {
-            $importModel = Mage::getModel(Mage::getConfig()->getNode('global/currency/import/services/' . $service . '/model')->asArray());
+            $importModel = Mage::getModel(
+                Mage::getConfig()->getNode('global/currency/import/services/' . $service . '/model')->asArray()
+            );
         } catch (Exception $e) {
             $importWarnings[] = Mage::helper('Mage_Directory_Helper_Data')->__('FATAL ERROR:') . ' ' . Mage::throwException(Mage::helper('Mage_Directory_Helper_Data')->__('Unable to initialize the import model.'));
         }
@@ -76,7 +78,10 @@ class Mage_Directory_Model_Observer
 
             /* @var $mailTemplate Mage_Core_Model_Email_Template */
             $mailTemplate = Mage::getModel('Mage_Core_Model_Email_Template');
-            $mailTemplate->setDesignConfig(array('area' => 'frontend', 'store' => Mage::app()->getStore()->getId()))
+            $mailTemplate->setDesignConfig(array(
+                'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
+                'store' => Mage::app()->getStore()->getId()
+            ))
                 ->sendTransactional(
                     Mage::getStoreConfig(self::XML_PATH_ERROR_TEMPLATE),
                     Mage::getStoreConfig(self::XML_PATH_ERROR_IDENTITY),

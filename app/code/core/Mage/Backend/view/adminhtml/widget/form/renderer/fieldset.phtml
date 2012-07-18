@@ -24,18 +24,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $_element Varien_Data_Form_Element_Fieldset */ ?>
 <?php $_element = $this->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-<div id="<?php echo $_element->getFieldsetContainerId(); ?>">
+<div id="<?php echo $_element->getFieldsetContainerId(); ?>"<?php echo $_element->serialize(array('style')) ?>>
 <?php endif; ?>
 <?php if ($_element->getLegend()): ?>
-<div class="entry-edit-head">
+<div class="entry-edit-head"<?php echo $_element->serialize(array('style')) ?>
+     id="head-<?php echo $_element->getHtmlId() ?>">
     <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $_element->getLegend() ?></h4>
     <div class="form-buttons"><?php echo $_element->getHeaderBar() ?></div>
 </div>
 <?php endif; ?>
 <?php if (!$_element->getNoContainer()): ?>
-    <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>"
+        <?php echo $_element->serialize(array('style')) ?>>
 <?php endif; ?>
     <div class="hor-scroll">
         <?php if ($_element->getComment()): ?>

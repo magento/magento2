@@ -38,6 +38,11 @@ class Mage_XmlConnect_Helper_DataTest extends PHPUnit_Framework_TestCase
         Mage::getDesign()->setDesignTheme('default/default/default', 'adminhtml');
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * @dataProvider getDefaultDesignTabsDataProvider
      */

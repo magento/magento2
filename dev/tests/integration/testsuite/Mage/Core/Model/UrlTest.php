@@ -37,6 +37,11 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Url;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testParseUrl()
     {
         $url = 'http://user:password@www.example.com:80/manual/3.5/?one=1&two=2#skeleton-generator.test';

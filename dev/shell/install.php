@@ -72,6 +72,10 @@ if (isset($args['show_locales'])) {
 } else if (isset($args['show_install_options'])) {
     var_export($installer->getAvailableInstallOptions());
 } else {
+    if (isset($args['config']) && file_exists($args['config'])) {
+        $config = (array) include($args['config']);
+        $args = array_merge((array)$config['install_options'], $args);
+    }
     $isUninstallMode = isset($args['uninstall']);
     if ($isUninstallMode) {
         $result = $installer->uninstall();

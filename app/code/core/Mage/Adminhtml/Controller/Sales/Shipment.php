@@ -48,7 +48,7 @@ class Mage_Adminhtml_Controller_Sales_Shipment extends Mage_Adminhtml_Controller
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('sales/order')
+            ->_setActiveMenu('Mage_Sales::sales_order')
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
             ->_addBreadcrumb($this->__('Shipments'),$this->__('Shipments'));
         return $this;

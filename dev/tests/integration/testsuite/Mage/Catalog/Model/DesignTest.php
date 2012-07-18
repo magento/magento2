@@ -40,6 +40,11 @@ class Mage_Catalog_Model_DesignTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Catalog_Model_Design();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testApplyCustomDesign()
     {
         $this->_model->applyCustomDesign('package/theme/skin');

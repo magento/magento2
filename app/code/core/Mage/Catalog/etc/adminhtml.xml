@@ -26,47 +26,6 @@
  */
 -->
 <config>
-    <menu>
-        <catalog translate="title" module="Mage_Catalog">
-            <title>Catalog</title>
-            <sort_order>30</sort_order>
-            <!--action>adminhtml/catalog</action-->
-            <depends>
-                <module>Mage_Catalog</module>
-            </depends>
-            <children>
-                <products translate="title" module="Mage_Catalog">
-                    <title>Manage Products</title>
-                    <action>adminhtml/catalog_product/</action>
-                    <sort_order>0</sort_order>
-                </products>
-                <categories translate="title" module="Mage_Catalog">
-                    <title>Manage Categories</title>
-                    <action>adminhtml/catalog_category/</action>
-                    <sort_order>10</sort_order>
-                </categories>
-                <attributes translate="title" module="Mage_Catalog">
-                    <title>Attributes</title>
-                    <children>
-                        <attributes translate="title" module="Mage_Catalog">
-                            <title>Manage Attributes</title>
-                            <action>adminhtml/catalog_product_attribute/</action>
-                        </attributes>
-                        <sets translate="title" module="Mage_Catalog">
-                            <title>Manage Attribute Sets</title>
-                            <action>adminhtml/catalog_product_set/</action>
-                        </sets>
-                    </children>
-                    <sort_order>20</sort_order>
-                </attributes>
-                <urlrewrite translate="title" module="Mage_Catalog">
-                    <title>URL Rewrite Management</title>
-                    <action>adminhtml/urlrewrite/index</action>
-                    <sort_order>30</sort_order>
-                </urlrewrite>
-            </children>
-        </catalog>
-    </menu>
     <acl>
         <resources>
             <admin>

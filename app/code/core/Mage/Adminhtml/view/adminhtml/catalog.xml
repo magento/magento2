@@ -32,7 +32,7 @@
             <action method="setTitle" translate="title"><title>Catalog</title></action>
         </referense>
         <reference name="menu">
-            <action method="setActive"><menupath>catalog/products</menupath></action>
+            <action method="setActive"><itemId>Mage_Catalog::catalog_products</itemId></action>
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product" name="products_list">
@@ -103,6 +103,7 @@
     </adminhtml_catalog_product_options>
 
     <adminhtml_catalog_product_grid>
+        <update handle="formkey"/>
         <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Grid" name="admin.product.grid"/>
         </container>

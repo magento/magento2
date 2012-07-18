@@ -43,6 +43,12 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
         $this->_block = $this->_layout->createBlock('Mage_CatalogSearch_Block_Advanced_Result', 'block');
     }
 
+    protected function tearDown()
+    {
+        $this->_layout = null;
+        $this->_block = null;
+    }
+
     /**
      * @magentoAppIsolation enabled
      */

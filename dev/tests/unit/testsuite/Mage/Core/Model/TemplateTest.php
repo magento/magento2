@@ -40,7 +40,7 @@ class Mage_Core_Model_TemplateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_model = $this->getMockForAbstractClass('Mage_Core_Model_Template', array(array(
-            'area' => 'frontend',
+            'area' => Mage_Core_Model_App_Area::AREA_FRONTEND,
             'store' => 1
         )));
     }
