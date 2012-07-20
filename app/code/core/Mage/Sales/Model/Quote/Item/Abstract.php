@@ -53,6 +53,13 @@ abstract class Mage_Sales_Model_Quote_Item_Abstract extends Mage_Core_Model_Abst
     abstract function getQuote();
 
     /**
+     * Retrieve address model
+     *
+     * @return Mage_Sales_Model_Quote_Address
+     */
+    abstract function getAddress();
+
+    /**
      * Retrieve product model object associated with item
      *
      * @return Mage_Catalog_Model_Product

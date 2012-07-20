@@ -28,7 +28,12 @@
 <config>
     <modules>
         <Mage_Bundle>
-            <version>1.6.0.0.1</version>
+            <version>1.6.0.0.2</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog />
+            </depends>
         </Mage_Bundle>
     </modules>
     <global>

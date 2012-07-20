@@ -29,6 +29,12 @@
     <modules>
         <Mage_DesignEditor>
             <version>1.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Adminhtml/>
+                <Mage_Page/>
+            </depends>
         </Mage_DesignEditor>
     </modules>
     <frontend>

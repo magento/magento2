@@ -1285,6 +1285,8 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         }
         Mage::dispatchEvent($this->_eventPrefix . '_collect_totals_before', array($this->_eventObject => $this));
 
+        $this->_collectItemsQtys();
+
         $this->setSubtotal(0);
         $this->setBaseSubtotal(0);
 
@@ -1320,6 +1322,22 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         Mage::helper('Mage_Sales_Helper_Data')->checkQuoteAmount($this, $this->getGrandTotal());
         Mage::helper('Mage_Sales_Helper_Data')->checkQuoteAmount($this, $this->getBaseGrandTotal());
 
+        $this->setData('trigger_recollect', 0);
+        $this->_validateCouponCode();
+
+        Mage::dispatchEvent($this->_eventPrefix . '_collect_totals_after', array($this->_eventObject => $this));
+
+        $this->setTotalsCollectedFlag(true);
+        return $this;
+    }
+
+    /**
+    * Collect items qtys
+    *
+    * @return Mage_Sales_Model_Quote
+    */
+    protected function _collectItemsQtys()
+    {
         $this->setItemsCount(0);
         $this->setItemsQty(0);
         $this->setVirtualItemsQty(0);
@@ -1345,12 +1363,6 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
             $this->setItemsQty((float) $this->getItemsQty()+$item->getQty());
         }
 
-        $this->setData('trigger_recollect', 0);
-        $this->_validateCouponCode();
-
-        Mage::dispatchEvent($this->_eventPrefix . '_collect_totals_after', array($this->_eventObject => $this));
-
-        $this->setTotalsCollectedFlag(true);
         return $this;
     }
 

@@ -29,6 +29,14 @@
     <modules>
         <Mage_PaypalUk>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Paygate/>
+                <Mage_Checkout/>
+                <Mage_Sales/>
+                <Mage_Paypal/>
+            </depends>
         </Mage_PaypalUk>
     </modules>
     <global>

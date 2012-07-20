@@ -42,18 +42,6 @@ class Mage_Eav_Model_Resource_Entity_Attribute_CollectionTest extends PHPUnit_Fr
         $this->_model = null;
     }
 
-    public function testSetAttributeSetExcludeFilter()
-    {
-        $collection = new Mage_Eav_Model_Resource_Entity_Attribute_Collection();
-        $setsPresent = $this->_getSets($collection);
-        $excludeSetId = current($setsPresent);
-
-        $this->_model->setAttributeSetExcludeFilter($excludeSetId);
-        $sets = $this->_getSets($this->_model);
-
-        $this->assertNotContains($excludeSetId, $sets);
-    }
-
     /**
      * Returns array of set ids, present in collection attributes
      *

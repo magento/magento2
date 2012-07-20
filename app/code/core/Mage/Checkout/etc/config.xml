@@ -29,6 +29,12 @@
     <modules>
         <Mage_Checkout>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Sales/>
+                <Mage_CatalogInventory/>
+            </depends>
         </Mage_Checkout>
     </modules>
     <global>

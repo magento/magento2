@@ -391,7 +391,7 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
      */
     public function getUrl($route='', $params=array())
     {
-        return Mage::helper('Mage_Backend_Helper_Data')->getUrl($route, $params);
+        return Mage_Backend_Helper_Data::getUrl($route, $params);
     }
 
     /**

@@ -189,7 +189,7 @@ class Mage_Adminhtml_Cms_Wysiwyg_ImagesController extends Mage_Adminhtml_Control
             $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
             $image = Varien_Image_Adapter::factory($adapter);
             $image->open($thumb);
-            $image->display();
+            $this->getResponse()->setHeader('Content-Type', $image->getMimeType())->setBody($image->getImage());
         } else {
             // todo: genearte some placeholder
         }

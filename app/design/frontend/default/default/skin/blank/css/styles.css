@@ -1073,7 +1073,7 @@ tr.summary-details-excluded { font-style:italic; }
 .captcha-image { float:left; position:relative; }
 .captcha-img { border:1px solid #ccc; }
 .registered-users .captcha-image    {}
-#checkout-step-login .captcha-image {}
+#checkout-step-login .captcha-image { overflow:hidden; }
 .captcha-reload { position:absolute; top:2px; right:2px;}
 .captcha-reload.refreshing  { animation:rotate 1.5s infinite linear; -webkit-animation:rotate 1.5s infinite linear; -moz-animation:rotate 1.5s infinite linear; }
 

@@ -29,6 +29,13 @@
     <modules>
         <Mage_Authorizenet>
             <version>1.5.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Paygate/>
+                <Mage_Sales/>
+                <Mage_Checkout/>
+            </depends>
         </Mage_Authorizenet>
     </modules>
     <adminhtml>

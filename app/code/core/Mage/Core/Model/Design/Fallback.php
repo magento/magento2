@@ -178,7 +178,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         // add modules to lookup
         $dirs = $themeDirs;
         if ($module) {
-            array_walk($themeDirs, function(&$dir) use ($module) {
+            array_walk($themeDirs, function (&$dir) use ($module) {
                 $dir = "{$dir}/{$module}";
             });
             $dirs = array_merge($themeDirs, $moduleDirs);

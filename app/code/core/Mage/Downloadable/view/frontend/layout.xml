@@ -56,11 +56,6 @@
         <update handle="catalog_product_view_type_downloadable"/>
     </checkout_cart_configure_type_downloadable>
 
-    <checkout_cart_configurefailed_type_downloadable translate="label" module="Mage_Downloadable" type="page" parent="checkout_cart_configure">
-        <label>Configure Cart Item</label>
-        <update handle="catalog_product_view_type_downloadable"/>
-    </checkout_cart_configurefailed_type_downloadable>
-
     <checkout_onepage_review>
         <reference name="order_review">
             <action method="addItemRender"><type>downloadable</type><block>Mage_Downloadable_Block_Checkout_Cart_Item_Renderer</block><template>checkout/onepage/review/item.phtml</template></action>

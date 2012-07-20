@@ -42,9 +42,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer
         $adminSession->unsetAll();
         $adminSession->getCookie()->delete($adminSession->getSessionName());
 
-        $route = ((bool)(string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_USE_CUSTOM_ADMIN_PATH))
-            ? Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_CUSTOM_ADMIN_PATH)
-            : Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
+        $route = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
 
         Mage::app()->getResponse()
             ->setRedirect(Mage::getBaseUrl() . $route)

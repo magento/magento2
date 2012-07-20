@@ -138,6 +138,8 @@ class Mage_Backend_Helper_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetHomePageUrl()
     {
-        $this->assertStringEndsWith('index.php/admin/', $this->_helper->getHomePageUrl(), 'Incorrect home page URL');
+        $this->assertStringEndsWith(
+            'index.php/backend/admin/', $this->_helper->getHomePageUrl(), 'Incorrect home page URL'
+        );
     }
 }

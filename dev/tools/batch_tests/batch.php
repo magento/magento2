@@ -26,17 +26,18 @@
  */
 
 $tests = array(
-    0 => array('../../tests/unit/framework/tests/unit', ''),
-    1 => array('../../tests/unit', ''),
-    2 => array('../../tests/static/framework/tests/unit', ''),
-    3 => array('../../tests/integration/framework/tests/unit', ''),
-    4 => array('../../tests/integration', ''),
-    5 => array('../../tests/static', ''),
+    'unit-unit'        => array('../../tests/unit/framework/tests/unit', ''),
+    'unit'             => array('../../tests/unit', ''),
+    'unit-performance' => array('../../tests/performance/framework/tests/unit', ''),
+    'unit-static'      => array('../../tests/static/framework/tests/unit', ''),
+    'unit-integration' => array('../../tests/integration/framework/tests/unit', ''),
+    'integration'      => array('../../tests/integration', ''),
+    'static'           => array('../../tests/static', ''),
 );
 $arguments = getopt('', array('all'));
 if (isset($arguments['all'])) {
-    $tests[] = array('../../tests/integration', ' testsuite/integrity');
-    $tests[5][1] = ' -c phpunit-all.xml.dist';
+    $tests['integration-integrity'] = array('../../tests/integration', ' testsuite/integrity');
+    $tests['static'][1] = ' -c phpunit-all.xml.dist';
 }
 
 $failures = array();

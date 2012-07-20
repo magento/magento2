@@ -62,6 +62,7 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
      * Error codes
      */
     const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
+    const ERROR_ADDRESS_NOT_FOUND   = 'addressNotFound';
     const ERROR_INVALID_REGION      = 'invalidRegion';
     /**#@-*/
 
@@ -149,24 +150,120 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
     );
 
     /**
+     * Customer entity
+     *
+     * @var Mage_Customer_Model_Customer
+     */
+    protected $_customerEntity;
+
+    /**
+     * Date/time format to import
+     *
+     * @var string
+     */
+    protected $_dateTimeFormat;
+
+    /**
+     * Entity ID incremented value
+     *
+     * @var int
+     */
+    protected $_nextEntityId;
+
+    /**
+     * Array of region parameters
+     *
+     * @var array
+     */
+    protected $_regionParameters;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->_entityTable = Mage::getModel('Mage_Customer_Model_Address')->getResource()->getEntityTable();
+        /** @var $addressResource Mage_Customer_Model_Resource_Address */
+        $addressResource = Mage::getModel('Mage_Customer_Model_Address')->getResource();
+        $this->_entityTable = $addressResource->getEntityTable();
 
         /** @var $helper Mage_ImportExport_Helper_Data */
         $helper = Mage::helper('Mage_ImportExport_Helper_Data');
         $this->addMessageTemplate(self::ERROR_ADDRESS_ID_IS_EMPTY,
             $helper->__('Customer address id column is not specified')
         );
+        $this->addMessageTemplate(self::ERROR_ADDRESS_NOT_FOUND,
+            $helper->__("Customer address for such customer doesn't exist")
+        );
         $this->addMessageTemplate(self::ERROR_INVALID_REGION, $helper->__('Region is invalid'));
 
         $this->_initAttributes();
         $this->_initAddresses()
             ->_initCountryRegions();
+    }
+
+    /**
+     * Customer entity getter
+     *
+     * @return Mage_Customer_Model_Customer
+     */
+    protected function _getCustomerEntity()
+    {
+        if (!$this->_customerEntity) {
+            $this->_customerEntity = Mage::getModel('Mage_Customer_Model_Customer');
+        }
+        return $this->_customerEntity;
+    }
+
+    /**
+     * Get date/time format string
+     *
+     * @return string
+     */
+    protected function _getDateTimeFormat()
+    {
+        if (!$this->_dateTimeFormat) {
+            $this->_dateTimeFormat = Varien_Date::convertZendToStrftime(
+                Varien_Date::DATETIME_INTERNAL_FORMAT, true, true
+            );
+        }
+        return $this->_dateTimeFormat;
+    }
+
+    /**
+     * Get region parameters
+     *
+     * @return array
+     */
+    protected function _getRegionParameters()
+    {
+        if (!$this->_regionParameters) {
+            $this->_regionParameters = array();
+            /** @var $regionConfig Mage_Eav_Model_Config */
+            $regionConfig = Mage::getSingleton('Mage_Eav_Model_Config');
+            /** @var $regionIdAttribute Mage_Customer_Model_Attribute */
+            $regionIdAttribute = $regionConfig->getAttribute($this->getEntityTypeCode(), 'region_id');
+            $this->_regionParameters['table']        = $regionIdAttribute->getBackend()->getTable();
+            $this->_regionParameters['attribute_id'] = $regionIdAttribute->getId();
+        }
+        return $this->_regionParameters;
+    }
+
+    /**
+     * Get next address entity ID
+     *
+     * @return int
+     */
+    protected function _getNextEntityId()
+    {
+        if (!$this->_nextEntityId) {
+            /** @var $addressResource Mage_Customer_Model_Resource_Address */
+            $addressResource     = Mage::getModel('Mage_Customer_Model_Address')->getResource();
+            $addressTable        = $addressResource->getEntityTable();
+            $this->_nextEntityId = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($addressTable);
+        }
+        return $this->_nextEntityId++;
     }
 
     /**
@@ -187,7 +284,6 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
                 $this->_addresses[$customerId][] = $addressId;
             }
         }
-
         return $this;
     }
 
@@ -231,24 +327,11 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
      */
     protected function _importData()
     {
-        /** @var $customer Mage_Customer_Model_Customer */
-        $customer       = Mage::getModel('Mage_Customer_Model_Customer');
-        $dateTimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
-        $addressModel   = Mage::getModel('Mage_Customer_Model_Address');
-        $table          = $addressModel->getResource()->getEntityTable();
-        $nextEntityId   = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($table);
-
-        /** @var $regionConfig Mage_Eav_Model_Config */
-        $regionConfig        = Mage::getSingleton('Mage_Eav_Model_Config');
-        /** @var $regionIdAttribute Mage_Customer_Model_Attribute */
-        $regionIdAttribute   = $regionConfig->getAttribute($this->getEntityTypeCode(), 'region_id');
-        $regionIdTable       = $regionIdAttribute->getBackend()->getTable();
-        $regionIdAttributeId = $regionIdAttribute->getId();
-
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $entityRows = array();
-            $attributes = array();
-            $defaults   = array(); // customer default addresses (billing/shipping) data
+            $addUpdateRows = array();
+            $attributes    = array();
+            $defaults      = array(); // customer default addresses (billing/shipping) data
+            $deleteRowIds  = array();
 
             foreach ($bunch as $rowNumber => $rowData) {
                 // check row data
@@ -256,80 +339,131 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
                     continue;
                 }
 
-                $email = strtolower($rowData[self::COLUMN_EMAIL]);
-                $websiteId = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
-                $customerId = $this->_customers[$email][$websiteId];
-
-                // get address attributes
-                $addressAttributes = array();
-                foreach ($this->_attributes as $attributeAlias => $attributeParams) {
-                    if (isset($rowData[$attributeAlias]) && strlen($rowData[$attributeAlias])) {
-                        if ('select' == $attributeParams['type']) {
-                            $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
-                        } elseif ('datetime' == $attributeParams['type']) {
-                            $value = gmstrftime($dateTimeFormat, strtotime($rowData[$attributeAlias]));
-                        } else {
-                            $value = $rowData[$attributeAlias];
-                        }
-                        $addressAttributes[$attributeParams['id']] = $value;
-                    }
-                }
-
-                // get address id
-                if (isset($this->_addresses[$customerId])
-                    && in_array($rowData[self::COLUMN_ADDRESS_ID], $this->_addresses[$customerId])
-                ) {
-                    $addressId = $rowData[self::COLUMN_ADDRESS_ID];
-                } else {
-                    $addressId = $nextEntityId++;
-                }
-
-                // entity table data
-                $entityRows[] = array(
-                    'entity_id'      => $addressId,
-                    'entity_type_id' => $this->getEntityTypeId(),
-                    'parent_id'      => $customerId,
-                    'created_at'     => now(),
-                    'updated_at'     => now()
-                );
-
-                // attribute values
-                foreach ($this->_attributes as $attributeParams) {
-                    if (isset($addressAttributes[$attributeParams['id']])) {
-                        $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]
-                            = $addressAttributes[$attributeParams['id']];
-                    }
-                }
-
-                // customer default addresses
-                foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
-                    if (!empty($rowData[$columnName])) {
-                        /** @var $attribute Mage_Eav_Model_Entity_Attribute_Abstract */
-                        $attribute = $customer->getAttribute($attributeCode);
-                        $defaults[$attribute->getBackend()->getTable()][$customerId][$attribute->getId()] = $addressId;
-                    }
-                }
-
-                // let's try to find region ID
-                if (!empty($rowData[self::COLUMN_REGION])) {
-                    $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
-                    $regionNormalized  = strtolower($rowData[self::COLUMN_REGION]);
-
-                    if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
-                        $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
-                        $attributes[$regionIdTable][$addressId][$regionIdAttributeId] = $regionId;
-                        $tableName = $this->_attributes[self::COLUMN_REGION]['table'];
-                        $regionColumnNameId = $this->_attributes[self::COLUMN_REGION]['id'];
-                        $attributes[$tableName][$addressId][$regionColumnNameId] = $this->_regions[$regionId];
-                    }
+                if ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE) {
+                    $addUpdateResult = $this->_prepareDataForUpdate($rowData);
+                    $addUpdateRows[] = $addUpdateResult['entity_row'];
+                    $attributes = $this->_mergeEntityAttributes($addUpdateResult['attributes'], $attributes);
+                    $defaults   = $this->_mergeEntityAttributes($addUpdateResult['defaults'], $defaults);
+                } elseif ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE) {
+                    $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
                 }
             }
 
-            $this->_saveAddressEntities($entityRows)
+            $this->_saveAddressEntities($addUpdateRows)
                 ->_saveAddressAttributes($attributes)
                 ->_saveCustomerDefaults($defaults);
+
+            $this->_deleteAddressEntities($deleteRowIds);
         }
         return true;
+    }
+
+    /**
+     * Merge attributes
+     *
+     * @param array $newAttributes
+     * @param array $attributes
+     * @return array
+     */
+    protected function _mergeEntityAttributes(array $newAttributes, array $attributes)
+    {
+        foreach ($newAttributes as $tableName => $tableData) {
+            foreach ($tableData as $entityId => $entityData) {
+                foreach ($entityData as $attributeId => $attributeValue) {
+                    $attributes[$tableName][$entityId][$attributeId] = $attributeValue;
+                }
+            }
+        }
+        return $attributes;
+    }
+
+    /**
+     * Prepare data for add/update action
+     *
+     * @param array $rowData
+     * @return array
+     */
+    protected function _prepareDataForUpdate(array $rowData)
+    {
+        $email      = strtolower($rowData[self::COLUMN_EMAIL]);
+        $websiteId  = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+        $customerId = $this->_customers[$email][$websiteId];
+
+        $regionParameters    = $this->_getRegionParameters();
+        $regionIdTable       = $regionParameters['table'];
+        $regionIdAttributeId = $regionParameters['attribute_id'];
+
+        // get address attributes
+        $addressAttributes = array();
+        foreach ($this->_attributes as $attributeAlias => $attributeParams) {
+            if (isset($rowData[$attributeAlias]) && strlen($rowData[$attributeAlias])) {
+                if ('select' == $attributeParams['type']) {
+                    $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
+                } elseif ('datetime' == $attributeParams['type']) {
+                    $value = gmstrftime($this->_getDateTimeFormat(), strtotime($rowData[$attributeAlias]));
+                } else {
+                    $value = $rowData[$attributeAlias];
+                }
+                $addressAttributes[$attributeParams['id']] = $value;
+            }
+        }
+
+        // get address id
+        if (isset($this->_addresses[$customerId])
+            && in_array($rowData[self::COLUMN_ADDRESS_ID], $this->_addresses[$customerId])
+        ) {
+            $addressId = $rowData[self::COLUMN_ADDRESS_ID];
+        } else {
+            $addressId = $this->_getNextEntityId();
+        }
+
+        // entity table data
+        $entityRow = array(
+            'entity_id'      => $addressId,
+            'entity_type_id' => $this->getEntityTypeId(),
+            'parent_id'      => $customerId,
+            'created_at'     => now(),
+            'updated_at'     => now()
+        );
+
+        // attribute values
+        $attributes = array();
+        foreach ($this->_attributes as $attributeParams) {
+            if (isset($addressAttributes[$attributeParams['id']])) {
+                $attributes[$attributeParams['table']][$addressId][$attributeParams['id']]
+                    = $addressAttributes[$attributeParams['id']];
+            }
+        }
+
+        // customer default addresses
+        $defaults = array();
+        foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
+            if (!empty($rowData[$columnName])) {
+                /** @var $attribute Mage_Eav_Model_Entity_Attribute_Abstract */
+                $attribute = $this->_getCustomerEntity()->getAttribute($attributeCode);
+                $defaults[$attribute->getBackend()->getTable()][$customerId][$attribute->getId()] = $addressId;
+            }
+        }
+
+        // let's try to find region ID
+        if (!empty($rowData[self::COLUMN_REGION])) {
+            $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
+            $regionNormalized  = strtolower($rowData[self::COLUMN_REGION]);
+
+            if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
+                $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
+                $attributes[$regionIdTable][$addressId][$regionIdAttributeId] = $regionId;
+                $tableName = $this->_attributes[self::COLUMN_REGION]['table'];
+                $regionColumnNameId = $this->_attributes[self::COLUMN_REGION]['id'];
+                $attributes[$tableName][$addressId][$regionColumnNameId] = $this->_regions[$regionId];
+            }
+        }
+
+        return array(
+            'entity_row' => $entityRow,
+            'attributes' => $attributes,
+            'defaults'   => $defaults,
+        );
     }
 
     /**
@@ -401,6 +535,20 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
     }
 
     /**
+     * Delete data from entity table
+     *
+     * @param array $entityRowIds Row IDs for delete
+     * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
+     */
+    protected function _deleteAddressEntities(array $entityRowIds)
+    {
+        if ($entityRowIds) {
+            $this->_connection->delete($this->_entityTable, array('entity_id IN (?)' => $entityRowIds));
+        }
+        return $this;
+    }
+
+    /**
      * EAV entity type code getter
      *
      * @abstract
@@ -423,34 +571,20 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
     }
 
     /**
-     * Validate data row
+     * Validate row for add/update action
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return boolean
+     * @return null
      */
-    public function validateRow(array $rowData, $rowNumber)
+    protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
-        if (isset($this->_validatedRows[$rowNumber])) { // check that row is already validated
-            return !isset($this->_invalidRows[$rowNumber]);
-        }
-        $this->_validatedRows[$rowNumber] = true;
-        $this->_processedEntitiesCount++;
-
-        if (empty($rowData[self::COLUMN_WEBSITE])) {
-            $this->addRowError(self::ERROR_WEBSITE_IS_EMPTY, $rowNumber, self::COLUMN_WEBSITE);
-        } elseif (empty($rowData[self::COLUMN_EMAIL])) {
-            $this->addRowError(self::ERROR_EMAIL_IS_EMPTY, $rowNumber, self::COLUMN_EMAIL);
-        } else {
-            $email   = strtolower($rowData[self::COLUMN_EMAIL]);
-            $website = $rowData[self::COLUMN_WEBSITE];
+        if ($this->_checkUniqueKey($rowData, $rowNumber)) {
+            $email      = strtolower($rowData[self::COLUMN_EMAIL]);
+            $website    = $rowData[self::COLUMN_WEBSITE];
             $addressId  = $rowData[self::COLUMN_ADDRESS_ID];
 
-            if (!Zend_Validate::is($email, 'EmailAddress')) {
-                $this->addRowError(self::ERROR_INVALID_EMAIL, $rowNumber, self::COLUMN_EMAIL);
-            } elseif (!isset($this->_websiteCodeToId[$website])) {
-                $this->addRowError(self::ERROR_INVALID_WEBSITE, $rowNumber, self::COLUMN_WEBSITE);
-            } elseif (!$this->_getCustomerId($email, $website)) {
+            if (!$this->_getCustomerId($email, $website)) {
                 $this->addRowError(self::ERROR_CUSTOMER_NOT_FOUND, $rowNumber);
             } else {
                 $websiteId  = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
@@ -484,8 +618,35 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
                 }
             }
         }
+    }
 
-        return !isset($this->_invalidRows[$rowNumber]);
+    /**
+     * Validate row for delete action
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return null
+     */
+    protected function _validateRowForDelete(array $rowData, $rowNumber)
+    {
+        if ($this->_checkUniqueKey($rowData, $rowNumber)) {
+            $email     = strtolower($rowData[self::COLUMN_EMAIL]);
+            $website   = $rowData[self::COLUMN_WEBSITE];
+            $addressId = $rowData[self::COLUMN_ADDRESS_ID];
+
+            if (!$this->_getCustomerId($email, $website)) {
+                $this->addRowError(self::ERROR_CUSTOMER_NOT_FOUND, $rowNumber);
+            } else {
+                $websiteId  = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+                $customerId = $this->_customers[$email][$websiteId];
+
+                if (!strlen($addressId)) {
+                    $this->addRowError(self::ERROR_ADDRESS_ID_IS_EMPTY, $rowNumber);
+                } elseif (!in_array($addressId, $this->_addresses[$customerId])) {
+                    $this->addRowError(self::ERROR_ADDRESS_NOT_FOUND, $rowNumber);
+                }
+            }
+        }
     }
 
     /**

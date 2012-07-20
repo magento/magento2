@@ -29,6 +29,11 @@
     <modules>
         <Mage_Widget>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Cms />
+            </depends>
         </Mage_Widget>
     </modules>
     <global>

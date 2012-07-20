@@ -45,8 +45,8 @@
             this.options = $.extend({}, this.options, {
                 start: function(event, ui) {
                     ui.placeholder.css({height: $(ui.helper).outerHeight(true)});
-                    $(this).sortable('option', 'connectWith', $(self.options.connectWithSelector).not(ui.item))
-                        .sortable('refresh');
+                    self.element.vde_container('option', 'connectWith', $(self.options.connectWithSelector).not(ui.item))
+                        .vde_container('refresh');
                 },
                 over: function(event, ui) {
                     self.element.addClass(self.options.hoverClass);

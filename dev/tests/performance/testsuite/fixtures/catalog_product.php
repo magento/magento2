@@ -41,10 +41,9 @@ if (!$setId) {
     throw new Exception('No attributes sets for product found.');
 }
 
-// Create product and its servants
+// Create product
 $product = new Mage_Catalog_Model_Product();
 $product->setTypeId('simple')
-    ->setId(1)
     ->setAttributeSetId($setId)
     ->setWebsiteIds(array(1))
     ->setName('Product 1')

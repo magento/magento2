@@ -29,6 +29,9 @@
     <modules>
         <Mage_Connect>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends />
         </Mage_Connect>
     </modules>
     <admin>

@@ -29,6 +29,11 @@
     <modules>
         <Mage_Sitemap>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+            </depends>
         </Mage_Sitemap>
     </modules>
     <global>

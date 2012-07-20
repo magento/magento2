@@ -74,7 +74,12 @@ abstract class Varien_Image_Adapter_Abstract
 
     abstract public function save($destination = null, $newName = null);
 
-    abstract public function display();
+    /**
+     * Render image and return its binary contents
+     *
+     * @return string
+     */
+    abstract public function getImage();
 
     abstract public function resize($width=null, $height=null);
 

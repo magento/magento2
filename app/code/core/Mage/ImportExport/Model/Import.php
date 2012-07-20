@@ -43,25 +43,36 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
     const CONFIG_KEY_CUSTOMER_ENTITIES = 'global/importexport/import_customer_entities';
     /**#@-*/
 
-    /**
-     * Import behavior
+    /**#@+
+     * Import behavior for version 1
      */
     const BEHAVIOR_APPEND  = 'append';
     const BEHAVIOR_REPLACE = 'replace';
     const BEHAVIOR_DELETE  = 'delete';
+    /**#@-*/
 
-    /**
+    /**#@+
+     * Import behaviors for version 2
+     */
+    const BEHAVIOR_V2_ADD_UPDATE = 'v2_update';
+    const BEHAVIOR_V2_DELETE     = 'v2_delete';
+    const BEHAVIOR_V2_CUSTOM     = 'v2_custom';
+    /**#@-*/
+
+    /**#@+
      * Form field names (and IDs)
      */
     const FIELD_NAME_SOURCE_FILE = 'import_file';
     const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
+    /**#@-*/
 
-    /**
+    /**#@+
      * Import constants
      *
      */
     const DEFAULT_SIZE      = 50;
     const MAX_IMPORT_CHUNKS = 4;
+    /**#@-*/
 
     /**
      * Entity adapter.

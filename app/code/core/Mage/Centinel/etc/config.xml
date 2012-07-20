@@ -29,6 +29,12 @@
     <modules>
         <Mage_Centinel>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Payment/>
+                <Mage_Checkout/>
+            </depends>
         </Mage_Centinel>
     </modules>
     <global>

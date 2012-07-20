@@ -28,7 +28,7 @@
 <li <?php echo ($this->getMenuItem()->hasChildren() ? 'onmouseover="Element.addClassName(this,\'over\')" onmouseout="Element.removeClassName(this,\'over\')"' : ''); ?>
     class="<?php echo ($this->isItemActive($this->getMenuItem()) ? 'active' : '') . ' ' . ($this->getMenuItem()->hasChildren() ? 'parent' : '') . ' ' . ($this->isLast() ? 'last' : '') . ' ' . ('level' . $this->getLevel()); ?>">
     <a href="<?php echo $this->getMenuItem()->getUrl(); ?>" <?php echo ($this->getMenuItem()->hasTooltip() ? 'title="' . $this->getMenuItem()->getModuleHelper()->__($this->getMenuItem()->getTooltip()) . '"' : '') . ($this->getMenuItem()->hasClickCallback() ? ' onclick="' . $this->getMenuItem()->getClickCallback() . '"' : ''); ?> class="<?php echo ($this->isItemActive($this->getMenuItem()) ? 'active' : ''); ?>">
-        <span><?php echo $this->escapeHtml($this->getMenuItem()->getModuleHelper()->__($this->getMenuItem()->getTitle())); ?> </span>
+        <span><?php echo $this->escapeHtml($this->getMenuItem()->getModuleHelper()->__($this->getMenuItem()->getTitle())); ?></span>
     </a>
     <?php if ($this->getMenuItem()->hasChildren()) : ?>
         <?php echo $this->getContainerRenderer()->renderMenuContainer($this->getMenuItem()->getChildren(), $this->getLevel() + 1); ?>

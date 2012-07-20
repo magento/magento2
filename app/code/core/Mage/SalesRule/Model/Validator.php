@@ -112,24 +112,6 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Get address object which can be used for discount calculation
-     *
-     * @param   Mage_Sales_Model_Quote_Item_Abstract $item
-     * @return  Mage_Sales_Model_Quote_Address
-     */
-    protected function _getAddress(Mage_Sales_Model_Quote_Item_Abstract $item)
-    {
-        if ($item instanceof Mage_Sales_Model_Quote_Address_Item) {
-            $address = $item->getAddress();
-        } elseif ($item->getQuote()->getItemVirtualQty() > 0) {
-            $address = $item->getQuote()->getBillingAddress();
-        } else {
-            $address = $item->getQuote()->getShippingAddress();
-        }
-        return $address;
-    }
-
-    /**
      * Check if rule can be applied for specific address/quote/customer
      *
      * @param   Mage_SalesRule_Model_Rule $rule
@@ -223,7 +205,7 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
      */
     public function canApplyRules(Mage_Sales_Model_Quote_Item_Abstract $item)
     {
-        $address = $this->_getAddress($item);
+        $address = $item->getAddress();
         foreach ($this->_getRules() as $rule) {
             if (!$this->_canProcessRule($rule, $address) || !$rule->getActions()->validate($item)) {
                 return false;
@@ -243,7 +225,7 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
      */
     public function processFreeShipping(Mage_Sales_Model_Quote_Item_Abstract $item)
     {
-        $address = $this->_getAddress($item);
+        $address = $item->getAddress();
         $item->setFreeShipping(false);
 
         foreach ($this->_getRules() as $rule) {
@@ -301,7 +283,7 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
         $item->setBaseDiscountAmount(0);
         $item->setDiscountPercent(0);
         $quote      = $item->getQuote();
-        $address    = $this->_getAddress($item);
+        $address    = $item->getAddress();
 
         $itemPrice              = $this->_getItemPrice($item);
         $baseItemPrice          = $this->_getItemBasePrice($item);
@@ -823,7 +805,6 @@ class Mage_SalesRule_Model_Validator extends Mage_Core_Model_Abstract
     public function prepareDescription($address, $separator=', ')
     {
         $descriptionArray = $address->getDiscountDescriptionArray();
-        /** @see Mage_SalesRule_Model_Validator::_getAddress */
         if (!$descriptionArray && $address->getQuote()->getItemVirtualQty() > 0) {
             $descriptionArray = $address->getQuote()->getBillingAddress()->getDiscountDescriptionArray();
         }

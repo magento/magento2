@@ -39,7 +39,7 @@ class Mage_User_Adminhtml_User_RoleControllerTest extends Mage_Adminhtml_Utility
 
         $this->getRequest()->setParam('rid', $roleAdmin->getId());
 
-        $this->dispatch('admin/user_role/editrole');
+        $this->dispatch('backend/admin/user_role/editrole');
 
         $this->assertContains('Role Information', $this->getResponse()->getBody());
         $this->assertContains("Edit Role '" . $roleAdmin->getRoleName() . "'", $this->getResponse()->getBody());
@@ -53,7 +53,7 @@ class Mage_User_Adminhtml_User_RoleControllerTest extends Mage_Adminhtml_Utility
         $this->getRequest()
             ->setParam('ajax', true)
             ->setParam('isAjax', true);
-        $this->dispatch('admin/user_role/editrolegrid');
+        $this->dispatch('backend/admin/user_role/editrolegrid');
         $expected = '%a<table %a id="roleUserGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }
@@ -67,7 +67,7 @@ class Mage_User_Adminhtml_User_RoleControllerTest extends Mage_Adminhtml_Utility
             ->setParam('ajax', true)
             ->setParam('isAjax', true)
             ->setParam('user_id', 1);
-        $this->dispatch('admin/user_role/roleGrid');
+        $this->dispatch('backend/admin/user_role/roleGrid');
         $expected = '%a<table %a id="roleGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }

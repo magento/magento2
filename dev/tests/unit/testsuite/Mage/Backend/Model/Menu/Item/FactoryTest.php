@@ -85,7 +85,7 @@ class Mage_Backend_Model_Menu_Item_FactoryTest extends PHPUnit_Framework_TestCas
         $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_factoryMock = $this->getMock('Mage_Backend_Model_Menu_Factory');
         $this->_helpers = array(
-            'Mage_Backend_Helper_Data' => $this->getMock('Mage_Backend_Helper_Data'),
+            'Mage_Backend_Helper_Data' => $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false),
             'Mage_User_Helper_Data' => $this->getMock('Mage_User_Helper_Data')
         );
         $this->_urlModelMock = $this->getMock("Mage_Backend_Model_Url", array(), array(), '', false);

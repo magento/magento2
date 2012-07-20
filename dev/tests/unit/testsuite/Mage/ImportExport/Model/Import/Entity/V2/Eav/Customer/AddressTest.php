@@ -31,7 +31,7 @@
 class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Abstract customer address export model
+     * Customer address entity adapter mock
      *
      * @var Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address|PHPUnit_Framework_MockObject_MockObject
      */
@@ -84,6 +84,15 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     );
 
     /**
+     * Customer addresses array
+     *
+     * @var array
+     */
+    protected $_addresses = array(
+        1 => array(1)
+    );
+
+    /**
      * Customers array
      *
      * @var array
@@ -102,6 +111,28 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
             'default_name' => 'region2',
         ),
     );
+
+    /**
+     * Available behaviours
+     *
+     * @var array
+     */
+    protected $_availableBehaviors = array(
+        Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE,
+        Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE,
+        Mage_ImportExport_Model_Import::BEHAVIOR_V2_CUSTOM,
+    );
+
+    /**
+     * Customer behaviours parameters
+     *
+     * @var array
+     */
+    protected $_customBehaviour = array(
+        'update_id' => 1,
+        'delete_id' => 2,
+    );
+
 
     /**
      * Init entity adapter model
@@ -146,6 +177,111 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
         return $modelMock;
     }
 
+
+    /**
+     * Create mock for custom behavior test
+     *
+     * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getModelMockForTestImportDataWithCustomBehaviour()
+    {
+        // input data
+        $customBehaviorRows = array(
+             array(
+                Mage_ImportExport_Model_Import_Entity_V2_Abstract::COLUMN_ACTION => 'update',
+                Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_ADDRESS_ID
+                    => $this->_customBehaviour['update_id'],
+            ),
+            array(
+                Mage_ImportExport_Model_Import_Entity_V2_Abstract::COLUMN_ACTION
+                    => Mage_ImportExport_Model_Import_Entity_V2_Abstract::COLUMN_ACTION_VALUE_DELETE,
+                Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_ADDRESS_ID
+                    => $this->_customBehaviour['delete_id'],
+            ),
+        );
+        $updateResult = array(
+            'entity_row' => $this->_customBehaviour['update_id'],
+            'attributes' => array(),
+            'defaults'   => array(),
+        );
+
+        // entity adapter mock
+        $modelMock = $this->getMock(
+            'Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address',
+            array(
+                'validateRow',
+                '_prepareDataForUpdate',
+                '_saveAddressEntities',
+                '_saveAddressAttributes',
+                '_saveCustomerDefaults',
+                '_deleteAddressEntities',
+                '_mergeEntityAttributes',
+            ),
+            array(),
+            '',
+            false,
+            true,
+            true
+        );
+
+        $availableBehaviors = new ReflectionProperty($modelMock, '_availableBehaviors');
+        $availableBehaviors->setAccessible(true);
+        $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
+
+        // mock to imitate data source model
+        $dataSourceMock = $this->getMock(
+            'Mage_ImportExport_Model_Resource_Import_Data',
+            array('getNextBunch'),
+            array(),
+            '',
+            false
+        );
+        $dataSourceMock->expects($this->at(0))
+            ->method('getNextBunch')
+            ->will($this->returnValue($customBehaviorRows));
+        $dataSourceMock->expects($this->at(1))
+            ->method('getNextBunch')
+            ->will($this->returnValue(null));
+
+        $dataSourceModel = new ReflectionProperty(
+            'Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address',
+            '_dataSourceModel'
+        );
+        $dataSourceModel->setAccessible(true);
+        $dataSourceModel->setValue($modelMock, $dataSourceMock);
+
+        // mock expects for entity adapter
+        $modelMock->expects($this->any())
+            ->method('validateRow')
+            ->will($this->returnValue(true));
+
+        $modelMock->expects($this->any())
+            ->method('_prepareDataForUpdate')
+            ->will($this->returnValue($updateResult));
+
+        $modelMock->expects($this->any())
+            ->method('_saveAddressEntities')
+            ->will($this->returnCallback(array($this, 'validateSaveAddressEntities')));
+
+        $modelMock->expects($this->any())
+            ->method('_saveAddressAttributes')
+            ->will($this->returnValue($modelMock));
+
+        $modelMock->expects($this->any())
+            ->method('_saveCustomerDefaults')
+            ->will($this->returnValue($modelMock));
+
+        $modelMock->expects($this->any())
+            ->method('_deleteAddressEntities')
+            ->will($this->returnCallback(array($this, 'validateDeleteAddressEntities')));
+
+        $modelMock->expects($this->any())
+            ->method('_mergeEntityAttributes')
+            ->will($this->returnValue(array()));
+
+        return $modelMock;
+    }
+
     /**
      * Create mock for customer address model class
      *
@@ -154,7 +290,16 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     protected function _getModelMock()
     {
         $modelMock = $this->getMock('Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address',
-            array('_getRegionCollection', 'isAttributeValid', '_getCustomerCollection'), array(), '', false, true, true
+            array(
+                '_getRegionCollection',
+                'isAttributeValid',
+                '_getCustomerCollection',
+            ),
+            array(),
+            '',
+            false,
+            true,
+            true
         );
 
         $regionCollection = new Varien_Data_Collection();
@@ -183,6 +328,10 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
         $method->setAccessible(true);
         $method->invoke($modelMock);
 
+        $property = new ReflectionProperty($modelMock, '_addresses');
+        $property->setAccessible(true);
+        $property->setValue($modelMock, $this->_addresses);
+
         $property = new ReflectionProperty($modelMock, '_websiteCodeToId');
         $property->setAccessible(true);
         $property->setValue($modelMock, array_flip($this->_websites));
@@ -190,6 +339,10 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
         $property = new ReflectionProperty($modelMock, '_attributes');
         $property->setAccessible(true);
         $property->setValue($modelMock, $this->_attributes);
+
+        $property = new ReflectionProperty($modelMock, '_availableBehaviors');
+        $property->setAccessible(true);
+        $property->setValue($modelMock, $this->_availableBehaviors);
 
         $regions = array();
         $countryRegions = array();
@@ -210,73 +363,25 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     }
 
     /**
-     * Data provider of row data and errors
+     * Data provider of row data and errors for add/update action
      *
      * @return array
      */
-    public function validateRowDataProvider()
+    public function validateRowForUpdateDataProvider()
     {
         return array(
             'valid' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_valid.php',
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
                 '$errors'  => array(),
                 '$isValid' => true,
             ),
             'empty address id' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_empty_address_id.php',
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
                 '$errors' => array(),
                 '$isValid' => true,
             ),
-            'no website' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_no_website.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_WEBSITE_IS_EMPTY => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_WEBSITE)
-                    )
-                ),
-            ),
-            'empty website' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_empty_website.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_WEBSITE_IS_EMPTY => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_WEBSITE)
-                    )
-                ),
-            ),
-            'no email' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_no_email.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_EMAIL_IS_EMPTY => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_EMAIL)
-                    )
-                ),
-            ),
-            'empty email' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_empty_email.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_EMAIL_IS_EMPTY => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_EMAIL)
-                    )
-                ),
-            ),
-            'invalid email' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_invalid_email.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_INVALID_EMAIL => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_EMAIL)
-                    )
-                ),
-            ),
-            'invalid website' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_invalid_website.php',
-                '$errors' => array(
-                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_INVALID_WEBSITE => array(
-                        array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_WEBSITE)
-                    )
-                ),
-            ),
             'no customer' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_no_customer.php',
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_no_customer.php',
                 '$errors' => array(
                     Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_CUSTOMER_NOT_FOUND => array(
                         array(1, null)
@@ -284,7 +389,7 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
                 ),
             ),
             'absent required attribute' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_absent_required_attribute.php',
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_absent_required_attribute.php',
                 '$errors' => array(
                     Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_VALUE_IS_REQUIRED => array(
                         array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_COUNTRY_ID)
@@ -292,7 +397,7 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
                 ),
             ),
             'invalid region' => array(
-                '$rowData' => include __DIR__ . '/_files/row_data_invalid_region.php',
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_invalid_region.php',
                 '$errors' => array(
                     Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_INVALID_REGION => array(
                         array(1, Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::COLUMN_REGION)
@@ -303,10 +408,50 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     }
 
     /**
+     * Data provider of row data and errors for add/update action
+     *
+     * @return array
+     */
+    public function validateRowForDeleteDataProvider()
+    {
+        return array(
+            'valid' => array(
+                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                '$errors'  => array(),
+                '$isValid' => true,
+            ),
+            'empty address id' => array(
+                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_empty_address_id.php',
+                '$errors' => array(
+                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_ADDRESS_ID_IS_EMPTY => array(
+                        array(1, null)
+                    ),
+                )
+            ),
+            'invalid address' => array(
+                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_address_not_found.php',
+                '$errors' => array(
+                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_ADDRESS_NOT_FOUND => array(
+                        array(1, null)
+                    ),
+                )
+            ),
+            'no customer' => array(
+                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_no_customer.php',
+                '$errors' => array(
+                    Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::ERROR_CUSTOMER_NOT_FOUND => array(
+                        array(1, null)
+                    )
+                ),
+            ),
+        );
+    }
+
+    /**
      * Check whether Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_regions and
      * Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_countryRegions are filled correctly
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_initCountryRegions()
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_initCountryRegions
      */
     public function testInitCountryRegions()
     {
@@ -332,18 +477,42 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     }
 
     /**
-     * Test Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow() with different values
+     * Test Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow() with add/update action
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow()
-     * @dataProvider validateRowDataProvider
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow
+     * @dataProvider validateRowForUpdateDataProvider
      * @depends testInitCountryRegions
      *
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
      */
-    public function testValidateRow(array $rowData, array $errors, $isValid = false)
+    public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
+        $this->_model->setParameters(array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE));
+
+        if ($isValid) {
+            $this->assertTrue($this->_model->validateRow($rowData, 0));
+        } else {
+            $this->assertFalse($this->_model->validateRow($rowData, 0));
+        }
+        $this->assertAttributeEquals($errors, '_errors', $this->_model);
+    }
+
+    /**
+     * Test Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow() with delete action
+     *
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::validateRow
+     * @dataProvider validateRowForDeleteDataProvider
+     *
+     * @param array $rowData
+     * @param array $errors
+     * @param boolean $isValid
+     */
+    public function testValidateRowForDelete(array $rowData, array $errors, $isValid = false)
+    {
+        $this->_model->setParameters(array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE));
+
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
         } else {
@@ -377,5 +546,45 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
             $attributeMapping,
             'Default address attribute mapping array must have a default shipping column.'
         );
+    }
+
+    /**
+     * Test if correct methods are invoked according to different custom behaviours
+     *
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_importData
+     */
+    public function testImportDataWithCustomBehaviour()
+    {
+        $this->_model = $this->_getModelMockForTestImportDataWithCustomBehaviour();
+        $this->_model->setParameters(array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_V2_CUSTOM));
+
+        // validation in validateSaveAddressEntities and validateDeleteAddressEntities
+        $this->_model->importData();
+    }
+
+    /**
+     * Validation method for _saveAddressEntities (callback for _saveAddressEntities)
+     *
+     * @param array $addUpdateRows
+     * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address|PHPUnit_Framework_MockObject_MockObject
+     */
+    public function validateSaveAddressEntities(array $addUpdateRows)
+    {
+        $this->assertCount(1, $addUpdateRows);
+        $this->assertContains($this->_customBehaviour['update_id'], $addUpdateRows);
+        return $this->_model;
+    }
+
+    /**
+     * Validation method for _deleteAddressEntities (callback for _deleteAddressEntities)
+     *
+     * @param array $deleteRowIds
+     * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address|PHPUnit_Framework_MockObject_MockObject
+     */
+    public function validateDeleteAddressEntities(array $deleteRowIds)
+    {
+        $this->assertCount(1, $deleteRowIds);
+        $this->assertContains($this->_customBehaviour['delete_id'], $deleteRowIds);
+        return $this->_model;
     }
 }

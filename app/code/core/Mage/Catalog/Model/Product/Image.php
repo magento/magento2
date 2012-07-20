@@ -492,11 +492,6 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         return $url;
     }
 
-    public function push()
-    {
-        $this->getImageProcessor()->display();
-    }
-
     /**
      * @return Mage_Catalog_Model_Product_Image
      */

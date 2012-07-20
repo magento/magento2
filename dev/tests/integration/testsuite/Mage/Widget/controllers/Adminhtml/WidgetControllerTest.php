@@ -33,7 +33,7 @@ class Mage_Widget_Adminhtml_WidgetControllerTest extends Mage_Adminhtml_Utility_
     public function testLoadOptionsAction()
     {
         $this->getRequest()->setPost('widget', '{"widget_type":"Mage_Cms_Block_Widget_Page_Link","values":{}}');
-        $this->dispatch('admin/widget/loadOptions');
+        $this->dispatch('backend/admin/widget/loadOptions');
         $output = $this->getResponse()->getBody();
         $this->assertRegExp('/<label for="options_fieldset[a-z\d]+_page_id">CMS Page/', $output);
     }

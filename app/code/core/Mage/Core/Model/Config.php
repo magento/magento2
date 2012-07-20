@@ -257,6 +257,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         }
         $this->loadModules();
         $this->loadDb();
+        $this->loadLocales();
         $this->saveCache();
         return $this;
     }
@@ -283,7 +284,27 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     }
 
     /**
-     * Load cached modules configuration
+     * Load locale configuration from locale configuration files
+     *
+     * @return Mage_Core_Model_Config
+     */
+    public function loadLocales()
+    {
+        $localeDir = $this->getOptions()->getLocaleDir();
+        $files = glob($localeDir . DS . '*' . DS . 'config.xml');
+
+        if (is_array($files) && !empty($files)) {
+            foreach ($files as $file) {
+                $merge = clone $this->_prototype;
+                $merge->loadFile($file);
+                $this->extend($merge);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Load cached modules and locale configuration
      *
      * @return bool
      */
@@ -700,8 +721,8 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     protected function _getDeclaredModuleFiles()
     {
-        $etcDir = $this->getOptions()->getEtcDir();
-        $moduleFiles = glob($etcDir . DS . 'modules' . DS . '*.xml');
+        $codeDir = $this->getOptions()->getCodeDir();
+        $moduleFiles = glob($codeDir . DS . '*' . DS . '*' . DS . '*' . DS . 'etc' . DS . 'config.xml');
 
         if (!$moduleFiles) {
             return false;
@@ -715,21 +736,26 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 
         foreach ($moduleFiles as $v) {
             $name = explode(DIRECTORY_SEPARATOR, $v);
-            $name = substr($name[count($name) - 1], 0, -4);
+            $collection = $name[count($name) - 4];
 
-            if ($name == 'Mage_All') {
-                $collectModuleFiles['base'][] = $v;
-            } else if (substr($name, 0, 5) == 'Mage_') {
+            if ($collection == 'Mage') {
                 $collectModuleFiles['mage'][] = $v;
             } else {
                 $collectModuleFiles['custom'][] = $v;
             }
         }
 
+        $etcDir = $this->getOptions()->getEtcDir();
+        $additionalFiles = glob($etcDir . DS . 'modules' . DS . '*.xml');
+
+        foreach ($additionalFiles as $v) {
+            $collectModuleFiles['base'][] = $v;
+        }
+
         return array_merge(
-            $collectModuleFiles['base'],
             $collectModuleFiles['mage'],
-            $collectModuleFiles['custom']
+            $collectModuleFiles['custom'],
+            $collectModuleFiles['base']
         );
     }
 
@@ -769,7 +795,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $unsortedConfig = new Mage_Core_Model_Config_Base('<config/>');
         foreach ($moduleFiles as $oneConfigFile) {
             $fileConfig = new Mage_Core_Model_Config_Base($oneConfigFile);
-            $unsortedConfig->extend($fileConfig);
+            foreach ($fileConfig->_xml->xpath('modules/*') as $module) {
+                $newModule = new Mage_Core_Model_Config_Element('<config><modules/></config>');
+                $newModule->modules->appendChild($module);
+                $unsortedConfig->extend(new Mage_Core_Model_Config_Base($newModule));
+            }
         }
 
         $sortedConfig = new Mage_Core_Model_Config_Module($unsortedConfig, $this->_allowedModules);
@@ -857,6 +887,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                     $configFile = $this->getModuleDir('etc', $modName).DS.$configFile;
                     if ($mergeModel->loadFile($configFile)) {
                         $mergeToObject->extend($mergeModel, true);
+                        //Prevent overriding <active> node of module if it was redefined in etc/modules
+                        $mergeToObject->extend(new Mage_Core_Model_Config_Base(
+                            "<config><modules><{$modName}><active>true</active></{$modName}></modules></config>"),
+                            true
+                        );
                     }
                 }
             }
@@ -1473,10 +1508,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                     continue;
                 }
 
-                $this->_allowedAreas[$areaCode] = array(
-                    'base_controller' => $areaInfo['base_controller'],
-                    'routers' => $areaInfo['routers']
-                );
+                $this->_allowedAreas[$areaCode] = $areaInfo;
             }
         }
 
@@ -1493,8 +1525,9 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $routers = array();
         foreach ($this->getAreas() as $areaCode => $areaInfo) {
             foreach ($areaInfo['routers'] as $routerKey => $routerInfo ) {
+                $routerInfo = array_merge($routerInfo, $areaInfo);
+                unset($routerInfo['routers']);
                 $routerInfo['area'] = $areaCode;
-                $routerInfo['base_controller'] = $areaInfo['base_controller'];
                 $routers[$routerKey] = $routerInfo;
             }
         }

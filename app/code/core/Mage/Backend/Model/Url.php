@@ -53,6 +53,26 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
      */
     protected $_startupMenuItemId;
 
+    /**
+     * @var Mage_Backend_Helper_Data
+     */
+    protected $_backendHelper;
+
+    /**
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @var Mage_Core_Model_Session
+     */
+    protected $_coreSession;
+
+    /**
+     * @var array
+     */
+    protected $_routes;
+
     public function __construct(array $data = array())
     {
         parent::__construct($data);
@@ -61,8 +81,27 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
             Mage::getStoreConfig(self::XML_PATH_STARTUP_MENU_ITEM);
 
         $this->_menu = isset($data['menu']) ? $data['menu'] : null;
-    }
 
+        $this->_backendHelper = isset($data['backendHelper']) ?
+            $data['backendHelper'] :
+            Mage::helper('Mage_Backend_Helper_Data');
+
+        if (false == ($this->_backendHelper instanceof Mage_Backend_Helper_Data)) {
+            throw new InvalidArgumentException('Backend helper is corrupted');
+        }
+
+        $this->_coreSession = isset($data['coreSession']) ?
+            $data['coreSession'] :
+            Mage::getSingleton('Mage_Core_Model_Session');
+
+        $this->_coreHelper = isset($data['coreHelper']) ?
+            $data['coreHelper'] :
+            Mage::helper('Mage_Core_Helper_Data');
+
+        $this->_routes = isset($data['routes']) ?
+            $data['routes'] :
+            array();
+    }
 
     /**
      * Retrieve is secure mode for ULR logic
@@ -116,15 +155,17 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
             return $result;
         }
 
-        $_route = $this->getRouteName() ? $this->getRouteName() : '*';
-        $_controller = $this->getControllerName() ? $this->getControllerName() : $this->getDefaultControllerName();
-        $_action = $this->getActionName() ? $this->getActionName() : $this->getDefaultActionName();
+        $routeName = $this->getRouteName() ? $this->getRouteName() : '*';
+        $controllerName = $this->getControllerName() ? $this->getControllerName() : $this->getDefaultControllerName();
+        $actionName = $this->getActionName() ? $this->getActionName() : $this->getDefaultActionName();
 
         if ($cacheSecretKey) {
-            $secret = array(self::SECRET_KEY_PARAM_NAME => "\${$_controller}/{$_action}\$");
+            $secret = array(self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$");
         }
         else {
-            $secret = array(self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($_controller, $_action));
+            $secret = array(
+                self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName)
+            );
         }
         if (is_array($routeParams)) {
             $routeParams = array_merge($secret, $routeParams);
@@ -135,30 +176,48 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
             $routeParams = array_merge($this->getRouteParams(), $routeParams);
         }
 
-        return parent::getUrl("{$_route}/{$_controller}/{$_action}", $routeParams);
+        return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
     }
 
     /**
      * Generate secret key for controller and action based on form key
      *
+     * @param string $routeName
      * @param string $controller Controller name
      * @param string $action Action name
      * @return string
      */
-    public function getSecretKey($controller = null, $action = null)
+    public function getSecretKey($routeName = null, $controller = null, $action = null)
     {
-        $salt = Mage::getSingleton('Mage_Core_Model_Session')->getFormKey();
+        $salt = $this->_coreSession->getFormKey();
+        $request = $this->getRequest();
 
-        $p = explode('/', trim($this->getRequest()->getOriginalPathInfo(), '/'));
+        if (!$routeName) {
+            if ($request->getBeforeForwardInfo('route_name') !== null) {
+                $routeName = $request->getBeforeForwardInfo('route_name');
+            } else {
+                $routeName = $request->getRouteName();
+            }
+        }
+
         if (!$controller) {
-            $controller = !empty($p[1]) ? $p[1] : $this->getRequest()->getControllerName();
-        }
-        if (!$action) {
-            $action = !empty($p[2]) ? $p[2] : $this->getRequest()->getActionName();
+            if ($request->getBeforeForwardInfo('controller_name') !== null) {
+                $controller = $request->getBeforeForwardInfo('controller_name');
+            } else {
+                $controller = $request->getControllerName();
+            }
         }
 
-        $secret = $controller . $action . $salt;
-        return Mage::helper('Mage_Core_Helper_Data')->getHash($secret);
+        if (!$action) {
+            if ($request->getBeforeForwardInfo('action_name') !== null) {
+                $action = $request->getBeforeForwardInfo('action_name');
+            } else {
+                $action = $request->getActionName();
+            }
+        }
+
+        $secret = $routeName . $controller . $action . $salt;
+        return $this->_coreHelper->getHash($secret);
     }
 
     /**
@@ -278,5 +337,38 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
             $this->_session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
         return $this->_session;
+    }
+
+
+    /**
+     * Return backend area front name, defined in configuration
+     *
+     * @return string
+     */
+    public function getAreaFrontName()
+    {
+        if (!$this->_getData('area_front_name')) {
+            $this->setData('area_front_name', $this->_backendHelper->getAreaFrontName());
+        }
+
+        return $this->_getData('area_front_name');
+    }
+
+    /**
+     * Retrieve action path.
+     * Add backend area front name as a prefix to action path
+     *
+     * @return string
+     */
+    public function getActionPath()
+    {
+        $path = parent::getActionPath();
+        if ($path) {
+            if ($this->getAreaFrontName()) {
+                $path = $this->getAreaFrontName() . '/' . $path;
+            }
+        }
+
+        return $path;
     }
 }

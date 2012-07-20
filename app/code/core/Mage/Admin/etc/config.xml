@@ -29,6 +29,11 @@
     <modules>
         <Mage_Admin>
             <version>1.6.1.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+               <Mage_Core/>
+            </depends>
         </Mage_Admin>
     </modules>
 </config>

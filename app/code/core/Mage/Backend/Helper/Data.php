@@ -26,12 +26,32 @@
 
 class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    const XML_PATH_ADMINHTML_ROUTER_FRONTNAME   = 'admin/routers/adminhtml/args/frontName';
+    const XML_PATH_BACKEND_FRONTNAME            = 'global/areas/adminhtml/frontName';
     const XML_PATH_USE_CUSTOM_ADMIN_URL         = 'default/admin/url/use_custom';
     const XML_PATH_USE_CUSTOM_ADMIN_PATH        = 'default/admin/url/use_custom_path';
     const XML_PATH_CUSTOM_ADMIN_PATH            = 'default/admin/url/custom_path';
+    const BACKEND_AREA_CODE                     = 'adminhtml';
 
     protected $_pageHelpUrl;
+
+    /**
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    protected $_areaFrontName = null;
+
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_config = isset($data['config']) ? $data['config'] : Mage::getConfig();
+
+        if (false == ($this->_config instanceof Mage_Core_Model_Config)) {
+            throw new InvalidArgumentException("Required config object is invalid");
+        }
+    }
 
     public function getPageHelpUrl()
     {
@@ -50,9 +70,11 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
                 $frontName = $request->getModuleName();
                 $router = Mage::app()->getFrontController()->getRouterByFrontName($frontName);
 
-                $frontModule = $router->getModuleByFrontName($frontName);
-                if (is_array($frontModule)) {
+                $frontModule = $router->getModulesByFrontName($frontName);
+                if (empty($frontModule) === false) {
                     $frontModule = $frontModule[0];
+                } else {
+                    $frontModule = null;
                 }
             }
             $url = 'http://www.magentocommerce.com/gethelp/';
@@ -130,5 +152,41 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
     public function getHomePageUrl()
     {
         return Mage::getModel('Mage_Backend_Model_Url')->getRouteUrl('adminhtml');
+    }
+
+    /**
+     * Return Backend area code
+     *
+     * @return string
+     */
+    public function getAreaCode()
+    {
+        return self::BACKEND_AREA_CODE;
+    }
+
+    /**
+     * Return Backend area front name
+     *
+     * @return string
+     */
+    public function getAreaFrontName()
+    {
+        if (null === $this->_areaFrontName) {
+            $this->_areaFrontName = (bool)(string)$this->_config->getNode(self::XML_PATH_USE_CUSTOM_ADMIN_PATH) ?
+                (string)$this->_config->getNode(self::XML_PATH_CUSTOM_ADMIN_PATH) :
+                (string)$this->_config->getNode(self::XML_PATH_BACKEND_FRONTNAME);
+        }
+        return $this->_areaFrontName;
+    }
+
+    /**
+     * Invalidate cache of area front name
+     *
+     * @return Mage_Backend_Helper_Data
+     */
+    public function clearAreaFrontName()
+    {
+        $this->_areaFrontName = null;
+        return $this;
     }
 }

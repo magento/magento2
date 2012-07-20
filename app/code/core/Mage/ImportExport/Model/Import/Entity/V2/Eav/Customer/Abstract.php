@@ -41,6 +41,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Abstract
      * to avoid interference with same attribute name.
      */
     const COLUMN_WEBSITE = '_website';
+    const COLUMN_EMAIL   = '_email';
     /**#@-*/
 
     /**#@+
@@ -90,7 +91,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Abstract
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, $helper->__('Website is not specified'));
         $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, $helper->__('E-mail is not specified'));
         $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE,
-            $helper->__('Invalid value in Website column (website does not exists?)')
+            $helper->__("Invalid value in website column")
         );
         $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, $helper->__('E-mail is invalid'));
         $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED,
@@ -154,5 +155,73 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Abstract
         }
 
         return false;
+    }
+
+    /**
+     * Validate data row
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return boolean
+     */
+    public function validateRow(array $rowData, $rowNumber)
+    {
+        if (isset($this->_validatedRows[$rowNumber])) { // check that row is already validated
+            return !isset($this->_invalidRows[$rowNumber]);
+        }
+        $this->_validatedRows[$rowNumber] = true;
+        $this->_processedEntitiesCount++;
+
+        if ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE) {
+            $this->_validateRowForUpdate($rowData, $rowNumber);
+        } elseif ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE) {
+            $this->_validateRowForDelete($rowData, $rowNumber);
+        }
+
+        return !isset($this->_invalidRows[$rowNumber]);
+    }
+
+    /**
+     * Validate data row for add/update behaviour
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return null
+     */
+    abstract protected function _validateRowForUpdate(array $rowData, $rowNumber);
+
+    /**
+     * Validate data row for delete behaviour
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return null
+     */
+    abstract protected function _validateRowForDelete(array $rowData, $rowNumber);
+
+    /**
+     * General check of unique key
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return boolean
+     */
+    protected function _checkUniqueKey(array $rowData, $rowNumber)
+    {
+        if (empty($rowData[static::COLUMN_WEBSITE])) {
+            $this->addRowError(static::ERROR_WEBSITE_IS_EMPTY, $rowNumber, static::COLUMN_WEBSITE);
+        } elseif (empty($rowData[static::COLUMN_EMAIL])) {
+            $this->addRowError(static::ERROR_EMAIL_IS_EMPTY, $rowNumber, static::COLUMN_EMAIL);
+        } else {
+            $email   = strtolower($rowData[static::COLUMN_EMAIL]);
+            $website = $rowData[static::COLUMN_WEBSITE];
+
+            if (!Zend_Validate::is($email, 'EmailAddress')) {
+                $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
+            } elseif (!isset($this->_websiteCodeToId[$website])) {
+                $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
+            }
+        }
+        return !isset($this->_invalidRows[$rowNumber]);
     }
 }

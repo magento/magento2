@@ -72,12 +72,10 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     /**
      * Test constructor
      *
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
+     * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      */
     public function testConstruct()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         // check entity table
         $this->assertAttributeInternalType('string', '_entityTable', $this->_entityAdapter,
             'Entity table must be a string.');
@@ -111,13 +109,11 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     /**
      * Test _initAddresses
      *
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
+     * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_initAddresses
      */
     public function testInitAddresses()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         // get addressed from fixture
         $customers = Mage::registry($this->_fixtureKey);
         $correctAddresses = array();
@@ -163,13 +159,11 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     /**
      * Test _saveAddressEntity
      *
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
+     * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_saveAddressEntities
      */
     public function testSaveAddressEntities()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         // invoke _saveAddressEntities
         list($customerId, $addressId) = $this->_addTestAddress($this->_entityAdapter);
 
@@ -185,12 +179,9 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
      *
      * @param Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address $entityAdapter
      * @return array (customerID, addressID)
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      */
     protected function _addTestAddress(Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address $entityAdapter)
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         $customers = Mage::registry($this->_fixtureKey);
         /** @var $customer Mage_Customer_Model_Customer */
         $customer = reset($customers);
@@ -220,13 +211,11 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     /**
      * Test _saveAddressAttributes
      *
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
+     * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_saveAddressAttributes
      */
     public function testSaveAddressAttributes()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         // get attributes list
         $attributesReflection = new ReflectionProperty($this->_testClassName, '_attributes');
         $attributesReflection->setAccessible(true);
@@ -265,13 +254,11 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     /**
      * Test _saveCustomerDefaults
      *
-     * magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
+     * @magentoDataFixture Mage/ImportExport/_files/customer_with_addresses.php
      * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_saveCustomerDefaults
      */
     public function testSaveCustomerDefaults()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         // get not default address
         $customers = Mage::registry($this->_fixtureKey);
         /** @var $notDefaultAddress Mage_Customer_Model_Address */
@@ -351,17 +338,20 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
     }
 
     /**
-     * Test import data method
+     * Test import data method with add/update behaviour
      *
-     * magentoDataFixture Mage/ImportExport/_files/customers_for_address_import.php
+     * @magentoDataFixture Mage/ImportExport/_files/customers_for_address_import.php
      * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_importData
      */
-    public function testImportData()
+    public function testImportDataAddUpdate()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
+        // set behaviour
+        $this->_entityAdapter->setParameters(
+            array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE)
+        );
 
         // set fixture CSV file
-        $sourceFile = __DIR__ . '/../../_files/address_import.csv';
+        $sourceFile = __DIR__ . '/../../_files/address_import_update.csv';
         $result = $this->_entityAdapter
             ->setSource(Mage_ImportExport_Model_Import_Adapter::findAdapterFor($sourceFile))
             ->isDataValid();
@@ -369,7 +359,7 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
 
         // fixture registry keys
         $fixtureCustomer = '_fixture/Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest_Customer';
-        $fixtureCsv      = '_fixture/Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest_Csv';
+        $fixtureCsv      = '_fixture/Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest_Csv_Update';
 
         // get customer
         /** @var $customer Mage_Customer_Model_Customer */
@@ -436,5 +426,52 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest extends 
             $customer->getDefaultShippingAddress()->getData($keyAttribute),
             'Incorrect default shipping address'
         );
+    }
+
+    /**
+     * Test import data method with delete behaviour
+     *
+     * @magentoDataFixture Mage/ImportExport/_files/customers_for_address_import.php
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address::_importData
+     */
+    public function testImportDataDelete()
+    {
+        // set behaviour
+        $this->_entityAdapter->setParameters(
+            array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE)
+        );
+
+        // set fixture CSV file
+        $sourceFile = __DIR__ . '/../../_files/address_import_delete.csv';
+        $result = $this->_entityAdapter
+            ->setSource(Mage_ImportExport_Model_Import_Adapter::findAdapterFor($sourceFile))
+            ->isDataValid();
+        $this->assertTrue($result, 'Validation result must be true.');
+
+        // fixture data
+        $fixtureCsv = '_fixture/Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_AddressTest_Csv_Delete';
+
+        // get csv fixture data
+        $csvData = Mage::registry($fixtureCsv);
+
+        // import data
+        $this->_entityAdapter->importData();
+
+        // key attribute
+        $keyAttribute = 'postcode';
+
+        // get addresses
+        /** @var $addressCollection Mage_Customer_Model_Resource_Address_Collection */
+        $addressCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Address_Collection');
+        $addressCollection->addAttributeToSelect($keyAttribute);
+        $addresses = array();
+        /** @var $address Mage_Customer_Model_Address */
+        foreach ($addressCollection as $address) {
+            $addresses[$address->getData($keyAttribute)] = $address;
+        }
+
+        // is addresses exists
+        $this->assertArrayNotHasKey($csvData['delete'], $addresses, 'Address must not exist.');
+        $this->assertArrayHasKey($csvData['not_delete'], $addresses, 'Address must exist.');
     }
 }

@@ -29,6 +29,8 @@
     <modules>
         <Mage_Core>
             <version>1.6.0.3</version>
+            <active>true</active>
+            <codePool>core</codePool>
         </Mage_Core>
     </modules>
     <global>

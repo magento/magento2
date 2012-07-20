@@ -28,16 +28,52 @@
 class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien_Router_Base
 {
     /**
+     * List of required request parameters
+     * Order sensitive
+     * @var array
+     */
+    protected $_requiredParams = array(
+        'areaFrontName',
+        'moduleFrontName',
+        'controllerName',
+        'actionName',
+    );
+
+    /**
+     * Url key of area
+     *
+     * @var string
+     */
+    protected $_areaFrontName;
+
+    /**
+     * Fetch area front name from params
+     *
+     * @param array $options
+     * @throws InvalidArgumentException
+     */
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+        $this->_areaFrontName = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
+        if (empty($this->_areaFrontName)) {
+            throw new InvalidArgumentException('Area Front Name should be defined');
+        }
+    }
+
+    /**
      * Fetch default path
      */
     public function fetchDefault()
     {
+        $defaultModuleFrontName = (string) Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName');
         // set defaults
         $d = explode('/', $this->_getDefaultPath());
         $this->getFront()->setDefault(array(
-            'module'     => !empty($d[0]) ? $d[0] : '',
-            'controller' => !empty($d[1]) ? $d[1] : 'index',
-            'action'     => !empty($d[2]) ? $d[2] : 'index'
+            'area'       => !empty($d[0]) ? $d[0] : '',
+            'module'     => !empty($d[1]) ? $d[1] : $defaultModuleFrontName,
+            'controller' => !empty($d[2]) ? $d[2] : 'index',
+            'action'     => !empty($d[3]) ? $d[3] : 'index'
         ));
     }
 
@@ -120,66 +156,26 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      */
     public function collectRoutes($configArea, $useRouterName)
     {
-        if ((string)Mage::getConfig()->getNode(Mage_Backend_Helper_Data::XML_PATH_USE_CUSTOM_ADMIN_PATH)) {
-            $customUrl = (string)Mage::getConfig()->getNode(Mage_Backend_Helper_Data::XML_PATH_CUSTOM_ADMIN_PATH);
-            $xmlPath = Mage_Backend_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME;
-            if ((string)Mage::getConfig()->getNode($xmlPath) != $customUrl) {
-                Mage::getConfig()->setNode($xmlPath, $customUrl, true);
-            }
-        }
-        $this->_collectRoutes('admin', $useRouterName);
+        parent::collectRoutes('admin', $useRouterName);
     }
 
     /**
-     * Collect modules routers configuration from configuration
+     * Check whether redirect should be used for secure routes
      *
-     * @param string $configArea
-     * @param string $useRouterName
-     * @return void
+     * @return bool
      */
-    protected function _collectRoutes($configArea, $useRouterName)
+    protected function _shouldRedirectToSecure()
     {
-        $routers = array();
-        $routersConfigNode = Mage::getConfig()->getNode($configArea.'/routers');
-        if($routersConfigNode) {
-            $routers = $routersConfigNode->children();
-        }
-        foreach ($routers as $routerName=>$routerConfig) {
-            $use = (string)$routerConfig->use;
-            if ($use == $useRouterName) {
-                $modules = array();
-                if (isset($routerConfig->args->module)) {
-                    $modules = array((string)$routerConfig->args->module);
-                }
-
-                if ($routerConfig->args->modules) {
-                    foreach ($routerConfig->args->modules->children() as $customModule) {
-                        if ($customModule) {
-                            if ($before = $customModule->getAttribute('before')) {
-                                $position = array_search($before, $modules);
-                                if ($position === false) {
-                                    $position = 0;
-                                }
-                                array_splice($modules, $position, 0, (string)$customModule);
-                            } elseif ($after = $customModule->getAttribute('after')) {
-                                $position = array_search($after, $modules);
-                                if ($position === false) {
-                                    $position = count($modules);
-                                }
-                                array_splice($modules, $position+1, 0, (string)$customModule);
-                            } else {
-                                $modules[] = (string)$customModule;
-                            }
-                        }
-                    }
-                }
-
-                $frontName = (string)$routerConfig->args->frontName;
-                $this->addModule($frontName, $modules, $routerName);
-            }
-        }
+        return false;
     }
 
+    /**
+     * Build controller file name based on moduleName and controllerName
+     *
+     * @param string $realModule
+     * @param string $controller
+     * @return string
+     */
     public function getControllerFileName($realModule, $controller)
     {
         /**
@@ -199,6 +195,13 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
         return $file . DS . ucfirst($this->_area) . DS . uc_words($controller, DS) . 'Controller.php';
     }
 
+    /**
+     * Build controller class name based on moduleName and controllerName
+     *
+     * @param string $realModule
+     * @param string $controller
+     * @return string
+     */
     public function getControllerClassName($realModule, $controller)
     {
         /**
@@ -215,5 +218,16 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
         return $realModule . '_' . ucfirst($this->_area) . '_' . uc_words($controller) . 'Controller';
+    }
+
+    /**
+     * Check whether this router should process given request
+     *
+     * @param array $params
+     * @return bool
+     */
+    protected function _canProcess(array $params)
+    {
+        return $params['areaFrontName'] == $this->_areaFrontName;
     }
 }

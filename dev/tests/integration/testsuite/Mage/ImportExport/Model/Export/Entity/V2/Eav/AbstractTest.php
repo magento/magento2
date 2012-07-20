@@ -109,12 +109,10 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_AbstractTest extends PHPUnit_
     /**
      * Test for method filterEntityCollection()
      *
-     * magentoDataFixture Mage/ImportExport/_files/customers.php
+     * @magentoDataFixture Mage/ImportExport/_files/customers.php
      */
     public function testFilterEntityCollection()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         $createdAtDate = '2013-01-01';
         /**
          * Change created_at date of first customer for future filter test.

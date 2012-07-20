@@ -54,6 +54,14 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
     const ERROR_PASSWORD_LENGTH      = 'passwordLength';
     /**#@-*/
 
+    /**#@+
+     * Keys which used to build result data array for future update
+     */
+    const ENTITIES_TO_CREATE_KEY = 'entities_to_create';
+    const ENTITIES_TO_UPDATE_KEY = 'entities_to_update';
+    const ATTRIBUTES_TO_SAVE_KEY = 'attributes_to_save';
+    /**#@-*/
+
     /**
      * Minimum password length
      */
@@ -88,6 +96,20 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
     protected $_entityTable;
 
     /**
+     * Customer model
+     *
+     * @var Mage_Customer_Model_Customer
+     */
+    protected $_customerModel;
+
+    /**
+     * Id of next customer entity row
+     *
+     * @var int
+     */
+    protected $_nextEntityId;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -118,115 +140,20 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
         $this->_initStores(true)
             ->_initAttributes();
 
+        $this->_customerModel = Mage::getModel('Mage_Customer_Model_Customer');
         /** @var $customerResource Mage_Customer_Model_Resource_Customer */
-        $customerResource = Mage::getModel('Mage_Customer_Model_Customer')->getResource();
+        $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
     }
 
     /**
-     * Gather and save information about customer entities.
-     *
-     * @return Mage_ImportExport_Model_Import_Entity_Customer
-     */
-    protected function _saveCustomers()
-    {
-        /** @var $resource Mage_Customer_Model_Customer */
-        $resource = Mage::getModel('Mage_Customer_Model_Customer');
-
-        $passwordAttribute = $resource->getAttribute('password_hash');
-        $passwordAttributeId = $passwordAttribute->getId();
-        $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
-
-        $dateTimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
-
-        $nextEntityId = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($this->_entityTable);
-
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $entitiesToCreate = array();
-            $entitiesToUpdate = array();
-            $attributes   = array();
-
-            foreach ($bunch as $rowNumber => $rowData) {
-                if (!$this->validateRow($rowData, $rowNumber)) {
-                    continue;
-                }
-
-                // entity table data
-                $entityRow = array(
-                    'group_id'   => empty($rowData['group_id'])
-                        ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
-
-                    'store_id'   => empty($rowData[self::COLUMN_STORE])
-                        ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
-
-                    'created_at' => empty($rowData['created_at'])
-                        ? now() : gmstrftime($dateTimeFormat, strtotime($rowData['created_at'])),
-
-                    'updated_at' => now()
-                );
-
-                $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
-                if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) { // edit
-                    $entityRow['entity_id'] = $entityId;
-                    $entitiesToUpdate[] = $entityRow;
-                } else { // create
-                    $entityId = $nextEntityId++;
-                    $entityRow['entity_id'] = $entityId;
-                    $entityRow['entity_type_id'] = $this->getEntityTypeId();
-                    $entityRow['attribute_set_id'] = 0;
-                    $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
-                    $entityRow['email'] = $emailInLowercase;
-                    $entityRow['is_active'] = 1;
-                    $entitiesToCreate[] = $entityRow;
-
-                    $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
-                }
-
-                // attribute values
-                foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
-                    if (!$this->_attributes[$attributeCode]['is_static'] && strlen($value)) {
-                        /** @var $attribute Mage_Customer_Model_Attribute */
-                        $attribute = $resource->getAttribute($attributeCode);
-                        $backendModel = $attribute->getBackendModel();
-                        $attributeParameters = $this->_attributes[$attributeCode];
-
-                        if ('select' == $attributeParameters['type']) {
-                            $value = $attributeParameters['options'][strtolower($value)];
-                        } elseif ('datetime' == $attributeParameters['type']) {
-                            $value = gmstrftime($dateTimeFormat, strtotime($value));
-                        } elseif ($backendModel) {
-                            $attribute->getBackend()->beforeSave($resource->setData($attributeCode, $value));
-                            $value = $resource->getData($attributeCode);
-                        }
-                        $attributes[$attribute->getBackend()->getTable()][$entityId][$attributeParameters['id']]
-                            = $value;
-
-                        // restore 'backend_model' to avoid default setting
-                        $attribute->setBackendModel($backendModel);
-                    }
-                }
-
-                // password change/set
-                if (isset($rowData['password']) && strlen($rowData['password'])) {
-                    $attributes[$passwordStorageTable][$entityId][$passwordAttributeId]
-                        = $resource->hashPassword($rowData['password']);
-                }
-            }
-
-            $this->_saveCustomerEntity($entitiesToCreate, $entitiesToUpdate)
-                ->_saveCustomerAttributes($attributes);
-        }
-        return $this;
-    }
-
-    /**
-     * Update and insert data in entity table.
+     * Update and insert data in entity table
      *
      * @param array $entitiesToCreate Rows for insert
      * @param array $entitiesToUpdate Rows for update
      * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
      */
-    protected function _saveCustomerEntity(array $entitiesToCreate, array $entitiesToUpdate)
+    protected function _saveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
         if ($entitiesToCreate) {
             $this->_connection->insertMultiple($this->_entityTable, $entitiesToCreate);
@@ -254,8 +181,8 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
         foreach ($attributesData as $tableName => $data) {
             $tableData = array();
 
-            foreach ($data as $customerId => $attrData) {
-                foreach ($attrData as $attributeId => $value) {
+            foreach ($data as $customerId => $attributeData) {
+                foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = array(
                         'entity_id'      => $customerId,
                         'entity_type_id' => $this->getEntityTypeId(),
@@ -270,13 +197,170 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
     }
 
     /**
+     * Delete list of customers
+     *
+     * @param array $entitiesToDelete customers id list
+     * @return Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
+     */
+    protected function _deleteCustomerEntities(array $entitiesToDelete)
+    {
+        $condition = $this->_connection->quoteInto('entity_id IN (?)', $entitiesToDelete);
+        $this->_connection->delete($this->_entityTable, $condition);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve next customer entity id
+     *
+     * @return int
+     */
+    protected function getNextEntityId()
+    {
+        if (!$this->_nextEntityId) {
+            /** @var $resourceHelper Mage_ImportExport_Model_Resource_Helper_Mysql4 */
+            $resourceHelper = Mage::getResourceHelper('Mage_ImportExport');
+            $this->_nextEntityId = $resourceHelper->getNextAutoincrement($this->_entityTable);
+        }
+        return $this->_nextEntityId++;
+    }
+
+    /**
+     * Prepare customer data for update
+     *
+     * @param array $rowData
+     * @return array
+     */
+    protected function _prepareDataForUpdate(array $rowData)
+    {
+        /** @var $passwordAttribute Mage_Customer_Model_Attribute */
+        $passwordAttribute = $this->_customerModel->getAttribute('password_hash');
+        $passwordAttributeId = $passwordAttribute->getId();
+        $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
+
+        $dateTimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
+
+        $entitiesToCreate = array();
+        $entitiesToUpdate = array();
+        $attributesToSave = array();
+
+        // entity table data
+        $entityRow = array(
+            'group_id'   => empty($rowData['group_id'])
+                ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
+
+            'store_id'   => empty($rowData[self::COLUMN_STORE])
+                ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
+
+            'created_at' => empty($rowData['created_at'])
+                ? now() : gmstrftime($dateTimeFormat, strtotime($rowData['created_at'])),
+
+            'updated_at' => now()
+        );
+
+        $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
+        if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) { // edit
+            $entityRow['entity_id'] = $entityId;
+            $entitiesToUpdate[] = $entityRow;
+        } else { // create
+            $entityId = $this->getNextEntityId();
+            $entityRow['entity_id'] = $entityId;
+            $entityRow['entity_type_id'] = $this->getEntityTypeId();
+            $entityRow['attribute_set_id'] = 0;
+            $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+            $entityRow['email'] = $emailInLowercase;
+            $entityRow['is_active'] = 1;
+            $entitiesToCreate[] = $entityRow;
+
+            $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
+        }
+
+        // attribute values
+        foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
+            if (!$this->_attributes[$attributeCode]['is_static'] && strlen($value)) {
+                /** @var $attribute Mage_Customer_Model_Attribute */
+                $attribute = $this->_customerModel->getAttribute($attributeCode);
+                $backendModel = $attribute->getBackendModel();
+                $attributeParameters = $this->_attributes[$attributeCode];
+
+                if ('select' == $attributeParameters['type']) {
+                    $value = $attributeParameters['options'][strtolower($value)];
+                } elseif ('datetime' == $attributeParameters['type']) {
+                    $value = gmstrftime($dateTimeFormat, strtotime($value));
+                } elseif ($backendModel) {
+                    $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
+                    $value = $this->_customerModel->getData($attributeCode);
+                }
+                $attributesToSave[$attribute->getBackend()->getTable()][$entityId][$attributeParameters['id']]
+                    = $value;
+
+                // restore 'backend_model' to avoid default setting
+                $attribute->setBackendModel($backendModel);
+            }
+        }
+
+        // password change/set
+        if (isset($rowData['password']) && strlen($rowData['password'])) {
+            $attributesToSave[$passwordStorageTable][$entityId][$passwordAttributeId]
+                = $this->_customerModel->hashPassword($rowData['password']);
+        }
+
+        return array(
+            self::ENTITIES_TO_CREATE_KEY => $entitiesToCreate,
+            self::ENTITIES_TO_UPDATE_KEY => $entitiesToUpdate,
+            self::ATTRIBUTES_TO_SAVE_KEY => $attributesToSave
+        );
+    }
+
+    /**
      * Import data rows
      *
      * @return boolean
      */
     protected function _importData()
     {
-        $this->_saveCustomers();
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $entitiesToCreate = array();
+            $entitiesToUpdate = array();
+            $entitiesToDelete = array();
+            $attributesToSave = array();
+
+            foreach ($bunch as $rowNumber => $rowData) {
+                if (!$this->validateRow($rowData, $rowNumber)) {
+                    continue;
+                }
+
+                if ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE) {
+                    $entitiesToDelete[] = $this->_getCustomerId(
+                        $rowData[self::COLUMN_EMAIL],
+                        $rowData[self::COLUMN_WEBSITE]
+                    );
+                } elseif ($this->getBehavior($rowData) == Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE) {
+                    $processedData = $this->_prepareDataForUpdate($rowData);
+                    $entitiesToCreate = array_merge($entitiesToCreate, $processedData[self::ENTITIES_TO_CREATE_KEY]);
+                    $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
+                    foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
+                        if (!isset($attributesToSave[$tableName])) {
+                            $attributesToSave[$tableName] = array();
+                        }
+                        $attributesToSave[$tableName] =
+                            array_diff_key($attributesToSave[$tableName], $customerAttributes) + $customerAttributes;
+                    }
+                }
+            }
+            /**
+             * Save prepared data
+             */
+            if ($entitiesToCreate || $entitiesToUpdate) {
+                $this->_saveCustomerEntities($entitiesToCreate, $entitiesToUpdate);
+            }
+            if ($attributesToSave) {
+                $this->_saveCustomerAttributes($attributesToSave);
+            }
+            if ($entitiesToDelete) {
+                $this->_deleteCustomerEntities($entitiesToDelete);
+            }
+        }
 
         return true;
     }
@@ -306,28 +390,18 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
     }
 
     /**
-     * Validate data row
+     * Validate row data for add/update behaviour
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return boolean
+     * @return null
      */
-    public function validateRow(array $rowData, $rowNumber)
+    protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
-        if (isset($this->_validatedRows[$rowNumber])) { // check that row is already validated
-            return !isset($this->_invalidRows[$rowNumber]);
-        }
-        $this->_validatedRows[$rowNumber] = true;
+        if ($this->_checkUniqueKey($rowData, $rowNumber)) {
+            $email   = strtolower($rowData[self::COLUMN_EMAIL]);
+            $website = $rowData[self::COLUMN_WEBSITE];
 
-        $this->_processedEntitiesCount++;
-        $email   = strtolower($rowData[self::COLUMN_EMAIL]);
-        $website = $rowData[self::COLUMN_WEBSITE];
-
-        if (!Zend_Validate::is($email, 'EmailAddress')) {
-            $this->addRowError(self::ERROR_INVALID_EMAIL, $rowNumber);
-        } elseif (!isset($this->_websiteCodeToId[$website])) {
-            $this->addRowError(self::ERROR_INVALID_WEBSITE, $rowNumber);
-        } else {
             if (isset($this->_newCustomers[strtolower($rowData[self::COLUMN_EMAIL])][$website])) {
                 $this->addRowError(self::ERROR_DUPLICATE_EMAIL_SITE, $rowNumber);
             }
@@ -356,7 +430,21 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer
                 }
             }
         }
+    }
 
-        return !isset($this->_invalidRows[$rowNumber]);
+    /**
+     * Validate row data for delete behaviour
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @return null
+     */
+    protected function _validateRowForDelete(array $rowData, $rowNumber)
+    {
+        if ($this->_checkUniqueKey($rowData, $rowNumber)) {
+            if (!$this->_getCustomerId($rowData[self::COLUMN_EMAIL], $rowData[self::COLUMN_WEBSITE])) {
+                $this->addRowError(self::ERROR_CUSTOMER_NOT_FOUND, $rowNumber);
+            }
+        }
     }
 }

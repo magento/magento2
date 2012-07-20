@@ -35,7 +35,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Cont
      */
     public function testIndexAction()
     {
-        $this->dispatch('admin/user/index');
+        $this->dispatch('backend/admin/user/index');
         $this->assertStringMatchesFormat('%a<div class="content-header">%aUsers%a', $this->getResponse()->getBody());
     }
 
@@ -47,7 +47,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Cont
         $this->getRequest()
             ->setParam('ajax', true)
             ->setParam('isAjax', true);
-        $this->dispatch('admin/user/roleGrid');
+        $this->dispatch('backend/admin/user/roleGrid');
         $expected = '%a<table %a id="permissionsUserGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }
@@ -61,7 +61,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Cont
             ->setParam('ajax', true)
             ->setParam('isAjax', true)
             ->setParam('user_id', 1);
-        $this->dispatch('admin/user/rolesGrid');
+        $this->dispatch('backend/admin/user/rolesGrid');
         $expected = '%a<table %a id="permissionsUserRolesGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }
@@ -72,7 +72,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Cont
     public function testEditAction()
     {
         $this->getRequest()->setParam('user_id', 1);
-        $this->dispatch('admin/user/edit');
+        $this->dispatch('backend/admin/user/edit');
         $expected = '%a<h3 class="icon-head head-user">Edit User%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }

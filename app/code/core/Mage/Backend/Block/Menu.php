@@ -114,7 +114,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     protected function _afterToHtml($html)
     {
         $html = preg_replace_callback(
-            '#'.Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME.'/\$([^\/].*)/([^\$].*)\$#U',
+            '#'.Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME.'/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
             array($this, '_callbackSecretKey'),
             $html
         );
@@ -131,7 +131,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     protected function _callbackSecretKey($match)
     {
         return Mage_Backend_Model_Url::SECRET_KEY_PARAM_NAME . '/'
-            . $this->_url->getSecretKey($match[1], $match[2]);
+            . $this->_url->getSecretKey($match[1], $match[2], $match[3]);
     }
 
     /**

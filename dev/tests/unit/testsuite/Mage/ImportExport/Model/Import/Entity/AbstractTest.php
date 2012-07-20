@@ -97,7 +97,7 @@ class Mage_ImportExport_Model_Import_Entity_AbstractTest extends PHPUnit_Framewo
     /**
      * Test for method validateData()
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData()
+     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData
      * @expectedException Mage_Core_Exception
      * @expectedExceptionMessage Columns number: "%s" have empty headers
      */
@@ -111,7 +111,7 @@ class Mage_ImportExport_Model_Import_Entity_AbstractTest extends PHPUnit_Framewo
     /**
      * Test for method validateData()
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData()
+     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData
      * @expectedException Mage_Core_Exception
      * @expectedExceptionMessage Columns number: "%s" have empty headers
      */
@@ -125,7 +125,7 @@ class Mage_ImportExport_Model_Import_Entity_AbstractTest extends PHPUnit_Framewo
     /**
      * Test for method validateData()
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData()
+     * @covers Mage_ImportExport_Model_Import_Entity_Abstract::validateData
      * @expectedException Mage_Core_Exception
      * @expectedExceptionMessage Column names: "%s" are invalid
      */

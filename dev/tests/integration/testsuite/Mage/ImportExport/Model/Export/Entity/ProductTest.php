@@ -56,6 +56,34 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
      */
     protected $_oldIsDeveloperMode;
 
+    /**
+     * Stock item attributes which must be exported
+     *
+     * @var array
+     */
+    public static $stockItemAttributes = array(
+        'qty',
+        'min_qty',
+        'use_config_min_qty',
+        'is_qty_decimal',
+        'backorders',
+        'use_config_backorders',
+        'min_sale_qty',
+        'use_config_min_sale_qty',
+        'max_sale_qty',
+        'use_config_max_sale_qty',
+        'is_in_stock',
+        'notify_stock_qty',
+        'use_config_notify_stock_qty',
+        'manage_stock',
+        'use_config_manage_stock',
+        'use_config_qty_increments',
+        'qty_increments',
+        'use_config_enable_qty_inc',
+        'enable_qty_increments',
+        'is_decimal_divided',
+    );
+
     protected function setUp()
     {
         parent::setUp();
@@ -72,7 +100,7 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
         ini_set('display_errors', $this->_oldDisplayErrors);
         error_reporting($this->_oldErrorLevel);
         Mage::setIsDeveloperMode($this->_oldIsDeveloperMode);
-        $this->_model = null;
+        unset($this->_model);
 
         parent::tearDown();
     }
@@ -93,5 +121,65 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
 
         $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
         $this->assertNotEmpty($this->_model->export());
+    }
+
+    /**
+     * Verify that all stock item attribute values are exported (aren't equal to empty string)
+     *
+     * @covers Mage_ImportExport_Model_Export_Entity_Product::export
+     * @magentoDataFixture Mage/ImportExport/_files/product.php
+     */
+    public function testExportStockItemAttributesAreFilled()
+    {
+        $writerMock = $this->getMockForAbstractClass(
+            'Mage_ImportExport_Model_Export_Adapter_Abstract',
+            array(),
+            '',
+            true,
+            true,
+            true,
+            array('setHeaderCols', 'writeRow')
+        );
+
+        $writerMock->expects($this->any())
+            ->method('setHeaderCols')
+            ->will($this->returnCallback(array($this, 'verifyHeaderColumns')));
+
+        $writerMock->expects($this->any())
+            ->method('writeRow')
+            ->will($this->returnCallback(array($this, 'verifyRow')));
+
+        $this->_model->setWriter($writerMock)
+            ->export();
+    }
+
+    /**
+     * Verify header columns (that stock item attributes column headers are present)
+     *
+     * @param array $headerColumns
+     * @return void
+     */
+    public function verifyHeaderColumns(array $headerColumns)
+    {
+        foreach (self::$stockItemAttributes as $stockItemAttribute) {
+            $this->assertContains($stockItemAttribute, $headerColumns,
+                "Stock item attribute {$stockItemAttribute} is absent among header columns"
+            );
+        }
+    }
+
+    /**
+     * Verify row data (stock item attribute values)
+     *
+     * @param array $rowData
+     * @return void
+     */
+    public function verifyRow(array $rowData)
+    {
+        foreach (self::$stockItemAttributes as $stockItemAttribute) {
+            $this->assertNotSame('', $rowData[$stockItemAttribute],
+                "Stock item attribute {$stockItemAttribute} value is empty string"
+            );
+        }
     }
 }

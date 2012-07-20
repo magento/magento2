@@ -51,6 +51,8 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest extends PHPUnit_Fra
         // check form fieldsets
         $formFieldsetIds = array(
             'base_fieldset',
+            'behavior_v1_fieldset',
+            'behavior_v2_customer_fieldset',
             'import_format_version_fieldset',
             'customer_entity_fieldset',
             'upload_file_fieldset'

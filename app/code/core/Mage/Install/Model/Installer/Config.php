@@ -131,7 +131,7 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
             ->setDbPass('')
             ->setSecureBaseUrl($baseSecureUrl)
             ->setUnsecureBaseUrl($baseUrl)
-            ->setAdminFrontname('admin')
+            ->setBackendFrontname('backend')
             ->setEnableCharts('1')
         ;
         return $data;

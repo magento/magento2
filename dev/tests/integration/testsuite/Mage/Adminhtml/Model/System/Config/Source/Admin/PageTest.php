@@ -32,7 +32,7 @@ class Mage_Adminhtml_Model_System_Config_Source_Admin_PageTest extends Mage_Admi
 {
     public function testToOptionArray()
     {
-        $this->dispatch('admin/system_config/edit/section/admin');
+        $this->dispatch('backend/admin/system_config/edit/section/admin');
 
         $dom = new DomDocument();
         $dom->loadHTML($this->getResponse()->getBody());

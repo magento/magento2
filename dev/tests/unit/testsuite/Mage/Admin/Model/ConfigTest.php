@@ -41,7 +41,7 @@ class Mage_Admin_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $userHelper = $this->getMock("Mage_User_Helper_Data");
         $userHelper->expects($this->any())->method('__')->will($this->returnValue('User_Translation'));
 
-        $backendHelper = $this->getMock('Mage_Backend_Helper_Data');
+        $backendHelper = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
         $backendHelper->expects($this->any())->method('__')->will($this->returnValue('Backend_Translation'));
 
         $this->_config = new Mage_Admin_Model_Config(

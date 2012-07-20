@@ -32,14 +32,21 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
      */
     protected $_model;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_frontMock;
+
     protected function setUp()
     {
         $options = array(
-            'area' => 'adminhtml',
-            'base_controller' => 'Mage_Backend_Controller_ActionAbstract'
+            'area' => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
+            'base_controller' => 'Mage_Backend_Controller_ActionAbstract',
+            'frontName' => 'backend'
         );
+        $this->_frontMock = $this->getMock('Mage_Core_Controller_Varien_Front');
         $this->_model = new Mage_Backend_Controller_Router_Default($options);
-        $this->_model->setFront(new Mage_Core_Controller_Varien_Front());
+        $this->_model->setFront($this->_frontMock);
     }
 
     protected function tearDown()
@@ -47,13 +54,39 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
         $this->_model = null;
     }
 
+    public function testRouterCannotProcessRequestsWithWrongFrontName()
+    {
+        $request = $this->getMock('Mage_Core_Controller_Request_Http');
+        $request->expects($this->once())
+            ->method('getPathInfo')
+            ->will($this->returnValue('frontend/admin/dashboard'));
+        $this->_frontMock->expects($this->never())
+            ->method('setDefault');
+        $this->_model->match($request);
+    }
+
+    public function testRouterCanProcessRequestsWithProperFrontName()
+    {
+        $request = $this->getMock('Mage_Core_Controller_Request_Http');
+        $request->expects($this->once())
+            ->method('getPathInfo')
+            ->will($this->returnValue('backend/admin/dashboard'));
+        $this->_frontMock->expects($this->once())
+            ->method('setDefault');
+        $this->_model->match($request);
+    }
+
+
     /**
      * @covers Mage_Backend_Controller_Router_Default::collectRoutes
      */
     public function testCollectRoutes()
     {
-        $this->_model->collectRoutes('admin', 'admin');
-        $this->assertEquals('admin', $this->_model->getFrontNameByRoute('adminhtml'));
+        $this->_model->collectRoutes(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(), 'admin');
+        $this->assertEquals(
+            'admin',
+            $this->_model->getFrontNameByRoute('adminhtml')
+        );
     }
 
     /**
@@ -62,13 +95,15 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
     public function testFetchDefault()
     {
         $default = array(
-            'module' => '',
+            'area' => '',
+            'module' => 'admin',
             'controller' => 'index',
             'action' => 'index'
         );
-        $this->assertEmpty($this->_model->getFront()->getDefault());
+        $this->_frontMock->expects($this->once())
+            ->method('setDefault')
+            ->with($this->equalTo($default));
         $this->_model->fetchDefault();
-        $this->assertEquals($default, $this->_model->getFront()->getDefault());
     }
 
     /**

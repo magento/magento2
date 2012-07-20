@@ -29,6 +29,12 @@
     <modules>
         <Mage_Rating>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+                <Mage_Review/>
+            </depends>
         </Mage_Rating>
     </modules>
     <global>

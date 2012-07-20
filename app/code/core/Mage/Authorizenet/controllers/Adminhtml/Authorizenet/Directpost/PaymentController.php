@@ -121,7 +121,7 @@ class Mage_Authorizenet_Adminhtml_Authorizenet_Directpost_PaymentController
                     $adminUrl = Mage::getSingleton('Mage_Adminhtml_Model_Url');
                     if ($adminUrl->useSecretKey()) {
                         $requestToPaygate->setKey(
-                            $adminUrl->getSecretKey('authorizenet_directpost_payment','redirect')
+                            $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment','redirect')
                         );
                     }
                     $result['directpost'] = array('fields' => $requestToPaygate->getData());

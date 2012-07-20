@@ -230,7 +230,9 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
         }
 
         $layout->setDirectOutput(false);
-        return $layout->getOutput();
+        $result = $layout->getOutput();
+        $layout->__destruct(); // To overcome bug with SimpleXML memory leak (https://bugs.php.net/bug.php?id=62468)
+        return $result;
     }
 
     /**

@@ -57,7 +57,7 @@ class Mage_ImportExport_Model_ExportTest extends PHPUnit_Framework_TestCase
             'Mage_ImportExport_Model_Export_Adapter_Abstract',
             array(),
             '',
-            true,
+            false,
             true,
             true,
             array('getFileExtension')

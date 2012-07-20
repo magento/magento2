@@ -68,7 +68,7 @@ class Mage_DesignEditor_Block_Toolbar_SkinTest extends PHPUnit_Framework_TestCas
         }
     }
 
-    public function  testIsSkinSelected()
+    public function testIsSkinSelected()
     {
         $oldTheme = Mage::getDesign()->getDesignTheme();
         Mage::getDesign()->setDesignTheme('a/b/c');

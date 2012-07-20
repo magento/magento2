@@ -46,7 +46,7 @@ class Utility_Classes
         foreach ($matches as $row) {
             $result = array_merge($result, $row);
         }
-        $result = array_filter(array_unique($result), function($value) {
+        $result = array_filter(array_unique($result), function ($value) {
             return !empty($value);
         });
         return $result;

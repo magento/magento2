@@ -149,14 +149,13 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     }
 
     /**
-     * Put image into output stream
-     *
+     * @see Varien_Image_Adapter_Abstract::getImage
+     * @return string
      */
-    public function display()
+    public function getImage()
     {
-        header("Content-type: " . $this->getMimeType());
         $this->_applyOptions();
-        echo (string)$this->_imageHandler;
+        return (string)$this->_imageHandler;
     }
 
     /**

@@ -29,6 +29,15 @@
     <modules>
         <Mage_Rss>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+             <depends>
+                <Mage_Catalog/>
+                <Mage_CatalogInventory/>
+                <Mage_Sales/>
+                <Mage_SalesRule/>
+                <Mage_Wishlist/>
+             </depends>
         </Mage_Rss>
     </modules>
     <admin>

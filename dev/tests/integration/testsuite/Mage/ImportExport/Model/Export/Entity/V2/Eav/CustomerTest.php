@@ -52,12 +52,10 @@ class Mage_ImportExport_Model_Export_Entity_V2_Eav_CustomerTest extends PHPUnit_
     /**
      * Test export method
      *
-     * magentoDataFixture Mage/ImportExport/_files/customers.php
+     * @magentoDataFixture Mage/ImportExport/_files/customers.php
      */
     public function testExport()
     {
-        $this->markTestIncomplete('BUG MAGETWO-1953');
-
         $expectedAttributes = array();
         /** @var $collection Mage_Customer_Model_Resource_Attribute_Collection */
         $collection = Mage::getResourceModel('Mage_Customer_Model_Resource_Attribute_Collection');

@@ -119,7 +119,7 @@ class Mage_ImportExport_Model_Import_Entity_V2_Eav_AbstractTest extends PHPUnit_
     /**
      * Test entity type id getter
      *
-     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Abstract::getEntityTypeId()
+     * @covers Mage_ImportExport_Model_Import_Entity_V2_Eav_Abstract::getEntityTypeId
      */
     public function testGetEntityTypeId()
     {

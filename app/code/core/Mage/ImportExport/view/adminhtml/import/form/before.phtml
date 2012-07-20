@@ -33,6 +33,121 @@
      */
     varienForm.prototype.ifrElemName = 'import_post_target_frame';
 
+    /**#@+
+     * Behavior version constants
+     *
+     * @type string
+     */
+    varienForm.prototype.BEHAVIOR_VERSION_1 = 'behaviour_v1';
+    varienForm.prototype.BEHAVIOR_VERSION_2_CUSTOMER = 'behaviour_v2_customer';
+    /**#@-*/
+
+    /**
+     * Show behavior selector
+     *
+     * @param string|boolean behaviorVersion If false, then hide both behavior selectors
+     * @return void
+     */
+    varienForm.prototype.showBehavior = function(behaviorVersion)
+    {
+        if (behaviorVersion == this.BEHAVIOR_VERSION_1) {
+            $('head-behavior_v1_fieldset').show();
+            $('behavior_v1_fieldset').show();
+            $('behavior_v1').enable();
+            $('behavior_v1').addClassName('required-entry');
+
+            $('head-behavior_v2_customer_fieldset').hide();
+            $('behavior_v2_customer_fieldset').hide();
+            $('behavior_v2_customer').selectedIndex = 0;
+            $('behavior_v2_customer').disable();
+            $('behavior_v2_customer').removeClassName('required-entry')
+        } else if (behaviorVersion == this.BEHAVIOR_VERSION_2_CUSTOMER) {
+            $('head-behavior_v1_fieldset').hide();
+            $('behavior_v1_fieldset').hide();
+            $('behavior_v1').selectedIndex = 0;
+            $('behavior_v1').disable();
+            $('behavior_v1').removeClassName('required-entry');
+
+            $('head-behavior_v2_customer_fieldset').show();
+            $('behavior_v2_customer_fieldset').show();
+            $('behavior_v2_customer').enable();
+            $('behavior_v2_customer').addClassName('required-entry')
+        } else {
+            $('head-behavior_v1_fieldset').hide();
+            $('behavior_v1_fieldset').hide();
+            $('behavior_v1').selectedIndex = 0;
+            $('behavior_v1').disable();
+            $('behavior_v1').removeClassName('required-entry');
+
+            $('head-behavior_v2_customer_fieldset').hide();
+            $('behavior_v2_customer_fieldset').hide();
+            $('behavior_v2_customer').selectedIndex = 0;
+            $('behavior_v2_customer').disable();
+            $('behavior_v2_customer').removeClassName('required-entry')
+        }
+    };
+
+    /**
+     * Show import format version selector
+     *
+     * @param boolean isShow
+     * @return void
+     */
+    varienForm.prototype.showFormatVersion = function(isShow)
+    {
+        if (isShow == true) {
+            $('head-import_format_version_fieldset').show();
+            $('import_format_version_fieldset').show();
+            $('file_format_version').enable();
+            $('file_format_version').addClassName('required-entry');
+        } else {
+            $('head-import_format_version_fieldset').hide();
+            $('import_format_version_fieldset').hide();
+            $('file_format_version').selectedIndex = 0;
+            $('file_format_version').disable();
+            $('file_format_version').removeClassName('required-entry');
+        }
+    };
+
+    /**
+     * Show customer entity selector
+     *
+     * @param boolean isShow
+     * @return void
+     */
+    varienForm.prototype.showCustomerEntity = function(isShow)
+    {
+        if (isShow == true) {
+            $('head-customer_entity_fieldset').show();
+            $('customer_entity_fieldset').show();
+            $('customer_entity').enable();
+            $('customer_entity').addClassName('required-entry');
+        } else {
+            $('head-customer_entity_fieldset').hide();
+            $('customer_entity_fieldset').hide();
+            $('customer_entity').disable();
+            $('customer_entity').selectedIndex = 0;
+            $('customer_entity').removeClassName('required-entry');
+        }
+    };
+
+    /**
+     * Show upload file field
+     *
+     * @param boolean isShow
+     * @return void
+     */
+    varienForm.prototype.showUploadFile = function(isShow)
+    {
+        if (isShow == true) {
+            $('head-upload_file_fieldset').show();
+            $('upload_file_fieldset').show();
+        } else {
+            $('head-upload_file_fieldset').hide();
+            $('upload_file_fieldset').hide();
+        }
+    };
+
     /**
      * Handle value change in entity type selector
      *
@@ -41,42 +156,26 @@
     varienForm.prototype.handleEntityTypeSelector = function()
     {
         if ($('entity') && $F('entity')) {
-            $('head-import_format_version_fieldset').hide();
-            $('import_format_version_fieldset').hide();
-            $('file_format_version').selectedIndex = 0;
-            $('head-customer_entity_fieldset').hide();
-            $('customer_entity_fieldset').hide();
-            $('customer_entity').disable();
-            $('customer_entity').selectedIndex = 0;
-            $('head-upload_file_fieldset').hide();
-            $('upload_file_fieldset').hide();
-            this.showAllBehaviours();
-
+            this.showFormatVersion(false);
+            this.showBehavior(false);
+            this.showCustomerEntity(false);
+            this.showUploadFile(false);
             switch ($F('entity')) {
                 case 'customer':
-                    $('head-import_format_version_fieldset').show();
-                    $('import_format_version_fieldset').show();
-                    $('file_format_version').addClassName('required-entry');
+                    this.showFormatVersion(true);
                     break;
                 case 'catalog_product':
-                    $('head-upload_file_fieldset').show();
-                    $('upload_file_fieldset').show();
-                    $('file_format_version').removeClassName('required-entry');
+                    this.showBehavior(this.BEHAVIOR_VERSION_1);
+                    this.showUploadFile(true);
                     break;
                 default:
                     break;
             }
         } else {
-            $('head-import_format_version_fieldset').hide();
-            $('import_format_version_fieldset').hide();
-            $('file_format_version').selectedIndex = 0;
-            $('head-customer_entity_fieldset').hide();
-            $('customer_entity_fieldset').hide();
-            $('customer_entity').disable();
-            $('customer_entity').selectedIndex = 0;
-            $('head-upload_file_fieldset').hide();
-            $('upload_file_fieldset').hide();
-            this.showAllBehaviours();
+            this.showFormatVersion(false);
+            this.showBehavior(false);
+            this.showCustomerEntity(false);
+            this.showUploadFile(false);
         }
     };
 
@@ -88,73 +187,23 @@
     varienForm.prototype.handleImportFormatVersionSelector = function()
     {
         if ($('file_format_version') && $F('file_format_version')) {
-            var allowedBehaviours = [];
-            <?php
-                $importVersion = array(
-                    1 => Mage_ImportExport_Model_Source_Format_Version::VERSION_1,
-                    2 => Mage_ImportExport_Model_Source_Format_Version::VERSION_2,
-                );
-            ?>
             switch ($F('file_format_version')) {
-                case '<?php echo $importVersion[1] ?>':
-                    $('head-customer_entity_fieldset').hide();
-                    $('customer_entity_fieldset').hide();
-                    $('customer_entity').disable();
-                    $('customer_entity').selectedIndex = 0;
-                    allowedBehaviours = <?php echo $this->getJsAllowedCustomerBehaviours($importVersion[1]) ?>;
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_1 ?>':
+                    this.showBehavior(this.BEHAVIOR_VERSION_1);
+                    this.showCustomerEntity(false);
                     break;
-                case '<?php echo $importVersion[2] ?>':
-                    $('head-customer_entity_fieldset').show();
-                    $('customer_entity_fieldset').show();
-                    $('customer_entity').enable();
-                    allowedBehaviours = <?php echo $this->getJsAllowedCustomerBehaviours($importVersion[2]) ?>;
+                case '<?php echo Mage_ImportExport_Model_Source_Format_Version::VERSION_2 ?>':
+                    this.showBehavior(this.BEHAVIOR_VERSION_2_CUSTOMER);
+                    this.showCustomerEntity(true);
                     break;
                 default:
                     break;
             }
-
-            // hide not allowed behaviours
-            if ($('behavior')) {
-                var behaviourLength = $('behavior').length;
-                var behaviourOptions = $('behavior').options;
-
-                for (var i = 0; i < behaviourLength; i++) {
-                    if (allowedBehaviours.include(behaviourOptions[i].value)) {
-                        behaviourOptions[i].show();
-                    } else if (behaviourOptions[i].value != '') {
-                        behaviourOptions[i].hide();
-                        if (behaviourOptions[i].selected) {
-                            $('behavior').selectedIndex = 0;
-                        }
-                    }
-                }
-            }
-
-            $('head-upload_file_fieldset').show();
-            $('upload_file_fieldset').show();
+            this.showUploadFile(true);
         } else {
-            $('head-customer_entity_fieldset').hide();
-            $('customer_entity_fieldset').hide();
-            $('customer_entity').disable();
-            $('customer_entity').selectedIndex = 0;
-            $('head-upload_file_fieldset').hide();
-            $('upload_file_fieldset').hide();
-        }
-    };
-
-    /**
-     * Show all available behaviours
-     *
-     * @return void
-     */
-    varienForm.prototype.showAllBehaviours = function()
-    {
-        if ($('behavior')) {
-            var behaviourLength = $('behavior').length;
-            var behaviourOptions = $('behavior').options;
-            for (var i = 0; i < behaviourLength; i++) {
-                behaviourOptions[i].show();
-            }
+            this.showBehavior(false);
+            this.showCustomerEntity(false);
+            this.showUploadFile(false);
         }
     };
 

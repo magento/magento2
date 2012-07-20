@@ -43,6 +43,7 @@
                         <class>Mage_Core_Controller_Varien_Router_Default</class>
                     </test_router2>
                 </routers>
+                <frontName>TESTAREA</frontName>
             </test_area1>
             <test_area2>
                 <base_controller></base_controller>

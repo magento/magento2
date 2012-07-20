@@ -29,6 +29,13 @@
     <modules>
         <Mage_Captcha>
             <version>1.7.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Customer />
+                <Mage_Checkout />
+                <Mage_Adminhtml />
+            </depends>
         </Mage_Captcha>
     </modules>
     <global>

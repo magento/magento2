@@ -244,4 +244,32 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
         $crud = new Magento_Test_Entity($this->_model, array('name' => 'new name'));
         $crud->testCrud();
     }
+
+    /**
+     *
+     * @dataProvider getUrlClassNameDataProvider
+     * @param $urlClassName
+     * @param $expectedModel
+     */
+    public function testGetUrlModel($urlClassName, $expectedModel)
+    {
+        $urlModel = $this->_model->setUrlClassName($urlClassName)
+            ->getUrlModel();
+        $this->assertEquals($expectedModel, get_class($urlModel));
+    }
+
+    public function getUrlClassNameDataProvider()
+    {
+        return array(
+            array(
+                null,'Mage_Core_Model_Url'
+            ),
+            array(
+                'Mage_Core_Model_Url', 'Mage_Core_Model_Url'
+            ),
+            array(
+                'Mage_Backend_Model_Url', 'Mage_Backend_Model_Url'
+            ),
+        );
+    }
 }

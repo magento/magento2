@@ -71,4 +71,25 @@ class Mage_Backend_Model_Observer
         Mage::app()->removeCache(Mage_Adminhtml_Block_Notification_Security::VERIFICATION_RESULT_CACHE_KEY);
         return $this;
     }
+
+    /**
+     * Set url class name for store 'admin'
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Backend_Model_Observer
+     */
+    public function setUrlClassName(Varien_Event_Observer $observer)
+    {
+        /** @var $storeCollection Mage_Core_Model_Resource_Store_Collection */
+        $storeCollection = $observer->getEvent()->getStoreCollection();
+        /** @var $store Mage_Core_Model_Store */
+        foreach ($storeCollection as $store) {
+            if ($store->getId() == 0) {
+                $store->setUrlClassName('Mage_Backend_Model_Url');
+                break;
+            }
+        }
+
+        return $this;
+    }
 }

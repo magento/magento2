@@ -29,6 +29,12 @@
     <modules>
         <Mage_GoogleOptimizer>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Cms/>
+            </depends>
         </Mage_GoogleOptimizer>
     </modules>
     <global>

@@ -29,6 +29,12 @@
     <modules>
         <Mage_Api2>
             <version>1.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core />
+                <Mage_Oauth />
+            </depends>
         </Mage_Api2>
     </modules>
     <global>

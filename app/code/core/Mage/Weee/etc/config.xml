@@ -29,6 +29,13 @@
     <modules>
         <Mage_Weee>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog />
+                <Mage_Tax />
+                <Mage_Sales />
+            </depends>
         </Mage_Weee>
     </modules>
     <global>

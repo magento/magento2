@@ -29,6 +29,13 @@
     <modules>
         <Mage_GoogleCheckout>
             <version>1.6.0.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Sales/>
+                <Mage_Payment/>
+                <Mage_Usa/>
+            </depends>
         </Mage_GoogleCheckout>
     </modules>
     <global>

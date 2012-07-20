@@ -64,14 +64,10 @@
                 </types>
             </connection>
         </resource>
-    </global>
-    <admin>
-        <routers>
+        <areas>
             <adminhtml>
-                <args>
-                    <frontName><![CDATA[admin]]></frontName>
-                </args>
+                <frontName><![CDATA[backend]]></frontName>
             </adminhtml>
-        </routers>
-    </admin>
+        </areas>
+    </global>
 </config>

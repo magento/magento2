@@ -34,7 +34,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
      */
     protected function _assertContainsDesignEditor($content)
     {
-        $expectedFormAction = 'http://localhost/index.php/admin/system_design_editor/launch/';
+        $expectedFormAction = 'http://localhost/index.php/backend/admin/system_design_editor/launch/';
         $this->assertContains('Visual Design Editor', $content);
         $this->assertContains('<form id="edit_form" action="' . $expectedFormAction, $content);
         $this->assertContains("editForm = new varienForm('edit_form'", $content);
@@ -53,7 +53,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
 
     public function testIndexActionSingleStore()
     {
-        $this->dispatch('admin/system_design_editor/index');
+        $this->dispatch('backend/admin/system_design_editor/index');
         $this->_assertContainsDesignEditor($this->getResponse()->getBody());
     }
 
@@ -62,7 +62,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
      */
     public function testIndexActionMultipleStores()
     {
-        $this->dispatch('admin/system_design_editor/index');
+        $this->dispatch('backend/admin/system_design_editor/index');
         $responseBody = $this->getResponse()->getBody();
         $this->_assertContainsDesignEditor($responseBody);
         $this->assertContains('<select id="store_id" name="store_id"', $responseBody);
@@ -74,7 +74,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
     {
         $session = new Mage_DesignEditor_Model_Session();
         $this->assertFalse($session->isDesignEditorActive());
-        $this->dispatch('admin/system_design_editor/launch');
+        $this->dispatch('backend/admin/system_design_editor/launch');
         $this->assertTrue($session->isDesignEditorActive());
 
         $this->_requireSessionId();
@@ -91,7 +91,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
 
         $session = new Mage_DesignEditor_Model_Session();
         $this->assertFalse($session->isDesignEditorActive());
-        $this->dispatch('admin/system_design_editor/launch');
+        $this->dispatch('backend/admin/system_design_editor/launch');
         $this->assertTrue($session->isDesignEditorActive());
 
         $this->_requireSessionId();
@@ -106,7 +106,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
     {
         $session = new Mage_DesignEditor_Model_Session();
         $this->assertTrue($session->isDesignEditorActive());
-        $this->dispatch('admin/system_design_editor/exit');
+        $this->dispatch('backend/admin/system_design_editor/exit');
 
         $this->assertFalse($session->isDesignEditorActive());
         $this->assertContains(

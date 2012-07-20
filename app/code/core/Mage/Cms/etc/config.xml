@@ -29,6 +29,12 @@
     <modules>
         <Mage_Cms>
             <version>1.6.0.0.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+                <Mage_Page/>
+            </depends>
         </Mage_Cms>
     </modules>
     <frontend>
@@ -90,8 +96,8 @@
             <browser>
                 <dirs>
                     <exclude>
-                        
-                        
+
+
                     </exclude>
                     <include/>
                 </dirs>

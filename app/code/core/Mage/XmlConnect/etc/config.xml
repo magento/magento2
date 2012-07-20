@@ -30,6 +30,22 @@
         <Mage_XmlConnect>
             <version>1.6.0.0</version>
             <innerVersion>22.1</innerVersion>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Checkout />
+                <Mage_Paypal />
+                <Mage_Usa />
+                <Mage_Tax />
+                <Mage_Weee />
+                <Mage_Catalog />
+                <Mage_CatalogSearch />
+                <Mage_CatalogInventory />
+                <Mage_Bundle />
+                <Mage_Wishlist />
+                <Mage_Rating />
+                <Mage_Review />
+            </depends>
         </Mage_XmlConnect>
     </modules>
     <global>

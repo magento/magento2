@@ -58,16 +58,10 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'onchange' => 'editForm.handleEntityTypeSelector();',
             'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Entity')->toOptionArray()
         ));
-        $fieldsets['base']->addField('behavior', 'select', array(
-            'name'     => 'behavior',
-            'title'    => $helper->__('Import Behavior'),
-            'label'    => $helper->__('Import Behavior'),
-            'required' => true,
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Behavior')->toOptionArray()
-        ));
 
         // fieldset for format version
-        $fieldsets['version'] = $form->addFieldset('import_format_version_fieldset',
+        $fieldsets['version'] = $form->addFieldset(
+            'import_format_version_fieldset',
             array(
                 'legend' => $helper->__('Import Format Version'),
                 'style'  => 'display:none'
@@ -78,8 +72,42 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'title'    => $helper->__('Import Format Version'),
             'label'    => $helper->__('Import Format Version'),
             'required' => true,
+            'disabled' => true,
             'onchange' => 'editForm.handleImportFormatVersionSelector();',
             'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Format_Version')->toOptionArray()
+        ));
+
+        // fieldsets for behaviours
+        $fieldsets['behavior_v1'] = $form->addFieldset(
+            'behavior_v1_fieldset',
+            array(
+                'legend' => $helper->__('Import Behavior'),
+                'style'  => 'display:none'
+            )
+        );
+        $fieldsets['behavior_v1']->addField('behavior_v1', 'select', array(
+            'name'     => 'behavior',
+            'title'    => $helper->__('Import Behavior'),
+            'label'    => $helper->__('Import Behavior'),
+            'required' => true,
+            'disabled' => true,
+            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Behavior')->toOptionArray()
+        ));
+
+        $fieldsets['behavior_v2_customer'] = $form->addFieldset(
+            'behavior_v2_customer_fieldset',
+            array(
+                'legend' => $helper->__('Import Behavior'),
+                'style'  => 'display:none'
+            )
+        );
+        $fieldsets['behavior_v2_customer']->addField('behavior_v2_customer', 'select', array(
+            'name'     => 'behavior',
+            'title'    => $helper->__('Import Behavior'),
+            'label'    => $helper->__('Import Behavior'),
+            'required' => true,
+            'disabled' => true,
+            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Customer_V2_Behavior')->toOptionArray()
         ));
 
         // fieldset for customer entity
@@ -93,7 +121,7 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'name'     => 'customer_entity',
             'title'    => $helper->__('Customer Entity Type'),
             'label'    => $helper->__('Customer Entity Type'),
-            'required' => false,
+            'required' => true,
             'disabled' => true,
             'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Customer_Entity')->toOptionArray()
         ));

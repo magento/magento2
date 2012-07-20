@@ -61,8 +61,6 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
      */
     public function testImportSource()
     {
-        $this->markTestIncomplete('MAGETWO-1953');
-
         /** @var $customersCollection Mage_Customer_Model_Resource_Customer_Collection */
         $customersCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Customer_Collection');
 

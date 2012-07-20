@@ -29,6 +29,8 @@
     <modules>
         <Phoenix_Moneybookers>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>community</codePool>
         </Phoenix_Moneybookers>
     </modules>
     <global>

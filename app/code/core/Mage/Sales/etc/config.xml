@@ -29,6 +29,14 @@
     <modules>
         <Mage_Sales>
             <version>1.6.0.8</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Rule/>
+                <Mage_Catalog/>
+                <Mage_Customer/>
+                <Mage_Payment/>
+            </depends>
         </Mage_Sales>
     </modules>
     <global>

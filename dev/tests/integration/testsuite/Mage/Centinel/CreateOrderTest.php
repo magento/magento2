@@ -45,7 +45,7 @@ class Mage_Centinel_CreateOrderTest extends Mage_Adminhtml_Utility_Controller
             'method' => 'ccsave',
         );
         $order->addProducts(array(1 => array('qty' => 1)))->getQuote()->getPayment()->addData($paymentData);
-        $this->dispatch('admin/sales_order_create/index');
+        $this->dispatch('backend/admin/sales_order_create/index');
         $this->assertContains('<div class="centinel">', $this->getResponse()->getBody());
     }
 }

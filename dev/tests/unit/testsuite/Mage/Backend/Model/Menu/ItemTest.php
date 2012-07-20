@@ -87,7 +87,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
         $this->_storeConfigMock = $this->getMock('Mage_Core_Model_Store_Config');
         $this->_menuFactoryMock = $this->getMock('Mage_Backend_Model_Menu_Factory', array(), array(), '', false);
         $this->_urlModelMock = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false);
-        $this->_helperMock = $this->getMock('Mage_Backend_Helper_Data');
+        $this->_helperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
         $this->_validatorMock = $this->getMock('Mage_Backend_Model_Menu_Item_Validator');
 
         $this->_params['module'] = $this->_helperMock;

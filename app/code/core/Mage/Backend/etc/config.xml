@@ -29,6 +29,11 @@
     <modules>
         <Mage_Backend>
             <version>2.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Directory/>
+            </depends>
         </Mage_Backend>
     </modules>
     <global>
@@ -38,9 +43,9 @@
                 <routers>
                     <admin>
                         <class>Mage_Backend_Controller_Router_Default</class>
-                        <!--<frontName>admin</frontName>-->
                     </admin>
                 </routers>
+                <frontName>backend</frontName>
             </adminhtml>
         </areas>
         <backend>
@@ -53,6 +58,16 @@
                 </config>
             </types>
         </cache>
+        <events>
+            <store_collection_load_after>
+                <observers>
+                    <set_url_class_name>
+                        <class>Mage_Backend_Model_Observer</class>
+                        <method>setUrlClassName</method>
+                    </set_url_class_name>
+                </observers>
+            </store_collection_load_after>
+        </events>
     </global>
     <admin>
         <routers>
@@ -60,6 +75,7 @@
                 <use>admin</use>
                 <args>
                     <module>Mage_Backend</module>
+                    <frontName>admin</frontName>
                 </args>
             </adminhtml>
         </routers>

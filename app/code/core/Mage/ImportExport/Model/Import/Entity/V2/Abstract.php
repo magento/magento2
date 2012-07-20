@@ -34,6 +34,18 @@
 abstract class Mage_ImportExport_Model_Import_Entity_V2_Abstract
 {
     /**#@+
+     * Custom row import behavior column name
+     */
+    const COLUMN_ACTION = '_action';
+    /**#@-*/
+
+    /**#@+
+     * Value in custom column for delete behaviour
+     */
+    const COLUMN_ACTION_VALUE_DELETE = 'delete';
+    /**#@-*/
+
+    /**#@+
      * Database constants
      */
     const DB_MAX_PACKET_COEFFICIENT = 900000;
@@ -196,10 +208,12 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Abstract
         $coreResourceModel = Mage::getSingleton('Mage_Core_Model_Resource');
         $this->_connection = $coreResourceModel->getConnection('write');
 
+        $this->_particularAttributes[] = self::COLUMN_ACTION;
+
         $this->_availableBehaviors = array(
-            Mage_ImportExport_Model_Import::BEHAVIOR_APPEND,
-            Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE,
-            Mage_ImportExport_Model_Import::BEHAVIOR_DELETE,
+            Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE,
+            Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE,
+            Mage_ImportExport_Model_Import::BEHAVIOR_V2_CUSTOM,
         );
     }
 
@@ -265,8 +279,10 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Abstract
 
         /** @var $resourceHelper Mage_ImportExport_Model_Resource_Helper_Mysql4 */
         $resourceHelper = Mage::getResourceHelper('Mage_ImportExport');
-        /** @var $dataHelper  Mage_ImportExport_Helper_Data */
+        /** @var $dataHelper Mage_ImportExport_Helper_Data */
         $dataHelper = Mage::helper('Mage_ImportExport_Helper_Data');
+        /** @var $coreDataHelper Mage_Core_Helper_Data */
+        $coreDataHelper = Mage::helper('Mage_Core_Helper_Data');
         $bunchSize = $dataHelper->getBunchSize();
 
         $source->rewind();
@@ -295,7 +311,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Abstract
                 // add row to bunch for save
                 if ($this->validateRow($rowData, $source->key())) {
                     $rowData = $this->_prepareRowForDb($rowData);
-                    $rowSize = strlen(Mage::helper('Mage_Core_Helper_Data')->jsonEncode($rowData));
+                    $rowSize = strlen($coreDataHelper->jsonEncode($rowData));
 
                     $isBunchSizeExceeded = ($bunchSize > 0 && count($bunchRows) >= $bunchSize);
 
@@ -348,16 +364,46 @@ abstract class Mage_ImportExport_Model_Import_Entity_V2_Abstract
     /**
      * Import behavior getter
      *
+     * @param array $rowData
      * @return string
      */
-    public function getBehavior()
+    public function getBehavior(array $rowData = null)
     {
         if (isset($this->_parameters['behavior'])
             && in_array($this->_parameters['behavior'], $this->_availableBehaviors)
         ) {
-            return $this->_parameters['behavior'];
+            $behavior = $this->_parameters['behavior'];
+            if ($rowData !== null && $behavior == Mage_ImportExport_Model_Import::BEHAVIOR_V2_CUSTOM) {
+                // try analyze value in self::COLUMN_CUSTOM column and return behavior for given $rowData
+                if (array_key_exists(self::COLUMN_ACTION, $rowData)) {
+                    if (strtolower($rowData[self::COLUMN_ACTION]) == self::COLUMN_ACTION_VALUE_DELETE) {
+                        $behavior = Mage_ImportExport_Model_Import::BEHAVIOR_V2_DELETE;
+                    } else {
+                        // as per task description, if column value is different to self::COLUMN_CUSTOM_VALUE_DELETE,
+                        // we should always use default behavior
+                        return self::getDefaultBehavior();
+                    }
+                    if (in_array($behavior, $this->_availableBehaviors)) {
+                        return $behavior;
+                    }
+                }
+            } else {
+                // if method is invoked without $rowData we should just return $this->_parameters['behavior']
+                return $behavior;
+            }
         }
-        return Mage_ImportExport_Model_Import::getDefaultBehavior();
+
+        return self::getDefaultBehavior();
+    }
+
+    /**
+     * Get default import behavior
+     *
+     * @return string
+     */
+    public static function getDefaultBehavior()
+    {
+        return Mage_ImportExport_Model_Import::BEHAVIOR_V2_ADD_UPDATE;
     }
 
     /**
