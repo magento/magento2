@@ -134,6 +134,15 @@
                 </captcha>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <captcha>
+                    <files>
+                        <default>Mage_Captcha.csv</default>
+                    </files>
+                </captcha>
+            </modules>
+        </translate>
     </frontend>
     <admin>
         <routers>
@@ -154,6 +163,15 @@
                 </captcha>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <captcha>
+                    <files>
+                        <default>Mage_Captcha.csv</default>
+                    </files>
+                </captcha>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <system>
