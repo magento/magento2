@@ -95,6 +95,9 @@
                 <allow_map_update>1</allow_map_update>
             </design_fallback>
         </dev>
+        <email>
+            <factory_helper>Mage_Core_Helper_Mail::getMailer</factory_helper>
+        </email>
     </global>
     <frontend>
         <routers>

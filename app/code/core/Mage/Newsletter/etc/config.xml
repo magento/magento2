@@ -69,6 +69,16 @@
         <newsletter>
             <tempate_filter>Mage_Newsletter_Model_Template_Filter</tempate_filter>
         </newsletter>
+        <events>
+            <email_template_filter_before>
+                <observers>
+                    <newsletter>
+                        <class>Mage_Newsletter_Model_Observer</class>
+                        <method>emailTemplateFilterBefore</method>
+                    </newsletter>
+                </observers>
+            </email_template_filter_before>
+        </events>
     </global>
     <adminhtml>
         <events>

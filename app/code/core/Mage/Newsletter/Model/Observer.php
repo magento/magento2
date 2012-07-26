@@ -69,4 +69,23 @@ class Mage_Newsletter_Model_Observer
 
          $collection->walk('sendPerSubscriber', array($countOfSubscritions));
     }
+
+    /**
+     * Set the subscriber store id on the transport object
+     *
+     * Set the subscriber store id on the transport object so the logo configuration for the
+     * subscriber store is read (which is not necessarily the current one).
+     *
+     * @param Varien_Object $observer
+     * @return Mage_Newsletter_Model_Observer
+     */
+    public function emailTemplateFilterBefore($observer)
+    {
+        // Only match newsletter subscriber events
+        $subscriber = $observer->getTransport()->getVariables()->getSubscriber();
+        if ($subscriber && $subscriber instanceof Mage_Newsletter_Model_Subscriber) {
+            $observer->getTransport()->setStoreId($subscriber->getStoreId());
+        }
+        return $this;
+    }
 }
