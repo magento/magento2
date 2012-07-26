@@ -59,7 +59,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
         'admin_no_form_key'          => array('required' => 0),
         'encryption_key'             => array('required' => 0),
         'session_save'               => array('required' => 0),
-        'admin_frontname'            => array('required' => 0),
+        'backend_frontname'          => array('required' => 0),
         'enable_charts'              => array('required' => 0),
         'order_increment_prefix'     => array('required' => 0),
     );
@@ -229,7 +229,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
                 'secure_base_url'        => $options['secure_base_url'],
                 'use_secure_admin'       => $this->_getFlagValue($options['use_secure_admin']),
                 'session_save'           => $this->_checkSessionSave($options['session_save']),
-                'admin_frontname'        => $this->_checkAdminFrontname($options['admin_frontname']),
+                'backend_frontname'      => $this->_checkBackendFrontname($options['backend_frontname']),
                 'admin_no_form_key'      => $this->_getFlagValue($options['admin_no_form_key']),
                 'skip_url_validation'    => $this->_getFlagValue($options['skip_url_validation']),
                 'enable_charts'          => $this->_getFlagValue($options['enable_charts']),

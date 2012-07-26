@@ -44,6 +44,8 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Mage::getConfig()->setModuleDir('Mage_Core', 'locale', dirname(__FILE__) . '/_files/Mage/Core/locale');
+        Mage::getConfig()->setModuleDir('Mage_Catalog', 'locale', dirname(__FILE__) . '/_files/Mage/Catalog/locale');
         $this->_model = new Mage_Core_Model_Translate();
         $this->_model->init('frontend');
     }

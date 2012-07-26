@@ -1,3 +1,18 @@
+Update as of 7/26/2012
+=====================
+* Implemented Magento Validator library in order to have clear solid mechanism and formal rules of input data validation
+* Moved translations to module directories, so that it is much more convenient to manage module resources
+* Updated inline translation mechanism to support locales inheritance
+* Implemented ability to navigate through pending reviews with Prev/Next buttons, no need to switch to grid and back
+* Fixed issues:
+  * Unable to use shell-installer after changes in Backend area routing process
+  * Incorrect redirect after entering wrong captcha on the "Forgot your user name or password?" backend page
+  * Translation is absent for several strings in Sales module `guest/form.phtml` template
+  * Exception during installation process, when `var` directory is not empty
+  * Node `modules` is merged to all modules' config XML-files, although it must be merged to `config.xml` only
+* GitHub requests:
+  * [#39](https://github.com/magento/magento2/pull/39) -- added `composer.json`, which was announced at previous update, but mistakenly omitted from publishing
+
 Update as of 7/19/2012
 =====================
 * Implemented inheritance of locales. Inheritance is declared in `app/locale/<locale_name>/config.xml`
@@ -25,7 +40,7 @@ Update as of 7/19/2012
   * Other small fixes
 * GitHub requests:
   * [#37](https://github.com/magento/magento2/pull/37) -- fixed particular case of "HEADERS ALREADY SENT" error in WYSIWYG thumbnail
-  * [#39](https://github.com/magento/magento2/pull/39) -- added `composer.json`
+  * [#39](https://github.com/magento/magento2/pull/39) -- added `composer.json` (actually, doesn't come with this update due to a mistake in publishing process)
   * [#40](https://github.com/magento/magento2/pull/40) -- fixed generation of "secret key" in backend URLs to honor `_forward` in controllers
 
 Update as of 7/3/2012

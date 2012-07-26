@@ -94,7 +94,6 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getDesignDir
      * @covers Mage_Core_Model_Config_Options::getEtcDir
      * @covers Mage_Core_Model_Config_Options::getLibDir
-     * @covers Mage_Core_Model_Config_Options::getLocaleDir
      * @covers Mage_Core_Model_Config_Options::getMediaDir
      * @covers Mage_Core_Model_Config_Options::getSysTmpDir
      * @covers Mage_Core_Model_Config_Options::getVarDir
@@ -126,7 +125,6 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
             array('getDesignDir', 'Design directory %s does not exist.'),
             array('getEtcDir', 'Etc directory %s does not exist.'),
             array('getLibDir', 'Lib directory %s does not exist.'),
-            array('getLocaleDir', 'Locale directory %s does not exist.'),
             array('getMediaDir', 'Media directory %s does not exist.'),
             array('getSysTmpDir', 'System temporary directory %s does not exist.'),
             array('getVarDir', 'Var directory %s does not exist.'),

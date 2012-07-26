@@ -33,7 +33,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
     /**
      * @param array $options
      *
-     * @@SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(array $options = array())
     {

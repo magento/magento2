@@ -205,7 +205,7 @@ class Mage_Captcha_Model_Observer
                     $this->_getBackendSession()->setEmail((string) $controller->getRequest()->getPost('email'));
                     $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
                     $this->_getBackendSession()->addError(Mage::helper('Mage_Captcha_Helper_Data')->__('Incorrect CAPTCHA.'));
-                    $controller->getResponse()->setRedirect(Mage::getUrl('*/*/forgotpassword'));
+                    $controller->getResponse()->setRedirect($controller->getUrl('*/*/forgotpassword', array('_nosecret' => true)));
                 }
             }
         }

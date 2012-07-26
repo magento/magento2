@@ -80,4 +80,22 @@ class Mage_Captcha_Model_ObserverTest extends Magento_Test_TestCase_ControllerAb
 
         $this->assertTrue($captchaModel->isRequired());
     }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Mage/Captcha/_files/dummy_user.php
+     * @magentoConfigFixture admin_store admin/captcha/enable 1
+     * @magentoConfigFixture admin_store admin/captcha/forms backend_forgotpassword
+     * @magentoConfigFixture admin_store admin/captcha/mode always
+     */
+    public function testCheckUserForgotPasswordBackendWhenCaptchaFailed()
+    {
+        $this->getRequest()->setPost(array(
+            'email' => 'dummy@dummy.com',
+            'captcha' => array('backend_forgotpassword' => 'dummy')
+        ));
+        $this->dispatch('backend/admin/auth/forgotpassword');
+        $this->assertRedirect($this->stringContains('backend/admin/auth/forgotpassword'));
+    }
 }

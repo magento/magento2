@@ -160,7 +160,12 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
                 }
             }
 
-            return $this->getResponse()->setRedirect($this->getUrl($this->getRequest()->getParam('ret') == 'pending' ? '*/*/pending' : '*/*/'));
+            $nextId = (int) $this->getRequest()->getParam('next_item');
+            $url = $this->getUrl($this->getRequest()->getParam('ret') == 'pending' ? '*/*/pending' : '*/*/');
+            if ($nextId) {
+                $url = $this->getUrl('*/*/edit', array('id' => $nextId));
+            }
+            return $this->getResponse()->setRedirect($url);
         }
         $this->_redirect('*/*/');
     }
