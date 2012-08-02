@@ -1,4 +1,4 @@
-Update as of 8/1/2012
+Update as of 8/2/2012
 =====================
 * Refactored ACL for the backend
   * ACL resources
