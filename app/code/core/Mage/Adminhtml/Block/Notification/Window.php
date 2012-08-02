@@ -173,6 +173,6 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
     protected function _isAllowed()
     {
         return Mage::getSingleton('Mage_Backend_Model_Auth_Session')
-            ->isAllowed('admin/system/adminnotification/show_toolbar');
+            ->isAllowed('Mage_AdminNotification::show_toolbar');
     }
 }

@@ -48,7 +48,7 @@ class Mage_Adminhtml_Block_Sales_Order_Shipment_View extends Mage_Adminhtml_Bloc
             return;
         }
 
-        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/emails')) {
+        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::emails')) {
             $this->_updateButton('save', 'label', Mage::helper('Mage_Sales_Helper_Data')->__('Send Tracking Information'));
             $this->_updateButton('save',
                 'onclick', "deleteConfirm('"

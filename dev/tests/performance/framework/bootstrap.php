@@ -39,8 +39,15 @@ $config = new Magento_Config($configData, $testsBaseDir);
 
 $installOptions = $config->getInstallOptions();
 if ($installOptions) {
+    // Populate install options with global options
     $baseUrl = 'http://' . $config->getApplicationUrlHost() . $config->getApplicationUrlPath();
     $installOptions = array_merge($installOptions, array('url' => $baseUrl, 'secure_base_url' => $baseUrl));
+    $adminOptions = $config->getAdminOptions();
+    foreach ($adminOptions as $key => $val) {
+        $installOptions['admin_' . $key] = $val;
+    }
+
+    // Install application
     $installer = new Magento_Installer($magentoBaseDir . '/dev/shell/install.php', new Magento_Shell(true));
     echo 'Uninstalling application' . PHP_EOL;
     $installer->uninstall();

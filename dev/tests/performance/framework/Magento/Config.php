@@ -45,6 +45,11 @@ class Magento_Config
     protected $_applicationUrlPath;
 
     /**
+     * @var array
+     */
+    protected $_adminOptions = array();
+
+    /**
      * @var string
      */
     protected $_reportDir;
@@ -84,18 +89,21 @@ class Magento_Config
         }
         $baseDir = str_replace('\\', '/', realpath($baseDir));
         $this->_reportDir = $baseDir . '/' . $configData['report_dir'];
-        $this->_applicationUrlHost = $configData['application']['url_host'];
-        $this->_applicationUrlPath = $configData['application']['url_path'];
 
-        if (isset($configData['application']['installation'])) {
-            $installConfig = $configData['application']['installation'];
+        $applicationOptions = $configData['application'];
+        $this->_applicationUrlHost = $applicationOptions['url_host'];
+        $this->_applicationUrlPath = $applicationOptions['url_path'];
+        $this->_adminOptions = $applicationOptions['admin'];
+
+        if (isset($applicationOptions['installation'])) {
+            $installConfig = $applicationOptions['installation'];
             $this->_installOptions = $installConfig['options'];
             if (isset($installConfig['fixture_files'])) {
                 $this->_fixtureFiles = glob($baseDir . '/' . $installConfig['fixture_files'], GLOB_BRACE);
             }
         }
 
-        if (isset($configData['scenario']['jmeter_jar_file'])) {
+        if (!empty($configData['scenario']['jmeter_jar_file'])) {
             $this->_jMeterPath = $configData['scenario']['jmeter_jar_file'];
         } else {
             $this->_jMeterPath = getenv('jmeter_jar_file') ?: self::DEFAULT_JMETER_JAR_FILE;
@@ -143,10 +151,19 @@ class Magento_Config
      */
     protected function _validateData(array $configData)
     {
+        // Validate 1st-level options data
         $requiredKeys = array('application', 'scenario', 'report_dir');
         foreach ($requiredKeys as $requiredKeyName) {
             if (empty($configData[$requiredKeyName])) {
                 throw new Magento_Exception("Configuration array must define '$requiredKeyName' key.");
+            }
+        }
+
+        // Validate admin options data
+        $requiredAdminKeys = array('frontname', 'username', 'password');
+        foreach ($requiredAdminKeys as $requiredKeyName) {
+            if (empty($configData['application']['admin'][$requiredKeyName])) {
+                throw new Magento_Exception("Admin options array must define '$requiredKeyName' key.");
             }
         }
     }
@@ -169,6 +186,16 @@ class Magento_Config
     public function getApplicationUrlPath()
     {
         return $this->_applicationUrlPath;
+    }
+
+    /**
+     * Retrieve admin options - backend path and admin user credentials
+     *
+     * @return array
+     */
+    public function getAdminOptions()
+    {
+        return $this->_adminOptions;
     }
 
     /**

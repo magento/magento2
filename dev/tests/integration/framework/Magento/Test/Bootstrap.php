@@ -591,7 +591,7 @@ class Magento_Test_Bootstrap
         $roleUser->setData(array(
             'parent_id'  => $roleAdmin->getId(),
             'tree_level' => $roleAdmin->getTreeLevel() + 1,
-            'role_type'  => Mage_Admin_Model_Acl::ROLE_TYPE_USER,
+            'role_type'  => Mage_User_Model_Acl_Role_User::ROLE_TYPE,
             'user_id'    => $user->getId(),
             'role_name'  => $user->getFirstname(),
         ));

@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_CatalogSearch::catalog_search" title="Search Terms" module="Mage_CatalogSearch" sortOrder="40" parent="Mage_Catalog::catalog" action="adminhtml/catalog_search/" />
+        <add id="Mage_CatalogSearch::catalog_search" title="Search Terms" module="Mage_CatalogSearch" sortOrder="40" parent="Mage_Catalog::catalog" action="adminhtml/catalog_search/" resource="Mage_CatalogSearch::search"/>
     </menu>
 </config>

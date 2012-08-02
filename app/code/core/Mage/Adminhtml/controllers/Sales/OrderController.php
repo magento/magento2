@@ -653,31 +653,31 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
         $action = strtolower($this->getRequest()->getActionName());
         switch ($action) {
             case 'hold':
-                $aclResource = 'sales/order/actions/hold';
+                $aclResource = 'Mage_Sales::hold';
                 break;
             case 'unhold':
-                $aclResource = 'sales/order/actions/unhold';
+                $aclResource = 'Mage_Sales::unhold';
                 break;
             case 'email':
-                $aclResource = 'sales/order/actions/email';
+                $aclResource = 'Mage_Sales::email';
                 break;
             case 'cancel':
-                $aclResource = 'sales/order/actions/cancel';
+                $aclResource = 'Mage_Sales::cancel';
                 break;
             case 'view':
-                $aclResource = 'sales/order/actions/view';
+                $aclResource = 'Mage_Sales::actions_view';
                 break;
             case 'addcomment':
-                $aclResource = 'sales/order/actions/comment';
+                $aclResource = 'Mage_Sales::comment';
                 break;
             case 'creditmemos':
-                $aclResource = 'sales/order/actions/creditmemo';
+                $aclResource = 'Mage_Sales::creditmemo';
                 break;
             case 'reviewpayment':
-                $aclResource = 'sales/order/actions/review_payment';
+                $aclResource = 'Mage_Sales::review_payment';
                 break;
             default:
-                $aclResource = 'sales/order';
+                $aclResource = 'Mage_Sales::sales_order';
                 break;
 
         }

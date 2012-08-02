@@ -44,7 +44,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_View extends Mage_Adminhtml_B
 
         parent::__construct();
 
-        if (!$this->_isAllowed('sales/billing_agreement/actions/manage')) {
+        if (!$this->_isAllowed('Mage_Sales::actions_manage')) {
             $this->_removeButton('delete');
         }
         $this->_removeButton('reset');
@@ -58,7 +58,7 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_View extends Mage_Adminhtml_B
         ), -1);
 
         $agreement = $this->_getBillingAgreement();
-        if ($agreement && $agreement->canCancel() && $this->_isAllowed('sales/billing_agreement/actions/manage')) {
+        if ($agreement && $agreement->canCancel() && $this->_isAllowed('Mage_Sales::actions_manage')) {
             $this->_addButton('cancel', array(
                 'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Cancel'),
                 'onclick'   => "confirmSetLocation("
@@ -102,11 +102,11 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement_View extends Mage_Adminhtml_B
     /**
      * Check current user permissions for specified action
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowed($action)
+    protected function _isAllowed($resourceId)
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($action);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($resourceId);
     }
 }

@@ -28,14 +28,29 @@
 class Mage_Eav_Model_Entity_AttributeTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Attribute model to be tested
+     * @var Mage_Eav_Model_Entity_Attribute|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_model;
+
+    protected function setUp()
+    {
+        $this->_model = $this->getMock('Mage_Eav_Model_Entity_Attribute', null, array(), '', false);
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
+    /**
      * @param string $givenFrontendInput
      * @param string $expectedBackendType
      * @dataProvider dataGetBackendTypeByInput
      */
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
-        $model = $this->getMock('Mage_Eav_Model_Entity_Attribute', null, array(), '', false);
-        $this->assertEquals($expectedBackendType, $model->getBackendTypeByInput($givenFrontendInput));
+        $this->assertEquals($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
     }
 
     public static function dataGetBackendTypeByInput()
@@ -63,8 +78,7 @@ class Mage_Eav_Model_Entity_AttributeTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDefaultValueByInput($givenFrontendInput, $expectedDefaultValue)
     {
-        $model = $this->getMock('Mage_Eav_Model_Entity_Attribute', null, array(), '', false);
-        $this->assertEquals($expectedDefaultValue, $model->getDefaultValueByInput($givenFrontendInput));
+        $this->assertEquals($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
     }
 
     public static function dataGetDefaultValueByInput()
@@ -82,6 +96,50 @@ class Mage_Eav_Model_Entity_AttributeTest extends PHPUnit_Framework_TestCase
             array('textarea', 'default_value_textarea'),
             array('date', 'default_value_date'),
             array('boolean', 'default_value_yesno'),
+        );
+    }
+
+    /**
+     * @param array|null $sortWeights
+     * @param float $expected
+     * @dataProvider getSortWeightDataProvider
+     */
+    public function testGetSortWeight($sortWeights, $expected)
+    {
+        $setId = 123;
+        $this->_model->setAttributeSetInfo(array($setId => $sortWeights));
+        $this->assertEquals($expected, $this->_model->getSortWeight($setId));
+    }
+
+    /**
+     * @return array
+     */
+    public function getSortWeightDataProvider()
+    {
+        return array(
+            'empty set info' => array(
+                'sortWeights' => null,
+                'expectedWeight' => 0
+            ),
+            'no group sort' => array(
+                'sortWeights' => array(
+                    'sort' => 5
+                ),
+                'expectedWeight' => 0.0005
+            ),
+            'no sort' => array(
+                'sortWeights' => array(
+                    'group_sort' => 7
+                ),
+                'expectedWeight' => 7000
+            ),
+            'group sort and sort' => array(
+                'sortWeights' => array(
+                    'group_sort' => 7,
+                    'sort' => 5
+                ),
+                'expectedWeight' => 7000.0005
+            ),
         );
     }
 }

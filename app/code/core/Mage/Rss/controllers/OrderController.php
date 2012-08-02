@@ -38,7 +38,7 @@ class Mage_Rss_OrderController extends Mage_Core_Controller_Front_Action
     {
         if ('new' === $this->getRequest()->getActionName()) {
             $this->setCurrentArea('adminhtml');
-            if (!self::authenticateAndAuthorizeAdmin($this, 'sales/order')) {
+            if (!self::authenticateAndAuthorizeAdmin($this, 'Mage_Sales::sales_order')) {
                 return;
             }
         }

@@ -67,4 +67,53 @@ class Legacy_ConfigTest extends PHPUnit_Framework_TestCase
     {
         return Utility_Files::init()->getConfigFiles('config.xml');
     }
+
+    /**
+     * Check if all localization files are declared in appropriate configuration files
+     *
+     * @param string $configFile
+     * @param array $localeFiles
+     * @param string $moduleName
+     * @dataProvider modulesDataProvider
+     */
+    public function testLocaleDeclarations($configFile, array $localeFiles, $moduleName)
+    {
+        $xml = simplexml_load_file($configFile);
+        $errors = array();
+        foreach ($localeFiles as $localeFile) {
+            $result = $xml->xpath("//translate/modules/{$moduleName}/files[* = \"{$localeFile}\"]");
+            if (empty($result)) {
+                $errors[] = "'$localeFile' file is not declared in '$moduleName' module";
+            }
+        }
+        $this->assertEmpty($errors, join("\n", $errors));
+    }
+
+    /**
+     * @return array
+     */
+    public function modulesDataProvider()
+    {
+        $data = array();
+        $root = Utility_Files::init()->getPathToSource();
+        $modulePaths = glob($root . "/app/code/*/*/*", GLOB_ONLYDIR);
+        foreach ($modulePaths as $modulePath) {
+            $localeFiles = glob($modulePath . "/locale/*/*.csv");
+            $configFile = $modulePath . '/etc/config.xml';
+            if (empty($localeFiles) || !file_exists($configFile)) {
+                continue;
+            }
+            foreach ($localeFiles as &$file) {
+                $file = basename($file);
+            }
+            $localeFiles = array_unique($localeFiles);
+
+            $modulePath = str_replace($root, '', $modulePath);
+            if (preg_match('#^/app/code/[\w_]+/([\w_]+)/([\w_]+)#', $modulePath, $matches)) {
+                $module = $matches[1] . '_' . $matches[2];
+                $data[$module] = array($configFile, $localeFiles, $module);
+            }
+        }
+        return $data;
+    }
 }

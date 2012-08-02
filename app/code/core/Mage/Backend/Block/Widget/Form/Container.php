@@ -76,21 +76,32 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
         ), 1);
     }
 
+    /**
+     * Create form block
+     *
+     * @return Mage_Core_Block_Abstract
+     */
     protected function _prepareLayout()
     {
         if ($this->_blockGroup && $this->_controller && $this->_mode
             && !$this->_layout->getChildName($this->_nameInLayout, 'form')
         ) {
-            $this->setChild(
-                'form',
-                $this->getLayout()->createBlock($this->_blockGroup
-                    . '_Block_'
-                    . str_replace(' ', '_', ucwords(str_replace('_', ' ', $this->_controller . '_' . $this->_mode)))
-                    . '_Form'
-                )
-            );
+            $this->setChild('form', $this->getLayout()->createBlock($this->_buildFormClassName()));
         }
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Build child form class name
+     *
+     * @return string
+     */
+    protected function _buildFormClassName()
+    {
+        return $this->_blockGroup
+            . '_Block_'
+            . str_replace(' ', '_', ucwords(str_replace('_', ' ', $this->_controller . '_' . $this->_mode)))
+            . '_Form';
     }
 
     /**

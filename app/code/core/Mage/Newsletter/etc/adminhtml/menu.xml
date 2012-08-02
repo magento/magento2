@@ -27,10 +27,10 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Newsletter::newsletter" title="Newsletter" module="Mage_Newsletter" sortOrder="60" />
-        <add id="Mage_Newsletter::newsletter_template" title="Newsletter Templates" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_template/" />
-        <add id="Mage_Newsletter::newsletter_queue" title="Newsletter Queue" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_queue/" />
-        <add id="Mage_Newsletter::newsletter_subscriber" title="Newsletter Subscribers" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_subscriber/" />
-        <add id="Mage_Newsletter::newsletter_problem" title="Newsletter Problem Reports" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_problem/" />
+        <add id="Mage_Newsletter::newsletter" title="Newsletter" module="Mage_Newsletter" sortOrder="60" resource="Mage_Newsletter::admin_newsletter"/>
+        <add id="Mage_Newsletter::newsletter_template" title="Newsletter Templates" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_template/" resource="Mage_Newsletter::template"/>
+        <add id="Mage_Newsletter::newsletter_queue" title="Newsletter Queue" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_queue/" resource="Mage_Newsletter::queue"/>
+        <add id="Mage_Newsletter::newsletter_subscriber" title="Newsletter Subscribers" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_subscriber/" resource="Mage_Newsletter::subscriber"/>
+        <add id="Mage_Newsletter::newsletter_problem" title="Newsletter Problem Reports" module="Mage_Newsletter" parent="Mage_Newsletter::newsletter" action="adminhtml/newsletter_problem/" resource="Mage_Newsletter::problem"/>
     </menu>
 </config>

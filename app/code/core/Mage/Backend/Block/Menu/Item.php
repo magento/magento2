@@ -78,7 +78,7 @@ class Mage_Backend_Block_Menu_Item extends Mage_Backend_Block_Template
         if ($this->getLevel() == 0
             && $itemModel instanceof Mage_Backend_Model_Menu_Item
             && ($itemModel->getId() == $item->getId()
-                || (strpos($itemModel->getFullPath(), $item->getFullPath() . '/') === 0))
+                || $item->getChildren()->get($itemModel->getId())!== null)
         ) {
             $output = true;
         }

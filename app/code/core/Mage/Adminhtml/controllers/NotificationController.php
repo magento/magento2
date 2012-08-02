@@ -162,23 +162,23 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
     {
         switch ($this->getRequest()->getActionName()) {
             case 'markAsRead':
-                $acl = 'system/adminnotification/mark_as_read';
+                $acl = 'Mage_AdminNotification::mark_as_read';
                 break;
 
             case 'massMarkAsRead':
-                $acl = 'system/adminnotification/mark_as_read';
+                $acl = 'Mage_AdminNotification::mark_as_read';
                 break;
 
             case 'remove':
-                $acl = 'system/adminnotification/remove';
+                $acl = 'Mage_AdminNotification::adminnotification_remove';
                 break;
 
             case 'massRemove':
-                $acl = 'system/adminnotification/remove';
+                $acl = 'Mage_AdminNotification::adminnotification_remove';
                 break;
 
             default:
-                $acl = 'system/adminnotification/show_list';
+                $acl = 'Mage_AdminNotification::show_list';
         }
         return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($acl);
     }

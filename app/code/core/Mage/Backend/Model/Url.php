@@ -269,10 +269,9 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
      */
     public function getStartupPageUrl()
     {
-        $aclResource = 'admin/' . $this->_startupMenuItemId;
-        if ($this->_getSession()->isAllowed($aclResource)) {
-            $menuItem = $this->_getMenu()->get($this->_startupMenuItemId);
-            if ($menuItem && $menuItem->getAction()) {
+        $menuItem = $this->_getMenu()->get($this->_startupMenuItemId);
+        if (!is_null($menuItem)) {
+            if ($menuItem->isAllowed() && $menuItem->getAction()) {
                 return $menuItem->getAction();
             }
         }

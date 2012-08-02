@@ -1,3 +1,30 @@
+Update as of 8/1/2012
+=====================
+* Refactored ACL for the backend
+  * ACL resources
+    * Strict configuration format, validated by XSD schema
+    * ACL configuration relocation from `app/code/<pool>/<namespace>/<module>/etc/adminhtml.xml` to `app/code/<pool>/<namespace>/<module>/etc/adminhtml/acl.xml`
+    * Renamed ACL resource identifiers according to the format `<namespace>_<module>::<resource>` throughout the system
+      * Backend menu configuration requires to specify ACL resource identifier in the new format
+      * Explicit declaration of ACL resources in `app/code/<pool>/<namespace>/<module>/etc/system.xml` instead of implicit relation by XPath
+    * Migration tool `dev/tools/migration/acl.php` to convert ACL configuration from 1.x to 2.x
+  * Declaration of ACL resource/role/rule loaders through the area configuration
+    * Module `Mage_Backend` declares loader for ACL resources in backend area
+    * Module `Mage_User` declares loaders for ACL roles and rules (relations between roles and resources) in backend area
+  * Implemented integrity and legacy tests for ACL
+* Fixed issues:
+  * Losing qty and visibility information when importing products
+  * Impossibility to reload captcha on backend
+  * Temporary excluded from execution integration test `Mage_Review_Model_Resource_Review_Product_CollectionTest::testGetResultingIds()` and corresponding fixture script, which cause occasional `segmentation fault` (exit code 139)
+* Refactored methods with high cyclomatic complexity:
+  * `Mage_Adminhtml_Block_System_Store_Edit_Form::_prepareForm()`
+  * `Mage_Adminhtml_Block_System_Config_Form::initForm()`
+  * `Mage_Adminhtml_Block_System_Config_Form::initFields()`
+* GitHub requests:
+  * [#32](https://github.com/magento/magento2/pull/32) -- fixed declaration of localization CSV files
+  * [#35](https://github.com/magento/magento2/issues/35) -- removed non-used `Mage_Core_Block_Flush` block
+  * [#41](https://github.com/magento/magento2/pull/41) -- implemented ability to extends `app/etc/local.xml` by specifying additional config file via `MAGE_LOCAL_CONFIG` environment variable
+
 Update as of 7/26/2012
 =====================
 * Implemented Magento Validator library in order to have clear solid mechanism and formal rules of input data validation

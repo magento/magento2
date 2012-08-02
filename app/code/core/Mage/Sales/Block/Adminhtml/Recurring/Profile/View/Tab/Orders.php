@@ -122,7 +122,7 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_View_Tab_Orders
             'options' => Mage::getSingleton('Mage_Sales_Model_Order_Config')->getStatuses(),
         ));
 
-        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/view')) {
+        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::actions_view')) {
             $this->addColumn('action',
                 array(
                     'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Action'),

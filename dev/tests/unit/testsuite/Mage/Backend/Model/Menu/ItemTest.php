@@ -74,7 +74,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
         'id' => 'item',
         'title' => 'Item Title',
         'action' => '/system/config',
-        'resource' => 'system/config',
+        'resource' => 'Mage_Backend::config',
         'dependsOnModule' => 'Mage_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
         'tooltip' => 'Item tooltip',
@@ -82,7 +82,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_aclMock = $this->getMock('Mage_Backend_Model_Auth_Session');
+        $this->_aclMock = $this->getMock('Mage_Backend_Model_Auth_Session', array(), array(), '', false);
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_storeConfigMock = $this->getMock('Mage_Core_Model_Store_Config');
         $this->_menuFactoryMock = $this->getMock('Mage_Backend_Model_Menu_Factory', array(), array(), '', false);
@@ -117,12 +117,6 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
             ->method('validate')
             ->will($this->throwException(new BadMethodCallException()));
         new Mage_Backend_Model_Menu_Item($this->_params);
-    }
-
-    public function testGetFullPathReturnsPathWithItemId()
-    {
-        $item = new Mage_Backend_Model_Menu_Item($this->_params);
-        $this->assertEquals('item', $item->getFullPath());
     }
 
     public function testGetUrlWithEmptyActionReturnsHashSign()
@@ -247,7 +241,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
     {
         $this->_aclMock->expects($this->once())
             ->method('isAllowed')
-            ->with('admin/system/config')
+            ->with('Mage_Backend::config')
             ->will($this->returnValue(true));
         $item = new Mage_Backend_Model_Menu_Item($this->_params);
         $this->assertTrue($item->isAllowed());
@@ -257,7 +251,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
     {
         $this->_aclMock->expects($this->once())
             ->method('isAllowed')
-            ->with('admin/system/config')
+            ->with('Mage_Backend::config')
             ->will($this->throwException(new Magento_Exception()));
         $item = new Mage_Backend_Model_Menu_Item($this->_params);
         $this->assertFalse($item->isAllowed());
@@ -270,29 +264,13 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
         $this->_menuFactoryMock->expects($this->once())
             ->method('getMenuInstance')
             ->with(
-                array('path' => 'item')
+                array()
             )
             ->will($this->returnValue($menuMock));
 
         $item = new Mage_Backend_Model_Menu_Item($this->_params);
         $item->getChildren();
         $item->getChildren();
-    }
-
-    public function testSetParentUpdatesAllChildren()
-    {
-        $menuMock = $this->getMock('Mage_Backend_Model_Menu', array(), array(), '', false);
-        $menuMock->expects($this->once())
-            ->method('setPath')
-            ->with($this->equalTo('root/item'));
-
-        $this->_menuFactoryMock->expects($this->once())
-            ->method('getMenuInstance')
-            ->will($this->returnValue($menuMock));
-
-        $item = new Mage_Backend_Model_Menu_Item($this->_params);
-        $item->getChildren();
-        $item->setPath('root/');
     }
 }
 

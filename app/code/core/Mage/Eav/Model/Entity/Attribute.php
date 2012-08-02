@@ -324,4 +324,21 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
         }
         return $this->getFrontendLabel();
     }
+
+    /**
+     * Get attribute sort weight
+     *
+     * @param int $setId
+     * @return float
+     */
+    public function getSortWeight($setId)
+    {
+        $groupSortWeight = isset($this->_data['attribute_set_info'][$setId]['group_sort'])
+            ? (float) $this->_data['attribute_set_info'][$setId]['group_sort'] * 1000
+            : 0.0;
+        $sortWeight = isset($this->_data['attribute_set_info'][$setId]['sort'])
+            ? (float)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
+            : 0.0;
+        return $groupSortWeight + $sortWeight;
+    }
 }

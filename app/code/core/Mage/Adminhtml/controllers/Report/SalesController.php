@@ -375,31 +375,31 @@ class Mage_Adminhtml_Report_SalesController extends Mage_Adminhtml_Controller_Re
     {
         switch ($this->getRequest()->getActionName()) {
             case 'sales':
-                return $this->_getSession()->isAllowed('report/salesroot/sales');
+                return $this->_getSession()->isAllowed('Mage_Reports::salesroot_sales');
                 break;
             case 'tax':
-                return $this->_getSession()->isAllowed('report/salesroot/tax');
+                return $this->_getSession()->isAllowed('Mage_Reports::tax');
                 break;
             case 'shipping':
-                return $this->_getSession()->isAllowed('report/salesroot/shipping');
+                return $this->_getSession()->isAllowed('Mage_Reports::shipping');
                 break;
             case 'invoiced':
-                return $this->_getSession()->isAllowed('report/salesroot/invoiced');
+                return $this->_getSession()->isAllowed('Mage_Reports::invoiced');
                 break;
             case 'refunded':
-                return $this->_getSession()->isAllowed('report/salesroot/refunded');
+                return $this->_getSession()->isAllowed('Mage_Reports::refunded');
                 break;
             case 'coupons':
-                return $this->_getSession()->isAllowed('report/salesroot/coupons');
+                return $this->_getSession()->isAllowed('Mage_Reports::coupons');
                 break;
             case 'shipping':
-                return $this->_getSession()->isAllowed('report/salesroot/shipping');
+                return $this->_getSession()->isAllowed('Mage_Reports::shipping');
                 break;
             case 'bestsellers':
-                return $this->_getSession()->isAllowed('report/products/bestsellers');
+                return $this->_getSession()->isAllowed('Mage_Reports::bestsellers');
                 break;
             default:
-                return $this->_getSession()->isAllowed('report/salesroot');
+                return $this->_getSession()->isAllowed('Mage_Reports::salesroot');
                 break;
         }
     }

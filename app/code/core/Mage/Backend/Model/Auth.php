@@ -93,14 +93,14 @@ class Mage_Backend_Model_Auth
      */
     protected function _initCredentialStorage()
     {
-        $config = Mage::getConfig()->getNode('global/backend/auth');
-        if ($config && $config instanceof Varien_Simplexml_Element) {
-            $storage = Mage::getModel($config->credential_storage->__toString());
-            if ($storage instanceof Mage_Backend_Model_Auth_Credential_StorageInterface) {
-                $this->_credentialStorage = $storage;
-                return;
-            }
+        $areaConfig = Mage::getConfig()->getAreaConfig(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
+        $storage = Mage::getModel($areaConfig['auth']['credential_storage']);
+
+        if ($storage instanceof Mage_Backend_Model_Auth_Credential_StorageInterface) {
+            $this->_credentialStorage = $storage;
+            return;
         }
+
         self::throwException(
             Mage::helper('Mage_Backend_Helper_Data')->__('There are no authentication credential storage.')
         );

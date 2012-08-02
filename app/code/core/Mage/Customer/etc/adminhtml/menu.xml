@@ -27,9 +27,9 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Customer::customer" title="Customers" module="Mage_Customer" sortOrder="40" />
-        <add id="Mage_Customer::customer_manage" title="Manage Customers" module="Mage_Customer" sortOrder="0" parent="Mage_Customer::customer" action="adminhtml/customer/" />
-        <add id="Mage_Customer::customer_group" title="Customer Groups" module="Mage_Customer" sortOrder="10" parent="Mage_Customer::customer" action="adminhtml/customer_group/" />
-        <add id="Mage_Customer::customer_online" title="Online Customers" module="Mage_Customer" sortOrder="100" parent="Mage_Customer::customer" action="adminhtml/customer_online/" />
+        <add id="Mage_Customer::customer" title="Customers" module="Mage_Customer" sortOrder="40" resource="Mage_Customer::customer"/>
+        <add id="Mage_Customer::customer_manage" title="Manage Customers" module="Mage_Customer" sortOrder="0" parent="Mage_Customer::customer" action="adminhtml/customer/" resource="Mage_Customer::manage"/>
+        <add id="Mage_Customer::customer_group" title="Customer Groups" module="Mage_Customer" sortOrder="10" parent="Mage_Customer::customer" action="adminhtml/customer_group/" resource="Mage_Customer::group"/>
+        <add id="Mage_Customer::customer_online" title="Online Customers" module="Mage_Customer" sortOrder="100" parent="Mage_Customer::customer" action="adminhtml/customer_online/" resource="Mage_Customer::online"/>
     </menu>
 </config>

@@ -40,7 +40,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
     protected function _isAllowed ()
     {
         return Mage::getSingleton('Mage_Backend_Model_Auth_Session')
-            ->isAllowed('newsletter/template');
+            ->isAllowed('Mage_Newsletter::template');
     }
 
     /**

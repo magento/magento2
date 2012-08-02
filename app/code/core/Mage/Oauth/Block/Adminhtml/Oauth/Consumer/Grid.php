@@ -54,7 +54,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Grid extends Mage_Adminhtml_Bloc
 
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        $this->_editAllow = $session->isAllowed('system/oauth/consumer/edit');
+        $this->_editAllow = $session->isAllowed('Mage_Oauth::consumer_edit');
     }
 
     /**

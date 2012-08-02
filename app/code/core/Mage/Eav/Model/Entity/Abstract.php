@@ -569,11 +569,8 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
      */
     public function attributesCompare($attribute1, $attribute2)
     {
-        $sortPath      = sprintf('attribute_set_info/%s/sort', $this->_sortingSetId);
-        $groupSortPath = sprintf('attribute_set_info/%s/group_sort', $this->_sortingSetId);
-
-        $sort1 =  ($attribute1->getData($groupSortPath) * 1000) + ($attribute1->getData($sortPath) * 0.0001);
-        $sort2 =  ($attribute2->getData($groupSortPath) * 1000) + ($attribute2->getData($sortPath) * 0.0001);
+        $sort1 = $attribute1->getSortWeight((int)$this->_sortingSetId);
+        $sort2 = $attribute2->getSortWeight((int)$this->_sortingSetId);
 
         if ($sort1 > $sort2) {
             return 1;

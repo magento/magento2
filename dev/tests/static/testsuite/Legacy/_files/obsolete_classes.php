@@ -25,7 +25,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
+    'Mage_Admin_Model_Acl' => array('suggestion' => 'Magento_Acl'),
     'Mage_Admin_Model_Acl_Role',
+    'Mage_Admin_Model_Acl_Resource' => array('suggestion' => 'Magento_Acl_Resource'),
+    'Mage_Admin_Model_Acl_Role_Registry' => array('suggestion' => 'Magento_Acl_Role_Registry'),
+    'Mage_Admin_Model_Acl_Role_Generic' => array('suggestion' => 'Mage_User_Model_Acl_Role_Generic'),
+    'Mage_Admin_Model_Acl_Role_Group' => array('suggestion' => 'Mage_User_Model_Acl_Role_Group'),
+    'Mage_Admin_Model_Acl_Role_User' => array('suggestion' => 'Mage_User_Model_Acl_Role_User'),
+    'Mage_Admin_Model_Resource_Acl' => array('suggestion' => 'Mage_User_Model_Resource_Acl'),
     'Mage_Admin_Model_Observer',
     'Mage_Admin_Model_Session' => array('suggestion' => 'Mage_Backend_Model_Auth_Session'),
     'Mage_Admin_Model_Resource_Acl_Role',
@@ -93,6 +100,7 @@ return array(
     'Mage_Catalog_Model_Entity_Product_Attribute_Frontend_Image',
     'Mage_Catalog_Model_Resource_Product_Attribute_Frontend_Image',
     'Mage_Catalog_Model_Resource_Product_Attribute_Frontend_Tierprice',
+    'Mage_Core_Block_Flush',
     'Mage_Core_Block_Template_Facade',
     'Mage_Core_Controller_Varien_Router_Admin' => array('suggestion' => 'Mage_Backend_Controller_Router_Default'),
     'Mage_Core_Model_Design_Source_Apply',

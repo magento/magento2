@@ -80,7 +80,6 @@ class Mage_Backend_Model_Menu extends ArrayObject
             $index = intval($index);
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
-                $item->setPath($this->getFullPath());
                 $this->_logger->log(sprintf('Add of item with id %s was processed', $item->getId()));
             } else {
                 $this->add($item, $parentId, $index + 1);
@@ -186,30 +185,6 @@ class Mage_Backend_Model_Menu extends ArrayObject
     public function isLast(Mage_Backend_Model_Menu_Item $item)
     {
         return $this->offsetGet(max(array_keys($this->getArrayCopy())))->getId() == $item->getId();
-    }
-
-    /**
-     * Set path in tree
-     *
-     * @param $path
-     */
-    public function setPath($path)
-    {
-        $this->_path = $path . '/';
-        /** @var $child Mage_Backend_Model_Menu_Item */
-        foreach ($this as $child) {
-            $child->setPath($this->getFullPath());
-        }
-    }
-
-    /**
-     * Retrieve full path to node in tree
-     *
-     * @return string
-     */
-    public function getFullPath()
-    {
-        return $this->_path;
     }
 
     /**

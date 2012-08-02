@@ -277,15 +277,32 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function loadBase()
     {
         $etcDir = $this->getOptions()->getEtcDir();
-        $files = glob($etcDir.DS.'*.xml');
+        $files = array();
+        $deferred = array();
+        foreach (scandir($etcDir) as $filename) {
+            if ('.' == $filename || '..' == $filename || '.xml' != substr($filename, -4)) {
+                continue;
+            }
+            $file = "{$etcDir}/{$filename}";
+            if ('local.xml' === $filename) {
+                $deferred[] = $file;
+                $this->_isLocalConfigLoaded = true;
+                $localConfig = $this->getOptions()->getData('local_config');
+                if (preg_match('/^[a-z\d_-]+\/[a-z\d_-]+\.xml$/', $localConfig)) {
+                    $deferred[] = "{$etcDir}/$localConfig";
+                }
+            } else {
+                $files[] = $file;
+            }
+        }
+        $files = array_merge($files, $deferred);
+
         $this->loadFile(current($files));
-        while ($file = next($files)) {
+        array_shift($files);
+        foreach ($files as $file) {
             $merge = clone $this->_prototype;
             $merge->loadFile($file);
             $this->extend($merge);
-        }
-        if (in_array($etcDir.DS.'local.xml', $files)) {
-            $this->_isLocalConfigLoaded = true;
         }
         return $this;
     }
@@ -1510,6 +1527,21 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         }
 
         return $this->_allowedAreas;
+    }
+
+    /**
+     * Retrieve area config by area code
+     *
+     * @param string $areaCode
+     * @return array
+     */
+    public function getAreaConfig($areaCode)
+    {
+        $areas = $this->getAreas();
+        if (!isset($areas[$areaCode])) {
+            throw new InvalidArgumentException('Requested area (' . $areaCode . ') doesn\'t exist');
+        }
+        return $areas[$areaCode];
     }
 
     /**

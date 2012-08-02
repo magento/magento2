@@ -163,7 +163,7 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
     {
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        return $session->isAllowed('system/oauth/authorizedTokens');
+        return $session->isAllowed('Mage_Oauth::authorizedTokens');
     }
 
     /**

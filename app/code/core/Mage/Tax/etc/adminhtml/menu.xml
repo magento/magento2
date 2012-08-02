@@ -27,11 +27,11 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Tax::sales_tax" title="Tax" module="Mage_Tax" sortOrder="500" parent="Mage_Sales::sales" />
-        <add id="Mage_Tax::sales_tax_rules" title="Manage Tax Rules" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rule" />
-        <add id="Mage_Tax::sales_tax_rates" title="Manage Tax Zones &amp; Rates" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate" />
-        <add id="Mage_Tax::sales_tax_import_export" title="Import / Export Tax Rates" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate/importExport" />
-        <add id="Mage_Tax::sales_tax_classes_customer" title="Customer Tax Classes" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_class_customer" />
-        <add id="Mage_Tax::sales_tax_classes_product" title="Product Tax Classes" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_class_product" />
+        <add id="Mage_Tax::sales_tax" title="Tax" module="Mage_Tax" sortOrder="500" parent="Mage_Sales::sales" resource="Mage_Tax::sales_tax"/>
+        <add id="Mage_Tax::sales_tax_rules" title="Manage Tax Rules" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rule" resource="Mage_Tax::rules"/>
+        <add id="Mage_Tax::sales_tax_rates" title="Manage Tax Zones &amp; Rates" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate" resource="Mage_Tax::tax_rates"/>
+        <add id="Mage_Tax::sales_tax_import_export" title="Import / Export Tax Rates" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate/importExport" resource="Mage_Tax::import_export"/>
+        <add id="Mage_Tax::sales_tax_classes_customer" title="Customer Tax Classes" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_class_customer" resource="Mage_Tax::classes_customer"/>
+        <add id="Mage_Tax::sales_tax_classes_product" title="Product Tax Classes" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_class_product" resource="Mage_Tax::classes_product"/>
     </menu>
 </config>

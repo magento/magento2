@@ -53,5 +53,14 @@
                 </connect>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_Connect>
+                    <files>
+                        <default>Mage_Connect.csv</default>
+                    </files>
+                </Mage_Connect>
+            </modules>
+        </translate>
     </adminhtml>
 </config>

@@ -148,6 +148,14 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
             'Backwards-incompatible change: method _setActiveMenu()'
             . ' must be invoked with menu item identifier than xpath for menu item'
         );
+
+        $this->_assertNotRegExp(
+            '#Mage::getSingleton\([\'"]Mage_Backend_Model_Auth_Session[\'"]\)'
+                . '([\s]+)?->isAllowed\([\'"]([\w\d/_]+)[\'"]\)#Ui',
+            $content,
+            'Backwards-incompatible change: method isAllowed()'
+                . ' must be invoked with acl item identifier than xpath for acl item'
+        );
     }
 
     /**

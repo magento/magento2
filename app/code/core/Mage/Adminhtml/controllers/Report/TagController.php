@@ -284,19 +284,19 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/tags/customer');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_customer');
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/tags/product');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'productAll':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/tags/product');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'popular':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/tags/popular');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::popular');
                 break;
             default:
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('report/tags');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags');
                 break;
         }
     }

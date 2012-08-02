@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Backup::system_tools_backup" title="Backups" module="Mage_Backup" parent="Mage_Adminhtml::system_tools" action="adminhtml/system_backup" />
+        <add id="Mage_Backup::system_tools_backup" title="Backups" module="Mage_Backup" parent="Mage_Adminhtml::system_tools" action="adminhtml/system_backup" resource="Mage_Backup::backup"/>
     </menu>
 </config>

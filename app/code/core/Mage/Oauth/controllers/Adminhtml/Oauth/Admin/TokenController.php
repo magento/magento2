@@ -181,6 +181,6 @@ class Mage_Oauth_Adminhtml_Oauth_Admin_TokenController extends Mage_Adminhtml_Co
     {
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        return $session->isAllowed('system/acl/admin_token');
+        return $session->isAllowed('Mage_Oauth::oauth_admin_token');
     }
 }

@@ -282,12 +282,15 @@ abstract class Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
     }
 
     /**
-     * Prepare attributes values for save: remove non-existent, remove empty values, remove static.
+     * Prepare attributes values for save: exclude non-existent, static or with empty values attributes;
+     * set default values if needed
      *
      * @param array $rowData
+     * @param bool $withDefaultValue
+     *
      * @return array
      */
-    public function prepareAttributesForSave(array $rowData)
+    public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
         $resultAttrs = array();
 
@@ -296,16 +299,32 @@ abstract class Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
                     $resultAttrs[$attrCode] =
                         ('select' == $attrParams['type'] || 'multiselect' == $attrParams['type'])
-                        ? $attrParams['options'][strtolower($rowData[$attrCode])]
-                        : $rowData[$attrCode];
+                            ? $attrParams['options'][strtolower($rowData[$attrCode])]
+                            : $rowData[$attrCode];
                 } elseif (array_key_exists($attrCode, $rowData)) {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
-                } elseif (null !== $attrParams['default_value']) {
+                } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
                     $resultAttrs[$attrCode] = $attrParams['default_value'];
                 }
             }
         }
+
         return $resultAttrs;
+    }
+
+    /**
+     * Prepare attributes values for save: remove non-existent, remove empty values, remove static.
+     *
+     * @deprecated
+     * @see Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract::prepareAttributesWithDefaultValueForSave()
+     *
+     * @param array $rowData
+     *
+     * @return array
+     */
+    public function prepareAttributesForSave(array $rowData)
+    {
+        return $this->prepareAttributesWithDefaultValueForSave($rowData);
     }
 
     /**

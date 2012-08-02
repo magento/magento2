@@ -45,16 +45,6 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_model = null;
     }
 
-    public function getProcessedTemplateDataProvider()
-    {
-        return array(
-            'install'        => array('install',   'default',      'default/default/default'),
-            'backend'        => array('adminhtml', 'admin',        'default/default/default'),
-            'frontend'       => array('frontend',  'default',      'default/iphone/default'),
-            'frontend store' => array('frontend',  'fixturestore', 'default/default/blue'),
-        );
-    }
-
     /**
      * @magentoConfigFixture                    install/design/theme/full_name   default/default/default
      * @magentoConfigFixture                    adminhtml/design/theme/full_name default/default/default
@@ -76,7 +66,36 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_model->revertDesign();
     }
 
-    public function getIsValidToSendDataProvider()
+    /**
+     * @return array
+     */
+    public function getProcessedTemplateDataProvider()
+    {
+        return array(
+            'install'        => array('install',   'default',      'default/default/default'),
+            'backend'        => array('adminhtml', 'admin',        'default/default/default'),
+            'frontend'       => array('frontend',  'default',      'default/iphone/default'),
+            'frontend store' => array('frontend',  'fixturestore', 'default/default/blue'),
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store system/smtp/disable 0
+     * @magentoAppIsolation enabled
+     * @dataProvider isValidToSendDataProvider
+     */
+    public function testIsValidToSend($senderEmail, $senderName, $subject, $isValid)
+    {
+        $this->_model->setTemplateSenderEmail($senderEmail)
+            ->setTemplateSenderName($senderName)
+            ->setTemplateSubject($subject);
+        $this->assertSame($isValid, $this->_model->isValidForSend());
+    }
+
+    /**
+     * @return array
+     */
+    public function isValidToSendDataProvider()
     {
         return array(
             array('john.doe@example.com', 'john.doe', 'Test Subject', true),
@@ -88,18 +107,5 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
             array('', 'john.doe', '', false),
             array('', '', '', false),
         );
-    }
-
-    /**
-     * @magentoConfigFixture current_store system/smtp/disable 0
-     * @magentoAppIsolation enabled
-     * @dataProvider getIsValidToSendDataProvider
-     */
-    public function testIsValidToSend($senderEmail, $senderName, $subject, $isValid)
-    {
-        $this->_model->setTemplateSenderEmail($senderEmail)
-            ->setTemplateSenderName($senderName)
-            ->setTemplateSubject($subject);
-        $this->assertSame($isValid, $this->_model->isValidForSend());
     }
 }

@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Api2::system_api_rest_roles" title="REST - Roles" module="Mage_Api2" sortOrder="30" parent="Mage_Api::system_api" action="adminhtml/api2_role" />
-        <add id="Mage_Api2::system_api_rest_attributes" title="REST - Attributes" module="Mage_Api2" sortOrder="40" parent="Mage_Api::system_api" action="adminhtml/api2_attribute" />
+        <add id="Mage_Api2::system_api_rest_roles" title="REST - Roles" module="Mage_Api2" sortOrder="30" parent="Mage_Api::system_api" action="adminhtml/api2_role" resource="Mage_Api2::rest_roles"/>
+        <add id="Mage_Api2::system_api_rest_attributes" title="REST - Attributes" module="Mage_Api2" sortOrder="40" parent="Mage_Api::system_api" action="adminhtml/api2_attribute" resource="Mage_Api2::rest_attributes"/>
     </menu>
 </config>

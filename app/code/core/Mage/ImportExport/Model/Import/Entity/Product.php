@@ -1184,7 +1184,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $rowData['attribute_set_id'] = $this->_newSku[$rowSku]['attr_set_id'];
                     $rowData[self::COL_ATTR_SET] = $this->_newSku[$rowSku]['attr_set_code'];
                 }
-                if (!empty($rowData['_product_websites'])) { // 2. Product-to-Website phase
+
+                // 2. Product-to-Website phase
+                if (!empty($rowData['_product_websites'])) {
                     $websites[$rowSku][$this->_websiteCodeToId[$rowData['_product_websites']]] = true;
                 }
 
@@ -1197,7 +1199,8 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $categories[$rowSku][$this->_categories[$categoryPath]] = true;
                 }
 
-                if (!empty($rowData['_tier_price_website'])) { // 4.1. Tier prices phase
+                // 4.1. Tier prices phase
+                if (!empty($rowData['_tier_price_website'])) {
                     $tierPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_tier_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_tier_price_customer_group'] == self::VALUE_ALL)
@@ -1208,7 +1211,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             ? 0 : $this->_websiteCodeToId[$rowData['_tier_price_website']]
                     );
                 }
-                if (!empty($rowData['_group_price_website'])) { // 4.2. Group prices phase
+
+                // 4.2. Group prices phase
+                if (!empty($rowData['_group_price_website'])) {
                     $groupPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_group_price_customer_group'] == self::VALUE_ALL)
@@ -1218,8 +1223,10 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             ? 0 : $this->_websiteCodeToId[$rowData['_group_price_website']]
                     );
                 }
+
+                // 5. Media gallery phase
                 foreach ($this->_imagesArrayKeys as $imageCol) {
-                    if (!empty($rowData[$imageCol])) { // 5. Media gallery phase
+                    if (!empty($rowData[$imageCol])) {
                         if (!array_key_exists($rowData[$imageCol], $uploadedGalleryFiles)) {
                             $uploadedGalleryFiles[$rowData[$imageCol]] = $this->_uploadMediaFiles($rowData[$imageCol]);
                         }
@@ -1235,6 +1242,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                         'value'             => $rowData['_media_image']
                     );
                 }
+
                 // 6. Attributes phase
                 $rowStore     = self::SCOPE_STORE == $rowScope ? $this->_storeCodeToId[$rowData[self::COL_STORE]] : 0;
                 $productType  = $rowData[self::COL_TYPE];
@@ -1256,8 +1264,12 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                         continue;
                     }
                 }
-                $rowData      = $this->_productTypeModels[$productType]->prepareAttributesForSave($rowData);
-                $product      = Mage::getModel('Mage_ImportExport_Model_Import_Proxy_Product', $rowData);
+
+                $rowData = $this->_productTypeModels[$productType]->prepareAttributesWithDefaultValueForSave(
+                    $rowData,
+                    !isset($this->_oldSku[$rowSku])
+                );
+                $product = Mage::getModel('Mage_ImportExport_Model_Import_Proxy_Product', $rowData);
 
                 foreach ($rowData as $attrCode => $attrValue) {
                     $attribute = $resource->getAttribute($attrCode);
@@ -1298,9 +1310,11 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
                         }
                     }
-                    $attribute->setBackendModel($backModel); // restore 'backend_model' to avoid 'default' setting
+                    // restore 'backend_model' to avoid 'default' setting
+                    $attribute->setBackendModel($backModel);
                 }
             }
+
             $this->_saveProductEntity($entityRowsIn, $entityRowsUp)
                 ->_saveProductWebsites($websites)
                 ->_saveProductCategories($categories)
@@ -1606,6 +1620,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     continue;
                 }
 
+                $row = array();
                 $row['product_id'] = $this->_newSku[$rowData[self::COL_SKU]]['entity_id'];
                 $row['stock_id'] = 1;
 

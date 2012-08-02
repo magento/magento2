@@ -27,8 +27,8 @@
 -->
 <config>
     <menu>
-        <update id="Mage_Adminhtml::system_currency" title="Manage Currency" module="Mage_CurrencySymbol" sortOrder="50" parent="Mage_Adminhtml::system" />
-        <add id="Mage_CurrencySymbol::system_currency_rates" title="Rates" module="Mage_CurrencySymbol" sortOrder="50" parent="Mage_Adminhtml::system_currency" action="adminhtml/system_currency" />
-        <add id="Mage_CurrencySymbol::system_currency_symbols" title="Symbols" module="Mage_CurrencySymbol" sortOrder="100" parent="Mage_Adminhtml::system_currency" action="adminhtml/system_currencysymbol" />
+        <update id="Mage_Adminhtml::system_currency" title="Manage Currency" module="Mage_CurrencySymbol" sortOrder="50" parent="Mage_Adminhtml::system"/>
+        <add id="Mage_CurrencySymbol::system_currency_rates" title="Rates" module="Mage_CurrencySymbol" sortOrder="50" parent="Mage_Adminhtml::system_currency" action="adminhtml/system_currency" resource="Mage_CurrencySymbol::currency_rates"/>
+        <add id="Mage_CurrencySymbol::system_currency_symbols" title="Symbols" module="Mage_CurrencySymbol" sortOrder="100" parent="Mage_Adminhtml::system_currency" action="adminhtml/system_currencysymbol" resource="Mage_CurrencySymbol::symbols"/>
     </menu>
 </config>

@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Paypal::report_salesroot_paypal_settlement_reports" title="PayPal Settlement Reports" module="Mage_Paypal" sortOrder="100" parent="Mage_Reports::report_salesroot" action="adminhtml/paypal_reports" />
+        <add id="Mage_Paypal::report_salesroot_paypal_settlement_reports" title="PayPal Settlement Reports" module="Mage_Paypal" sortOrder="100" parent="Mage_Reports::report_salesroot" action="adminhtml/paypal_reports" resource="Mage_Paypal::paypal_settlement_reports"/>
     </menu>
 </config>

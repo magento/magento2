@@ -31,7 +31,7 @@ class Mage_Backend_Model_Menu_Item_Validator
      * @var array
      */
     protected $_required = array(
-        'acl', 'appConfig', 'menuFactory', 'urlModel', 'storeConfig', 'id', 'title', 'module'
+        'acl', 'appConfig', 'menuFactory', 'urlModel', 'storeConfig', 'id', 'title', 'module', 'resource'
     );
 
     /**
@@ -68,6 +68,12 @@ class Mage_Backend_Model_Menu_Item_Validator
         $idValidator->addValidator(new Zend_Validate_StringLength(array('min' => 3)));
         $idValidator->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9\/:_]+$/'));
 
+        $resourceValidator = new Zend_Validate();
+        $resourceValidator->addValidator(new Zend_Validate_StringLength(array('min' => 8)));
+        $resourceValidator->addValidator(
+            new Zend_Validate_Regex('/^[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}$/')
+        );
+
         $attributeValidator = new Zend_Validate();
         $attributeValidator->addValidator(new Zend_Validate_StringLength(array('min' => 3)));
         $attributeValidator->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9\/_]+$/'));
@@ -75,8 +81,7 @@ class Mage_Backend_Model_Menu_Item_Validator
         $textValidator = new Zend_Validate_StringLength(array('min' => 3, 'max' => 50));
 
         $titleValidator = $tooltipValidator = $textValidator;
-        $actionValidator = $resourceValidator = $resourceValidator = $moduleDependencyValidator
-            = $configDependencyValidator = $attributeValidator;
+        $actionValidator = $moduleDependencyValidator = $configDependencyValidator = $attributeValidator;
 
         $this->_validators['id'] = $idValidator;
         $this->_validators['title'] = $titleValidator;

@@ -75,6 +75,36 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Varien_Simplexml_Element', $model->getNode('global'));
     }
 
+    /**
+     * @param string $etcDir
+     * @param string $option
+     * @param string $expectedNode
+     * @param string $expectedValue
+     * @dataProvider loadBaseLocalConfigDataProvider
+     */
+    public function testLoadBaseLocalConfig($etcDir, $option, $expectedNode, $expectedValue)
+    {
+        $model = new Mage_Core_Model_Config;
+        $model->setOptions(array('etc_dir' => __DIR__ . "/_files/local_config/{$etcDir}", 'local_config' => $option));
+        $model->loadBase();
+        $this->assertInstanceOf('Varien_Simplexml_Element', $model->getNode($expectedNode));
+        $this->assertEquals($expectedValue, (string)$model->getNode($expectedNode));
+    }
+
+    /**
+     * @return array
+     */
+    public function loadBaseLocalConfigDataProvider()
+    {
+        return array(
+            array('no_local_config_no_custom_config', '', 'a/value', 'b'),
+            array('no_local_config_custom_config', 'custom/local.xml', 'a', ''),
+            array('local_config_no_custom_config', '', 'value', 'local'),
+            array('local_config_custom_config', 'custom/local.xml', 'value', 'custom'),
+            array('local_config_custom_config', 'custom/invalid.pattern.xml', 'value', 'local'),
+        );
+    }
+
     public function testLoadLocales()
     {
         $model = new Mage_Core_Model_Config();
@@ -191,13 +221,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Mage_Cms', $model->determineOmittedNamespace('cms', true));
         $this->assertEquals('', $model->determineOmittedNamespace('nonexistent'));
         $this->assertEquals('', $model->determineOmittedNamespace('nonexistent', true));
-    }
-
-    public function testLoadModulesConfiguration()
-    {
-        $config = $this->_createModel(true)->loadModulesConfiguration('adminhtml.xml');
-        $this->assertInstanceOf('Mage_Core_Model_Config_Base', $config);
-        $this->assertInstanceOf('Mage_Core_Model_Config_Element', $config->getNode('acl'));
     }
 
     public function testGetModuleConfigurationFiles()
@@ -411,6 +434,15 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
             $model->init(self::$_options);
         }
         return $model;
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetAreaConfigThrowsExceptionIfNonexistentAreaIsRequested()
+    {
+        Mage::app()->getConfig()->getAreaConfig('non_existent_area_code');
     }
 
     /**

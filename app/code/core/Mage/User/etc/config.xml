@@ -28,12 +28,23 @@
 <config>
     <modules>
         <Mage_User>
-            <version>1.6.1.0</version>
+            <version>1.6.1.1</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_User>
     </modules>
     <global>
+        <areas>
+            <adminhtml>
+                <auth>
+                    <credential_storage>Mage_User_Model_User</credential_storage>
+                </auth>
+                <acl>
+                    <ruleLoader>Mage_User_Model_Acl_Loader_Rule</ruleLoader>
+                    <roleLoader>Mage_User_Model_Acl_Loader_Role</roleLoader>
+                </acl>
+            </adminhtml>
+        </areas>
         <resources>
             <user_setup>
                 <setup>
@@ -50,11 +61,6 @@
                 </admin_emails_forgot_email_template>
             </email>
         </template>
-        <backend>
-            <auth>
-                <credential_storage>Mage_User_Model_User</credential_storage>
-            </auth>
-        </backend>
     </global>
     <default>
         <admin>

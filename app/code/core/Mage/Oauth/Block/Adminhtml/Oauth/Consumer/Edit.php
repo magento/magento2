@@ -79,7 +79,7 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Edit extends Mage_Adminhtml_Bloc
 
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        if (!$this->getModel() || !$this->getModel()->getId() || !$session->isAllowed('system/oauth/consumer/delete')) {
+        if (!$this->getModel() || !$this->getModel()->getId() || !$session->isAllowed('Mage_Oauth::consumer_delete')) {
             $this->_removeButton('delete');
         }
     }

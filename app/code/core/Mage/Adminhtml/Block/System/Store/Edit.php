@@ -45,19 +45,28 @@ class Mage_Adminhtml_Block_System_Store_Edit extends Mage_Adminhtml_Block_Widget
                 $this->_objectId = 'website_id';
                 $saveLabel   = Mage::helper('Mage_Core_Helper_Data')->__('Save Website');
                 $deleteLabel = Mage::helper('Mage_Core_Helper_Data')->__('Delete Website');
-                $deleteUrl   = $this->getUrl('*/*/deleteWebsite', array('item_id' => Mage::registry('store_data')->getId()));
+                $deleteUrl   = $this->getUrl(
+                    '*/*/deleteWebsite',
+                    array('item_id' => Mage::registry('store_data')->getId())
+                );
                 break;
             case 'group':
                 $this->_objectId = 'group_id';
                 $saveLabel   = Mage::helper('Mage_Core_Helper_Data')->__('Save Store');
                 $deleteLabel = Mage::helper('Mage_Core_Helper_Data')->__('Delete Store');
-                $deleteUrl   = $this->getUrl('*/*/deleteGroup', array('item_id' => Mage::registry('store_data')->getId()));
+                $deleteUrl   = $this->getUrl(
+                    '*/*/deleteGroup',
+                    array('item_id' => Mage::registry('store_data')->getId())
+                );
                 break;
             case 'store':
                 $this->_objectId = 'store_id';
                 $saveLabel   = Mage::helper('Mage_Core_Helper_Data')->__('Save Store View');
                 $deleteLabel = Mage::helper('Mage_Core_Helper_Data')->__('Delete Store View');
-                $deleteUrl   = $this->getUrl('*/*/deleteStore', array('item_id' => Mage::registry('store_data')->getId()));
+                $deleteUrl   = $this->getUrl(
+                    '*/*/deleteStore',
+                    array('item_id' => Mage::registry('store_data')->getId())
+                );
                 break;
             default:
                 $saveLabel = '';
@@ -107,5 +116,15 @@ class Mage_Adminhtml_Block_System_Store_Edit extends Mage_Adminhtml_Block_Widget
         }
 
         return Mage::registry('store_action') == 'add' ? $addLabel : $editLabel;
+    }
+
+    /**
+     * Build child form class form name based on value of store_type in registry
+     *
+     * @return string
+     */
+    protected function _buildFormClassName()
+    {
+        return parent::_buildFormClassName() . '_' . ucwords(Mage::registry('store_type'));
     }
 }

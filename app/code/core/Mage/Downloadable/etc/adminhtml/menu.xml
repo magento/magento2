@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Downloadable::report_products_downloads" title="Downloads" module="Mage_Reports" parent="Mage_Reports::report_products" action="adminhtml/report_product/downloads" />
+        <add id="Mage_Downloadable::report_products_downloads" title="Downloads" module="Mage_Reports" parent="Mage_Reports::report_products" action="adminhtml/report_product/downloads" resource="Mage_Reports::downloads"/>
     </menu>
 </config>

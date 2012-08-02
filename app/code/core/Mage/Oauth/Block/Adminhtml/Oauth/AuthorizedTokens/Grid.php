@@ -220,6 +220,6 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
     {
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        return $session->isAllowed('system/oauth/authorizedTokens');
+        return $session->isAllowed('Mage_Oauth::authorizedTokens');
     }
 }

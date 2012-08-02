@@ -116,7 +116,7 @@ class Mage_Api2_Block_Adminhtml_Roles_Grid extends Mage_Adminhtml_Block_Widget_G
         /** @var $session Mage_Backend_Model_Auth_Session */
         $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
 
-        if ($session->isAllowed('system/api/roles/edit')) {
+        if ($session->isAllowed('Mage_Api2::rest_roles_edit')) {
             return $this->getUrl('*/*/edit', array('id' => $row->getId()));
         }
         return null;

@@ -205,37 +205,9 @@ class Mage_Backend_Model_Menu_Item
     {
         if (!$this->_submenu) {
             $this->_submenu = $this->_menuFactory
-                ->getMenuInstance(
-                    array('path' => $this->getFullPath())
-            );
+                ->getMenuInstance();
         }
         return $this->_submenu;
-    }
-
-    /**
-     * Retrieve full path from root element
-     *
-     * @return string
-     */
-    public function getFullPath()
-    {
-        /*
-         * TODO: Remove id manipulation after acl is transfered to ids
-         */
-        $id = $this->_id;
-        $start = strrpos($this->_id, ':');
-        if ($start) {
-            if ($this->_path) {
-                $path = str_replace('/', '_', $this->_path);
-                $start = strpos($this->_id, $path) + strlen($path);
-            } else {
-                if ($start) {
-                    $start++;
-                }
-            }
-            $id = substr($this->_id, $start);
-        }
-        return $this->_path . $id;
     }
 
     /**
@@ -457,23 +429,9 @@ class Mage_Backend_Model_Menu_Item
     public function isAllowed()
     {
         try {
-            $aclResource = 'admin/' . ($this->_resource ? (string)$this->_resource : $this->getFullPath());
-            return $this->_acl->isAllowed($aclResource);
+            return $this->_acl->isAllowed((string)$this->_resource);
         } catch (Exception $e) {
             return false;
-        }
-    }
-
-    /**
-     * Set path in structure
-     *
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->_path = $path;
-        if ($this->_submenu) {
-            $this->_submenu->setPath($this->getFullPath());
         }
     }
 }

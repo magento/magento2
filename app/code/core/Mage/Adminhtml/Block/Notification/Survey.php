@@ -42,7 +42,8 @@ class Mage_Adminhtml_Block_Notification_Survey extends Mage_Adminhtml_Block_Temp
     {
         $adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         $seconds = intval(date('s', time()));
-        if ($adminSession->getHideSurveyQuestion() || !$adminSession->isAllowed('all')
+        if ($adminSession->getHideSurveyQuestion()
+            || !$adminSession->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
             || Mage_AdminNotification_Model_Survey::isSurveyViewed()
             || !Mage_AdminNotification_Model_Survey::isSurveyUrlValid())
         {

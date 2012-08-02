@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <add id="Mage_ImportExport::system_convert_import" title="Import" module="Mage_ImportExport" sortOrder="10" parent="Mage_Adminhtml::system_convert" action="adminhtml/import" />
-        <add id="Mage_ImportExport::system_convert_export" title="Export" module="Mage_ImportExport" sortOrder="20" parent="Mage_Adminhtml::system_convert" action="adminhtml/export" />
+        <add id="Mage_ImportExport::system_convert_import" title="Import" module="Mage_ImportExport" sortOrder="10" parent="Mage_Adminhtml::system_convert" action="adminhtml/import" resource="Mage_ImportExport::import"/>
+        <add id="Mage_ImportExport::system_convert_export" title="Export" module="Mage_ImportExport" sortOrder="20" parent="Mage_Adminhtml::system_convert" action="adminhtml/export" resource="Mage_ImportExport::export"/>
     </menu>
 </config>
