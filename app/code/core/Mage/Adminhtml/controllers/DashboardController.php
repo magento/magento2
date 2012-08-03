@@ -95,16 +95,20 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
             $newHash = Mage::helper('Mage_Adminhtml_Helper_Dashboard_Data')->getChartDataHash($gaData);
             if ($newHash == $gaHash) {
                 if ($params = unserialize(base64_decode(urldecode($gaData)))) {
-                    $response = $httpClient->setUri(Mage_Adminhtml_Block_Dashboard_Graph::API_URL)
-                            ->setParameterGet($params)
-                            ->setConfig(array('timeout' => 5))
-                            ->request('GET');
+                    try {
+                        $response = $httpClient->setUri(Mage_Adminhtml_Block_Dashboard_Graph::API_URL)
+                                ->setParameterGet($params)
+                                ->setConfig(array('timeout' => 5))
+                                ->request('GET');
 
-                    $headers = $response->getHeaders();
+                        $headers = $response->getHeaders();
 
-                    $this->getResponse()
-                        ->setHeader('Content-type', $headers['Content-type'])
-                        ->setBody($response->getBody());
+                        $this->getResponse()
+                            ->setHeader('Content-type', $headers['Content-type'])
+                            ->setBody($response->getBody());
+                    } catch (Zend_Http_Client_Exception $e) {
+                        Mage::logException($e);
+                    }
                 }
             }
         }
