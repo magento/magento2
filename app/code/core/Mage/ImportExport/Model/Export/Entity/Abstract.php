@@ -123,7 +123,7 @@ abstract class Mage_ImportExport_Model_Export_Entity_Abstract
      *
      * @var array
      */
-    protected $_particularAttributes = array();
+    protected $_specialAttributes = array();
 
     /**
      * Permanent entity columns.

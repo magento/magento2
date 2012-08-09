@@ -39,7 +39,7 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Grouped
      *
      * @var array
      */
-    protected $_particularAttributes = array(
+    protected $_specialAttributes = array(
         '_associated_sku', '_associated_default_qty', '_associated_position'
     );
 

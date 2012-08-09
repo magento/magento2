@@ -94,7 +94,6 @@
         <catalog>
             <seo>
                 <search_terms>1</search_terms>
-                <site_map>1</site_map>
             </seo>
             <search>
                 <min_query_length>1</min_query_length>

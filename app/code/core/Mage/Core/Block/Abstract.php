@@ -622,9 +622,19 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     public function getUiId()
     {
+        return ' data-ui-id="' . call_user_func_array(array($this, 'getJsId'), func_get_args()). '" ';
+    }
+
+    /**
+     * Generate id for using in JavaScript UI
+     * Function takes an arbitrary amount of parameters
+     *
+     * @return string
+     */
+    public function getJsId()
+    {
         $rawId = $this->_nameInLayout . '-' . implode('-', func_get_args());
-        $normalizedId = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($rawId)), '-');
-        return ' data-ui-id="' . $normalizedId . '" ';
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($rawId)), '-');
     }
 
     /**

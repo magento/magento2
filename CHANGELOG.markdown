@@ -1,3 +1,35 @@
+Update as of 8/9/2012
+=====================
+* Improvements:
+  * Implemented "multi-file" scheduled import/export of customers, deleted legacy implementation
+  * Ability to import amendments to complex product data, such as custom options
+  * Ability to cleanup database before installation using CLI script (`dev/shell/install.php`)
+  * Customer export feature performance optimizations
+  * Ability to control `robots.txt` via backend (System -> Config -> Design -> Search Engine Robots)
+  * Ability to create custom URL rewrites for CMS-pages
+* Product editing and attribute set changes:
+  * Ability to copy custom options from one product to another
+  * Ability to create/change attribute set during product creation/editing
+  * Ability to define default values for all system attributes
+  * New "Minimal" attribute set which has only required system attributes
+* "Google Sitemap" feature changes:
+  * The feature is renamed to "XML Sitemap"
+  * Reference to a XML sitemap file will be automatically added to `robots.txt` upon update. Controlled by "System -> Config -> Design -> Search Engine Robots", enabled by default
+  * Automatic switch to multiple "sitemaps" when size exceeds Google limits
+  * Support of images in sitemap
+* Removed "HTML Sitemap" feature as such (not the one known as "Google Sitemap")
+* Fixes:
+  * Map of listed products in XML sitemap will list product last modification date, rather than current date
+  * Incorrect timestamp of export file
+  * Addressed WSI-compliance issues in SOAP API (V2)
+  * Fixed incompatibility of Downloader tool with PHP 5.3
+  * Fixed inconsistent behavior of importing duplicated rows in CSV files
+  * Fixed message about successful registration not appearing if customer has previously logged out on the shopping cart page
+  * Fixed minor configuration issues for "Cache on Delivery Payment" method
+  * Fixed wrong order status in some cases when it is placed using PayPal with "Authorization" action
+  * Applied Zend framework security hotfix against XML external entity injection via XMLRPC API
+  * Fixed inappropriate displaying of credit card credentials to admin user after "reorder" action with Authorize.net and PayPal payment methods involved
+
 Update as of 8/2/2012
 =====================
 * Refactored ACL for the backend

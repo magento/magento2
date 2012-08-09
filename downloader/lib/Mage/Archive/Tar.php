@@ -557,12 +557,11 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
             $checksum += ord(substr($headerBlock, $i, 1));
         }
 
-        $isUstar = 'ustar' == strtolower(substr($header['magic'], 0, 5));
-
         $checksumOk = $header['checksum'] == $checksum;
         if (isset($header['name']) && $checksumOk) {
 
             if (!($header['name'] == '././@LongLink' && $header['type'] == 'L')) {
+                $header['name'] = trim($header['name']);
                 return $header;
             }
 
@@ -572,7 +571,7 @@ class Mage_Archive_Tar extends Mage_Archive_Abstract implements Mage_Archive_Int
             $realName = substr($realNameBlock, 0, $header['size']);
 
             $headerMain = $this->_extractFileHeader();
-            $headerMain['name'] = $realName;
+            $headerMain['name'] = trim($realName);
             return $headerMain;
         }
 

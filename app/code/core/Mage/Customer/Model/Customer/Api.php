@@ -107,45 +107,36 @@ class Mage_Customer_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
     }
 
     /**
-     * Retrieve cutomers data
+     * Retrieve customers data
      *
-     * @param  array $filters
+     * @param  object|array $filters
      * @return array
      */
     public function items($filters)
     {
-        $collection = Mage::getModel('Mage_Customer_Model_Customer')->getCollection()
-            ->addAttributeToSelect('*');
-
-        if (is_array($filters)) {
-            try {
-                foreach ($filters as $field => $value) {
-                    if (isset($this->_mapAttributes[$field])) {
-                        $field = $this->_mapAttributes[$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
+        $collection = Mage::getModel('Mage_Customer_Model_Customer')->getCollection()->addAttributeToSelect('*');
+        /** @var $apiHelper Mage_Api_Helper_Data */
+        $apiHelper = Mage::helper('Mage_Api_Helper_Data');
+        $filters = $apiHelper->parseFilters($filters, $this->_mapAttributes);
+        try {
+            foreach ($filters as $field => $value) {
+                $collection->addFieldToFilter($field, $value);
             }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('filters_invalid', $e->getMessage());
         }
-
         $result = array();
         foreach ($collection as $customer) {
             $data = $customer->toArray();
             $row  = array();
-
             foreach ($this->_mapAttributes as $attributeAlias => $attributeCode) {
                 $row[$attributeAlias] = (isset($data[$attributeCode]) ? $data[$attributeCode] : null);
             }
-
             foreach ($this->getAllowedAttributes($customer) as $attributeCode => $attribute) {
                 if (isset($data[$attributeCode])) {
                     $row[$attributeCode] = $data[$attributeCode];
                 }
             }
-
             $result[] = $row;
         }
 
@@ -162,7 +153,7 @@ class Mage_Customer_Model_Customer_Api extends Mage_Customer_Model_Api_Resource
     public function update($customerId, $customerData)
     {
         $customerData = $this->_prepareData($customerData);
-        
+
         $customer = Mage::getModel('Mage_Customer_Model_Customer')->load($customerId);
 
         if (!$customer->getId()) {

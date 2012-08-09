@@ -385,10 +385,6 @@
                 <default_sort_by>position</default_sort_by>
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
-            <sitemap>
-                <tree_mode>0</tree_mode>
-                <lines_perpage>30</lines_perpage>
-            </sitemap>
             <product>
                 <default_tax_group>2</default_tax_group>
             </product>

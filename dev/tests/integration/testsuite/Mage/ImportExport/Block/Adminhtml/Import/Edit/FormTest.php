@@ -31,6 +31,34 @@
 class Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * List of expected fieldsets in import edit form
+     *
+     * @var array
+     */
+    protected static $_expectedFieldsets = array(
+        'base_fieldset',
+        'upload_file_fieldset',
+    );
+
+    /**
+     * Add behaviour fieldsets to expected fieldsets
+     *
+     * @static
+     */
+    public static function setUpBeforeClass()
+    {
+        $uniqueBehaviors = Mage_ImportExport_Model_Import::getUniqueEntityBehaviors();
+        foreach (array_keys($uniqueBehaviors) as $behavior) {
+            self::$_expectedFieldsets[] = $behavior . '_fieldset';
+        }
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$_expectedFieldsets = null;
+    }
+
+    /**
      * Test content of form after _prepareForm
      */
     public function testPrepareForm()
@@ -49,23 +77,15 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_FormTest extends PHPUnit_Fra
         $this->assertTrue($form->getUseContainer(), 'Form should use container.');
 
         // check form fieldsets
-        $formFieldsetIds = array(
-            'base_fieldset',
-            'behavior_v1_fieldset',
-            'behavior_v2_customer_fieldset',
-            'import_format_version_fieldset',
-            'customer_entity_fieldset',
-            'upload_file_fieldset'
-        );
         $formFieldsets = array();
         $formElements = $form->getElements();
         foreach ($formElements as $element) {
             /** @var $element Varien_Data_Form_Element_Abstract */
-            if (in_array($element->getId(), $formFieldsetIds)) {
+            if (in_array($element->getId(), self::$_expectedFieldsets)) {
                 $formFieldsets[] = $element;
             }
         }
-        $this->assertCount(count($formFieldsetIds), $formFieldsets);
+        $this->assertSameSize(self::$_expectedFieldsets, $formFieldsets);
         foreach ($formFieldsets as $fieldset) {
             $this->assertInstanceOf('Varien_Data_Form_Element_Fieldset', $fieldset, 'Incorrect fieldset class.');
         }

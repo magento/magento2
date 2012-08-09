@@ -71,7 +71,8 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
     protected function _isApplicableAttribute($object, $attribute)
     {
         $applyTo = $attribute->getApplyTo();
-        return count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo);
+        return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
+            && $attribute->isInSet($object->getAttributeSetId());
     }
 
     /**
@@ -362,7 +363,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
             $adapter->update($table, $bind, $where);
         } else {
             $bind  = array(
-                $idField            => (int)$object->getId(),
+                $entityIdField      => (int)$object->getId(),
                 'entity_type_id'    => (int)$object->getEntityTypeId(),
                 'attribute_id'      => (int)$attribute->getId(),
                 'value'             => $this->_prepareValueForSave($value, $attribute),

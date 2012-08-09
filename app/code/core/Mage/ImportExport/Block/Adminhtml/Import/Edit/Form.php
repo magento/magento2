@@ -49,6 +49,8 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
         ));
 
         // base fieldset
+        /** @var $importEntity Mage_ImportExport_Model_Source_Import_Entity */
+        $importEntity = Mage::getModel('Mage_ImportExport_Model_Source_Import_Entity');
         $fieldsets['base'] = $form->addFieldset('base_fieldset', array('legend' => $helper->__('Import Settings')));
         $fieldsets['base']->addField('entity', 'select', array(
             'name'     => 'entity',
@@ -56,75 +58,30 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtml_
             'label'    => $helper->__('Entity Type'),
             'required' => true,
             'onchange' => 'editForm.handleEntityTypeSelector();',
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Entity')->toOptionArray()
+            'values'   => $importEntity->toOptionArray()
         ));
 
-        // fieldset for format version
-        $fieldsets['version'] = $form->addFieldset(
-            'import_format_version_fieldset',
-            array(
-                'legend' => $helper->__('Import Format Version'),
-                'style'  => 'display:none'
-            )
-        );
-        $fieldsets['version']->addField('file_format_version', 'select', array(
-            'name'     => 'file_format_version',
-            'title'    => $helper->__('Import Format Version'),
-            'label'    => $helper->__('Import Format Version'),
-            'required' => true,
-            'disabled' => true,
-            'onchange' => 'editForm.handleImportFormatVersionSelector();',
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Format_Version')->toOptionArray()
-        ));
-
-        // fieldsets for behaviours
-        $fieldsets['behavior_v1'] = $form->addFieldset(
-            'behavior_v1_fieldset',
-            array(
-                'legend' => $helper->__('Import Behavior'),
-                'style'  => 'display:none'
-            )
-        );
-        $fieldsets['behavior_v1']->addField('behavior_v1', 'select', array(
-            'name'     => 'behavior',
-            'title'    => $helper->__('Import Behavior'),
-            'label'    => $helper->__('Import Behavior'),
-            'required' => true,
-            'disabled' => true,
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Behavior')->toOptionArray()
-        ));
-
-        $fieldsets['behavior_v2_customer'] = $form->addFieldset(
-            'behavior_v2_customer_fieldset',
-            array(
-                'legend' => $helper->__('Import Behavior'),
-                'style'  => 'display:none'
-            )
-        );
-        $fieldsets['behavior_v2_customer']->addField('behavior_v2_customer', 'select', array(
-            'name'     => 'behavior',
-            'title'    => $helper->__('Import Behavior'),
-            'label'    => $helper->__('Import Behavior'),
-            'required' => true,
-            'disabled' => true,
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Customer_V2_Behavior')->toOptionArray()
-        ));
-
-        // fieldset for customer entity
-        $fieldsets['customer'] = $form->addFieldset('customer_entity_fieldset',
-            array(
-                'legend' => $helper->__('Customer Entity Type'),
-                'style'  => 'display:none'
-            )
-        );
-        $fieldsets['customer']->addField('customer_entity', 'select', array(
-            'name'     => 'customer_entity',
-            'title'    => $helper->__('Customer Entity Type'),
-            'label'    => $helper->__('Customer Entity Type'),
-            'required' => true,
-            'disabled' => true,
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Import_Customer_Entity')->toOptionArray()
-        ));
+        // add behaviour fieldsets
+        $uniqueBehaviors = Mage_ImportExport_Model_Import::getUniqueEntityBehaviors();
+        foreach ($uniqueBehaviors as $behaviorCode => $behaviorClass) {
+            $fieldsets[$behaviorCode] = $form->addFieldset(
+                $behaviorCode .'_fieldset',
+                array(
+                    'legend' => $helper->__('Import Behavior'),
+                    'style'  => 'display:none',
+                )
+            );
+            /** @var $behaviorSource Mage_ImportExport_Model_Source_Import_BehaviorAbstract */
+            $behaviorSource = Mage::getModel($behaviorClass);
+            $fieldsets[$behaviorCode]->addField($behaviorCode, 'select', array(
+                'name'     => 'behavior',
+                'title'    => $helper->__('Import Behavior'),
+                'label'    => $helper->__('Import Behavior'),
+                'required' => true,
+                'disabled' => true,
+                'values'   => $behaviorSource->toOptionArray()
+            ));
+        }
 
         // fieldset for file uploading
         $fieldsets['upload'] = $form->addFieldset('upload_file_fieldset',

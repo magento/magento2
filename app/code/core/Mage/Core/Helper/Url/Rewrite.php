@@ -94,4 +94,17 @@ class Mage_Core_Helper_Url_Rewrite extends Mage_Core_Helper_Abstract
         }
         return true;
     }
+
+    /**
+     * Has redirect options set
+     *
+     * @param Mage_Core_Model_Url_Rewrite $urlRewrite
+     * @return bool
+     */
+    public function hasRedirectOptions($urlRewrite)
+    {
+        /** @var $options Mage_Core_Model_Source_Urlrewrite_Options */
+        $options = Mage::getSingleton('Mage_Core_Model_Source_Urlrewrite_Options');
+        return in_array($urlRewrite->getOptions(), $options->getRedirectOptions());
+    }
 }

@@ -81,6 +81,8 @@ class Varien_Object implements ArrayAccess
      *
      * By default is looking for first argument as array and assigns it as object attributes
      * This behavior may change in child classes
+     *
+     * @param array $data
      */
     public function __construct(array $data = array())
     {

@@ -274,13 +274,23 @@ class Mage_Catalog_Model_Resource_Eav_Attribute extends Mage_Eav_Model_Entity_At
     }
 
     /**
-     * Check is allow for rule condition
+     * Whether allowed for rule condition
      *
      * @return bool
      */
     public function isAllowedForRuleCondition()
     {
-        $allowedInputTypes = array('text', 'multiselect', 'textarea', 'date', 'datetime', 'select', 'boolean', 'price');
+        $allowedInputTypes = array(
+            'boolean',
+            'date',
+            'datetime',
+            'multiselect',
+            'price',
+            'select',
+            'text',
+            'textarea',
+            'weight',
+        );
         return $this->getIsVisible() && in_array($this->getFrontendInput(), $allowedInputTypes);
     }
 

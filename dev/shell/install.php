@@ -74,7 +74,7 @@ if (isset($args['show_locales'])) {
 } else {
     if (isset($args['config']) && file_exists($args['config'])) {
         $config = (array) include($args['config']);
-        $args = array_merge((array)$config['install_options'], $args);
+        $args = array_merge((array)$config, $args);
     }
     $isUninstallMode = isset($args['uninstall']);
     if ($isUninstallMode) {

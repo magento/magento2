@@ -45,13 +45,21 @@
 
     <adminhtml_catalog_product_new>
         <update handle="editor"/>
+        <reference name="head">
+            <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+            <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::css/ui-lightness/jquery-ui-1.8.21.custom.css</file></action>
+        </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet" name="attribute-set-info" template="Mage_Adminhtml::catalog/product/edit/attribute_set.phtml"></block>
         </reference>
         <reference name="left">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"></block>
         </reference>
         <reference name="js">
+            <block type="Mage_Core_Block_Template" name="change-attribute-set" template="Mage_Adminhtml::catalog/product/change_attribute_set_widget.phtml" />
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
             <block type="Mage_Core_Block_Template" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
         </reference>
@@ -59,14 +67,22 @@
 
     <adminhtml_catalog_product_edit>
         <update handle="editor"/>
+        <reference name="head">
+            <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+            <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::css/ui-lightness/jquery-ui-1.8.21.custom.css</file></action>
+        </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet" name="attribute-set-info" template="Mage_Adminhtml::catalog/product/edit/attribute_set.phtml"></block>
         </reference>
         <reference name="left">
             <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" before="-"></block>
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"></block>
         </reference>
         <reference name="js">
+            <block type="Mage_Core_Block_Template" name="change-attribute-set" template="Mage_Adminhtml::catalog/product/change_attribute_set_widget.phtml" />
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
             <block type="Mage_Core_Block_Template" name="catalog.wysiwyg.js" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
         </reference>
@@ -329,5 +345,17 @@ Additional block in composite_fieldset block dependant on product type
             <remove name="product.composite.fieldset.qty"/>
         </reference>
     </catalog_product_view_type_grouped>
+
+    <adminhtml_catalog_product_optionsimportgrid>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Popup_Grid" name="catalog.product.import.custom.options" />
+        </container>
+    </adminhtml_catalog_product_optionsimportgrid>
+
+    <adminhtml_catalog_product_customoptions>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Options_Ajax" name="catalog.product.import.custom.options"/>
+        </container>
+    </adminhtml_catalog_product_customoptions>
 
 </layout>

@@ -823,7 +823,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
      /**
      * Retrieve rss lists types
      *
-     * @return array
+     * @return array|bool
      */
     public function getRssLists()
     {
@@ -862,6 +862,17 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
                 'label' => $label
             )
         );
+        return $this;
+    }
+
+    /**
+     * Clear rss list in grid
+     *
+     * @return  Mage_Backend_Block_Widget_Grid
+     */
+    public function clearRss()
+    {
+        $this->_rssLists = array();
         return $this;
     }
 

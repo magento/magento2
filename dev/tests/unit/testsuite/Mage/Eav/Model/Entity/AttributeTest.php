@@ -56,7 +56,7 @@ class Mage_Eav_Model_Entity_AttributeTest extends PHPUnit_Framework_TestCase
     public static function dataGetBackendTypeByInput()
     {
         return array(
-            array('unrecognized-frontent-input', null),
+            array('unrecognized-frontend-input', null),
             array('text', 'varchar'),
             array('gallery', 'varchar'),
             array('media_image', 'varchar'),
@@ -84,7 +84,7 @@ class Mage_Eav_Model_Entity_AttributeTest extends PHPUnit_Framework_TestCase
     public static function dataGetDefaultValueByInput()
     {
         return array(
-            array('unrecognized-frontent-input', ''),
+            array('unrecognized-frontend-input', ''),
             array('select', ''),
             array('gallery', ''),
             array('media_image', ''),

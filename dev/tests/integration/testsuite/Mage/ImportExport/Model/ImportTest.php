@@ -26,37 +26,62 @@
  */
 
 /**
- * Tests for Import model
- *
  * @magentoDataFixture Mage/ImportExport/_files/import_data.php
  */
 class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Model object which used for tests
+     * Model object which is used for tests
      *
      * @var Mage_ImportExport_Model_Import
      */
     protected $_model;
 
+    /**
+     * Expected entity behaviors
+     *
+     * @var array
+     */
+    protected $_entityBehaviors = array(
+        'catalog_product' => array(
+            'token' => 'Mage_ImportExport_Model_Source_Import_Behavior_Basic',
+            'code'  => 'basic_behavior',
+        ),
+        'customer_composite' => array(
+            'token' => 'Mage_ImportExport_Model_Source_Import_Behavior_Basic',
+            'code'  => 'basic_behavior',
+        ),
+        'customer' => array(
+            'token' => 'Mage_ImportExport_Model_Source_Import_Behavior_Custom',
+            'code'  => 'custom_behavior',
+        ),
+        'customer_address' => array(
+            'token' => 'Mage_ImportExport_Model_Source_Import_Behavior_Custom',
+            'code'  => 'custom_behavior',
+        ),
+    );
+
+    /**
+     * Expected unique behaviors
+     *
+     * @var array
+     */
+    protected $_uniqueBehaviors = array(
+        'basic_behavior'  => 'Mage_ImportExport_Model_Source_Import_Behavior_Basic',
+        'custom_behavior' => 'Mage_ImportExport_Model_Source_Import_Behavior_Custom',
+    );
+
     protected function setUp()
     {
-        parent::setUp();
-
         $this->_model = new Mage_ImportExport_Model_Import();
     }
 
     protected function tearDown()
     {
         unset($this->_model);
-
-        parent::tearDown();
     }
 
     /**
-     * Test import from import data storage.
-     * Covers _getEntityAdapter() in case when entity adapter was successfully returned
-     *
      * @covers Mage_ImportExport_Model_Import::_getEntityAdapter
      */
     public function testImportSource()
@@ -79,8 +104,6 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test _getEntityAdapter() through validateSource() method in case when entity was not set
-     *
      * @expectedException Mage_Core_Exception
      * @expectedExceptionMessage Entity is unknown
      */
@@ -90,56 +113,77 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test _getEntityAdapter() through validateSource() method
-     * in case when not valid customer entity subtype was passed
-     *
      * @expectedException Mage_Core_Exception
      * @expectedExceptionMessage Invalid entity
      */
-    public function testGetEntityAdapterInvalidCustomerSubtype()
+    public function testGetEntityAdapterInvalidEntity()
     {
-        $this->_model->setEntitySubtype(microtime());
-
+        $this->_model->setEntity('invalid_entity_name');
         $this->_model->validateSource('');
     }
 
-    /**
-     * Test _getEntityAdapter() through validateSource() method
-     * in case when not valid customer entity model was set in config
-     *
-     * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Invalid entity model
-     *
-     * @magentoConfigFixture global/importexport/import_customer_entities/customer_address/model_token Varien_Image
-     *
-     */
-    public function testGetEntityAdapterInvalidCustomerEntityModel()
+    public function testGetEntity()
     {
-        $addressesImport = new Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address();
-
-        $this->_model->setEntitySubtype($addressesImport->getEntityTypeCode());
-
-        $this->_model->validateSource('');
+        $entityName = 'entity_name';
+        $this->_model->setEntity($entityName);
+        $this->assertSame($entityName, $this->_model->getEntity());
     }
 
-    // @codingStandardsIgnoreStart
     /**
-     * Test _getEntityAdapter() through validateSource() method
-     * in case when in config was set customer entity model which not
-     * extends Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address
+     * @expectedException Mage_Core_Exception
+     * @expectedExceptionMessage Entity is unknown
+     */
+    public function testGetEntityEntityIsNotSet()
+    {
+        $this->_model->getEntity();
+    }
+
+    /**
+     * Test getEntityBehaviors with all required data
+     * Can't check array on equality because this test should be useful for CE
      *
-     * @magentoConfigFixture global/importexport/import_customer_entities/customer_address/model_token Mage_ImportExport_Model_Import_Entity_Customer
+     * @covers Mage_ImportExport_Model_Import::getEntityBehaviors
+     */
+    public function testGetEntityBehaviors()
+    {
+        $importModel = $this->_model;
+        $actualBehaviors = $importModel::getEntityBehaviors();
+
+        foreach ($this->_entityBehaviors as $entityKey => $behaviorData) {
+            $this->assertArrayHasKey($entityKey, $actualBehaviors);
+            $this->assertEquals($behaviorData, $actualBehaviors[$entityKey]);
+        }
+    }
+
+    /**
+     * Test getEntityBehaviors with not existing behavior class
+     *
+     * @magentoConfigFixture global/importexport/import_entities/customer/behavior_token Unknown_Behavior_Class
      *
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Entity adapter object must be an instance of Mage_ImportExport_Model_Import_Entity_V2_Abstract
+     * @expectedExceptionMessage Invalid behavior token for customer
      */
-    // @codingStandardsIgnoreEnd
-    public function testGetEntityAdapterInvalidCustomerEntityObject()
+    public function testGetEntityBehaviorsWithUnknownBehavior()
     {
-        $addressesImport = new Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address();
+        $importModel = $this->_model;
+        $actualBehaviors = $importModel::getEntityBehaviors();
+        $this->assertArrayNotHasKey('customer', $actualBehaviors);
+    }
 
-        $this->_model->setEntitySubtype($addressesImport->getEntityTypeCode());
+    /**
+     * Test getUniqueEntityBehaviors with all required data
+     * Can't check array on equality because this test should be useful for CE
+     *
+     * @covers Mage_ImportExport_Model_Import::getUniqueEntityBehaviors
+     */
+    public function testGetUniqueEntityBehaviors()
+    {
+        $importModel = $this->_model;
+        $actualBehaviors = $importModel::getUniqueEntityBehaviors();
 
-        $this->_model->validateSource('');
+        foreach ($this->_uniqueBehaviors as $behaviorCode => $behaviorClass) {
+            $this->assertArrayHasKey($behaviorCode, $actualBehaviors);
+            $this->assertEquals($behaviorClass, $actualBehaviors[$behaviorCode]);
+        }
     }
 }

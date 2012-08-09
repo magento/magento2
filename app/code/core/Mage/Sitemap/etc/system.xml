@@ -28,7 +28,7 @@
 <config>
    <sections>
         <sitemap translate="label" module="Mage_Sitemap">
-            <label>Google Sitemap</label>
+            <label>XML Sitemap</label>
             <tab>catalog</tab>
             <frontend_type>text</frontend_type>
             <sort_order>70</sort_order>
@@ -93,6 +93,15 @@
                             <show_in_store>1</show_in_store>
                             <comment>Valid values range: from 0.0 to 1.0.</comment>
                         </priority>
+                        <image_include translate="label">
+                            <label>Add Images into Sitemap</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Sitemap_Model_Source_Product_Image_Include</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </image_include>
                     </fields>
                 </product>
                 <page translate="label">
@@ -127,7 +136,7 @@
                 <generate translate="label">
                     <label>Generation Settings</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>50</sort_order>
+                    <sort_order>4</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
@@ -188,6 +197,52 @@
                         </time>
                     </fields>
                 </generate>
+                <limit translate="label">
+                    <label>Sitemap File Limits</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <max_lines translate="label">
+                            <label>Maximum No of URLs Per File</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_lines>
+                        <max_file_size translate="label comment">
+                            <label>Maximum File Size</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>File size in bytes.</comment>
+                        </max_file_size>
+                    </fields>
+                </limit>
+                <search_engines translate="label">
+                    <label>Search Engine Submission Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>6</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <submission_robots translate="label">
+                            <label>Enable Submission to Robots.txt</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </submission_robots>
+                    </fields>
+                </search_engines>
             </groups>
         </sitemap>
     </sections>

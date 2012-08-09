@@ -62,6 +62,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
         'backend_frontname'          => array('required' => 0),
         'enable_charts'              => array('required' => 0),
         'order_increment_prefix'     => array('required' => 0),
+        'cleanup_database'           => array('required' => 0),
     );
 
     /**
@@ -254,6 +255,10 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
              */
             $installer->installConfig($this->_getDataModel()->getConfigData());
 
+            if (!empty($options['cleanup_database'])) {
+                $this->_cleanUpDatabase();
+            }
+
             if ($this->hasErrors()) {
                 return false;
             }
@@ -348,15 +353,10 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     }
 
     /**
-     * Uninstall the application
-     *
-     * @return bool
+     * Cleanup database use system configuration
      */
-    public function uninstall()
+    protected function _cleanUpDatabase()
     {
-        if (!Mage::isInstalled()) {
-            return false;
-        }
         $dbConfig = Mage::getConfig()->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
         $modelName = 'Mage_Install_Model_Installer_Db_' . ucfirst($dbConfig->model);
 
@@ -368,6 +368,20 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
         /** @var $resourceModel Mage_Install_Model_Installer_Db_Abstract */
         $resourceModel = Mage::getModel($modelName);
         $resourceModel->cleanUpDatabase($dbConfig);
+    }
+
+    /**
+     * Uninstall the application
+     *
+     * @return bool
+     */
+    public function uninstall()
+    {
+        if (!Mage::isInstalled()) {
+            return false;
+        }
+
+        $this->_cleanUpDatabase();
 
         /* Remove temporary directories */
         $configOptions = Mage::app()->getConfig()->getOptions();

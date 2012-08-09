@@ -52,7 +52,6 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
                 break;
             }
         }
-        $this->assertNotEmpty($this->_attributeOptionId, 'Fixture attribute option id.'); // just in case
 
         $this->_model = new Mage_Catalog_Model_Layer_Filter_Attribute;
         $this->_model->setData(array(
@@ -64,6 +63,11 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
     protected function tearDown()
     {
         $this->_model = null;
+    }
+
+    public function testOptionIdNotEmpty()
+    {
+        $this->assertNotEmpty($this->_attributeOptionId, 'Fixture attribute option id.'); // just in case
     }
 
     public function testApplyInvalid()

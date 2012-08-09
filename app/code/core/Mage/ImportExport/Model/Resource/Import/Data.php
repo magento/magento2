@@ -41,6 +41,26 @@ class Mage_ImportExport_Model_Resource_Import_Data
     protected $_iterator = null;
 
     /**
+     * Helper to encode/decode json
+     *
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_jsonHelper;
+
+    /**
+     * Class constructor
+     *
+     * @param array $arguments
+     */
+    public function __construct(array $arguments = array())
+    {
+        parent::__construct($arguments);
+
+        $this->_jsonHelper = isset($arguments['json_helper']) ? $arguments['json_helper']
+            : Mage::helper('Mage_Core_Helper_Data');
+    }
+
+    /**
      * Resource initialization
      */
     protected function _construct()
@@ -140,7 +160,7 @@ class Mage_ImportExport_Model_Resource_Import_Data
         }
         if ($this->_iterator->valid()) {
             $dataRow = $this->_iterator->current();
-            $dataRow = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($dataRow[0]);
+            $dataRow = $this->_jsonHelper->jsonDecode($dataRow[0]);
             $this->_iterator->next();
         } else {
             $this->_iterator = null;
@@ -155,18 +175,16 @@ class Mage_ImportExport_Model_Resource_Import_Data
      * @param string $entity
      * @param string $behavior
      * @param array $data
-     * @param string|null $entitySubtype
      * @return int
      */
-    public function saveBunch($entity, $behavior, array $data, $entitySubtype = null)
+    public function saveBunch($entity, $behavior, array $data)
     {
         return $this->_getWriteAdapter()->insert(
             $this->getMainTable(),
             array(
                 'behavior'       => $behavior,
                 'entity'         => $entity,
-                'entity_subtype' => $entitySubtype,
-                'data'           => Mage::helper('Mage_Core_Helper_Data')->jsonEncode($data)
+                'data'           => $this->_jsonHelper->jsonEncode($data)
             )
         );
     }

@@ -886,16 +886,6 @@ tr.summary-details-excluded { font-style:italic; }
 .cms-home .subtitle {}
 .cms-index-index .subtitle {}
 
-/* Sitemap */
-.page-sitemap .links { text-align:right; margin:0 8px -22px 0; }
-.page-sitemap .links a { text-decoration:none; position:relative; }
-.page-sitemap .links a:hover { text-decoration:underline; }
-.page-sitemap .sitemap { margin:12px; }
-.page-sitemap .sitemap a {}
-.page-sitemap .sitemap li { margin:3px 0; }
-.page-sitemap .sitemap li.level-0 { margin:10px 0 0; font-weight:bold; }
-.page-sitemap .sitemap li.level-0 a {}
-
 /* RSS */
 .rss-title h1 { background:url(../images/i_rss-big.png) 0 4px no-repeat; padding-left:27px; }
 .rss-table .link-rss { display:block; line-height:1.35; background-position:0 2px; }

@@ -38,7 +38,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Groupprice
     /**
      * Retrieve resource instance
      *
-     * @return Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Attribute_Backend_Tierprice
+     * @return Mage_Catalog_Model_Resource_Product_Attribute_Backend_Groupprice
      */
     protected function _getResource()
     {

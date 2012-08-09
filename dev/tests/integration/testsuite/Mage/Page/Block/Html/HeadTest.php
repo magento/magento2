@@ -99,4 +99,22 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
             $this->_block->getCssJsHtml()
         );
     }
+
+    /**
+     * Test getRobots default value
+     */
+    public function testGetRobotsDefaultValue()
+    {
+        $this->assertEquals('INDEX,FOLLOW', $this->_block->getRobots());
+    }
+
+    /**
+     * Test getRobots
+     *
+     * @magentoConfigFixture default_store design/search_engine_robots/default_robots INDEX,NOFOLLOW
+     */
+    public function testGetRobots()
+    {
+        $this->assertEquals('INDEX,NOFOLLOW', $this->_block->getRobots());
+    }
 }

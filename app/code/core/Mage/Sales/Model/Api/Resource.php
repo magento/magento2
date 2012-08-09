@@ -92,8 +92,10 @@ class Mage_Sales_Model_Api_Resource extends Mage_Api_Model_Resource_Abstract
             }
         }
 
-        foreach ($this->_attributesMap['global'] as $alias=>$attributeCode) {
-            $result[$alias] = $object->getData($attributeCode);
+        if (isset($this->_attributesMap['global'])) {
+            foreach ($this->_attributesMap['global'] as $alias=>$attributeCode) {
+                $result[$alias] = $object->getData($attributeCode);
+            }
         }
 
         if (isset($this->_attributesMap[$type])) {

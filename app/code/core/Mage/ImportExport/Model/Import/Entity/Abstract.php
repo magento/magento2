@@ -138,7 +138,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      *
      * @var array
      */
-    protected $_particularAttributes = array();
+    protected $_specialAttributes = array();
 
     /**
      * Permanent entity columns.
@@ -530,7 +530,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      */
     public function isAttributeParticular($attrCode)
     {
-        return in_array($attrCode, $this->_particularAttributes);
+        return in_array($attrCode, $this->_specialAttributes);
     }
 
     /**

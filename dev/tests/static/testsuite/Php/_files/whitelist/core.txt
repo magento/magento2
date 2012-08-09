@@ -1,5 +1,10 @@
 app/bootstrap.php
+app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Options/Popup/Grid.php
+app/code/core/Mage/Adminhtml/Block/Catalog/Product/Options/Ajax.php
 app/code/core/Mage/Adminhtml/Model/Observer.php
+app/code/core/Mage/Adminhtml/Block/Urlrewrite
+app/code/core/Mage/Adminhtml/Block/controllers/UrlrewriteController.php
+app/code/core/Mage/Adminhtml/Block/Page/System/Config/Robots/Reset.php
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit.php
 app/code/core/Mage/Core/Block/Abstract.php
@@ -13,6 +18,10 @@ app/code/core/Mage/Core/Model/Design/Fallback
 app/code/core/Mage/Core/Model/Design/Fallback.php
 app/code/core/Mage/Core/Model/Design/FallbackInterface.php
 app/code/core/Mage/DesignEditor
+app/code/core/Mage/ImportExport/Model/Import/Entity/CustomerComposite.php
+app/code/core/Mage/ImportExport/Model/Import/Entity/Product/Option.php
+app/code/core/Mage/ImportExport/Model/Resource/Customer/Storage.php
+app/code/core/Mage/ImportExport/Model/Resource/Import/CustomerComposite/Data.php
 app/code/core/Mage/Index/Model/Indexer/Abstract.php
 app/code/core/Mage/Index/Model/Shell.php
 app/code/core/Mage/Log/Model/Resource/Helper
@@ -25,6 +34,7 @@ app/code/core/Mage/Core/Controller/Varien/DispatchableInterface.php
 app/code/core/Mage/Core/Controller/Varien/Router/Standard.php
 app/code/core/Mage/Core/Controller/Varien/Router/Abstract.php
 app/code/core/Mage/Cms/Controller/Router.php
+app/code/core/Mage/Page/Helper/Robots.php
 dev/shell
 dev/tests/integration
 dev/tests/performance
@@ -35,4 +45,5 @@ lib/Magento/Convert
 lib/Magento/Profiler
 lib/Magento/Profiler.php
 lib/Varien/Convert
+lib/Varien/Date.php
 lib/Varien/Object.php

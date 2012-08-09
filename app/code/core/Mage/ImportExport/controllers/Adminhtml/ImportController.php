@@ -139,10 +139,6 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
                     Mage_ImportExport_Model_Import::FIELD_NAME_IMG_ARCHIVE_FILE)
                 );
 
-            if (!empty($data['customer_entity'])) {
-                $data['entity_subtype'] = $data['customer_entity'];
-            }
-
             try {
                 /** @var $import Mage_ImportExport_Model_Import */
                 $import = Mage::getModel('Mage_ImportExport_Model_Import');

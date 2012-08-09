@@ -30,11 +30,11 @@
         <resources>
             <resource id="Mage_Adminhtml::admin">
                 <resource id="Mage_Catalog::catalog">
-                    <resource id="Mage_Sitemap::sitemap" module="Mage_Sitemap" title="Google Sitemap" />
+                    <resource id="Mage_Sitemap::sitemap" module="Mage_Sitemap" title="XML Sitemap" />
                 </resource>
                 <resource id="Mage_Adminhtml::system">
                     <resource id="Mage_Adminhtml::config">
-                        <resource id="Mage_Sitemap::config_sitemap" module="Mage_Shipping" title="Google Sitemap Section" />
+                        <resource id="Mage_Sitemap::config_sitemap" module="Mage_Sitemap" title="XML Sitemap Section" />
                     </resource>
                 </resource>
             </resource>

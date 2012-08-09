@@ -46,7 +46,7 @@ class Mage_Sitemap_Model_Resource_Cms_Page extends Mage_Core_Model_Resource_Db_A
     /**
      * Retrieve cms page collection array
      *
-     * @param unknown_type $storeId
+     * @param int $storeId
      * @return array
      */
     public function getCollection($storeId)
@@ -54,19 +54,19 @@ class Mage_Sitemap_Model_Resource_Cms_Page extends Mage_Core_Model_Resource_Db_A
         $pages = array();
 
         $select = $this->_getWriteAdapter()->select()
-            ->from(array('main_table' => $this->getMainTable()), array($this->getIdFieldName(), 'identifier AS url'))
+            ->from(array('main_table' => $this->getMainTable()), array($this->getIdFieldName(),
+                'url' => 'identifier', 'updated_at' => 'update_time'))
             ->join(
                 array('store_table' => $this->getTable('cms_page_store')),
-                'main_table.page_id=store_table.page_id',
+                'main_table.page_id = store_table.page_id',
                 array()
             )
-            ->where('main_table.is_active=1')
+            ->where('main_table.is_active = 1')
+            ->where('main_table.identifier != ?', Mage_Cms_Model_Page::NOROUTE_PAGE_ID)
             ->where('store_table.store_id IN(?)', array(0, $storeId));
+
         $query = $this->_getWriteAdapter()->query($select);
         while ($row = $query->fetch()) {
-            if ($row['url'] == Mage_Cms_Model_Page::NOROUTE_PAGE_ID) {
-                continue;
-            }
             $page = $this->_prepareObject($row);
             $pages[$page->getId()] = $page;
         }
@@ -85,6 +85,7 @@ class Mage_Sitemap_Model_Resource_Cms_Page extends Mage_Core_Model_Resource_Db_A
         $object = new Varien_Object();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
+        $object->setUpdatedAt($data['updated_at']);
 
         return $object;
     }

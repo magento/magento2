@@ -395,12 +395,13 @@ class Mage_Paypal_Model_Ipn
         $this->_order->save();
 
         // notify customer
-        if ($invoice = $payment->getCreatedInvoice() && !$this->_order->getEmailSent()) {
-            $comment = $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
-                    Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
-                )
-                ->setIsCustomerNotified(true)
-                ->save();
+        $invoice = $payment->getCreatedInvoice();
+        if ($invoice && !$this->_order->getEmailSent()) {
+            $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
+                Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
+            )
+            ->setIsCustomerNotified(true)
+            ->save();
         }
     }
 

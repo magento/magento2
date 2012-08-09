@@ -413,9 +413,9 @@ Validation.add('IsEmpty', '', function(v) {
 
 Validation.addAllThese([
     ['validate-no-html-tags', 'HTML tags are not allowed', function(v) {
-				return !/<(\/)?\w+/.test(v);
-			}],
-	['validate-select', 'Please select an option.', function(v) {
+                return !/<(\/)?\w+/.test(v);
+            }],
+    ['validate-select', 'Please select an option.', function(v) {
                 return ((v != "none") && (v != null) && (v.length != 0));
             }],
     ['required-entry', 'This is a required field.', function(v) {

@@ -26,19 +26,13 @@
 ?>
 <script type="text/javascript">
 //<![CDATA[
-export_filter_gridJsObject.resetFilter = function () {
-    var callback = null;
-    if (window['editForm'] != undefined && 'handleExportFormatVersionSelector' in window['editForm']) {
-        callback = editForm.handleCustomerEntityTypeSelector;
-    }
-    return varienGrid.prototype.resetFilter.call(this, callback);
-};
-export_filter_gridJsObject.doFilter = function () {
-    var callback = null;
-    if (window['editForm'] != undefined && 'handleExportFormatVersionSelector' in window['editForm']) {
-        callback = editForm.handleCustomerEntityTypeSelector;
-    }
-    return varienGrid.prototype.doFilter.call(this, callback);
-};
+if (window['export_filter_gridJsObject'] != undefined) {
+    export_filter_gridJsObject.resetFilter = function () {
+        return varienGrid.prototype.resetFilter.call(this, editForm.modifyFilterGrid);
+    };
+    export_filter_gridJsObject.doFilter = function () {
+        return varienGrid.prototype.doFilter.call(this, editForm.modifyFilterGrid);
+    };
+}
 //]]>
 </script>
