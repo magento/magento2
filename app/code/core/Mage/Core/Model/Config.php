@@ -358,9 +358,16 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         Magento_Profiler::start('config');
         Magento_Profiler::start('load_modules');
         $this->_loadDeclaredModules();
-
+        
         $resourceConfig = sprintf('config.%s.xml', $this->_getResourceConnectionModel('core'));
-        $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this);
+
+        $configFiles = array('config.xml',$resourceConfig);
+        
+        if (($environment = getenv('MAGE_ENVIRONMENT'))) {
+            $configFiles[] = sprintf('config.%s.xml', $environment);
+        }
+        
+        $this->loadModulesConfiguration($configFiles, $this);
 
         /**
          * Prevent local.xml directives overwriting
