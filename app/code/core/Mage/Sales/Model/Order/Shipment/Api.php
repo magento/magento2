@@ -45,15 +45,16 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
     }
 
     /**
-     * Retrive shipments by filters
+     * Retrieve shipments by filters
      *
-     * @param array $filters
+     * @param null|object|array $filters
      * @return array
      */
     public function items($filters = null)
     {
+        $shipments = array();
         //TODO: add full name logic
-        $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Collection')
+        $shipmentCollection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Collection')
             ->addAttributeToSelect('increment_id')
             ->addAttributeToSelect('created_at')
             ->addAttributeToSelect('total_qty')
@@ -62,27 +63,21 @@ class Mage_Sales_Model_Order_Shipment_Api extends Mage_Sales_Model_Api_Resource
             ->joinAttribute('order_increment_id', 'order/increment_id', 'order_id', null, 'left')
             ->joinAttribute('order_created_at', 'order/created_at', 'order_id', null, 'left');
 
-        if (is_array($filters)) {
-            try {
-                foreach ($filters as $field => $value) {
-                    if (isset($this->_attributesMap['shipment'][$field])) {
-                        $field = $this->_attributesMap['shipment'][$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
+        /** @var $apiHelper Mage_Api_Helper_Data */
+        $apiHelper = Mage::helper('Mage_Api_Helper_Data');
+        try {
+            $filters = $apiHelper->parseFilters($filters, $this->_attributesMap['shipment']);
+            foreach ($filters as $field => $value) {
+                $shipmentCollection->addFieldToFilter($field, $value);
             }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('filters_invalid', $e->getMessage());
+        }
+        foreach ($shipmentCollection as $shipment) {
+            $shipments[] = $this->_getAttributes($shipment, 'shipment');
         }
 
-        $result = array();
-
-        foreach ($collection as $shipment) {
-            $result[] = $this->_getAttributes($shipment, 'shipment');
-        }
-
-        return $result;
+        return $shipments;
     }
 
     /**

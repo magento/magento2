@@ -51,7 +51,6 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
     public function testViewAction()
     {
         $this->dispatch('catalog/product/view/id/1');
-
         /** @var $currentProduct Mage_Catalog_Model_Product */
         $currentProduct = Mage::registry('current_product');
         $this->assertInstanceOf('Mage_Catalog_Model_Product', $currentProduct);
@@ -86,8 +85,8 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
     {
         $this->dispatch('catalog/product/view/id/1');
         $html = $this->getResponse()->getBody();
-        $format = '%Alass="product-options" id="product-options-wrapper">%A'
-            . '<div class="product-options-bottom">%A';
+        $format = '%Aclass="product-options" id="product-options-wrapper">%A'
+            . '<div class="product-options-bottom">%A<div class="add-to-cart">%A<ul class="add-to-links">%A';
         $this->assertStringMatchesFormat($format, $html);
     }
 

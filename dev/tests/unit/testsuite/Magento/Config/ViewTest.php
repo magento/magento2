@@ -40,7 +40,7 @@ class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Exception
+     * @expectedException InvalidArgumentException
      */
     public function testConstructException()
     {

@@ -148,6 +148,8 @@ class Mage_Install_Model_Installer extends Varien_Object
         Mage::getSingleton('Mage_Install_Model_Installer_Config')
             ->setConfigData($data)
             ->install();
+
+        $this->_refreshConfig();
         return $this;
     }
 
@@ -176,6 +178,9 @@ class Mage_Install_Model_Installer extends Varien_Object
             $setupModel->setConfigData(Mage_Adminhtml_Block_Dashboard::XML_PATH_ENABLE_CHARTS, 0);
         }
 
+        if (!empty($data['admin_no_form_key'])) {
+            $setupModel->setConfigData('admin/security/use_form_key', 0);
+        }
 
         $unsecureBaseUrl = Mage::getBaseUrl('web');
         if (!empty($data['unsecure_base_url'])) {
@@ -210,7 +215,30 @@ class Mage_Install_Model_Installer extends Varien_Object
             $setupModel->setConfigData(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_ALLOW, $locale['currency']);
         }
 
+        if (!empty($data['order_increment_prefix'])) {
+            $this->_setOrderIncrementPrefix($setupModel, $data['order_increment_prefix']);
+        }
+
         return $this;
+    }
+
+    /**
+     * Set order number prefix
+     *
+     * @param Mage_Core_Model_Resource_Setup $setupModel
+     * @param string $orderIncrementPrefix
+     */
+    protected function _setOrderIncrementPrefix(Mage_Core_Model_Resource_Setup $setupModel, $orderIncrementPrefix)
+    {
+        $select = $setupModel->getConnection()->select()
+            ->from($setupModel->getTable('eav_entity_type'), 'entity_type_id')
+            ->where('entity_type_code=?', 'order');
+        $data = array(
+            'entity_type_id' => $setupModel->getConnection()->fetchOne($select),
+            'store_id' => '1',
+            'increment_prefix' => $orderIncrementPrefix,
+        );
+        $setupModel->getConnection()->insert($setupModel->getTable('eav_entity_store'), $data);
     }
 
     /**
@@ -222,7 +250,7 @@ class Mage_Install_Model_Installer extends Varien_Object
      */
     public function validateAndPrepareAdministrator($data)
     {
-        $user = Mage::getModel('Mage_Admin_Model_User')
+        $user = Mage::getModel('Mage_User_Model_User')
             ->load($data['username'], 'username');
         $user->addData($data);
 
@@ -246,7 +274,7 @@ class Mage_Install_Model_Installer extends Varien_Object
      */
     public function createAdministrator($data)
     {
-        $user = Mage::getModel('Mage_Admin_Model_User')
+        $user = Mage::getModel('Mage_User_Model_User')
             ->load('admin', 'username');
         if ($user && $user->getPassword() == '4297f44b13955235245b2497399d7a93') {
             $user->delete();
@@ -255,16 +283,15 @@ class Mage_Install_Model_Installer extends Varien_Object
         //to support old logic checking if real data was passed
         if (is_array($data)) {
             $data = $this->validateAndPrepareAdministrator($data);
-            if (is_array(data)) {
+            if (is_array($data)) {
                 throw new Exception(Mage::helper('Mage_Install_Helper_Data')->__('Please correct the user data and try again.'));
             }
         }
 
         //run time flag to force saving entered password
-        $data->setForceNewPassword(true);
-
-        $data->save();
-        $data->setRoleIds(array(1))->saveRelations();
+        $data->setForceNewPassword(true)
+            ->setRoleId(1)
+            ->save();
 
         return true;
     }
@@ -308,14 +335,15 @@ class Mage_Install_Model_Installer extends Varien_Object
             Mage::helper('Mage_Core_Helper_Data')->validateKey($key);
         }
         Mage::getSingleton('Mage_Install_Model_Installer_Config')->replaceTmpEncryptKey($key);
+        $this->_refreshConfig();
         return $this;
     }
 
     public function finish()
     {
         Mage::getSingleton('Mage_Install_Model_Installer_Config')->replaceTmpInstallDate();
-        Mage::app()->cleanCache();
-
+        $this->_refreshConfig();
+        /* Enable all cache types */
         $cacheData = array();
         foreach (Mage::helper('Mage_Core_Helper_Data')->getCacheTypes() as $type => $label) {
             $cacheData[$type] = 1;
@@ -324,4 +352,12 @@ class Mage_Install_Model_Installer extends Varien_Object
         return $this;
     }
 
+    /**
+     * Ensure changes in the configuration, if any, take effect
+     */
+    protected function _refreshConfig()
+    {
+        Mage::app()->cleanCache();
+        Mage::app()->getConfig()->reinit();
+    }
 }

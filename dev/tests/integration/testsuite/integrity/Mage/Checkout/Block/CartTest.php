@@ -37,7 +37,7 @@ class Integrity_Mage_Checkout_Block_CartTest extends PHPUnit_Framework_TestCase
     {
         $params = array();
         if (preg_match('/app\/design\/frontend\/(.+?)\/(.+?)\//', $layoutFile, $matches)) {
-            $params = array('_package' => $matches[1], '_theme' => $matches[2]);
+            $params = array('package' => $matches[1], 'theme' => $matches[2]);
         }
 
         $xml = simplexml_load_file($layoutFile);
@@ -49,8 +49,8 @@ class Integrity_Mage_Checkout_Block_CartTest extends PHPUnit_Framework_TestCase
             $blockNode = $node->xpath('..');
             $blockNode = $blockNode[0];
             preg_match('/^(.+?_.+?)_/', $blockNode['type'], $matches);
-            $params['_module'] = $matches[1];
-            $this->assertFileExists(Mage::getDesign()->getTemplateFilename($template, $params));
+            $params['module'] = $matches[1];
+            $this->assertFileExists(Mage::getDesign()->getFilename($template, $params));
         }
     }
 

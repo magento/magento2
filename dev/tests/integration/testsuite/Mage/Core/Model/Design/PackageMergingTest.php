@@ -28,39 +28,44 @@
 class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Path to the public directory for skin files
+     *
+     * @var string
+     */
+    protected static $_skinPublicDir;
+
+    /**
+     * Path to the public directory for merged skin files
+     *
+     * @var string
+     */
+    protected static $_skinPublicMergedDir;
+
+    /**
      * @var Mage_Core_Model_Design_Package
      */
     protected $_model = null;
 
-    /**
-     * @var string
-     */
-    protected $_skinFixture = '';
-
-    /**
-     * @var string
-     */
-    protected $_pubMerged = '';
-
-    /**
-     * @var string
-     */
-    protected $_pubLib = '';
+    public static function setUpBeforeClass()
+    {
+        self::$_skinPublicDir = Mage::app()->getConfig()->getOptions()->getMediaDir() . '/skin';
+        self::$_skinPublicMergedDir = self::$_skinPublicDir . '/_merged';
+    }
 
     protected function setUp()
     {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(dirname(__DIR__) . '/_files/design');
-        Varien_Io_File::rmdirRecursive(Mage::app()->getConfig()->getOptions()->getMediaDir() . '/skin');
+        Mage::app()->getConfig()->getOptions()->setDesignDir(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design'
+        );
 
         $this->_model = new Mage_Core_Model_Design_Package();
-        $this->_model->setArea('frontend')
-            ->setDesignTheme('package/default/theme');
+        $this->_model->setDesignTheme('package/default/theme', 'frontend');
+    }
 
-        $pub = Mage::getBaseDir('media');
-        $this->_pubMerged = "{$pub}/skin/_merged";
-        $this->_pubLib = Mage::getBaseDir('js');
-        // emulate source skin
-        $this->_skinFixture = dirname(__DIR__) . '/_files/skin';
+    protected function tearDown()
+    {
+        Varien_Io_File::rmdirRecursive(self::$_skinPublicDir);
+        $this->_model = null;
     }
 
     /**
@@ -79,11 +84,11 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
      * @param string $contentType
      * @param array $files
      * @param string $expectedFilename
-     * @param string $expectedFixture
      * @param array $related
      * @dataProvider mergeFilesDataProvider
      * @magentoConfigFixture current_store dev/css/merge_css_files 1
      * @magentoConfigFixture current_store dev/js/merge_files 1
+     * @magentoConfigFixture current_store dev/static/sign 0
      * @magentoAppIsolation enabled
      */
     public function testMergeFiles($contentType, $files, $expectedFilename, $related = array())
@@ -96,12 +101,46 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
         $this->assertArrayHasKey(0, $result);
         $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
         $this->assertEquals($expectedFilename, basename($result[0]));
-        if ($related) {
-            foreach ($related as $file) {
-                $this->assertFileExists(
-                    Mage::getBaseDir('media') . "/skin/frontend/package/default/theme/en_US/{$file}"
-                );
-            }
+        foreach ($related as $file) {
+            $this->assertFileExists(
+                self::$_skinPublicDir . '/frontend/package/default/theme/en_US/' . $file
+            );
+        }
+    }
+
+    /**
+     * @param string $contentType
+     * @param array $files
+     * @param string $expectedFilename
+     * @param array $related
+     * @dataProvider mergeFilesDataProvider
+     * @magentoConfigFixture current_store dev/css/merge_css_files 1
+     * @magentoConfigFixture current_store dev/js/merge_files 1
+     * @magentoConfigFixture current_store dev/static/sign 1
+     * @magentoAppIsolation enabled
+     */
+    public function testMergeFilesSigned($contentType, $files, $expectedFilename, $related = array())
+    {
+        if ($contentType == Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS) {
+            $result = $this->_model->getOptimalCssUrls($files);
+        } else {
+            $result = $this->_model->getOptimalJsUrls($files);
+        }
+        $this->assertArrayHasKey(0, $result);
+        $this->assertEquals(1, count($result), 'Result must contain exactly one file.');
+        $mergedFileName = basename($result[0]);
+        $mergedFileName = preg_replace('/\?.*$/i', '', $mergedFileName);
+        $this->assertEquals($expectedFilename, $mergedFileName);
+        $lastModified = array();
+        preg_match('/.*\?(.*)$/i', $result[0], $lastModified);
+        $this->assertArrayHasKey(1, $lastModified);
+        $this->assertEquals(10, strlen($lastModified[1]));
+        $this->assertLessThanOrEqual(time(), $lastModified[1]);
+        $this->assertGreaterThan(1970, date('Y', $lastModified[1]));
+        foreach ($related as $file) {
+            $this->assertFileExists(
+                self::$_skinPublicDir . '/frontend/package/default/theme/en_US/' . $file
+            );
         }
     }
 
@@ -154,7 +193,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
             'scripts.js',
         );
 
-        $resultingFile = "{$this->_pubMerged}/916b1b8161a8f61422b432009f47f267.js";
+        $resultingFile = self::$_skinPublicMergedDir . '/916b1b8161a8f61422b432009f47f267.js';
         $this->assertFileNotExists($resultingFile);
 
         // merge first time
@@ -169,22 +208,23 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
      */
     public function testCleanMergedJsCss()
     {
-        $this->assertFileNotExists($this->_pubMerged);
+        $this->assertFileNotExists(self::$_skinPublicMergedDir);
 
         $this->_model->getOptimalJsUrls(array(
             'calendar/calendar.js',
             'scripts.js',
         ));
-        $this->assertFileExists($this->_pubMerged);
+        $this->assertFileExists(self::$_skinPublicMergedDir);
         $filesFound = false;
-        foreach (new RecursiveDirectoryIterator($this->_pubMerged) as $fileInfo) {
+        foreach (new RecursiveDirectoryIterator(self::$_skinPublicMergedDir) as $fileInfo) {
             if ($fileInfo->isFile()) {
                 $filesFound = true;
+                break;
             }
         }
         $this->assertTrue($filesFound, 'No files found in the merged directory.');
 
         $this->_model->cleanMergedJsCss();
-        $this->assertFileNotExists($this->_pubMerged);
+        $this->assertFileNotExists(self::$_skinPublicMergedDir);
     }
 }

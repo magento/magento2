@@ -139,7 +139,7 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
                 'align'     => 'center',
                 'width'     => '80px',
                 'type'      => 'options',
-                'options'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteOptionHash(true),
+                'options'   => Mage::getSingleton('Mage_Core_Model_System_Store')->getWebsiteOptionHash(true),
                 'index'     => 'website_id',
             ));
         }

@@ -40,6 +40,11 @@ class Mage_Core_Model_Translate_ExprTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Translate_Expr($this->_expectedText, $this->_expectedModule);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testConstructor()
     {
         $this->assertEquals($this->_expectedText, $this->_model->getText());

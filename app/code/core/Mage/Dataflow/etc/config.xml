@@ -29,6 +29,11 @@
     <modules>
         <Mage_Dataflow>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+            </depends>
         </Mage_Dataflow>
     </modules>
     <global>
@@ -40,4 +45,15 @@
             </dataflow_setup>
         </resources>
     </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mage_Dataflow>
+                    <files>
+                        <default>Mage_Dataflow.csv</default>
+                    </files>
+                </Mage_Dataflow>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

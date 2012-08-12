@@ -55,6 +55,8 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Mage::getSingleton('Mage_Catalog_Model_Session')->unsLastViewedProductId();
+        $this->_controller = null;
+        $this->_helper = null;
     }
 
     /**

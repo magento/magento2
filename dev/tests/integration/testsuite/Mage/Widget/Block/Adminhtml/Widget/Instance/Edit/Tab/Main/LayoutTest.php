@@ -40,6 +40,11 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_LayoutTest exten
         $this->_block->setLayout(Mage::app()->getLayout());
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetLayoutsChooser()
     {
         $actualHtml = $this->_block->getLayoutsChooser();

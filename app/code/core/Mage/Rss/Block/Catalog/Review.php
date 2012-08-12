@@ -31,31 +31,8 @@
  * @package    Mage_Rss
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Rss_Block_Catalog_Review extends Mage_Rss_Block_Abstract
+class Mage_Rss_Block_Catalog_Review extends Mage_Core_Block_Abstract
 {
-
-    /**
-     * Cache tag constant for feed reviews
-     *
-     * @var string
-     */
-    const CACHE_TAG = 'block_html_rss_catalog_review';
-
-    /**
-     * Initialize cache
-     *
-     * @return null
-     */
-    protected function _construct()
-    {
-        $this->setCacheTags(array(self::CACHE_TAG));
-        /*
-        * setting cache to save the rss for 10 minutes
-        */
-        $this->setCacheKey('rss_catalog_review');
-        $this->setCacheLifetime(600);
-    }
-
     /**
      * Render XML response
      *

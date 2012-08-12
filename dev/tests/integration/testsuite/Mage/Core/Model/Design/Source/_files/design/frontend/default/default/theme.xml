@@ -28,15 +28,9 @@
 -->
 <design>
     <package code="default">
-        <title>Y</title>
+        <title>Default</title>
         <theme code="default" version="0.0.0.1">
-            <title>Y</title>
-            <requirements>
-                <magento_version from="0.0.0.1" to="0.0.0.1"/>
-            </requirements>
-        </theme>
-        <theme code="g" version="0.0.0.1" parent="default">
-            <title>A</title>
+            <title>Default</title>
             <requirements>
                 <magento_version from="0.0.0.1" to="0.0.0.1"/>
             </requirements>

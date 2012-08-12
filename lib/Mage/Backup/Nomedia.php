@@ -31,32 +31,8 @@
  * @package     Mage_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backup_Nomedia extends Mage_Backup_Snapshot
+class Mage_Backup_Nomedia extends Mage_Backup_Media
 {
-    /**
-     * Implementation Rollback functionality for Snapshot
-     *
-     * @throws Mage_Exception
-     * @return bool
-     */
-    public function rollback()
-    {
-        $this->_prepareIgnoreList();
-        return parent::rollback();
-    }
-
-    /**
-     * Implementation Create Backup functionality for Snapshot
-     *
-     * @throws Mage_Exception
-     * @return bool
-     */
-    public function create()
-    {
-        $this->_prepareIgnoreList();
-        return parent::create();
-    }
-
     /**
      * Overlap getType
      *
@@ -75,8 +51,11 @@ class Mage_Backup_Nomedia extends Mage_Backup_Snapshot
      */
     protected function _prepareIgnoreList()
     {
-        $this->addIgnorePaths($this->getRootDir() . DS . 'media');
-
+        $rootDir = $this->_snapshotManager->getRootDir();
+        $this->_snapshotManager->addIgnorePaths(array(
+            $rootDir . DIRECTORY_SEPARATOR . 'media',
+            $rootDir . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . 'media',
+        ));
         return $this;
     }
 }

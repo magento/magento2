@@ -311,7 +311,7 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
         $cacheKey   = date('Y-m-d', $dateTs) . "|$websiteId|$customerGroupId|$productId|$price";
 
         if (!array_key_exists($cacheKey, self::$_priceRulesData)) {
-            $rulesData = $this->_getResource()->getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
+            $rulesData = $this->_getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
             if ($rulesData) {
                 foreach ($rulesData as $ruleData) {
                     if ($product->getParentId()) {
@@ -322,7 +322,7 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
                                 $priceRules ? $priceRules : $price
                             );
                         } else {
-                            $priceRules = $price;
+                            $priceRules = $priceRules ? $priceRules : $price;
                         }
                         if ($ruleData['action_stop']) {
                             break;
@@ -346,6 +346,20 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
             return self::$_priceRulesData[$cacheKey];
         }
         return null;
+    }
+
+    /**
+     * Get rules from product
+     *
+     * @param string $dateTs
+     * @param int $websiteId
+     * @param array $customerGroupId
+     * @param int $productId
+     * @return array
+     */
+    protected function _getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId)
+    {
+        return $this->_getResource()->getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
     }
 
     /**

@@ -37,6 +37,11 @@ class Mage_Sales_Model_Order_Shipment_TrackTest extends PHPUnit_Framework_TestCa
         $this->_model = new Mage_Sales_Model_Order_Shipment_Track();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testSetGetNumber()
     {
         $this->assertNull($this->_model->getNumber());

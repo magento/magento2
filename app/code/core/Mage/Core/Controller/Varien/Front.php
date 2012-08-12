@@ -138,12 +138,7 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
                 continue;
             }
             if (isset($routerInfo['class'])) {
-                $options = array();
-                if (isset($routerInfo['area']) && isset($routerInfo['base_controller'])) {
-                    $options['area'] = $routerInfo['area'];
-                    $options['base_controller'] = $routerInfo['base_controller'];
-                }
-                $router = new $routerInfo['class']($options);
+                $router = new $routerInfo['class']($routerInfo);
                 if (isset($routerInfo['area'])) {
                     $router->collectRoutes($routerInfo['area'], $routerCode);
                 }
@@ -161,6 +156,11 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
         return $this;
     }
 
+    /**
+     * Dispatch user request
+     *
+     * @return Mage_Core_Controller_Varien_Front
+     */
     public function dispatch()
     {
         $request = $this->getRequest();
@@ -183,16 +183,19 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
         Magento_Profiler::stop('dispatch');
 
         Magento_Profiler::start('routers_match');
-        $i = 0;
-        while (!$request->isDispatched() && $i++<100) {
+        $routingCycleCounter = 0;
+        while (!$request->isDispatched() && $routingCycleCounter++<100) {
             foreach ($this->_routers as $router) {
-                if ($router->match($this->getRequest())) {
+                /** @var $controllerInstance Mage_Core_Controller_Varien_Action */
+                $controllerInstance = $router->match($this->getRequest());
+                if ($controllerInstance) {
+                    $controllerInstance->dispatch($request->getActionName());
                     break;
                 }
             }
         }
         Magento_Profiler::stop('routers_match');
-        if ($i>100) {
+        if ($routingCycleCounter>100) {
             Mage::throwException('Front controller reached 100 router match iterations');
         }
         // This event gives possibility to launch something before sending output (allow cookie setting)
@@ -225,6 +228,10 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
         return $router;
     }
 
+    /**
+     * @param string $frontName
+     * @return Mage_Core_Controller_Varien_Router_Abstract
+     */
     public function getRouterByFrontName($frontName)
     {
         // empty route supplied - return base url
@@ -354,34 +361,12 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
      */
     protected function _isAdminFrontNameMatched($request)
     {
-        $useCustomAdminPath = (bool)(string)Mage::getConfig()
-            ->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_USE_CUSTOM_ADMIN_PATH);
-        $customAdminPath = (string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_CUSTOM_ADMIN_PATH);
-        $adminPath = ($useCustomAdminPath) ? $customAdminPath : null;
-
-        if (!$adminPath) {
-            $adminPath = (string)Mage::getConfig()
-                ->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
-        }
-        $adminFrontNames = array($adminPath);
-
-        // Check for other modules that can use admin router (a lot of Magento extensions do that)
-        $adminFrontNameNodes = Mage::getConfig()->getNode('admin/routers')
-            ->xpath('*[not(self::adminhtml) and use = "admin"]/args/frontName');
-
-        if (is_array($adminFrontNameNodes)) {
-            foreach ($adminFrontNameNodes as $frontNameNode) {
-                /** @var $frontNameNode SimpleXMLElement */
-                array_push($adminFrontNames, (string)$frontNameNode);
-            }
-        }
-
         $pathPrefix = ltrim($request->getPathInfo(), '/');
         $urlDelimiterPos = strpos($pathPrefix, '/');
         if ($urlDelimiterPos) {
             $pathPrefix = substr($pathPrefix, 0, $urlDelimiterPos);
         }
 
-        return in_array($pathPrefix, $adminFrontNames);
+        return $pathPrefix == Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
     }
 }

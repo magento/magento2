@@ -74,20 +74,20 @@ class Mage_Install_Model_Installer_Abstract
     }
 
     /**
-     * Validate admin frontname value.
-     * If empty, "admin" will be returned
+     * Validate backend area frontname value.
+     * If empty, "backend" will be returned
      *
      * @param string $value
      * @return string
      * @throws Exception
      */
-    protected function _checkAdminFrontname($value)
+    protected function _checkBackendFrontname($value)
     {
         if (empty($value)) {
-            return 'admin';
+            return 'backend';
         }
-        if (!preg_match('/^[a-z]+[a-z0-9_]+$/i', $value)) {
-            throw new Exception('admin_frontname value must contain only letters (a-z or A-Z), numbers (0-9) or underscore(_), first character should be a letter.');
+        if (!preg_match('/^[a-z]+[a-z0-9_]+$/', $value)) {
+            throw new Exception('backend_frontname value must contain only letters (a-z), numbers (0-9) or underscore(_), first character should be a letter.');
         }
         return $value;
     }

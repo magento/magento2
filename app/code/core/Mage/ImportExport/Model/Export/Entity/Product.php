@@ -453,9 +453,11 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
         }
 
         $categoryId = array_shift($rowCategories[$productId]);
-        $dataRow[self::COL_ROOT_CATEGORY] = $this->_rootCategories[$categoryId];
-        if (isset($this->_categories[$categoryId])) {
-            $dataRow[self::COL_CATEGORY] = $this->_categories[$categoryId];
+        if ($categoryId) {
+            $dataRow[self::COL_ROOT_CATEGORY] = $this->_rootCategories[$categoryId];
+            if (isset($this->_categories[$categoryId])) {
+                $dataRow[self::COL_CATEGORY] = $this->_categories[$categoryId];
+            }
         }
 
         return true;
@@ -790,7 +792,9 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                         $dataRow[self::COL_TYPE]     = null;
                     } else {
                         $dataRow[self::COL_STORE] = null;
-                        $dataRow += $stockItemRows[$productId];
+                        if (isset($stockItemRows[$productId])) {
+                            $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
+                        }
                     }
 
                     $this->_updateDataWithCategoryColumns($dataRow, $rowCategories, $productId);
@@ -823,7 +827,7 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                     if (!empty($configurableData[$productId])) {
                         $dataRow = array_merge($dataRow, array_shift($configurableData[$productId]));
                     }
-                    if(!empty($rowMultiselects[$productId])) {
+                    if (!empty($rowMultiselects[$productId])) {
                         foreach ($rowMultiselects[$productId] as $attrKey => $attrVal) {
                             if (!empty($rowMultiselects[$productId][$attrKey])) {
                                 $dataRow[$attrKey] = array_shift($rowMultiselects[$productId][$attrKey]);
@@ -863,7 +867,7 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                     $additionalRowsCount = max($additionalRowsCount, count($configurableData[$productId]));
                 }
                 if (!empty($rowMultiselects[$productId])) {
-                    foreach($rowMultiselects[$productId] as $attributes) {
+                    foreach ($rowMultiselects[$productId] as $attributes) {
                         $additionalRowsCount = max($additionalRowsCount, count($attributes));
                     }
                 }
@@ -903,9 +907,9 @@ class Mage_ImportExport_Model_Export_Entity_Product extends Mage_ImportExport_Mo
                         if (!empty($configurableData[$productId])) {
                             $dataRow = array_merge($dataRow, array_shift($configurableData[$productId]));
                         }
-                        if(!empty($rowMultiselects[$productId])) {
-                            foreach($rowMultiselects[$productId] as $attrKey=>$attrVal) {
-                                if(!empty($rowMultiselects[$productId][$attrKey])) {
+                        if (!empty($rowMultiselects[$productId])) {
+                            foreach ($rowMultiselects[$productId] as $attrKey => $attrVal) {
+                                if (!empty($rowMultiselects[$productId][$attrKey])) {
                                     $dataRow[$attrKey] = array_shift($rowMultiselects[$productId][$attrKey]);
                                 }
                             }

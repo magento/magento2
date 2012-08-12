@@ -38,30 +38,23 @@ abstract class Magento_Config_XmlAbstract
     protected $_data;
 
     /**
+     * Dom configuration model
+     * @var Magento_Config_Dom
+     */
+    protected $_domConfig = null;
+
+    /**
      * Instantiate with the list of files to merge
      *
      * @param array $configFiles
-     * @param Zend_Cache_Core $cache
-     * @throws Magento_Exception
+     * @throws InvalidArgumentException
      */
-    public function __construct(array $configFiles, Zend_Cache_Core $cache = null)
+    public function __construct(array $configFiles)
     {
         if (empty($configFiles)) {
-            throw new Magento_Exception('There must be at least one configuration file specified.');
-        }
-        $cacheId = null;
-        if ($cache) {
-            $cacheId = 'CONFIG_XML_' . md5(implode('|', $configFiles));
-            $cachedData = $cache->load($cacheId);
-            if ($cachedData !== false) {
-                $this->_data = unserialize($cachedData);
-                return;
-            }
+            throw new InvalidArgumentException('There must be at least one configuration file specified.');
         }
         $this->_data = $this->_extractData($this->_merge($configFiles));
-        if ($cache) {
-            $cache->save(serialize($this->_data), $cacheId);
-        }
     }
 
     /**
@@ -88,22 +81,56 @@ abstract class Magento_Config_XmlAbstract
      */
     protected function _merge($configFiles)
     {
-        $domConfig = new Magento_Config_Dom($this->_getInitialXml(), $this->_getIdAttributes());
         foreach ($configFiles as $file) {
             if (!file_exists($file)) {
                 throw new Magento_Exception("File does not exist: {$file}");
             }
-            $domConfig->merge(file_get_contents($file));
-            if (!$domConfig->validate($this->getSchemaFile(), $errors)) {
-                $message = "Invalid XML-file: {$file}\n";
-                /** @var libXMLError $error */
-                foreach ($errors as $error) {
-                    $message .= "{$error->message} Line: {$error->line}\n";
-                }
-                throw new Magento_Exception($message);
+            $this->_getDomConfigModel()->merge(file_get_contents($file));
+            if ($this->_isRuntimeValidated()) {
+                $this->_performValidate($file);
             }
         }
-        return $domConfig->getDom();
+        return $this->_getDomConfigModel()->getDom();
+    }
+
+    /**
+     * Perform xml validation
+     * @param string $file
+     * @return Magento_Config_XmlAbstract
+     * @throws Magento_Exception if invalid XML-file passed
+     */
+    protected function _performValidate($file = null)
+    {
+        if (!$this->_getDomConfigModel()->validate($this->getSchemaFile(), $errors)) {
+            $message = is_null($file) ?  "Invalid Document \n" : "Invalid XML-file: {$file}\n";
+            /** @var libXMLError $error */
+            foreach ($errors as $error) {
+                $message .= "{$error->message} Line: {$error->line}\n";
+            }
+            throw new Magento_Exception($message);
+        }
+        return $this;
+    }
+
+    /**
+     * Get if xml files must be runtime validated
+     * @return boolean
+     */
+    protected function _isRuntimeValidated()
+    {
+        return true;
+    }
+
+    /**
+     * Get Dom configuration model
+     * @return Magento_Config_Dom
+     */
+    protected function _getDomConfigModel()
+    {
+        if (is_null($this->_domConfig)) {
+            $this->_domConfig = new Magento_Config_Dom($this->_getInitialXml(), $this->_getIdAttributes());
+        }
+        return $this->_domConfig;
     }
 
     /**

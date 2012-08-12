@@ -64,8 +64,7 @@ Mage.Cookies.get = function(name){
 
 Mage.Cookies.clear = function(name) {
   if(Mage.Cookies.get(name)){
-    document.cookie = name + "=" +
-    "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+      Mage.Cookies.set(name, "", new Date("Jan 01 1970 00:00:01 GMT"));
   }
 };
 

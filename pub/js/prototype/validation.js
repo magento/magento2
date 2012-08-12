@@ -413,9 +413,9 @@ Validation.add('IsEmpty', '', function(v) {
 
 Validation.addAllThese([
     ['validate-no-html-tags', 'HTML tags are not allowed', function(v) {
-				return !/<(\/)?\w+/.test(v);
-			}],
-	['validate-select', 'Please select an option.', function(v) {
+                return !/<(\/)?\w+/.test(v);
+            }],
+    ['validate-select', 'Please select an option.', function(v) {
                 return ((v != "none") && (v != null) && (v.length != 0));
             }],
     ['required-entry', 'This is a required field.', function(v) {
@@ -474,6 +474,39 @@ Validation.addAllThese([
                     }
                 });
 
+                return result;
+            }],
+    ['validate-range', 'The value is not within the specified range.', function(v, elm) {
+                var minValue, maxValue;
+                if (Validation.get('IsEmpty').test(v)) {
+                    return  true;
+                } else if (Validation.get('validate-digits').test(v)) {
+                    minValue = maxValue = parseNumber(v);
+                } else {
+                    var ranges = /^(-?\d+)?-(-?\d+)?$/.exec(v);
+
+                    if (ranges) {
+                        minValue = parseNumber(ranges[1]);
+                        maxValue = parseNumber(ranges[2]);
+                        if (minValue > maxValue) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+                var reRange = /^range-(-?\d+)?-(-?\d+)?$/,
+                result = true;
+                $w(elm.className).each(function(name) {
+                    var validRange = reRange.exec(name);
+                    if (validRange) {
+                        var minValidRange = parseNumber(validRange[1]);
+                        var maxValidRange = parseNumber(validRange[2]);
+                        result = result
+                            && (isNaN(minValidRange) || minValue >= minValidRange)
+                            && (isNaN(maxValidRange) || maxValue <= maxValidRange);
+                    }
+                });
                 return result;
             }],
     ['validate-alpha', 'Please use letters only (a-z or A-Z) in this field.', function (v) {

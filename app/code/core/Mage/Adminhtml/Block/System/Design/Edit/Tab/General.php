@@ -36,7 +36,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
             $field = $fieldset->addField('store_id', 'select', array(
                 'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Store'),
                 'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Store'),
-                'values'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
+                'values'   => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
                 'name'     => 'store_id',
                 'required' => true,
             ));

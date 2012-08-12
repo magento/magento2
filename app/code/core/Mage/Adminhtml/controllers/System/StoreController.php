@@ -43,7 +43,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
     {
         // load layout, set active menu and breadcrumbs
         $this->loadLayout()
-            ->_setActiveMenu('system/store')
+            ->_setActiveMenu('Mage_Adminhtml::system_store')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'))
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Stores'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Stores'))
         ;
@@ -448,7 +448,7 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/store');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::store');
     }
 
     /**

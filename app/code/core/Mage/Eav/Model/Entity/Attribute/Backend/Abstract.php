@@ -313,6 +313,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract
     {
         return $this;
     }
+
     /**
      * After delete method
      *
@@ -322,5 +323,21 @@ abstract class Mage_Eav_Model_Entity_Attribute_Backend_Abstract
     public function afterDelete($object)
     {
         return $this;
+    }
+
+    /**
+     * Retrieve data for update attribute
+     *
+     * @param Varien_Object $object
+     * @return array
+     */
+    public function getAffectedFields($object)
+    {
+        $data = array();
+        $data[$this->getTable()][] = array(
+            'attribute_id' => $this->getAttribute()->getAttributeId(),
+            'value_id' => $this->getEntityValueId($object),
+        );
+        return $data;
     }
 }

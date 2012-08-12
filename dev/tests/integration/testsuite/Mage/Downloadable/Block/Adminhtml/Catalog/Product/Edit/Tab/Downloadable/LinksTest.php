@@ -45,6 +45,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
         $layout->addBlock($block, 'links');
         $expected = uniqid();
         $text = new Mage_Core_Block_Text(array('text' => $expected));
+        $block->unsetChild('upload_button');
         $layout->addBlock($text, 'upload_button', 'links');
         self::assertEquals($expected, $block->getUploadButtonHtml());
     }

@@ -39,13 +39,13 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
         foreach ($this->templatesDataProvider() as $template) {
             list($area, $package, $theme, $module, $file, $xml) = $template;
             $params = array(
-                '_area'     => $area,
-                '_package'  => $package,
-                '_theme'    => $theme,
-                '_module'   => $module
+                'area'     => $area,
+                'package'  => $package,
+                'theme'    => $theme,
+                'module'   => $module
             );
             try {
-                $templateFilename = Mage::getDesign()->getTemplateFilename($file, $params);
+                $templateFilename = Mage::getDesign()->getFilename($file, $params);
                 $this->assertFileExists($templateFilename);
             } catch (PHPUnit_Framework_ExpectationFailedException $e) {
                 $invalidTemplates[] = "{$templateFilename}\n"
@@ -105,7 +105,8 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
                     $parent = $action[0]->xpath("parent::*");
                     $attributes = $parent[0]->attributes();
                     $referenceName = (string)$attributes['name'];
-                    $block = $layoutXml->xpath("//block[@name='{$referenceName}']");
+                    $block = $layoutXml->xpath(
+                        "//block[@name='{$referenceName}'] | //reference[@name='{$referenceName}']");
                     $module = $this->_getBlockModule($block[0]);
                     if (!$template->attributes() && !$this->_isTemplateForDisabledModule($module, (string)$template)) {
                         $templates[] = array($module, (string)$template, $parent[0]->asXml());

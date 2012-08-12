@@ -108,6 +108,7 @@ body {
     border-radius: 4px;
 }
 .vde_element_title {
+    font: 10pt Arial, Helvetica, sans-serif;
     margin: -2px 0px 0px -4px;
     padding: 0px;
     border-width: 2px 5px 6px 7px;
@@ -152,7 +153,7 @@ body {
 .vde_placeholder {
     background-color: #F5F5DC;
 }
-.vde_wrapper_hidden , .vde_wrapper_hidden .vde_element_title {
+.vde_wrapper_hidden, .vde_wrapper_hidden .vde_element_title {
     display: none;
 }
 
@@ -203,7 +204,7 @@ body {
     font-style:italic;
     cursor:default;
 }
-.vde_toolbar_cell_content .vde_cell_list_item:hover, #vde_page_types_tree .jstree-clicked, #vde_page_types_tree .jstree-hovered {
+.vde_toolbar_cell_content .vde_cell_list_item:hover, #vde_handles_tree .jstree-clicked, #vde_handles_tree .jstree-hovered {
     background-color:#7b7b7b;
 }
 .vde_toolbar_cell_content .checked {
@@ -231,30 +232,33 @@ body {
     opacity: 0.9;
 }
 
-#vde_page_types_hierarchy .vde_toolbar_cell_content {
+#vde_handles_hierarchy .vde_toolbar_cell_content {
     padding: 1em .5em 1em 0;
 }
-#vde_page_types_tree {
+#vde_handles_tree {
     max-height: 30em; /* max allowed height */
     overflow: hidden; /* don't display native scrollbars */
     padding-right: .5em;
     text-align: left;
     background-color: transparent;
 }
-#vde_page_types_tree li {
+#vde_handles_tree li {
     overflow: hidden;
 }
-#vde_page_types_tree a {
+#vde_handles_tree a {
     margin-left: .5em;
     padding: .5em;
     width: 100%;
 }
-#vde_page_types_tree .jstree-clicked, #vde_page_types_tree .jstree-hovered {
+#vde_handles_tree .jstree-clicked, #vde_handles_tree .jstree-hovered {
     border: none;
 }
-#vde_page_types_tree .jstree-closed > .jstree-icon {
+#vde_handles_tree .jstree-closed > .jstree-icon {
     background: url(../images/jstree_plus_minus.png) top left no-repeat;
 }
-#vde_page_types_tree .jstree-open > .jstree-icon {
+#vde_handles_tree .jstree-open > .jstree-icon {
     background: url(../images/jstree_plus_minus.png) top right no-repeat;
+}
+#vde_handles_tree .vde_option_fragment a {
+    color: #eea243;
 }

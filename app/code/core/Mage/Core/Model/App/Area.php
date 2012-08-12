@@ -56,26 +56,13 @@ class Mage_Core_Model_App_Area
     protected $_code;
 
     /**
-     * Area application
+     * Constructor
      *
-     * @var Mage_Core_Model_App
+     * @param string $areaCode
      */
-    protected $_application;
-
-    public function __construct($areaCode, $application)
+    public function __construct($areaCode)
     {
         $this->_code = $areaCode;
-        $this->_application = $application;
-    }
-
-    /**
-     * Retrieve area application
-     *
-     * @return Mage_Core_Model_App
-     */
-    public function getApplication()
-    {
-        return $this->_application;
     }
 
     /**

@@ -39,7 +39,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
         $this->_initEnityId();
         $this->loadLayout();
 
-        $this->_setActiveMenu('catalog/ratings');
+        $this->_setActiveMenu('Mage_Review::catalog_reviews_ratings_ratings');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Ratings'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Ratings'));
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Rating_Rating'));
 
@@ -58,7 +58,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
 
         $this->_title($ratingModel->getId() ? $ratingModel->getRatingCode() : $this->__('New Rating'));
 
-        $this->_setActiveMenu('catalog/ratings');
+        $this->_setActiveMenu('Mage_Review::catalog_reviews_ratings_ratings');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Ratings'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Ratings'));
 
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Rating_Edit'))
@@ -156,7 +156,7 @@ class Mage_Adminhtml_RatingController extends Mage_Adminhtml_Controller_Action
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/reviews_ratings/ratings');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Rating::ratings');
     }
 
 }

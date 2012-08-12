@@ -44,6 +44,7 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
     {
         /* Cleanup all cached data */
         $this->_model->flush();
+        $this->_model = null;
     }
 
     /**

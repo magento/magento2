@@ -28,7 +28,7 @@
 class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Admin_Model_Session
+     * @var Mage_Backend_Model_Auth_Session
      */
     protected static $_adminSession;
 
@@ -40,6 +40,11 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new Mage_DesignEditor_Model_Session();
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
     }
 
     public function testIsDesignEditorActiveFalse()
@@ -78,13 +83,16 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     public static function loginAdmin()
     {
-        self::$_adminSession = new Mage_Admin_Model_Session();
-        self::$_adminSession->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
+        $auth = new Mage_Backend_Model_Auth();
+        self::$_adminSession = $auth->getAuthStorage();
+        $auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
 
     public static function loginAdminRollback()
     {
-        self::$_adminSession->logout();
+        $auth = new Mage_Backend_Model_Auth();
+        $auth->setAuthStorage(self::$_adminSession);
+        $auth->logout();
     }
 
     /**
@@ -95,8 +103,6 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isDesignEditorActive());
         $this->_model->deactivateDesignEditor();
         $this->assertFalse($this->_model->isDesignEditorActive());
-        Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'off');
-        $this->assertTrue($this->_model->isHighlightingDisabled());
     }
 
     public function testIsHighlightingDisabled()
@@ -106,7 +112,18 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isHighlightingDisabled());
         Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'on');
         $this->assertFalse($this->_model->isHighlightingDisabled());
-        Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'any');
+    }
+
+    /**
+     * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
+     * @depends testDeactivateDesignEditor
+     * @depends testIsHighlightingDisabled
+     */
+    public function testIsHighlightingDisabledOnDeactivateDesignEditor()
+    {
+        Mage::getSingleton('Mage_Core_Model_Cookie')->set(Mage_DesignEditor_Model_Session::COOKIE_HIGHLIGHTING, 'off');
+        $this->assertTrue($this->_model->isHighlightingDisabled());
+        $this->_model->deactivateDesignEditor();
         $this->assertFalse($this->_model->isHighlightingDisabled());
     }
 

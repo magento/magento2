@@ -29,6 +29,12 @@
     <modules>
         <Mage_Ogone>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Sales/>
+                <Mage_Payment/>
+            </depends>
         </Mage_Ogone>
     </modules>
     <global>
@@ -109,6 +115,15 @@
                 </args>
             </ogone>
         </routers>
+        <translate>
+            <modules>
+                <Mage_Ogone>
+                    <files>
+                        <default>Mage_Ogone.csv</default>
+                    </files>
+                </Mage_Ogone>
+            </modules>
+        </translate>
     </frontend>
     <default>
         <payment>

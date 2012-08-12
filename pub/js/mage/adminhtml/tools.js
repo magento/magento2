@@ -151,6 +151,11 @@ function toggleValueElements(checkbox, container, excludedElements, checked){
             }
         });
         if (navigator && navigator.userAgent.indexOf('Chrome') != -1) {
+            if (!checkbox.checked) {
+                $(checkbox).writeAttribute('checked', false);
+            } else {
+                $(checkbox).writeAttribute('checked', 'checked');
+            }
             // fix chrome bug: rerender page updating parent content
             var p = elems[0].nodeName.toLowerCase() == 'img'
                 ? elems[1].parentNode

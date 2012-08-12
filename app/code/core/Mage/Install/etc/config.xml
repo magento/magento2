@@ -29,6 +29,11 @@
     <modules>
         <Mage_Install>
             <version>0.7.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+            </depends>
         </Mage_Install>
     </modules>
     <frontend>
@@ -65,14 +70,6 @@
                     </checkConnection>
                 </observers>
             </controller_action_predispatch>
-            <mage_run_exception>
-                <observers>
-                    <install_failure>
-                        <class>Mage_Install_Model_Observer</class>
-                        <method>installFailure</method>
-                    </install_failure>
-                </observers>
-            </mage_run_exception>
             <core_locale_set_locale>
                 <observers>
                     <bind_locale>

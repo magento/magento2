@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Validator
+ * @subpackage  Config
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Magento Validation Configuration File
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="validation">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Validation group uses reference to validation rules
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="entity" type="entity" maxOccurs="unbounded">
+                    <xs:keyref name="ruleNameReference" refer="ruleNameKey">
+                        <xs:selector xpath="groups/group/uses/use"/>
+                        <xs:field xpath="@rule"/>
+                    </xs:keyref>
+                    <xs:key name="ruleNameKey">
+                        <xs:selector xpath="rules/rule"/>
+                        <xs:field xpath="@name"/>
+                    </xs:key>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="entity">
+        <xs:sequence>
+            <xs:element name="rules" type="rules"/>
+            <xs:element name="groups" type="groups"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="rules">
+        <xs:sequence>
+            <xs:element name="rule" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="constraints" type="constraints"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="constraints">
+        <xs:sequence>
+            <xs:element name="constraint" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="class" type="xs:string" use="required"/>
+                    <xs:attribute name="field" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="groups">
+        <xs:sequence>
+            <xs:element name="group" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="uses" type="uses"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+                <xs:unique name="groupUse">
+                    <xs:selector xpath="uses/use"/>
+                    <xs:field xpath="@rule"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="uses">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                All validation rules used by current group are listed in this element
+                "rule" attribute of "use" element must point to one of entity's rules
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="use" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="rule" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

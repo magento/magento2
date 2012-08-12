@@ -31,12 +31,10 @@
  * @package     Mage_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_ImportExport_Block_Adminhtml_Export_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+class Mage_ImportExport_Block_Adminhtml_Export_Edit extends Mage_Backend_Block_Widget_Form_Container
 {
     /**
      * Constructor
-     *
-     * @return void
      */
     public function __construct()
     {

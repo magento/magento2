@@ -38,6 +38,8 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
     const XML_PATH_CACHE_BETA_TYPES             = 'global/cache/betatypes';
     const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
+    const XML_PATH_IMAGE_ADAPTER                = 'dev/image/adapter';
+    const XML_PATH_STATIC_FILE_SIGNATURE        = 'dev/static/sign';
 
     const CHARS_LOWERS                          = 'abcdefghijklmnopqrstuvwxyz';
     const CHARS_UPPERS                          = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -59,6 +61,11 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
      * Const for correct dividing decimal values
      */
     const DIVIDE_EPSILON = 10000;
+
+    /**
+     * Config path to mail sending setting that shows if email communications are disabled
+     */
+    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
     /**
      * @var Mage_Core_Model_Encryption
@@ -170,7 +177,11 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
             return '';
         }
         if (is_null($date)) {
-            $date = Mage::app()->getLocale()->date(Mage::getSingleton('Mage_Core_Model_Date')->gmtTimestamp(), null, null);
+            $date = Mage::app()->getLocale()->date(
+                Mage::getSingleton('Mage_Core_Model_Date')->gmtTimestamp(),
+                null,
+                null
+            );
         } else if (!$date instanceof Zend_Date) {
             $date = Mage::app()->getLocale()->date(strtotime($date), null, null);
         }
@@ -577,7 +588,9 @@ XML;
             if (!is_array($value)) {
                 if (is_string($key)) {
                     if ($key === $rootName) {
-                        throw new Magento_Exception('Associative key must not be the same as its parent associative key.');
+                        throw new Magento_Exception(
+                            'Associative key must not be the same as its parent associative key.'
+                        );
                     }
                     $hasStringKey = true;
                     $xml->$key = $value;
@@ -785,5 +798,25 @@ XML;
         }
 
         return $remainder;
+    }
+
+    /**
+     * Returns image adapter type
+     *
+     * @return string
+     */
+    public function getImageAdapterType()
+    {
+        return Mage::getStoreConfig(self::XML_PATH_IMAGE_ADAPTER);
+    }
+
+    /**
+     * Check if static files have to be signed
+     *
+     * @return bool
+     */
+    public function isStaticFilesSigned()
+    {
+        return (bool) Mage::getStoreConfig(self::XML_PATH_STATIC_FILE_SIGNATURE);
     }
 }

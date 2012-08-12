@@ -24,20 +24,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /** @var $this Mage_DesignEditor_Block_Template */ ?>
 <div class="vde_toolbar_cell">
     <div class="vde_toolbar_cell_title"><?php echo $this->__('View Options'); ?></div>
     <div class="vde_toolbar_cell_content">
-            <div id="vde_highlighting" class="vde_cell_list_item<?php if (!Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled()) echo ' checked'; ?>">
+            <div id="vde_highlighting" class="vde_cell_list_item<?php if (!$this->isHighlightingDisabled()) echo ' checked'; ?>">
                 <?php echo $this->__('Highlight Elements'); ?>
             </div>
     </div>
 </div>
 
-<script type="text/javascript">
-jQuery(document).ready(function () {
-    jQuery('#vde_highlighting').click(function(){
-        jQuery(this).toggleClass('checked');
-        designEditor.highlight(jQuery(this).hasClass('checked'));
-    });
-});
-</script>
+

@@ -33,7 +33,7 @@
             <xsd:complexType name="complexFilter">
                 <xsd:sequence>
                     <xsd:element name="key" type="xsd:string" />
-                    <xsd:element name="value" type="typens:associativeMultiEntity" />
+                    <xsd:element name="value" type="typens:associativeEntity" />
                 </xsd:sequence>
             </xsd:complexType>
             <xsd:complexType name="complexFilterArray">

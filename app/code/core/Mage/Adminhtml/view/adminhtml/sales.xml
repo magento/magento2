@@ -978,7 +978,7 @@
 
     <adminhtml_sales_recurring_profile_view>
         <reference name="content">
-            <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_View" name="sales.recurring.profile.view" template="Mage_Adminhtml::widget/view/container.phtml">
+            <block type="Mage_Sales_Block_Adminhtml_Recurring_Profile_View" name="sales.recurring.profile.view" template="Mage_Backend::widget/view/container.phtml">
                 <action method="setDestElementId"><value>sales_recurring_profile_view</value></action>
             </block>
         </reference>

@@ -25,30 +25,13 @@
  */
 
 /**
- * Fieldset element renderer
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element extends Mage_Adminhtml_Block_Template
-    implements Varien_Data_Form_Element_Renderer_Interface
+class Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element
+    extends Mage_Backend_Block_Widget_Form_Renderer_Fieldset_Element
 {
-    protected $_element;
 
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Adminhtml::widget/form/renderer/fieldset/element.phtml');
-    }
-
-    public function getElement()
-    {
-        return $this->_element;
-    }
-
-    public function render(Varien_Data_Form_Element_Abstract $element)
-    {
-        $this->_element = $element;
-        return $this->toHtml();
-    }
 }

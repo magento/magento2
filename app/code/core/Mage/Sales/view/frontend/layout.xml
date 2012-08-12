@@ -83,8 +83,8 @@ Customer account home dashboard layout
 
 
     <sales_order_view translate="label" type="page" parent="default">
-        <label>Customer My Account Order View</label>
         <update handle="customer_account"/>
+        <label>Customer My Account Order View</label>
         <reference name="my.account.wrapper">
             <block type="Mage_Sales_Block_Order_Info" as="info" name="sales.order.info">
                 <block type="Mage_Sales_Block_Order_Info_Buttons" as="buttons" name="sales.order.info.buttons" />
@@ -330,7 +330,7 @@ Guest
 
 
     <sales_guest_view translate="label" type="page" parent="default">
-        <label>Customer My Account Order View</label>
+        <label>Guest Order View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -359,7 +359,7 @@ Guest
     </sales_guest_view>
 
     <sales_guest_invoice translate="label" type="page" parent="sales_guest_view">
-        <label>Customer My Account Order Invoice View</label>
+        <label>Guest Order Invoice View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -389,7 +389,7 @@ Guest
     </sales_guest_invoice>
 
     <sales_guest_shipment translate="label" type="page" parent="sales_guest_view">
-        <label>Customer My Account Order Shipment View</label>
+        <label>Guest Order Shipment View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -413,7 +413,7 @@ Guest
     </sales_guest_shipment>
 
     <sales_guest_creditmemo translate="label" type="page" parent="sales_guest_view">
-        <label>Customer My Account Order Creditmemo View</label>
+        <label>Guest Order Creditmemo View</label>
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>

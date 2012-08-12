@@ -27,11 +27,31 @@
 
 class Magento_Test_RequestTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Magento_Test_Request
+     */
+    protected $_model = null;
+
+    protected function setUp()
+    {
+        $this->_model = new Magento_Test_Request;
+    }
+
     public function testGetHttpHost()
     {
-        $request = new Magento_Test_Request();
-        $this->assertEquals('localhost', $request->getHttpHost());
-        $this->assertEquals('localhost', $request->getHttpHost(false));
+        $this->assertEquals('localhost', $this->_model->getHttpHost());
+        $this->assertEquals('localhost', $this->_model->getHttpHost(false));
+    }
+
+    public function testSetGetServer()
+    {
+        $this->assertSame(array(), $this->_model->getServer());
+        $this->assertSame($this->_model, $this->_model->setServer(array('test' => 'value', 'null' => null)));
+        $this->assertSame(array('test' => 'value', 'null' => null), $this->_model->getServer());
+        $this->assertEquals('value', $this->_model->getServer('test'));
+        $this->assertSame(null, $this->_model->getServer('non-existing'));
+        $this->assertSame('default', $this->_model->getServer('non-existing', 'default'));
+        $this->assertSame(null, $this->_model->getServer('null'));
     }
 }
 

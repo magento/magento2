@@ -86,11 +86,6 @@ Default layout, loads most of the pages
         </block>
     </default>
 
-    <ajax_index translate="label" type="page">
-        <label>Dynamic Page Blocks (Updated by Ajax Request)</label>
-        <block type="Mage_Page_Block_Html" name="root" output="1" template="page_part.phtml"/>
-    </ajax_index>
-
     <print translate="label" module="Mage_Page" type="page">
         <label>All Pages (Print Version)</label>
         <!-- Mage_Page -->

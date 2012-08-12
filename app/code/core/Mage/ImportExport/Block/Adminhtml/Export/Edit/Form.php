@@ -31,7 +31,7 @@
  * @package     Mage_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_ImportExport_Block_Adminhtml_Export_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
+class Mage_ImportExport_Block_Adminhtml_Export_Edit_Form extends Mage_Backend_Block_Widget_Form
 {
     /**
      * Prepare form before rendering HTML.
@@ -46,21 +46,26 @@ class Mage_ImportExport_Block_Adminhtml_Export_Edit_Form extends Mage_Adminhtml_
             'action' => $this->getUrl('*/*/getFilter'),
             'method' => 'post'
         ));
+
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => $helper->__('Export Settings')));
+        /** @var $entitySourceModel Mage_ImportExport_Model_Source_Export_Entity */
+        $entitySourceModel = Mage::getModel('Mage_ImportExport_Model_Source_Export_Entity');
         $fieldset->addField('entity', 'select', array(
             'name'     => 'entity',
             'title'    => $helper->__('Entity Type'),
             'label'    => $helper->__('Entity Type'),
             'required' => false,
             'onchange' => 'editForm.getFilter();',
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Export_Entity')->toOptionArray()
+            'values'   => $entitySourceModel->toOptionArray()
         ));
+        /** @var $formatSourceModel Mage_ImportExport_Model_Source_Export_Format */
+        $formatSourceModel = Mage::getModel('Mage_ImportExport_Model_Source_Export_Format');
         $fieldset->addField('file_format', 'select', array(
             'name'     => 'file_format',
             'title'    => $helper->__('Export File Format'),
             'label'    => $helper->__('Export File Format'),
             'required' => false,
-            'values'   => Mage::getModel('Mage_ImportExport_Model_Source_Export_Format')->toOptionArray()
+            'values'   => $formatSourceModel->toOptionArray()
         ));
 
         $form->setUseContainer(true);

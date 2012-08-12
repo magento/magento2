@@ -101,28 +101,4 @@ class Inspection_CopyPasteDetector_CommandTest extends PHPUnit_Framework_TestCas
         ;
         $this->_cmd->run(array('some/test/dir with space', 'some/test/file with space.php'));
     }
-
-    public function testRunHtmlReport()
-    {
-        $this->_cmd
-            ->expects($this->at(0))
-            ->method('_execShellCmd')
-            ->with($this->stringContains('phpcpd'))
-        ;
-        $this->_cmd
-            ->expects($this->at(1))
-            ->method('_execShellCmd')
-            ->with($this->stringContains('xsltproc'))
-            ->will($this->returnValue('Using libxml X, libxslt Y and libexslt Z'))
-        ;
-        $expectedQuoteChar = substr(escapeshellarg(' '), 0, 1);
-        $expectedXsltCmd = 'xsltproc "%s/html_report.xslt" "some/report/file.xml" > "some/report/file.xml.html"';
-        $expectedXsltCmd = str_replace('"', $expectedQuoteChar, $expectedXsltCmd);
-        $this->_cmd
-            ->expects($this->at(2))
-            ->method('_execShellCmd')
-            ->with($this->matches($expectedXsltCmd))
-        ;
-        $this->_cmd->run(array());
-    }
 }

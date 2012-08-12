@@ -29,6 +29,9 @@
     <modules>
         <Mage_Connect>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends />
         </Mage_Connect>
     </modules>
     <admin>
@@ -50,5 +53,14 @@
                 </connect>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_Connect>
+                    <files>
+                        <default>Mage_Connect.csv</default>
+                    </files>
+                </Mage_Connect>
+            </modules>
+        </translate>
     </adminhtml>
 </config>

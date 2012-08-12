@@ -46,6 +46,8 @@
  * @method Mage_XmlConnect_Model_Application setStatus(int $value)
  * @method int getBrowsingMode()
  * @method Mage_XmlConnect_Model_Application setBrowsingMode(int $value)
+ * @method null|array getSubmitParams()
+ * @method Mage_XmlConnect_Model_Application setSubmitParams(array $value)
  *
  * @category    Mage
  * @package     Mage_XmlConnect
@@ -596,7 +598,7 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
      */
     public function setScreenSize($screenSize)
     {
-        $this->_data['screen_size'] = Mage::helper('Mage_XmlConnect_Helper_Image')->filterScreenSize((string) $screenSize);
+        $this->_data['screen_size'] = $this->getHelperImage()->filterScreenSize((string)$screenSize);
         return $this;
     }
 
@@ -889,7 +891,7 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
                 $basename = basename($params[$id]);
             }
             if (!empty($basename)) {
-                $images['conf/submit/'.$id] = Mage::getBaseUrl('media') . 'xmlconnect/'
+                $images['conf/submit/' . $id] = Mage::getBaseUrl('media') . 'xmlconnect/'
                     . Mage::helper('Mage_XmlConnect_Helper_Image')->getFileDefaultSizeSuffixAsUrl($basename);
             }
         }
@@ -1012,7 +1014,6 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
     {
         $params = array();
         if (isset($data['conf']) && is_array($data['conf'])) {
-
             if (isset($data['conf']['submit_text']) && is_array($data['conf']['submit_text'])) {
                 $params = $data['conf']['submit_text'];
             }
@@ -1020,9 +1021,15 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
             $params['name'] = $this->getName();
             $params['code'] = $this->getCode();
             $params['type'] = $this->getType();
-            $params['url'] = Mage::getUrl('xmlconnect/configuration/index', array(
-                '_store' => $this->getStoreId(), '_nosid' => true, 'app_code' => $this->getCode()
-            ));
+            $url = $this->getUrl();
+            if ($url === null) {
+                $url = Mage::getUrl('xmlconnect/configuration/index', array(
+                    '_store'   => $this->getStoreId(),
+                    '_nosid'   => true,
+                    'app_code' => $this->getCode()
+                ));
+            }
+            $params['url'] = $url;
 
             $params['magentoversion'] = Mage::getVersion();
 
@@ -1051,11 +1058,10 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
                 $submitRestore = $this->_data['conf']['submit_restore'];
             }
 
-            $deviceImages = Mage::helper('Mage_XmlConnect_Helper_Data')->getDeviceHelper()->getSubmitImages();
-
-            foreach ($deviceImages as $id) {
+            foreach ($this->getHelperData()->getDeviceHelper()->getSubmitImages() as $id) {
                 if (isset($submit[$id])) {
-                    $params[$id] = '@' . $submit[$id];
+                    $params[$id] = '@' . $this->getHelperImage()->getDefaultSizeUploadDir()
+                        . DIRECTORY_SEPARATOR . $submit[$id];
                 } elseif (isset($submitRestore[$id])) {
                     $params[$id] = $submitRestore[$id];
                 }
@@ -1063,6 +1069,26 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
         }
         $this->setSubmitParams($params);
         return $params;
+    }
+
+    /**
+     * Retrieve data helper instance
+     *
+     * @return Mage_XmlConnect_Helper_Data
+     */
+    public function getHelperData()
+    {
+        return Mage::helper('Mage_XmlConnect_Helper_Data');
+    }
+
+    /**
+     * Retrieve image helper instance
+     *
+     * @return Mage_XmlConnect_Helper_Image
+     */
+    public function getHelperImage()
+    {
+        return Mage::helper('Mage_XmlConnect_Helper_Image');
     }
 
     /**

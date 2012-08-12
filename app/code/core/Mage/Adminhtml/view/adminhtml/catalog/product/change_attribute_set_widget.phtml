@@ -1,0 +1,70 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Mage_Core_Block_Template */
+?>
+<script type="text/javascript">//<[CDATA[
+(function($) {
+    'use strict';
+    $(function() {
+        $('#product_edit_form').bind('product:changeAttributeSet', function(event, attributeSetId) {
+            if ($('.tab-item-link.ajax.changed').length > 0
+                && !confirm('Some data will be not saved. Perform attribute set change anyway?')
+            ) {
+                return false;
+            }
+            var $form = $(this);
+            var uri = document.location.href.replace(/(\/|&|\?)?\bset(\/|=)\d+/g, '').replace('#', '');
+            uri += /\?/.test(uri) ? '&' : '?';
+            uri += 'set=' + window.encodeURIComponent(attributeSetId);
+            $form.attr('action', uri).submit();
+        });
+
+        $('#attribute-set-info').dialog({
+            title: '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Select Attribute Set'); ?>',
+            autoOpen: false,
+            id: '<?php echo $this->getJsId() ?>',
+            minWidth: 560,
+            modal: true,
+            resizable: false,
+            buttons: [{
+                text: '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Cancel'); ?>',
+                id: '<?php echo $this->getJsId('close-button') ?>',
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }, {
+                text: '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Apply'); ?>',
+                id: '<?php echo $this->getJsId('apply-button') ?>',
+                click: function() {
+                    var $attibuteSetId = $(this).find('#attribute_set_id');
+                    $('#product_edit_form').trigger('product:changeAttributeSet', [$attibuteSetId.val()]);
+                }
+            }]
+        });
+    });
+})(jQuery);
+//]]>
+</script>

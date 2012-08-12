@@ -54,7 +54,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Submission_Tab_Container_Submission
     protected function _prepareLayout()
     {
         $block = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Template')
-            ->setTemplate('submission/app_icons_preview.phtml')
+            ->setTemplate('Mage_XmlConnect::submission/app_icons_preview.phtml')
             ->setImages(Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication()->getImages());
         $this->setChild('images', $block);
         parent::_prepareLayout();

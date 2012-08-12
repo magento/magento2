@@ -32,7 +32,9 @@
  * @package     Mage_Wishlist
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Wishlist_IndexController extends Mage_Wishlist_Controller_Abstract
+class Mage_Wishlist_IndexController
+    extends Mage_Wishlist_Controller_Abstract
+    implements Mage_Catalog_Controller_Product_View_Interface
 {
     /**
      * Action list where need check enabled cookie
@@ -54,10 +56,11 @@ class Mage_Wishlist_IndexController extends Mage_Wishlist_Controller_Abstract
 
         if (!$this->_skipAuthentication && !Mage::getSingleton('Mage_Customer_Model_Session')->authenticate($this)) {
             $this->setFlag('', 'no-dispatch', true);
-            if (!Mage::getSingleton('Mage_Customer_Model_Session')->getBeforeWishlistUrl()) {
-                Mage::getSingleton('Mage_Customer_Model_Session')->setBeforeWishlistUrl($this->_getRefererUrl());
+            $customerSession = Mage::getSingleton('Mage_Customer_Model_Session');
+            if (!$customerSession->getBeforeWishlistUrl()) {
+                $customerSession->setBeforeWishlistUrl($this->_getRefererUrl());
             }
-            Mage::getSingleton('Mage_Customer_Model_Session')->setBeforeWishlistRequest($this->getRequest()->getParams());
+            $customerSession->setBeforeWishlistRequest($this->getRequest()->getParams());
         }
         if (!Mage::getStoreConfigFlag('wishlist/general/active')) {
             $this->norouteAction();

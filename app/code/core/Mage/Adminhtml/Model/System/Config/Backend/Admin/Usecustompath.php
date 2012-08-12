@@ -42,6 +42,7 @@ class Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustompath extends Mag
     protected function _beforeSave()
     {
         if ($this->getOldValue() != $this->getValue()) {
+            Mage::helper('Mage_Backend_Helper_Data')->clearAreaFrontName();
             Mage::register('custom_admin_path_redirect', true, true);
         }
 

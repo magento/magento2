@@ -51,6 +51,11 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_layout->getUpdate()->load('layout_test_handle_extra');
     }
 
+    protected function tearDown()
+    {
+        $this->_layout = null;
+    }
+
     /**
      * @param array $inputArguments
      * @param string $expectedArea
@@ -73,8 +78,8 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorStructure()
     {
-        $structure = new Mage_Core_Model_Layout_Structure;
-        $structure->insertContainer('', 'test.container');
+        $structure = new Magento_Data_Structure;
+        $structure->createElement('test.container', array());
         $layout = new Mage_Core_Model_Layout(array('structure' => $structure));
         $this->assertTrue($layout->hasElement('test.container'));
     }
@@ -85,6 +90,14 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
     public function testConstructorWrongStructure()
     {
         new Mage_Core_Model_Layout(array('structure' => false));
+    }
+
+    public function testDestructor()
+    {
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'test');
+        $this->assertNotEmpty($this->_layout->getAllBlocks());
+        $this->_layout->__destruct();
+        $this->assertEmpty($this->_layout->getAllBlocks());
     }
 
     public function testGetUpdate()
@@ -128,7 +141,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
             'index_notifications',
             'index_notifications_copy'
         );
-        $this->_layout->generateBlocks();
+        $this->_layout->generateElements();
 
         $actualBlocks = $this->_layout->getAllBlocks();
         $this->assertEquals($expectedBlocks, array_keys($actualBlocks));
@@ -149,11 +162,38 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
     {
         $utility = new Mage_Core_Utility_Layout($this);
         $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
-        $layout->getUpdate()->load('a_handle');
-        $layout->generateXml()->generateBlocks();
+        $layout->getUpdate()->load(array('first_handle', 'a_handle', 'another_handle'));
+        $layout->generateXml()->generateElements();
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
-        $this->assertEquals('Value: 1Value: 2', $layout->renderElement('container1'));
-        $this->assertEquals('Value: 1', $layout->renderElement('block1'));
+        $this->assertEquals("Value: 1 Reference: 1.1\nValue: 2 Reference: 2.2\n", $layout->renderElement('container1'));
+        $this->assertEquals("Value: 1 Reference: 1.1\n", $layout->renderElement('block1'));
+    }
+
+    public function testGetElementProperty()
+    {
+        $name = 'test';
+        $this->_layout->addContainer($name, 'Test', array('option1' => 1, 'option2' => 2));
+        $this->assertEquals('Test', $this->_layout->getElementProperty(
+            $name, Mage_Core_Model_Layout::CONTAINER_OPT_LABEL
+        ));
+        $this->assertEquals(Mage_Core_Model_Layout::TYPE_CONTAINER, $this->_layout->getElementProperty($name, 'type'));
+        $this->assertSame(2, $this->_layout->getElementProperty($name, 'option2'));
+
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'text', $name);
+        $this->assertEquals(Mage_Core_Model_Layout::TYPE_BLOCK, $this->_layout->getElementProperty('text', 'type'));
+        $this->assertSame(array('text' => 'text'), $this->_layout->getElementProperty(
+            $name, Magento_Data_Structure::CHILDREN
+        ));
+    }
+
+    public function testIsBlock()
+    {
+        $this->assertFalse($this->_layout->isBlock('container'));
+        $this->assertFalse($this->_layout->isBlock('block'));
+        $this->_layout->addContainer('container', 'Container');
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'block');
+        $this->assertFalse($this->_layout->isBlock('container'));
+        $this->assertTrue($this->_layout->isBlock('block'));
     }
 
     public function testSetUnsetBlock()
@@ -223,36 +263,114 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
 
     public function testAddBlock()
     {
-        $parentName = 'parent';
-        $name1 = 'block1';
-        $block = $this->_layout->addBlock('Mage_Core_Block_Text', $name1, $parentName . '', 'alias1');
-        $this->assertInstanceOf('Mage_Core_Block_Text', $block);
-        $this->assertTrue($this->_layout->hasElement($name1));
-        $this->assertEquals($parentName, $this->_layout->getParentName($name1));
-        $this->assertEquals('alias1', $this->_layout->getElementAlias($name1));
-        $this->assertEquals($name1, $this->_layout->getChildName($parentName, 'alias1'));
+        $this->assertInstanceOf('Mage_Core_Block_Text', $this->_layout->addBlock('Mage_Core_Block_Text', 'block1'));
+        $block2 = new Mage_Core_Block_Text;
+        $block2->setNameInLayout('block2');
+        $this->_layout->addBlock($block2, '', 'block1');
 
-        $name2 = 'block2';
-        $block2 = $this->_layout->addBlock(new Mage_Core_Block_Text, $name2, $parentName, 'alias2', $name1, true);
-        $this->assertInstanceOf('Mage_Core_Block_Text', $block2);
-        $this->assertEquals(array($name1, $name2), $this->_layout->getChildNames($parentName));
-        $this->assertTrue($this->_layout->hasElement($name2));
+        $this->assertTrue($this->_layout->hasElement('block1'));
+        $this->assertTrue($this->_layout->hasElement('block2'));
+        $this->assertEquals('block1', $this->_layout->getParentName('block2'));
+    }
+
+    public function testAddContainer()
+    {
+        $this->assertFalse($this->_layout->hasElement('container'));
+        $this->_layout->addContainer('container', 'Container');
+        $this->assertTrue($this->_layout->hasElement('container'));
+        $this->assertTrue($this->_layout->isContainer('container'));
+
+        $this->_layout->addContainer('container1', 'Container 1', array(), 'container', 'c1');
+        $this->assertEquals('container1', $this->_layout->getChildName('container', 'c1'));
     }
 
     public function testGetChildBlock()
     {
+        $this->_layout->addContainer('parent', 'Parent');
         $block = $this->_layout->addBlock('Mage_Core_Block_Text', 'block', 'parent', 'block_alias');
-        $this->_layout->insertContainer('parent', 'container', 'container_alias');
+        $this->_layout->addContainer('container', 'Container', array(), 'parent', 'container_alias');
         $this->assertSame($block, $this->_layout->getChildBlock('parent', 'block_alias'));
         $this->assertFalse($this->_layout->getChildBlock('parent', 'container_alias'));
     }
 
+    /**
+     * @return Mage_Core_Model_Layout
+     */
+    public function testSetChild()
+    {
+        $this->_layout->addContainer('one', 'One');
+        $this->_layout->addContainer('two', 'Two');
+        $this->_layout->addContainer('three', 'Three');
+        $this->assertSame($this->_layout, $this->_layout->setChild('one', 'two', ''));
+        $this->_layout->setChild('one', 'three', '');
+        $this->assertSame(array('two', 'three'), $this->_layout->getChildNames('one'));
+        return $this->_layout;
+    }
+
+    /**
+     * @param Mage_Core_Model_Layout $layout
+     * @depends testSetChild
+     */
+    public function testReorderChild(Mage_Core_Model_Layout $layout)
+    {
+        $layout->addContainer('four', 'Four', array(), 'one');
+
+        // offset +1
+        $layout->reorderChild('one', 'four', 1);
+        $this->assertSame(array('two', 'four', 'three'), $layout->getChildNames('one'));
+
+        // offset -2
+        $layout->reorderChild('one', 'three', 2, false);
+        $this->assertSame(array('two', 'three', 'four'), $layout->getChildNames('one'));
+
+        // after sibling
+        $layout->reorderChild('one', 'two', 'three');
+        $this->assertSame(array('three', 'two', 'four'), $layout->getChildNames('one'));
+
+        // after everyone
+        $layout->reorderChild('one', 'three', '-');
+        $this->assertSame(array('two', 'four', 'three'), $layout->getChildNames('one'));
+
+        // before sibling
+        $layout->reorderChild('one', 'four', 'two', false);
+        $this->assertSame(array('four', 'two', 'three'), $layout->getChildNames('one'));
+
+        // before everyone
+        $layout->reorderChild('one', 'two', '-', false);
+        $this->assertSame(array('two', 'four', 'three'), $layout->getChildNames('one'));
+    }
+
+    /**
+     * @param string $handle
+     * @param string $expectedResult
+     * @dataProvider sortSpecialCasesDataProvider
+     */
+    public function testSortSpecialCases($handle, $expectedResult)
+    {
+        $utility = new Mage_Core_Utility_Layout($this);
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/sort_special_cases.xml');
+        $layout->getUpdate()->load($handle);
+        $layout->generateXml()->generateElements();
+        $this->assertEquals($expectedResult, $layout->renderElement('root'));
+    }
+
+    public function sortSpecialCasesDataProvider()
+    {
+        return array(
+            'Before element which is after' => array('before_after', '312'),
+            'Before element which is previous' => array('before_before', '213'),
+            'After element which is after' => array('after_after', '312'),
+            'After element which is previous' => array('after_previous', '321'),
+        );
+    }
+
     public function testGetChildBlocks()
     {
+        $this->_layout->addContainer('parent', 'Parent');
         $block1 = $this->_layout->addBlock('Mage_Core_Block_Text', 'block1', 'parent');
-        $this->_layout->insertContainer('parent', 'container');
+        $this->_layout->addContainer('container', 'Container', array(), 'parent');
         $block2 = $this->_layout->addBlock('Mage_Core_Block_Template', 'block2', 'parent');
-        $this->assertEquals(array($block1, $block2), $this->_layout->getChildBlocks('parent'));
+        $this->assertSame(array('block1' => $block1, 'block2' => $block2), $this->_layout->getChildBlocks('parent'));
     }
 
     /**
@@ -260,7 +378,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
      */
     public function testAddBlockInvalidType()
     {
-        $this->_layout->addBlock('invalid_name', 'child', 'parent', 'alias', true, 'sibling');
+        $this->_layout->addBlock('invalid_name', 'child');
     }
 
     public function testIsContainer()
@@ -268,10 +386,25 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $block = 'block';
         $container = 'container';
         $this->_layout->addBlock('Mage_Core_Block_Text', $block);
-        $this->_layout->insertContainer('', $container);
+        $this->_layout->addContainer($container, 'Container');
         $this->assertFalse($this->_layout->isContainer($block));
         $this->assertTrue($this->_layout->isContainer($container));
         $this->assertFalse($this->_layout->isContainer('invalid_name'));
+    }
+
+    public function testIsManipulationAllowed()
+    {
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'block1');
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'block2', 'block1');
+        $this->assertFalse($this->_layout->isManipulationAllowed('block1'));
+        $this->assertFalse($this->_layout->isManipulationAllowed('block2'));
+
+        $this->_layout->addContainer('container1', 'Container 1');
+        $this->_layout->addBlock('Mage_Core_Block_Text', 'block3', 'container1');
+        $this->_layout->addContainer('container2', 'Container 2', array(), 'container1');
+        $this->assertFalse($this->_layout->isManipulationAllowed('container1'));
+        $this->assertTrue($this->_layout->isManipulationAllowed('block3'));
+        $this->assertTrue($this->_layout->isManipulationAllowed('container2'));
     }
 
     public function testRenameElement()
@@ -281,7 +414,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $containerName = 'container';
         $expContainerName = 'container_renamed';
         $block = $this->_layout->createBlock('Mage_Core_Block_Text', $blockName);
-        $this->_layout->insertContainer('', $containerName);
+        $this->_layout->addContainer($containerName, 'Container');
 
         $this->assertEquals($block, $this->_layout->getBlock($blockName));
         $this->_layout->renameElement($blockName, $expBlockName);
@@ -292,22 +425,56 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->_layout->hasElement($expContainerName);
     }
 
+    public function testGetBlock()
+    {
+        $this->assertFalse($this->_layout->getBlock('test'));
+        $block = new Mage_Core_Block_Text;
+        $this->_layout->setBlock('test', $block);
+        $this->assertSame($block, $this->_layout->getBlock('test'));
+    }
+
     /**
-     * @covers Mage_Core_Model_Layout::getParentName
-     * @covers Mage_Core_Model_Layout::getElementAlias
+     * Invoke getBlock() while layout is being generated
+     *
+     * Assertions in this test are pure formalism. The point is to emulate situation where block refers to other block
+     * while the latter hasn't been generated yet, and assure that there is no crash
      */
+    public function testGetBlockUnscheduled()
+    {
+        $utility = new Mage_Core_Utility_Layout($this);
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
+        $layout->getUpdate()->load(array('get_block_special_case'));
+        $layout->generateXml()->generateElements();
+        $this->assertInstanceOf('Mage_Core_Block_Text', $layout->getBlock('block1'));
+        $this->assertInstanceOf('Mage_Core_Block_Text', $layout->getBlock('block2'));
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testGetBlockUnscheduledException()
+    {
+        $utility = new Mage_Core_Utility_Layout($this);
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
+        $layout->getUpdate()->load(array('get_block_special_case_exception'));
+        $layout->generateXml();
+        $layout->generateElements();
+    }
+
     public function testGetParentName()
     {
-        $parent = 'block1';
-        $child = 'block2';
-        $alias = 'alias';
-        $this->_layout->createBlock('Mage_Core_Block_Text', $parent);
-        $this->assertEmpty($this->_layout->getParentName($parent));
-        $this->assertEquals($parent, $this->_layout->getElementAlias($parent));
+        $this->_layout->addContainer('one', 'One');
+        $this->_layout->addContainer('two', 'Two', array(), 'one');
+        $this->assertFalse($this->_layout->getParentName('one'));
+        $this->assertEquals('one', $this->_layout->getParentName('two'));
+    }
 
-        $this->_layout->addBlock('Mage_Core_Block_Text', $child, $parent, $alias);
-        $this->assertEquals($parent, $this->_layout->getParentName($child));
-        $this->assertEquals($alias, $this->_layout->getElementAlias($child));
+    public function testGetElementAlias()
+    {
+        $this->_layout->addContainer('one', 'One');
+        $this->_layout->addContainer('two', 'One', array(), 'one', '1');
+        $this->assertFalse($this->_layout->getElementAlias('one'));
+        $this->assertEquals('1', $this->_layout->getElementAlias('two'));
     }
 
     /**

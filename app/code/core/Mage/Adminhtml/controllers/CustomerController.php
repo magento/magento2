@@ -65,7 +65,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('customer/manage');
+        $this->_setActiveMenu('Mage_Customer::customer_manage');
 
         /**
          * Append customers block to content
@@ -146,7 +146,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('customer/new');
+        $this->_setActiveMenu('Mage_Customer::customer');
 
         $this->renderLayout();
     }
@@ -290,7 +290,8 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
                 }
             }
 
-            if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('customer/newsletter')
+            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')
+                ->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
                 && !$customer->getConfirmation()
             ) {
                 $customer->setIsSubscribed(isset($data['subscription']));
@@ -807,7 +808,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('customer/manage');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Customer::manage');
     }
 
     /**

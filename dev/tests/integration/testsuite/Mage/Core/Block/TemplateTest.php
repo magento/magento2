@@ -37,6 +37,11 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_block = new Mage_Core_Block_Template;
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testConstruct()
     {
         $block = new Mage_Core_Block_Template(array('template' => 'value'));

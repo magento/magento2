@@ -52,7 +52,7 @@ class Mage_DesignEditor_Block_Adminhtml_Launcher_Form extends Mage_Adminhtml_Blo
                 'label'     => Mage::helper('Mage_DesignEditor_Helper_Data')->__('Store View'),
                 'title'     => Mage::helper('Mage_DesignEditor_Helper_Data')->__('Store View'),
                 'required'  => true,
-                'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm(),
+                'values'    => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
             ));
         }
 

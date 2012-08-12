@@ -277,7 +277,7 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Zend request object
      *
-     * @return Zend_Controller_Request_Http
+     * @return Mage_Core_Controller_Request_Http
      */
     public function getRequest()
     {

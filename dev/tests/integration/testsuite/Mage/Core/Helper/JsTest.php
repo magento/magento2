@@ -39,6 +39,11 @@ class Mage_Core_Helper_JsTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Core_Helper_Js();
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     public function testGetTranslateJson()
     {
         $this->assertNotNull(json_decode($this->_helper->getTranslateJson()));

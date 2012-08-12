@@ -52,6 +52,12 @@ class Mage_Catalog_Block_Product_ViewTest extends PHPUnit_Framework_TestCase
         Mage::register('product', $this->_product);
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+        $this->_product = null;
+    }
+
     public function testSetLayout()
     {
         $layout = new Mage_Core_Model_Layout();

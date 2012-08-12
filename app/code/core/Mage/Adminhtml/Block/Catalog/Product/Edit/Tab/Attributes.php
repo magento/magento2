@@ -56,9 +56,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
         $group = $this->getGroup();
         if ($group) {
             $form = new Varien_Data_Form();
-
+            $product = Mage::registry('product');
             // Initialize product object as form property to use it during elements generation
-            $form->setDataObject(Mage::registry('product'));
+            $form->setDataObject($product);
 
             $fieldset = $form->addFieldset('group_fields' . $group->getId(), array(
                 'legend' => Mage::helper('Mage_Catalog_Helper_Data')->__($group->getAttributeGroupName()),
@@ -99,7 +99,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
 
             // Add new attribute button if it is not an image tab
             if (!$form->getElement('media_gallery')
-                && Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/attributes/attributes')
+                && Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Catalog::attributes_attributes')
             ) {
                 $headerBar = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes_Create');
 
@@ -118,10 +118,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
                 $form->getElement('meta_description')->setOnkeyup('checkMaxLength(this, 255);');
             }
 
-            $values = Mage::registry('product')->getData();
+            $values = $product->getData();
 
-            // Set default attribute values for new product
-            if (!Mage::registry('product')->getId()) {
+            // Set default attribute values for new product or on attribute set change
+            if (!$product->getId() || $product->dataHasChangedFor('attribute_set_id')) {
                 foreach ($attributes as $attribute) {
                     if (!isset($values[$attribute->getAttributeCode()])) {
                         $values[$attribute->getAttributeCode()] = $attribute->getDefaultValue();
@@ -129,8 +129,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes extends Mage_Admi
                 }
             }
 
-            if (Mage::registry('product')->hasLockedAttributes()) {
-                foreach (Mage::registry('product')->getLockedAttributes() as $attribute) {
+            if ($product->hasLockedAttributes()) {
+                foreach ($product->getLockedAttributes() as $attribute) {
                     $element = $form->getElement($attribute);
                     if ($element) {
                         $element->setReadonly(true, true);

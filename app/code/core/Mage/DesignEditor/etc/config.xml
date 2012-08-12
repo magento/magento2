@@ -29,6 +29,12 @@
     <modules>
         <Mage_DesignEditor>
             <version>1.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Adminhtml/>
+                <Mage_Page/>
+            </depends>
         </Mage_DesignEditor>
     </modules>
     <frontend>
@@ -101,14 +107,14 @@
             </updates>
         </layout>
         <events>
-            <admin_session_user_logout>
+            <backend_auth_user_logout>
                 <observers>
                     <designeditor>
                         <class>Mage_DesignEditor_Model_Observer</class>
                         <method>adminSessionUserLogout</method>
                     </designeditor>
                 </observers>
-            </admin_session_user_logout>
+            </backend_auth_user_logout>
         </events>
     </adminhtml>
     <admin>

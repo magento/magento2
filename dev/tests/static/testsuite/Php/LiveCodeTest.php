@@ -99,7 +99,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
         foreach (glob($globPattern) as $list) {
             $result = array_merge($result, file($list));
         }
-        $map = function($value) {
+        $map = function ($value) {
             return trim($value) ? Utility_Files::init()->getPathToSource() . '/' . trim($value) : '';
         };
         return array_filter(array_map($map, $result), 'file_exists');

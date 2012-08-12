@@ -332,7 +332,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         $this->_initSession();
         $this->loadLayout();
 
-        $this->_setActiveMenu('sales/order')
+        $this->_setActiveMenu('Mage_Sales::sales_order')
             ->renderLayout();
     }
 
@@ -495,7 +495,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
 
             $this->_getSession()->clear();
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The order has been created.'));
-            if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/order/actions/view')) {
+            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::actions_view')) {
                 $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
             } else {
                 $this->_redirect('*/sales_order/index');
@@ -531,19 +531,19 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
         switch ($action) {
             case 'index':
             case 'save':
-                $aclResource = 'sales/order/actions/create';
+                $aclResource = 'Mage_Sales::create';
                 break;
             case 'reorder':
-                $aclResource = 'sales/order/actions/reorder';
+                $aclResource = 'Mage_Sales::reorder';
                 break;
             case 'cancel':
-                $aclResource = 'sales/order/actions/cancel';
+                $aclResource = 'Mage_Sales::cancel';
                 break;
             default:
-                $aclResource = 'sales/order/actions';
+                $aclResource = 'Mage_Sales::actions';
                 break;
         }
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed($aclResource);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($aclResource);
     }
 
     /*

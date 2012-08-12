@@ -31,7 +31,7 @@ class Mage_Adminhtml_Sales_Order_CreateControllerTest extends Mage_Adminhtml_Uti
     {
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
-        $this->dispatch('admin/sales_order_create/loadBlock');
+        $this->dispatch('backend/admin/sales_order_create/loadBlock');
         $this->assertEquals('{"message":""}', $this->getResponse()->getBody());
     }
 
@@ -43,7 +43,7 @@ class Mage_Adminhtml_Sales_Order_CreateControllerTest extends Mage_Adminhtml_Uti
         Mage::getSingleton('Mage_Adminhtml_Model_Sales_Order_Create')->addProducts(array(1 => array('qty' => 1)));
         $this->getRequest()->setParam('block', 'data');
         $this->getRequest()->setParam('json', 1);
-        $this->dispatch('admin/sales_order_create/loadBlock');
+        $this->dispatch('backend/admin/sales_order_create/loadBlock');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<div id=\"sales_order_create_search_grid\">', $html);
         $this->assertContains('<div id=\"order-billing_method_form\">', $html);
@@ -58,7 +58,7 @@ class Mage_Adminhtml_Sales_Order_CreateControllerTest extends Mage_Adminhtml_Uti
     {
         $this->getRequest()->setParam('block', $block);
         $this->getRequest()->setParam('json', 1);
-        $this->dispatch('admin/sales_order_create/loadBlock');
+        $this->dispatch('backend/admin/sales_order_create/loadBlock');
         $html = $this->getResponse()->getBody();
         $this->assertContains($expected, $html);
     }
@@ -82,7 +82,7 @@ class Mage_Adminhtml_Sales_Order_CreateControllerTest extends Mage_Adminhtml_Uti
         Mage::getSingleton('Mage_Adminhtml_Model_Sales_Order_Create')->addProducts(array(1 => array('qty' => 1)));
         $this->getRequest()->setParam('block', 'items');
         $this->getRequest()->setParam('json', 1);
-        $this->dispatch('admin/sales_order_create/loadBlock');
+        $this->dispatch('backend/admin/sales_order_create/loadBlock');
         $html = $this->getResponse()->getBody();
         $this->assertContains('id=\"coupons:code\"', $html);
     }
@@ -95,7 +95,7 @@ class Mage_Adminhtml_Sales_Order_CreateControllerTest extends Mage_Adminhtml_Uti
         /** @var $order Mage_Adminhtml_Model_Sales_Order_Create */
         $order = Mage::getSingleton('Mage_Adminhtml_Model_Sales_Order_Create');
         $order->addProducts(array(1 => array('qty' => 1)));
-        $this->dispatch('admin/sales_order_create/index');
+        $this->dispatch('backend/admin/sales_order_create/index');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<div id="order-customer-selector"', $html);
         $this->assertContains('<div id="sales_order_create_customer_grid">', $html);

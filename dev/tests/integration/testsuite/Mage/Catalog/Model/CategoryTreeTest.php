@@ -44,6 +44,11 @@ class Mage_Catalog_Model_CategoryTreeTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Catalog_Model_Category();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testMove()
     {
         $this->_model->load(7);

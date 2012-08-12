@@ -40,20 +40,19 @@ class Mage_Core_Model_App_Emulation extends Varien_Object
      *
      * @param integer $storeId
      * @param string $area
-     * @param boolean $emulateSroreInlineTranslation emulate inline translation of the specified store or just disable it
+     * @param bool $emulateStoreInlineTranslation emulate inline translation of the specified store or just disable it
      *
      * @return Varien_Object information about environment of the initial store
      */
-    public function startEnvironmentEmulation($storeId, $area = Mage_Core_Model_App_Area::AREA_FRONTEND, $emulateSroreInlineTranslation = false)
-    {
-        if (is_null($area)) {
+    public function startEnvironmentEmulation($storeId, $area = Mage_Core_Model_App_Area::AREA_FRONTEND,
+        $emulateStoreInlineTranslation = false
+    ) {
+        if ($area === null) {
             $area = Mage_Core_Model_App_Area::AREA_FRONTEND;
         }
-        if ($emulateSroreInlineTranslation) {
-            $initialTranslateInline = $this->_emulateInlineTranslation($storeId, $area);
-        } else {
-            $initialTranslateInline = $this->_emulateInlineTranslation();
-        }
+        $initialTranslateInline = $emulateStoreInlineTranslation
+            ? $this->_emulateInlineTranslation($storeId, $area)
+            : $this->_emulateInlineTranslation();
         $initialDesign = $this->_emulateDesign($storeId, $area);
         // Current store needs to be changed right before locale change and after design change
         Mage::app()->setCurrentStore($storeId);
@@ -132,12 +131,12 @@ class Mage_Core_Model_App_Emulation extends Varien_Object
         );
 
         $storeTheme = Mage::getStoreConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME, $storeId);
-        $design->setDesignTheme($storeTheme);
+        $design->setDesignTheme($storeTheme, $area);
 
         if ($area == Mage_Core_Model_App_Area::AREA_FRONTEND) {
             $designChange = Mage::getSingleton('Mage_Core_Model_Design')->loadChange($storeId);
             if ($designChange->getData()) {
-                $design->setDesignTheme($designChange->getDesign());
+                $design->setDesignTheme($designChange->getDesign(), $area);
             }
         }
 
@@ -184,8 +183,7 @@ class Mage_Core_Model_App_Emulation extends Varien_Object
      */
     protected function _restoreInitialDesign(array $initialDesign)
     {
-        Mage::getDesign()->setArea($initialDesign['area']);
-        Mage::getDesign()->setDesignTheme($initialDesign['theme']);
+        Mage::getDesign()->setDesignTheme($initialDesign['theme'], $initialDesign['area']);
         return $this;
     }
 

@@ -40,7 +40,7 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
     {
         // set active menu and breadcrumbs
         $this->loadLayout()
-            ->_setActiveMenu('system/currency')
+            ->_setActiveMenu('Mage_Adminhtml::system_currency')
             ->_addBreadcrumb(
                 Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('System'),
                 Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('System')
@@ -95,6 +95,6 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/currency/symbols');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_CurrencySymbol::symbols');
     }
 }

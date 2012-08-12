@@ -36,7 +36,7 @@ class Maged_Model_Session extends Maged_Model
     /**
      * Session
      *
-     * @var Mage_Admin_Model_Session
+     * @var Mage_Backend_Model_Auth_Session
      */
     protected $_session;
 
@@ -50,7 +50,7 @@ class Maged_Model_Session extends Maged_Model
         if (class_exists('Mage') && Mage::isInstalled()) {
             // initialize Magento Config
             Mage::app();
-            $this->_session = Mage::getSingleton('Mage_Admin_Model_Session');
+            $this->_session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         } else {
             session_start();
         }
@@ -129,7 +129,7 @@ class Maged_Model_Session extends Maged_Model
     /**
      * Check is user logged in and permissions
      *
-     * @param Mage_Admin_Model_User|null $user
+     * @param Mage_User_Model_User|null $user
      * @return bool
      */
     protected function _checkUserAccess($user = null)
@@ -138,7 +138,7 @@ class Maged_Model_Session extends Maged_Model
             $this->addMessage('error', 'Invalid user name or password');
             $this->controller()->setAction('login');
         } elseif ($this->getUserId() || ($user && $user->getId())) {
-            if ($this->_session->isAllowed('all')) {
+            if ($this->_session->isAllowed('Mage_Adminhtml::all')) {
                 return true;
             } else {
                 $this->logout();
@@ -218,6 +218,6 @@ class Maged_Model_Session extends Maged_Model
         if (!$this->_session || !$this->_session->isLoggedIn()) {
             return '';
         }
-        return Mage::getSingleton('Mage_Adminhtml_Model_Url')->getUrl('adminhtml');
+        return Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl();
     }
 }

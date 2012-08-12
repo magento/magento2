@@ -52,23 +52,24 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
      *
      * @param string $destination OPTIONAL Destination file path.
      * @throws Exception
-     * @return void
      */
     final public function __construct($destination = null)
     {
+        /** @var $helper Mage_ImportExport_Helper_Data */
+        $helper = Mage::helper('Mage_ImportExport_Helper_Data');
         if (!$destination) {
             $destination = tempnam(sys_get_temp_dir(), 'importexport_');
         }
         if (!is_string($destination)) {
-            Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Destination file path must be a string'));
+            Mage::throwException($helper->__('Destination file path must be a string'));
         }
         $pathinfo = pathinfo($destination);
 
         if (empty($pathinfo['dirname']) || !is_writable($pathinfo['dirname'])) {
-            Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Destination directory is not writable'));
+            Mage::throwException($helper->__('Destination directory is not writable'));
         }
         if (is_file($destination) && !is_writable($destination)) {
-            Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Destination file is not writable'));
+            Mage::throwException($helper->__('Destination file is not writable'));
         }
         $this->_destination = $destination;
 
@@ -86,7 +87,7 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
     }
 
     /**
-     * Get contents of export file.
+     * Get contents of export file
      *
      * @return string
      */
@@ -96,7 +97,7 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
     }
 
     /**
-     * MIME-type for 'Content-Type' header.
+     * MIME-type for 'Content-Type' header
      *
      * @return string
      */
@@ -106,7 +107,7 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
     }
 
     /**
-     * Return file extension for downloading.
+     * Return file extension for downloading
      *
      * @return string
      */
@@ -116,28 +117,18 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
     }
 
     /**
-     * Set column names.
+     * Set column names
      *
-     * @param array $headerCols
-     * @throws Exception
+     * @param array $headerColumns
      * @return Mage_ImportExport_Model_Export_Adapter_Abstract
      */
-    public function setHeaderCols(array $headerCols)
+    public function setHeaderCols(array $headerColumns)
     {
-        if (null !== $this->_headerCols) {
-            Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Header column names already set'));
-        }
-        if ($headerCols) {
-            foreach ($headerCols as $colName) {
-                $this->_headerCols[$colName] = false;
-            }
-            fputcsv($this->_fileHandler, array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
-        }
         return $this;
     }
 
     /**
-     * Write row data to source file.
+     * Write row data to source file
      *
      * @param array $rowData
      * @return Mage_ImportExport_Model_Export_Adapter_Abstract

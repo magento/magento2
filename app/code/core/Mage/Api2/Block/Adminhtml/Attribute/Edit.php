@@ -39,7 +39,7 @@ class Mage_Api2_Block_Adminhtml_Attribute_Edit extends Mage_Adminhtml_Block_Widg
     public function __construct()
     {
         $this->_objectId   = 'id';
-        $this->_blockGroup = 'api2';
+        $this->_blockGroup = 'Mage_Api2';
         $this->_controller = 'adminhtml_attribute';
 
         parent::__construct();

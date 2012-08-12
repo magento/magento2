@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category     Mage
- * @package      Mage_Backup
+ * @category    Mage
+ * @package     Mage_Backup
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -126,6 +126,28 @@ class Mage_Backup_Snapshot extends Mage_Backup_Filesystem
         }
 
         return $this->_dbBackupManager;
+    }
+
+    /**
+     * Set Db backup manager
+     *
+     * @param Mage_Backup_Abstract $manager
+     * @return Mage_Backup_Snapshot
+     */
+    public function setDbBackupManager(Mage_Backup_Abstract $manager)
+    {
+        $this->_dbBackupManager = $manager;
+        return $this;
+    }
+
+    /**
+     * Get Db Backup Filemane
+     *
+     * @return string
+     */
+    public function getDbBackupFilename()
+    {
+        return $this->_getDbBackupManager()->getBackupFilename();
     }
 
     /**

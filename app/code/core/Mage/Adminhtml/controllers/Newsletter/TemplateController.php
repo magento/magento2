@@ -39,8 +39,8 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
      */
     protected function _isAllowed ()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')
-            ->isAllowed('newsletter/template');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')
+            ->isAllowed('Mage_Newsletter::template');
     }
 
     /**
@@ -66,7 +66,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
             return;
         }
         $this->loadLayout();
-        $this->_setActiveMenu('newsletter/template');
+        $this->_setActiveMenu('Mage_Newsletter::newsletter_template');
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Templates'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Templates'));
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Template', 'template'));
         $this->renderLayout();
@@ -109,7 +109,7 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
         Mage::register('_current_template', $model);
 
         $this->loadLayout();
-        $this->_setActiveMenu('newsletter/template');
+        $this->_setActiveMenu('Mage_Newsletter::newsletter_template');
 
         if ($model->getId()) {
             $breadcrumbTitle = Mage::helper('Mage_Newsletter_Helper_Data')->__('Edit Template');

@@ -27,34 +27,37 @@
 -->
 <layout>
     <design_editor_toolbar>
-        <label>Design Editor Toolbar</label>
         <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/settimeout_override.js</file></action>
             <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
             <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
-            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
+            <action method="addJs"><file>prototype/prototype.js</file></action>
+            <action method="addJs"><file>mage/translate.js</file></action>
+            <action method="addJs"><file>Mage_Page::js/cookies.js</file></action>
             <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
         </reference>
         <!-- Toolbar block has been intentionally declared outside of containers to be rendered manually -->
         <block type="Mage_DesignEditor_Block_Toolbar" name="design_editor_toolbar" template="toolbar.phtml">
             <block type="Mage_DesignEditor_Block_Toolbar_Breadcrumbs" name="design_editor_toolbar_breadcrumbs" template="toolbar/breadcrumbs.phtml"/>
-            <block type="Mage_Core_Block_Template" name="design_editor_toolbar_row" template="Mage_DesignEditor::toolbar/row.phtml">
-                <block type="Mage_DesignEditor_Block_Toolbar_PageType" name="design_editor_toolbar_page_types" template="toolbar/page_types.phtml"/>
+            <block type="Mage_DesignEditor_Block_Template" name="design_editor_toolbar_row" template="toolbar/row.phtml">
+                <block type="Mage_DesignEditor_Block_Toolbar_HandlesHierarchy" name="design_editor_toolbar_handles_hierarchy" template="toolbar/handles_hierarchy.phtml"/>
                 <block type="Mage_DesignEditor_Block_Toolbar_Skin" name="design_editor_toolbar_skin" template="toolbar/skin.phtml"/>
-                <block type="Mage_Core_Block_Template" name="design_editor_toolbar_highlighting" template="Mage_DesignEditor::toolbar/highlighting.phtml"/>
+                <block type="Mage_DesignEditor_Block_Template" name="design_editor_toolbar_highlighting" template="toolbar/highlighting.phtml"/>
                 <block type="Mage_DesignEditor_Block_Toolbar_Exit" name="design_editor_toolbar_exit" template="toolbar/exit.phtml"/>
             </block>
         </block>
     </design_editor_toolbar>
 
     <design_editor_page>
-        <label>Design Editor Page Blocks Management Page</label>
         <reference name="root">
             <action method="setTemplate"><template>Mage_DesignEditor::page.phtml</template></action>
             <block type="Mage_Page_Block_Html_Head" name="head" as="head"/>
-            <container name="after_body_start" as="after_body_start" label="Page Top"/>
+            <block type="Mage_DesignEditor_Block_Container" name="after_body_start" template="container.phtml"/>
         </reference>
     </design_editor_page>
 </layout>

@@ -59,7 +59,7 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Configurable
      *
      * @var array
      */
-    protected $_particularAttributes = array(
+    protected $_specialAttributes = array(
         '_super_products_sku', '_super_attribute_code', '_super_attribute_option',
         '_super_attribute_price_corr', '_super_attribute_price_website'
     );

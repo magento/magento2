@@ -27,8 +27,15 @@
  */
 -->
 <layouts>
+    <first_handle>
+        <!-- Despite reference element is not declared yet, it will "save this action for later" -->
+        <reference name="block1">
+            <action method="setReferenceValue"><value>1.1</value></action>
+        </reference>
+    </first_handle>
+
     <a_handle>
-        <container name="container1">
+        <container name="container1" label="Container 1">
             <block type="Mage_Core_Block_Template" name="block1" template="Mage_Core::test.phtml">
                 <action method="setTestValue"><value>1</value></action>
             </block>
@@ -37,4 +44,30 @@
             </block>
         </container>
     </a_handle>
+
+    <another_handle>
+        <!-- A conventional use of reference - after element is declared -->
+        <reference name="block2">
+            <action method="setReferenceValue"><value>2.2</value></action>
+        </reference>
+
+        <!-- Reference to non-existing element will remain ignored -->
+        <reference name="nonexistent">
+            <action method="setReferenceValue"><value>3.3</value></action>
+        </reference>
+    </another_handle>
+
+    <get_block_special_case>
+        <block name="block1" type="Mage_Core_Block_Text">
+            <action method="getChildBlock"><value>block2</value></action>
+            <block name="block2" type="Mage_Core_Block_Text"/>
+        </block>
+    </get_block_special_case>
+
+    <get_block_special_case_exception>
+        <block name="block1" type="Mage_Core_Block_Text">
+            <container name="container" label="Container"/>
+            <action method="getChildBlock"><value>container</value></action>
+        </block>
+    </get_block_special_case_exception>
 </layouts>

@@ -43,7 +43,7 @@ class Mage_Adminhtml_System_Email_TemplateController extends Mage_Adminhtml_Cont
         }
 
         $this->loadLayout();
-        $this->_setActiveMenu('system/email_template');
+        $this->_setActiveMenu('Mage_Adminhtml::system_email_template');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'));
 
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Email_Template', 'template'));
@@ -75,7 +75,7 @@ class Mage_Adminhtml_System_Email_TemplateController extends Mage_Adminhtml_Cont
     {
         $this->loadLayout();
         $template = $this->_initTemplate('id');
-        $this->_setActiveMenu('system/email_template');
+        $this->_setActiveMenu('Mage_Adminhtml::system_email_template');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'), $this->getUrl('*/*'));
 
         if ($this->getRequest()->getParam('id')) {
@@ -225,6 +225,6 @@ class Mage_Adminhtml_System_Email_TemplateController extends Mage_Adminhtml_Cont
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/email_template');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::email_template');
     }
 }

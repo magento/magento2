@@ -69,6 +69,32 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
     protected $_initialEnvironmentInfo = null;
 
     /**
+     * Package area
+     *
+     * @var string
+     */
+    protected $_area;
+
+    /**
+     * Store id
+     *
+     * @var int
+     */
+    protected $_store;
+
+    /**
+     * Initialize data
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_area = isset($data['area']) ? $data['area'] : null;
+        $this->_store = isset($data['store']) ? $data['store'] : null;
+        parent::__construct($data);
+    }
+
+    /**
      * Applying of design config
      *
      * @return Mage_Core_Model_Template
@@ -106,12 +132,18 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
      *
      * @return Varien_Object
      */
-    protected function getDesignConfig()
+    public function getDesignConfig()
     {
-        if(is_null($this->_designConfig)) {
+        if ($this->_designConfig === null) {
+            if ($this->_area === null) {
+                $this->_area = Mage::getDesign()->getArea();
+            }
+            if ($this->_store === null) {
+                $this->_store = Mage::app()->getStore()->getId();
+            }
             $this->_designConfig = new Varien_Object(array(
-                'area' => Mage::getDesign()->getArea(),
-                'store' => Mage::app()->getStore()->getId()
+                'area' => $this->_area,
+                'store' => $this->_store
             ));
         }
         return $this->_designConfig;
@@ -120,8 +152,9 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
     /**
      * Initialize design information for template processing
      *
-     * @param   array $config
-     * @return  Mage_Core_Model_Template
+     * @param array $config
+     * @return Mage_Core_Model_Template
+     * @throws Magento_Exception
      */
     public function setDesignConfig(array $config)
     {
@@ -137,6 +170,7 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
      * Event is not dispatched.
      *
      * @param int|string $storeId
+     * @param string $area
      */
     public function emulateDesign($storeId, $area=self::DEFAULT_DESIGN_AREA)
     {

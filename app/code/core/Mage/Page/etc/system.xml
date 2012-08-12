@@ -88,15 +88,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </default_keywords>
-                        <default_robots translate="label">
-                            <label>Default Robots</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Design_Robots</source_model>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </default_robots>
 <!--
                         <default_media_type translate="label">
                             <label>Default Media Type</label>
@@ -135,6 +126,45 @@
                         </demonotice>
                     </fields>
                 </head>
+                <search_engine_robots translate="label">
+                    <label>Search Engine Robots</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>25</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <default_robots translate="label comment">
+                            <label>Default Robots</label>
+                            <comment>This will be included before head closing tag in page HTML.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Mage_Adminhtml_Model_System_Config_Source_Design_Robots</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_robots>
+                        <custom_instructions translate="label comment">
+                            <label>Edit custom instruction of robots.txt File</label>
+                            <frontend_type>textarea</frontend_type>
+                            <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots</backend_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom_instructions>
+                        <reset_to_defaults translate="label comment">
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>Mage_Adminhtml_Block_Page_System_Config_Robots_Reset</frontend_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>This action will delete your custom instructions and reset robots.txt file to
+                                system's default settings.</comment>
+                        </reset_to_defaults>
+                    </fields>
+                </search_engine_robots>
                 <header translate="label">
                     <label>Header</label>
                     <frontend_type>text</frontend_type>

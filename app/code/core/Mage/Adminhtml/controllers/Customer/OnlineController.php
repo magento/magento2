@@ -37,7 +37,7 @@ class Mage_Adminhtml_Customer_OnlineController extends Mage_Adminhtml_Controller
 
         $this->loadLayout();
 
-        $this->_setActiveMenu('customer/online');
+        $this->_setActiveMenu('Mage_Customer::customer_online');
 
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Online', 'customers'));
 
@@ -49,6 +49,6 @@ class Mage_Adminhtml_Customer_OnlineController extends Mage_Adminhtml_Controller
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('customer/online');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Customer::online');
     }
 }

@@ -29,6 +29,11 @@
     <modules>
         <Mage_Page>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+            </depends>
         </Mage_Page>
     </modules>
     <global>
@@ -109,10 +114,37 @@
                 <default_title>Magento Commerce</default_title>
                 <default_description>Default Description</default_description>
                 <default_keywords>Magento, Varien, E-commerce</default_keywords>
-                <default_robots>*</default_robots>
                 <default_media_type>text/html</default_media_type>
                 <default_charset>utf-8</default_charset>
             </head>
+            <search_engine_robots>
+                <default_robots>INDEX,FOLLOW</default_robots>
+                <default_custom_instructions>
+                    <![CDATA[
+User-agent: *
+Disallow: /index.php/
+Disallow: /*?
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /checkout/
+Disallow: /tag/
+Disallow: /app/
+Disallow: /downloader/
+Disallow: /js/
+Disallow: /lib/
+Disallow: /*.php$
+Disallow: /pkginfo/
+Disallow: /report/
+Disallow: /skin/
+Disallow: /var/
+Disallow: /catalog/
+Disallow: /customer/
+Disallow: /sendfriend/
+Disallow: /review/
+Disallow: /*SID=
+                    ]]>
+                </default_custom_instructions>
+            </search_engine_robots>
             <header translate="welcome" module="Mage_Page">
                 <logo_src>images/logo.gif</logo_src>
                 <logo_alt>Magento Commerce</logo_alt>

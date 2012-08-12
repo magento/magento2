@@ -23,142 +23,175 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-(function ($) {
+(function($) {
+
     /**
-     * Class for design editor
+     * Widget container
      */
-    DesignEditor = function (opts) {
-        /* Children storage for the period, when highlighting is disabled */
-        this._children = {};
-
-        /* Configuration options for design editor */
-        this._options = {};
-
-        var defaultOptions = {'cookie_highlighting_name': 'vde_highlighting'};
-        $.extend(this._options, defaultOptions, opts);
-
-        if (Mage.Cookies.get(this._options['cookie_highlighting_name']) == 'off') {
-            this._addParentMarkers();
-        }
-        this._enableDragDrop();
-    };
-
-    DesignEditor.prototype._enableDragDrop = function () {
-        var thisObj = this;
-        /* Enable reordering of draggable children within their containers */
-        $('.vde_element_wrapper.vde_container').sortable({
-            items: '.vde_element_wrapper.vde_draggable',
+    $.widget('vde.vde_container', $.ui.sortable, {
+        options: {
             tolerance: 'pointer',
             revert: true,
-            helper: 'clone',
-            appendTo: 'body',
+            connectWithSelector: '.vde_element_wrapper.vde_container',
             placeholder: 'vde_placeholder',
-            start: function(event, ui) {
-                thisObj._resizePlaceholder(ui.placeholder, ui.item);
-                thisObj._outlineDropContainer(this);
-                /* Enable dropping of the elements outside of their containers */
-                var otherContainers = $('.vde_element_wrapper.vde_container').not(ui.item);
-                $(this).sortable('option', 'connectWith', otherContainers);
-                otherContainers.sortable('refresh');
-            },
-            over: function(event, ui) {
-                thisObj._outlineDropContainer(this);
-            },
-            stop: function(event, ui) {
-                thisObj._removeDropContainerOutline();
-            }
-        }).disableSelection();
-        return this;
-    };
-
-    DesignEditor.prototype._resizePlaceholder = function (placeholder, element) {
-        placeholder.css({height: $(element).outerHeight(true) + 'px'});
-    };
-
-    DesignEditor.prototype._outlineDropContainer = function (container) {
-        this._removeDropContainerOutline();
-        $(container).addClass('vde_container_hover');
-    };
-
-    DesignEditor.prototype._removeDropContainerOutline = function () {
-        $('.vde_container_hover').removeClass('vde_container_hover');
-    };
-
-    DesignEditor.prototype.highlight = function (isOn) {
-        if (isOn) {
-            this._turnHighlightingOn();
-        } else {
-            this._turnHighlightingOff();
-        }
-        return this;
-    };
-
-    DesignEditor.prototype._turnHighlightingOn = function () {
-        var thisObj = this;
-        Mage.Cookies.set(this._options['cookie_highlighting_name'], "on");
-        $('.vde_element_wrapper').each(function () {
-            $(this)
-                .append(thisObj._getChildren($(this).attr('id')))
-                .show()
-                .children('.vde_element_title').slideDown('fast');
-        });
-        this._children = {};
-        return this;
-    };
-
-    DesignEditor.prototype._turnHighlightingOff = function () {
-        var thisObj = this;
-        Mage.Cookies.set(this._options['cookie_highlighting_name'], "off");
-        $('.vde_element_wrapper').each(function () {
-            var elem = $(this);
-            elem.children('.vde_element_title').slideUp('fast', function () {
-                var children = elem.contents(':not(.vde_element_title)');
-                var parentId = elem.attr('id');
-                children.each(function(){
-                    thisObj._storeChild(parentId, this);
-                });
-                elem.after(children).hide();
-            });
-        });
-        return this;
-    };
-
-    DesignEditor.prototype._addParentMarkers = function () {
-        var thisObj = this;
-        var parentsStack = [];
-        var currentParent;
-        $('*').contents().each(function(){
-            if (this.nodeType == Node.COMMENT_NODE) {
-                if (this.data.substr(0, 9) == 'start_vde') {
-                    currentParent = this.data.substr(6, this.data.length);
-                    parentsStack.push(currentParent);
-                    this.parentNode.removeChild(this);
-                } else if (this.data.substr(0, 7) == 'end_vde') {
-                    if (this.data.substr(4, this.data.length) !== currentParent) {
-                        throw "Could not find closing element for opened '" + currentParent + "' element";
-                    }
-                    parentsStack.pop();
-                    currentParent = parentsStack[parentsStack.length - 1];
-                    this.parentNode.removeChild(this);
+            hoverClass: 'vde_container_hover',
+            items: '.vde_element_wrapper.vde_draggable',
+            helper: 'clone',
+            appendTo: 'body'
+        },
+        _create: function () {
+            this.element.data('sortable', this);
+            var self = this;
+            this.options = $.extend({}, this.options, {
+                start: function(event, ui) {
+                    ui.placeholder.css({height: $(ui.helper).outerHeight(true)});
+                    self.element.vde_container('option', 'connectWith', $(self.options.connectWithSelector).not(ui.item))
+                        .vde_container('refresh');
+                },
+                over: function(event, ui) {
+                    self.element.addClass(self.options.hoverClass);
+                },
+                out: function(event, ui) {
+                    self.element.removeClass(self.options.hoverClass);
                 }
-            } else if (undefined !== currentParent) {
-                thisObj._storeChild(currentParent, this);
+            });
+            $.ui.sortable.prototype._create.apply(this, arguments);
+        }
+    });
+
+    /**
+     * Widget panel
+     */
+    $.widget('vde.vde_panel', {
+        options: {
+            cellSelector: '.vde_toolbar_cell',
+            handlesHierarchySelector: '#vde_handles_hierarchy',
+            treeSelector: '#vde_handles_tree'
+        },
+        _create: function () {
+            var self = this;
+            this.element.find(this.options.cellSelector).each(function () {
+                var params = $(this).is(self.options.handlesHierarchySelector) ? {treeSelector: self.options.treeSelector, slimScroll: true } : {};
+                $(this).vde_menu(params);
+            });
+        }
+    });
+
+    /**
+     * Widget page
+     */
+    $.widget('vde.vde_page', {
+        options: {
+            containerSelector: '.vde_element_wrapper.vde_container',
+            panelSelector: '#vde_toolbar',
+            highlightElementSelector: '.vde_element_wrapper',
+            highlightElementTitleSelector: '.vde_element_title',
+            highlightCheckboxSelector: '#vde_highlighting',
+            cookieHighlightingName: 'vde_highlighting'
+        },
+        _create: function () {
+            this._initContainers();
+            this._initPanel();
+        },
+        _initContainers: function () {
+            $(this.options.containerSelector)
+                .vde_container().disableSelection();
+        },
+        _initPanel: function () {
+            $(this.options.panelSelector).vde_panel();
+        }
+    });
+
+    /**
+     * Widget page highlight functionality
+     */
+    var pageBasePrototype = $.vde.vde_page.prototype;
+    $.widget('vde.vde_page', $.extend({}, pageBasePrototype, {
+        _create: function () {
+            pageBasePrototype._create.apply(this, arguments);
+            if (this.options.highlightElementSelector) {
+                this._initHighlighting();
+                this._bind();
             }
-        });
-    };
+        },
+        _bind: function () {
+            var self = this;
+            this.element
+                .on('checked.vde_checkbox', function () {
+                    self._highlight();
+                })
+                .on('unchecked.vde_checkbox', function () {
+                    self._unhighlight();
+                });
+        },
+        _initHighlighting: function () {
+            if (this.options.highlightCheckboxSelector) {
+                $(this.options.highlightCheckboxSelector)
+                    .vde_checkbox();
+            }
+            this.highlightBlocks = {};
+            if (Mage.Cookies.get(this.options.cookieHighlightingName) == 'off') {
+                this._processMarkers();
+            }
 
-    DesignEditor.prototype._storeChild = function (parentId, child) {
-        if (undefined == this._children[parentId]) {
-            this._children[parentId] = [];
+        },
+        _highlight: function () {
+            Mage.Cookies.clear(this.options.cookieHighlightingName);
+            var self = this;
+            $(this.options.highlightElementSelector).each(function () {
+                $(this)
+                    .append(self._getChildren($(this).attr('id')))
+                    .show()
+                    .children(self.options.highlightElementTitleSelector).slideDown('fast');
+            });
+            this.highlightBlocks = {};
+        },
+        _unhighlight: function () {
+            Mage.Cookies.set(this.options.cookieHighlightingName, 'off');
+            var self = this;
+            $(this.options.highlightElementSelector).each(function () {
+                var elem = $(this);
+                elem.children(self.options.highlightElementTitleSelector).slideUp('fast', function () {
+                    var children = elem.contents(':not(' + self.options.highlightElementTitleSelector + ')');
+                    var parentId = elem.attr('id');
+                    children.each(function () {
+                        self._storeChild(parentId, this);
+                    });
+                    elem.after(children).hide();
+                });
+            });
+        },
+        _processMarkers: function () {
+            var self = this,
+                parentsIdsStack = [],
+                currentParentId;
+            $('*').contents().each(function () {
+                if (this.nodeType == Node.COMMENT_NODE) {
+                    if (this.data.substr(0, 9) == 'start_vde') {
+                        currentParentId = this.data.substr(6, this.data.length);
+                        parentsIdsStack.push(currentParentId);
+                        this.parentNode.removeChild(this);
+                    } else if (this.data.substr(0, 7) == 'end_vde') {
+                        if (this.data.substr(4, this.data.length) !== currentParentId) {
+                            throw "Could not find closing element for opened '" + currentParentId + "' element";
+                        }
+                        parentsIdsStack.pop();
+                        currentParentId = parentsIdsStack[parentsIdsStack.length - 1];
+                        this.parentNode.removeChild(this);
+                    }
+                } else if (currentParentId) {
+                    self._storeChild(currentParentId, this);
+                }
+            })
+        },
+        _storeChild: function(parentId, child) {
+            if (!this.highlightBlocks[parentId]) {
+                this.highlightBlocks[parentId] = [];
+            }
+            this.highlightBlocks[parentId].push(child);
+        },
+        _getChildren: function(parentId) {
+            return (!this.highlightBlocks[parentId]) ? [] : this.highlightBlocks[parentId];
         }
-        this._children[parentId].push(child);
-    };
-
-    DesignEditor.prototype._getChildren = function (parentId) {
-        if (undefined == this._children[parentId]) {
-            return [];
-        }
-        return this._children[parentId];
-    };
-
-})(jQuery);
+    }));
+})( jQuery );

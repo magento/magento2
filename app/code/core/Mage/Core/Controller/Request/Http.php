@@ -474,7 +474,8 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
                 'params' => $this->getParams(),
                 'action_name' => $this->getActionName(),
                 'controller_name' => $this->getControllerName(),
-                'module_name' => $this->getModuleName()
+                'module_name' => $this->getModuleName(),
+                'route_name' => $this->getRouteName(),
             );
         }
 

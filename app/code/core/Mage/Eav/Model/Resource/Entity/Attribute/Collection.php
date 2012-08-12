@@ -191,24 +191,6 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Collection extends Mage_Core_Mode
     }
 
     /**
-     * Add filter which exclude attributes assigned to attribute set
-     *
-     * @param int $setId
-     * @return Mage_Eav_Model_Resource_Entity_Attribute_Collection
-     */
-    public function setAttributeSetExcludeFilter($setId)
-    {
-        $this->join(
-            array('entity_attribute' => $this->getTable('eav_entity_attribute')),
-            'entity_attribute.attribute_id = main_table.attribute_id'
-        );
-        $this->addFieldToFilter('entity_attribute.attribute_set_id', array('neq' => $setId));
-        $this->setOrder('sort_order', self::SORT_ORDER_ASC);
-
-        return $this;
-    }
-
-    /**
      * Exclude attributes filter
      *
      * @param array $attributes

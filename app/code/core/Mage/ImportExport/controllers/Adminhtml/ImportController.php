@@ -53,7 +53,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
     {
         $this->_title($this->__('Import/Export'))
             ->loadLayout()
-            ->_setActiveMenu('system/importexport');
+            ->_setActiveMenu('Mage_ImportExport::system_convert_import');
 
         return $this;
     }
@@ -65,7 +65,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/convert/import');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_ImportExport::import');
     }
 
     /**
@@ -121,7 +121,7 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
     }
 
     /**
-     * Validate uploaded files action.
+     * Validate uploaded files action
      *
      * @return void
      */
@@ -154,7 +154,9 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
                             );
                         } elseif ($import->getErrorsCount() >= $import->getErrorsLimit()) {
                             $resultBlock->addNotice(
-                                $this->__('Errors limit (%d) reached. Please fix errors and re-upload file', $import->getErrorsLimit())
+                                $this->__('Errors limit (%d) reached. Please fix errors and re-upload file',
+                                    $import->getErrorsLimit()
+                                )
                             );
                         } else {
                             if ($import->isImportAllowed()) {
@@ -185,7 +187,12 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
                         }
                     }
                     $resultBlock->addNotice($import->getNotices());
-                    $resultBlock->addNotice($this->__('Checked rows: %d, checked entities: %d, invalid rows: %d, total errors: %d', $import->getProcessedRowsCount(), $import->getProcessedEntitiesCount(), $import->getInvalidRowsCount(), $import->getErrorsCount()));
+                    $resultBlock->addNotice(
+                        $this->__('Checked rows: %d, checked entities: %d, invalid rows: %d, total errors: %d',
+                            $import->getProcessedRowsCount(), $import->getProcessedEntitiesCount(),
+                            $import->getInvalidRowsCount(), $import->getErrorsCount()
+                        )
+                    );
                 }
             } catch (Exception $e) {
                 $resultBlock->addNotice($this->__('Please fix errors and re-upload file'))

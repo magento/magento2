@@ -37,7 +37,7 @@ class Mage_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/tag')
+            ->_setActiveMenu('Mage_Tag::catalog_tag')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'))
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tags'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tags'));
 
@@ -81,7 +81,7 @@ class Mage_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
 
         $this->_initAction()
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('All Tags'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('All Tags'))
-            ->_setActiveMenu('catalog/tag/all')
+            ->_setActiveMenu('Mage_Tag::catalog_tag_all')
             ->renderLayout();
     }
 
@@ -234,7 +234,7 @@ class Mage_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
 
         $this->_initAction()
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Pending Tags'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Pending Tags'))
-            ->_setActiveMenu('catalog/tag/pending')
+            ->_setActiveMenu('Mage_Tag::catalog_tag_pending')
             ->renderLayout();
     }
 
@@ -348,13 +348,13 @@ class Mage_Adminhtml_TagController extends Mage_Adminhtml_Controller_Action
     {
         switch ($this->getRequest()->getActionName()) {
             case 'pending':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/tag/pending');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tag::tag_pending');
                 break;
             case 'all':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/tag/all');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tag::tag_all');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/tag');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tag::tag');
                 break;
         }
     }

@@ -37,6 +37,11 @@ class Mage_Core_Model_Url_RewriteTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Url_Rewrite;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testLoadByRequestPath()
     {
         $this->_model->setStoreId(Mage::app()->getDefaultStoreView()->getId())

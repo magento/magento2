@@ -75,7 +75,7 @@ class Mage_Adminhtml_System_Convert_ProfileController extends Mage_Adminhtml_Con
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('system/convert');
+        $this->_setActiveMenu('Mage_Adminhtml::system_convert');
 
         /**
          * Append profiles block to content
@@ -123,7 +123,7 @@ class Mage_Adminhtml_System_Convert_ProfileController extends Mage_Adminhtml_Con
 
         $this->_title($profile->getId() ? $profile->getName() : $this->__('New Profile'));
 
-        $this->_setActiveMenu('system/convert');
+        $this->_setActiveMenu('Mage_Adminhtml::system_convert');
 
         $this->_addContent(
             $this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Convert_Profile_Edit')
@@ -312,6 +312,6 @@ class Mage_Adminhtml_System_Convert_ProfileController extends Mage_Adminhtml_Con
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('admin/system/convert/profiles');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::profiles');
     }
 }

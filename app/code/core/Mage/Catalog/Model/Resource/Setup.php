@@ -35,6 +35,25 @@
 class Mage_Catalog_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
 {
     /**
+     * Add Minimal attribute set id to exclude list
+     *
+     * @param string $resourceName
+     */
+    public function __construct($resourceName)
+    {
+        parent::__construct($resourceName);
+        $entityTypeForMinimal = $this->getEntityType('Minimal', 'entity_type_id');
+        if (is_numeric($entityTypeForMinimal)) {
+            $minimalAttributeSetId = $this->getAttributeSet(
+                Mage_Catalog_Model_Product::ENTITY, $entityTypeForMinimal, 'attribute_set_id'
+            );
+            if (is_numeric($minimalAttributeSetId)) {
+                $this->setExcludedAttributeSetIds(array($minimalAttributeSetId));
+            }
+        }
+    }
+
+    /**
      * Prepare catalog attribute values to save
      *
      * @param array $attr

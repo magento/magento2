@@ -29,6 +29,11 @@
     <modules>
         <Mage_Directory>
             <version>1.6.0.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+            </depends>
         </Mage_Directory>
     </modules>
     <global>

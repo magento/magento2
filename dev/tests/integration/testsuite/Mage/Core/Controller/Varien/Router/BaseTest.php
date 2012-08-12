@@ -39,7 +39,12 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
             'base_controller' => 'Mage_Core_Controller_Front_Action'
         );
         $this->_model = new Mage_Core_Controller_Varien_Router_Base($options);
-        $this->_model->setFront(Mage::app()->getFrontController());
+        $this->_model->setFront(new Mage_Core_Controller_Varien_Front());
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
     }
 
     /**
@@ -79,8 +84,9 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
             'controller' => 'index',
             'action' => 'index'
         );
+        $this->assertEmpty($this->_model->getFront()->getDefault());
         $this->_model->fetchDefault();
-        $this->assertEquals($default, Mage::app()->getFrontController()->getDefault());
+        $this->assertEquals($default, $this->_model->getFront()->getDefault());
     }
 
     public function testMatch()
@@ -90,30 +96,30 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
         }
 
         $request = new Magento_Test_Request();
-        $this->assertFalse($this->_model->match($request));
+        $this->assertNull($this->_model->match($request));
 
         $this->_model->collectRoutes('frontend', 'standard');
-        $this->assertTrue($this->_model->match($request));
+        $this->assertInstanceOf('Mage_Core_Controller_Varien_Action', $this->_model->match($request));
         $request->setRequestUri('core/index/index');
-        $this->assertTrue($this->_model->match($request));
+        $this->assertInstanceOf('Mage_Core_Controller_Varien_Action', $this->_model->match($request));
 
         $request->setPathInfo('not_exists/not_exists/not_exists')
             ->setModuleName('not_exists')
             ->setControllerName('not_exists')
             ->setActionName('not_exists');
-        $this->assertFalse($this->_model->match($request));
+        $this->assertNull($this->_model->match($request));
     }
 
     /**
      * @covers Mage_Core_Controller_Varien_Router_Base::addModule
-     * @covers Mage_Core_Controller_Varien_Router_Base::getModuleByFrontName
+     * @covers Mage_Core_Controller_Varien_Router_Base::getModulesByFrontName
      * @covers Mage_Core_Controller_Varien_Router_Base::getRouteByFrontName
      * @covers Mage_Core_Controller_Varien_Router_Base::getFrontNameByRoute
      */
     public function testAddModuleAndGetters()
     {
         $this->_model->addModule('test_front', 'test_name', 'test_route');
-        $this->assertEquals('test_name', $this->_model->getModuleByFrontName('test_front'));
+        $this->assertEquals(array('test_name'), $this->_model->getModulesByFrontName('test_front'));
         $this->assertEquals('test_route', $this->_model->getRouteByFrontName('test_front'));
         $this->assertEquals('test_front', $this->_model->getFrontNameByRoute('test_route'));
     }

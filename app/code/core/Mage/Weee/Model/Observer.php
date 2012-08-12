@@ -187,9 +187,11 @@ class Mage_Weee_Model_Observer extends Mage_Core_Model_Abstract
      * @param   Varien_Event_Observer $observer
      * @return  Mage_Weee_Model_Observer
      */
-    public function updateCofigurableProductOptions(Varien_Event_Observer $observer)
+    public function updateConfigurableProductOptions(Varien_Event_Observer $observer)
     {
-        if (!Mage::helper('Mage_Weee_Helper_Data')->isEnabled()) {
+        /* @var $helper Mage_Weee_Helper_Data */
+        $helper = Mage::helper('Mage_Weee_Helper_Data');
+        if (!$helper->isEnabled()) {
             return $this;
         }
 
@@ -201,14 +203,13 @@ class Mage_Weee_Model_Observer extends Mage_Core_Model_Abstract
             return $this;
         }
 
-        $amount     = Mage::helper('Mage_Weee_Helper_Data')->getAmount($_product);
-        $origAmount = Mage::helper('Mage_Weee_Helper_Data')->getOriginalAmount($_product);
-
-        $options['oldPlusDisposition'] = $origAmount;
-        $options['plusDisposition'] = $amount;
+        $options['oldPlusDisposition'] = $helper->getOriginalAmount($_product);
+        $options['plusDisposition'] = $helper->getAmount($_product);
 
         // Exclude Weee amount from excluding tax amount
-        if (!$weeeHelper->typeOfDisplay($_product, array(0, 1, 4))) {
+        if (!$helper->typeOfDisplay($_product, array(
+            Mage_Weee_Model_Tax::DISPLAY_INCL, Mage_Weee_Model_Tax::DISPLAY_INCL_DESCR,
+        ))) {
             $options['exclDisposition'] = true;
         }
 

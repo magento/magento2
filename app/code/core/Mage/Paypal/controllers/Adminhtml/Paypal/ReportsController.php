@@ -115,7 +115,7 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
     {
         $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('PayPal Settlement Reports'));
         $this->loadLayout()
-            ->_setActiveMenu('report/sales')
+            ->_setActiveMenu('Mage_Paypal::report_salesroot_paypal_settlement_reports')
             ->_addBreadcrumb(Mage::helper('Mage_Paypal_Helper_Data')->__('Reports'), Mage::helper('Mage_Paypal_Helper_Data')->__('Reports'))
             ->_addBreadcrumb(Mage::helper('Mage_Paypal_Helper_Data')->__('Sales'), Mage::helper('Mage_Paypal_Helper_Data')->__('Sales'))
             ->_addBreadcrumb(Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal Settlement Reports'), Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal Settlement Reports'));
@@ -131,13 +131,13 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
         switch ($this->getRequest()->getActionName()) {
             case 'index':
             case 'details':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/salesroot/paypal_settlement_reports/view');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Paypal::paypal_settlement_reports_view');
                 break;
             case 'fetch':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/salesroot/paypal_settlement_reports/fetch');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Paypal::fetch');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/salesroot/paypal_settlement_reports');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Paypal::paypal_settlement_reports');
                 break;
         }
     }

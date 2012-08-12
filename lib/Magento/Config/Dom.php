@@ -92,11 +92,7 @@ class Magento_Config_Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             foreach ($node->attributes as $attribute) {
-                if ($matchedNode->getAttribute($attribute->name)) {
-                    $matchedNode->setAttribute($attribute->name, $attribute->value);
-                } else {
-                    $matchedNode->setAttributeNode($attribute);
-                }
+                $matchedNode->setAttribute($attribute->name, $attribute->value);
             }
             /* Merge child nodes */
             if ($node->hasChildNodes()) {

@@ -75,7 +75,7 @@ class Mage_Adminhtml_System_Config_System_StorageController extends Mage_Adminht
         }
 
         $flag->setState(Mage_Core_Model_File_Storage_Flag::STATE_RUNNING)->save();
-        Mage::getSingleton('Mage_Admin_Model_Session')->setSyncProcessStopWatch(false);
+        Mage::getSingleton('Mage_Backend_Model_Auth_Session')->setSyncProcessStopWatch(false);
 
         $storage = array('type' => (int) $_REQUEST['storage']);
         if (isset($_REQUEST['connection']) && !empty($_REQUEST['connection'])) {

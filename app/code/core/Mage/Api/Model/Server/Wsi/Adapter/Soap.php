@@ -31,7 +31,7 @@
  * @package    Mage_Api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Api_Model_Server_WSI_Adapter_Soap extends Mage_Api_Model_Server_Adapter_Soap
+class Mage_Api_Model_Server_Wsi_Adapter_Soap extends Mage_Api_Model_Server_Adapter_Soap
 {
     /**
      * Run webservice

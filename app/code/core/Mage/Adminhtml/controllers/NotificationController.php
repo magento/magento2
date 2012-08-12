@@ -39,7 +39,7 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
         $this->_title($this->__('System'))->_title($this->__('Notifications'));
 
         $this->loadLayout()
-            ->_setActiveMenu('system/notification')
+            ->_setActiveMenu('Mage_AdminNotification::system_adminnotification')
             ->_addBreadcrumb(Mage::helper('Mage_AdminNotification_Helper_Data')->__('Messages Inbox'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Messages Inbox'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Notification_Inbox'))
             ->renderLayout();
@@ -162,24 +162,24 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
     {
         switch ($this->getRequest()->getActionName()) {
             case 'markAsRead':
-                $acl = 'system/adminnotification/mark_as_read';
+                $acl = 'Mage_AdminNotification::mark_as_read';
                 break;
 
             case 'massMarkAsRead':
-                $acl = 'system/adminnotification/mark_as_read';
+                $acl = 'Mage_AdminNotification::mark_as_read';
                 break;
 
             case 'remove':
-                $acl = 'system/adminnotification/remove';
+                $acl = 'Mage_AdminNotification::adminnotification_remove';
                 break;
 
             case 'massRemove':
-                $acl = 'system/adminnotification/remove';
+                $acl = 'Mage_AdminNotification::adminnotification_remove';
                 break;
 
             default:
-                $acl = 'system/adminnotification/show_list';
+                $acl = 'Mage_AdminNotification::show_list';
         }
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed($acl);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($acl);
     }
 }

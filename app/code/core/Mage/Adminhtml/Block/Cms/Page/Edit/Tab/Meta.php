@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Meta
         /*
          * Checking if user have permissions to save information
          */
-        if ($this->_isAllowedAction('save')) {
+        if ($this->_isAllowedAction('Mage_Cms::save')) {
             $isElementDisabled = false;
         } else {
             $isElementDisabled = true;
@@ -125,11 +125,11 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Meta
     /**
      * Check permission for passed action
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowedAction($action)
+    protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page/' . $action);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($resourceId);
     }
 }

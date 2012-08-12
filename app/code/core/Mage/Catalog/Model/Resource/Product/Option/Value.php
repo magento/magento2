@@ -44,7 +44,7 @@ class Mage_Catalog_Model_Resource_Product_Option_Value extends Mage_Core_Model_R
     }
 
     /**
-     * Proceeed operations after object is saved
+     * Proceed operations after object is saved
      * Save options store data
      *
      * @param Mage_Core_Model_Abstract $object
@@ -116,7 +116,10 @@ class Mage_Catalog_Model_Resource_Product_Option_Value extends Mage_Core_Model_R
                 foreach ($storeIds as $storeId) {
                     if ($priceType == 'fixed') {
                         $storeCurrency = Mage::app()->getStore($storeId)->getBaseCurrencyCode();
-                        $rate = Mage::getModel('Mage_Directory_Model_Currency')->load($baseCurrency)->getRate($storeCurrency);
+                        /** @var $currencyModel Mage_Directory_Model_Currency */
+                        $currencyModel = Mage::getModel('Mage_Directory_Model_Currency');
+                        $currencyModel->load($baseCurrency);
+                        $rate = $currencyModel->getRate($storeCurrency);
                         if (!$rate) {
                             $rate = 1;
                         }
@@ -177,7 +180,7 @@ class Mage_Catalog_Model_Resource_Product_Option_Value extends Mage_Core_Model_R
             $select = $this->_getReadAdapter()->select()
                 ->from($titleTable, array('option_type_id'))
                 ->where('option_type_id = ?', (int)$object->getId())
-                ->where('store_id = ?', 0);
+                ->where('store_id = ?', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
             $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
 
             if ($optionTypeId) {
@@ -227,8 +230,8 @@ class Mage_Catalog_Model_Resource_Product_Option_Value extends Mage_Core_Model_R
             }
         } else if ($object->getData('scope', 'title')) {
             $where = array(
-                'option_type_id = ?'    => (int)$optionTypeId,
-                'store_id = ?'          => (int)$object->getStoreId()
+                'option_type_id = ?'    => (int) $object->getId(),
+                'store_id = ?'          => (int) $object->getStoreId(),
             );
             $this->_getWriteAdapter()->delete($titleTable, $where);
         }

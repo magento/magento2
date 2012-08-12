@@ -185,6 +185,11 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
     );
 
     /**
+     * @var Mage_Paygate_Model_Authorizenet_Cards
+     */
+    protected $_cardsStorage = null;
+
+    /**
      * Check method for processing with base currency
      *
      * @param string $currencyCode

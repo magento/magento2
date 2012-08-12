@@ -29,6 +29,12 @@
     <modules>
         <Mage_Usa>
             <version>1.6.0.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Sales/>
+                <Mage_Shipping/>
+            </depends>
         </Mage_Usa>
     </modules>
     <global>

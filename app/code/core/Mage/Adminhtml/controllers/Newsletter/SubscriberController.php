@@ -45,7 +45,7 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
 
         $this->loadLayout();
 
-        $this->_setActiveMenu('newsletter/subscriber');
+        $this->_setActiveMenu('Mage_Newsletter::newsletter_subscriber');
 
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter'));
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Subscribers'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Subscribers'));
@@ -137,6 +137,6 @@ class Mage_Adminhtml_Newsletter_SubscriberController extends Mage_Adminhtml_Cont
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('newsletter/subscriber');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Newsletter::subscriber');
     }
 }

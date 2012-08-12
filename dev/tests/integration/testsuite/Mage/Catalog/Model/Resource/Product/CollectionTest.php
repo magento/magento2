@@ -41,6 +41,11 @@ class Mage_Catalog_Model_Resource_Product_CollectionTest extends PHPUnit_Framewo
         $this->_collection = new Mage_Catalog_Model_Resource_Product_Collection;
     }
 
+    protected function tearDown()
+    {
+        $this->_collection = null;
+    }
+
     /**
      * @dataProvider setOrderDataProvider
      */

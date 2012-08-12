@@ -43,8 +43,12 @@ class Mage_Bundle_ProductControllerTest extends Magento_Test_TestCase_Controller
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Bundle Product', $responseBody);
         $this->assertContains('In stock', $responseBody);
-        $this->assertContains('Add to Cart', $responseBody);
+        $addToCartCount = substr_count($responseBody, '<span>Add to Cart</span>');
+        $this->assertEquals(1, $addToCartCount, '"Add to Cart" button should appear on the page exactly once.');
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
+        $this->assertNotContains('class="options-container-big"', $responseBody);
+        $this->assertStringMatchesFormat('%Aclass="product-options" id="product-options-wrapper">%A'
+            . 'for="bundle-option-%Avar DateOption = Class.create({%A', $responseBody);
     }
 }

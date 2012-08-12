@@ -52,7 +52,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($this->__('Customers'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/customer')
+            ->_setActiveMenu('Mage_Tag::report_tags_customer')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Tag_Customer'))
             ->renderLayout();
@@ -89,7 +89,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($this->__('Products'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/product')
+            ->_setActiveMenu('Mage_Tag::report_tags_product')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Poducts Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Products Report'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Tag_Product'))
             ->renderLayout();
@@ -127,7 +127,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($this->__('Popular'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/popular')
+            ->_setActiveMenu('Mage_Tag::report_tags_popular')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Popular Tags'), Mage::helper('Mage_Reports_Helper_Data')->__('Popular Tags'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Tag_Popular'))
             ->renderLayout();
@@ -167,7 +167,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($detailBlock->getHeaderText());
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/customerDetail')
+            ->_setActiveMenu('Mage_Tag::report_tags')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Customers Report'))
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Customer Tags'), Mage::helper('Mage_Reports_Helper_Data')->__('Customer Tags'))
             ->_addContent($detailBlock)
@@ -208,7 +208,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($detailBlock->getHeaderText());
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/productDetail')
+            ->_setActiveMenu('Mage_Tag::report_tags')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Products Report'), Mage::helper('Mage_Reports_Helper_Data')->__('Products Report'))
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Product Tags'), Mage::helper('Mage_Reports_Helper_Data')->__('Product Tags'))
             ->_addContent($detailBlock)
@@ -249,7 +249,7 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
              ->_title($detailBlock->getHeaderText());
 
         $this->_initAction()
-            ->_setActiveMenu('report/tag/tagDetail')
+            ->_setActiveMenu('Mage_Tag::report_tags')
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Popular Tags'), Mage::helper('Mage_Reports_Helper_Data')->__('Popular Tags'))
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Tag Detail'), Mage::helper('Mage_Reports_Helper_Data')->__('Tag Detail'))
             ->_addContent($detailBlock)
@@ -284,19 +284,19 @@ class Mage_Adminhtml_Report_TagController extends Mage_Adminhtml_Controller_Acti
     {
         switch ($this->getRequest()->getActionName()) {
             case 'customer':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/tags/customer');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_customer');
                 break;
             case 'product':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/tags/product');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'productAll':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/tags/product');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags_product');
                 break;
             case 'popular':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/tags/popular');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::popular');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('report/tags');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::tags');
                 break;
         }
     }

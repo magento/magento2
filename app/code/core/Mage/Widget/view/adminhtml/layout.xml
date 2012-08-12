@@ -48,6 +48,7 @@
             <action method="addJs"><file>prototype/window.js</file></action>
             <action method="addCss"><file>prototype/windows/themes/default.css</file></action>
             <action method="addCss"><file>Mage_Core::prototype/magento.css</file></action>
+            <action method="addCss"><file>Mage_Widget::css/styles.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Widget_Block_Adminhtml_Widget_Instance_Edit" name="widget_instance_edit" />

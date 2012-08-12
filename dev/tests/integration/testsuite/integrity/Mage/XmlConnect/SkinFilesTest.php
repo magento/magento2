@@ -39,12 +39,12 @@ class Integrity_Mage_XmlConnect_SkinFilesTest extends PHPUnit_Framework_TestCase
     public function testSharedSkinFiles($file)
     {
         $params = array(
-            '_area'    => 'adminhtml',
-            '_package' => 'default',
-            '_theme'   => 'default',
+            'area'    => 'adminhtml',
+            'package' => 'default',
+            'theme'   => 'default',
         );
         $this->assertFileExists(Mage::getDesign()->getSkinFile($file, $params));
-        $params['_area'] = 'frontend';
+        $params['area'] = 'frontend';
         $this->assertFileExists(Mage::getDesign()->getSkinFile($file, $params));
     }
 

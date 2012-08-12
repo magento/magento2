@@ -321,7 +321,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
     public function getRobots()
     {
         if (empty($this->_data['robots'])) {
-            $this->_data['robots'] = Mage::getStoreConfig('design/head/default_robots');
+            $this->_data['robots'] = Mage::getStoreConfig('design/search_engine_robots/default_robots');
         }
         return $this->_data['robots'];
     }

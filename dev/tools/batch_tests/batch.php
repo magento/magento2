@@ -26,19 +26,23 @@
  */
 
 $tests = array(
-    '../../tests/unit' => '',
-    '../../tests/static/framework/tests/unit' => '',
-    '../../tests/integration/framework/tests/unit' => '',
-    '../../tests/integration' => '',
-    '../../tests/static' => '',
+    'unit-unit'        => array('../../tests/unit/framework/tests/unit', ''),
+    'unit'             => array('../../tests/unit', ''),
+    'unit-performance' => array('../../tests/performance/framework/tests/unit', ''),
+    'unit-static'      => array('../../tests/static/framework/tests/unit', ''),
+    'unit-integration' => array('../../tests/integration/framework/tests/unit', ''),
+    'integration'      => array('../../tests/integration', ''),
+    'static'           => array('../../tests/static', ''),
 );
 $arguments = getopt('', array('all'));
 if (isset($arguments['all'])) {
-    $tests['../../tests/static'] = ' -c phpunit-all.xml.dist';
+    $tests['integration-integrity'] = array('../../tests/integration', ' testsuite/integrity');
+    $tests['static'][1] = ' -c phpunit-all.xml.dist';
 }
 
 $failures = array();
-foreach ($tests as $dir => $options) {
+foreach ($tests as $row) {
+    list($dir, $options) = $row;
     $dirName = realpath(__DIR__ . '/' . $dir);
     chdir($dirName);
     $command = 'phpunit' . $options;

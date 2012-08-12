@@ -32,7 +32,7 @@
             <controller_front_init_before>
                 <observers>
                     <integration_tests>
-                        <class>Magento_Test_Listener_Annotation_Config</class>
+                        <class>Magento_Test_Event_Magento</class>
                         <method>initFrontControllerBefore</method>
                     </integration_tests>
                 </observers>
@@ -41,5 +41,10 @@
         <rewrites>
             <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
         </rewrites>
+        <dev>
+            <design_fallback>
+                <allow_map_update>0</allow_map_update>
+            </design_fallback>
+        </dev>
     </global>
 </config>

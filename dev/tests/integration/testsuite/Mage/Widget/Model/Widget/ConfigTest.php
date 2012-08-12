@@ -37,6 +37,11 @@ class Mage_Widget_Model_Widget_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Widget_Model_Widget_Config;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * App isolation is enabled, because we change current area and design
      *

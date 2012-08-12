@@ -25,7 +25,7 @@
  */
 
 /**
- * Source model of export formats
+ * Source model of export file formats
  *
  * @category    Mage
  * @package     Mage_ImportExport

@@ -37,7 +37,7 @@ class Mage_Widget_Adminhtml_Widget_InstanceControllerTest extends Mage_Adminhtml
 
     public function testEditAction()
     {
-        $this->dispatch('admin/widget_instance/edit');
+        $this->dispatch('backend/admin/widget_instance/edit');
         $this->assertContains('<option value="Mage_Cms_Block_Widget_Page_Link" selected="selected">',
             $this->getResponse()->getBody()
         );
@@ -45,13 +45,13 @@ class Mage_Widget_Adminhtml_Widget_InstanceControllerTest extends Mage_Adminhtml
 
     public function testBlocksAction()
     {
-        $this->dispatch('admin/widget_instance/blocks');
+        $this->dispatch('backend/admin/widget_instance/blocks');
         $this->assertStringStartsWith('<select name="block" id=""', $this->getResponse()->getBody());
     }
 
     public function testTemplateAction()
     {
-        $this->dispatch('admin/widget_instance/template');
+        $this->dispatch('backend/admin/widget_instance/template');
         $this->assertStringStartsWith('<select name="template" id=""', $this->getResponse()->getBody());
     }
 }

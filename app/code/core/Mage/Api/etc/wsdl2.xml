@@ -31,12 +31,6 @@
                     </restriction>
                 </complexContent>
             </complexType>
-            <complexType name="associativeAnyTypeEntity">
-                <all>
-                    <element name="key" type="xsd:string" />
-                    <element name="value" type="typens:anyType" />
-                </all>
-            </complexType>
             <complexType name="filters">
                 <all>
                     <element name="filter" type="typens:associativeArray" minOccurs="0" />
@@ -53,7 +47,7 @@
             <complexType name="complexFilter">
                 <all>
                     <element name="key" type="xsd:string" />
-                    <element name="value" type="typens:associativeAnyTypeEntity" />
+                    <element name="value" type="typens:associativeEntity" />
                 </all>
             </complexType>
             <complexType name="ArrayOfString">

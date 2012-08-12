@@ -91,9 +91,7 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      */
     public function getPackageTitle($package)
     {
-        if (!isset($this->_data[$package])) {
-            throw new Magento_Exception('Unknown design package "' . $package . '".');
-        }
+        $this->_ensurePackageExists($package);
         return $this->_data[$package]['title'];
     }
 
@@ -120,7 +118,15 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
     public function getParentTheme($package, $theme)
     {
         $this->_ensureThemeExists($package, $theme);
-        return $this->_data[$package]['themes'][$theme]['parent'];
+        $parentTheme = $this->_data[$package]['themes'][$theme]['parent'];
+        if (!$parentTheme) {
+            return null;
+        }
+        $result = explode('/', $parentTheme, 2);
+        if (count($result) > 1) {
+            return $result;
+        }
+        return array($package, $parentTheme);
     }
 
     /**
@@ -136,6 +142,19 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
     {
         $this->_ensureThemeExists($package, $theme);
         return $this->_data[$package]['themes'][$theme]['requirements']['magento_version'];
+    }
+
+    /**
+     * Check whether a package is declared in the configuration
+     *
+     * @param string $package
+     * @throws Magento_Exception
+     */
+    protected function _ensurePackageExists($package)
+    {
+        if (!isset($this->_data[$package])) {
+            throw new Magento_Exception('Unknown design package "' . $package . '".');
+        }
     }
 
     /**

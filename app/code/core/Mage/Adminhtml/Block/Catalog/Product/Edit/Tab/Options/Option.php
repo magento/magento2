@@ -216,9 +216,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option extends Mage_
     public function getOptionValues()
     {
         $optionsArr = array_reverse($this->getProduct()->getOptions(), true);
-//        $optionsArr = $this->getProduct()->getOptions();
 
-        if (!$this->_values) {
+        if (!$this->_values || $this->getIgnoreCaching()) {
             $showPrice = $this->getCanReadPrice();
             $values = array();
             $scope = (int) Mage::app()->getStore()->getConfig(Mage_Core_Model_Store::XML_PATH_PRICE_SCOPE);
@@ -341,5 +340,25 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option extends Mage_
         } elseif ($type == 'fixed') {
             return number_format($value, 2, null, '');
         }
+    }
+
+    /**
+     * Return product grid url for custom options import popup
+     *
+     * @return string
+     */
+    public function getProductGridUrl()
+    {
+        return $this->getUrl('*/*/optionsImportGrid');
+    }
+
+    /**
+     * Return custom options getter URL for ajax queries
+     *
+     * @return string
+     */
+    public function getCustomOptionsUrl()
+    {
+        return $this->getUrl('*/*/customOptions');
     }
 }

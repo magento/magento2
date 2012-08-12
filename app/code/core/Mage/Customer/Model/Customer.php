@@ -30,6 +30,10 @@
  * @category    Mage
  * @package     Mage_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @method int getWebsiteId() getWebsiteId()
+ * @method int getStoreId() getStoreId()
+ * @method string getEmail() getEmail()
  */
 class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
 {
@@ -118,7 +122,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     /**
      * Initialize customer model
      */
-    function _construct()
+    public function _construct()
     {
         $this->_init('Mage_Customer_Model_Resource_Customer');
     }
@@ -139,19 +143,21 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      * @param  string $login
      * @param  string $password
      * @throws Mage_Core_Exception
-     * @return true
+     * @return boolean
      *
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw Mage::exception('Mage_Core', Mage::helper('Mage_Customer_Helper_Data')->__('This account is not confirmed.'),
+            throw Mage::exception('Mage_Core',
+                Mage::helper('Mage_Customer_Helper_Data')->__('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
             );
         }
         if (!$this->validatePassword($password)) {
-            throw Mage::exception('Mage_Core', Mage::helper('Mage_Customer_Helper_Data')->__('Invalid login or password.'),
+            throw Mage::exception('Mage_Core',
+                Mage::helper('Mage_Customer_Helper_Data')->__('Invalid login or password.'),
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
         }
@@ -551,7 +557,9 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
             'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,   // email with confirmation link
         );
         if (!isset($types[$type])) {
-            Mage::throwException(Mage::helper('Mage_Customer_Helper_Data')->__('Wrong transactional account email type'));
+            Mage::throwException(
+                Mage::helper('Mage_Customer_Helper_Data')->__('Wrong transactional account email type')
+            );
         }
 
         if (!$storeId) {
@@ -770,18 +778,19 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
 
     /**
      * Validate customer attribute values.
-     * For existing customer password + confirmation will be validated only when password is set (i.e. its change is requested)
+     * For existing customer password + confirmation will be validated only when password is set
+     * (i.e. its change is requested)
      *
      * @return bool
      */
     public function validate()
     {
         $errors = array();
-        if (!Zend_Validate::is( trim($this->getFirstname()) , 'NotEmpty')) {
+        if (!Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
             $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The first name cannot be empty.');
         }
 
-        if (!Zend_Validate::is( trim($this->getLastname()) , 'NotEmpty')) {
+        if (!Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
             $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The last name cannot be empty.');
         }
 
@@ -790,7 +799,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         }
 
         $password = $this->getPassword();
-        if (!$this->getId() && !Zend_Validate::is($password , 'NotEmpty')) {
+        if (!$this->getId() && !Zend_Validate::is($password, 'NotEmpty')) {
             $errors[] = Mage::helper('Mage_Customer_Helper_Data')->__('The password cannot be empty.');
         }
         if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
@@ -826,7 +835,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      *
      * @return Mage_Customer_Model_Customer
      */
-    function unsetSubscription()
+    public function unsetSubscription()
     {
         if (isset($this->_isSubscribed)) {
             unset($this->_isSubscribed);
@@ -839,16 +848,18 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      *
      * @return Mage_Customer_Model_Customer
      */
-    function cleanAllAddresses() {
+    public function cleanAllAddresses()
+    {
         $this->_addressesCollection = null;
     }
 
     /**
      * Add error
      *
+     * @param $error
      * @return Mage_Customer_Model_Customer
      */
-    function addError($error)
+    public function addError($error)
     {
         $this->_errors[] = $error;
         return $this;
@@ -859,7 +870,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      *
      * @return array
      */
-    function getErrors()
+    public function getErrors()
     {
         return $this->_errors;
     }
@@ -869,7 +880,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      *
      * @return Mage_Customer_Model_Customer
      */
-    function resetErrors()
+    public function resetErrors()
     {
         $this->_errors = array();
         return $this;
@@ -882,14 +893,14 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      * @param string $type
      * @return bool
      */
-    function validateAddress(array $data, $type = 'billing')
+    public function validateAddress(array $data, $type = 'billing')
     {
         $fields = array('city', 'country', 'postcode', 'telephone', 'street1');
         $usca   = array('US', 'CA');
         $prefix = $type ? $type . '_' : '';
 
         if ($data) {
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 if (!isset($data[$prefix . $field])) {
                     return false;
                 }
@@ -1067,13 +1078,17 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      *
      * Stores new reset password link token
      *
+     * @throws Mage_Core_Exception
      * @param string $newResetPasswordLinkToken
      * @return Mage_Customer_Model_Customer
      */
-    public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
+    public function changeResetPasswordLinkToken($newResetPasswordLinkToken)
+    {
         if (!is_string($newResetPasswordLinkToken) || empty($newResetPasswordLinkToken)) {
-            throw Mage::exception('Mage_Core', Mage::helper('Mage_Customer_Helper_Data')->__('Invalid password reset token.'),
-                self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN);
+            throw Mage::exception('Mage_Core',
+                Mage::helper('Mage_Customer_Helper_Data')->__('Invalid password reset token.'),
+                self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
+            );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $newResetPasswordLinkToken);
         return $this;

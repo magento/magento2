@@ -368,7 +368,8 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
         if (!$io->isWriteable($targetDir)) {
             return false;
         }
-        $image = Varien_Image_Adapter::factory('GD2');
+        $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+        $image = Varien_Image_Adapter::factory($adapter);
         $image->open($source);
         $width = $this->getConfigData('resize_width');
         $height = $this->getConfigData('resize_height');

@@ -64,7 +64,7 @@ class Mage_Adminhtml_Sales_Order_StatusController extends Mage_Adminhtml_Control
     public function indexAction()
     {
         $this->_title($this->__('Sales'))->_title($this->__('Order Statuses'));
-        $this->loadLayout()->_setActiveMenu('system')->renderLayout();
+        $this->loadLayout()->_setActiveMenu('Mage_Adminhtml::system')->renderLayout();
     }
 
     /**
@@ -234,6 +234,6 @@ class Mage_Adminhtml_Sales_Order_StatusController extends Mage_Adminhtml_Control
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/order_statuses');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::order_statuses');
     }
 }

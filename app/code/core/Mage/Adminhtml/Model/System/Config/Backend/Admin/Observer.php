@@ -37,14 +37,12 @@ class Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer
             return;
         }
 
-        /** @var $adminSession Mage_Admin_Model_Session */
-        $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+        /** @var $adminSession Mage_Backend_Model_Auth_Session */
+        $adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         $adminSession->unsetAll();
         $adminSession->getCookie()->delete($adminSession->getSessionName());
 
-        $route = ((bool)(string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_USE_CUSTOM_ADMIN_PATH))
-            ? Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_CUSTOM_ADMIN_PATH)
-            : Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
+        $route = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
 
         Mage::app()->getResponse()
             ->setRedirect(Mage::getBaseUrl() . $route)

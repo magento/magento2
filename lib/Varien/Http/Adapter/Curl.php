@@ -151,11 +151,11 @@ class Varien_Http_Adapter_Curl implements Zend_Http_Client_Adapter_Interface
     /**
      * Send request to the remote server
      *
-     * @param string        $method
-     * @param Zend_Uri_Http $url
-     * @param string        $http_ver
-     * @param array         $headers
-     * @param string        $body
+     * @param string $method
+     * @param Zend_Uri_Http|string $url
+     * @param string $http_ver
+     * @param array $headers
+     * @param string $body
      * @return string Request as text
      */
     public function write($method, $url, $http_ver = '1.1', $headers = array(), $body = '')

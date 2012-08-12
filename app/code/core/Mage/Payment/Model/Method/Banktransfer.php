@@ -44,7 +44,7 @@ class Mage_Payment_Model_Method_Banktransfer extends Mage_Payment_Model_Method_A
      * @var string
      */
     protected $_formBlockType = 'Mage_Payment_Block_Form_Banktransfer';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info_Banktransfer';
+    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
 
     /**
      * Get instructions text from config

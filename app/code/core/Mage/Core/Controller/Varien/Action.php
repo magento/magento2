@@ -34,7 +34,7 @@
  * @package    Mage_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Core_Controller_Varien_Action
+abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controller_Varien_DispatchableInterface
 {
     const FLAG_NO_CHECK_INSTALLATION    = 'no-install-check';
     const FLAG_NO_DISPATCH              = 'no-dispatch';
@@ -49,6 +49,8 @@ abstract class Mage_Core_Controller_Varien_Action
     const PARAM_NAME_REFERER_URL        = 'referer_url';
     const PARAM_NAME_BASE64_URL         = 'r64';
     const PARAM_NAME_URL_ENCODED        = 'uenc';
+
+    const XML_PAGE_TYPE_RENDER_INHERITED = 'global/dev/page_type/render_inherited';
 
     /**
      * Request object
@@ -133,13 +135,16 @@ abstract class Mage_Core_Controller_Varien_Action
      * @param Zend_Controller_Response_Abstract $response
      * @param array $invokeArgs
      */
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
-    {
+    public function __construct(Zend_Controller_Request_Abstract $request,
+        Zend_Controller_Response_Abstract $response, array $invokeArgs = array()
+    ) {
         $this->_request = $request;
         $this->_response= $response;
 
         Mage::app()->getFrontController()->setAction($this);
-
+        if (!$this->_currentArea) {
+            $this->_currentArea = isset($invokeArgs['areaCode']) ? $invokeArgs['areaCode'] : null;
+        }
         $this->_construct();
     }
 
@@ -298,10 +303,10 @@ abstract class Mage_Core_Controller_Varien_Action
      */
     public function addActionLayoutHandles()
     {
-        /*
-         * @todo Use addPageLayoutHandles() as soon as page type inheritance declarations are correct
-         */
-        $this->getLayout()->getUpdate()->addHandle($this->getDefaultLayoutHandle());
+        $renderInherited = (string) Mage::app()->getConfig()->getNode(self::XML_PAGE_TYPE_RENDER_INHERITED);
+        if (!$renderInherited || !$this->addPageLayoutHandles()) {
+            $this->getLayout()->getUpdate()->addHandle($this->getDefaultLayoutHandle());
+        }
         return $this;
     }
 
@@ -375,7 +380,7 @@ abstract class Mage_Core_Controller_Varien_Action
 
         // generate blocks from xml layout
         Magento_Profiler::start('layout_generate_blocks');
-        $this->getLayout()->generateBlocks();
+        $this->getLayout()->generateElements();
         Magento_Profiler::stop('layout_generate_blocks');
 
         if(!$this->getFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
@@ -432,6 +437,7 @@ abstract class Mage_Core_Controller_Varien_Action
 
     public function dispatch($action)
     {
+        $this->getRequest()->setDispatched(true);
         try {
             $actionMethodName = $this->getActionMethodName($action);
             if (!method_exists($this, $actionMethodName)) {
@@ -500,6 +506,53 @@ abstract class Mage_Core_Controller_Varien_Action
     }
 
     /**
+     * Start session if it is not restricted
+     *
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    protected function _startSession()
+    {
+        if (!$this->getFlag('', self::FLAG_NO_START_SESSION)) {
+            $checkCookie = in_array($this->getRequest()->getActionName(), $this->_cookieCheckActions)
+                && !$this->getRequest()->getParam('nocookie', false);
+            $cookies = Mage::getSingleton('Mage_Core_Model_Cookie')->get();
+            /** @var $session Mage_Core_Model_Session */
+            $session = Mage::getSingleton('Mage_Core_Model_Session', array('name' => $this->_sessionNamespace))->start();
+
+            if (empty($cookies)) {
+                if ($session->getCookieShouldBeReceived()) {
+                    $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
+                    $session->unsCookieShouldBeReceived();
+                    $session->setSkipSessionIdFlag(true);
+                } elseif ($checkCookie) {
+                    if (isset($_GET[$session->getSessionIdQueryParam()]) && Mage::app()->getUseSessionInUrl()
+                        && $this->_sessionNamespace != Mage_Backend_Controller_ActionAbstract::SESSION_NAMESPACE
+                    ) {
+                        $session->setCookieShouldBeReceived(true);
+                    } else {
+                        $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
+                    }
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Initialize area and design
+     *
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    protected function _initDesign()
+    {
+        $area = Mage::app()->getArea($this->getLayout()->getArea());
+        $area->load();
+        $area->detectDesign($this->getRequest());
+        
+        return $this;
+    }
+
+    /**
      * Dispatch event before action
      *
      * @return void
@@ -523,33 +576,11 @@ abstract class Mage_Core_Controller_Varien_Action
             return;
         }
 
-        if (!$this->getFlag('', self::FLAG_NO_START_SESSION)) {
-            $checkCookie = in_array($this->getRequest()->getActionName(), $this->_cookieCheckActions)
-                && !$this->getRequest()->getParam('nocookie', false);
-            $cookies = Mage::getSingleton('Mage_Core_Model_Cookie')->get();
-            /** @var $session Mage_Core_Model_Session */
-            $session = Mage::getSingleton('Mage_Core_Model_Session', array('name' => $this->_sessionNamespace))->start();
+        // Start session
+        $this->_startSession();
 
-            if (empty($cookies)) {
-                if ($session->getCookieShouldBeReceived()) {
-                    $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
-                    $session->unsCookieShouldBeReceived();
-                    $session->setSkipSessionIdFlag(true);
-                } elseif ($checkCookie) {
-                    if (isset($_GET[$session->getSessionIdQueryParam()]) && Mage::app()->getUseSessionInUrl()
-                        && $this->_sessionNamespace != Mage_Adminhtml_Controller_Action::SESSION_NAMESPACE
-                    ) {
-                        $session->setCookieShouldBeReceived(true);
-                    } else {
-                        $this->setFlag('', self::FLAG_NO_COOKIES_REDIRECT, true);
-                    }
-                }
-            }
-        }
-
-        $area = Mage::app()->getArea($this->getLayout()->getArea());
-        $area->load();
-        $area->detectDesign($this->getRequest());
+        // Load area and initialize design depend on loaded area
+        $this->_initDesign();
 
         if ($this->getFlag('', self::FLAG_NO_COOKIES_REDIRECT)
             && Mage::getStoreConfig('web/browser_capabilities/cookies')
@@ -562,7 +593,16 @@ abstract class Mage_Core_Controller_Varien_Action
             return;
         }
 
+        $this->_firePreDispatchEvents();
+    }
 
+    /**
+     * Fire predispatch events, execute extra logic after predispatch
+     *
+     * @return void
+     */
+    protected function _firePreDispatchEvents()
+    {
         Mage::dispatchEvent('controller_action_predispatch', array('controller_action' => $this));
         Mage::dispatchEvent('controller_action_predispatch_' . $this->getRequest()->getRouteName(),
             array('controller_action' => $this));
@@ -743,7 +783,7 @@ abstract class Mage_Core_Controller_Varien_Action
         /** @var $session Mage_Core_Model_Session */
         $session = Mage::getSingleton('Mage_Core_Model_Session', array('name' => $this->_sessionNamespace));
         if ($session->getCookieShouldBeReceived() && Mage::app()->getUseSessionInUrl()
-            && $this->_sessionNamespace != Mage_Adminhtml_Controller_Action::SESSION_NAMESPACE
+            && $this->_sessionNamespace != Mage_Backend_Controller_ActionAbstract::SESSION_NAMESPACE
         ) {
             $arguments += array('_query' => array(
                 $session->getSessionIdQueryParam() => $session->getSessionId()
@@ -1082,12 +1122,6 @@ abstract class Mage_Core_Controller_Varien_Action
         $contentType = 'application/octet-stream',
         $contentLength = null)
     {
-        $session = Mage::getSingleton('Mage_Admin_Model_Session');
-        if ($session->isFirstPageAfterLogin()) {
-            $this->_redirect($session->getUser()->getStartupPageUrl());
-            return $this;
-        }
-
         $isFile = false;
         $file   = null;
         if (is_array($content)) {
@@ -1116,6 +1150,9 @@ abstract class Mage_Core_Controller_Varien_Action
                 $this->getResponse()->sendHeaders();
 
                 $ioAdapter = new Varien_Io_File();
+                if (!$ioAdapter->fileExists($file)) {
+                    Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('File not found'));
+                }
                 $ioAdapter->open(array('path' => $ioAdapter->dirname($file)));
                 $ioAdapter->streamOpen($file, 'r');
                 while ($buffer = $ioAdapter->streamRead()) {

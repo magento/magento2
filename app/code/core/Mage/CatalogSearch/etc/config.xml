@@ -29,6 +29,11 @@
     <modules>
         <Mage_CatalogSearch>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+            </depends>
         </Mage_CatalogSearch>
     </modules>
     <global>
@@ -89,7 +94,6 @@
         <catalog>
             <seo>
                 <search_terms>1</search_terms>
-                <site_map>1</site_map>
             </seo>
             <search>
                 <min_query_length>1</min_query_length>

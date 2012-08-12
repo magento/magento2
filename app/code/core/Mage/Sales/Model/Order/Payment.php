@@ -451,7 +451,7 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
 
         // register new capture
         if (!$invoice) {
-            if ($this->_isCaptureFinal($amount)) {
+            if ($this->_isSameCurrency() && $this->_isCaptureFinal($amount)) {
                 $invoice = $order->prepareInvoice()->register();
                 $order->addRelatedObject($invoice);
                 $this->setCreatedInvoice($invoice);
@@ -1429,20 +1429,32 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
 
     /**
      * Decide whether authorization transaction may close (if the amount to capture will cover entire order)
+     *
      * @param float $amountToCapture
      * @return bool
      */
     protected function _isCaptureFinal($amountToCapture)
     {
+        $amountPaid = $this->_formatAmount($this->getBaseAmountPaid(), true);
         $amountToCapture = $this->_formatAmount($amountToCapture, true);
         $orderGrandTotal = $this->_formatAmount($this->getOrder()->getBaseGrandTotal(), true);
-        if ($orderGrandTotal == $this->_formatAmount($this->getBaseAmountPaid(), true) + $amountToCapture) {
+        if ($orderGrandTotal == $amountPaid + $amountToCapture) {
             if (false !== $this->getShouldCloseParentTransaction()) {
                 $this->setShouldCloseParentTransaction(true);
             }
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check whether payment currency corresponds to order currency
+     *
+     * @return bool
+     */
+    protected function _isSameCurrency()
+    {
+        return !$this->getCurrencyCode() || $this->getCurrencyCode() == $this->getOrder()->getBaseCurrencyCode();
     }
 
     /**

@@ -192,4 +192,21 @@ class Mage_Sales_Model_Order_Shipment_Track extends Mage_Sales_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * Add data to the object.
+     *
+     * Retains previous data in the object.
+     *
+     * @param array $data
+     * @return Mage_Sales_Model_Order_Shipment_Track
+     */
+    public function addData(array $data)
+    {
+        if (array_key_exists('number', $data)) {
+            $this->setNumber($data['number']);
+            unset($data['number']);
+        }
+        return parent::addData($data);
+    }
 }

@@ -28,6 +28,8 @@
 /**
  * EAV Entity attribute model
  *
+ * @method Mage_Eav_Model_Entity_Attribute setOption($value)
+ *
  * @category   Mage
  * @package    Mage_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
@@ -56,7 +58,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     protected $_cacheTag    = 'EAV_ATTRIBUTE';
 
     /**
-     * Retreive default attribute backend model by attribute code
+     * Retrieve default attribute backend model by attribute code
      *
      * @return string
      */
@@ -80,7 +82,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive default attribute frontend model
+     * Retrieve default attribute frontend model
      *
      * @return string
      */
@@ -90,7 +92,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive default attribute source model
+     * Retrieve default attribute source model
      *
      * @return string
      */
@@ -201,8 +203,8 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     /**
      * Detect backend storage type using frontend input type
      *
-     * @return string backend_type field value
      * @param string $type frontend_input field value
+     * @return string backend_type field value
      */
     public function getBackendTypeByInput($type)
     {
@@ -230,6 +232,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
                 break;
 
             case 'price':
+            case 'weight':
                 $field = 'decimal';
                 break;
         }
@@ -240,8 +243,8 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     /**
      * Detect default value using frontend input type
      *
-     * @return string default_value field value
      * @param string $type frontend_input field name
+     * @return string default_value field value
      */
     public function getDefaultValueByInput($type)
     {
@@ -258,6 +261,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
             case 'text':
             case 'price':
             case 'image':
+            case 'weight':
                 $field = 'default_value_text';
                 break;
 
@@ -278,7 +282,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive attribute codes by frontend type
+     * Retrieve attribute codes by frontend type
      *
      * @param string $type
      * @return array
@@ -321,5 +325,22 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
             }
         }
         return $this->getFrontendLabel();
+    }
+
+    /**
+     * Get attribute sort weight
+     *
+     * @param int $setId
+     * @return float
+     */
+    public function getSortWeight($setId)
+    {
+        $groupSortWeight = isset($this->_data['attribute_set_info'][$setId]['group_sort'])
+            ? (float) $this->_data['attribute_set_info'][$setId]['group_sort'] * 1000
+            : 0.0;
+        $sortWeight = isset($this->_data['attribute_set_info'][$setId]['sort'])
+            ? (float)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
+            : 0.0;
+        return $groupSortWeight + $sortWeight;
     }
 }

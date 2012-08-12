@@ -29,8 +29,8 @@
  */
 class Mage_DesignEditor_Model_Observer
 {
-    const PAGE_HANDLE = 'design_editor_page';
-    const TOOLBAR_HANDLE = 'design_editor_toolbar';
+    const PAGE_HANDLE =             'design_editor_page';
+    const TOOLBAR_HANDLE =          'design_editor_toolbar';
 
     /**
      * Renderer for wrapping html to be shown at frontend
@@ -64,11 +64,15 @@ class Mage_DesignEditor_Model_Observer
         if (!$this->_getSession()->isDesignEditorActive()) {
             return;
         }
-        $layout = $observer->getEvent()->getLayout();
-        if (in_array('ajax_index', $layout->getUpdate()->getHandles())) {
-            $layout->getUpdate()->addHandle(self::PAGE_HANDLE);
+
+        /** @var $update Mage_Core_Model_Layout_Update */
+        $update = $observer->getEvent()->getLayout()->getUpdate();
+        $handles = $update->getHandles();
+        $handle = reset($handles);
+        if ($handle && $update->getPageHandleType($handle) == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
+            $update->addHandle(self::PAGE_HANDLE);
         }
-        $layout->getUpdate()->addHandle(self::TOOLBAR_HANDLE);
+        $update->addHandle(self::TOOLBAR_HANDLE);
     }
 
     /**
@@ -123,14 +127,12 @@ class Mage_DesignEditor_Model_Observer
         }
 
         if (!$this->_wrappingRenderer) {
-            $this->_wrappingRenderer = Mage::getModel('Mage_Core_Block_Template', array(
-                'template' => 'Mage_DesignEditor::wrapping.phtml'
+            $this->_wrappingRenderer = Mage::getModel('Mage_DesignEditor_Block_Template', array(
+                'template' => 'wrapping.phtml'
             ));
         }
 
         $event = $observer->getEvent();
-        /** @var $structure Mage_Core_Model_Layout_Structure */
-        $structure = $event->getData('structure');
         /** @var $layout Mage_Core_Model_Layout */
         $layout = $event->getData('layout');
         $elementName = $event->getData('element_name');
@@ -138,17 +140,15 @@ class Mage_DesignEditor_Model_Observer
         $transport = $event->getData('transport');
 
         $block = $layout->getBlock($elementName);
-        $isVdeToolbar = ($block && 0 === strpos(get_class($block), 'Mage_DesignEditor_Block_'));
-        $isDraggable = $structure->isManipulationAllowed($elementName) && !$isVdeToolbar;
-
+        $isVde = ($block && 0 === strpos(get_class($block), 'Mage_DesignEditor_Block_'));
+        $isDraggable = $layout->isManipulationAllowed($elementName) && !$isVde;
         $isContainer = $layout->isContainer($elementName);
-        $elementTitle = $isContainer ? $structure->getElementAttribute($elementName, 'label') : $elementName;
 
         if ($isDraggable || $isContainer) {
             $elementId = 'vde_element_' . rtrim(strtr(base64_encode($elementName), '+/', '-_'), '=');
             $this->_wrappingRenderer->setData(array(
                 'element_id'    => $elementId,
-                'element_title' => $elementTitle,
+                'element_title' => $layout->getElementProperty($elementName, 'label') ?: $elementName,
                 'element_html'  => $transport->getData('output'),
                 'is_draggable'  => $isDraggable,
                 'is_container'  => $isContainer,

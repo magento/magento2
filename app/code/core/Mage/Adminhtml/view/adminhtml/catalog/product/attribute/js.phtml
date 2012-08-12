@@ -320,6 +320,41 @@ function updateRequriedOptions()
     }
 }
 
+function saveAttributeInNewSet(promptMessage)
+{
+    var newAttributeSetName = prompt(promptMessage, '');
+
+    if (newAttributeSetName == null) {
+        return;
+    }
+
+    var rules = ['required-entry', 'validate-no-html-tags'], validator;
+    for (var i = 0; i < rules.length; i++) {
+        validator = Validation.get(rules[i]);
+        if (!validator.test(newAttributeSetName)) {
+            alert(validator.error);
+            return;
+        }
+    }
+
+    var newAttributeSetNameInputId = 'new_attribute_set_name';
+
+    if ($(newAttributeSetNameInputId)) {
+        $(newAttributeSetNameInputId).value = newAttributeSetName;
+    } else {
+        $('edit_form').insert({
+            top: new Element('input', {
+                type: 'hidden',
+                id: newAttributeSetNameInputId,
+                name: 'new_attribute_set_name',
+                value: newAttributeSetName
+            })
+        });
+    }
+
+    saveAttribute();
+}
+
 if($('frontend_input')){
     Event.observe($('frontend_input'), 'change', updateRequriedOptions);
     Event.observe($('frontend_input'), 'change', bindAttributeInputType);

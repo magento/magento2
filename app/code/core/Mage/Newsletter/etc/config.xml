@@ -29,6 +29,14 @@
     <modules>
         <Mage_Newsletter>
             <version>1.6.0.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Core/>
+                <Mage_Customer/>
+                <Mage_Eav/>
+                <Mage_Widget/>
+            </depends>
         </Mage_Newsletter>
     </modules>
     <global>

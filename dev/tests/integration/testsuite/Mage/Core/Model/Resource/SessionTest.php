@@ -37,6 +37,11 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Resource_Session();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testHasConnection()
     {
         $this->assertTrue($this->_model->hasConnection());

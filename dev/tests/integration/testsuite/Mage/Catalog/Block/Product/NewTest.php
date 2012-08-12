@@ -42,6 +42,11 @@ class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase
         $this->_block = new Mage_Catalog_Block_Product_New;
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     public function testGetCacheKeyInfo()
     {
         $info = $this->_block->getCacheKeyInfo();

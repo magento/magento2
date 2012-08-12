@@ -121,7 +121,7 @@ class Mage_Sendfriend_Model_Sendfriend extends Mage_Core_Model_Abstract
         );
 
         $mailTemplate->setDesignConfig(array(
-            'area'  => 'frontend',
+            'area'  => Mage_Core_Model_App_Area::AREA_FRONTEND,
             'store' => Mage::app()->getStore()->getId()
         ));
 

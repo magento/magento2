@@ -44,8 +44,15 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Mage::getConfig()->setModuleDir('Mage_Core', 'locale', dirname(__FILE__) . '/_files/Mage/Core/locale');
+        Mage::getConfig()->setModuleDir('Mage_Catalog', 'locale', dirname(__FILE__) . '/_files/Mage/Catalog/locale');
         $this->_model = new Mage_Core_Model_Translate();
         $this->_model->init('frontend');
+    }
+
+    protected function tearDown()
+    {
+        $this->_model = null;
     }
 
     public function testGetModulesConfig()
@@ -141,6 +148,39 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
                 new Mage_Core_Model_Translate_Expr('text_with_no_translation'),
                 'text_with_no_translation'
             )
+        );
+    }
+
+    /**
+     * @magentoConfigFixture global/locale/inheritance/en_AU en_UK
+     * @magentoConfigFixture global/locale/inheritance/en_UK en_US
+     * @dataProvider translateWithLocaleInheritanceDataProvider
+     */
+    public function testTranslateWithLocaleInheritance($inputText, $expectedTranslation)
+    {
+        $model = new Mage_Core_Model_Translate();
+        $model->setLocale('en_AU');
+        $model->init('frontend');
+        $this->assertEquals($expectedTranslation, $model->translate(array($inputText)));
+    }
+
+    public function translateWithLocaleInheritanceDataProvider()
+    {
+        return array(
+            array(
+                new Mage_Core_Model_Translate_Expr(
+                    'Text with different translation on different modules',
+                    'Mage_Core'
+                ),
+                'Text translation by Mage_Core module in en_UK'
+            ),
+            array(
+                new Mage_Core_Model_Translate_Expr(
+                    'Original value for Mage_Core module',
+                    'Mage_Core'
+                ),
+                'Translated value for Mage_Core module in en_AU'
+            ),
         );
     }
 

@@ -102,10 +102,8 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
             Mage::dispatchEvent('adminhtml_block_system_config_init_tab_sections_before', array('section' => $section));
             $hasChildren = $configFields->hasChildren($section, $websiteCode, $storeCode);
 
-            //$code = $section->getPath();
             $code = $section->getName();
-
-            $sectionAllowed = $this->checkSectionPermissions($code);
+            $sectionAllowed = $this->checkSectionPermissions($section->resource);
             if ((empty($current) && $sectionAllowed)) {
 
                 $current = $code;
@@ -205,8 +203,8 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         $curWebsite = $this->getRequest()->getParam('website');
         $curStore   = $this->getRequest()->getParam('store');
 
-        $storeModel = Mage::getSingleton('Mage_Adminhtml_Model_System_Store');
-        /* @var $storeModel Mage_Adminhtml_Model_System_Store */
+        $storeModel = Mage::getSingleton('Mage_Core_Model_System_Store');
+        /* @var $storeModel Mage_Core_Model_System_Store */
 
         $url = Mage::getModel('Mage_Adminhtml_Model_Url');
 
@@ -317,23 +315,23 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
     /**
      * Enter description here...
      *
-     * @param string $code
+     * @param string $aclResourceId
      * @return boolean
      */
-    public function checkSectionPermissions($code=null)
+    public function checkSectionPermissions($aclResourceId=null)
     {
         static $permissions;
 
-        if (!$code or trim($code) == "") {
+        if (!$aclResourceId or trim($aclResourceId) == "") {
             return false;
         }
 
         if (!$permissions) {
-            $permissions = Mage::getSingleton('Mage_Admin_Model_Session');
+            $permissions = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
 
         $showTab = false;
-        if ( $permissions->isAllowed('system/config/'.$code) ) {
+        if ( $permissions->isAllowed($aclResourceId) ) {
             $showTab = true;
         }
         return $showTab;

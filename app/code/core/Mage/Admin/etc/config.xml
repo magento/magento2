@@ -29,24 +29,11 @@
     <modules>
         <Mage_Admin>
             <version>1.6.1.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+               <Mage_Core/>
+            </depends>
         </Mage_Admin>
     </modules>
-    <global>
-        <resources>
-            <admin_setup>
-                <setup>
-                    <module>Mage_Admin</module>
-                </setup>
-            </admin_setup>
-        </resources>
-    </global>
-    <default>
-        <admin>
-            <emails>
-                <forgot_email_template>admin_emails_forgot_email_template</forgot_email_template>
-                <forgot_email_identity>general</forgot_email_identity>
-                <password_reset_link_expiration_period>1</password_reset_link_expiration_period>
-            </emails>
-        </admin>
-    </default>
 </config>

@@ -121,12 +121,12 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      */
     public function getTemplateFile()
     {
-        $params = array('_module' => $this->getModuleName());
+        $params = array('module' => $this->getModuleName());
         $area = $this->getArea();
         if ($area) {
-            $params['_area'] = $area;
+            $params['area'] = $area;
         }
-        $templateName = Mage::getDesign()->getTemplateFilename($this->getTemplate(), $params);
+        $templateName = Mage::getDesign()->getFilename($this->getTemplate(), $params);
         return $templateName;
     }
 

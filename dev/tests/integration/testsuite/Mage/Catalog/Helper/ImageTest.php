@@ -95,6 +95,11 @@ class Mage_Catalog_Helper_ImageTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Catalog_Helper_Image;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     /**
      * init()
      * __toString()

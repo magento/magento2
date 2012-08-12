@@ -42,6 +42,11 @@ class Mage_Bundle_Model_ProductTest extends PHPUnit_Framework_TestCase
         $this->_model->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_BUNDLE);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetTypeId()
     {
         $this->assertEquals(Mage_Catalog_Model_Product_Type::TYPE_BUNDLE, $this->_model->getTypeId());

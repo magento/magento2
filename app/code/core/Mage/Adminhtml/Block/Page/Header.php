@@ -41,17 +41,17 @@ class Mage_Adminhtml_Block_Page_Header extends Mage_Adminhtml_Block_Template
 
     public function getHomeLink()
     {
-        return $this->getUrl('adminhtml');
+        return Mage::helper('Mage_Backend_Helper_Data')->getHomePageUrl();
     }
 
     public function getUser()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->getUser();
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser();
     }
 
     public function getLogoutLink()
     {
-        return $this->getUrl('adminhtml/index/logout');
+        return $this->getUrl('adminhtml/auth/logout');
     }
 
     /**

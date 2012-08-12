@@ -325,7 +325,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
             $miscParams[] = $this->getWatermarkImageOpacity();
             $miscParams[] = $this->getWatermarkPosition();
             $miscParams[] = $this->getWatermarkWidth();
-            $miscParams[] = $this->getWatermarkHeigth();
+            $miscParams[] = $this->getWatermarkHeight();
         }
 
         $path[] = md5(implode('_', $miscParams));
@@ -360,12 +360,9 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
      */
     public function getImageProcessor()
     {
-        if( !$this->_processor ) {
-//            var_dump($this->_checkMemory());
-//            if (!$this->_checkMemory()) {
-//                $this->_baseFile = null;
-//            }
-            $this->_processor = new Varien_Image($this->getBaseFile());
+        if (!$this->_processor) {
+            $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+            $this->_processor = new Varien_Image($this->getBaseFile(), $adapter);
         }
         $this->_processor->keepAspectRatio($this->_keepAspectRatio);
         $this->_processor->keepFrame($this->_keepFrame);
@@ -445,7 +442,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         if ($width)
             $this->setWatermarkWidth($width);
         if ($heigth)
-            $this->setWatermarkHeigth($heigth);
+            $this->setWatermarkHeight($heigth);
         if ($imageOpacity)
             $this->setImageOpacity($imageOpacity);
 
@@ -456,7 +453,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
                 ->setWatermarkPosition( $this->getWatermarkPosition() )
                 ->setWatermarkImageOpacity( $this->getWatermarkImageOpacity() )
                 ->setWatermarkWidth( $this->getWatermarkWidth() )
-                ->setWatermarkHeigth( $this->getWatermarkHeigth() )
+                ->setWatermarkHeight( $this->getWatermarkHeight() )
                 ->watermark($filePath);
         }
 
@@ -493,11 +490,6 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
         }
 
         return $url;
-    }
-
-    public function push()
-    {
-        $this->getImageProcessor()->display();
     }
 
     /**
@@ -633,7 +625,7 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
     {
         if( is_array($size) ) {
             $this->setWatermarkWidth($size['width'])
-                ->setWatermarkHeigth($size['heigth']);
+                ->setWatermarkHeight($size['heigth']);
         }
         return $this;
     }
@@ -666,18 +658,18 @@ class Mage_Catalog_Model_Product_Image extends Mage_Core_Model_Abstract
      * @param int $heigth
      * @return Mage_Catalog_Model_Product_Image
      */
-    public function setWatermarkHeigth($heigth)
+    public function setWatermarkHeight($heigth)
     {
         $this->_watermarkHeigth = $heigth;
         return $this;
     }
 
     /**
-     * Get watermark heigth
+     * Get watermark height
      *
      * @return string
      */
-    public function getWatermarkHeigth()
+    public function getWatermarkHeight()
     {
         return $this->_watermarkHeigth;
     }

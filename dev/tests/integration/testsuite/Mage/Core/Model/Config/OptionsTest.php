@@ -57,6 +57,11 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Config_Options;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testConstruct()
     {
         $data = $this->_model->getData();
@@ -89,7 +94,6 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getDesignDir
      * @covers Mage_Core_Model_Config_Options::getEtcDir
      * @covers Mage_Core_Model_Config_Options::getLibDir
-     * @covers Mage_Core_Model_Config_Options::getLocaleDir
      * @covers Mage_Core_Model_Config_Options::getMediaDir
      * @covers Mage_Core_Model_Config_Options::getSysTmpDir
      * @covers Mage_Core_Model_Config_Options::getVarDir
@@ -99,25 +103,38 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getSessionDir
      * @covers Mage_Core_Model_Config_Options::getUploadDir
      * @covers Mage_Core_Model_Config_Options::getExportDir
+     * @covers Mage_Core_Model_Config_Options::getSkinDir
+     * @dataProvider getGettersDataProvider
+     * @param string $method
+     * @param string $message
      */
-    public function testGetters()
+    public function testGetters($method, $message)
     {
-        $this->assertTrue(is_dir($this->_model->getAppDir()), "App directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getBaseDir()), "Base directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getCodeDir()), "Code directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getDesignDir()), "Design directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getEtcDir()), "Etc directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getLibDir()), "Lib directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getLocaleDir()), "Locale directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getMediaDir()), "Media directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getSysTmpDir()), "System temporary directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getVarDir()), "Var directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getTmpDir()), "Temporary directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getCacheDir()), "Cache directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getLogDir()), "Log directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getSessionDir()), "Session directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getUploadDir()), "Upload directory does not exist.");
-        $this->assertTrue(is_dir($this->_model->getExportDir()), "Export directory does not exist.");
+        $this->assertTrue(is_dir($this->_model->$method()), sprintf($message, $this->_model->$method()));
+    }
+
+    /**
+     * @return array
+     */
+    public function getGettersDataProvider()
+    {
+        return array(
+            array('getAppDir', 'App directory %s does not exist.'),
+            array('getBaseDir', 'Base directory %s does not exist.'),
+            array('getCodeDir', 'Code directory %s does not exist.'),
+            array('getDesignDir', 'Design directory %s does not exist.'),
+            array('getEtcDir', 'Etc directory %s does not exist.'),
+            array('getLibDir', 'Lib directory %s does not exist.'),
+            array('getMediaDir', 'Media directory %s does not exist.'),
+            array('getSysTmpDir', 'System temporary directory %s does not exist.'),
+            array('getVarDir', 'Var directory %s does not exist.'),
+            array('getTmpDir', 'Temporary directory %s does not exist.'),
+            array('getCacheDir', 'Cache directory %s does not exist.'),
+            array('getLogDir', 'Log directory does %s not exist.'),
+            array('getSessionDir', 'Session directory %s does not exist.'),
+            array('getUploadDir', 'Upload directory %s does not exist.'),
+            array('getExportDir', 'Export directory %s does not exist.'),
+        );
     }
 
     public function testCreateDirIfNotExists()

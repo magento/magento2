@@ -50,18 +50,6 @@ Customer account home dashboard layout
 
     </customer_account_index>
 
-
-<!--
-Product reviews page (?)
--->
-
-    <reviews>
-        <!-- Mage_Review -->
-        <reference name="root">
-            <action method="setTemplate"><template>2columns-left.phtml</template></action>
-        </reference>
-    </reviews>
-
 <!--
 Product reviews page
 -->
@@ -89,7 +77,7 @@ Product reviews page
                         </block>
                     </container>
                 </block>
-                <block type="Mage_Catalog_Block_Product_View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
+                <block type="Mage_Catalog_Block_Product_View" name="product.tierprices" as="tierprices" template="Mage_Catalog::product/view/tierprices.phtml"/>
                 <block type="Mage_Core_Block_Template" name="product.info.other" as="other" template="Mage_Review::product/view/other.phtml"/>
                 <block type="Mage_Page_Block_Html_Pager" name="product_review_list.toolbar" />
                 <block type="Mage_Core_Block_Template" name="product_review_list.count" template="Mage_Review::product/view/count.phtml" />

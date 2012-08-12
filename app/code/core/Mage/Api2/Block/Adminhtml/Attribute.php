@@ -40,7 +40,7 @@ class Mage_Api2_Block_Adminhtml_Attribute extends Mage_Adminhtml_Block_Widget_Gr
     {
         parent::__construct();
 
-        $this->_blockGroup = 'api2';
+        $this->_blockGroup = 'Mage_Api2';
         $this->_controller = 'adminhtml_attribute';
         $this->_headerText = $this->__('REST Attributes');
         $this->_removeButton('add');

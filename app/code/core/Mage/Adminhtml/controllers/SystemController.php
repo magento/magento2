@@ -36,7 +36,7 @@ class Mage_Adminhtml_SystemController extends Mage_Adminhtml_Controller_Action
     public function indexAction()
     {
         $this->loadLayout();
-        $this->_setActiveMenu('system');
+        $this->_setActiveMenu('Mage_Adminhtml::system');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'));
         $this->renderLayout();
     }
@@ -52,6 +52,6 @@ class Mage_Adminhtml_SystemController extends Mage_Adminhtml_Controller_Action
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::system');
     }
 }

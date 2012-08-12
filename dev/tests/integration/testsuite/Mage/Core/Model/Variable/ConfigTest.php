@@ -37,6 +37,11 @@ class Mage_Core_Model_Variable_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Core_Model_Variable_Config;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetWysiwygJsPluginSrc()
     {
         $src = $this->_model->getWysiwygJsPluginSrc();

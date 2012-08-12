@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_Cms_Page extends Mage_Adminhtml_Block_Widget_Grid_Con
 
         parent::__construct();
 
-        if ($this->_isAllowedAction('save')) {
+        if ($this->_isAllowedAction('Mage_Cms::save')) {
             $this->_updateButton('add', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Add New Page'));
         } else {
             $this->_removeButton('add');
@@ -56,12 +56,12 @@ class Mage_Adminhtml_Block_Cms_Page extends Mage_Adminhtml_Block_Widget_Grid_Con
     /**
      * Check permission for passed action
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowedAction($action)
+    protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/page/' . $action);
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($resourceId);
     }
 
 }

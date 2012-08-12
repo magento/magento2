@@ -27,45 +27,61 @@
 
 class Mage_Rss_OrderControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
-    public function testNewActionNonLoggedUser()
+    /**
+     * Reuse URI for "new" action
+     */
+    const NEW_ORDER_URI = 'rss/order/new';
+
+    public function testNewActionAuthorizationFailed()
     {
-        $this->markTestIncomplete('Incomplete until Mage_Core_Helper_Http stops exiting script for non-logged user');
-        $this->dispatch('rss/order/new/');
+        $this->dispatch(self::NEW_ORDER_URI);
+        $this->assertHeaderPcre('Http/1.1', '/^401 Unauthorized$/');
     }
 
-    public function testNewActionLoggedUser()
+    /**
+     * @magentoDataFixture Mage/Sales/_files/order.php
+     */
+    public function testNewAction()
     {
-        $admin = new Mage_Admin_Model_User;
-        $admin->loadByUsername(Magento_Test_Bootstrap::ADMIN_NAME);
-        $session = Mage::getSingleton('Mage_Rss_Model_Session');
-        $session->setAdmin($admin);
+        $this->getRequest()->setServer(array(
+            'PHP_AUTH_USER' => Magento_Test_Bootstrap::ADMIN_NAME,
+            'PHP_AUTH_PW' => Magento_Test_Bootstrap::ADMIN_PASSWORD
+        ));
+        $this->dispatch(self::NEW_ORDER_URI);
+        $this->assertHeaderPcre('Content-Type', '/text\/xml/');
+        $this->assertContains('#100000001', $this->getResponse()->getBody());
+    }
 
-        $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
-        $adminSession->setUpdatedAt(time())
-            ->setUser($admin);
+    public function testNotLoggedIn()
+    {
+        $this->dispatch(self::NEW_ORDER_URI);
+        $this->assertHeaderPcre('Http/1.1', '/^401 Unauthorized$/');
+    }
 
-        $this->dispatch('rss/order/new/');
+    /**
+     * @param string $login
+     * @param string $password
+     * @dataProvider invalidAccessDataProvider
+     * @magentoDataFixture Mage/User/_files/dummy_user.php
+     * @covers Mage_Rss_OrderController::authenticateAndAuthorizeAdmin
+     */
+    public function testInvalidAccess($login, $password)
+    {
+        $this->getRequest()->setServer(array('PHP_AUTH_USER' => $login, 'PHP_AUTH_PW' => $password));
+        $this->dispatch(self::NEW_ORDER_URI);
+        $this->assertHeaderPcre('Http/1.1', '/^401 Unauthorized$/');
+    }
 
-        $body = $this->getResponse()->getBody();
-        $this->assertNotEmpty($body);
-
-        $response = Mage::app()->getResponse();
-        $code = $response->getHttpResponseCode();
-        $this->assertFalse(($code >= 300) && ($code < 400));
-
-        $xmlContentType = false;
-        $headers = $response->getHeaders();
-        foreach ($headers as $header) {
-            if ($header['name'] != 'Content-Type') {
-                continue;
-            }
-            if (strpos($header['value'], 'text/xml') !== false) {
-                $xmlContentType = true;
-            }
-        }
-        $this->assertTrue($xmlContentType, 'Rss document should output xml header');
-
-        $body = $response->getBody();
-        $this->assertContains('<rss', $body);
+    /**
+     * @return array
+     */
+    public function invalidAccessDataProvider()
+    {
+        return array(
+            'no login' => array('', Magento_Test_Bootstrap::ADMIN_PASSWORD),
+            'no password' => array(Magento_Test_Bootstrap::ADMIN_NAME, ''),
+            'no login and password' => array('', ''),
+            'user with inappropriate ACL' => array('dummy_username', 'dummy_password1'),
+        );
     }
 }

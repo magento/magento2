@@ -41,6 +41,11 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_
         $this->_block = $layout->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion');
     }
 
+    protected function tearDown()
+    {
+        $this->_block = null;
+    }
+
     /**
      * @magentoDataFixture Mage/Customer/_files/customer.php
      */

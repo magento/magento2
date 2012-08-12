@@ -37,6 +37,11 @@ class Mage_Widget_Model_Widget_InstanceTest extends PHPUnit_Framework_TestCase
         $this->_model = new Mage_Widget_Model_Widget_Instance;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testSetGetType()
     {
         $this->assertEmpty($this->_model->getType());

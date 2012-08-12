@@ -33,7 +33,7 @@
  * @method Mage_Api2_Model_Acl_Global_Role getRole()
  * @method Mage_Api2_Block_Adminhtml_Roles_Tab_Users setRole(Mage_Api2_Model_Acl_Global_Role $role)
  * @method Mage_Api2_Block_Adminhtml_Roles_Tab_Users setUsers(array $users)
- * @method Mage_Admin_Model_Resource_User_Collection getCollection()
+ * @method Mage_User_Model_Resource_User_Collection getCollection()
  */
 class Mage_Api2_Block_Adminhtml_Roles_Tab_Users extends Mage_Adminhtml_Block_Widget_Grid
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
@@ -59,8 +59,8 @@ class Mage_Api2_Block_Adminhtml_Roles_Tab_Users extends Mage_Adminhtml_Block_Wid
      */
     protected function _prepareCollection()
     {
-        /** @var $collection Mage_Admin_Model_Resource_User_Collection */
-        $collection = Mage::getModel('Mage_Admin_Model_User')->getCollection();
+        /** @var $collection Mage_User_Model_Resource_User_Collection */
+        $collection = Mage::getModel('Mage_User_Model_User')->getCollection();
         $collection->getSelect()->joinLeft(
             array('acl' => $collection->getTable('api2_acl_user')),
             'acl.admin_id = main_table.user_id',

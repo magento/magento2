@@ -25,42 +25,12 @@
  */
 
 /**
- * Checkbox grid column filter
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Radio extends Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Select
+class Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Radio extends Mage_Backend_Block_Widget_Grid_Column_Filter_Radio
 {
-    protected function _getOptions()
-    {
-        return array(
-            array(
-                'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Any'),
-                'value' => ''
-            ),
-            array(
-                'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Yes'),
-                'value' => 1
-            ),
-            array(
-                'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('No'),
-                'value' => 0
-            ),
-        );
-    }
-    
-    public function getCondition()
-    {
-        if ($this->getValue()) {
-            return $this->getColumn()->getValue();
-        }
-        else {
-            return array(
-                array('neq'=>$this->getColumn()->getValue()),
-                array('is'=>new Zend_Db_Expr('NULL'))
-            );
-        }
-    }
+
 }

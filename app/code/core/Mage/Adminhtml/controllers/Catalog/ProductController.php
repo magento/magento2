@@ -62,14 +62,11 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
              ->_title($this->__('Manage Products'));
 
         $productId  = (int) $this->getRequest()->getParam('id');
+        /** @var $product Mage_Catalog_Model_Product */
         $product    = Mage::getModel('Mage_Catalog_Model_Product')
             ->setStoreId($this->getRequest()->getParam('store', 0));
 
         if (!$productId) {
-            if ($setId = (int) $this->getRequest()->getParam('set')) {
-                $product->setAttributeSetId($setId);
-            }
-
             if ($typeId = $this->getRequest()->getParam('type')) {
                 $product->setTypeId($typeId);
             }
@@ -83,6 +80,11 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 $product->setTypeId(Mage_Catalog_Model_Product_Type::DEFAULT_TYPE);
                 Mage::logException($e);
             }
+        }
+
+        $setId = (int)$this->getRequest()->getParam('set');
+        if ($setId) {
+            $product->setAttributeSetId($setId);
         }
 
         $attributes = $this->getRequest()->getParam('attributes');
@@ -128,9 +130,11 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                     $data[$attribute->getAttributeCode()] = $configProduct->getData($attribute->getAttributeCode());
                 }
             }
-
             $product->addData($data)
                 ->setWebsiteIds($configProduct->getWebsiteIds());
+        }
+        if ($product->dataHasChangedFor('attribute_set_id')) {
+            $this->_initProductSave($product);
         }
 
         Mage::register('product', $product);
@@ -188,6 +192,12 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
     {
         $product = $this->_initProduct();
 
+        $productData = $this->getRequest()->getPost('product');
+        if ($productData) {
+            $this->_filterStockData($productData['stock_data']);
+            $product->addData($productData);
+        }
+
         $this->_title($this->__('New Product'));
 
         Mage::dispatchEvent('catalog_product_new_action', array('product' => $product));
@@ -206,7 +216,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 strtolower($this->getFullActionName()),
                 'adminhtml_catalog_product_'.$product->getTypeId() . $_additionalLayoutPart
             ));
-            $this->_setActiveMenu('catalog/products');
+            $this->_setActiveMenu('Mage_Catalog::catalog_products');
         }
 
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
@@ -250,7 +260,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             'adminhtml_catalog_product_'.$product->getTypeId() . $_additionalLayoutPart
         ));
 
-        $this->_setActiveMenu('catalog/products');
+        $this->_setActiveMenu('Mage_Catalog::catalog_products');
 
         if (!Mage::app()->isSingleStoreMode() && ($switchBlock = $this->getLayout()->getBlock('store_switcher'))) {
             $switchBlock->setDefaultStoreName($this->__('Default Values'))
@@ -549,10 +559,12 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
 
     /**
      * Initialize product before saving
+     *
+     * @param $product Mage_Catalog_Model_Product
+     * @return Mage_Catalog_Model_Product
      */
-    protected function _initProductSave()
+    protected function _initProductSave($product)
     {
-        $product     = $this->_initProduct();
         $productData = $this->getRequest()->getPost('product');
         if ($productData) {
             $this->_filterStockData($productData['stock_data']);
@@ -711,7 +723,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         if ($data) {
             $this->_filterStockData($data['product']['stock_data']);
 
-            $product = $this->_initProductSave();
+            $product = $this->_initProductSave($this->_initProduct());
 
             try {
                 $product->save();
@@ -1063,7 +1075,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/products');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Catalog::products');
     }
 
     /**
@@ -1083,5 +1095,24 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $session->unsCompositeProductResult();
             return false;
         }
+    }
+
+    /**
+     * Show product grid for custom options import popup
+     */
+    public function optionsImportGridAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
+     * Show custom options in JSON format for specified products
+     */
+    public function customOptionsAction()
+    {
+        Mage::register('import_option_products', $this->getRequest()->getPost('products'));
+        $this->loadLayout();
+        $this->renderLayout();
     }
 }

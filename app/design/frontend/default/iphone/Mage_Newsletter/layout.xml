@@ -52,7 +52,7 @@ Customer account pages, rendered for all tabs in dashboard
         </reference>
     </customer_account>
 
-    <newsletter_manage_index translate="label">
+    <newsletter_manage_index translate="label" type="page" parent="customer_account_index">
         <label>Customer My Account Newsletter Subscriptions</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">

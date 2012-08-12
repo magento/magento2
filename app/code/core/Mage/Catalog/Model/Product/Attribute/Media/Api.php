@@ -107,6 +107,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
     /**
      * Create new image for product and return image filename
      *
+     * @throws Mage_Api_Exception
      * @param int|string $productId
      * @param array $data
      * @param string|int $store
@@ -155,7 +156,8 @@ class Mage_Catalog_Model_Product_Attribute_Media_Api extends Mage_Catalog_Model_
 
             // try to create Image object - it fails with Exception if image is not supported
             try {
-                new Varien_Image($tmpDirectory . DS . $fileName);
+                $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+                new Varien_Image($tmpDirectory . DS . $fileName, $adapter);
             } catch (Exception $e) {
                 // Remove temporary directory
                 $ioAdapter->rmdir($tmpDirectory, true);

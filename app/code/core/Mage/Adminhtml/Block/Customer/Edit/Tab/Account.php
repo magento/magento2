@@ -230,7 +230,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Account extends Mage_Adminhtml_Bloc
                 $fieldset->addField('sendemail_store_id', 'select', array(
                     'label' => $this->helper('Mage_Customer_Helper_Data')->__('Send From'),
                     'name' => 'sendemail_store_id',
-                    'values' => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getStoreValuesForForm()
+                    'values' => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm()
                 ));
             }
         }

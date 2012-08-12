@@ -58,7 +58,7 @@ class Mage_Connect_Adminhtml_Extension_CustomController extends Mage_Adminhtml_C
              ->_title($this->__('Edit Extension'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('system/extension/custom');
+        $this->_setActiveMenu('Mage_Connect::system_extensions_custom');
         $this->renderLayout();
     }
 
@@ -199,6 +199,6 @@ class Mage_Connect_Adminhtml_Extension_CustomController extends Mage_Adminhtml_C
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/extensions/custom');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::custom');
     }
 }

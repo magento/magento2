@@ -31,6 +31,13 @@
 class Magento_Test_Request extends Mage_Core_Controller_Request_Http
 {
     /**
+     * Server super-global mock
+     *
+     * @var array
+     */
+    protected $_server = array();
+
+    /**
      * Retrieve HTTP HOST.
      * This method is a stub - all parameters are ignored, just static value returned.
      *
@@ -42,5 +49,33 @@ class Magento_Test_Request extends Mage_Core_Controller_Request_Http
     public function getHttpHost($trimPort = true)
     {
         return 'localhost';
+    }
+
+    /**
+     * Set "server" super-global mock
+     *
+     * @param array $server
+     * @return Magento_Test_Request
+     */
+    public function setServer(array $server)
+    {
+        $this->_server = $server;
+        return $this;
+    }
+
+    /**
+     * Overridden getter to avoid using of $_SERVER
+     *
+     * @param string|null $key
+     * @param mixed|null $default
+     * @return array|mixed|null
+     */
+    public function getServer($key = null, $default = null)
+    {
+        if (null === $key) {
+            return $this->_server;
+        }
+
+        return (isset($this->_server[$key])) ? $this->_server[$key] : $default;
     }
 }

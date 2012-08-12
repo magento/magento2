@@ -36,7 +36,15 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     protected $_runCode     = '';
     protected $_runScope    = 'store';
     protected $_runOptions  = array();
+
+    /**
+     * @var Magento_Test_Request
+     */
     protected $_request;
+
+    /**
+     * @var Magento_Test_Response
+     */
     protected $_response;
 
     /**
@@ -64,6 +72,12 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
         $this->_runOptions['response']  = $this->getResponse();
     }
 
+    protected function tearDown()
+    {
+        $this->_request = null;
+        $this->_response = null;
+    }
+
     /**
      * Run request
      *
@@ -78,7 +92,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     /**
      * Request getter
      *
-     * @return Mage_Core_Controller_Request_Http
+     * @return Magento_Test_Request
      */
     public function getRequest()
     {
@@ -111,20 +125,50 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     }
 
     /**
+     * Analyze response object and look for header with specified name, and assert a regex towards its value
+     *
+     * @param string $headerName
+     * @param string $valueRegex
+     * @throws PHPUnit_Framework_AssertionFailedError when header not found
+     */
+    public function assertHeaderPcre($headerName, $valueRegex)
+    {
+        $headerFound = false;
+        $headers = $this->getResponse()->getHeaders();
+        foreach ($headers as $header) {
+            if ($header['name'] === $headerName) {
+                $headerFound = true;
+                $this->assertRegExp($valueRegex, $header['value']);
+            }
+        }
+        if (!$headerFound) {
+            $this->fail("Header '{$headerName}' was not found. Headers dump:\n" . var_export($headers, 1));
+        }
+    }
+
+    /**
      * Assert that there is a redirect to expected URL.
      * Omit expected URL to check that redirect to wherever has been occurred.
+     * Examples of usage:
+     * $this->assertRedirect($this->equalTo($expectedUrl));
+     * $this->assertRedirect($this->stringStartsWith($expectedUrlPrefix));
+     * $this->assertRedirect($this->stringEndsWith($expectedUrlSuffix));
+     * $this->assertRedirect($this->stringContains($expectedUrlSubstring));
      *
-     * @param string|null $expectedUrl
+     * @param PHPUnit_Framework_Constraint|null $urlConstraint
      */
-    public function assertRedirect($expectedUrl = null)
+    public function assertRedirect(PHPUnit_Framework_Constraint $urlConstraint = null)
     {
         $this->assertTrue($this->getResponse()->isRedirect());
-        if ($expectedUrl) {
-            $this->assertContains(array(
-                'name'    => 'Location',
-                'value'   => $expectedUrl,
-                'replace' => true,
-            ), $this->getResponse()->getHeaders());
+        if ($urlConstraint) {
+            $actualUrl = '';
+            foreach ($this->getResponse()->getHeaders() as $header) {
+                if ($header['name'] == 'Location') {
+                    $actualUrl = $header['value'];
+                    break;
+                }
+            }
+            $this->assertThat($actualUrl, $urlConstraint, 'Redirection URL does not match expectations');
         }
     }
 }

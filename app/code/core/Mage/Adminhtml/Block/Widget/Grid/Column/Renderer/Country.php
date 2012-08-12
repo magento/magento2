@@ -25,30 +25,13 @@
  */
 
 /**
- * Country column renderer
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
 class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Country
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+    extends Mage_Backend_Block_Widget_Grid_Column_Renderer_Country
 {
-    /**
-     * Render country grid column
-     *
-     * @param   Varien_Object $row
-     * @return  string
-     */
-    public function render(Varien_Object $row)
-    {
-        if ($data = $row->getData($this->getColumn()->getIndex())) {
-            $name = Mage::app()->getLocale()->getCountryTranslation($data);
-            if (empty($name)) {
-                $name = $this->escapeHtml($data);
-            }
-            return $name;
-        }
-        return null;
-    }
+
 }

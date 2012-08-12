@@ -34,136 +34,87 @@
  */
 class Mage_Adminhtml_Model_System_Config_Source_Admin_Page
 {
-    protected $_url;
+    /**
+     * Menu model
+     *
+     * @var Mage_Backend_Model_Menu
+     */
+    protected $_menu;
+
+    /**
+     * Object factory
+     *
+     * @var Mage_Core_Model_Config
+     */
+    protected $_objectFactory;
+
+    /**
+     * Default construct
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_menu = isset($data['menu']) ?
+            $data['menu'] :
+            Mage::getSingleton('Mage_Backend_Model_Menu_Config')->getMenu();
+
+        $this->_objectFactory = isset($data['objectFactory']) ? $data['objectFactory'] : Mage::getConfig();
+    }
 
     public function toOptionArray()
     {
         $options = array();
-        $menu    = $this->_buildMenuArray();
-
-        $this->_createOptions($options, $menu);
-
+        $this->_createOptions($options, $this->_menu);
         return $options;
     }
 
-    protected function _createOptions(&$optionArray, $menuNode)
+    /**
+     * Get menu filter iterator
+     *
+     * @param Mage_Backend_Model_Menu $menu menu model
+     * @return Mage_Backend_Model_Menu_Filter_Iterator
+     */
+    protected function _getMenuIterator(Mage_Backend_Model_Menu $menu)
+    {
+        return $this->_objectFactory->getModelInstance('Mage_Backend_Model_Menu_Filter_Iterator', $menu->getIterator());
+    }
+
+    /**
+     * Create options array
+     *
+     * @param array $optionArray
+     * @param Mage_Backend_Model_Menu $menu
+     * @param int $level
+     */
+    protected function _createOptions(&$optionArray, Mage_Backend_Model_Menu $menu, $level = 0)
     {
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
+        $paddingString = str_repeat($nonEscapableNbspChar, ($level * 4));
 
-        foreach ($menuNode as $menu) {
+        foreach ($this->_getMenuIterator($menu) as $menuItem) {
 
-            if (!empty($menu['url'])) {
+            /**@var  $menuItem Mage_Backend_Model_Menu_Item */
+            if ($menuItem->getAction()) {
                 $optionArray[] = array(
-                    'label' => str_repeat($nonEscapableNbspChar, ($menu['level'] * 4)) . $menu['label'],
-                    'value' => $menu['path'],
+                    'label' =>  $paddingString . $menuItem->getTitle(),
+                    'value' => $menuItem->getId(),
                 );
 
-                if (isset($menu['children'])) {
-                    $this->_createOptions($optionArray, $menu['children']);
+                if ($menuItem->hasChildren()) {
+                    $this->_createOptions($optionArray, $menuItem->getChildren(), $level + 1);
                 }
             }
             else {
                 $children = array();
 
-                if(isset($menu['children'])) {
-                    $this->_createOptions($children, $menu['children']);
+                if($menuItem->hasChildren()) {
+                    $this->_createOptions($children, $menuItem->getChildren(), $level + 1);
                 }
 
                 $optionArray[] = array(
-                    'label' => str_repeat($nonEscapableNbspChar, ($menu['level'] * 4)) . $menu['label'],
+                    'label' => $paddingString . $menuItem->getTitle(),
                     'value' => $children,
                 );
             }
         }
-    }
-
-    protected function _getUrlModel()
-    {
-        if (is_null($this->_url)) {
-            $this->_url = Mage::getModel('Mage_Adminhtml_Model_Url');
-        }
-        return $this->_url;
-    }
-
-    protected function _buildMenuArray(Varien_Simplexml_Element $parent=null, $path='', $level=0)
-    {
-        if (is_null($parent)) {
-            $parent = Mage::getSingleton('Mage_Admin_Model_Config')->getAdminhtmlConfig()->getNode('menu');
-        }
-
-        $parentArr = array();
-        $sortOrder = 0;
-        foreach ($parent->children() as $childName=>$child) {
-            if ((1 == $child->disabled)
-                || ($child->depends && !$this->_checkDepends($child->depends))
-            ) {
-                continue;
-            }
-
-            $menuArr = array();
-            $menuArr['label'] = $this->_getHelperValue($child);
-
-            $menuArr['sort_order'] = $child->sort_order ? (int)$child->sort_order : $sortOrder;
-
-            if ($child->action) {
-                $menuArr['url'] = (string)$child->action;
-            } else {
-                $menuArr['url'] = '';
-            }
-
-            $menuArr['level'] = $level;
-            $menuArr['path'] = $path . $childName;
-
-            if ($child->children) {
-                $menuArr['children'] = $this->_buildMenuArray($child->children, $path.$childName.'/', $level+1);
-            }
-            $parentArr[$childName] = $menuArr;
-
-            $sortOrder++;
-        }
-
-        uasort($parentArr, array($this, '_sortMenu'));
-
-        while (list($key, $value) = each($parentArr)) {
-            $last = $key;
-        }
-        if (isset($last)) {
-            $parentArr[$last]['last'] = true;
-        }
-
-        return $parentArr;
-    }
-
-    protected function _sortMenu($a, $b)
-    {
-        return $a['sort_order']<$b['sort_order'] ? -1 : ($a['sort_order']>$b['sort_order'] ? 1 : 0);
-    }
-
-    protected function _checkDepends(Varien_Simplexml_Element $depends)
-    {
-        if ($depends->module) {
-            $modulesConfig = Mage::getConfig()->getNode('modules');
-            foreach ($depends->module as $module) {
-                if (!$modulesConfig->$module || !$modulesConfig->$module->is('active')) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    protected function _getHelperValue(Varien_Simplexml_Element $child)
-    {
-        $helperName         = 'Mage_Adminhtml_Helper_Data';
-        $titleNodeName      = 'title';
-        $childAttributes    = $child->attributes();
-        if (isset($childAttributes['module'])) {
-            $helperName     = (string)$childAttributes['module'];
-        }
-
-        $titleNodeName = 'title';
-
-        return Mage::helper($helperName)->__((string)$child->$titleNodeName);
     }
 }

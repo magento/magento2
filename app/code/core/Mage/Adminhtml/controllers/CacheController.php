@@ -44,7 +44,7 @@ class Mage_Adminhtml_CacheController extends Mage_Adminhtml_Controller_Action
         $this->_title($this->__('System'))->_title($this->__('Cache Management'));
 
         $this->loadLayout()
-            ->_setActiveMenu('system/cache')
+            ->_setActiveMenu('Mage_Adminhtml::system_cache')
             ->renderLayout();
     }
 
@@ -190,6 +190,6 @@ class Mage_Adminhtml_CacheController extends Mage_Adminhtml_Controller_Action
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/cache');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::cache');
     }
 }

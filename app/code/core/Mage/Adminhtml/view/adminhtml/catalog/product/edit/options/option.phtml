@@ -28,7 +28,7 @@
 
 <script type="text/javascript">
 //<![CDATA[
-var firstStepTemplate = '<div class="option-box" id="option_{{id}}">'+
+window.firstStepTemplate = '<div class="option-box" id="option_{{id}}">'+
             '<table id="<?php echo $this->getFieldId() ?>_{{id}}" class="option-header" cellpadding="0" cellspacing="0">'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_is_delete" name="<?php echo $this->getFieldName() ?>[{{id}}][is_delete]" value="" />'+
             '<input type="hidden" id="<?php echo $this->getFieldId() ?>_{{id}}_previous_type" name="<?php echo $this->getFieldName() ?>[{{id}}][previous_type]" value="{{type}}" />'+
@@ -52,10 +52,10 @@ var firstStepTemplate = '<div class="option-box" id="option_{{id}}">'+
                 '<td>&nbsp;</td>'+
             '</tr></table></div>';
 
-var productOption = {
+window.productOption = {
     div : $('product_options_container_top'),
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
-    templateText : firstStepTemplate,
+    templateText : window.firstStepTemplate,
     itemCount : 1,
     add : function(data) {
         this.template = new Template(this.templateText, this.templateSyntax);
@@ -94,7 +94,7 @@ var productOption = {
 
         this.itemCount++;
         this.bindRemoveButtons();
-        productOptionType.bindSelectInputType();
+        window.productOptionType.bindSelectInputType();
     },
     remove : function(event){
         var element = $(Event.findElement(event, 'div'));
@@ -124,11 +124,14 @@ var productOption = {
         <?php else: ?>
             inputs.each(function(el) { Event.observe(el, 'change', el.setHasChanges.bind(el));  } )
         <?php endif;?>
+    },
+    getFreeOptionId : function(id) {
+        return $('product_option_'+id) ? this.getFreeOptionId(parseInt(id) + 1) : id;
     }
 }
 
 
-var productOptionType = {
+window.productOptionType = {
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     loadStepTwo : function(event){
         var element = $(Event.findElement(event, 'select'));
@@ -283,14 +286,14 @@ var productOptionType = {
             if(!$(types[i]).binded){
                 $(types[i]).binded = true;
                 Event.observe(types[i], 'change', function(event){
-                    productOptionType.loadStepTwo(event);
+                    window.productOptionType.loadStepTwo(event);
                 });
             }
         }
     }
 }
 
-var productOptionScope = {
+window.productOptionScope = {
     addScope : function(event){
         var element = $(Event.element(event));
         fieldToDisable = $(element.readAttribute('id').sub('_use_default', ''));
@@ -322,10 +325,10 @@ if($('option_panel')){
     $('option_panel').remove();
 }
 
-productOption.bindRemoveButtons();
+window.productOption.bindRemoveButtons();
 
 if($('<?php echo $this->getAddButtonId() ?>')){
-    Event.observe('<?php echo $this->getAddButtonId() ?>', 'click', productOption.add.bind(productOption));
+    Event.observe('<?php echo $this->getAddButtonId() ?>', 'click', window.productOption.add.bind(window.productOption));
 }
 
 //validation for selected input type
@@ -339,13 +342,86 @@ Validation.addAllThese([
 
 //adding data to templates
 <?php foreach ($this->getOptionValues() as $_value): ?>
-    productOption.add(<?php echo $_value->toJson() ?>);
-    productOptionType.addDataToValues(<?php echo $_value->toJson() ?>);
+    window.productOption.add(<?php echo $_value->toJson() ?>);
+    window.productOptionType.addDataToValues(<?php echo $_value->toJson() ?>);
 <?php endforeach; ?>
 
 //bind scope checkboxes
-productOptionScope.bindScopeCheckbox();
+window.productOptionScope.bindScopeCheckbox();
+
+(function($) {
+    $(function(){
+        $('#import_new_defined_option').click(function (){
+            $('#import-container').load("<?php echo $this->getProductGridUrl()?>", function() {
+                $('#productGrid_massaction-form button').click(function (){
+                    $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                });
+                $('#import-container').dialog('open');
+            });
+
+        });
+
+        $('#import-container').dialog({
+            title: 'Select Product',
+            autoOpen: false,
+            minWidth: 980,
+            modal: true,
+            resizable: true,
+            buttons: [{
+                text: 'Close',
+                id: 'import-custom-options-close-button',
+                click: function() {
+                    $(this).dialog('close');
+                }
+            }, {
+                text: 'Import',
+                id: 'import-custom-options-apply-button',
+                click: function(event, massActionTrigger) {
+                    var request = [];
+                    $(this).find('input.massaction-checkbox:checked').map(function(){
+                        request.push(this.value);
+                    });
+
+                    if (request.length == 0) {
+                        if (!massActionTrigger) {
+                            alert('<?php echo Mage::helper('Mage_Backend_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Backend_Helper_Data')->__('Please select items.')) ?>');
+                        }
+                        return;
+                    }
+
+                    $.post('<?php echo $this->getCustomOptionsUrl()?>', {
+                        'products[]': request,
+                        'form_key': '<?php echo $this->getFormKey() ?>'
+                    }, function ($data) {
+                            $.parseJSON($data).each(function(el){
+                                el.id = window.productOption.getFreeOptionId(el.id);
+                                el.option_id = el.id;
+                                if (typeof el.optionValues != 'undefined') {
+                                    for (i = 0; i < el.optionValues.length; i++) {
+                                        el.optionValues[i].option_id = el.id;
+                                    }
+                                }
+
+                                //Adding option
+                                window.productOption.add(el);
+                                window.productOptionType.addDataToValues(el);
+                                //Will save new option on server side
+                                $('#product_option_' + el.id + '_option_id').val(0);
+                                $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
+                            });
+                        $('#import-container').dialog('close');
+                    });
+                }
+            }]
+        });
+    });
+})(jQuery);
+
 //]]>
 </script>
 
 <div><?php if (!$this->isReadonly()):?><input type="hidden" name="affect_product_custom_options" value="1" /><?php endif;?></div>
+
+
+<div id="import-container" style="display: none;"></div>
+

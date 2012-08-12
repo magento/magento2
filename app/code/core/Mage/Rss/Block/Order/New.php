@@ -31,26 +31,8 @@
  * @package    Mage_Rss
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Rss_Block_Order_New extends Mage_Core_Block_Template
+class Mage_Rss_Block_Order_New extends Mage_Core_Block_Abstract
 {
-
-    /**
-     * Cache tag constant for feed new orders
-     *
-     * @var string
-     */
-    const CACHE_TAG = 'block_html_rss_order_new';
-
-    protected function _construct()
-    {
-        $this->setCacheTags(array(self::CACHE_TAG));
-        /*
-        * setting cache to save the rss for 10 minutes
-        */
-        $this->setCacheKey('rss_order_new');
-        $this->setCacheLifetime(600);
-    }
-
     protected function _toHtml()
     {
         $order = Mage::getModel('Mage_Sales_Model_Order');

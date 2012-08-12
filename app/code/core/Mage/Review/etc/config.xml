@@ -29,6 +29,12 @@
     <modules>
         <Mage_Review>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Core/>
+            </depends>
         </Mage_Review>
     </modules>
     <global>
@@ -71,16 +77,6 @@
                 </args>
             </review>
         </routers>
-        <events>
-            <review_save_after>
-                <observers>
-                    <rss>
-                        <class>Mage_Rss_Model_Observer</class>
-                        <method>reviewSaveAfter</method>
-                    </rss>
-                </observers>
-            </review_save_after>
-        </events>
         <translate>
             <modules>
                 <Mage_Review>

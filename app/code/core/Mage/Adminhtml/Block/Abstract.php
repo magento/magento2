@@ -25,23 +25,12 @@
  */
 
 /**
- * Adminhtml abstract block
- *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Abstract extends Mage_Core_Block_Template
+class Mage_Adminhtml_Block_Abstract extends Mage_Backend_Block_Abstract
 {
-
-    /**
-     * Enter description here...
-     *
-     * @return string
-     */
-    protected function _getUrlModelClass()
-    {
-        return 'Mage_Adminhtml_Model_Url';
-    }
 
 }

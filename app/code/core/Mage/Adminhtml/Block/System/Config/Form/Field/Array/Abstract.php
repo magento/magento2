@@ -148,6 +148,7 @@ abstract class Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
                 $rowColumnValues = array();
                 foreach ($row as $key => $value) {
                     $row[$key] = $this->escapeHtml($value);
+                    $rowColumnValues[$this->_getCellInputElementId($rowId, $key)] = $row[$key];
                 }
                 $row['_id'] = $rowId;
                 $row['column_values'] = $rowColumnValues;

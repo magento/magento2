@@ -71,7 +71,7 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setStockData(
         array(
             'use_config_manage_stock'   => 1,
-            'qty'                       => 100,
+            'qty'                       => 50,
             'is_qty_decimal'            => 0,
             'is_in_stock'               => 1,
         )

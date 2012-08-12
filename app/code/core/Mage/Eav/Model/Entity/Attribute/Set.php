@@ -44,10 +44,42 @@
 class Mage_Eav_Model_Entity_Attribute_Set extends Mage_Core_Model_Abstract
 {
     /**
+     * Resource instance
+     *
+     * @var Mage_Eav_Model_Resource_Entity_Attribute_Set
+     */
+    protected $_resource;
+
+    /**
+     * Helper instance
+     *
+     * @var Mage_Core_Helper_Abstract
+     */
+    protected $_helperInstance;
+
+    /**
      * Prefix of model events names
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute_set';
+
+    /**
+     * Initialize data
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        if (isset($data['resource'])) {
+            $this->_resource = $data['resource'];
+            unset($data['resource']);
+        }
+        if (isset($data['helper'])) {
+            $this->_helperInstance = $data['helper'];
+            unset($data['helper']);
+        }
+        parent::__construct($data);
+    }
 
     /**
      * Initialize resource model
@@ -179,15 +211,21 @@ class Mage_Eav_Model_Entity_Attribute_Set extends Mage_Core_Model_Abstract
     /**
      * Validate attribute set name
      *
-     * @param string $name
-     * @throws Mage_Eav_Exception
      * @return bool
+     * @throws Mage_Eav_Exception
      */
     public function validate()
     {
-        if (!$this->_getResource()->validate($this, $this->getAttributeSetName())) {
+        $attributeSetName = $this->getAttributeSetName();
+        if ($attributeSetName == '') {
             throw Mage::exception('Mage_Eav',
-                Mage::helper('Mage_Eav_Helper_Data')->__('Attribute set with the "%s" name already exists.', $this->getAttributeSetName())
+                $this->_helper('Mage_Eav_Helper_Data')->__('Attribute set name is empty.')
+            );
+        }
+
+        if (!$this->_getResource()->validate($this, $attributeSetName)) {
+            throw Mage::exception('Mage_Eav',
+                $this->_helper('Mage_Eav_Helper_Data')->__('Attribute set with the "%s" name already exists.', $attributeSetName)
             );
         }
 
@@ -264,11 +302,28 @@ class Mage_Eav_Model_Entity_Attribute_Set extends Mage_Core_Model_Abstract
         if ($setId === null) {
             $setId = $this->getId();
         }
-        if ($setId) {
-            $groupId = $this->_getResource()->getDefaultGroupId($setId);
-        } else {
-            $groupId = null;
-        }
-        return $groupId;
+
+        return $setId ? $this->_getResource()->getDefaultGroupId($setId) : null;
+    }
+
+    /**
+     * Retrieve helper instance by specified helper name
+     *
+     * @param string $helperName
+     * @return Mage_Core_Helper_Abstract
+     */
+    protected function _helper($helperName)
+    {
+        return $this->_helperInstance instanceof $helperName ? $this->_helperInstance : Mage::helper($helperName);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
+    protected function _getResource()
+    {
+        return $this->_resource ?: parent::_getResource();
     }
 }

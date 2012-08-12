@@ -43,6 +43,11 @@ class Mage_Core_Model_Resource_Entity_TableTest extends PHPUnit_Framework_TestCa
         $this->_model = new Mage_Core_Model_Resource_Entity_Table($config);
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetTable()
     {
         $this->assertEquals('test_table', $this->_model->getTable());

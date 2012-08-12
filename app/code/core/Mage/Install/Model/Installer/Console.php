@@ -24,29 +24,46 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
- * Console installer
- * @category   Mage
- * @package    Mage_Install
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Magento application console installer
  */
 class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_Abstract
 {
-
     /**
-     * Available options
+     * Available installation options
      *
      * @var array
      */
-    protected $_options;
-
-    /**
-     * Script arguments
-     *
-     * @var array
-     */
-    protected $_args = array();
+    protected $_installOptions = array(
+        'license_agreement_accepted' => array('required' => 1),
+        'locale'                     => array('required' => 1),
+        'timezone'                   => array('required' => 1),
+        'default_currency'           => array('required' => 1),
+        'db_model'                   => array('required' => 0),
+        'db_host'                    => array('required' => 1),
+        'db_name'                    => array('required' => 1),
+        'db_user'                    => array('required' => 1),
+        'db_pass'                    => array('required' => 0),
+        'db_prefix'                  => array('required' => 0),
+        'url'                        => array('required' => 1),
+        'skip_url_validation'        => array('required' => 0),
+        'use_rewrites'               => array('required' => 1),
+        'use_secure'                 => array('required' => 1),
+        'secure_base_url'            => array('required' => 1),
+        'use_secure_admin'           => array('required' => 1),
+        'admin_lastname'             => array('required' => 1),
+        'admin_firstname'            => array('required' => 1),
+        'admin_email'                => array('required' => 1),
+        'admin_username'             => array('required' => 1),
+        'admin_password'             => array('required' => 1),
+        'admin_no_form_key'          => array('required' => 0),
+        'encryption_key'             => array('required' => 0),
+        'session_save'               => array('required' => 0),
+        'backend_frontname'          => array('required' => 0),
+        'enable_charts'              => array('required' => 0),
+        'order_increment_prefix'     => array('required' => 0),
+        'cleanup_database'           => array('required' => 0),
+    );
 
     /**
      * Installer data model to store data between installations steps
@@ -56,99 +73,28 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     protected $_dataModel;
 
     /**
-     * Current application
-     *
-     * @var Mage_Core_Model_App
+     * Constructor
      */
-    protected $_app;
-
-    /**
-     * Get available options list
-     *
-     * @return array
-     */
-    protected function _getOptions()
+    public function __construct()
     {
-        if (is_null($this->_options)) {
-            $this->_options = array(
-                'license_agreement_accepted'    => array('required' => true, 'comment' => ''),
-                'locale'              => array('required' => true, 'comment' => ''),
-                'timezone'            => array('required' => true, 'comment' => ''),
-                'default_currency'    => array('required' => true, 'comment' => ''),
-                'db_model'            => array('comment' => ''),
-                'db_host'             => array('required' => true, 'comment' => ''),
-                'db_name'             => array('required' => true, 'comment' => ''),
-                'db_user'             => array('required' => true, 'comment' => ''),
-                'db_pass'             => array('comment' => ''),
-                'db_prefix'           => array('comment' => ''),
-                'url'                 => array('required' => true, 'comment' => ''),
-                'skip_url_validation' => array('comment' => ''),
-                'use_rewrites'      => array('required' => true, 'comment' => ''),
-                'use_secure'        => array('required' => true, 'comment' => ''),
-                'secure_base_url'   => array('required' => true, 'comment' => ''),
-                'use_secure_admin'  => array('required' => true, 'comment' => ''),
-                'admin_lastname'    => array('required' => true, 'comment' => ''),
-                'admin_firstname'   => array('required' => true, 'comment' => ''),
-                'admin_email'       => array('required' => true, 'comment' => ''),
-                'admin_username'    => array('required' => true, 'comment' => ''),
-                'admin_password'    => array('required' => true, 'comment' => ''),
-                'encryption_key'    => array('comment' => ''),
-                'session_save'      => array('comment' => ''),
-                'admin_frontname'   => array('comment' => ''),
-                'enable_charts'     => array('comment' => ''),
-            );
-        }
-        return $this->_options;
+        Mage::init();
+        $this->_getInstaller()->setDataModel($this->_getDataModel());
     }
 
     /**
-     * Set and validate arguments
+     * Retrieve validated installation options
      *
-     * @param array $args
-     * @return boolean
+     * @param array $options
+     * @return array|boolean
      */
-    public function setArgs($args = null)
+    protected function _getInstallOptions(array $options)
     {
-        if (empty($args)) {
-            // take server args
-            $args = $_SERVER['argv'];
-        }
-
         /**
-         * Parse arguments
+         * Check required options
          */
-        $currentArg = false;
-        $match = false;
-        foreach ($args as $arg) {
-            if (preg_match('/^--(.*)$/', $arg, $match)) {
-                // argument name
-                $currentArg = $match[1];
-                // in case if argument doen't need a value
-                $args[$currentArg] = true;
-            } else {
-                // argument value
-                if ($currentArg) {
-                    $args[$currentArg] = $arg;
-                }
-                $currentArg = false;
-            }
-        }
-
-        if (isset($args['get_options'])) {
-            $this->printOptions();
-            return false;
-        }
-
-        /**
-         * Check required arguments
-         */
-        foreach ($this->_getOptions() as $name => $option) {
-            if (isset($option['required']) && $option['required'] && !isset($args[$name])) {
-                $error = 'ERROR: ' . 'You should provide the value for --' . $name . ' parameter';
-                if (!empty($option['comment'])) {
-                    $error .= ': ' . $option['comment'];
-                }
-                $this->addError($error);
+        foreach ($this->_installOptions as $optionName => $optionInfo) {
+            if (isset($optionInfo['required']) && $optionInfo['required'] && !isset($options[$optionName])) {
+                $this->addError("ERROR: installation option '$optionName' is required.");
             }
         }
 
@@ -157,21 +103,21 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
         }
 
         /**
-         * Validate license aggreement acceptance
+         * Validate license agreement acceptance
          */
-        if (!$this->_checkFlag($args['license_agreement_accepted'])) {
-            $this->addError('ERROR: You have to accept Magento license agreement terms and conditions to continue installation');
+        if (!$this->_getFlagValue($options['license_agreement_accepted'])) {
+            $this->addError(
+                'ERROR: You have to accept Magento license agreement terms and conditions to continue installation.'
+            );
             return false;
         }
 
-        /**
-         * Set args values
-         */
-        foreach ($this->_getOptions() as $name => $option) {
-            $this->_args[$name] = isset($args[$name]) ? $args[$name] : '';
+        $result = array();
+        foreach ($this->_installOptions as $optionName => $optionInfo) {
+            $result[$optionName] = isset($options[$optionName]) ? $options[$optionName] : '';
         }
 
-        return true;
+        return $result;
     }
 
     /**
@@ -207,18 +153,14 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     }
 
     /**
-     * Check flag value
-     *
-     * Returns true for 'yes', 1, 'true'
-     * Case insensitive
+     * Return TRUE for 'yes', 1, 'true' (case insensitive) or FALSE otherwise
      *
      * @param string $value
      * @return boolean
      */
-    protected function _checkFlag($value)
+    protected function _getFlagValue($value)
     {
-        $res = (1 == $value)
-            || preg_match('/^(yes|y|true)$/i', $value);
+        $res = (1 == $value) || preg_match('/^(yes|y|true)$/i', $value);
         return $res;
     }
 
@@ -236,137 +178,90 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     }
 
     /**
-     * Get encryption key from data model
-     *
-     * @return string
-     */
-    public function getEncryptionKey()
-    {
-        return $this->_getDataModel()->getEncryptionKey();
-    }
-
-    /**
-     * Init installation
-     *
-     * @param Mage_Core_Model_App $app
-     * @return boolean
-     */
-    public function init(Mage_Core_Model_App $app)
-    {
-        $this->_app = $app;
-        $this->_getInstaller()->setDataModel($this->_getDataModel());
-
-        /**
-         * Check if already installed
-         */
-        if (Mage::isInstalled()) {
-            $this->addError('ERROR: Magento is already installed');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Prepare data ans save it in data model
-     *
-     * @return Mage_Install_Model_Installer_Console
-     */
-    protected function _prepareData()
-    {
-        /**
-         * Locale settings
-         */
-        $this->_getDataModel()->setLocaleData(array(
-            'locale'            => $this->_args['locale'],
-            'timezone'          => $this->_args['timezone'],
-            'currency'          => $this->_args['default_currency'],
-        ));
-
-        /**
-         * Database and web config
-         */
-        $this->_getDataModel()->setConfigData(array(
-            'db_model'            => $this->_args['db_model'],
-            'db_host'             => $this->_args['db_host'],
-            'db_name'             => $this->_args['db_name'],
-            'db_user'             => $this->_args['db_user'],
-            'db_pass'             => $this->_args['db_pass'],
-            'db_prefix'           => $this->_args['db_prefix'],
-            'use_rewrites'        => $this->_checkFlag($this->_args['use_rewrites']),
-            'use_secure'          => $this->_checkFlag($this->_args['use_secure']),
-            'unsecure_base_url'   => $this->_args['url'],
-            'secure_base_url'     => $this->_args['secure_base_url'],
-            'use_secure_admin'    => $this->_checkFlag($this->_args['use_secure_admin']),
-            'session_save'        => $this->_checkSessionSave($this->_args['session_save']),
-            'admin_frontname'     => $this->_checkAdminFrontname($this->_args['admin_frontname']),
-            'skip_url_validation' => $this->_checkFlag($this->_args['skip_url_validation']),
-            'enable_charts'       => $this->_checkFlag($this->_args['enable_charts']),
-        ));
-
-        /**
-         * Primary admin user
-         */
-        $this->_getDataModel()->setAdminData(array(
-            'firstname'         => $this->_args['admin_firstname'],
-            'lastname'          => $this->_args['admin_lastname'],
-            'email'             => $this->_args['admin_email'],
-            'username'          => $this->_args['admin_username'],
-            'new_password'      => $this->_args['admin_password'],
-        ));
-
-        return $this;
-    }
-
-    /**
      * Install Magento
      *
-     * @return boolean
+     * @param array $options
+     * @return string|boolean
      */
-    public function install()
+    public function install(array $options)
     {
         try {
+            $options = $this->_getInstallOptions($options);
+            if (!$options) {
+                return false;
+            }
 
             /**
              * Check if already installed
              */
             if (Mage::isInstalled()) {
-                $this->addError('ERROR: Magento is already installed');
+                $this->addError('ERROR: Magento is already installed.');
                 return false;
             }
 
             /**
              * Skip URL validation, if set
              */
-            $this->_getDataModel()->setSkipUrlValidation($this->_args['skip_url_validation']);
-            $this->_getDataModel()->setSkipBaseUrlValidation($this->_args['skip_url_validation']);
+            $this->_getDataModel()->setSkipUrlValidation($options['skip_url_validation']);
+            $this->_getDataModel()->setSkipBaseUrlValidation($options['skip_url_validation']);
 
             /**
-             * Prepare data
+             * Locale settings
              */
-            $this->_prepareData();
+            $this->_getDataModel()->setLocaleData(array(
+                'locale'            => $options['locale'],
+                'timezone'          => $options['timezone'],
+                'currency'          => $options['default_currency'],
+            ));
 
-            if ($this->hasErrors()) {
-                return false;
-            }
+            /**
+             * Database and web config
+             */
+            $this->_getDataModel()->setConfigData(array(
+                'db_model'               => $options['db_model'],
+                'db_host'                => $options['db_host'],
+                'db_name'                => $options['db_name'],
+                'db_user'                => $options['db_user'],
+                'db_pass'                => $options['db_pass'],
+                'db_prefix'              => $options['db_prefix'],
+                'use_rewrites'           => $this->_getFlagValue($options['use_rewrites']),
+                'use_secure'             => $this->_getFlagValue($options['use_secure']),
+                'unsecure_base_url'      => $options['url'],
+                'secure_base_url'        => $options['secure_base_url'],
+                'use_secure_admin'       => $this->_getFlagValue($options['use_secure_admin']),
+                'session_save'           => $this->_checkSessionSave($options['session_save']),
+                'backend_frontname'      => $this->_checkBackendFrontname($options['backend_frontname']),
+                'admin_no_form_key'      => $this->_getFlagValue($options['admin_no_form_key']),
+                'skip_url_validation'    => $this->_getFlagValue($options['skip_url_validation']),
+                'enable_charts'          => $this->_getFlagValue($options['enable_charts']),
+                'order_increment_prefix' => $options['order_increment_prefix'],
+            ));
+
+            /**
+             * Primary admin user
+             */
+            $this->_getDataModel()->setAdminData(array(
+                'firstname'         => $options['admin_firstname'],
+                'lastname'          => $options['admin_lastname'],
+                'email'             => $options['admin_email'],
+                'username'          => $options['admin_username'],
+                'new_password'      => $options['admin_password'],
+            ));
 
             $installer = $this->_getInstaller();
 
             /**
              * Install configuration
              */
-            $installer->installConfig($this->_getDataModel()->getConfigData()); // TODO fix wizard and simplify this everywhere
+            $installer->installConfig($this->_getDataModel()->getConfigData());
+
+            if (!empty($options['cleanup_database'])) {
+                $this->_cleanUpDatabase();
+            }
 
             if ($this->hasErrors()) {
                 return false;
             }
-
-            /**
-             * Reinitialize configuration (to use new config data)
-             */
-
-            $this->_app->cleanCache();
-            Mage::getConfig()->reinit();
 
             /**
              * Install database
@@ -392,9 +287,9 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             /**
              * Prepare encryption key and validate it
              */
-            $encryptionKey = empty($this->_args['encryption_key'])
-                ? md5(Mage::helper('Mage_Core_Helper_Data')->getRandomString(10))
-                : $this->_args['encryption_key'];
+            $encryptionKey = empty($options['encryption_key'])
+                ? $this->generateEncryptionKey()
+                : $options['encryption_key'];
             $this->_getDataModel()->setEncryptionKey($encryptionKey);
             $installer->validateEncryptionKey($encryptionKey);
 
@@ -435,47 +330,118 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             @chmod('var/cache', 0777);
             @chmod('var/session', 0777);
 
+            return $encryptionKey;
+
         } catch (Exception $e) {
             $this->addError('ERROR: ' . $e->getMessage());
             return false;
         }
+    }
 
+    /**
+     * Generate pseudorandom encryption key
+     *
+     * @param Mage_Core_Helper_Data $helper
+     * @return string
+     */
+    public function generateEncryptionKey($helper = null)
+    {
+        if ($helper === null) {
+            $helper = Mage::helper('Mage_Core_Helper_Data');
+        }
+        return md5($helper->getRandomString(10));
+    }
+
+    /**
+     * Cleanup database use system configuration
+     */
+    protected function _cleanUpDatabase()
+    {
+        $dbConfig = Mage::getConfig()->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
+        $modelName = 'Mage_Install_Model_Installer_Db_' . ucfirst($dbConfig->model);
+
+        if (!Magento_Autoload::getInstance()->classExists($modelName)) {
+            $this->addError('Database uninstall is not supported for the ' . ucfirst($dbConfig->model) . '.');
+            return false;
+        }
+
+        /** @var $resourceModel Mage_Install_Model_Installer_Db_Abstract */
+        $resourceModel = Mage::getModel($modelName);
+        $resourceModel->cleanUpDatabase($dbConfig);
+    }
+
+    /**
+     * Uninstall the application
+     *
+     * @return bool
+     */
+    public function uninstall()
+    {
+        if (!Mage::isInstalled()) {
+            return false;
+        }
+
+        $this->_cleanUpDatabase();
+
+        /* Remove temporary directories */
+        $configOptions = Mage::app()->getConfig()->getOptions();
+        $dirsToRemove = array(
+            $configOptions->getCacheDir(),
+            $configOptions->getSessionDir(),
+            $configOptions->getExportDir(),
+            $configOptions->getLogDir(),
+            $configOptions->getVarDir() . '/report',
+        );
+        foreach ($dirsToRemove as $dir) {
+            Varien_Io_File::rmdirRecursive($dir);
+        }
+
+        /* Remove local configuration */
+        unlink($configOptions->getEtcDir() . '/local.xml');
         return true;
     }
 
     /**
-     * Print available currency, locale and timezone options
+     * Retrieve available locale codes
      *
-     * @return Mage_Install_Model_Installer_Console
+     * @return array
      */
-    public function printOptions()
+    public function getAvailableLocales()
     {
-        $options = array(
-            'locale'    => $this->_app->getLocale()->getOptionLocales(),
-            'currency'  => $this->_app->getLocale()->getOptionCurrencies(),
-            'timezone'  => $this->_app->getLocale()->getOptionTimezones(),
-        );
-        var_export($options);
-        return $this;
+        return Mage::app()->getLocale()->getOptionLocales();
     }
 
     /**
-     * Check if installer is run in shell, and redirect if run on web
+     * Retrieve available currency codes
      *
-     * @param string $url fallback url to redirect to
-     * @return boolean
+     * @return array
      */
-    public function checkConsole($url=null)
+    public function getAvailableCurrencies()
     {
-        if (defined('STDIN') && defined('STDOUT') && (defined('STDERR'))) {
-            return true;
-        }
-        if (is_null($url)) {
-            $url = preg_replace('/install\.php/i', '', Mage::getBaseUrl());
-            $url = preg_replace('/\/\/$/', '/', $url);
-        }
-        header('Location: ' . $url);
-        return false;
+        return Mage::app()->getLocale()->getOptionCurrencies();
     }
 
+    /**
+     * Retrieve available timezone codes
+     *
+     * @return array
+     */
+    public function getAvailableTimezones()
+    {
+        return Mage::app()->getLocale()->getOptionTimezones();
+    }
+
+    /**
+     * Retrieve available installation options
+     *
+     * @return array
+     */
+    public function getAvailableInstallOptions()
+    {
+        $result = array();
+        foreach ($this->_installOptions as $optionName => $optionInfo) {
+            $result[$optionName] = ($optionInfo['required'] ? 'required' : 'optional');
+        }
+        return $result;
+    }
 }

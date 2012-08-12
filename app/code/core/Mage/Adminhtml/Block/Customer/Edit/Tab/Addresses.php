@@ -236,7 +236,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Addresses extends Mage_Adminhtml_Bl
      * @return string
      */
     public function getDefaultCountriesJson() {
-        $websites = Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteValuesForForm(false, true);
+        $websites = Mage::getSingleton('Mage_Core_Model_System_Store')->getWebsiteValuesForForm(false, true);
         $result = array();
         foreach ($websites as $website) {
             $result[$website['value']] = Mage::app()->getWebsite($website['value'])->getConfig(

@@ -41,6 +41,8 @@ class Mage_Core_Model_Translate
     const CONFIG_KEY_DESIGN_PACKAGE = 'package';
     const CONFIG_KEY_DESIGN_THEME   = 'theme';
 
+    const XML_PATH_LOCALE_INHERITANCE = 'global/locale/inheritance';
+
     /**
      * Default translation string
      */
@@ -104,15 +106,39 @@ class Mage_Core_Model_Translate
      */
     protected $_canUseInline = true;
 
-    public function __construct()
+    /**
+     * Locale hierarchy (empty by default)
+     *
+     * @var array
+     */
+    protected $_localeHierarchy = array();
+
+    /**
+     * Initialize translate model
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
     {
+        if (isset($data['locale_hierarchy']) && is_array($data['locale_hierarchy'])) {
+            $this->_localeHierarchy = $data['locale_hierarchy'];
+        } else {
+            // Try to load locale inheritance from Magento configuration
+            $inheritanceNode = Mage::getConfig()->getNode(self::XML_PATH_LOCALE_INHERITANCE);
+            if ($inheritanceNode instanceof Varien_Simplexml_Element) {
+                $this->_localeHierarchy = Mage::helper('Mage_Core_Helper_Translate')->composeLocaleHierarchy(
+                    $inheritanceNode->asCanonicalArray()
+                );
+            }
+        }
     }
 
     /**
      * Initialization translation data
      *
-     * @param   string $area
-     * @return  Mage_Core_Model_Translate
+     * @param string $area
+     * @param bool $forceReload
+     * @return Mage_Core_Model_Translate
      */
     public function init($area, $forceReload = false)
     {
@@ -205,19 +231,38 @@ class Mage_Core_Model_Translate
     }
 
     /**
-     * Loading data from module translation files
+     * Load data from module translation files
      *
-     * @param   string $moduleName
-     * @param   string $files
-     * @return  Mage_Core_Model_Translate
+     * @param string $moduleName
+     * @param array $files
+     * @param boolean $forceReload
+     * @return Mage_Core_Model_Translate
      */
-    protected function _loadModuleTranslation($moduleName, $files, $forceReload=false)
+    protected function _loadModuleTranslation($moduleName, $files, $forceReload = false)
     {
+        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
         foreach ($files as $file) {
-            $file = $this->_getModuleFilePath($moduleName, $file);
-            $this->_addData($this->_getFileData($file), $moduleName, $forceReload);
+            foreach ($requiredLocaleList as $locale) {
+                $moduleFilePath = $this->_getModuleFilePath($moduleName, $file, $locale);
+                $this->_addData($this->_getFileData($moduleFilePath), $moduleName, $forceReload);
+            }
         }
         return $this;
+    }
+
+    /**
+     * Compose the list of locales which are required to translate text entity based on given locale
+     *
+     * @param string $locale
+     * @return array
+     */
+    protected function _composeRequiredLocaleList($locale)
+    {
+        $requiredLocaleList = array($locale);
+        if (isset($this->_localeHierarchy[$locale])) {
+            $requiredLocaleList = array_merge($this->_localeHierarchy[$locale], $requiredLocaleList);
+        }
+        return $requiredLocaleList;
     }
 
     /**
@@ -263,14 +308,18 @@ class Mage_Core_Model_Translate
     }
 
     /**
-     * Loading current theme translation
+     * Load current theme translation
      *
+     * @param boolean $forceReload
      * @return Mage_Core_Model_Translate
      */
     protected function _loadThemeTranslation($forceReload = false)
     {
-        $file = Mage::getDesign()->getLocaleFileName('translate.csv');
-        $this->_addData($this->_getFileData($file), false, $forceReload);
+        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
+        foreach ($requiredLocaleList as $locale) {
+            $file = Mage::getDesign()->getLocaleFileName('translate.csv', array('locale' => $locale));
+            $this->_addData($this->_getFileData($file), false, $forceReload);
+        }
         return $this;
     }
 
@@ -281,22 +330,26 @@ class Mage_Core_Model_Translate
      */
     protected function _loadDbTranslation($forceReload = false)
     {
-        $arr = $this->getResource()->getTranslationArray(null, $this->getLocale());
-        $this->_addData($arr, $this->getConfig(self::CONFIG_KEY_STORE), $forceReload);
+        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
+        foreach ($requiredLocaleList as $locale) {
+            $arr = $this->getResource()->getTranslationArray(null, $locale);
+            $this->_addData($arr, $this->getConfig(self::CONFIG_KEY_STORE), $forceReload);
+        }
         return $this;
     }
 
     /**
      * Retrieve translation file for module
      *
-     * @param   string $module
-     * @return  string
+     * @param string $module
+     * @param string $fileName
+     * @param string $locale
+     * @return string
      */
-    protected function _getModuleFilePath($module, $fileName)
+    protected function _getModuleFilePath($module, $fileName, $locale)
     {
-        //$file = Mage::getConfig()->getModuleDir('locale', $module);
-        $file = Mage::getBaseDir('locale');
-        $file.= DS.$this->getLocale().DS.$fileName;
+        $file = Mage::getModuleDir('locale', $module);
+        $file .= DS . $locale . DS . $fileName;
         return $file;
     }
 

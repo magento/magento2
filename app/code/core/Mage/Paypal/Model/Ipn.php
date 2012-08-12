@@ -130,30 +130,25 @@ class Mage_Paypal_Model_Ipn
      */
     protected function _postBack(Zend_Http_Client_Adapter_Interface $httpAdapter)
     {
-            $sReq = '';
-            foreach ($this->_request as $k => $v) {
-                $sReq .= '&'.$k.'='.urlencode($v);
-            }
-            $sReq .= "&cmd=_notify-validate";
-            $sReq = substr($sReq, 1);
-            $this->_debugData['postback'] = $sReq;
-            $this->_debugData['postback_to'] = $this->_config->getPaypalUrl();
+        $postbackQuery = http_build_query($this->_request) . '&cmd=_notify-validate';
+        $postbackUrl = $this->_config->getPaypalUrl();
+        $this->_debugData['postback_to'] = $postbackUrl;
 
-            $httpAdapter->write(Zend_Http_Client::POST, $this->_config->getPaypalUrl(), '1.1', array(), $sReq);
-            try {
-                $response = $httpAdapter->read();
-            } catch (Exception $e) {
-                $this->_debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-                throw $e;
-            }
-            $this->_debugData['postback_result'] = $response;
+        $httpAdapter->write(Zend_Http_Client::POST, $postbackUrl, '1.1', array(), $postbackQuery);
+        try {
+            $postbackResult = $httpAdapter->read();
+        } catch (Exception $e) {
+            $this->_debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
+            throw $e;
+        }
 
-            $response = preg_split('/^\r?$/m', $response, 2);
-            $response = trim($response[1]);
-            if ($response != 'VERIFIED') {
-                throw new Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
-            }
-            unset($this->_debugData['postback'], $this->_debugData['postback_result']);
+        $response = preg_split('/^\r?$/m', $postbackResult, 2);
+        $response = trim($response[1]);
+        if ($response != 'VERIFIED') {
+            $this->_debugData['postback'] = $postbackQuery;
+            $this->_debugData['postback_result'] = $postbackResult;
+            throw new Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
+        }
     }
 
     /**
@@ -178,10 +173,10 @@ class Mage_Paypal_Model_Ipn
                 exit;
             }
             // re-initialize config with the method code and store id
-            $methodCode = $this->_order->getPayment()->getMethod();
-            $this->_config = Mage::getModel('Mage_Paypal_Model_Config', array($methodCode, $this->_order->getStoreId()));
-            if (!$this->_config->isMethodActive($methodCode) || !$this->_config->isMethodAvailable()) {
-                throw new Exception(sprintf('Method "%s" is not available.', $methodCode));
+            $method = $this->_order->getPayment()->getMethod();
+            $this->_config = Mage::getModel('Mage_Paypal_Model_Config', array($method, $this->_order->getStoreId()));
+            if (!$this->_config->isMethodActive($method) || !$this->_config->isMethodAvailable()) {
+                throw new Exception(sprintf('Method "%s" is not available.', $method));
             }
 
             $this->_verifyOrder();
@@ -363,6 +358,7 @@ class Mage_Paypal_Model_Ipn
 
         $payment = $order->getPayment();
         $payment->setTransactionId($this->getRequestData('txn_id'))
+            ->setCurrencyCode($this->getRequestData('mc_currency'))
             ->setPreparedMessage($this->_createIpnComment(''))
             ->setIsTransactionClosed(0);
         $order->save();
@@ -390,6 +386,7 @@ class Mage_Paypal_Model_Ipn
         $this->_importPaymentInformation();
         $payment = $this->_order->getPayment();
         $payment->setTransactionId($this->getRequestData('txn_id'))
+            ->setCurrencyCode($this->getRequestData('mc_currency'))
             ->setPreparedMessage($this->_createIpnComment(''))
             ->setParentTransactionId($this->getRequestData('parent_txn_id'))
             ->setShouldCloseParentTransaction('Completed' === $this->getRequestData('auth_status'))
@@ -398,12 +395,13 @@ class Mage_Paypal_Model_Ipn
         $this->_order->save();
 
         // notify customer
-        if ($invoice = $payment->getCreatedInvoice() && !$this->_order->getEmailSent()) {
-            $comment = $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
-                    Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
-                )
-                ->setIsCustomerNotified(true)
-                ->save();
+        $invoice = $payment->getCreatedInvoice();
+        if ($invoice && !$this->_order->getEmailSent()) {
+            $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
+                Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
+            )
+            ->setIsCustomerNotified(true)
+            ->save();
         }
     }
 

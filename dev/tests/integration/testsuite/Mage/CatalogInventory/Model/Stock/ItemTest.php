@@ -37,6 +37,11 @@ class Mage_CatalogInventory_Model_Stock_ItemTest extends PHPUnit_Framework_TestC
         $this->_model = new Mage_CatalogInventory_Model_Stock_Item;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     /**
      * Simple product with stock item
      */

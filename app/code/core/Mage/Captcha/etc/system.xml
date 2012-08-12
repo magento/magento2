@@ -219,7 +219,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                             <depends><enable>1</enable></depends>
-                            <frontend_class>required-entry</frontend_class>
+                            <frontend_class>required-entry validate-range range-1-8</frontend_class>
                         </length>
                         <symbols translate="label comment">
                             <label>Symbols Used in CAPTCHA</label>

@@ -55,6 +55,9 @@ class Mage_Core_Controller_Varien_Router_Default extends Mage_Core_Controller_Va
             ->setControllerName($controllerName)
             ->setActionName($actionName);
 
-        return true;
+        return Mage::getControllerInstance('Mage_Core_Controller_Varien_Action_Forward',
+            $request,
+            $this->getFront()->getResponse()
+        );
     }
 }

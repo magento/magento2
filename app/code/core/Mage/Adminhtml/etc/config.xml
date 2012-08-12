@@ -29,18 +29,14 @@
     <modules>
         <Mage_Adminhtml>
             <version>0.7.1</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Admin/>
+            </depends>
         </Mage_Adminhtml>
     </modules>
     <global>
-        <template>
-            <email>
-                <admin_emails_forgot_email_template translate="label" module="Mage_Adminhtml">
-                    <label>Forgot Admin Password</label>
-                    <file>email/password_reset_confirmation.html</file>
-                    <type>html</type>
-                </admin_emails_forgot_email_template>
-            </email>
-        </template>
         <events>
             <adminhtml_controller_action_predispatch_start>
                 <observers>
@@ -74,14 +70,6 @@
     </admin>
     <adminhtml>
         <events>
-            <controller_action_predispatch>
-                <observers>
-                    <auth>
-                        <class>Mage_Adminhtml_Model_Observer</class>
-                        <method>actionPreDispatchAdmin</method>
-                    </auth>
-                </observers>
-            </controller_action_predispatch>
             <core_locale_set_locale>
                 <observers>
                     <bind_locale>
@@ -102,15 +90,15 @@
         <global_search>
             <products>
                 <class>Mage_Adminhtml_Model_Search_Catalog</class>
-                <acl>catalog</acl>
+                <acl>Mage_Catalog::catalog</acl>
             </products>
             <customers>
                 <class>Mage_Adminhtml_Model_Search_Customer</class>
-                <acl>customer</acl>
+                <acl>Mage_Customer::customer</acl>
             </customers>
             <sales>
                 <class>Mage_Adminhtml_Model_Search_Order</class>
-                <acl>sales</acl>
+                <acl>Mage_Sales::sales</acl>
             </sales>
         </global_search>
         <translate>

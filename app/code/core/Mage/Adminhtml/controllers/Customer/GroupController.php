@@ -52,7 +52,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
         $this->_title($this->__('Customers'))->_title($this->__('Customer Groups'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('customer/group');
+        $this->_setActiveMenu('Mage_Customer::customer_group');
         $this->_addBreadcrumb(Mage::helper('Mage_Customer_Helper_Data')->__('Customers'), Mage::helper('Mage_Customer_Helper_Data')->__('Customers'));
         $this->_addBreadcrumb(Mage::helper('Mage_Customer_Helper_Data')->__('Customer Groups'), Mage::helper('Mage_Customer_Helper_Data')->__('Customer Groups'));
         $this->renderLayout();
@@ -65,7 +65,7 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
     {
         $this->_initGroup();
         $this->loadLayout();
-        $this->_setActiveMenu('customer/group');
+        $this->_setActiveMenu('Mage_Customer::customer_group');
         $this->_addBreadcrumb(Mage::helper('Mage_Customer_Helper_Data')->__('Customers'), Mage::helper('Mage_Customer_Helper_Data')->__('Customers'));
         $this->_addBreadcrumb(Mage::helper('Mage_Customer_Helper_Data')->__('Customer Groups'), Mage::helper('Mage_Customer_Helper_Data')->__('Customer Groups'), $this->getUrl('*/customer_group'));
 
@@ -154,6 +154,6 @@ class Mage_Adminhtml_Customer_GroupController extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('customer/group');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Customer::group');
     }
 }

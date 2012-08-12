@@ -32,7 +32,8 @@
  * @package    Mage_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_Abstract
+abstract class Mage_Eav_Model_Entity_Attribute_Abstract
+    extends Mage_Core_Model_Abstract
     implements Mage_Eav_Model_Entity_Attribute_Interface
 {
     const TYPE_STATIC = 'static';
@@ -97,9 +98,10 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
     /**
      * Load attribute data by code
      *
-     * @param   mixed $entityType
-     * @param   string $code
-     * @return  Mage_Eav_Model_Entity_Attribute_Abstract
+     * @param  mixed $entityType
+     * @param  string $code
+     * @return Mage_Eav_Model_Entity_Attribute_Abstract
+     * @throws Mage_Core_Exception
      */
     public function loadByCode($entityType, $code)
     {
@@ -265,7 +267,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
     }
 
     /**
-     * Retreive entity type
+     * Retrieve entity type
      *
      * @return string
      */
@@ -300,7 +302,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
     }
 
     /**
-     * Retreive entity type
+     * Retrieve entity type
      *
      * @return string
      */
@@ -313,6 +315,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
      * Retrieve backend instance
      *
      * @return Mage_Eav_Model_Entity_Attribute_Backend_Abstract
+     * @throws Mage_Core_Exception
      */
     public function getBackend()
     {
@@ -352,6 +355,7 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
      * Retrieve source instance
      *
      * @return Mage_Eav_Model_Entity_Attribute_Source_Abstract
+     * @throws Mage_Core_Exception
      */
     public function getSource()
     {
@@ -370,10 +374,15 @@ abstract class Mage_Eav_Model_Entity_Attribute_Abstract extends Mage_Core_Model_
         return $this->_source;
     }
 
+    /**
+     * Whether possible attribute values are retrieved from finite source
+     *
+     * @return bool
+     */
     public function usesSource()
     {
-        return $this->getFrontendInput() === 'select' || $this->getFrontendInput() === 'multiselect'
-            || $this->getData('source_model') != '';
+        $input = $this->getFrontendInput();
+        return $input === 'select' || $input === 'multiselect' || $this->_getData('source_model') != '';
     }
 
     protected function _getDefaultBackendModel()

@@ -73,7 +73,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_TypesController extends Mage_
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/googleshopping/types')
+            ->_setActiveMenu('Mage_GoogleShopping::catalog_googleshopping_types')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Catalog'))
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Google Content'));
         return $this;
@@ -294,6 +294,6 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_TypesController extends Mage_
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/googleshopping/types');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_GoogleShopping::types');
     }
 }

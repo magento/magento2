@@ -311,6 +311,21 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
     }
 
     /**
+     * Get result sorted ids
+     *
+     * @return array
+     */
+    public function getResultingIds()
+    {
+        $idsSelect = clone $this->getSelect();
+        $idsSelect->reset(Zend_Db_Select::LIMIT_COUNT);
+        $idsSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $idsSelect->reset(Zend_Db_Select::COLUMNS);
+        $idsSelect->columns('rt.review_id');
+        return $this->getConnection()->fetchCol($idsSelect);
+    }
+
+    /**
      * Render SQL for retrieve product count
      *
      * @return string

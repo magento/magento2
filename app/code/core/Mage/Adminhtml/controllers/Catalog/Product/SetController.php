@@ -43,7 +43,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
         $this->_setTypeId();
 
         $this->loadLayout();
-        $this->_setActiveMenu('catalog/sets');
+        $this->_setActiveMenu('Mage_Catalog::catalog_attributes_sets');
 
         $this->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'));
         $this->_addBreadcrumb(
@@ -80,7 +80,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
         Mage::register('current_attribute_set', $attributeSet);
 
         $this->loadLayout();
-        $this->_setActiveMenu('catalog/sets');
+        $this->_setActiveMenu('Mage_Catalog::catalog_attributes_sets');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $this->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'));
@@ -189,7 +189,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
         $this->_setTypeId();
 
         $this->loadLayout();
-        $this->_setActiveMenu('catalog/sets');
+        $this->_setActiveMenu('Mage_Catalog::catalog_attributes_sets');
 
         $this->_addContent(
             $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add')
@@ -226,7 +226,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/attributes/sets');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Catalog::sets');
     }
 
     /**

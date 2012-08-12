@@ -72,6 +72,16 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
     abstract protected function _getEavWebsiteTable();
 
     /**
+     * Get default attribute entity type code
+     *
+     * @return string
+     */
+    public function getEntityTypeCode()
+    {
+        return $this->_getEntityTypeCode();
+    }
+
+    /**
      * Return eav entity type instance
      *
      * @return Mage_Eav_Model_Entity_Type
@@ -79,7 +89,8 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
     public function getEntityType()
     {
         if ($this->_entityType === null) {
-            $this->_entityType = Mage::getSingleton('Mage_Eav_Model_Config')->getEntityType($this->_getEntityTypeCode());
+            $this->_entityType = Mage::getSingleton('Mage_Eav_Model_Config')
+                ->getEntityType($this->_getEntityTypeCode());
         }
         return $this->_entityType;
     }
@@ -226,9 +237,15 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
      */
     public function addSystemHiddenFilterWithPasswordHash()
     {
-        $field = '(CASE WHEN additional_table.is_system = 1 AND additional_table.is_visible = 0
-            AND main_table.attribute_code != "' . self::EAV_CODE_PASSWORD_HASH . '" THEN 1 ELSE 0 END)';
-        $this->addFieldToFilter($field, 0);
+        $connection = $this->getConnection();
+        $expression = $connection->getCheckSql(
+            $connection->quoteInto(
+                'additional_table.is_system = 1 AND additional_table.is_visible = 0 AND main_table.attribute_code != ?',
+                self::EAV_CODE_PASSWORD_HASH
+            ),
+            '1', '0'
+        );
+        $this->getSelect()->where($connection->quoteInto($expression . ' = ?', 0));
         return $this;
     }
 

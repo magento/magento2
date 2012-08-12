@@ -29,6 +29,13 @@
     <modules>
         <Mage_Weee>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog />
+                <Mage_Tax />
+                <Mage_Sales />
+            </depends>
         </Mage_Weee>
     </modules>
     <global>
@@ -62,7 +69,7 @@
                 <observers>
                     <weee>
                         <class>Mage_Weee_Model_Observer</class>
-                        <method>updateCofigurableProductOptions</method>
+                        <method>updateConfigurableProductOptions</method>
                     </weee>
                 </observers>
             </catalog_product_view_config>
@@ -147,6 +154,15 @@
                 </observers>
             </adminhtml_catalog_product_edit_element_types>
         </events>
+        <translate>
+            <modules>
+                <Mage_Weee>
+                    <files>
+                        <default>Mage_Weee.csv</default>
+                    </files>
+                </Mage_Weee>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <sales>
@@ -182,5 +198,14 @@
                 </weee>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_Weee>
+                    <files>
+                        <default>Mage_Weee.csv</default>
+                    </files>
+                </Mage_Weee>
+            </modules>
+        </translate>
     </frontend>
 </config>

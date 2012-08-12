@@ -228,7 +228,7 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('sales/tax_rates')
+            ->_setActiveMenu('Mage_Tax::sales_tax_rates')
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Sales'), Mage::helper('Mage_Tax_Helper_Data')->__('Sales'))
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Tax'), Mage::helper('Mage_Tax_Helper_Data')->__('Tax'));
         return $this;
@@ -247,7 +247,7 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
         $this->_title($this->__('Import and Export Tax Rates'));
 
         $this->loadLayout()
-            ->_setActiveMenu('sales/tax_importExport')
+            ->_setActiveMenu('Mage_Tax::sales_tax_import_export')
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_ImportExport'))
             ->renderLayout();
     }
@@ -464,13 +464,13 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
 
         switch ($this->getRequest()->getActionName()) {
             case 'importExport':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/tax/import_export');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tax::import_export');
                 break;
             case 'index':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/tax/rates');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tax::tax_rates');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/tax/rates');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tax::tax_rates');
                 break;
         }
     }

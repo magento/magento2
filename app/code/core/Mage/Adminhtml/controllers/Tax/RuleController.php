@@ -156,7 +156,7 @@ class Mage_Adminhtml_Tax_RuleController extends Mage_Adminhtml_Controller_Action
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('sales/tax/rule')
+            ->_setActiveMenu('Mage_Tax::sales_tax_rules')
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Tax'), Mage::helper('Mage_Tax_Helper_Data')->__('Tax'))
             ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rules'), Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rules'))
         ;
@@ -165,6 +165,6 @@ class Mage_Adminhtml_Tax_RuleController extends Mage_Adminhtml_Controller_Action
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/tax/rules');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tax::rules');
     }
 }

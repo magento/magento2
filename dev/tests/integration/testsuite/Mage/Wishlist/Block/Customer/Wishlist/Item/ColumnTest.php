@@ -45,6 +45,12 @@ class Mage_Wishlist_Block_Customer_Wishlist_Item_ColumnTest extends PHPUnit_Fram
 
     }
 
+    protected function tearDown()
+    {
+        $this->_layout = null;
+        $this->_block = null;
+    }
+
     public function testToHtml()
     {
         $item = new StdClass;

@@ -77,7 +77,7 @@ class Mage_Paypal_Block_Iframe extends Mage_Payment_Block_Form
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
-            if (file_exists(Mage::getDesign()->getTemplateFilename($templateFile))) {
+            if (file_exists(Mage::getDesign()->getFilename($templateFile))) {
                 $this->setTemplate($templateFile);
             } else {
                 $this->setTemplate('hss/iframe.phtml');

@@ -35,11 +35,16 @@ class Mage_DesignEditor_Block_Toolbar_BreadcrumbsTest extends PHPUnit_Framework_
     protected function setUp()
     {
         $layoutUtility = new Mage_Core_Utility_Layout($this);
-        $pageTypesFixture = __DIR__ . '/../../../Core/Model/Layout/_files/_page_types.xml';
+        $pageTypesFixture = __DIR__ . '/../../../Core/Model/Layout/_files/_handles.xml';
         $this->_block = new Mage_DesignEditor_Block_Toolbar_Breadcrumbs(
             array('template' => 'toolbar/breadcrumbs.phtml')
         );
         $this->_block->setLayout($layoutUtility->getLayoutFromFixture($pageTypesFixture));
+    }
+
+    protected function tearDown()
+    {
+        $this->_block = null;
     }
 
     /**

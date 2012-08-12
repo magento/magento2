@@ -36,7 +36,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
     /**
      * Admin session model
      *
-     * @var null|Mage_Admin_Model_Session
+     * @var null|Mage_Backend_Model_Auth_Session
      */
     protected $_adminSession = null;
 
@@ -179,25 +179,25 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
         $this->_title($this->__('Reports'))->_title($this->__('Sales'))->_title($this->__('Refresh Statistics'));
 
         $this->_initAction()
-            ->_setActiveMenu('report/statistics/refreshstatistics')
+            ->_setActiveMenu('Mage_Reports::report_statistics')
             ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh Statistics'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh Statistics'))
             ->renderLayout();
     }
 
     protected function _isAllowed()
     {
-        return $this->_getSession()->isAllowed('report/statistics');
+        return $this->_getSession()->isAllowed('Mage_Reports::statistics');
     }
 
     /**
      * Retrieve admin session model
      *
-     * @return Mage_Admin_Model_Session
+     * @return Mage_Backend_Model_Auth_Session
      */
     protected function _getSession()
     {
         if (is_null($this->_adminSession)) {
-            $this->_adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+            $this->_adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
         return $this->_adminSession;
     }

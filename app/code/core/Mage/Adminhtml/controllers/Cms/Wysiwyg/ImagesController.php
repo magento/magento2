@@ -186,9 +186,10 @@ class Mage_Adminhtml_Cms_Wysiwyg_ImagesController extends Mage_Adminhtml_Control
         $file = Mage::helper('Mage_Cms_Helper_Wysiwyg_Images')->idDecode($file);
         $thumb = $this->getStorage()->resizeOnTheFly($file);
         if ($thumb !== false) {
-            $image = Varien_Image_Adapter::factory('GD2');
+            $adapter = Mage::helper('Mage_Core_Helper_Data')->getImageAdapterType();
+            $image = Varien_Image_Adapter::factory($adapter);
             $image->open($thumb);
-            $image->display();
+            $this->getResponse()->setHeader('Content-Type', $image->getMimeType())->setBody($image->getImage());
         } else {
             // todo: genearte some placeholder
         }
@@ -228,6 +229,6 @@ class Mage_Adminhtml_Cms_Wysiwyg_ImagesController extends Mage_Adminhtml_Control
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('cms/media_gallery');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Cms::media_gallery');
     }
 }

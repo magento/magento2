@@ -43,63 +43,60 @@ class Mage_Core_Helper_Http extends Mage_Core_Helper_Abstract
     protected $_remoteAddr;
 
     /**
-     * Validate and retrieve user and password from HTTP
+     * Extract "login" and "password" credentials from HTTP-request
      *
+     * Returns plain array with 2 items: login and password respectively
+     *
+     * @param Zend_Controller_Request_Http $request
      * @return array
      */
-    public function authValidate($headers = null)
+    public function getHttpAuthCredentials(Zend_Controller_Request_Http $request)
     {
-        if(!is_null($headers)) {
-            $_SERVER = $headers;
-        }
-
+        $server = $request->getServer();
         $user = '';
         $pass = '';
 
-        // moshe's fix for CGI
-        if (empty($_SERVER['HTTP_AUTHORIZATION'])) {
-            foreach ($_SERVER as $k=>$v) {
-                if (substr($k, -18)==='HTTP_AUTHORIZATION' && !empty($v)) {
-                    $_SERVER['HTTP_AUTHORIZATION'] = $v;
+        if (empty($server['HTTP_AUTHORIZATION'])) {
+            foreach ($server as $k => $v) {
+                if (substr($k, -18) === 'HTTP_AUTHORIZATION' && !empty($v)) {
+                    $server['HTTP_AUTHORIZATION'] = $v;
                     break;
                 }
             }
         }
 
-        if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-            $user = $_SERVER['PHP_AUTH_USER'];
-            $pass = $_SERVER['PHP_AUTH_PW'];
+        if (isset($server['PHP_AUTH_USER']) && isset($server['PHP_AUTH_PW'])) {
+            $user = $server['PHP_AUTH_USER'];
+            $pass = $server['PHP_AUTH_PW'];
         }
-        //  IIS Note::  For HTTP Authentication to work with IIS,
-        // the PHP directive cgi.rfc2616_headers must be set to 0 (the default value).
-        elseif (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
-            $auth = $_SERVER['HTTP_AUTHORIZATION'];
+        /**
+         * IIS Note: for HTTP authentication to work with IIS,
+         * the PHP directive cgi.rfc2616_headers must be set to 0 (the default value).
+         */
+        elseif (!empty($server['HTTP_AUTHORIZATION'])) {
+            $auth = $server['HTTP_AUTHORIZATION'];
             list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, " ") + 1)));
         }
-        elseif (!empty($_SERVER['Authorization'])) {
-            $auth = $_SERVER['Authorization'];
+        elseif (!empty($server['Authorization'])) {
+            $auth = $server['Authorization'];
             list($user, $pass) = explode(':', base64_decode(substr($auth, strpos($auth, " ") + 1)));
-        }
-
-        if (!$user || !$pass) {
-            $this->authFailed();
         }
 
         return array($user, $pass);
     }
 
     /**
-     * Send auth failed Headers and exit
+     * Set "auth failed" headers to the specified response object
      *
+     * @param Zend_Controller_Response_Http $response
+     * @param string $realm
      */
-    public function authFailed()
+    public function failHttpAuthentication(Zend_Controller_Response_Http $response, $realm)
     {
-        Mage::app()->getResponse()
-            ->setHeader('HTTP/1.1','401 Unauthorized')
-            ->setHeader('WWW-Authenticate','Basic realm="RSS Feeds"')
+        $response->setHeader('HTTP/1.1', '401 Unauthorized')
+            ->setHeader('WWW-Authenticate', 'Basic realm="' . $realm . '"')
             ->setBody('<h1>401 Unauthorized</h1>')
-            ->sendResponse();
-        exit;
+        ;
     }
 
     /**

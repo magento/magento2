@@ -83,7 +83,7 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
     /**
      * Retrieve list of products with basic info (id, sku, type, set, name)
      *
-     * @param array $filters
+     * @param null|object|array $filters
      * @param string|int $store
      * @return array
      */
@@ -93,34 +93,28 @@ class Mage_Catalog_Model_Product_Api extends Mage_Catalog_Model_Api_Resource
             ->addStoreFilter($this->_getStoreId($store))
             ->addAttributeToSelect('name');
 
-        if (is_array($filters)) {
-            try {
-                foreach ($filters as $field => $value) {
-                    if (isset($this->_filtersMap[$field])) {
-                        $field = $this->_filtersMap[$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
+        /** @var $apiHelper Mage_Api_Helper_Data */
+        $apiHelper = Mage::helper('Mage_Api_Helper_Data');
+        $filters = $apiHelper->parseFilters($filters, $this->_filtersMap);
+        try {
+            foreach ($filters as $field => $value) {
+                $collection->addFieldToFilter($field, $value);
             }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('filters_invalid', $e->getMessage());
         }
-
         $result = array();
-
         foreach ($collection as $product) {
-//            $result[] = $product->getData();
-            $result[] = array( // Basic product data
+            $result[] = array(
                 'product_id' => $product->getId(),
                 'sku'        => $product->getSku(),
                 'name'       => $product->getName(),
                 'set'        => $product->getAttributeSetId(),
                 'type'       => $product->getTypeId(),
-                'category_ids'       => $product->getCategoryIds()
+                'category_ids' => $product->getCategoryIds(),
+                'website_ids'  => $product->getWebsiteIds()
             );
         }
-
         return $result;
     }
 

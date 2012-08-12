@@ -26,11 +26,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<phpunit bootstrap="./framework/bootstrap.php" clors="true">
+<phpunit bootstrap="./framework/bootstrap.php">
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+            <exclude>testsuite/integrity</exclude>
         </testsuite>
     </testsuites>
      <!-- Code coverage filters -->
@@ -79,6 +80,6 @@
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Magento_Test_Listener"/>
+        <listener class="Magento_Test_Event_PhpUnit"/>
     </listeners>
 </phpunit>

@@ -72,8 +72,15 @@
         </xs:sequence>
         <xs:attribute name="version" type="version" use="required"/>
         <xs:attribute name="code" type="xs:string" use="required"/>
-        <xs:attribute name="parent" type="xs:string"/>
+        <xs:attribute name="parent" type="parent_theme"/>
     </xs:complexType>
+
+    <!-- Short theme name: '<theme>'. Fully-qualified theme name: '<package>/<theme>'. -->
+    <xs:simpleType name="parent_theme">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([^/]+/)?[^/]+"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="version">
         <xs:restriction base="xs:string">

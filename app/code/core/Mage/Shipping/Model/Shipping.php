@@ -431,7 +431,7 @@ class Mage_Shipping_Model_Shipping
      */
     public function requestToShipment(Mage_Sales_Model_Order_Shipment $orderShipment)
     {
-        $admin = Mage::getSingleton('Mage_Admin_Model_Session')->getUser();
+        $admin = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser();
         $order = $orderShipment->getOrder();
         $address = $order->getShippingAddress();
         $shippingMethod = $order->getShippingMethod(true);

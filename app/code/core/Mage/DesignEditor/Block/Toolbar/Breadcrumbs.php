@@ -35,7 +35,7 @@ class Mage_DesignEditor_Block_Toolbar_Breadcrumbs extends Mage_Core_Block_Templa
      * Result format:
      * array(
      *     array(
-     *         'label' => 'Some Page Type',
+     *         'label' => 'Some Page Handle',
      *         'url'   => http://localhost/index.php/design/editor/page/page_type/some_page_type/',
      *     ),
      *     // ...
@@ -45,20 +45,13 @@ class Mage_DesignEditor_Block_Toolbar_Breadcrumbs extends Mage_Core_Block_Templa
      */
     public function getBreadcrumbs()
     {
-        $result = array();
         $layoutUpdate = $this->getLayout()->getUpdate();
-        $pageTypes = $layoutUpdate->getPageHandles();
-        if (!$pageTypes) {
-            /** @var $controllerAction Mage_Core_Controller_Varien_Action */
-            $controllerAction = Mage::app()->getFrontController()->getAction();
-            if ($controllerAction) {
-                $pageTypes = $layoutUpdate->getPageLayoutHandles($controllerAction->getDefaultLayoutHandle());
-            }
-        }
-        foreach ($pageTypes as $pageTypeName) {
+        $result = array();
+        $pageHandles = $this->_getPageHandlesPath();
+        foreach ($pageHandles as $pageHandle) {
             $result[] = array(
-                'label' => $this->escapeHtml($layoutUpdate->getPageTypeLabel($pageTypeName)),
-                'url'   => $this->getUrl('design/editor/page', array('page_type' => $pageTypeName))
+                'label' => $this->escapeHtml($layoutUpdate->getPageHandleLabel($pageHandle)),
+                'url'   => $this->getUrl('design/editor/page', array('handle' => $pageHandle))
             );
         }
         /** @var $blockHead Mage_Page_Block_Html_Head */
@@ -72,5 +65,29 @@ class Mage_DesignEditor_Block_Toolbar_Breadcrumbs extends Mage_Core_Block_Templa
             $result[count($result) - 1]['url'] = '';
         }
         return $result;
+    }
+
+    /**
+     * Return breadcrumbs path leading to the page handle selected
+     *
+     * @return array
+     */
+    protected function _getPageHandlesPath()
+    {
+        $layoutUpdate = $this->getLayout()->getUpdate();
+        $pageHandles = $layoutUpdate->getPageHandles();
+        if (!$pageHandles) {
+            /** @var $controllerAction Mage_Core_Controller_Varien_Action */
+            $controllerAction = Mage::app()->getFrontController()->getAction();
+            if ($controllerAction) {
+                $pageHandles = array($controllerAction->getDefaultLayoutHandle());
+            }
+        }
+        if (count($pageHandles) == 1) {
+            $pageHandle = reset($pageHandles);
+            $pageHandles = $layoutUpdate->getPageHandleParents($pageHandle, false);
+            $pageHandles[] = $pageHandle;
+        }
+        return $pageHandles;
     }
 }

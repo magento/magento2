@@ -138,7 +138,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      *
      * @var array
      */
-    protected $_particularAttributes = array();
+    protected $_specialAttributes = array();
 
     /**
      * Permanent entity columns.
@@ -530,7 +530,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      */
     public function isAttributeParticular($attrCode)
     {
-        return in_array($attrCode, $this->_particularAttributes);
+        return in_array($attrCode, $this->_specialAttributes);
     }
 
     /**
@@ -664,32 +664,46 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
     public function validateData()
     {
         if (!$this->_dataValidated) {
-            // does all permanent columns exists?
-            if (($colsAbsent = array_diff($this->_permanentAttributes, $this->_getSource()->getColNames()))) {
+            /** @var $helper Mage_ImportExport_Helper_Data */
+            $helper = Mage::helper('Mage_ImportExport_Helper_Data');
+
+            // do all permanent columns exist?
+            if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
                 Mage::throwException(
-                    Mage::helper('Mage_ImportExport_Helper_Data')->__('Can not find required columns: %s', implode(', ', $colsAbsent))
+                    $helper->__('Can not find required columns: %s', implode(', ', $absentColumns))
+                );
+            }
+
+            // check attribute columns names validity
+            $columnNumber       = 0;
+            $emptyHeaderColumns = array();
+            $invalidColumns     = array();
+            foreach ($this->getSource()->getColNames() as $columnName) {
+                $columnNumber++;
+                if (!$this->isAttributeParticular($columnName)) {
+                    if (trim($columnName) == '') {
+                        $emptyHeaderColumns[] = $columnNumber;
+                    } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                        $invalidColumns[] = $columnName;
+                    }
+                }
+            }
+
+            if ($emptyHeaderColumns) {
+                Mage::throwException(
+                    $helper->__('Columns number: "%s" have empty headers', implode('", "', $emptyHeaderColumns))
+                );
+            }
+            if ($invalidColumns) {
+                Mage::throwException(
+                    $helper->__('Column names: "%s" are invalid', implode('", "', $invalidColumns))
                 );
             }
 
             // initialize validation related attributes
             $this->_errors = array();
             $this->_invalidRows = array();
-
-            // check attribute columns names validity
-            $invalidColumns = array();
-
-            foreach ($this->_getSource()->getColNames() as $colName) {
-                if (!preg_match('/^[a-z][a-z0-9_]*$/', $colName) && !$this->isAttributeParticular($colName)) {
-                    $invalidColumns[] = $colName;
-                }
-            }
-            if ($invalidColumns) {
-                Mage::throwException(
-                    Mage::helper('Mage_ImportExport_Helper_Data')->__('Column names: "%s" are invalid', implode('", "', $invalidColumns))
-                );
-            }
             $this->_saveValidatedBunches();
-
             $this->_dataValidated = true;
         }
         return $this;

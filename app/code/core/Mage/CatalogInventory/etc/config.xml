@@ -29,6 +29,11 @@
     <modules>
         <Mage_CatalogInventory>
             <version>1.6.0.0.2</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+            </depends>
         </Mage_CatalogInventory>
     </modules>
     <global>

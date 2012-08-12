@@ -26,24 +26,4 @@
  */
 -->
 <config>
-    <menu>
-        <system>
-            <children>
-                <extensions translate="title" module="Mage_Connect">
-                    <title>Magento Connect</title>
-                    <sort_order>80</sort_order>
-                    <children>
-                        <local translate="title">
-                            <title>Magento Connect Manager</title>
-                            <action>adminhtml/extension_local</action>
-                        </local>
-                        <custom translate="title">
-                            <title>Package Extensions</title>
-                            <action>adminhtml/extension_custom</action>
-                        </custom>
-                    </children>
-                </extensions>
-            </children>
-        </system>
-    </menu>
 </config>

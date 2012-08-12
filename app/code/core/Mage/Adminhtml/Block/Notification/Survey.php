@@ -40,9 +40,10 @@ class Mage_Adminhtml_Block_Notification_Survey extends Mage_Adminhtml_Block_Temp
      */
     public function canShow()
     {
-        $adminSession = Mage::getSingleton('Mage_Admin_Model_Session');
+        $adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         $seconds = intval(date('s', time()));
-        if ($adminSession->getHideSurveyQuestion() || !$adminSession->isAllowed('all')
+        if ($adminSession->getHideSurveyQuestion()
+            || !$adminSession->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
             || Mage_AdminNotification_Model_Survey::isSurveyViewed()
             || !Mage_AdminNotification_Model_Survey::isSurveyUrlValid())
         {

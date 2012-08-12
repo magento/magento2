@@ -55,14 +55,19 @@
             </default_setup>
         </resources>
         <session_save><![CDATA[files]]></session_save>
-    </global>
-    <admin>
-        <routers>
+        <resource>
+            <connection>
+                <types>
+                    <pdo_mysql>
+                        <adapter><![CDATA[Magento_Test_Db_Adapter_Mysql]]></adapter>
+                    </pdo_mysql>
+                </types>
+            </connection>
+        </resource>
+        <areas>
             <adminhtml>
-                <args>
-                    <frontName><![CDATA[admin]]></frontName>
-                </args>
+                <frontName><![CDATA[backend]]></frontName>
             </adminhtml>
-        </routers>
-    </admin>
+        </areas>
+    </global>
 </config>

@@ -57,17 +57,17 @@ class Varien_Data_Form extends Varien_Data_Form_Abstract
         $this->_allElements = new Varien_Data_Form_Element_Collection($this);
     }
 
-    public static function setElementRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer)
+    public static function setElementRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer = null)
     {
         self::$_defaultElementRenderer = $renderer;
     }
 
-    public static function setFieldsetRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer)
+    public static function setFieldsetRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer = null)
     {
         self::$_defaultFieldsetRenderer = $renderer;
     }
 
-    public static function setFieldsetElementRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer)
+    public static function setFieldsetElementRenderer(Varien_Data_Form_Element_Renderer_Interface $renderer = null)
     {
         self::$_defaultFieldsetElementRenderer = $renderer;
     }

@@ -57,6 +57,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ->setSortOrder()
                 ->load();
 
+            $tabAttributesBlock = $this->getLayout()->createBlock(
+                $this->getAttributeTabBlock(), 'adminhtml.catalog.product.edit.tab.attributes'
+            );
             foreach ($groupCollection as $group) {
                 $attributes = $product->getAttributes($group->getId(), true);
                 // do not add groups without attributes
@@ -73,10 +76,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
 
                 $this->addTab('group_'.$group->getId(), array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__($group->getAttributeGroupName()),
-                    'content'   => $this->_translateHtml($this->getLayout()->createBlock($this->getAttributeTabBlock(),
-                        'adminhtml.catalog.product.edit.tab.attributes')->setGroup($group)
-                            ->setGroupAttributes($attributes)
-                            ->toHtml()),
+                    'content'   => $this->_translateHtml($tabAttributesBlock->setGroup($group)
+                        ->setGroupAttributes($attributes)
+                        ->toHtml()
+                    ),
                 ));
             }
 
@@ -143,7 +146,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
 
             if( $this->getRequest()->getParam('id', false) ) {
                 if (Mage::helper('Mage_Catalog_Helper_Data')->isModuleEnabled('Mage_Review')) {
-                    if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('admin/catalog/reviews_ratings')){
+                    if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Review::reviews_ratings')){
                         $this->addTab('reviews', array(
                             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Reviews'),
                             'url'   => $this->getUrl('*/*/reviews', array('_current' => true)),
@@ -152,7 +155,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                     }
                 }
                 if (Mage::helper('Mage_Catalog_Helper_Data')->isModuleEnabled('Mage_Tag')) {
-                    if (Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('admin/catalog/tag')){
+                    if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tag::tag')){
                         $this->addTab('tags', array(
                          'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Tags'),
                          'url'   => $this->getUrl('*/*/tagGrid', array('_current' => true)),

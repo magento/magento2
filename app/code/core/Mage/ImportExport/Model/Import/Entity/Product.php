@@ -218,7 +218,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      *
      * @var array
      */
-    protected $_particularAttributes = array(
+    protected $_specialAttributes = array(
         '_store', '_attribute_set', '_type', self::COL_CATEGORY, self::COL_ROOT_CATEGORY, '_product_websites',
         '_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price',
         '_links_related_sku', '_group_price_website', '_group_price_customer_group', '_group_price_price',
@@ -290,12 +290,25 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
     protected $_fileUploader;
 
     /**
-     * Constructor.
+     * Import entity which provide import of product custom options
      *
+     * @var Mage_ImportExport_Model_Import_Entity_Product_Option
      */
-    public function __construct()
+    protected $_optionEntity;
+
+    /**
+     * Constructor
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
     {
         parent::__construct();
+
+        $this->_optionEntity = isset($data['option_entity']) ? $data['option_entity']
+            : Mage::getModel('Mage_ImportExport_Model_Import_Entity_Product_Option',
+                array('product_entity' => $this)
+            );
 
         $this->_initWebsites()
             ->_initStores()
@@ -304,6 +317,30 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             ->_initCategories()
             ->_initSkus()
             ->_initCustomerGroups();
+    }
+
+    /**
+     * Retrieve instance of product custom options import entity
+     *
+     * @return Mage_ImportExport_Model_Import_Entity_Product_Option
+     */
+    public function getOptionEntity()
+    {
+        return $this->_optionEntity;
+    }
+
+    /**
+     * Set import parameters
+     *
+     * @param array $params
+     * @return Mage_ImportExport_Model_Import_Entity_Product
+     */
+    public function setParameters(array $params)
+    {
+        parent::setParameters($params);
+        $this->getOptionEntity()->setParameters($params);
+
+        return $this;
     }
 
     /**
@@ -348,7 +385,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             $this->_saveProducts();
             $this->_saveStockItem();
             $this->_saveLinks();
-            $this->_saveCustomOptions();
+            $this->getOptionEntity()->importData();
             foreach ($this->_productTypeModels as $productType => $productTypeModel) {
                 $productTypeModel->saveData();
             }
@@ -472,13 +509,13 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$type] = $model;
             }
-            $this->_particularAttributes = array_merge(
-                $this->_particularAttributes,
+            $this->_specialAttributes = array_merge(
+                $this->_specialAttributes,
                 $model->getParticularAttributes()
             );
         }
         // remove doubles
-        $this->_particularAttributes = array_unique($this->_particularAttributes);
+        $this->_specialAttributes = array_unique($this->_specialAttributes);
 
         return $this;
     }
@@ -653,265 +690,6 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
             return false;
         }
         return true;
-    }
-
-    /**
-     * Custom options save.
-     *
-     * @return Mage_ImportExport_Model_Import_Entity_Product
-     */
-    protected function _saveCustomOptions()
-    {
-        /** @var $coreResource Mage_Core_Model_Resource */
-        $coreResource   = Mage::getSingleton('Mage_Core_Model_Resource');
-        $productTable   = $coreResource->getTableName('catalog_product_entity');
-        $optionTable    = $coreResource->getTableName('catalog_product_option');
-        $priceTable     = $coreResource->getTableName('catalog_product_option_price');
-        $titleTable     = $coreResource->getTableName('catalog_product_option_title');
-        $typePriceTable = $coreResource->getTableName('catalog_product_option_type_price');
-        $typeTitleTable = $coreResource->getTableName('catalog_product_option_type_title');
-        $typeValueTable = $coreResource->getTableName('catalog_product_option_type_value');
-        $nextOptionId   = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($optionTable);
-        $nextValueId    = Mage::getResourceHelper('Mage_ImportExport')->getNextAutoincrement($typeValueTable);
-        $priceIsGlobal  = Mage::helper('Mage_Catalog_Helper_Data')->isPriceGlobal();
-        $type           = null;
-        $typeSpecific   = array(
-            'date'      => array('price', 'sku'),
-            'date_time' => array('price', 'sku'),
-            'time'      => array('price', 'sku'),
-            'field'     => array('price', 'sku', 'max_characters'),
-            'area'      => array('price', 'sku', 'max_characters'),
-            //'file'      => array('price', 'sku', 'file_extension', 'image_size_x', 'image_size_y'),
-            'drop_down' => true,
-            'radio'     => true,
-            'checkbox'  => true,
-            'multiple'  => true
-        );
-
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $customOptions = array(
-                'product_id'    => array(),
-                $optionTable    => array(),
-                $priceTable     => array(),
-                $titleTable     => array(),
-                $typePriceTable => array(),
-                $typeTitleTable => array(),
-                $typeValueTable => array()
-            );
-
-            foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
-                    continue;
-                }
-                if (self::SCOPE_DEFAULT == $this->getRowScope($rowData)) {
-                    $productId = $this->_newSku[$rowData[self::COL_SKU]]['entity_id'];
-                } elseif (!isset($productId)) {
-                    continue;
-                }
-                if (!empty($rowData['_custom_option_store'])) {
-                    if (!isset($this->_storeCodeToId[$rowData['_custom_option_store']])) {
-                        continue;
-                    }
-                    $storeId = $this->_storeCodeToId[$rowData['_custom_option_store']];
-                } else {
-                    $storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
-                }
-                if (!empty($rowData['_custom_option_type'])) { // get CO type if its specified
-                    if (!isset($typeSpecific[$rowData['_custom_option_type']])) {
-                        $type = null;
-                        continue;
-                    }
-                    $type = $rowData['_custom_option_type'];
-                    $rowIsMain = true;
-                } else {
-                    if (null === $type) {
-                        continue;
-                    }
-                    $rowIsMain = false;
-                }
-                if (!isset($customOptions['product_id'][$productId])) { // for update product entity table
-                    $customOptions['product_id'][$productId] = array(
-                        'entity_id'        => $productId,
-                        'has_options'      => 0,
-                        'required_options' => 0,
-                        'updated_at'       => now()
-                    );
-                }
-                if ($rowIsMain) {
-                    $solidParams = array(
-                        'option_id'      => $nextOptionId,
-                        'sku'            => '',
-                        'max_characters' => 0,
-                        'file_extension' => null,
-                        'image_size_x'   => 0,
-                        'image_size_y'   => 0,
-                        'product_id'     => $productId,
-                        'type'           => $type,
-                        'is_require'     => empty($rowData['_custom_option_is_required']) ? 0 : 1,
-                        'sort_order'     => empty($rowData['_custom_option_sort_order'])
-                                            ? 0 : abs($rowData['_custom_option_sort_order'])
-                    );
-
-                    if (true !== $typeSpecific[$type]) { // simple option may have optional params
-                        $priceTableRow = array(
-                            'option_id'  => $nextOptionId,
-                            'store_id'   => Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID,
-                            'price'      => 0,
-                            'price_type' => 'fixed'
-                        );
-
-                        foreach ($typeSpecific[$type] as $paramSuffix) {
-                            if (isset($rowData['_custom_option_' . $paramSuffix])) {
-                                $data = $rowData['_custom_option_' . $paramSuffix];
-
-                                if (array_key_exists($paramSuffix, $solidParams)) {
-                                    $solidParams[$paramSuffix] = $data;
-                                } elseif ('price' == $paramSuffix) {
-                                    if ('%' == substr($data, -1)) {
-                                        $priceTableRow['price_type'] = 'percent';
-                                    }
-                                    $priceTableRow['price'] = (float) rtrim($data, '%');
-                                }
-                            }
-                        }
-                        $customOptions[$priceTable][] = $priceTableRow;
-                    }
-                    $customOptions[$optionTable][] = $solidParams;
-                    $customOptions['product_id'][$productId]['has_options'] = 1;
-
-                    if (!empty($rowData['_custom_option_is_required'])) {
-                        $customOptions['product_id'][$productId]['required_options'] = 1;
-                    }
-                    $prevOptionId = $nextOptionId++; // increment option id, but preserve value for $typeValueTable
-                }
-                if ($typeSpecific[$type] === true && !empty($rowData['_custom_option_row_title'])
-                        && empty($rowData['_custom_option_store'])) {
-                    // complex CO option row
-                    $customOptions[$typeValueTable][$prevOptionId][] = array(
-                        'option_type_id' => $nextValueId,
-                        'sort_order'     => empty($rowData['_custom_option_row_sort'])
-                                            ? 0 : abs($rowData['_custom_option_row_sort']),
-                        'sku'            => !empty($rowData['_custom_option_row_sku'])
-                                            ? $rowData['_custom_option_row_sku'] : ''
-                    );
-                    if (!isset($customOptions[$typeTitleTable][$nextValueId][0])) { // ensure default title is set
-                        $customOptions[$typeTitleTable][$nextValueId][0] = $rowData['_custom_option_row_title'];
-                    }
-                    $customOptions[$typeTitleTable][$nextValueId][$storeId] = $rowData['_custom_option_row_title'];
-
-                    if (!empty($rowData['_custom_option_row_price'])) {
-                        $typePriceRow = array(
-                            'price'      => (float) rtrim($rowData['_custom_option_row_price'], '%'),
-                            'price_type' => 'fixed'
-                        );
-                        if ('%' == substr($rowData['_custom_option_row_price'], -1)) {
-                            $typePriceRow['price_type'] = 'percent';
-                        }
-                        if ($priceIsGlobal) {
-                            $customOptions[$typePriceTable][$nextValueId][0] = $typePriceRow;
-                        } else {
-                            // ensure default price is set
-                            if (!isset($customOptions[$typePriceTable][$nextValueId][0])) {
-                                $customOptions[$typePriceTable][$nextValueId][0] = $typePriceRow;
-                            }
-                            $customOptions[$typePriceTable][$nextValueId][$storeId] = $typePriceRow;
-                        }
-                    }
-                    $nextValueId++;
-                }
-                if (!empty($rowData['_custom_option_title'])) {
-                    if (!isset($customOptions[$titleTable][$prevOptionId][0])) { // ensure default title is set
-                        $customOptions[$titleTable][$prevOptionId][0] = $rowData['_custom_option_title'];
-                    }
-                    $customOptions[$titleTable][$prevOptionId][$storeId] = $rowData['_custom_option_title'];
-                }
-            }
-            if ($this->getBehavior() != Mage_ImportExport_Model_Import::BEHAVIOR_APPEND) { // remove old data?
-                $this->_connection->delete(
-                    $optionTable,
-                    $this->_connection->quoteInto('product_id IN (?)', array_keys($customOptions['product_id']))
-                );
-            }
-            // if complex options does not contain values - ignore them
-            foreach ($customOptions[$optionTable] as $key => $optionData) {
-                if ($typeSpecific[$optionData['type']] === true
-                        && !isset($customOptions[$typeValueTable][$optionData['option_id']])
-                ) {
-                    unset($customOptions[$optionTable][$key], $customOptions[$titleTable][$optionData['option_id']]);
-                }
-            }
-
-            if ($customOptions[$optionTable]) {
-                $this->_connection->insertMultiple($optionTable, $customOptions[$optionTable]);
-            } else {
-                continue; // nothing to save
-            }
-            $titleRows = array();
-
-            foreach ($customOptions[$titleTable] as $optionId => $storeInfo) {
-                foreach ($storeInfo as $storeId => $title) {
-                    $titleRows[] = array('option_id' => $optionId, 'store_id' => $storeId, 'title' => $title);
-                }
-            }
-            if ($titleRows) {
-                $this->_connection->insertOnDuplicate($titleTable, $titleRows, array('title'));
-            }
-            if ($customOptions[$priceTable]) {
-                $this->_connection->insertOnDuplicate(
-                    $priceTable,
-                    $customOptions[$priceTable],
-                    array('price', 'price_type')
-                );
-            }
-            $typeValueRows = array();
-
-            foreach ($customOptions[$typeValueTable] as $optionId => $optionInfo) {
-                foreach ($optionInfo as $row) {
-                    $row['option_id'] = $optionId;
-                    $typeValueRows[]  = $row;
-                }
-            }
-            if ($typeValueRows) {
-                $this->_connection->insertMultiple($typeValueTable, $typeValueRows);
-            }
-            $optionTypePriceRows = array();
-            $optionTypeTitleRows = array();
-
-            foreach ($customOptions[$typePriceTable] as $optionTypeId => $storesData) {
-                foreach ($storesData as $storeId => $row) {
-                    $row['option_type_id'] = $optionTypeId;
-                    $row['store_id']       = $storeId;
-                    $optionTypePriceRows[] = $row;
-                }
-            }
-            foreach ($customOptions[$typeTitleTable] as $optionTypeId => $storesData) {
-                foreach ($storesData as $storeId => $title) {
-                    $optionTypeTitleRows[] = array(
-                        'option_type_id' => $optionTypeId,
-                        'store_id'       => $storeId,
-                        'title'          => $title
-                    );
-                }
-            }
-            if ($optionTypePriceRows) {
-                $this->_connection->insertOnDuplicate(
-                    $typePriceTable,
-                    $optionTypePriceRows,
-                    array('price', 'price_type')
-                );
-            }
-            if ($optionTypeTitleRows) {
-                $this->_connection->insertOnDuplicate($typeTitleTable, $optionTypeTitleRows, array('title'));
-            }
-            if ($customOptions['product_id']) { // update product entity table to show that product has options
-                $this->_connection->insertOnDuplicate(
-                    $productTable,
-                    $customOptions['product_id'],
-                    array('has_options', 'required_options', 'updated_at')
-                );
-            }
-        }
-        return $this;
     }
 
     /**
@@ -1184,7 +962,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $rowData['attribute_set_id'] = $this->_newSku[$rowSku]['attr_set_id'];
                     $rowData[self::COL_ATTR_SET] = $this->_newSku[$rowSku]['attr_set_code'];
                 }
-                if (!empty($rowData['_product_websites'])) { // 2. Product-to-Website phase
+
+                // 2. Product-to-Website phase
+                if (!empty($rowData['_product_websites'])) {
                     $websites[$rowSku][$this->_websiteCodeToId[$rowData['_product_websites']]] = true;
                 }
 
@@ -1197,7 +977,8 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $categories[$rowSku][$this->_categories[$categoryPath]] = true;
                 }
 
-                if (!empty($rowData['_tier_price_website'])) { // 4.1. Tier prices phase
+                // 4.1. Tier prices phase
+                if (!empty($rowData['_tier_price_website'])) {
                     $tierPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_tier_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_tier_price_customer_group'] == self::VALUE_ALL)
@@ -1208,7 +989,9 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             ? 0 : $this->_websiteCodeToId[$rowData['_tier_price_website']]
                     );
                 }
-                if (!empty($rowData['_group_price_website'])) { // 4.2. Group prices phase
+
+                // 4.2. Group prices phase
+                if (!empty($rowData['_group_price_website'])) {
                     $groupPrices[$rowSku][] = array(
                         'all_groups'        => $rowData['_group_price_customer_group'] == self::VALUE_ALL,
                         'customer_group_id' => ($rowData['_group_price_customer_group'] == self::VALUE_ALL)
@@ -1218,8 +1001,10 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             ? 0 : $this->_websiteCodeToId[$rowData['_group_price_website']]
                     );
                 }
+
+                // 5. Media gallery phase
                 foreach ($this->_imagesArrayKeys as $imageCol) {
-                    if (!empty($rowData[$imageCol])) { // 5. Media gallery phase
+                    if (!empty($rowData[$imageCol])) {
                         if (!array_key_exists($rowData[$imageCol], $uploadedGalleryFiles)) {
                             $uploadedGalleryFiles[$rowData[$imageCol]] = $this->_uploadMediaFiles($rowData[$imageCol]);
                         }
@@ -1235,6 +1020,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                         'value'             => $rowData['_media_image']
                     );
                 }
+
                 // 6. Attributes phase
                 $rowStore     = self::SCOPE_STORE == $rowScope ? $this->_storeCodeToId[$rowData[self::COL_STORE]] : 0;
                 $productType  = $rowData[self::COL_TYPE];
@@ -1256,8 +1042,12 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                         continue;
                     }
                 }
-                $rowData      = $this->_productTypeModels[$productType]->prepareAttributesForSave($rowData);
-                $product      = Mage::getModel('Mage_ImportExport_Model_Import_Proxy_Product', $rowData);
+
+                $rowData = $this->_productTypeModels[$productType]->prepareAttributesWithDefaultValueForSave(
+                    $rowData,
+                    !isset($this->_oldSku[$rowSku])
+                );
+                $product = Mage::getModel('Mage_ImportExport_Model_Import_Proxy_Product', $rowData);
 
                 foreach ($rowData as $attrCode => $attrValue) {
                     $attribute = $resource->getAttribute($attrCode);
@@ -1298,9 +1088,11 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                             $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
                         }
                     }
-                    $attribute->setBackendModel($backModel); // restore 'backend_model' to avoid 'default' setting
+                    // restore 'backend_model' to avoid 'default' setting
+                    $attribute->setBackendModel($backModel);
                 }
             }
+
             $this->_saveProductEntity($entityRowsIn, $entityRowsUp)
                 ->_saveProductWebsites($websites)
                 ->_saveProductCategories($categories)
@@ -1606,6 +1398,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     continue;
                 }
 
+                $row = array();
                 $row['product_id'] = $this->_newSku[$rowData[self::COL_SKU]]['entity_id'];
                 $row['stock_id'] = 1;
 
@@ -1830,7 +1623,31 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                 $sku = false; // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
             }
         }
+        // validate custom options
+        $this->getOptionEntity()->validateRow($rowData, $rowNum);
+
         return !isset($this->_invalidRows[$rowNum]);
+    }
+
+    /**
+     * Validate data rows and save bunches to DB
+     *
+     * @return Mage_ImportExport_Model_Import_Entity_Product
+     */
+    protected function _saveValidatedBunches()
+    {
+        $source = $this->_getSource();
+        $source->rewind();
+        while ($source->valid()) {
+            if ($this->_errorsCount >= $this->_errorsLimit) { // errors limit check
+                return $this;
+            }
+            $rowData = $source->current();
+            $this->validateRow($rowData, $source->key());
+            $source->next();
+        }
+        $this->getOptionEntity()->validateAmbiguousData();
+        return parent::_saveValidatedBunches();
     }
 
     /**

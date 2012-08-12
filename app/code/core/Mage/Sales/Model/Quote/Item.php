@@ -219,6 +219,22 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     }
 
     /**
+     * Retrieve address model
+     *
+     * @return Mage_Sales_Model_Quote_Address
+     */
+    public function getAddress()
+    {
+        if ($this->getQuote()->getItemsQty() == $this->getQuote()->getVirtualItemsQty()) {
+            $address = $this->getQuote()->getBillingAddress();
+        } else {
+            $address = $this->getQuote()->getShippingAddress();
+        }
+
+        return $address;
+    }
+
+    /**
      * Declare quote model object
      *
      * @param   Mage_Sales_Model_Quote $quote

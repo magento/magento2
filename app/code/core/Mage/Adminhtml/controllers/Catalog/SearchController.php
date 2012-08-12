@@ -30,7 +30,7 @@ class Mage_Adminhtml_Catalog_SearchController extends Mage_Adminhtml_Controller_
     protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/search')
+            ->_setActiveMenu('Mage_CatalogSearch::catalog_search')
             ->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Search'), Mage::helper('Mage_Catalog_Helper_Data')->__('Search'))
         ;
         return $this;
@@ -190,6 +190,6 @@ class Mage_Adminhtml_Catalog_SearchController extends Mage_Adminhtml_Controller_
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/search');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_CatalogSearch::search');
     }
 }

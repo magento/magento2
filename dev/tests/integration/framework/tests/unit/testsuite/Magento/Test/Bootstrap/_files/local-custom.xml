@@ -55,14 +55,10 @@
             </default_setup>
         </resources>
         <session_save><![CDATA[files]]></session_save>
-    </global>
-    <admin>
-        <routers>
+        <areas>
             <adminhtml>
-                <args>
-                    <frontName><![CDATA[admin]]></frontName>
-                </args>
+                <frontName><![CDATA[backend]]></frontName>
             </adminhtml>
-        </routers>
-    </admin>
+        </areas>
+    </global>
 </config>

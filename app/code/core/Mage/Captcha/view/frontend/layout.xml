@@ -70,7 +70,7 @@
     </customer_account_create>
     <checkout_onepage_index>
         <reference name="checkout.onepage.login">
-            <container name="form.additional.info" label="Form Additional Info">
+            <container name="login.form.additional.info" label="Form Additional Info">
                 <block type="Mage_Captcha_Block_Captcha" name="captcha">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
@@ -86,6 +86,7 @@
                 <block type="Mage_Captcha_Block_Captcha" name="captcha.guest.checkout">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
+                        <action method="addJs"><file>Mage_Captcha::onepage.js</file></action>
                     </reference>
                     <action method="setFormId"><formId>guest_checkout</formId></action>
                     <action method="setImgWidth"><width>230</width></action>
@@ -94,6 +95,7 @@
                 <block type="Mage_Captcha_Block_Captcha" name="captcha.register.during.checkout">
                     <reference name="head">
                         <action method="addJs"><file>mage/captcha.js</file></action>
+                        <action method="addJs"><file>Mage_Captcha::onepage.js</file></action>
                     </reference>
                     <action method="setFormId"><formId>register_during_checkout</formId></action>
                     <action method="setImgWidth"><width>230</width></action>

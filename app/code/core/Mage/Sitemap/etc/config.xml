@@ -29,6 +29,11 @@
     <modules>
         <Mage_Sitemap>
             <version>1.6.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Catalog/>
+            </depends>
         </Mage_Sitemap>
     </modules>
     <global>
@@ -62,6 +67,10 @@
     </adminhtml>
     <default>
         <sitemap>
+            <limit>
+                <max_lines>50000</max_lines>
+                <max_file_size>10485760</max_file_size>
+            </limit>
             <page>
                 <priority>0.25</priority>
                 <changefreq>daily</changefreq>
@@ -73,6 +82,7 @@
             <product>
                 <priority>1</priority>
                 <changefreq>daily</changefreq>
+                <image_include>all</image_include>
             </product>
             <generate>
                 <enabled>0</enabled>
@@ -80,6 +90,9 @@
                 <error_email_template>sitemap_generate_error_email_template</error_email_template>
                 <error_email_identity>general</error_email_identity>
             </generate>
+            <search_engines>
+                <submission_robots>0</submission_robots>
+            </search_engines>
         </sitemap>
     </default>
     <crontab>

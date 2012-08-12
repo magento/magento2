@@ -28,7 +28,12 @@
 <config>
     <modules>
         <Mage_CurrencySymbol>
-             <version>1.0.0.0.0</version>
+            <version>1.0.0.0.0</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Widget/>
+            </depends>
         </Mage_CurrencySymbol>
     </modules>
 

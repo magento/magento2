@@ -56,7 +56,7 @@ class Mage_Adminhtml_System_CurrencyController extends Mage_Adminhtml_Controller
         $this->_title($this->__('System'))->_title($this->__('Manage Currency Rates'));
 
         $this->loadLayout();
-        $this->_setActiveMenu('system/currency');
+        $this->_setActiveMenu('Mage_Adminhtml::system_currency');
         $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Currency'));
         $this->renderLayout();
     }
@@ -122,6 +122,6 @@ class Mage_Adminhtml_System_CurrencyController extends Mage_Adminhtml_Controller
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/currency/rates');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_CurrencySymbol::currency_rates');
     }
 }

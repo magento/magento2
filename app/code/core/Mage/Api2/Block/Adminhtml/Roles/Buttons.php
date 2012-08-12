@@ -41,7 +41,7 @@ class Mage_Api2_Block_Adminhtml_Roles_Buttons extends Mage_Adminhtml_Block_Templ
     public function __construct()
     {
         parent::__construct();
-        $this->setTemplate('api2/role/buttons.phtml');
+        $this->setTemplate('role/buttons.phtml');
     }
 
     /**

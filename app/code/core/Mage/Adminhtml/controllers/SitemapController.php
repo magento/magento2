@@ -26,7 +26,7 @@
 
 
 /**
- * Google sitemap controller
+ * XML sitemap controller
  *
  * @category   Mage
  * @package    Mage_Sitemap
@@ -42,13 +42,13 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
     {
         // load layout, set active menu and breadcrumbs
         $this->loadLayout()
-            ->_setActiveMenu('catalog/system_sitemap')
+            ->_setActiveMenu('Mage_Sitemap::catalog_sitemap')
             ->_addBreadcrumb(
                 Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'),
                 Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'))
             ->_addBreadcrumb(
-                Mage::helper('Mage_Sitemap_Helper_Data')->__('Google Sitemap'),
-                Mage::helper('Mage_Sitemap_Helper_Data')->__('Google Sitemap'))
+                Mage::helper('Mage_Sitemap_Helper_Data')->__('XML Sitemap'),
+                Mage::helper('Mage_Sitemap_Helper_Data')->__('XML Sitemap'))
         ;
         return $this;
     }
@@ -58,7 +58,7 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
      */
     public function indexAction()
     {
-        $this->_title($this->__('Catalog'))->_title($this->__('Google Sitemaps'));
+        $this->_title($this->__('Catalog'))->_title($this->__('XML Sitemaps'));
 
         $this->_initAction()
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Sitemap'))
@@ -79,7 +79,7 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
      */
     public function editAction()
     {
-        $this->_title($this->__('Catalog'))->_title($this->__('Google Sitemaps'));
+        $this->_title($this->__('Catalog'))->_title($this->__('XML Sitemaps'));
 
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('sitemap_id');
@@ -280,6 +280,6 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('catalog/sitemap');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sitemap::sitemap');
     }
 }

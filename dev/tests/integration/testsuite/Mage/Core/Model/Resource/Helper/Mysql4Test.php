@@ -47,6 +47,12 @@ class Mage_Core_Model_Resource_Helper_Mysql4Test extends PHPUnit_Framework_TestC
         $this->_select = $collection->getSelect();
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+        $this->_select = null;
+    }
+
     public function testCastField()
     {
         $this->assertEquals('test', $this->_model->castField('test'));

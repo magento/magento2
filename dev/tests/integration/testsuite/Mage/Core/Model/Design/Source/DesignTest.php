@@ -42,41 +42,47 @@ class Mage_Core_Model_Design_Source_DesignTest extends PHPUnit_Framework_TestCas
         $this->_model = new Mage_Core_Model_Design_Source_Design;
     }
 
+    protected function tearDown()
+    {
+        $this->_model = null;
+    }
+
     public function testGetAllOptionsSorting()
     {
-        $fixture = array(0 => array(
-                'label' => 'X / X',
+        $fixture = array(
+            array(
+                'label' => 'Default / Default',
                 'value' => array(
-                    0 => array(
-                        'label' => 'x (incompatible version)',
-                        'value' => 'b/e/x',
-                    ),
-                ),
-            ),
-            1 => array(
-                'label' => 'Y / A',
-                'value' => array(
-                    0 => array(
-                        'label' => 'default (incompatible version)',
-                        'value' => 'default/g/default',
-                    ),
-                ),
-            ),
-            2 => array(
-                'label' => 'Y / Y',
-                'value' => array(
-                    0 => array(
+                    array(
                         'label' => 'default (incompatible version)',
                         'value' => 'default/default/default',
                     ),
                 ),
             ),
-            3 => array(
-                'label' => 'Z / Z',
+            array(
+                'label' => 'Default / Theme G',
                 'value' => array(
-                    0 => array(
+                    array(
+                        'label' => 'default (incompatible version)',
+                        'value' => 'default/g/default',
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'Package A / Theme D',
+                'value' => array(
+                    array(
                         'label' => 'y (incompatible version)',
                         'value' => 'a/d/y',
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'Package B / Theme E',
+                'value' => array(
+                    array(
+                        'label' => 'x (incompatible version)',
+                        'value' => 'b/e/x',
                     ),
                 ),
             ),
@@ -87,34 +93,34 @@ class Mage_Core_Model_Design_Source_DesignTest extends PHPUnit_Framework_TestCas
     public function testGetThemeOptionsSorting()
     {
         $fixture = array(
-            0 => array(
-                'label' => 'X',
+            array(
+                'label' => 'Default',
                 'value' => array(
-                    0 => array(
-                        'label' => 'X (incompatible version)',
-                        'value' => 'b/e',
-                    ),
-                ),
-            ),
-            1 => array(
-                'label' => 'Y',
-                'value' => array(
-                    0 => array(
-                        'label' => 'A (incompatible version)',
-                        'value' => 'default/g',
-                    ),
-                    1 => array(
-                        'label' => 'Y (incompatible version)',
+                    array(
+                        'label' => 'Default (incompatible version)',
                         'value' => 'default/default',
                     ),
+                    array(
+                        'label' => 'Theme G (incompatible version)',
+                        'value' => 'default/g',
+                    ),
                 ),
             ),
-            2 => array(
-                'label' => 'Z',
+            array(
+                'label' => 'Package A',
                 'value' => array(
-                    0 => array(
-                        'label' => 'Z (incompatible version)',
+                    array(
+                        'label' => 'Theme D (incompatible version)',
                         'value' => 'a/d',
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'Package B',
+                'value' => array(
+                    array(
+                        'label' => 'Theme E (incompatible version)',
+                        'value' => 'b/e',
                     ),
                 ),
             ),

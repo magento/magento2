@@ -38,4 +38,6 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setStockData(array('qty' => 100, 'is_in_stock' => 1))
     ->setNewsFromDate(date('Y-m-d', strtotime('-2 day')))
     ->setNewsNewsToDate(date('Y-m-d', strtotime('+2 day')))
+    ->setDescription('description')
+    ->setShortDescription('short desc')
     ->save();

@@ -52,7 +52,7 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
      */
     public function indexAction()
     {
-        $this->loadLayout()->_setActiveMenu('system/oauth');
+        $this->loadLayout()->_setActiveMenu('Mage_Oauth::system_api_oauth_authorized_tokens');
         $this->renderLayout();
     }
 
@@ -161,9 +161,9 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
      */
     protected function _isAllowed()
     {
-        /** @var $session Mage_Admin_Model_Session */
-        $session = Mage::getSingleton('Mage_Admin_Model_Session');
-        return $session->isAllowed('system/oauth/authorizedTokens');
+        /** @var $session Mage_Backend_Model_Auth_Session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
+        return $session->isAllowed('Mage_Oauth::authorizedTokens');
     }
 
     /**
@@ -175,10 +175,10 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizedTokensController extends Mage_Adminht
     protected function _sendTokenStatusChangeNotification($token, $newStatus)
     {
         if (($adminId = $token->getAdminId())) {
-            /** @var $session Mage_Admin_Model_Session */
-            $session = Mage::getSingleton('Mage_Admin_Model_Session');
+            /** @var $session Mage_Backend_Model_Auth_Session */
+            $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
 
-            /** @var $admin Mage_Admin_Model_User */
+            /** @var $admin Mage_User_Model_User */
             $admin = $session->getUser();
 
             if ($admin->getId() == $adminId) { // skip own tokens

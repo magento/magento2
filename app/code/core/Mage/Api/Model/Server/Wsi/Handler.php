@@ -31,7 +31,7 @@
  * @package    Mage_Api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Api_Model_Server_WSI_Handler extends Mage_Api_Model_Server_Handler_Abstract
+class Mage_Api_Model_Server_Wsi_Handler extends Mage_Api_Model_Server_Handler_Abstract
 {
     protected $_resourceSuffix = '_v2';
 

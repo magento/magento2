@@ -24,6 +24,7 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+require_once __DIR__ . '/../../../../../../lib/Varien/Simplexml/Element.php';
 
 /**
  * Tests entry point. Implements application installation, initialization and uninstall
@@ -48,6 +49,8 @@ class Magento_Test_Bootstrap
     const ADMIN_NAME = 'user';
     const ADMIN_PASSWORD = 'password';
 
+    const ADMIN_ROLE_NAME = 'Administrators';
+
     /**
      * @var Magento_Test_Bootstrap
      */
@@ -61,7 +64,7 @@ class Magento_Test_Bootstrap
     protected $_localXmlFile;
 
     /**
-     * @var SimpleXMLElement
+     * @var Varien_Simplexml_Element
      */
     protected $_localXml;
 
@@ -85,6 +88,13 @@ class Magento_Test_Bootstrap
      * @var array
      */
     protected $_moduleEtcFiles;
+
+    /**
+     * Configuration file with custom options
+     *
+     * @var array
+     */
+    protected $_customXmlFile;
 
     /**
      * Installation destination directory
@@ -186,14 +196,15 @@ class Magento_Test_Bootstrap
      * @param string $localXmlFile
      * @param string $globalEtcFiles
      * @param string $moduleEtcFiles
+     * @param string $customXmlFile
      * @param string $tmpDir
      * @param string $cleanupAction
      * @param bool $developerMode
      * @throws Magento_Exception
      */
     public function __construct(
-        $magentoDir, $localXmlFile, $globalEtcFiles, $moduleEtcFiles, $tmpDir, $cleanupAction = self::CLEANUP_NONE,
-        $developerMode = false
+        $magentoDir, $localXmlFile, $globalEtcFiles, $moduleEtcFiles, $customXmlFile, $tmpDir,
+        $cleanupAction = self::CLEANUP_NONE, $developerMode = false
     ) {
         if (!in_array($cleanupAction, array(self::CLEANUP_NONE, self::CLEANUP_UNINSTALL, self::CLEANUP_RESTORE_DB))) {
             throw new Magento_Exception("Cleanup action '{$cleanupAction}' is not supported.");
@@ -203,6 +214,7 @@ class Magento_Test_Bootstrap
         $this->_localXmlFile = $localXmlFile;
         $this->_globalEtcFiles = $this->_exposeFiles($globalEtcFiles);
         $this->_moduleEtcFiles = $this->_exposeFiles($moduleEtcFiles);
+        $this->_customXmlFile = $customXmlFile;
         $this->_tmpDir = $tmpDir;
 
         $this->_readLocalXml();
@@ -256,17 +268,10 @@ class Magento_Test_Bootstrap
      */
     public function initialize()
     {
-        if (!class_exists('Mage', false)) {
-            require_once $this->_magentoDir . '/app/bootstrap.php';
-        } else {
-            $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
-            Mage::reset();
-            Varien_Data_Form::setElementRenderer(null);
-            Varien_Data_Form::setFieldsetRenderer(null);
-            Varien_Data_Form::setFieldsetElementRenderer(null);
-            if ($resource) {
-                Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
-            }
+        $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
+        $this->_resetApp();
+        if ($resource) {
+            Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
         }
         Mage::setIsDeveloperMode($this->_developerMode);
         Mage::$headersSentThrowsException = false;
@@ -299,6 +304,23 @@ class Magento_Test_Bootstrap
     }
 
     /**
+     * Reset application global state
+     */
+    protected function _resetApp()
+    {
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::registry('_singleton/Mage_Core_Model_Layout');
+        if ($layout) {
+            /* Force to cleanup circular references */
+            $layout->__destruct();
+        }
+        Mage::reset();
+        Varien_Data_Form::setElementRenderer(null);
+        Varien_Data_Form::setFieldsetRenderer(null);
+        Varien_Data_Form::setFieldsetElementRenderer(null);
+    }
+
+    /**
      * Perform a cleanup action
      */
     protected function _cleanup()
@@ -324,7 +346,18 @@ class Magento_Test_Bootstrap
         if (!is_file($this->_localXmlFile)) {
             throw new Magento_Exception("Local XML configuration file '{$this->_localXmlFile}' does not exist.");
         }
-        $this->_localXml = simplexml_load_file($this->_localXmlFile);
+
+        // Read local.xml and merge customization file into it
+        $this->_localXml = simplexml_load_string(file_get_contents($this->_localXmlFile),
+            'Varien_Simplexml_Element');
+        if ($this->_customXmlFile) {
+            $additionalOptions = simplexml_load_string(
+                file_get_contents($this->_customXmlFile), 'Varien_Simplexml_Element'
+            );
+            $this->_localXml->extend($additionalOptions);
+        }
+
+        // Extract db vendor
         $dbVendorId = (string)$this->_localXml->global->resources->default_setup->connection->model;
         $dbVendorMap = array('mysql4' => 'mysql', 'mssql' => 'mssql', 'oracle' => 'oracle');
         if (!array_key_exists($dbVendorId, $dbVendorMap)) {
@@ -473,7 +506,7 @@ class Magento_Test_Bootstrap
 
         /* Replace local.xml */
         $targetLocalXml = $this->_installEtcDir . '/local.xml';
-        copy($this->_localXmlFile, $targetLocalXml);
+        $this->_localXml->asNiceXml($targetLocalXml);
 
         /* Initialize an application in non-installed mode */
         $this->initialize();
@@ -540,7 +573,7 @@ class Magento_Test_Bootstrap
      */
     protected function _createAdminUser()
     {
-        $user = new Mage_Admin_Model_User();
+        $user = new Mage_User_Model_User();
         $user->setData(array(
             'firstname' => 'firstname',
             'lastname'  => 'lastname',
@@ -551,14 +584,14 @@ class Magento_Test_Bootstrap
         ));
         $user->save();
 
-        $roleAdmin = new Mage_Admin_Model_Role();
-        $roleAdmin->load('Administrators', 'role_name');
+        $roleAdmin = new Mage_User_Model_Role();
+        $roleAdmin->load(self::ADMIN_ROLE_NAME, 'role_name');
 
-        $roleUser = new Mage_Admin_Model_Role();
+        $roleUser = new Mage_User_Model_Role();
         $roleUser->setData(array(
             'parent_id'  => $roleAdmin->getId(),
             'tree_level' => $roleAdmin->getTreeLevel() + 1,
-            'role_type'  => Mage_Admin_Model_Acl::ROLE_TYPE_USER,
+            'role_type'  => Mage_User_Model_Acl_Role_User::ROLE_TYPE,
             'user_id'    => $user->getId(),
             'role_name'  => $user->getFirstname(),
         ));

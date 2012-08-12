@@ -43,7 +43,7 @@ class Mage_Payment_Model_Method_Cashondelivery extends Mage_Payment_Model_Method
      * @var string
      */
     protected $_formBlockType = 'Mage_Payment_Block_Form_Cashondelivery';
-    protected $_infoBlockType = 'Mage_Payment_Block_Info';
+    protected $_infoBlockType = 'Mage_Payment_Block_Info_Instructions';
 
     /**
      * Get instructions text from config

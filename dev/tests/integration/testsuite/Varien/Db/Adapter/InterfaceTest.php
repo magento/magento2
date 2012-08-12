@@ -59,6 +59,14 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
         $this->_twoColumnIdxName = $installer->getIdxName($this->_tableName, array('column1', 'column2'));
 
         $table = $this->_connection->newTable($this->_tableName)
+            ->addColumn('id', Varien_Db_Ddl_Table::TYPE_INTEGER, null,
+                array(
+                    'identity' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'primary'  => true,
+                ),
+            'Id')
             ->addColumn('column1', Varien_Db_Ddl_Table::TYPE_INTEGER)
             ->addColumn('column2', Varien_Db_Ddl_Table::TYPE_INTEGER)
             ->addIndex($this->_oneColumnIdxName, array('column1'))
@@ -74,6 +82,7 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection->dropTable($this->_tableName);
         $this->_connection->resetDdlCache($this->_tableName);
+        $this->_connection = null;
     }
 
     protected function assertPreConditions()
@@ -169,12 +178,17 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     {
         $this->_connection->insertArray($this->_tableName, $columns, $data);
         $select = $this->_connection->select()
-            ->from($this->_tableName)
+            ->from($this->_tableName, array_keys($expected[0]))
             ->order('column1');
         $result = $this->_connection->fetchAll($select);
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Data provider for insertArray() test
+     *
+     * @return array
+     */
     public function insertArrayDataProvider()
     {
         return array(
@@ -202,6 +216,15 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
                     array('column1' => 3, 'column2' => 4),
                 ),
             ),
+            'several columns with identity' => array( // test possibility to insert data with filled identity field
+                array('id', 'column1', 'column2'),
+                array(array(1, 0, 0), array(2, 1, 1), array(3, 2, 2)),
+                array(
+                    array('id' => 1, 'column1' => 0, 'column2' => 0),
+                    array('id' => 2, 'column1' => 1, 'column2' => 1),
+                    array('id' => 3, 'column1' => 2, 'column2' => 2)
+                ),
+            )
         );
     }
 
@@ -211,5 +234,61 @@ class Varien_Db_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
     public function testInsertArrayTwoColumnsWithSimpleData()
     {
         $this->_connection->insertArray($this->_tableName, array('column1', 'column2'), array(1, 2));
+    }
+
+    /**
+     * @dataProvider insertDataProvider
+     */
+    public function testInsertMultiple($data)
+    {
+        $this->_connection->insertMultiple($this->_tableName, $data);
+
+        $select = $this->_connection->select()
+            ->from($this->_tableName);
+        $result = $this->_connection->fetchRow($select);
+
+        $this->assertEquals($data, $result);
+    }
+
+    /**
+     * @dataProvider insertDataProvider
+     */
+    public function testInsertOnDuplicate($data)
+    {
+        $this->_connection->insertOnDuplicate($this->_tableName, $data);
+
+        $select = $this->_connection->select()
+            ->from($this->_tableName);
+        $result = $this->_connection->fetchRow($select);
+
+        $this->assertEquals($data, $result);
+    }
+
+    /**
+     * @dataProvider insertDataProvider
+     */
+    public function testInsertForce($data)
+    {
+        $this->assertEquals(1, $this->_connection->insertForce($this->_tableName, $data));
+
+        $select = $this->_connection->select()
+            ->from($this->_tableName);
+        $result = $this->_connection->fetchRow($select);
+
+        $this->assertEquals($data, $result);
+    }
+
+    /**
+     * Data provider for insert() tests
+     *
+     * @return array
+     */
+    public function insertDataProvider()
+    {
+        return array(
+            'column with identity field' => array(
+                array('id' => 1, 'column1' => 10, 'column2' => 20)
+            )
+        );
     }
 }

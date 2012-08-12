@@ -29,6 +29,13 @@
     <modules>
         <Mage_CatalogRule>
             <version>1.6.0.3</version>
+            <active>true</active>
+            <codePool>core</codePool>
+            <depends>
+                <Mage_Rule/>
+                <Mage_Catalog/>
+                <Mage_Customer/>
+            </depends>
         </Mage_CatalogRule>
     </modules>
     <global>

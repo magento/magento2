@@ -37,6 +37,11 @@ class Mage_Catalog_Helper_Category_FlatTest extends PHPUnit_Framework_TestCase
         $this->_helper = new Mage_Catalog_Helper_Category_Flat;
     }
 
+    protected function tearDown()
+    {
+        $this->_helper = null;
+    }
+
     public function testIsEnabledDefault()
     {
         $this->assertFalse($this->_helper->isEnabled());

@@ -29,10 +29,10 @@
 <layout>
     <default>
         <reference name="notifications">
-            <block type="Mage_Adminhtml_Block_Notification_Toolbar" name="notification_toolbar" as="notification_toolbar" acl="system/adminnotification/show_toolbar" template="notification/toolbar.phtml" />
+            <block type="Mage_Adminhtml_Block_Notification_Toolbar" name="notification_toolbar" as="notification_toolbar" acl="Mage_AdminNotification::show_toolbar" template="notification/toolbar.phtml" />
         </reference>
         <reference name="notifications">
-            <block type="Mage_Adminhtml_Block_Notification_Window" name="notification_window" as="notification_window" acl="system/adminnotification/show_toolbar" template="notification/window.phtml" />
+            <block type="Mage_Adminhtml_Block_Notification_Window" name="notification_window" as="notification_window" acl="Mage_AdminNotification::show_toolbar" template="notification/window.phtml" />
         </reference>
     </default>
 </layout>

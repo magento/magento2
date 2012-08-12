@@ -127,7 +127,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Grid extends Mage_Adminhtml_Block_Widget_
                 'index'     => 'website_ids',
                 'type'      => 'options',
                 'sortable'  => false,
-                'options'   => Mage::getSingleton('Mage_Adminhtml_Model_System_Store')->getWebsiteOptionHash(),
+                'options'   => Mage::getSingleton('Mage_Core_Model_System_Store')->getWebsiteOptionHash(),
                 'width'     => 200,
             ));
         }

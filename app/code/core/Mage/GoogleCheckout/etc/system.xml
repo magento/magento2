@@ -35,6 +35,7 @@
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>0</show_in_store>
+            <resource>Mage_GoogleCheckout::google</resource>
             <groups>
                 <checkout translate="label">
                     <label>Google Checkout</label>

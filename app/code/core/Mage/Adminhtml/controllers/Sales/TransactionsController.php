@@ -65,7 +65,7 @@ class Mage_Adminhtml_Sales_TransactionsController extends Mage_Adminhtml_Control
             ->_title($this->__('Transactions'));
 
         $this->loadLayout()
-            ->_setActiveMenu('sales/transactions')
+            ->_setActiveMenu('Mage_Sales::sales_transactions')
             ->renderLayout();
     }
 
@@ -92,7 +92,7 @@ class Mage_Adminhtml_Sales_TransactionsController extends Mage_Adminhtml_Control
             ->_title(sprintf("#%s", $txn->getTxnId()));
 
         $this->loadLayout()
-            ->_setActiveMenu('sales/transactions')
+            ->_setActiveMenu('Mage_Sales::sales_transactions')
             ->renderLayout();
     }
 
@@ -132,10 +132,10 @@ class Mage_Adminhtml_Sales_TransactionsController extends Mage_Adminhtml_Control
     {
         switch ($this->getRequest()->getActionName()) {
             case 'fetch':
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/transactions/fetch');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::transactions_fetch');
                 break;
             default:
-                return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('sales/transactions');
+                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::transactions');
                 break;
         }
     }

@@ -89,7 +89,7 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
 
         $this->loadLayout();
 
-        $this->_setActiveMenu('system/config');
+        $this->_setActiveMenu('Mage_Adminhtml::system_config');
         $this->getLayout()->getBlock('menu')->setAdditionalCacheKeyInfo(array($current));
 
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'),
@@ -257,7 +257,7 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Admin_Model_Session')->isAllowed('system/config');
+        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::config');
     }
 
     /**
@@ -271,10 +271,10 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
     protected function _isSectionAllowed($section)
     {
         try {
-            $session = Mage::getSingleton('Mage_Admin_Model_Session');
-            $resourceLookup = "admin/system/config/{$section}";
-            if ($session->getData('acl') instanceof Mage_Admin_Model_Acl) {
-                $resourceId = $session->getData('acl')->get($resourceLookup)->getResourceId();
+            $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
+            if ($session->getData('acl') instanceof Magento_Acl) {
+                $resourceId = (string) Mage::getSingleton('Mage_Adminhtml_Model_Config')
+                    ->getSection($section)->resource;
                 if (!$session->isAllowed($resourceId)) {
                     throw new Exception('');
                 }
@@ -301,7 +301,7 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
      */
     protected function _saveState($configState = array())
     {
-        $adminUser = Mage::getSingleton('Mage_Admin_Model_Session')->getUser();
+        $adminUser = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser();
         if (is_array($configState)) {
             $extra = $adminUser->getExtra();
             if (!is_array($extra)) {
