@@ -52,7 +52,7 @@ class Mage_Eav_Model_Attribute_Data_TextTest extends PHPUnit_Framework_TestCase
 
         /** @var $model Mage_Core_Model_Abstract */
         $attribute = $this->getMock('Mage_Core_Model_Abstract', null, array($attributeData));
-        //$this->_model->_attribute = $attribute;
+
         $this->_attribute = $attribute;
         $this->_model->expects($this->any())
             ->method('getAttribute')
@@ -81,7 +81,7 @@ class Mage_Eav_Model_Attribute_Data_TextTest extends PHPUnit_Framework_TestCase
      * This test is to check the change made to validateValue.
      * A bug was found where a text attribute that has is_required==1
      * would not accept the string value of "0" (zero) as an input.
-     * That bug was fixed. 
+     * That bug was fixed.
      * @covers Mage_Eav_Model_Attribute_Data_Text::validateValue
      * @param string|int|float|array $value
      * @param string|int|float|array $expectedResult
