@@ -121,6 +121,43 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
         return $totalConfig;
     }
 
+
+    /**
+     * Topological sort
+     *
+     * @param $nodeids Node Ids - example: array('subtotal','grand_total');
+     * @param $edges Array of Edges. Each edge is specified as an array with two elements: The source and destination node of the edge
+     *               Example: array(array('subtotal','grand_total')); -> subtotal comes before grand_total
+     * @return array|null
+     */
+    public function _topologicalSort($nodeids, $edges) {
+        $L = $S = $nodes = array();
+        foreach($nodeids as $id) {
+            $nodes[$id] = array('in'=>array(), 'out'=>array());
+            foreach($edges as $e) {
+                if ($id==$e[0]) { $nodes[$id]['out'][]=$e[1]; }
+                if ($id==$e[1]) { $nodes[$id]['in'][]=$e[0]; }
+            }
+        }
+        foreach ($nodes as $id=>$n) { if (empty($n['in'])) $S[]=$id; }
+        while ($id = array_shift($S)) {
+            if (!in_array($id, $L)) {
+                $L[] = $id;
+                foreach($nodes[$id]['out'] as $m) {
+                    $nodes[$m]['in'] = array_diff($nodes[$m]['in'], array($id));
+                    if (empty($nodes[$m]['in'])) { $S[] = $m; }
+                }
+                $nodes[$id]['out'] = array();
+            }
+        }
+        foreach($nodes as $n) {
+            if (!empty($n['in']) or !empty($n['out'])) {
+                return null; // not sortable as graph is cyclic
+            }
+        }
+        return $L;
+    }
+
     /**
      * Aggregate before/after information from all items and sort totals based on this data
      *
@@ -140,36 +177,30 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
         $element = current($configArray);
         if (isset($element['sort_order'])) {
             uasort($configArray, array($this, '_compareSortOrder'));
+            $sortedCollectors = array_keys($configArray);
         } else {
-            foreach ($configArray as $code => $data) {
+            // prepare data for topological sort
+            $nodes = array_keys($configArray);
+            $edges = array();
+
+            foreach ($configArray as $data) {
+                $_code = $data['_code'];
+                if (!isset($configArray[$_code])) continue;
                 foreach ($data['before'] as $beforeCode) {
-                    if (!isset($configArray[$beforeCode])) {
-                        continue;
-                    }
-                    $configArray[$code]['before'] = array_unique(array_merge(
-                        $configArray[$code]['before'], $configArray[$beforeCode]['before']
-                    ));
-                    $configArray[$beforeCode]['after'] = array_merge(
-                        $configArray[$beforeCode]['after'], array($code), $data['after']
-                    );
-                    $configArray[$beforeCode]['after'] = array_unique($configArray[$beforeCode]['after']);
+                    if (!isset($configArray[$beforeCode])) continue;
+                    $edges[] = array($_code, $beforeCode);
                 }
                 foreach ($data['after'] as $afterCode) {
-                    if (!isset($configArray[$afterCode])) {
-                        continue;
-                    }
-                    $configArray[$code]['after'] = array_unique(array_merge(
-                        $configArray[$code]['after'], $configArray[$afterCode]['after']
-                    ));
-                    $configArray[$afterCode]['before'] = array_merge(
-                        $configArray[$afterCode]['before'], array($code), $data['before']
-                    );
-                    $configArray[$afterCode]['before'] = array_unique($configArray[$afterCode]['before']);
+                    if (!isset($configArray[$afterCode])) continue;
+                    $edges[] = array($afterCode, $_code);
                 }
             }
-            uasort($configArray, array($this, '_compareTotals'));
+            $sortedCollectors = $this->_topologicalSort($nodes, $edges);
+
+            if (is_null($sortedCollectors)) {
+                throw new Mage_Sales_Exception('Total ordering before/after conditions can not be complied with');
+            }
         }
-        $sortedCollectors = array_keys($configArray);
         if (Mage::app()->useCache('config')) {
             Mage::app()->saveCache(serialize($sortedCollectors), $this->_collectorsCacheKey, array(
                     Mage_Core_Model_Config::CACHE_TAG
@@ -193,27 +224,6 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
         }
 
         return $this;
-    }
-
-    /**
-     * Callback that uses after/before for comparison
-     *
-     * @param   array $a
-     * @param   array $b
-     * @return  int
-     */
-    protected function _compareTotals($a, $b)
-    {
-        $aCode = $a['_code'];
-        $bCode = $b['_code'];
-        if (in_array($aCode, $b['after']) || in_array($bCode, $a['before'])) {
-            $res = -1;
-        } elseif (in_array($bCode, $a['after']) || in_array($aCode, $b['before'])) {
-            $res = 1;
-        } else {
-            $res = 0;
-        }
-        return $res;
     }
 
     /**
