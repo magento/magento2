@@ -24,7 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once ( __DIR__ . '/Menu/Generator.php');
-require_once ( __DIR__ . '/FileWriter.php');
+require_once ( __DIR__ . '/FileManager.php');
 
 class Tools_Migration_Acl_Generator
 {
@@ -106,22 +106,22 @@ class Tools_Migration_Acl_Generator
     protected $_xmlFormatter;
 
     /**
-     * @var Tools_Migration_Acl_FileWriter
+     * @var Tools_Migration_Acl_FileManager
      */
-    protected $_fileWriter;
+    protected $_fileManager;
 
     /**
      * @param Tools_Migration_Acl_Formatter $xmlFormatter
-     * @param Tools_Migration_Acl_FileWriter $fileWriter
+     * @param Tools_Migration_Acl_FileManager $fileManager
      * @param array $options configuration options
      */
     public function __construct(
         Tools_Migration_Acl_Formatter $xmlFormatter,
-        Tools_Migration_Acl_FileWriter $fileWriter,
+        Tools_Migration_Acl_FileManager $fileManager,
         $options = array()
     ) {
         $this->_xmlFormatter = $xmlFormatter;
-        $this->_fileWriter = $fileWriter;
+        $this->_fileManager = $fileManager;
         $this->_printHelp = array_key_exists('h', $options);
         $this->_isPreviewMode = array_key_exists('p', $options);
 
@@ -136,25 +136,21 @@ class Tools_Migration_Acl_Generator
     }
 
     /**
-     * Get Comment text
+     * Get License Template for a file
      *
-     * @param $category string
-     * @param $package string
+     * @param $file string File path
      * @return string
      */
-    public function getCommentText($category, $package)
+    public function getLicenseTemplate($file)
     {
-        $comment = PHP_EOL;
-        $comment .= '/**' . PHP_EOL;
-        $comment .= ' * {license_notice}' . PHP_EOL;
-        $comment .= ' *' . PHP_EOL;
-        $comment .= ' * @category    ' . $category . PHP_EOL;
-        $comment .= ' * @package     ' . $package . PHP_EOL;
-        $comment .= ' * @copyright   {copyright}' . PHP_EOL;
-        $comment .= ' * @license     {license_link}' . PHP_EOL;
-        $comment .= ' */' . PHP_EOL;
+        $content = $this->_fileManager->getContents($file);
 
-        return $comment;
+        $licenseTemplate = '';
+        if (preg_match('#<\?xml[^>]+>\s+<\!--(\s+/\*\*[\w\W\d\s]+\*/\s+)-->#', $content, $matches)) {
+            $licenseTemplate = $matches[1];
+        }
+
+        return $licenseTemplate;
     }
 
     /**
@@ -168,18 +164,6 @@ class Tools_Migration_Acl_Generator
         $parts = array_reverse(explode(DIRECTORY_SEPARATOR, $fileName));
         $module = $parts[3] . '_' . $parts[2];
         return $module;
-    }
-
-    /**
-     * Get category name from file name
-     *
-     * @param $fileName string
-     * @return string
-     */
-    public function getCategory($fileName)
-    {
-        $parts = array_reverse(explode(DIRECTORY_SEPARATOR, $fileName));
-        return $parts[3];
     }
 
     /**
@@ -363,9 +347,8 @@ class Tools_Migration_Acl_Generator
         if (null === $this->_adminhtmlFiles) {
             $localFiles = glob($this->getEtcDirPattern('local') . 'adminhtml.xml');
             $communityFiles = glob($this->getEtcDirPattern('community') . 'adminhtml.xml');
-            $coreEnterpriseFiles = glob($this->getEtcDirPattern('core', 'Enterprise') . 'adminhtml.xml');
-            $coreMageFiles = glob($this->getEtcDirPattern('core', 'Mage') . 'adminhtml.xml');
-            $this->_adminhtmlFiles = array_merge($localFiles, $communityFiles, $coreEnterpriseFiles, $coreMageFiles);
+            $coreFiles = glob($this->getEtcDirPattern('core') . 'adminhtml.xml');
+            $this->_adminhtmlFiles = array_merge($localFiles, $communityFiles, $coreFiles);
         }
         return $this->_adminhtmlFiles;
     }
@@ -443,16 +426,16 @@ class Tools_Migration_Acl_Generator
 
     /**
      * Get template for result DOMDocument
-     * @param $module
-     * @param $category
+     *
+     * @param $licenseTemplate
      * @return DOMDocument
      */
-    public function getResultDomDocument($module, $category)
+    public function getResultDomDocument($licenseTemplate)
     {
         $resultDom = new DOMDocument();
         $resultDom->formatOutput = true;
 
-        $comment = $resultDom->createComment($this->getCommentText($category, $module));
+        $comment = $resultDom->createComment($licenseTemplate);
         $resultDom->appendChild($comment);
 
         $config = $resultDom->createElement('config');
@@ -474,8 +457,8 @@ class Tools_Migration_Acl_Generator
     {
         foreach ($this->getAdminhtmlFiles() as $file) {
             $module = $this->getModuleName($file);
-            $category = $this->getCategory($file);
-            $resultDom = $this->getResultDomDocument($module, $category);
+            $licenseTemplate = $this->getLicenseTemplate($file);
+            $resultDom = $this->getResultDomDocument($licenseTemplate);
 
             $adminhtmlDom = new DOMDocument();
             $adminhtmlDom->load($file);
@@ -568,7 +551,7 @@ class Tools_Migration_Acl_Generator
                 'indent-spaces' => 4,
                 'wrap' => 1000
             ));
-            $this->_fileWriter->write($file, $output);
+            $this->_fileManager->write($file, $output);
         }
     }
 
@@ -623,7 +606,7 @@ class Tools_Migration_Acl_Generator
             }
             if ($this->isNodeEmpty($acl)) {
                 if (false == $this->_isPreviewMode) {
-                    $this->_fileWriter->remove($file);
+                    $this->_fileManager->remove($file);
                 }
                 $output['removed'][] = $file;
             } else {
@@ -745,7 +728,7 @@ class Tools_Migration_Acl_Generator
     public function saveArtifacts($artifacts)
     {
         foreach ($artifacts as $file => $data) {
-            $this->_fileWriter->write($this->_artifactsPath . $file, $data);
+            $this->_fileManager->write($this->_artifactsPath . $file, $data);
         }
     }
 
@@ -760,6 +743,7 @@ class Tools_Migration_Acl_Generator
             $this->getBasePath(),
             $this->getValidNodeTypes(),
             $this->_aclResourceMaps,
+            $this->_fileManager,
             $this->_isPreviewMode
         );
         return $menu->run();

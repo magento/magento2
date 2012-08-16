@@ -27,12 +27,12 @@
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 
 $includePaths = array(
-    get_include_path(),
     "./framework",
     './testsuite',
     '../../../lib',
     '../../../app/code/core',
-    '../../../app/'
+    '../../../app/',
+    get_include_path()
 );
 set_include_path(implode(PATH_SEPARATOR, $includePaths));
 spl_autoload_register('magentoAutoloadForUnitTests');

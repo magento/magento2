@@ -49,8 +49,6 @@
 
             <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>
             <block type="Mage_Core_Block_Text" as="no_name"/>
-            <action method="insert"><element>some_element_1</element></action>
-            <action method="append"><element>some_element_2</element></action>
         </block>
     </layout_test_handle_sample>
 
@@ -64,6 +62,101 @@
             <action method="setTemplate"><template>popup.phtml</template></action>
         </reference>
         <reference name="some_element_1"/>
+        <block name="test.nonexisting.block" type="Mage_Core_Block_Text_List"/>
+        <remove name="test.nonexisting.block"/>
+        <reference name="test.nonexisting.block">
+            <action method="getSomething"/>
+        </reference>
     </layout_test_handle_main>
 
+    <layout_test_handle_move>
+        <container name="container1" label="Container 1">
+            <block type="Mage_Core_Block_Text" name="no.name2" as="no.name2"/>
+        </container>
+        <container name="container2" label="Container 2"/>
+        <move element="container1" destination="container2"/>
+
+        <block type="Mage_Core_Block_Text" name="block_container" as="block.container">
+            <block type="Mage_Core_Block_Text" name="child_block1"/>
+            <block type="Mage_Core_Block_Text" name="child_block2"/>
+        </block>
+
+        <container name="container3" label="Container 3">
+            <block type="Mage_Core_Block_Text" name="no_name"/>
+        </container>
+        <move element="no_name" destination="block_container" after="child_block1"/>
+
+        <block type="Mage_Core_Block_Text" name="no_name4"/>
+        <move element="no_name4" destination="block_container" before="child_block2"/>
+
+        <move element="no_name3" destination="block_container"/>
+        <block type="Mage_Core_Block_Text" name="no_name3"/>
+    </layout_test_handle_move>
+
+    <layout_test_handle_move_broken>
+        <container name="container1" label="Container 1"/>
+        <move element="no_name3"/>
+        <block type="Mage_Core_Block_Text" name="no_name3"/>
+    </layout_test_handle_move_broken>
+
+    <layout_test_handle_move_alias_broken>
+        <container name="container1" label="Container 1">
+            <block type="Mage_Core_Block_Text" name="no_name1" as="same_alias"/>
+        </container>
+        <move element="no_name3" destination="container1" as="same_alias"/>
+        <block type="Mage_Core_Block_Text" name="no_name3" as="same_alias"/>
+    </layout_test_handle_move_alias_broken>
+
+    <layout_test_handle_move_the_same_alias>
+        <container name="container1" label="Container 1">
+            <block type="Mage_Core_Block_Text" name="no_name1" as="same_alias"/>
+        </container>
+        <move element="no_name3" destination="container1"/>
+        <block type="Mage_Core_Block_Text" name="no_name3" as="same_alias"/>
+    </layout_test_handle_move_the_same_alias>
+
+    <layout_test_handle_move_new_alias>
+        <container name="container1" label="Container 1">
+            <block type="Mage_Core_Block_Text" name="no_name1" as="same_alias"/>
+        </container>
+        <move element="no_name3" destination="container1" as="new_alias"/>
+        <block type="Mage_Core_Block_Text" name="no_name3" as="same_alias"/>
+    </layout_test_handle_move_new_alias>
+
+    <layout_test_handle_remove>
+        <container name="container1" label="Container 1">
+            <block type="Mage_Core_Block_Text" name="no_name2"/>
+        </container>
+        <remove name="container1"/>
+
+        <remove name="child_block1"/>
+        <block type="Mage_Core_Block_Text" name="block_container" as="block.container">
+            <block type="Mage_Core_Block_Text" name="child_block1"/>
+            <block type="Mage_Core_Block_Text" name="child_block2"/>
+        </block>
+        <remove name="not_exist"/>
+    </layout_test_handle_remove>
+
+    <layout_test_handle_remove_broken>
+        <block name="test.broken.block" type="Mage_Core_Block_Text"/>
+        <remove name="test.broken.block"/>
+        <block type="Mage_Core_Block_Template" name="bug.without.name.action.is.ignored">
+            <action method="insert"><element>test.broken.block</element></action>
+            <action method="append"><element>test.broken.block</element></action>
+        </block>
+    </layout_test_handle_remove_broken>
+
+
+    <layout_test_handle_action_for_anonymous_parent_block>
+        <block name="test.block.insert" type="Mage_Core_Block_Text"/>
+
+        <block type="Mage_Core_Block_Template">
+            <action method="insert"><element>test.block.insert</element></action>
+        </block>
+
+        <block name="test.block.append" type="Mage_Core_Block_Text"/>
+        <block type="Mage_Core_Block_Text">
+            <action method="append"><element>test.block.append</element></action>
+        </block>
+    </layout_test_handle_action_for_anonymous_parent_block>
 </layout>

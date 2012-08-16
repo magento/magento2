@@ -239,16 +239,16 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
     {
         switch ($this->getRequest()->getActionName()) {
             case 'viewed':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::viewed');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::viewed');
                 break;
             case 'sold':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::sold');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::sold');
                 break;
             case 'lowstock':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::lowstock');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::lowstock');
                 break;
             default:
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Reports::report_products');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::report_products');
                 break;
         }
     }

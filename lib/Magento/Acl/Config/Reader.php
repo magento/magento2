@@ -18,21 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Backend
+ * @category    Magento
+ * @package     Framework
+ * @subpackage  ACL
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Backend Acl Resources reader
+ * Magento Acl Resources reader
  *
- * @category    Mage
- * @package     Mage_Backend
+ * @category    Magento
+ * @package     Framework
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Model_Acl_Config_Reader extends Magento_Config_XmlAbstract
-    implements Mage_Backend_Model_Acl_Config_ReaderInterface
+class Magento_Acl_Config_Reader extends Magento_Config_XmlAbstract
+    implements Magento_Acl_Config_ReaderInterface
 {
     /**
      * Get absolute path to the XML-schema file
@@ -82,7 +83,7 @@ class Mage_Backend_Model_Acl_Config_Reader extends Magento_Config_XmlAbstract
     protected function _getDomConfigModel()
     {
         if (is_null($this->_domConfig)) {
-            $this->_domConfig = new Mage_Backend_Model_Acl_Config_Reader_Dom(
+            $this->_domConfig = new Magento_Acl_Config_Reader_Dom(
                 $this->_getInitialXml(),
                 $this->_getIdAttributes()
             );

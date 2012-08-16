@@ -304,6 +304,6 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Widget::widget_instance');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Widget::widget_instance');
     }
 }

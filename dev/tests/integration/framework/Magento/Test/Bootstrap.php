@@ -327,7 +327,9 @@ class Magento_Test_Bootstrap
     {
         switch ($this->_cleanupAction) {
             case self::CLEANUP_UNINSTALL:
-                $this->_db->cleanup();
+                if (!$this->_db->cleanup()) {
+                    throw new Magento_Exception("Database cleanup failed.");
+                }
                 $this->_cleanupFilesystem();
                 break;
             case self::CLEANUP_RESTORE_DB:

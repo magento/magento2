@@ -43,9 +43,8 @@ class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
 
         $aclMock = $this->getMock('Magento_Acl');
         $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
-        Mage::getSingleton('Mage_Backend_Model_Auth_Session')->setAcl($aclMock);
 
-        $this->_block = new Mage_User_Block_Role_Tab_Edit();
+        $this->_block = new Mage_User_Block_Role_Tab_Edit(array('acl' => $aclMock));
     }
 
     protected function tearDown()

@@ -247,6 +247,6 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Tab_Googleoptimizer
      */
     protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($resourceId);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
     }
 }

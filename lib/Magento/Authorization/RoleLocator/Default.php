@@ -18,33 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    tools
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @category    Magento
+ * @package     Framework
+ * @subpackage  Authorization
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Tools_Migration_Acl_FileWriter
+class Magento_Authorization_RoleLocator_Default implements Magento_Authorization_RoleLocator
 {
     /**
-     * @param string $fileName
-     * @param string $contents
-     */
-    public function write($fileName, $contents)
-    {
-        if (false == is_dir(dirname($fileName))) {
-            mkdir(dirname($fileName), 0777, true);
-        }
-        file_put_contents($fileName, $contents);
-    }
-
-    /**
-     * Remove file
+     * Retrieve current role
      *
-     * @param $fileName
+     * @return string
      */
-    public function remove($fileName)
+    public function getAclRoleId()
     {
-        unlink($fileName);
+        return '';
     }
 }

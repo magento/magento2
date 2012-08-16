@@ -381,10 +381,10 @@ class Mage_Adminhtml_Catalog_Product_ReviewController extends Mage_Adminhtml_Con
     {
         switch ($this->getRequest()->getActionName()) {
             case 'pending':
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Review::pending');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Review::pending');
                 break;
             default:
-                return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Review::reviews_all');
+                return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Review::reviews_all');
                 break;
         }
     }

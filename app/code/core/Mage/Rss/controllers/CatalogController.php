@@ -41,7 +41,10 @@ class Mage_Rss_CatalogController extends Mage_Core_Controller_Front_Action
     public function preDispatch()
     {
         $action = $this->getRequest()->getActionName();
-        $acl = array('notifystock' => 'catalog/products', 'review' => 'catalog/reviews_ratings');
+        /**
+         * Format actionName => acrResourceId
+         */
+        $acl = array('notifystock' => 'Mage_Catalog::products', 'review' => 'Mage_Review::reviews_ratings');
         if (isset($acl[$action])) {
             $this->setCurrentArea('adminhtml');
             if (Mage_Rss_OrderController::authenticateAndAuthorizeAdmin($this, $acl[$action])) {

@@ -54,7 +54,7 @@ class Tools_Migration_Acl_Menu_GeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_fileWriterMock;
+    protected $_fileManagerMock;
 
 
     public function setUp()
@@ -67,13 +67,13 @@ class Tools_Migration_Acl_Menu_GeneratorTest extends PHPUnit_Framework_TestCase
             'config/acl/resources/admin/area_config' => 'Module_Name::acl_resource_area',
             'config/acl/resources/admin/some_other_resource' => 'Module_Name::some_other_resource',
         );
-        $this->_fileWriterMock = $this->getMock('Tools_Migration_Acl_FileWriter');
+        $this->_fileManagerMock = $this->getMock('Tools_Migration_Acl_FileManager');
 
         $this->_model = new Tools_Migration_Acl_Menu_Generator(
             $this->_fixturePath,
             array(1),
             $aclXPathToId,
-            $this->_fileWriterMock,
+            $this->_fileManagerMock,
             false
         );
 
@@ -84,8 +84,8 @@ class Tools_Migration_Acl_Menu_GeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->_menuFiles = array(
             $prefix . 'community' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'Enterprise' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'Mage' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'core' . DIRECTORY_SEPARATOR . 'ANamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'core' . DIRECTORY_SEPARATOR . 'BNamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
             $prefix . 'local' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
         );
 
@@ -259,15 +259,15 @@ class Tools_Migration_Acl_Menu_GeneratorTest extends PHPUnit_Framework_TestCase
         );
         $this->_model->setMenuDomList($menuDomList);
 
-        $this->_fileWriterMock->expects($this->at(0))
+        $this->_fileManagerMock->expects($this->at(0))
             ->method('write')
             ->with($this->equalTo('file1'), $this->equalTo($dom->saveXML()));
 
-        $this->_fileWriterMock->expects($this->at(1))
+        $this->_fileManagerMock->expects($this->at(1))
             ->method('write')
             ->with($this->equalTo('file2'), $this->equalTo($dom->saveXML()));
 
-        $this->_fileWriterMock->expects($this->at(2))
+        $this->_fileManagerMock->expects($this->at(2))
             ->method('write')
             ->with($this->equalTo('file3'), $this->equalTo($dom->saveXML()));
 

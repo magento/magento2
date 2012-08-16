@@ -250,9 +250,7 @@ class Mage_Oauth_Adminhtml_Oauth_ConsumerController extends Mage_Adminhtml_Contr
                 break;
         }
 
-        /** @var $session Mage_Backend_Model_Auth_Session*/
-        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        return $session->isAllowed($resourceId);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
     }
 
     /**

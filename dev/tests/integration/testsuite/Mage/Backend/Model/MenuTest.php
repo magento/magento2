@@ -40,6 +40,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_model = new Mage_Backend_Model_Auth();
+        Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
     }
 
     protected function tearDown()

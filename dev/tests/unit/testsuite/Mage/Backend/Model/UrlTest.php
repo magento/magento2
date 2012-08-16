@@ -160,16 +160,6 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
 
     public function testGetStartupPageUrl()
     {
-        $mockSession = $this->getMock('Mage_Backend_Model_Auth_Session',
-            array('getUser', 'isAllowed'),
-            array(),
-            '',
-            false
-        );
-        $mockSession->expects($this->any())
-            ->method('isAllowed')
-            ->will($this->returnValue(true));
-        $this->_model->setSession($mockSession);
         $this->assertEquals('adminhtml/user_role', (string)$this->_model->getStartupPageUrl());
     }
 

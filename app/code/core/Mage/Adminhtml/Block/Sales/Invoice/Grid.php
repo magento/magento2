@@ -145,7 +145,7 @@ class Mage_Adminhtml_Block_Sales_Invoice_Grid extends Mage_Adminhtml_Block_Widge
 
     public function getRowUrl($row)
     {
-        if (!Mage::getSingleton('Mage_Backend_Model_Auth_Session')
+        if (!Mage::getSingleton('Mage_Core_Model_Authorization')
             ->isAllowed(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
         ) {
             return false;

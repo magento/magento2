@@ -180,6 +180,6 @@ class Mage_Adminhtml_NotificationController extends Mage_Adminhtml_Controller_Ac
             default:
                 $acl = 'Mage_AdminNotification::show_list';
         }
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($acl);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($acl);
     }
 }

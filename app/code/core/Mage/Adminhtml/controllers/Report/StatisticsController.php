@@ -186,7 +186,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
 
     protected function _isAllowed()
     {
-        return $this->_getSession()->isAllowed('Mage_Reports::statistics');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Reports::statistics');
     }
 
     /**

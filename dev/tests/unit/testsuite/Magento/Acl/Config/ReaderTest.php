@@ -25,25 +25,25 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Model_Acl_Config_ReaderTest extends PHPUnit_Framework_TestCase
+class Magento_Acl_Config_ReaderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Backend_Model_Acl_Config_Reader
+     * @var Magento_Acl_Config_Reader
      */
     protected $_model;
 
     public function setUp()
     {
         $files = array(
-            realpath(__DIR__) . '/../../_files/acl_1.xml',
-            realpath(__DIR__) . '/../../_files/acl_2.xml'
+            realpath(__DIR__) . '/../_files/acl_1.xml',
+            realpath(__DIR__) . '/../_files/acl_2.xml'
         );
-        $this->_model = new Mage_Backend_Model_Acl_Config_Reader($files);
+        $this->_model = new Magento_Acl_Config_Reader($files);
     }
 
     public function testReaderImplementRequiredInterface()
     {
-        $this->assertInstanceOf('Mage_Backend_Model_Acl_Config_ReaderInterface', $this->_model);
+        $this->assertInstanceOf('Magento_Acl_Config_ReaderInterface', $this->_model);
     }
 
     public function testGetAclResources()
@@ -56,7 +56,7 @@ class Mage_Backend_Model_Acl_Config_ReaderTest extends PHPUnit_Framework_TestCas
 
     public function testGetAclResourcesMergedCorrectly()
     {
-        $expectedFile = realpath(__DIR__) . '/../../_files/acl_merged.xml';
+        $expectedFile = realpath(__DIR__) . '/../_files/acl_merged.xml';
         $expectedResources = new DOMDocument();
         $expectedResources->load($expectedFile);
 

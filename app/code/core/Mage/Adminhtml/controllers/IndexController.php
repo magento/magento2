@@ -42,7 +42,7 @@ class Mage_Adminhtml_IndexController extends Mage_Adminhtml_Controller_Action
         $searchModules = Mage::getConfig()->getNode("adminhtml/global_search");
         $items = array();
 
-        if (!Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::global_search')) {
+        if (!Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::global_search')) {
             $items[] = array(
                 'id' => 'error',
                 'type' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Error'),
@@ -65,7 +65,7 @@ class Mage_Adminhtml_IndexController extends Mage_Adminhtml_Controller_Action
                 $query = $this->getRequest()->getParam('query', '');
                 foreach ($searchModules->children() as $searchConfig) {
 
-                    if ($searchConfig->acl && !Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($searchConfig->acl)){
+                    if ($searchConfig->acl && !Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($searchConfig->acl)){
                         continue;
                     }
 

@@ -63,20 +63,46 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
             if ($class->isAbstract() || !$class->isSubclassOf('Mage_Core_Block_Template')) {
                 continue;
             }
+
+            $area = 'frontend';
+            if ($module == 'Mage_Install') {
+                $area = 'install';
+            } elseif ($module == 'Mage_Adminhtml' || strpos($blockClass, '_Adminhtml_')
+                || strpos($blockClass, '_Backend_')
+                || ($this->_isClassInstanceOf($blockClass, 'Mage_Backend_Block_Template'))
+            ) {
+                $area = 'adminhtml';
+            }
+
+            Mage::getConfig()->setCurrentAreaCode($area);
+
             $block = new $blockClass;
             $template = $block->getTemplate();
             if ($template) {
-                $area = 'frontend';
-                if ($module == 'Mage_Install') {
-                    $area = 'install';
-                } elseif ($module == 'Mage_Adminhtml' || strpos($blockClass, '_Adminhtml_')
-                    || strpos($blockClass, '_Backend_') || ($block instanceof Mage_Backend_Block_Template)
-                ) {
-                    $area = 'adminhtml';
-                }
                 $templates[] = array($module, $template, $blockClass, $area);
             }
         }
         return $templates;
+    }
+
+    /**
+     * @param string $blockClass
+     * @param string $parentClass
+     * @return bool
+     */
+    protected function _isClassInstanceOf($blockClass, $parentClass)
+    {
+        $currentClass = new ReflectionClass($blockClass);
+        $supertypes = array();
+        do {
+            $supertypes = array_merge($supertypes, $currentClass->getInterfaceNames());
+            if (!($currentParent = $currentClass->getParentClass())) {
+                break;
+            }
+            $supertypes[] = $currentParent->getName();
+            $currentClass = $currentParent;
+        } while (true);
+
+        return in_array($parentClass, $supertypes);
     }
 }

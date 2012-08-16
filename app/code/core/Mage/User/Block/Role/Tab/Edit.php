@@ -76,16 +76,21 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
 
     /**
      * Class constructor
-     *
+     * @param array $data
      */
-    public function __construct()
+    public function __construct(array $data = array())
     {
         parent::__construct();
 
         $rid = Mage::app()->getRequest()->getParam('rid', false);
 
-        /** @var $acl Magento_Acl */
-        $acl = Mage::getModel('Mage_Backend_Model_Auth_Session')->getAcl();
+        $acl = isset($data['acl']) ? $data['acl'] : Mage::getSingleton(
+            'Mage_Core_Model_Acl_Builder',
+            array(
+                'areaConfig' => Mage::getConfig()->getAreaConfig(),
+                'objectFactory' => Mage::getConfig()
+            )
+        )->getAcl();
         $rulesSet = Mage::getResourceModel('Mage_User_Model_Resource_Rules_Collection')->getByRoles($rid)->load();
 
         $selectedResourceIds = array();

@@ -1,3 +1,14 @@
+Update as of 8/15/2012
+======================
+* Refactored ACL functionality:
+  * Implementation is not bound to backend area anymore and moved to `Mage_Core` module
+  * Covered backwards-incompatible changes with additional migration tool (`dev/tools/migration/Acl`)
+* Implemented "move" layout directive and slightly modified behavior of "remove"
+* A failure in DB cleanup by integration testing framework is articulated more clearly by throwing `Magento_Exception`
+* Fixed security vulnerability of exploiting Magento "cookie restriction" feature
+* Fixed caching mechanism of loading modules declaration to not cause additional performance overhead
+* Adjusted include path in unit tests to use the original include path at the end, rather than at the beginning
+
 Update as of 8/9/2012
 =====================
 * Improvements:

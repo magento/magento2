@@ -49,7 +49,7 @@ class Mage_Backend_Model_Acl_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_readerMock = $this->getMock('Mage_Backend_Model_Acl_Config_Reader', array(), array(), '', false);
+        $this->_readerMock = $this->getMock('Magento_Acl_Config_Reader', array(), array(), '', false);
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_cacheMock  = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
 
@@ -65,7 +65,7 @@ class Mage_Backend_Model_Acl_ConfigTest extends PHPUnit_Framework_TestCase
         $originalAclResources->loadXML('<?xml version="1.0" encoding="utf-8"?><config><acl></acl></config>');
 
         $this->_configMock->expects($this->once())->method('getModelInstance')
-            ->with($this->equalTo('Mage_Backend_Model_Acl_Config_Reader'))
+            ->with($this->equalTo('Magento_Acl_Config_Reader'))
             ->will($this->returnValue($this->_readerMock));
 
         $this->_cacheMock->expects($this->exactly(2))->method('canUse')
@@ -99,7 +99,7 @@ class Mage_Backend_Model_Acl_ConfigTest extends PHPUnit_Framework_TestCase
         );
 
         $this->_configMock->expects($this->once())->method('getModelInstance')
-            ->with($this->equalTo('Mage_Backend_Model_Acl_Config_Reader'))
+            ->with($this->equalTo('Magento_Acl_Config_Reader'))
             ->will($this->returnValue($this->_readerMock));
 
         $this->_cacheMock->expects($this->exactly(2))->method('canUse')
@@ -151,7 +151,7 @@ class Mage_Backend_Model_Acl_ConfigTest extends PHPUnit_Framework_TestCase
         $aclResources->loadXML('<?xml version="1.0" encoding="utf-8"?><config><acl></acl></config>');
 
         $this->_configMock->expects($this->once())->method('getModelInstance')
-            ->with($this->equalTo('Mage_Backend_Model_Acl_Config_Reader'))
+            ->with($this->equalTo('Magento_Acl_Config_Reader'))
             ->will($this->returnValue($this->_readerMock));
 
         $this->_cacheMock->expects($this->exactly(4))->method('canUse')

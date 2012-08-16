@@ -18,28 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Backend
+ * @category    Tools
+ * @package     unit_tests
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @category    Mage
- * @package     Mage_Backend
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-class Mage_Backend_Model_Acl_Config_Reader_Dom extends Magento_Config_Dom
+require_once realpath(dirname(__FILE__) . '/../../../../../../../../') . '/tools/migration/Acl/Db/LoggerAbstract.php';
+require_once realpath(dirname(__FILE__) . '/../../../../../../../../') . '/tools/migration/Acl/Db/Logger/Console.php';
+
+class Tools_Migration_Acl_Db_Logger_ConsoleTest extends PHPUnit_Extensions_OutputTestCase
 {
-    /**
-     * Return attribute for resource node that identify it as unique
-     *
-     * @param string $xPath
-     * @return bool|string
-     */
-    protected function _findIdAttribute($xPath)
+    public function testReport()
     {
-        $needle = 'resource';
-        return substr($xPath, -strlen($needle)) === $needle ? 'id' : false;
+        $this->expectOutputRegex('/^Mapped items count: 0(.)*/');
+        $model = new Tools_Migration_Acl_Db_Logger_Console();
+        $model->report();
     }
 }
+

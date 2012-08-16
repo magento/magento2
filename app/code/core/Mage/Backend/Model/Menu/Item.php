@@ -95,7 +95,7 @@ class Mage_Backend_Model_Menu_Item
     /**
      * Acl
      *
-     * @var Mage_Backend_Model_Auth_Session
+     * @var Mage_Core_Model_Authorization
      */
     protected $_acl;
 

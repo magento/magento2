@@ -96,9 +96,9 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
         return $this;
     }
 
-    public static function getUrl($route='', $params=array())
+    public function getUrl($route='', $params=array())
     {
-        return Mage::getModel('Mage_Backend_Model_Url')->getUrl($route, $params);
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl($route, $params);
     }
 
     public function getCurrentUserId()

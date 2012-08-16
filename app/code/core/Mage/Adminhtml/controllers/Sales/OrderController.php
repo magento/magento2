@@ -681,7 +681,7 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
                 break;
 
         }
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($aclResource);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($aclResource);
     }
 
     /**

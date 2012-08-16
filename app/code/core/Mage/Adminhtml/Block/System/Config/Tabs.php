@@ -327,7 +327,7 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
         }
 
         if (!$permissions) {
-            $permissions = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
+            $permissions = Mage::getSingleton('Mage_Core_Model_Authorization');
         }
 
         $showTab = false;

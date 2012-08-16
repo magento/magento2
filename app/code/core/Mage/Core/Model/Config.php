@@ -195,6 +195,20 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     protected $_moduleDirs = array();
 
+    /*
+     * Cache for declared modules to prevent loading modules' config twice
+     *
+     * @var array
+     */
+    protected $_modulesCache = array();
+
+    /**
+     * Current area code
+     *
+     * @var string
+     */
+    protected $_currentAreaCode = null;
+
     /**
      * Class construct
      *
@@ -359,14 +373,15 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         Magento_Profiler::start('load_modules');
         $this->_loadDeclaredModules();
 
-        $resourceConfig = sprintf('config.%s.xml', $this->_getResourceConnectionModel('core'));
-        $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this);
+        Magento_Profiler::start('load_modules_configuration');
+        $this->loadModulesConfiguration(array('config.xml'), $this);
+        Magento_Profiler::stop('load_modules_configuration');
 
         /**
          * Prevent local.xml directives overwriting
          */
         $mergeConfig = clone $this->_prototype;
-        $this->_isLocalConfigLoaded = $mergeConfig->loadFile($this->getOptions()->getEtcDir().DS.'local.xml');
+        $this->_isLocalConfigLoaded = $mergeConfig->loadFile($this->getOptions()->getEtcDir() . DS . 'local.xml');
         if ($this->_isLocalConfigLoaded) {
             $this->extend($mergeConfig);
         }
@@ -809,27 +824,53 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     protected function _loadDeclaredModules()
     {
+        Magento_Profiler::start('load_modules_files');
         $moduleFiles = $this->_getDeclaredModuleFiles();
         if (!$moduleFiles) {
             return $this;
         }
+        Magento_Profiler::stop('load_modules_files');
 
         Magento_Profiler::start('load_modules_declaration');
-
         $unsortedConfig = new Mage_Core_Model_Config_Base('<config/>');
+        $emptyConfig = new Mage_Core_Model_Config_Element('<config><modules/></config>');
+        $declaredModules = array();
         foreach ($moduleFiles as $oneConfigFile) {
-            $fileConfig = new Mage_Core_Model_Config_Base($oneConfigFile);
-            foreach ($fileConfig->_xml->xpath('modules/*') as $module) {
-                $newModule = new Mage_Core_Model_Config_Element('<config><modules/></config>');
+            $path = explode(DIRECTORY_SEPARATOR, $oneConfigFile);
+            $moduleConfig = new Mage_Core_Model_Config_Base($oneConfigFile);
+            $modules = $moduleConfig->getXpath('modules/*');
+            if (!$modules) {
+                continue;
+            }
+            $cPath = count($path);
+            if ($cPath > 4) {
+                $moduleName = $path[$cPath - 4] . '_' . $path[$cPath - 3];
+                $this->_modulesCache[$moduleName] = $moduleConfig;
+            }
+            foreach ($modules as $module) {
+                $moduleName = $module->getName();
+                $isActive = (string)$module->active;
+                if (isset($declaredModules[$moduleName])) {
+                    $declaredModules[$moduleName]['active'] = $isActive;
+                    continue;
+                }
+                $newModule = clone $emptyConfig;
                 $newModule->modules->appendChild($module);
-                $unsortedConfig->extend(new Mage_Core_Model_Config_Base($newModule));
+                $declaredModules[$moduleName] = array(
+                    'active' => $isActive,
+                    'module' => $newModule,
+                );
             }
         }
-
+        foreach ($declaredModules as $moduleName => $module) {
+            if ($module['active'] == 'true') {
+                $module['module']->modules->{$moduleName}->active = 'true';
+                $unsortedConfig->extend(new Mage_Core_Model_Config_Base($module['module']));
+            }
+        }
         $sortedConfig = new Mage_Core_Model_Config_Module($unsortedConfig, $this->_allowedModules);
 
         $this->extend($sortedConfig);
-
         Magento_Profiler::stop('load_modules_declaration');
         return $this;
     }
@@ -906,23 +947,24 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                 if (!is_array($fileName)) {
                     $fileName = array($fileName);
                 }
-
                 foreach ($fileName as $configFile) {
-                    $configFilePath = $this->getModuleDir('etc', $modName).DS.$configFile;
-                    if ($mergeModel->loadFile($configFilePath)) {
-                        $mergeToObject->extend($mergeModel, true);
-                        if ($configFile !== 'config.xml') {
-                            continue;
-                        }
+                    if ($configFile == 'config.xml' && isset($this->_modulesCache[$modName])) {
+                        $mergeToObject->extend($this->_modulesCache[$modName], true);
                         //Prevent overriding <active> node of module if it was redefined in etc/modules
                         $mergeToObject->extend(new Mage_Core_Model_Config_Base(
                             "<config><modules><{$modName}><active>true</active></{$modName}></modules></config>"),
                             true
                         );
+                    } else {
+                        $configFilePath = $this->getModuleDir('etc', $modName) . DS . $configFile;
+                        if ($mergeModel->loadFile($configFilePath)) {
+                            $mergeToObject->extend($mergeModel, true);
+                        }
                     }
                 }
             }
         }
+        unset($this->_modulesCache);
         return $mergeToObject;
     }
 
@@ -1532,11 +1574,12 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     /**
      * Retrieve area config by area code
      *
-     * @param string $areaCode
+     * @param string|null $areaCode
      * @return array
      */
-    public function getAreaConfig($areaCode)
+    public function getAreaConfig($areaCode = null)
     {
+        $areaCode = empty($areaCode) ? $this->getCurrentAreaCode() : $areaCode;
         $areas = $this->getAreas();
         if (!isset($areas[$areaCode])) {
             throw new InvalidArgumentException('Requested area (' . $areaCode . ') doesn\'t exist');
@@ -1595,5 +1638,27 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             }
         }
         return $routers;
+    }
+
+
+    /**
+     * Get currently used area code
+     * @return string|null
+     */
+    public function getCurrentAreaCode()
+    {
+        return $this->_currentAreaCode;
+    }
+
+    /**
+     * Set currently used area code
+     *
+     * @param $areaCode
+     * @return Mage_Core_Model_Config
+     */
+    public function setCurrentAreaCode($areaCode)
+    {
+        $this->_currentAreaCode = $areaCode;
+        return $this;
     }
 }

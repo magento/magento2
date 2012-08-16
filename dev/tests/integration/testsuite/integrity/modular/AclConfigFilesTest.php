@@ -43,7 +43,7 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $readerMock = $this->getMock('Mage_Backend_Model_Acl_Config_Reader', array('getShemaFile'), array(), '', false);
+        $readerMock = $this->getMock('Magento_Acl_Config_Reader', array('getShemaFile'), array(), '', false);
         $this->_schemeFile = $readerMock->getSchemaFile();
         $this->_prepareFileList();
     }
@@ -94,10 +94,10 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
      */
     public function testMergedConfiguration()
     {
-        /** @var $dom DOMDocument **/
-        $dom = Mage::getModel('Mage_Backend_Model_Acl_Config_Reader', $this->_fileList)->getAclResources();
+        /** @var $dom Magento_Acl_Config_Reader **/
+        $dom = Mage::getModel('Magento_Acl_Config_Reader', $this->_fileList)->getAclResources();
 
-        $domConfig = new Mage_Backend_Model_Acl_Config_Reader_Dom($dom->saveXML());
+        $domConfig = new Magento_Acl_Config_Reader_Dom($dom->saveXML());
         $errors = array();
         $result = $domConfig->validate($this->_schemeFile, $errors);
         $message = "Invalid merged ACL config\n";

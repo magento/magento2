@@ -25,7 +25,7 @@
  */
 
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Generator.php';
-require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileWriter.php';
+require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileManager.php';
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Formatter.php';
 
 /**
@@ -56,7 +56,7 @@ class Tools_Migration_Acl_GeneratorRemoveTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_fileWriterMock;
+    protected $_fileManagerMock;
 
     public function setUp()
     {
@@ -67,9 +67,9 @@ class Tools_Migration_Acl_GeneratorRemoveTest extends PHPUnit_Framework_TestCase
         $this->_notEmptyFile = $path . 'not_empty.xml';
 
         $this->_xmlFormatterMock = $this->getMock('Tools_Migration_Acl_Formatter');
-        $this->_fileWriterMock = $this->getMock('Tools_Migration_Acl_FileWriter');
-        $this->_fileWriterMock->expects($this->once())->method('remove')->with($this->equalTo($this->_emptyFile));
-        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileWriterMock);
+        $this->_fileManagerMock = $this->getMock('Tools_Migration_Acl_FileManager');
+        $this->_fileManagerMock->expects($this->once())->method('remove')->with($this->equalTo($this->_emptyFile));
+        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileManagerMock);
     }
 
     public function tearDown()
