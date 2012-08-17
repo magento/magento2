@@ -46,8 +46,12 @@ class Magento_Test_Environment
      *
      * @param Magento_Test_Environment $instance
      */
-    public static function setInstance(Magento_Test_Environment $instance)
+    public static function setInstance($instance)
     {
+        if(!is_null($instance) && !($instance instanceof Magento_Test_Environment)) {
+            throw new Magento_Exception("Instance Parameter must be an Instance of Magento_Test_Environtment");
+        }
+
         self::$_instance = $instance;
     }
 

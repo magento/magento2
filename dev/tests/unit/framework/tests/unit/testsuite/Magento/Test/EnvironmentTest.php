@@ -50,21 +50,37 @@ class Magento_Test_EnvironmentTest extends PHPUnit_Framework_TestCase
         $this->_environment = new Magento_Test_Environment(self::$_tmpDir);
     }
 
+    public function testSetGetInstance()
+    {
+        Magento_Test_Environment::setInstance($this->_environment);
+        $this->assertSame($this->_environment, Magento_Test_Environment::getInstance());
+    }
+
     /**
      * @expectedException Magento_Exception
      */
     public function testGetInstance()
     {
+        Magento_Test_Environment::setInstance(null);
         Magento_Test_Environment::getInstance();
     }
 
     /**
      * @depends testGetInstance
+     * @expectedException Magento_Exception
      */
-    public function testSetGetInstance()
+    public function testSetInstanceWithNull()
     {
-        Magento_Test_Environment::setInstance($this->_environment);
-        $this->assertSame($this->_environment, Magento_Test_Environment::getInstance());
+        Magento_Test_Environment::setInstance(null);
+        $instance = Magento_Test_Environment::getInstance();
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testSetInstanceThrowExceptionIfParamNotValid()
+    {
+        Magento_Test_Environment::setInstance(new stdClass());
     }
 
     public function testGetTmpDir()
@@ -103,5 +119,13 @@ class Magento_Test_EnvironmentTest extends PHPUnit_Framework_TestCase
             rmdir($dir);
             throw $e;
         }
+    }
+
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        Magento_Test_Environment::setInstance($this->_environment);
     }
 }

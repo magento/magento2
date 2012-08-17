@@ -35,6 +35,13 @@ class Varien_Image_Adapter_ImageMagickTest extends PHPUnit_Framework_TestCase
      */
     protected $_object;
 
+    public function setUp()
+    {
+        if (DIRECTORY_SEPARATOR == "\\") {
+            $this->markTestSkipped("Used touch function in watermarkDataProvider will not work on windows systems");
+        }
+    }
+
     public function tearDown()
     {
         Magento_Test_Environment::getInstance()->cleanTmpDirOnShutdown();
@@ -50,7 +57,7 @@ class Varien_Image_Adapter_ImageMagickTest extends PHPUnit_Framework_TestCase
             $this->_object->watermark($imagePath);
             $this->fail('An expected exception has not been raised.');
         } catch (Exception $e) {
-            $this->assertContains($e->getMessage(), $expectedResult);
+            $this->assertContains($expectedResult, $e->getMessage());
         }
     }
 
@@ -62,9 +69,9 @@ class Varien_Image_Adapter_ImageMagickTest extends PHPUnit_Framework_TestCase
         touch($imageExists);
 
         return array(
-            array('', Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
-            array($imageAbsent, Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
-            array($imageExists, Varien_Image_Adapter_ImageMagick::ERROR_WRONG_IMAGE),
+            'Empty Image Path' => array('', Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
+            'Image Absent' => array($imageAbsent, Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
+            'Image already Exist should result in Wrong Image Exception' => array($imageExists, Varien_Image_Adapter_ImageMagick::ERROR_WRONG_IMAGE),
         );
     }
 }
