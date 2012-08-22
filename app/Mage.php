@@ -768,17 +768,21 @@ final class Mage
 
         try {
             if (!isset($loggers[$file])) {
-                $logDir  = self::getBaseDir('var') . DS . 'log';
-                $logFile = $logDir . DS . $file;
+                if (substr($file,0,6) == 'php://') {
+                    $logFile = $file;
+                }  else {
+                    $logDir  = self::getBaseDir('var') . DS . 'log';
+                    $logFile = $logDir . DS . $file;
 
-                if (!is_dir($logDir)) {
-                    mkdir($logDir);
-                    chmod($logDir, 0777);
-                }
+                    if (!is_dir($logDir)) {
+                        mkdir($logDir);
+                        chmod($logDir, 0777);
+                    }
 
-                if (!file_exists($logFile)) {
-                    file_put_contents($logFile, '');
-                    chmod($logFile, 0777);
+                    if (!file_exists($logFile)) {
+                        file_put_contents($logFile, '');
+                        chmod($logFile, 0777);
+                    }
                 }
 
                 $format = '%timestamp% %priorityName% (%priority%): %message%' . PHP_EOL;
