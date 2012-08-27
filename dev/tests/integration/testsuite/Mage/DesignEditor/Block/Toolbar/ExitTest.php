@@ -28,13 +28,13 @@
 class Mage_DesignEditor_Block_Toolbar_ExitTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_DesignEditor_Block_Toolbar_Exit
+     * @var Mage_DesignEditor_Block_Toolbar_Buttons
      */
     protected $_block;
 
     protected function setUp()
     {
-        $this->_block = new Mage_DesignEditor_Block_Toolbar_Exit(array('template' => 'toolbar/exit.phtml'));
+        $this->_block = new Mage_DesignEditor_Block_Toolbar_Buttons(array('template' => 'toolbar/exit.phtml'));
     }
 
     protected function tearDown()

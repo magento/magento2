@@ -116,7 +116,7 @@ return array(
     'addConstraint' => array('class_scope' => 'Varien_Db_Adapter_Pdo_Mysql'),
     'addCustomersToAlertQueueAction',
     'addCustomerToSegments',
-    'addGroupByTag' => array('class_scope' => 'Mage_Reports_Model_Resource_Tag_Collection'),
+    'addGroupByTag' => array('class_scope' => 'Mage_Tag_Model_Resource_Reports_Collection'),
     'addKey' => array('class_scope' => 'Varien_Db_Adapter_Pdo_Mysql'),
     'addSaleableFilterToCollection',
     'addSearchQfFilter',
@@ -376,4 +376,5 @@ return array(
     'validateDataArray' => array('class_scope' => 'Varien_Convert_Container_Abstract'),
     'validateFile' => array('class_scope' => 'Mage_Core_Model_Design_Package'),
     'validateOrder' => array('class_scope' => 'Mage_Checkout_Model_Type_Onepage'),
+    'prepareAttributesForSave' => array('class_scope' => 'Mage_ImportExport_Model_Import_Entity_Product')
 );

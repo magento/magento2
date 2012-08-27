@@ -29,10 +29,10 @@ define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 $includePaths = array(
     "./framework",
     './testsuite',
-    '../../../lib',
-    '../../../app/code/core',
     '../../../app/',
-    get_include_path()
+    '../../../app/code/core',
+    '../../../lib',
+    get_include_path(),
 );
 set_include_path(implode(PATH_SEPARATOR, $includePaths));
 spl_autoload_register('magentoAutoloadForUnitTests');
@@ -44,7 +44,7 @@ function magentoAutoloadForUnitTests($class)
         $fileName = $path . DIRECTORY_SEPARATOR . $file;
         if (file_exists($fileName)) {
             include $file;
-            if (class_exists($class, false)) {
+            if (class_exists($class, false) || interface_exists($class, false)) {
                 return true;
             }
         }

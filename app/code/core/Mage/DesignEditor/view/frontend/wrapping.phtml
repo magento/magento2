@@ -30,12 +30,15 @@ $elementId = $this->getElementId();
 $elementHtml = $this->getElementHtml();
 $hideWrapping = $this->isHighlightingDisabled();
 $cssClass = 'vde_element_wrapper'
-    . ($this->getIsDraggable() ? ' vde_draggable' : '')
+    . ($this->getIsManipulationAllowed() ? ' vde_draggable vde_removable' : '')
     . ($this->getIsContainer() ? ' vde_container' : '')
     . ($hideWrapping ? ' vde_wrapper_hidden' : '');
 ?>
-<div id="<?php echo $elementId; ?>" class="<?php echo $cssClass; ?>">
+<div id="<?php echo $elementId; ?>" class="<?php echo $cssClass; ?>" data-name="<?php echo $this->getElementName() ?>">
     <div class="vde_element_title"><?php echo $this->getElementTitle() ?></div>
+    <?php if ($this->getIsManipulationAllowed()): ?>
+        <?php echo $this->getRemoveButton($elementId) ?>
+    <?php endif; ?>
     <?php if (!$hideWrapping) : ?>
         <?php echo $elementHtml; ?>
     <?php endif; ?>
@@ -44,4 +47,4 @@ $cssClass = 'vde_element_wrapper'
     <!--start_<?php echo $elementId; ?>-->
     <?php echo $elementHtml; ?>
     <!--end_<?php echo $elementId; ?>-->
-<?php endif; ?>
+<?php endif;?>

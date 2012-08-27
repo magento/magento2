@@ -150,6 +150,10 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
                 'param1' => 'value 1',
                 'param2' => 'value 2',
             ),
+            $dir . '/scenario_with_scripts.jmx' => array(
+                'param1' => 'value 1',
+                'param2' => 'value 2',
+            ),
         );
 
         $actualScenarios = $this->_object->getScenarios();

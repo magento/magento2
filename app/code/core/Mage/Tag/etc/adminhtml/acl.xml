@@ -35,6 +35,13 @@
                         <resource id="Mage_Tag::tag_pending" title="Pending Tags" />
                     </resource>
                 </resource>
+                <resource id="Mage_Reports::report" module="Mage_Reports" title="Reports" sortOrder="80">
+                    <resource id="Mage_Reports::tags" module="Mage_Tag" title="Tags">
+                        <resource id="Mage_Reports::tags_customer" module="Mage_Tag" title="Customers" />
+                        <resource id="Mage_Reports::popular" module="Mage_Tag" title="Popular" />
+                        <resource id="Mage_Reports::tags_product" module="Mage_Tag" title="Products" />
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

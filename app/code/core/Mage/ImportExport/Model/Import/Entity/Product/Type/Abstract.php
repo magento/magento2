@@ -313,21 +313,6 @@ abstract class Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
     }
 
     /**
-     * Prepare attributes values for save: remove non-existent, remove empty values, remove static.
-     *
-     * @deprecated
-     * @see Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract::prepareAttributesWithDefaultValueForSave()
-     *
-     * @param array $rowData
-     *
-     * @return array
-     */
-    public function prepareAttributesForSave(array $rowData)
-    {
-        return $this->prepareAttributesWithDefaultValueForSave($rowData);
-    }
-
-    /**
      * Save product type specific data.
      *
      * @return Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
