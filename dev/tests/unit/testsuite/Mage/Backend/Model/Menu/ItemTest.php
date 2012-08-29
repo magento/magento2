@@ -82,7 +82,7 @@ class Mage_Backend_Model_Menu_ItemTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_aclMock = $this->getMock('Mage_Backend_Model_Auth_Session', array(), array(), '', false);
+        $this->_aclMock = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false);
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_storeConfigMock = $this->getMock('Mage_Core_Model_Store_Config');
         $this->_menuFactoryMock = $this->getMock('Mage_Backend_Model_Menu_Factory', array(), array(), '', false);

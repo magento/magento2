@@ -301,17 +301,30 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
             if (false == $controllerClassName) {
                 return null;
             }
-            // instantiate controller class
-            $controllerInstance = $this->_getControllerInstance($controllerClassName, $request);
 
-            if (false == $this->_validateControllerInstance($controllerInstance, $action)) {
+            if (false == $this->_validateControllerAction($controllerClassName, $action)) {
                 return null;
             }
+
+            // instantiate controller class
+            $controllerInstance = $this->_getControllerInstance($controllerClassName, $request);
         } else {
             return null;
         }
 
         return $controllerInstance;
+    }
+
+    /**
+     * Check whether action handler exists for provided handler
+     *
+     * @param string $controllerClassName
+     * @param string $action
+     * @return bool
+     */
+    protected function _validateControllerAction($controllerClassName, $action)
+    {
+        return method_exists($controllerClassName, $action . 'Action');
     }
 
     /**
@@ -370,12 +383,14 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
                 continue;
             }
 
+            if (false === $this->_validateControllerAction($controllerClassName, $action)) {
+                continue;
+            }
+
+            Mage::getConfig()->setCurrentAreaCode($this->_area);
             // instantiate controller class
             $controllerInstance = $this->_getControllerInstance($controllerClassName, $request);
 
-            if (false == $this->_validateControllerInstance($controllerInstance, $action)) {
-                continue;
-            }
             $found = true;
             break;
         }
@@ -399,19 +414,6 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
             $request->setParams($params['variables']);
         }
         return $controllerInstance;
-    }
-
-    /**
-     * Validate accessibility of controller action
-     *
-     * @param Mage_Core_Controller_Varien_Action $controllerInstance
-     * @param string $action
-     *
-     * @return bool
-     */
-    protected function _validateControllerInstance($controllerInstance, $action)
-    {
-        return (bool) $controllerInstance->hasAction($action);
     }
 
     /**

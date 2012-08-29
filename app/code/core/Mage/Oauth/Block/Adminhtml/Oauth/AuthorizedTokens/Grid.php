@@ -218,8 +218,6 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
      */
     protected function _isAllowed()
     {
-        /** @var $session Mage_Backend_Model_Auth_Session */
-        $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        return $session->isAllowed('Mage_Oauth::authorizedTokens');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Oauth::authorizedTokens');
     }
 }

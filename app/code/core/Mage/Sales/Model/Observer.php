@@ -269,7 +269,7 @@ class Mage_Sales_Model_Observer
         if (!($methodInstance instanceof Mage_Sales_Model_Payment_Method_Billing_AgreementAbstract)) {
             return;
         }
-        if (!Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::use')) {
+        if (!Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::use')) {
             $observer->getEvent()->getResult()->isAvailable = false;
         }
     }

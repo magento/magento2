@@ -4,6 +4,7 @@
 /.metadata
 /.project
 /.settings
+atlassian*
 /index.php
 /nbproject
 /sitemap

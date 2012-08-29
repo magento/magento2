@@ -7,3 +7,4 @@ dev/tests/integration/testsuite/Mage/Core/Block/_files
 dev/tests/integration/tmp
 dev/tests/static/testsuite/Php/Exemplar/_files/phpcs/input
 dev/tests/static/testsuite/Php/Exemplar/_files/phpmd/input
+dev/tools/translate

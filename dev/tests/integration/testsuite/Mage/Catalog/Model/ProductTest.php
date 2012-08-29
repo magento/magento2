@@ -356,7 +356,7 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Mage/Catalog/_files/two_products.php
+     * @magentoDataFixture Mage/Catalog/_files/multiple_products.php
      */
     public function testIsProductsHasSku()
     {

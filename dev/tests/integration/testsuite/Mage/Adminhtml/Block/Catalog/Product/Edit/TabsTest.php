@@ -32,6 +32,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_TabsTest extends PHPUnit_Framewo
      */
     public function testPrepareLayout()
     {
+        Mage::getConfig()->setCurrentAreaCode(Mage::helper("Mage_Backend_Helper_Data")->getAreaCode());
         $product = new Mage_Catalog_Model_Product;
         $product->load(1); // fixture
         Mage::register('product', $product);

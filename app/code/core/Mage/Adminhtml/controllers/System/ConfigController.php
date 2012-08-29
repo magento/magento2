@@ -257,7 +257,7 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Adminhtml::config');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::config');
     }
 
     /**
@@ -271,15 +271,12 @@ class Mage_Adminhtml_System_ConfigController extends Mage_Adminhtml_Controller_A
     protected function _isSectionAllowed($section)
     {
         try {
-            $session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-            if ($session->getData('acl') instanceof Magento_Acl) {
-                $resourceId = (string) Mage::getSingleton('Mage_Adminhtml_Model_Config')
-                    ->getSection($section)->resource;
-                if (!$session->isAllowed($resourceId)) {
-                    throw new Exception('');
-                }
-                return true;
+            $resourceId = (string) Mage::getSingleton('Mage_Adminhtml_Model_Config')
+                ->getSection($section)->resource;
+            if (!Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId)) {
+                throw new Exception('');
             }
+            return true;
         }
         catch (Zend_Acl_Exception $e) {
             $this->norouteAction();

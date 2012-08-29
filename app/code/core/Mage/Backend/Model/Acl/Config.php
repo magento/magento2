@@ -49,7 +49,7 @@ class Mage_Backend_Model_Acl_Config
     protected $_cache;
 
     /**
-     * @var Mage_Backend_Model_Acl_Config_Reader
+     * @var Magento_Acl_Config_Reader
      */
     protected $_reader;
 
@@ -74,13 +74,13 @@ class Mage_Backend_Model_Acl_Config
     /**
      * Reader object initialization
      *
-     * @return Mage_Backend_Model_Acl_Config_Reader
+     * @return Magento_Acl_Config_Reader
      */
     protected function _getReader()
     {
         if (null === $this->_reader) {
             $aclResourceFiles = $this->_getAclResourceFiles();
-            $this->_reader = $this->_config->getModelInstance('Mage_Backend_Model_Acl_Config_Reader', $aclResourceFiles);
+            $this->_reader = $this->_config->getModelInstance('Magento_Acl_Config_Reader', $aclResourceFiles);
         }
         return $this->_reader;
     }

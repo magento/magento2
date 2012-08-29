@@ -136,6 +136,6 @@ class Mage_Adminhtml_Controller_Sales_Creditmemo extends Mage_Adminhtml_Controll
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::sales_creditmemo');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::sales_creditmemo');
     }
 }

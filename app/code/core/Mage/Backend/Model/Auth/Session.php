@@ -61,7 +61,7 @@ class Mage_Backend_Model_Auth_Session extends Mage_Core_Model_Session_Abstract i
             $this->_aclBuilder = $data['aclBuilder'];
         } else {
             $areaConfig = Mage::getConfig()->getAreaConfig(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
-            $this->_aclBuilder = Mage::getModel('Mage_Core_Model_Acl_Builder', array(
+            $this->_aclBuilder = Mage::getSingleton('Mage_Core_Model_Acl_Builder', array(
                 'areaConfig' => $areaConfig,
                 'objectFactory' => Mage::getConfig()
             ));
@@ -116,8 +116,8 @@ class Mage_Backend_Model_Auth_Session extends Mage_Core_Model_Session_Abstract i
     /**
      * Check current user permission on resource and privilege
      *
-     * Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Catalog::catalog')
-     * Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Catalog::catalog')
+     * Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::catalog')
+     * Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Catalog::catalog')
      *
      * @param   string $resource
      * @param   string $privilege

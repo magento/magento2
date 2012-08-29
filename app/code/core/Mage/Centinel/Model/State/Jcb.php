@@ -25,7 +25,7 @@
  */
 
 /**
- * Abstract Validation State Model for JCB
+ * Validation State Model for JCB
  */
 class Mage_Centinel_Model_State_Jcb extends Mage_Centinel_Model_StateAbstract
 {
@@ -47,67 +47,18 @@ class Mage_Centinel_Model_State_Jcb extends Mage_Centinel_Model_StateAbstract
      */
     public function isAuthenticateSuccessful()
     {
-        //Test cases 5-9
         if (!$this->getIsModeStrict() && $this->_isLookupSoftSuccessful()) {
             return true;
         }
 
-        $paResStatus = $this->getAuthenticatePaResStatus();
-        $eciFlag = $this->getAuthenticateEciFlag();
-        $xid = $this->getAuthenticateXid();
-        $cavv = $this->getAuthenticateCavv();
-        $errorNo = $this->getAuthenticateErrorNo();
-        $signatureVerification = $this->getAuthenticateSignatureVerification();
-
-        //Test cases 1-4, 10-11
         if ($this->_isLookupStrictSuccessful()) {
-
-            if ($paResStatus == 'Y' && $eciFlag == '05' && $xid != '' && $cavv != '' && $errorNo == '0') {
-                //Test case 1
-                if ($signatureVerification == 'Y') {
-                    return true;
-                }
-                //Test case 2
-                if ($signatureVerification == 'N') {
-                    return false;
-                }
+            if ($this->_isAuthenticationSuccessful()) {
+                return true;
             }
-
-            //Test case 3
-            if ($paResStatus == 'N' && $signatureVerification == 'Y' && $eciFlag == '07' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
-                return false;
+            if ($this->_isAuthenticationUnavailable() && !$this->getIsModeStrict()) {
+                return true;
             }
-
-            //Test case 4
-            if ($paResStatus == 'U' && $signatureVerification == 'Y' && $eciFlag == '07' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
-                if ($this->getIsModeStrict()) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            //Test case 5
-            if ($paResStatus == 'U' && $signatureVerification == 'Y' && $eciFlag == '07' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
-                if ($this->getIsModeStrict()) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            //Test case 10
-            if ($paResStatus == '' && $signatureVerification == '' && $eciFlag == '07' &&
-                $xid == '' && $cavv == '' && $errorNo != '0') {
-                return false;
-            }
-
-            //Test case 11
-            if ($paResStatus == 'A' && $signatureVerification == 'Y' && $eciFlag == '06' &&
-                $xid != '' && $cavv != '' && $errorNo == '0') {
+            if ($this->_isAuthenticationAttemptsPerformed()) {
                 return true;
             }
         }
@@ -116,24 +67,65 @@ class Mage_Centinel_Model_State_Jcb extends Mage_Centinel_Model_StateAbstract
     }
 
     /**
-     * Analyse lookup`s results. If lookup is strict successful return true
+     * Returns true if authentication successful (Test case 1)
+     *
+     * @return bool
+     */
+    protected function _isAuthenticationSuccessful()
+    {
+        return $this->getAuthenticatePaResStatus() === 'Y'
+            && $this->getAuthenticateEciFlag() === '05'
+            && $this->getAuthenticateXid() != ''
+            && $this->getAuthenticateCavv() != ''
+            && $this->getAuthenticateErrorNo() === '0'
+            && $this->getAuthenticateSignatureVerification() === 'Y';
+    }
+
+    /**
+     * Returns true if authentication unavailable (Test case 4) or timeout encountered (Test case 5)
+     *
+     * @return bool
+     */
+    protected function _isAuthenticationUnavailable()
+    {
+        return $this->getAuthenticatePaResStatus() === 'U'
+            && $this->getAuthenticateSignatureVerification() === 'Y'
+            && $this->getAuthenticateEciFlag() === '07'
+            && $this->getAuthenticateXid() != ''
+            && $this->getAuthenticateCavv() === ''
+            && $this->getAuthenticateErrorNo() === '0';
+    }
+
+    /**
+     * Returns true if processing attempts performed (Test case 11)
+     *
+     * @return bool
+     */
+    protected function _isAuthenticationAttemptsPerformed()
+    {
+        return $this->getAuthenticatePaResStatus() === 'A'
+            && $this->getAuthenticateSignatureVerification() === 'Y'
+            && $this->getAuthenticateEciFlag() === '06'
+            && $this->getAuthenticateXid() != ''
+            && $this->getAuthenticateCavv() != ''
+            && $this->getAuthenticateErrorNo() === '0';
+    }
+
+    /**
+     * Analyse lookup`s results. If lookup is strict successful return true (Test cases 1-4, 6, 10-11)
      *
      * @return bool
      */
     protected function _isLookupStrictSuccessful()
     {
-        //Test cases 1-4, 6, 10-11
-        if ($this->getLookupEnrolled() == 'Y' &&
-            $this->getLookupAcsUrl() != '' &&
-            $this->getLookupPayload() != '' &&
-            $this->getLookupErrorNo() == '0') {
-            return true;
-        }
-        return false;
+        return $this->getLookupEnrolled() === 'Y'
+            && $this->getLookupAcsUrl() != ''
+            && $this->getLookupPayload() != ''
+            && $this->getLookupErrorNo() === '0';
     }
 
     /**
-     * Analyse lookup`s results. If lookup is soft successful return true
+     * Analyse lookup`s results. If lookup is soft successful return true (Test cases 5,7,8,9)
      *
      * @return bool
      */
@@ -144,18 +136,15 @@ class Mage_Centinel_Model_State_Jcb extends Mage_Centinel_Model_StateAbstract
         $errorNo = $this->getLookupErrorNo();
         $enrolled = $this->getLookupEnrolled();
 
-        //Test cases 5
-        if ($enrolled == '' && $acsUrl == '' && $payload == '' && $errorNo == '0') {
+        if ($acsUrl !== '' || $payload !== '') {
+            return false;
+        }
+
+        if ($enrolled === '' && $errorNo === '0') {
             return true;
         }
 
-        //Test case 7
-        if ($enrolled == 'U' && $acsUrl == '' && $payload == '' && $errorNo == '0') {
-            return true;
-        }
-
-        //Test cases 8,9
-        if ($enrolled == 'U' && $acsUrl == '' && $payload == '' && $errorNo != '0') {
+        if ($enrolled === 'U' && ($errorNo === '0' || $errorNo !== '')) {
             return true;
         }
 

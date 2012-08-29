@@ -8,6 +8,7 @@ app/code/core/Mage/Adminhtml/Block/Page/System/Config/Robots/Reset.php
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit.php
 app/code/core/Mage/Core/Block/Abstract.php
+app/code/core/Mage/Centinel/Model/State/Jcb.php
 app/code/core/Mage/Core/Model/Config/Module.php
 app/code/core/Mage/Core/Model/Design.php
 app/code/core/Mage/Core/Model/ShellAbstract.php
@@ -28,6 +29,8 @@ app/code/core/Mage/Log/Model/Resource/Helper
 app/code/core/Mage/Log/Model/Resource/Shell.php
 app/code/core/Mage/Log/Model/Shell.php
 app/code/core/Mage/Rss/Controller/AdminhtmlAbstract.php
+app/code/core/Mage/Tag/Block/Adminhtml/Customer/Edit/Tab/Tag.php
+app/code/core/Mage/Tag/Block/Catalog/Product/Rss/Link.php
 app/code/core/Mage/User
 app/code/core/Mage/Core/Controller/Varien/Action/Forward.php
 app/code/core/Mage/Core/Controller/Varien/DispatchableInterface.php

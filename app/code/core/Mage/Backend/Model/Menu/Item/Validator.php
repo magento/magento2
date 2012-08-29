@@ -40,7 +40,7 @@ class Mage_Backend_Model_Menu_Item_Validator
      * @var array
      */
     protected $_requiredTypes = array(
-        'acl' => 'Mage_Backend_Model_Auth_Session',
+        'acl' => 'Mage_Core_Model_Authorization',
         'appConfig' => 'Mage_Core_Model_Config',
         'menuFactory' => 'Mage_Backend_Model_Menu_Factory',
         'urlModel' => 'Mage_Backend_Model_Url',

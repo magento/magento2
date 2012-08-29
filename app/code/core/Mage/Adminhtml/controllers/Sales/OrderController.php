@@ -681,7 +681,7 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
                 break;
 
         }
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($aclResource);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($aclResource);
     }
 
     /**
@@ -721,11 +721,8 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
     public function addressAction()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        $address = Mage::getModel('Mage_Sales_Model_Order_Address')
-            ->getCollection()
-            ->addFilter('entity_id', $addressId)
-            ->getItemById($addressId);
-        if ($address) {
+        $address = Mage::getModel('Mage_Sales_Model_Order_Address')->load($addressId);
+        if ($address->getId()) {
             Mage::register('order_address', $address);
             $this->loadLayout();
             // Do not display VAT validation button on edit order address form

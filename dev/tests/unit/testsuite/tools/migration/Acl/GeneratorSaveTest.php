@@ -25,7 +25,7 @@
  */
 
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Generator.php';
-require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileWriter.php';
+require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileManager.php';
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Formatter.php';
 
 /**
@@ -61,13 +61,13 @@ class Tools_Migration_Acl_GeneratorSaveTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_fileWriterMock;
+    protected $_fileManagerMock;
 
     public function setUp()
     {
         $this->_xmlFormatterMock = $this->getMock('Tools_Migration_Acl_Formatter');
-        $this->_fileWriterMock = $this->getMock('Tools_Migration_Acl_FileWriter');
-        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileWriterMock);
+        $this->_fileManagerMock = $this->getMock('Tools_Migration_Acl_FileManager');
+        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileManagerMock);
 
         $this->_fixturePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files';
         $path = $this->_fixturePath . DIRECTORY_SEPARATOR . 'save' . DIRECTORY_SEPARATOR;
@@ -106,7 +106,7 @@ class Tools_Migration_Acl_GeneratorSaveTest extends PHPUnit_Framework_TestCase
     {
         unset($this->_model);
         unset($this->_xmlFormatterMock);
-        unset($this->_fileWriterMock);
+        unset($this->_fileManagerMock);
     }
 
     public function testSaveAclFiles()
@@ -132,7 +132,7 @@ class Tools_Migration_Acl_GeneratorSaveTest extends PHPUnit_Framework_TestCase
                 }
             ));
 
-        $this->_fileWriterMock->expects($this->once())
+        $this->_fileManagerMock->expects($this->once())
             ->method('write')
             ->with(
                 $this->equalTo($this->_aclFile),

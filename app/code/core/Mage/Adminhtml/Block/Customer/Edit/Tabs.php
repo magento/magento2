@@ -44,15 +44,17 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
 
     protected function _beforeToHtml()
     {
-/*
-        if (Mage::registry('current_customer')->getId()) {
-            $this->addTab('view', array(
-                'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Customer View'),
-                'content'   => $this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View')->toHtml(),
-                'active'    => true
-            ));
-        }
-*/
+        Magento_Profiler::start('customer/tabs');
+
+        /*
+                if (Mage::registry('current_customer')->getId()) {
+                    $this->addTab('view', array(
+                        'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Customer View'),
+                        'content'   => $this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View')->toHtml(),
+                        'active'    => true
+                    ));
+                }
+        */
         $this->addTab('account', array(
             'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Account Information'),
             'content'   => $this->getLayout()
@@ -71,7 +73,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
 
         if (Mage::registry('current_customer')->getId()) {
 
-            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::actions_view')) {
+            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_view')) {
                 $this->addTab('orders', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Orders'),
                     'class'     => 'ajax',
@@ -91,7 +93,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 'url'       => $this->getUrl('*/*/wishlist', array('_current' => true)),
             ));
 
-            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Newsletter::subscriber')) {
+            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Newsletter::subscriber')) {
                 $this->addTab('newsletter', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Newsletter'),
                     'content'   => $this->getLayout()
@@ -99,19 +101,11 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 ));
             }
 
-            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Review::reviews_ratings')) {
+            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Review::reviews_ratings')) {
                 $this->addTab('reviews', array(
                     'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Product Reviews'),
                     'class'     => 'ajax',
                     'url'       => $this->getUrl('*/*/productReviews', array('_current' => true)),
-                ));
-            }
-
-            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Tag::tag')) {
-                $this->addTab('tags', array(
-                    'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Product Tags'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('*/*/productTags', array('_current' => true)),
                 ));
             }
         }

@@ -85,6 +85,8 @@ body {
     text-decoration:none;
     background-image:url(../images/button.png);
     background-size:contain;
+    float: left;
+    margin-right:3px;
 }
 #vde_toolbar_buttons a.vde_button:hover {
     box-shadow:0 0 1pt 1pt #c9c6be;
@@ -108,15 +110,15 @@ body {
     border-radius: 4px;
 }
 .vde_element_title {
-    font: 10pt Arial, Helvetica, sans-serif;
-    margin: -2px 0px 0px -4px;
-    padding: 0px;
+    font-family:Arial, Helvetica, sans-serif;
+    margin: -2px 0 0 -4px;
+    padding: 0;
     border-width: 2px 5px 6px 7px;
     border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
     border-image-outset: fill;
     -webkit-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
     -moz-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
-    color: white;
+    color: black;
     font-size: 8pt;
     font-weight: bold;
     max-width: 150px;
@@ -125,6 +127,22 @@ body {
     text-align: left;
     line-height: 17px;
     cursor: default;
+}
+.vde_element_remove {
+    margin: -26px -6px 0px -4px;
+    padding: 0px;
+    border-width: 2px 5px 6px 7px;
+    border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    border-image-outset: fill;
+    -webkit-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    max-width: 20px;
+    height: 18px;
+    overflow: hidden;
+    text-align: right;
+    line-height: 17px;
+    cursor: default;
+    float: right;
 }
 .vde_element_wrapper.vde_container {
     border: 2px solid #7bc361;
@@ -261,4 +279,24 @@ body {
 }
 #vde_handles_tree .vde_option_fragment a {
     color: #eea243;
+}
+
+.vde_history_toolbar {
+    position: fixed;
+    left:0; top:150px;
+    width:220px;
+    background: #f0efe9;
+    border-bottom: 1pt solid #dddcd8;
+    box-shadow: 0 0 4pt 1pt #cbcbcb;
+    padding: 0 3pt;
+    line-height: 13pt;
+}
+.vde_history_toolbar ul {}
+.vde_history_toolbar ul li {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.vde_element_remove {
+    display: none;
 }

@@ -33,6 +33,9 @@
             <codePool>core</codePool>
             <depends>
                 <Mage_Catalog/>
+                <Mage_Customer/>
+                <Mage_Rss/>
+                <Mage_Reports/>
             </depends>
         </Mage_Tag>
     </modules>
@@ -51,9 +54,25 @@
                 </tag_summary>
             </indexer>
         </index>
+        <session>
+            <catalog>
+                <product>
+                    <message_models>
+                        <tag>Mage_Tag_Model_Session</tag>
+                    </message_models>
+                </product>
+            </catalog>
+        </session>
     </global>
     <frontend>
         <routers>
+            <rss>
+                <args>
+                    <modules>
+                        <tag before="Mage_Rss">Mage_Tag_Rss</tag>
+                    </modules>
+                </args>
+            </rss>
             <tag>
                 <use>standard</use>
                 <args>
@@ -76,12 +95,26 @@
                 <tag module="Mage_Tag">
                     <file>layout.xml</file>
                 </tag>
+                <tag_rss module="Mage_Tag">
+                    <file>rss.xml</file>
+                </tag_rss>
             </updates>
         </layout>
         <secure_url>
             <tag_customer>/tag/customer/</tag_customer>
         </secure_url>
     </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Mage_Tag before="Mage_Adminhtml">Mage_Tag_Adminhtml</Mage_Tag>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <adminhtml>
         <events>
             <catalog_product_delete_before>
@@ -103,5 +136,18 @@
                 </Mage_Tag>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <tag_product module="Mage_Tag">
+                    <file>product.xml</file>
+                </tag_product>
+                <tag_customer module="Mage_Tag">
+                    <file>customer.xml</file>
+                </tag_customer>
+                <tag module="Mage_Tag">
+                    <file>tag.xml</file>
+                </tag>
+            </updates>
+        </layout>
     </adminhtml>
 </config>

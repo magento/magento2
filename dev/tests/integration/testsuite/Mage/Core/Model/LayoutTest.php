@@ -25,6 +25,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * Layout integration tests
+ *
+ * 'ExcessivePublicCount' rule intersects with the 'TooManyFields' and 'TooManyMethods'.
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ */
 class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -117,7 +126,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Layout::generateBlocks
      * @covers Mage_Core_Model_Layout::getBlock
      */
-    public function testGenerateXmlAndBlocks()
+    public function testGenerateXmlAndElements()
     {
         $this->_layout->generateXml();
         /* Generate fixture
@@ -156,6 +165,97 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         /** @var $block Mage_Core_Block_Template */
         $block = $this->_layout->getBlock('root');
         $this->assertEquals('popup.phtml', $block->getTemplate());
+
+        $this->assertFalse($this->_layout->getBlock('test.nonexisting.block'));
+    }
+
+    public function testLayoutMoveDirective()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_move'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('container2', $layout->getParentName('container1'));
+        $this->assertEquals('container1', $layout->getParentName('no.name2'));
+        $this->assertEquals('block_container', $layout->getParentName('no_name3'));
+
+        // verify `after` attribute
+        $this->assertEquals('block_container', $layout->getParentName('no_name'));
+        $childrenOrderArray = array_keys($layout->getChildBlocks($layout->getParentName('no_name')));
+        $positionAfter = array_search('child_block1', $childrenOrderArray);
+        $positionToVerify = array_search('no_name', $childrenOrderArray);
+        $this->assertEquals($positionAfter, --$positionToVerify);
+
+        // verify `before` attribute
+        $this->assertEquals('block_container', $layout->getParentName('no_name4'));
+        $childrenOrderArray = array_keys($layout->getChildBlocks($layout->getParentName('no_name4')));
+        $positionBefore = array_search('child_block2', $childrenOrderArray);
+        $positionToVerify = array_search('no_name4', $childrenOrderArray);
+        $this->assertEquals($positionBefore, ++$positionToVerify);
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testLayoutMoveDirectiveBroken()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_move_broken'));
+        $layout->generateXml()->generateElements();
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testLayoutMoveAliasBroken()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_move_alias_broken'));
+        $layout->generateXml()->generateElements();
+    }
+
+    public function testLayoutMoveSameAlias()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_move_the_same_alias'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('container1', $layout->getParentName('no_name3'));
+    }
+
+    public function testLayoutMoveNewAlias()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_move_new_alias'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('new_alias', $layout->getElementAlias('no_name3'));
+    }
+
+    public function testLayoutActionForAnonymousParent()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_action_for_anonymous_parent_block'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('ANONYMOUS_0', $layout->getParentName('test.block.insert'));
+        $this->assertEquals('ANONYMOUS_1', $layout->getParentName('test.block.append'));
+    }
+
+    public function testLayoutRemoveDirective()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load(array('layout_test_handle_remove'));
+        $layout->generateXml()->generateElements();
+        $this->assertFalse($layout->getBlock('no_name2'));
+        $this->assertFalse($layout->getBlock('child_block1'));
+        $this->assertTrue($layout->isBlock('child_block2'));
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testGenerateElementsBroken()
+    {
+        $layout = new Mage_Core_Model_Layout();
+        $layout->getUpdate()->load('layout_test_handle_remove_broken');
+        $layout->generateXml()->generateElements();
     }
 
     public function testRenderElement()

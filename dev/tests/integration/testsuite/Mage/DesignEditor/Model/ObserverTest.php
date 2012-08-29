@@ -117,9 +117,9 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     public function testAddToolbar()
     {
         $layoutUpdate = Mage::app()->getLayout()->getUpdate();
-        $this->assertNotContains(Mage_DesignEditor_Model_Observer::TOOLBAR_HANDLE, $layoutUpdate->getHandles());
+        $this->assertNotContains(Mage_DesignEditor_Model_Observer::HANDLE_TOOLBAR, $layoutUpdate->getHandles());
         $this->_observer->addToolbar($this->_eventObserver);
-        $this->assertContains(Mage_DesignEditor_Model_Observer::TOOLBAR_HANDLE, $layoutUpdate->getHandles());
+        $this->assertContains(Mage_DesignEditor_Model_Observer::HANDLE_TOOLBAR, $layoutUpdate->getHandles());
     }
 
     /**
@@ -167,8 +167,15 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testWrapPageElement($elementName, $elementHtml, $expectedOutput)
     {
+        //@TODO Consider remaking the test cause now it's very fragile.
+        // Trivial change of wrapper template requires modifications in data provider
+
         $actualOutput = $this->_wrapElement($elementName, $elementHtml);
-        $this->assertXmlStringEqualsXmlString("<root>$expectedOutput</root>", "<root>$actualOutput</root>");
+        $this->assertXmlStringEqualsXmlString(
+            "<root>$expectedOutput</root>",
+            "<root>$actualOutput</root>",
+            "\n" . $expectedOutput . "\ndiffers from\n" . $actualOutput
+        );
     }
 
     /**
@@ -176,6 +183,9 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function wrapPageElementDataProvider()
     {
+        $removeLink = sprintf('<a href="#remove"><img src="%s" alt="Remove" /></a>',
+            Mage::getDesign()->getSkinUrl('images/btn_remove.gif')
+        );
         return array(
             'non-draggable block' => array(
                 'non_draggable_block',
@@ -190,15 +200,19 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
             'draggable block' => array(
                 'draggable_block',
                 '<b>Draggable Block</b>',
-                '<div id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr" class="vde_element_wrapper vde_draggable">
+                '<div id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr" class="vde_element_wrapper vde_draggable vde_removable"
+                    data-name="draggable_block">
                     <div class="vde_element_title">draggable_block</div>
+                    <div class="vde_element_title vde_element_remove"
+                        id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr_remove">' . $removeLink . '</div>
                     <b>Draggable Block</b>
                 </div>',
             ),
             'non-draggable container' => array(
                 'non_draggable_container',
                 '<b>Non-Draggable Container Text</b>',
-                '<div id="vde_element_bm9uX2RyYWdnYWJsZV9jb250YWluZXI" class="vde_element_wrapper vde_container">
+                '<div id="vde_element_bm9uX2RyYWdnYWJsZV9jb250YWluZXI" class="vde_element_wrapper vde_container"
+                    data-name="non_draggable_container">
                     <div class="vde_element_title">Non-Draggable Container</div>
                     <b>Non-Draggable Container Text</b>
                 </div>',
@@ -207,8 +221,11 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
                 'draggable_container',
                 '<b>Draggable Container Text</b>',
                 '<div id="vde_element_ZHJhZ2dhYmxlX2NvbnRhaW5lcg"
-                    class="vde_element_wrapper vde_draggable vde_container">
+                    class="vde_element_wrapper vde_draggable vde_removable vde_container"
+                    data-name="draggable_container">
                     <div class="vde_element_title">Draggable Container</div>
+                    <div class="vde_element_title vde_element_remove"
+                        id="vde_element_ZHJhZ2dhYmxlX2NvbnRhaW5lcg_remove">' . $removeLink . '</div>
                     <b>Draggable Container Text</b>
                 </div>',
             ),
@@ -216,7 +233,8 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
                 'after_body_start',
                 '<b>Page Top Container Text</b>',
                 '<div>VDE Toolbar</div>
-                <div id="vde_element_YWZ0ZXJfYm9keV9zdGFydA" class="vde_element_wrapper vde_container">
+                <div id="vde_element_YWZ0ZXJfYm9keV9zdGFydA" class="vde_element_wrapper vde_container"
+                    data-name="after_body_start">
                     <div class="vde_element_title">Page Top</div>
                     <b>Page Top Container Text</b>
                 </div>',
@@ -230,11 +248,21 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testWrapPageElementHighlightingDisabled()
     {
+        //@TODO Consider remaking the test cause now it's very fragile.
+        // Trivial change of wrapper template requires modifications in data provider
+
         $elementName = 'draggable_block';
         $elementHtml = '<b>Draggable Block</b>';
         $expectedOutputFormat =
-            '<div id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr" class="vde_element_wrapper vde_draggable vde_wrapper_hidden">%w'
+            '<div id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr" '
+                . 'class="vde_element_wrapper vde_draggable vde_removable vde_wrapper_hidden" '
+                . 'data-name="draggable_block">%w'
                 . '<div class="vde_element_title">draggable_block</div>%w'
+                . '<div class="vde_element_title vde_element_remove" id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr_remove">%w'
+                    . '<a href="#remove">%w'
+                        . '<img src="' . Mage::getDesign()->getSkinUrl('images/btn_remove.gif') . '" alt="Remove" />%w'
+                    . '</a>%w'
+                . '</div>%w'
             . '</div>%w'
             . '<!--start_vde_element_ZHJhZ2dhYmxlX2Jsb2Nr-->%w'
             . '<b>Draggable Block</b>%w'

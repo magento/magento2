@@ -49,6 +49,8 @@
                 <auth/>
                 <acl>
                     <resourceLoader>Mage_Backend_Model_Acl_Loader_Resource</resourceLoader>
+                    <roleLocator>Mage_Backend_Model_Authorization_RoleLocator</roleLocator>
+                    <policy>Magento_Authorization_Policy_Acl</policy>
                 </acl>
             </adminhtml>
         </areas>

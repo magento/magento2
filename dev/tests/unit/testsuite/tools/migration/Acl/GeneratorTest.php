@@ -25,7 +25,7 @@
  */
 
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Generator.php';
-require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileWriter.php';
+require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/FileManager.php';
 require_once realpath(dirname(__FILE__) . '/../../../../../../') . '/tools/migration/Acl/Formatter.php';
 
 /**
@@ -58,13 +58,13 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_fileWriterMock;
+    protected $_fileManagerMock;
 
     public function setUp()
     {
         $this->_xmlFormatterMock = $this->getMock('Tools_Migration_Acl_Formatter');
-        $this->_fileWriterMock = $this->getMock('Tools_Migration_Acl_FileWriter');
-        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileWriterMock);
+        $this->_fileManagerMock = $this->getMock('Tools_Migration_Acl_FileManager');
+        $this->_model = new Tools_Migration_Acl_Generator($this->_xmlFormatterMock, $this->_fileManagerMock);
 
         $this->_fixturePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files';
 
@@ -76,8 +76,8 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
         $this->_adminhtmlFiles = array(
             $prefix . 'local' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
             $prefix . 'community' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'Enterprise' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'Mage' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'core' . DIRECTORY_SEPARATOR . 'ANamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'core' . DIRECTORY_SEPARATOR . 'BNamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
         );
 
         $this->_model->setAdminhtmlFiles($this->_adminhtmlFiles);
@@ -85,19 +85,19 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
         $this->_model->setBasePath($this->_fixturePath);
     }
 
-    public function testGetCommentText()
+    /**
+     * @param $file
+     * @param $expected
+     *
+     */
+    public function testGetLicenseTemplate()
     {
-        $expected = PHP_EOL;
-        $expected .= '/**' . PHP_EOL;
-        $expected .= ' * {license_notice}' . PHP_EOL;
-        $expected .= ' *' . PHP_EOL;
-        $expected .= ' * @category    Category' . PHP_EOL;
-        $expected .= ' * @package     Module_Name' . PHP_EOL;
-        $expected .= ' * @copyright   {copyright}' . PHP_EOL;
-        $expected .= ' * @license     {license_link}' . PHP_EOL;
-        $expected .= ' */' . PHP_EOL;
-
-        $this->assertEquals($expected, $this->_model->getCommentText('Category', 'Module_Name'));
+        $this->_fileManagerMock->expects($this->once())
+            ->method('getContents')
+            ->with('someFile')
+            ->will($this->returnValue('<?xml version="1.0"?> <!-- /** license_notice */ -->'));
+        $actual = $this->_model->getLicenseTemplate('someFile');
+        $this->assertEquals(' /** license_notice */ ', $actual);
     }
 
     /**
@@ -112,17 +112,6 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $filePath
-     * @param $expectedCategory
-     *
-     * @dataProvider getCategoryDataProvider
-     */
-    public function testGetCategory($filePath, $expectedCategory)
-    {
-        $this->assertEquals($expectedCategory, $this->_model->getCategory($filePath), 'Incorrect Category Name');
-    }
-
-    /**
      * @return array
      */
     public function getModuleNameDataProvider()
@@ -130,52 +119,25 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'filePath' => DIRECTORY_SEPARATOR
-                    . 'app ' . DIRECTORY_SEPARATOR
-                    . 'core ' . DIRECTORY_SEPARATOR
-                    . 'Enterprise' . DIRECTORY_SEPARATOR
+                    . 'app' . DIRECTORY_SEPARATOR
+                    . 'code' . DIRECTORY_SEPARATOR
+                    . 'core' . DIRECTORY_SEPARATOR
+                    . 'ANamespace' . DIRECTORY_SEPARATOR
                     . 'ModuleOne' . DIRECTORY_SEPARATOR
                     . 'etc' . DIRECTORY_SEPARATOR
                     . 'adminhtml.xml',
-                'moduleName' => 'Enterprise_ModuleOne',
+                'moduleName' => 'ANamespace_ModuleOne',
             ),
             array(
                 'filePath' => DIRECTORY_SEPARATOR
-                    . 'app ' . DIRECTORY_SEPARATOR
-                    . 'core ' . DIRECTORY_SEPARATOR
-                    . 'Mage' . DIRECTORY_SEPARATOR
+                    . 'app' . DIRECTORY_SEPARATOR
+                    . 'code' . DIRECTORY_SEPARATOR
+                    . 'core' . DIRECTORY_SEPARATOR
+                    . 'BNamespace' . DIRECTORY_SEPARATOR
                     . 'ModuleOne' . DIRECTORY_SEPARATOR
                     . 'etc' . DIRECTORY_SEPARATOR
                     . 'adminhtml.xml',
-                'moduleName' => 'Mage_ModuleOne',
-            ),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getCategoryDataProvider()
-    {
-        return array(
-            array(
-                'filePath' => DIRECTORY_SEPARATOR
-                    . 'app ' . DIRECTORY_SEPARATOR
-                    . 'core ' . DIRECTORY_SEPARATOR
-                    . 'Enterprise' . DIRECTORY_SEPARATOR
-                    . 'ModuleOne' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR
-                    . 'adminhtml.xml',
-                'category' => 'Enterprise',
-            ),
-            array(
-                'filePath' => DIRECTORY_SEPARATOR
-                    . 'app ' . DIRECTORY_SEPARATOR
-                    . 'core ' . DIRECTORY_SEPARATOR
-                    . 'Mage' . DIRECTORY_SEPARATOR
-                    . 'ModuleOne' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR
-                    . 'adminhtml.xml',
-                'category' => 'Mage',
+                'moduleName' => 'BNamespace_ModuleOne',
             ),
         );
     }
@@ -323,14 +285,19 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testGetResultDomDocument()
     {
-        $dom = $this->_model->getResultDomDocument('Module_Name', 'Category');
+        $expectedDccument = <<<TEMPLATE
+<config>
+  <acl>
+    <resources xpath="config/acl/resources"/>
+  </acl>
+</config>
+TEMPLATE;
+        $dom = $this->_model->getResultDomDocument('license_placeholder');
         $expectedDom = new DOMDocument();
         $expectedDom->formatOutput = true;
 
-        $file = $this->_fixturePath . DIRECTORY_SEPARATOR . 'template_document.xml';
-        $expectedDom->load($file);
-        $this->assertContains('{license_notice}', $dom->saveXML());
-        $this->assertEquals($expectedDom->saveXML($expectedDom->documentElement), $dom->saveXML($dom->documentElement));
+        $this->assertContains('license_placeholder', $dom->saveXML());
+        $this->assertEquals($expectedDccument, $dom->saveXML($dom->documentElement));
     }
 
     public function testParseAdminhtmlFiles()

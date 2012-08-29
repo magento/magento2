@@ -32,6 +32,13 @@
 class Mage_Core_Model_Acl_Builder
 {
     /**
+     * Acl object
+     *
+     * @var Magento_Acl
+     */
+    protected $_acl;
+
+    /**
      * Area configuration
      *
      * @var Varien_Simplexml_Element
@@ -69,16 +76,18 @@ class Mage_Core_Model_Acl_Builder
      */
     public function getAcl()
     {
-        try {
-            $acl = $this->_objectFactory->getModelInstance('Magento_Acl');
-            $this->_objectFactory->getModelInstance($this->_getLoaderClass('resource'))->populateAcl($acl);
-            $this->_objectFactory->getModelInstance($this->_getLoaderClass('role'))->populateAcl($acl);
-            $this->_objectFactory->getModelInstance($this->_getLoaderClass('rule'))->populateAcl($acl);
-        } catch (Exception $e) {
-            throw new LogicException('Could not create acl object: ' . $e->getMessage());
+        if (!$this->_acl) {
+            try {
+                $acl = $this->_objectFactory->getModelInstance('Magento_Acl');
+                $this->_objectFactory->getModelInstance($this->_getLoaderClass('resource'))->populateAcl($acl);
+                $this->_objectFactory->getModelInstance($this->_getLoaderClass('role'))->populateAcl($acl);
+                $this->_objectFactory->getModelInstance($this->_getLoaderClass('rule'))->populateAcl($acl);
+                $this->_acl = $acl;
+            } catch (Exception $e) {
+                throw new LogicException('Could not create acl object: ' . $e->getMessage());
+            }
         }
-
-        return $acl;
+        return $this->_acl;
     }
 
     /**

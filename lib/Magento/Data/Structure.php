@@ -293,6 +293,7 @@ class Magento_Data_Structure
      *
      * @param string $elementId ID of an element or its parent element
      * @param string|null $alias
+     * @return Magento_Data_Structure
      */
     public function unsetChild($elementId, $alias = null)
     {
@@ -309,6 +310,7 @@ class Magento_Data_Structure
                 unset($this->_elements[$parentId][self::CHILDREN]);
             }
         }
+        return $this;
     }
 
     /**
@@ -340,8 +342,7 @@ class Magento_Data_Structure
                 }
             }
         }
-        $this->unsetChild($childId);
-        $this->_insertChild($parentId, $childId, $offset, $alias);
+        $this->unsetChild($childId)->_insertChild($parentId, $childId, $offset, $alias);
         return $this->_getChildOffset($parentId, $childId) + 1;
     }
 
@@ -369,8 +370,7 @@ class Magento_Data_Structure
             return $this->reorderChild($parentId, $childId, $newOffset);
         }
         $alias = $this->getChildAlias($parentId, $childId);
-        $this->unsetChild($childId);
-        $newOffset = $this->_getRelativeOffset($parentId, $siblingId, $offset);
+        $newOffset = $this->unsetChild($childId)->_getRelativeOffset($parentId, $siblingId, $offset);
         $this->_insertChild($parentId, $childId, $newOffset, $alias);
         return $this->_getChildOffset($parentId, $childId) + 1;
     }

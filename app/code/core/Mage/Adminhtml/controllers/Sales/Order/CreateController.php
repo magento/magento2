@@ -495,7 +495,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
 
             $this->_getSession()->clear();
             Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess($this->__('The order has been created.'));
-            if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('Mage_Sales::actions_view')) {
+            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_view')) {
                 $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
             } else {
                 $this->_redirect('*/sales_order/index');
@@ -543,7 +543,7 @@ class Mage_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Control
                 $aclResource = 'Mage_Sales::actions';
                 break;
         }
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed($aclResource);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($aclResource);
     }
 
     /*

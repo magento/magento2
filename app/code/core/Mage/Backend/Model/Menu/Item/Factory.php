@@ -28,7 +28,7 @@ class Mage_Backend_Model_Menu_Item_Factory
     /**
      * ACL
      *
-     * @var Mage_Backend_Model_Auth_Session
+     * @var Mage_Core_Model_Authorization
      */
     protected $_acl;
 
@@ -79,8 +79,8 @@ class Mage_Backend_Model_Menu_Item_Factory
      */
     public function __construct(array $data = array())
     {
-        $this->_acl = isset($data['acl']) ? $data['acl'] : Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        if (!($this->_acl instanceof Mage_Backend_Model_Auth_Session)) {
+        $this->_acl = isset($data['acl']) ? $data['acl'] : Mage::getSingleton('Mage_Core_Model_Authorization');
+        if (!($this->_acl instanceof Mage_Core_Model_Authorization)) {
             throw new InvalidArgumentException('Wrong acl object provided');
         }
 

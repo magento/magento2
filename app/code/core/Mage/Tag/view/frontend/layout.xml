@@ -98,6 +98,7 @@ All tags page
                     </block>
                     <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
                 </block>
+                <block type="Mage_Tag_Block_Catalog_Product_Rss_Link" name="tagged_product_list_rss_link" template="product/rss/link.phtml" />
                 <action method="setListOrders"/>
                 <action method="setListModes"/>
                 <action method="setListCollection"/>

@@ -41,7 +41,10 @@ class Mage_Rss_CatalogController extends Mage_Core_Controller_Front_Action
     public function preDispatch()
     {
         $action = $this->getRequest()->getActionName();
-        $acl = array('notifystock' => 'catalog/products', 'review' => 'catalog/reviews_ratings');
+        /**
+         * Format actionName => acrResourceId
+         */
+        $acl = array('notifystock' => 'Mage_Catalog::products', 'review' => 'Mage_Review::reviews_ratings');
         if (isset($acl[$action])) {
             $this->setCurrentArea('adminhtml');
             if (Mage_Rss_OrderController::authenticateAndAuthorizeAdmin($this, $acl[$action])) {
@@ -64,23 +67,6 @@ class Mage_Rss_CatalogController extends Mage_Core_Controller_Front_Action
     public function salesruleAction()
     {
         $this->_genericAction('salesrule');
-    }
-
-    public function tagAction()
-    {
-        if (!$this->_isEnabled('tag')) {
-            $this->_forward('nofeed', 'index', 'rss');
-            return;
-        }
-        $tagName = urldecode($this->getRequest()->getParam('tagName'));
-        $tagModel = Mage::getModel('Mage_Tag_Model_Tag');
-        $tagModel->loadByName($tagName);
-        if ($tagModel->getId() && $tagModel->getStatus() == $tagModel->getApprovedStatus()) {
-            Mage::register('tag_model', $tagModel);
-            $this->_render();
-            return;
-        }
-        $this->_forward('nofeed', 'index', 'rss');
     }
 
     public function notifystockAction()

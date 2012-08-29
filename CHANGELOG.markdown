@@ -1,3 +1,36 @@
+Update as of 8/26/2012
+======================
+* Decoupled Tag module functionality from other modules
+* Visual Design Editor:
+  * Implemented tracking of user changes history and rendering the actions at VDE toolbar
+  * Implemented compacting of user changes history. Compacting is done in order to save all the changes as a minimal layout update.
+* Improvements:
+  * Added Atlassian IDE Plugin configuration files to `.gitignore`
+  * Relocated `add_to_cart`, `checkout` and `product_edit` performance scenarios from `samples` to the normal `testsuite` directory. These scenarios can be used for Magento performance testing.
+  * Implemented verification of number of orders that were created during execution of `checkout` performance scenario
+  * Removed usage of deprecated `PHPUnit_Extensions_OutputTestCase` class from unit tests
+* Fixes:
+  * Fixed MySQL DB adapter to always throw exception, if it was not able to connect to DB because of wrong configuration. So now the adapter's behavior is not dependent on `error_reporting` settings.
+  * Added the missing closing tag to New Order email template
+  * Fixed `Mage_ImportExport_Model_Import_Entity_CustomerComposite` integration test issues
+  * Marked several integration tests in `Mage_Adminhtml_CustomerControllerTest` as incomplete, as the tested functionality was not MMDB-compliant
+  * Fixed issue with unit tests failure, when there was a Zend Framework installed as PEAR package
+  * Fixed `advanced_search` performance scenario to fail, if the searched product doesn't exist
+  * Fixed issue with non-escaped latest message link in admin backend
+* GitHub requests:
+  * [#48](https://github.com/magento/magento2/pull/48) -- fixed usage of a collection at the place, where just a single object was needed
+
+Update as of 8/15/2012
+======================
+* Refactored ACL functionality:
+  * Implementation is not bound to backend area anymore and moved to `Mage_Core` module
+  * Covered backwards-incompatible changes with additional migration tool (`dev/tools/migration/Acl`)
+* Implemented "move" layout directive and slightly modified behavior of "remove"
+* A failure in DB cleanup by integration testing framework is articulated more clearly by throwing `Magento_Exception`
+* Fixed security vulnerability of exploiting Magento "cookie restriction" feature
+* Fixed caching mechanism of loading modules declaration to not cause additional performance overhead
+* Adjusted include path in unit tests to use the original include path at the end, rather than at the beginning
+
 Update as of 8/9/2012
 =====================
 * Improvements:
