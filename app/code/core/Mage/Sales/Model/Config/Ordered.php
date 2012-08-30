@@ -140,36 +140,46 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
         $element = current($configArray);
         if (isset($element['sort_order'])) {
             uasort($configArray, array($this, '_compareSortOrder'));
+            $sortedCollectors = array_keys($configArray);
         } else {
-            foreach ($configArray as $code => $data) {
-                foreach ($data['before'] as $beforeCode) {
-                    if (!isset($configArray[$beforeCode])) {
+            $sortedCollectors = array_keys($configArray);
+            // Move all totals with before specification in front of related total
+
+            foreach ($configArray as $code => &$data) {
+                foreach ($data['before'] as $positionCode) {
+                    if (!isset($configArray[$positionCode])) {
                         continue;
                     }
-                    $configArray[$code]['before'] = array_unique(array_merge(
-                        $configArray[$code]['before'], $configArray[$beforeCode]['before']
-                    ));
-                    $configArray[$beforeCode]['after'] = array_merge(
-                        $configArray[$beforeCode]['after'], array($code), $data['after']
-                    );
-                    $configArray[$beforeCode]['after'] = array_unique($configArray[$beforeCode]['after']);
-                }
-                foreach ($data['after'] as $afterCode) {
-                    if (!isset($configArray[$afterCode])) {
-                        continue;
+                    if (!in_array($code, $configArray[$positionCode]['after'], true)) {
+                        // Also add additional after condition for related total,
+                        // to keep it always after total with before value specified
+                        $configArray[$positionCode]['after'][] = $code;
                     }
-                    $configArray[$code]['after'] = array_unique(array_merge(
-                        $configArray[$code]['after'], $configArray[$afterCode]['after']
-                    ));
-                    $configArray[$afterCode]['before'] = array_merge(
-                        $configArray[$afterCode]['before'], array($code), $data['before']
-                    );
-                    $configArray[$afterCode]['before'] = array_unique($configArray[$afterCode]['before']);
+                    $currentPosition = array_search($code, $sortedCollectors, true);
+                    $desiredPosition = array_search($positionCode, $sortedCollectors, true);
+                    if ($currentPosition > $desiredPosition) {
+                        // Only if current position is not corresponding to before condition
+                        array_splice($sortedCollectors, $currentPosition, 1); // Removes existent
+                        array_splice($sortedCollectors, $desiredPosition, 0, $code); // Add at new position
+                    }
                 }
             }
-            uasort($configArray, array($this, '_compareTotals'));
+            // Sort out totals with after position specified
+            foreach ($configArray as $code => &$data) {
+                $maxAfter = null;
+                $currentPosition = array_search($code, $sortedCollectors, true);
+
+                foreach ($data['after'] as $positionCode) {
+                    $maxAfter = max($maxAfter, array_search($positionCode, $sortedCollectors, true));
+                }
+
+                if ($maxAfter !== null && $maxAfter > $currentPosition) {
+                    // Moves only if it is in front of after total
+                    array_splice($sortedCollectors, $maxAfter + 1, 0, $code); // Add at new position
+                    array_splice($sortedCollectors, $currentPosition, 1); // Removes existent
+                }
+            }
         }
-        $sortedCollectors = array_keys($configArray);
         if (Mage::app()->useCache('config')) {
             Mage::app()->saveCache(serialize($sortedCollectors), $this->_collectorsCacheKey, array(
                     Mage_Core_Model_Config::CACHE_TAG
