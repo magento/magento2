@@ -26,9 +26,16 @@
  */
 class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framework_TestCase
 {
-
+    /**
+     * Invoice to be passed to the collect method in testCollect
+     * @var Mage_Sales_Model_Order_Invoice $_invoice
+     */
     protected $_invoice;
 
+    /**
+     * Order to be returned when calling 'getOrder' inside collect method.
+     * @var Mage_Sales_Model_Order $_order
+     */
     protected $_order;
 
 
