@@ -1,3 +1,9 @@
+Update as of 8/30/2012
+======================
+* Fixes:
+  * Fixed name, title, markup, styles at "Orders and Returns" homepage
+  * Fixed displaying products in the shopping cart item block at the backend
+
 Update as of 8/26/2012
 ======================
 * Decoupled Tag module functionality from other modules

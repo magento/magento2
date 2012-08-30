@@ -502,7 +502,7 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         $layout = $this->loadLayout()
             ->getLayout()
             ->getBlock('admin.customer.view.cart')
-            ->setWebsiteId();
+            ->setWebsiteId((int)$this->getRequest()->getParam('website_id'));
         $this->renderLayout();
     }
 
