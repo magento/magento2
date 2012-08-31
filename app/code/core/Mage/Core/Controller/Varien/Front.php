@@ -256,7 +256,7 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object
     /**
      * Apply configuration rewrites to current url
      *
-     * @return Mage_Core_Controller_Varien_Front
+     * @return null
      */
     public function rewrite()
     {
