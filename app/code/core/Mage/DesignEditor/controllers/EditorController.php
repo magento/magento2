@@ -32,9 +32,11 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
     /**
      * @var Mage_DesignEditor_Model_Session
      */
-    protected $_session = null;
+    protected $_session;
 
     /**
+     * Variable to store full action name
+     *
      * @var string
      */
     protected $_fullActionName = '';
@@ -131,5 +133,59 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
             $this->_session->addError($e->getMessage());
         }
         $this->getResponse()->setRedirect($backUrl);
+    }
+
+    /**
+     * Compact history
+     */
+    public function compactHistoryAction()
+    {
+        $historyData = Mage::app()->getRequest()->getPost();
+
+        if (!$historyData) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($this->__('Invalid post data')))
+            ));
+            return;
+        }
+
+        /** @var $historyModel Mage_DesignEditor_Model_History */
+        $historyModel = Mage::getModel('Mage_DesignEditor_Model_History');
+        try {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                Mage_Core_Model_Message::SUCCESS => array($historyModel->setChangeLog($historyData)->getCompactLog())
+            )));
+        } catch (Mage_Core_Exception $e) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($e->getMessage()))
+            ));
+        }
+    }
+
+    /**
+     * Get layout xml
+     */
+    public function compactXmlAction()
+    {
+        $historyData = Mage::app()->getRequest()->getPost();
+
+        if (!$historyData) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($this->__('Invalid post data')))
+            ));
+            return;
+        }
+
+        /** @var $historyModel Mage_DesignEditor_Model_History */
+        $historyModel = Mage::getModel('Mage_DesignEditor_Model_History');
+        try {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                Mage_Core_Model_Message::SUCCESS => array($historyModel->setChangeLog($historyData)->getCompactXml())
+            )));
+        } catch (Mage_Core_Exception $e) {
+            $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+                array(Mage_Core_Model_Message::ERROR => array($e->getMessage()))
+            ));
+        }
     }
 }

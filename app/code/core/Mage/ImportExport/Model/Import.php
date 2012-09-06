@@ -480,15 +480,14 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
     /**
      * Validates source file and returns validation result.
      *
-     * @param string $sourceFile Full path to source file
+     * @param Mage_ImportExport_Model_Import_Adapter_Abstract $source
      * @return bool
      */
-    public function validateSource($sourceFile)
+    public function validateSource(Mage_ImportExport_Model_Import_Adapter_Abstract $source)
     {
         $this->addLogComment(Mage::helper('Mage_ImportExport_Helper_Data')->__('Begin data validation'));
-        $result = $this->_getEntityAdapter()
-            ->setSource($this->_getSourceAdapter($sourceFile))
-            ->isDataValid();
+        $adapter = $this->_getEntityAdapter()->setSource($source);
+        $result = $adapter->isDataValid();
 
         $messages = $this->getOperationResultMessages($result);
         $this->addLogComment($messages);

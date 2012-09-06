@@ -72,7 +72,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
      */
     public function getTranslatorScript()
     {
-        $script = 'var Translator = new Translate('.$this->getTranslateJson().');';
+        $script = '(function($) {$.mage.translate.add(' . $this->getTranslateJson() . ')})(jQuery);';
         return $this->getScript($script);
     }
 
@@ -112,7 +112,8 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
                 foreach ($messages as $message) {
                     $messageText = (string)$message;
                     $module = $message->getParent()->getAttribute("module");
-                    $this->_translateData[$messageText] = Mage::helper(empty($module) ? 'Mage_Core' : $module
+                    $this->_translateData[$messageText] = Mage::helper(
+                        empty($module) ? 'Mage_Core' : $module
                     )->__($messageText);
                 }
             }

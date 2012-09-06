@@ -79,6 +79,7 @@ class Magento_Config
      *
      * @param array $configData
      * @param string $baseDir
+     * @throws InvalidArgumentException
      * @throws Magento_Exception
      */
     public function __construct(array $configData, $baseDir)
@@ -87,8 +88,7 @@ class Magento_Config
         if (!is_dir($baseDir)) {
             throw new Magento_Exception("Base directory '$baseDir' does not exist.");
         }
-        $baseDir = str_replace('\\', '/', realpath($baseDir));
-        $this->_reportDir = $baseDir . '/' . $configData['report_dir'];
+        $this->_reportDir = $baseDir . DIRECTORY_SEPARATOR . $configData['report_dir'];
 
         $applicationOptions = $configData['application'];
         $this->_applicationUrlHost = $applicationOptions['url_host'];
@@ -99,7 +99,19 @@ class Magento_Config
             $installConfig = $applicationOptions['installation'];
             $this->_installOptions = $installConfig['options'];
             if (isset($installConfig['fixture_files'])) {
-                $this->_fixtureFiles = glob($baseDir . '/' . $installConfig['fixture_files'], GLOB_BRACE);
+                if (!is_array($installConfig['fixture_files'])) {
+                    throw new InvalidArgumentException(
+                        "'application' => 'installation' => 'fixture_files' option must be array"
+                    );
+                }
+                $this->_fixtureFiles = array();
+                foreach ($installConfig['fixture_files'] as $fixtureName) {
+                    $fixtureFile = $baseDir . DIRECTORY_SEPARATOR . $fixtureName;
+                    if (!file_exists($fixtureFile)) {
+                        throw new Magento_Exception("Fixture '$fixtureName' doesn't exist in $baseDir");
+                    }
+                    $this->_fixtureFiles[] = $fixtureFile;
+                }
             }
         }
 
@@ -116,6 +128,7 @@ class Magento_Config
      * Expands scenario options and file paths glob to a list of scenarios
      * @param array $scenarios
      * @param string $baseDir
+     * @throws InvalidArgumentException
      * @throws Magento_Exception
      */
     protected function _expandScenarios($scenarios, $baseDir)
@@ -126,20 +139,23 @@ class Magento_Config
             $scenarioParamsCommon = array();
         }
 
-        $scenarioFilesPattern = $baseDir . '/' . $scenarios['files'];
-        $scenarioFiles = glob($scenarioFilesPattern, GLOB_BRACE);
-        if (!$scenarioFiles) {
-            throw new Magento_Exception("No scenario files match '$scenarioFilesPattern' pattern.");
-        }
-        foreach ($scenarioFiles as $oneScenarioFile) {
-            $oneScenarioFile = str_replace('\\', '/', realpath($oneScenarioFile));
-            $oneScenarioName = substr($oneScenarioFile, strlen($baseDir) + 1);
-            if (isset($scenarios['scenario_params'][$oneScenarioName])) {
-                $oneScenarioParams = $scenarios['scenario_params'][$oneScenarioName];
-            } else {
-                $oneScenarioParams = array();
+        if (isset($scenarios['files'])) {
+            if (!is_array($scenarios['files'])) {
+                throw new InvalidArgumentException("'scenarios' => 'files' option must be array");
             }
-            $this->_scenarios[$oneScenarioFile] = array_merge($scenarioParamsCommon, $oneScenarioParams);
+            foreach ($scenarios['files'] as $scenarioName) {
+                $scenarioFile = $baseDir . DIRECTORY_SEPARATOR . $scenarioName;
+                if (!file_exists($scenarioFile)) {
+                    throw new Magento_Exception("Scenario '$scenarioName' doesn't exist in $baseDir");
+                }
+
+                if (isset($scenarios['scenario_params'][$scenarioName])) {
+                    $oneScenarioParams = $scenarios['scenario_params'][$scenarioName];
+                } else {
+                    $oneScenarioParams = array();
+                }
+                $this->_scenarios[$scenarioFile] = array_merge($scenarioParamsCommon, $oneScenarioParams);
+            }
         }
     }
 

@@ -200,3 +200,47 @@ PageTest.prototype.testUnhighlight = function() {
     page.vde_page('destroy');
     jQuery.fx.off = false;
 }
+PageTest.prototype.testInitHistory = function() {
+    var page = jQuery('body').vde_page();
+    assertEquals(true, jQuery(window).is(':vde-vde_history'));
+    page.vde_page('destroy');
+}
+PageTest.prototype.testInitHistoryToolbar = function() {
+    /*:DOC += <div class="vde_history_toolbar"></div> */
+    jQuery(window).vde_page();
+    var container = jQuery('.vde_history_toolbar');
+    assertEquals(true, container.is(':vde-vde_historyToolbar'));
+    assertNotNull(container.data('vde_historyToolbar')._history);
+    jQuery(window).vde_page('destroy');
+};
+PageTest.prototype.testInitRemoveOperation = function() {
+    /*:DOC += <div class="vde_element_wrapper"></div> */
+    jQuery(window).vde_page();
+    var containers = jQuery('.vde_element_wrapper');
+    assertEquals(true, containers.is(':vde-vde_removable'));
+    jQuery(window).vde_page('destroy');
+};
+PageTest.prototype.testSetHistoryForContainers = function() {
+    jQuery(window).vde_page();
+    var containers = jQuery('.vde_element_wrapper.vde_container');
+    assertNotNull(containers.vde_container('getHistory'));
+    jQuery(window).vde_page('destroy');
+};
+PageTest.prototype.testDestroy = function() {
+    /*:DOC +=
+     <div id="vde_toolbar"></div>
+     <div class="vde_history_toolbar"></div>
+     <div class="vde_element_wrapper vde_container"></div>
+     */
+
+    jQuery(window).vde_page();
+    jQuery(window).vde_page('destroy');
+
+    //check no garbage is left
+    assertFalse($('#vde_toolbar').is(':vde-vde_panel'));
+    assertFalse($('.vde_history_toolbar').is(':vde-vde_historyToolbar'));
+    assertFalse($(window).is(':vde-vde_history'));
+    assertFalse($('.vde_element_wrapper').is(':vde-vde_removable'));
+    assertFalse($('.vde_element_wrapper.vde_container').is(':vde-vde_container'));
+};
+

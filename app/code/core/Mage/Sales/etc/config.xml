@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Sales>
-            <version>1.6.0.8</version>
+            <version>1.6.0.9</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>

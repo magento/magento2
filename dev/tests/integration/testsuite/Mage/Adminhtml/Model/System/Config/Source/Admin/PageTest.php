@@ -34,8 +34,7 @@ class Mage_Adminhtml_Model_System_Config_Source_Admin_PageTest extends Mage_Admi
     {
         $this->dispatch('backend/admin/system_config/edit/section/admin');
 
-        $dom = new DomDocument();
-        $dom->loadHTML($this->getResponse()->getBody());
+        $dom = PHPUnit_Util_XML::load($this->getResponse()->getBody(), true);
         $select = $dom->getElementById('admin_startup_menu_item_id');
 
         $this->assertNotEmpty($select, 'Startup Page select missed');

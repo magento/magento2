@@ -100,18 +100,6 @@
         </container>
     </adminhtml_catalog_product_reviews>
 
-    <adminhtml_catalog_product_taggrid>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Tag" name="admin.product.tags"/>
-        </container>
-    </adminhtml_catalog_product_taggrid>
-
-    <adminhtml_catalog_product_tagcustomergrid>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Tag_Customer" name="admin.product.tags.customers"/>
-        </container>
-    </adminhtml_catalog_product_tagcustomergrid>
-
     <adminhtml_catalog_product_options>
         <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options" name="admin.product.options"/>

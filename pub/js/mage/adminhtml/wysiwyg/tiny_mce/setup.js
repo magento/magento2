@@ -193,7 +193,7 @@ tinyMceWysiwygSetup.prototype =
     },
 
     translate: function(string) {
-        return 'undefined' != typeof(Translator) ? Translator.translate(string) : string;
+        return jQuery.mage.__ ? jQuery.mage.__(string) : string;
     },
 
     getMediaBrowserOpener: function() {

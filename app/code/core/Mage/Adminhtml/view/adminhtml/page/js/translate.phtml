@@ -63,5 +63,7 @@ $_data = array(
 );
 ?>
 <script type="text/javascript">
-    var Translator = new Translate(<?php echo Zend_Json::encode($_data) ?>);
+    (function($) {
+        $.mage.translate.add(<?php echo Zend_Json::encode($_data) ?>)
+    })(jQuery);
 </script>

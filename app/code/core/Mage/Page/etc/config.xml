@@ -127,7 +127,6 @@ Disallow: /*?
 Disallow: /*.js$
 Disallow: /*.css$
 Disallow: /checkout/
-Disallow: /tag/
 Disallow: /app/
 Disallow: /downloader/
 Disallow: /js/

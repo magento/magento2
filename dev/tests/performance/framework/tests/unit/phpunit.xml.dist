@@ -34,6 +34,7 @@
     </testsuites>
     <php>
         <includePath>../../../../../../lib</includePath>
+        <includePath>../../../../../../app/code/core</includePath>
         <includePath>../..</includePath>
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>

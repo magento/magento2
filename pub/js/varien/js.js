@@ -486,10 +486,9 @@ Varien.DateElement.prototype = {
         }
 
         if (error !== false) {
-            try {
-                error = Translator.translate(error);
+            if (jQuery.mage.__) {
+                error = jQuery.mage.__(error);
             }
-            catch (e) {}
             if (!valueError) {
                 this.advice.innerHTML = error.replace('%d', countDaysInMonth);
             } else {

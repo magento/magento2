@@ -32,6 +32,8 @@
         <remove name="root"/>
         <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="1" template="admin/page.phtml">
             <block type="Mage_Adminhtml_Block_Page_Head" name="convert_root_head" as="head" template="page/head.phtml">
+                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
                 <action method="addJs"><file>varien/js.js</file></action>
@@ -46,6 +48,8 @@
         <remove name="root"/>
         <block type="Mage_Adminhtml_Block_Page" name="convert_root" output="1" template="admin/page.phtml">
             <block type="Mage_Adminhtml_Block_Page_Head" name="convert_root_head" as="head" template="page/head.phtml">
+                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
                 <action method="addJs"><file>varien/js.js</file></action>

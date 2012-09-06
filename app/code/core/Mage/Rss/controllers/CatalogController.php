@@ -69,23 +69,6 @@ class Mage_Rss_CatalogController extends Mage_Core_Controller_Front_Action
         $this->_genericAction('salesrule');
     }
 
-    public function tagAction()
-    {
-        if (!$this->_isEnabled('tag')) {
-            $this->_forward('nofeed', 'index', 'rss');
-            return;
-        }
-        $tagName = urldecode($this->getRequest()->getParam('tagName'));
-        $tagModel = Mage::getModel('Mage_Tag_Model_Tag');
-        $tagModel->loadByName($tagName);
-        if ($tagModel->getId() && $tagModel->getStatus() == $tagModel->getApprovedStatus()) {
-            Mage::register('tag_model', $tagModel);
-            $this->_render();
-            return;
-        }
-        $this->_forward('nofeed', 'index', 'rss');
-    }
-
     public function notifystockAction()
     {
         $this->_render();

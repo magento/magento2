@@ -108,14 +108,6 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                     'url'       => $this->getUrl('*/*/productReviews', array('_current' => true)),
                 ));
             }
-
-            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tag::tag')) {
-                $this->addTab('tags', array(
-                    'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Product Tags'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('*/*/productTags', array('_current' => true)),
-                ));
-            }
         }
 
         $this->_updateActiveTab();

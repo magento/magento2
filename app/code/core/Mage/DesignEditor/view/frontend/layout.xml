@@ -34,6 +34,7 @@
             <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/change/layout.js</file></action>
             <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
             <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
             <action method="addJs"><file>prototype/prototype.js</file></action>
@@ -48,7 +49,8 @@
                 <block type="Mage_DesignEditor_Block_Toolbar_HandlesHierarchy" name="design_editor_toolbar_handles_hierarchy" template="toolbar/handles_hierarchy.phtml"/>
                 <block type="Mage_DesignEditor_Block_Toolbar_Skin" name="design_editor_toolbar_skin" template="toolbar/skin.phtml"/>
                 <block type="Mage_DesignEditor_Block_Template" name="design_editor_toolbar_highlighting" template="toolbar/highlighting.phtml"/>
-                <block type="Mage_DesignEditor_Block_Toolbar_Exit" name="design_editor_toolbar_exit" template="toolbar/exit.phtml"/>
+                <block type="Mage_DesignEditor_Block_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="toolbar/buttons.phtml"/>
+                <block type="Mage_DesignEditor_Block_Toolbar_History" name="design_editor_toolbar_history" template="toolbar/history.phtml"/>
             </block>
         </block>
     </design_editor_toolbar>

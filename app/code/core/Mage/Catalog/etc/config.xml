@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.16</version>
+            <version>1.6.0.0.17</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -247,6 +247,16 @@
                 </visibility>
             </catalog_product>
         </eav_attributes>
+        <session>
+            <catalog>
+                <product>
+                    <message_models>
+                        <catalog>Mage_Catalog_Model_Session</catalog>
+                        <checkout>Mage_Checkout_Model_Session</checkout>
+                    </message_models>
+                </product>
+            </catalog>
+        </session>
     </global>
     <adminhtml>
         <translate>

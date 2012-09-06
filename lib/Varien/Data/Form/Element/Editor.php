@@ -107,10 +107,8 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
                 . $this->serialize($this->getHtmlAttributes()) . ' >' . $this->getEscapedValue() . '</textarea>'
                 . $js . '
                 <script type="text/javascript">
-                //<![CDATA[
-                    if ("undefined" != typeof(Translator)) {
-                        Translator.add(' . Zend_Json::encode($translatedString) . ');
-                    }'
+                //<![CDATA[' . "\n"
+                    . '(function($) {$.mage.translate.add(' . Zend_Json::encode($translatedString) . ')})(jQuery);' . "\n"
                     . $jsSetupObject . ' = new tinyMceWysiwygSetup("' . $this->getHtmlId() . '", '
                     . Zend_Json::encode($this->getConfig()).');'
                     . $forceLoad.'
@@ -194,9 +192,8 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
     protected function _getPluginButtonsHtml($visible = true)
     {
         $buttonsHtml = '';
-
         // Button to widget insertion window
-        if ($this->getConfig('add_widgets')) {
+        if (1 || $this->getConfig('add_widgets')) {
             $buttonsHtml .= $this->_getButtonHtml(array(
                 'title'     => $this->translate('Insert Widget...'),
                 'onclick'   => "widgetTools.openDialog('" . $this->getConfig('widget_window_url') . "widget_target_id/"

@@ -58,11 +58,6 @@
                         <resource id="Mage_Reports::review_customer" title="Customers Reviews" />
                         <resource id="Mage_Reports::review_product" title="Products Reviews" />
                     </resource>
-                    <resource id="Mage_Reports::tags" module="Mage_Tag" title="Tags">
-                        <resource id="Mage_Reports::tags_customer" module="Mage_Tag" title="Customers" />
-                        <resource id="Mage_Reports::popular" module="Mage_Tag" title="Popular" />
-                        <resource id="Mage_Reports::tags_product" module="Mage_Tag" title="Products" />
-                    </resource>
                     <resource id="Mage_Reports::report_search" title="Search Terms" />
                     <resource id="Mage_Reports::statistics" title="Statistics" />
                 </resource>

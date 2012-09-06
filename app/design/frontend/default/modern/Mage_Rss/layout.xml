@@ -63,10 +63,6 @@ Catalog layout
         <block type="Mage_Rss_Block_Catalog_Salesrule" output="1" name="rss.catalog.salesrule"/>
     </rss_catalog_salesrule>
 
-    <rss_catalog_tag>
-        <block type="Mage_Rss_Block_Catalog_Tag" output="1" name="rss.catalog.tag" />
-    </rss_catalog_tag>
-
     <rss_catalog_category>
         <block type="Mage_Rss_Block_Catalog_Category" output="1" name="rss.catalog.category" />
     </rss_catalog_category>
