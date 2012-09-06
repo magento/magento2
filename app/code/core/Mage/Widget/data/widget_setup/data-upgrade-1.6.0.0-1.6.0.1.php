@@ -1,7 +1,5 @@
 <?php
 /**
- * Script to retrieve number of orders before checkout scenario execution
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,14 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Sales
- * @subpackage  performance_tests
+ * @category    Mage
+ * @package     Mage_Widget
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once __DIR__ . '/../../../../app/bootstrap.php';
-Mage::app('', 'store');
-$collection = new Mage_Sales_Model_Resource_Order_Collection();
-echo "Num orders: ", $collection->getSize(), PHP_EOL;
+/** @var $installer Mage_Core_Model_Resource_Setup_Migration */
+$installer = Mage::getResourceModel('Mage_Core_Model_Resource_Setup_Migration', 'core_setup');
+$installer->startSetup();
+
+$installer->appendClassAliasReplace('widget_instance', 'instance_type',
+    Mage_Core_Model_Resource_Setup_Migration::ENTITY_TYPE_BLOCK,
+    Mage_Core_Model_Resource_Setup_Migration::FIELD_CONTENT_TYPE_PLAIN,
+    array('instance_id')
+);
+$installer->doUpdateClassAliases();
+
+$installer->endSetup();

@@ -18,6 +18,7 @@ app/code/core/Mage/Core/Model/Layout/Update.php
 app/code/core/Mage/Core/Model/Design/Fallback
 app/code/core/Mage/Core/Model/Design/Fallback.php
 app/code/core/Mage/Core/Model/Design/FallbackInterface.php
+app/code/core/Mage/Core/Model/Resource/Setup/Migration.php
 app/code/core/Mage/DesignEditor
 app/code/core/Mage/ImportExport/Model/Import/Entity/CustomerComposite.php
 app/code/core/Mage/ImportExport/Model/Import/Entity/Product/Option.php

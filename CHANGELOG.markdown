@@ -1,3 +1,34 @@
+Update as of 9/05/2012
+======================
+* Implemented encryption of the credit card name and expiration date for the payment method "Credit Card (saved)"
+* Implemented console utility `dev/tools/migration/get_aliases_map.php`, which generates map file "M1 class alias" to "M2 class name"
+* Implemented automatic data upgrades for replacing "M1 class aliases" to "M2 class names" in a database
+* Implemented recursive `chmod` in the library class `Varien_Io_File`
+* Improved verbosity of the library class `Magento_Shell`
+* Migrated client-side translation mechanism to jQuery
+* Performance tests:
+  * Improved assertion for number of created orders for the checkout performance testing scenario
+    * Reverted the feature of specifying PHP scenarios to be executed before and after a JMeter scenario
+    * Implemented validation for the number of created orders as a part of the JMeter scenario
+    * Implemented the "Admin Login" user activity as a separate file to be reused in the performance testing scenarios
+  * Implemented fixture of 100k customers for the performance tests
+  * Implemented fixture of 100k products for the performance tests
+    * Enhanced module `Mage_ImportExport` in order to utilize it for the fixture implementation
+  * Implemented back-end performance testing scenario, which covers Dashboard, Manage Products, Manage Customers pages
+* Fixes:
+  * Fixed Magento console installer to enable write permission recursively to the `var` directory
+  * Fixed performance tests to enable write permission recursively to the `var` directory
+  * Fixed integration test `Mage_Adminhtml_Model_System_Config_Source_Admin_PageTest::testToOptionArray` to not produce "Warning: DOMDocument::loadHTML(): htmlParseEntityRef: expecting ';' in Entity" in the developer mode
+* GitHub requests:
+  * [#43](https://github.com/magento/magento2/pull/43) -- implemented logging of executed setup files
+  * [#44](https://github.com/magento/magento2/pull/44)
+    * Implemented support of writing logs into wrappers (for example, `php://output`)
+    * Enforced a log writer model to be an instance of `Zend_Log_Writer_Stream`
+  * [#49](https://github.com/magento/magento2/pull/49)
+    * Fixed sorting of totals according to "before" and "after" properties
+    * Introduced `Magento_Data_Graph` library class and utilized it for finding cycles in "before" and "after" declarations
+    * Implemented tests for totals sorting including the ambiguous cases
+
 Update as of 8/30/2012
 ======================
 * Fixes:

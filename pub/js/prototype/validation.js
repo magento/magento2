@@ -338,13 +338,9 @@ Object.extend(Validation, {
         if (customError) {
             errorMsg = customError;
         }
-        try {
-            if (Translator){
-                errorMsg = Translator.translate(errorMsg);
-            }
+        if (jQuery.mage.__){
+            errorMsg = jQuery.mage.__(errorMsg);
         }
-        catch(e){}
-
         advice = '<div class="validation-advice" id="advice-' + name + '-' + Validation.getElmID(elm) +'" style="display:none">' + errorMsg + '</div>'
 
 

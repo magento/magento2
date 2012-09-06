@@ -45,7 +45,7 @@ class Mage_Payment_Model_Info extends Mage_Core_Model_Abstract
      *
      * @param   string $key
      * @param   mixed $index
-     * @return unknown
+     * @return  mixed
      */
     public function getData($key='', $index=null)
     {

@@ -60,7 +60,7 @@ AdminOrder.prototype = {
                 }
             });
 
-            var searchButton = new ControlButton(Translator.translate('Add Products')),
+            var searchButton = new ControlButton(jQuery.mage.__('Add Products')),
                 searchAreaId = this.getAreaId('search');
             searchButton.onClick = function() {
                 $(searchAreaId).show();

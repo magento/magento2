@@ -124,59 +124,56 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
     /**
      * Aggregate before/after information from all items and sort totals based on this data
      *
+     * @param array $config
      * @return array
      */
-    protected function _getSortedCollectorCodes()
+    protected function _getSortedCollectorCodes(array $config)
     {
-        if (Mage::app()->useCache('config')) {
-            $cachedData = Mage::app()->loadCache($this->_collectorsCacheKey);
-            if ($cachedData) {
-                return unserialize($cachedData);
-            }
-        }
-        $configArray = $this->_modelsConfig;
         // invoke simple sorting if the first element contains the "sort_order" key
-        reset($configArray);
-        $element = current($configArray);
+        reset($config);
+        $element = current($config);
         if (isset($element['sort_order'])) {
-            uasort($configArray, array($this, '_compareSortOrder'));
+            uasort($config, array($this, '_compareSortOrder'));
+            $result = array_keys($config);
         } else {
-            foreach ($configArray as $code => $data) {
-                foreach ($data['before'] as $beforeCode) {
-                    if (!isset($configArray[$beforeCode])) {
+            $result = array_keys($config);
+            // Move all totals with before specification in front of related total
+            foreach ($config as $code => &$data) {
+                foreach ($data['before'] as $positionCode) {
+                    if (!isset($config[$positionCode])) {
                         continue;
                     }
-                    $configArray[$code]['before'] = array_unique(array_merge(
-                        $configArray[$code]['before'], $configArray[$beforeCode]['before']
-                    ));
-                    $configArray[$beforeCode]['after'] = array_merge(
-                        $configArray[$beforeCode]['after'], array($code), $data['after']
-                    );
-                    $configArray[$beforeCode]['after'] = array_unique($configArray[$beforeCode]['after']);
-                }
-                foreach ($data['after'] as $afterCode) {
-                    if (!isset($configArray[$afterCode])) {
-                        continue;
+                    if (!in_array($code, $config[$positionCode]['after'], true)) {
+                        // Also add additional after condition for related total,
+                        // to keep it always after total with before value specified
+                        $config[$positionCode]['after'][] = $code;
                     }
-                    $configArray[$code]['after'] = array_unique(array_merge(
-                        $configArray[$code]['after'], $configArray[$afterCode]['after']
-                    ));
-                    $configArray[$afterCode]['before'] = array_merge(
-                        $configArray[$afterCode]['before'], array($code), $data['before']
-                    );
-                    $configArray[$afterCode]['before'] = array_unique($configArray[$afterCode]['before']);
+                    $currentPosition = array_search($code, $result, true);
+                    $desiredPosition = array_search($positionCode, $result, true);
+                    if ($currentPosition > $desiredPosition) {
+                        // Only if current position is not corresponding to before condition
+                        array_splice($result, $currentPosition, 1); // Removes existent
+                        array_splice($result, $desiredPosition, 0, $code); // Add at new position
+                    }
                 }
             }
-            uasort($configArray, array($this, '_compareTotals'));
+            // Sort out totals with after position specified
+            foreach ($config as $code => &$data) {
+                $maxAfter = null;
+                $currentPosition = array_search($code, $result, true);
+
+                foreach ($data['after'] as $positionCode) {
+                    $maxAfter = max($maxAfter, array_search($positionCode, $result, true));
+                }
+
+                if ($maxAfter !== null && $maxAfter > $currentPosition) {
+                    // Moves only if it is in front of after total
+                    array_splice($result, $maxAfter + 1, 0, $code); // Add at new position
+                    array_splice($result, $currentPosition, 1); // Removes existent
+                }
+            }
         }
-        $sortedCollectors = array_keys($configArray);
-        if (Mage::app()->useCache('config')) {
-            Mage::app()->saveCache(serialize($sortedCollectors), $this->_collectorsCacheKey, array(
-                    Mage_Core_Model_Config::CACHE_TAG
-                )
-            );
-        }
-        return $sortedCollectors;
+        return $result;
     }
 
     /**
@@ -187,33 +184,32 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
      */
     protected function _initCollectors()
     {
-        $sortedCodes = $this->_getSortedCollectorCodes();
+        $useCache = Mage::app()->useCache('config');
+        $sortedCodes = array();
+        if ($useCache) {
+            $cachedData = Mage::app()->loadCache($this->_collectorsCacheKey);
+            if ($cachedData) {
+                $sortedCodes = unserialize($cachedData);
+            }
+        }
+        if (!$sortedCodes) {
+            try {
+                self::validateCollectorDeclarations($this->_modelsConfig);
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+            $sortedCodes = $this->_getSortedCollectorCodes($this->_modelsConfig);
+            if ($useCache) {
+                Mage::app()->saveCache(serialize($sortedCodes), $this->_collectorsCacheKey, array(
+                    Mage_Core_Model_Config::CACHE_TAG
+                ));
+            }
+        }
         foreach ($sortedCodes as $code) {
             $this->_collectors[$code] = $this->_models[$code];
         }
 
         return $this;
-    }
-
-    /**
-     * Callback that uses after/before for comparison
-     *
-     * @param   array $a
-     * @param   array $b
-     * @return  int
-     */
-    protected function _compareTotals($a, $b)
-    {
-        $aCode = $a['_code'];
-        $bCode = $b['_code'];
-        if (in_array($aCode, $b['after']) || in_array($bCode, $a['before'])) {
-            $res = -1;
-        } elseif (in_array($bCode, $a['after']) || in_array($aCode, $b['before'])) {
-            $res = 1;
-        } else {
-            $res = 0;
-        }
-        return $res;
     }
 
     /**
@@ -236,5 +232,51 @@ abstract class Mage_Sales_Model_Config_Ordered extends Mage_Core_Model_Config_Ba
             $res = 0;
         }
         return $res;
+    }
+
+    /**
+     * Validate specified configuration array as sales totals declaration
+     *
+     * If there are contradictions, the totals cannot be sorted correctly. Possible contradictions:
+     * - A relation between totals leads to cycles
+     * - Two relations combined lead to cycles
+     *
+     * @param array $config
+     * @throws Magento_Exception
+     */
+    public static function validateCollectorDeclarations($config)
+    {
+        $before = self::_instantiateGraph($config, 'before');
+        $after  = self::_instantiateGraph($config, 'after');
+        foreach ($after->getRelations(Magento_Data_Graph::INVERSE) as $from => $relations) {
+            foreach ($relations as $to) {
+                $before->addRelation($from, $to);
+            }
+        }
+        $cycle = $before->findCycle();
+        if ($cycle) {
+            throw new Magento_Exception(sprintf(
+                'Found cycle in sales total declarations: %s', implode(' -> ', $cycle)
+            ));
+        }
+    }
+
+    /**
+     * Parse "config" array by specified key and instantiate a graph based on that
+     *
+     * @param array $config
+     * @param string $key
+     * @return Magento_Data_Graph
+     */
+    private static function _instantiateGraph($config, $key)
+    {
+        $nodes = array_keys($config);
+        $graph = array();
+        foreach ($config as $from => $row) {
+            foreach ($row[$key] as $to) {
+                $graph[] = array($from, $to);
+            }
+        }
+        return new Magento_Data_Graph($nodes, $graph);
     }
 }

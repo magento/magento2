@@ -56,6 +56,7 @@ class Mage_Sales_Model_Resource_Order_Payment extends Mage_Sales_Model_Resource_
      */
     protected function _construct()
     {
+        $this->_converter = Mage::getSingleton('Mage_Sales_Model_Payment_Method_Converter');
         $this->_init('sales_flat_order_payment', 'entity_id');
     }
 }

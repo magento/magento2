@@ -48,7 +48,7 @@ class Magento_InstallerTest extends PHPUnit_Framework_TestCase
         $this->_installerScript = realpath(__DIR__ . '/_files/install_stub.php');
         $this->_object = $this->getMock(
             'Magento_Installer',
-            array('_bootstrap', '_reindex'),
+            array('_bootstrap', '_reindex', '_updateFilesystemPermissions'),
             array($this->_installerScript, $this->_shell)
         );
     }
