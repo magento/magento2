@@ -292,7 +292,7 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
         $adapter = $this->getConnection();
 
         $query = $adapter->select()
-            ->from($adapter->getTableName($tableName), array('rows_count' => new Zend_Db_Expr('COUNT(*)')))
+            ->from($this->getTable($tableName), array('rows_count' => new Zend_Db_Expr('COUNT(*)')))
             ->where($fieldName . ' IS NOT NULL');
 
         if (!empty($additionalWhere)) {
@@ -362,7 +362,7 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
                     $where[$adapter->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
                 }
                 $adapter->update(
-                    $adapter->getTableName($tableName),
+                    $this->getTable($tableName),
                     array($fieldName => $fieldReplacement['to']),
                     $where
                 );
@@ -387,7 +387,7 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
         $adapter = $this->getConnection();
 
         $query = $adapter->select()
-            ->from($adapter->getTableName($tableName), $fieldsToSelect)
+            ->from($this->getTable($tableName), $fieldsToSelect)
             ->where($fieldName . ' IS NOT NULL');
 
         if (!empty($additionalWhere)) {

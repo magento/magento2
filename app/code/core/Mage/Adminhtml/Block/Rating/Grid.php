@@ -78,6 +78,17 @@ class Mage_Adminhtml_Block_Rating_Grid extends Mage_Adminhtml_Block_Widget_Grid
             'index' => 'position',
         ));
 
+        $this->addColumn('is_active', array(
+            'header' => Mage::helper('Mage_Rating_Helper_Data')->__('Is Active'),
+            'align' => 'left',
+            'type' => 'options',
+            'index' => 'is_active',
+            'options'   => array(
+                '1' => Mage::helper('Mage_Rating_Helper_Data')->__('Active'),
+                '0' => Mage::helper('Mage_Rating_Helper_Data')->__('Inactive')
+            ),
+        ));
+
         return parent::_prepareColumns();
     }
 

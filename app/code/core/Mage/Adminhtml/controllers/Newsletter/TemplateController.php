@@ -182,18 +182,25 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
             if ($this->getRequest()->getParam('_save_as_flag')) {
                 $template->setId(null);
             }
+
             $template->save();
+
+            $this->_getSession()->addSuccess($this->_getHelper()->__('The newsletter template has been saved.'));
+            $this->_getSession()->setFormData(false);
+
             $this->_redirect('*/*');
-        }
-        catch (Mage_Core_Exception $e) {
+            return;
+        } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data',
                 $this->getRequest()->getParams());
-        }
-        catch (Exception $e) {
-            $this->_getSession()->addException($e, Mage::helper('Mage_Adminhtml_Helper_Data')->__('An error occurred while saving this template.'));
+        } catch (Exception $e) {
+            $this->_getSession()->addException($e,
+                $this->_getHelper()->__('An error occurred while saving this template.')
+            );
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         }
+
         $this->_forward('new');
     }
 
@@ -208,12 +215,14 @@ class Mage_Adminhtml_Newsletter_TemplateController extends Mage_Adminhtml_Contro
         if ($template->getId()) {
             try {
                 $template->delete();
-            }
-            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addSuccess($this->_getHelper()->__('The newsletter template has been deleted.'));
+                $this->_getSession()->setFormData(false);
+            } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
-            }
-            catch (Exception $e) {
-                $this->_getSession()->addException($e, Mage::helper('Mage_Adminhtml_Helper_Data')->__('An error occurred while deleting this template.'));
+            } catch (Exception $e) {
+                $this->_getSession()->addException($e,
+                    $this->_getHelper()->__('An error occurred while deleting this template.')
+                );
             }
         }
         $this->_redirect('*/*');

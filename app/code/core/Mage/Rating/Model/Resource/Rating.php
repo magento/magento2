@@ -36,6 +36,29 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
     const RATING_STATUS_APPROVED = 'Approved';
 
     /**
+     * Application instance
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * Class constructor
+     *
+     * @param array $arguments
+     * @throws InvalidArgumentException
+     */
+    public function __construct(array $arguments = array())
+    {
+        $this->_app = isset($arguments['app']) ? $arguments['app'] : Mage::app();
+
+        if (!($this->_app instanceof Mage_Core_Model_App)) {
+            throw new InvalidArgumentException('Required app object is invalid');
+        }
+        parent::__construct($arguments);
+    }
+
+    /**
      * Resource initialization
      */
     protected function _construct()
@@ -317,11 +340,15 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
                 array())
             ->joinLeft(array('review_store' => $this->getTable('review_store')),
                 'rating_vote.review_id=review_store.review_id',
-                array('review_store.store_id'))
-            ->join(array('rating_store' => $this->getTable('rating_store')),
+                array('review_store.store_id'));
+        if (!$this->_app->isSingleStoreMode()) {
+            $select->join(
+                array('rating_store' => $this->getTable('rating_store')),
                 'rating_store.rating_id = rating_vote.rating_id AND rating_store.store_id = review_store.store_id',
-                array())
-            ->join(array('review_status' => $this->getTable('review_status')),
+                array()
+            );
+        }
+        $select->join(array('review_status' => $this->getTable('review_status')),
                 'review.status_id = review_status.status_id',
                 array())
             ->where('review_status.status_code = :status_code')

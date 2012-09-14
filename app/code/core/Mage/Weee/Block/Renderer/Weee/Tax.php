@@ -96,7 +96,7 @@ class Mage_Weee_Block_Renderer_Weee_Tax extends Mage_Adminhtml_Block_Widget impl
 
     public function isMultiWebsites()
     {
-        return !Mage::app()->isSingleStoreMode();
+        return !Mage::app()->hasSingleStore();
     }
 
     public function getCountries()
@@ -120,7 +120,7 @@ class Mage_Weee_Block_Renderer_Weee_Tax extends Mage_Adminhtml_Block_Widget impl
             'currency'  => Mage::app()->getBaseCurrencyCode()
         );
 
-        if (!Mage::app()->isSingleStoreMode() && !$this->getElement()->getEntityAttribute()->isScopeGlobal()) {
+        if (!Mage::app()->hasSingleStore() && !$this->getElement()->getEntityAttribute()->isScopeGlobal()) {
             if ($storeId = $this->getProduct()->getStoreId()) {
                 $website = Mage::app()->getStore($storeId)->getWebsite();
                 $websites[$website->getId()] = array(

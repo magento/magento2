@@ -191,7 +191,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
     protected function _prepareStoreElement($fieldset)
     {
         // get store switcher or a hidden field with it's id
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $fieldset->addField('store_id', 'hidden', array(
                 'name'  => 'store_id',
                 'value' => Mage::app()->getStore(true)->getId()

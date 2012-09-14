@@ -34,6 +34,30 @@
 class Mage_Rating_Model_Resource_Rating_Option_Vote_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     /**
+     * Application instance
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * Collection constructor
+     *
+     * @param Mage_Core_Model_Resource_Db_Abstract $resource
+     * @param array $data
+     * @throws InvalidArgumentException
+     */
+    public function __construct($resource = null, $data = array())
+    {
+        $this->_app = isset($data['app']) ? $data['app'] : Mage::app();
+
+        if (!($this->_app instanceof Mage_Core_Model_App)) {
+            throw new InvalidArgumentException('Required app object is invalid');
+        }
+        parent::__construct($resource);
+    }
+
+    /**
      * Define model
      *
      */
@@ -76,6 +100,9 @@ class Mage_Rating_Model_Resource_Rating_Option_Vote_Collection extends Mage_Core
      */
     public function setStoreFilter($storeId)
     {
+        if ($this->_app->isSingleStoreMode()) {
+            return $this;
+        }
         $this->getSelect()
             ->join(array('rstore'=>$this->getTable('review_store')),
                 $this->getConnection()->quoteInto(
@@ -105,26 +132,24 @@ class Mage_Rating_Model_Resource_Rating_Option_Vote_Collection extends Mage_Core
                 $adapter->quoteInto('main_table.rating_id=title.rating_id AND title.store_id = ?',
                     (int)Mage::app()->getStore()->getId()),
                 array('rating_code' => $ratingCodeCond));
+        if (!$this->_app->isSingleStoreMode()) {
+            if ($storeId == null) {
+                $storeId = Mage::app()->getStore()->getId();
+            }
 
-        if ($storeId == null) {
-            $storeId = Mage::app()->getStore()->getId();
-        }
+            if (is_array($storeId)) {
+                $condition = $adapter->prepareSqlCondition('store.store_id', array(
+                    'in' => $storeId
+                ));
+            } else {
+                $condition = $adapter->quoteInto('store.store_id = ?', $storeId);
+            }
 
-        if (is_array($storeId)) {
-            $condition = $adapter->prepareSqlCondition('store.store_id', array(
-                'in' => $storeId
-            ));
-        } else {
-            $condition = $adapter->quoteInto('store.store_id = ?', $storeId);
-        }
-
-        $this->getSelect()
-            ->join(
+            $this->getSelect()->join(
                 array('store' => $this->getTable('rating_store')),
-                'main_table.rating_id = store.rating_id AND ' . $condition)
-//            ->group('main_table.vote_id')
-        ;
-
+                'main_table.rating_id = store.rating_id AND ' . $condition
+            );
+        }
         $adapter->fetchAll($this->getSelect());
         return $this;
     }

@@ -193,7 +193,7 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function getIsUniqueBlockToStores(Mage_Core_Model_Abstract $object)
     {
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         } else {
             $stores = (array)$object->getData('stores');

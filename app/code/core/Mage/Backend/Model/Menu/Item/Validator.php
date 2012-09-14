@@ -81,14 +81,14 @@ class Mage_Backend_Model_Menu_Item_Validator
         $textValidator = new Zend_Validate_StringLength(array('min' => 3, 'max' => 50));
 
         $titleValidator = $tooltipValidator = $textValidator;
-        $actionValidator = $moduleDependencyValidator = $configDependencyValidator = $attributeValidator;
+        $actionValidator = $moduleDepValidator = $configDepValidator = $attributeValidator;
 
         $this->_validators['id'] = $idValidator;
         $this->_validators['title'] = $titleValidator;
         $this->_validators['action'] = $actionValidator;
         $this->_validators['resource'] = $resourceValidator;
-        $this->_validators['dependsOnModule'] = $moduleDependencyValidator;
-        $this->_validators['dependsOnConfig'] = $configDependencyValidator;
+        $this->_validators['dependsOnModule'] = $moduleDepValidator;
+        $this->_validators['dependsOnConfig'] = $configDepValidator;
         $this->_validators['toolTip'] = $tooltipValidator;
     }
     /**

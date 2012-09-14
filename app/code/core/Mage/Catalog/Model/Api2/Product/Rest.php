@@ -210,7 +210,7 @@ abstract class Mage_Catalog_Model_Api2_Product_Rest extends Mage_Catalog_Model_A
             // Check display settings for customers & guests
             if ($this->getApiUser()->getType() != Mage_Api2_Model_Auth_User_Admin::USER_TYPE) {
                 // check if product assigned to any website and can be shown
-                if ((!Mage::app()->isSingleStoreMode() && !count($product->getWebsiteIds()))
+                if ((!Mage::app()->hasSingleStore() && !count($product->getWebsiteIds()))
                     || !$productHelper->canShow($product)
                 ) {
                     $this->_critical(self::RESOURCE_NOT_FOUND);

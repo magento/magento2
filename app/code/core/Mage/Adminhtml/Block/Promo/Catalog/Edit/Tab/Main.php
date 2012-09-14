@@ -122,7 +122,7 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit_Tab_Main
             ),
         ));
 
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $websiteId = Mage::app()->getStore(true)->getWebsiteId();
             $fieldset->addField('website_ids', 'hidden', array(
                 'name'     => 'website_ids[]',

@@ -90,6 +90,7 @@ class Mage_Review_Block_Form extends Mage_Core_Block_Template
             ->setPositionOrder()
             ->addRatingPerStoreName(Mage::app()->getStore()->getId())
             ->setStoreFilter(Mage::app()->getStore()->getId())
+            ->setActiveFilter(true)
             ->load()
             ->addOptionToItems();
         return $ratingCollection;

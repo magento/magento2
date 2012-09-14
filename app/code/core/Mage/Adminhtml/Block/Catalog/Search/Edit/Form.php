@@ -86,7 +86,7 @@ class Mage_Adminhtml_Block_Catalog_Search_Edit_Form extends Mage_Adminhtml_Block
             'required'  => true,
         ));
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $field = $fieldset->addField('store_id', 'select', array(
                 'name'      => 'store_id',
                 'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Store'),

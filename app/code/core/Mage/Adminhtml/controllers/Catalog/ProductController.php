@@ -589,7 +589,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $product->lockAttribute('media');
         }
 
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $product->setWebsiteIds(array(Mage::app()->getStore(true)->getWebsite()->getId()));
         }
 

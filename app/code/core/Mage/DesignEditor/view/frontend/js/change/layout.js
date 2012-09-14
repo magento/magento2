@@ -141,12 +141,12 @@
                     action: ACTION_MOVE,
                     block: data.element_name,
                     origin: {
-                        container: null,
-                        order: null
+                        container: data.origin_container,
+                        order: data.origin_order
                     },
                     destination: {
-                        container: data.action_data.container,
-                        order: data.action_data.after
+                        container: data.destination_container,
+                        order: data.destination_order
                     }
                 });
             },
@@ -171,19 +171,19 @@
             _getPostDataMove: function(data) {
                 return {
                     handle: 'current_handle',
-                    change_type: this.type,
+                    type: this.type,
                     element_name: data.block,
                     action_name: ACTION_MOVE,
-                    action_data: {
-                        container: data.destination.container,
-                        after: data.destination.order
-                    }
+                    destination_container: data.destination.container,
+                    destination_order: data.destination.order,
+                    origin_container: data.origin.container,
+                    origin_order: data.origin.order
                 }
             },
             _getPostDataRemove: function(data) {
                 return {
                     handle: 'current_handle',
-                    change_type: this.type,
+                    type: this.type,
                     element_name: data.block,
                     action_name: ACTION_REMOVE
                 }

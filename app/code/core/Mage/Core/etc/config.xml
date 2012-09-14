@@ -338,6 +338,9 @@
                     </protected>
                 </public_files_valid_paths>
             </file>
+            <single_store_mode>
+                <enabled>0</enabled>
+            </single_store_mode>
         </general>
         <dev>
             <image>

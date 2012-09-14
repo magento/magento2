@@ -32,147 +32,163 @@ class Mage_DesignEditor_Model_HistoryTest extends PHPUnit_Framework_TestCase
      */
     protected $_historyObject;
 
-    public function setUp()
+    /**
+     * Get clear history model
+     *
+     * @return Mage_DesignEditor_Model_History
+     */
+    protected function getClearHistoryModel()
     {
-        $this->_historyObject = Mage::getModel('Mage_DesignEditor_Model_History');
+        return $this->_historyObject = Mage::getModel('Mage_DesignEditor_Model_History');
     }
 
     /**
-     * @dataProvider getChangeLogData
+     * Add change test
+     *
+     * @dataProvider getChange
      */
-    public function testGetCompactLog($changes)
+    public function testAddChange($change)
     {
-        $historyObject = $this->_historyObject;
-        $historyObject->setChangeLog($changes);
-        $this->assertEquals($this->getCompactedChangeLogData(), $historyObject->getCompactLog());
+        $historyModel = $this->getClearHistoryModel();
+        $collection = $historyModel->addChange($change)->getChanges();
+
+        $this->assertEquals(array($change), $collection->toArray());
     }
 
     /**
-     * @dataProvider getInvalidChangeLogData
-     * @expectedException Mage_DesignEditor_Exception
+     * Add change with invalid data test
+     *
+     * @dataProvider getInvalidChange
+     * @expectedException Magento_Exception
      */
-    public function testGetCompactLogInvalidData($changes)
+    public function testAddChangeWithInvalidData($change)
     {
-        $historyObject = $this->_historyObject;
-        $historyObject->setChangeLog($changes);
-        $historyObject->getCompactLog();
+        $historyModel = $this->getClearHistoryModel();
+        $historyModel->addChange($change)->getChanges();
     }
 
     /**
-     * @dataProvider getChangeLogData
+     * Set changes test
+     *
+     * @dataProvider getChanges
      */
-    public function testGetCompactXml($changes)
+    public function testSetChanges($changes)
     {
-        $historyObject = $this->_historyObject;
-        $historyObject->setChangeLog($changes);
+        $historyModel = $this->getClearHistoryModel();
+        $collection = $historyModel->setChanges($changes)->getChanges();
+
+        $this->assertEquals($changes, $collection->toArray());
+    }
+
+    /**
+     * Test output(renderer)
+     *
+     * @dataProvider getChanges
+     */
+    public function testOutput($changes)
+    {
+        $historyModel = $this->getClearHistoryModel();
+        /** @var $layoutRenderer Mage_DesignEditor_Model_History_Renderer_LayoutUpdate */
+        $layoutRenderer = Mage::getModel('Mage_DesignEditor_Model_History_Renderer_LayoutUpdate');
+
+        /** @var $collection Mage_DesignEditor_Model_Change_Collection */
+        $collection = $historyModel->setChanges($changes)->getChanges();
+
+        /** @var $historyCompactModel Mage_DesignEditor_Model_History_Compact */
+        $historyCompactModel = Mage::getModel('Mage_DesignEditor_Model_History_Compact');
+        $historyCompactModel->compact($collection);
+
         $this->assertXmlStringEqualsXmlFile(
-            realpath(__DIR__) . '/../_files/history/compact_log.xml', $historyObject->getCompactXml()
+            realpath(__DIR__) . '/../_files/history/layout_renderer.xml', $historyModel->output($layoutRenderer)
         );
     }
 
     /**
-     * @dataProvider getInvalidChangeLogData
-     * @expectedException Mage_DesignEditor_Exception
+     * Get change
+     *
+     * @return array
      */
-    public function testGetCompactXmlInvalidData($changes)
-    {
-        $historyObject = $this->_historyObject;
-        $historyObject->setChangeLog($changes);
-        $historyObject->getCompactXml();
-    }
-
-    public function getChangeLogData()
+    public function getChange()
     {
         return array(array(
             array(
-                array(
-                    'handle'       => 'catalog_category_view',
-                    'change_type'  => 'layout',
-                    'element_name' => 'category.products',
-                    'action_name'  => 'move',
-                    'action_data'  => array(
-                        'destination_container' => 'content',
-                        'after'          => '-',
-                    ),
-                ),
-                array(
-                    'handle'       => 'catalog_category_view',
-                    'change_type'  => 'layout',
-                    'element_name' => 'category.products',
-                    'action_name'  => 'remove',
-                    'action_data'  => array(),
-                ),
-                array(
-                    'handle'       => 'customer_account',
-                    'change_type'  => 'layout',
-                    'element_name' => 'customer_account_navigation',
-                    'action_name'  => 'move',
-                    'action_data'  => array(
-                        'destination_container' => 'content',
-                        'after'                 => '-',
-                        'as'                    => 'customer_account_navigation_alias',
-                    ),
-                ),
-                array(
-                    'handle'       => 'customer_account',
-                    'change_type'  => 'layout',
-                    'element_name' => 'customer_account_navigation',
-                    'action_name'  => 'move',
-                    'action_data'  => array(
-                        'destination_container' => 'top.menu',
-                        'after'                 => '-',
-                        'as'                    => 'customer_account_navigation_alias',
-                    ),
-                ),
+                'handle'                => 'customer_account',
+                'type'                  => 'layout',
+                'element_name'          => 'customer_account_navigation',
+                'action_name'           => 'move',
+                'destination_container' => 'content',
+                'destination_order'     => '-',
+                'origin_container'      => 'top.menu',
+                'origin_order'          => '-'
             ),
         ));
     }
 
-    public function getCompactedChangeLogData()
-    {
-        return array(
-            array(
-                'handle'       => 'catalog_category_view',
-                'change_type'  => 'layout',
-                'element_name' => 'category.products',
-                'action_name'  => 'remove',
-                'action_data'  => array(),
-            ),
-            array(
-                'handle'       => 'customer_account',
-                'change_type'  => 'layout',
-                'element_name' => 'customer_account_navigation',
-                'action_name'  => 'move',
-                'action_data'  => array(
-                    'destination_container' => 'top.menu',
-                    'after'                 => '-',
-                    'as'                    => 'customer_account_navigation_alias',
-                ),
-            ),
-        );
-    }
-
-    public function getInvalidChangeLogData()
+    /**
+     * Get invalid change
+     *
+     * @return array
+     */
+    public function getInvalidChange()
     {
         return array(array(
             array(
-                array(
-                    'handle'       => 'catalog_category_view',
-                    'change_type'  => 'layout',
-                    'element_name' => 'category.products',
-                    'action_name'  => 'move',
-                    'action_data'  => array(
-                        'destination_container' => 'content',
-                        'after'          => '-',
-                    ),
-                ),
-                array(
-                    'handle'       => '',
-                    'change_type'  => '',
-                    'element_name' => '',
-                    'action_name'  => '',
-                ),
+                'handle'                => 'customer_account',
+                'type'                  => '',
+                'element_name'          => '',
+                'action_name'           => 'move',
+                'destination_container' => 'content',
+                'destination_order'     => '-',
+                'origin_container'      => 'top.menu',
+                'origin_order'          => '-'
             ),
         ));
+    }
+
+    /**
+     * Get changes
+     *
+     * @return array
+     */
+    public function getChanges()
+    {
+        return array(array(array(
+            array(
+                'handle'                => 'customer_account',
+                'type'                  => 'layout',
+                'element_name'          => 'customer_account_navigation',
+                'action_name'           => 'move',
+                'destination_container' => 'content',
+                'destination_order'     => '-',
+                'origin_container'      => 'top.menu',
+                'origin_order'          => '-'
+            ),
+            array(
+                'handle'                => 'customer_account',
+                'type'                  => 'layout',
+                'element_name'          => 'customer_account_navigation',
+                'action_name'           => 'move',
+                'destination_container' => 'right',
+                'destination_order'     => '-',
+                'origin_container'      => 'content',
+                'origin_order'          => '-'
+            ),
+            array(
+                'handle'                => 'catalog_category_view',
+                'type'                  => 'layout',
+                'element_name'          => 'category.products',
+                'action_name'           => 'move',
+                'destination_container' => 'content',
+                'destination_order'     => '-',
+                'origin_container'      => 'right',
+                'origin_order'          => '-'
+            ),
+            array(
+                'handle'                => 'catalog_category_view',
+                'type'                  => 'layout',
+                'element_name'          => 'category.products',
+                'action_name'           => 'remove',
+            ),
+        )));
     }
 }

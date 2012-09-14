@@ -217,9 +217,13 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function __construct($sourceData=null)
     {
         $this->setCacheId('config_global');
-        $this->_options         = new Mage_Core_Model_Config_Options($sourceData);
-        $this->_prototype       = new Mage_Core_Model_Config_Base();
-        $this->_cacheChecksum   = null;
+        $options = $sourceData;
+        if (!is_array($options)) {
+            $options = array($options);
+        }
+        $this->_options = new Mage_Core_Model_Config_Options($options);
+        $this->_prototype = new Mage_Core_Model_Config_Base();
+        $this->_cacheChecksum = null;
         parent::__construct($sourceData);
     }
 

@@ -37,14 +37,8 @@ class Integrity_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testDeclaredLocales()
     {
-        $configFiles = Utility_Files::init()->getConfigFiles('config.xml', array(), false);
         $verifiedFiles = array();
-        foreach ($configFiles as $configFile) {
-            preg_match('/\/([^\/]+?\/[^\/]+?)\/etc\/config\.xml$/', $configFile, $moduleName);
-            $moduleName = str_replace('/', '_', $moduleName[1]);
-            if (in_array($moduleName, self::$_brokenModules)) {
-                continue;
-            }
+        foreach ($this->_getConfigFilesPerModule() as $configFile => $moduleName) {
             $config = simplexml_load_file($configFile);
             $nodes = $config->xpath("/config/*/translate/modules/{$moduleName}/files/*") ?: array();
             foreach ($nodes as $node) {
@@ -77,5 +71,50 @@ class Integrity_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($failures,
             'Translation files exist, but not declared in configuration:' . "\n" . var_export($failures, 1)
         );
+    }
+
+    /**
+     * Verify whether all payment methods are declared in appropriate modules
+     *
+     * @dataProvider paymentMethodsDataProvider
+     */
+    public function testPaymentMethods($configFile, $moduleName)
+    {
+        $config = simplexml_load_file($configFile);
+        $nodes = $config->xpath('/config/default/payment/*/model') ?: array();
+        foreach ($nodes as $node) {
+            $this->assertStringStartsWith($moduleName . '_Model_', (string)$node,
+                "'$node' payment method is declared in '$configFile' module, but doesn't belong to '$moduleName' module"
+            );
+        }
+    }
+
+    public function paymentMethodsDataProvider()
+    {
+        $data = array();
+        foreach ($this->_getConfigFilesPerModule() as $configFile => $moduleName) {
+            $data[] = array($configFile, $moduleName);
+        }
+        return $data;
+    }
+
+    /**
+     * Get list of configuration files associated with modules
+     *
+     * @return array
+     */
+    protected function _getConfigFilesPerModule()
+    {
+        $configFiles = Utility_Files::init()->getConfigFiles('config.xml', array(), false);
+        $data = array();
+        foreach ($configFiles as $configFile) {
+            preg_match('#/([^/]+?/[^/]+?)/etc/config\.xml$#', $configFile, $moduleName);
+            $moduleName = str_replace('/', '_', $moduleName[1]);
+            if (in_array($moduleName, self::$_brokenModules)) {
+                continue;
+            }
+            $data[$configFile] = $moduleName;
+        }
+        return $data;
     }
 }

@@ -42,7 +42,7 @@ class Mage_DesignEditor_Block_Adminhtml_Launcher_Form extends Mage_Adminhtml_Blo
             'target'    => '_blank'
         ));
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $fieldset = $form->addFieldset(
                 'base_fieldset',
                 array('legend' => Mage::helper('Mage_DesignEditor_Helper_Data')->__('Context Information'))

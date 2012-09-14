@@ -217,6 +217,7 @@ class Mage_Core_Model_Resource_Setup_MigrationTest extends PHPUnit_Framework_Tes
             'core_setup',
             $this->_getModelDependencies($tableRowsCount, $tableData, $aliasesMap)
         );
+        $setupModel->setTable('table', 'table');
 
         foreach ($replaceRules as $replaceRule) {
             call_user_func_array(array($setupModel, 'appendClassAliasReplace'), $replaceRule);

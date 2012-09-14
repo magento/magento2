@@ -573,13 +573,6 @@
         </events>
     </adminhtml>
     <default>
-        <payment>
-            <googlecheckout>
-                <active>1</active>
-                <model>Mage_GoogleCheckout_Model_Payment</model>
-                <title>Google Checkout</title>
-            </googlecheckout>
-        </payment>
         <sales>
             <totals_sort>
                 <discount>20</discount>

@@ -1,3 +1,32 @@
+Update as of 9/13/2012
+======================
+* Implemented the option to enable the single store mode in the system configuration, which simplifies the back-end GUI:
+  * Hiding scope labels from the system configuration
+  * Hiding the scope switcher from the CMS management pages and the system configuration
+  * Hiding scope related fields from the system configuration
+  * Hiding scope related columns and fields from the sales pages (order, invoice, shipment pages)
+  * Hiding scope related fields from the promotions
+  * Hiding scope related fields from the catalog pages
+  * Hiding scope related columns and fields from the customers management page
+  * Hiding scope related columns and fields from the customer and customer address attributes management pages
+* Implemented the history management for the Visual Design Editor
+* Implemented the user interface for themes management, which allows to list existing themes and add new ones
+* Replaced all usages of the old JavaScript translations mechanism with the new jQuery one
+* Refactored methods with high cyclomatic complexity
+* Converted some surrogate integration tests into functional Selenium tests
+* Converted some surrogate integration tests into unit tests
+* Fixes:
+  * Fixed inability to install application with a prefix defined for database tables
+  * Fixed displaying fields with model name in the payment methods settings
+  * Fixed performance degradation of the back-end menu rendering
+  * Fixed absence of the success message upon newsletter template creation/deletion/queueing
+  * Workaround for occasional segmentation fault in integration tests caused by `Mage_Core_Model_Resource_Setup_Migration`
+* GitHub requests:
+  * [#51](https://github.com/magento/magento2/issues/51) -- fixed managing of scope-spefic values for Categories
+  * [#56](https://github.com/magento/magento2/pull/56) -- removed excessive semicolon in the CSS file
+  * [#60](https://github.com/magento/magento2/issues/60) -- fixed taking bind parameters into account in `Mage_Core_Model_Resource_Db_Collection_Abstract::getAllIds()`
+  * [#61](https://github.com/magento/magento2/pull/61) -- relocated declaration of the "Google Checkout" payment method into `Mage_GoogleCheckout` module from `Mage_Sales`
+
 Update as of 9/05/2012
 ======================
 * Implemented encryption of the credit card name and expiration date for the payment method "Credit Card (saved)"

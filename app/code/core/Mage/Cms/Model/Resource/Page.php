@@ -246,7 +246,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function getIsUniquePageToStores(Mage_Core_Model_Abstract $object)
     {
-        if (Mage::app()->isSingleStoreMode() || !$object->hasStores()) {
+        if (Mage::app()->hasSingleStore() || !$object->hasStores()) {
             $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         } else {
             $stores = (array)$object->getData('stores');

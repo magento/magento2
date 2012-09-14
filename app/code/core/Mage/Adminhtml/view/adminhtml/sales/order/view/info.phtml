@@ -61,10 +61,12 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 <td class="label"><label><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Status') ?></label></td>
                 <td class="value"><strong><span id="order_status"><?php echo $_order->getStatusLabel() ?></span></strong></td>
             </tr>
+            <?php if (Mage::app()->isSingleStoreMode() == false):?>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Purchased From') ?></label></td>
                 <td class="value"><strong><?php echo $this->getOrderStoreName() ?></strong></td>
             </tr>
+            <?php endif; ?>
             <?php if($_order->getRelationChildId()): ?>
             <tr>
                 <td class="label"><label><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Link to the New Order') ?></label></td>

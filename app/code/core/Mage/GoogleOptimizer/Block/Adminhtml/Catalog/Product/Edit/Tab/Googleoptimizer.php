@@ -90,7 +90,7 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Catalog_Product_Edit_Tab_Googleoptimi
             )
         );
 
-        if ($this->getProduct()->getStoreId() == '0' && !Mage::app()->isSingleStoreMode()) {
+        if ($this->getProduct()->getStoreId() == '0' && !Mage::app()->hasSingleStore()) {
             $fieldset->addField('conversion_page_url', 'note',
                 array(
                     'name'  => 'conversion_page_url',

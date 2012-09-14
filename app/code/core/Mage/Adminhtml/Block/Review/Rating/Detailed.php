@@ -56,6 +56,7 @@ class Mage_Adminhtml_Block_Review_Rating_Detailed extends Mage_Adminhtml_Block_T
                     ->getResourceCollection()
                     ->addEntityFilter('product')
                     ->setStoreFilter($stores)
+                    ->setActiveFilter(true)
                     ->setPositionOrder()
                     ->load()
                     ->addOptionToItems();
