@@ -76,7 +76,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_General
         /**
          * Check is single store mode
          */
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $storeElement = $fieldset->addField('store_id', 'select', array(
                 'name'      => 'store_id',
                 'label'     => $this->__('Store View'),

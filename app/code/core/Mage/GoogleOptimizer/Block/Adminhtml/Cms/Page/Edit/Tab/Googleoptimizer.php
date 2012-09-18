@@ -68,7 +68,7 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Tab_Googleoptimizer
             )
         );
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $form->getElement('conversion_page')->setOnchange('googleOptimizerConversionCmsPageAction(this)');
             $fieldset->addField('conversion_page_url', 'note', array(
                     'name'  => 'conversion_page_url',

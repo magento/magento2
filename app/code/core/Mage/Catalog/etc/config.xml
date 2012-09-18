@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.16</version>
+            <version>1.6.0.0.17</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>

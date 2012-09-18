@@ -141,8 +141,9 @@ class Mage_ImportExport_Adminhtml_ImportController extends Mage_Adminhtml_Contro
 
             try {
                 /** @var $import Mage_ImportExport_Model_Import */
-                $import = Mage::getModel('Mage_ImportExport_Model_Import');
-                $validationResult = $import->validateSource($import->setData($data)->uploadSource());
+                $import = Mage::getModel('Mage_ImportExport_Model_Import')->setData($data);
+                $source = Mage_ImportExport_Model_Import_Adapter::findAdapterFor($import->uploadSource());
+                $validationResult = $import->validateSource($source);
 
                 if (!$import->getProcessedRowsCount()) {
                     $resultBlock->addError($this->__('File does not contain data. Please upload another one'));

@@ -215,7 +215,7 @@ class Mage_Review_Model_Resource_Review extends Mage_Core_Model_Resource_Db_Abst
             ->from($this->_reviewStoreTable, array('store_id'))
             ->where('review_id = :review_id');
         $stores = $adapter->fetchCol($select, array(':review_id' => $object->getId()));
-        if (empty($stores) && Mage::app()->isSingleStoreMode()) {
+        if (empty($stores) && Mage::app()->hasSingleStore()) {
             $object->setStores(array(Mage::app()->getStore(true)->getId()));
         } else {
             $object->setStores($stores);

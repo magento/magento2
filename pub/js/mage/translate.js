@@ -18,33 +18,49 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     js
+ * @package     mage.translate
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-var Translate = Class.create();
-Translate.prototype = {
-    initialize: function(data){
-        this.data = $H(data);
-    },
+(function($) {
+    $.extend(true, $, {
+        mage: {
+            translate: new function() {
+                /**
+                 * Key-value translations storage
+                 * @type {Object}
+                 * @private
+                 */
+                var _data = {};
 
-    translate : function(){
-        var args = arguments;
-        var text = arguments[0];
+                /**
+                 * Add new translation (two string parameters) or several translations (object)
+                 * @param {(Object.<string>|string)}
+                 * @param {string=}
+                 */
+                this.add = function() {
+                    if (arguments.length > 1) {
+                        _data[arguments[0]] = arguments[1];
+                    } else if (typeof arguments[0] == 'object') {
+                        $.extend(_data, arguments[0]);
+                    }
+                };
 
-        if(this.data.get(text)){
-            return this.data.get(text);
+                /**
+                 * Make a translation
+                 * @param {string} text
+                 * @return {string}
+                 */
+                this.translate = function(text) {
+                    return _data[text] ? _data[text] : text;
+                }
+            }
         }
-        return text;
-    },
-    add : function() {
-        if (arguments.length > 1) {
-            this.data.set(arguments[0], arguments[1]);
-        } else if (typeof arguments[0] =='object') {
-            $H(arguments[0]).each(function (pair){
-                this.data.set(pair.key, pair.value);
-            }.bind(this));
-        }
-    }
-}
+    });
+    /**
+     * Sort alias for jQuery.mage.translate.translate method
+     * @type {function(string): string}
+     */
+    $.mage.__ = $.proxy($.mage.translate.translate, $.mage.translate);
+})(jQuery);

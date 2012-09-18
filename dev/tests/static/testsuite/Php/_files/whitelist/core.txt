@@ -1,12 +1,14 @@
 app/bootstrap.php
 app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Options/Popup/Grid.php
 app/code/core/Mage/Adminhtml/Block/Catalog/Product/Options/Ajax.php
+app/code/core/Mage/Adminhtml/Block/Customer/Edit/Tab/Account.php
 app/code/core/Mage/Adminhtml/Model/Observer.php
 app/code/core/Mage/Adminhtml/Block/Urlrewrite
 app/code/core/Mage/Adminhtml/Block/controllers/UrlrewriteController.php
 app/code/core/Mage/Adminhtml/Block/Page/System/Config/Robots/Reset.php
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit.php
+app/code/core/Mage/Adminhtml/Block/System/Config/Form/Field.php
 app/code/core/Mage/Core/Block/Abstract.php
 app/code/core/Mage/Centinel/Model/State/Jcb.php
 app/code/core/Mage/Core/Model/Config/Module.php
@@ -18,6 +20,7 @@ app/code/core/Mage/Core/Model/Layout/Update.php
 app/code/core/Mage/Core/Model/Design/Fallback
 app/code/core/Mage/Core/Model/Design/Fallback.php
 app/code/core/Mage/Core/Model/Design/FallbackInterface.php
+app/code/core/Mage/Core/Model/Resource/Setup/Migration.php
 app/code/core/Mage/DesignEditor
 app/code/core/Mage/ImportExport/Model/Import/Entity/CustomerComposite.php
 app/code/core/Mage/ImportExport/Model/Import/Entity/Product/Option.php

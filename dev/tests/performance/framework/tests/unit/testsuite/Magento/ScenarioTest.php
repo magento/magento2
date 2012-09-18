@@ -135,31 +135,4 @@ class Magento_ScenarioTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
-
-    public function testRunWithScripts()
-    {
-        $scenarioFile = realpath(__DIR__ . '/_files/scenario_with_scripts.jmx');
-        $scriptBefore = realpath(__DIR__ . '/_files/scenario_with_scripts_before.php');
-        $scriptAfter = realpath(__DIR__ . '/_files/scenario_with_scripts_after.php');
-
-        $this->_shell
-            ->expects($this->at(0))
-            ->method('execute')
-            ->with('php %s', array($scriptBefore))
-            ->will($this->returnValue('fixture output'));
-
-        $this->_shell
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with(
-                'php %s --beforeOutput=%s --scenarioExecutions=%s',
-                array(
-                    $scriptAfter,
-                    'fixture output',
-                    4, // 2 warm-up executions + 2 users x 1 loop
-                )
-            );
-
-        $this->_object->run($scenarioFile, $this->_scenarioParams);
-    }
 }

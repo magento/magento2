@@ -107,10 +107,8 @@ class Varien_Data_Form_Element_Editor extends Varien_Data_Form_Element_Textarea
                 . $this->serialize($this->getHtmlAttributes()) . ' >' . $this->getEscapedValue() . '</textarea>'
                 . $js . '
                 <script type="text/javascript">
-                //<![CDATA[
-                    if ("undefined" != typeof(Translator)) {
-                        Translator.add(' . Zend_Json::encode($translatedString) . ');
-                    }'
+                //<![CDATA[' . "\n"
+                    . '(function($) {$.mage.translate.add(' . Zend_Json::encode($translatedString) . ')})(jQuery);' . "\n"
                     . $jsSetupObject . ' = new tinyMceWysiwygSetup("' . $this->getHtmlId() . '", '
                     . Zend_Json::encode($this->getConfig()).');'
                     . $forceLoad.'

@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Core>
-            <version>1.6.0.3</version>
+            <version>1.6.0.4</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_Core>
@@ -95,6 +95,9 @@
                 <allow_map_update>1</allow_map_update>
             </design_fallback>
         </dev>
+        <migration>
+            <path_to_aliases_map_file>app/etc/aliases_to_classes_map.json</path_to_aliases_map_file>
+        </migration>
     </global>
     <frontend>
         <routers>
@@ -335,6 +338,9 @@
                     </protected>
                 </public_files_valid_paths>
             </file>
+            <single_store_mode>
+                <enabled>0</enabled>
+            </single_store_mode>
         </general>
         <dev>
             <image>

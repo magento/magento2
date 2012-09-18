@@ -327,8 +327,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             /**
              * Change directories mode to be writable by apache user
              */
-            @chmod('var/cache', 0777);
-            @chmod('var/session', 0777);
+            Varien_Io_File::chmodRecursive(Mage::getBaseDir('var'), 0777);
 
             return $encryptionKey;
 

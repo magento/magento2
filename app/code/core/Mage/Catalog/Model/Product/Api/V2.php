@@ -256,7 +256,7 @@ class Mage_Catalog_Model_Product_Api_V2 extends Mage_Catalog_Model_Product_Api
             $product->setWebsiteIds($productData->websites);
         }
 
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $product->setWebsiteIds(array(Mage::app()->getStore(true)->getWebsite()->getId()));
         }
 

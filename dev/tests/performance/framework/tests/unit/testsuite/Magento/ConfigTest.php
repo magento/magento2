@@ -49,11 +49,17 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
                     'option1' => 'value 1',
                     'option2' => 'value 2',
                 ),
-                'fixture_files' => '{fixture}.php',
+                'fixture_files' => array(
+                    'fixture.php',
+                ),
             ),
         ),
         'scenario' => array(
-            'files' => '*.jmx',
+            'files' => array(
+                'scenario.jmx',
+                'scenario_error.jmx',
+                'scenario_failure.jmx',
+            ),
             'common_params' => array(
                 'param1' => 'value 1',
                 'param2' => 'value 2',
@@ -69,7 +75,7 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = new Magento_Config($this->_sampleConfigData, __DIR__ . '/_files');
+        $this->_object = new Magento_Config($this->_sampleConfigData, __DIR__ . DIRECTORY_SEPARATOR . '_files');
     }
 
     protected function tearDown()
@@ -81,11 +87,12 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
      * @dataProvider constructorExceptionDataProvider
      * @param array $configData
      * @param string $baseDir
+     * @param string $expectedException
      * @param string $expectedExceptionMsg
      */
-    public function testConstructorException(array $configData, $baseDir, $expectedExceptionMsg)
+    public function testConstructorException(array $configData, $baseDir, $expectedException, $expectedExceptionMsg)
     {
-        $this->setExpectedException('Magento_Exception', $expectedExceptionMsg);
+        $this->setExpectedException($expectedException, $expectedExceptionMsg);
         new Magento_Config($configData, $baseDir);
     }
 
@@ -98,12 +105,64 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
             'non-existing base dir' => array(
                 $this->_sampleConfigData,
                 'non_existing_dir',
+                'Magento_Exception',
                 "Base directory 'non_existing_dir' does not exist",
             ),
-            'no scenarios match pattern' => array(
-                array_merge($this->_sampleConfigData, array('scenario' => array('files' => 'non_existing_*.jmx'))),
-                __DIR__ . '/_files',
-                'No scenario files match',
+            'invalid fixtures format' => array(
+                array_merge(
+                    $this->_sampleConfigData, array(
+                        'application' => array(
+                            'url_host' => '127.0.0.1',
+                            'url_path' => '/',
+                            'admin' => array(
+                                'frontname' => 'backend',
+                                'username' => 'admin',
+                                'password' => 'password1',
+                            ),
+                            'installation' => array(
+                                'options' => array(
+                                    'option1' => 'value 1',
+                                    'option2' => 'value 2',
+                                ),
+                                'fixture_files' => 'string_fixtures_*.php',
+                            ),
+                        )
+                    )
+                ),
+                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                'InvalidArgumentException',
+                "'application' => 'installation' => 'fixture_files' option must be array",
+            ),
+            'non-existing fixture' => array(
+                array_merge_recursive(
+                    $this->_sampleConfigData,
+                    array('application' =>
+                        array(
+                            'installation' => array('fixture_files' => array('non_existing_fixture.php')),
+                        )
+                    )
+                ),
+                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                'Magento_Exception',
+                "Fixture 'non_existing_fixture.php' doesn't exist",
+            ),
+            'invalid scenarios format' => array(
+                array_merge(
+                    $this->_sampleConfigData,
+                    array('scenario' => array('files' => 'string_fixtures_*.jmx'))
+                ),
+                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                'InvalidArgumentException',
+                "'scenarios' => 'files' option must be array",
+            ),
+            'non-existing scenario' => array(
+                array_merge(
+                    $this->_sampleConfigData,
+                    array('scenario' => array('files' => array('non_existing_scenario.jmx')))
+                ),
+                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                'Magento_Exception',
+                "Scenario 'non_existing_scenario.jmx' doesn't exist",
             ),
         );
     }
@@ -136,21 +195,17 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testGetScenarios()
     {
-        $dir = str_replace('\\', '/', __DIR__ . '/_files');
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $expectedScenarios = array(
-            $dir . '/scenario.jmx' => array(
+            $dir . 'scenario.jmx' => array(
                 'param1' => 'value 1',
                 'param2' => 'overridden value 2',
             ),
-            $dir . '/scenario_error.jmx' => array(
+            $dir . 'scenario_error.jmx' => array(
                 'param1' => 'value 1',
                 'param2' => 'value 2',
             ),
-            $dir . '/scenario_failure.jmx' => array(
-                'param1' => 'value 1',
-                'param2' => 'value 2',
-            ),
-            $dir . '/scenario_with_scripts.jmx' => array(
+            $dir . 'scenario_failure.jmx' => array(
                 'param1' => 'value 1',
                 'param2' => 'value 2',
             ),
@@ -163,13 +218,13 @@ class Magento_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testGetFixtureFiles()
     {
-        $expectedFixtureFile = str_replace('\\', '/', __DIR__ . '/_files/fixture.php');
+        $expectedFixtureFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'fixture.php';
         $this->assertEquals(array($expectedFixtureFile), $this->_object->getFixtureFiles());
     }
 
     public function testGetReportDir()
     {
-        $expectedReportDir = str_replace('\\', '/', __DIR__ . '/_files/report');
+        $expectedReportDir = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'report';
         $this->assertEquals($expectedReportDir, $this->_object->getReportDir());
     }
 

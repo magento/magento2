@@ -322,7 +322,7 @@ class Mage_Catalog_Model_Convert_Adapter_Product
         /**
          * In single store mode all data should be saved as default
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             return Mage::app()->getStore(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
         }
 
@@ -345,7 +345,7 @@ class Mage_Catalog_Model_Convert_Adapter_Product
         /**
          * In single store mode all data should be saved as default
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             return Mage::app()->getStore(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
         }
 

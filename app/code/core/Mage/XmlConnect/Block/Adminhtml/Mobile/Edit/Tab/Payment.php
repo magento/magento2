@@ -196,7 +196,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Payment
                 /**
                  * PayPal MECL management
                  */
-                if (Mage::app()->isSingleStoreMode()
+                if (Mage::app()->hasSingleStore()
                     || Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication()->getId()
                 ) {
                     $paypalMeclIsAvailable = Mage::getModel('Mage_XmlConnect_Model_Payment_Method_Paypal_Mecl')

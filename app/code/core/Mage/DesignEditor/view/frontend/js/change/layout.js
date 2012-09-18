@@ -41,7 +41,7 @@
             status: 'active',
             getType: function() {
                 if (!this.type) {
-                    throw Error(Translator.translate('Type of change is not defined'));
+                    throw Error($.mage.__('Type of change is not defined'));
                 }
                 return this.type;
             },
@@ -50,13 +50,13 @@
             },
             undo: function() {
                 if (this.status == 'undone') {
-                    throw Error(Translator.translate("Can't undo change twice"));
+                    throw Error($.mage.__("Can't undo change twice"));
                 }
                 alert('undo');
                 this.status = 'undone';
             },
             getTitle: function() {
-                throw Error(Translator.translate('Method "getTitle" is not implemented'));
+                throw Error($.mage.__('Method "getTitle" is not implemented'));
             },
             setData: function(data) {
                 this.data = data;
@@ -65,10 +65,10 @@
                 return this.data;
             },
             getPostData: function() {
-                throw Error(Translator.translate('Method "getTitle" is not implemented'));
+                throw Error($.mage.__('Method "getTitle" is not implemented'));
             },
             setActionData: function() {
-                throw Error(Translator.translate('Method "getTitle" is not implemented'));
+                throw Error($.mage.__('Method "getTitle" is not implemented'));
             }
         };
     }
@@ -106,13 +106,13 @@
 
                     case ACTION_MOVE:
                         if (data.origin.container == data.destination.container) {
-                            title = Translator.translate('Block #block# sorted').replace('#block#', data.block);
+                            title = $.mage.__('Block #block# sorted').replace('#block#', data.block);
                         } else {
-                            title = Translator.translate('Block #block# moved').replace('#block#', data.block);
+                            title = $.mage.__('Block #block# moved').replace('#block#', data.block);
                         }
                         break;
                     case ACTION_REMOVE:
-                        title = Translator.translate('Block #block# removed').replace('#block#', data.block);
+                        title = $.mage.__('Block #block# removed').replace('#block#', data.block);
                         break;
                 }
                 return title;
@@ -126,7 +126,7 @@
                         return this[ '_' + type + this._stringToTitleCase(action) ](data);
                         break;
                     default:
-                        throw Error(Translator.translate('Invalid action "#action#"').replace('#action#', action));
+                        throw Error($.mage.__('Invalid action "#action#"').replace('#action#', action));
                 }
             },
             /** @todo maybe we need to create global object for strings? */
@@ -141,12 +141,12 @@
                     action: ACTION_MOVE,
                     block: data.element_name,
                     origin: {
-                        container: null,
-                        order: null
+                        container: data.origin_container,
+                        order: data.origin_order
                     },
                     destination: {
-                        container: data.action_data.container,
-                        order: data.action_data.after
+                        container: data.destination_container,
+                        order: data.destination_order
                     }
                 });
             },
@@ -171,19 +171,19 @@
             _getPostDataMove: function(data) {
                 return {
                     handle: 'current_handle',
-                    change_type: this.type,
+                    type: this.type,
                     element_name: data.block,
                     action_name: ACTION_MOVE,
-                    action_data: {
-                        container: data.destination.container,
-                        after: data.destination.order
-                    }
+                    destination_container: data.destination.container,
+                    destination_order: data.destination.order,
+                    origin_container: data.origin.container,
+                    origin_order: data.origin.order
                 }
             },
             _getPostDataRemove: function(data) {
                 return {
                     handle: 'current_handle',
-                    change_type: this.type,
+                    type: this.type,
                     element_name: data.block,
                     action_name: ACTION_REMOVE
                 }
@@ -229,7 +229,7 @@
                         var change = new fileChange();
                         break;
                     default:
-                        throw Error(Translator.translate('Invalid change type "#type#"').replace('#type#', type));
+                        throw Error($.mage.__('Invalid change type "#type#"').replace('#type#', type));
                 }
                 return $.extend(new abstractChange(), change);
             }
@@ -311,7 +311,7 @@
                 },
                 error: function(data) {
                     _isSaveLocked = false;
-                    throw Error(Translator.translate('Some problem with save action'));
+                    throw Error($.mage.__('Some problem with save action'));
                 }
             });
         }

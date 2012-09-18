@@ -50,7 +50,7 @@
                             <source_model>Mage_Adminhtml_Model_System_Config_Source_Currency</source_model>
                             <backend_model>Mage_Adminhtml_Model_System_Config_Backend_Currency_Base</backend_model>
                             <sort_order>1</sort_order>
-                            <comment><![CDATA[Base currency is used for all online payment transactions. Scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]></comment>
+                            <comment><![CDATA[Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]></comment>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>

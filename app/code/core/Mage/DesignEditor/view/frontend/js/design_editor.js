@@ -239,7 +239,7 @@
             try {
                 if (this._history.getItems().length == 0) {
                     /** @todo temporary report */
-                    alert(Translator.translate('No changes found.'));
+                    alert($.mage.__('No changes found.'));
                     return false;
                 }
                 var data = this._preparePostItems(this._history.getItems());
@@ -255,7 +255,7 @@
             try {
                 if (this._history.getItems().length == 0) {
                     /** @todo temporary report */
-                    alert(Translator.translate('No changes found.'));
+                    alert($.mage.__('No changes found.'));
                     return false;
                 }
                 var data = this._preparePostItems(this._history.getItems());
@@ -314,13 +314,13 @@
                 success: function(data) {
                     if (data.error) {
                         /** @todo add error validator */
-                        throw Error(Translator.translate('Some problem with save action'));
+                        throw Error($.mage.__('Some problem with save action'));
                         return;
                     }
                     postResult = data.success;
                 },
                 error: function(data) {
-                    throw Error(Translator.translate('Some problem with save action'));
+                    throw Error($.mage.__('Some problem with save action'));
                 }
             });
             return postResult;

@@ -316,13 +316,7 @@ if(!window.Flex) {
             }
         },
         translate: function(text) {
-            try {
-                if(Translator){
-                   return Translator.translate(text);
-                }
-            }
-            catch(e){}
-            return text;
+            return jQuery.mage.__ ? jQuery.mage.__(text) : text;
         },
         errorText: function(file) {
             var error = '';

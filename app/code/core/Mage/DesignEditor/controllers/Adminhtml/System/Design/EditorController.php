@@ -50,7 +50,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         $session->activateDesignEditor();
         /* Redirect to the frontend */
         $query = Mage_Core_Model_Session_Abstract::SESSION_ID_QUERY_PARAM . '=' . urlencode($session->getSessionId());
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $storeId = (int)$this->getRequest()->getParam('store_id');
             $store = Mage::app()->getStore($storeId);
             $baseUrl = $store->getBaseUrl();

@@ -24,13 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Abstract config form element renderer
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_System_Config_Form_Field
     extends Mage_Adminhtml_Block_Abstract
@@ -38,7 +37,7 @@ class Mage_Adminhtml_Block_System_Config_Form_Field
 {
 
     /**
-     * Enter description here...
+     * Retrieve element HTML markup
      *
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
@@ -49,92 +48,131 @@ class Mage_Adminhtml_Block_System_Config_Form_Field
     }
 
     /**
-     * Enter description here...
+     * Retrieve HTML markup for given form element
      *
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        $id = $element->getHtmlId();
+        $htmlId = $element->getHtmlId();
+        $isCheckboxRequired = $this->_isInheritCheckboxRequired($element);
 
-        $useContainerId = $element->getData('use_container_id');
-        $html = '<tr id="row_' . $id . '">'
-              . '<td class="label"><label for="'.$id.'">'.$element->getLabel().'</label></td>';
+        // Disable element if value is inherited from other scope. Flag has to be set before the value is rendered.
+        if ($element->getInherit() == 1 && $isCheckboxRequired) {
+            $element->setDisabled(true);
+        }
 
-        //$isDefault = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
-        $isMultiple = $element->getExtType()==='multiple';
+        $html = '<tr id="row_' . $htmlId . '">';
+        $html .= '<td class="label"><label for="' . $htmlId . '">' . $element->getLabel() . '</label></td>';
+        $html .= $this->_renderValue($element);
 
-        // replace [value] with [inherit]
+        if ($isCheckboxRequired) {
+            $html .= $this->_renderInheritCheckbox($element);
+        }
+
+        $html .= $this->_renderScopeLabel($element);
+        $html .= $this->_renderHint($element);
+
+        $html .= '</tr>';
+        return $html;
+    }
+
+    /**
+     * Render element value
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _renderValue(Varien_Data_Form_Element_Abstract $element)
+    {
+        $html = '<td class="value">';
+        $html .= $this->_getElementHtml($element);
+        if ($element->getComment()) {
+            $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
+        }
+        $html .= '</td>';
+        return $html;
+    }
+
+    /**
+     * Render inheritance checkbox (Use Default or Use Website)
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _renderInheritCheckbox(Varien_Data_Form_Element_Abstract $element)
+    {
+        $htmlId = $element->getHtmlId();
         $namePrefix = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
+        $checkedHtml = ($element->getInherit() == 1) ? 'checked="checked"' : '';
 
-        $options = $element->getValues();
+        $html = '<td class="use-default">';
+        $html .= '<input id="' . $htmlId . '_inherit" name="' . $namePrefix . '[inherit]" type="checkbox" value="1"'
+            . ' class="checkbox config-inherit" ' . $checkedHtml
+            . ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
+        $html .= '<label for="' . $htmlId . '_inherit" class="inherit">' . $this->_getInheritCheckboxLabel($element)
+            . '</label>';
+        $html .= '</td>';
 
-        $addInheritCheckbox = false;
+        return $html;
+    }
+
+    /**
+     * Check if inheritance checkbox has to be rendered
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return bool
+     */
+    protected function _isInheritCheckboxRequired(Varien_Data_Form_Element_Abstract $element)
+    {
+        return $element->getCanUseWebsiteValue() || $element->getCanUseDefaultValue();
+    }
+
+    /**
+     * Retrieve label for the inheritance checkbox
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getInheritCheckboxLabel(Varien_Data_Form_Element_Abstract $element)
+    {
+        $checkboxLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Use Default');
         if ($element->getCanUseWebsiteValue()) {
-            $addInheritCheckbox = true;
             $checkboxLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Use Website');
         }
-        elseif ($element->getCanUseDefaultValue()) {
-            $addInheritCheckbox = true;
-            $checkboxLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Use Default');
-        }
+        return $checkboxLabel;
+    }
 
-        if ($addInheritCheckbox) {
-            $inherit = $element->getInherit()==1 ? 'checked="checked"' : '';
-            if ($inherit) {
-                $element->setDisabled(true);
-            }
-        }
-
-        $html.= '<td class="value">';
-        $html.= $this->_getElementHtml($element);
-        if ($element->getComment()) {
-            $html.= '<p class="note"><span>'.$element->getComment().'</span></p>';
-        }
-        $html.= '</td>';
-
-        if ($addInheritCheckbox) {
-
-            $defText = $element->getDefaultValue();
-            if ($options) {
-                $defTextArr = array();
-                foreach ($options as $k=>$v) {
-                    if ($isMultiple) {
-                        if (is_array($v['value']) && in_array($k, $v['value'])) {
-                            $defTextArr[] = $v['label'];
-                        }
-                    } elseif ($v['value']==$defText) {
-                        $defTextArr[] = $v['label'];
-                        break;
-                    }
-                }
-                $defText = join(', ', $defTextArr);
-            }
-
-            // default value
-            $html.= '<td class="use-default">';
-            //$html.= '<input id="'.$id.'_inherit" name="'.$namePrefix.'[inherit]" type="checkbox" value="1" class="input-checkbox config-inherit" '.$inherit.' onclick="$(\''.$id.'\').disabled = this.checked">';
-            $html.= '<input id="'.$id.'_inherit" name="'.$namePrefix.'[inherit]" type="checkbox" value="1" class="checkbox config-inherit" '.$inherit.' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
-            $html.= '<label for="'.$id.'_inherit" class="inherit" title="'.htmlspecialchars($defText).'">'.$checkboxLabel.'</label>';
-            $html.= '</td>';
-        }
-
-        $html.= '<td class="scope-label">';
-        if ($element->getScope()) {
+    /**
+     * Render scope label
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return Mage_Adminhtml_Block_System_Config_Form_Field
+     */
+    protected function _renderScopeLabel(Varien_Data_Form_Element_Abstract $element)
+    {
+        $html = '<td class="scope-label">';
+        if ($element->getScope() && !Mage::app()->isSingleStoreMode()) {
             $html .= $element->getScopeLabel();
         }
-        $html.= '</td>';
+        $html .= '</td>';
+        return $html;
+    }
 
-        $html.= '<td class="">';
+    /**
+     * Render field hint
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _renderHint(Varien_Data_Form_Element_Abstract $element)
+    {
+        $html = '<td class="">';
         if ($element->getHint()) {
-            $html.= '<div class="hint" >';
-            $html.= '<div style="display: none;">' . $element->getHint() . '</div>';
-            $html.= '</div>';
+            $html .= '<div class="hint"><div style="display: none;">' . $element->getHint() . '</div></div>';
         }
-        $html.= '</td>';
-
-        $html.= '</tr>';
+        $html .= '</td>';
         return $html;
     }
 

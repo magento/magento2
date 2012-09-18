@@ -114,7 +114,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
          * store mode, customize some value per specific store view and than back
          * to single store mode. We should load correct values
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $storeId = (int)Mage::app()->getStore(true)->getId();
         } else {
             $storeId = (int)$object->getStoreId();
@@ -228,7 +228,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
          * for default store id
          * In this case we clear all not default values
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
             $write->delete($table, array(
                 'attribute_id = ?' => $attribute->getAttributeId(),

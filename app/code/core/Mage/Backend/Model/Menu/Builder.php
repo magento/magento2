@@ -98,7 +98,7 @@ class Mage_Backend_Model_Menu_Builder
         }
 
         // Build menu tree based on "parent" param
-        foreach($items as $id => $item) {
+        foreach ($items as $id => $item) {
             $sortOrder = isset($params[$id]['sortOrder']) ? $params[$id]['sortOrder'] : null;
             $parentId = isset($params[$id]['parent']) ? $params[$id]['parent'] : null;
             $isRemoved = isset($params[$id]['removed']);

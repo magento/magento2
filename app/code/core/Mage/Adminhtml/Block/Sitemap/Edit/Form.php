@@ -80,7 +80,7 @@ class Mage_Adminhtml_Block_Sitemap_Edit_Form extends Mage_Adminhtml_Block_Widget
             'value' => $model->getSitemapPath()
         ));
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $field = $fieldset->addField('store_id', 'select', array(
                 'label'    => Mage::helper('Mage_Sitemap_Helper_Data')->__('Store View'),
                 'title'    => Mage::helper('Mage_Sitemap_Helper_Data')->__('Store View'),

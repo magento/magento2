@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Sales>
-            <version>1.6.0.8</version>
+            <version>1.6.0.9</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -573,13 +573,6 @@
         </events>
     </adminhtml>
     <default>
-        <payment>
-            <googlecheckout>
-                <active>1</active>
-                <model>Mage_GoogleCheckout_Model_Payment</model>
-                <title>Google Checkout</title>
-            </googlecheckout>
-        </payment>
         <sales>
             <totals_sort>
                 <discount>20</discount>

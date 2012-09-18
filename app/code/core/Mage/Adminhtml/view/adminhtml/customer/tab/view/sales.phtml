@@ -30,20 +30,24 @@
         <table cellspacing="0" class="data">
             <thead>
                 <tr class="headings">
-                    <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Website') ?></th>
-                    <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Store') ?></th>
-                    <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Store View') ?></th>
+                    <?php if (!Mage::app()->isSingleStoreMode()): ?>
+                        <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Website') ?></th>
+                        <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Store') ?></th>
+                        <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Store View') ?></th>
+                    <?php endif; ?>
                     <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Lifetime Sales') ?></th>
                     <th><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('Average Sale') ?></th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="label"><strong><big><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('All Store Views') ?></big></strong></td>
-                    <td class="emph"><strong><big><?php echo $this->formatCurrency($this->getTotals()->getBaseLifetime()) ?></big></strong></td>
-                    <td class="emph"><strong><big><?php echo $this->formatCurrency($this->getTotals()->getAvgsale()) ?></big></strong></td>
-                </tr>
-            </tfoot>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="label"><strong><big><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('All Store Views') ?></big></strong></td>
+                        <td class="emph"><strong><big><?php echo $this->formatCurrency($this->getTotals()->getBaseLifetime()) ?></big></strong></td>
+                        <td class="emph"><strong><big><?php echo $this->formatCurrency($this->getTotals()->getAvgsale()) ?></big></strong></td>
+                    </tr>
+                </tfoot>
+            <?php endif; ?>
             <?php if ($this->getRows()): ?>
             <tbody>
                 <?php $_i = 0; ?>
@@ -52,30 +56,34 @@
                     <?php foreach ($_groups as $_groupId => $_stores): ?>
                         <?php $_groupRow = false; ?>
                         <?php foreach ($_stores as $_row): ?>
-                        <?php if ($_row->getStoreId() == 0): ?>
-                        <td colspan="3" class="label"><?php echo $_row->getStoreName() ?></td>
-                        <?php else: ?>
-                <tr<?php echo ($_i++ % 2 ? ' class="even"' : '') ?>>
-                        <?php if (!$_websiteRow): ?>
-                    <td rowspan="<?php echo $this->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
-                            <?php $_websiteRow = true; ?>
-                        <?php endif; ?>
-                        <?php if (!$_groupRow): ?>
-                    <td rowspan="<?php echo count($_stores) ?>"><?php echo $_row->getGroupName() ?></td>
-                            <?php $_groupRow = true; ?>
-                        <?php endif; ?>
-                    <td class="label"><?php echo $_row->getStoreName() ?></td>
-                        <?php endif; ?>
-                    <td><?php echo $this->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
-                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
-                </tr>
+                            <?php if (!Mage::app()->isSingleStoreMode()): ?>
+                                <?php if ($_row->getStoreId() == 0): ?>
+                                <td colspan="3" class="label"><?php echo $_row->getStoreName() ?></td>
+                                <?php else: ?>
+                        <tr<?php echo ($_i++ % 2 ? ' class="even"' : '') ?>>
+                                <?php if (!$_websiteRow): ?>
+                            <td rowspan="<?php echo $this->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
+                                    <?php $_websiteRow = true; ?>
+                                <?php endif; ?>
+                                <?php if (!$_groupRow): ?>
+                            <td rowspan="<?php echo count($_stores) ?>"><?php echo $_row->getGroupName() ?></td>
+                                    <?php $_groupRow = true; ?>
+                                <?php endif; ?>
+                            <td class="label"><?php echo $_row->getStoreName() ?></td>
+                                <?php endif; ?>
+                            <?php else: ?>
+                        <tr>
+                            <?php endif; ?>
+                            <td><?php echo $this->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
+                            <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                        </tr>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             </tbody>
             <?php else: ?>
             <tbody>
-                <tr class="no-display"><td colspan="5"></td></tr>
+                <tr class="no-display"><td colspan="<?php echo !Mage::app()->isSingleStoreMode() ? '5' : '2'; ?>"></td></tr>
             </tbody>
             <?php endif; ?>
         </table>

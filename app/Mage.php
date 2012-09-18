@@ -100,6 +100,13 @@ final class Mage
     static private $_isInstalled;
 
     /**
+     * Logger entities
+     *
+     * @var array
+     */
+    static private $_loggers = array();
+
+    /**
      * Magento edition constants
      */
     const EDITION_COMMUNITY    = 'Community';
@@ -172,6 +179,7 @@ final class Mage
         self::$_isDownloader    = false;
         self::$_isDeveloperMode = false;
         self::$_isInstalled     = null;
+        self::$_loggers         = array();
         // do not reset $headersSentThrowsException
     }
 
@@ -761,48 +769,63 @@ final class Mage
             return;
         }
 
-        static $loggers = array();
-
         $level  = is_null($level) ? Zend_Log::DEBUG : $level;
         $file = empty($file) ? 'system.log' : $file;
 
         try {
-            if (!isset($loggers[$file])) {
-                $logDir  = self::getBaseDir('var') . DS . 'log';
-                $logFile = $logDir . DS . $file;
-
-                if (!is_dir($logDir)) {
-                    mkdir($logDir);
-                    chmod($logDir, 0777);
-                }
-
-                if (!file_exists($logFile)) {
-                    file_put_contents($logFile, '');
-                    chmod($logFile, 0777);
-                }
+            if (!isset(self::$_loggers[$file])) {
+                $logFile = self::_expandLogFileName($file);
 
                 $format = '%timestamp% %priorityName% (%priority%): %message%' . PHP_EOL;
                 $formatter = new Zend_Log_Formatter_Simple($format);
                 $writerModel = (string)self::getConfig()->getNode('global/log/core/writer_model');
-                if (!self::$_app || !$writerModel) {
-                    $writer = new Zend_Log_Writer_Stream($logFile);
+                if (!self::$_app || !$writerModel || !is_subclass_of($writerModel, 'Zend_Log_Writer_Stream')) {
+                    $writerModel = 'Zend_Log_Writer_Stream';
                 }
-                else {
-                    $writer = new $writerModel($logFile);
-                }
+                /** @var $writer Zend_Log_Writer_Stream */
+                $writer = new $writerModel($logFile);
                 $writer->setFormatter($formatter);
-                $loggers[$file] = new Zend_Log($writer);
+                self::$_loggers[$file] = new Zend_Log($writer);
             }
 
             if (is_array($message) || is_object($message)) {
                 $message = print_r($message, true);
             }
 
-            $loggers[$file]->log($message, $level);
+            self::$_loggers[$file]->log($message, $level);
         }
         catch (Exception $e) {
         }
     }
+
+    /**
+     * Expand log file name to absolute path, if necessary
+     *
+     * @param string $file
+     * @return string
+     */
+    protected static function _expandLogFileName($file)
+    {
+        /*
+         * Check whether a file is a wrapper
+         * @link http://www.php.net/manual/en/wrappers.php
+         */
+        if (preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
+            return $file;
+        }
+        $dir  = self::getBaseDir('var') . DIRECTORY_SEPARATOR . 'log';
+        $file = $dir . DIRECTORY_SEPARATOR . $file;
+        if (!is_dir($dir)) {
+            mkdir($dir);
+            chmod($dir, 0777);
+        }
+        if (!file_exists($file)) {
+            file_put_contents($file, '');
+            chmod($file, 0777);
+        }
+        return $file;
+    }
+
 
     /**
      * Write exception to log

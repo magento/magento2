@@ -60,11 +60,7 @@ class Mage_Adminhtml_Helper_Media_Js extends Mage_Core_Helper_Js
      */
     public function getTranslatorScript()
     {
-        $script = 'if (typeof(Translator) == \'undefined\') {'
-                . '    var Translator = new Translate('.$this->getTranslateJson().');'
-                . '} else {'
-                . '    Translator.add('.$this->getTranslateJson().');'
-                . '}';
+        $script = '(function($) {$.mage.translate.add(' . $this->getTranslateJson() . ')})(jQuery);';
         return $this->getScript($script);
     }
 

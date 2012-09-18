@@ -103,23 +103,24 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan($existCustomersCount, $addedCustomers);
     }
 
-    /**
-     * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Entity is unknown
-     */
-    public function testGetEntityAdapterEntityIsNotSet()
+    public function testValidateSource()
     {
-        $this->_model->validateSource('');
+        $this->_model->setEntity('catalog_product');
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false,
+            true, true, array('getColNames')
+        );
+        $source->expects($this->any())->method('getColNames')->will($this->returnValue(array('sku')));
+        $this->assertTrue($this->_model->validateSource($source));
     }
 
     /**
      * @expectedException Mage_Core_Exception
-     * @expectedExceptionMessage Invalid entity
+     * @expectedExceptionMessage Entity is unknown
      */
-    public function testGetEntityAdapterInvalidEntity()
+    public function testValidateSourceException()
     {
-        $this->_model->setEntity('invalid_entity_name');
-        $this->_model->validateSource('');
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false);
+        $this->_model->validateSource($source);
     }
 
     public function testGetEntity()

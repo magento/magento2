@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Review_Edit_Form extends Mage_Adminhtml_Block_Widget_
         /**
          * Check is single store mode
          */
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $field = $fieldset->addField('select_stores', 'multiselect', array(
                 'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Visible In'),
                 'required'  => true,

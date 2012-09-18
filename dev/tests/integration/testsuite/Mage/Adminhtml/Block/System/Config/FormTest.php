@@ -145,6 +145,9 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
                 'general_store_information_merchant_vat_number' => 'text',
                 'general_store_information_validate_vat_number' => 'text',
                 'general_store_information_address' => 'textarea',
+            ),
+            'general_single_store_mode' => array(
+                'general_single_store_mode_enabled' => 'select',
             )
         );
         $elements = $block->getForm()->getElements();

@@ -35,6 +35,29 @@
 class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
     /**
+     * Application instance
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * Class constructor
+     *
+     * @param array $data
+     * @throws InvalidArgumentException
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_app = isset($data['app']) ? $data['app'] : Mage::app();
+
+        if (!($this->_app instanceof Mage_Core_Model_App)) {
+            throw new InvalidArgumentException('Required app object is invalid');
+        }
+        parent::__construct($data);
+    }
+
+    /**
      * Prepare rating edit form
      *
      * @return Mage_Adminhtml_Block_Rating_Edit_Tab_Form
@@ -105,14 +128,25 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
         $fieldset = $form->addFieldset('visibility_form', array(
             'legend' => Mage::helper('Mage_Rating_Helper_Data')->__('Rating Visibility')
         ));
+        if (!$this->_app->isSingleStoreMode()) {
+            $field = $fieldset->addField('stores', 'multiselect', array(
+                'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
+                'name' => 'stores[]',
+                'values' => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
+            ));
+            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $field->setRenderer($renderer);
 
-        $field = $fieldset->addField('stores', 'multiselect', array(
-            'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Visible In'),
-            'name' => 'stores[]',
-            'values' => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
+            if (Mage::registry('rating_data')) {
+                $form->getElement('stores')->setValue(Mage::registry('rating_data')->getStores());
+            }
+        }
+
+        $fieldset->addField('is_active', 'checkbox', array(
+            'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Is Active'),
+            'name' => 'is_active',
+            'value' => 1,
         ));
-        $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
-        $field->setRenderer($renderer);
 
         $fieldset->addField('position', 'text', array(
             'label' => Mage::helper('Mage_Rating_Helper_Data')->__('Sort Order'),
@@ -121,7 +155,7 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
 
         if (Mage::registry('rating_data')) {
             $form->getElement('position')->setValue(Mage::registry('rating_data')->getPosition());
-            $form->getElement('stores')->setValue(Mage::registry('rating_data')->getStores());
+            $form->getElement('is_active')->setIsChecked(Mage::registry('rating_data')->getIsActive());
         }
 
         return parent::_prepareForm();
