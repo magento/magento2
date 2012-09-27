@@ -1155,6 +1155,10 @@ ul.tabs a.paypal-section:hover { background:url(images/tabs_span_bg.gif) repeat-
 .files-wide .uploader .file-row-info,
 .files .uploader .file-row-narrow,
 .files-wide .uploader .file-row-narrow { margin:0 !important; }
+.progressbar { height: 20px; }
+.upload-progress { background-color: #fcffac; }
+.upload-success { background-color: #E4FFB1; }
+.upload-failure { background-color: #FF7E77; }
 
 td.input-price { white-space:nowrap; }
 td.input-price .validation-advice { white-space:normal; }

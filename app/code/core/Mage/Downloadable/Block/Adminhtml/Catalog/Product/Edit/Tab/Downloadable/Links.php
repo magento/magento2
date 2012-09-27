@@ -275,17 +275,40 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     }
 
     /**
+     * Retrieve File Field Name
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getFileFieldName($type)
+    {
+        return $type;
+    }
+
+
+    /**
+     * Retrieve Upload URL
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getUploadUrl($type)
+    {
+        return Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()
+            ->getUrl('*/downloadable_file/upload', array('type' => $type, '_secure' => true));
+    }
+
+    /**
      * Retrieve config json
      *
      * @param string $type
      * @return string
      */
-    public function getConfigJson($type='links')
+    public function getConfigJson($type = 'links')
     {
-        $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()
-            ->getUrl('*/downloadable_file/upload', array('type' => $type, '_secure' => true)));
+        $this->getConfig()->setUrl($this->getUploadUrl($type));
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
-        $this->getConfig()->setFileField($type);
+        $this->getConfig()->setFileField($this->getFileFieldName($type));
         $this->getConfig()->setFilters(array(
             'all'    => array(
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('All Files'),

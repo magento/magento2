@@ -153,6 +153,13 @@ class Mage_Backend_Model_Menu_Item
     protected $_validator;
 
     /**
+     * Serialized submenu string
+     *
+     * @var string
+     */
+    protected $_serializedSubmenu;
+
+    /**
      * @param array $data
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
@@ -445,6 +452,9 @@ class Mage_Backend_Model_Menu_Item
     public function __sleep()
     {
         $this->_moduleHelperName = get_class($this->_moduleHelper);
+        if ($this->_submenu) {
+            $this->_serializedSubmenu = $this->_submenu->serialize();
+        }
         return array(
             '_parentId',
             '_moduleHelperName',
@@ -457,7 +467,7 @@ class Mage_Backend_Model_Menu_Item
             '_dependsOnModule',
             '_tooltip',
             '_title',
-            '_submenu',
+            '_serializedSubmenu'
         );
     }
 
@@ -470,5 +480,9 @@ class Mage_Backend_Model_Menu_Item
         $this->_storeConfig =  Mage::getSingleton('Mage_Core_Model_Store_Config');
         $this->_menuFactory = Mage::getSingleton('Mage_Backend_Model_Menu_Factory');
         $this->_urlModel = Mage::getSingleton('Mage_Backend_Model_Url');
+        if ($this->_serializedSubmenu) {
+            $this->_submenu = $this->_menuFactory->getMenuInstance();
+            $this->_submenu->unserialize($this->_serializedSubmenu);
+        }
     }
 }

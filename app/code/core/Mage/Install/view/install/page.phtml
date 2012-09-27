@@ -32,93 +32,91 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento Installation Wizard') ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento Installation Wizard') ?></title>
 
-<link rel="icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon" />
-<link rel="shortcut icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon" />
+    <link rel="icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+    <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
 
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery-1.7.1.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/jquery-no-conflict.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('prototype/prototype.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('prototype/validation.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('scriptaculous/effects.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/translate.js') ?>" ></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('varien/js.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('varien/form.js') ?>"></script>
-<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/reset.css') ?>" type="text/css" media="all" />
-<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/boxes.css') ?>" type="text/css" media="all" />
-<link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/clears.css') ?>" type="text/css" media="all" />
-<!--[if IE]><link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/iestyles.css') ?>" type="text/css" media="all" /><![endif]-->
-<!--[if lt IE 7]><link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/ie7minus.css') ?>" type="text/css" media="all" /><![endif]-->
-
-<?php echo $this->helper('Mage_Core_Helper_Js')->getTranslatorScript() ?>
-
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery-1.7.1.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/head.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery.cookie.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/mage.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/translate.js') ?>"></script>
+    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Install::css/mage-js-style.css') ?>" type="text/css"
+          media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Install::css/validate.css') ?>" type="text/css"
+          media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/reset.css') ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/boxes.css') ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/clears.css') ?>" type="text/css" media="all"/>
+    <?php echo $this->helper('Mage_Core_Helper_Js')->getTranslatorScript() ?>
 </head>
 
 <body>
 <!-- [start] header -->
-    <div class="header">
-        <div class="header-top-container">
-            <div class="header-top">
-                <h1 id="logo">
-                    <a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getSkinUrl('images/logo.gif') ?>" title="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>" alt="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>" /></a>
-                </h1>
+<div class="header">
+    <div class="header-top-container">
+        <div class="header-top">
+            <h1 id="logo">
+                <a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getSkinUrl('images/logo.gif') ?>"
+                                                               title="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>"
+                                                               alt="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>"/></a>
+            </h1>
 
-                <?php echo $this->getChildHtml('topSearch') ?>
+            <?php echo $this->getChildHtml('topSearch') ?>
 
-                <div class="quick-access">
-                    <div class="account-access">
-                       <strong>&nbsp;<?php echo $this->getWelcome() ?></strong> <?php echo $this->getChildHtml('topLeftLinks') ?>
-                    </div>
-                    <div class="shop-access">
-                        <?php echo $this->getChildHtml('topRightLinks') ?>
-                    </div>
+            <div class="quick-access">
+                <div class="account-access">
+                    <strong>
+                        &nbsp;<?php echo $this->getWelcome() ?></strong> <?php echo $this->getChildHtml('topLeftLinks') ?>
                 </div>
-
+                <div class="shop-access">
+                    <?php echo $this->getChildHtml('topRightLinks') ?>
+                </div>
             </div>
+
         </div>
-        <?php echo $this->getChildHtml('topMenu') ?>
     </div>
+    <?php echo $this->getChildHtml('topMenu') ?>
+</div>
 <!-- [end] header -->
 
-        <!-- [start] middle -->
-       <?php echo $this->getChildHtml('store') ?>
-    <div class="middle-container">
-        <div class="middle col-2-left-layout">
-            <?php echo $this->getChildHtml('breadcrumbs') ?>
+<!-- [start] middle -->
+<?php echo $this->getChildHtml('store') ?>
+<div class="middle-container">
+    <div class="middle col-2-left-layout">
+        <?php echo $this->getChildHtml('breadcrumbs') ?>
 
-            <!-- [start] left -->
-            <div class="col-left side-col">
-                <?php echo $this->getChildHtml('left') ?>
-            </div>
-            <div id="main" class="col-main">
+        <!-- [start] left -->
+        <div class="col-left side-col">
+            <?php echo $this->getChildHtml('left') ?>
+        </div>
+        <div id="main" class="col-main">
             <!-- [start] global messages -->
-                <?php echo $this->getChildHtml('global_messages') ?>
+            <?php echo $this->getChildHtml('global_messages') ?>
             <!-- [end] global messages -->
             <!-- [start] content -->
-                <?php echo $this->getChildHtml('content') ?>
+            <?php echo $this->getChildHtml('content') ?>
             <!-- [end] content -->
-            </div>
         </div>
-            <!-- [end] center -->
     </div>
-        <!-- [end] middle -->
+    <!-- [end] center -->
+</div>
+<!-- [end] middle -->
 
-        <!-- [start] footer -->
-    <div class="footer-container">
-        <div class="footer">
+<!-- [start] footer -->
+<div class="footer-container">
+    <div class="footer">
         <p class="legality">
-            <?php echo Mage::helper('Mage_Install_Helper_Data')->__('Help Us to Keep Magento Healthy') ?> - <a href="http://www.magentocommerce.com/bug-tracking" id="bug_tracking_link"><strong><?php echo Mage::helper('Mage_Install_Helper_Data')->__('Report All Bugs') ?></strong></a> <?php echo Mage::helper('Mage_Install_Helper_Data')->__('(ver. %s)', Mage::getVersion()) ?><br/>
-<script type="text/javascript">
-//<![CDATA[
-    $('bug_tracking_link').target = "varien_external";
-//]]>
-</script>
+            <?php echo Mage::helper('Mage_Install_Helper_Data')->__('Help Us to Keep Magento Healthy') ?> - <a
+            href="http://www.magentocommerce.com/bug-tracking"
+            target="varien_external"><strong><?php echo Mage::helper('Mage_Install_Helper_Data')->__('Report All Bugs') ?></strong></a> <?php echo Mage::helper('Mage_Install_Helper_Data')->__('(ver. %s)', Mage::getVersion()) ?>
+            <br/>
             <?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.', date('Y')) ?>
         </p>
-        </div>
     </div>
-        <!-- [end] footer -->
-    </body>
+</div>
+<!-- [end] footer -->
+</body>
 </html>

@@ -44,6 +44,7 @@ app/code/core/Mage/Page/Helper/Robots.php
 dev/shell
 dev/tests/integration
 dev/tests/performance
+dev/tests/js
 dev/tests/static
 dev/tests/unit
 dev/tools

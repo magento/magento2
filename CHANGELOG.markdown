@@ -1,3 +1,25 @@
+Update as of 9/27/2012
+======================
+* Refactoring Magento 2 to use jQuery instead of Prototype:
+  * Implemented simple lazy-loading functionality
+  * Converted decorator mechanism to jQuery
+  * Moved Installation process to jQuery
+  * Moved Home, Category and Simple Product View pages to jQuery
+  * Moved all frontend libraries from `pub/js` directory to `pub/lib`
+* Improved Javascript unit tests to be consistent with other test frameworks in Magento
+* Added Javascript code analysis tests to the static tests suite
+* Added jQuery file uploader for admin backend, cleaned out old deprecated uploaders
+* Implemented fixture of 100k orders for the performance tests
+* Fixes
+  * Admin menu elements order differs for a cached page and non-cached one
+  * Typos in System > Configuration > General Tab
+  * Wrong elements positions on "View Order" page
+  * Impossible to configure checkout on store scope
+  * Warning message in `system.log` when using GD2 image adapter
+  * "Preview" link is absent for managing CMS Pages in single store mode
+  * "Promotions" tab is missing on Configuration page
+  * Wrong format of performance tests config
+
 Update as of 9/13/2012
 ======================
 * Implemented the option to enable the single store mode in the system configuration, which simplifies the back-end GUI:

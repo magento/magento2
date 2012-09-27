@@ -36,7 +36,7 @@
         <span class="product-image"><img src="<?php echo $this->getProductThumbnailSidebarUrl() ?>" width="<?php echo $this->getThumbnailSidebarSize()?>" height="<?php echo $this->getThumbnailSidebarSize()?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></span>
     <?php endif; ?>
     <div class="product-details">
-        <a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>" onclick="return confirm('<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>');" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
+        <a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo $this->__('Remove This Item') ?>"  class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
         <?php if ($isVisibleProduct): ?>
         <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo $this->__('Edit item') ?>" class="btn-edit"><?php echo $this->__('Edit item')?></a>
         <?php endif ?>

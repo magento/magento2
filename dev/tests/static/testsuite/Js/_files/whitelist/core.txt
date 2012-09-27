@@ -1,0 +1,8 @@
+pub/lib/mage
+app/code/core/Mage/Install
+app/code/core/Mage/Catalog
+app/code/core/Mage/Newsletter
+app/code/core/Mage/Page
+app/code/core/Mage/Poll
+app/code/core/Mage/CatalogSearch
+app/code/core/Mage/Checkout

@@ -85,19 +85,6 @@ class Varien_Data_Form_Element_Gallery extends Varien_Data_Form_Element_Abstract
 
         $html .= '</tbody></table>';
 
-/*
-        $html .= '<script language="javascript">
-                    var multi_selector = new MultiSelector( document.getElementById( "gallery" ),
-                    "'.$this->getName().'",
-                    -1,
-                        \'<a href="file:///%file%" target="_blank" onclick="imagePreview(\\\''.$this->getHtmlId().'_image_new_%id%\\\');return false;"><img src="file:///%file%" width="50" align="absmiddle" class="small-image-preview" style="padding-bottom:3px; width:"></a> <div id="'.$this->getHtmlId().'_image_new_%id%" style="display:none" class="image-preview"><img src="file:///%file%"></div>\',
-                        "",
-                        \'<input type="file" name="'.parent::getName().'[new_image][%id%][%j%]" size="1" />\'
-                    );
-                    multi_selector.addElement( document.getElementById( "'.$this->getHtmlId().'" ) );
-                    </script>';
-*/
-
         $name = $this->getName();
         $parentName = parent::getName();
 

@@ -38,7 +38,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery extends Varien_Da
     public function getElementHtml()
     {
         $html = $this->getContentHtml();
-        //$html.= $this->getAfterElementHtml();
         return $html;
     }
 
@@ -54,8 +53,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery extends Varien_Da
         $content = Mage::getSingleton('Mage_Core_Model_Layout')
             ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content');
 
-        $content->setId($this->getHtmlId() . '_content')
-            ->setElement($this);
+        $content->setId($this->getHtmlId() . '_content')->setElement($this);
+        $galleryJs = $content->getJsObjectName();
+        $content->getUploader()->getConfig()->setMegiaGallery($galleryJs);
         return $content->toHtml();
     }
 

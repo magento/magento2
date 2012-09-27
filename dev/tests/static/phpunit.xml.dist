@@ -29,6 +29,9 @@
 -->
 <phpunit bootstrap="./framework/bootstrap.php">
     <testsuites>
+        <testsuite name="Javascript Static Code Analysis">
+            <file>testsuite/Js/LiveCodeTest.php</file>
+        </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Php/LiveCodeTest.php</file>
         </testsuite>
@@ -38,5 +41,9 @@
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
+        <!-- TESTS_JSHINT_PATH specify the path to wsh.js on Windows and jshint-rhino.js on Linux -->
+        <const name="TESTS_JSHINT_PATH" value="path_to_jshint_javascript"/>
+        <!-- JSHint global options for code verification. See: http://www.jshint.com/docs/ -->
+        <const name="TESTS_JSHINT_OPTIONS" value=""/>
     </php>
 </phpunit>

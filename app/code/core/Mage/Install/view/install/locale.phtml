@@ -64,14 +64,10 @@
 </div>
 </form>
 <script type="text/javascript">
-    function changeLocale(event){
-        var elem = Event.element(event);
-        if(elem){
-            setLocation('<?php echo $this->getChangeUrl() ?>locale/'+elem.value+'/?timezone='+$('timezone').value+'&amp;currency='+$('currency').value);
-        }
-    }
-    var dataForm = new VarienForm('form-validate');
-    if($('locale')){
-        Event.observe($('locale'), 'change', changeLocale);
-    }
+    (function($) {
+        $.mage.event.observe('mage.install.initialize', function (e, o) {
+            o.changeUrl = '<?php echo $this->getChangeUrl();?>'
+        });
+        $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Install::js/locale.js') ?>");
+    })(jQuery);
 </script>

@@ -35,8 +35,6 @@ Default layout, loads most of the pages
         <block type="Mage_Page_Block_Html" name="root" output="1" template="2columns-left.phtml">
 
             <block type="Mage_Page_Block_Html_Head" name="head" as="head">
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
-                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>lib/ccard.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
@@ -93,8 +91,6 @@ Default layout, loads most of the pages
         <block type="Mage_Page_Block_Html" name="root" output="1" template="print.phtml">
 
             <block type="Mage_Page_Block_Html_Head" name="head" as="head">
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
-                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>mage/translate.js</file></action>
                 <action method="addJs"><file>lib/ccard.js</file></action>

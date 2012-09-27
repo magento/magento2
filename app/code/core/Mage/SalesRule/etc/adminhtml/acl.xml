@@ -34,7 +34,7 @@
                 </resource>
                 <resource id="Mage_Adminhtml::system">
                     <resource id="Mage_Adminhtml::config">
-                        <resource id="Mage_SalesRule::config_promo" module="Mage_SalesRule" title="Shopping Cart Price Rules" />
+                        <resource id="Mage_SalesRule::config_promo" module="Mage_SalesRule" title="Promotion" />
                     </resource>
                 </resource>
             </resource>

@@ -82,7 +82,7 @@ class Mage_Core_Model_Config_Options extends Varien_Object
         $this->_data['lib_dir']     = $root . DIRECTORY_SEPARATOR . 'lib';
         $this->_data['locale_dir']  = $appRoot . DIRECTORY_SEPARATOR . 'locale';
         $this->_data['pub_dir']     = $root . DIRECTORY_SEPARATOR . 'pub';
-        $this->_data['js_dir']      = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'js';
+        $this->_data['js_dir']      = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'lib';
         $this->_data['media_dir']   = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'media';
         $this->_data['var_dir']     = $this->getVarDir();
         $this->_data['tmp_dir']     = $this->_data['var_dir'] . DIRECTORY_SEPARATOR . 'tmp';

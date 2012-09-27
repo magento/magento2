@@ -38,6 +38,17 @@
     </adminhtml_cms_page_new>
 
     <adminhtml_cms_page_edit>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
+
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/vendor/jquery.ui.widget.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+        </reference>
         <update handle="editor"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Cms_Page_Edit" name="cms_page_edit"></block>
@@ -68,6 +79,17 @@
 
     <adminhtml_cms_block_edit>
         <update handle="editor"/>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
+
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/vendor/jquery.ui.widget.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+        </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Cms_Block_Edit" name="cms_block_edit"></block>
         </reference>

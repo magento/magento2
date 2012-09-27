@@ -619,7 +619,7 @@
             <resource>Mage_Adminhtml::config_general</resource>
             <groups>
                 <country translate="label">
-                    <label>Countries Options</label>
+                    <label>Country Options</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>

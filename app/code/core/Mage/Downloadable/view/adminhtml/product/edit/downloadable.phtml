@@ -40,7 +40,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                     ' ' +
                                     '<span class="file-info-size">({{size}})</span>' +
                                 '</span>' +
-                                '<span class="progress-text"></span>' +
+                                '<div class="progressbar-container">' +
+                                    '<div class="progressbar upload-progress" style="width: 0%;"></div>' +
+                                '</div>' +
                                 '<div class="clear"></div>' +
                             '</div>' +
                         '</div>' +
@@ -144,12 +146,9 @@ Downloadable.FileUploader.prototype = {
         Downloadable.setUploaderObj(
             this.type,
             this.key,
-            new Flex.Uploader(this.idName, '<?php echo $this->getSkinUrl('media/uploaderSingle.swf') ?>', this.config)
+            null
         );
-        if (varienGlobalEvents) {
-            varienGlobalEvents.attachEventHandler('tabChangeBefore', Downloadable.getUploaderObj(type, key).onContainerHideBefore);
-        }
-        new Downloadable.FileList(this.idName, Downloadable.getUploaderObj(type, key));
+        new Downloadable.FileList(this.idName, null);
         <?php endif;?>
     }
 }
@@ -167,12 +166,9 @@ Downloadable.FileList.prototype = {
         this.containerId  = containerId,
         this.container = $(this.containerId);
         this.uploader = uploader;
-        this.uploader.onFilesComplete = this.handleUploadComplete.bind(this);
         this.file = this.getElement('save').value.evalJSON();
         this.listTemplate = new Template(this.fileListTemplate, this.templatePattern);
         this.updateFiles();
-        this.uploader.onFileRemoveAll = this.handleFileRemoveAll.bind(this);
-        this.uploader.onFileSelect = this.handleFileSelect.bind(this);
     },
     handleFileRemoveAll: function(fileId) {
         $(this.containerId+'-new').hide();
@@ -184,28 +180,17 @@ Downloadable.FileList.prototype = {
     getElement: function (name) {
         return $(this.containerId + '_' + name);
     },
-    handleUploadComplete: function (files) {
-        files.each(function(item) {
-           if (!item.response.isJSON()) {
-                try {
-                    console.log(item.response);
-                } catch (e2) {
-                    alert(item.response);
-                }
-               return;
-           }
-           var response = item.response.evalJSON();
-           if (response.error) {
-               return;
-           }
-           var newFile = {};
-           newFile.file = response.file;
-           newFile.name = response.name;
-           newFile.size = response.size;
-           newFile.status = 'new';
-           this.file[0] = newFile;
-           this.uploader.removeFile(item.id);
-        }.bind(this));
+    handleUploadComplete: function (file) {
+        if (file.error) {
+            return;
+        }
+
+        var newFile = {};
+        newFile.file = file.file;
+        newFile.name = file.name;
+        newFile.size = file.size;
+        newFile.status = 'new';
+        this.file[0] = newFile;
         this.updateFiles();
     },
     updateFiles: function() {
@@ -213,7 +198,7 @@ Downloadable.FileList.prototype = {
             ? this.file.toJSON()
             : Object.toJSON(this.file);
         this.file.each(function(row){
-            row.size = this.uploader.formatSize(row.size);
+            row.size = byteConvert(row.size);
             $(this.containerId + '-old').innerHTML = this.listTemplate.evaluate(row);
             $(this.containerId + '-new').hide();
             $(this.containerId + '-old').show();
@@ -268,6 +253,3 @@ $('downloadableInfo').select('input', 'select', 'textarea', 'button').each(funct
 });
 </script>
 <?php endif; ?>
-<!--
-<div><input type="hidden" name="affect_downloadable_information" value="1" /></div>
--->

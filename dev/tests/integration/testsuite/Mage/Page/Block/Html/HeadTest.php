@@ -81,12 +81,12 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
             ->addJs('varien/form.js', '', 'lt IE 7')
         ;
         $this->assertEquals(
-            '<script type="text/javascript" src="http://localhost/pub/js/varien/js.js"></script>' . "\n"
+            '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n"
             . '<script type="text/javascript" '
             . 'src="http://localhost/pub/media/skin/frontend/default/default/default/en_US/Mage_Bundle/bundle.js">'
             . '</script>' . "\n"
             . '<link rel="stylesheet" type="text/css" media="all"'
-            . ' href="http://localhost/pub/js/tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
+            . ' href="http://localhost/pub/lib/tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print" '
                 . 'href="http://localhost/pub/media/skin/frontend/default/default/default/en_US/css/styles.css" />'
                 . "\n"
@@ -94,7 +94,7 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
                 . "\n"
             . '<link rel="next" href="http://example.com/page1.html" />' . "\n"
             . '<!--[if lt IE 7]>' . "\n"
-            . '<script type="text/javascript" src="http://localhost/pub/js/varien/form.js"></script>' . "\n"
+            . '<script type="text/javascript" src="http://localhost/pub/lib/varien/form.js"></script>' . "\n"
             . '<![endif]-->' . "\n",
             $this->_block->getCssJsHtml()
         );

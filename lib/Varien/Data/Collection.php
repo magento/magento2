@@ -431,6 +431,17 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
     }
 
     /**
+     * Remove all items from collection
+     *
+     * @return Varien_Data_Collection
+     */
+    public function removeAllItems()
+    {
+        $this->_items = array();
+        return $this;
+    }
+
+    /**
      * Clear collection
      *
      * @return Varien_Data_Collection

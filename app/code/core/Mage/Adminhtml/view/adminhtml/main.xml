@@ -79,7 +79,6 @@ Supported layout update handles (special):
                 <action method="addJs"><file>mage/adminhtml/form.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/accordion.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/tools.js</file></action>
-                <action method="addJs"><file>mage/adminhtml/uploader.js</file></action>
                 <action method="addJs"><file>Mage_Adminhtml::catalog/product.js</file></action>
 
                 <action method="addJs"><file>lib/ds-sleight.js</file><params>defer</params><if>lt IE 7</if></action>
