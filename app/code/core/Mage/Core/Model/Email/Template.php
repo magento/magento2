@@ -486,6 +486,9 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         $result = false;
         $this->_sendingException = null;
         try {
+
+            Mage::dispatchEvent('core_email_template_send_before', array('mail' => $mail));
+
             $mail->send();
             $result = true;
         } catch (Exception $e) {
