@@ -1,0 +1,18 @@
+language: php
+
+env: 
+  - DB=mysql
+
+php:
+  - 5.3.3
+  - 5.3
+  - 5.4
+  
+before_script:
+  - cp dev/tests/integration/etc/local-mysql.xml.dist dev/tests/integration/etc/local-mysql.xml
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS `magento_integration_tests`;'
+  - echo "xdebug.max_nesting_level = 200" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
+
+script:
+ - php ./dev/tools/batch_tests/batch.php
