@@ -92,6 +92,11 @@ class Mage_Tax_Model_Config
     protected $_needUsePriceExcludeTax = false;
 
     /**
+     * @var $_priceIncludeTax bool
+     */
+    protected $_priceIncludeTax = null;
+
+    /**
      * Flag which notify what we need use shipping prices exclude tax for calculations
      *
      * @var bool
@@ -114,7 +119,23 @@ class Mage_Tax_Model_Config
         if ($this->_needUsePriceExcludeTax) {
             return false;
         }
-        return (bool)Mage::getStoreConfig(self::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, $store);
+        if ($this->_priceIncludeTax === null) {
+            $this->_priceIncludeTax = (bool)Mage::getStoreConfig(
+                self::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
+                $store
+            );
+        }
+        return $this->_priceIncludeTax;
+    }
+
+    /**
+     * Declare prices type
+     * @param bool $flag
+     */
+    public function setPriceIncludeTax($flag)
+    {
+        $this->_priceIncludeTax = $flag;
+        return $this;
     }
 
     /**
