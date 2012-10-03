@@ -71,7 +71,7 @@ class Mage_Backend_Model_Menu_Item_Validator
         $resourceValidator = new Zend_Validate();
         $resourceValidator->addValidator(new Zend_Validate_StringLength(array('min' => 8)));
         $resourceValidator->addValidator(
-            new Zend_Validate_Regex('/^[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}$/')
+            new Zend_Validate_Regex('/^[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Za-z0-9]{1,}::[A-Za-z_0-9]{1,}$/')
         );
 
         $attributeValidator = new Zend_Validate();
