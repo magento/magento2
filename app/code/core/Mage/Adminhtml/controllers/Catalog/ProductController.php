@@ -190,6 +190,10 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
      */
     public function newAction()
     {
+        if (!$this->getRequest()->getParam('set') || !$this->getRequest()->getParam('type')) {
+            $this->_forward('noroute');
+            return;
+        }
         $product = $this->_initProduct();
 
         $productData = $this->getRequest()->getPost('product');
@@ -726,6 +730,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $product = $this->_initProductSave($this->_initProduct());
 
             try {
+                $originalSku = $product->getSku();
                 $product->save();
                 $productId = $product->getId();
 
@@ -745,6 +750,11 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 Mage::getModel('Mage_CatalogRule_Model_Rule')->applyAllRulesToProduct($productId);
 
                 $this->_getSession()->addSuccess($this->__('The product has been saved.'));
+                if ($product->getSku() != $originalSku) {
+                    $this->_getSession()->addNotice(
+                        $this->__('SKU for product %s has been changed to %s.', Mage::helper('Mage_Core_Helper_Data')->escapeHtml($product->getName()), Mage::helper('Mage_Core_Helper_Data')->escapeHtml($product->getSku()))
+                    );
+                }
             } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage())
                     ->setProductData($data);

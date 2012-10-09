@@ -43,35 +43,24 @@ class Mage_Adminhtml_Block_Backup extends Mage_Adminhtml_Block_Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->setChild('createButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Backup_Helper_Data')->__('Database Backup'),
-                    'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_DB . "')",
-                    'class'  => 'task'
-                ))
-        );
-        $this->setChild('createSnapshotButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Backup_Helper_Data')->__('System Backup'),
-                    'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_SYSTEM_SNAPSHOT . "')",
-                    'class'  => ''
-                ))
-        );
-        $this->setChild('createMediaBackupButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Backup_Helper_Data')->__('Database and Media Backup'),
-                    'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_MEDIA . "')",
-                    'class'  => ''
-                ))
-        );
-        $this->setChild('backupsGrid',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Backup_Grid')
-        );
+        $this->addChild('createButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Backup_Helper_Data')->__('Database Backup'),
+            'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_DB . "')",
+            'class'  => 'task'
+        ));
+        $this->addChild('createSnapshotButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Backup_Helper_Data')->__('System Backup'),
+            'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_SYSTEM_SNAPSHOT . "')",
+            'class'  => ''
+        ));
+        $this->addChild('createMediaBackupButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Backup_Helper_Data')->__('Database and Media Backup'),
+            'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_MEDIA . "')",
+            'class'  => ''
+        ));
+        $this->addChild('backupsGrid', 'Mage_Adminhtml_Block_Backup_Grid');
 
-        $this->setChild('dialogs', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Backup_Dialogs'));
+        $this->addChild('dialogs', 'Mage_Adminhtml_Block_Backup_Dialogs');
     }
 
     public function getCreateButtonHtml()

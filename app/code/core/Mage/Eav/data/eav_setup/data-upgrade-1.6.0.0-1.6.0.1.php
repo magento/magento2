@@ -24,9 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** Bug MAGETWO-3318 Segmentation Fault */
-return;
-
 /** @var $installer Mage_Core_Model_Resource_Setup_Migration */
 $installer = Mage::getResourceModel('Mage_Core_Model_Resource_Setup_Migration', 'core_setup');
 $installer->startSetup();

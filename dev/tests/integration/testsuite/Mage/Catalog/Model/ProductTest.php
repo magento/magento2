@@ -119,6 +119,14 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testDuplicateSkuGeneration()
+    {
+        $this->_model->load(1);
+        $this->assertEquals('simple', $this->_model->getSku());
+        $duplicated = $this->_model->duplicate();
+        $this->assertEquals('simple-1', $duplicated->getSku());
+    }
+
     /**
      * Delete model
      *

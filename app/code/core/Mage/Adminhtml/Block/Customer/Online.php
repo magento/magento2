@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Customer_Online extends Mage_Adminhtml_Block_Template
 
     protected function _prepareLayout()
     {
-        $this->setChild('filterForm', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Online_Filter'));
+        $this->addChild('filterForm', 'Mage_Adminhtml_Block_Customer_Online_Filter');
         return parent::_prepareLayout();
     }
 

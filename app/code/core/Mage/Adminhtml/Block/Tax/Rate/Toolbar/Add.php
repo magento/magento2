@@ -42,14 +42,11 @@ class Mage_Adminhtml_Block_Tax_Rate_Toolbar_Add extends Mage_Adminhtml_Block_Tem
 
     protected function _prepareLayout()
     {
-        $this->setChild('addButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Tax_Helper_Data')->__('Add New Tax Rate'),
-                    'onclick' => 'window.location.href=\''.$this->getUrl('*/tax_rate/add').'\'',
-                    'class' => 'add'
-                ))
-        );
+        $this->addChild('addButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Tax_Helper_Data')->__('Add New Tax Rate'),
+            'onclick' => 'window.location.href=\''.$this->getUrl('*/tax_rate/add').'\'',
+            'class' => 'add'
+        ));
         return parent::_prepareLayout();
     }
 }

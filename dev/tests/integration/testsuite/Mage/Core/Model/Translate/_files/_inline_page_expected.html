@@ -29,22 +29,29 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>shown_0</title><span class="translate-inline-title" translate="[{shown:'shown_0',translated:'translated_0',original:'original_0',location:'Page title',scope:'scope_0'}]">TITLE</span>
+    <title>shown_0</title><span class="translate-inline-title" data-translate="[{&quot;shown&quot;:&quot;shown_0&quot;,&quot;translated&quot;:&quot;translated_0&quot;,&quot;original&quot;:&quot;original_0&quot;,&quot;location&quot;:&quot;Page title&quot;,&quot;scope&quot;:&quot;scope_0&quot;}]">TITLE</span>
 </head>
 <body>
-    <div title="some_title_shown_1_in_div" translate="[{shown:'shown_1',translated:'translated_1',original:'original_1',location:'Tag attribute (ALT, TITLE, etc.)',scope:'scope_1'}]">
-    some_text_<span translate="[{shown:'shown_2',translated:'translated_2',original:'original_2',location:'Text',scope:'scope_2'}]">shown_2</span>_in_div
+    <div data-translate="[{&quot;shown&quot;:&quot;shown_1&quot;,&quot;translated&quot;:&quot;translated_1&quot;,&quot;original&quot;:&quot;original_1&quot;,&quot;location&quot;:&quot;Tag attribute (ALT, TITLE, etc.)&quot;,&quot;scope&quot;:&quot;scope_1&quot;}]"title="some_title_shown_1_in_div">
+    some_text_<span data-translate="[{&quot;shown&quot;:&quot;shown_2&quot;,&quot;translated&quot;:&quot;translated_2&quot;,&quot;original&quot;:&quot;original_2&quot;,&quot;location&quot;:&quot;Text&quot;,&quot;scope&quot;:&quot;scope_2&quot;}]">shown_2</span>_in_div
     </div>
-<script type="text/javascript" src="http://localhost/pub/js/prototype/window.js"></script>
-<link rel="stylesheet" type="text/css" href="http://localhost/pub/js/prototype/windows/themes/default.css"/>
-<link rel="stylesheet" type="text/css" href="http://localhost/pub/media/skin/frontend/default/default/en_US/Mage_Core/prototype/magento.css"/>
+<script type="text/javascript" src="http://localhost/pub/lib/prototype/window.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost/pub/lib/prototype/windows/themes/default.css"/>
+<link rel="stylesheet" type="text/css" href="http://localhost/pub/media/skin/frontend/{{design_package}}/default/default/en_US/Mage_Core/prototype/magento.css"/>
+<script type="text/javascript" src="http://localhost/pub/lib/mage/edit-trigger.js"></script>
+<script type="text/javascript" src="http://localhost/pub/lib/mage/translate-inline.js"></script>
+<link rel="stylesheet" type="text/css" href="http://localhost/pub/lib/mage/translate-inline.css"/>
 
-<script type="text/javascript" src="http://localhost/pub/js/mage/translate_inline.js"></script>
-<link rel="stylesheet" type="text/css" href="http://localhost/pub/js/mage/translate_inline.css"/>
-
-<div id="translate-inline-trig"><img src="http://localhost/pub/media/skin/frontend/{{design_package}}/default/default/en_US/Mage_Core/fam_book_open.png" alt="[TR]"/></div>
 <script type="text/javascript">
-    new TranslateInline('translate-inline-trig', 'http://localhost/index.php/core/ajax/translate/', 'frontend');
+    (function($){
+        $(document).ready(function() {
+            $(this).translateInline({
+                ajaxUrl: 'http://localhost/index.php/core/ajax/translate/',
+                area: 'frontend',
+                editTrigger: {img: 'http://localhost/pub/media/skin/frontend/{{design_package}}/default/default/en_US/Mage_Core/fam_book_open.png'}
+            });
+        });
+    })(jQuery);
 </script>
 </body>
 </html>

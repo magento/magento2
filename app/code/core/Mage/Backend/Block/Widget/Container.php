@@ -67,16 +67,22 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
      * @param array $data
      * @param integer $level
      * @param integer $sortOrder
-     * @param string|null $area, that button should be displayed in ('header', 'footer', null)
+     * @param string|null $region, that button should be displayed in ('header', 'footer', null)
      * @return Mage_Backend_Block_Widget_Container
      */
-    protected function _addButton($id, $data, $level = 0, $sortOrder = 0, $area = 'header')
+    protected function _addButton($id, $data, $level = 0, $sortOrder = 0, $region = 'header')
     {
         if (!isset($this->_buttons[$level])) {
             $this->_buttons[$level] = array();
         }
+        if (empty($data['id'])) {
+            $data['id'] = $id;
+        }
         $this->_buttons[$level][$id] = $data;
-        $this->_buttons[$level][$id]['area'] = $area;
+        $this->_buttons[$level][$id]['region'] = $region;
+        if (empty($this->_buttons[$level][$id]['id'])) {
+            $this->_buttons[$level][$id]['id'] = $id;
+        }
         if ($sortOrder) {
             $this->_buttons[$level][$id]['sort_order'] = $sortOrder;
         } else {
@@ -92,12 +98,12 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
      * @param array $data
      * @param integer $level
      * @param integer $sortOrder
-     * @param string|null $area, that button should be displayed in ('header', 'footer', null)
+     * @param string|null $region, that button should be displayed in ('header', 'footer', null)
      * @return Mage_Backend_Block_Widget_Container
      */
-    public function addButton($id, $data, $level = 0, $sortOrder = 0, $area = 'header')
+    public function addButton($id, $data, $level = 0, $sortOrder = 0, $region = 'header')
     {
-        return $this->_addButton($id, $data, $level, $sortOrder, $area);
+        return $this->_addButton($id, $data, $level, $sortOrder, $region);
     }
 
     /**
@@ -181,7 +187,8 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
         foreach ($this->_buttons as $level => $buttons) {
             foreach ($buttons as $id => $data) {
                 $childId = $this->_prepareButtonBlockId($id);
-                $this->_addButtonChildBlock($childId);
+                $blockClassName = isset($data['class_name']) ? $data['class_name'] : null;
+                $this->_addButtonChildBlock($childId, $blockClassName);
             }
         }
         return parent::_prepareLayout();
@@ -202,11 +209,15 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
      * Adding child block with specified child's id.
      *
      * @param string $childId
-     * @return Mage_Backend_Block_Widget_Button
+     * @param null|string $blockClassName
+     * @return Mage_Backend_Block_Widget
      */
-    protected function _addButtonChildBlock($childId)
+    protected function _addButtonChildBlock($childId, $blockClassName = null)
     {
-        $block = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        if (null === $blockClassName) {
+            $blockClassName = 'Mage_Backend_Block_Widget_Button';
+        }
+        $block = $this->getLayout()->createBlock($blockClassName,  $this->getNameInLayout() . '-' . $childId);
         $this->setChild($childId, $block);
         return $block;
     }
@@ -214,10 +225,10 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
     /**
      * Produce buttons HTML
      *
-     * @param string $area
+     * @param string $region
      * @return string
      */
-    public function getButtonsHtml($area = null)
+    public function getButtonsHtml($region = null)
     {
         $out = '';
         foreach ($this->_buttons as $level => $buttons) {
@@ -230,14 +241,15 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
             foreach ($_buttons as $button) {
                 $id = $button['id'];
                 $data = $button['data'];
-                if ($area && isset($data['area']) && ($area != $data['area'])) {
+                if ($region && isset($data['region']) && ($region != $data['region'])) {
                     continue;
                 }
                 $childId = $this->_prepareButtonBlockId($id);
                 $child = $this->getChildBlock($childId);
 
                 if (!$child) {
-                    $child = $this->_addButtonChildBlock($childId);
+                    $blockClassName = isset($data['class_name']) ? $data['class_name'] : null;
+                    $child = $this->_addButtonChildBlock($childId, $blockClassName);
                 }
                 if (isset($data['name'])) {
                     $data['element_name'] = $data['name'];
@@ -289,7 +301,7 @@ class Mage_Backend_Block_Widget_Container extends Mage_Backend_Block_Template
     {
         foreach ($this->_buttons as $level => $buttons) {
             foreach ($buttons as $id => $data) {
-                if (isset($data['area']) && ('footer' == $data['area'])) {
+                if (isset($data['region']) && ('footer' == $data['region'])) {
                     return true;
                 }
             }

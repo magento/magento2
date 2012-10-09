@@ -45,14 +45,11 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Tracking extends Mage_Admi
      */
     protected function _prepareLayout()
     {
-        $this->setChild('add_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'   => Mage::helper('Mage_Sales_Helper_Data')->__('Add Tracking Number'),
-                    'class'   => '',
-                    'onclick' => 'trackingControl.add()'
-                ))
-        );
+        $this->addChild('add_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'   => Mage::helper('Mage_Sales_Helper_Data')->__('Add Tracking Number'),
+            'class'   => '',
+            'onclick' => 'trackingControl.add()'
+        ));
     }
 
     /**

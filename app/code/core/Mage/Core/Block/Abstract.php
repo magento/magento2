@@ -262,11 +262,29 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
             $this->unsetChild($alias);
         }
         if ($block instanceof self) {
+            if ($block->getIsAnonymous()) {
+                $block->setNameInLayout($this->getNameInLayout() . '.' . $alias);
+            }
             $block = $block->getNameInLayout();
         }
         $layout->setChild($thisName, $block, $alias);
 
         return $this;
+    }
+
+    /**
+     * Create block and set as child
+     *
+     * @param string $alias
+     * @param Mage_Core_Block_Abstract $block
+     * @param array $data
+     * @return Mage_Core_Block_Abstract new block
+     */
+    public function addChild($alias, $block, $data = array())
+    {
+        $block = $this->getLayout()->createBlock($block, $this->getNameInLayout() . '.' . $alias, $data);
+        $this->setChild($alias, $block);
+        return $block;
     }
 
     /**

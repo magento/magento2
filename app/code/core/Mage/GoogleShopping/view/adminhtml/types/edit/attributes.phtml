@@ -93,7 +93,7 @@ var attributesSelectTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{ind
                 '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="" class="delete">' +
                 '</td>' +
                 '<td><?php echo $this->getGcontentAttributesSelectHtml() ?></td>' +
-                '<td>&nbsp;<?php echo $this->getDeleteButtonHtml() ?></td>' +
+                '<td>&nbsp;' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</td>' +
             '</tr>' +
         '</tbody>' +
     '</table>' +

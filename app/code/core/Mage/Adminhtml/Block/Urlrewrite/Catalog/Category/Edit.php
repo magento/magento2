@@ -80,13 +80,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit extends Mage_Adminht
     {
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-        $this->setChild('category_link', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Link')
-            ->setData(array(
-                'item_url'  => $helper->getUrl('*/*/*') . 'category',
-                'item_name' => $this->_getCategory()->getName(),
-                'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Category:')
-            ))
-        );
+        $this->addChild('category_link', 'Mage_Adminhtml_Block_Urlrewrite_Link', array(
+            'item_url'  => $helper->getUrl('*/*/*') . 'category',
+            'item_name' => $this->_getCategory()->getName(),
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Category:')
+        ));
     }
 
     /**
@@ -94,10 +92,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit extends Mage_Adminht
      */
     private function _addCategoryTreeBlock()
     {
-        $this->setChild(
-            'categories_tree',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree')
-        );
+        $this->addChild('categories_tree', 'Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree');
     }
 
     /**

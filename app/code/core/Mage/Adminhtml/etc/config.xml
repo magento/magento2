@@ -148,6 +148,9 @@
                 <sales module="Mage_Adminhtml">
                     <file>sales.xml</file>
                 </sales>
+                <tax module="Mage_Adminhtml">
+                    <file>tax.xml</file>
+                </tax>
             </updates>
         </layout>
         <sales>

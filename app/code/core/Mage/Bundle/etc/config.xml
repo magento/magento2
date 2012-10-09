@@ -80,6 +80,12 @@
                         </types>
                     </bundle>
                 </options>
+                <attributes>
+                    <unassignable>
+                        <price_type/>
+                        <price_view/>
+                    </unassignable>
+                </attributes>
             </product>
         </catalog>
         <sales>

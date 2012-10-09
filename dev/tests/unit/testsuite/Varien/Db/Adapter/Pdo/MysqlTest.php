@@ -51,14 +51,6 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_adapter = new Varien_Db_Adapter_Pdo_Mysql(
-            array(
-                'dbname' => 'not_exists',
-                'username' => 'not_valid',
-                'password' => 'not_valid',
-            )
-        );
-
         $this->_mockAdapter = $this->getMock(
             'Varien_Db_Adapter_Pdo_Mysql',
             array('beginTransaction', 'getTransactionLevel'),
@@ -68,6 +60,29 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
         $this->_mockAdapter->expects($this->any())
              ->method('getTransactionLevel')
              ->will($this->returnValue(1));
+
+        $this->_adapter = $this->getMock(
+            'Varien_Db_Adapter_Pdo_Mysql',
+            array('_connect', '_beginTransaction', '_commit', '_rollBack'),
+            array(
+                'dbname' => 'not_exists',
+                'username' => 'not_valid',
+                'password' => 'not_valid',
+            ),
+            '',
+            false
+        );
+
+        $profiler = $this->getMock(
+            'Zend_Db_Profiler'
+        );
+
+        $resourceProperty = new ReflectionProperty(
+                get_class($this->_adapter),
+                '_profiler'
+        );
+        $resourceProperty->setAccessible(true);
+        $resourceProperty->setValue($this->_adapter, $profiler);
     }
 
     /**
@@ -170,5 +185,198 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
             array('DELETE from user'),
             array('INSERT into user'),
         );
+    }
+
+    /**
+     * Test Asymmetric transaction rollback failure
+     */
+    public function testAsymmetricRollBackFailure()
+    {
+        try {
+            $this->_adapter->rollBack();
+            throw new Exception('Test Failed!');
+        } catch (Exception $e) {
+            $this->assertEquals(
+                Varien_Db_Adapter_Interface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Test Asymmetric transaction commit failure
+     */
+    public function testAsymmetricCommitFailure()
+    {
+        try {
+            $this->_adapter->commit();
+            throw new Exception('Test Failed!');
+        } catch (Exception $e) {
+            $this->assertEquals(
+                Varien_Db_Adapter_Interface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Test Asymmetric transaction commit success
+     */
+    public function testAsymmetricCommitSuccess()
+    {
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->_adapter->beginTransaction();
+        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
+        $this->_adapter->commit();
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+    }
+
+    /**
+     * Test Asymmetric transaction rollback success
+     */
+    public function testAsymmetricRollBackSuccess()
+    {
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+        $this->_adapter->beginTransaction();
+        $this->assertEquals(1, $this->_adapter->getTransactionLevel());
+        $this->_adapter->rollBack();
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+    }
+
+    /**
+     * Test successfull nested transaction
+     */
+    public function testNestedTransactionCommitSuccess()
+    {
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_connect');
+        $this->_adapter->expects($this->once())
+            ->method('_beginTransaction');
+        $this->_adapter->expects($this->once())
+            ->method('_commit');
+
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->_adapter->commit();
+        $this->_adapter->commit();
+        $this->_adapter->commit();
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+    }
+
+    /**
+     * Test successfull nested transaction
+     */
+    public function testNestedTransactionRollBackSuccess()
+    {
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_connect');
+        $this->_adapter->expects($this->once())
+            ->method('_beginTransaction');
+        $this->_adapter->expects($this->once())
+            ->method('_rollBack');
+
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->_adapter->rollBack();
+        $this->_adapter->rollBack();
+        $this->_adapter->rollBack();
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+    }
+
+    /**
+     * Test successfull nested transaction
+     */
+    public function testNestedTransactionLastRollBack()
+    {
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_connect');
+        $this->_adapter->expects($this->once())
+            ->method('_beginTransaction');
+        $this->_adapter->expects($this->once())
+            ->method('_rollBack');
+
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->assertEquals(3, $this->_adapter->getTransactionLevel());
+        $this->_adapter->commit();
+        $this->_adapter->commit();
+        $this->_adapter->rollBack();
+        $this->assertEquals(0, $this->_adapter->getTransactionLevel());
+    }
+
+    /**
+     * Test incomplete Roll Back in a nested transaction
+     */
+    public function testIncompleteRollBackFailureOnCommit()
+    {
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_connect');
+
+        try {
+            $this->_adapter->beginTransaction();
+            $this->_adapter->beginTransaction();
+            $this->_adapter->rollBack();
+            $this->_adapter->commit();
+            throw new Exception('Test Failed!');
+        } catch (Exception $e) {
+            $this->assertEquals(
+                Varien_Db_Adapter_Interface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                $e->getMessage()
+            );
+            $this->_adapter->rollBack();
+        }
+    }
+
+    /**
+     * Test incomplete Roll Back in a nested transaction
+     */
+    public function testIncompleteRollBackFailureOnBeginTransaction()
+    {
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_connect');
+
+        try {
+            $this->_adapter->beginTransaction();
+            $this->_adapter->beginTransaction();
+            $this->_adapter->rollBack();
+            $this->_adapter->beginTransaction();
+            throw new Exception('Test Failed!');
+        } catch (Exception $e) {
+            $this->assertEquals(
+                Varien_Db_Adapter_Interface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                $e->getMessage()
+            );
+            $this->_adapter->rollBack();
+        }
+    }
+
+    /**
+     * Test incomplete Roll Back in a nested transaction
+     */
+    public function testSequentialTransactionsSuccess()
+    {
+        $this->_adapter->expects($this->exactly(4))
+            ->method('_connect');
+        $this->_adapter->expects($this->exactly(2))
+            ->method('_beginTransaction');
+        $this->_adapter->expects($this->once())
+            ->method('_rollBack');
+        $this->_adapter->expects($this->once())
+            ->method('_commit');
+
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->_adapter->beginTransaction();
+        $this->_adapter->rollBack();
+        $this->_adapter->rollBack();
+        $this->_adapter->rollBack();
+
+        $this->_adapter->beginTransaction();
+        $this->_adapter->commit();
     }
 }

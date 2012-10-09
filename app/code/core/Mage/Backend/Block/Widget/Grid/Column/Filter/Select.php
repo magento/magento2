@@ -69,7 +69,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Select extends Mage_Backend_B
 
     public function getHtml()
     {
-        $html = '<select name="'.$this->_getHtmlName().'" id="'.$this->_getHtmlId().'" class="no-changes">';
+        $html = '<select name="' . $this->_getHtmlName() . '" id="' . $this->_getHtmlId() . '"'
+            . $this->getUiId('filter', $this->_getHtmlName())
+            . 'class="no-changes">';
         $value = $this->getValue();
         foreach ($this->_getOptions() as $option){
             if (is_array($option['value'])) {

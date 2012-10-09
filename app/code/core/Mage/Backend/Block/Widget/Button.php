@@ -33,39 +33,65 @@
  */
 class Mage_Backend_Block_Widget_Button extends Mage_Backend_Block_Widget
 {
-    public function __construct()
+    /**
+     * Define block template
+     */
+    protected function _construct()
     {
-        parent::__construct();
+        $this->setTemplate('Mage_Backend::widget/button.phtml');
+        parent::_construct();
     }
 
+    /**
+     * Retrieve button type
+     *
+     * @return string
+     */
     public function getType()
     {
-        return ($type=$this->getData('type')) ? $type : 'button';
+        if (in_array($this->getData('type'), array('reset', 'submit'))) {
+            return $this->getData('type');
+        }
+        return 'button';
     }
 
+    /**
+     * Retrieve onclick handler
+     *
+     * @return null|string
+     */
     public function getOnClick()
     {
-        if (!$this->getData('on_click')) {
-            return $this->getData('onclick');
-        }
-        return $this->getData('on_click');
+        return $this->getData('on_click') ?: $this->getData('onclick');
     }
 
-    protected function _toHtml()
+    /**
+     * Retrieve attributes html
+     *
+     * @return string
+     */
+    public function getAttributesHtml()
     {
-        $html = $this->getBeforeHtml().'<button '
-            . ($this->getId()?' id="'.$this->getId() . '"':'')
-            . ($this->getElementName()?' name="'.$this->getElementName() . '"':'')
-            . ' title="'
-            . Mage::helper('Mage_Core_Helper_Data')->quoteEscape($this->getTitle() ? $this->getTitle() : $this->getLabel())
-            . '"'
-            . ' type="'.$this->getType() . '"'
-            . ' class="scalable ' . $this->getClass() . ($this->getDisabled() ? ' disabled' : '') . '"'
-            . ' onclick="'.$this->getOnClick().'"'
-            . ' style="'.$this->getStyle() .'"'
-            . ($this->getValue()?' value="'.$this->getValue() . '"':'')
-            . ($this->getDisabled() ? ' disabled="disabled"' : '')
-            . '><span><span><span>' .$this->getLabel().'</span></span></span></button>'.$this->getAfterHtml();
+        $attributes = array(
+            'id'        => $this->getId(),
+            'name'      => $this->getElementName(),
+            'title'     => $this->getTitle() ? $this->getTitle() : $this->getLabel(),
+            'type'      => $this->getType(),
+            'class'     => 'scalable ' . $this->getClass() . ($this->getDisabled() ? ' disabled' : ''),
+            'onclick'   => $this->getOnClick(),
+            'style'     => $this->getStyle(),
+            'value'     => $this->getValue(),
+            'disabled'  => $this->getDisabled() ? 'disabled' : ''
+        );
+
+        $html = '';
+        foreach ($attributes as $attributeKey => $attributeValue) {
+            if ($attributeValue === null || $attributeValue == '') {
+                continue;
+            }
+            $html .= $attributeKey . '="'
+                . $this->helper('Mage_Backend_Helper_Data')->escapeHtml($attributeValue) . '" ';
+        }
 
         return $html;
     }

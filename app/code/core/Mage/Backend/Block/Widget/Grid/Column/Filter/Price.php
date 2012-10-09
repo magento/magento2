@@ -39,8 +39,8 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
     public function getHtml()
     {
         $html  = '<div class="range">';
-        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('From').':</span> <input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$this->_getHtmlId().'_from" value="'.$this->getEscapedValue('from').'" class="input-text no-changes"/></div>';
-        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('To').' : </span><input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$this->_getHtmlId().'_to" value="'.$this->getEscapedValue('to').'" class="input-text no-changes"/></div>';
+        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('From').':</span> <input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$this->_getHtmlId().'_from" value="'.$this->getEscapedValue('from').'" class="input-text no-changes"  ' . $this->getUiId('filter', $this->_getHtmlName(), 'from') .  '/></div>';
+        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('To').' : </span><input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$this->_getHtmlId().'_to" value="'.$this->getEscapedValue('to').'" class="input-text no-changes" '  . $this->getUiId('filter', $this->_getHtmlName(), 'to') .  '/></div>';
         if ($this->getDisplayCurrencySelect())
             $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('In').' : </span>' . $this->_getCurrencySelectHtml() . '</div>';
         $html .= '</div>';

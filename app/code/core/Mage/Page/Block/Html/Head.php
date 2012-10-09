@@ -68,17 +68,6 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
      */
     public function addJs($name, $params = '', $if = null, $cond = null)
     {
-        /* This only temporarily remove old js files from refactored pages
-         * needs to remove this code and remove files from layout.xml files
-         * when all refactor works have been complete.
-         */
-        $excludePages = array('catalog-category-view', 'cms-index-index');
-        $currentPage = Mage::app()->getRequest()->getModuleName() . '-'
-            . Mage::app()->getRequest()->getControllerName() . '-' .
-            Mage::app()->getRequest()->getActionName();
-        if (in_array($currentPage, $excludePages)) {
-            return;
-        }
         return $this->_addItem('js', $name, $params, $if, $cond);
     }
 

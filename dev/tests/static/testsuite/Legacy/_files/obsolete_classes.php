@@ -58,6 +58,7 @@ return array(
     'Mage_Adminhtml_Block_Api_Edituser',
     'Mage_Adminhtml_Block_Api_Tab_Userroles',
     'Mage_Adminhtml_Block_Catalog',
+    'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Settings',
     'Mage_Adminhtml_Block_Page_Menu' => array('suggestion' => 'Mage_Backend_Block_Menu'),
     'Mage_Adminhtml_Block_Permissions_User',
     'Mage_Adminhtml_Block_Permissions_User_Grid',
@@ -109,6 +110,7 @@ return array(
     'Mage_Core_Model_Resource_Language_Collection',
     'Mage_Core_Model_Session_Abstract_Varien',
     'Mage_Core_Model_Session_Abstract_Zend',
+    'Mage_Core_Model_Layout_Data' => array('suggestion' => 'Mage_Core_Model_Layout_Update'),
     'Mage_Customer_Block_Account',
     'Mage_Directory_Model_Resource_Currency_Collection',
     'Mage_Downloadable_FileController' => array(

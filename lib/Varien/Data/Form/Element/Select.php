@@ -44,7 +44,7 @@ class Varien_Data_Form_Element_Select extends Varien_Data_Form_Element_Abstract
     public function getElementHtml()
     {
         $this->addClass('select');
-        $html = '<select id="'.$this->getHtmlId().'" name="'.$this->getName().'" '.$this->serialize($this->getHtmlAttributes()).'>'."\n";
+        $html = '<select id="'.$this->getHtmlId().'" name="'.$this->getName().'" '.$this->serialize($this->getHtmlAttributes()). $this->_getUiId() .'>'."\n";
 
         $value = $this->getValue();
         if (!is_array($value)) {

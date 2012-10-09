@@ -28,14 +28,14 @@
 <table cellspacing="0" cellpadding="0" class="massaction">
 <tr>
     <td><?php if ($this->getUseSelectAll()):?>
-        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
+        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"<?php echo $this->getUiId('select','all','link') ?>><?php echo $this->__('Select All') ?></a>
         <span class="separator">|</span>
-        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo $this->__('Unselect All') ?></a>
+        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"<?php echo $this->getUiId('unselect','all','link') ?>><?php echo $this->__('Unselect All') ?></a>
         <span class="separator">|</span>
         <?php endif; ?>
-        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo $this->__('Select Visible') ?></a>
+        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"<?php echo $this->getUiId('select','visible','link') ?>><?php echo $this->__('Select Visible') ?></a>
         <span class="separator">|</span>
-        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo $this->__('Unselect Visible') ?></a>
+        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"<?php echo $this->getUiId('unselect','visible','link') ?>><?php echo $this->__('Unselect Visible') ?></a>
         <span class="separator">|</span>
         <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo $this->__('items selected') ?>
     </td>
@@ -49,7 +49,7 @@
                     <fieldset>
                         <span class="field-row">
                             <label><?php echo $this->__('Actions') ?></label>
-                            <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
+                            <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation"<?php echo $this->getUiId('select') ?>>
                                 <option value=""></option>
                                 <?php foreach($this->getItems() as $_item): ?>
                                     <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>

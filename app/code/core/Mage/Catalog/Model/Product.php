@@ -107,6 +107,24 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     protected $_calculatePrice = true;
 
     /**
+     * Resource instance
+     *
+     * @var Mage_Catalog_Model_Resource_Product
+     */
+    protected $_resource;
+
+    /**
+     * Initialize data
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_resource = isset($data['resource']) ? $data['resource'] : null;
+        parent::__construct($data);
+    }
+
+    /**
      * Initialize resources
      */
     protected function _construct()
@@ -481,6 +499,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
             $this->setHasOptions(false);
             $this->setRequiredOptions(false);
         }
+
         parent::_beforeSave();
     }
 
@@ -579,7 +598,10 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     protected function _getResource()
     {
-        return parent::_getResource();
+        if (is_null($this->_resource)) {
+            return parent::_getResource();
+        }
+        return $this->_resource;
     }
 
     /**
@@ -1041,7 +1063,6 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         $newProduct = Mage::getModel('Mage_Catalog_Model_Product')->setData($this->getData())
             ->setIsDuplicate(true)
             ->setOriginalId($this->getId())
-            ->setSku(null)
             ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_DISABLED)
             ->setCreatedAt(null)
             ->setUpdatedAt(null)

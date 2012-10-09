@@ -75,7 +75,8 @@
     text-align:center;
     z-index:501;
     }
-#loading-mask {
+#loading-mask,
+.loading-mask {
     background:background:url(images/blank.gif) repeat;
     position:absolute;
     color:#d85909;
@@ -86,7 +87,8 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"; /* IE8 */
     z-index:500;
     }
-#loading-mask .loader {
+#loading-mask .loader,
+.loading-mask .loader {
     position:fixed;
     top:45%;
     left:50%;
@@ -100,7 +102,16 @@
     text-align:center;
     z-index:1000;
     }
-
+.loading-mask .loader {
+    position:absolute;
+    }
+.loading-mask {
+    *filter:alpha(opacity=60);
+    -moz-opacity:.6;
+    opacity:.6;
+    -webkit-opacity:.6;
+    background: #ffffff;
+    }
 #message-popup-window-mask { position:absolute; top:0; right:0; bottom:0; left:0; width:100%; height:100%; z-index:980; background-color:#efefef; opacity:.5; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";/*IE8*/ }
 .message-popup { position:absolute; z-index:990; width:407px; top:-9999em; left:50%; margin:0 0 0 -203px; background:#f3bf8f; padding:0 4px 4px; }
 .message-popup.show { top:280px; }
@@ -419,7 +430,7 @@ span.delete-file                { padding:0; }
 .content-header .form-buttons button { margin-bottom:3px; }
 .sub-btn-set { border:1px solid #ddd; border-width:0 1px; background:url(images/sub_button_bg.gif) repeat; padding:3px 10px; text-align:right; }
 button,
-.form-button { border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502; padding:0 7px 1px 7px; background:#ffac47 url(Mage_Adminhtml::images/btn_bg.gif) repeat-x 0 100%; color:#fff; font:bold 12px arial, helvetica, sans-serif; cursor:pointer; text-align:center !important; white-space:nowrap; }
+.form-button { vertical-align:middle; border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502; padding:0 7px 1px 7px; background:#ffac47 url(Mage_Adminhtml::images/btn_bg.gif) repeat-x 0 100%; color:#fff; font:bold 12px arial, helvetica, sans-serif; cursor:pointer; text-align:center !important; white-space:nowrap; }
 button:hover                    { background:#f77c16 url(Mage_Adminhtml::images/btn_over_bg.gif) repeat-x 0 0; }
 button:active                   { background:#f77c16 url(Mage_Adminhtml::images/btn_on_bg.gif) repeat-x 0 0; }
 button span                     { line-height:1.35em; background-repeat:no-repeat; background-position:0 50%; }
@@ -474,6 +485,206 @@ button.icon-btn span { text-indent:-999em; display:block; width:16px; padding:0;
 
 .buttons-set { margin:0 0 10px; }
 .buttons-set button { margin-right:5px; }
+
+
+/* Buttons group */
+
+.btn-add { padding-left:6px; }
+.btn-add span {
+    background-image:url(images/add_btn_icon.gif);
+    padding-left:20px;
+}
+div.button {
+    border-width:1px;
+    border-style:solid;
+    order-color:#ed6502 #a04300 #a04300 #ed6502;
+    padding:1px 7px 3px 7px;
+    background:#ffac47 url(Mage_Adminhtml::images/btn_bg.gif) repeat-x 0 100%;
+    color:#fff;
+    font:bold 12px arial, helvetica, sans-serif;
+    cursor:pointer;
+    text-align:center !important;
+    white-space:nowrap;
+}
+div.button:hover {
+    background:#f77c16 url(Mage_Adminhtml::images/btn_over_bg.gif) repeat-x 0 0;
+}
+div.button:active {
+    background:#f77c16 url(Mage_Adminhtml::images/btn_on_bg.gif) repeat-x 0 0;
+}
+div.button span {
+    line-height:1.25em;
+    background-repeat:no-repeat;
+    background-position:0 50%;
+}
+div.button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.buttons-group {
+    position: relative;
+    display:inline-block;
+    vertical-align:middle;
+}
+.buttons-group:before,
+.buttons-group:after {
+    display: table;
+    content: "";
+}
+.buttons-group:after {
+    clear: both;
+}
+.buttons-group > .button {
+    position:relative;
+    float:left;
+    margin-left:-1px;
+    border-radius:0;
+}
+.buttons-group > .button:first-child {
+    margin-left:0;
+}
+.buttons-group > .button:last-child,
+.buttons-group > [data-toggle="dropdown"] {
+}
+
+/* Button toggle (with dropdown menu) */
+.dropdown-menu {
+    position:absolute;
+    display:none;
+    list-style:none;
+    margin:1px 0 0 0;
+    padding:0;
+    right:0;
+    top:100%;
+    min-width: 100%;
+    border-width:1px; border-style:solid; border-color:#ed6502 #a04300 #a04300 #ed6502;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+.dropdown-menu li {
+    background:#ffac47;
+    background:rgba(255, 172, 71, .95);
+    text-align: left;color:#fff; font:bold 12px arial, helvetica, sans-serif; cursor:pointer;
+    padding:0;
+    position: relative;
+    z-index: 1;
+}
+.dropdown-menu li .item {
+    display: block;
+    padding:4px 25px 4px 8px;
+}
+.dropdown-menu li > .tooltip {
+    position: absolute; top:5px; right:3px;
+}
+.dropdown-menu li.selected {
+}
+.dropdown-menu li:hover {
+    background:#f77c16;
+    z-index: 2;
+}
+.dropdown-menu li:active {
+    background:#f77c16;
+}
+.dropdown-menu li:last-child {
+
+}
+.dropdown-menu-top {
+    margin:0 0 3px 0;
+    top:auto;
+    bottom:100%;
+}
+.buttons-group.active {
+    z-index:20;
+}
+.buttons-group.active .dropdown-menu {
+    display:block;
+}
+.btn-toggle span {
+    width:6px; overflow: hidden; display: block;
+}
+.active .btn-toggle {
+    background:#f77c16 url(Mage_Adminhtml::images/btn_on_bg.gif) repeat-x 0 0;
+}
+.btn-toggle span:before {
+    display: inline-block;
+    content:'';
+    margin-left:100px;
+    /*position: absolute;*/
+    text-indent: 0;
+    margin-left:0;
+    width: 0;
+    height: 0;
+    border-right:3px solid transparent;
+    border-left:3px solid transparent;
+    border-top: 6px solid #fff;
+}
+
+/* =============================================================================
+   Tooltip
+   ========================================================================== */
+
+/* Styles for simple "css" tooltip */
+.tooltip {
+    display:inline-block;
+    vertical-align:middle;
+    line-height:1.1;
+}
+.tooltip > .help {
+    width:15px;
+    height: 15px;
+    line-height: 15px;
+    text-indent: -999em;
+    overflow: hidden;
+    display: block;
+    background: url(images/icon-tooltip.png) no-repeat 0 0;
+    position: relative; z-index: 111;
+    cursor:help;
+}
+.tooltip-content {
+    display:none;
+    position:absolute;
+    max-width:200px;
+    margin-top:5px;
+    margin-left:-18px;
+    padding:8px;
+    border-radius:3px;
+    background:#000;
+    background:rgba(0,0,0,.8);
+    color:#fff;
+    text-shadow:none;
+    z-index:20;
+    font-weight: normal;
+    font-size: 11px;
+}
+.tooltip-content:before {
+    content:'';
+    position:absolute;
+    width:0;
+    height:0;
+    top:-5px;
+    left:20px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #000;
+    opacity:.8;
+}
+.tooltip:hover {
+    z-index:20;
+}
+.tooltip:hover > .help {
+    background-position: 0 -15px;
+}
+.tooltip > .help:hover + .tooltip-content {
+    display:block;
+}
 
 
 /* SWITCHER

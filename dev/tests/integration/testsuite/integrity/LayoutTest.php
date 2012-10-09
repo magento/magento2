@@ -76,7 +76,7 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
      */
     protected function _composeXml($area, $package, $theme)
     {
-        $layoutUpdate = new Mage_Core_Model_Layout_Update(array(
+        $layoutUpdate = new Mage_Core_Model_Layout_Merge(array(
             'area' => $area, 'package' => $package, 'theme' => $theme
         ));
         return $layoutUpdate->getFileLayoutUpdatesXml();
@@ -92,13 +92,13 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
     protected function _collectHierarchyErrors($node, $xml, &$errors)
     {
         $name = $node->getName();
-        $refName = $node->getAttribute('type') == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT
+        $refName = $node->getAttribute('type') == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT
             ? $node->getAttribute('owner') : $node->getAttribute('parent');
         if ($refName) {
             $refNode = $xml->xpath("/layouts/{$refName}");
             if (!$refNode) {
                 $errors[$name][] = "Node '{$refName}', referenced in hierarchy, does not exist";
-            } elseif ($refNode[0]->getAttribute('type') == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
+            } elseif ($refNode[0]->getAttribute('type') == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT) {
                 $errors[$name][] = "Page fragment type '{$refName}', cannot be an ancestor in a hierarchy";
             }
         }
@@ -146,8 +146,8 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
         $xml = $this->_composeXml($area, $package, $theme);
 
         $xpath = '/layouts/*['
-            . '@type="' . Mage_Core_Model_Layout_Update::TYPE_PAGE . '"'
-            . ' or @type="' . Mage_Core_Model_Layout_Update::TYPE_FRAGMENT . '"'
+            . '@type="' . Mage_Core_Model_Layout_Merge::TYPE_PAGE . '"'
+            . ' or @type="' . Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT . '"'
             . ' or @translate="label"]';
         $handles = $xml->xpath($xpath) ?: array();
 
@@ -159,8 +159,7 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
             }
         }
         if ($errors) {
-            $this->fail("The following handles must have label, but they don't have it:\n" . var_export($errors, 1)
-            );
+            $this->fail("The following handles must have label, but they don't have it:\n" . var_export($errors, 1));
         }
     }
 }

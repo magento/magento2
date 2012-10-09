@@ -39,7 +39,7 @@
 var pageGroupTemplate = '<div class="options-box page_group_container" id="page_group_container_{{id}}">'+
     '<div class="option-box">'+
         '<div class="option-title">'+
-            '<?php echo $this->getRemoveLayoutButtonHtml() ?>'+
+            <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getRemoveLayoutButtonHtml()) ?> +
             '<label for="widget_instance[{{id}}][page_group]">Display On <span class="required">*</span></label>'+
             '<?php echo $this->getDisplayOnSelectHtml(); ?>'+
         '</div>'+

@@ -48,23 +48,17 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Select extends
 
     protected function _prepareLayout()
     {
-        $this->setChild('add_select_row_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Row'),
-                    'class' => 'add add-select-row',
-                    'id'    => 'add_select_row_button_{{option_id}}'
-                ))
-        );
+        $this->addChild('add_select_row_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Row'),
+            'class' => 'add add-select-row',
+            'id'    => 'add_select_row_button_{{option_id}}'
+        ));
 
-        $this->setChild('delete_select_row_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Row'),
-                    'class' => 'delete delete-select-row icon-btn',
-                    'id'    => 'delete_select_row_button'
-                ))
-        );
+        $this->addChild('delete_select_row_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Row'),
+            'class' => 'delete delete-select-row icon-btn',
+            'id'    => 'delete_select_row_button'
+        ));
 
         return parent::_prepareLayout();
     }

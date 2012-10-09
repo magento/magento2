@@ -33,7 +33,9 @@
  *  getColumns()
  *  getPagerVisibility()
  *  getVarNamePage()
+ *
  */
+/* @var $this Mage_Backend_Block_Widget_Grid */
 $numColumns = sizeof($this->getColumns());
 ?>
 <?php if($this->getCollection()): ?>
@@ -62,15 +64,15 @@ $numColumns = sizeof($this->getColumns());
             <?php $_curPage  = $this->getCollection()->getCurPage() ?>
             <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
             <?php if($_curPage>1): ?>
-                <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
+                <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;" <?php echo $this->getUiId('previous') ?>><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
             <?php else: ?>
                 <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
             <?php endif; ?>
 
-            <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+            <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $this->getUiId('current-page') ?>/>
 
             <?php if($_curPage < $_lastPage): ?>
-                <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
+                <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"<?php echo $this->getUiId('next') ?>><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
             <?php else: ?>
                 <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
             <?php endif; ?>
@@ -78,7 +80,7 @@ $numColumns = sizeof($this->getColumns());
             <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
             <span class="separator">|</span>
             <?php echo $this->__('View') ?>
-            <select name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+            <select name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)" <?php echo $this->getUiId('per-page') ?>>
                 <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
                 <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
                 <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
@@ -86,8 +88,9 @@ $numColumns = sizeof($this->getColumns());
                 <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
             </select>
             <?php echo $this->__('per page') ?><span class="separator">|</span>
-            <?php echo $this->__('Total %d records found', $this->getCollection()->getSize()) ?>
-            <span id="<?php echo $this->getHtmlId() ?>-total-count" class="no-display"><?php echo $this->getCollection()->getSize() ?></span>
+            <?php $countRecords = $this->getCollection()->getSize(); ?>
+            <?php echo $this->__('Total %d records found', $countRecords) ?>
+            <span id="<?php echo $this->getHtmlId() ?>-total-count" class="total-count no-display"<?php echo $this->getUiId('total-count') ?>><?php echo $countRecords ?></span>
             <?php if($this->getRssLists()): ?>
                 <?php foreach ($this->getRssLists() as $_rss): ?>
                 <span class="separator">|</span><a href="<?php echo $_rss->getUrl() ?>" class="link-feed"><?php echo $_rss->getLabel() ?></a>
@@ -119,21 +122,21 @@ $numColumns = sizeof($this->getColumns());
     <div class="hor-scroll">
     <table cellspacing="0" class="data" id="<?php echo $this->getId() ?>_table">
         <?php foreach ($this->getColumns() as $_column): ?>
-        <col <?php echo $_column->getHtmlProperty() ?> />
+        <col <?php echo $_column->getHtmlProperty() ?>/>
         <?php endforeach; ?>
         <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
             <thead>
                 <?php if ($this->getHeadersVisibility()): ?>
                     <tr class="headings">
                     <?php foreach ($this->getColumns() as $_column): ?>
-                        <th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
+                        <th<?php echo $_column->getHeaderHtmlProperty() ?><?php echo $this->getUiId('column', $_column->getId()) ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
                     <?php endforeach; ?>
                     </tr>
                 <?php endif; ?>
                 <?php if ($this->getFilterVisibility()): ?>
                     <tr class="filter">
                     <?php $i=0;foreach ($this->getColumns() as $_column): ?>
-                        <th<?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getFilterHtml() ?></th>
+                        <th<?php echo $_column->getHeaderHtmlProperty() ?><?php echo $this->getUiId('column', $_column->getId()) ?>><?php echo $_column->getFilterHtml() ?></th>
                     <?php endforeach; ?>
                     </tr>
                 <?php endif ?>
@@ -169,9 +172,9 @@ $numColumns = sizeof($this->getColumns());
             </tr>
             <?php if ($_multipleRows = $this->getMultipleRows($_item)):?>
                 <?php foreach ($_multipleRows as $_i):?>
-                <tr>
+                <tr <?php echo $this->getUiId('row-multy', $_item->getId(), $_i) ?>>
                     <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
-                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>">
+                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>" <?php echo $this->getUiId('cell', $_column->getId(), $_i) ?>>
                             <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td>
                     <?php endforeach; ?>

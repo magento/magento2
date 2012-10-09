@@ -67,9 +67,9 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      */
     public function getElementHtml()
     {
-        $html = '<fieldset id="'.$this->getHtmlId().'"'.$this->serialize(array('class')).'>'."\n";
+        $html = '<fieldset id="'.$this->getHtmlId().'"'.$this->serialize(array('class')) . $this->_getUiId() . '>'."\n";
         if ($this->getLegend()) {
-            $html.= '<legend>'.$this->getLegend().'</legend>'."\n";
+            $html.= '<legend ' . $this->_getUiId('legend') . '>'.$this->getLegend().'</legend>'."\n";
         }
         $html.= $this->getChildrenHtml();
         $html.= '</fieldset></div>'."\n";

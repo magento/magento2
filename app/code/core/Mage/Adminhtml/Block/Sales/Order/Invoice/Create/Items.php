@@ -44,14 +44,11 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Items extends Mage_Adminht
     protected function _beforeToHtml()
     {
         $onclick = "submitAndReloadArea($('invoice_item_container'),'".$this->getUpdateUrl()."')";
-        $this->setChild(
-            'update_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'class'     => 'update-button',
-                'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Update Qty\'s'),
-                'onclick'   => $onclick,
-            ))
-        );
+        $this->addChild('update_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'class'     => 'update-button',
+            'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Update Qty\'s'),
+            'onclick'   => $onclick,
+        ));
         $this->_disableSubmitButton = true;
         $_submitButtonClass = ' disabled';
         foreach ($this->getInvoice()->getAllItems() as $item) {
@@ -69,15 +66,12 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Items extends Mage_Adminht
         } else {
             $_submitLabel = Mage::helper('Mage_Sales_Helper_Data')->__('Submit Invoice');
         }
-        $this->setChild(
-            'submit_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => $_submitLabel,
-                'class'     => 'save submit-button' . $_submitButtonClass,
-                'onclick'   => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
-                'disabled'  => $this->_disableSubmitButton
-            ))
-        );
+        $this->addChild('submit_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => $_submitLabel,
+            'class'     => 'save submit-button' . $_submitButtonClass,
+            'onclick'   => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
+            'disabled'  => $this->_disableSubmitButton
+        ));
 
         return parent::_prepareLayout();
     }

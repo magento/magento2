@@ -25,8 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-throw new LogicException('Bug MAGETWO-2595');
-
 require __DIR__ . '/../../Catalog/_files/product_simple.php';
 
 $review = new Mage_Review_Model_Review(array(

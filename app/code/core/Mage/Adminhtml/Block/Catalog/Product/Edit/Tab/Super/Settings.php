@@ -40,15 +40,12 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
      */
     protected function _prepareLayout()
     {
-        $onclick = "setSuperSettings('".$this->getContinueUrl()."','attribute-checkbox', 'attributes')";
-        $this->setChild('continue_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Continue'),
-                    'onclick'   => $onclick,
-                    'class'     => 'save'
-                ))
-        );
+        $onclick = "setSuperSettings('" . $this->getContinueUrl() . "','attribute-checkbox', 'attributes')";
+        $this->addChild('continue_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Continue'),
+            'onclick'   => $onclick,
+            'class'     => 'save'
+        ));
 
         $backButton = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
             ->setData(array(
@@ -58,6 +55,17 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
             ));
 
         $this->setChild('back_button', $backButton);
+
+        $this->setChild('change_attribute_set_button',
+            $this->getLayout()->createBlock(
+                'Mage_Adminhtml_Block_Widget_Button',
+                $this->getNameInLayout() . '-change-attribute-set'
+            )->setData(array(
+                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Change Attribute Set'),
+                'onclick' => "jQuery('#attribute-set-info').dialog('open');"
+            ))
+        );
+
         parent::_prepareLayout();
     }
 
@@ -93,6 +101,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
                     . '</li></ul></li></ul>'
         ));
 
+        $fieldset->addField('change_attribute_set_button', 'note', array(
+            'text' => $this->getChildHtml('change_attribute_set_button'),
+        ));
+
         $hasAttributes = false;
 
         foreach ($attributes as $attribute) {
@@ -110,10 +122,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
 
         if ($hasAttributes) {
             $fieldset->addField('attributes', 'hidden', array(
-                        'name'  => 'attribute_validate',
-                        'value' => '',
-                        'class' => 'validate-super-product-attributes'
-                    ));
+                'name'  => 'attribute_validate',
+                'value' => '',
+                'class' => 'validate-super-product-attributes'
+            ));
 
             $fieldset->addField('continue_button', 'note', array(
                 'text' => $this->getChildHtml('continue_button'),
@@ -154,6 +166,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
      */
     public function getBackUrl()
     {
-        return $this->getUrl('*/*/new', array('set'=>null, 'type'=>null));
+        return $this->getUrl('*/*/', array('set' => null, 'type' => null));
     }
 }

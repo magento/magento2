@@ -37,12 +37,12 @@
     </script>
     <?php endif; ?>
     <form id="addTagForm" action="<?php echo $this->getFormAction(); ?>" method="get">
-        <div class="form-add">
+        <div class="form-add" <?php echo $this->getUiId() ?>>
             <label for="productTagName"><?php echo $this->__('Add Your Tags:') ?></label>
             <div class="input-box">
-                <input type="text" class="input-text required-entry" name="productTagName" id="productTagName" />
+                <input type="text" class="input-text required-entry" name="productTagName" id="productTagName" <?php echo $this->getUiId('add','input') ?>/>
             </div>
-            <button type="button" title="<?php echo $this->__('Add Tags') ?>" class="button" onclick="submitTagForm()">
+            <button type="button" title="<?php echo $this->__('Add Tags') ?>" class="button" onclick="submitTagForm()"<?php echo $this->getUiId('add','button') ?>>
                 <span>
                     <span><?php echo $this->__('Add Tags') ?></span>
                 </span>

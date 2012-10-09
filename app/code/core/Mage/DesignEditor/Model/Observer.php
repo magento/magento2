@@ -69,11 +69,11 @@ class Mage_DesignEditor_Model_Observer
             return;
         }
 
-        /** @var $update Mage_Core_Model_Layout_Update */
+        /** @var $update Mage_Core_Model_Layout_Merge */
         $update = $observer->getEvent()->getLayout()->getUpdate();
         $handles = $update->getHandles();
         $handle = reset($handles);
-        if ($handle && $update->getPageHandleType($handle) == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
+        if ($handle && $update->getPageHandleType($handle) == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT) {
             $update->addHandle(self::HANDLE_PAGE);
         }
         $update->addHandle(self::HANDLE_TOOLBAR);

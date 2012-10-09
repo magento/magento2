@@ -49,7 +49,7 @@ class Mage_DesignEditor_Block_Toolbar_HandlesHierarchy extends Mage_Core_Block_T
         }
         $result = '<ul>';
         foreach ($hierarchy as $name => $info) {
-            $class = $info['type'] == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT
+            $class = $info['type'] == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT
                 ? ' class="vde_option_fragment"'
                 : '';
             $result .= '<li rel="' . $name . '"' . $class . '>';

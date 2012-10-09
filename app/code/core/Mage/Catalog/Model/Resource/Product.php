@@ -162,13 +162,6 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
     protected function _beforeSave(Varien_Object $object)
     {
         /**
-         * Try detect product id by sku if id is not declared
-         */
-        if (!$object->getId() && $object->getSku()) {
-            $object->setId($this->getIdBySku($object->getSku()));
-        }
-
-        /**
          * Check if declared category ids in object data.
          */
         if ($object->hasCategoryIds()) {
@@ -178,7 +171,14 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
             $object->setCategoryIds($categoryIds);
         }
 
-        return parent::_beforeSave($object);
+        $self = parent::_beforeSave($object);
+        /**
+         * Try detect product id by sku if id is not declared
+         */
+        if (!$object->getId() && $object->getSku()) {
+            $object->setId($this->getIdBySku($object->getSku()));
+        }
+        return $self;
     }
 
     /**

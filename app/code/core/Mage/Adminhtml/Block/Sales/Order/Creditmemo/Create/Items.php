@@ -43,45 +43,33 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_Create_Items extends Mage_Admi
     protected function _prepareLayout()
     {
         $onclick = "submitAndReloadArea($('creditmemo_item_container'),'".$this->getUpdateUrl()."')";
-        $this->setChild(
-            'update_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Update Qty\'s'),
-                'class'     => 'update-button',
-                'onclick'   => $onclick,
-            ))
-        );
+        $this->addChild('update_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Update Qty\'s'),
+            'class'     => 'update-button',
+            'onclick'   => $onclick,
+        ));
 
         if ($this->getCreditmemo()->canRefund()) {
             if ($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) {
-                $this->setChild(
-                    'submit_button',
-                    $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                        'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund'),
-                        'class'     => 'save submit-button',
-                        'onclick'   => 'disableElements(\'submit-button\');submitCreditMemo()',
-                    ))
-                );
-            }
-            $this->setChild(
-                'submit_offline',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                    'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund Offline'),
+                $this->addChild('submit_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+                    'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund'),
                     'class'     => 'save submit-button',
-                    'onclick'   => 'disableElements(\'submit-button\');submitCreditMemoOffline()',
-                ))
-            );
+                    'onclick'   => 'disableElements(\'submit-button\');submitCreditMemo()',
+                ));
+            }
+            $this->addChild('submit_offline', 'Mage_Adminhtml_Block_Widget_Button', array(
+                'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund Offline'),
+                'class'     => 'save submit-button',
+                'onclick'   => 'disableElements(\'submit-button\');submitCreditMemoOffline()',
+            ));
 
         }
         else {
-            $this->setChild(
-                'submit_button',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                    'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund Offline'),
-                    'class'     => 'save submit-button',
-                    'onclick'   => 'disableElements(\'submit-button\');submitCreditMemoOffline()',
-                ))
-            );
+            $this->addChild('submit_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+                'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Refund Offline'),
+                'class'     => 'save submit-button',
+                'onclick'   => 'disableElements(\'submit-button\');submitCreditMemoOffline()',
+            ));
         }
 
         return parent::_prepareLayout();

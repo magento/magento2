@@ -101,14 +101,17 @@ class Magento_Test_Annotation_AppIsolation
                     'Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.'
                 );
             }
-            $isIsolationEnabled = ($isolation === array('enabled'));
+            $isIsolationEnabled = $isolation === array('enabled');
         } else {
             /* Controller tests should be isolated by default */
-            $isIsolationEnabled = ($test instanceof Magento_Test_TestCase_ControllerAbstract);
+            $isIsolationEnabled = $test instanceof Magento_Test_TestCase_ControllerAbstract;
         }
 
         if ($isIsolationEnabled) {
             $this->_isolateApp();
         }
+
+        /* Forced garbage collection to avoid process non-zero exit code (exec returned: 139) caused by PHP bug  */
+        gc_collect_cycles();
     }
 }

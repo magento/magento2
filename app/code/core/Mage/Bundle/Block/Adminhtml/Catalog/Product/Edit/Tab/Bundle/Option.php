@@ -122,39 +122,27 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
 
     protected function _prepareLayout()
     {
-        $this->setChild('add_selection_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'id'    => $this->getFieldId().'_{{index}}_add_button',
-                    'label'     => Mage::helper('Mage_Bundle_Helper_Data')->__('Add Selection'),
-                    'on_click'   => 'bSelection.showSearch(event)',
-                    'class' => 'add'
-                )));
+        $this->addChild('add_selection_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'id'    => $this->getFieldId().'_{{index}}_add_button',
+            'label'     => Mage::helper('Mage_Bundle_Helper_Data')->__('Add Selection'),
+            'on_click'   => 'bSelection.showSearch(event)',
+            'class' => 'add'
+        ));
 
-        $this->setChild('close_search_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'id'    => $this->getFieldId().'_{{index}}_close_button',
-                    'label'     => Mage::helper('Mage_Bundle_Helper_Data')->__('Close'),
-                    'on_click'   => 'bSelection.closeSearch(event)',
-                    'class' => 'back no-display'
-                )));
+        $this->addChild('close_search_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'id'    => $this->getFieldId().'_{{index}}_close_button',
+            'label'     => Mage::helper('Mage_Bundle_Helper_Data')->__('Close'),
+            'on_click'   => 'bSelection.closeSearch(event)',
+            'class' => 'back no-display'
+        ));
 
-        $this->setChild('option_delete_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Option'),
-                    'class' => 'delete delete-product-option',
-                    'on_click' => 'bOption.remove(event)'
-                ))
-        );
+        $this->addChild('option_delete_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Option'),
+            'class' => 'delete delete-product-option',
+            'on_click' => 'bOption.remove(event)'
+        ));
 
-        $this->setChild(
-            'selection_template',
-            $this->getLayout()->createBlock(
-                'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection'
-            )
-        );
+        $this->addChild('selection_template', 'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection');
 
         return parent::_prepareLayout();
     }

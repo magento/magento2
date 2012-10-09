@@ -26,39 +26,35 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-try {
-    /** @var $config Magento_Config */
-    $config = require_once __DIR__ . '/framework/bootstrap.php';
+/** @var $bootstrap Magento_Performance_Config */
+$config = require_once __DIR__ . '/framework/bootstrap.php';
 
-    $adminOptions = $config->getAdminOptions();
-    $scenario = new Magento_Scenario(new Magento_Shell(true), $config->getJMeterPath(), $config->getReportDir());
-    $scenarioParamsGlobal = array(
-        Magento_Scenario::PARAM_HOST => $config->getApplicationUrlHost(),
-        Magento_Scenario::PARAM_PATH => $config->getApplicationUrlPath(),
-        Magento_Scenario::PARAM_ADMIN_FRONTNAME => $adminOptions['frontname'],
-        Magento_Scenario::PARAM_ADMIN_USERNAME => $adminOptions['username'],
-        Magento_Scenario::PARAM_ADMIN_PASSWORD => $adminOptions['password'],
-    );
-    $scenarioTotalCount = count($config->getScenarios());
-    $scenarioFailCount = 0;
-    $scenarioNum = 1;
-    foreach ($config->getScenarios() as $scenarioFile => $scenarioParams) {
-        echo "Scenario $scenarioNum of $scenarioTotalCount: '$scenarioFile'" . PHP_EOL;
-        $scenarioParams = array_merge($scenarioParams, $scenarioParamsGlobal);
-        try {
-            $scenario->run($scenarioFile, $scenarioParams);
-        } catch (Exception $e) {
-            echo $e->getMessage() . PHP_EOL;
-            $scenarioFailCount++;
-        }
-        echo PHP_EOL;
-        $scenarioNum++;
-    }
-    if ($scenarioFailCount) {
-        throw new Magento_Exception("Failed $scenarioFailCount of $scenarioTotalCount scenario(s)");
-    }
-    echo 'Successful' . PHP_EOL;
-} catch (Exception $e) {
-    echo $e->getMessage() . PHP_EOL;
+$shell = new Magento_Shell(true);
+$scenarioHandler = new Magento_Performance_Scenario_Handler_Statistics(
+    new Magento_Performance_Scenario_Handler_Aggregate(array(
+        new Magento_Performance_Scenario_Handler_Jmeter($shell),
+        new Magento_Performance_Scenario_Handler_Php($shell),
+    ))
+);
+
+$scenarioTotalCount = count($config->getScenarios());
+$scenarioCount = 1;
+$scenarioHandler->onScenarioFirstRun(function ($scenarioFile) use (&$scenarioCount, $scenarioTotalCount) {
+    echo "Scenario $scenarioCount of $scenarioTotalCount: '$scenarioFile'" . PHP_EOL;
+    $scenarioCount++;
+});
+$scenarioHandler->onScenarioFailure(function ($scenarioFile, Magento_Performance_Scenario_FailureException $failure) {
+    echo "Scenario '$scenarioFile' has failed!" . PHP_EOL . $failure->getMessage() . PHP_EOL . PHP_EOL;
+});
+
+$testsuite = new Magento_Performance_Testsuite($config, new Magento_Application($config, $shell), $scenarioHandler);
+$testsuite->run();
+
+$scenarioFailures = $scenarioHandler->getFailures();
+if ($scenarioFailures) {
+    $scenarioFailCount = count($scenarioFailures);
+    echo "Failed $scenarioFailCount of $scenarioTotalCount scenario(s)" . PHP_EOL;
     exit(1);
+} else {
+    echo 'Successful' . PHP_EOL;
 }
