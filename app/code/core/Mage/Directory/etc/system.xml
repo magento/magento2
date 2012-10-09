@@ -199,7 +199,7 @@
             <groups>
                 <country>
                     <fields>
-                        <optional_zip_countries translate="label">
+                        <optional_zip_countries translate="label" module="Mage_Directory">
                             <label>Zip/Postal Code is Optional for</label>
                             <frontend_type>multiselect</frontend_type>
                             <sort_order>3</sort_order>
