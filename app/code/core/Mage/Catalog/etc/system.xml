@@ -44,6 +44,52 @@
             <show_in_store>1</show_in_store>
             <resource>Mage_Catalog::config_catalog</resource>
             <groups>
+                <fields_masks translate="label">
+                    <label>Product Fields Auto-Generation</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>90</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <sku translate="label comment">
+                            <label>Mask for SKU</label>
+                            <comment>Use {{name}} as Product Name placeholder</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sku>
+                        <meta_title translate="label comment">
+                            <label>Mask for Meta Title</label>
+                            <comment>Use {{name}} as Product Name placeholder</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </meta_title>
+                        <meta_keyword translate="label comment">
+                            <label>Mask for Meta Keywords</label>
+                            <comment>Use {{name}} and {{sku}} as Product Name and Product SKU placeholders</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </meta_keyword>
+                        <meta_description translate="label comment">
+                            <label>Mask for Meta Description</label>
+                            <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </meta_description>
+                    </fields>
+                </fields_masks>
                 <frontend translate="label">
                     <label>Frontend</label>
                     <frontend_type>text</frontend_type>

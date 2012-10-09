@@ -83,6 +83,9 @@
                 <page module="Mage_Page">
                     <file>layout.xml</file>
                 </page>
+                <page_addons module="Mage_Page">
+                    <file>layout_addons.xml</file>
+                </page_addons>
             </updates>
         </layout>
     </frontend>

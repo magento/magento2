@@ -58,6 +58,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Edit_FormTest extends PHPUnit_Fram
      * @param string $idPath
      * @param string $requestPath
      * @param string $targetPath
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      */
     public function testFormPostInitNew($productData, $categoryData, $action, $idPath, $requestPath, $targetPath)
     {

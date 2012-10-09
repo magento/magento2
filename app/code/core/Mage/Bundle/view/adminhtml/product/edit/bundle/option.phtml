@@ -33,7 +33,7 @@ optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="
     <?php else: ?>
     '<input class="input-text required-entry" type="text" name="<?php echo $this->getFieldName() ?>[{{index}}][default_title]" id="id_<?php echo $this->getFieldName() ?>_{{index}}_default_title" value="{{default_title}}">' +
     <?php endif; ?>
-'<?php echo $this->jsQuoteEscape($this->getOptionDeleteButtonHtml()) ?>' +
+<?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getOptionDeleteButtonHtml()) ?> +
 '</div>' +
     '<table class="option-header" cellpadding="0" cellspacing="0">' +
         '<thead>' +
@@ -57,7 +57,7 @@ optionTemplate = '<div id="<?php echo $this->getFieldId() ?>_{{index}}"  class="
                 '<td><?php echo $this->getTypeSelectHtml() ?></td>' +
                 '<td><?php echo $this->getRequireSelectHtml() ?></td>' +
                 '<td><input class="input-text validate-zero-or-greater" type="text" name="<?php echo $this->getFieldName() ?>[{{index}}][position]" value="{{position}}"></td>' +
-                '<td>&nbsp;<?php echo $this->jsQuoteEscape($this->getAddSelectionButtonHtml()) ?></td>' +
+                '<td>&nbsp;' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getAddSelectionButtonHtml()) ?> + '</td>' +
             '</tr>' +
         '</tbody>' +
     '</table>' +

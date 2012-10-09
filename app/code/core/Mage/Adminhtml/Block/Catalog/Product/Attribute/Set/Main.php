@@ -51,60 +51,49 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Admin
     {
         $setId = $this->_getSetId();
 
-        $this->setChild('group_tree',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Tree_Group')
-        );
+        $this->addChild('group_tree', 'Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Tree_Group');
 
-        $this->setChild('edit_set_form',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset')
-        );
+        $this->addChild('edit_set_form', 'Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset');
 
-        $this->setChild('delete_group_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Selected Group'),
-                'onclick'   => 'editSet.submit();',
-                'class'     => 'delete'
-        )));
+        $this->addChild('delete_group_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Selected Group'),
+            'onclick'   => 'editSet.submit();',
+            'class'     => 'delete'
+        ));
 
-        $this->setChild('add_group_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New'),
-                'onclick'   => 'editSet.addGroup();',
-                'class'     => 'add'
-        )));
+        $this->addChild('add_group_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New'),
+            'onclick'   => 'editSet.addGroup();',
+            'class'     => 'add'
+        ));
 
-        $this->setChild('back_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
-                'onclick'   => 'setLocation(\''.$this->getUrl('*/*/').'\')',
-                'class'     => 'back'
-        )));
+        $this->addChild('back_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
+            'onclick'   => 'setLocation(\''.$this->getUrl('*/*/').'\')',
+            'class'     => 'back'
+        ));
 
-        $this->setChild('reset_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Reset'),
-                'onclick'   => 'window.location.reload()'
-        )));
+        $this->addChild('reset_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Reset'),
+            'onclick'   => 'window.location.reload()'
+        ));
 
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
-                'onclick'   => 'editSet.save();',
-                'class'     => 'save'
-        )));
+        $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
+            'onclick'   => 'editSet.save();',
+            'class'     => 'save'
+        ));
 
-        $this->setChild('delete_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Attribute Set'),
-                'onclick'   => 'deleteConfirm(\''. $this->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('All products of this set will be deleted! Are you sure you want to delete this attribute set?')) . '\', \'' . $this->getUrl('*/*/delete', array('id' => $setId)) . '\')',
-                'class'     => 'delete'
-        )));
+        $this->addChild('delete_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Delete Attribute Set'),
+            'onclick'   => 'deleteConfirm(\''. $this->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('All products of this set will be deleted! Are you sure you want to delete this attribute set?')) . '\', \'' . $this->getUrl('*/*/delete', array('id' => $setId)) . '\')',
+            'class'     => 'delete'
+        ));
 
-        $this->setChild('rename_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('New Set Name'),
-                'onclick'   => 'editSet.rename()'
-        )));
+        $this->addChild('rename_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('New Set Name'),
+            'onclick'   => 'editSet.rename()'
+        ));
 
         return parent::_prepareLayout();
     }
@@ -179,6 +168,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Admin
         $configurable = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute')
             ->getUsedAttributes($setId);
 
+        $unassignableAttributes = Mage::helper('Mage_Catalog_Helper_Product')->getUnassignableAttributes();
+
         /* @var $node Mage_Eav_Model_Entity_Attribute_Group */
         foreach ($groups as $node) {
             $item = array();
@@ -197,15 +188,19 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Admin
                 $item['children'] = array();
                 foreach ($nodeChildren->getItems() as $child) {
                     /* @var $child Mage_Eav_Model_Entity_Attribute */
+
+                    $isUnassignable = !in_array($child->getAttributeCode(), $unassignableAttributes);
+
                     $attr = array(
                         'text'              => $child->getAttributeCode(),
                         'id'                => $child->getAttributeId(),
-                        'cls'               => (!$child->getIsUserDefined()) ? 'system-leaf' : 'leaf',
+                        'cls'               => $isUnassignable ? 'leaf' : 'system-leaf',
                         'allowDrop'         => false,
                         'allowDrag'         => true,
                         'leaf'              => true,
                         'is_user_defined'   => $child->getIsUserDefined(),
                         'is_configurable'   => (int)in_array($child->getAttributeId(), $configurable),
+                        'is_unassignable'   => $isUnassignable,
                         'entity_id'         => $child->getEntityAttributeId()
                     );
 

@@ -64,6 +64,21 @@ interface Varien_Db_Adapter_Interface
     const ERROR_DDL_MESSAGE = 'DDL statements are not allowed in transactions';
 
     /**
+     * Error message for unfinished rollBack transaction
+     */
+    const ERROR_ROLLBACK_INCOMPLETE_MESSAGE = 'Rolled back transaction has not been completed correctly.';
+
+    /**
+     * Error message for asymmetric transaction rollback
+     */
+    const ERROR_ASYMMETRIC_ROLLBACK_MESSAGE = 'Asymmetric transaction rollback.';
+
+    /**
+     * Error message for asymmetric transaction commit
+     */
+    const ERROR_ASYMMETRIC_COMMIT_MESSAGE = 'Asymmetric transaction commit.';
+
+    /**
      * Begin new DB transaction for connection
      *
      * @return Varien_Db_Adapter_Pdo_Mysql

@@ -80,13 +80,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Edit extends Mage_Adminhtml_Block
     {
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-        $this->setChild('cms_page_link', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Link')
-            ->setData(array(
-                'item_url'  => $helper->getUrl('*/*/*') . 'cms_page',
-                'item_name' => $this->getCmsPage()->getTitle(),
-                'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('CMS page:')
-            ))
-        );
+        $this->addChild('cms_page_link', 'Mage_Adminhtml_Block_Urlrewrite_Link', array(
+            'item_url'  => $helper->getUrl('*/*/*') . 'cms_page',
+            'item_name' => $this->getCmsPage()->getTitle(),
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('CMS page:')
+        ));
     }
 
     /**
@@ -94,10 +92,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Edit extends Mage_Adminhtml_Block
      */
     private function _addCmsPageGridBlock()
     {
-        $this->setChild(
-            'cms_pages_grid',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Grid')
-        );
+        $this->addChild('cms_pages_grid', 'Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Grid');
     }
 
     /**

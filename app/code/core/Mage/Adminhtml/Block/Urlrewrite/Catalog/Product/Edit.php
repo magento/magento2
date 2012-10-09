@@ -112,13 +112,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit extends Mage_Adminhtm
     {
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-        $this->setChild('product_link', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Link')
-            ->setData(array(
-                'item_url'  => $helper->getUrl('*/*/*') . 'product',
-                'item_name' => $this->_getProduct()->getName(),
-                'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Product:')
-            ))
-        );
+        $this->addChild('product_link', 'Mage_Adminhtml_Block_Urlrewrite_Link', array(
+            'item_url'  => $helper->getUrl('*/*/*') . 'product',
+            'item_name' => $this->_getProduct()->getName(),
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Product:')
+        ));
     }
 
     /**
@@ -128,13 +126,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit extends Mage_Adminhtm
     {
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-        $this->setChild('category_link', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Link')
-            ->setData(array(
-                'item_url'  => $helper->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . 'category',
-                'item_name' => $this->_getCategory()->getName(),
-                'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Category:')
-            ))
-        );
+        $this->addChild('category_link', 'Mage_Adminhtml_Block_Urlrewrite_Link', array(
+            'item_url'  => $helper->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . 'category',
+            'item_name' => $this->_getCategory()->getName(),
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Category:')
+        ));
     }
 
     /**
@@ -142,10 +138,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit extends Mage_Adminhtm
      */
     private function _addProductsGridBlock()
     {
-        $this->setChild(
-            'products_grid',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Grid')
-        );
+        $this->addChild('products_grid', 'Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Grid');
     }
 
     /**
@@ -153,10 +146,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit extends Mage_Adminhtm
      */
     private function _addCategoriesTreeBlock()
     {
-        $this->setChild(
-            'categories_tree',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree')
-        );
+        $this->addChild('categories_tree', 'Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Tree');
     }
 
     /**
@@ -166,15 +156,13 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit extends Mage_Adminhtm
     {
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('Mage_Adminhtml_Helper_Data');
-        $this->setChild('skip_categories',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
-                'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Skip Category Selection'),
-                'onclick' => 'window.location = \''
-                    . $helper->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . '\'',
-                'class' => 'save',
-                'level' => -1
-            ))
-        );
+        $this->addChild('skip_categories', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Skip Category Selection'),
+            'onclick' => 'window.location = \''
+                . $helper->getUrl('*/*/*', array('product' => $this->_getProduct()->getId())) . '\'',
+            'class' => 'save',
+            'level' => -1
+        ));
     }
 
     /**

@@ -61,9 +61,9 @@ class Varien_Data_Form_Element_Image extends Varien_Data_Form_Element_Abstract
             }
 
             $html = '<a href="' . $url . '"'
-                . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;">'
+                . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;" ' . $this->_getUiId('link') . '>'
                 . '<img src="' . $url . '" id="' . $this->getHtmlId() . '_image" title="' . $this->getValue() . '"'
-                . ' alt="' . $this->getValue() . '" height="22" width="22" class="small-image-preview v-middle" />'
+                . ' alt="' . $this->getValue() . '" height="22" width="22" class="small-image-preview v-middle"  ' . $this->_getUiId() . ' />'
                 . '</a> ';
         }
         $this->setClass('input-file');

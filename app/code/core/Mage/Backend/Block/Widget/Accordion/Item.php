@@ -53,9 +53,10 @@ class Mage_Backend_Block_Widget_Accordion_Item extends Mage_Backend_Block_Widget
 
     public function getTitle()
     {
-        $title  = $this->getData('title');
-        $url    = $this->getContentUrl() ? $this->getContentUrl() : '#';
-        $title  = '<a href="'.$url.'" class="'.$this->getTarget().'">'.$title.'</a>';
+        $title = $this->getData('title');
+        $url = $this->getContentUrl() ? $this->getContentUrl() : '#';
+        $title = '<a href="' . $url . '" class="' . $this->getTarget() . '"' . $this->getUiId('title-link') . '>'
+            . $title . '</a>';
 
         return $title;
     }
@@ -84,12 +85,13 @@ class Mage_Backend_Block_Widget_Accordion_Item extends Mage_Backend_Block_Widget
     protected function _toHtml()
     {
         $content = $this->getContent();
-        $html = '<dt id="dt-'.$this->getHtmlId().'" class="'.$this->getClass().'">';
-        $html.= $this->getTitle();
-        $html.= '</dt>';
-        $html.= '<dd id="dd-'.$this->getHtmlId().'" class="'.$this->getClass().'">';
-        $html.= $content;
-        $html.= '</dd>';
+        $html = '<dt id="dt-' . $this->getHtmlId() . '" class="' . $this->getClass() . '"';
+        $html .= $this->getUiId() . '>';
+        $html .= $this->getTitle();
+        $html .= '</dt>';
+        $html .= '<dd id="dd-' . $this->getHtmlId() . '" class="' . $this->getClass() . '">';
+        $html .= $content;
+        $html .= '</dd>';
         return $html;
     }
 }

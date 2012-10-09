@@ -118,7 +118,7 @@ var templateText =
             '<td class="a-left" id="delete_button_container_{{id}}">'+
                 '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
                 <?php if (!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()):?>
-                    '<?php echo $this->getDeleteButtonHtml() ?>'+
+                    <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getDeleteButtonHtml()) ?> +
                 <?php endif;?>
             '<\/td>'+
         '<\/tr>';

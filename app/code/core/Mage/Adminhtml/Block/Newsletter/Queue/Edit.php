@@ -85,52 +85,35 @@ class Mage_Adminhtml_Block_Newsletter_Queue_Edit extends Mage_Adminhtml_Block_Te
             $this->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
         }
 
-        $this->setChild('preview_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Preview Template'),
-                    'onclick'   => 'queueControl.preview();',
-                    'class'     => 'task'
-                ))
-        );
+        $this->addChild('preview_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Preview Template'),
+            'onclick'   => 'queueControl.preview();',
+            'class'     => 'task'
+        ));
 
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save Newsletter'),
-                    'onclick'   => 'queueControl.save()',
-                    'class'     => 'save'
-                ))
-        );
+        $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save Newsletter'),
+            'onclick'   => 'queueControl.save()',
+            'class'     => 'save'
+        ));
 
-        $this->setChild('save_and_resume',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save and Resume'),
-                    'onclick'   => 'queueControl.resume()',
-                    'class'     => 'save'
-                ))
-        );
+        $this->addChild('save_and_resume', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save and Resume'),
+            'onclick'   => 'queueControl.resume()',
+            'class'     => 'save'
+        ));
 
-        $this->setChild('reset_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Reset'),
-                    'onclick'   => 'window.location = window.location'
-                ))
-        );
+        $this->addChild('reset_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Reset'),
+            'onclick'   => 'window.location = window.location'
+        ));
 
-        $this->setChild('back_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(
-                    array(
-                        'label'   => Mage::helper('Mage_Newsletter_Helper_Data')->__('Back'),
-                        'onclick' => "window.location.href = '" . $this->getUrl((
-                            $this->getTemplateId() ? '*/newsletter_template/' : '*/*')) . "'",
-                        'class'   => 'back'
-                    )
-                )
-        );
+        $this->addChild('back_button','Mage_Adminhtml_Block_Widget_Button', array(
+            'label'   => Mage::helper('Mage_Newsletter_Helper_Data')->__('Back'),
+            'onclick' => "window.location.href = '" . $this->getUrl((
+                $this->getTemplateId() ? '*/newsletter_template/' : '*/*')) . "'",
+            'class'   => 'back'
+        ));
 
         return parent::_prepareLayout();
     }

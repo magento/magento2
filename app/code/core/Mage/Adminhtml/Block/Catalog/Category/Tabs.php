@@ -133,7 +133,8 @@ class Mage_Adminhtml_Block_Catalog_Category_Tabs extends Mage_Adminhtml_Block_Wi
             }
 
             $active  = $defaultGroupId == $group->getId();
-            $block = $this->getLayout()->createBlock($this->getAttributeTabBlock(), '')
+            $block = $this->getLayout()->createBlock($this->getAttributeTabBlock(), $this->getNameInLayout() . '_tab_'
+                . $group->getAttributeGroupName())
                 ->setGroup($group)
                 ->setAttributes($attributes)
                 ->setAddHiddenFields($active)

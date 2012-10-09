@@ -72,13 +72,10 @@ class Mage_Adminhtml_Block_Sales_Order_View_Giftmessage extends Mage_Adminhtml_B
      */
     protected function _prepareLayout()
     {
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'   => Mage::helper('Mage_GiftMessage_Helper_Data')->__('Save Gift Message'),
-                    'class'   => 'save'
-                ))
-        );
+        $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'   => Mage::helper('Mage_GiftMessage_Helper_Data')->__('Save Gift Message'),
+            'class'   => 'save'
+        ));
 
         return $this;
     }

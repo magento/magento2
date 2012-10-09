@@ -57,6 +57,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Edit_FormTest extends PHPUnit_Fra
      * @param string $idPath
      * @param string $requestPath
      * @param string $targetPath
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      */
     public function testFormPostInit($cmsPageData, $action, $idPath, $requestPath, $targetPath)
     {

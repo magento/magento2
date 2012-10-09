@@ -160,6 +160,64 @@ class Mage_Adminhtml_Tax_Class_CustomerController extends Mage_Adminhtml_Control
     }
 
     /**
+     * Delete Tax Class via AJAX
+     */
+    public function ajaxDeleteAction()
+    {
+        $responseContent = '';
+        $classId = (int)$this->getRequest()->getParam('class_id');
+        try {
+            $classModel = Mage::getModel('Mage_Tax_Model_Class')->load($classId);
+            $this->_checkCustomerTaxClassUsage($classModel);
+            $classModel->delete();
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => true,
+                'error' => false,
+                'error_message' => ''
+            ));
+        } catch (Mage_Core_Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => $e->getMessage()
+            ));
+        } catch (Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data')->__('An error occurred while deleting this tax class.')
+            ));
+        }
+        $this->getResponse()->setBody($responseContent);
+    }
+
+    /**
+     * Check if customer tax class exists and has not been used yet (in Tax Rules or Customer Groups)
+     *
+     * @param Mage_Tax_Model_Class $classModel
+     */
+    protected function _checkCustomerTaxClassUsage(Mage_Tax_Model_Class $classModel)
+    {
+        if (!$classModel->getId() || $classModel->getClassType() != Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('This class no longer exists.'));
+        }
+
+        $ruleCollection = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->getCollection()
+            ->setClassTypeFilter(Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER, $classModel->getId());
+
+        if ($ruleCollection->getSize() > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.'));
+        }
+
+        $customerGroupCollection = Mage::getModel('Mage_Customer_Model_Group')->getCollection()
+            ->addFieldToFilter('tax_class_id', $classModel->getId());
+        $groupCount = $customerGroupCollection->getSize();
+        if ($groupCount > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used for %d customer groups.', $groupCount));
+        }
+    }
+
+    /**
      * Initialize action
      *
      * @return Mage_Adminhtml_Controller_Action

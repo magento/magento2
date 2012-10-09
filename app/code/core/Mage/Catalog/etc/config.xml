@@ -209,6 +209,23 @@
                     <add_filterable_attributes>0</add_filterable_attributes>
                     <add_child_data>0</add_child_data>
                 </flat>
+                <attributes>
+                    <unassignable>
+                        <name/>
+                        <description/>
+                        <short_description/>
+                        <sku/>
+                        <price/>
+                        <status/>
+                        <visibility/>
+                        <weight/>
+                    </unassignable>
+                    <used_in_autogeneration>
+                        <name/>
+                        <description/>
+                        <sku/>
+                    </used_in_autogeneration>
+                </attributes>
             </product>
             <content>
                 <tempate_filter>Mage_Catalog_Model_Template_Filter</tempate_filter>
@@ -385,6 +402,12 @@
             <navigation>
                 <max_depth>0</max_depth>
             </navigation>
+            <fields_masks>
+                <sku>{{name}}</sku>
+                <meta_title>{{name}}</meta_title>
+                <meta_keyword>{{name}},{{sku}}</meta_keyword>
+                <meta_description>{{name}} {{description}}</meta_description>
+            </fields_masks>
             <frontend>
                 <list_mode>grid-list</list_mode>
                 <grid_per_page_values>9,15,30</grid_per_page_values>

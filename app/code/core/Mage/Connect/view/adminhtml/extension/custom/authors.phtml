@@ -38,7 +38,7 @@ var authorTemplate =
             '<input class="input-text required-entry validate-email" style="width:160px;" name="authors[email][]" id="authors_email_{{id}}" value="{{email}}"/>'+
         '</td>'+
         '<td style="margin-bottom:5px;">'+
-            '<?php echo $this->jsQuoteEscape($this->getRemoveRowButtonHtml('tr')) ?>'+
+            <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getRemoveRowButtonHtml('tr')) ?> +
         '</td>'+
     '</tr>';
 

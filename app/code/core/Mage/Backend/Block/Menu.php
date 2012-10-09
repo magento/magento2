@@ -282,7 +282,8 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
         /** @var $menuItem Mage_Backend_Model_Menu_Item  */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
             $output .= '<li ' . $this->_renderMouseEvent($menuItem)
-                . ' class="' . $this->_renderItemCssClass($menuItem, $level) . '">';
+                . ' class="' . $this->_renderItemCssClass($menuItem, $level) . '"'
+                . $this->getUiId($menuItem->getId()) . '>';
 
             $output .= $this->_renderAnchor($menuItem, $level);
 

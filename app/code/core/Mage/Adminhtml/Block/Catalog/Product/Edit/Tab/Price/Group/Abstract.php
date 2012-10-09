@@ -190,7 +190,7 @@ abstract class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price_Group_Abstrac
      */
     public function isMultiWebsites()
     {
-        return !Mage::app()->hasSingleStore();
+        return !Mage::app()->isSingleStoreMode();
     }
 
     /**

@@ -31,9 +31,13 @@
  */
 class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
 {
-    const XML_PATH_PRODUCT_URL_SUFFIX           = 'catalog/seo/product_url_suffix';
-    const XML_PATH_PRODUCT_URL_USE_CATEGORY     = 'catalog/seo/product_use_categories';
-    const XML_PATH_USE_PRODUCT_CANONICAL_TAG    = 'catalog/seo/product_canonical_tag';
+    const XML_PATH_PRODUCT_URL_SUFFIX                = 'catalog/seo/product_url_suffix';
+    const XML_PATH_PRODUCT_URL_USE_CATEGORY          = 'catalog/seo/product_use_categories';
+    const XML_PATH_USE_PRODUCT_CANONICAL_TAG         = 'catalog/seo/product_canonical_tag';
+    const XML_PATH_AUTO_GENERATE_MASK                = 'catalog/fields_masks';
+    const XML_PATH_UNASSIGNABLE_ATTRIBUTES           = 'global/catalog/product/attributes/unassignable';
+    const XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION = 'global/catalog/product/attributes/used_in_autogeneration';
+
 
     /**
      * Flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
@@ -467,5 +471,38 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     public function getSkipSaleableCheck()
     {
         return $this->_skipSaleableCheck;
+    }
+
+    /**
+     * Get masks for auto generation of fields
+     *
+     * @return array
+     */
+    public function getFieldsAutogenerationMasks()
+    {
+        return Mage::getConfig()
+            ->getNode(Mage_Catalog_Helper_Product::XML_PATH_AUTO_GENERATE_MASK, 'default')
+            ->asArray();
+    }
+
+    /**
+     * Retrieve list of attributes that cannot be removed from attribute set
+     *
+     * @return array
+     */
+    public function getUnassignableAttributes()
+    {
+        $data = Mage::getConfig()->getNode(self::XML_PATH_UNASSIGNABLE_ATTRIBUTES);
+        return false === $data || is_string($data->asArray()) ? array() : array_keys($data->asArray());
+    }
+
+    /**
+     * Retrieve list of attributes that allowed for autogeneration
+     *
+     * @return array
+     */
+    public function getAttributesAllowedForAutogeneration()
+    {
+        return array_keys(Mage::getConfig()->getNode(self::XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION)->asArray());
     }
 }

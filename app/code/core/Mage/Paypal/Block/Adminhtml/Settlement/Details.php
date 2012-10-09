@@ -54,7 +54,7 @@ class Mage_Paypal_Block_Adminhtml_Settlement_Details extends Mage_Adminhtml_Bloc
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->setChild('form', $this->getLayout()->createBlock('Mage_Paypal_Block_Adminhtml_Settlement_Details_Form'));
+        $this->addChild('form', 'Mage_Paypal_Block_Adminhtml_Settlement_Details_Form');
         return $this;
     }
 }

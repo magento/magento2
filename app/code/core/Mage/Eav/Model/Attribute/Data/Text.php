@@ -35,6 +35,23 @@
 class Mage_Eav_Model_Attribute_Data_Text extends Mage_Eav_Model_Attribute_Data_Abstract
 {
     /**
+     * @var Mage_Core_Helper_String
+     */
+    protected $_stringHelper;
+
+    /**
+     * Constructor
+     *
+     * @param array $arguments
+     */
+    public function __construct(array $arguments = array())
+    {
+        parent::__construct($arguments);
+        $this->_stringHelper = isset($arguments['stringHelper'])
+            ? $arguments['stringHelper'] : Mage::helper('Mage_Core_Helper_String');
+    }
+
+    /**
      * Extract data from request and return value
      *
      * @param Zend_Controller_Request_Http $request
@@ -57,15 +74,15 @@ class Mage_Eav_Model_Attribute_Data_Text extends Mage_Eav_Model_Attribute_Data_A
     {
         $errors     = array();
         $attribute  = $this->getAttribute();
-        $label      = Mage::helper('Mage_Eav_Helper_Data')->__($attribute->getStoreLabel());
+        $label      = $this->_translationHelper->__($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && empty($value)) {
-            $errors[] = Mage::helper('Mage_Eav_Helper_Data')->__('"%s" is a required value.', $label);
+        if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
+            $errors[] = $this->_translationHelper->__('"%s" is a required value.', $label);
         }
 
         if (!$errors && !$attribute->getIsRequired() && empty($value)) {
@@ -73,16 +90,16 @@ class Mage_Eav_Model_Attribute_Data_Text extends Mage_Eav_Model_Attribute_Data_A
         }
 
         // validate length
-        $length = Mage::helper('Mage_Core_Helper_String')->strlen(trim($value));
+        $length = $this->_stringHelper->strlen(trim($value));
 
         $validateRules = $attribute->getValidateRules();
         if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
             $v = $validateRules['min_text_length'];
-            $errors[] = Mage::helper('Mage_Eav_Helper_Data')->__('"%s" length must be equal or greater than %s characters.', $label, $v);
+            $errors[] = $this->_translationHelper->__('"%s" length must be equal or greater than %s characters.', $label, $v);
         }
         if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
             $v = $validateRules['max_text_length'];
-            $errors[] = Mage::helper('Mage_Eav_Helper_Data')->__('"%s" length must be equal or less than %s characters.', $label, $v);
+            $errors[] = $this->_translationHelper->__('"%s" length must be equal or less than %s characters.', $label, $v);
         }
 
         $result = $this->_validateInputRule($value);

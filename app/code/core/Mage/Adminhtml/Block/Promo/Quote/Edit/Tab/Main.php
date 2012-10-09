@@ -125,7 +125,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main
             $model->setData('is_active', '1');
         }
 
-        if (Mage::app()->hasSingleStore()) {
+        if (Mage::app()->isSingleStoreMode()) {
             $websiteId = Mage::app()->getStore(true)->getWebsiteId();
             $fieldset->addField('website_ids', 'hidden', array(
                 'name'     => 'website_ids[]',

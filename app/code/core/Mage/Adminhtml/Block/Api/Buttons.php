@@ -35,40 +35,28 @@ class Mage_Adminhtml_Block_Api_Buttons extends Mage_Adminhtml_Block_Template
 
     protected function _prepareLayout()
     {
-        $this->setChild('backButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Back'),
-                    'onclick'   => 'window.location.href=\''.$this->getUrl('*/*/').'\'',
-                    'class' => 'back'
-                ))
-        );
+        $this->addChild('backButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Back'),
+            'onclick'   => 'window.location.href=\''.$this->getUrl('*/*/').'\'',
+            'class' => 'back'
+        ));
 
-        $this->setChild('resetButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Reset'),
-                    'onclick'   => 'window.location.reload()'
-                ))
-        );
+        $this->addChild('resetButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Reset'),
+            'onclick'   => 'window.location.reload()'
+        ));
 
-        $this->setChild('saveButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Role'),
-                    'onclick'   => 'roleForm.submit();return false;',
-                    'class' => 'save'
-                ))
-        );
+        $this->addChild('saveButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Role'),
+            'onclick'   => 'roleForm.submit();return false;',
+            'class' => 'save'
+        ));
 
-        $this->setChild('deleteButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Delete Role'),
-                    'onclick'   => 'deleteConfirm(\'' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('Are you sure you want to do this?') . '\', \'' . $this->getUrl('*/*/delete', array('rid' => $this->getRequest()->getParam('rid'))) . '\')',
-                    'class' => 'delete'
-                ))
-        );
+        $this->addChild('deleteButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Delete Role'),
+            'onclick'   => 'deleteConfirm(\'' . Mage::helper('Mage_Adminhtml_Helper_Data')->__('Are you sure you want to do this?') . '\', \'' . $this->getUrl('*/*/delete', array('rid' => $this->getRequest()->getParam('rid'))) . '\')',
+            'class' => 'delete'
+        ));
         return parent::_prepareLayout();
     }
 

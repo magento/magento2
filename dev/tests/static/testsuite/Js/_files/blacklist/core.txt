@@ -2,7 +2,6 @@ pub/lib/mage/adminhtml
 pub/lib/mage/captcha.js
 pub/lib/mage/directpost.js
 pub/lib/mage/jquery-no-conflict.js
-pub/lib/mage/translate_inline.js
 app/code/core/Mage/Catalog/view/frontend/msrp.js
 app/code/core/Mage/Page/view/frontend/js/cookies.js
 app/code/core/Mage/Page/view/frontend/menu.js

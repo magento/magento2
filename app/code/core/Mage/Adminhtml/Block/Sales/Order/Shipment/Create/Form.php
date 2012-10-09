@@ -70,14 +70,8 @@ class Mage_Adminhtml_Block_Sales_Order_Shipment_Create_Form extends Mage_Adminht
 //            ->setOrder($this->getShipment()->getOrder());
 //        $this->setChild('order_info', $infoBlock);
 
-        $this->setChild(
-            'items',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Shipment_Create_Items')
-        );
-        $this->setChild(
-            'tracking',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Shipment_Create_Tracking')
-        );
+        $this->addChild('items', 'Mage_Adminhtml_Block_Sales_Order_Shipment_Create_Items');
+        $this->addChild('tracking', 'Mage_Adminhtml_Block_Sales_Order_Shipment_Create_Tracking');
 //        $paymentInfoBlock = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Payment')
 //            ->setPayment($this->getShipment()->getOrder()->getPayment());
 //        $this->setChild('payment_info', $paymentInfoBlock);

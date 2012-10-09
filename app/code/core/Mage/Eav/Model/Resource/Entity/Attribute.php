@@ -361,16 +361,12 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
             return $this;
         }
 
-        /* System attribute options are permanent, which of them is default can be changed only */
-        if (!$object->getIsUserDefined() && !$object->getCanManageOptionLabels() && !$object->isObjectNew()) {
-            $defaultValue = $object->getDefault() ?: array();
-        } elseif (isset($option['value'])) {
+        $defaultValue = null;
+        if (isset($option['value'])) {
             if (!is_array($object->getDefault())) {
                 $object->setDefault(array());
             }
-            $defaultValue = $this->_processUserDefinedAttributeOptions($object, $option);
-        } else {
-            $defaultValue = null;
+            $defaultValue = $this->_processAttributeOptions($object, $option);
         }
 
         $this->_saveDefaultValue($object, $defaultValue);
@@ -378,23 +374,23 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     }
 
     /**
-     * Save changes of user defined attribute options, return obtained default value
+     * Save changes of attribute options, return obtained default value
      *
      * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @param array $option
      * @return array
      */
-    protected function _processUserDefinedAttributeOptions($object, $option)
+    protected function _processAttributeOptions($object, $option)
     {
         $defaultValue = array();
         foreach ($option['value'] as $optionId => $values) {
-            $intOptionId = $this->_updateUserDefinedAttributeOption($object, $optionId, $option);
+            $intOptionId = $this->_updateAttributeOption($object, $optionId, $option);
             if ($intOptionId === false) {
                 continue;
             }
-            $this->_updateDefaultValue($object, $optionId, $defaultValue);
+            $this->_updateDefaultValue($object, $optionId, $intOptionId, $defaultValue);
             $this->_checkDefaultOptionValue($values);
-            $this->_updateUserDefinedAttributeOptionValues($intOptionId, $values);
+            $this->_updateAttributeOptionValues($intOptionId, $values);
         }
         return $defaultValue;
     }
@@ -416,17 +412,18 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      * Update attribute default value
      *
      * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
-     * @param int $optionId
+     * @param int|string $optionId
+     * @param int $intOptionId
      * @param array $defaultValue
      */
-    protected function _updateDefaultValue($object, $optionId, &$defaultValue)
+    protected function _updateDefaultValue($object, $optionId, $intOptionId, &$defaultValue)
     {
         if (in_array($optionId, $object->getDefault())) {
             $frontendInput = $object->getFrontendInput();
-            if ($frontendInput == 'multiselect') {
-                $defaultValue[] = (int)$optionId;
-            } elseif ($frontendInput == 'select') {
-                $defaultValue = array((int)$optionId);
+            if ($frontendInput === 'multiselect') {
+                $defaultValue[] = $intOptionId;
+            } elseif ($frontendInput === 'select') {
+                $defaultValue = array($intOptionId);
             }
         }
     }
@@ -454,7 +451,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      * @param array $option
      * @return int|bool
      */
-    protected function _updateUserDefinedAttributeOption($object, $optionId, $option)
+    protected function _updateAttributeOption($object, $optionId, $option)
     {
         $adapter = $this->_getWriteAdapter();
         $table = $this->getTable('eav_attribute_option');
@@ -490,7 +487,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      * @param int $optionId
      * @param array $values
      */
-    protected function _updateUserDefinedAttributeOptionValues($optionId, $values)
+    protected function _updateAttributeOptionValues($optionId, $values)
     {
         $adapter = $this->_getWriteAdapter();
         $table = $this->getTable('eav_attribute_option_value');

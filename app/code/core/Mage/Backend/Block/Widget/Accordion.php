@@ -47,7 +47,11 @@ class Mage_Backend_Block_Widget_Accordion extends Mage_Backend_Block_Widget
     
     public function addItem($itemId, $config)
     {
-        $this->_items[$itemId] = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Accordion_Item')
+        $this->_items[$itemId] = $this->getLayout()
+            ->createBlock(
+                'Mage_Backend_Block_Widget_Accordion_Item',
+                $this->getNameInLayout() . '-' . $itemId
+            )
             ->setData($config)
             ->setAccordion($this)
             ->setId($itemId);

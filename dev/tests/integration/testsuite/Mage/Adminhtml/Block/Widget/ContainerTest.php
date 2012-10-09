@@ -68,7 +68,7 @@ class Mage_Adminhtml_Block_Widget_ContainerTest extends PHPUnit_Framework_TestCa
      */
     protected function _buildBlock($titles)
     {
-        $layout = new Mage_Core_Model_Layout;
+        $layout = new Mage_Core_Model_Layout(array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
         $block = new Mage_Adminhtml_Block_Widget_Container;
         foreach ($titles as $id => $title) {
             $block->addButton($id, array('title' => $title));

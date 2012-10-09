@@ -63,11 +63,11 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Ma
      * Retrieve new layout update model instance
      *
      * @param array $arguments
-     * @return Mage_Core_Model_Layout_Update
+     * @return Mage_Core_Model_Layout_Merge
      */
     protected function _getLayoutUpdate(array $arguments)
     {
-        return Mage::getModel('Mage_Core_Model_Layout_Update', $arguments);
+        return Mage::getModel('Mage_Core_Model_Layout_Merge', $arguments);
     }
 
     /**
@@ -80,7 +80,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Ma
     {
         foreach ($pageTypes as $pageTypeName => $pageTypeInfo) {
             $params = array();
-            if ($pageTypeInfo['type'] == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
+            if ($pageTypeInfo['type'] == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT) {
                 $params['class'] = 'fragment';
             }
             $this->addOption($pageTypeName, str_repeat('. ', $level) . $pageTypeInfo['label'], $params);

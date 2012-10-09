@@ -29,14 +29,26 @@ class Magento_ImportExport_Fixture_GeneratorTest extends PHPUnit_Framework_TestC
 {
     public function testIteratorInterface()
     {
-        $model = new Magento_ImportExport_Fixture_Generator(array('id' => '%s', 'name' => 'Static'), 2);
+        $pattern = array(
+            'id' => '%s',
+            'name' => 'Static',
+            // @codingStandardsIgnoreStart
+            /**
+             * PHP_CodeSniffer bug - http://pear.php.net/bugs/bug.php?id=19290 (fixed in 1.4.0)
+             */
+            'calculated' => function ($index) {
+                return $index * 10;
+            },
+            // @codingStandardsIgnoreEnd
+        );
+        $model = new Magento_ImportExport_Fixture_Generator($pattern, 2);
         $rows = array();
         foreach ($model as $row) {
             $rows[] = $row;
         }
         $this->assertEquals(array(
-            array('id' => '1', 'name' => 'Static'),
-            array('id' => '2', 'name' => 'Static'),
+            array('id' => '1', 'name' => 'Static', 'calculated' => 10),
+            array('id' => '2', 'name' => 'Static', 'calculated' => 20),
         ), $rows);
     }
 }

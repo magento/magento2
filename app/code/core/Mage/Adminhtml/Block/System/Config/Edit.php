@@ -53,14 +53,11 @@ class Mage_Adminhtml_Block_System_Config_Edit extends Mage_Adminhtml_Block_Widge
 
     protected function _prepareLayout()
     {
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Config'),
-                    'onclick'   => 'configForm.submit()',
-                    'class' => 'save',
-                ))
-        );
+        $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Config'),
+            'onclick'   => 'configForm.submit()',
+            'class' => 'save',
+        ));
         return parent::_prepareLayout();
     }
 

@@ -48,7 +48,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Theme
                 'label' => ''
             ));
         }
-        $html = sprintf('<select name="%s" id="%s" class="no-changes">', $this->_getHtmlName(), $this->_getHtmlId())
+        $html = sprintf('<select name="%s" id="%s" class="no-changes"'  . $this->getUiId('filter', $this->_getHtmlName()) .  '>', $this->_getHtmlName(), $this->_getHtmlId())
             . $this->_drawOptions($options)
             . '</select>';
         return $html;

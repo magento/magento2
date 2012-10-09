@@ -1,3 +1,52 @@
+Update as of 10/09/2012
+======================
+* Performance Testing Framework improvements:
+  * Added ability to specify fixtures per scenario
+  * Implemented Magento application cleanup between scenarios
+  * Implemented support of PHP scenarios. The framework distinguishes type of the scenario by its extension: `jmx` or `php`
+  * Added ability to skip warm-up for a certain scenario
+  * JMeter scenarios are run with `jmeter` command instead of `java -jar ApacheJmeter.jar`. It's impossible to specify path to JMeter tool now, it should be accessible from command line as `jmeter`
+* Implemented fixture for Performance Tests with 80k products distributed among 200 categories
+* Tax rule management UI simplified:
+  * Added `Jeditable` jQuery library
+  * Added multiselect fields for customer tax class, product tax class and tax rate
+  * Added ability to add/edit Tax Rate directly from Tax Rule page
+* Simplified product creation workflow:
+  * Added product types dropdown to "Add Product" button. Default attribute set is used for product creation
+  * "Add Product" button opens form for Simple product with Default attribute set
+  * Attribute set can be changed from product creation form
+* Implemented auto-generation of product SKU and meta fields. The templates can be configured in `System -> Configuration -> Catalog -> Catalog -> Product Fields Auto-Generation`
+* Added ability to unassign system attribute from an attribute set, if it's not "Minimal" one
+* Specified UI IDs for base Backend elements. UI ID is represented as HTML "id" attribute intended to identify certain HTML element
+* Refactored `Catalog_Model_Product_Indexer_Flat::matchEvent()` method - reduced cyclomatic complexity
+* Updated DB structure to make possible to store Themes' and Widgets' layout updates
+* Migration to jQuery:
+  * Replaced Ajax, Dialog and Template mechanisms with jQuery analogs
+  * Added jQuery loader for translation process
+  * Migrated Inline-Translator to jQuery
+* JavaScript improvements:
+  * Implemented `editTrigger` jQuery widget intended to display "Edit" button for elements it is attached to
+* Fixes:
+  * Incorrect title for "Currency Symbols" page on Backend
+  * References to website, store and store view aren't displayed on Backend, if Single Store mode is disabled
+  * "Store" column and dropdown are displayed on `System -> Import/Export -> DataFlow-Profiles` page, when Single Store mode is enabled
+  * Options are absent for `'tax_class_id'` product attribute
+  * No exception/error message is produced, when attempting to commit/rollback asymmetric DB transaction
+  * Links are not copied during downloadable product duplication
+  * PayPal tab is absent in `System -> Configuration -> Sales` section
+  * "Edit" link in wishlist opens Product View page instead of "Configure Product" page
+  * Default value for a product attribute is not saved
+  * Escaped HTML blocks with `Mage_Core_Helper_Data::jsonEncode`, where necessary
+  * Impossible to add new Dataflow profile
+  * Impossible to specify default option for new product attribute with "dropdown" type
+  * Unable to send the email when creating new invoice/shipment/credit memo
+  * "Segmentation Fault" in Integration tests
+* GitHub requests:
+  * [#36](https://github.com/magento/magento2/pull/36) -- added ability to force set of "Include Tax" option for catalog prices
+  * [#63](https://github.com/magento/magento2/pull/63) -- removed obsolete "args" node in event subscribers
+  * [#64](https://github.com/magento/magento2/pull/64) -- fixed EAV text attribute validation for "0" value
+  * [#72](https://github.com/magento/magento2/pull/72) -- fixed collecting shipping totals for case, when previous invoice value is 0
+
 Update as of 9/27/2012
 ======================
 * Refactoring Magento 2 to use jQuery instead of Prototype:

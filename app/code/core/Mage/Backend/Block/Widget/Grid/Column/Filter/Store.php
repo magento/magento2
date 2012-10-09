@@ -52,7 +52,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Store
         $allShow = $this->getColumn()->getStoreAll();
 
         $html  = '<select name="' . $this->escapeHtml($this->_getHtmlName()) . '" '
-               . $this->getColumn()->getValidateClass() . '>';
+               . $this->getColumn()->getValidateClass()
+               . $this->getUiId('filter', $this->_getHtmlName())
+               . '>';
         $value = $this->getColumn()->getValue();
         if ($allShow) {
             $html .= '<option value="0"' . ($value == 0 ? ' selected="selected"' : '') . '>'

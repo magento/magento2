@@ -105,12 +105,11 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Sidebar_Cart
     protected function _prepareLayout()
     {
         $deleteAllConfirmString = Mage::helper('Mage_Sales_Helper_Data')->__('Are you sure you want to delete all items from shopping cart?');
-        $button = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->setData(array(
+        $this->addChild('empty_customer_cart_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label' => Mage::helper('Mage_Sales_Helper_Data')->__('Clear Shopping Cart'),
             'onclick' => 'order.clearShoppingCart(\'' . $deleteAllConfirmString . '\')',
             'style' => 'float: right;'
         ));
-        $this->setChild('empty_customer_cart_button', $button);
 
         return parent::_prepareLayout();
     }

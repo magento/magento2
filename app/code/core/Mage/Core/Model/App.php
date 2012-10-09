@@ -1301,7 +1301,6 @@ class Mage_Core_Model_App
                         'type'  => (string)$obsConfig->type,
                         'model' => $obsConfig->class ? (string)$obsConfig->class : $obsConfig->getClassName(),
                         'method'=> (string)$obsConfig->method,
-                        'args'  => (array)$obsConfig->args,
                     );
                 }
                 $events[$eventName]['observers'] = $observers;

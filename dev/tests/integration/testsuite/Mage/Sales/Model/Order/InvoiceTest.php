@@ -28,7 +28,6 @@
 class Mage_Sales_Model_Order_InvoiceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoConfigFixture sales_email/invoice/enabled 1
      * @magentoConfigFixture current_store design/theme/full_name default/default/default
      * @magentoDataFixture Mage/Sales/_files/order.php
      */
@@ -40,13 +39,15 @@ class Mage_Sales_Model_Order_InvoiceTest extends PHPUnit_Framework_TestCase
 
         $invoice = new Mage_Sales_Model_Order_Invoice();
         $invoice->setOrder($order);
-        $paymentInfoBlock = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($order->getPayment());
-        $paymentInfoBlock->setArea('invalid-area');
-        $invoice->setPaymentInfoBlock($paymentInfoBlock);
 
-        $this->assertNull($invoice->getEmailSent());
+        $payment = $order->getPayment();
+        $paymentInfoBlock = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($payment);
+        $paymentInfoBlock->setArea('invalid-area');
+        $payment->setBlockMock($paymentInfoBlock);
+
+        $this->assertEmpty($invoice->getEmailSent());
         $invoice->sendEmail(true);
-        $this->assertTrue($invoice->getEmailSent());
+        $this->assertNotEmpty($invoice->getEmailSent());
         $this->assertEquals('frontend', $paymentInfoBlock->getArea());
     }
 }
