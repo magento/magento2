@@ -31,7 +31,6 @@
         <reference name="head">
             <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-            <action method="setTitle" translate="title"><title>Catalog</title></action>
         </reference>
         <reference name="menu">
             <action method="setActive"><itemId>Mage_Catalog::catalog_products</itemId></action>
