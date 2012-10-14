@@ -105,11 +105,6 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
             return false;
         }
 
-        if (!$this->_isAllowed()) {
-            $this->_available = false;
-            return false;
-        }
-
         if (is_null($this->_available)) {
             $this->_available = $this->isShow();
         }
@@ -162,17 +157,5 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
     public function getSeverityText()
     {
         return strtolower(str_replace('SEVERITY_', '', $this->getNoticeSeverity()));
-    }
-
-    /**
-     * Check if current block allowed in ACL
-     *
-     * @param string $resourcePath
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')
-            ->isAllowed('admin/system/adminnotification/show_toolbar');
     }
 }

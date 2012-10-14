@@ -63,7 +63,7 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
             );
         }
 
-        if ($this->_isAllowedAction('emails')) {
+        if ($this->_isAllowedAction('Mage_Sales::emails')) {
             $this->addButton('send_notification', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Send Email'),
                 'onclick'   => 'confirmSetLocation(\''
@@ -224,11 +224,11 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
     /**
      * Check whether action is allowed
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    public function _isAllowedAction($action)
+    public function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/order/actions/' . $action);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
     }
 }

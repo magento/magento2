@@ -40,6 +40,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_model = new Mage_Backend_Model_Auth();
+        Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
     }
 
     protected function tearDown()
@@ -59,6 +60,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
             'id' => 'Mage_Backend::system2',
             'title' => 'Extended System',
             'module' => 'Mage_Backend',
+            'resource' => 'Mage_Backend::system2'
         )));
 
          //Add submenu
@@ -66,7 +68,8 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
             'id' => 'Mage_Backend::system2_acl',
             'title' => 'Acl',
             'module' => 'Mage_Backend',
-            'action' => 'admin/backend/acl/index'
+            'action' => 'admin/backend/acl/index',
+            'resource' => 'Mage_Backend::system2_acl',
         )), 'Mage_Backend::system2');
 
         // Modify existing menu item

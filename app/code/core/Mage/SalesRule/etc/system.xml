@@ -36,6 +36,7 @@
             <show_in_default>1</show_in_default>
             <show_in_website>0</show_in_website>
             <show_in_store>0</show_in_store>
+            <resource>Mage_SalesRule::config_promo</resource>
             <groups>
                 <auto_generated_coupon_codes translate="label" module="Mage_SalesRule">
                     <label>Auto Generated Specific Coupon Codes</label>

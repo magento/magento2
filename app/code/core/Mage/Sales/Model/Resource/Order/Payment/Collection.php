@@ -67,6 +67,16 @@ class Mage_Sales_Model_Resource_Order_Payment_Collection extends Mage_Sales_Mode
         foreach ($this->_items as $item) {
             $this->getResource()->unserializeFields($item);
         }
+
+        /** @var Mage_Sales_Model_Order_Payment $item */
+        foreach ($this->_items as $item) {
+            foreach ($item->getData() as $fieldName => $fieldValue) {
+                $item->setData($fieldName,
+                    Mage::getSingleton('Mage_Sales_Model_Payment_Method_Converter')->decode($item, $fieldName)
+                );
+            }
+        }
+
         return parent::_afterLoad();
     }
 }

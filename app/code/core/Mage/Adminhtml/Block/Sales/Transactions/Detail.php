@@ -60,7 +60,7 @@ class Mage_Adminhtml_Block_Sales_Transactions_Detail extends Mage_Adminhtml_Bloc
             'class'   => 'back'
         ));
 
-        if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/transactions/fetch')
+        if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::transactions_fetch')
             && $this->_txn->getOrderPaymentObject()->getMethodInstance()->canFetchTransactionInfo()) {
             $fetchUrl = $this->getUrl('*/*/fetch' , array('_current' => true));
             $this->_addButton('fetch', array(

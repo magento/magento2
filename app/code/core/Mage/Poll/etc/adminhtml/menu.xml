@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Poll::cms_poll" title="Polls" module="Mage_Poll" sortOrder="20" parent="Mage_Cms::cms" action="adminhtml/poll" />
+        <add id="Mage_Poll::cms_poll" title="Polls" module="Mage_Poll" sortOrder="20" parent="Mage_Cms::cms" action="adminhtml/poll" resource="Mage_Poll::poll"/>
     </menu>
 </config>

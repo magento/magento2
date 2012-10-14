@@ -24,41 +24,42 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if(isset($poll)) : ?>
-<script type="text/javascript">
-//<![CDATA[
-    function validatePollAnswerIsSelected()
-    {
-        var options = $$('input.poll_vote');
-        for( i in options ) {
-            if( options[i].checked == true ) {
-                return true;
-            }
-        }
-        return false;
-    }
-//]]>
-</script>
+<?php if (isset($poll)) : ?>
 <div class="block block-poll">
     <div class="block-title">
         <strong><span><?php echo $this->__('Community Poll') ?></span></strong>
     </div>
-    <form id="pollForm" action="<?php echo $action ?>" method="post" onsubmit="return validatePollAnswerIsSelected();">
+    <form id="pollForm" action="<?php echo $action ?>" method="post">
         <div class="block-content">
             <p class="block-subtitle"><?php echo $this->escapeHtml($poll->getPollTitle()); ?></p>
-            <?php if( $poll_answers ): ?>
+            <?php if ($poll_answers): ?>
             <ul id="poll-answers">
-                <?php foreach( $poll_answers as $answer ): ?>
+                <?php foreach ($poll_answers as $answer): ?>
                 <li>
-                    <input type="radio" name="vote" class="radio poll_vote" id="vote_<?php echo $answer->getId() ?>" value="<?php echo $answer->getAnswerId() ?>" />
-                    <span class="label"><label for="vote_<?php echo $answer->getId() ?>"><?php echo $this->escapeHtml($answer->getAnswerTitle()) ?></label></span>
+                    <input type="radio" name="vote" class="radio poll_vote" id="vote_<?php echo $answer->getId() ?>"
+                           value="<?php echo $answer->getAnswerId() ?>"/>
+                    <span class="label"><label
+                        for="vote_<?php echo $answer->getId() ?>"><?php echo $this->escapeHtml($answer->getAnswerTitle()) ?></label></span>
                 </li>
                 <?php endforeach; ?>
             </ul>
-            <script type="text/javascript">decorateList('poll-answers');</script>
+            <script type="text/javascript">
+                //<![CDATA[
+                (function($) {
+                    $.mage.event.observe('mage.poll.initialize', function (event, initData) {
+                        initData.formId = '#pollForm';
+                        pollAnswersId = '#poll-answers';
+                        pollCheckedOption = 'input.poll_vote:checked';
+                    });
+                    $.mage.load.js("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
+                    $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Poll::poll.js') ?>");
+                })(jQuery);
+                //]]>
+            </script>
             <?php endif; ?>
             <div class="actions">
-                <button type="submit" title="<?php echo $this->__('Vote') ?>" class="button"><span><span><?php echo $this->__('Vote') ?></span></span></button>
+                <button type="submit" title="<?php echo $this->__('Vote') ?>" class="button">
+                    <span><span><?php echo $this->__('Vote') ?></span></span></button>
             </div>
         </div>
     </form>

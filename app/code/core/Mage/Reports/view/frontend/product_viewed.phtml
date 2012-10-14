@@ -32,13 +32,27 @@
     </div>
     <div class="block-content">
         <ol id="recently-viewed-items">
-        <?php foreach ($_products as $_item): ?>
+            <?php foreach ($_products as $_item): ?>
             <li class="item">
-                <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $_item->getName() , 'name') ?></a></p>
+                <p class="product-name"><a
+                    href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $_item->getName(), 'name') ?></a>
+                </p>
             </li>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
         </ol>
-        <script type="text/javascript">decorateList('recently-viewed-items');</script>
+        <script type="text/javascript">
+            //<![CDATA[
+            (function($) {
+                $.mage.event.observe('mage.productView.initialize', function (e, o) {
+                    o.recentlyViewedItemSelector = '#recently-viewed-items';
+                });
+                $.mage.load.jsSync(
+                    "<?php echo $this->getSkinUrl('mage/decorate.js') ?>",
+                    "<?php echo $this->getSkinUrl('Mage_Checkout::js/product-view.js') ?>"
+                );
+            })(jQuery);
+            //]]>
+        </script>
     </div>
 </div>
 <?php endif; ?>

@@ -1,3 +1,242 @@
+Update as of 10/11/2012
+======================
+* Removed unused `Mage_DesignEditor_Model_History_Compact_Diff` class
+* Fixes:
+  * Incorrect title for Manage Products page
+  * 'Element with ID 'wishlist_column_qty' already exists.' error on Manage Shopping Cart page
+  * Incorrect redirect on "Print Shipping Labels" action, when shipment without shipping label selected
+  * Error message is displayed twice, when restoring admin password with captcha enabled
+  * Impossible to retrieve admin password, when captcha is enabled
+
+Update as of 10/09/2012
+======================
+* Performance Testing Framework improvements:
+  * Added ability to specify fixtures per scenario
+  * Implemented Magento application cleanup between scenarios
+  * Implemented support of PHP scenarios. The framework distinguishes type of the scenario by its extension: `jmx` or `php`
+  * Added ability to skip warm-up for a certain scenario
+  * JMeter scenarios are run with `jmeter` command instead of `java -jar ApacheJmeter.jar`. It's impossible to specify path to JMeter tool now, it should be accessible from command line as `jmeter`
+* Implemented fixture for Performance Tests with 80k products distributed among 200 categories
+* Tax rule management UI simplified:
+  * Added `Jeditable` jQuery library
+  * Added multiselect fields for customer tax class, product tax class and tax rate
+  * Added ability to add/edit Tax Rate directly from Tax Rule page
+* Simplified product creation workflow:
+  * Added product types dropdown to "Add Product" button. Default attribute set is used for product creation
+  * "Add Product" button opens form for Simple product with Default attribute set
+  * Attribute set can be changed from product creation form
+* Implemented auto-generation of product SKU and meta fields. The templates can be configured in `System -> Configuration -> Catalog -> Catalog -> Product Fields Auto-Generation`
+* Added ability to unassign system attribute from an attribute set, if it's not "Minimal" one
+* Specified UI IDs for base Backend elements. UI ID is represented as HTML "id" attribute intended to identify certain HTML element
+* Refactored `Catalog_Model_Product_Indexer_Flat::matchEvent()` method - reduced cyclomatic complexity
+* Updated DB structure to make possible to store Themes' and Widgets' layout updates
+* Migration to jQuery:
+  * Replaced Ajax, Dialog and Template mechanisms with jQuery analogs
+  * Added jQuery loader for translation process
+  * Migrated Inline-Translator to jQuery
+* JavaScript improvements:
+  * Implemented `editTrigger` jQuery widget intended to display "Edit" button for elements it is attached to
+* Fixes:
+  * Incorrect title for "Currency Symbols" page on Backend
+  * References to website, store and store view aren't displayed on Backend, if Single Store mode is disabled
+  * "Store" column and dropdown are displayed on `System -> Import/Export -> DataFlow-Profiles` page, when Single Store mode is enabled
+  * Options are absent for `'tax_class_id'` product attribute
+  * No exception/error message is produced, when attempting to commit/rollback asymmetric DB transaction
+  * Links are not copied during downloadable product duplication
+  * PayPal tab is absent in `System -> Configuration -> Sales` section
+  * "Edit" link in wishlist opens Product View page instead of "Configure Product" page
+  * Default value for a product attribute is not saved
+  * Escaped HTML blocks with `Mage_Core_Helper_Data::jsonEncode`, where necessary
+  * Impossible to add new Dataflow profile
+  * Impossible to specify default option for new product attribute with "dropdown" type
+  * Unable to send the email when creating new invoice/shipment/credit memo
+  * "Segmentation Fault" in Integration tests
+* GitHub requests:
+  * [#36](https://github.com/magento/magento2/pull/36) -- added ability to force set of "Include Tax" option for catalog prices
+  * [#63](https://github.com/magento/magento2/pull/63) -- removed obsolete "args" node in event subscribers
+  * [#64](https://github.com/magento/magento2/pull/64) -- fixed EAV text attribute validation for "0" value
+  * [#72](https://github.com/magento/magento2/pull/72) -- fixed collecting shipping totals for case, when previous invoice value is 0
+
+Update as of 9/27/2012
+======================
+* Refactoring Magento 2 to use jQuery instead of Prototype:
+  * Implemented simple lazy-loading functionality
+  * Converted decorator mechanism to jQuery
+  * Moved Installation process to jQuery
+  * Moved Home, Category and Simple Product View pages to jQuery
+  * Moved all frontend libraries from `pub/js` directory to `pub/lib`
+* Improved Javascript unit tests to be consistent with other test frameworks in Magento
+* Added Javascript code analysis tests to the static tests suite
+* Added jQuery file uploader for admin backend, cleaned out old deprecated uploaders
+* Implemented fixture of 100k orders for the performance tests
+* Fixes
+  * Admin menu elements order differs for a cached page and non-cached one
+  * Typos in System > Configuration > General Tab
+  * Wrong elements positions on "View Order" page
+  * Impossible to configure checkout on store scope
+  * Warning message in `system.log` when using GD2 image adapter
+  * "Preview" link is absent for managing CMS Pages in single store mode
+  * "Promotions" tab is missing on Configuration page
+  * Wrong format of performance tests config
+
+Update as of 9/13/2012
+======================
+* Implemented the option to enable the single store mode in the system configuration, which simplifies the back-end GUI:
+  * Hiding scope labels from the system configuration
+  * Hiding the scope switcher from the CMS management pages and the system configuration
+  * Hiding scope related fields from the system configuration
+  * Hiding scope related columns and fields from the sales pages (order, invoice, shipment pages)
+  * Hiding scope related fields from the promotions
+  * Hiding scope related fields from the catalog pages
+  * Hiding scope related columns and fields from the customers management page
+  * Hiding scope related columns and fields from the customer and customer address attributes management pages
+* Implemented the history management for the Visual Design Editor
+* Implemented the user interface for themes management, which allows to list existing themes and add new ones
+* Replaced all usages of the old JavaScript translations mechanism with the new jQuery one
+* Refactored methods with high cyclomatic complexity
+* Converted some surrogate integration tests into functional Selenium tests
+* Converted some surrogate integration tests into unit tests
+* Fixes:
+  * Fixed inability to install application with a prefix defined for database tables
+  * Fixed displaying fields with model name in the payment methods settings
+  * Fixed performance degradation of the back-end menu rendering
+  * Fixed absence of the success message upon newsletter template creation/deletion/queueing
+  * Workaround for occasional segmentation fault in integration tests caused by `Mage_Core_Model_Resource_Setup_Migration`
+* GitHub requests:
+  * [#51](https://github.com/magento/magento2/issues/51) -- fixed managing of scope-spefic values for Categories
+  * [#56](https://github.com/magento/magento2/pull/56) -- removed excessive semicolon in the CSS file
+  * [#60](https://github.com/magento/magento2/issues/60) -- fixed taking bind parameters into account in `Mage_Core_Model_Resource_Db_Collection_Abstract::getAllIds()`
+  * [#61](https://github.com/magento/magento2/pull/61) -- relocated declaration of the "Google Checkout" payment method into `Mage_GoogleCheckout` module from `Mage_Sales`
+
+Update as of 9/05/2012
+======================
+* Implemented encryption of the credit card name and expiration date for the payment method "Credit Card (saved)"
+* Implemented console utility `dev/tools/migration/get_aliases_map.php`, which generates map file "M1 class alias" to "M2 class name"
+* Implemented automatic data upgrades for replacing "M1 class aliases" to "M2 class names" in a database
+* Implemented recursive `chmod` in the library class `Varien_Io_File`
+* Improved verbosity of the library class `Magento_Shell`
+* Migrated client-side translation mechanism to jQuery
+* Performance tests:
+  * Improved assertion for number of created orders for the checkout performance testing scenario
+    * Reverted the feature of specifying PHP scenarios to be executed before and after a JMeter scenario
+    * Implemented validation for the number of created orders as a part of the JMeter scenario
+    * Implemented the "Admin Login" user activity as a separate file to be reused in the performance testing scenarios
+  * Implemented fixture of 100k customers for the performance tests
+  * Implemented fixture of 100k products for the performance tests
+    * Enhanced module `Mage_ImportExport` in order to utilize it for the fixture implementation
+  * Implemented back-end performance testing scenario, which covers Dashboard, Manage Products, Manage Customers pages
+* Fixes:
+  * Fixed Magento console installer to enable write permission recursively to the `var` directory
+  * Fixed performance tests to enable write permission recursively to the `var` directory
+  * Fixed integration test `Mage_Adminhtml_Model_System_Config_Source_Admin_PageTest::testToOptionArray` to not produce "Warning: DOMDocument::loadHTML(): htmlParseEntityRef: expecting ';' in Entity" in the developer mode
+* GitHub requests:
+  * [#43](https://github.com/magento/magento2/pull/43) -- implemented logging of executed setup files
+  * [#44](https://github.com/magento/magento2/pull/44)
+    * Implemented support of writing logs into wrappers (for example, `php://output`)
+    * Enforced a log writer model to be an instance of `Zend_Log_Writer_Stream`
+  * [#49](https://github.com/magento/magento2/pull/49)
+    * Fixed sorting of totals according to "before" and "after" properties
+    * Introduced `Magento_Data_Graph` library class and utilized it for finding cycles in "before" and "after" declarations
+    * Implemented tests for totals sorting including the ambiguous cases
+
+Update as of 8/30/2012
+======================
+* Fixes:
+  * Fixed name, title, markup, styles at "Orders and Returns" homepage
+  * Fixed displaying products in the shopping cart item block at the backend
+
+Update as of 8/26/2012
+======================
+* Decoupled Tag module functionality from other modules
+* Visual Design Editor:
+  * Implemented tracking of user changes history and rendering the actions at VDE toolbar
+  * Implemented compacting of user changes history. Compacting is done in order to save all the changes as a minimal layout update.
+* Improvements:
+  * Added Atlassian IDE Plugin configuration files to `.gitignore`
+  * Relocated `add_to_cart`, `checkout` and `product_edit` performance scenarios from `samples` to the normal `testsuite` directory. These scenarios can be used for Magento performance testing.
+  * Implemented verification of number of orders that were created during execution of `checkout` performance scenario
+  * Removed usage of deprecated `PHPUnit_Extensions_OutputTestCase` class from unit tests
+* Fixes:
+  * Fixed MySQL DB adapter to always throw exception, if it was not able to connect to DB because of wrong configuration. So now the adapter's behavior is not dependent on `error_reporting` settings.
+  * Added the missing closing tag to New Order email template
+  * Fixed `Mage_ImportExport_Model_Import_Entity_CustomerComposite` integration test issues
+  * Marked several integration tests in `Mage_Adminhtml_CustomerControllerTest` as incomplete, as the tested functionality was not MMDB-compliant
+  * Fixed issue with unit tests failure, when there was a Zend Framework installed as PEAR package
+  * Fixed `advanced_search` performance scenario to fail, if the searched product doesn't exist
+  * Fixed issue with non-escaped latest message link in admin backend
+* GitHub requests:
+  * [#48](https://github.com/magento/magento2/pull/48) -- fixed usage of a collection at the place, where just a single object was needed
+
+Update as of 8/15/2012
+======================
+* Refactored ACL functionality:
+  * Implementation is not bound to backend area anymore and moved to `Mage_Core` module
+  * Covered backwards-incompatible changes with additional migration tool (`dev/tools/migration/Acl`)
+* Implemented "move" layout directive and slightly modified behavior of "remove"
+* A failure in DB cleanup by integration testing framework is articulated more clearly by throwing `Magento_Exception`
+* Fixed security vulnerability of exploiting Magento "cookie restriction" feature
+* Fixed caching mechanism of loading modules declaration to not cause additional performance overhead
+* Adjusted include path in unit tests to use the original include path at the end, rather than at the beginning
+
+Update as of 8/9/2012
+=====================
+* Improvements:
+  * Implemented "multi-file" scheduled import/export of customers, deleted legacy implementation
+  * Ability to import amendments to complex product data, such as custom options
+  * Ability to cleanup database before installation using CLI script (`dev/shell/install.php`)
+  * Customer export feature performance optimizations
+  * Ability to control `robots.txt` via backend (System -> Config -> Design -> Search Engine Robots)
+  * Ability to create custom URL rewrites for CMS-pages
+* Product editing and attribute set changes:
+  * Ability to copy custom options from one product to another
+  * Ability to create/change attribute set during product creation/editing
+  * Ability to define default values for all system attributes
+  * New "Minimal" attribute set which has only required system attributes
+* "Google Sitemap" feature changes:
+  * The feature is renamed to "XML Sitemap"
+  * Reference to a XML sitemap file will be automatically added to `robots.txt` upon update. Controlled by "System -> Config -> Design -> Search Engine Robots", enabled by default
+  * Automatic switch to multiple "sitemaps" when size exceeds Google limits
+  * Support of images in sitemap
+* Removed "HTML Sitemap" feature as such (not the one known as "Google Sitemap")
+* Fixes:
+  * Map of listed products in XML sitemap will list product last modification date, rather than current date
+  * Incorrect timestamp of export file
+  * Addressed WSI-compliance issues in SOAP API (V2)
+  * Fixed incompatibility of Downloader tool with PHP 5.3
+  * Fixed inconsistent behavior of importing duplicated rows in CSV files
+  * Fixed message about successful registration not appearing if customer has previously logged out on the shopping cart page
+  * Fixed minor configuration issues for "Cache on Delivery Payment" method
+  * Fixed wrong order status in some cases when it is placed using PayPal with "Authorization" action
+  * Applied Zend framework security hotfix against XML external entity injection via XMLRPC API
+  * Fixed inappropriate displaying of credit card credentials to admin user after "reorder" action with Authorize.net and PayPal payment methods involved
+
+Update as of 8/2/2012
+=====================
+* Refactored ACL for the backend
+  * ACL resources
+    * Strict configuration format, validated by XSD schema
+    * ACL configuration relocation from `app/code/<pool>/<namespace>/<module>/etc/adminhtml.xml` to `app/code/<pool>/<namespace>/<module>/etc/adminhtml/acl.xml`
+    * Renamed ACL resource identifiers according to the format `<namespace>_<module>::<resource>` throughout the system
+      * Backend menu configuration requires to specify ACL resource identifier in the new format
+      * Explicit declaration of ACL resources in `app/code/<pool>/<namespace>/<module>/etc/system.xml` instead of implicit relation by XPath
+    * Migration tool `dev/tools/migration/acl.php` to convert ACL configuration from 1.x to 2.x
+  * Declaration of ACL resource/role/rule loaders through the area configuration
+    * Module `Mage_Backend` declares loader for ACL resources in backend area
+    * Module `Mage_User` declares loaders for ACL roles and rules (relations between roles and resources) in backend area
+  * Implemented integrity and legacy tests for ACL
+* Fixed issues:
+  * Losing qty and visibility information when importing products
+  * Impossibility to reload captcha on backend
+  * Temporary excluded from execution integration test `Mage_Review_Model_Resource_Review_Product_CollectionTest::testGetResultingIds()` and corresponding fixture script, which cause occasional `segmentation fault` (exit code 139)
+* Refactored methods with high cyclomatic complexity:
+  * `Mage_Adminhtml_Block_System_Store_Edit_Form::_prepareForm()`
+  * `Mage_Adminhtml_Block_System_Config_Form::initForm()`
+  * `Mage_Adminhtml_Block_System_Config_Form::initFields()`
+* GitHub requests:
+  * [#32](https://github.com/magento/magento2/pull/32) -- fixed declaration of localization CSV files
+  * [#35](https://github.com/magento/magento2/issues/35) -- removed non-used `Mage_Core_Block_Flush` block
+  * [#41](https://github.com/magento/magento2/pull/41) -- implemented ability to extends `app/etc/local.xml` by specifying additional config file via `MAGE_LOCAL_CONFIG` environment variable
+
 Update as of 7/26/2012
 =====================
 * Implemented Magento Validator library in order to have clear solid mechanism and formal rules of input data validation

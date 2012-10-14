@@ -56,7 +56,7 @@ abstract class Mage_Backend_Model_Menu_Builder_CommandAbstract
      */
     public function __construct(array $data = array())
     {
-        foreach($this->_requiredParams as $param) {
+        foreach ($this->_requiredParams as $param) {
             if (!isset($data[$param]) || is_null($data[$param])) {
                 throw new InvalidArgumentException("Missing required param " . $param);
             }

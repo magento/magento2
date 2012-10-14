@@ -27,8 +27,8 @@
 -->
 <config>
     <menu>
-        <add id="Mage_User::system_acl" title="Permissions" module="Mage_User" sortOrder="70" parent="Mage_Adminhtml::system" />
-        <add id="Mage_User::system_acl_users" title="Users" module="Mage_User" parent="Mage_User::system_acl" action="adminhtml/user" />
-        <add id="Mage_User::system_acl_roles" title="Roles" module="Mage_User" parent="Mage_User::system_acl" action="adminhtml/user_role" />
+        <add id="Mage_User::system_acl" title="Permissions" module="Mage_User" sortOrder="70" parent="Mage_Adminhtml::system" resource="Mage_User::acl"/>
+        <add id="Mage_User::system_acl_users" title="Users" module="Mage_User" parent="Mage_User::system_acl" action="adminhtml/user" resource="Mage_User::acl_users"/>
+        <add id="Mage_User::system_acl_roles" title="Roles" module="Mage_User" parent="Mage_User::system_acl" action="adminhtml/user_role" resource="Mage_User::acl_roles"/>
     </menu>
 </config>

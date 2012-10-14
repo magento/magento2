@@ -27,10 +27,11 @@
 <?php
 
 /**
- * @see Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links
+ * @var $this Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links
  */
 ?>
 <?php $_product = $this->getProduct()?>
+<?php $this->getConfigJson() ?>
 <div class="fieldset">
 <table cellspacing="0" class="form-list">
     <tbody>
@@ -58,7 +59,7 @@
             </td>
             <td class="value">
                     <?php echo $this->getPurchasedSeparatelySelect()?>
-                </td>
+            </td>
             <td class="scope-label"><?php echo !Mage::app()->isSingleStoreMode() ? Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') : ''; ?></td>
             <td><small>&nbsp;</small></td>
         </tr>
@@ -92,7 +93,7 @@
     </thead>
     <tfoot>
         <tr>
-            <td colspan="8" class="a-right"><?php echo $this->getAddButtonHtml()?>&nbsp;<?php echo $this->getUploadButtonHtml() ?></td>
+            <td colspan="8" class="a-right"><?php echo $this->getAddButtonHtml()?></td>
         </tr>
     </tfoot>
     <tbody id="link_items_body">
@@ -143,10 +144,14 @@ var linkTemplate = '<tr>'+
                 '<div id="downloadable_link_{{id}}_sample_file" class="uploader">'+
                     '<div id="downloadable_link_{{id}}_sample_file-old" class="file-row-info"></div>'+
                     '<div id="downloadable_link_{{id}}_sample_file-new" class="file-row-info"></div>'+
-                    '<div class="buttons">'+
-                        '<div id="downloadable_link_{{id}}_sample_file-install-flash" style="display:none">'+
-                            '<?php echo $this->jsQuoteEscape(Mage::helper('Mage_Media_Helper_Data')->__('This content requires last version of Adobe Flash Player. <a href="%s">Get Flash</a>', 'http://www.adobe.com/go/getflash/')) ?>'+
-                        '</div>'+
+                    '<div class="fileinput-button form-buttons">'+
+                        '<span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Browse Files...') ?></span>' +
+                        '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $this->getFileFieldName('link_samples') ?>">' +
+                        '<script type="text/javascript">' +
+                        '/*<![CDATA[*/' +
+                            'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $this->getUploadUrl('link_samples') ?>"); ' +
+                        '/*]]>*/' +
+                        '</scr'+'ipt>'+
                     '</div>'+
                     '<div class="clear"></div>'+
                 '</div>'+
@@ -167,10 +172,14 @@ var linkTemplate = '<tr>'+
                 '<div id="downloadable_link_{{id}}_file" class="uploader">'+
                     '<div id="downloadable_link_{{id}}_file-old" class="file-row-info"></div>'+
                     '<div id="downloadable_link_{{id}}_file-new" class="file-row-info new-file"></div>'+
-                    '<div class="buttons">'+
-                        '<div id="downloadable_link_{{id}}_file-install-flash" style="display:none">'+
-                            '<?php echo $this->jsQuoteEscape(Mage::helper('Mage_Media_Helper_Data')->__('This content requires last version of Adobe Flash Player. <a href="%s">Get Flash</a>', 'http://www.adobe.com/go/getflash/')) ?>'+
-                        '</div>'+
+                    '<div class="fileinput-button form-buttons">'+
+                        '<span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Browse Files...') ?></span>' +
+                        '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $this->getFileFieldName('links') ?>">' +
+                        '<script type="text/javascript">' +
+                        '/*<![CDATA[*/' +
+                            'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $this->getUploadUrl('links') ?>"); ' +
+                        '/*]]>*/' +
+                        '</scr'+'ipt>'+
                     '</div>'+
                     '<div class="clear"></div>'+
                 '</div>'+
@@ -354,6 +363,60 @@ var linkItems = {
 }
 
 linkItems.bindRemoveButtons();
+
+linksUploader = function (id, url) {
+    (function ($) {
+        $(id).fileupload({
+            dataType: 'json',
+            url: url,
+            sequentialUploads: true,
+            maxFileSize: 2000000,
+            add: function (e, data) {
+                $.each(data.files, function (index, file) {
+                    if ($(id + ' .progressbar-container').length) {
+                        $(id + ' .progressbar-container').parent().remove();
+                    }
+                    data.fileId = Math.random().toString(36).substr(2, 9);
+                    var progressTmpl = $(id + '-template').children(':first').clone();
+                    progressTmpl.attr('id', data.fileId);
+                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
+                            .replace('{{name}}', file.name);
+                    progressTmpl.html(fileInfoHtml);
+                    progressTmpl.appendTo(id);
+                });
+                $(this).fileupload('process', data).done(function () {
+                    data.submit();
+                });
+            },
+            done: function (e, data) {
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).css('width', '100%');
+                if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                    new Downloadable.FileList(id.substr(1), null).handleUploadComplete(data.result);
+                } else {
+                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+                }
+            },
+            progress: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).css('width', progress + '%');
+            },
+            fail: function (e, data) {
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                if (data.result && data.result.hasOwnProperty('errorcode')) {
+                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+                }
+            }
+        });
+    })(jQuery);
+};
+
 
 if ($('downloadable_link_purchase_type')) {
     Event.observe('downloadable_link_purchase_type', 'change', linkItems.togglePriceFields.bind());

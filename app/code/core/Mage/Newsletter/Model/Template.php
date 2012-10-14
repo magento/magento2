@@ -188,7 +188,7 @@ class Mage_Newsletter_Model_Template extends Mage_Core_Model_Template
             $variables['this'] = $this;
         }
 
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $processor->setStoreId(Mage::app()->getStore());
         } else {
             $processor->setStoreId(Mage::app()->getRequest()->getParam('store_id'));

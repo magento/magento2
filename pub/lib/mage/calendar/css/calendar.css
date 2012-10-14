@@ -1,0 +1,120 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    frontend calendar
+ * @package     mage
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+.ui-datepicker {
+    position: relative;
+    display: none;
+    font-size: 11px;
+    cursor: default;
+    background: #d4d0c8;
+    font-family: tahoma, verdana, sans-serif;
+    width: auto; /* Auto sizing is needed to resize the datepicker for some locales. */
+    z-index: 999999 !important; /* Override the in-line setting, which is too low. */
+}
+
+.ui-datepicker table {
+    margin-top: 0.4em;
+    font-size: 11px;
+    cursor: default;
+    background: #d4d0c8;
+    font-family: tahoma, verdana, sans-serif;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    /* This holds the current month and year. */
+    background: #848078;
+    color: #fff;
+    text-align: center;
+}
+
+.ui-datepicker thead {
+    /* Header cells containing the day names. */
+    background: #f4f0e8;
+}
+
+.ui-datepicker th {
+    font-weight: normal;
+}
+
+.ui-datepicker thead .ui-datepicker-week-end {
+    /* How a weekend day name shows in header. */
+    color: #f00;
+}
+
+.ui-datepicker tbody td.ui-datepicker-week-col {
+    /* The column with the numbered weeks. */
+    background: #f4f0e8;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ui-datepicker tbody td a.ui-state-default {
+    background: #d4d0c8;
+    color: #000;
+}
+
+.ui-datepicker tbody td a.ui-state-active {
+    /* Cell showing selected date. */
+    font-weight: bold;
+    background: #e4e0d8;
+}
+
+.ui-datepicker tbody td.ui-datepicker-week-end a {
+    /* Cells showing weekend days. */
+    color: #f00;
+}
+
+.ui-datepicker tbody td.ui-datepicker-today a {
+    /* Cell showing today date. */
+    font-weight: bold;
+    color: #00f;
+}
+
+.ui-datepicker tbody td.ui-datepicker-today a.ui-state-hover {
+    /* Hovering over a table cell. */
+    border: 1px solid #999999;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane {
+    /* Bottom pane containing Today and Done buttons. */
+    margin: 0;
+}
+
+.ui-datepicker .ui-datepicker-buttonpane button {
+    font-size: 11px;
+    font-family: tahoma, verdana, sans-serif;
+    margin: 2px;
+}
+
+.ui-datepicker .ui-datepicker-title select {
+    /* Select dropdowns for picking month and year. */
+    background: #c4c0b8;
+    color: #000;
+    padding: 0;
+    vertical-align: top;
+}
+
+.ui-datepicker-trigger {
+    vertical-align: middle; /* Vertically align the calendar icon in the middle of the input field. */
+}

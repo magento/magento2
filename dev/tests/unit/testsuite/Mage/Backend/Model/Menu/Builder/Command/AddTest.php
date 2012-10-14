@@ -33,7 +33,11 @@ class Mage_Backend_Model_Menu_Builder_Command_AddTest extends PHPUnit_Framework_
     protected $_model;
 
     protected $_params = array(
-        'id' => 'item', 'title' => 'item', 'module' => 'Mage_Backend', 'parent' => 'parent'
+        'id' => 'item',
+        'title' => 'item',
+        'module' => 'Mage_Backend',
+        'parent' => 'parent',
+        'resource' => 'Mage_Backend::item'
     );
 
     public function setUp()

@@ -42,10 +42,10 @@ class Mage_Backend_Model_Menu_Config_Menu extends Magento_Config_XmlAbstract
     /**
      * Extract configuration data from the DOM structure
      *
-     * @param DOMDocument $dom
+     * @param DOMDocument $domDocument
      * @return array
      */
-    protected function _extractData(DOMDocument $dom)
+    protected function _extractData(DOMDocument $domDocument)
     {
         return array();
     }

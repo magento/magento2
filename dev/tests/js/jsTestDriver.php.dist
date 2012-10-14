@@ -1,0 +1,55 @@
+<?php
+/**
+ * Returns an array containing the configuration used to generate the JsTestDriver configuration
+ * file that gets used by JsTestDriver when it executes the Javascript unit tests.
+ *
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    tests
+ * @package     js
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *
+ * @return array
+ */
+return array(
+    'server' => 'http://localhost:9876',
+    'proxy' => array(array('matcher' => '/pub/lib/*', 'server' => '%s/test/%s/pub/lib/')),
+    'load' => array(
+        '/pub/lib/globalize',
+        '/pub/lib/mage/localization',
+        '/pub/lib/mage/validation',
+        '/pub/lib/jquery/ui/jquery-ui.js',
+        '/pub/lib/jquery/ui/i18n',
+        '/pub/lib/jquery/jquery.tmpl.min.js',
+        '/app/code/core/Mage/DesignEditor/view/frontend/js/base.js',
+        '/app/code/core/Mage/DesignEditor/view/frontend/js/design_editor.js',
+        '/pub/lib/jquery/jstree/jquery.jstree.js',
+        '/pub/lib/jquery/slimScroll/slimScroll.min.js',
+        '/app/code/core/Mage/Page/view/frontend/js/cookies.js',
+        '/app/code/core/Mage/DesignEditor/view/frontend/css/styles.css',
+        '/pub/lib/mage/translate.js',
+        '/pub/lib/mage/loader.js',
+        '/pub/lib/mage/edit-trigger.js',
+        '/pub/lib/mage/translate-inline.js',
+    ),
+    'test' => array('/dev/tests/js/testsuite'),
+    'serve' => array('/pub/lib/mage/calendar'),
+    'JsTestDriver' => '{{path_to_jstestdriver_jar}}'
+);

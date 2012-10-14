@@ -43,9 +43,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
 
     protected function _prepareLayout()
     {
-        $this->setChild('uploader',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Media_Uploader')
-        );
+        $this->addChild('uploader', 'Mage_Adminhtml_Block_Media_Uploader');
 
         $this->getUploader()->getConfig()
             ->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()->getUrl('*/catalog_product_gallery/upload'))

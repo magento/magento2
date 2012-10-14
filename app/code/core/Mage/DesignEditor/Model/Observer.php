@@ -29,8 +29,12 @@
  */
 class Mage_DesignEditor_Model_Observer
 {
-    const PAGE_HANDLE =             'design_editor_page';
-    const TOOLBAR_HANDLE =          'design_editor_toolbar';
+    /**#@+
+     * VDE specific layout update handles
+     */
+    const HANDLE_PAGE    = 'design_editor_page';
+    const HANDLE_TOOLBAR = 'design_editor_toolbar';
+    /**#@-*/
 
     /**
      * Renderer for wrapping html to be shown at frontend
@@ -65,14 +69,14 @@ class Mage_DesignEditor_Model_Observer
             return;
         }
 
-        /** @var $update Mage_Core_Model_Layout_Update */
+        /** @var $update Mage_Core_Model_Layout_Merge */
         $update = $observer->getEvent()->getLayout()->getUpdate();
         $handles = $update->getHandles();
         $handle = reset($handles);
-        if ($handle && $update->getPageHandleType($handle) == Mage_Core_Model_Layout_Update::TYPE_FRAGMENT) {
-            $update->addHandle(self::PAGE_HANDLE);
+        if ($handle && $update->getPageHandleType($handle) == Mage_Core_Model_Layout_Merge::TYPE_FRAGMENT) {
+            $update->addHandle(self::HANDLE_PAGE);
         }
-        $update->addHandle(self::TOOLBAR_HANDLE);
+        $update->addHandle(self::HANDLE_TOOLBAR);
     }
 
     /**
@@ -141,17 +145,18 @@ class Mage_DesignEditor_Model_Observer
 
         $block = $layout->getBlock($elementName);
         $isVde = ($block && 0 === strpos(get_class($block), 'Mage_DesignEditor_Block_'));
-        $isDraggable = $layout->isManipulationAllowed($elementName) && !$isVde;
+        $manipulationAllowed = $layout->isManipulationAllowed($elementName) && !$isVde;
         $isContainer = $layout->isContainer($elementName);
 
-        if ($isDraggable || $isContainer) {
+        if ($manipulationAllowed || $isContainer) {
             $elementId = 'vde_element_' . rtrim(strtr(base64_encode($elementName), '+/', '-_'), '=');
             $this->_wrappingRenderer->setData(array(
                 'element_id'    => $elementId,
                 'element_title' => $layout->getElementProperty($elementName, 'label') ?: $elementName,
                 'element_html'  => $transport->getData('output'),
-                'is_draggable'  => $isDraggable,
+                'is_manipulation_allowed'  => $manipulationAllowed,
                 'is_container'  => $isContainer,
+                'element_name'  => $elementName,
             ));
             $transport->setData('output', $this->_wrappingRenderer->toHtml());
         }

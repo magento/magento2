@@ -57,6 +57,8 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_MERCHANT_VAT_NUMBER = 'general/store_information/merchant_vat_number';
     const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
+    const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
+
     /**
      * Const for correct dividing decimal values
      */
@@ -818,5 +820,18 @@ XML;
     public function isStaticFilesSigned()
     {
         return (bool) Mage::getStoreConfig(self::XML_PATH_STATIC_FILE_SIGNATURE);
+    }
+
+    /**
+     * Check if Single-Store mode is enabled in configuration
+     *
+     * This flag only shows that admin does not want to show certain UI components at backend (like store switchers etc)
+     * if Magento has only one store view but it does not check the store view collection
+     *
+     * @return bool
+     */
+    public function isSingleStoreModeEnabled()
+    {
+        return (bool) Mage::getStoreConfig(self::XML_PATH_SINGLE_STORE_MODE_ENABLED);
     }
 }

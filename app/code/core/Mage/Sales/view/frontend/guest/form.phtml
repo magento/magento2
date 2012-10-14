@@ -25,89 +25,70 @@
  */
 ?>
 <div class="page-title">
-   <h1><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Returns') ?></h1>
+    <h1><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Orders and Returns') ?></h1>
 </div>
-<div class="block-content">
-   <form id="oar_widget_orders_and_returns_form" action="<?php echo $this->getActionUrl() ?>" method="post" class="search-form" name="guest_post">
-       <ul class="form-alt">
-           <li style="clear:both;">
-               <div class="input-box" style="float:left;width:150px;">
-                   <label for="oar_order_id" class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order ID') ?> <em>*</em></label>
-               </div>
-               <div class="input-box" style="float:left;width:305px;">
-                   <input type="text" class="input-text required-entry" id="oar_order_id" name="oar_order_id" style="width:300px;"/>
-               </div>
-           </li>
-           <li style="clear:both;">
-               <div class="input-box">
-                   <?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Enter the billing last name and email/ZIP as in the order billing address') ?>.
+<form id="oar_widget_orders_and_returns_form" action="<?php echo $this->getActionUrl() ?>" method="post" class="search-form" name="guest_post">
+    <div class="fieldset">
+        <h2 class="legend"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order Information') ?></h2>
+        <ul class="form-list">
+            <li class="fields">
+                <div class="field">
+                    <label for="oar_order_id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Order ID') ?></label>
+                    <div class="input-box">
+                        <input type="text" class="input-text required-entry" id="oar_order_id" name="oar_order_id" />
+                    </div>
                 </div>
-           </li>
-           <li style="clear:both;">
-               <div class="input-box" style="float:left;width:150px;">
-                   <label for="oar_billing_lastname" class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Last Name') ?> <em>*</em></label>
-               </div>
-               <div class="input-box" style="float:left;width:305px;">
-                   <input type="text" class="input-text required-entry" id="oar_billing_lastname" name="oar_billing_lastname"  style="width:300px;"/>
-               </div>
-           </li>
-           <li style="clear:both;">
-               <div class="input-box" style="float:left;width:150px;">
-                   <label class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Find Order By:') ?></label>
-               </div>
-               <div class="input-box" style="float:left;width:305px;">
-                   <select name="oar_type" id="quick_search_type_id" class="select guest-select" title="" onchange="showIdentifyBlock(this.value);">
-                       <option value="email"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address'); ?></option>
-                       <option value="zip"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('ZIP Code'); ?></option>
-                   </select>
-               </div>
-           </li>
-           <li id="oar-email" style="clear:both;">
-               <div class="input-box" style="float:left;width:150px;">
-                   <label for="oar_email" class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address') ?> <em>*</em></label>
-               </div>
-               <div class="input-box" style="float:left;width:305px;">
-                   <input type="text" class="input-text validate-email required-entry" id="oar_email" name="oar_email"  style="width:300px;"/>
-               </div>
-           </li>
-           <li id="oar-zip" style="display:none;clear:both;">
-               <div class="input-box" style="float:left;width:150px;">
-                   <label for="oar_zip" class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing ZIP Code') ?> <em>*</em></label>
-               </div>
-               <div class="input-box" style="float:left;width:305px;">
-                   <input type="text" class="input-text required-entry" id="oar_zip" name="oar_zip" style="width:300px;"/>
-               </div>
-           </li>
-           <li style="clear:both;">
-               <div class="input-box" style="float:left;text-align:right;width:455px">
-                   <button type="submit" title="Continue" class="button"><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Continue') ?></span></span></button>
-               </div>
-           </li>
+                <div class="field">
+                    <label for="oar_billing_lastname" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Last Name') ?></label>
+                    <div class="input-box">
+                        <input type="text" class="input-text required-entry" id="oar_billing_lastname" name="oar_billing_lastname" />
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field">
+                    <label for="quick_search_type_id" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Find Order By:') ?></label>
+                    <div class="input-box">
+                        <select name="oar_type" id="quick_search_type_id" class="select" onchange="showIdentifyBlock(this.value);">
+                           <option value="email"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address'); ?></option>
+                           <option value="zip"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('ZIP Code'); ?></option>
+                        </select>
+                    </div>
+                </div>
+                <div id="oar-email" class="field">
+                    <label for="oar_email" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address') ?></label>
+                    <div class="input-box">
+                        <input type="text" class="input-text validate-email required-entry" id="oar_email" name="oar_email"/>
+                    </div>
+                </div>
+                <div id="oar-zip" class="field">
+                    <label for="oar_zip" class="required"><em>*</em><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing ZIP Code') ?></label>
+                    <div class="input-box">
+                        <input type="text" class="input-text required-entry" id="oar_zip" name="oar_zip"/>
+                    </div>
+                </div>
+            </li>
        </ul>
-   </form>
-</div>
+    </div>
+    <div class="buttons-set form-buttons">
+        <button type="submit" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Continue') ?>" class="button"><span><span><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Continue') ?></span></span></button>
+    </div>
+</form>
 <script type="text/javascript">
 //<![CDATA[
-    if ($('quick_search_type_id').value == 'zip') {
-        $('oar-zip').show();
-        $('oar-email').hide();
-    } else {
-       $('oar-zip').hide();
-       $('oar-email').show();
+    var dataForm = new VarienForm('oar_widget_orders_and_returns_form', true);
+
+    function showIdentifyBlock(id)
+    {
+        if (id == 'zip') {
+            $('oar-zip').show();
+            $('oar-email').hide();
+        } else {
+            $('oar-zip').hide();
+            $('oar-email').show();
+        }
+        return false;
     }
-
-   var dataForm = new VarienForm('oar_widget_orders_and_returns_form', true);
-
-   function showIdentifyBlock(id)
-   {
-       if (id == 'zip') {
-           $('oar-zip').show();
-           $('oar-email').hide();
-       } else if (id == 'email') {
-           $('oar-zip').hide();
-           $('oar-email').show();
-       }
-       return false;
-   }
+    showIdentifyBlock($('quick_search_type_id').value);
 //]]>
 </script>

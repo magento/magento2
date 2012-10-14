@@ -261,6 +261,10 @@ class Mage_Adminhtml_Newsletter_QueueController extends Mage_Adminhtml_Controlle
             }
 
             $queue->save();
+
+            $this->_getSession()->addSuccess($this->_getHelper()->__('The newsletter queue has been saved.'));
+            $this->_getSession()->setFormData(false);
+
             $this->_redirect('*/*');
         }
         catch (Mage_Core_Exception $e) {
@@ -276,6 +280,6 @@ class Mage_Adminhtml_Newsletter_QueueController extends Mage_Adminhtml_Controlle
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('newsletter/queue');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Newsletter::queue');
     }
 }

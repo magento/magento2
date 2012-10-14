@@ -640,10 +640,13 @@ class Mage_Core_Model_Resource_Setup
 
                 if ($result) {
                     $this->_setResourceVersion($actionType, $file['toVersion']);
+                    Mage::log($fileName);
+                } else {
+                    Mage::log("Failed resource setup: {$fileName}");
                 }
             } catch (Exception $e) {
                 printf('<pre>%s</pre>', print_r($e, true));
-                throw Mage::exception('Mage_Core', Mage::helper('Mage_Core_Helper_Data')->__('Error in file: "%s" - %s', $fileName, $e->getMessage()));
+                throw new Magento_Exception(sprintf('Error in file: "%s" - %s', $fileName, $e->getMessage()), 0, $e);
             }
             $version = $file['toVersion'];
             $this->getConnection()->allowDdlCache();

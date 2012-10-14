@@ -253,15 +253,12 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     protected function _prepareLayout()
     {
-        $this->setChild(
-            'upload_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')->addData(array(
-                'id'      => '',
-                'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Upload Files'),
-                'type'    => 'button',
-                'onclick' => 'Downloadable.massUploadByType(\'links\');Downloadable.massUploadByType(\'linkssample\')'
-            ))
-        );
+        $this->addChild('upload_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'id'      => '',
+            'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Upload Files'),
+            'type'    => 'button',
+            'onclick' => 'Downloadable.massUploadByType(\'links\');Downloadable.massUploadByType(\'linkssample\')'
+        ));
     }
 
     /**
@@ -275,17 +272,40 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     }
 
     /**
+     * Retrieve File Field Name
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getFileFieldName($type)
+    {
+        return $type;
+    }
+
+
+    /**
+     * Retrieve Upload URL
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getUploadUrl($type)
+    {
+        return Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()
+            ->getUrl('*/downloadable_file/upload', array('type' => $type, '_secure' => true));
+    }
+
+    /**
      * Retrieve config json
      *
      * @param string $type
      * @return string
      */
-    public function getConfigJson($type='links')
+    public function getConfigJson($type = 'links')
     {
-        $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()
-            ->getUrl('*/downloadable_file/upload', array('type' => $type, '_secure' => true)));
+        $this->getConfig()->setUrl($this->getUploadUrl($type));
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
-        $this->getConfig()->setFileField($type);
+        $this->getConfig()->setFileField($this->getFileFieldName($type));
         $this->getConfig()->setFilters(array(
             'all'    => array(
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('All Files'),

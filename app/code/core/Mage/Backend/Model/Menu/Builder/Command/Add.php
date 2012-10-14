@@ -37,7 +37,8 @@ class Mage_Backend_Model_Menu_Builder_Command_Add extends Mage_Backend_Model_Men
     protected $_requiredParams = array(
         "id",
         "title",
-        "module"
+        "module",
+        "resource"
     );
 
     /**
@@ -63,7 +64,7 @@ class Mage_Backend_Model_Menu_Builder_Command_Add extends Mage_Backend_Model_Men
      */
     protected function _execute(array $itemParams)
     {
-        foreach($this->_data as $key => $value) {
+        foreach ($this->_data as $key => $value) {
             $itemParams[$key] = isset($itemParams[$key]) ? $itemParams[$key] : $value;
         }
         return $itemParams;

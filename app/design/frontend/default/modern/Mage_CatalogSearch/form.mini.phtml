@@ -24,16 +24,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<form id="search_mini_form" action="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getResultUrl() ?>" method="get">
+<form id="search_mini_form" action="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getResultUrl() ?>"
+      method="get">
     <div class="form-search">
-        <label for="search"><?php echo $this->__('Search') ?></label>
-        <input id="search" type="text" name="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getQueryParamName() ?>" value="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getEscapedQueryText() ?>" class="input-text" />
-        <button type="submit" title="<?php echo $this->__('Go') ?>" class="button"><span><span><?php echo $this->__('Go') ?></span></span></button>
+        <label for="search"><?php echo $this->__('Search site:') ?></label><input id="search" type="text" name="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getQueryParamName() ?>" value="<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getEscapedQueryText() ?>" class="input-text" autocomplete="off"/>&nbsp;<button type="submit"title="<?php echo $this->__('Go') ?>" class="button"><span><span><?php echo $this->__('Go') ?></span></span></button><a href="<?php echo Mage::helper('Mage_CatalogSearch_Helper_Data')->getAdvancedSearchUrl(); ?>"><?php echo $this->__('Advanced Search'); ?></a>
         <div id="search_autocomplete" class="search-autocomplete"></div>
         <script type="text/javascript">
         //<![CDATA[
-            var searchForm = new Varien.searchForm('search_mini_form', 'search', '<?php echo $this->__('Search entire store here...') ?>');
-            searchForm.initAutocomplete('<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getSuggestUrl() ?>', 'search_autocomplete');
+        (function($) {
+            $.mage.event.observe('mage.catalogsearch.initialize', function (e, o) {
+                o.formSelector = '#search_mini_form',
+                o.fieldSelector = '#search',
+                o.placeholder = '<?php echo $this->__('Search entire store here...') ?>',
+                o.url = '<?php echo $this->helper('Mage_CatalogSearch_Helper_Data')->getSuggestUrl() ?>',
+                o.destinationSelector = '#search_autocomplete';
+            });
+            $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_CatalogSearch::form-mini.js') ?>");
+        })(jQuery);
         //]]>
         </script>
     </div>

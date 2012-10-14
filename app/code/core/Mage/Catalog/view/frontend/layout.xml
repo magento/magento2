@@ -61,9 +61,6 @@ Default layout, loads most of the pages
                 <action method="setImgAlt" translate="alt" module="Mage_Catalog"><alt>Keep your eyes open for our special Back to School items and save A LOT!</alt></action>
             </block>
         </reference>
-        <reference name="footer_links">
-            <action method="addLink" translate="label title" module="Mage_Catalog" ifconfig="catalog/seo/site_map"><label>Site Map</label><url helper="Mage_Catalog_Helper_Map::getCategoryUrl" /><title>Site Map</title></action>
-        </reference>
         <block type="Mage_Catalog_Block_Product_Price_Template" name="catalog_product_price_template" />
     </default>
 
@@ -280,96 +277,4 @@ Product additional images gallery popup
             <block type="Mage_Catalog_Block_Product_Gallery" name="catalog_product_gallery" template="product/gallery.phtml"/>
         </reference>
     </catalog_product_gallery>
-
-<!--
-SEO Site Map
--->
-
-    <catalog_seo_sitemap translate="label" type="page" parent="default">
-        <label>Catalog Seo Sitemap (Common)</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
-        <reference name="root">
-            <action method="setTemplate"><template>1column.phtml</template></action>
-        </reference>
-        <reference name="content">
-            <block type="Mage_Page_Block_Template_Container" name="seo.sitemap.container" template="Mage_Catalog::seo/sitemap/container.phtml">
-                <block type="Mage_Page_Block_Template_Links" name="seo.sitemap.links" as="links" template="template/links.phtml"/>
-                <block type="Mage_Page_Block_Html_Pager" name="seo.sitemap.pager.top" as="pager_top" template="html/pager.phtml"/>
-                <block type="Mage_Page_Block_Html_Pager" name="seo.sitemap.pager.bottom" as="pager_bottom" template="html/pager.phtml"/>
-            </block>
-        </reference>
-    </catalog_seo_sitemap>
-
-    <catalog_seo_sitemap_category translate="label" type="page" parent="catalog_seo_sitemap">
-        <label>Catalog Seo Sitemap (Category List)</label>
-        <reference name="head">
-            <action method="setTitle" translate="title" module="Mage_Catalog"><title>Site Map</title></action>
-        </reference>
-        <reference name="content">
-            <block type="Mage_Page_Block_Html_Breadcrumbs" name="breadcrumbs" as="breadcrumbs" before="-">
-                <action method="addCrumb" translate="crumbName" module="Mage_Catalog">
-                    <crumbName>home</crumbName>
-                    <crumbInfo>
-                        <label>Home</label>
-                        <title>Home</title>
-                        <link>/</link>
-                    </crumbInfo>
-                </action>
-                <action method="addCrumb" translate="crumbName" module="Mage_Catalog">
-                    <crumbName>categories</crumbName>
-                    <crumbInfo>
-                        <label>Categories</label>
-                        <title>Categories</title>
-                    </crumbInfo>
-                </action>
-            </block>
-        </reference>
-        <reference name="seo.sitemap.container">
-            <action method="setTitle" translate="title" module="Mage_Catalog"><title>Categories</title></action>
-            <block type="Mage_Catalog_Block_Seo_Sitemap_Category" name="seo.sitemap.sitemap" as="sitemap" after="pager_top" template="seo/sitemap.phtml">
-                <action method="bindPager"><pager>seo.sitemap.pager.top</pager></action>
-                <action method="bindPager"><pager>seo.sitemap.pager.bottom</pager></action>
-                <action method="setItemsTitle" translate="title" module="Mage_Catalog"><title>categories</title></action>
-            </block>
-        </reference>
-        <reference name="seo.sitemap.links">
-            <action method="addLink" translate="label title" module="Mage_Catalog"><label>Products Sitemap</label><url helper="Mage_Catalog_Helper_Map::getProductUrl"/><title>Products Sitemap</title></action>
-        </reference>
-    </catalog_seo_sitemap_category>
-
-    <catalog_seo_sitemap_category_type_tree translate="label" type="page" parent="catalog_seo_sitemap_category">
-        <label>Catalog Seo Sitemap (Category Tree)</label>
-        <reference name="seo.sitemap.container">
-            <remove name="seo.sitemap.pager.top" />
-            <remove name="seo.sitemap.pager.bottom" />
-            <block type="Mage_Catalog_Block_Seo_Sitemap_Tree_Pager" name="seo.sitemap.tree.pager.top" as="pager_top" template="Mage_Page::html/pager.phtml"/>
-            <block type="Mage_Catalog_Block_Seo_Sitemap_Tree_Pager" name="seo.sitemap.tree.pager.bottom" as="pager_bottom" template="Mage_Page::html/pager.phtml"/>
-            <remove name="seo.sitemap.sitemap" />
-            <block type="Mage_Catalog_Block_Seo_Sitemap_Tree_Category" name="seo.sitemap.sitemap_tree" as="sitemap" after="pager_top" template="seo/tree.phtml">
-                <action method="bindPager"><pager>seo.sitemap.tree.pager.top</pager></action>
-                <action method="bindPager"><pager>seo.sitemap.tree.pager.bottom</pager></action>
-            </block>
-        </reference>
-    </catalog_seo_sitemap_category_type_tree>
-
-    <catalog_seo_sitemap_product translate="label" type="page" parent="catalog_seo_sitemap">
-        <label>Catalog Seo Sitemap (Product List)</label>
-        <reference name="head">
-            <action method="setTitle" translate="title" module="Mage_Catalog"><title>Site Map</title></action>
-        </reference>
-        <update handle="catalog_seo_sitemap" />
-        <reference name="seo.sitemap.container">
-            <action method="setTitle" translate="title" module="Mage_Catalog"><title>Products</title></action>
-            <block type="Mage_Catalog_Block_Seo_Sitemap_Product" name="seo.sitemap.sitemap" as="sitemap" after="pager_top" template="seo/sitemap.phtml">
-                <action method="bindPager"><pager>seo.sitemap.pager.top</pager></action>
-                <action method="bindPager"><pager>seo.sitemap.pager.bottom</pager></action>
-                <action method="setItemsTitle" translate="title" module="Mage_Catalog"><title>products</title></action>
-            </block>
-        </reference>
-        <reference name="seo.sitemap.links">
-            <action method="addLink" translate="label title" module="Mage_Catalog"><label>Categories Sitemap</label><url helper="Mage_Catalog_Helper_Map::getCategoryUrl"/><title>Categories Sitemap</title></action>
-        </reference>
-    </catalog_seo_sitemap_product>
 </layout>

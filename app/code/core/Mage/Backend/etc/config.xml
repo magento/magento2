@@ -46,11 +46,14 @@
                     </admin>
                 </routers>
                 <frontName>backend</frontName>
+                <auth/>
+                <acl>
+                    <resourceLoader>Mage_Backend_Model_Acl_Loader_Resource</resourceLoader>
+                    <roleLocator>Mage_Backend_Model_Authorization_RoleLocator</roleLocator>
+                    <policy>Magento_Authorization_Policy_Acl</policy>
+                </acl>
             </adminhtml>
         </areas>
-        <backend>
-            <auth/>
-        </backend>
         <cache>
             <types>
                 <config translate="description" module="Mage_Backend">

@@ -63,7 +63,7 @@ class Integrity_Theme_TemplateFilesTest extends Magento_Test_TestCase_IntegrityA
         $themes = $this->_getDesignThemes();
         foreach ($themes as $view) {
             list($area, $package, $theme) = explode('/', $view);
-            $layoutUpdate = new Mage_Core_Model_Layout_Update(
+            $layoutUpdate = new Mage_Core_Model_Layout_Merge(
                 array('area' => $area, 'package' => $package, 'theme' => $theme)
             );
             $layoutTemplates = $this->_getLayoutTemplates($layoutUpdate->getFileLayoutUpdatesXml());

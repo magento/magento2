@@ -70,7 +70,7 @@ var bundleTemplateRow ='<td>' +
                 '<td class="qty-box"><?php echo $this->getQtyTypeSelectHtml() ?></td>' +
                 '<td><input class="input-text required-entry validate-zero-or-greater" type="text" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][position]" value="{{position}}"></td>' +
                 '<td class="a-center"><input onclick="bSelection.checkGroup(event)" type="{{option_type}}" class="default" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][is_default]" value="1" {{checked}}></td>' +
-                '<td class="last"><span title="Delete Row"><?php echo $this->getSelectionDeleteButtonHtml() ?></span></td>';
+                '<td class="last"><span title="Delete Row">' + <?php echo Mage::helper('Mage_Core_Helper_Data')->jsonEncode($this->getSelectionDeleteButtonHtml()) ?> + '</span></td>';
 
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {

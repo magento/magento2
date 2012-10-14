@@ -40,31 +40,22 @@ class Mage_Adminhtml_Block_System_Store_Delete_Website extends Mage_Adminhtml_Bl
 
         $this->setTemplate('system/store/delete_website.phtml');
         $this->setAction($this->getUrl('*/*/deleteWebsitePost', array('website_id'=>$itemId)));
-        $this->setChild('confirm_deletion_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Delete Website'),
-                    'onclick'   => "deleteForm.submit()",
-                    'class'     => 'cancel'
-                ))
-        );
+        $this->addChild('confirm_deletion_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Delete Website'),
+            'onclick'   => "deleteForm.submit()",
+            'class'     => 'cancel'
+        ));
         $onClick = "setLocation('".$this->getUrl('*/*/editWebsite', array('website_id'=>$itemId))."')";
-        $this->setChild('cancel_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Cancel'),
-                    'onclick'   => $onClick,
-                    'class'     => 'cancel'
-                ))
-        );
-        $this->setChild('back_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Back'),
-                    'onclick'   => $onClick,
-                    'class'     => 'cancel'
-                ))
-        );
+        $this->addChild('cancel_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Cancel'),
+            'onclick'   => $onClick,
+            'class'     => 'cancel'
+        ));
+        $this->addChild('back_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Back'),
+            'onclick'   => $onClick,
+            'class'     => 'cancel'
+        ));
         return parent::_prepareLayout();
     }
 

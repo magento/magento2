@@ -129,6 +129,9 @@ class Varien_Image_Adapter_InterfaceTest extends PHPUnit_Framework_TestCase
      */
     protected function _isAdapterAvailable($adapter)
     {
+        if (substr(PHP_OS, 0, 3) == 'WIN' && $adapter instanceof Varien_Image_Adapter_ImageMagick) {
+            $this->markTestSkipped("ImageMagick is not working correctly on Windows");
+        }
         try {
             $adapter->checkDependencies();
         } catch (Exception $e) {

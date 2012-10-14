@@ -52,13 +52,12 @@ class Mage_Adminhtml_Block_Sales_Order_Comments_View extends Mage_Adminhtml_Bloc
      */
     protected function _prepareLayout()
     {
-        $button = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-            ->setData(array(
-                'id'      => 'submit_comment_button',
-                'label'   => Mage::helper('Mage_Sales_Helper_Data')->__('Submit Comment'),
-                'class'   => 'save'
-            ));
-        $this->setChild('submit_button', $button);
+        $this->addChild('submit_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'id'      => 'submit_comment_button',
+            'label'   => Mage::helper('Mage_Sales_Helper_Data')->__('Submit Comment'),
+            'class'   => 'save'
+        ));
+
 
         return parent::_prepareLayout();
     }

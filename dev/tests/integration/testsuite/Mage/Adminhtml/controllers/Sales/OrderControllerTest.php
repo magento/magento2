@@ -53,6 +53,13 @@ class Mage_Adminhtml_Sales_OrderControllerTest extends Mage_Adminhtml_Utility_Co
         $this->assertContains('Los Angeles', $this->getResponse()->getBody());
     }
 
+    public function testAddressActionNonExistingAddress()
+    {
+        $this->getRequest()->setParam('address_id', -1);
+        $this->dispatch('backend/admin/sales_order/address');
+        $this->assertRedirect();
+    }
+
     /**
      * @magentoDataFixture Mage/Adminhtml/controllers/Sales/_files/address.php
      */

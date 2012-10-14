@@ -33,63 +33,50 @@
  */
 class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
 {
+    /**
+     * Initialize attributes map
+     */
     public function __construct()
     {
-        $this->_attributesMap['invoice'] = array(
-            'invoice_id' => 'entity_id'
-        );
-
-        $this->_attributesMap['invoice_item'] = array(
-            'item_id'    => 'entity_id'
-        );
-
-        $this->_attributesMap['invoice_comment'] = array(
-            'comment_id' => 'entity_id'
-        );
+        $this->_attributesMap = array(
+            'invoice' => array('invoice_id' => 'entity_id'),
+            'invoice_item' => array('item_id' => 'entity_id'),
+            'invoice_comment' => array('comment_id' => 'entity_id'));
     }
 
     /**
-     * Retrive invoices by filters
+     * Retrive invoices list. Filtration could be applied
      *
-     * @param array $filters
+     * @param null|object|array $filters
      * @return array
      */
     public function items($filters = null)
     {
-        //TODO: add full name logic
-        $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Invoice_Collection')
+        $invoices = array();
+        /** @var $invoiceCollection Mage_Sales_Model_Resource_Order_Invoice_Collection */
+        $invoiceCollection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Invoice_Collection');
+        $invoiceCollection->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('order_id')
             ->addAttributeToSelect('increment_id')
             ->addAttributeToSelect('created_at')
             ->addAttributeToSelect('state')
             ->addAttributeToSelect('grand_total')
-            ->addAttributeToSelect('order_currency_code')
-            ->joinAttribute('billing_firstname', 'order_address/firstname', 'billing_address_id', null, 'left')
-            ->joinAttribute('billing_lastname', 'order_address/lastname', 'billing_address_id', null, 'left')
-            ->joinAttribute('order_increment_id', 'order/increment_id', 'order_id', null, 'left')
-            ->joinAttribute('order_created_at', 'order/created_at', 'order_id', null, 'left');
+            ->addAttributeToSelect('order_currency_code');
 
-        if (is_array($filters)) {
-            try {
-                foreach ($filters as $field => $value) {
-                    if (isset($this->_attributesMap['invoice'][$field])) {
-                        $field = $this->_attributesMap['invoice'][$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
+        /** @var $apiHelper Mage_Api_Helper_Data */
+        $apiHelper = Mage::helper('Mage_Api_Helper_Data');
+        try {
+            $filters = $apiHelper->parseFilters($filters, $this->_attributesMap['invoice']);
+            foreach ($filters as $field => $value) {
+                $invoiceCollection->addFieldToFilter($field, $value);
             }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('filters_invalid', $e->getMessage());
         }
-
-        $result = array();
-
-        foreach ($collection as $invoice) {
-            $result[] = $this->_getAttributes($invoice, 'invoice');
+        foreach ($invoiceCollection as $invoice) {
+            $invoices[] = $this->_getAttributes($invoice, 'invoice');
         }
-
-        return $result;
+        return $invoices;
     }
 
     /**
@@ -110,7 +97,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
 
         $result = $this->_getAttributes($invoice, 'invoice');
         $result['order_increment_id'] = $invoice->getOrderIncrementId();
-        
+
         $result['items'] = array();
         foreach ($invoice->getAllItems() as $item) {
             $result['items'][] = $this->_getAttributes($item, 'invoice_item');
@@ -120,7 +107,7 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
         foreach ($invoice->getCommentsCollection() as $comment) {
             $result['comments'][] = $this->_getAttributes($comment, 'invoice_comment');
         }
-        
+
         return $result;
     }
 
@@ -319,4 +306,4 @@ class Mage_Sales_Model_Order_Invoice_Api extends Mage_Sales_Model_Api_Resource
 
         return true;
     }
-} // Class Mage_Sales_Model_Order_Invoice_Api End
+}

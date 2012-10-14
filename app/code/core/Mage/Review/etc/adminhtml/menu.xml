@@ -27,13 +27,13 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Review::catalog_reviews_ratings" title="Reviews and Ratings" module="Mage_Review" sortOrder="50" parent="Mage_Catalog::catalog" />
-        <add id="Mage_Review::catalog_reviews_ratings_reviews" title="Customer Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings" />
-        <add id="Mage_Review::catalog_reviews_ratings_ratings" title="Manage Ratings" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings" action="adminhtml/rating/" />
-        <add id="Mage_Review::catalog_reviews_ratings_reviews_pending" title="Pending Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings_reviews" action="adminhtml/catalog_product_review/pending/" />
-        <add id="Mage_Review::catalog_reviews_ratings_reviews_all" title="All Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings_reviews" action="adminhtml/catalog_product_review/" />
-        <add id="Mage_Review::report_review" title="Reviews" module="Mage_Reports" sortOrder="55" parent="Mage_Reports::report" />
-        <add id="Mage_Review::report_review_customer" title="Customers Reviews" module="Mage_Review" parent="Mage_Review::report_review" action="adminhtml/report_review/customer" />
-        <add id="Mage_Review::report_review_product" title="Products Reviews" module="Mage_Review" parent="Mage_Review::report_review" action="adminhtml/report_review/product" />
+        <add id="Mage_Review::catalog_reviews_ratings" title="Reviews and Ratings" module="Mage_Review" sortOrder="50" parent="Mage_Catalog::catalog" resource="Mage_Review::reviews_ratings"/>
+        <add id="Mage_Review::catalog_reviews_ratings_reviews" title="Customer Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings" resource="Mage_Review::reviews"/>
+        <add id="Mage_Review::catalog_reviews_ratings_ratings" title="Manage Ratings" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings" action="adminhtml/rating/" resource="Mage_Rating::ratings"/>
+        <add id="Mage_Review::catalog_reviews_ratings_reviews_pending" title="Pending Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings_reviews" action="adminhtml/catalog_product_review/pending/" resource="Mage_Review::pending"/>
+        <add id="Mage_Review::catalog_reviews_ratings_reviews_all" title="All Reviews" module="Mage_Review" parent="Mage_Review::catalog_reviews_ratings_reviews" action="adminhtml/catalog_product_review/" resource="Mage_Review::reviews_all"/>
+        <add id="Mage_Review::report_review" title="Reviews" module="Mage_Reports" sortOrder="55" parent="Mage_Reports::report" resource="Mage_Reports::review"/>
+        <add id="Mage_Review::report_review_customer" title="Customers Reviews" module="Mage_Review" parent="Mage_Review::report_review" action="adminhtml/report_review/customer" resource="Mage_Reports::review_customer"/>
+        <add id="Mage_Review::report_review_product" title="Products Reviews" module="Mage_Review" parent="Mage_Review::report_review" action="adminhtml/report_review/product" resource="Mage_Reports::review_product"/>
     </menu>
 </config>

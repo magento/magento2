@@ -91,30 +91,18 @@ Product.Gallery.prototype = {
         this.getElement('add_images_button').hide();
         this.getElement('uploader').show();
     },
-    handleUploadComplete : function(files) {
-        files.each( function(item) {
-            if (!item.response.isJSON()) {
-                try {
-                    console.log(item.response);
-                } catch (e2) {
-                    alert(item.response);
-                }
-                return;
-            }
-            var response = item.response.evalJSON();
-            if (response.error) {
-                return;
-            }
-            var newImage = {};
-            newImage.url = response.url;
-            newImage.file = response.file;
-            newImage.label = '';
-            newImage.position = this.getNextPosition();
-            newImage.disabled = 0;
-            newImage.removed = 0;
-            this.images.push(newImage);
-            this.uploader.removeFile(item.id);
-        }.bind(this));
+    handleUploadComplete : function(file) {
+        if (file.error) {
+            return;
+        }
+        var newImage = {};
+        newImage.url = file.url;
+        newImage.file = file.file;
+        newImage.label = '';
+        newImage.position = this.getNextPosition();
+        newImage.disabled = 0;
+        newImage.removed = 0;
+        this.images.push(newImage);
         this.container.setHasChanges();
         this.updateImages();
     },

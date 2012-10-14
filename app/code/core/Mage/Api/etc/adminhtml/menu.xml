@@ -27,8 +27,8 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Api::system_api" title="Web Services" module="Mage_Api" sortOrder="25" parent="Mage_Adminhtml::system" />
-        <add id="Mage_Api::system_api_users" title="SOAP/XML-RPC - Users" module="Mage_Api" sortOrder="10" parent="Mage_Api::system_api" action="adminhtml/api_user" />
-        <add id="Mage_Api::system_api_roles" title="SOAP/XML-RPC - Roles" module="Mage_Api" sortOrder="20" parent="Mage_Api::system_api" action="adminhtml/api_role" />
+        <add id="Mage_Api::system_api" title="Web Services" module="Mage_Api" sortOrder="25" parent="Mage_Adminhtml::system" resource="Mage_Api::api"/>
+        <add id="Mage_Api::system_api_users" title="SOAP/XML-RPC - Users" module="Mage_Api" sortOrder="10" parent="Mage_Api::system_api" action="adminhtml/api_user" resource="Mage_Api::users"/>
+        <add id="Mage_Api::system_api_roles" title="SOAP/XML-RPC - Roles" module="Mage_Api" sortOrder="20" parent="Mage_Api::system_api" action="adminhtml/api_role" resource="Mage_Api::roles"/>
     </menu>
 </config>

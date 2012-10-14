@@ -27,6 +27,8 @@
 /**
  * Catalog category helper
  *
+ * @category    Mage
+ * @package     Mage_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
@@ -35,7 +37,33 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
     public $ERR_NO_PRODUCT_LOADED = 1;
     public $ERR_BAD_CONTROLLER_INTERFACE = 2;
 
-     /**
+    /**
+     * Path to list of session models to get messages
+     */
+    const XML_PATH_SESSION_MESSAGE_MODELS = 'global/session/catalog/product/message_models';
+
+    /**
+     * General config object
+     *
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    /**
+     * Constructor dependency injection
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        if (isset($data['config'])) {
+            $this->_config = $data['config'];
+        } else {
+            $this->_config = Mage::getConfig();
+        }
+    }
+
+    /**
      * Inits layout for viewing product page
      *
      * @param Mage_Catalog_Model_Product $product
@@ -61,7 +89,7 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
         $layoutUpdates = $settings->getLayoutUpdates();
         if ($layoutUpdates) {
             if (is_array($layoutUpdates)) {
-                foreach($layoutUpdates as $layoutUpdate) {
+                foreach ($layoutUpdates as $layoutUpdate) {
                     $update->addUpdate($layoutUpdate);
                 }
             }
@@ -105,6 +133,7 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
      * @param null|Varien_Object $params
      *
      * @return Mage_Catalog_Helper_Product_View
+     * @throws Mage_Core_Exception
      */
     public function prepareAndRender($productId, $controller, $params = null)
     {
@@ -141,14 +170,29 @@ class Mage_Catalog_Helper_Product_View extends Mage_Core_Helper_Abstract
         $this->initProductLayout($product, $controller);
 
         if ($controller instanceof Mage_Catalog_Controller_Product_View_Interface) {
-            $controller->initLayoutMessages('Mage_Catalog_Model_Session');
-            $controller->initLayoutMessages('Mage_Tag_Model_Session');
-            $controller->initLayoutMessages('Mage_Checkout_Model_Session');
+            foreach ($this->_getSessionMessageModels() as $sessionModel) {
+                $controller->initLayoutMessages($sessionModel);
+            }
         } else {
-            throw new Mage_Core_Exception($this->__('Bad controller interface for showing product'), $this->ERR_BAD_CONTROLLER_INTERFACE);
+            throw new Mage_Core_Exception(
+                $this->__('Bad controller interface for showing product'),
+                $this->ERR_BAD_CONTROLLER_INTERFACE
+            );
         }
         $controller->renderLayout();
 
         return $this;
+    }
+
+    /**
+     * Get list of session models with messages
+     *
+     * @return array
+     */
+    protected function _getSessionMessageModels()
+    {
+        $messageModels = $this->_config->getNode(self::XML_PATH_SESSION_MESSAGE_MODELS)
+            ->asArray();
+        return array_values($messageModels);
     }
 }

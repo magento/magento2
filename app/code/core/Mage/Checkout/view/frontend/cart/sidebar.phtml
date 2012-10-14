@@ -31,50 +31,68 @@
  */
 
 ?>
-<?php if ($this->getIsNeedToDisplaySideBar()):?>
+<?php if ($this->getIsNeedToDisplaySideBar()): ?>
 <div class="block block-cart">
     <?php $_cartQty = $this->getSummaryCount() ?>
     <div class="block-title">
         <strong><span><?php echo $this->__('My Cart') ?></span></strong>
     </div>
     <div class="block-content">
-    <?php if ($_cartQty>0): ?>
+        <?php if ($_cartQty > 0): ?>
         <div class="summary">
-            <?php if ($_cartQty==1): ?>
-                <p class="amount"><?php echo $this->__('There is <a href="%s">1 item</a> in your cart.', $this->getUrl('checkout/cart')) ?></p>
+            <?php if ($_cartQty == 1): ?>
+            <p class="amount"><?php echo $this->__('There is <a href="%s">1 item</a> in your cart.', $this->getUrl('checkout/cart')) ?></p>
             <?php else: ?>
-                <p class="amount"><?php echo $this->__('There are <a href="%s">%s items</a> in your cart.', $this->getUrl('checkout/cart'), $_cartQty) ?></p>
+            <p class="amount"><?php echo $this->__('There are <a href="%s">%s items</a> in your cart.', $this->getUrl('checkout/cart'), $_cartQty) ?></p>
             <?php endif ?>
             <p class="subtotal">
                 <?php if ($this->canApplyMsrp()): ?>
-                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                <span
+                    class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
                 <?php else: ?>
-                    <span class="label"><?php echo $this->__('Cart Subtotal:') ?></span> <?php echo Mage::helper('Mage_Checkout_Helper_Data')->formatPrice($this->getSubtotal()) ?>
-                    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
-                        <br />(<?php echo Mage::helper('Mage_Checkout_Helper_Data')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('Mage_Tax_Helper_Data')->getIncExcText(true) ?>)
+                <span
+                    class="label"><?php echo $this->__('Cart Subtotal:') ?></span> <?php echo Mage::helper('Mage_Checkout_Helper_Data')->formatPrice($this->getSubtotal()) ?>
+                <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
+                    <br/>
+                    (<?php echo Mage::helper('Mage_Checkout_Helper_Data')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('Mage_Tax_Helper_Data')->getIncExcText(true) ?>
+                    )
                     <?php endif; ?>
                 <?php endif; ?>
             </p>
         </div>
-    <?php endif ?>
-    <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
-    <div class="actions">
-        <?php echo $this->getChildHtml('extra_actions') ?>
-        <button type="button" title="<?php echo $this->__('Checkout') ?>" class="button" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
-    </div>
-    <?php endif ?>
-    <?php $_items = $this->getRecentItems() ?>
-    <?php if(count($_items)): ?>
+        <?php endif ?>
+        <?php if ($_cartQty && $this->isPossibleOnepageCheckout()): ?>
+        <div class="actions">
+            <?php echo $this->getChildHtml('extra_actions') ?>
+            <button type="button" title="<?php echo $this->__('Checkout') ?>" class="button">
+                <span><span><?php echo $this->__('Checkout') ?></span></span></button>
+        </div>
+        <?php endif ?>
+        <?php $_items = $this->getRecentItems() ?>
+        <?php if (count($_items)): ?>
         <p class="block-subtitle"><?php echo $this->__('Recently added item(s)') ?></p>
         <ol id="cart-sidebar" class="mini-products-list">
-        <?php foreach($_items as $_item): ?>
+            <?php foreach ($_items as $_item): ?>
             <?php echo $this->getItemHtml($_item) ?>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
         </ol>
-        <script type="text/javascript">decorateList('cart-sidebar', 'none-recursive')</script>
-    <?php else: ?>
+        <script type="text/javascript">
+            (function($) {
+                $.mage.event.observe('mage.checkout.initialize', function (e, o) {
+                    o.cartSelector = '#cart-sidebar',
+                    o.isRecursive = true,
+                    o.url = '<?php echo $this->getCheckoutUrl();?>',
+                    o.button = ':button[title=' + '<?php echo $this->__('Checkout') ?>' + ']',
+                    o.confirmMessage = '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>',
+                    o.closeList = 'a[title=\'' + '<?php echo $this->__('Remove This Item')?>' + '\']';
+                });
+                $.mage.load.jsSync("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
+                $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Checkout::js/sidebar.js') ?>");
+            })(jQuery);
+        </script>
+        <?php else: ?>
         <p class="empty"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
-    <?php endif ?>
+        <?php endif ?>
     </div>
 </div>
-<?php endif;?>
+<?php endif; ?>

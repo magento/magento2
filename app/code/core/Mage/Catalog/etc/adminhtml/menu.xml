@@ -27,12 +27,12 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Catalog::catalog" title="Catalog" module="Mage_Catalog" sortOrder="30" dependsOnModule="Mage_Catalog" />
-        <add id="Mage_Catalog::catalog_products" title="Manage Products" module="Mage_Catalog" sortOrder="0" parent="Mage_Catalog::catalog" action="adminhtml/catalog_product/" />
-        <add id="Mage_Catalog::catalog_categories" title="Manage Categories" module="Mage_Catalog" sortOrder="10" parent="Mage_Catalog::catalog" action="adminhtml/catalog_category/" />
-        <add id="Mage_Catalog::catalog_attributes" title="Attributes" module="Mage_Catalog" sortOrder="20" parent="Mage_Catalog::catalog" />
-        <add id="Mage_Catalog::catalog_attributes_attributes" title="Manage Attributes" module="Mage_Catalog" parent="Mage_Catalog::catalog_attributes" action="adminhtml/catalog_product_attribute/" />
-        <add id="Mage_Catalog::catalog_attributes_sets" title="Manage Attribute Sets" module="Mage_Catalog" parent="Mage_Catalog::catalog_attributes" action="adminhtml/catalog_product_set/" />
-        <add id="Mage_Catalog::catalog_urlrewrite" title="URL Rewrite Management" module="Mage_Catalog" sortOrder="30" parent="Mage_Catalog::catalog" action="adminhtml/urlrewrite/index" />
+        <add id="Mage_Catalog::catalog" title="Catalog" module="Mage_Catalog" sortOrder="30" dependsOnModule="Mage_Catalog" resource="Mage_Catalog::catalog"/>
+        <add id="Mage_Catalog::catalog_products" title="Manage Products" module="Mage_Catalog" sortOrder="0" parent="Mage_Catalog::catalog" action="adminhtml/catalog_product/" resource="Mage_Catalog::products"/>
+        <add id="Mage_Catalog::catalog_categories" title="Manage Categories" module="Mage_Catalog" sortOrder="10" parent="Mage_Catalog::catalog" action="adminhtml/catalog_category/" resource="Mage_Catalog::categories"/>
+        <add id="Mage_Catalog::catalog_attributes" title="Attributes" module="Mage_Catalog" sortOrder="20" parent="Mage_Catalog::catalog" resource="Mage_Catalog::catalog_attributes"/>
+        <add id="Mage_Catalog::catalog_attributes_attributes" title="Manage Attributes" module="Mage_Catalog" parent="Mage_Catalog::catalog_attributes" action="adminhtml/catalog_product_attribute/" resource="Mage_Catalog::attributes_attributes"/>
+        <add id="Mage_Catalog::catalog_attributes_sets" title="Manage Attribute Sets" module="Mage_Catalog" parent="Mage_Catalog::catalog_attributes" action="adminhtml/catalog_product_set/" resource="Mage_Catalog::sets"/>
+        <add id="Mage_Catalog::catalog_urlrewrite" title="URL Rewrite Management" module="Mage_Catalog" sortOrder="30" parent="Mage_Catalog::catalog" action="adminhtml/urlrewrite/index" resource="Mage_Catalog::urlrewrite"/>
     </menu>
 </config>

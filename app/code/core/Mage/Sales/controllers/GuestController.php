@@ -81,6 +81,7 @@ class Mage_Sales_GuestController extends Mage_Sales_Controller_Abstract
             return;
         }
         $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Orders and Returns'));
         Mage::helper('Mage_Sales_Helper_Guest')->getBreadcrumbs($this);
         $this->renderLayout();
     }

@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_AdminNotification::system_adminnotification" title="Notifications" module="Mage_AdminNotification" sortOrder="15" parent="Mage_Adminhtml::system" action="adminhtml/notification" />
+        <add id="Mage_AdminNotification::system_adminnotification" title="Notifications" module="Mage_AdminNotification" sortOrder="15" parent="Mage_Adminhtml::system" action="adminhtml/notification" resource="Mage_AdminNotification::adminnotification"/>
     </menu>
 </config>

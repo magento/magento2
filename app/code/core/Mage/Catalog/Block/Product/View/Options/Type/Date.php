@@ -91,7 +91,7 @@ class Mage_Catalog_Block_Product_View_Options_Type_Date extends Mage_Catalog_Blo
         $yearEnd = Mage::getSingleton('Mage_Catalog_Model_Product_Option_Type_Date')->getYearEnd();
 
         $calendar = $this->getLayout()
-            ->createBlock('Mage_Core_Block_Html_Date')
+            ->createBlock('Mage_Core_Block_Html_Date_Jquery_Calendar')
             ->setId('options_'.$this->getOption()->getId().'_date')
             ->setName('options['.$this->getOption()->getId().'][date]')
             ->setClass('product-custom-option datetime-picker input-text' . $require)

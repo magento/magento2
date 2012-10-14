@@ -45,4 +45,15 @@
             </dataflow_setup>
         </resources>
     </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mage_Dataflow>
+                    <files>
+                        <default>Mage_Dataflow.csv</default>
+                    </files>
+                </Mage_Dataflow>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

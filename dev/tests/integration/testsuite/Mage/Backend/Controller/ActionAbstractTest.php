@@ -67,4 +67,56 @@ class Mage_Backend_Controller_ActionAbstractTest extends Mage_Adminhtml_Utility_
         $expected = 'backend/admin/system_account/index';
         $this->assertRedirect($this->stringContains($expected));
     }
+
+    /**
+     * Check layout attribute "acl" for check access to
+     *
+     * @param string $blockName
+     * @param string $resource
+     * @param bool $isLimitedAccess
+     * @dataProvider nodesWithAcl
+     */
+    public function testAclInNodes($blockName, $resource, $isLimitedAccess)
+    {
+        /** @var $noticeInbox Mage_AdminNotification_Model_Inbox */
+        $noticeInbox = Mage::getModel('Mage_AdminNotification_Model_Inbox');
+        if (!$noticeInbox->loadLatestNotice()->getId()) {
+            $noticeInbox->addCritical('Test notice', 'Test description');
+        }
+
+        $this->_auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
+
+        /** @var $acl Magento_Acl */
+        $acl = Mage::getSingleton('Mage_Core_Model_Acl_Builder')->getAcl();
+        if ($isLimitedAccess) {
+            $acl->deny(null, $resource);
+        }
+
+        $this->dispatch('backend/admin/dashboard');
+
+        $layout = Mage::app()->getLayout();
+        $actualBlocks = $layout->getAllBlocks();
+
+        $this->assertNotEmpty($actualBlocks);
+        if ($isLimitedAccess) {
+            $this->assertNotContains($blockName, array_keys($actualBlocks));
+        } else {
+            $this->assertContains($blockName, array_keys($actualBlocks));
+        }
+    }
+
+    /**
+     * Data provider with expected blocks with acl properties
+     *
+     * @return array
+     */
+    public function nodesWithAcl()
+    {
+        return array(
+            array('notification_toolbar', 'Mage_AdminNotification::show_toolbar', true),
+            array('notification_window', 'Mage_AdminNotification::show_toolbar', true),
+            array('notification_toolbar', 'Mage_AdminNotification::show_toolbar', false),
+            array('notification_window', 'Mage_AdminNotification::show_toolbar', false),
+        );
+    }
 }

@@ -42,25 +42,15 @@ class Mage_Adminhtml_Block_Dashboard extends Mage_Adminhtml_Block_Template
 
     protected function _prepareLayout()
     {
-        $this->setChild('lastOrders',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Orders_Grid')
-        );
+        $this->addChild('lastOrders', 'Mage_Adminhtml_Block_Dashboard_Orders_Grid');
 
-        $this->setChild('totals',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Totals')
-        );
+        $this->addChild('totals', 'Mage_Adminhtml_Block_Dashboard_Totals');
 
-        $this->setChild('sales',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Sales')
-        );
+        $this->addChild('sales', 'Mage_Adminhtml_Block_Dashboard_Sales');
 
-        $this->setChild('lastSearches',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Searches_Last')
-        );
+        $this->addChild('lastSearches', 'Mage_Adminhtml_Block_Dashboard_Searches_Last');
 
-        $this->setChild('topSearches',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Searches_Top')
-        );
+        $this->addChild('topSearches', 'Mage_Adminhtml_Block_Dashboard_Searches_Top');
 
         if (Mage::getStoreConfig(self::XML_PATH_ENABLE_CHARTS)) {
             $block = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Diagrams');
@@ -71,9 +61,7 @@ class Mage_Adminhtml_Block_Dashboard extends Mage_Adminhtml_Block_Template
         }
         $this->setChild('diagrams', $block);
 
-        $this->setChild('grids',
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Dashboard_Grids')
-        );
+        $this->addChild('grids', 'Mage_Adminhtml_Block_Dashboard_Grids');
 
         parent::_prepareLayout();
     }

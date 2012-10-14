@@ -313,7 +313,12 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
         $this->setShippingMethod($order->getShippingMethod());
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
-        $quote->getPayment()->addData($order->getPayment()->getData());
+        $paymentData = $order->getPayment()->getData();
+        if ('ccsave' !== $paymentData['method']) {
+            unset($paymentData['cc_type'], $paymentData['cc_last4']);
+            unset($paymentData['cc_exp_month'], $paymentData['cc_exp_year']);
+        }
+        $quote->getPayment()->addData($paymentData);
 
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {

@@ -223,10 +223,24 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         $this->_db
             ->expects($this->exactly(1))
             ->method('cleanup')
+            ->will($this->returnValue(true))
         ;
         $this->_bootstrap
             ->expects($this->exactly(1))
             ->method('_cleanupFilesystem')
+        ;
+        $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_UNINSTALL);
+    }
+
+    /**
+     * @expectedException Magento_Exception
+     */
+    public function testConstructorCleanupUninstallWithFail()
+    {
+        $this->_db
+            ->expects($this->exactly(1))
+            ->method('cleanup')
+            ->will($this->returnValue(false))
         ;
         $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_UNINSTALL);
     }

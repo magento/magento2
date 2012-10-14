@@ -74,6 +74,83 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
     }
 
     /**
+     * Save Tax Class via AJAX
+     */
+    public function ajaxSaveAction()
+    {
+        $responseContent = '';
+        try {
+            $classData = array(
+                'class_id' => (int)$this->getRequest()->getPost('class_id') ?: null, // keep null for new tax classes
+                'class_type' => $this->_processClassType((string)$this->getRequest()->getPost('class_type')),
+                'class_name' => $this->_processClassName((string)$this->getRequest()->getPost('class_name'))
+            );
+            $class = Mage::getModel('Mage_Tax_Model_Class')
+                ->setData($classData)
+                ->save();
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => true,
+                'error' => false,
+                'error_message' => '',
+                'class_id' => $class->getId(),
+                'class_name' => $class->getClassName()
+            ));
+        } catch (Mage_Core_Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => $e->getMessage(),
+                'class_id' => '',
+                'class_name' => ''
+            ));
+        } catch (Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data') ->__('There was an error saving tax class.'),
+                'class_id' => '',
+                'class_name' => ''
+            ));
+        }
+        $this->getResponse()->setBody($responseContent);
+    }
+
+    /**
+     * Validate/Filter Tax Class Type
+     *
+     * @param string $classType
+     * @return string processed class type
+     * @throws Mage_Core_Exception
+     */
+    protected function _processClassType($classType)
+    {
+        $validClassTypes = array(
+            Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER,
+            Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT
+        );
+        if (!in_array($classType, $validClassTypes)) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data') ->__('Invalid type of tax class specified.'));
+        }
+        return $classType;
+    }
+
+    /**
+     * Validate/Filter Tax Class Name
+     *
+     * @param string $className
+     * @return string processed class name
+     * @throws Mage_Core_Exception
+     */
+    protected function _processClassName($className)
+    {
+        $className = trim(strip_tags($className));
+        if ($className == '') {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data') ->__('Invalid name of tax class specified.'));
+        }
+        return $className;
+    }
+
+    /**
      * Initialize action
      *
      * @return Mage_Adminhtml_Controller_Action
@@ -97,7 +174,7 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/tax/classes_product')
-            || Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/tax/classes_customer');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::classes_product')
+            || Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::classes_customer');
     }
 }

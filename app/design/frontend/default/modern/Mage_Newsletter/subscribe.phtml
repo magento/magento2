@@ -30,14 +30,30 @@
             <label for="newsletter"><?php echo $this->__('Newsletter Sign-up:') ?></label>
         </div>
         <div class="input-box">
-           <input type="text" name="email" id="newsletter" title="<?php echo $this->__('Sign up for our newsletter') ?>" class="input-text required-entry validate-email" />
+            <input type="text" name="email" id="newsletter"
+                   title="<?php echo $this->__('Sign up for our newsletter') ?>"
+                   value="<?php echo $this->__('Enter your email address') ?>"
+                   class="input-text" data-validate="{required:true,validateEmail:true}"/>
         </div>
-        <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+        <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button">
+            <span><span><?php echo $this->__('Submit') ?></span></span></button>
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var newsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail');
-    new Varien.searchForm('newsletter-validate-detail', 'newsletter', '<?php echo $this->helper('Mage_Newsletter_Helper_Data')->__('Enter your email address') ?>');
-//]]>
+    //<![CDATA[
+    (function ($) {
+        $.mage.event.observe('mage.newsletter.initialize', function (event, initData) {
+            initData.newsletterId = '#newsletter-validate-detail';
+            initData.newsletterInputId = '#newsletter';
+            initData.placeholder = '<?php echo $this->__('Enter your email address') ?>';
+            initData.errorClass = 'mage-error';
+        });
+        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>");
+        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>");
+        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
+        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
+        $.mage.load.js("<?php echo $this->getSkinUrl('mage/validation/validate.js')?>");
+        $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Newsletter::newsletter.js') ?>");
+    })(jQuery);
+    //]]>
 </script>

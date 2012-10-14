@@ -80,7 +80,7 @@ class Mage_Adminhtml_Promo_WidgetController extends Mage_Adminhtml_Controller_Ac
 
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('promo/catalog');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_CatalogRule::promo_catalog');
     }
 
     /**

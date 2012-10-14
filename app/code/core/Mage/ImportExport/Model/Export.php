@@ -30,8 +30,6 @@
  * @category    Mage
  * @package     Mage_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
- *
- * @method string getCustomerEntity() getCustomerEntity()
  */
 class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
 {
@@ -50,7 +48,6 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
      * Config keys.
      */
     const CONFIG_KEY_ENTITIES          = 'global/importexport/export_entities';
-    const CONFIG_KEY_CUSTOMER_ENTITIES = 'global/importexport/export_customer_entities';
     const CONFIG_KEY_FORMATS           = 'global/importexport/export_file_formats';
     /**#@-*/
 
@@ -69,48 +66,17 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
     protected $_writer;
 
     /**
-     * Create instance of entity adapter and returns it.
+     * Create instance of entity adapter and return it
      *
-     * @throws Exception
-     * @return Mage_ImportExport_Model_Export_Entity_Abstract|Mage_ImportExport_Model_Export_Entity_V2_Abstract
+     * @throws Mage_Core_Exception
+     * @return Mage_ImportExport_Model_Export_Entity_Abstract|Mage_ImportExport_Model_Export_EntityAbstract
      */
     protected function _getEntityAdapter()
     {
         if (!$this->_entityAdapter) {
             $entityTypes = Mage_ImportExport_Model_Config::getModels(self::CONFIG_KEY_ENTITIES);
-            $customerEntityTypes = Mage_ImportExport_Model_Config::getModels(self::CONFIG_KEY_CUSTOMER_ENTITIES);
 
-            $customerEntityType = $this->getCustomerEntity();
-            if (!empty($customerEntityType)) {
-                if (isset($customerEntityTypes[$customerEntityType])) {
-                    try {
-                        $this->_entityAdapter = Mage::getModel($customerEntityTypes[$customerEntityType]['model']);
-                    } catch (Exception $e) {
-                        Mage::logException($e);
-                        Mage::throwException(
-                            Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity model')
-                        );
-                    }
-                    if (!$this->_entityAdapter instanceof Mage_ImportExport_Model_Export_Entity_V2_Abstract) {
-                        Mage::throwException(
-                            Mage::helper('Mage_ImportExport_Helper_Data')
-                                ->__('Entity adapter obejct must be an instance of %s',
-                                    'Mage_ImportExport_Model_Export_Entity_V2_Abstract'
-                                )
-                        );
-                    }
-
-                    // check for entity codes integrity
-                    if ($this->getCustomerEntity() != $this->_entityAdapter->getEntityTypeCode()) {
-                        Mage::throwException(
-                            Mage::helper('Mage_ImportExport_Helper_Data')
-                                ->__('Input entity code is not equal to entity adapter code')
-                        );
-                    }
-                } else {
-                    Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity'));
-                }
-            } elseif (isset($entityTypes[$this->getEntity()])) {
+            if (isset($entityTypes[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = Mage::getModel($entityTypes[$this->getEntity()]['model']);
                 } catch (Exception $e) {
@@ -119,11 +85,14 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
                         Mage::helper('Mage_ImportExport_Helper_Data')->__('Invalid entity model')
                     );
                 }
-                if (!$this->_entityAdapter instanceof Mage_ImportExport_Model_Export_Entity_Abstract) {
+                if (!($this->_entityAdapter instanceof Mage_ImportExport_Model_Export_Entity_Abstract)
+                    && !($this->_entityAdapter instanceof Mage_ImportExport_Model_Export_EntityAbstract)
+                ) {
                     Mage::throwException(
                         Mage::helper('Mage_ImportExport_Helper_Data')
-                            ->__('Entity adapter obejct must be an instance of %s',
-                                'Mage_ImportExport_Model_Export_Entity_Abstract'
+                            ->__('Entity adapter object must be an instance of %s or %s',
+                                'Mage_ImportExport_Model_Export_Entity_Abstract',
+                                'Mage_ImportExport_Model_Export_EntityAbstract'
                             )
                     );
                 }
@@ -308,7 +277,7 @@ class Mage_ImportExport_Model_Export extends Mage_ImportExport_Model_Abstract
     {
         $fileName = null;
         $entityAdapter = $this->_getEntityAdapter();
-        if ($entityAdapter instanceof Mage_ImportExport_Model_Export_Entity_V2_Abstract) {
+        if ($entityAdapter instanceof Mage_ImportExport_Model_Export_EntityAbstract) {
             $fileName = $entityAdapter->getFileName();
         }
         if (!$fileName) {

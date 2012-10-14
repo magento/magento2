@@ -142,6 +142,6 @@ class Mage_Adminhtml_Customer_Wishlist_Product_Composite_WishlistController
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('customer/manage');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Customer::manage');
     }
 }

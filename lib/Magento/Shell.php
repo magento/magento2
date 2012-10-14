@@ -73,23 +73,30 @@ class Magento_Shell
      *
      * @param string $command Command with optional argument markers '%s'
      * @param array $arguments Argument values to substitute markers with
-     * @return string
-     * @throws Magento_Exception
+     * @param string &$fullOutput A string to dump all actual output
+     * @return array raw output from exec() PHP-function (the second argument)
+     * @throws Magento_Exception if exit code is other than zero
      */
-    public function execute($command, array $arguments = array())
+    public function execute($command, array $arguments = array(), &$fullOutput = '')
     {
         $arguments = array_map('escapeshellarg', $arguments);
-        $command = vsprintf($command, $arguments);
-        /* Output errors to STDOUT instead of STDERR */
-        exec("$command 2>&1", $output, $exitCode);
-        $output = implode(PHP_EOL, $output);
+        $rawCommand = vsprintf("{$command} 2>&1", $arguments); // Output errors to STDOUT instead of STDERR
+        $output = $rawCommand . PHP_EOL;
+        $fullOutput .= $output;
         if ($this->_isVerbose) {
-            echo $output . PHP_EOL;
+            echo $output;
+        }
+        exec($rawCommand, $rawOutput, $exitCode);
+        $rawOutputStr = implode(PHP_EOL, $rawOutput);
+        $output = $rawOutputStr . PHP_EOL . PHP_EOL;
+        $fullOutput .= $output;
+        if ($this->_isVerbose) {
+            echo $output;
         }
         if ($exitCode) {
-            $commandError = new Exception($output, $exitCode);
+            $commandError = new Exception($rawOutputStr, $exitCode);
             throw new Magento_Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
         }
-        return $output;
+        return $rawOutput;
     }
 }

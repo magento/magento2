@@ -48,7 +48,7 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Tab_Googleoptimizer
         /*
          * Checking if user have permissions to save information
          */
-        if ($this->_isAllowedAction('save')) {
+        if ($this->_isAllowedAction('Mage_Cms::save')) {
             $isElementDisabled = false;
         } else {
             $isElementDisabled = true;
@@ -68,7 +68,7 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Tab_Googleoptimizer
             )
         );
 
-        if (!Mage::app()->isSingleStoreMode()) {
+        if (!Mage::app()->hasSingleStore()) {
             $form->getElement('conversion_page')->setOnchange('googleOptimizerConversionCmsPageAction(this)');
             $fieldset->addField('conversion_page_url', 'note', array(
                     'name'  => 'conversion_page_url',
@@ -242,11 +242,11 @@ class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Tab_Googleoptimizer
 
     /** Check permission for passed action
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowedAction($action)
+    protected function _isAllowedAction($resourceId)
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('cms/page/' . $action);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
     }
 }

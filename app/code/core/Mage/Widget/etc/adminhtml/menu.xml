@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Widget::cms_widget_instance" title="Widgets" module="Mage_Widget" sortOrder="15" parent="Mage_Cms::cms" action="adminhtml/widget_instance" />
+        <add id="Mage_Widget::cms_widget_instance" title="Widgets" module="Mage_Widget" sortOrder="15" parent="Mage_Cms::cms" action="adminhtml/widget_instance" resource="Mage_Widget::widget_instance"/>
     </menu>
 </config>

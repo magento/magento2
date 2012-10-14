@@ -24,15 +24,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+require __DIR__ . '/../../../../app/code/core/Mage/Core/functions.php';
+
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 
 $includePaths = array(
-    get_include_path(),
     "./framework",
     './testsuite',
-    '../../../lib',
+    '../../../app/',
     '../../../app/code/core',
-    '../../../app/'
+    '../../../lib',
+    get_include_path(),
 );
 set_include_path(implode(PATH_SEPARATOR, $includePaths));
 spl_autoload_register('magentoAutoloadForUnitTests');
@@ -44,7 +46,7 @@ function magentoAutoloadForUnitTests($class)
         $fileName = $path . DIRECTORY_SEPARATOR . $file;
         if (file_exists($fileName)) {
             include $file;
-            if (class_exists($class, false)) {
+            if (class_exists($class, false) || interface_exists($class, false)) {
                 return true;
             }
         }

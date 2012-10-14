@@ -25,7 +25,7 @@
  */
 
 /**
- * Pbridge controller
+ * Payment bridge controller
  *
  * @category    Mage
  * @package     Mage_XmlConnect
@@ -36,7 +36,7 @@ class Mage_XmlConnect_PbridgeController extends Mage_Core_Controller_Front_Actio
     /**
      * Load only action layout handles
      *
-     * @return Enterprise_Pbridge_PbridgeController
+     * @return Mage_XmlConnect_PbridgeController
      */
     protected function _initActionLayout()
     {
@@ -91,7 +91,7 @@ class Mage_XmlConnect_PbridgeController extends Mage_Core_Controller_Front_Actio
     /**
      * Output action with params that was given by payment bridge
      *
-     * @return viod
+     * @return null
      */
     public function outputAction()
     {
@@ -100,12 +100,13 @@ class Mage_XmlConnect_PbridgeController extends Mage_Core_Controller_Front_Actio
         }
         $this->loadLayout(false);
 
-        $method = $this->getRequest()->getParam('method', false);
-        $originalPaymentMethod = $this->getRequest()->getParam('original_payment_method', false);
-        $token = $this->getRequest()->getParam('token', false);
-
-        $ccLast4 = $this->getRequest()->getParam('cc_last4', false);
-        $ccType  = $this->getRequest()->getParam('cc_type', false);
+        /** @var $helper Mage_Core_Helper_Data */
+        $helper = Mage::helper('Mage_Core_Helper_Data');
+        $method = $helper->escapeHtml($this->getRequest()->getParam('method', false));
+        $originalPaymentMethod = $helper->escapeHtml($this->getRequest()->getParam('original_payment_method', false));
+        $token = $helper->escapeHtml($this->getRequest()->getParam('token', false));
+        $ccLast4 = $helper->escapeHtml($this->getRequest()->getParam('cc_last4', false));
+        $ccType  = $helper->escapeHtml($this->getRequest()->getParam('cc_type', false));
 
         if ($originalPaymentMethod && $token && $ccLast4 && $ccType) {
             $message = Mage::helper('Enterprise_Pbridge_Helper_Data')->__('Payment Bridge Selected');
@@ -128,7 +129,8 @@ EOT;
     </div>
 EOT;
         }
-
-        $this->getResponse()->setBody(html_entity_decode(Mage::helper('Mage_XmlConnect_Helper_Data')->htmlize($body)));
+        $replacePattern = '{{content}}';
+        $content = html_entity_decode(Mage::helper('Mage_XmlConnect_Helper_Data')->htmlize($replacePattern));
+        $this->getResponse()->setBody(str_replace($replacePattern, $body, $content));
     }
 }

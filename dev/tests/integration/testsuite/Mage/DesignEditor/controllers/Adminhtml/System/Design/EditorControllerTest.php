@@ -65,8 +65,9 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
         $this->dispatch('backend/admin/system_design_editor/index');
         $responseBody = $this->getResponse()->getBody();
         $this->_assertContainsDesignEditor($responseBody);
-        $this->assertContains('<select id="store_id" name="store_id"', $responseBody);
-        $this->assertContains('<label for="store_id">Store View', $responseBody);
+        $this->assertContains('id="store_id" name="store_id"', $responseBody);
+        $this->assertContains('for="store_id"', $responseBody);
+        $this->assertContains('Store View', $responseBody);
         $this->assertContains('Fixture Store</option>', $responseBody);
     }
 

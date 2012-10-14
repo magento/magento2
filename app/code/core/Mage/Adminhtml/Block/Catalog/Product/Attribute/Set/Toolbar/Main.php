@@ -42,14 +42,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main extends Ma
 
     protected function _prepareLayout()
     {
-        $this->setChild('addButton',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Set'),
-                    'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/add') . '\')',
-                    'class' => 'add',
-                ))
-        );
+        $this->addChild('addButton', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Set'),
+            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/add') . '\')',
+            'class' => 'add',
+        ));
         return parent::_prepareLayout();
     }
 

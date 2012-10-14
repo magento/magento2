@@ -43,8 +43,8 @@
          </action>
          <block type="Mage_Core_Block_Html_Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
       </block>
-      <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header" ignore="1"/>
-      <block type="Mage_Backend_Block_Menu" name="menu" as="menu" ignore="1"/>
+      <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header"/>
+      <block type="Mage_Backend_Block_Menu" name="menu" as="menu"/>
       <block type="Mage_Core_Block_Text_List" name="notifications" as="notifications">
          <block type="Mage_Adminhtml_Block_Notification_Baseurl" name="notification_baseurl" as="notification_baseurl" template="notification/baseurl.phtml"/>
          <block type="Mage_Adminhtml_Block_Cache_Notifications" name="cache_notifications" template="system/cache/notifications.phtml"/>
@@ -53,8 +53,6 @@
       </block>
       <block type="Mage_Core_Block_Messages" name="messages" as="messages"/>
       <block type="Mage_Core_Block_Text" as="no_name"/>
-       <action method="insert" ignore="1"><element>some_element_1</element></action>
-       <action method="append" ignore="1"><element>some_element_2</element></action>
    </block>
    <update handle="layout_test_handle_sample"/>
    <remove name="header"/>
@@ -66,7 +64,12 @@
          <template>popup.phtml</template>
       </action>
    </reference>
-    <reference name="some_element_1" ignore="1"/>
+    <reference name="some_element_1"/>
+    <block name="test.nonexisting.block" type="Mage_Core_Block_Text_List"/>
+    <remove name="test.nonexisting.block"/>
+    <reference name="test.nonexisting.block">
+        <action method="getSomething"/>
+    </reference>
     <reference name="notifications">
        <block type="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications" template="index/notifications.phtml" before="-"/>
        <block class="Mage_Index_Block_Adminhtml_Notifications" name="index_notifications_copy" template="index/notifications.phtml" after="-"/>

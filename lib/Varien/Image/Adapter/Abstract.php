@@ -70,6 +70,12 @@ abstract class Varien_Image_Adapter_Abstract
     protected $_backgroundColor;
     protected $_constrainOnly;
 
+    /**
+     * IO model to work with files
+     * @var Varien_Io_File
+     */
+    protected $_ioFile;
+
     abstract public function open($fileName);
 
     abstract public function save($destination = null, $newName = null);
@@ -90,6 +96,16 @@ abstract class Varien_Image_Adapter_Abstract
     abstract public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false);
 
     abstract public function checkDependencies();
+
+    /**
+     * Initialize default values
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_ioFile = isset($data['io']) ? $data['io'] : new Varien_Io_File();
+    }
 
     /**
      * Assign image width, height, fileType and fileMimeType to object properties
@@ -329,15 +345,10 @@ abstract class Varien_Image_Adapter_Abstract
      */
     protected function _adaptResizeValues($frameWidth, $frameHeight)
     {
-        if ($frameWidth !== null && $frameWidth <= 0
-            || $frameHeight !== null && $frameHeight <= 0
-            || empty($frameWidth) && empty($frameHeight)
-        ) {
-            throw new Exception('Invalid image dimensions.');
-        }
+        $this->_checkDimensions($frameWidth, $frameHeight);
 
         // calculate lacking dimension
-        if (!$this->_keepFrame) {
+        if (!$this->_keepFrame && $this->_checkSrcDimensions()) {
             if (null === $frameWidth) {
                 $frameWidth = round($frameHeight * ($this->_imageSrcWidth / $this->_imageSrcHeight));
             } elseif (null === $frameHeight) {
@@ -354,26 +365,10 @@ abstract class Varien_Image_Adapter_Abstract
         // define coordinates of image inside new frame
         $srcX = 0;
         $srcY = 0;
-        $dstX = 0;
-        $dstY = 0;
-        $dstWidth  = $frameWidth;
-        $dstHeight = $frameHeight;
-        if ($this->_keepAspectRatio) {
-            // do not make picture bigger, than it is, if required
-            if ($this->_constrainOnly) {
-                if (($frameWidth >= $this->_imageSrcWidth) && ($frameHeight >= $this->_imageSrcHeight)) {
-                    $dstWidth  = $this->_imageSrcWidth;
-                    $dstHeight = $this->_imageSrcHeight;
-                }
-            }
-            // keep aspect ratio
-            if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = round(($dstWidth / $this->_imageSrcWidth) * $this->_imageSrcHeight);
-            } else {
-                $dstWidth = round(($dstHeight / $this->_imageSrcHeight) * $this->_imageSrcWidth);
-            }
-        }
-        // define position in center (TODO: add positions option)
+        list($dstWidth, $dstHeight) = $this->_checkAspectRatio($frameWidth, $frameHeight);
+
+        // define position in center
+        // TODO: add positions option
         $dstY = round(($frameHeight - $dstHeight) / 2);
         $dstX = round(($frameWidth - $dstWidth) / 2);
 
@@ -401,6 +396,62 @@ abstract class Varien_Image_Adapter_Abstract
                 'height' => $frameHeight
             )
         );
+    }
+
+    /**
+     * Check aspect ratio
+     *
+     * @param int $frameWidth
+     * @param int $frameHeight
+     * @return array
+     */
+    protected function _checkAspectRatio($frameWidth, $frameHeight)
+    {
+        $dstWidth  = $frameWidth;
+        $dstHeight = $frameHeight;
+        if ($this->_keepAspectRatio && $this->_checkSrcDimensions()) {
+            // do not make picture bigger, than it is, if required
+            if ($this->_constrainOnly) {
+                if (($frameWidth >= $this->_imageSrcWidth) && ($frameHeight >= $this->_imageSrcHeight)) {
+                    $dstWidth  = $this->_imageSrcWidth;
+                    $dstHeight = $this->_imageSrcHeight;
+                }
+            }
+            // keep aspect ratio
+            if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
+                $dstHeight = round(($dstWidth / $this->_imageSrcWidth) * $this->_imageSrcHeight);
+            } else {
+                $dstWidth = round(($dstHeight / $this->_imageSrcHeight) * $this->_imageSrcWidth);
+            }
+        }
+        return array($dstWidth, $dstHeight);
+    }
+
+    /**
+     * Check Frame dimensions and throw exception if they are not valid
+     *
+     * @param int $frameWidth
+     * @param int $frameHeight
+     * @throws Exception
+     */
+    protected function _checkDimensions($frameWidth, $frameHeight)
+    {
+        if ($frameWidth !== null && $frameWidth <= 0
+            || $frameHeight !== null && $frameHeight <= 0
+            || empty($frameWidth) && empty($frameHeight)
+        ) {
+            throw new Exception('Invalid image dimensions.');
+        }
+    }
+
+    /**
+     * Return false if source width or height is empty
+     *
+     * @return bool
+     */
+    protected function _checkSrcDimensions()
+    {
+        return !empty($this->_imageSrcWidth) && !empty($this->_imageSrcHeight);
     }
 
     /**
@@ -434,26 +485,26 @@ abstract class Varien_Image_Adapter_Abstract
      */
     protected function _prepareDestination($destination = null, $newName = null)
     {
-        if (isset($destination) && isset($newName)) {
-            $fileName = $destination . DIRECTORY_SEPARATOR . $newName;
-        } elseif (isset($destination) && !isset($newName)) {
-            $info = pathinfo($destination);
-            $fileName = $destination;
-            $destination = $info['dirname'];
-        } elseif (!isset($destination) && isset($newName)) {
-            $fileName = $this->_fileSrcPath . DIRECTORY_SEPARATOR . $newName;
-        } else {
-            $fileName = $this->_fileSrcPath . DIRECTORY_SEPARATOR . $this->_fileSrcName;
-        }
-
         if (empty($destination)) {
             $destination = $this->_fileSrcPath;
+        } else {
+            if (empty($newName)) {
+                $info = pathinfo($destination);
+                $newName = $info['basename'];
+                $destination = $info['dirname'];
+            }
         }
+
+        if (empty($newName)) {
+            $newFileName = $this->_fileSrcName;
+        } else {
+            $newFileName = $newName;
+        }
+        $fileName = $destination . DIRECTORY_SEPARATOR . $newFileName;
 
         if (!is_writable($destination)) {
             try {
-                $io = new Varien_Io_File();
-                $result = $io->mkdir($destination);
+                $result = $this->_ioFile->mkdir($destination);
             } catch (Exception $e) {
                 $result = false;
             }

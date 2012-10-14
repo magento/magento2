@@ -43,6 +43,27 @@ class Mage_Adminhtml_Controller_Action extends Mage_Backend_Controller_ActionAbs
     protected $_currentArea = 'adminhtml';
 
     /**
+     * @var Mage_Core_Model_Translate
+     */
+    protected $_translator;
+
+    /**
+     * Constructor
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     * @param Zend_Controller_Response_Abstract $response
+     * @param array $invokeArgs
+     */
+    public function __construct(Zend_Controller_Request_Abstract $request,
+                                Zend_Controller_Response_Abstract $response,
+                                array $invokeArgs = array()
+    ) {
+        parent::__construct($request, $response, $invokeArgs);
+
+        $this->_translator = isset($invokeArgs['translator']) ? $invokeArgs['translator'] : $this->_getTranslator();
+    }
+
+    /**
      * Translate a phrase
      *
      * @return string
@@ -52,7 +73,20 @@ class Mage_Adminhtml_Controller_Action extends Mage_Backend_Controller_ActionAbs
         $args = func_get_args();
         $expr = new Mage_Core_Model_Translate_Expr(array_shift($args), $this->getUsedModuleName());
         array_unshift($args, $expr);
-        return Mage::app()->getTranslator()->translate($args);
+        return $this->_getTranslator()->translate($args);
+    }
+
+    /**
+     * Get translator model
+     *
+     * @return Mage_Core_Model_Translate
+     */
+    protected function _getTranslator()
+    {
+        if (null === $this->_translator) {
+            $this->_translator = Mage::app()->getTranslator();
+        }
+        return $this->_translator;
     }
 
     /**

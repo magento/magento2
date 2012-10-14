@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_ImportExport>
-            <version>1.6.0.3</version>
+            <version>1.6.0.4</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -50,11 +50,23 @@
                 <catalog_product translate="label">
                     <model_token>Mage_ImportExport_Model_Import_Entity_Product</model_token>
                     <label>Products</label>
+                    <behavior_token>Mage_ImportExport_Model_Source_Import_Behavior_Basic</behavior_token>
                 </catalog_product>
-                <customer translate="label">
-                    <model_token>Mage_ImportExport_Model_Import_Entity_Customer</model_token>
+                <customer_composite translate="label">
+                    <model_token>Mage_ImportExport_Model_Import_Entity_CustomerComposite</model_token>
                     <label>Customers</label>
+                    <behavior_token>Mage_ImportExport_Model_Source_Import_Behavior_Basic</behavior_token>
+                </customer_composite>
+                <customer translate="label">
+                    <model_token>Mage_ImportExport_Model_Import_Entity_Eav_Customer</model_token>
+                    <label>Customers Main File</label>
+                    <behavior_token>Mage_ImportExport_Model_Source_Import_Behavior_Custom</behavior_token>
                 </customer>
+                <customer_address translate="label">
+                    <model_token>Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address</model_token>
+                    <label>Customer Addresses</label>
+                    <behavior_token>Mage_ImportExport_Model_Source_Import_Behavior_Custom</behavior_token>
+                </customer_address>
             </import_entities>
             <export_entities>
                 <catalog_product translate="label">
@@ -62,30 +74,14 @@
                     <label>Products</label>
                 </catalog_product>
                 <customer translate="label">
-                    <model_token>Mage_ImportExport_Model_Export_Entity_Customer</model_token>
-                    <label>Customers</label>
+                    <model_token>Mage_ImportExport_Model_Export_Entity_Eav_Customer</model_token>
+                    <label>Customers Main File</label>
                 </customer>
+                <customer_address translate="label">
+                    <model_token>Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address</model_token>
+                    <label>Customer Addresses</label>
+                </customer_address>
             </export_entities>
-            <import_customer_entities>
-                <customer translate="label">
-                    <model_token>Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer</model_token>
-                    <label>Customers Main File</label>
-                </customer>
-                <customer_address translate="label">
-                    <model_token>Mage_ImportExport_Model_Import_Entity_V2_Eav_Customer_Address</model_token>
-                    <label>Customer Addresses</label>
-                </customer_address>
-            </import_customer_entities>
-            <export_customer_entities>
-                <customer translate="label">
-                    <model_token>Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer</model_token>
-                    <label>Customers Main File</label>
-                </customer>
-                <customer_address translate="label">
-                    <model_token>Mage_ImportExport_Model_Export_Entity_V2_Eav_Customer_Address</model_token>
-                    <label>Customer Addresses</label>
-                </customer_address>
-            </export_customer_entities>
             <export_file_formats>
                 <csv translate="label">
                     <model_token>Mage_ImportExport_Model_Export_Adapter_Csv</model_token>
@@ -125,6 +121,15 @@
                 </importexport>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_ImportExport>
+                    <files>
+                        <default>Mage_ImportExport.csv</default>
+                    </files>
+                </Mage_ImportExport>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <general>
@@ -140,5 +145,20 @@
                 <bunch_size>100</bunch_size>
             </file>
         </general>
+        <export>
+            <customer_page_size>
+                <customer>10000</customer>
+                <address>5000</address>
+            </customer_page_size>
+        </export>
+        <import>
+            <format_v1>
+                <page_size>5000</page_size>
+            </format_v1>
+            <format_v2>
+                <page_size>10000</page_size>
+                <bunch_size>100</bunch_size>
+            </format_v2>
+        </import>
     </default>
 </config>

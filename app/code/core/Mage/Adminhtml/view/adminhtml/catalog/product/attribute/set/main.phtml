@@ -256,10 +256,10 @@
                     },
 
                     SystemNodesExists : function(currentNode) {
-                        for( i in currentNode.childNodes ) {
-                            if( currentNode.childNodes[i].id ) {
+                        for (i in currentNode.childNodes) {
+                            if (currentNode.childNodes[i].id) {
                                 child = editSet.currentNode.childNodes[i];
-                                if( child.attributes.is_user_defined != 1 ) {
+                                if (child.attributes.is_unassignable != 1) {
                                     return true;
                                 }
                             }
@@ -391,19 +391,17 @@
 
                     rightBeforeInsert : function(tree, nodeThis, node, newParent) {
                         var empty = TreePanels.root2.findChild('id', 'empty');
-                        if( empty ) {
+                        if (empty) {
                             return false;
                         }
 
-                        if (node.attributes.is_user_defined == 0) {
+                        if (node.attributes.is_unassignable == 0) {
                             alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('You cannot remove system attribute from this set.')) ?>');
                             return false;
-                        }
-                        else if (node.attributes.is_configurable == 1) {
+                        } else if (node.attributes.is_configurable == 1) {
                             alert('<?php echo Mage::helper('Mage_Core_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Catalog_Helper_Data')->__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
                             return false;
-                        }
-                        else {
+                        } else {
                             return true;
                         }
                     },

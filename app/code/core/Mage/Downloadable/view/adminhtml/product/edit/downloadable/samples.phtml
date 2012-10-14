@@ -26,11 +26,12 @@
 ?>
 <?php
 /**
- * @see Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Samples
+ * @var $this Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links
  */
-?>
 
-<?php $_product = $this->getProduct() ?>
+$_product = $this->getProduct();
+$this->getConfigJson();
+?>
 <div class="fieldset">
     <table cellspacing="0" class="form-list">
         <tbody>
@@ -68,7 +69,7 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="4" class="a-right"><?php echo $this->getAddButtonHtml() ?>&nbsp;<?php echo $this->getUploadButtonHtml() ?></td>
+                        <td colspan="4" class="a-right"><?php echo $this->getAddButtonHtml() ?></td>
                     </tr>
                 </tfoot>
                 <tbody id="sample_items_body">
@@ -95,10 +96,14 @@ var sampleTemplate = '<tr>'+
                                     '<div id="downloadable_sample_{{id}}_file" class="uploader">'+
                                         '<div id="downloadable_sample_{{id}}_file-old" class="file-row-info"></div>'+
                                         '<div id="downloadable_sample_{{id}}_file-new" class="file-row-info new-file"></div>'+
-                                        '<div class="buttons">'+
-                                            '<div id="downloadable_sample_{{id}}_file-install-flash" style="display:none">'+
-                                                '<?php echo $this->jsQuoteEscape(Mage::helper('Mage_Media_Helper_Data')->__('This content requires last version of Adobe Flash Player. <a href="%s">Get Flash</a>', 'http://www.adobe.com/go/getflash/')) ?>'+
-                                            '</div>'+
+                                        '<div class="fileinput-button form-buttons">'+
+                                            '<span><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('Browse Files...') ?></span>' +
+                                            '<input id="downloadable_sample_{{id}}_file" type="file" name="<?php echo $this->getConfig()->getFileField() ?>" data-url="<?php echo $this->getConfig()->getUrl() ?>">' +
+                                            '<script type="text/javascript">' +
+                                            '/*<![CDATA[*/' +
+                                                'sampleUploader("#downloadable_sample_{{id}}_file"); ' +
+                                            '/*]]>*/' +
+                                            '</scr'+'ipt>'+
                                         '</div>'+
                                         '<div class="clear"></div>'+
                                     '</div>'+
@@ -118,15 +123,15 @@ var sampleTemplate = '<tr>'+
                         '</td>'+
                     '</tr>';
 var sampleItems = {
-    tbody : $('sample_items_body'),
-    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
-    templateText : sampleTemplate,
-    itemCount : 0,
-    add : function(data) {
+    tbody: $('sample_items_body'),
+    templateSyntax: /(^|.|\r|\n)({{(\w+)}})/,
+    templateText: sampleTemplate,
+    itemCount: 0,
+    add: function(data) {
         alertAlreadyDisplayed = false;
         this.template = new Template(this.templateText, this.templateSyntax);
 
-        if(!data.sample_id){
+        if(!data.sample_id) {
             data = {};
             data.sample_type = 'file';
             data.sample_id  = 0;
@@ -181,18 +186,17 @@ var sampleItems = {
         this.itemCount++;
         this.bindRemoveButtons();
     },
-    remove : function(event){
+    remove: function(event) {
         var element = $(Event.findElement(event, 'tr'));
         alertAlreadyDisplayed = false;
         if(element){
             element.down('input[type="hidden"].__delete__').value = '1';
-            element.down('div.flex').remove();
             element.addClassName('no-display');
             element.addClassName('ignore-validate');
             element.hide();
         }
     },
-    bindRemoveButtons : function(){
+    bindRemoveButtons: function() {
         var buttons = $$('tbody#sample_items_body .delete-sample-item');
         for(var i=0;i<buttons.length;i++){
             if(!$(buttons[i]).binded){
@@ -205,6 +209,57 @@ var sampleItems = {
 
 sampleItems.bindRemoveButtons();
 
+sampleUploader = function (id) {
+    (function ($, id) {
+        $(id).fileupload({
+            dataType: 'json',
+            url: '<?php echo $this->getConfig()->getUrl() ?>',
+            sequentialUploads: true,
+            maxFileSize: 2000000,
+            add: function (e, data) {
+                $.each(data.files, function (index, file) {
+                    data.fileId = Math.random().toString(36).substr(2, 9);
+                    var progressTmpl = $(id + '-template').children(':first').clone();
+                    progressTmpl.attr('id', data.fileId);
+                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
+                            .replace('{{name}}', file.name);
+                    progressTmpl.html(fileInfoHtml);
+                    progressTmpl.appendTo(id);
+                });
+                $(this).fileupload('process', data).done(function () {
+                    data.submit();
+                });
+            },
+            done: function (e, data) {
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).css('width', '100%');
+                if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                    new Downloadable.FileList(id.substr(1), null).handleUploadComplete(data.result);
+                } else {
+                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+                }
+            },
+            progress: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).css('width', progress + '%');
+            },
+            fail: function (e, data) {
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                if (data.result && data.result.hasOwnProperty('errorcode')) {
+                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+                }
+            }
+        });
+    })(jQuery, id);
+};
+
+
 if($('add_sample_item')){
     Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
 }
@@ -215,3 +270,4 @@ if($('add_sample_item')){
 
 //]]>
 </script>
+

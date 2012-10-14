@@ -55,12 +55,23 @@ class Mage_Core_Model_Config_Options extends Varien_Object
     protected $_dirExists = array();
 
     /**
-     * Initialize default values of the options
+     * Flag cache for existing or already created directories
+     *
+     * @var array
      */
-    public function __construct()
+    protected $_io;
+
+    /**
+     * Initialize default values of the options
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
     {
-        parent::__construct();
-        $appRoot= Mage::getRoot();
+        $this->_io = isset($data['io']) ? $data['io'] : new Varien_Io_File();
+        unset ($data['io']);
+        parent::__construct($data);
+        $appRoot = isset($data['app_dir']) ? $data['app_dir'] : Mage::getRoot();
         $root   = dirname($appRoot);
 
         $this->_data['app_dir']     = $appRoot;
@@ -71,7 +82,7 @@ class Mage_Core_Model_Config_Options extends Varien_Object
         $this->_data['lib_dir']     = $root . DIRECTORY_SEPARATOR . 'lib';
         $this->_data['locale_dir']  = $appRoot . DIRECTORY_SEPARATOR . 'locale';
         $this->_data['pub_dir']     = $root . DIRECTORY_SEPARATOR . 'pub';
-        $this->_data['js_dir']      = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'js';
+        $this->_data['js_dir']      = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'lib';
         $this->_data['media_dir']   = $this->_data['pub_dir'] . DIRECTORY_SEPARATOR . 'media';
         $this->_data['var_dir']     = $this->getVarDir();
         $this->_data['tmp_dir']     = $this->_data['var_dir'] . DIRECTORY_SEPARATOR . 'tmp';
@@ -213,11 +224,12 @@ class Mage_Core_Model_Config_Options extends Varien_Object
      * Var folder paths getter
      *
      * @return string
+     * @throws Mage_Core_Exception
      */
     public function getVarDir()
     {
         $dir = isset($this->_data['var_dir']) ? $this->_data['var_dir']
-            : $this->_data['base_dir'] . DS . self::VAR_DIRECTORY;
+            : $this->_data['base_dir'] . DIRECTORY_SEPARATOR . self::VAR_DIRECTORY;
         if (!$this->createDirIfNotExists($dir)) {
             $dir = $this->getSysTmpDir() . DIRECTORY_SEPARATOR . 'magento' . DIRECTORY_SEPARATOR . 'var';
             if (!$this->createDirIfNotExists($dir)) {
@@ -315,19 +327,10 @@ class Mage_Core_Model_Config_Options extends Varien_Object
         if (!empty($this->_dirExists[$dir])) {
             return true;
         }
-        if (file_exists($dir)) {
-            if (!is_dir($dir)) {
-                return false;
-            }
-            if (!is_dir_writeable($dir)) {
-                return false;
-            }
-        } else {
-            $oldUmask = umask(0);
-            if (!@mkdir($dir, 0777, true)) {
-                return false;
-            }
-            umask($oldUmask);
+        try {
+            $this->_io->checkAndCreateFolder($dir);
+        } catch (Exception $e) {
+            return false;
         }
         $this->_dirExists[$dir] = true;
         return true;

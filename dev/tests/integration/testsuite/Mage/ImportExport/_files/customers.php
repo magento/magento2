@@ -81,4 +81,5 @@ $customer->isObjectNew(true);
 $customer->save();
 $customers[] = $customer;
 
+Mage::unregister('_fixture/Mage_ImportExport_Customer_Collection');
 Mage::register('_fixture/Mage_ImportExport_Customer_Collection', $customers);

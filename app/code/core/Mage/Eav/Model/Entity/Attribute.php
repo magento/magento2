@@ -28,6 +28,8 @@
 /**
  * EAV Entity attribute model
  *
+ * @method Mage_Eav_Model_Entity_Attribute setOption($value)
+ *
  * @category   Mage
  * @package    Mage_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
@@ -56,7 +58,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     protected $_cacheTag    = 'EAV_ATTRIBUTE';
 
     /**
-     * Retreive default attribute backend model by attribute code
+     * Retrieve default attribute backend model by attribute code
      *
      * @return string
      */
@@ -80,7 +82,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive default attribute frontend model
+     * Retrieve default attribute frontend model
      *
      * @return string
      */
@@ -90,7 +92,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive default attribute source model
+     * Retrieve default attribute source model
      *
      * @return string
      */
@@ -280,7 +282,7 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
-     * Retreive attribute codes by frontend type
+     * Retrieve attribute codes by frontend type
      *
      * @param string $type
      * @return array
@@ -323,5 +325,22 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
             }
         }
         return $this->getFrontendLabel();
+    }
+
+    /**
+     * Get attribute sort weight
+     *
+     * @param int $setId
+     * @return float
+     */
+    public function getSortWeight($setId)
+    {
+        $groupSortWeight = isset($this->_data['attribute_set_info'][$setId]['group_sort'])
+            ? (float) $this->_data['attribute_set_info'][$setId]['group_sort'] * 1000
+            : 0.0;
+        $sortWeight = isset($this->_data['attribute_set_info'][$setId]['sort'])
+            ? (float)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
+            : 0.0;
+        return $groupSortWeight + $sortWeight;
     }
 }

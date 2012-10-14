@@ -85,6 +85,13 @@ abstract class Mage_Catalog_Model_Product_Attribute_Backend_Groupprice_Abstract
     }
 
     /**
+     * Retrieve resource instance
+     *
+     * @return Mage_Catalog_Model_Resource_Product_Attribute_Backend_Groupprice
+     */
+    abstract protected function _getResource();
+
+    /**
      * Get additional unique fields
      *
      * @param array $objectArray
@@ -365,5 +372,27 @@ abstract class Mage_Catalog_Model_Product_Attribute_Backend_Groupprice_Abstract
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve data for update attribute
+     *
+     * @param  Mage_Catalog_Model_Product $object
+     * @return array
+     */
+    public function getAffectedFields($object)
+    {
+        $data = array();
+        $groupPrices = (array)$object->getData($this->getAttribute()->getName());
+        $tableName = $this->_getResource()->getMainTable();
+        foreach ($groupPrices as $value) {
+            $data[$tableName][] = array(
+                'attribute_id' => $this->getAttribute()->getAttributeId(),
+                'entity_id' => $object->getId(),
+                'value_id' => $value['price_id'],
+            );
+        }
+
+        return $data;
     }
 }

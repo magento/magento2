@@ -92,7 +92,6 @@
             <action method="removeItem"><type>js</type><name>mage/adminhtml/tabs.js</name></action>
             <action method="removeItem"><type>js</type><name>mage/adminhtml/accordion.js</name></action>
             <!--            <action method="removeItem"><type>js</type><name>mage/adminhtml/tools.js</name></action>-->
-            <action method="removeItem"><type>js</type><name>mage/adminhtml/uploader.js</name></action>
             <action method="removeItem"><type>js</type><name>mage/adminhtml/product.js</name></action>
             <action method="removeItem"><type>js</type><name>mage/adminhtml/rules.js</name></action>
             <action method="removeItem"><type>js</type><name>mage/adminhtml/wysiwyg/tiny_mce/setup.js</name></action>

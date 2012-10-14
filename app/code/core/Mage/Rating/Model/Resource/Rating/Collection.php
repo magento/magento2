@@ -34,6 +34,30 @@
 class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
     /**
+     * Application instance
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * Collection constructor
+     *
+     * @param Mage_Core_Model_Resource_Db_Abstract $resource
+     * @param array $data
+     * @throws InvalidArgumentException
+     */
+    public function __construct($resource = null, $data = array())
+    {
+        $this->_app = isset($data['app']) ? $data['app'] : Mage::app();
+
+        if (!($this->_app instanceof Mage_Core_Model_App)) {
+            throw new InvalidArgumentException('Required app object is invalid');
+        }
+        parent::__construct($resource);
+    }
+
+    /**
      * @var bool
      */
     protected $_isStoreJoined = false;
@@ -94,6 +118,9 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
      */
     public function setStoreFilter($storeId)
     {
+        if ($this->_app->isSingleStoreMode()) {
+            return $this;
+        }
         $adapter = $this->getConnection();
         if (!is_array($storeId)) {
             $storeId = array($storeId === null ? -1 : $storeId);
@@ -175,12 +202,14 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
             ->join(
                 array('review_store' => $this->getTable('review_store')),
                 'rating_option_vote.review_id=review_store.review_id AND review_store.store_id = :store_id',
-                array())
-            ->join(
+                array());
+        if (!$this->_app->isSingleStoreMode()) {
+            $select->join(
                 array('rst' => $this->getTable('rating_store')),
                 'rst.rating_id = rating_option_vote.rating_id AND rst.store_id = :rst_store_id',
-                array())
-            ->join(array('review'              => $this->getTable('review')),
+                array());
+        }
+        $select->join(array('review' => $this->getTable('review')),
                 'review_store.review_id=review.review_id AND review.status_id=1',
                 array())
             ->where($inCond)
@@ -188,9 +217,13 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
             ->group('rating_option_vote.rating_id');
         $bind = array(
             ':store_id' => (int)$storeId,
-            ':rst_store_id' => (int)$storeId,
+
             ':pk_value'     => $entityPkValue
         );
+        if (!$this->_app->isSingleStoreMode()) {
+            $bind[':rst_store_id'] = (int)$storeId;
+        }
+
         $data = $this->getConnection()->fetchAll($select, $bind);
 
         foreach ($data as $item) {
@@ -226,6 +259,9 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
      */
     public function addStoresToCollection()
     {
+        if ($this->_app->isSingleStoreMode()) {
+            return $this;
+        }
         if (!$this->_isCollectionLoaded) {
             return $this;
         }
@@ -255,6 +291,18 @@ class Mage_Rating_Model_Resource_Rating_Collection extends Mage_Core_Model_Resou
                 $item->setStores(array_merge($item->getStores(), array($row['store_id'])));
             }
         }
+        return $this;
+    }
+
+    /**
+     * Set Active Filter
+     *
+     * @param bool $isActive
+     * @return Mage_Rating_Model_Resource_Rating_Collection
+     */
+    public function setActiveFilter($isActive = true)
+    {
+        $this->getSelect()->where('main_table.is_active=?', $isActive);
         return $this;
     }
 }

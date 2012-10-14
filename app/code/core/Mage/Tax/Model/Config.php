@@ -85,11 +85,9 @@ class Mage_Tax_Model_Config
     const DISPLAY_TYPE_BOTH = 3;
 
     /**
-     * Flag which notify what we need use prices exclude tax for calculations
-     *
-     * @var bool
+     * @var bool|null
      */
-    protected $_needUsePriceExcludeTax = false;
+    protected $_priceIncludesTax = null;
 
     /**
      * Flag which notify what we need use shipping prices exclude tax for calculations
@@ -104,17 +102,33 @@ class Mage_Tax_Model_Config
     protected $_shippingPriceIncludeTax = null;
 
     /**
-     * Check if product prices inputed include tax
+     * Check if prices of product in catalog include tax
      *
-     * @param   mix $store
+     * @param   mixed $store
      * @return  bool
      */
-    public function priceIncludesTax($store=null)
+    public function priceIncludesTax($store = null)
     {
-        if ($this->_needUsePriceExcludeTax) {
-            return false;
+        if (null !== $this->_priceIncludesTax) {
+            return $this->_priceIncludesTax;
         }
         return (bool)Mage::getStoreConfig(self::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, $store);
+    }
+
+    /**
+     * Override "price includes tax" variable regardless of system configuration of any store
+     *
+     * @param bool|null $value
+     * @return Mage_Tax_Model_Config
+     */
+    public function setPriceIncludesTax($value)
+    {
+        if (null === $value) {
+            $this->_priceIncludesTax = null;
+        } else {
+            $this->_priceIncludesTax = (bool)$value;
+        }
+        return $this;
     }
 
     /**
@@ -176,28 +190,6 @@ class Mage_Tax_Model_Config
             }
         }
         return $seq;
-    }
-
-    /**
-     * Specify flag what we need use price exclude tax
-     *
-     * @param   bool $flag
-     * @return  Mage_Tax_Model_Config
-     */
-    public function setNeedUsePriceExcludeTax($flag)
-    {
-        $this->_needUsePriceExcludeTax = $flag;
-        return $this;
-    }
-
-    /**
-     * Get flag what we need use price exclude tax
-     *
-     * @return bool $flag
-     */
-    public function getNeedUsePriceExcludeTax()
-    {
-        return $this->_needUsePriceExcludeTax;
     }
 
     /**

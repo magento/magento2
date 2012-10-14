@@ -274,21 +274,9 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isLast($this->_items['item3']));
     }
 
-    public function testSetPathUpdatesAllChildren()
-    {
-        $this->_items['item1']->expects($this->exactly(2))->method('setPath');
-        $this->_model->add($this->_items['item1']);
-
-        $this->_items['item2']->expects($this->exactly(2))->method('setPath');
-        $this->_model->add($this->_items['item2']);
-
-        $this->_model->setpath('root');
-    }
-
     public function testGetFirstAvailableReturnsLeafNode()
     {
         $item = $this->getMock('Mage_Backend_Model_Menu_Item', array(), array(), '', false);
-        $item->expects($this->once())->method('setPath');
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 

@@ -57,7 +57,7 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
             return;
         }
 
-        if ($this->_isAllowedAction('cancel') && $this->getInvoice()->canCancel()) {
+        if ($this->_isAllowedAction('Mage_Sales::cancel') && $this->getInvoice()->canCancel()) {
             $this->_addButton('cancel', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Cancel'),
                 'class'     => 'delete',
@@ -66,7 +66,7 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
             );
         }
 
-        if ($this->_isAllowedAction('emails')) {
+        if ($this->_isAllowedAction('Mage_Sales::emails')) {
             $this->addButton('send_notification', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Send Email'),
                 'onclick'   => 'confirmSetLocation(\''
@@ -77,7 +77,7 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
 
         $orderPayment = $this->getInvoice()->getOrder()->getPayment();
 
-        if ($this->_isAllowedAction('creditmemo') && $this->getInvoice()->getOrder()->canCreditmemo()) {
+        if ($this->_isAllowedAction('Mage_Sales::creditmemo') && $this->getInvoice()->getOrder()->canCreditmemo()) {
             if (($orderPayment->canRefundPartialPerInvoice()
                 && $this->getInvoice()->canRefund()
                 && $orderPayment->getAmountPaid() > $orderPayment->getAmountRefunded())
@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
             }
         }
 
-        if ($this->_isAllowedAction('capture') && $this->getInvoice()->canCapture()) {
+        if ($this->_isAllowedAction('Mage_Sales::capture') && $this->getInvoice()->canCapture()) {
             $this->_addButton('capture', array(
                 'label'     => Mage::helper('Mage_Sales_Helper_Data')->__('Capture'),
                 'class'     => 'save',
@@ -202,11 +202,11 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
     /**
      * Check whether is allowed action
      *
-     * @param string $action
+     * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowedAction($action)
+    protected function _isAllowedAction($resourceId)
     {
-        return $this->_session->isAllowed('sales/order/actions/' . $action);
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($resourceId);
     }
 }

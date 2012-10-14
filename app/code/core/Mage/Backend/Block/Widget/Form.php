@@ -63,13 +63,22 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
     protected function _prepareLayout()
     {
         Varien_Data_Form::setElementRenderer(
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Form_Renderer_Element')
+            $this->getLayout()->createBlock(
+                'Mage_Backend_Block_Widget_Form_Renderer_Element',
+                $this->getNameInLayout() . '_element'
+            )
         );
         Varien_Data_Form::setFieldsetRenderer(
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Form_Renderer_Fieldset')
+            $this->getLayout()->createBlock(
+                'Mage_Backend_Block_Widget_Form_Renderer_Fieldset',
+                $this->getNameInLayout() . '_fieldset'
+            )
         );
         Varien_Data_Form::setFieldsetElementRenderer(
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Form_Renderer_Fieldset_Element')
+            $this->getLayout()->createBlock(
+                'Mage_Backend_Block_Widget_Form_Renderer_Fieldset_Element',
+                $this->getNameInLayout() . '_fieldset_element'
+            )
         );
 
         return parent::_prepareLayout();

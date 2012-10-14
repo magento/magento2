@@ -138,11 +138,11 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
             throw new Magento_Exception('File name must be not empty.');
         }
         $this->_data['items'][$type . '/' . $name] = array(
-            'type'   => $type,
-            'name'   => $name,
+            'type' => $type,
+            'name' => $name,
             'params' => trim($params),
-            'if'     => $if,
-            'cond'   => $cond,
+            'if' => $if,
+            'cond' => $cond,
         );
         return $this;
     }
@@ -156,7 +156,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
      */
     public function removeItem($type, $name)
     {
-        unset($this->_data['items'][$type.'/'.$name]);
+        unset($this->_data['items'][$type . '/' . $name]);
         return $this;
     }
 
@@ -168,7 +168,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
     public function getCssJsHtml()
     {
         $lines = array();
-        $meta  = array();
+        $meta = array();
         foreach ($this->_data['items'] as $item) {
             if (!is_null($item['cond']) && !$this->getData($item['cond'])) {
                 continue;
@@ -179,7 +179,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
             $lines[$group][] = $item['name'];
         }
 
-        $html   = '';
+        $html = '';
         foreach ($lines as $group => $items) {
             list($if, $params, $contentType) = $meta[$group];
             if (!empty($if)) {
@@ -193,17 +193,17 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
                     foreach (Mage::getDesign()->getOptimalCssUrls($items) as $url) {
                         $html .= sprintf('<link%s href="%s" />' . "\n", $params, $url);
                     }
-                break;
+                    break;
                 case 'js':
                     foreach (Mage::getDesign()->getOptimalJsUrls($items) as $url) {
                         $html .= sprintf('<script%s type="text/javascript" src="%s"></script>' . "\n", $params, $url);
                     }
-                break;
+                    break;
                 case 'link':
                     foreach ($items as $file) {
                         $html .= sprintf('<link%s href="%s" />' . "\n", $params, $file);
                     }
-                break;
+                    break;
             }
             if (!empty($if)) {
                 $html .= '<![endif]-->' . "\n";
@@ -220,7 +220,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
     public function getContentType()
     {
         if (empty($this->_data['content_type'])) {
-            $this->_data['content_type'] = $this->getMediaType().'; charset='.$this->getCharset();
+            $this->_data['content_type'] = $this->getMediaType() . '; charset=' . $this->getCharset();
         }
         return $this->_data['content_type'];
     }
@@ -321,7 +321,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
     public function getRobots()
     {
         if (empty($this->_data['robots'])) {
-            $this->_data['robots'] = Mage::getStoreConfig('design/head/default_robots');
+            $this->_data['robots'] = Mage::getStoreConfig('design/search_engine_robots/default_robots');
         }
         return $this->_data['robots'];
     }
@@ -364,7 +364,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
         $faviconFile = Mage::getBaseUrl('media') . $folderName . '/' . $storeConfig;
         $absolutePath = Mage::getBaseDir('media') . '/' . $folderName . '/' . $storeConfig;
 
-        if(!is_null($storeConfig) && $this->_isFile($absolutePath)) {
+        if (!is_null($storeConfig) && $this->_isFile($absolutePath)) {
             $url = $faviconFile;
         } else {
             $url = $this->getSkinUrl('Mage_Page::favicon.ico');
@@ -378,10 +378,21 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
      * @param string $filename
      * @return bool
      */
-    protected function _isFile($filename) {
+    protected function _isFile($filename)
+    {
         if (Mage::helper('Mage_Core_Helper_File_Storage_Database')->checkDbUsage() && !is_file($filename)) {
             Mage::helper('Mage_Core_Helper_File_Storage_Database')->saveFileToFilesystem($filename);
         }
         return is_file($filename);
+    }
+
+    /**
+     * Retrieve locale code
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return substr(Mage::app()->getLocale()->getLocaleCode(), 0, 2);
     }
 }

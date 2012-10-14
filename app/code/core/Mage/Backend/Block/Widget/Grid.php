@@ -227,29 +227,20 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
 
     protected function _prepareLayout()
     {
-        $this->setChild('export_button',
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Export'),
-                    'onclick'   => $this->getJsObjectName().'.doExport()',
-                    'class'   => 'task'
-                ))
-        );
-        $this->setChild('reset_filter_button',
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Reset Filter'),
-                    'onclick'   => $this->getJsObjectName().'.resetFilter()',
-                ))
-        );
-        $this->setChild('search_button',
-            $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Search'),
-                    'onclick'   => $this->getJsObjectName().'.doFilter()',
-                    'class'   => 'task'
-                ))
-        );
+        $this->addChild('export_button', 'Mage_Backend_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Export'),
+            'onclick'   => $this->getJsObjectName().'.doExport()',
+            'class'   => 'task'
+        ));
+        $this->addChild('reset_filter_button', 'Mage_Backend_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Reset Filter'),
+            'onclick'   => $this->getJsObjectName().'.resetFilter()',
+        ));
+        $this->addChild('search_button', 'Mage_Backend_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Search'),
+            'onclick'   => $this->getJsObjectName().'.doFilter()',
+            'class'   => 'task'
+        ));
         return parent::_prepareLayout();
     }
 
@@ -308,8 +299,13 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
     public function addColumn($columnId, $column)
     {
         if (is_array($column)) {
-            $this->_columns[$columnId] = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid_Column')
+            $this->_columns[$columnId] = $this->getLayout()
+                ->createBlock(
+                    isset($column['block_class']) ? $column['block_class'] : 'Mage_Backend_Block_Widget_Grid_Column',
+                    $this->getNameInLayout() . '_column_' . $columnId
+                )
                 ->setData($column)
+                ->setColumnId($columnId)
                 ->setGrid($this);
         } else {
             throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong column format.'));
@@ -588,15 +584,19 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
     protected function _prepareMassactionColumn()
     {
         $columnId = 'massaction';
-        $massactionColumn = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid_Column')
-                ->setData(array(
-                    'index'        => $this->getMassactionIdField(),
-                    'filter_index' => $this->getMassactionIdFilter(),
-                    'type'         => 'massaction',
-                    'name'         => $this->getMassactionBlock()->getFormFieldName(),
-                    'align'        => 'center',
-                    'is_system'    => true
-                ));
+        $massactionColumn = $this->getLayout()
+            ->createBlock(
+                'Mage_Backend_Block_Widget_Grid_Column',
+                ($this->getId() ? : $this->getNameInLayout()) . $columnId
+            )
+            ->setData(array(
+                'index'        => $this->getMassactionIdField(),
+                'filter_index' => $this->getMassactionIdFilter(),
+                'type'         => 'massaction',
+                'name'         => $this->getMassactionBlock()->getFormFieldName(),
+                'align'        => 'center',
+                'is_system'    => true
+            ));
 
         if ($this->getNoFilterMassactionColumn()) {
             $massactionColumn->setData('filter', false);
@@ -823,7 +823,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
      /**
      * Retrieve rss lists types
      *
-     * @return array
+     * @return array|bool
      */
     public function getRssLists()
     {
@@ -862,6 +862,17 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
                 'label' => $label
             )
         );
+        return $this;
+    }
+
+    /**
+     * Clear rss list in grid
+     *
+     * @return  Mage_Backend_Block_Widget_Grid
+     */
+    public function clearRss()
+    {
+        $this->_rssLists = array();
         return $this;
     }
 

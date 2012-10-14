@@ -34,36 +34,27 @@
     <h3><?php echo $this->__("Welcome to Magento's Installation Wizard") ?>!</h3>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php if(count($this->getMessagesBlock()->getMessages())==0): ?>
+<?php if (count($this->getMessagesBlock()->getMessages()) == 0): ?>
 <form action="<?php echo $this->getPostUrl() ?>" method="post">
-<div style="height:20em; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">
-<?php echo $this->getLicenseHtml() ?>
-</div>
-
-<script type="text/javascript">
-//<![CDATA[
-function changeSubmitStatus(obj) {
-    $('submitButton').disabled = !obj.checked;
-    if(obj.checked){
-        $('submitButton').setStyle({'background':'#f18200','borderColor':'','cursor':'pointer','color':'#C73615'});
-    }
-    else{
-        $('submitButton').setStyle({'background':'#bbb','borderColor':'#bbb','cursor':'default','color':'white'});
-    }
-}
-//]]>
-</script>
+    <div
+        style="height:20em; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">
+        <?php echo $this->getLicenseHtml() ?>
+    </div>
     <p>
-        <input type="checkbox" name="agree" value="1" id="agree" onclick="changeSubmitStatus(this)" class="checkbox" />
+        <input type="checkbox" name="agree" value="1" id="agree" class="checkbox"/>
         <label for="agree"><?php echo $this->__('I agree to the above terms and conditions.') ?></label>
     </p>
+
     <div class="button-set">
-        <button class="form-button" type="submit" id="submitButton" disabled="disabled"><span><?php echo $this->__('Continue') ?></span></button>
+        <button class="form-button mage-disabled" type="submit" id="submitButton" disabled="disabled">
+            <span><?php echo $this->__('Continue') ?></span></button>
     </div>
 </form>
 <script type="text/javascript">
 //<![CDATA[
-    changeSubmitStatus($('agree'));
+(function($) {
+    $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Install::js/begin.js') ?>");
+})(jQuery);
 //]]>
 </script>
 <?php endif ?>

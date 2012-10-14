@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <add id="Mage_CatalogRule::promo" title="Promotions" module="Mage_CatalogRule" sortOrder="50" />
-        <add id="Mage_CatalogRule::promo_catalog" title="Catalog Price Rules" module="Mage_CatalogRule" parent="Mage_CatalogRule::promo" action="adminhtml/promo_catalog/" dependsOnModule="Mage_Catalog" />
+        <add id="Mage_CatalogRule::promo" title="Promotions" module="Mage_CatalogRule" sortOrder="50" resource="Mage_CatalogRule::promo"/>
+        <add id="Mage_CatalogRule::promo_catalog" title="Catalog Price Rules" module="Mage_CatalogRule" parent="Mage_CatalogRule::promo" action="adminhtml/promo_catalog/" dependsOnModule="Mage_Catalog" resource="Mage_CatalogRule::promo_catalog"/>
     </menu>
 </config>

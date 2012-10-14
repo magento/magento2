@@ -76,16 +76,16 @@ class Mage_Adminhtml_Block_System_Convert_Gui_Grid extends Mage_Adminhtml_Block_
             'options'   => array('product'=>'Products', 'customer'=>'Customers'),
             'width'     => '120px',
         ));
-
-        $this->addColumn('store_id', array(
-            'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Store'),
-            'type'      => 'options',
-            'align'     => 'center',
-            'index'     => 'store_id',
-            'type'      => 'store',
-            'width'     => '200px',
-        ));
-
+        if (!Mage::app()->isSingleStoreMode()){
+            $this->addColumn('store_id', array(
+                'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Store'),
+                'type'      => 'options',
+                'align'     => 'center',
+                'index'     => 'store_id',
+                'type'      => 'store',
+                'width'     => '200px',
+            ));
+        }
         $this->addColumn('created_at', array(
             'header'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Created At'),
             'type'      => 'datetime',

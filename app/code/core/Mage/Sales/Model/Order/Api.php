@@ -33,12 +33,16 @@
  */
 class Mage_Sales_Model_Order_Api extends Mage_Sales_Model_Api_Resource
 {
+    /**
+     * Initialize attributes map
+     */
     public function __construct()
     {
-        $this->_attributesMap['order']         = array('order_id' => 'entity_id');
-        $this->_attributesMap['order_address'] = array('address_id' => 'entity_id');
-        $this->_attributesMap['order_payment'] = array('payment_id' => 'entity_id');
-
+        $this->_attributesMap = array(
+            'order' => array('order_id' => 'entity_id'),
+            'order_address' => array('address_id' => 'entity_id'),
+            'order_payment' => array('payment_id' => 'entity_id')
+        );
     }
 
     /**
@@ -63,71 +67,55 @@ class Mage_Sales_Model_Order_Api extends Mage_Sales_Model_Api_Resource
     }
 
     /**
-     * Retrieve list of orders by filters
+     * Retrieve list of orders. Filtration could be applied
      *
-     * @param array $filters
+     * @param null|object|array $filters
      * @return array
      */
     public function items($filters = null)
     {
+        $orders = array();
+
         //TODO: add full name logic
         $billingAliasName = 'billing_o_a';
         $shippingAliasName = 'shipping_o_a';
 
-        $collection = Mage::getModel('Mage_Sales_Model_Order')->getCollection()
-            ->addAttributeToSelect('*')
+        /** @var $orderCollection Mage_Sales_Model_Resource_Order_Collection */
+        $orderCollection = Mage::getModel('Mage_Sales_Model_Order')->getCollection();
+        $billingFirstnameField = "$billingAliasName.firstname";
+        $billingLastnameField = "$billingAliasName.lastname";
+        $shippingFirstnameField = "$shippingAliasName.firstname";
+        $shippingLastnameField = "$shippingAliasName.lastname";
+        $orderCollection->addAttributeToSelect('*')
             ->addAddressFields()
-            ->addExpressionFieldToSelect(
-                'billing_firstname', "{{billing_firstname}}", array('billing_firstname'=>"$billingAliasName.firstname")
-            )
-            ->addExpressionFieldToSelect(
-                'billing_lastname', "{{billing_lastname}}", array('billing_lastname'=>"$billingAliasName.lastname")
-            )
-            ->addExpressionFieldToSelect(
-                'shipping_firstname', "{{shipping_firstname}}",
-                array('shipping_firstname'=>"$shippingAliasName.firstname")
-            )
-            ->addExpressionFieldToSelect(
-                'shipping_lastname', "{{shipping_lastname}}", array('shipping_lastname'=>"$shippingAliasName.lastname")
-            )
-            ->addExpressionFieldToSelect(
-                    'billing_name',
-                    "CONCAT({{billing_firstname}}, ' ', {{billing_lastname}})",
-                    array(
-                        'billing_firstname'=>"$billingAliasName.firstname",
-                        'billing_lastname'=>"$billingAliasName.lastname"
-                    )
-            )
-            ->addExpressionFieldToSelect(
-                    'shipping_name',
-                    'CONCAT({{shipping_firstname}}, " ", {{shipping_lastname}})',
-                    array(
-                        'shipping_firstname'=>"$shippingAliasName.firstname",
-                        'shipping_lastname'=>"$shippingAliasName.lastname"
-                    )
-            );
+            ->addExpressionFieldToSelect('billing_firstname', "{{billing_firstname}}",
+                array('billing_firstname' => $billingFirstnameField))
+            ->addExpressionFieldToSelect('billing_lastname', "{{billing_lastname}}",
+                array('billing_lastname' => $billingLastnameField))
+            ->addExpressionFieldToSelect('shipping_firstname', "{{shipping_firstname}}",
+                array('shipping_firstname' => $shippingFirstnameField))
+            ->addExpressionFieldToSelect('shipping_lastname', "{{shipping_lastname}}",
+                array('shipping_lastname' => $shippingLastnameField))
+            ->addExpressionFieldToSelect('billing_name', "CONCAT({{billing_firstname}}, ' ', {{billing_lastname}})",
+                array('billing_firstname' => $billingFirstnameField, 'billing_lastname' => $billingLastnameField))
+            ->addExpressionFieldToSelect('shipping_name', 'CONCAT({{shipping_firstname}}, " ", {{shipping_lastname}})',
+                array('shipping_firstname' => $shippingFirstnameField, 'shipping_lastname' => $shippingLastnameField)
+        );
 
-        if (is_array($filters)) {
-            try {
-                foreach ($filters as $field => $value) {
-                    if (isset($this->_attributesMap['order'][$field])) {
-                        $field = $this->_attributesMap['order'][$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
+        /** @var $apiHelper Mage_Api_Helper_Data */
+        $apiHelper = Mage::helper('Mage_Api_Helper_Data');
+        $filters = $apiHelper->parseFilters($filters, $this->_attributesMap['order']);
+        try {
+            foreach ($filters as $field => $value) {
+                $orderCollection->addFieldToFilter($field, $value);
             }
+        } catch (Mage_Core_Exception $e) {
+            $this->_fault('filters_invalid', $e->getMessage());
         }
-
-        $result = array();
-
-        foreach ($collection as $order) {
-            $result[] = $this->_getAttributes($order, 'order');
+        foreach ($orderCollection as $order) {
+            $orders[] = $this->_getAttributes($order, 'order');
         }
-
-        return $result;
+        return $orders;
     }
 
     /**

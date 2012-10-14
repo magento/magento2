@@ -194,7 +194,7 @@ class Mage_GoogleOptimizer_Helper_Data extends Mage_Core_Helper_Abstract
                 $storeBaseUrl = $store->getConfig($_path);
                 $websiteBaseUrl = $store->getWebsite()->getConfig($_path);
                 $defaultBaseUrl = Mage::app()->getStore(0)->getConfig($_path);
-                if ($storeBaseUrl == $websiteBaseUrl && !Mage::app()->isSingleStoreMode()) {
+                if ($storeBaseUrl == $websiteBaseUrl && !Mage::app()->hasSingleStore()) {
                     $_query = array('__store' => $store->getCode());
                 }
                 $urls[$choice['value']] = $url->setStore($this->getStoreId())->getUrl($route,

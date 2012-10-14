@@ -58,7 +58,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ->load();
 
             $tabAttributesBlock = $this->getLayout()->createBlock(
-                $this->getAttributeTabBlock(), 'adminhtml.catalog.product.edit.tab.attributes'
+                $this->getAttributeTabBlock(), $this->getNameInLayout() . '_attributes_tab'
             );
             foreach ($groupCollection as $group) {
                 $attributes = $product->getAttributes($group->getId(), true);
@@ -146,7 +146,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
 
             if( $this->getRequest()->getParam('id', false) ) {
                 if (Mage::helper('Mage_Catalog_Helper_Data')->isModuleEnabled('Mage_Review')) {
-                    if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('admin/catalog/reviews_ratings')){
+                    if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Review::reviews_ratings')){
                         $this->addTab('reviews', array(
                             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Reviews'),
                             'url'   => $this->getUrl('*/*/reviews', array('_current' => true)),
@@ -154,22 +154,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                         ));
                     }
                 }
-                if (Mage::helper('Mage_Catalog_Helper_Data')->isModuleEnabled('Mage_Tag')) {
-                    if (Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('admin/catalog/tag')){
-                        $this->addTab('tags', array(
-                         'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Product Tags'),
-                         'url'   => $this->getUrl('*/*/tagGrid', array('_current' => true)),
-                         'class' => 'ajax',
-                        ));
-
-                        $this->addTab('customers_tags', array(
-                            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Customers Tagged Product'),
-                            'url'   => $this->getUrl('*/*/tagCustomerGrid', array('_current' => true)),
-                            'class' => 'ajax',
-                        ));
-                    }
-                }
-
             }
 
             /**
@@ -185,14 +169,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ));
             }
 
-        }
-        else {
-            $this->addTab('set', array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Settings'),
-                'content'   => $this->_translateHtml($this->getLayout()
-                    ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Settings')->toHtml()),
-                'active'    => true
-            ));
         }
         return parent::_prepareLayout();
     }

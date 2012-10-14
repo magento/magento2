@@ -284,15 +284,17 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
         // fill new image with required color
         $this->_fillBackgroundColor($newImage);
 
-        // resample source image and copy it into new frame
-        imagecopyresampled(
-            $newImage,
-            $this->_imageHandler,
-            $dims['dst']['x'], $dims['dst']['y'],
-            $dims['src']['x'], $dims['src']['y'],
-            $dims['dst']['width'], $dims['dst']['height'],
-            $this->_imageSrcWidth, $this->_imageSrcHeight
-        );
+        if ($this->_imageHandler) {
+            // resample source image and copy it into new frame
+            imagecopyresampled(
+                $newImage,
+                $this->_imageHandler,
+                $dims['dst']['x'], $dims['dst']['y'],
+                $dims['src']['x'], $dims['src']['y'],
+                $dims['dst']['width'], $dims['dst']['height'],
+                $this->_imageSrcWidth, $this->_imageSrcHeight
+            );
+        }
         $this->_imageHandler = $newImage;
         $this->refreshImageDimensions();
         $this->_resized = true;

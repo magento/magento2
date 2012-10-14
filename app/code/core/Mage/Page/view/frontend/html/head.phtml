@@ -24,22 +24,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
+<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>"/>
 <title><?php echo $this->getTitle() ?></title>
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
 <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
-<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
-<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
-<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
-<!--[if lt IE 7]>
-<script type="text/javascript">
-//<![CDATA[
-    var BLANK_URL = '<?php echo $this->getSkinUrl('blank.html') ?>';
-    var BLANK_IMG = '<?php echo $this->getSkinUrl('spacer.gif') ?>';
-//]]>
-</script>
-<![endif]-->
+<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>"/>
+<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
+<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery-1.7.1.min.js')?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/head.js')?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/mage.js')?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/translate.js')?>"></script>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('jquery/ui/css/jquery-ui.css')?>" type="text/css"
+      media="all"/>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Page::css/validate.css') ?>" type="text/css"
+      media="all"/>
 <?php echo $this->getCssJsHtml() ?>
 <?php echo $this->getChildHtml() ?>
-<?php echo $this->helper('Mage_Core_Helper_Js')->getTranslatorScript() ?>
 <?php echo $this->getIncludes() ?>
+<?php echo $this->helper('Mage_Core_Helper_Js')->getTranslatorScript() ?>

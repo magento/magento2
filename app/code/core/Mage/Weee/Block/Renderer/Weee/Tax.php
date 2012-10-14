@@ -96,7 +96,7 @@ class Mage_Weee_Block_Renderer_Weee_Tax extends Mage_Adminhtml_Block_Widget impl
 
     public function isMultiWebsites()
     {
-        return !Mage::app()->isSingleStoreMode();
+        return !Mage::app()->hasSingleStore();
     }
 
     public function getCountries()
@@ -120,7 +120,7 @@ class Mage_Weee_Block_Renderer_Weee_Tax extends Mage_Adminhtml_Block_Widget impl
             'currency'  => Mage::app()->getBaseCurrencyCode()
         );
 
-        if (!Mage::app()->isSingleStoreMode() && !$this->getElement()->getEntityAttribute()->isScopeGlobal()) {
+        if (!Mage::app()->hasSingleStore() && !$this->getElement()->getEntityAttribute()->isScopeGlobal()) {
             if ($storeId = $this->getProduct()->getStoreId()) {
                 $website = Mage::app()->getStore($storeId)->getWebsite();
                 $websites[$website->getId()] = array(
@@ -145,13 +145,11 @@ class Mage_Weee_Block_Renderer_Weee_Tax extends Mage_Adminhtml_Block_Widget impl
 
     protected function _setAddButton()
     {
-        $this->setChild('add_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add Tax'),
-                    'onclick'   => "weeeTaxControl.addItem('".$this->getElement()->getHtmlId()."')",
-                    'class' => 'add'
-                )));
+        $this->addChild('add_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Add Tax'),
+            'onclick'   => "weeeTaxControl.addItem('".$this->getElement()->getHtmlId()."')",
+            'class' => 'add'
+        ));
     }
 
     public function getAddButtonHtml()

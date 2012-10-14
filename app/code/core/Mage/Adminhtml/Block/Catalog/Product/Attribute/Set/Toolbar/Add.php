@@ -40,24 +40,18 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mag
 
     protected function _prepareLayout()
     {
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
-                    'onclick'   => 'if (addSet.submit()) disableElements(\'save\');',
-                    'class' => 'save'
-        )));
-        $this->setChild('back_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
-                    'onclick'   => 'setLocation(\''.$this->getUrl('*/*/').'\')',
-                    'class' => 'back'
-        )));
+        $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
+            'onclick'   => 'if (addSet.submit()) disableElements(\'save\');',
+            'class' => 'save'
+        ));
+        $this->addChild('back_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
+            'onclick'   => 'setLocation(\''.$this->getUrl('*/*/').'\')',
+            'class' => 'back'
+        ));
 
-        $this->setChild('setForm',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset')
-        );
+        $this->addChild('setForm', 'Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset');
         return parent::_prepareLayout();
     }
 

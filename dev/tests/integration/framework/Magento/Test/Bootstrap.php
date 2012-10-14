@@ -327,7 +327,9 @@ class Magento_Test_Bootstrap
     {
         switch ($this->_cleanupAction) {
             case self::CLEANUP_UNINSTALL:
-                $this->_db->cleanup();
+                if (!$this->_db->cleanup()) {
+                    throw new Magento_Exception("Database cleanup failed.");
+                }
                 $this->_cleanupFilesystem();
                 break;
             case self::CLEANUP_RESTORE_DB:
@@ -591,7 +593,7 @@ class Magento_Test_Bootstrap
         $roleUser->setData(array(
             'parent_id'  => $roleAdmin->getId(),
             'tree_level' => $roleAdmin->getTreeLevel() + 1,
-            'role_type'  => Mage_Admin_Model_Acl::ROLE_TYPE_USER,
+            'role_type'  => Mage_User_Model_Acl_Role_User::ROLE_TYPE,
             'user_id'    => $user->getId(),
             'role_name'  => $user->getFirstname(),
         ));

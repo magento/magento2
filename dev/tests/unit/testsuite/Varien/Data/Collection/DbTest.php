@@ -37,6 +37,11 @@ class Varien_Data_Collection_DbTest extends Magento_Test_TestCase_ZendDbAdapterA
         $this->_collection = new Varien_Data_Collection_Db;
     }
 
+    protected function tearDown()
+    {
+        unset($this->_collection);
+    }
+
     /**
      * @return PHPUnit_Framework_MockObject_MockObject|Zend_Db_Adapter_Abstract
      */
@@ -163,5 +168,25 @@ class Varien_Data_Collection_DbTest extends Magento_Test_TestCase_ZendDbAdapterA
         $select = $this->_collection->getSelect()->from('test');
         $this->_collection->addFieldToFilter('email', array('like' => 'value?'));
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
+    }
+
+    /**
+     * Test that after cloning collection $this->_select in initial and cloned collections
+     * do not reference the same object
+     *
+     * @covers Varien_Data_Collection_Db::__clone
+     */
+    public function testClone()
+    {
+        $adapter = $this->_getAdapterMock('Zend_Db_Adapter_Pdo_Mysql', null, null);
+        $this->_collection->setConnection($adapter);
+        $this->assertInstanceOf('Zend_Db_Select', $this->_collection->getSelect());
+
+        $clonedCollection = clone $this->_collection;
+
+        $this->assertInstanceOf('Zend_Db_Select', $clonedCollection->getSelect());
+        $this->assertNotSame($clonedCollection->getSelect(), $this->_collection->getSelect(),
+            'Collection was cloned but $this->_select in both initial and cloned collections reference the same object'
+        );
     }
 }

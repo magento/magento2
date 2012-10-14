@@ -26,11 +26,11 @@
 ?>
 <?php
 /**
- * @see Mage_Backend_Block_Widget_Form_Container
+ * @var $this Mage_Backend_Block_Widget_Form_Container
  */
  ?>
 <?php echo $this->getFormInitScripts() ?>
-<div class="content-header">
+<div class="content-header" <?php echo $this->getUiId('content-header') ?>>
     <?php echo $this->getHeaderHtml() ?>
     <p class="form-buttons"><?php echo $this->getButtonsHtml('header') ?></p>
 </div>

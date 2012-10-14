@@ -51,7 +51,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
     public function testCRUD()
     {
         $this->_model->setRoleType('G')
-            ->setResourceId("all")
+            ->setResourceId(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL)
             ->setPrivileges("")
             ->setAssertId(0)
             ->setRoleId(1)
@@ -72,7 +72,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
 
         $rules = $ruleSelect->query()->fetchAll();
         $this->assertEquals(1, count($rules));
-        $this->assertEquals('all', $rules[0]['resource_id']);
+        $this->assertEquals(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL, $rules[0]['resource_id']);
         $this->assertEquals(1, $rules[0]['role_id']);
         $this->assertEquals('allow', $rules[0]['permission']);
     }
@@ -87,7 +87,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
         $ruleSelect = $adapter->select()
             ->from($this->_model->getResource()->getMainTable());
 
-        $resources = array('all');
+        $resources = array(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL);
 
         $this->_model->setRoleId(1)
             ->setResources($resources)
@@ -95,7 +95,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
 
         $rules = $ruleSelect->query()->fetchAll();
         $this->assertEquals(1, count($rules));
-        $this->assertEquals('all', $rules[0]['resource_id']);
+        $this->assertEquals(Mage_Backend_Model_Acl_Config::ACL_RESOURCE_ALL, $rules[0]['resource_id']);
         $this->assertEquals(1, $rules[0]['role_id']);
         $this->assertEquals('allow', $rules[0]['permission']);
     }

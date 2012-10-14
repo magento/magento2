@@ -55,14 +55,6 @@
                     </captcha>
                 </observers>
             </controller_action_predispatch_customer_account_loginPost>
-            <controller_action_predispatch_customer_account_forgotpasswordpost>
-                <observers>
-                    <captcha>
-                        <class>Mage_Captcha_Model_Observer</class>
-                        <method>checkForgotPassword</method>
-                    </captcha>
-                </observers>
-            </controller_action_predispatch_customer_account_forgotpasswordpost>
             <controller_action_predispatch_customer_account_createpost>
                 <observers>
                     <captcha>
@@ -126,6 +118,15 @@
                 </captcha>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_Captcha>
+                    <files>
+                        <default>Mage_Captcha.csv</default>
+                    </files>
+                </Mage_Captcha>
+            </modules>
+        </translate>
     </frontend>
     <admin>
         <routers>
@@ -146,6 +147,15 @@
                 </captcha>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Mage_Captcha>
+                    <files>
+                        <default>Mage_Captcha.csv</default>
+                    </files>
+                </Mage_Captcha>
+            </modules>
+        </translate>
         <events>
             <controller_action_predispatch_adminhtml_auth_forgotpassword>
                 <observers>
@@ -155,6 +165,14 @@
                     </captcha>
                 </observers>
             </controller_action_predispatch_adminhtml_auth_forgotpassword>
+            <controller_action_predispatch_customer_account_forgotpasswordpost>
+                <observers>
+                    <captcha>
+                        <class>Mage_Captcha_Model_Observer</class>
+                        <method>checkForgotPassword</method>
+                    </captcha>
+                </observers>
+            </controller_action_predispatch_customer_account_forgotpasswordpost>
         </events>
     </adminhtml>
     <default>

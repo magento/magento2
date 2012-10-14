@@ -33,62 +33,6 @@
  */
 class Mage_Sales_Model_Order_Shipment_Api_V2 extends Mage_Sales_Model_Order_Shipment_Api
 {
-    /**
-     * Retrive shipments by filters
-     *
-     * @param array $filters
-     * @return array
-     */
-    public function items($filters = null)
-    {
-        //TODO: add full name logic
-        $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Collection')
-            ->addAttributeToSelect('increment_id')
-            ->addAttributeToSelect('created_at')
-            ->addAttributeToSelect('total_qty')
-            ->joinAttribute('shipping_firstname', 'order_address/firstname', 'shipping_address_id', null, 'left')
-            ->joinAttribute('shipping_lastname', 'order_address/lastname', 'shipping_address_id', null, 'left')
-            ->joinAttribute('order_increment_id', 'order/increment_id', 'order_id', null, 'left')
-            ->joinAttribute('order_created_at', 'order/created_at', 'order_id', null, 'left');
-
-        $preparedFilters = array();
-        if (isset($filters->filter)) {
-            foreach ($filters->filter as $_filter) {
-                $preparedFilters[$_filter->key] = $_filter->value;
-            }
-        }
-        if (isset($filters->complex_filter)) {
-            foreach ($filters->complex_filter as $_filter) {
-                $_value = $_filter->value;
-                $preparedFilters[$_filter->key] = array(
-                    $_value->key => $_value->value
-                );
-            }
-        }
-
-        if (!empty($preparedFilters)) {
-            try {
-                foreach ($preparedFilters as $field => $value) {
-                    if (isset($this->_attributesMap['shipment'][$field])) {
-                        $field = $this->_attributesMap['shipment'][$field];
-                    }
-
-                    $collection->addFieldToFilter($field, $value);
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_fault('filters_invalid', $e->getMessage());
-            }
-        }
-
-        $result = array();
-
-        foreach ($collection as $shipment) {
-            $result[] = $this->_getAttributes($shipment, 'shipment');
-        }
-
-        return $result;
-    }
-
     protected function _prepareItemQtyData($data)
     {
         $_data = array();
@@ -106,12 +50,13 @@ class Mage_Sales_Model_Order_Shipment_Api_V2 extends Mage_Sales_Model_Order_Ship
      * @param string $orderIncrementId
      * @param array $itemsQty
      * @param string $comment
-     * @param booleam $email
+     * @param boolean $email
      * @param boolean $includeComment
      * @return string
      */
-    public function create($orderIncrementId, $itemsQty = array(), $comment = null, $email = false, $includeComment = false)
-    {
+    public function create($orderIncrementId, $itemsQty = array(), $comment = null, $email = false,
+        $includeComment = false
+    ) {
         $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($orderIncrementId);
         $itemsQty = $this->_prepareItemQtyData($itemsQty);
         /**

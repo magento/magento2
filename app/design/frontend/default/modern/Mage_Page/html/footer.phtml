@@ -28,14 +28,18 @@
     <div class="footer">
         <?php echo $this->getChildHtml('bottomContainer') ?>
         <div class="f-right">
-            <img src="<?php echo $this->getSkinUrl('images/media/footer_callout.png');?>" class="footer-callout" alt="" />
+            <img src="<?php echo $this->getSkinUrl('images/media/footer_callout.png');?>" class="footer-callout"
+                 alt=""/>
             <?php echo $this->getChildHtml('store_switcher') ?>
         </div>
         <div class="f-left">
             <?php echo $this->getChildHtml('cms_footer_links') ?>
             <?php echo $this->getChildHtml('footer_links') ?>
             <?php echo $this->getChildHtml('newsletter') ?>
-            <p class="bugs"><?php echo $this->__('Help Us to Keep Magento Healthy') ?> - <a href="http://www.magentocommerce.com/bug-tracking" onclick="this.target='_blank'"><strong><?php echo $this->__('Report All Bugs') ?></strong></a> <?php echo $this->__('(ver. %s)', Mage::getVersion()) ?></p>
+            <p class="bugs"><?php echo $this->__('Help Us to Keep Magento Healthy') ?> - <a
+                href="http://www.magentocommerce.com/bug-tracking"
+                target="_blank"><strong><?php echo $this->__('Report All Bugs') ?></strong></a> <?php echo $this->__('(ver. %s)', Mage::getVersion()) ?>
+            </p>
             <address><?php echo $this->getCopyright() ?></address>
         </div>
     </div>

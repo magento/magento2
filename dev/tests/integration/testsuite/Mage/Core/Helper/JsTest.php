@@ -52,9 +52,9 @@ class Mage_Core_Helper_JsTest extends PHPUnit_Framework_TestCase
     public function testGetTranslatorScript()
     {
         $this->assertEquals(
-            '<script type="text/javascript">//<![CDATA['
-                . "\nvar Translator = new Translate({$this->_helper->getTranslateJson()});\n"
-                . '//]]></script>',
+            "<script type=\"text/javascript\">//<![CDATA[\n"
+                . '(function($) {$.mage.translate.add(' . $this->_helper->getTranslateJson() . ')})(jQuery);'
+                . "\n//]]></script>",
             $this->_helper->getTranslatorScript()
         );
     }
@@ -68,7 +68,7 @@ class Mage_Core_Helper_JsTest extends PHPUnit_Framework_TestCase
 
     public function testIncludeScript()
     {
-        $this->assertEquals('<script type="text/javascript" src="http://localhost/pub/js/blank.html"></script>' . "\n",
+        $this->assertEquals('<script type="text/javascript" src="http://localhost/pub/lib/blank.html"></script>' . "\n",
             $this->_helper->includeScript(self::FILE)
         );
         $script = '<script type="text/javascript" '

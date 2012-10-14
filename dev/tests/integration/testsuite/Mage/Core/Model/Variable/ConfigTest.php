@@ -45,7 +45,7 @@ class Mage_Core_Model_Variable_ConfigTest extends PHPUnit_Framework_TestCase
     public function testGetWysiwygJsPluginSrc()
     {
         $src = $this->_model->getWysiwygJsPluginSrc();
-        $this->assertStringStartsWith('http://localhost/pub/js/', $src);
+        $this->assertStringStartsWith('http://localhost/pub/lib/', $src);
         $this->assertStringEndsWith('editor_plugin.js', $src);
     }
 }

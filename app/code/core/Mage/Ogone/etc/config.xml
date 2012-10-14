@@ -115,6 +115,15 @@
                 </args>
             </ogone>
         </routers>
+        <translate>
+            <modules>
+                <Mage_Ogone>
+                    <files>
+                        <default>Mage_Ogone.csv</default>
+                    </files>
+                </Mage_Ogone>
+            </modules>
+        </translate>
     </frontend>
     <default>
         <payment>

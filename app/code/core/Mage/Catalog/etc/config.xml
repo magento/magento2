@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.16</version>
+            <version>1.6.0.0.17</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -209,6 +209,23 @@
                     <add_filterable_attributes>0</add_filterable_attributes>
                     <add_child_data>0</add_child_data>
                 </flat>
+                <attributes>
+                    <unassignable>
+                        <name/>
+                        <description/>
+                        <short_description/>
+                        <sku/>
+                        <price/>
+                        <status/>
+                        <visibility/>
+                        <weight/>
+                    </unassignable>
+                    <used_in_autogeneration>
+                        <name/>
+                        <description/>
+                        <sku/>
+                    </used_in_autogeneration>
+                </attributes>
             </product>
             <content>
                 <tempate_filter>Mage_Catalog_Model_Template_Filter</tempate_filter>
@@ -247,6 +264,16 @@
                 </visibility>
             </catalog_product>
         </eav_attributes>
+        <session>
+            <catalog>
+                <product>
+                    <message_models>
+                        <catalog>Mage_Catalog_Model_Session</catalog>
+                        <checkout>Mage_Checkout_Model_Session</checkout>
+                    </message_models>
+                </product>
+            </catalog>
+        </session>
     </global>
     <adminhtml>
         <translate>
@@ -375,6 +402,12 @@
             <navigation>
                 <max_depth>0</max_depth>
             </navigation>
+            <fields_masks>
+                <sku>{{name}}</sku>
+                <meta_title>{{name}}</meta_title>
+                <meta_keyword>{{name}},{{sku}}</meta_keyword>
+                <meta_description>{{name}} {{description}}</meta_description>
+            </fields_masks>
             <frontend>
                 <list_mode>grid-list</list_mode>
                 <grid_per_page_values>9,15,30</grid_per_page_values>
@@ -385,10 +418,6 @@
                 <default_sort_by>position</default_sort_by>
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
-            <sitemap>
-                <tree_mode>0</tree_mode>
-                <lines_perpage>30</lines_perpage>
-            </sitemap>
             <product>
                 <default_tax_group>2</default_tax_group>
             </product>

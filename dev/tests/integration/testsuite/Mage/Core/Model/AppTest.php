@@ -88,10 +88,28 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mage_Core_Model_Cookie', $this->_model->getCookie());
     }
 
-    public function testIsSingleStoreMode()
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 1
+     */
+    public function testIsSingleStoreModeWhenEnabled()
     {
-        $this->assertNull($this->_model->isSingleStoreMode());
         $this->assertTrue($this->_mageModel->isSingleStoreMode());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 0
+     */
+    public function testIsSingleStoreModeWhenDisabled()
+    {
+        $this->assertFalse($this->_mageModel->isSingleStoreMode());;
+    }
+
+    public function testHasSingleStore()
+    {
+        $this->assertNull($this->_model->hasSingleStore());
+        $this->assertTrue($this->_mageModel->hasSingleStore());
     }
 
     public function testSetCurrentStore()

@@ -29,7 +29,7 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tabs extends Mage_Adminhtml_Block_Widget_Tabs
 {
@@ -52,23 +52,12 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tabs extends Mage_Admi
             'active'    => true
         ));
 
-        $model = Mage::registry('entity_attribute');
-
         $this->addTab('labels', array(
             'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Label / Options'),
             'title'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Label / Options'),
             'content'   => $this->getLayout()
                 ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options')->toHtml(),
         ));
-        
-        /*if ('select' == $model->getFrontendInput()) {
-            $this->addTab('options_section', array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Options Control'),
-                'title'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Options Control'),
-                'content'   => $this->getLayout()
-                    ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options')->toHtml(),
-            ));
-        }*/
 
         return parent::_beforeToHtml();
     }

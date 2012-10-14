@@ -69,10 +69,7 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Form extends Mage_Adminhtm
            ->setOrder($this->getInvoice()->getOrder());
        $this->setChild('order_info', $infoBlock);
 */
-     /*  $this->setChild(
-          'items',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Items')
-        );
+     /*  $this->addChild('items', 'Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Items');
         */
         $trackingBlock = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Invoice_Create_Tracking');
        //$this->setChild('order_tracking', $trackingBlock);

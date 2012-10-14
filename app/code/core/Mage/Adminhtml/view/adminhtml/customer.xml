@@ -94,18 +94,6 @@
         </container>
     </adminhtml_customer_productreviews>
 
-    <adminhtml_customer_producttags>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Tag" name="admin.customer.tags"/>
-        </container>
-    </adminhtml_customer_producttags>
-
-    <adminhtml_customer_taggrid>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Tag" name="admin.customer.tags"/>
-        </container>
-    </adminhtml_customer_taggrid>
-
     <adminhtml_customer_newsletter>
         <container name="root" label="Root" output="1">
             <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid" name="admin.customer.newsletter.grid"/>

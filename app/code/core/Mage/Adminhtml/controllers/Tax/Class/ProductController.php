@@ -159,6 +159,64 @@ class Mage_Adminhtml_Tax_Class_ProductController extends Mage_Adminhtml_Controll
     }
 
     /**
+     * Delete Tax Class via AJAX
+     */
+    public function ajaxDeleteAction()
+    {
+        $responseContent = '';
+        $classId = (int)$this->getRequest()->getParam('class_id');
+        try {
+            $classModel = Mage::getModel('Mage_Tax_Model_Class')->load($classId);
+            $this->_checkProductTaxClassUsage($classModel);
+            $classModel->delete();
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => true,
+                'error' => false,
+                'error_message' => ''
+            ));
+        } catch (Mage_Core_Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => $e->getMessage()
+            ));
+        } catch (Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data')->__('An error occurred while deleting this tax class.')
+            ));
+        }
+        $this->getResponse()->setBody($responseContent);
+    }
+
+    /**
+     * Check if product tax class exists and has not been used yet (in Tax Rules or Products)
+     *
+     * @param Mage_Tax_Model_Class $classModel
+     */
+    protected function _checkProductTaxClassUsage(Mage_Tax_Model_Class $classModel)
+    {
+        if (!$classModel->getId() || $classModel->getClassType() != Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('This class no longer exists.'));
+        }
+
+        $ruleCollection = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->getCollection()
+            ->setClassTypeFilter(Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT, $classModel->getId());
+
+        if ($ruleCollection->getSize() > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.'));
+        }
+
+        $productCollection = Mage::getModel('Mage_Catalog_Model_Product')->getCollection()
+            ->addAttributeToFilter('tax_class_id', $classModel->getId());
+        $productCount = $productCollection->getSize();
+        if ($productCount > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used for %d products.', $productCount));
+        }
+    }
+
+    /**
      * Initialize action
      *
      * @return Mage_Adminhtml_Controller_Action
@@ -181,7 +239,7 @@ class Mage_Adminhtml_Tax_Class_ProductController extends Mage_Adminhtml_Controll
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('sales/tax/classes_product');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::classes_product');
     }
 
 }

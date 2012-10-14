@@ -30,7 +30,7 @@
 <?php if( sizeof($this->getTags()) > 0 ): ?>
     <ul class="tags-list">
         <?php foreach ($this->getTags() as $_tag): ?>
-            <li><a href="<?php echo $_tag->getTaggedProductsUrl() ?>" style="font-size:<?php echo $_tag->getRatio()*70+75 ?>%;"><?php echo $this->escapeHtml($_tag->getName()) ?></a></li>
+            <li><a href="<?php echo $_tag->getTaggedProductsUrl() ?>" style="font-size:<?php echo $_tag->getRatio()*70+75 ?>%;"<?php echo $this->getUiId('item', $_tag->getName()) ?>><?php echo $this->escapeHtml($_tag->getName()) ?></a></li>
         <?php endforeach; ?>
     </ul>
 <?php else: ?>

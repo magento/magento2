@@ -106,4 +106,60 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
             array($section, $group, $field, array($fieldPath => 'value'), false),
         );
     }
+
+    public function testInitFormAddsFieldsets()
+    {
+        new Mage_Core_Controller_Front_Action(Mage::app()->getRequest(), Mage::app()->getResponse());
+        Mage::app()->getRequest()->setParam('section', 'general');
+        $block = new Mage_Adminhtml_Block_System_Config_Form();
+        $block->setLayout(Mage::app()->getLayout());
+        $block->initForm();
+        $expectedIds = array(
+            'general_country' => array(
+                'general_country_default' => 'select',
+                'general_country_allow' => 'select',
+                'general_country_optional_zip_countries' => 'select',
+                'general_country_eu_countries' => 'select'
+            ),
+            'general_region' => array(
+                'general_region_state_required' => 'select',
+                'general_region_display_all' => 'select'
+            ),
+            'general_locale' => array(
+                'general_locale_timezone' => 'select',
+                'general_locale_code' => 'select',
+                'general_locale_firstday' => 'select',
+                'general_locale_weekend' => 'select'
+            ),
+            'general_restriction' => array(
+                'general_restriction_is_active' => 'select',
+                'general_restriction_mode' => 'select',
+                'general_restriction_http_redirect' => 'select',
+                'general_restriction_cms_page' => 'select',
+                'general_restriction_http_status' => 'select'
+            ),
+            'general_store_information' => array(
+                'general_store_information_name' => 'text',
+                'general_store_information_phone' => 'text',
+                'general_store_information_merchant_country' => 'select',
+                'general_store_information_merchant_vat_number' => 'text',
+                'general_store_information_validate_vat_number' => 'text',
+                'general_store_information_address' => 'textarea',
+            ),
+            'general_single_store_mode' => array(
+                'general_single_store_mode_enabled' => 'select',
+            )
+        );
+        $elements = $block->getForm()->getElements();
+        foreach ($elements as $element) {
+            $this->assertInstanceOf('Varien_Data_Form_Element_Fieldset', $element);
+            $this->assertArrayHasKey($element->getId(), $expectedIds);
+            $fields = $element->getSortedElements();
+            $this->assertEquals(count($expectedIds[$element->getId()]), count($fields));
+            foreach ($element->getElements() as $field) {
+                $this->assertArrayHasKey($field->getId(), $expectedIds[$element->getId()]);
+                $this->assertEquals($expectedIds[$element->getId()][$field->getId()], $field->getType());
+            }
+        };
+    }
 }

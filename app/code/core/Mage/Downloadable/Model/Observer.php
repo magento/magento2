@@ -293,4 +293,50 @@ class Mage_Downloadable_Model_Observer
         $block->addOptionsRenderCfg('downloadable', 'Mage_Downloadable_Helper_Catalog_Product_Configuration');
         return $this;
     }
+
+    /**
+     * Duplicating downloadable product data
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Downloadable_Model_Observer
+     */
+    public function duplicateProduct($observer)
+    {
+        $currentProduct = $observer->getCurrentProduct();
+        $newProduct = $observer->getNewProduct();
+        if ($currentProduct->getTypeId() !== Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+            //do nothing if not downloadable
+            return $this;
+        }
+        $downloadableData = array();
+        $type = $currentProduct->getTypeInstance();
+        foreach ($type->getLinks($currentProduct) as $link) {
+            $linkData = $link->getData();
+            $downloadableData['link'][] = array(
+                'file'                => $linkData['link_file'],
+                'is_shareable'        => $linkData['is_shareable'],
+                'link_url'            => $linkData['link_url'],
+                'number_of_downloads' => $linkData['number_of_downloads'],
+                'price'               => $linkData['price'],
+                'sample'              => array(
+                    'file'            => $linkData['sample_file'],
+                    'type'            => $linkData['sample_type'],
+                    'url'             => $linkData['sample_url']),
+                'sort_order'          => $linkData['sort_order'],
+                'title'               => $linkData['title'],
+                'type'                => $linkData['link_type'],
+            );
+        }
+        foreach ($type->getSamples($currentProduct)->getData() as $sample) {
+            $downloadableData['sample'][] = array(
+                'file'       => $sample['sample_file'],
+                'sample_url' => $sample['sample_url'],
+                'sort_order' => $sample['sort_order'],
+                'title'      => $sample['title'],
+                'type'       => $sample['sample_type'],
+            );
+        }
+        $newProduct->setDownloadableData($downloadableData);
+        return $this;
+    }
 }

@@ -138,7 +138,7 @@ class Maged_Model_Session extends Maged_Model
             $this->addMessage('error', 'Invalid user name or password');
             $this->controller()->setAction('login');
         } elseif ($this->getUserId() || ($user && $user->getId())) {
-            if ($this->_session->isAllowed('all')) {
+            if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::all')) {
                 return true;
             } else {
                 $this->logout();

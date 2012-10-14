@@ -158,7 +158,7 @@ class Integrity_Theme_SkinFilesTest extends Magento_Test_TestCase_IntegrityAbstr
         }
 
         // Collect "addCss" and "addJs" from theme layout
-        $layoutUpdate = new Mage_Core_Model_Layout_Update(
+        $layoutUpdate = new Mage_Core_Model_Layout_Merge(
             array('area' => $area, 'package' => $package, 'theme' => $theme)
         );
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();

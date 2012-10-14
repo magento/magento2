@@ -78,9 +78,45 @@ class Mage_Catalog_Model_Product_Option extends Mage_Core_Model_Abstract
 
     protected $_values = array();
 
+    /**
+     * Resource instance
+     *
+     * @var Mage_Catalog_Model_Resource_Product_Option
+     */
+    protected $_resource;
+
+    /**
+     * Translate instance
+     *
+     * @var Mage_Core_Model_Translate
+     */
+    protected $_translate;
+
+    /**
+     * Initialize data
+     *
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_resource = isset($data['resource']) ? $data['resource'] : null;
+        parent::__construct($data);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
+    protected function _getResource()
+    {
+        return $this->_resource ?: parent::_getResource();
+    }
+
     protected function _construct()
     {
         $this->_init('Mage_Catalog_Model_Resource_Product_Option');
+        parent::_construct();
     }
 
     /**

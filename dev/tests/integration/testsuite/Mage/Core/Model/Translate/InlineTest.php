@@ -118,7 +118,16 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
         $actualText = $originalText;
         $this->_model->processResponseBody($actualText);
         $this->markTestIncomplete('Bug MAGE-2494');
-        $this->assertXmlStringEqualsXmlString($expectedText, $actualText);
+
+        $expected = new DOMDocument;
+        $expected->preserveWhiteSpace = FALSE;
+        $expected->loadHTML($expectedText);
+
+        $actual = new DOMDocument;
+        $actual->preserveWhiteSpace = FALSE;
+        $actual->loadHTML($actualText);
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function processResponseBodyDataProvider()

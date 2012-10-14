@@ -71,7 +71,7 @@ class Mage_Backend_Model_Menu_Item_ValidatorTest extends PHPUnit_Framework_TestC
         'id' => 'item',
         'title' => 'Item Title',
         'action' => '/system/config',
-        'resource' => 'system/config',
+        'resource' => 'Mage_Backend::system_config',
         'dependsOnModule' => 'Mage_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
         'toolTip' => 'Item tooltip',
@@ -79,7 +79,7 @@ class Mage_Backend_Model_Menu_Item_ValidatorTest extends PHPUnit_Framework_TestC
 
     public function setUp()
     {
-        $this->_aclMock = $this->getMock('Mage_Backend_Model_Auth_Session', array(), array(), '', false);
+        $this->_aclMock = $this->getMock('Mage_Core_Model_Authorization', array(), array(), '', false);
         $this->_factoryMock = $this->getMock('Mage_Backend_Model_Menu_Factory');
         $this->_helperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
         $this->_urlModelMock = $this->getMock("Mage_Backend_Model_Url", array(), array(), '', false);
@@ -122,7 +122,8 @@ class Mage_Backend_Model_Menu_Item_ValidatorTest extends PHPUnit_Framework_TestC
             array('storeConfig'),
             array('id'),
             array('title'),
-            array('module')
+            array('module'),
+            array('resource'),
         );
     }
 
@@ -225,18 +226,21 @@ class Mage_Backend_Model_Menu_Item_ValidatorTest extends PHPUnit_Framework_TestC
                     array(
                         'id' => 'item1',
                         'title' => 'Item 1',
-                        'action' => 'adminhtml/controller/item1'
+                        'action' => 'adminhtml/controller/item1',
+                        'resource' => 'Namespace_Module::item1'
                     ),
                     array(
                         'id' => 'item2',
                         'title' => 'Item 2',
-                        'action' => 'adminhtml/controller/item2'
+                        'action' => 'adminhtml/controller/item2',
+                        'resource' => 'Namespace_Module::item2'
                     )
                 ),
                 array(
                     'id' => 'item1',
                     'title' => 'Item 1',
-                    'action' => 'adminhtml/controller/item1'
+                    'action' => 'adminhtml/controller/item1',
+                    'resource' => 'Namespace_Module::item1'
                 )
             ),
             array(
@@ -244,18 +248,21 @@ class Mage_Backend_Model_Menu_Item_ValidatorTest extends PHPUnit_Framework_TestC
                     array(
                         'id' => 'Namespace_Module::item1',
                         'title' => 'Item 1',
-                        'action' => 'adminhtml/controller/item1'
+                        'action' => 'adminhtml/controller/item1',
+                        'resource' => 'Namespace_Module::item1'
                     ),
                     array(
                         'id' => 'Namespace_Module::item2',
                         'title' => 'Item 2',
-                        'action' => 'adminhtml/controller/item2'
+                        'action' => 'adminhtml/controller/item2',
+                        'resource' => 'Namespace_Module::item1'
                     )
                 ),
                 array(
                     'id' => 'Namespace_Module::item1',
                     'title' => 'Item 1',
-                    'action' => 'adminhtml/controller/item1'
+                    'action' => 'adminhtml/controller/item1',
+                    'resource' => 'Namespace_Module::item1'
                 )
             )
         );

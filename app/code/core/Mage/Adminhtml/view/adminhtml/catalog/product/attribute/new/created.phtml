@@ -27,13 +27,19 @@
 <script type="text/javascript">
 var added = false;
 function addAttribute(closeAfter) {
-    if(window.opener!=null && !added) {
-        window.opener.Product.AttributesBridge.addAttributeRow(<?php echo $this->getAttributesBlockJson() ?>);
-        added = true;
+    if (window.opener != null && !added) {
+        var data = <?php echo $this->getAttributesBlockJson() ?>;
+        if (data.newAttributeSetId) {
+            (function($) {
+                $('#product_edit_form').trigger('product:changeAttributeSet', [data.newAttributeSetId]);
+            })(window.opener.jQuery);
+        } else {
+            window.opener.Product.AttributesBridge.addAttributeRow(data);
+            added = true;
+        }
     }
 
-    if(closeAfter)
-    {
+    if (closeAfter) {
         closeWindow();
     }
 }

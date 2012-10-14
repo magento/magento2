@@ -34,20 +34,20 @@
 <li>
     <div class="input-box">
         <label for="host"><?php echo $this->__('Host') ?> <span class="required">*</span></label><br />
-        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_host]" id="host" value="<?php echo $this->getFormData()->getDbHost() ?>" title="<?php echo $this->__('Database host') ?>" class="required-entry input-text" />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_host]" id="host" value="<?php echo $this->getFormData()->getDbHost() ?>" title="<?php echo $this->__('Database host') ?>" data-validate="{required:true}" class="input-text" />
         <p style="margin-top:4px; line-height:1.3em; color:#666;">
             <small><?php echo $this->__('You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock') ?></small>
         </p>
     </div>
     <div class="input-box">
         <label for="dbname"><?php echo $this->__('Database Name') ?> <span class="required">*</span></label><br />
-        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_name]" id="dbname" value="<?php echo $this->getFormData()->getDbName() ?>" title="<?php echo $this->__('Database Name') ?>" class="required-entry input-text" />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_name]" id="dbname" value="<?php echo $this->getFormData()->getDbName() ?>" title="<?php echo $this->__('Database Name') ?>" data-validate="{required:true}" class="input-text" />
     </div>
 </li>
 <li>
     <div class="input-box">
         <label for="user"><?php echo $this->__('User Name') ?> <span class="required">*</span></label><br />
-        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_user]" id="user" value="<?php echo $this->getFormData()->getDbUser() ?>" title="<?php echo $this->__('Database user name') ?>" class="required-entry input-text" />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_user]" id="user" value="<?php echo $this->getFormData()->getDbUser() ?>" title="<?php echo $this->__('Database user name') ?>" data-validate="{required:true}" class="input-text" />
     </div>
     <div class="input-box">
         <label for="password"><?php echo $this->__('User Password') ?></label><br />
@@ -57,7 +57,7 @@
 <li>
     <div class="input-box">
         <label for="prefix"><?php echo $this->__('Tables Prefix') ?></label><br />
-        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_prefix]" id="prefix" value="<?php echo $this->getFormData()->getDbPrefix() ?>" title="<?php echo $this->__('Tables Prefix') ?>" class="validate-data input-text" />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_prefix]" id="prefix" value="<?php echo $this->getFormData()->getDbPrefix() ?>" title="<?php echo $this->__('Tables Prefix') ?>" data-validate="{validateData:true}" class="input-text" />
         <p style="margin-top:4px; line-height:1.3em; color:#666;">
             <small><?php echo $this->__('(Optional. Leave blank for no prefix)') ?></small>
         </p>

@@ -71,7 +71,8 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
     protected function _isApplicableAttribute($object, $attribute)
     {
         $applyTo = $attribute->getApplyTo();
-        return count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo);
+        return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
+            && $attribute->isInSet($object->getAttributeSetId());
     }
 
     /**
@@ -113,7 +114,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
          * store mode, customize some value per specific store view and than back
          * to single store mode. We should load correct values
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $storeId = (int)Mage::app()->getStore(true)->getId();
         } else {
             $storeId = (int)$object->getStoreId();
@@ -227,7 +228,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
          * for default store id
          * In this case we clear all not default values
          */
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
             $write->delete($table, array(
                 'attribute_id = ?' => $attribute->getAttributeId(),
@@ -362,7 +363,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
             $adapter->update($table, $bind, $where);
         } else {
             $bind  = array(
-                $idField            => (int)$object->getId(),
+                $entityIdField      => (int)$object->getId(),
                 'entity_type_id'    => (int)$object->getEntityTypeId(),
                 'attribute_id'      => (int)$attribute->getId(),
                 'value'             => $this->_prepareValueForSave($value, $attribute),

@@ -25,11 +25,11 @@
  */
 
 /**
- * Adminhtml urlrewrite grid block
+ * Adminhtml URL rewrite grid block
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Urlrewrite_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {

@@ -28,6 +28,11 @@ return array(
     'application' => array(
         'url_host' => '127.0.0.1',
         'url_path' => '/magento/',
+        'admin' => array(
+            'frontname' => 'backend',
+            'username' => 'admin',
+            'password' => '123123q', // must be at least of 7 both numeric and alphanumeric chars
+        ),
         /* Optional installation configuration. If omitted, no installation occurs. */
         'installation' => array(
             /**
@@ -49,29 +54,60 @@ return array(
                 'admin_lastname'             => 'Admin',
                 'admin_firstname'            => 'Admin',
                 'admin_email'                => 'admin@example.com',
-                'admin_username'             => 'admin',
-                'admin_password'             => '123123q', // must be at least of 7 both numeric and alphanumeric chars
+                'admin_no_form_key'          => 'yes',
             ),
-            'fixture_files' => 'testsuite/fixtures/*.php',
         ),
     ),
     'scenario' => array(
-        'files' => 'testsuite/*.jmx',
-        /**
-         * Path to JMeter executable. If empty, then env value 'jmeter_jar_file' is taken. If this value is empty as
-         * well, then default value is used.
-         */
-        'jmeter_jar_file' => '',
-        /* Common parameters for all scenarios */
-        'common_params' => array(
-            'users' => 1,
-            'loops' => 1,
+        'common_config' => array(
+            /* Common arguments passed to all scenarios */
+            'arguments' => array(
+                'users' => 1,
+                'loops' => 1,
+            ),
+            /* Common settings for all scenarios */
+            'settings' => array(),
         ),
-        /* Optional scenario-specific parameters */
-        'scenario_params' => array(
+        'scenarios' => array(
+            'testsuite/add_to_cart.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
+            ),
+            'testsuite/advanced_search.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
+            ),
+            'testsuite/category_view.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_category.php',
+                ),
+            ),
+            'testsuite/checkout.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
+            ),
+            'testsuite/home_page.jmx',
+            'testsuite/product_edit.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
+            ),
             'testsuite/product_view.jmx' => array(
-                'product_url_key' => 'product-1.html',
-                'product_name'    => 'Product 1',
+                'arguments' => array(
+                    'product_url_key' => 'product-1.html',
+                    'product_name'    => 'Product 1',
+                ),
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
+            ),
+            'testsuite/quick_search.jmx' => array(
+                'fixtures' => array(
+                    'testsuite/fixtures/catalog_product.php',
+                ),
             ),
         ),
     ),

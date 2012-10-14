@@ -25,18 +25,19 @@
  */
 ?>
 <?php
+/* @var $this Mage_Backend_Block_Widget_Form_Renderer_Fieldset_Element */
 $_element = $this->getElement();
 $_note    = $_element->getNote();
 $_trId    = $_element->getHtmlContainerId();
 $_class   = $_element->getFieldsetHtmlClass();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?>>
+<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> <?php echo $this->getUiId('form-row',$_element->getId()) ?>>
     <?php if ($_element->getType()=='hidden'): ?>
-    <td colspan="2" class="hidden"><?php echo trim($_element->getElementHtml()) ?></td>
+    <td colspan="2" class="hidden" <?php echo $this->getUiId($_element->getId()) ?>><?php echo trim($_element->getElementHtml()) ?></td>
     <?php else: ?>
-    <td class="label<?php echo $_class ? " {$_class}-label" : ''?>"><?php echo trim($_element->getLabelHtml()) ?></td>
-    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value' ?><?php echo $_class ? " {$_class}-value" : ''?>">
+    <td class="label<?php echo $_class ? " {$_class}-label" : ''?>" <?php echo $this->getUiId('cell', $_element->getId(), 'label') ?>><?php echo trim($_element->getLabelHtml()) ?></td>
+    <td class="<?php echo $_element->hasValueClass() ? $_element->getValueClass() : 'value' ?><?php echo $_class ? " {$_class}-value" : ''?>" <?php echo $this->getUiId('cell',$_element->getId(), 'value') ?>>
         <?php echo trim($_element->getElementHtml()) ?>
         <?php if ($_note): ?>
             <p class="note<?php echo $_class ? " {$_class}-note" : ''?>" id="note_<?php echo $_element->getId()?>"><span><?php echo $_note ?></span></p>

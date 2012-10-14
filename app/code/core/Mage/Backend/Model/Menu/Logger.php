@@ -53,10 +53,10 @@ class Mage_Backend_Model_Menu_Logger extends Mage_Core_Model_Logger
     /**
      * Log exception wrapper
      *
-     * @param Exception $e
+     * @param Exception $exception
      */
-    public function logException(Exception $e)
+    public function logException(Exception $exception)
     {
-        $this->log("\n" . $e->__toString(), Zend_Log::ERR);
+        $this->log("\n" . $exception->__toString(), Zend_Log::ERR);
     }
 }

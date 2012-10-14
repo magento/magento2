@@ -79,14 +79,11 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 ->setTemplate('report/store/switcher.phtml')
         );
 
-        $this->setChild('refresh_button',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-                ->setData(array(
-                    'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh'),
-                    'onclick'   => $this->getRefreshButtonCallback(),
-                    'class'   => 'task'
-                ))
-        );
+        $this->addChild('refresh_button', 'Mage_Adminhtml_Block_Widget_Button', array(
+            'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Refresh'),
+            'onclick'   => $this->getRefreshButtonCallback(),
+            'class'   => 'task'
+        ));
         parent::_prepareLayout();
         return $this;
     }

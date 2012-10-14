@@ -39,9 +39,8 @@ $admGroupRole = Mage::getModel('Mage_User_Model_Role')->setData(array(
 
 Mage::getModel('Mage_User_Model_Rules')->setData(array(
     'role_id'       => $admGroupRole->getId(),
-    'resource_id'   => 'all',
+    'resource_id'   => 'Mage_Adminhtml::all',
     'privileges'    => null,
-    'assert_id'     => 0,
     'role_type'     => 'G',
     'permission'    => 'allow'
     ))

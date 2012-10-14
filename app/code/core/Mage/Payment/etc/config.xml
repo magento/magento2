@@ -153,7 +153,7 @@
     <default>
         <payment>
             <ccsave>
-                <active>1</active>
+                <active>0</active>
                 <cctypes>AE,VI,MC,DI</cctypes>
                 <model>Mage_Payment_Model_Method_Ccsave</model>
                 <order_status>pending</order_status>

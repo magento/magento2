@@ -26,7 +26,7 @@
 ?>
 <?php
 /**
- * Template for Mage_Adminhtml_Block_Catalog_Product_Edit
+ * @var $this Mage_Adminhtml_Block_Catalog_Product_Edit
  */
 ?>
 
@@ -43,6 +43,7 @@
         <?php endif; ?>
     <?php endif; ?>
     <?php if($this->getProductSetId() && $this->getIsConfigured()): ?>
+        <?php echo $this->getChangeAttributeSetButtonHtml() ?>
         <?php echo $this->getSaveButtonHtml() ?>
         <?php echo $this->getSaveAndEditButtonHtml() ?>
     <?php endif; ?>
@@ -123,11 +124,88 @@ Event.observe(window, 'load', function() {
         product_info_tabsJsTabs.showTabContent(obj);
     }
     Product.AttributesBridge.setTabsObject(product_info_tabsJsTabs);
+
+    (function ($) {
+
+        var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
+        var availablePlaceholders = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getAttributesAllowedForAutogeneration())?>;
+        var Autogenerator = function(masks) {
+            this._masks = masks || {};
+            this._fieldReverseIndex = this._buildReverseIndex(this._masks);
+        };
+
+        $.extend(Autogenerator.prototype, {
+            varRegexp: /{{([\w_]+?)}}/,
+            varsRegexp: new RegExp('{{(' + availablePlaceholders.join('|') + ')}}', 'g'),
+            data: {
+                disabled: 'autogenerator-disabled'
+            },
+            bindAll: function(events) {
+                var self = this;
+
+                $.each(self._masks, function(field, mask) {
+                    var disabler = function() {
+                        $(this).data(self.data.disabled, $(this).val().replace(/\s/g, '') != '');
+                    };
+                    var $field = $('#' + field);
+                    if (!$field.val() && mask.length > 0 && !self.varRegexp.test(mask)) {
+                        $field.val(mask);
+                    }
+                    if ($field.length) {
+                        disabler.call($field);
+                        $field.bind('focus blur change keyup click', disabler);
+                    }
+                });
+
+                $.each(self._fieldReverseIndex, function(field) {
+                    var fields = this, $field = $('#' + field);
+                    var filler = function(onlyText) {
+                        $.each(fields, function() {
+                            var $el = $('#' + this);
+                            if ($el.data(self.data.disabled)) {
+                                return;
+                            }
+                            if (onlyText === true && self.varRegexp.test(self._masks[this])) {
+                                return;
+                            }
+                            var value = self._masks[this].replace(self.varsRegexp, function(maskfieldName) {
+                                return $('#' + maskfieldName.slice(2, -2)).val();
+                            });
+                            $el.val(value);
+
+                        });
+                    };
+                    if ($field.length) {
+                        $field.bind(events || 'keyup change blur click', filler);
+                        filler.call($field, true);
+                    }
+
+                });
+            },
+            _buildReverseIndex: function(masks) {
+                var self = this;
+                var fieldReverseIndex = {};
+                $.each(masks, function(field, mask) {
+                    $.each(mask.toString().match(self.varsRegexp) || [], function(key, maskName) {
+                        var fieldName = maskName.slice(2, -2);
+                        if (!(fieldName in fieldReverseIndex)) {
+                            fieldReverseIndex[fieldName] = [];
+                        }
+                        fieldReverseIndex[fieldName].push(field);
+                    })
+                });
+                return fieldReverseIndex;
+            }
+        });
+
+        new Autogenerator(masks).bindAll();
+    })(jQuery);
 });
 
 Validation.addAllThese([
     ['validate-super-product-attributes', '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Please select one or more attributes.') ?>', function(v) {
-                return (v != "no-attributes");
-            }]]);
+        return (v != "no-attributes");
+    }]
+]);
 //]]>
 </script>

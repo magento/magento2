@@ -36,7 +36,10 @@
     </div>
     <div class="entry-edit-head">
         <h4><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Custom Options') ?></h4>
-        <div class="right"><?php echo $this->getAddButtonHtml() ?></div>
+        <div class="right">
+            <?php echo $this->getChildHtml('import_button') ?>
+            <?php echo $this->getAddButtonHtml() ?>
+        </div>
     </div>
 
     <div id="product_options_container" class="box">

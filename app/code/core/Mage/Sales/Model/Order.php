@@ -1247,25 +1247,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
         $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
         $copyMethod = Mage::getStoreConfig(self::XML_PATH_EMAIL_COPY_METHOD, $storeId);
 
-        // Start store emulation process
-        $appEmulation = Mage::getSingleton('Mage_Core_Model_App_Emulation');
-        $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($storeId);
-
-        try {
-            // Retrieve specified view block from appropriate design package (depends on emulated store)
-            $paymentBlock = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlock($this->getPayment())
-                ->setArea('frontend')
-                ->setIsSecureMode(true);
-            $paymentBlock->getMethod()->setStore($storeId);
-            $paymentBlockHtml = $paymentBlock->toHtml();
-        } catch (Exception $exception) {
-            // Stop store emulation process
-            $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
-            throw $exception;
-        }
-
-        // Stop store emulation process
-        $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+        $paymentBlockHtml = Mage::helper('Mage_Payment_Helper_Data')->getInfoBlockHtml($this->getPayment(), $storeId);
 
         // Retrieve corresponding email template id and customer name
         if ($this->getCustomerIsGuest()) {
@@ -1394,6 +1376,9 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
 
 /*********************** ADDRESSES ***************************/
 
+    /**
+     * @return Mage_Sales_Model_Resource_Order_Address_Collection
+     */
     public function getAddressesCollection()
     {
         if (is_null($this->_addresses)) {
@@ -1429,6 +1414,11 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
         return $this;
     }
 
+    /**
+     * @param array $filterByTypes
+     * @param bool $nonChildrenOnly
+     * @return Mage_Sales_Model_Resource_Order_Item_Collection
+     */
     public function getItemsCollection($filterByTypes = array(), $nonChildrenOnly = false)
     {
         if (is_null($this->_items)) {
@@ -1576,6 +1566,9 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
 
 /*********************** PAYMENTS ***************************/
 
+    /**
+     * @return Mage_Sales_Model_Resource_Order_Payment_Collection
+     */
     public function getPaymentsCollection()
     {
         if (is_null($this->_payments)) {

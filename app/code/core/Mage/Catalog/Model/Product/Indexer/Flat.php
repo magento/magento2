@@ -112,7 +112,7 @@ class Mage_Catalog_Model_Product_Indexer_Flat extends Mage_Index_Model_Indexer_A
     public function matchEvent(Mage_Index_Model_Event $event)
     {
         /** @var $productFlatHelper Mage_Catalog_Helper_Product_Flat */
-        $productFlatHelper = Mage::helper('Mage_Catalog_Helper_Product_Flat');
+        $productFlatHelper = $event->getFlatHelper() ?: Mage::helper('Mage_Catalog_Helper_Product_Flat');
         if (!$productFlatHelper->isAvailable() || !$productFlatHelper->isBuilt()) {
             return false;
         }
@@ -123,61 +123,109 @@ class Mage_Catalog_Model_Product_Indexer_Flat extends Mage_Index_Model_Indexer_A
         }
 
         $entity = $event->getEntity();
-        if ($entity == Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY) {
-            /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-            $attribute      = $event->getDataObject();
-            $addFilterable  = $productFlatHelper->isAddFilterableAttributes();
+        switch ($entity) {
+            case Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY:
+                $result = $this->_matchAttributeEvent($event, $productFlatHelper);
+                break;
 
-            $enableBefore   = $attribute && (($attribute->getOrigData('backend_type') == 'static')
-                || ($addFilterable && $attribute->getOrigData('is_filterable') > 0)
-                || ($attribute->getOrigData('used_in_product_listing') == 1)
-                || ($attribute->getOrigData('is_used_for_promo_rules') == 1)
-                || ($attribute->getOrigData('used_for_sort_by') == 1));
+            case Mage_Core_Model_Store::ENTITY:
+                $result = $this->_matchStoreEvent($event);
+                break;
 
-            $enableAfter    = $attribute && (($attribute->getData('backend_type') == 'static')
-                || ($addFilterable && $attribute->getData('is_filterable') > 0)
-                || ($attribute->getData('used_in_product_listing') == 1)
-                || ($attribute->getData('is_used_for_promo_rules') == 1)
-                || ($attribute->getData('used_for_sort_by') == 1));
+            case Mage_Core_Model_Store_Group::ENTITY:
+                $result = $this->_matchStoreGroupEvent($event);
+                break;
 
-            if ($attribute && $event->getType() == Mage_Index_Model_Event::TYPE_DELETE) {
-                $result = $enableBefore;
-            } elseif ($attribute && $event->getType() == Mage_Index_Model_Event::TYPE_SAVE) {
-                if ($enableAfter || $enableBefore) {
-                    $result = true;
-                } else {
-                    $result = false;
-                }
-            } else {
-                $result = false;
-            }
-        } else if ($entity == Mage_Core_Model_Store::ENTITY) {
-            if ($event->getType() == Mage_Index_Model_Event::TYPE_DELETE) {
-                $result = true;
-            } else {
-                /* @var $store Mage_Core_Model_Store */
-                $store = $event->getDataObject();
-                if ($store && $store->isObjectNew()) {
-                    $result = true;
-                } else {
-                    $result = false;
-                }
-            }
-        } else if ($entity == Mage_Core_Model_Store_Group::ENTITY) {
-            /* @var $storeGroup Mage_Core_Model_Store_Group */
-            $storeGroup = $event->getDataObject();
-            if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
-                $result = true;
-            } else {
-                $result = false;
-            }
-        } else {
-            $result = parent::matchEvent($event);
+            default:
+                $result = parent::matchEvent($event);
+                break;
         }
 
         $event->addNewData(self::EVENT_MATCH_RESULT_KEY, $result);
 
         return $result;
+    }
+
+    /**
+     * Whether a store group available for matching or not
+     *
+     * @param Mage_Index_Model_Event $event
+     * @return bool
+     */
+    protected function _matchStoreGroupEvent(Mage_Index_Model_Event $event)
+     {
+         /* @var $storeGroup Mage_Core_Model_Store_Group */
+         $storeGroup = $event->getDataObject();
+         if ($storeGroup && $storeGroup->dataHasChangedFor('website_id')) {
+             return true;
+         }
+         return false;
+     }
+
+    /**
+     * Whether a store available for matching or not
+     *
+     * @param Mage_Index_Model_Event $event
+     * @return bool
+     */
+    protected function _matchStoreEvent(Mage_Index_Model_Event $event)
+    {
+        if ($event->getType() == Mage_Index_Model_Event::TYPE_DELETE) {
+            return true;
+        } else {
+            /* @var $store Mage_Core_Model_Store */
+            $store = $event->getDataObject();
+            if ($store && $store->isObjectNew()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Whether an attribute available for matching or not
+     *
+     * @param Mage_Index_Model_Event $event
+     * @param $productFlatHelper
+     * @return bool
+     */
+    protected function _matchAttributeEvent(Mage_Index_Model_Event $event, $productFlatHelper)
+    {
+        $attribute = $event->getDataObject();
+        if (!$attribute) {
+            return false;
+        }
+
+        $enableBefore = $this->_isAttributeEnabled($attribute, $productFlatHelper);
+        $enableAfter = $this->_isAttributeEnabled($attribute, $productFlatHelper, false);
+
+        if ($event->getType() == Mage_Index_Model_Event::TYPE_DELETE) {
+            return $enableBefore;
+        } elseif ($event->getType() == Mage_Index_Model_Event::TYPE_SAVE && ($enableAfter || $enableBefore)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Whether an attribute available for matching or not
+     *
+     * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @param Mage_Catalog_Helper_Product_Flat $productFlatHelper
+     * @param bool $before
+     * @return bool
+     */
+    protected function _isAttributeEnabled($attribute, $productFlatHelper, $before = true) {
+
+        $method = $before ? 'getOrigData': 'getData';
+
+        return $attribute && (($attribute->$method('backend_type') == 'static')
+            || ($productFlatHelper->isAddFilterableAttributes() && $attribute->$method('is_filterable') > 0)
+            || ($attribute->$method('used_in_product_listing') == 1)
+            || ($attribute->$method('is_used_for_promo_rules') == 1)
+            || ($attribute->$method('used_for_sort_by') == 1));
     }
 
     /**

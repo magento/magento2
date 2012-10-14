@@ -49,6 +49,13 @@ class Mage_Backend_Model_Menu_Item
      * @var Mage_Core_Helper_Abstract
      */
     protected $_moduleHelper;
+    
+    /**
+     * Module helper name
+     *
+     * @var string
+     */
+    protected $_moduleHelperName;
 
     /**
      * Menu item sort index in list
@@ -95,7 +102,7 @@ class Mage_Backend_Model_Menu_Item
     /**
      * Acl
      *
-     * @var Mage_Backend_Model_Auth_Session
+     * @var Mage_Core_Model_Authorization
      */
     protected $_acl;
 
@@ -144,6 +151,13 @@ class Mage_Backend_Model_Menu_Item
      * @var Mage_Backend_Model_Menu_Item_Validator
      */
     protected $_validator;
+
+    /**
+     * Serialized submenu string
+     *
+     * @var string
+     */
+    protected $_serializedSubmenu;
 
     /**
      * @param array $data
@@ -205,37 +219,9 @@ class Mage_Backend_Model_Menu_Item
     {
         if (!$this->_submenu) {
             $this->_submenu = $this->_menuFactory
-                ->getMenuInstance(
-                    array('path' => $this->getFullPath())
-            );
+                ->getMenuInstance();
         }
         return $this->_submenu;
-    }
-
-    /**
-     * Retrieve full path from root element
-     *
-     * @return string
-     */
-    public function getFullPath()
-    {
-        /*
-         * TODO: Remove id manipulation after acl is transfered to ids
-         */
-        $id = $this->_id;
-        $start = strrpos($this->_id, ':');
-        if ($start) {
-            if ($this->_path) {
-                $path = str_replace('/', '_', $this->_path);
-                $start = strpos($this->_id, $path) + strlen($path);
-            } else {
-                if ($start) {
-                    $start++;
-                }
-            }
-            $id = substr($this->_id, $start);
-        }
-        return $this->_path . $id;
     }
 
     /**
@@ -288,7 +274,7 @@ class Mage_Backend_Model_Menu_Item
     /**
      * Retrieve item click callback
      *
-     * @return bool
+     * @return string
      */
     public function getClickCallback()
     {
@@ -457,23 +443,46 @@ class Mage_Backend_Model_Menu_Item
     public function isAllowed()
     {
         try {
-            $aclResource = 'admin/' . ($this->_resource ? (string)$this->_resource : $this->getFullPath());
-            return $this->_acl->isAllowed($aclResource);
+            return $this->_acl->isAllowed((string)$this->_resource);
         } catch (Exception $e) {
             return false;
         }
     }
 
-    /**
-     * Set path in structure
-     *
-     * @param string $path
-     */
-    public function setPath($path)
+    public function __sleep()
     {
-        $this->_path = $path;
+        $this->_moduleHelperName = get_class($this->_moduleHelper);
         if ($this->_submenu) {
-            $this->_submenu->setPath($this->getFullPath());
+            $this->_serializedSubmenu = $this->_submenu->serialize();
+        }
+        return array(
+            '_parentId',
+            '_moduleHelperName',
+            '_sortIndex',
+            '_dependsOnConfig',
+            '_id',
+            '_resource',
+            '_path',
+            '_action',
+            '_dependsOnModule',
+            '_tooltip',
+            '_title',
+            '_serializedSubmenu'
+        );
+    }
+
+    public function __wakeup()
+    {
+        $this->_moduleHelper = Mage::helper($this->_moduleHelperName);
+        $this->_validator = Mage::getSingleton('Mage_Backend_Model_Menu_Item_Validator');
+        $this->_acl = Mage::getSingleton('Mage_Core_Model_Authorization');
+        $this->_appConfig = Mage::getConfig();
+        $this->_storeConfig =  Mage::getSingleton('Mage_Core_Model_Store_Config');
+        $this->_menuFactory = Mage::getSingleton('Mage_Backend_Model_Menu_Factory');
+        $this->_urlModel = Mage::getSingleton('Mage_Backend_Model_Url');
+        if ($this->_serializedSubmenu) {
+            $this->_submenu = $this->_menuFactory->getMenuInstance();
+            $this->_submenu->unserialize($this->_serializedSubmenu);
         }
     }
 }

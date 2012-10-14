@@ -60,7 +60,7 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
     /**
      * Get category collection array
      *
-     * @param unknown_type $storeId
+     * @param null|string|bool|int|Mage_Core_Model_Store $storeId
      * @return array
      */
     public function getCollection($storeId)
@@ -84,13 +84,13 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
         }
 
         $urConditions = array(
-            'e.entity_id=ur.category_id',
+            'e.entity_id = ur.category_id',
             $this->_getWriteAdapter()->quoteInto('ur.store_id=?', $store->getId()),
             'ur.product_id IS NULL',
             $this->_getWriteAdapter()->quoteInto('ur.is_system=?', 1),
         );
         $this->_select = $this->_getWriteAdapter()->select()
-            ->from(array('e' => $this->getMainTable()), array($this->getIdFieldName()))
+            ->from(array('e' => $this->getMainTable()), array($this->getIdFieldName(), 'updated_at'))
             ->joinLeft(
                 array('ur' => $this->getTable('core_url_rewrite')),
                 join(' AND ', $urConditions),
@@ -119,8 +119,10 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
     {
         $category = new Varien_Object();
         $category->setId($categoryRow[$this->getIdFieldName()]);
-        $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] : 'catalog/category/view/id/' . $category->getId();
+        $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] :
+            'catalog/category/view/id/' . $category->getId();
         $category->setUrl($categoryUrl);
+        $category->setUpdatedAt($categoryRow['updated_at']);
         return $category;
     }
 
@@ -131,10 +133,14 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
-     * @return Zend_Db_Select
+     * @return Zend_Db_Select|bool
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
+        if (!$this->_select instanceof Zend_Db_Select) {
+            return false;
+        }
+
         if (!isset($this->_attributesCache[$attributeCode])) {
             $attribute = Mage::getSingleton('Mage_Catalog_Model_Category')->getResource()->getAttribute($attributeCode);
 
@@ -146,12 +152,7 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
                 'backend_type'      => $attribute->getBackendType()
             );
         }
-
         $attribute = $this->_attributesCache[$attributeCode];
-
-        if (!$this->_select instanceof Zend_Db_Select) {
-            return false;
-        }
 
         switch ($type) {
             case '=':
@@ -169,22 +170,25 @@ class Mage_Sitemap_Model_Resource_Catalog_Category extends Mage_Core_Model_Resou
             $this->_select->where('e.' . $attributeCode . $conditionRule, $value);
         } else {
             $this->_select->join(
-                array('t1_'.$attributeCode => $attribute['table']),
-                'e.entity_id=t1_'.$attributeCode.'.entity_id AND t1_'.$attributeCode.'.store_id=0',
+                array('t1_' . $attributeCode => $attribute['table']),
+                'e.entity_id = t1_' . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.store_id = 0',
                 array()
             )
-            ->where('t1_'.$attributeCode.'.attribute_id=?', $attribute['attribute_id']);
+            ->where('t1_' . $attributeCode . '.attribute_id=?', $attribute['attribute_id']);
 
             if ($attribute['is_global']) {
                 $this->_select->where('t1_'.$attributeCode.'.value'.$conditionRule, $value);
             } else {
-                $ifCase = $this->_select->getAdapter()->getCheckSql('t2_'.$attributeCode.'.value_id > 0', 't2_'.$attributeCode.'.value', 't1_'.$attributeCode.'.value');
+                $ifCase = $this->_select->getAdapter()->getCheckSql('t2_' . $attributeCode . '.value_id > 0',
+                    't2_' . $attributeCode . '.value', 't1_' . $attributeCode . '.value');
                 $this->_select->joinLeft(
-                    array('t2_'.$attributeCode => $attribute['table']),
-                    $this->_getWriteAdapter()->quoteInto('t1_'.$attributeCode.'.entity_id = t2_'.$attributeCode.'.entity_id AND t1_'.$attributeCode.'.attribute_id = t2_'.$attributeCode.'.attribute_id AND t2_'.$attributeCode.'.store_id=?', $storeId),
+                    array('t2_' . $attributeCode => $attribute['table']),
+                    $this->_getWriteAdapter()->quoteInto('t1_' . $attributeCode . '.entity_id = t2_'
+                        . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.attribute_id = t2_'
+                        . $attributeCode . '.attribute_id AND t2_' . $attributeCode . '.store_id=?', $storeId),
                     array()
                 )
-                ->where('('.$ifCase.')'.$conditionRule, $value);
+                ->where('(' . $ifCase . ')' . $conditionRule, $value);
             }
         }
 

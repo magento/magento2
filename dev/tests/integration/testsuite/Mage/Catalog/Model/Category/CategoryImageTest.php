@@ -63,7 +63,15 @@ class Mage_Catalog_Model_Category_CategoryImageTest extends PHPUnit_Framework_Te
         Mage::getConfig()->setNode('global/log/core/writer_model', self::$_oldWriterModel);
         self::$_oldWriterModel = null;
 
-        Stub_Mage_Catalog_Model_CategoryTest_Zend_Log_Writer_Stream::$exceptions = array();
+        /**
+         * @TODO: refactor this test
+         * Changing store configuration in such a way totally breaks the idea of application isolation.
+         * Class declaration in data fixture file is dumb too.
+         * Added a quick fix to be able run separate tests with "phpunit --filter testMethod"
+         */
+        if (class_exists('Stub_Mage_Catalog_Model_CategoryTest_Zend_Log_Writer_Stream', false)) {
+            Stub_Mage_Catalog_Model_CategoryTest_Zend_Log_Writer_Stream::$exceptions = array();
+        }
 
         parent::tearDownAfterClass();
     }

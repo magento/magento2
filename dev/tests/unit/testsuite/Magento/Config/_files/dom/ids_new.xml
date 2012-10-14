@@ -30,7 +30,7 @@
     <node>
         <entity>entity_value2</entity>
         <subnode id="my_id3" some_attribute="attribute_value3"/>
-        <subnode id="my_id2" some_attribute="attribute_value_new">
+        <subnode id="my_id2" some_attribute="attribute_value_new" extra_attribute="extra_attribute_value">
             <child><![CDATA[<test_value>]]></child>
         </subnode>
     </node>

@@ -110,7 +110,7 @@ function exportUrlField()
     var urlFieldEl = $('profile_add_url_field').up();
     var entityType = $('profile_entity_type').value;
     var direction  = $('profile_direction').value;
-    var storeId    = $('profile_store_id').value;
+    var storeId    = $('profile_store_id') ? $('profile_store_id').value : 0;
 
     if (entityType == 'product' && direction == 'export' && storeId > 0) {
         urlFieldEl.show();
@@ -185,39 +185,41 @@ Event.observe(window, 'load', function(){
                 <option value="export" <?php echo $this->getSelected('direction', 'export') ?>><?php echo $this->__("Export") ?></option>
             </select>
         </span>
-        <span class="field-row">
-            <label for="profile_store_id"><?php echo $this->__("Store:") ?></label>
-            <span class="with-tip">
-                <select id="profile_store_id" name="store_id" onchange="exportUrlField();">
-                <option value="0"><?php echo $this->__('Default (Admin) Values') ?></option>
-                    <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-                        <?php $_websiteShow=false; ?>
-                        <?php foreach ($this->getGroupCollection() as $_group): ?>
-                            <?php if ($_website->getId() != $_group->getWebsiteId()) continue; ?>
-                            <?php $_groupShow=false; ?>
-                            <?php foreach ($this->getStoreCollection() as $_store): ?>
-                                <?php if ($_group->getId() != $_store->getGroupId()) continue; ?>
-                                <?php if (!$_websiteShow): ?>
-                                    <?php $_websiteShow=true; ?>
-                                    <optgroup label="<?php echo $_website->getName() ?>"></optgroup>
+        <?php if (!Mage::app()->isSingleStoreMode()) :?>
+            <span class="field-row">
+                <label for="profile_store_id"><?php echo $this->__("Store:") ?></label>
+                <span class="with-tip">
+                    <select id="profile_store_id" name="store_id" onchange="exportUrlField();">
+                    <option value="0"><?php echo $this->__('Default (Admin) Values') ?></option>
+                        <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                            <?php $_websiteShow=false; ?>
+                            <?php foreach ($this->getGroupCollection() as $_group): ?>
+                                <?php if ($_website->getId() != $_group->getWebsiteId()) continue; ?>
+                                <?php $_groupShow=false; ?>
+                                <?php foreach ($this->getStoreCollection() as $_store): ?>
+                                    <?php if ($_group->getId() != $_store->getGroupId()) continue; ?>
+                                    <?php if (!$_websiteShow): ?>
+                                        <?php $_websiteShow=true; ?>
+                                        <optgroup label="<?php echo $_website->getName() ?>"></optgroup>
+                                    <?php endif; ?>
+                                    <?php if (!$_groupShow): ?>
+                                        <?php $_groupShow=true; ?>
+                                        <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?>">
+                                    <?php endif; ?>
+                                    <option value="<?php echo $_store->getId() ?>" <?php echo $this->getSelected('store_id', $_store->getId()) ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
+                                <?php endforeach; ?>
+                                <?php if ($_groupShow): ?>
+                                    </optgroup>
                                 <?php endif; ?>
-                                <?php if (!$_groupShow): ?>
-                                    <?php $_groupShow=true; ?>
-                                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_group->getName() ?>">
-                                <?php endif; ?>
-                                <option value="<?php echo $_store->getId() ?>" <?php echo $this->getSelected('store_id', $_store->getId()) ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $_store->getName() ?></option>
                             <?php endforeach; ?>
-                            <?php if ($_groupShow): ?>
-                                </optgroup>
-                            <?php endif; ?>
                         <?php endforeach; ?>
-                    <?php endforeach; ?>
-                </select>
-                <small class="profile_direction_import profile_entity_type_product">
-                        <?php echo $this->__("(Products will be added/updated to this store if 'store' column is blank or missing in the import file.)") ?>
-                </small>
+                    </select>
+                    <small class="profile_direction_import profile_entity_type_product">
+                            <?php echo $this->__("(Products will be added/updated to this store if 'store' column is blank or missing in the import file.)") ?>
+                    </small>
+                </span>
             </span>
-        </span>
+        <?php endif;?>
         <span class="field-row">
             <label for="profile_add_url_field"><?php echo $this->__("Add Field with URL:") ?></label>
             <select id="profile_add_url_field" name="gui_data[export][add_url_field]" class="option-control">

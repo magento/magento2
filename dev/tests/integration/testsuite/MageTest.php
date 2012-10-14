@@ -33,6 +33,29 @@ class MageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store dev/log/active 1
+     * @link http://us3.php.net/manual/en/wrappers.php
+     */
+    public function testLogIntoWrapper()
+    {
+        $this->expectOutputRegex('/test/');
+        Mage::log('test', null, 'php://output');
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/log/active 1
+     * @magentoConfigFixture global/log/core/writer_model Zend_Log_Writer_Mail
+     */
+    public function testLogUnsuppotedWrapper()
+    {
+        $logEntry = microtime();
+        Mage::log($logEntry);
+        $logFile = Mage::getBaseDir('log') . '/system.log';
+        $this->assertFileExists($logFile);
+        $this->assertContains($logEntry, file_get_contents($logFile));
+    }
+
+    /**
      * @magentoAppIsolation enabled
      */
     public function testReset()

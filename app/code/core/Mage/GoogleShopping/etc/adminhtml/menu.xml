@@ -27,8 +27,8 @@
 -->
 <config>
     <menu>
-        <add id="Mage_GoogleShopping::catalog_googleshopping" title="Google Content" module="Mage_GoogleShopping" sortOrder="70" parent="Mage_Catalog::catalog" />
-        <add id="Mage_GoogleShopping::catalog_googleshopping_types" title="Manage Attributes" module="Mage_GoogleShopping" parent="Mage_GoogleShopping::catalog_googleshopping" action="adminhtml/googleshopping_types" />
-        <add id="Mage_GoogleShopping::catalog_googleshopping_items" title="Manage Items" module="Mage_GoogleShopping" parent="Mage_GoogleShopping::catalog_googleshopping" action="adminhtml/googleshopping_items" />
+        <add id="Mage_GoogleShopping::catalog_googleshopping" title="Google Content" module="Mage_GoogleShopping" sortOrder="70" parent="Mage_Catalog::catalog" resource="Mage_GoogleShopping::googleshopping"/>
+        <add id="Mage_GoogleShopping::catalog_googleshopping_types" title="Manage Attributes" module="Mage_GoogleShopping" parent="Mage_GoogleShopping::catalog_googleshopping" action="adminhtml/googleshopping_types" resource="Mage_GoogleShopping::types"/>
+        <add id="Mage_GoogleShopping::catalog_googleshopping_items" title="Manage Items" module="Mage_GoogleShopping" parent="Mage_GoogleShopping::catalog_googleshopping" action="adminhtml/googleshopping_items" resource="Mage_GoogleShopping::items"/>
     </menu>
 </config>

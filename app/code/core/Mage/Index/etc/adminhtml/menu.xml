@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Index::system_index" title="Index Management" module="Mage_Index" sortOrder="92" parent="Mage_Adminhtml::system" action="adminhtml/process/list" />
+        <add id="Mage_Index::system_index" title="Index Management" module="Mage_Index" sortOrder="92" parent="Mage_Adminhtml::system" action="adminhtml/process/list" resource="Mage_Index::index"/>
     </menu>
 </config>

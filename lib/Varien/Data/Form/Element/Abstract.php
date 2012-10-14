@@ -172,10 +172,21 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
         return $this->_renderer;
     }
 
+    protected function _getUiId($suffix = null)
+    {
+        if ($this->_renderer instanceof Mage_Core_Block_Abstract) {
+            return $this->_renderer->getUiId($this->getType(), $this->getName(), $suffix);
+        } else {
+            return ' data-ui-id="form-element-' . $this->getName() . ($suffix ? : '') . '"';
+        }
+    }
+
     public function getElementHtml()
     {
-        $html = '<input id="'.$this->getHtmlId().'" name="'.$this->getName()
-             .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).'/>'."\n";
+
+        $html = '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
+            . $this->_getUiId()
+            . ' value="' . $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>' . "\n";
         $html.= $this->getAfterElementHtml();
         return $html;
     }
@@ -194,8 +205,9 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
     public function getLabelHtml($idSuffix = '')
     {
         if (!is_null($this->getLabel())) {
-            $html = '<label for="'.$this->getHtmlId() . $idSuffix . '">' . $this->_escape($this->getLabel())
-                  . ( $this->getRequired() ? ' <span class="required">*</span>' : '' ) . '</label>' . "\n";
+            $html = '<label for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId('label') . '>'
+                . $this->_escape($this->getLabel())
+                . ($this->getRequired() ? ' <span class="required">*</span>' : '') . '</label>' . "\n";
         } else {
             $html = '';
         }

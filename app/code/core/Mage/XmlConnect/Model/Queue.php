@@ -173,7 +173,7 @@ class Mage_XmlConnect_Model_Queue extends Mage_Core_Model_Template
 
         $variables['this'] = $this;
 
-        if (Mage::app()->isSingleStoreMode()) {
+        if (Mage::app()->hasSingleStore()) {
             $processor->setStoreId(Mage::app()->getStore());
         } else {
             $processor->setStoreId(1);

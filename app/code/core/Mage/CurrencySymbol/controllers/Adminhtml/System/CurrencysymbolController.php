@@ -51,7 +51,7 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
             );
 
         $this->_title($this->__('System'))
-            ->_title($this->__('Manage Currency Rates'));
+            ->_title($this->__('Manage Currency Symbols'));
         $this->renderLayout();
     }
 
@@ -95,6 +95,6 @@ class Mage_CurrencySymbol_Adminhtml_System_CurrencysymbolController extends Mage
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Backend_Model_Auth_Session')->isAllowed('system/currency/symbols');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_CurrencySymbol::symbols');
     }
 }

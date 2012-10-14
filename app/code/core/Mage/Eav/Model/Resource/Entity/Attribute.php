@@ -39,7 +39,39 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      *
      * @var array
      */
-    protected static $_entityAttributes     = array();
+    protected static $_entityAttributes = array();
+
+    /**
+     * Application instance
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_application;
+
+    /**
+     * Helper instance
+     *
+     * @var Mage_Eav_Helper_Data
+     */
+    protected $_helperInstance;
+
+    /**
+     * Class constructor
+     *
+     * @param array $arguments
+     */
+    public function __construct(array $arguments = array())
+    {
+        if (isset($arguments['application']) && $arguments['application'] instanceof Mage_Core_Model_App) {
+            $this->_application = $arguments['application'];
+            unset($arguments['application']);
+        }
+        if (isset($arguments['helper']) && $arguments['helper'] instanceof Mage_Core_Helper_Abstract) {
+            $this->_helperInstance = $arguments['helper'];
+            unset($arguments['helper']);
+        }
+        parent::__construct($arguments);
+    }
 
     /**
      * Define main table
@@ -51,6 +83,27 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     }
 
     /**
+     * Retrieve helper instance
+     *
+     * @param string $helperName
+     * @return Mage_Core_Helper_Abstract|Mage_Eav_Helper_Data
+     */
+    protected function _helper($helperName)
+    {
+        return $this->_helperInstance instanceof $helperName ? $this->_helperInstance : Mage::helper($helperName);
+    }
+
+    /**
+     * Retrieve application instance
+     *
+     * @return Mage_Core_Model_App
+     */
+    protected function _getApplication()
+    {
+        return $this->_application ?: Mage::app();
+    }
+
+    /**
      * Initialize unique fields
      *
      * @return Mage_Eav_Model_Resource_Entity_Attribute
@@ -59,7 +112,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     {
         $this->_uniqueFields = array(array(
             'field' => array('attribute_code', 'entity_type_id'),
-            'title' => Mage::helper('Mage_Eav_Helper_Data')->__('Attribute with the same code')
+            'title' => $this->_helper('Mage_Eav_Helper_Data')->__('Attribute with the same code')
         ));
         return $this;
     }
@@ -91,10 +144,10 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     /**
      * Load attribute data by attribute code
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @param int $entityTypeId
      * @param string $code
-     * @return boolean
+     * @return bool
      */
     public function loadByCode(Mage_Core_Model_Abstract $object, $entityTypeId, $code)
     {
@@ -158,7 +211,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     /**
      * Validate attribute data before save
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _beforeSave(Mage_Core_Model_Abstract $object)
@@ -166,7 +219,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
             if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
-                Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Frontend label is not defined'));
+                Mage::throwException($this->_helper('Mage_Eav_Helper_Data')->__('Frontend label is not defined'));
             }
             $object->setFrontendLabel($frontendLabel[0])
                    ->setStoreLabels($frontendLabel);
@@ -187,7 +240,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     /**
      * Save additional attribute data after save attribute
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
@@ -203,7 +256,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     /**
      * Save store labels
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _saveStoreLabels(Mage_Core_Model_Abstract $object)
@@ -234,7 +287,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     /**
      * Save additional data of attribute
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _saveAdditionalAttributeData(Mage_Core_Model_Abstract $object)
@@ -255,7 +308,6 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
                 $adapter->insert($this->getTable($additionalTable), $data);
             }
         }
-
         return $this;
     }
 
@@ -267,15 +319,15 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      */
     public function saveInSetIncluding(Mage_Core_Model_Abstract $object)
     {
-        $attributeId = (int) $object->getId();
-        $setId       = (int) $object->getAttributeSetId();
-        $groupId     = (int) $object->getAttributeGroupId();
+        $attributeId = (int)$object->getId();
+        $setId       = (int)$object->getAttributeSetId();
+        $groupId     = (int)$object->getAttributeGroupId();
 
         if ($setId && $groupId && $object->getEntityTypeId()) {
             $adapter = $this->_getWriteAdapter();
             $table   = $this->getTable('eav_entity_attribute');
 
-            $sortOrder = (($object->getSortOrder()) ? $object->getSortOrder() : $this->_getMaxSortOrder($object) + 1);
+            $sortOrder = $object->getSortOrder() ?: $this->_getMaxSortOrder($object) + 1;
             $data = array(
                 'entity_type_id'     => $object->getEntityTypeId(),
                 'attribute_set_id'   => $setId,
@@ -297,86 +349,164 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     }
 
     /**
-     *  Save attribute options
+     * Save attribute options
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _saveOption(Mage_Core_Model_Abstract $object)
     {
         $option = $object->getOption();
-        if (is_array($option)) {
-            $adapter            = $this->_getWriteAdapter();
-            $optionTable        = $this->getTable('eav_attribute_option');
-            $optionValueTable   = $this->getTable('eav_attribute_option_value');
-
-            $stores = Mage::app()->getStores(true);
-            if (isset($option['value'])) {
-                $attributeDefaultValue = array();
-                if (!is_array($object->getDefault())) {
-                    $object->setDefault(array());
-                }
-
-                foreach ($option['value'] as $optionId => $values) {
-                    $intOptionId = (int) $optionId;
-                    if (!empty($option['delete'][$optionId])) {
-                        if ($intOptionId) {
-                            $adapter->delete($optionTable, array('option_id = ?' => $intOptionId));
-                        }
-                        continue;
-                    }
-
-                    $sortOrder = !empty($option['order'][$optionId]) ? $option['order'][$optionId] : 0;
-                    if (!$intOptionId) {
-                        $data = array(
-                           'attribute_id'  => $object->getId(),
-                           'sort_order'    => $sortOrder
-                        );
-                        $adapter->insert($optionTable, $data);
-                        $intOptionId = $adapter->lastInsertId($optionTable);
-                    } else {
-                        $data  = array('sort_order'    => $sortOrder);
-                        $where = array('option_id =?' => $intOptionId);
-                        $adapter->update($optionTable, $data, $where);
-                    }
-
-                    if (in_array($optionId, $object->getDefault())) {
-                        if ($object->getFrontendInput() == 'multiselect') {
-                            $attributeDefaultValue[] = $intOptionId;
-                        } elseif ($object->getFrontendInput() == 'select') {
-                            $attributeDefaultValue = array($intOptionId);
-                        }
-                    }
-
-                    // Default value
-                    if (!isset($values[0])) {
-                        Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Default option value is not defined'));
-                    }
-
-                    $adapter->delete($optionValueTable, array('option_id =?' => $intOptionId));
-                    foreach ($stores as $store) {
-                        if (isset($values[$store->getId()])
-                            && (!empty($values[$store->getId()])
-                            || $values[$store->getId()] == "0")
-                        ) {
-                            $data = array(
-                                'option_id' => $intOptionId,
-                                'store_id'  => $store->getId(),
-                                'value'     => $values[$store->getId()],
-                            );
-                            $adapter->insert($optionValueTable, $data);
-                        }
-                    }
-                }
-                $bind  = array('default_value' => implode(',', $attributeDefaultValue));
-                $where = array('attribute_id =?' => $object->getId());
-                $adapter->update($this->getMainTable(), $bind, $where);
-            }
+        if (!is_array($option)) {
+            return $this;
         }
 
+        $defaultValue = null;
+        if (isset($option['value'])) {
+            if (!is_array($object->getDefault())) {
+                $object->setDefault(array());
+            }
+            $defaultValue = $this->_processAttributeOptions($object, $option);
+        }
+
+        $this->_saveDefaultValue($object, $defaultValue);
         return $this;
     }
 
+    /**
+     * Save changes of attribute options, return obtained default value
+     *
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
+     * @param array $option
+     * @return array
+     */
+    protected function _processAttributeOptions($object, $option)
+    {
+        $defaultValue = array();
+        foreach ($option['value'] as $optionId => $values) {
+            $intOptionId = $this->_updateAttributeOption($object, $optionId, $option);
+            if ($intOptionId === false) {
+                continue;
+            }
+            $this->_updateDefaultValue($object, $optionId, $intOptionId, $defaultValue);
+            $this->_checkDefaultOptionValue($values);
+            $this->_updateAttributeOptionValues($intOptionId, $values);
+        }
+        return $defaultValue;
+    }
+
+    /**
+     * Check default option value presence
+     *
+     * @param array $values
+     * @throws Mage_Core_Exception
+     */
+    protected function _checkDefaultOptionValue($values)
+    {
+        if (!isset($values[0])) {
+            Mage::throwException($this->_helper('Mage_Eav_Helper_Data')->__('Default option value is not defined'));
+        }
+    }
+
+    /**
+     * Update attribute default value
+     *
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
+     * @param int|string $optionId
+     * @param int $intOptionId
+     * @param array $defaultValue
+     */
+    protected function _updateDefaultValue($object, $optionId, $intOptionId, &$defaultValue)
+    {
+        if (in_array($optionId, $object->getDefault())) {
+            $frontendInput = $object->getFrontendInput();
+            if ($frontendInput === 'multiselect') {
+                $defaultValue[] = $intOptionId;
+            } elseif ($frontendInput === 'select') {
+                $defaultValue = array($intOptionId);
+            }
+        }
+    }
+
+    /**
+     * Save attribute default value
+     *
+     * @param Mage_Core_Model_Abstract $object
+     * @param array $defaultValue
+     */
+    protected function _saveDefaultValue($object, $defaultValue)
+    {
+        if ($defaultValue !== null) {
+            $bind = array('default_value' => implode(',', $defaultValue));
+            $where = array('attribute_id = ?' => $object->getId());
+            $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
+        }
+    }
+
+    /**
+     * Save option records
+     *
+     * @param Mage_Core_Model_Abstract $object
+     * @param int $optionId
+     * @param array $option
+     * @return int|bool
+     */
+    protected function _updateAttributeOption($object, $optionId, $option)
+    {
+        $adapter = $this->_getWriteAdapter();
+        $table = $this->getTable('eav_attribute_option');
+        $intOptionId = (int)$optionId;
+
+        if (!empty($option['delete'][$optionId])) {
+            if ($intOptionId) {
+                $adapter->delete($table, array('option_id = ?' => $intOptionId));
+            }
+            return false;
+        }
+
+        $sortOrder = empty($option['order'][$optionId]) ? 0 : $option['order'][$optionId];
+        if (!$intOptionId) {
+            $data = array(
+                'attribute_id' => $object->getId(),
+                'sort_order' => $sortOrder
+            );
+            $adapter->insert($table, $data);
+            $intOptionId = $adapter->lastInsertId($table);
+        } else {
+            $data  = array('sort_order' => $sortOrder);
+            $where = array('option_id = ?' => $intOptionId);
+            $adapter->update($table, $data, $where);
+        }
+
+        return $intOptionId;
+    }
+
+    /**
+     * Save option values records per store
+     *
+     * @param int $optionId
+     * @param array $values
+     */
+    protected function _updateAttributeOptionValues($optionId, $values)
+    {
+        $adapter = $this->_getWriteAdapter();
+        $table = $this->getTable('eav_attribute_option_value');
+
+        $adapter->delete($table, array('option_id = ?' => $optionId));
+
+        $stores = $this->_getApplication()->getStores(true);
+        foreach ($stores as $store) {
+            $storeId = $store->getId();
+            if (!empty($values[$storeId]) || isset($values[$storeId]) && $values[$storeId] == '0') {
+                $data = array(
+                    'option_id' => $optionId,
+                    'store_id' => $storeId,
+                    'value' => $values[$storeId],
+                );
+                $adapter->insert($table, $data);
+            }
+        }
+    }
 
     /**
      * Retrieve attribute id by entity type code and attribute code
@@ -488,7 +618,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
      * Load additional attribute data.
      * Load label of current active store
      *
-     * @param Mage_Eav_Model_Entity_Attribute $object
+     * @param Mage_Eav_Model_Entity_Attribute|Mage_Core_Model_Abstract $object
      * @return Mage_Eav_Model_Resource_Entity_Attribute
      */
     protected function _afterLoad(Mage_Core_Model_Abstract $object)
