@@ -314,12 +314,19 @@
                     <element name="cc_exp_month" type="xsd:string" minOccurs="0"/>
                 </all>
             </complexType>
+            <complexType name="shoppingCartPaymentMethodResponseEntity">
+             <all>
+               <element name="code" type="xsd:string"/>
+               <element name="title" type="xsd:string"/>
+               <element name="cc_types" type="typens:associativeArray" minOccurs="0"/>
+             </all>
+            </complexType>
             <complexType name="shoppingCartPaymentMethodResponseEntityArray">
-                <all>
-                    <element name="code" type="xsd:string"/>
-                    <element name="title" type="xsd:string"/>
-                    <element name="cc_types" type="typens:associativeArray"/>
-                </all>
+              <complexContent>
+                <restriction base="soapenc:Array">
+                  <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:shoppingCartPaymentMethodResponseEntity[]"/>
+                </restriction>
+              </complexContent>
             </complexType>
         </schema>
     </types>
