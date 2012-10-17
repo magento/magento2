@@ -28,37 +28,8 @@
 /**
  * Layout integration tests
  */
-class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
+class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
 {
-    /**
-     * @var Mage_Core_Model_Layout
-     */
-    protected $_layout;
-
-    public static function setUpBeforeClass()
-    {
-        /* Point application to predefined layout fixtures */
-        Mage::getConfig()->setOptions(array(
-            'design_dir' => dirname(__FILE__) . '/_files/design',
-        ));
-        Mage::getDesign()->setDesignTheme('test/default/default');
-
-        /* Disable loading and saving layout cache */
-        Mage::app()->getCacheInstance()->banUse('layout');
-    }
-
-    protected function setUp()
-    {
-        $this->_layout = new Mage_Core_Model_Layout();
-        $this->_layout->getUpdate()->addHandle('layout_test_handle_main');
-        $this->_layout->getUpdate()->load('layout_test_handle_extra');
-    }
-
-    protected function tearDown()
-    {
-        $this->_layout = null;
-    }
-
     /**
      * @param array $inputArguments
      * @param string $expectedArea
@@ -223,7 +194,7 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($layout->getBlock('no_name2'));
         $this->assertFalse($layout->getBlock('child_block1'));
         $this->assertTrue($layout->isBlock('child_block2'));
-    }
+    }    
 
     /**
      * @expectedException Magento_Exception
@@ -559,27 +530,20 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $layout->generateElements();
     }
 
-    /**
-     * @covers Mage_Core_Model_Layout::getParentName
-     * @covers Mage_Core_Model_Layout::getElementAlias
-     */
-    public function testGetParentNameAndAlias()
+    public function testGetParentName()
     {
-        /**
-         * Test get name
-         */
         $this->_layout->addContainer('one', 'One');
         $this->_layout->addContainer('two', 'Two', array(), 'one');
         $this->assertFalse($this->_layout->getParentName('one'));
         $this->assertEquals('one', $this->_layout->getParentName('two'));
+    }
 
-        /**
-         * Test get alias
-         */
-        $this->_layout->addContainer('one_2', 'One_2');
-        $this->_layout->addContainer('two_2', 'One_2', array(), 'one_2', '1');
-        $this->assertFalse($this->_layout->getElementAlias('one_2'));
-        $this->assertEquals('1', $this->_layout->getElementAlias('two_2'));
+    public function testGetElementAlias()
+    {
+        $this->_layout->addContainer('one', 'One');
+        $this->_layout->addContainer('two', 'One', array(), 'one', '1');
+        $this->assertFalse($this->_layout->getElementAlias('one'));
+        $this->assertEquals('1', $this->_layout->getElementAlias('two'));
     }
 
     /**
@@ -604,6 +568,11 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_layout->getOutput());
     }
 
+    public function testGetMessagesBlock()
+    {
+        $this->assertInstanceOf('Mage_Core_Block_Messages', $this->_layout->getMessagesBlock());
+    }
+
     /**
      * @param string $blockType
      * @param string $expectedClassName
@@ -623,19 +592,11 @@ class Mage_Core_Model_LayoutTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testHelperAndMessageBlock()
+    public function testHelper()
     {
-        /**
-         * Test helper
-         */
         $helper = $this->_layout->helper('Mage_Core_Helper_Data');
         $this->assertInstanceOf('Mage_Core_Helper_Data', $helper);
         $this->assertSame($this->_layout, $helper->getLayout());
-
-        /**
-         * Test message block
-         */
-        $this->assertInstanceOf('Mage_Core_Block_Messages', $this->_layout->getMessagesBlock());
     }
 
     /**

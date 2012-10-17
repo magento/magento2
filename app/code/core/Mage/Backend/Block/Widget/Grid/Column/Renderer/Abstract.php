@@ -105,7 +105,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
 
     public function renderHeader()
     {
-        if (false !== $this->getColumn()->getGrid()->getSortable() && false !== $this->getColumn()->getSortable()) {
+        if (false !== $this->getColumn()->getSortable()) {
             $className = 'not-sort';
             $dir = strtolower($this->getColumn()->getDir());
             $nDir= ($dir=='asc') ? 'desc' : 'asc';

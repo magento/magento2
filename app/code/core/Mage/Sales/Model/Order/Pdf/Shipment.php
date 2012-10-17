@@ -112,7 +112,7 @@ class Mage_Sales_Model_Order_Pdf_Shipment extends Mage_Sales_Model_Order_Pdf_Abs
             /* Add document text and number */
             $this->insertDocumentNumber(
                 $page,
-                Mage::helper('Mage_Sales_Helper_Data')->__('Packingslip # ') . $shipment->getIncrementId()
+                Mage::helper('Mage_Sales_Helper_Data')->__('Packing Slip # ') . $shipment->getIncrementId()
             );
             /* Add table */
             $this->_drawHeader($page);

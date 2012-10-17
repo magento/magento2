@@ -283,7 +283,12 @@ class Varien_Simplexml_Element extends SimpleXMLElement
         }
 
         if ($this->hasChildren()) {
-            $out .= '>'.$nl;
+            $out .= '>';
+            $value = trim((string)$this);
+            if (strlen($value)) {
+                $out .= $this->xmlentities($value);
+            }
+            $out .= $nl;
             foreach ($this->children() as $child) {
                 $out .= $child->asNiceXml('', is_numeric($level) ? $level+1 : true);
             }

@@ -23,9 +23,11 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/**
+ * @var $this Mage_Core_Block_Template
+ */
 ?>
-<?php echo $this->getGridParentHtml() ?>
-<?php if($this->canDisplayContainer()): ?>
 <script type="text/javascript">
 //<!--
 wishlistControl = {
@@ -76,4 +78,3 @@ productConfigure.addListType(
 );
 //-->
 </script>
-<?php endif ?>

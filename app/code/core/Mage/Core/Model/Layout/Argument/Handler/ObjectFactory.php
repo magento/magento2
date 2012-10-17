@@ -18,21 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Checkout
- * @subpackage  integration_tests
+ * @category    Mage
+ * @package     Mage_Core
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require __DIR__ . '/../../Checkout/_files/simple_product.php';
-
-/** @var $product Mage_Catalog_Model_Product */
-$product = Mage::getModel('Mage_Catalog_Model_Product');
-$product->load(1);
-
-$requestInfo = new Varien_Object(array(
-    'qty' => 1
-));
-
-require __DIR__ . '/../../Checkout/_files/cart.php';
+/**
+ * Object handler factory
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class Mage_Core_Model_Layout_Argument_Handler_ObjectFactory
+    implements Mage_Core_Model_Layout_Argument_HandlerFactoryInterface
+{
+    /**
+     * Create object type handler
+     * @return Mage_Core_Model_Layout_Argument_HandlerInterface
+     */
+    public function createHandler()
+    {
+        return Mage::getModel('Mage_Core_Model_Layout_Argument_Handler_Object', array(
+            'objectFactory' => Mage::app()->getConfig()
+        ));
+    }
+}

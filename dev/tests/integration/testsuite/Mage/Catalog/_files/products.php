@@ -41,10 +41,11 @@ $product->setTypeId('simple')
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
 
-    ->save()
-;
+    ->setStockData(array(
+        'use_config_manage_stock' => 0,
+    ))
+    ->save();
 
 $customDesignProduct = new Mage_Catalog_Model_Product($product->getData());
 $customDesignProduct->setId(2)->setCustomDesign('default/default/blue')
-    ->save()
-;
+    ->save();

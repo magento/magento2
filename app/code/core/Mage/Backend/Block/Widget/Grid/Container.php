@@ -61,16 +61,19 @@ class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget
 
     protected function _prepareLayout()
     {
-        $this->setChild(
-            'grid',
-            $this->getLayout()->createBlock(
-                $this->_blockGroup
-                    . '_Block_'
-                    . str_replace(' ', '_', ucwords(str_replace('_', ' ', $this->_controller)))
-                    . '_Grid',
-                $this->_controller . '.grid')
-                ->setSaveParametersInSession(true)
-        );
+        // check if grid was created through the layout
+        if (false === $this->getChildBlock('grid')) {
+            $this->setChild(
+                'grid',
+                $this->getLayout()->createBlock(
+                    $this->_blockGroup
+                        . '_Block_'
+                        . str_replace(' ', '_', ucwords(str_replace('_', ' ', $this->_controller)))
+                        . '_Grid',
+                    $this->_controller . '.grid')
+                    ->setSaveParametersInSession(true)
+            );
+        }
         return parent::_prepareLayout();
     }
 

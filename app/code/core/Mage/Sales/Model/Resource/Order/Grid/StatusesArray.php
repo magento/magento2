@@ -18,28 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Checkout
- * @subpackage  integration_tests
+ * @category    Mage
+ * @package     Mage_Sales
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require __DIR__ . '/../../Catalog/_files/product_configurable.php';
-/** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-
-/** @var $product Mage_Catalog_Model_Product */
-$product = Mage::getModel('Mage_Catalog_Model_Product');
-$product->load(1);
-/* Create simple products per each option */
-$options = new Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection();
-$option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
-
-$requestInfo = new Varien_Object(array(
-    'qty' => 1,
-    'super_attribute' => array(
-        $attribute->getId() => $option->getId()
-    )
-));
-
-require __DIR__ . '/../../Checkout/_files/cart.php';
+/**
+ * Sales orders statuses option array
+ *
+ * @category   Mage
+ * @package    Mage_Adminhtml
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class Mage_Sales_Model_Resource_Order_Grid_StatusesArray implements Mage_Core_Model_Option_ArrayInterface
+{
+    /**
+     * Return option array
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $statuses = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Status_Collection')
+            ->toOptionHash();
+        return $statuses;
+    }
+}

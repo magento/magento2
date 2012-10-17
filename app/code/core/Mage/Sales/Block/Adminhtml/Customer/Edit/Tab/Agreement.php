@@ -129,9 +129,9 @@ class Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement
     {
         $result = parent::_prepareColumns();
 
-        foreach ($this->_columns as $key => $value) {
+        foreach ($this->getColumns() as $key => $value) {
             if (in_array($key, $this->_columnsToRemove)) {
-                unset($this->_columns[$key]);
+                $this->removeColumn($key);
             }
         }
         return $result;

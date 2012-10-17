@@ -26,4 +26,4 @@
  */
 
 require __DIR__ . '/products.php';
-$product->setSpecialPrice('5.99')->save();
+$product->setStockData()->setSpecialPrice('5.99')->save();

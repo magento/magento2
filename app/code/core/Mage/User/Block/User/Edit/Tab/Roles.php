@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_User_Block_User_Edit_Tab_Roles extends Mage_Backend_Block_Widget_Grid
+class Mage_User_Block_User_Edit_Tab_Roles extends Mage_Backend_Block_Widget_Grid_Extended
 {
     public function __construct()
     {

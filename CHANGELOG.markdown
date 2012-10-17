@@ -1,3 +1,26 @@
+Update as of 10/16/2012
+======================
+* Introduced block arguments to the layout syntax:
+  * Introduced the "object" block argument type to specify a grid data source
+  * Introduced the "options" block argument type to accommodate key-value pairs
+  * Introduced the "URL" block argument type to represent a URL with parameters
+  * Introduced block argument updaters for the block arguments, which allow to customize the original grid arguments
+  * Implemented extraction of translatable strings from block arguments in layout by the Translation Tool
+* Declared the Customer Wishlist and Sales Order grids through the layout instead of the PHP classes
+* Implemented the block `Mage_Backend_Block_Widget_Grid_Massaction` to encapsulate grid mass actions
+* Moved grid columns and mass action management from the base grid `Mage_Backend_Block_Widget_Grid` to the `Mage_Backend_Block_Widget_Grid_Extended`
+* Introduced the column set block `Mage_Backend_Block_Widget_Grid_ColumnSet` responsible for grouping columns in a grid
+* Updated the grid rendering template to render a column set instead of rendering columns
+* Eliminated dependency between the grid column block and parent blocks
+* Denied the public access to the `pub/cron.php`
+* Fixes:
+  * Fixed the broken Billing Agreement View page
+  * Fixed absence of the Default and Minimal attribute sets in the Manage Attribute Sets grid, if the total number of records is 22 and the view of 20 rows per page is chosen
+  * Fixed typos on the Sales Order page
+  * Fixed typos on the Sales Order's Packing Slips printed to PDF
+  * Fixed preserving selected rows after searching in the Sales Order grid
+  * Fixed "column not found" SQL error while sorting by the "Product Name" in the Catalog Pending Reviews grid
+
 Update as of 10/11/2012
 ======================
 * Removed unused `Mage_DesignEditor_Model_History_Compact_Diff` class

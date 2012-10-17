@@ -164,7 +164,7 @@ class Mage_Adminhtml_Block_Sales_Shipment_Grid extends Mage_Adminhtml_Block_Widg
         $this->getMassactionBlock()->setUseSelectAll(false);
 
         $this->getMassactionBlock()->addItem('pdfshipments_order', array(
-             'label'=> Mage::helper('Mage_Sales_Helper_Data')->__('PDF Packingslips'),
+             'label'=> Mage::helper('Mage_Sales_Helper_Data')->__('PDF Packing Slips'),
              'url'  => $this->getUrl('*/sales_shipment/pdfshipments'),
         ));
 

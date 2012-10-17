@@ -29,7 +29,7 @@
 <layout>
     <adminhtml_customer_edit>
         <reference name="content">
-            <block type="Mage_Adminhtml_Block_Customer_Edit" name="customer_edit"></block>
+            <block type="Mage_Adminhtml_Block_Customer_Edit" name="customer_edit"/>
         </reference>
         <reference name="head">
             <block type="Mage_Adminhtml_Block_Template" name="optional_zip_countries" as="optional_zip_countries" template="Mage_Directory::js/optional_zip_countries.phtml" />
@@ -54,9 +54,6 @@
             <block type="Mage_Adminhtml_Block_Customer_Group" name="customer_group"></block>
         </reference>
     </adminhtml_customer_group_index>
-    <adminhtml_customer_wishlist>
-        <block type="Mage_Adminhtml_Block_Customer_Edit_Tab_Wishlist" name="customer.wishlist.edit.tab" output="1" />
-    </adminhtml_customer_wishlist>
 
     <adminhtml_customer_orders>
         <container name="root" label="Root" output="1">

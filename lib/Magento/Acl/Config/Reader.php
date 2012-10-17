@@ -104,7 +104,7 @@ class Magento_Acl_Config_Reader extends Magento_Config_XmlAbstract
      * Retrieve ACL resources
      * @return DOMDocument
      */
-    function getAclResources()
+    public function getAclResources()
     {
         return $this->_getDomConfigModel()->getDom();
     }

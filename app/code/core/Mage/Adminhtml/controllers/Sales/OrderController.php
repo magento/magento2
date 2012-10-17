@@ -689,9 +689,11 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
      */
     public function exportCsvAction()
     {
-        $fileName   = 'orders.csv';
-        $grid       = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Grid');
-        $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
+        $this->loadLayout();
+        $fileName = 'orders.csv';
+        /** @var Mage_Backend_Block_Widget_Grid_ExportInterface $exportBlock  */
+        $exportBlock = $this->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
+        $this->_prepareDownloadResponse($fileName, $exportBlock->getCsvFile());
     }
 
     /**
@@ -699,9 +701,11 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
      */
     public function exportExcelAction()
     {
-        $fileName   = 'orders.xml';
-        $grid       = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Sales_Order_Grid');
-        $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
+        $this->loadLayout();
+        $fileName = 'orders.xml';
+        /** @var Mage_Backend_Block_Widget_Grid_ExportInterface $exportBlock  */
+        $exportBlock = $this->getLayout()->getChildBlock('sales.order.grid', 'grid.export');
+        $this->_prepareDownloadResponse($fileName, $exportBlock->getExcelFile($fileName));
     }
 
     /**

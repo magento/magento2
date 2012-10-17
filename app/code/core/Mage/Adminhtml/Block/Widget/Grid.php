@@ -30,7 +30,7 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  * @deprecated Moved to module Mage_Backend
  */
-class Mage_Adminhtml_Block_Widget_Grid extends Mage_Backend_Block_Widget_Grid
+class Mage_Adminhtml_Block_Widget_Grid extends Mage_Backend_Block_Widget_Grid_Extended
 {
 
 }

@@ -85,7 +85,11 @@
 
     <adminhtml_customer_wishlist>
         <reference name="customer.wishlist.edit.tab">
-            <action method="addProductConfigurationHelper"><type>downloadable</type><name>Mage_Downloadable_Helper_Catalog_Product_Configuration</name></action>
+            <arguments>
+                <product_configuration_helpers>
+                    <downloadable>Mage_Downloadable_Helper_Catalog_Product_Configuration</downloadable>
+                </product_configuration_helpers>
+            </arguments>
         </reference>
     </adminhtml_customer_wishlist>
 

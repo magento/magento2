@@ -148,7 +148,7 @@ class Utility_Classes
                     or @method="addPriceBlockType" or @method="addMergeSettingsBlockType"
                     or @method="addInformationRenderer" or @method="addOptionRenderer" or @method="addRowItemRender"
                     or @method="addDatabaseBlock"]/*[2]
-                | /layout//action[@method="setMassactionBlockName" or @method="addProductConfigurationHelper"]/name
+                | /layout//action[@method="setMassactionBlockName"]/name
                 | /layout//action[@method="setEntityModelClass"]/code'
         ));
         return array_unique($classes);

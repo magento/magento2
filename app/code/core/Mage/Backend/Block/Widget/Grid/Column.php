@@ -33,17 +33,112 @@
  */
 class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
 {
+    /**
+     * Parent grid
+     *
+     * @var Mage_Backend_Block_Widget_Grid
+     */
     protected $_grid;
+
+    /**
+     * Column renderer
+     *
+     * @var Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
+     */
     protected $_renderer;
+
+    /**
+     * Column filter
+     *
+     * @var Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract
+     */
     protected $_filter;
-    protected $_type;
+
+    /**
+     * Column css classes
+     *
+     * @var string|null
+     */
     protected $_cssClass=null;
 
-    public function __construct($data=array())
+    /**
+     * Renderer types
+     * 
+     * @var array
+     */
+    protected $_rendererTypes;
+
+    /**
+     * Filter types
+     *
+     * @var array
+     */
+    protected $_filterTypes;
+
+    /**
+     * Block constructor
+     * 
+     * @param array $data
+     */
+    public function __construct($data = array())
     {
+        $this->_rendererTypes = array(
+            'date' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Date',
+            'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Datetime',
+            'number' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Number',
+            'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency',
+            'price' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Price',
+            'country' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Country',
+            'concat' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Concat',
+            'action' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Action',
+            'options' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Options',
+            'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox',
+            'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Massaction',
+            'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio',
+            'input' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Input',
+            'select' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Select',
+            'text' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Longtext',
+            'store' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Store',
+            'wrapline' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Wrapline',
+            'default' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Text',
+        );
+
+        $this->_filterTypes = array(
+            'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Datetime',
+            'date' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Date',
+            'range' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+            'number' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+            'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+            'price' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Price',
+            'country' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Country',
+            'options' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Select',
+            'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction',
+            'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox',
+            'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Radio',
+            'store' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Store',
+            'theme' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Theme',
+            'default' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Text',
+        );
+
         parent::__construct($data);
     }
 
+    /**
+     * Should column be displayed in grid
+     *
+     * @return bool
+     */
+    public function isDisplayed()
+    {
+        return true;
+    }
+
+    /**
+     * Set grid block to column
+     *
+     * @param Mage_Backend_Block_Widget_Grid $grid
+     * @return Mage_Backend_Block_Widget_Grid_Column
+     */
     public function setGrid($grid)
     {
         $this->_grid = $grid;
@@ -52,26 +147,40 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
         return $this;
     }
 
+    /**
+     * Get grid block
+     *
+     * @return Mage_Backend_Block_Widget_Grid
+     */
     public function getGrid()
     {
         return $this->_grid;
     }
 
-    public function isLast()
-    {
-        return $this->getId() == $this->getGrid()->getLastColumnId();
-    }
-
+    /**
+     * Get html code for column properties
+     *
+     * @return string
+     */
     public function getHtmlProperty()
     {
         return $this->getRenderer()->renderProperty();
     }
 
+    /**
+     * Get Header html
+     * @return string
+     */
     public function getHeaderHtml()
     {
         return $this->getRenderer()->renderHeader();
     }
 
+    /**
+     * Get column css classes
+     *
+     * @return string
+     */
     public function getCssClass()
     {
         if (is_null($this->_cssClass)) {
@@ -90,23 +199,59 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
         return $this->_cssClass;
     }
 
+    /**
+     * Get column css property
+     *
+     * @return string
+     */
     public function getCssProperty()
     {
         return $this->getRenderer()->renderCss();
     }
 
+    /**
+     * Set is column sortable
+     *
+     * @param boolean $value
+     */
+    public function setSortable($value)
+    {
+        $this->setData('sortable', $value);
+    }
+
+    /**
+     * Get header css class name
+     * @return string
+     */
     public function getHeaderCssClass()
     {
         $class = $this->getData('header_css_class');
-        if (($this->getSortable()===false) || ($this->getGrid()->getSortable()===false)) {
-            $class .= ' no-link';
-        }
-        if ($this->isLast()) {
-            $class .= ' last';
-        }
+        $class .= false === $this->getSortable() ? ' no-link' : '';
         return $class;
     }
 
+    /**
+     * @return bool
+     */
+    public function getSortable()
+    {
+        return $this->hasData('sortable') ? (bool) $this->getData('sortable') : true;
+    }
+
+    /**
+     * Add css class to column header
+     * @param $className
+     */
+    public function addHeaderCssClass($className)
+    {
+        $classes = $this->getData('header_css_class') ? $this->getData('header_css_class') . ' ' : '';
+        $this->setData('header_css_class', $classes . $className);
+    }
+
+    /**
+     * Get header class names
+     * @return string
+     */
     public function getHeaderHtmlProperty()
     {
         $str = '';
@@ -171,6 +316,19 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
     }
 
     /**
+     * Retrieve Header Name for Export
+     *
+     * @return string
+     */
+    public function getExportHeader()
+    {
+        if ($this->getHeaderExport()) {
+            return $this->getHeaderExport();
+        }
+        return $this->getHeader();
+    }
+
+    /**
      * Decorate rendered cell value
      *
      * @param string $value
@@ -198,77 +356,41 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
         return $value;
     }
 
+    /**
+     * Set column renderer
+     *
+     * @param Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract $renderer
+     * @return Mage_Backend_Block_Widget_Grid_Column
+     */
     public function setRenderer($renderer)
     {
         $this->_renderer = $renderer;
         return $this;
     }
 
+    /**
+     * Set renderer type class name
+     *
+     * @param string $type type of renderer
+     * @param string $className renderer class name
+     */
+    public function setRendererType($type, $className)
+    {
+        $this->_rendererTypes[$type] = $className;
+    }
+
+    /**
+     * Get renderer class name by renderer type
+     *
+     * @return string
+     */
     protected function _getRendererByType()
     {
         $type = strtolower($this->getType());
-        $renderers = $this->getGrid()->getColumnRenderers();
+        $rendererClass = (isset($this->_rendererTypes[$type])) ?
+            $this->_rendererTypes[$type] :
+            $this->_rendererTypes['default'];
 
-        if (is_array($renderers) && isset($renderers[$type])) {
-            return $renderers[$type];
-        }
-
-        switch ($type) {
-            case 'date':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Date';
-                break;
-            case 'datetime':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Datetime';
-                break;
-            case 'number':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Number';
-                break;
-            case 'currency':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency';
-                break;
-            case 'price':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Price';
-                break;
-            case 'country':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Country';
-                break;
-            case 'concat':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Concat';
-                break;
-            case 'action':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Action';
-                break;
-            case 'options':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Options';
-                break;
-            case 'checkbox':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox';
-                break;
-            case 'massaction':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Massaction';
-                break;
-            case 'radio':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio';
-                break;
-            case 'input':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Input';
-                break;
-            case 'select':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Select';
-                break;
-            case 'text':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Longtext';
-                break;
-            case 'store':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Store';
-                break;
-            case 'wrapline':
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Wrapline';
-                break;
-            default:
-                $rendererClass = 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Text';
-                break;
-        }
         return $rendererClass;
     }
 
@@ -279,82 +401,64 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
      */
     public function getRenderer()
     {
-        if (!$this->_renderer) {
+        if (is_null($this->_renderer)) {
             $rendererClass = $this->getData('renderer');
-            if (!$rendererClass) {
+            if (empty($rendererClass)) {
                 $rendererClass = $this->_getRendererByType();
             }
-            $this->_renderer = $this->getLayout()->createBlock($rendererClass, $this->getNameInLayout() . '.renderer.' . $this->getColumnId())
+            $this->_renderer = $this->getLayout()->createBlock($rendererClass)
                 ->setColumn($this);
         }
         return $this->_renderer;
     }
 
+    /**
+     * Set column filter
+     *
+     * @param string $filterClass filter class name
+     */
     public function setFilter($filterClass)
     {
-        $this->_filter = $this->getLayout()->createBlock($filterClass, $this->getNameInLayout() . '.' . $this->getId())
-                ->setColumn($this);
+        $filterBlock = $this->getLayout()->createBlock($filterClass);
+        $filterBlock->setColumn($this);
+        $this->_filter = $filterBlock;
     }
 
+    /**
+     * Set filter type class name
+     * @param string $type type of filter
+     * @param string $className filter class name
+     */
+    public function setFilterType($type, $className)
+    {
+        $this->_filterTypes[$type] = $className;
+    }
+
+    /**
+     * Get column filter class name by filter type
+     *
+     * @return mixed
+     */
     protected function _getFilterByType()
     {
         $type = strtolower($this->getType());
-        $filters = $this->getGrid()->getColumnFilters();
-        if (is_array($filters) && isset($filters[$type])) {
-            return $filters[$type];
-        }
+        $filterClass = (isset($this->_filterTypes[$type])) ?
+            $this->_filterTypes[$type] :
+            $this->_filterTypes['default'];
 
-        switch ($type) {
-            case 'datetime':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Datetime';
-                break;
-            case 'date':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Date';
-                break;
-            case 'range':
-            case 'number':
-            case 'currency':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range';
-                break;
-            case 'price':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Price';
-                break;
-            case 'country':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Country';
-                break;
-            case 'options':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Select';
-                break;
-
-            case 'massaction':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction';
-                break;
-
-            case 'checkbox':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox';
-                break;
-
-            case 'radio':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Radio';
-                break;
-            case 'store':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Store';
-                break;
-            case 'theme':
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Theme';
-                break;
-            default:
-                $filterClass = 'Mage_Backend_Block_Widget_Grid_Column_Filter_Text';
-                break;
-        }
         return $filterClass;
     }
 
+    /**
+     * Get filter block
+     *
+     * @return Mage_Backend_Block_Widget_Grid_Column_Filter_Abstract|bool
+     */
     public function getFilter()
     {
-        if (!$this->_filter) {
+        if (is_null($this->_filter)) {
             $filterClass = $this->getData('filter');
-            if ($filterClass === false) {
+            if (false === (bool) $filterClass && false === is_null($filterClass)) {
                 return false;
             }
             if (!$filterClass) {
@@ -363,33 +467,22 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
                     return false;
                 }
             }
-            $this->_filter = $this->getLayout()->createBlock($filterClass, $this->getNameInLayout() .'.' . $this->getColumnId())
+            $this->_filter = $this->getLayout()->createBlock($filterClass)
                 ->setColumn($this);
         }
 
         return $this->_filter;
     }
 
+    /**
+     * Get filter html code
+     *
+     * @return null|string
+     */
     public function getFilterHtml()
     {
-        if ($this->getFilter()) {
-            return $this->getFilter()->getHtml();
-        } else {
-            return '&nbsp;';
-        }
-        return null;
-    }
-
-    /**
-     * Retrieve Header Name for Export
-     *
-     * @return string
-     */
-    public function getExportHeader()
-    {
-        if ($this->getHeaderExport()) {
-            return $this->getHeaderExport();
-        }
-        return $this->getHeader();
+        $filter = $this->getFilter();
+        $output = $filter ? $filter->getHtml() : '&nbsp;';
+        return $output;
     }
 }

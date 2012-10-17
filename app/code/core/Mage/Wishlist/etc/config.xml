@@ -140,6 +140,13 @@
                 </Mage_Wishlist>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <wishlist module="Mage_Wishlist">
+                    <file>layout.xml</file>
+                </wishlist>
+            </updates>
+        </layout>
     </adminhtml>
     <default>
         <wishlist>

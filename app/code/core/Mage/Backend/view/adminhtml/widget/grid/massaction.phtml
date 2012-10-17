@@ -51,7 +51,7 @@
                             <label><?php echo $this->__('Actions') ?></label>
                             <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation"<?php echo $this->getUiId('select') ?>>
                                 <option value=""></option>
-                                <?php foreach($this->getItems() as $_item): ?>
+                                <?php foreach($this->getItems() as $_item):?>
                                     <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -70,7 +70,9 @@
             <div class="no-display">
             <?php foreach($this->getItems() as $_item): ?>
                 <div id="<?php echo $this->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
-                    <?php echo $_item->getAdditionalActionBlockHtml() ?>
+                    <?php if ('' != $_item->getBlockName()):?>
+                        <?php echo $this->getChildHtml($_item->getBlockName());?>
+                    <?php endif;?>
                 </div>
             <?php endforeach; ?>
             </div>

@@ -59,4 +59,27 @@ class Varien_Simplexml_ElementTest extends PHPUnit_Framework_TestCase
             array(array(__DIR__ . '/_files/data.xml', 'Varien_Simplexml_Element'))
         );
     }
+
+    public function testAsNiceXmlMixedData()
+    {
+        $dataFile = file_get_contents(__DIR__ . '/_files/mixed_data.xml');
+        /** @var Varien_Simplexml_Element $xml  */
+        $xml = simplexml_load_string($dataFile, 'Varien_Simplexml_Element');
+
+        $expected = <<<XML
+<root>
+   <node_1 id="1">Value 1
+      <node_1_1>Value 1.1
+         <node_1_1_1>Value 1.1.1</node_1_1_1>
+      </node_1_1>
+   </node_1>
+   <node_2>
+      <node_2_1>Value 2.1</node_2_1>
+   </node_2>
+</root>
+
+XML;
+        $this->assertEquals($expected, $xml->asNiceXml());
+    }
+
 }

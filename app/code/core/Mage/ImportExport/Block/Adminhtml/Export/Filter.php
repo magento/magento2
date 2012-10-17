@@ -336,7 +336,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
      */
     public function prepareCollection(Varien_Data_Collection $collection)
     {
-        $this->_collection = $collection;
-        return $this->_collection;
+        $this->setCollection($collection);
+        return $this->getCollection();
     }
 }

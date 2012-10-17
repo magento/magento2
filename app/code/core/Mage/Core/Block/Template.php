@@ -301,7 +301,7 @@ HTML;
     public function getBaseUrl()
     {
         if (!$this->_baseUrl) {
-            $this->_baseUrl = Mage::getBaseUrl();
+            $this->_baseUrl = $this->_getUrlModel()->getBaseUrl();
         }
         return $this->_baseUrl;
     }
