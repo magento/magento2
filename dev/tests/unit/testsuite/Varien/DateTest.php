@@ -33,12 +33,41 @@ class Varien_DateTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Varien_Date::convertZendToStrftime
      * @todo   Implement testConvertZendToStrftime().
+     * @dataProvider dp_convertZendToStrfTime
      */
-    public function testConvertZendToStrftime()
+    public function testConvertZendToStrftime($zendDateFormat, $expectedOutput)
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $actual = Varien_Date::convertZendToStrftime($zendDateFormat);
+        $this->assertEquals($expectedOutput, $actual);
+    }
+
+    public function dp_convertZendToStrfTime()
+    {
+        return array(
+            'Year' => array(
+                Zend_Date::YEAR,
+                "%Y"
+            ),
+            'Month' => array(
+                Zend_Date::MONTH,
+                "%m"
+            ),
+            'Month Name' => array(
+                Zend_Date::MONTH_NAME,
+                "%B"
+            ),
+            'Hour' => array(
+                Zend_Date::HOUR,
+                "%H"
+            ),
+            'Combined Date and Time' => array(
+                "yyyy-MM-ddTHH:mm:ssZZZZ",
+                "%c"
+            ),
+            'German Date and Time' => array(
+                Zend_Date::DAY . "." . Zend_Date::MONTH . "." . Zend_Date::YEAR . " " . Zend_Date::HOUR . ":" . Zend_Date::MINUTE,
+                "%d.%m.%Y %H:%M"
+            ),
         );
     }
 
@@ -68,12 +97,42 @@ class Varien_DateTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Varien_Date::formatDate
      * @todo   Implement testFormatDate().
+     * @dataProvider dp_formatDate
      */
-    public function testFormatDate()
+    public function testFormatDate($date, $includeTime, $expectedResult)
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $actual = Varien_Date::formatDate($date, $includeTime);
+        $this->assertEquals($expectedResult, $actual);
+    }
+
+    public function dp_formatDate()
+    {
+        return array(
+            'null' => array(
+                null,
+                false,
+                ""
+            ),
+            'Bool true' => array(
+                true,
+                false,
+                date("Y-m-d")
+            ),
+            'Bool false' => array(
+                false,
+                false,
+                ""
+            ),
+            'Zend Date' => array(
+                new Zend_Date(),
+                false,
+                date("Y-m-d")
+            ),
+            'Zend Date including Time' => array(
+                new Zend_Date(),
+                true,
+                date("Y-m-d H:i:s")
+            ),
         );
     }
 }
