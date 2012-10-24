@@ -153,10 +153,10 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
             array(
                 Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS,
                 array(
-                    'calendar/calendar-blue.css',
+                    'mage/calendar.css',
                     'css/file.css',
                 ),
-                'ba1ea83ef061c58d4ceef66018beb4f2.css',
+                '16f3dae4a78f603c9afa37606b0f51e7.css',
                 array(
                     'css/file.css',
                     'recursive.css',
@@ -174,10 +174,10 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
             array(
                 Mage_Core_Model_Design_Package::CONTENT_TYPE_JS,
                 array(
-                    'calendar/calendar.js',
+                    'mage/calendar.js',
                     'scripts.js',
                 ),
-                '916b1b8161a8f61422b432009f47f267.js',
+                'e97b02be13928ce72066d99a4b967d41.js',
             ),
         );
     }
@@ -189,11 +189,11 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
     public function testMergeFilesModification()
     {
         $files = array(
-            'calendar/calendar.js',
+            'mage/calendar.js',
             'scripts.js',
         );
 
-        $resultingFile = self::$_skinPublicMergedDir . '/916b1b8161a8f61422b432009f47f267.js';
+        $resultingFile = self::$_skinPublicMergedDir . '/e97b02be13928ce72066d99a4b967d41.js';
         $this->assertFileNotExists($resultingFile);
 
         // merge first time
@@ -211,7 +211,7 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
         $this->assertFileNotExists(self::$_skinPublicMergedDir);
 
         $this->_model->getOptimalJsUrls(array(
-            'calendar/calendar.js',
+            'mage/calendar.js',
             'scripts.js',
         ));
         $this->assertFileExists(self::$_skinPublicMergedDir);

@@ -109,6 +109,12 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerImportTest extends PHPUn
             $updatedCustomer->getLastname(),
             'Lastname must be changed'
         );
+
+        $this->assertNotEquals(
+            $existingCustomer->getCreatedAt(),
+            $updatedCustomer->getCreatedAt(),
+            'Creation date must be changed'
+        );
     }
 
     /**

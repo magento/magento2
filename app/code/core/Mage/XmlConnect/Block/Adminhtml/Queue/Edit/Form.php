@@ -85,9 +85,9 @@ class Mage_XmlConnect_Block_Adminhtml_Queue_Edit_Form
 
         $fieldset->addField('exec_time', 'date', array(
             'name'      => 'exec_time',
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'date_format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'time_format' => Mage::app()->getLocale()->getTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'label'     => $this->__('Start Date'),
-            'time'      => true,
             'title'     => $this->__('Start Date'),
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'note'      => $this->__('If leave this field empty, the message will be sent immediately'),

@@ -267,13 +267,17 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer
         $passwordAttributeId = $passwordAttribute->getId();
         $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
 
-        $dateTimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
-
         $entitiesToCreate = array();
         $entitiesToUpdate = array();
         $attributesToSave = array();
 
         // entity table data
+        $now = new DateTime('@' . time());
+        if (empty($rowData['created_at'])) {
+            $createdAt = $now;
+        } else {
+            $createdAt = new DateTime('@' . strtotime($rowData['created_at']));
+        }
         $entityRow = array(
             'group_id'   => empty($rowData['group_id'])
                 ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
@@ -281,10 +285,8 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer
             'store_id'   => empty($rowData[self::COLUMN_STORE])
                 ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
 
-            'created_at' => empty($rowData['created_at'])
-                ? now() : gmstrftime($dateTimeFormat, strtotime($rowData['created_at'])),
-
-            'updated_at' => now()
+            'created_at' => $createdAt->format(Varien_Date::DATETIME_PHP_FORMAT),
+            'updated_at' => $now->format(Varien_Date::DATETIME_PHP_FORMAT),
         );
 
         $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
@@ -315,7 +317,8 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer
                 if ('select' == $attributeParameters['type']) {
                     $value = $attributeParameters['options'][strtolower($value)];
                 } elseif ('datetime' == $attributeParameters['type']) {
-                    $value = gmstrftime($dateTimeFormat, strtotime($value));
+                    $value = new DateTime('@' . strtotime($value));
+                    $value = $value->format(Varien_Date::DATETIME_PHP_FORMAT);
                 } elseif ($backendModel) {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);

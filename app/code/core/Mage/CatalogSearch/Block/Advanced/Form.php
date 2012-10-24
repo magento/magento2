@@ -305,7 +305,7 @@ class Mage_CatalogSearch_Block_Advanced_Form extends Mage_Core_Block_Template
             ->setTitle($this->getAttributeLabel($attribute))
             ->setValue($value)
             ->setImage($this->getSkinUrl('Mage_Core::calendar.gif'))
-            ->setFormat('%m/%d/%y')
+            ->setDateFormat(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT))
             ->setClass('input-text')
             ->getHtml();
     }

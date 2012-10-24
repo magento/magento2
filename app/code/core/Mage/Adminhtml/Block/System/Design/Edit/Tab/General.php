@@ -57,13 +57,13 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
             'required' => true,
         ));
 
-        $dateFormatIso = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
         $fieldset->addField('date_from', 'date', array(
             'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Date From'),
             'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Date From'),
             'name'     => 'date_from',
             'image'    => $this->getSkinUrl('images/grid-cal.gif'),
-            'format'   => $dateFormatIso,
+            'date_format' => $dateFormat,
             //'required' => true,
         ));
         $fieldset->addField('date_to', 'date', array(
@@ -71,7 +71,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
             'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Date To'),
             'name'     => 'date_to',
             'image'    => $this->getSkinUrl('images/grid-cal.gif'),
-            'format'   => $dateFormatIso,
+            'date_format' => $dateFormat,
             //'required' => true,
         ));
 

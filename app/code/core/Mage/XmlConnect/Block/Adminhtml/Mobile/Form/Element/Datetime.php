@@ -157,16 +157,11 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Form_Element_Datetime
         $this->addClass('input-text');
 
         $html = sprintf(
-            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" />'
-            .' <img src="%s" alt="" class="v-middle" id="%s_trig" title="%s" style="%s" />',
+            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" />',
             $this->getName(),
             $this->getHtmlId(),
             $this->_escape($this->getValue()),
-            $this->serialize($this->getHtmlAttributes()),
-            $this->getImage(),
-            $this->getHtmlId(),
-            'Select Date',
-            ($this->getDisabled() ? 'display:none;' : '')
+            $this->serialize($this->getHtmlAttributes())
         );
         $outputFormat = $this->getFormat();
         $outputTimeFormat = $this->getFormatT();
@@ -175,27 +170,27 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Form_Element_Datetime
                 $this->__('Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().')
             );
         }
-        $displayFormat = Varien_Date::convertZendToStrFtime($outputFormat, true, false);
-        $displayTimeFormat = Varien_Date::convertZendToStrFtime($outputTimeFormat, false, true);
 
         $html .= sprintf('
             <script type="text/javascript">
             //<![CDATA[
-                Calendar.setup({
-                    inputField: "%s",
-                    ifFormat: "%s",
-                    showsTime: %s,
-                    button: "%s_trig",
-                    align: "Bl",
-                    singleClick : false,
-                    timeFormat: 12
-                });
+            (function($) {
+                $("#%s").calendar({
+                    buttonImage: "%s",
+                    buttonText: "%s",
+                    dateFormat: "%s",
+                    timeFormat: "%s",
+                    showsTime: %s
+                })
+            })(jQuery);
             //]]>
             </script>',
             $this->getHtmlId(),
-            $displayFormat . " " . $displayTimeFormat,
-            $this->getTime() ? 'true' : 'false',
-            $this->getHtmlId()
+            $this->getImage(),
+            $this->__('Select Date'),
+            $outputFormat,
+            $outputTimeFormat ?: '',
+            $this->getTime() ? 'true' : 'false'
         );
 
         $html .= $this->getAfterElementHtml();

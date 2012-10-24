@@ -78,9 +78,10 @@ class Mage_ImportExport_Model_Import_Entity_EavAbstractTest extends PHPUnit_Fram
             foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                 $expectedOptions[strtolower($option[$index])] = $option['value'];
             }
-
             $actualOptions = $this->_model->getAttributeOptions($attribute, array($indexAttributeCode));
-            $this->assertSame($expectedOptions, $actualOptions);
+            sort($expectedOptions);
+            sort($actualOptions);
+            $this->assertEquals($expectedOptions, $actualOptions);
         }
     }
 }

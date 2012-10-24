@@ -176,7 +176,7 @@ abstract class Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract
                 } else if ($inputType == 'date') {
                     $format = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
                     $element->setImage($this->getSkinUrl('images/grid-cal.gif'));
-                    $element->setFormat($format);
+                    $element->setDateFormat($format);
                 }
             }
         }

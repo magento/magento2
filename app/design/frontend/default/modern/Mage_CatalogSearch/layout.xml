@@ -83,10 +83,8 @@
         </reference>
         <reference name="head">
             <action method="setTitle" translate="title" module="Mage_CatalogSearch"><title>Advanced Search</title></action>
-            <action method="addCss"><file>calendar/calendar-win2k-1.css</file><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
-            <action method="addJs"><file>calendar/calendar.js</file><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
-            <action method="addJs"><file>calendar/calendar-setup.js</file><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
         </reference>
+        <update handle="page_calendar"/>
         <reference name="content">
             <block type="Mage_CatalogSearch_Block_Advanced_Form" name="catalogsearch_advanced_form" template="advanced/form.phtml"/>
             <block type="Mage_Core_Block_Html_Calendar" name="html_calendar" as="html_calendar" template="Mage_Page::js/calendar.phtml"/>

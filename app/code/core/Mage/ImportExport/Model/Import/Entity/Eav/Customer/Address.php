@@ -168,13 +168,6 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address
     protected $_customerEntity;
 
     /**
-     * Date/time format to import
-     *
-     * @var string
-     */
-    protected $_dateTimeFormat;
-
-    /**
      * Entity ID incremented value
      *
      * @var int
@@ -263,21 +256,6 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address
             $this->_customerEntity = Mage::getModel('Mage_Customer_Model_Customer');
         }
         return $this->_customerEntity;
-    }
-
-    /**
-     * Get date/time format string
-     *
-     * @return string
-     */
-    protected function _getDateTimeFormat()
-    {
-        if (!$this->_dateTimeFormat) {
-            $this->_dateTimeFormat = Varien_Date::convertZendToStrftime(
-                Varien_Date::DATETIME_INTERNAL_FORMAT, true, true
-            );
-        }
-        return $this->_dateTimeFormat;
     }
 
     /**
@@ -435,7 +413,8 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address
                 if ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
-                    $value = gmstrftime($this->_getDateTimeFormat(), strtotime($rowData[$attributeAlias]));
+                    $value = new DateTime('@' . strtotime($rowData[$attributeAlias]));
+                    $value = $value->format(Varien_Date::DATETIME_PHP_FORMAT);
                 } else {
                     $value = $rowData[$attributeAlias];
                 }

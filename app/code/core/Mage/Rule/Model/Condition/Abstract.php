@@ -472,7 +472,7 @@ abstract class Mage_Rule_Model_Condition_Abstract
         if ($this->getInputType()=='date') {
             // date format intentionally hard-coded
             $elementParams['input_format'] = Varien_Date::DATE_INTERNAL_FORMAT;
-            $elementParams['format']       = Varien_Date::DATE_INTERNAL_FORMAT;
+            $elementParams['date_format']  = Varien_Date::DATE_INTERNAL_FORMAT;
         }
         return $this->getForm()->addField($this->getPrefix().'__'.$this->getId().'__value',
             $this->getValueElementType(),

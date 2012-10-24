@@ -24,19 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php
-/**
- * @methods
- * - getValue($key, $default)
- * - getSelected($key, $value)
- * - getChecked($key)
- * - getAttributes()
- * - getMappings()
- * - getAddMapButtonHtml()
- * - getRemoveMapButtonHtml()
- */
-?>
-
+<?php /** @var $this Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Wizard */ ?>
 <script type="text/javascript">
 //<![CDATA[
 var profileImportOnly = ['profile_number_of_records', 'profile_decimal_separator'];
@@ -527,30 +515,27 @@ Event.observe(window, 'load', function(){
                     <input class="input-text" id="customer_filter_region" name="gui_data[customer][filter][region]" value="<?php echo $this->getValue('gui_data/customer/filter/region') ?>"/>
                     <?php echo $this->__('(For US 2-letter state names)') ?>
                 </span>
-                <span class="field-row">
+                <span class="field-row" id="customer_filter_created_at_range">
                     <label for="customer_filter_created_at_from"><?php echo $this->__("Customer Since:") ?></label>
                     <input class="input-text" style="width:5em" id="customer_filter_created_at_from" name="gui_data[customer][filter][created_at][from]" value="<?php echo $this->getValue('gui_data/customer/filter/created_at/from') ?>"/>
-                    <img src="<?php echo $this->getSkinUrl('images/grid-cal.gif') ?>" alt="" class="v-middle" id="customer_filter_created_at_from_trig" title="<?php echo $this->__('Date selector') ?>" />
                      <?php echo $this->__('to') ?>
                     <input class="input-text" style="width:5em" id="customer_filter_created_at_to" name="gui_data[customer][filter][created_at][to]" value="<?php echo $this->getValue('gui_data/customer/filter/created_at/to') ?>"/>
-                    <img src="<?php echo $this->getSkinUrl('images/grid-cal.gif') ?>" alt="" class="v-middle" id="customer_filter_created_at_to_trig" title="<?php echo $this->__('Date selector') ?>" />
-<script type="text/javascript">
-    Calendar.setup({
-        inputField : "customer_filter_created_at_from",
-        ifFormat : "<?php echo $this->getShortDateFormat() ?>",
-        button : "customer_filter_created_at_from_trig",
-        align : "Bl",
-        singleClick : true
-    });
-    Calendar.setup({
-        inputField : "customer_filter_created_at_to",
-        ifFormat : "<?php echo $this->getShortDateFormat() ?>",
-        button : "customer_filter_created_at_to_trig",
-        align : "Bl",
-        singleClick : true
-    });
-</script>
                 </span>
+                <script type="text/javascript">
+                    (function( $ ) {
+                        $("#customer_filter_created_at_range").dateRange({
+                            dateFormat: "<?php echo $this->getShortDateFormat() ?>",
+                            buttonImage: "<?php echo $this->getSkinUrl('images/grid-cal.gif') ?>",
+                            buttonText: "<?php echo $this->__('Date selector') ?>",
+                            from: {
+                                id: "customer_filter_created_at_from"
+                            },
+                            to: {
+                                id: "customer_filter_created_at_to"
+                            }
+                        })
+                    })(jQuery)
+                </script>
             </div>
         </fieldset>
     </div>

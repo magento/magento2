@@ -1177,36 +1177,38 @@ class Mage_Eav_Model_Entity_Setup extends Mage_Core_Model_Resource_Setup
             $backendPrefix  = isset($entity['backend_prefix']) ? $entity['backend_prefix'] : '';
             $sourcePrefix   = isset($entity['source_prefix']) ? $entity['source_prefix'] : '';
 
-            foreach ($entity['attributes'] as $attrCode => $attr) {
-                if (!empty($attr['backend'])) {
-                    if ('_' === $attr['backend']) {
-                        $attr['backend'] = $backendPrefix;
-                    } elseif ('_' === $attr['backend']{0}) {
-                        $attr['backend'] = $backendPrefix.$attr['backend'];
-                    } else {
-                        $attr['backend'] = $attr['backend'];
+            if (is_array($entity['attributes']) && !empty($entity['attributes'])) {
+                foreach ($entity['attributes'] as $attrCode => $attr) {
+                    if (!empty($attr['backend'])) {
+                        if ('_' === $attr['backend']) {
+                            $attr['backend'] = $backendPrefix;
+                        } elseif ('_' === $attr['backend']{0}) {
+                            $attr['backend'] = $backendPrefix.$attr['backend'];
+                        } else {
+                            $attr['backend'] = $attr['backend'];
+                        }
                     }
-                }
-                if (!empty($attr['frontend'])) {
-                    if ('_' === $attr['frontend']) {
-                        $attr['frontend'] = $frontendPrefix;
-                    } elseif ('_' === $attr['frontend']{0}) {
-                        $attr['frontend'] = $frontendPrefix.$attr['frontend'];
-                    } else {
-                        $attr['frontend'] = $attr['frontend'];
+                    if (!empty($attr['frontend'])) {
+                        if ('_' === $attr['frontend']) {
+                            $attr['frontend'] = $frontendPrefix;
+                        } elseif ('_' === $attr['frontend']{0}) {
+                            $attr['frontend'] = $frontendPrefix.$attr['frontend'];
+                        } else {
+                            $attr['frontend'] = $attr['frontend'];
+                        }
                     }
-                }
-                if (!empty($attr['source'])) {
-                    if ('_' === $attr['source']) {
-                        $attr['source'] = $sourcePrefix;
-                    } elseif ('_' === $attr['source']{0}) {
-                        $attr['source'] = $sourcePrefix . $attr['source'];
-                    } else {
-                        $attr['source'] = $attr['source'];
+                    if (!empty($attr['source'])) {
+                        if ('_' === $attr['source']) {
+                            $attr['source'] = $sourcePrefix;
+                        } elseif ('_' === $attr['source']{0}) {
+                            $attr['source'] = $sourcePrefix . $attr['source'];
+                        } else {
+                            $attr['source'] = $attr['source'];
+                        }
                     }
-                }
 
-                $this->addAttribute($entityName, $attrCode, $attr);
+                    $this->addAttribute($entityName, $attrCode, $attr);
+                }
             }
             $this->setDefaultSetToEntityType($entityName);
         }

@@ -115,7 +115,7 @@ class Mage_CatalogSearch_Model_Indexer_Fulltext extends Mage_Index_Model_Indexer
      */
     public function getName()
     {
-        return Mage::helper('Mage_CatalogSearch_Helper_Data')->__('Catalog Search Index');
+        return Mage::helper('Mage_CatalogSearch_Helper_Data')->__('Catalog Search');
     }
 
     /**

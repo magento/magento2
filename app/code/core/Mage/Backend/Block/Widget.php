@@ -41,6 +41,17 @@ class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
         return $this->getData('id');
     }
 
+    /**
+     * Get HTML ID with specified suffix
+     *
+     * @param string $suffix
+     * @return string
+     */
+    public function getSuffixId($suffix)
+    {
+        return "{$this->getId()}_{$suffix}";
+    }
+
     public function getHtmlId()
     {
         return $this->getId();

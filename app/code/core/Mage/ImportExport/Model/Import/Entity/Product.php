@@ -905,7 +905,6 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
         /** @var $resource Mage_ImportExport_Model_Import_Proxy_Product_Resource */
         $resource       = Mage::getModel('Mage_ImportExport_Model_Import_Proxy_Product_Resource');
         $priceIsGlobal  = Mage::helper('Mage_Catalog_Helper_Data')->isPriceGlobal();
-        $strftimeFormat = Varien_Date::convertZendToStrftime(Varien_Date::DATETIME_INTERNAL_FORMAT, true, true);
         $productLimit   = null;
         $productsQty    = null;
 
@@ -1061,7 +1060,8 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     $storeIds  = array(0);
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = gmstrftime($strftimeFormat, strtotime($attrValue));
+                        $attrValue = new DateTime('@' . strtotime($attrValue));
+                        $attrValue = $attrValue->format(Varien_Date::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());

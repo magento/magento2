@@ -46,65 +46,34 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
 
     public function getHtml()
     {
-        $htmlId = $this->_getHtmlId() . microtime(true);
-        $format = $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-        $html = '<div class="range"><div class="range-line date">'
+        $htmlId = Mage::helper('Mage_Core_Helper_Data')->uniqHash($this->_getHtmlId());
+        $format = $this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $html = '<div class="range" id="'.$htmlId.'_range"><div class="range-line date">'
             . '<span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('From').':</span>'
             . '<input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$htmlId.'_from"'
                 . ' value="'.$this->getEscapedValue('from').'" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'from') .  '/>'
-            . '<img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
-                . ' id="'.$htmlId.'_from_trig"'
-                . ' title="' . $this->escapeHtml(Mage::helper('Mage_Backend_Helper_Data')->__('Date selector')) . '"/>'
             . '</div>';
         $html.= '<div class="range-line date">'
             . '<span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('To').' :</span>'
             . '<input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$htmlId.'_to"'
                 . ' value="'.$this->getEscapedValue('to').'" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'to') .  '/>'
-            . '<img src="' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '" alt="" class="v-middle"'
-                . ' id="'.$htmlId.'_to_trig"'
-                . ' title="'.$this->escapeHtml(Mage::helper('Mage_Backend_Helper_Data')->__('Date selector')).'"/>'
             . '</div></div>';
         $html.= '<input type="hidden" name="'.$this->_getHtmlName().'[locale]"'
             . ' value="'.$this->getLocale()->getLocaleCode().'"/>';
         $html.= '<script type="text/javascript">
-            Calendar.setup({
-                inputField : "'.$htmlId.'_from",
-                ifFormat : "'.$format.'",
-                button : "'.$htmlId.'_from_trig",
-                align : "Bl",
-                singleClick : true
-            });
-            Calendar.setup({
-                inputField : "'.$htmlId.'_to",
-                ifFormat : "'.$format.'",
-                button : "'.$htmlId.'_to_trig",
-                align : "Bl",
-                singleClick : true
-            });
-
-            $("'.$htmlId.'_to_trig").observe("click", showCalendar);
-            $("'.$htmlId.'_from_trig").observe("click", showCalendar);
-
-            function showCalendar(event){
-                var element = event.element(event);
-                var offset = $(element).viewportOffset();
-                var scrollOffset = $(element).cumulativeScrollOffset();
-                var dimensionsButton = $(element).getDimensions();
-                var index = $("widget-chooser").getStyle("zIndex");
-
-                $$("div.calendar").each(function(item){
-                    if ($(item).visible()) {
-                        var dimensionsCalendar = $(item).getDimensions();
-
-                        $(item).setStyle({
-                            "zIndex" : index + 1,
-                            "left" : offset[0] + scrollOffset[0] - dimensionsCalendar.width
-                                + dimensionsButton.width + "px",
-                            "top" : offset[1] + scrollOffset[1] + dimensionsButton.height + "px"
-                        });
-                    };
-                });
-            };
+            (function( $ ) {
+                $("#'.$htmlId.'_range").dateRange({
+                    dateFormat: "'.$format.'",
+                    buttonImage: "' . Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '",
+                    buttonText: "'.$this->escapeHtml(Mage::helper('Mage_Backend_Helper_Data')->__('Date selector')).'",
+                    from: {
+                        id: "'.$htmlId.'_from"
+                    },
+                    to: {
+                        id: "'.$htmlId.'_to"
+                    }
+                })
+            })(jQuery)
         </script>';
         return $html;
     }

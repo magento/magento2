@@ -87,9 +87,12 @@ Supported layout update handles (special):
 
                 <action method="addJs"><file>lib/ds-sleight.js</file><params>defer</params><if>lt IE 7</if></action>
 
-                <action method="addCss"><file>calendar/calendar-win2k-1.css</file><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
-                <action method="addJs"><file>calendar/calendar.js</file><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
-                <action method="addJs"><file>calendar/calendar-setup.js</file><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+                <action method="addCss"><file>mage/calendar.css</file><params/></action>
+                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui-timepicker-addon.js</file><!--<if/><condition>can_load_calendar_js</condition>--></action>
+                <action method="addJs"><file>mage/calendar.js</file><!--<if/><condition>can_load_calendar_js</condition>--></action>
 
                 <action method="addJs"><file>extjs/ext-tree.js</file><params/><if/><condition>can_load_ext_js</condition></action>
                 <action method="addJs"><file>mage/adminhtml/fix-extjs-defer.js</file><params/><if/><condition>can_load_ext_js</condition></action>

@@ -1,5 +1,12 @@
-Update as of 10/16/2012
-======================
+2.0.0.0-dev29
+=============
+* Implemented and verified ability to upgrade DB from CE 1.7 (EE 1.12) to 2.x
+* Replaced calendar UI component with jQuery calendar
+* Restored back the public access to `pub/cron.php` entry point (in the previous patch it was denied by mistake)
+* Fixed typo in label of "Catalog Search" index in UI
+
+2.0.0.0-dev28
+=============
 * Introduced block arguments to the layout syntax:
   * Introduced the "object" block argument type to specify a grid data source
   * Introduced the "options" block argument type to accommodate key-value pairs
@@ -21,8 +28,8 @@ Update as of 10/16/2012
   * Fixed preserving selected rows after searching in the Sales Order grid
   * Fixed "column not found" SQL error while sorting by the "Product Name" in the Catalog Pending Reviews grid
 
-Update as of 10/11/2012
-======================
+2.0.0.0-dev27
+=============
 * Removed unused `Mage_DesignEditor_Model_History_Compact_Diff` class
 * Fixes:
   * Incorrect title for Manage Products page
@@ -31,8 +38,8 @@ Update as of 10/11/2012
   * Error message is displayed twice, when restoring admin password with captcha enabled
   * Impossible to retrieve admin password, when captcha is enabled
 
-Update as of 10/09/2012
-======================
+2.0.0.0-dev26
+=============
 * Performance Testing Framework improvements:
   * Added ability to specify fixtures per scenario
   * Implemented Magento application cleanup between scenarios
@@ -80,8 +87,8 @@ Update as of 10/09/2012
   * [#64](https://github.com/magento/magento2/pull/64) -- fixed EAV text attribute validation for "0" value
   * [#72](https://github.com/magento/magento2/pull/72) -- fixed collecting shipping totals for case, when previous invoice value is 0
 
-Update as of 9/27/2012
-======================
+2.0.0.0-dev25
+=============
 * Refactoring Magento 2 to use jQuery instead of Prototype:
   * Implemented simple lazy-loading functionality
   * Converted decorator mechanism to jQuery
@@ -102,8 +109,8 @@ Update as of 9/27/2012
   * "Promotions" tab is missing on Configuration page
   * Wrong format of performance tests config
 
-Update as of 9/13/2012
-======================
+2.0.0.0-dev24
+=============
 * Implemented the option to enable the single store mode in the system configuration, which simplifies the back-end GUI:
   * Hiding scope labels from the system configuration
   * Hiding the scope switcher from the CMS management pages and the system configuration
@@ -131,8 +138,8 @@ Update as of 9/13/2012
   * [#60](https://github.com/magento/magento2/issues/60) -- fixed taking bind parameters into account in `Mage_Core_Model_Resource_Db_Collection_Abstract::getAllIds()`
   * [#61](https://github.com/magento/magento2/pull/61) -- relocated declaration of the "Google Checkout" payment method into `Mage_GoogleCheckout` module from `Mage_Sales`
 
-Update as of 9/05/2012
-======================
+2.0.0.0-dev23
+=============
 * Implemented encryption of the credit card name and expiration date for the payment method "Credit Card (saved)"
 * Implemented console utility `dev/tools/migration/get_aliases_map.php`, which generates map file "M1 class alias" to "M2 class name"
 * Implemented automatic data upgrades for replacing "M1 class aliases" to "M2 class names" in a database
@@ -162,14 +169,14 @@ Update as of 9/05/2012
     * Introduced `Magento_Data_Graph` library class and utilized it for finding cycles in "before" and "after" declarations
     * Implemented tests for totals sorting including the ambiguous cases
 
-Update as of 8/30/2012
-======================
+2.0.0.0-dev22
+=============
 * Fixes:
   * Fixed name, title, markup, styles at "Orders and Returns" homepage
   * Fixed displaying products in the shopping cart item block at the backend
 
-Update as of 8/26/2012
-======================
+2.0.0.0-dev21
+=============
 * Decoupled Tag module functionality from other modules
 * Visual Design Editor:
   * Implemented tracking of user changes history and rendering the actions at VDE toolbar
@@ -190,8 +197,8 @@ Update as of 8/26/2012
 * GitHub requests:
   * [#48](https://github.com/magento/magento2/pull/48) -- fixed usage of a collection at the place, where just a single object was needed
 
-Update as of 8/15/2012
-======================
+2.0.0.0-dev20
+=============
 * Refactored ACL functionality:
   * Implementation is not bound to backend area anymore and moved to `Mage_Core` module
   * Covered backwards-incompatible changes with additional migration tool (`dev/tools/migration/Acl`)
@@ -201,8 +208,8 @@ Update as of 8/15/2012
 * Fixed caching mechanism of loading modules declaration to not cause additional performance overhead
 * Adjusted include path in unit tests to use the original include path at the end, rather than at the beginning
 
-Update as of 8/9/2012
-=====================
+2.0.0.0-dev19
+=============
 * Improvements:
   * Implemented "multi-file" scheduled import/export of customers, deleted legacy implementation
   * Ability to import amendments to complex product data, such as custom options
@@ -233,8 +240,8 @@ Update as of 8/9/2012
   * Applied Zend framework security hotfix against XML external entity injection via XMLRPC API
   * Fixed inappropriate displaying of credit card credentials to admin user after "reorder" action with Authorize.net and PayPal payment methods involved
 
-Update as of 8/2/2012
-=====================
+2.0.0.0-dev18
+=============
 * Refactored ACL for the backend
   * ACL resources
     * Strict configuration format, validated by XSD schema
@@ -260,8 +267,8 @@ Update as of 8/2/2012
   * [#35](https://github.com/magento/magento2/issues/35) -- removed non-used `Mage_Core_Block_Flush` block
   * [#41](https://github.com/magento/magento2/pull/41) -- implemented ability to extends `app/etc/local.xml` by specifying additional config file via `MAGE_LOCAL_CONFIG` environment variable
 
-Update as of 7/26/2012
-=====================
+2.0.0.0-dev17
+=============
 * Implemented Magento Validator library in order to have clear solid mechanism and formal rules of input data validation
 * Moved translations to module directories, so that it is much more convenient to manage module resources
 * Updated inline translation mechanism to support locales inheritance
@@ -275,8 +282,8 @@ Update as of 7/26/2012
 * GitHub requests:
   * [#39](https://github.com/magento/magento2/pull/39) -- added `composer.json`, which was announced at previous update, but mistakenly omitted from publishing
 
-Update as of 7/19/2012
-=====================
+2.0.0.0-dev16
+=============
 * Implemented inheritance of locales. Inheritance is declared in `app/locale/<locale_name>/config.xml`
 * Moved declaration of modules from `app/etc/modules/<module>.xml` to `app/code/<pool>/<namespace>/<module>/config.xml`
 * Implemented ability to match URLs in format `protocol://base_url/area/module/controller/action` (as opposite to only `module/controller/action`), utilized this feature in backend (admin) area
@@ -305,8 +312,8 @@ Update as of 7/19/2012
   * [#39](https://github.com/magento/magento2/pull/39) -- added `composer.json` (actually, doesn't come with this update due to a mistake in publishing process)
   * [#40](https://github.com/magento/magento2/pull/40) -- fixed generation of "secret key" in backend URLs to honor `_forward` in controllers
 
-Update as of 7/3/2012
-=====================
+2.0.0.0-dev15
+=============
 * Refactored backend (admin) menu generation:
   * Menu is separated from `adminhtml.xml` files into `menu.xml` files
   * Rendering menu became responsibility of `Mage_Backend` instead of `Mage_Adminhtml` module
@@ -324,8 +331,8 @@ Update as of 7/3/2012
 * GitHub requests:
   * [#23](https://github.com/magento/magento2/pull/23) -- added `Mage_Customer_Block_Account_Navigation::removeLink()`
 
-Update as of 6/20/2012
-=====================
+2.0.0.0-dev14
+=============
 * Implemented locale translation inheritance
 * Implemented new format for exporting customer data
 * Added initial Javascript code for globalization and localization
@@ -345,8 +352,8 @@ Update as of 6/20/2012
   * ACL tables aliases interference with other table aliases
 * Several tests are made incomplete temporary, appropriate bugs to be fixed in the nearest future
 
-Update as of 6/7/2012
-=====================
+2.0.0.0-dev13
+=============
 * Fixed various crashes of visual design editor
 * Fixed some layouts that caused visual design editor toolbar disappearing, also fixed some confusing page type labels
 * Eliminated "after commit callback" workaround from integration tests by implementing "transparent transactions" capability in integration testing framework
@@ -355,8 +362,8 @@ Update as of 6/7/2012
 * GitHub requests:
   * [#19](https://github.com/magento/magento2/pull/19) Implemented "soft" dependency between modules and performed several improvements in the related code, covered with tests
 
-Update as of 5/31/2012
-======================
+2.0.0.0-dev12
+=============
 * Implemented backend authentication independent of `Mage_Adminhtml` module. Authentication can be disabled
   * Authentication logic is moved to `Mage_Backend` module and being performed in controller instead of observer
   * `Mage_Adminhtml_Controller_Action` is changed to `Mage_Backend_Controller_ActionAbstract`, `Mage_Admin_Model_Session` is changed to `Mage_Backend_Model_Auth_Session`, `Mage_User_Model_Role` and `Mage_User_Model_Roles` classes are unified into one `Mage_User_Model_Role` class
@@ -377,8 +384,8 @@ Update as of 5/31/2012
   * Fixed ability to separate CDN server setup for static and media content
   * Other small fixes
 
-Update as of 5/23/2012
-======================
+2.0.0.0-dev11
+=============
 * Published performance tests (`dev/tests/performance`)
 * Implemented support of ImageMagick library for processing images
 * Distinguished "Page Fragments" and "Pages" in layout handles declaration
@@ -395,7 +402,7 @@ Update as of 5/23/2012
   * Fixed broken category page when "Use Flat Catalog Product" is enabled
   * Fixed incorrect applying of discount to a sub-product, if more two rules are being applied
   * Fixed broken "Edit" product link in Wishlist and Shopping Cart
-  * Fixed broken installation when "pub/media" is not writable
+  * Fixed broken installation when `pub/media` is not writable
   * Fixed resetting Design Theme configuration option when User-Agent Exception is added
   * Fixed error while running unit tests, when Zend Framework is installed with PEAR
   * Fixed incorrect processing of "before" and "after" layout instructions in case, when the instruction refers to a node, which is not processed yet
@@ -407,8 +414,8 @@ Update as of 5/23/2012
   * Fixed broken design when database is used as media storage
 * Other small changes
 
-Update as of 5/09/2012
-======================
+2.0.0.0-dev10
+=============
 * Implemented configuration option that enables the page types hierarchy usage during the page generation
 * Removed theme/view config files caching in favour of the view files map to be implemented in the future
 * Fixed some issues:
@@ -420,8 +427,8 @@ Update as of 5/09/2012
   * Fixed Web API for product to category assignment by SKU containing digits only
 * Implemented new tests
 
-Update as of 5/05/2012
-======================
+2.0.0.0-dev09
+=============
 * Added theme inheritance ability
 * Removed @group annotation usage in integration tests
 * Introduced keeping of highlighting state while switching between pages in Visual Design Editor
@@ -431,8 +438,8 @@ Update as of 5/05/2012
   * Fixed broken "Customer My Account My OAuth Applications" page type in Visual Design Editor
 * Fetched updates from Magento 1.x up to April 30 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details
 
-Update as of 4/26/2012
-======================
+2.0.0.0-dev08
+=============
 * Introduced `Mage_Backend` module and relocated backend area routing model there (was `Mage_Core_Controller_Varien_Router_Admin`). The "adminhtml" area is also declared in the `Mage_Backend` module.
 * Introduced declaration of application area in config.xml with the following requirements:
   * Must declare with a router class in `config/global/areas/<area_code>/routers/<router_code>/class`
@@ -440,9 +447,8 @@ Update as of 4/26/2012
 * Refined styling of the visual design editor toolbar. Subtle improvements of toolbar usability.
 * Fetched updates from Magento 1.x up to April 11 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details
 
-Update as of 4/13/2012
-======================
-
+2.0.0.0-dev07
+=============
 * Implemented a tool for migrating factory table names from 1.x to 2.x. The tool replaces table names by list of names associations
 * Changed Unit tests suite running from usage AllTests.php in each directory to configuration in phpunit.xml.dist. Now all tests in `testsuite` directory are launched, there is no necessity to add new tests to the config
 * Implemented in Visual Desig Editor:
@@ -456,9 +462,8 @@ Update as of 4/13/2012
   * Fixed elements' duplication on pages (downloadable, bundle product view)
 * Fetched updates from Magento 1 up to April 6 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details
 
-Update as of 3/26/2012
-======================
-
+2.0.0.0-dev06
+=============
 * Introduced concept of containers and "page types" in layout.
   * Containers replace `Mage_Core_Block_Text_List` and `Mage_Page_Block_Html_Wrapper`
   * Widgets now utilize page types and containers instead of "handles" and "block references"
@@ -477,10 +482,9 @@ Update as of 3/26/2012
 * Addressed pull requests and issues from Github
 * Fetched updates from Magento 1 up to March 2 2012. Refer to [Magento 1 release notes](http://www.magentocommerce.com/download/release_notes) for details.
 
-Update as of 2/29/2012
-======================
-
-* Added jQuery to Magento 2. It has not been made a main library yet, however all new features are developed using jQuery.
+2.0.0.0-dev05
+=============
+* Added jQuery library. It has not been made a main library yet, however all new features are developed using jQuery.
 * Added support for new versions of testing tools - PHPUnit 3.6, PHPMD 1.3.0. Confirmed compatibility with latest PHPCS 1.3.2 and PHPCPD 1.3.5.
 * Improved legacy tests:
   * Refactored Integrity_ClassesTest and Legacy_ClassesTest.
@@ -492,12 +496,11 @@ Update as of 2/29/2012
   * Fixed docblock for Mage_Core_Model_Design_Package.
   * Fixed static code analysis failures related to case-sensitivity.
   * Fixed several typos and minor mistakes.
-  * Fixed integration test's failures due to specifics of xpath library version.
+  * Fixed integration tests' failures due to specifics of xpath library version.
 * Imported fresh features and bug fixes from Magento 1.x.
 
-Additional Tests and Fixes
-==========================
-
+2.0.0.0-dev04
+=============
 * Various code integrity fixes in different places:
   * Fixed obsolete references to classes
   * Fixed broken references to template and static view files
@@ -513,4 +516,20 @@ Additional Tests and Fixes
   * Simplified and reorganized the "Exemplar" and self-assessment tests for static code analysis
 * Covered previously made backwards-incompatible changes with legacy tests
 * Changed storage of class map from a PHP-file with array into a better-performing text file with serialized array.
-* Published dev/tests/static and dev/tests/unit
+* Published `dev/tests/static` and `dev/tests/unit`
+
+2.0.0.0-dev03
+=============
+* A test release just to verify deployment scripts
+
+2.0.0.0-dev02
+=============
+Deprecated code & minor fixes update:
+* Eliminated remnants of `htmlescape` implementation
+* Eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
+* Disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
+* Minor refactoring of data fixtures rollback capability in integration testing framework
+
+2.0.0.0-dev01
+=============
+* Added initial version of Magento 2.x CE to public repository

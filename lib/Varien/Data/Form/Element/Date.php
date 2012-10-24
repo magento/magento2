@@ -155,32 +155,38 @@ class Varien_Data_Form_Element_Date extends Varien_Data_Form_Element_Abstract
         $this->addClass('input-text');
 
         $html = sprintf(
-            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" ' . $this->_getUiId('hidden') . '/>'
-            .' <img src="%s" alt="" class="v-middle" id="%s_trig" title="%s" style="%s" ' . $this->_getUiId('calendar-button') . '/>',
+            '<input name="%s" id="%s" value="%s" %s style="width:110px !important;" ' . $this->_getUiId('hidden') . '/>',
             $this->getName(), $this->getHtmlId(), $this->_escape($this->getValue()), $this->serialize($this->getHtmlAttributes()),
             $this->getImage(), $this->getHtmlId(), 'Select Date', ($this->getDisabled() ? 'display:none;' : '')
         );
-        $outputFormat = $this->getFormat();
-        if (empty($outputFormat)) {
+        $dateFormat = $this->getDateFormat();
+        $timeFormat = $this->getTimeFormat();
+        if (empty($dateFormat)) {
             throw new Exception('Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().');
         }
-        $displayFormat = Varien_Date::convertZendToStrFtime($outputFormat, true, (bool)$this->getTime());
 
         $html .= sprintf('
             <script type="text/javascript">
             //<![CDATA[
-                Calendar.setup({
-                    inputField: "%s",
-                    ifFormat: "%s",
+            (function($) {
+                $("#%s").calendar({
+                    dateFormat: "%s",
                     showsTime: %s,
-                    button: "%s_trig",
-                    align: "Bl",
-                    singleClick : true
-                });
+                    timeFormat: "%s",
+                    buttonImage: "%s",
+                    buttonText: "%s",
+                    disabled: %s
+                })
+            })(jQuery)
             //]]>
             </script>',
-            $this->getHtmlId(), $displayFormat,
-            $this->getTime() ? 'true' : 'false', $this->getHtmlId()
+            $this->getHtmlId(),
+            $dateFormat,
+            $timeFormat ? 'true' : 'false',
+            $timeFormat ?: '',
+            $this->getImage(),
+            'Select Date',
+            ($this->getDisabled() ? 'true' : 'false')
         );
 
         $html .= $this->getAfterElementHtml();

@@ -43,6 +43,11 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     protected $_filters = array();
 
+    /**
+     * @var Mage_Core_Model_Locale
+     */
+    protected $_locale;
+
     protected $_defaultFilters = array(
             'report_from' => '',
             'report_to' => '',
@@ -292,7 +297,7 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     public function getDateFormat()
     {
-        return $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        return $this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
     }
 
     /**

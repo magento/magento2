@@ -80,7 +80,7 @@ class Mage_Customer_Block_Widget_Dob extends Mage_Customer_Block_Widget_Abstract
      */
     public function getDateFormat()
     {
-        return Mage::app()->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        return Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
     }
 
     /**

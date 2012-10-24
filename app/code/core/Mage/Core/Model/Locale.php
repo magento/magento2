@@ -447,28 +447,6 @@ class Mage_Core_Model_Locale
     }
 
     /**
-     * Retrieve date format by strftime function
-     *
-     * @param   string $type
-     * @return  string
-     */
-    public function getDateStrFormat($type)
-    {
-        return Varien_Date::convertZendToStrftime($this->getDateFormat($type), true, false);
-    }
-
-    /**
-     * Retrieve time format by strftime function
-     *
-     * @param   string $type
-     * @return  string
-     */
-    public function getTimeStrFormat($type)
-    {
-        return Varien_Date::convertZendToStrftime($this->getTimeFormat($type), false, true);
-    }
-
-    /**
      * Create Zend_Date object for current locale
      *
      * @param mixed              $date

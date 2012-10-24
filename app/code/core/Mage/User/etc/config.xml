@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_User>
-            <version>1.6.1.1</version>
+            <version>1.6.1.2</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_User>

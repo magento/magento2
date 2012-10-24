@@ -29,15 +29,11 @@
     <design_editor_toolbar>
         <reference name="head">
             <action method="addJs"><file>Mage_DesignEditor::js/settimeout_override.js</file></action>
-            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/change/layout.js</file></action>
             <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
             <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
-            <action method="addJs"><file>prototype/prototype.js</file></action>
-            <action method="addJs"><file>mage/translate.js</file></action>
-            <action method="addJs"><file>Mage_Page::js/cookies.js</file></action>
             <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
         </reference>
         <!-- Toolbar block has been intentionally declared outside of containers to be rendered manually -->

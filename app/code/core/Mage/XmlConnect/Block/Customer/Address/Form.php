@@ -47,7 +47,7 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
      * - 'text'      => 'Enterprise_Customer_Block_Form_Renderer_Text',
      * - 'textarea'  => 'Enterprise_Customer_Block_Form_Renderer_Textarea',
      * - 'multiline' => 'Enterprise_Customer_Block_Form_Renderer_Multiline',
-     * - 'date'      => 'Enterprise_Customer_Block_Form_Renderer_Date',
+     * - 'date'      => 'Enterprise_Eav_Block_Form_Renderer_Date',
      * - 'select'    => 'Enterprise_Customer_Block_Form_Renderer_Select',
      * - 'multiselect' => 'Enterprise_Customer_Block_Form_Renderer_Multiselect',
      * - 'boolean'   => 'Enterprise_Customer_Block_Form_Renderer_Boolean',

@@ -114,14 +114,14 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Main_Abstract extends Mag
             'value' => $attributeObject->getDefaultValue(),
         ));
 
-        $dateFormatIso = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        $dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
         $fieldset->addField('default_value_date', 'date', array(
             'name'   => 'default_value_date',
             'label'  => Mage::helper('Mage_Eav_Helper_Data')->__('Default Value'),
             'title'  => Mage::helper('Mage_Eav_Helper_Data')->__('Default Value'),
             'image'  => $this->getSkinUrl('images/grid-cal.gif'),
             'value'  => $attributeObject->getDefaultValue(),
-            'format'       => $dateFormatIso
+            'date_format' => $dateFormat
         ));
 
         $fieldset->addField('default_value_textarea', 'textarea', array(

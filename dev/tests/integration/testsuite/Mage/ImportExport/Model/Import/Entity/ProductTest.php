@@ -199,6 +199,47 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
     }
 
     /**
+     * Test if datetime properly saved after import
+     *
+     * @magentoDataFixture Mage/Catalog/_files/multiple_products.php
+     */
+    public function testSaveDatetimeAttribute()
+    {
+        $existingProductIds = array(10, 11, 12);
+        $productsBeforeImport = array();
+        foreach ($existingProductIds as $productId) {
+            $product = new Mage_Catalog_Model_Product();
+            $product->load($productId);
+            $productsBeforeImport[$product->getSku()] = $product;
+        }
+
+        $resource = __DIR__ . '/_files/products_to_import_with_datetime.csv';
+        $source = new Mage_ImportExport_Model_Import_Adapter_Csv($resource);
+        $this->_model->setParameters(array(
+            'behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE,
+            'entity' => 'catalog_product'
+        ))->setSource($source)->isDataValid();
+
+        $this->_model->importData();
+
+        reset($source);
+        foreach ($source as $row) {
+            /** @var $productAfterImport Mage_Catalog_Model_Product */
+            $productBeforeImport = $productsBeforeImport[$row['sku']];
+
+            /** @var $productAfterImport Mage_Catalog_Model_Product */
+            $productAfterImport = new Mage_Catalog_Model_Product();
+            $productAfterImport->load($productBeforeImport->getId());
+            $this->assertEquals(
+                @strtotime($row['news_from_date']),
+                @strtotime($productAfterImport->getNewsFromDate())
+            );
+            unset($productAfterImport);
+        }
+        unset($productsBeforeImport, $product);
+    }
+
+    /**
      * Returns expected product data: current id, options, options data and option values
      *
      * @param string $pathToFile

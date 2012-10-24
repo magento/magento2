@@ -27,6 +27,8 @@
 $installer = $this;
 /** @var $installer Mage_Catalog_Model_Resource_Setup */
 
+$installer->installEntities();
+
 foreach (array('news_from_date', 'custom_design_from') as $attributeCode) {
     $installer->updateAttribute(
         Mage_Catalog_Model_Product::ENTITY,

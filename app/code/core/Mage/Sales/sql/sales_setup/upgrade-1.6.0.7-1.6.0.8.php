@@ -27,6 +27,8 @@
 /* @var $installer Mage_Sales_Model_Resource_Setup */
 $installer = $this;
 
+$installer->installEntities();
+
 $invoiceTable = $installer->getTable('sales_flat_invoice');
 $installer->getConnection()
     ->addColumn($invoiceTable, 'discount_description', array(
