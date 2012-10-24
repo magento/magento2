@@ -1091,9 +1091,9 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     {
         $this->joinTable(
             'core_url_rewrite',
-            'entity_id=entity_id',
+            'product_id=entity_id',
             array('request_path'),
-            '{{table}}.type = ' . Mage_Core_Model_Url_Rewrite::TYPE_PRODUCT,
+            null,
             'left'
         );
 
