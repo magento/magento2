@@ -575,8 +575,10 @@ END;
         $min = $this->getDependencyPhpVersionMin();
         $max = $this->getDependencyPhpVersionMax();
 
-        $minOk = $min? version_compare(PHP_VERSION, $min, ">=") : true;
-        $maxOk = $max? version_compare(PHP_VERSION, $max, "<=") : true;
+        $version = substr(PHP_VERSION,0,strpos(PHP_VERSION, "-"));
+
+        $minOk = $min? version_compare($version, $min, ">=") : true;
+        $maxOk = $max? version_compare($version, $max, "<=") : true;
 
         if(!$minOk || !$maxOk) {
             $err = "requires PHP version ";
