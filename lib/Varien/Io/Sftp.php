@@ -179,7 +179,7 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
      */
     public function write($filename, $src, $mode=null)
     {
-        return $this->_connection->put($filename, $src);
+        return $this->_connection->put($filename, $src, NET_SFTP_LOCAL_FILE);
     }
 
     /**
