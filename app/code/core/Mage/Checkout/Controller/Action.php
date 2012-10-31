@@ -50,7 +50,10 @@ abstract class Mage_Checkout_Controller_Action extends Mage_Core_Controller_Fron
                     }
                 }
                 if ($redirect) {
-                    $this->_redirect('customer/account/edit');
+                    $referer = Mage::getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
+                    $referer = Mage::helper('core')->urlEncode($referer);
+                    $arguments = array(Mage_Core_Controller_Varien_Action::PARAM_NAME_URL_ENCODED => $referer);
+                    $this->_redirect('customer/account/edit', $arguments);
                     $this->setFlag('', self::FLAG_NO_DISPATCH, true);
                 }
                 return false;

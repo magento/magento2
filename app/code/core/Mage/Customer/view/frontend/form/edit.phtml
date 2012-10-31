@@ -30,6 +30,7 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
     <div class="fieldset">
+        <input type="hidden" name="<?php echo Mage_Core_Controller_Varien_Action::PARAM_NAME_SUCCESS_URL ?>" value="<?php echo $this->htmlEscape($this->getRefererUrl()) ?>">
         <?php echo $this->getBlockHtml('formkey')?>
         <h2 class="legend"><?php echo $this->__('Account Information') ?></h2>
         <ul class="form-list">
