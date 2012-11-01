@@ -132,7 +132,7 @@ final class Mage
     {
         $i = self::getVersionInfo();
         return trim("{$i['major']}.{$i['minor']}.{$i['revision']}" . ($i['patch'] != '' ? ".{$i['patch']}" : "")
-                        . "-{$i['stability']}{$i['number']}", '.-');
+                        . "-{$i['stability']}{$i['number']}{$i['edition']}", '.-');
     }
 
     /**
@@ -150,6 +150,7 @@ final class Mage
             'patch'     => '0',
             'stability' => 'dev',
             'number'    => '29',
+            'edition'   => 'CE',
         );
     }
 
