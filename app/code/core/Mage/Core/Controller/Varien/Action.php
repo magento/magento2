@@ -38,6 +38,7 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
 {
     const FLAG_NO_CHECK_INSTALLATION    = 'no-install-check';
     const FLAG_NO_DISPATCH              = 'no-dispatch';
+    const FLAG_NO_DISPATCH_ACTION       = 'no-dispatch-action';
     const FLAG_NO_PRE_DISPATCH          = 'no-preDispatch';
     const FLAG_NO_POST_DISPATCH         = 'no-postDispatch';
     const FLAG_NO_START_SESSION         = 'no-startSession';
@@ -469,7 +470,11 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
                  */
                 if (!$this->getFlag('', self::FLAG_NO_DISPATCH)) {
                     Magento_Profiler::start('action_body');
-                    $this->$actionMethodName();
+
+                    if (!$this->getFlag('', self::FLAG_NO_DISPATCH_ACTION)) {
+                        $this->$actionMethodName();
+                    }
+                    
                     Magento_Profiler::stop('action_body');
 
                     Magento_Profiler::start('postdispatch');
