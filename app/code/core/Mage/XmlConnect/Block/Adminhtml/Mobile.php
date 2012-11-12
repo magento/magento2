@@ -36,7 +36,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile extends Mage_Adminhtml_Block_Widget
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'adminhtml_mobile';
         $this->_blockGroup = 'Mage_XmlConnect';
@@ -48,6 +48,6 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile extends Mage_Adminhtml_Block_Widget
             . $this->__('ver. %s', $xmlconnectVersion);
         $this->_addButtonLabel = $this->__('Add App');
 
-        parent::__construct();
+        parent::_construct();
     }
 }

@@ -31,14 +31,12 @@
  */
 class Mage_Sales_Block_Payment_Form_Billing_Agreement extends Mage_Payment_Block_Form
 {
-    /**
-     * Set custom template
-     *
-     */
-    public function __construct()
+    protected $_template = 'Mage_Sales::payment/form/billing/agreement.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('Mage_Sales::payment/form/billing/agreement.phtml');
+        parent::_construct();
+
         $this->setTransportName(Mage_Sales_Model_Payment_Method_Billing_AgreementAbstract::TRANSPORT_BILLING_AGREEMENT_ID);
     }
 

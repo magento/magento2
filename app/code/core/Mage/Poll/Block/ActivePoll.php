@@ -61,9 +61,9 @@ class Mage_Poll_Block_ActivePoll extends Mage_Core_Block_Template
      */
     protected $_pollModel;
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_pollModel = Mage::getModel('Mage_Poll_Model_Poll');
     }
 

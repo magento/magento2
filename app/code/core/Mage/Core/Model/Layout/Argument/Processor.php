@@ -34,9 +34,9 @@
 class Mage_Core_Model_Layout_Argument_Processor
 {
     /**
-     * @var Mage_Core_Model_Layout_Argument_ProcessorConfig
+     * @var Mage_Core_Model_Layout_Argument_HandlerFactory
      */
-    protected $_config;
+    protected $_handlerFactory;
 
     /**
      * @var Mage_Core_Model_Config
@@ -56,24 +56,15 @@ class Mage_Core_Model_Layout_Argument_Processor
     protected $_argumentHandlers = array();
 
     /**
-     * @param array $args
-     * @throws InvalidArgumentException
+     * @param Mage_Core_Model_Layout_Argument_Updater $argumentUpdater
+     * @param Mage_Core_Model_Layout_Argument_HandlerFactory $handlerFactory
      */
-    public function __construct(array $args = array())
-    {
-        if (!isset($args['processorConfig']) || !isset($args['objectFactory'])) {
-            throw new InvalidArgumentException('Not all required parameters were passed');
-        }
-
-        $this->_config = $args['processorConfig'];
-        if (false === ($this->_config instanceof Mage_Core_Model_Layout_Argument_ProcessorConfig)) {
-            throw new InvalidArgumentException('Passed wrong instance of processor config object');
-        }
-
-        $this->_objectFactory = $args['objectFactory'];
-        if (false === ($this->_objectFactory instanceof Mage_Core_Model_Config)) {
-            throw new InvalidArgumentException('Passed wrong instance of object factory');
-        }
+    public function __construct(
+        Mage_Core_Model_Layout_Argument_Updater $argumentUpdater,
+        Mage_Core_Model_Layout_Argument_HandlerFactory $handlerFactory
+    ) {
+        $this->_handlerFactory  = $handlerFactory;
+        $this->_argumentUpdater = $argumentUpdater;
     }
 
     /**
@@ -89,36 +80,20 @@ class Mage_Core_Model_Layout_Argument_Processor
             $value = isset($argumentValue['value']) ? $argumentValue['value'] : null;
 
             if (true == isset($argumentValue['type']) && false == empty($argumentValue['type'])) {
-
                 if (true == empty($value)) {
                     throw new InvalidArgumentException('Argument value is required for type ' . $argumentValue['type']);
                 }
 
                 $handler = $this->_getArgumentHandler($argumentValue['type']);
-                $value = $handler->process($value);
+                $value   = $handler->process($value);
             }
 
             if (true == isset($argumentValue['updater']) && false == empty($argumentValue['updater'])) {
-                $value = $this->_getArgumentUpdater()->applyUpdaters($value, $argumentValue['updater']);
+                $value = $this->_argumentUpdater->applyUpdaters($value, $argumentValue['updater']);
             }
             $processedArguments[$argumentKey] = $value;
         }
         return $processedArguments;
-    }
-
-    /**
-     * Get argument updater instance
-     *
-     * @return Mage_Core_Model_Layout_Argument_Updater
-     */
-    protected function _getArgumentUpdater()
-    {
-        if (null === $this->_argumentUpdater) {
-            $this->_argumentUpdater = $this->_objectFactory
-                ->getModelInstance('Mage_Core_Model_Layout_Argument_Updater',
-                    array('objectFactory' => $this->_objectFactory));
-        }
-        return $this->_argumentUpdater;
     }
 
     /**
@@ -134,14 +109,8 @@ class Mage_Core_Model_Layout_Argument_Processor
             return $this->_argumentHandlers[$type];
         }
 
-        $handlerFactory = $this->_config->getArgumentHandlerFactoryByType($type);
-
-        if (false === ($handlerFactory instanceof Mage_Core_Model_Layout_Argument_HandlerFactoryInterface)) {
-            throw new InvalidArgumentException('Incorrect handler factory');
-        }
-
         /** @var $handler Mage_Core_Model_Layout_Argument_HandlerInterface */
-        $handler = $handlerFactory->createHandler();
+        $handler = $this->_handlerFactory->getArgumentHandlerByType($type);
 
         if (false === ($handler instanceof Mage_Core_Model_Layout_Argument_HandlerInterface)) {
             throw new InvalidArgumentException($type

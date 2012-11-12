@@ -25,7 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$installer = new Mage_Catalog_Model_Resource_Setup('catalog_setup');
+/** @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'catalog_setup'));
 
 $installer->updateAttribute('catalog_product', 'weight', 'is_filterable', 1);
 

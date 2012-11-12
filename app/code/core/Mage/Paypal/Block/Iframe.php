@@ -61,9 +61,11 @@ class Mage_Paypal_Block_Iframe extends Mage_Payment_Block_Form
      */
     protected $_block;
 
+
+    protected $_template = 'hss/js.phtml';
+
     /**
      * Internal constructor
-     * Set info template for payment step
      *
      */
     protected function _construct()
@@ -159,7 +161,7 @@ class Mage_Paypal_Block_Iframe extends Mage_Payment_Block_Form
     protected function _toHtml()
     {
         if ($this->_isAfterPaymentSave()) {
-            $this->setTemplate('hss/js.phtml');
+
             return parent::_toHtml();
         }
         if (!$this->_shouldRender) {

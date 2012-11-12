@@ -40,14 +40,6 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Account extends Mage_Adminhtml_Bloc
     const DISABLE_ATTRIBUTE_NAME = 'disable_auto_group_change';
 
     /**
-     * Initialize block
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Initialize form
      *
      * @return Mage_Adminhtml_Block_Customer_Edit_Tab_Account

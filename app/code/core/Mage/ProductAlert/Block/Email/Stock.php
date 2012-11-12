@@ -34,15 +34,8 @@
  */
 class Mage_ProductAlert_Block_Email_Stock extends Mage_ProductAlert_Block_Email_Abstract
 {
-    /**
-     * Constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('email/stock.phtml');
-    }
+
+    protected $_template = 'email/stock.phtml';
 
     /**
      * Product thumbnail image url getter

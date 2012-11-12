@@ -37,7 +37,6 @@ class Mage_Checkout_Block_Total_Default extends Mage_Checkout_Block_Cart_Totals
 
     protected function _construct()
     {
-        $this->setTemplate($this->_template);
         $this->_store = Mage::app()->getStore();
     }
 

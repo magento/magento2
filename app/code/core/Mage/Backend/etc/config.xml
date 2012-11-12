@@ -71,6 +71,11 @@
                 </observers>
             </store_collection_load_after>
         </events>
+        <di>
+            <preferences>
+                <Mage_Backend_Model_Auth_StorageInterface>Mage_Backend_Model_Auth_Session</Mage_Backend_Model_Auth_StorageInterface>
+            </preferences>
+        </di>
     </global>
     <admin>
         <routers>

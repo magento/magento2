@@ -25,36 +25,49 @@
  */
 /* @var $this Mage_Catalog_Block_Product_Compare_Sidebar */
 ?>
-<?php 
+<?php
 $_helper = $this->helper('Mage_Catalog_Helper_Product_Compare');
 $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
 ?>
 <div class="block block-list block-compare">
     <div class="block-title">
         <strong><span><?php echo $this->__('Compare Products') ?>
-            <?php if($_helper->getItemCount() > 0): ?> 
+            <?php if($_helper->getItemCount() > 0): ?>
                 <small><?php echo $this->__('(%d)', $_helper->getItemCount()) ?></small>
-            <?php endif; ?>
+                <?php endif; ?>
         </span></strong>
     </div>
     <div class="block-content">
-    <?php if($_helper->getItemCount() > 0): ?>
+        <?php if($_helper->getItemCount() > 0): ?>
         <ol id="compare-items">
-        <?php foreach($_items as $_index => $_item): ?>
+            <?php foreach($_items as $_index => $_item): ?>
             <li class="item">
                 <input type="hidden" class="compare-item-id" value="<?php echo $_item->getId() ?>" />
-                <a href="<?php echo $_helper->getRemoveUrl($_item) ?>" title="<?php echo $this->__('Remove This Item') ?>" class="btn-remove" onclick="return confirm('<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>');"><?php echo $this->__('Remove This Item') ?></a>
+                <a href="<?php echo $_helper->getRemoveUrl($_item) ?>" title="<?php echo $this->__('Remove This Item') ?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
                 <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('Mage_Catalog_Helper_Output')->productAttribute($_item, $_item->getName(), 'name') ?></a></p>
             </li>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
         </ol>
-        <script type="text/javascript">decorateList('compare-items')</script>
         <div class="actions">
-            <a href="<?php echo $_helper->getClearListUrl() ?>" onclick="return confirm('<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>');"><?php echo $this->__('Clear All') ?></a>
-            <button type="button" title="<?php echo $this->__('Compare') ?>" class="button" onclick="popWin('<?php echo $_helper->getListUrl() ?>','compare','top:0,left:0,width=820,height=600,resizable=yes,scrollbars=yes')"><span><span><?php echo $this->__('Compare') ?></span></span></button>
+            <a id='compare-clear-all' href="<?php echo $_helper->getClearListUrl() ?>" ><?php echo $this->__('Clear All') ?></a>
+            <button type="button" title="<?php echo $this->__('Compare') ?>" class="button" data-mage-popwin="{windowURL:'<?php echo $_helper->getListUrl() ?>',windowName:'compare',resizable:1,scrollbars:1,width:820,height:600}"><span><span><?php echo $this->__('Compare') ?></span></span></button>
         </div>
-    <?php else: ?>
+        <script type="text/javascript">
+            (function($) {
+                $.mage.event.observe('mage.compare.initialize', function (e, o) {
+                    o.listSelector = '#compare-items',
+                    o.removeConfirmMessage = '<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>',
+                    o.removeSelector = '#compare-items .btn-remove',
+                    o.clearAllConfirmMessage = '<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>',
+                    o.clearAllSelector = '#compare-clear-all'
+                });
+                $.mage.load.jsSync("<?php echo $this->getSkinUrl('jquery/jquery.popupwindow.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getSkinUrl('mage/popup-window.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Catalog::js/compare.js') ?>");
+            })(jQuery);
+        </script>
+        <?php else: ?>
         <p class="empty"><?php echo $this->__('You have no items to compare.') ?></p>
-    <?php endif; ?>
+        <?php endif; ?>
     </div>
 </div>

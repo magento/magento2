@@ -58,97 +58,16 @@ class Mage_Backend_Model_Menu_Director_DomTest extends PHPUnit_Framework_TestCas
             array('getId')
         );
 
-        $factory = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $factory->expects($this->any())->method('getModelInstance')->will($this->returnValue($mockCommand));
+        $factory = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $factory->expects($this->any())->method('create')->will($this->returnValue($mockCommand));
 
         $this->_loggerMock = $this->getMock('Mage_Backend_Model_Menu_Logger', array('log'));
 
         $this->_model = new Mage_Backend_Model_Menu_Director_Dom(
-            array(
-                'config' => $domDocument,
-                'factory' => $factory,
-                'logger' => $this->_loggerMock
-            )
+            $domDocument,
+            $factory,
+            $this->_loggerMock
         );
-    }
-
-    /**
-     * Test __construct if required param missed
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidConstructorException()
-    {
-        new Mage_Backend_Model_Menu_Director_Dom();
-    }
-
-    /**
-     * Test __construct if config is no instance of DOMDocument
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidConfigInstanceConstructorException()
-    {
-        $object = $this->getMock('StdClass');
-        new Mage_Backend_Model_Menu_Director_Dom(array('config' => $object, 'factory' => $object));
-    }
-
-    /**
-     * Test __construct
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testMissingLoggerInstanceException()
-    {
-        $domDocument = $this->getMock('DOMDocument');
-        $factory = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $logger = null;
-        $model = new Mage_Backend_Model_Menu_Director_Dom(
-            array(
-                'config' => $domDocument,
-                'factory' => $factory,
-                'logger' => $logger
-            )
-        );
-
-        unset($model);
-    }
-
-    /**
-     * Test __construct
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidLoggerInstanceException()
-    {
-        $domDocument = $this->getMock('DOMDocument');
-        $factory = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $logger = $this->getMock('StdClass');
-        $model = new Mage_Backend_Model_Menu_Director_Dom(
-            array(
-                'config' => $domDocument,
-                'factory' => $factory,
-                'logger' => $logger
-            )
-        );
-
-        unset($model);
-    }
-
-    /**
-     * Test __construct if config is instance of DOMDocument
-     */
-    public function testValidConfigInstanceConstructor()
-    {
-        $domDocument = $this->getMock('DOMDocument');
-        $factory = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $logger = $this->getMock('Mage_Backend_Model_Menu_Logger');
-        $model = new Mage_Backend_Model_Menu_Director_Dom(
-            array(
-                'config' => $domDocument,
-                'factory' => $factory,
-                'logger' => $logger
-            )
-        );
-        unset($model);
     }
 
     /**

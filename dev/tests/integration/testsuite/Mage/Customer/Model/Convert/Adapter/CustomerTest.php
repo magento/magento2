@@ -36,7 +36,7 @@ class Mage_Customer_Model_Convert_Adapter_CustomerTest extends PHPUnit_Framework
             if ($level == Varien_Convert_Exception::FATAL) {
                 $exceptionWas = true;
             }
-            return new Mage_Dataflow_Model_Convert_Exception($error);
+            return Mage::getModel('Mage_Dataflow_Model_Convert_Exception', array('message' => $error));
         };
 
         $model->expects($this->any())

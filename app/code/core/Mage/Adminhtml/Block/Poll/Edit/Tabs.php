@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Poll_Edit_Tabs extends Mage_Adminhtml_Block_Widget_Tabs
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('poll_tabs');
         $this->setDestElementId('edit_form');
         $this->setTitle(Mage::helper('Mage_Poll_Helper_Data')->__('Poll Information'));

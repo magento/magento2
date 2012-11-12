@@ -33,13 +33,13 @@
  */
 class Mage_User_Block_User_Edit extends Mage_Backend_Block_Widget_Form_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'user_id';
         $this->_controller = 'user';
         $this->_blockGroup = 'Mage_User';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_User_Helper_Data')->__('Save User'));
         $this->_updateButton('delete', 'label', Mage::helper('Mage_User_Helper_Data')->__('Delete User'));

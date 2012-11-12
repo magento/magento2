@@ -30,7 +30,7 @@ class Phoenix_Moneybookers_Block_Jsinit extends Mage_Adminhtml_Block_Template
      */
     protected function _prepareLayout()
     {
-        $section = $this->getAction()->getRequest()->getParam('section', false);
+        $section = $this->getRequest()->getParam('section', false);
         if ($section == 'moneybookers') {
             $this->getLayout()
                 ->getBlock('head')
@@ -45,7 +45,7 @@ class Phoenix_Moneybookers_Block_Jsinit extends Mage_Adminhtml_Block_Template
      */
     protected function _toHtml()
     {
-        $section = $this->getAction()->getRequest()->getParam('section', false);
+        $section = $this->getRequest()->getParam('section', false);
         if ($section == 'moneybookers') {
             return parent::_toHtml();
         } else {

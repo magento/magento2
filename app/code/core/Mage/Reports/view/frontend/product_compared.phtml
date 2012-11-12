@@ -38,7 +38,7 @@
             </li>
         <?php endforeach; ?>
         </ol>
-        <script type="text/javascript">decorateList('recently-compared-items');</script>
+        <script type="text/javascript">(function($) {$('#recently-compared-items').decorate('list', false)})(jQuery)</script>
     </div>
 </div>
 <?php endif; ?>

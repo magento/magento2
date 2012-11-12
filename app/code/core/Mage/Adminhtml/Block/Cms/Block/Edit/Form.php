@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Cms_Block_Edit_Form extends Mage_Adminhtml_Block_Widg
     /**
      * Init form
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('block_form');
         $this->setTitle(Mage::helper('Mage_Cms_Helper_Data')->__('Block Information'));
     }

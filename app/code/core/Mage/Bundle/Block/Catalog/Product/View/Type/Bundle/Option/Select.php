@@ -35,13 +35,5 @@
 class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Select
     extends Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option
 {
-    /**
-     * Set template
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/view/type/bundle/option/select.phtml');
-    }
+    protected $_template = 'catalog/product/view/type/bundle/option/select.phtml';
 }

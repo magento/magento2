@@ -47,6 +47,6 @@
         </tr>
     <?php endfor; ?>
     </table>
-    <script type="text/javascript">decorateTable('upsell-product-table')</script>
+    <script type="text/javascript">(function($) {$('#upsell-product-table').decorate('table')})(jQuery)</script>
 </div>
 <?php endif ?>

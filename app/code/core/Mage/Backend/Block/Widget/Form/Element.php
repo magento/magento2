@@ -37,11 +37,7 @@ class Mage_Backend_Block_Widget_Form_Element extends Mage_Backend_Block_Template
     protected $_form;
     protected $_formBlock;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('Mage_Backend::widget/form/element.phtml');
-    }
+    protected $_template = 'Mage_Backend::widget/form/element.phtml';
 
     public function setElement($element)
     {

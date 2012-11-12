@@ -40,6 +40,13 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
     protected $_elements;
     protected $_renderer;
 
+    /**
+     * Shows whether current element belongs to Basic or Advanced form layout
+     *
+     * @var bool
+     */
+    protected $_advanced = false;
+
     public function __construct($attributes = array())
     {
         parent::__construct($attributes);
@@ -60,6 +67,26 @@ abstract class Varien_Data_Form_Element_Abstract extends Varien_Data_Form_Abstra
         }
 
         parent::addElement($element, $after);
+        return $this;
+    }
+
+    /**
+     * Shows whether current element belongs to Basic or Advanced form layout
+     *
+     * @return  bool
+     */
+    public function isAdvanced() {
+        return $this->_advanced;
+    }
+
+    /**
+     * Set _advanced layout property
+     *
+     * @param bool $advanced
+     * @return Varien_Data_Form_Element_Abstract
+     */
+    public function setAdvanced($advanced) {
+        $this->_advanced = $advanced;
         return $this;
     }
 

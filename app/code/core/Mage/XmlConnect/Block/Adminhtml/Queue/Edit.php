@@ -37,12 +37,12 @@ class Mage_XmlConnect_Block_Adminhtml_Queue_Edit
     /**
      * Constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'id';
         $this->_controller  = 'adminhtml_queue';
         $this->_blockGroup  = 'Mage_XmlConnect';
-        parent::__construct();
+        parent::_construct();
 
         $message = Mage::registry('current_message');
         if ($message && $message->getStatus() != Mage_XmlConnect_Model_Queue::STATUS_IN_QUEUE) {

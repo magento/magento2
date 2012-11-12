@@ -36,11 +36,6 @@ abstract class Mage_Adminhtml_Block_Dashboard_Abstract extends Mage_Adminhtml_Bl
 {
     protected $_dataHelperName = null;
 
-    public function __construct($attributes=array())
-    {
-        parent::__construct($attributes);
-    }
-
     public function getCollection()
     {
            return $this->getDataHelper()->getCollection();

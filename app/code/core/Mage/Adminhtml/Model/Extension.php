@@ -24,8 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once 'Varien/Pear/Package.php';
-
 class Mage_Adminhtml_Model_Extension extends Varien_Object
 {
     protected $_roles;

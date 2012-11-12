@@ -95,7 +95,8 @@ class Integrity_Modular_AclConfigFilesTest extends PHPUnit_Framework_TestCase
     public function testMergedConfiguration()
     {
         /** @var $dom Magento_Acl_Config_Reader **/
-        $dom = Mage::getModel('Magento_Acl_Config_Reader', $this->_fileList)->getAclResources();
+        $dom = Mage::getModel('Magento_Acl_Config_Reader', array('configFiles' => $this->_fileList))
+            ->getAclResources();
 
         $domConfig = new Magento_Acl_Config_Reader_Dom($dom->saveXML());
         $errors = array();

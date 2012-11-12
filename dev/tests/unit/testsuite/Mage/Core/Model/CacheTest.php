@@ -54,7 +54,12 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_config = new Mage_Core_Model_Config(<<<XML
+        $objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create', 'get'), array(), '', false);
+        $objectManagerMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnCallback(array($this, 'getInstance')));
+
+        $this->_config = new Mage_Core_Model_Config($objectManagerMock, <<<XML
             <config>
                 <global>
                     <cache>
@@ -451,5 +456,17 @@ XML
         ;
         $this->assertTrue($this->_model->processRequest($response));
         $this->assertEquals('Initial response body.Additional response text.', $response->getBody());
+    }
+
+    /**
+     * Callback to use instead Magento_ObjectManager_Zend::create
+     *
+     * @param string $className
+     * @param array $params
+     * @return string
+     */
+    public function getInstance($className, $params = array())
+    {
+        return new $className($params);
     }
 }

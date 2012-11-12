@@ -49,5 +49,5 @@
             </li>
         <?php endforeach; ?>
     </ol>
-    <script type="text/javascript">decorateList('my_recent_tags', 'none-recursive');</script>
+    <script type="text/javascript">(function($) {$('#my_recent_tags').decorate('list', false)})(jQuery)</script>
 </div>

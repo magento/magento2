@@ -44,7 +44,7 @@ class Mage_XmlConnect_Block_Cart_Paypal_Mecl_Shippingmethods
         /** @var $listXmlObj Mage_XmlConnect_Model_Simplexml_Element */
         $methodListXmlObj = Mage::getModel(
             'Mage_XmlConnect_Model_Simplexml_Element',
-            '<shipping_method_list></shipping_method_list>'
+            array('data' => '<shipping_method_list></shipping_method_list>')
         );
 
         $methodListXmlObj->addAttribute('label', $this->__('Shipping Method'));

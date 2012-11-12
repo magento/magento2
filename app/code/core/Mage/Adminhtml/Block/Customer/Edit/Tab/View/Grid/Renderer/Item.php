@@ -33,17 +33,7 @@
  */
 class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
-    /**
-     * Constructor to set default template
-     *
-     * @return Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('customer/edit/tab/view/grid/item.phtml');
-        return $this;
-    }
+    protected $_template = 'customer/edit/tab/view/grid/item.phtml';
 
     /**
      * Returns helper for product type

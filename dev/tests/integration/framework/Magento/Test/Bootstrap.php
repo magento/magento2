@@ -32,18 +32,6 @@ require_once __DIR__ . '/../../../../../../lib/Varien/Simplexml/Element.php';
 class Magento_Test_Bootstrap
 {
     /**
-     * Name for DB backups, used by bootstrap
-     */
-    const DB_BACKUP_NAME = 'bootstrap_backup';
-
-    /**
-     * CLEANUP_* constants represent allowed cleanup actions
-     */
-    const CLEANUP_NONE       = '';
-    const CLEANUP_UNINSTALL  = 'uninstall';
-    const CLEANUP_RESTORE_DB = 'restoreDatabase';
-
-    /**
      * Predefined admin user credentials
      */
     const ADMIN_NAME = 'user';
@@ -139,18 +127,11 @@ class Magento_Test_Bootstrap
     protected $_db = null;
 
     /**
-     * Cleanup action represented by CLEANUP_* constants
-     *
-     * @var string
-     */
-    protected $_cleanupAction;
-
-    /**
-     * Developer mode flag
+     * Whether a developer mode is enabled or not
      *
      * @var bool
      */
-    protected $_developerMode = false;
+    protected $_isDeveloperMode = false;
 
     /**
      * Set self instance for static access
@@ -198,18 +179,15 @@ class Magento_Test_Bootstrap
      * @param string $moduleEtcFiles
      * @param string $customXmlFile
      * @param string $tmpDir
-     * @param string $cleanupAction
-     * @param bool $developerMode
+     * @param Magento_Shell $shell
+     * @param bool $isCleanupEnabled
+     * @param bool $isDeveloperMode
      * @throws Magento_Exception
      */
     public function __construct(
         $magentoDir, $localXmlFile, $globalEtcFiles, $moduleEtcFiles, $customXmlFile, $tmpDir,
-        $cleanupAction = self::CLEANUP_NONE, $developerMode = false
+        Magento_Shell $shell, $isCleanupEnabled = true, $isDeveloperMode = false
     ) {
-        if (!in_array($cleanupAction, array(self::CLEANUP_NONE, self::CLEANUP_UNINSTALL, self::CLEANUP_RESTORE_DB))) {
-            throw new Magento_Exception("Cleanup action '{$cleanupAction}' is not supported.");
-        }
-
         $this->_magentoDir = $magentoDir;
         $this->_localXmlFile = $localXmlFile;
         $this->_globalEtcFiles = $this->_exposeFiles($globalEtcFiles);
@@ -235,20 +213,20 @@ class Magento_Test_Bootstrap
             'upload_dir'  => $this->_installDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'upload',
         );
 
-        $this->_db = $this->_instantiateDb();
+        $this->_db = $this->_instantiateDb($shell);
 
-        $this->_cleanupAction = $cleanupAction;
-        $this->_cleanup();
+        if ($isCleanupEnabled) {
+            $this->_cleanup();
+        }
         $this->_ensureDirExists($this->_installDir);
 
-        $this->_developerMode = $developerMode;
+        $this->_isDeveloperMode = $isDeveloperMode;
 
         $this->_emulateEnvironment();
 
         if ($this->_isInstalled()) {
             $this->initialize();
         } else {
-            $this->_db->verifyEmptyDatabase();
             $this->_install();
         }
     }
@@ -273,7 +251,8 @@ class Magento_Test_Bootstrap
         if ($resource) {
             Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
         }
-        Mage::setIsDeveloperMode($this->_developerMode);
+
+        Mage::setIsDeveloperMode($this->_isDeveloperMode);
         Mage::$headersSentThrowsException = false;
         Mage::app('', 'store', $this->_options);
     }
@@ -321,21 +300,12 @@ class Magento_Test_Bootstrap
     }
 
     /**
-     * Perform a cleanup action
+     * Perform the application cleanup
      */
     protected function _cleanup()
     {
-        switch ($this->_cleanupAction) {
-            case self::CLEANUP_UNINSTALL:
-                if (!$this->_db->cleanup()) {
-                    throw new Magento_Exception("Database cleanup failed.");
-                }
-                $this->_cleanupFilesystem();
-                break;
-            case self::CLEANUP_RESTORE_DB:
-                $this->_db->restoreBackup(self::DB_BACKUP_NAME);
-                break;
-        }
+        $this->_db->cleanup();
+        $this->_cleanupFilesystem();
     }
 
     /**
@@ -388,9 +358,10 @@ class Magento_Test_Bootstrap
     /**
      * Create object of configured DB vendor adapter
      *
+     * @param Magento_Shell $shell
      * @return Magento_Test_Db_DbAbstract
      */
-    protected function _instantiateDb()
+    protected function _instantiateDb(Magento_Shell $shell)
     {
         $suffix = ucfirst($this->_dbVendorName);
         require_once dirname(__FILE__) . '/Db/DbAbstract.php';
@@ -403,7 +374,8 @@ class Magento_Test_Bootstrap
             (string)$dbConfig->username,
             (string)$dbConfig->password,
             (string)$dbConfig->dbname,
-            $this->_installDir
+            $this->_installDir,
+            $shell
         );
     }
 
@@ -531,9 +503,6 @@ class Magento_Test_Bootstrap
         /* Add predefined admin user to the system */
         $this->_createAdminUser();
 
-        /* Make a database backup to be able to restore it to initial state any time */
-        $this->_db->createBackup(self::DB_BACKUP_NAME);
-
         /* Switch an application to installed mode */
         $this->initialize();
         /**
@@ -575,7 +544,7 @@ class Magento_Test_Bootstrap
      */
     protected function _createAdminUser()
     {
-        $user = new Mage_User_Model_User();
+        $user = mage::getModel('Mage_User_Model_User');
         $user->setData(array(
             'firstname' => 'firstname',
             'lastname'  => 'lastname',
@@ -586,10 +555,10 @@ class Magento_Test_Bootstrap
         ));
         $user->save();
 
-        $roleAdmin = new Mage_User_Model_Role();
+        $roleAdmin = Mage::getModel('Mage_User_Model_Role');
         $roleAdmin->load(self::ADMIN_ROLE_NAME, 'role_name');
 
-        $roleUser = new Mage_User_Model_Role();
+        $roleUser = Mage::getModel('Mage_User_Model_Role');
         $roleUser->setData(array(
             'parent_id'  => $roleAdmin->getId(),
             'tree_level' => $roleAdmin->getTreeLevel() + 1,

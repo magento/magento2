@@ -34,9 +34,9 @@
 
 class Mage_GoogleShopping_Block_Adminhtml_Types_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_blockGroup = 'Mage_GoogleShopping';
         $this->_controller = 'adminhtml_types';
         $this->_mode = 'edit';

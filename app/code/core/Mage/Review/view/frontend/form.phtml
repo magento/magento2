@@ -63,7 +63,7 @@
                     </tbody>
                 </table>
                 <input type="hidden" name="validate_rating" class="validate-rating" value="" />
-                <script type="text/javascript">decorateTable('product-review-table')</script>
+                <script type="text/javascript">(function($) {$('#product-review-table').decorate('table')})(jQuery)</script>
             <?php endif; ?>
                 <ul class="form-list">
                     <li>

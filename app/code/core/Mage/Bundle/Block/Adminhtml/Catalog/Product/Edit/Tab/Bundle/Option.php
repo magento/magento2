@@ -63,14 +63,16 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
      */
     protected $_options = null;
 
+    protected $_template = 'product/edit/bundle/option.phtml';
+
     /**
      * Bundle option renderer class constructor
      *
      * Sets block template and necessary data
      */
-    public function __construct()
+    protected function _construct()
     {
-        $this->setTemplate('product/edit/bundle/option.phtml');
+
         $this->setCanReadPrice(true);
         $this->setCanEditPrice(true);
     }

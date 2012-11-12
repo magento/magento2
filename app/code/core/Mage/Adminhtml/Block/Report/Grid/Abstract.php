@@ -32,9 +32,9 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
     protected $_storeIds                = array();
     protected $_aggregatedColumns       = null;
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
         $this->setUseAjax(false);

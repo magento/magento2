@@ -35,9 +35,9 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_MainTest extends PHPUnit_Framewo
      */
     public function testPrepareForm()
     {
-        Mage::register('current_promo_quote_rule', new Mage_SalesRule_Model_Rule);
+        Mage::register('current_promo_quote_rule', Mage::getObjectManager()->create('Mage_SalesRule_Model_Rule'));
 
-        $layout = new Mage_Core_Model_Layout;
+        $layout = Mage::getObjectManager()->create('Mage_Core_Model_Layout');
         $block = $layout->addBlock('Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main');
         $prepareFormMethod = new ReflectionMethod(
             'Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Main', '_prepareForm');

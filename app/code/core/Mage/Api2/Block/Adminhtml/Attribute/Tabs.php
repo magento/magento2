@@ -36,9 +36,9 @@ class Mage_Api2_Block_Adminhtml_Attribute_Tabs extends Mage_Adminhtml_Block_Widg
     /**
      * Constructor
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('api2_attribute_section_main')
             ->setDestElementId('edit_form')

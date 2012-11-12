@@ -65,6 +65,13 @@ final class Mage
     static private $_events;
 
     /**
+     * Object manager interface
+     *
+     * @var Magento_ObjectManager
+     */
+    static private $_objectManager;
+
+    /**
      * Object cache instance
      *
      * @var Varien_Object_Cache
@@ -107,6 +114,13 @@ final class Mage
     static private $_loggers = array();
 
     /**
+     * Design object
+     *
+     * @var Mage_Core_Model_Design_Package
+     */
+    protected static $_design;
+
+    /**
      * Magento edition constants
      */
     const EDITION_COMMUNITY    = 'Community';
@@ -121,6 +135,13 @@ final class Mage
      * @static
      */
     static private $_currentEdition = self::EDITION_COMMUNITY;
+
+    /**
+     * Check if we need to use __sleep and __wakeup serialization methods in models
+     *
+     * @var bool
+     */
+    static private $_isSerializable = true;
 
     /**
      * Gets the current Magento version string
@@ -149,7 +170,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '29',
+            'number'    => '30',
         );
     }
 
@@ -161,7 +182,7 @@ final class Mage
      */
     public static function getEdition()
     {
-       return self::$_currentEdition;
+        return self::$_currentEdition;
     }
 
     /**
@@ -170,7 +191,8 @@ final class Mage
      */
     public static function reset()
     {
-        self::$_registry        = array();
+        self::resetRegistry();
+
         self::$_appRoot         = null;
         self::$_app             = null;
         self::$_config          = null;
@@ -180,7 +202,21 @@ final class Mage
         self::$_isDeveloperMode = false;
         self::$_isInstalled     = null;
         self::$_loggers         = array();
+        self::$_design          = null;
         // do not reset $headersSentThrowsException
+    }
+
+    /**
+     * Reset registry
+     */
+    public static function resetRegistry()
+    {
+        /** @var $value */
+        foreach (self::$_registry as $key => $value) {
+            self::unregister($key);
+        }
+
+        self::$_registry = array();
     }
 
     /**
@@ -250,7 +286,7 @@ final class Mage
 
         $appRoot = realpath($appRoot);
 
-        if (is_dir($appRoot) and is_readable($appRoot)) {
+        if (is_dir($appRoot) && is_readable($appRoot)) {
             self::$_appRoot = $appRoot;
         } else {
             self::throwException($appRoot . ' is not a directory or not readable by this user');
@@ -368,7 +404,8 @@ final class Mage
      */
     public static function getUrl($route = '', $params = array())
     {
-        return self::getModel('Mage_Core_Model_Url')->getUrl($route, $params);
+        return self::getObjectManager()->create('Mage_Core_Model_Url', array('data' => array()))
+            ->getUrl($route, $params);
     }
 
     /**
@@ -378,7 +415,10 @@ final class Mage
      */
     public static function getDesign()
     {
-        return self::getSingleton('Mage_Core_Model_Design_Package');
+        if (!self::$_design) {
+            self::$_design = self::getObjectManager()->get('Mage_Core_Model_Design_Package');
+        }
+        return self::$_design;
     }
 
     /**
@@ -388,6 +428,9 @@ final class Mage
      */
     public static function getConfig()
     {
+        if (!self::$_config) {
+            self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
+        }
         return self::$_config;
     }
 
@@ -396,15 +439,17 @@ final class Mage
      *
      * @param string $eventName
      * @param callback $callback
-     * @param array $arguments
+     * @param array $data
      * @param string $observerName
+     * @param string $observerClass
+     * @return Varien_Event_Collection
      */
     public static function addObserver($eventName, $callback, $data = array(), $observerName = '', $observerClass = '')
     {
         if ($observerClass == '') {
             $observerClass = 'Varien_Event_Observer';
         }
-        $observer = new $observerClass();
+        $observer = self::getObjectManager()->create($observerClass);
         $observer->setName($observerName)->addData($data)->setEventName($eventName)->setCallback($callback);
         return self::getEvents()->addObserver($observer);
     }
@@ -437,7 +482,10 @@ final class Mage
      */
     public static function getModel($modelClass = '', $arguments = array())
     {
-        return self::getConfig()->getModelInstance($modelClass, $arguments);
+        if (!is_array($arguments)) {
+            $arguments = array($arguments);
+        }
+        return self::getObjectManager()->create($modelClass, $arguments, false);
     }
 
     /**
@@ -447,13 +495,41 @@ final class Mage
      * @param   array $arguments
      * @return  Mage_Core_Model_Abstract
      */
-    public static function getSingleton($modelClass='', array $arguments=array())
+    public static function getSingleton($modelClass = '', array $arguments=array())
     {
         $registryKey = '_singleton/'.$modelClass;
         if (!self::registry($registryKey)) {
-            self::register($registryKey, self::getModel($modelClass, $arguments));
+            self::register($registryKey, self::getObjectManager()->get($modelClass, $arguments));
         }
         return self::registry($registryKey);
+    }
+
+    /**
+     * Initialize object manager with definitions file
+     *
+     * @static
+     * @param string $definitionsFile
+     * @param Magento_ObjectManager $objectManager
+     */
+    public static function initializeObjectManager(
+        $definitionsFile = null,
+        Magento_ObjectManager $objectManager = null
+    ) {
+        self::$_objectManager = $objectManager ?: new Magento_ObjectManager_Zend($definitionsFile);
+    }
+
+    /**
+     * Retrieve object manager
+     *
+     * @static
+     * @return Magento_ObjectManager
+     */
+    public static function getObjectManager()
+    {
+        if (!self::$_objectManager) {
+            self::initializeObjectManager();
+        }
+        return self::$_objectManager;
     }
 
     /**
@@ -465,21 +541,10 @@ final class Mage
      */
     public static function getResourceModel($modelClass, $arguments = array())
     {
-        return self::getConfig()->getResourceModelInstance($modelClass, $arguments);
-    }
-
-    /**
-     * Retrieve Controller instance by ClassName
-     *
-     * @param string $class
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Controller_Response_Http $response
-     * @param array $invokeArgs
-     * @return Mage_Core_Controller_Front_Action
-     */
-    public static function getControllerInstance($class, $request, $response, array $invokeArgs = array())
-    {
-        return new $class($request, $response, $invokeArgs);
+        if (!is_array($arguments)) {
+            $arguments = array($arguments);
+        }
+        return self::getObjectManager()->create($modelClass, $arguments);
     }
 
     /**
@@ -493,9 +558,27 @@ final class Mage
     {
         $registryKey = '_resource_singleton/'.$modelClass;
         if (!self::registry($registryKey)) {
-            self::register($registryKey, self::getResourceModel($modelClass, $arguments));
+            self::register($registryKey, self::getObjectManager()->get($modelClass, $arguments));
         }
         return self::registry($registryKey);
+    }
+
+    /**
+     * Retrieve Controller instance by ClassName
+     *
+     * @param string $class
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Response_Http $response
+     * @param array $invokeArgs
+     * @return Mage_Core_Controller_Front_Action
+     */
+    public static function getControllerInstance($class, $request, $response, array $invokeArgs = array())
+    {
+        return self::getObjectManager()->create($class, array(
+            'request' => $request,
+            'response' => $response,
+            'invokeArgs' => $invokeArgs
+        ));
     }
 
     /**
@@ -526,7 +609,7 @@ final class Mage
         $registryKey = '_helper/' . $name;
         if (!self::registry($registryKey)) {
             $helperClass = self::getConfig()->getHelperClassName($name);
-            self::register($registryKey, new $helperClass);
+            self::register($registryKey, self::getObjectManager()->get($helperClass));
         }
         return self::registry($registryKey);
     }
@@ -539,13 +622,14 @@ final class Mage
      */
     public static function getResourceHelper($moduleName)
     {
-        $registryKey = '_resource_helper/' . $moduleName;
-        if (!self::registry($registryKey)) {
-            $helperClass = self::getConfig()->getResourceHelper($moduleName);
-            self::register($registryKey, $helperClass);
-        }
+        $connectionModel = self::getConfig()->getResourceConnectionModel('core');
 
-        return self::registry($registryKey);
+        $helperClassName = $moduleName . '_Model_Resource_Helper_' . ucfirst($connectionModel);
+        $connection = strtolower($moduleName);
+        if (substr($moduleName, 0, 5) == 'Mage_') {
+            $connection = substr($connection, 5);
+        }
+        return self::getObjectManager()->get($helperClassName, array('modulePrefix' => $connection));
     }
 
     /**
@@ -588,8 +672,8 @@ final class Mage
     public static function app($code = '', $type = 'store', $options = array())
     {
         if (null === self::$_app) {
-            self::$_app = new Mage_Core_Model_App();
             self::setRoot();
+            self::$_app = self::getObjectManager()->get('Mage_Core_Model_App');
             self::$_events = new Varien_Event_Collection();
             self::_setIsInstalled($options);
             self::_setConfigModel($options);
@@ -604,6 +688,15 @@ final class Mage
 
     /**
      * @static
+     * @param string $areaCode
+     */
+    public static function setCurrentArea($areaCode)
+    {
+        self::getObjectManager()->loadAreaConfiguration($areaCode);
+    }
+
+    /**
+     * @static
      * @param string $code
      * @param string $type
      * @param array $options
@@ -613,7 +706,7 @@ final class Mage
     {
         try {
             self::setRoot();
-            self::$_app     = new Mage_Core_Model_App();
+            self::$_app     = self::getObjectManager()->create('Mage_Core_Model_App');
             self::_setIsInstalled($options);
             self::_setConfigModel($options);
 
@@ -649,7 +742,7 @@ final class Mage
             if (isset($options['edition'])) {
                 self::$_currentEdition = $options['edition'];
             }
-            self::$_app    = new Mage_Core_Model_App();
+            self::$_app    = self::getObjectManager()->get('Mage_Core_Model_App');
             if (isset($options['request'])) {
                 self::$_app->setRequest($options['request']);
             }
@@ -658,7 +751,6 @@ final class Mage
             }
             self::$_events = new Varien_Event_Collection();
             self::_setIsInstalled($options);
-            self::_setConfigModel($options);
             self::$_app->run(array(
                 'scope_code' => $code,
                 'scope_type' => $type,
@@ -704,7 +796,7 @@ final class Mage
         if (!is_null($alternativeConfigModel) && ($alternativeConfigModel instanceof Mage_Core_Model_Config)) {
             self::$_config = $alternativeConfigModel;
         } else {
-            self::$_config = new Mage_Core_Model_Config($options);
+            self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
         }
     }
 
@@ -901,8 +993,8 @@ final class Mage
             try {
                 $storeCode = self::app()->getStore()->getCode();
                 $reportData['skin'] = $storeCode;
+            } catch (Exception $e) {
             }
-            catch (Exception $e) {}
 
             require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . 'report.php');
         }
@@ -968,5 +1060,27 @@ final class Mage
     public static function setIsDownloader($flag = true)
     {
         self::$_isDownloader = $flag;
+    }
+
+    /**
+     * Set is serializable flag
+     *
+     * @static
+     * @param bool $value
+     */
+    public static function setIsSerializable($value = true)
+    {
+        self::$_isSerializable = !empty($value);
+    }
+
+    /**
+     * Get is serializable flag
+     *
+     * @static
+     * @return bool
+     */
+    public static function getIsSerializable()
+    {
+        return self::$_isSerializable;
     }
 }

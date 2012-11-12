@@ -30,13 +30,13 @@ require __DIR__ . '/../../../Mage/Core/_files/store.php';
 $currentStore = Mage::app()->getStore()->getId();
 $otherStore = Mage::app()->getStore('fixturestore')->getId();
 
-$subscriber = new Mage_Newsletter_Model_Subscriber;
+$subscriber = Mage::getModel('Mage_Newsletter_Model_Subscriber');
 $subscriber->setStoreId($currentStore)
     ->setSubscriberEmail('test1@example.com')
     ->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)
     ->save()
 ;
-$subscriber = new Mage_Newsletter_Model_Subscriber;
+$subscriber = Mage::getModel('Mage_Newsletter_Model_Subscriber');
 $subscriber->setStoreId($otherStore)
     ->setSubscriberEmail('test2@example.com')
     ->setSubscriberStatus(Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED)

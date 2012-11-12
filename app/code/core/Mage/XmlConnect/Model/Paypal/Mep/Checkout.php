@@ -253,7 +253,7 @@ class Mage_XmlConnect_Model_Paypal_Mep_Checkout
     {
         $this->_ignoreAddressValidation();
 
-        $order = Mage::getModel('Mage_Sales_Model_Service_Quote', $this->_quote)->submit();
+        $order = Mage::getModel('Mage_Sales_Model_Service_Quote', array('quote' => $this->_quote))->submit();
         $this->_quote->save();
 
         $this->_getCheckoutSession()->clear();

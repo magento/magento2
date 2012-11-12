@@ -335,7 +335,8 @@ class Mage_Paypal_Model_Direct extends Mage_Payment_Model_Method_Cc
         }
 
         // add line items
-        $api->setPaypalCart(Mage::getModel('Mage_Paypal_Model_Cart', array($order)))
+        $parameters = array('params' => array($order));
+        $api->setPaypalCart(Mage::getModel('Mage_Paypal_Model_Cart', $parameters))
             ->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled)
         ;
 

@@ -353,7 +353,7 @@ class Mage_Core_Model_Design_Package
             $model = $this->_isDeveloperMode() ?
                 'Mage_Core_Model_Design_Fallback' :
                 'Mage_Core_Model_Design_Fallback_CachingProxy';
-            $this->_fallback[$cacheKey] = Mage::getModel($model, $params);
+            $this->_fallback[$cacheKey] = Mage::getModel($model, array('data' => $params));
         }
         return $this->_fallback[$cacheKey];
     }

@@ -35,13 +35,6 @@
 class Mage_Page_Block_Template_Container extends Mage_Core_Block_Template
 {
 
-    /**
-     * Set default template
-     *
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('template/container.phtml');
-    }
+    protected $_template = 'template/container.phtml';
 
 }

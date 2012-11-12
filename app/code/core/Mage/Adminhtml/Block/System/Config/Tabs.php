@@ -42,15 +42,12 @@ class Mage_Adminhtml_Block_System_Config_Tabs extends Mage_Adminhtml_Block_Widge
      */
     protected $_tabs;
 
-    /**
-     * Enter description here...
-     *
-     */
+    protected $_template = 'system/config/tabs.phtml';
+
     protected function _construct()
     {
         $this->setId('system_config_tabs');
         $this->setTitle(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Configuration'));
-        $this->setTemplate('system/config/tabs.phtml');
     }
 
     /**

@@ -35,13 +35,15 @@
 class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Select extends
     Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Abstract
 {
+
+    protected $_template = 'catalog/product/edit/options/type/select.phtml';
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('catalog/product/edit/options/type/select.phtml');
+        parent::_construct();
+
         $this->setCanEditPrice(true);
         $this->setCanReadPrice(true);
     }

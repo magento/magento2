@@ -26,7 +26,7 @@
  */
 
 $storeId = Mage::app()->getAnyStoreView()->getId();
-$change = new Mage_Core_Model_Design;
+$change = Mage::getModel('Mage_Core_Model_Design');
 $change->setStoreId($storeId)
     ->setDesign('default/modern/default')
     ->setDateFrom('2001-01-01 01:01:01')

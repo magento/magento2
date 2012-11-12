@@ -36,9 +36,9 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Shipping_Method_Form
 {
     protected $_rates;
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_order_create_shipping_method_form');
     }
 

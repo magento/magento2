@@ -49,15 +49,27 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
     protected $_sortChildrenDirection = SORT_ASC;
 
     /**
+     * Label for Advanced section
+     *
+     * @var string
+     */
+    protected $_labelAdvanceSection = '';
+
+    /**
      * Enter description here...
      *
      * @param array $attributes
      */
-    public function __construct($attributes=array())
+    public function __construct($attributes = array())
     {
         parent::__construct($attributes);
         $this->_renderer = Varien_Data_Form::getFieldsetRenderer();
         $this->setType('fieldset');
+        if (isset($attributes['advancedSection'])) {
+            $this->_labelAdvanceSection = $attributes['advancedSection'];
+        } else {
+            $this->_labelAdvanceSection = Mage::helper('Mage_Core_Helper_Data')->__('Additional Settings');
+        }
     }
 
     /**
@@ -91,6 +103,75 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
             }
         }
         return $html;
+    }
+
+    /**
+     * Get Basic elements' html in sorted order
+     *
+     * @return string
+     */
+    public function getBasicChildrenHtml()
+    {
+        $html = '';
+        foreach ($this->getSortedElements() as $element) {
+            if ($element->getType() != 'fieldset' && !$element->isAdvanced()) {
+                $html.= $element->toHtml();
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * Get Advanced elements' html in sorted order
+     *
+     * @return string
+     */
+    public function getAdvancedChildrenHtml()
+    {
+        $html = '';
+        foreach ($this->getSortedElements() as $element) {
+            if ($element->getType() != 'fieldset' && $element->isAdvanced()) {
+                $html.= $element->toHtml();
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * Whether fieldset contains advance section
+     *
+     * @return bool
+     */
+    public function hasAdvanced()
+    {
+        foreach ($this->getElements() as $element) {
+            if ($element->isAdvanced()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Set advanced label
+     *
+     * @param string $labelAdvanced
+     * @return Varien_Data_Form_Element_Fieldset
+     */
+    public function setAdvancedLabel($labelAdvanced)
+    {
+        $this->_labelAdvanceSection = $labelAdvanced;
+        return $this;
+    }
+
+    /**
+     * Get advanced label
+     *
+     * @return string
+     */
+    public function getAdvancedLabel()
+    {
+        return $this->_labelAdvanceSection;
     }
 
     /**
@@ -130,12 +211,13 @@ class Varien_Data_Form_Element_Fieldset extends Varien_Data_Form_Element_Abstrac
      * @param boolean $after
      * @return Varien_Data_Form_Element_Abstract
      */
-    public function addField($elementId, $type, $config, $after=false)
+    public function addField($elementId, $type, $config, $after = false, $isAdvanced = false)
     {
         $element = parent::addField($elementId, $type, $config, $after);
         if ($renderer = Varien_Data_Form::getFieldsetElementRenderer()) {
             $element->setRenderer($renderer);
         }
+        $element->setAdvanced($isAdvanced);
         return $element;
     }
 

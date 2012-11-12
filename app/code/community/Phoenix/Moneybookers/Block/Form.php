@@ -39,14 +39,7 @@ class Phoenix_Moneybookers_Block_Form extends Mage_Payment_Block_Form
      */
     protected $_defaultInfoLocale = 'en';
 
-    /**
-     * Constructor. Set template.
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('form.phtml');
-    }
+    protected $_template = 'form.phtml';
 
     /**
      * Return payment logo image src

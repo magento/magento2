@@ -22,7 +22,7 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-input.mage-error {
+input.mage-error, textarea.mage-error, ul.mage-error, select.mage-error {
     background: none repeat scroll 0 0 #FAEBE7 !important;
     border: 1px dashed #EB340A !important;
 

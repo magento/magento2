@@ -34,13 +34,13 @@
 class Mage_Adminhtml_Block_Sales_Order_Shipment_View extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'shipment_id';
         $this->_controller  = 'sales_order_shipment';
         $this->_mode        = 'view';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_removeButton('reset');
         $this->_removeButton('delete');

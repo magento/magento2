@@ -34,7 +34,8 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_App_Area('frontend');
+        /** @var $_model Mage_Core_Model_App_Area */
+        $this->_model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'frontend'));
     }
 
     protected function tearDown()
@@ -48,10 +49,8 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     public function testInitDesign()
     {
         $this->_model->load(Mage_Core_Model_App_Area::PART_DESIGN);
-        /** @var Mage_Core_Model_Design_Package $design */
-        $design = Mage::registry('_singleton/Mage_Core_Model_Design_Package');
-        $this->assertInstanceOf('Mage_Core_Model_Design_Package', $design);
-        $this->assertSame($design, Mage::getDesign());
+        $design = Mage::getDesign();
+        $this->assertEquals('default/default/default', $design->getDesignTheme());
         $this->assertEquals('frontend', $design->getArea());
 
         // try second time and make sure it won't load second time
@@ -65,7 +64,7 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
      */
     public function testDetectDesignGlobalConfig()
     {
-        $model = new Mage_Core_Model_App_Area('adminhtml');
+        $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'adminhtml'));
         $model->detectDesign();
         $this->assertEquals('default/default/default', Mage::getDesign()->getDesignTheme());
     }
@@ -108,14 +107,14 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
      * Test that non-frontend areas are not affected neither by user-agent reg expressions, nor by the "design change"
      *
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:22:"default/modern/default";}}
-     * @magentoDataFixture Mage/Core/_files/design_change.php
+     * magentoDataFixture Mage/Core/_files/design_change.php
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
     public function testDetectDesignNonFrontend()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox';
-        $model = new Mage_Core_Model_App_Area('install');
+        $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'install'));
         $model->detectDesign(new Zend_Controller_Request_Http);
         $this->assertNotEquals('default/modern/default', Mage::getDesign()->getDesignTheme());
         $this->assertNotEquals('default/default/blue', Mage::getDesign()->getDesignTheme());

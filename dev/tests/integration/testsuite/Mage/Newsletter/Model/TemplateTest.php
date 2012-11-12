@@ -37,7 +37,7 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Newsletter_Model_Template;
+        $this->_model = Mage::getModel('Mage_Newsletter_Model_Template');
     }
 
     protected function tearDown()

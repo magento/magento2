@@ -186,9 +186,10 @@ class Mage_Core_Model_File_Storage_Directory_Database extends Mage_Core_Model_Fi
             }
 
             try {
+                $arguments = array('connection' => $this->getConnectionName());
                 $directory = Mage::getModel(
                     'Mage_Core_Model_File_Storage_Directory_Database',
-                    array('connection' => $this->getConnectionName())
+                    array('connectionName' => $arguments)
                 );
                 $directory->setPath($dir['path']);
 

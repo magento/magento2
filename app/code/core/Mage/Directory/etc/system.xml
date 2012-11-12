@@ -172,7 +172,7 @@
         </currency>
         <system>
             <groups>
-                <currency translate="label">
+                <currency translate="label" module="Mage_Directory">
                     <label>Currency</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>50</sort_order>
@@ -199,7 +199,7 @@
             <groups>
                 <country>
                     <fields>
-                        <optional_zip_countries translate="label">
+                        <optional_zip_countries translate="label" module="Mage_Directory">
                             <label>Zip/Postal Code is Optional for</label>
                             <frontend_type>multiselect</frontend_type>
                             <sort_order>3</sort_order>
@@ -211,7 +211,7 @@
                         </optional_zip_countries>
                     </fields>
                 </country>
-                <region translate="label">
+                <region translate="label" module="Mage_Directory">
                     <label>State Options</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>4</sort_order>

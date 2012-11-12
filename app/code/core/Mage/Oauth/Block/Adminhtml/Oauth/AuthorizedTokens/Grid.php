@@ -36,9 +36,9 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
     /**
      * Construct grid block
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('authorizedTokensGrid');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);

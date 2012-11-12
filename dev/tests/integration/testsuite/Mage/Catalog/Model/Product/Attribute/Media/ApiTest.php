@@ -50,7 +50,7 @@ class Mage_Catalog_Model_Product_Attribute_Media_ApiTest extends PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Attribute_Media_Api;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Media_Api');
     }
 
     protected function tearDown()
@@ -69,13 +69,15 @@ class Mage_Catalog_Model_Product_Attribute_Media_ApiTest extends PHPUnit_Framewo
     public static function tearDownAfterClass()
     {
         Varien_Io_File::rmdirRecursive(self::$_mediaTmpDir);
+        /** @var $config Mage_Catalog_Model_Product_Media_Config */
         $config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');
         Varien_Io_File::rmdirRecursive($config->getBaseMediaPath());
     }
 
     public static function productMediaFixture()
     {
-        $product = new Mage_Catalog_Model_Product();
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
         $product->setTierPrice(array());
         $product->setData('media_gallery', array('images' => array(array('file' => '/m/a/magento_image.jpg',),)));

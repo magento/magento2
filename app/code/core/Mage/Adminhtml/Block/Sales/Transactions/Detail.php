@@ -44,9 +44,9 @@ class Mage_Adminhtml_Block_Sales_Transactions_Detail extends Mage_Adminhtml_Bloc
      * Add control buttons
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->_txn = Mage::registry('current_transaction');
         if (!$this->_txn) {

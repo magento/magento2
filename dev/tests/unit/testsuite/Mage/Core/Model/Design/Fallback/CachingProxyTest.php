@@ -57,18 +57,8 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
 
     public static function setUpBeforeClass()
     {
-        self::$_tmpDir = Magento_Test_Environment::getInstance()->getTmpDir() . DIRECTORY_SEPARATOR . 'fallback';
-        if (!is_dir(self::$_tmpDir)) {
-            mkdir(self::$_tmpDir);
-        } else {
-            Magento_Test_Environment::getInstance()->cleanDir(self::$_tmpDir);
-        }
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Magento_Test_Environment::getInstance()->cleanDir(self::$_tmpDir);
-        rmdir(self::$_tmpDir);
+        self::$_tmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'fallback';
+        mkdir(self::$_tmpDir);
     }
 
     public function setUp()
@@ -101,11 +91,6 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
         $this->_model->expects($this->any())
             ->method('_getFallback')
             ->will($this->returnValue($this->_fallback));
-    }
-
-    public function tearDown()
-    {
-        Magento_Test_Environment::getInstance()->cleanDir(self::$_tmpDir);
     }
 
     /**

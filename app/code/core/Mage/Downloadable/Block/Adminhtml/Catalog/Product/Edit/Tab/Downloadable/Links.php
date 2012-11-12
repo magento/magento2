@@ -48,14 +48,16 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     protected $_purchasedSeparatelyAttribute = null;
 
+    protected $_template = 'product/edit/downloadable/links.phtml';
+
     /**
      * Class constructor
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('product/edit/downloadable/links.phtml');
+        parent::_construct();
+
         $this->setCanEditPrice(true);
         $this->setCanReadPrice(true);
     }

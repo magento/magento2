@@ -35,9 +35,9 @@
 class Mage_Sales_Block_Order_Recent extends Mage_Core_Block_Template
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         //TODO: add full name logic
         $orders = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Collection')

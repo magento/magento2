@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Sales_Order_Status_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_order_status_grid');
         //$this->setFilterVisibility(false);
         $this->setPagerVisibility(false);

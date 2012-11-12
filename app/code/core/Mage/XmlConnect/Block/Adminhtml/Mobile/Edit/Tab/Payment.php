@@ -41,9 +41,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Payment
      * Constructor
      * Setting view options
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 

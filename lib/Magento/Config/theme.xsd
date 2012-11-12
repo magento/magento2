@@ -69,9 +69,11 @@
         <xs:sequence>
             <xs:element name="title" type="xs:string"/>
             <xs:element name="requirements" type="requirements"/>
+            <xs:element name="media" type="media" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="version" type="version" use="required"/>
         <xs:attribute name="code" type="xs:string" use="required"/>
+        <xs:attribute name="featured" type="xs:boolean"/>
         <xs:attribute name="parent" type="parent_theme"/>
     </xs:complexType>
 
@@ -99,6 +101,20 @@
             <xs:extension base="xs:string">
                 <xs:attribute name="from" type="version" use="required"/>
                 <xs:attribute name="to" type="version" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="media">
+        <xs:sequence>
+            <xs:element name="preview_image" type="preview_image" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="preview_image">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="order" type="xs:integer" use="optional"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

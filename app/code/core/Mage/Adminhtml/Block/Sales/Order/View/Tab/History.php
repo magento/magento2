@@ -35,11 +35,8 @@ class Mage_Adminhtml_Block_Sales_Order_View_Tab_History
     extends Mage_Adminhtml_Block_Template
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('sales/order/view/tab/history.phtml');
-    }
+
+    protected $_template = 'sales/order/view/tab/history.phtml';
 
     /**
      * Retrieve order model instance

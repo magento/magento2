@@ -41,13 +41,7 @@ class Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
      */
     protected $_validateButton = null;
 
-    /**
-     * Set custom template for 'VAT number'
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('customer/sales/order/create/address/form/renderer/vat.phtml');
-    }
+    protected $_template = 'customer/sales/order/create/address/form/renderer/vat.phtml';
 
     /**
      * Retrieve validate button block

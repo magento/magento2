@@ -27,9 +27,9 @@
 
 require __DIR__ . '/../../Catalog/_files/multiple_products.php';
 
-$review = new Mage_Review_Model_Review(array(
-    'nickname' => 'Nickname', 'title' => 'Review Summary', 'detail' => 'Review text'
-));
+$review = Mage::getModel('Mage_Review_Model_Review',
+    array('data' => array('nickname' => 'Nickname', 'title' => 'Review Summary', 'detail' => 'Review text'))
+);
 $review->setEntityId($review->getEntityIdByCode(Mage_Review_Model_Review::ENTITY_PRODUCT_CODE))
     ->setEntityPkValue($product->getId()) // the last product from the fixture file included above
     ->setStatusId(Mage_Review_Model_Review::STATUS_PENDING)

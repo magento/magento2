@@ -42,9 +42,9 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Backend_Block_Widget_Grid_Ex
     /**
      * Initialize grid
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('reviwGrid');
         $this->setDefaultSort('created_at');
     }

@@ -237,6 +237,9 @@ abstract class Mage_XmlConnect_Model_Preview_Abstract extends Varien_Object
             }
 
             for ($i = 0; $i < 3; $i++) {
+                if (!isset($_rgb[$i])) {
+                    $_rgb[$i] = 0;
+                }
                 $_rgb[$i] = round($_rgb[$i] * $percent) + round($mask * (1 - $percent));
                 if ($_rgb[$i] > 255) {
                     $_rgb[$i] = 255;

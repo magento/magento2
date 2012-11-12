@@ -36,11 +36,13 @@ class Mage_Adminhtml_Block_Media_Uploader extends Mage_Adminhtml_Block_Widget
 
     protected $_config;
 
-    public function __construct()
+    protected $_template = 'media/uploader.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId($this->getId() . '_Uploader');
-        $this->setTemplate('media/uploader.phtml');
+
         $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()->getUrl('*/*/upload'));
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('file');

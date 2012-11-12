@@ -39,10 +39,12 @@ class Mage_Checkout_MultishippingControllerTest extends Magento_Test_TestCase_Co
      */
     public function testOverviewAction()
     {
-        $quote = new Mage_Sales_Model_Quote();
+        /** @var $quote Mage_Sales_Model_Quote */
+        $quote = Mage::getModel('Mage_Sales_Model_Quote');
         $quote->load('test01', 'reserved_order_id');
         Mage::getSingleton('Mage_Checkout_Model_Session')->setQuoteId($quote->getId());
-        $session = new Mage_Customer_Model_Session;
+        /** @var $session Mage_Customer_Model_Session */
+        $session = Mage::getModel('Mage_Customer_Model_Session');
         $session->login('customer@example.com', 'password');
         $this->getRequest()->setPost('payment', array('method' => 'checkmo'));
         $this->dispatch('checkout/multishipping/overview');

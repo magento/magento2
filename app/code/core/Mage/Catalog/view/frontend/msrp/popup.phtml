@@ -33,27 +33,30 @@
 <?php if (Mage::helper('Mage_Catalog_Helper_Data')->isMsrpEnabled()): ?>
 <div id="map-popup" class="map-popup" style="display:none;">
     <a href="#" class="map-popup-close" id="map-popup-close">x</a>
+
     <div class="map-popup-arrow"></div>
     <div class="map-popup-heading"><h2 id="map-popup-heading"></h2></div>
     <div class="map-popup-content" id="map-popup-content">
         <div class="map-popup-checkout">
             <form action="" method="POST" id="product_addtocart_form_from_popup">
-                <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id" />
+                <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
+
                 <div class="additional-addtocart-box">
                     <?php echo $this->getChildHtml(); ?>
                 </div>
-                <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" id="map-popup-button"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart"
+                        id="map-popup-button"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
             </form>
         </div>
-        <div class="map-popup-msrp" id="map-popup-msrp-box"><strong><?php echo $this->__('Price'); ?>:</strong> <span style="text-decoration:line-through;" id="map-popup-msrp"></span></div>
-        <div class="map-popup-price" id="map-popup-price-box"><strong><?php echo $this->__('Actual Price'); ?>:</strong> <span id="map-popup-price"></span></div>
-        <script type="text/javascript">
-        //<![CDATA[
-            document.observe("dom:loaded", Catalog.Map.bindProductForm);
-        //]]>
-        </script>
+        <div class="map-popup-msrp" id="map-popup-msrp-box"><strong><?php echo $this->__('Price'); ?>:</strong> <span
+            style="text-decoration:line-through;" id="map-popup-msrp"></span></div>
+        <div class="map-popup-price" id="map-popup-price-box"><strong><?php echo $this->__('Actual Price'); ?>:</strong>
+            <span id="map-popup-price"></span></div>
+
     </div>
-    <div class="map-popup-text" id="map-popup-text"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->getMsrpExplanationMessage(); ?></div>
-    <div class="map-popup-text" id="map-popup-text-what-this"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->getMsrpExplanationMessageWhatsThis(); ?></div>
+    <div class="map-popup-text"
+         id="map-popup-text"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->getMsrpExplanationMessage(); ?></div>
+    <div class="map-popup-text"
+         id="map-popup-text-what-this"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->getMsrpExplanationMessageWhatsThis(); ?></div>
 </div>
 <?php endif; ?>

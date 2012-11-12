@@ -384,13 +384,13 @@
                     .vde_checkbox();
             }
             this.highlightBlocks = {};
-            if (Mage.Cookies.get(this.options.cookieHighlightingName) == 'off') {
+            if ($.mage.cookies.get(this.options.cookieHighlightingName) == 'off') {
                 this._processMarkers();
             }
 
         },
         _highlight: function () {
-            Mage.Cookies.clear(this.options.cookieHighlightingName);
+            $.mage.cookies.clear(this.options.cookieHighlightingName);
             var self = this;
             $(this.options.highlightElementSelector).each(function () {
                 $(this)
@@ -401,7 +401,7 @@
             this.highlightBlocks = {};
         },
         _unhighlight: function () {
-            Mage.Cookies.set(this.options.cookieHighlightingName, 'off');
+            $.mage.cookies.set(this.options.cookieHighlightingName, 'off');
             var self = this;
             $(this.options.highlightElementSelector).each(function () {
                 var elem = $(this);
@@ -462,7 +462,7 @@
             this._setHistoryForContainers(history);
         },
         _initHistory: function() {
-            //@TODO can we make this not a widget but global object?
+            // @TODO can we make this not a widget but global object?
             return $( window ).vde_history().data('vde_history');
         },
         _initHistoryToolbar: function(history) {

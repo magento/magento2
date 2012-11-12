@@ -33,11 +33,11 @@
  */
 class Mage_Review_Block_Form extends Mage_Core_Block_Template
 {
-    public function __construct()
+    protected function _construct()
     {
         $customerSession = Mage::getSingleton('Mage_Customer_Model_Session');
 
-        parent::__construct();
+        parent::_construct();
 
         $data = Mage::getSingleton('Mage_Review_Model_Session')->getFormData(true);
         $data = new Varien_Object((array)$data);

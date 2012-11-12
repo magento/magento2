@@ -40,9 +40,9 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag_Grid extends Mage_Backend_B
     /**
      * Initialize grid parameters
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('tag_grid');
         $this->setDefaultSort('name');
         $this->setDefaultDir('ASC');

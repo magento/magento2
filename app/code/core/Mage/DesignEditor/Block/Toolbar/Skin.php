@@ -30,14 +30,18 @@
 class Mage_DesignEditor_Block_Toolbar_Skin extends Mage_Core_Block_Template
 {
     /**
-     * Returns list of skins in the system
-     *
-     * @return array
+     * Html id of the skin select control
      */
-    public function getOptions()
+    const VDE_HTML_SKIN_ID = 'visual_design_editor_skin';
+
+    /**
+     * Get current theme
+     *
+     * @return Mage_Core_Model_Theme
+     */
+    public function getTheme()
     {
-        return Mage::getModel('Mage_Core_Model_Design_Source_Design')
-            ->getOptions();
+        return Mage::registry('vde_theme');
     }
 
     /**
@@ -59,6 +63,6 @@ class Mage_DesignEditor_Block_Toolbar_Skin extends Mage_Core_Block_Template
      */
     public function getSelectHtmlId()
     {
-        return 'visual_design_editor_skin';
+        return self::VDE_HTML_SKIN_ID;
     }
 }

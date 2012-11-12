@@ -34,11 +34,6 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Totals_Default extends Mage_Adminh
 {
     protected $_template = 'Mage_Adminhtml::sales/order/create/totals/default.phtml';
 
-    protected function _construct()
-    {
-        $this->setTemplate($this->_template);
-    }
-
     /**
      * Retrieve quote session object
      *

@@ -43,7 +43,8 @@ class Mage_XmlConnect_Block_Catalog_Product extends Mage_XmlConnect_Block_Catalo
     public function productToXmlObject(Mage_Catalog_Model_Product $product, $itemNodeName = 'item')
     {
         /** @var $item Mage_XmlConnect_Model_Simplexml_Element */
-        $item = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<' . $itemNodeName . '></' . $itemNodeName . '>');
+        $item = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<' . $itemNodeName . '></' . $itemNodeName . '>'));
         if ($product && $product->getId()) {
             $item->addChild('entity_id', $product->getId());
             $item->addChild('name', $item->escapeXml($product->getName()));

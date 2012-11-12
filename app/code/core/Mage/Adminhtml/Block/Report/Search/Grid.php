@@ -37,9 +37,9 @@ class Mage_Adminhtml_Block_Report_Search_Grid extends Mage_Adminhtml_Block_Widge
      * Initialize Grid Properties
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('searchReportGrid');
         $this->setDefaultSort('query_id');
         $this->setDefaultDir('desc');

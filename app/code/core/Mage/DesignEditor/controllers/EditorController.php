@@ -126,8 +126,15 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
     {
         $skin = $this->getRequest()->get('skin');
         $backUrl = $this->_getRefererUrl();
-
+        $themeId = $this->getRequest()->get('theme_id');
+        /** @var  $theme Mage_Core_Model_Theme */
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
         try {
+            $theme->load($themeId);
+            if (!$theme->getId()) {
+                Mage::throwException($this->__('The theme was not found.'));
+            }
+            $this->_session->setThemeId($themeId);
             $this->_session->setSkin($skin);
         } catch (Mage_Core_Exception $e) {
             $this->_session->addError($e->getMessage());

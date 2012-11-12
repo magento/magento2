@@ -81,11 +81,11 @@ class Magento_Application
     }
 
     /**
-     * Installs application
+     * Reset application - i.e. cleanup already installed app, or install it otherwise
      *
      * @return Magento_Application
      */
-    public function install()
+    protected function _reset()
     {
         if ($this->_config->getInstallOptions()) {
             $this->_uninstall()
@@ -208,7 +208,7 @@ class Magento_Application
     public function applyFixtures(array $fixtures)
     {
         if (!$this->_isInstalled || $this->_doFixturesNeedReinstall($fixtures)) {
-            $this->install();
+            $this->_reset();
         }
 
         // Apply fixtures

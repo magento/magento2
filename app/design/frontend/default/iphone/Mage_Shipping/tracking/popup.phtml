@@ -148,7 +148,7 @@
                    <?php endforeach; ?>
                 </table>
                 <script type="text/javascript">
-                 decorateTable('track-history-table-<?php echo $track->getTracking(); ?>');
+                    (function($) {$('#track-history-table-<?php echo $track->getTracking(); ?>').decorate('table')})(jQuery)
                 </script>
                 <?php endif; ?>
 

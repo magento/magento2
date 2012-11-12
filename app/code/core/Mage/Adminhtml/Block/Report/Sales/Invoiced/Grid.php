@@ -35,9 +35,9 @@ class Mage_Adminhtml_Block_Report_Sales_Invoiced_Grid extends Mage_Adminhtml_Blo
 {
     protected $_columnGroupBy = 'period';
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setCountTotals(true);
     }
 

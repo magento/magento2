@@ -37,9 +37,10 @@ class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestC
 
     protected function setUp()
     {
-        $this->_block = new Mage_Checkout_Block_Cart_Item_Renderer();
-        $item = new Mage_Sales_Model_Quote_Item();
-        $product = new Mage_Catalog_Model_Product();
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Checkout_Block_Cart_Item_Renderer');
+        /** @var $item Mage_Sales_Model_Quote_Item */
+        $item = Mage::getModel('Mage_Sales_Model_Quote_Item');
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
         $item->setProduct($product);
         $this->_block->setItem($item);
@@ -59,7 +60,6 @@ class Mage_Checkout_Block_Cart_Item_RendererTest extends PHPUnit_Framework_TestC
         $this->assertContains('/'.$size, $this->_block->getProductThumbnailUrl());
         $this->assertContains('/'.$sidebarSize, $this->_block->getProductThumbnailSidebarUrl());
         $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailUrl());
-        $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailSidebarUrl()
-        );
+        $this->assertStringEndsWith('magento_image.jpg', $this->_block->getProductThumbnailSidebarUrl());
     }
 }

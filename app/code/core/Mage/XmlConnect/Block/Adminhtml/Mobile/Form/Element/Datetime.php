@@ -41,9 +41,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Form_Element_Datetime
      */
     protected $_value;
 
-    public function __construct($attributes=array())
+    protected function _construct($attributes=array())
     {
-        parent::__construct($attributes);
+        parent::_construct($attributes);
         $this->setType('text');
         $this->setExtType('textfield');
         if (isset($attributes['value'])) {

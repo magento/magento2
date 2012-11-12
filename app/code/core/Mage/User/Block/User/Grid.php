@@ -34,9 +34,9 @@
 class Mage_User_Block_User_Grid extends Mage_Backend_Block_Widget_Grid_Extended
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('permissionsUserGrid');
         $this->setDefaultSort('username');
         $this->setDefaultDir('asc');

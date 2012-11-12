@@ -40,7 +40,8 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends PHPUnit_F
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
-        $layout = new Mage_Core_Model_Layout(array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
 
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit */
         $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Edit', '', $blockAttributes);
@@ -267,10 +268,20 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends PHPUnit_F
      */
     public function prepareLayoutDataProvider()
     {
-        $urlRewrite = new Mage_Core_Model_Url_Rewrite();
-        $product = new Mage_Catalog_Model_Product(array('entity_id' => 1, 'name' => 'Test product'));
-        $category = new Mage_Catalog_Model_Category(array('entity_id' => 1, 'name' => 'Test category'));
-        $existingUrlRewrite = new Mage_Core_Model_Url_Rewrite(array('url_rewrite_id' => 1));
+        /** @var $urlRewrite Mage_Core_Model_Url_Rewrite */
+        $urlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product',
+            array('data' => array('entity_id' => 1, 'name' => 'Test product'))
+        );
+        /** @var $category Mage_Catalog_Model_Category */
+        $category = Mage::getModel('Mage_Catalog_Model_Category',
+            array('data' => array('entity_id' => 1, 'name' => 'Test category'))
+        );
+        /** @var $existingUrlRewrite Mage_Core_Model_Url_Rewrite */
+        $existingUrlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite',
+            array('data' => array('url_rewrite_id' => 1))
+        );
         return array(
             array( // Creating URL rewrite when product and category are not selected
                 array('url_rewrite' => $urlRewrite),
@@ -292,9 +303,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends PHPUnit_F
                 array('product' => $product, 'url_rewrite' => $urlRewrite, 'is_category_mode' => true),
                 array(
                     'selector' => false,
-                    'product_link' => array(
-                        'name' => $product->getName()
-                    ),
+                    'product_link' => array('name' => $product->getName()),
                     'category_link' => false,
                     'back_button' => true,
                     'reset_button' => false,
@@ -310,9 +319,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_EditTest extends PHPUnit_F
                 array('product' => $product, 'url_rewrite' => $urlRewrite),
                 array(
                     'selector' => false,
-                    'product_link' => array(
-                        'name' => $product->getName()
-                    ),
+                    'product_link' => array('name' => $product->getName()),
                     'category_link' => false,
                     'back_button' => true,
                     'reset_button' => false,

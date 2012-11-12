@@ -52,6 +52,23 @@ class Mage_DesignEditor_Model_Observer
         if (!$this->_getSession()->isLoggedIn()) {
             $this->_getSession()->deactivateDesignEditor();
         }
+
+        /* Deactivate the design editor, if the theme cannot be loaded */
+        if ($this->_getSession()->isDesignEditorActive()) {
+            /** @var $theme Mage_Core_Model_Theme */
+            $theme = Mage::getModel('Mage_Core_Model_Theme');
+            try {
+                $theme->load($this->_getSession()->getThemeId());
+                if (!$theme->getId()) {
+                    Mage::throwException(Mage::helper('Mage_DesignEditor_Helper_Data')->__('The theme was not found.'));
+                }
+                Mage::register('vde_theme', $theme);
+            } catch (Exception $e) {
+                $this->_getSession()->deactivateDesignEditor();
+                Mage::logException($e);
+            }
+        }
+
         /* Apply custom design to the current page */
         if ($this->_getSession()->isDesignEditorActive() && $this->_getSession()->getSkin()) {
             Mage::getDesign()->setDesignTheme($this->_getSession()->getSkin());
@@ -131,9 +148,9 @@ class Mage_DesignEditor_Model_Observer
         }
 
         if (!$this->_wrappingRenderer) {
-            $this->_wrappingRenderer = Mage::getModel('Mage_DesignEditor_Block_Template', array(
+            $this->_wrappingRenderer = Mage::getModel('Mage_DesignEditor_Block_Template', array('data' => array(
                 'template' => 'wrapping.phtml'
-            ));
+            )));
         }
 
         $event = $observer->getEvent();

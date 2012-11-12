@@ -34,18 +34,6 @@
 class Mage_ImportExport_Block_Adminhtml_Export_Edit extends Mage_Backend_Block_Widget_Form_Container
 {
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->removeButton('back')
-            ->removeButton('reset')
-            ->removeButton('save');
-    }
-
-    /**
      * Internal constructor
      *
      * @return void
@@ -53,6 +41,9 @@ class Mage_ImportExport_Block_Adminhtml_Export_Edit extends Mage_Backend_Block_W
     protected function _construct()
     {
         parent::_construct();
+        $this->removeButton('back')
+            ->removeButton('reset')
+            ->removeButton('save');
 
         $this->_objectId   = 'export_id';
         $this->_blockGroup = 'Mage_ImportExport';

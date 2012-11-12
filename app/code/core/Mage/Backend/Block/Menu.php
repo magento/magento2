@@ -195,7 +195,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
      */
     protected function _getMenuIterator($menu)
     {
-        return Mage::getModel('Mage_Backend_Model_Menu_Filter_Iterator', $menu->getIterator());
+        return Mage::getModel('Mage_Backend_Model_Menu_Filter_Iterator', array('iterator' => $menu->getIterator()));
     }
 
     /**

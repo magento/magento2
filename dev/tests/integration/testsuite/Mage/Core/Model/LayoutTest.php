@@ -37,7 +37,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
      */
     public function testConstructor(array $inputArguments, $expectedArea)
     {
-        $layout = new Mage_Core_Model_Layout($inputArguments);
+        $layout = Mage::getModel('Mage_Core_Model_Layout', $inputArguments);
         $this->assertEquals($expectedArea, $layout->getArea());
     }
 
@@ -54,16 +54,8 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     {
         $structure = new Magento_Data_Structure;
         $structure->createElement('test.container', array());
-        $layout = new Mage_Core_Model_Layout(array('structure' => $structure));
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('structure' => $structure));
         $this->assertTrue($layout->hasElement('test.container'));
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructorWrongStructure()
-    {
-        new Mage_Core_Model_Layout(array('structure' => false));
     }
 
     public function testDestructor()
@@ -137,9 +129,45 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testLayoutDirectives()
     {
         /**
+         * Test move with the same alias
+         */
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        $layout->getUpdate()->load(array('layout_test_handle_move_the_same_alias'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('container1', $layout->getParentName('no_name3'));
+
+        /**
+         * Test move with a new alias
+         */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        $layout->getUpdate()->load(array('layout_test_handle_move_new_alias'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('new_alias', $layout->getElementAlias('no_name3'));
+
+        /**
+         * Test layout action with anonymous parent block
+         */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        $layout->getUpdate()->load(array('layout_test_handle_action_for_anonymous_parent_block'));
+        $layout->generateXml()->generateElements();
+        $this->assertEquals('schedule_block', $layout->getParentName('test.block.insert'));
+        $this->assertEquals('schedule_block_1', $layout->getParentName('test.block.append'));
+
+        /**
+         * Test layout remove directive
+         */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        $layout->getUpdate()->load(array('layout_test_handle_remove'));
+        $layout->generateXml()->generateElements();
+        $this->assertFalse($layout->getBlock('no_name2'));
+        $this->assertFalse($layout->getBlock('child_block1'));
+        $this->assertTrue($layout->isBlock('child_block2'));
+
+        /**
          * Test correct move
          */
-        $layout = new Mage_Core_Model_Layout();
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->getUpdate()->load(array('layout_test_handle_move'));
         $layout->generateXml()->generateElements();
         $this->assertEquals('container2', $layout->getParentName('container1'));
@@ -159,49 +187,14 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
         $positionBefore = array_search('child_block2', $childrenOrderArray);
         $positionToVerify = array_search('no_name4', $childrenOrderArray);
         $this->assertEquals($positionBefore, ++$positionToVerify);
-
-        /**
-         * Test move with the same alias
-         */
-        $layout = new Mage_Core_Model_Layout();
-        $layout->getUpdate()->load(array('layout_test_handle_move_the_same_alias'));
-        $layout->generateXml()->generateElements();
-        $this->assertEquals('container1', $layout->getParentName('no_name3'));
-
-        /**
-         * Test move with a new alias
-         */
-        $layout = new Mage_Core_Model_Layout();
-        $layout->getUpdate()->load(array('layout_test_handle_move_new_alias'));
-        $layout->generateXml()->generateElements();
-        $this->assertEquals('new_alias', $layout->getElementAlias('no_name3'));
-
-        /**
-         * Test layout action with anonymous parent block
-         */
-        $layout = new Mage_Core_Model_Layout();
-        $layout->getUpdate()->load(array('layout_test_handle_action_for_anonymous_parent_block'));
-        $layout->generateXml()->generateElements();
-        $this->assertEquals('schedule_block', $layout->getParentName('test.block.insert'));
-        $this->assertEquals('schedule_block_1', $layout->getParentName('test.block.append'));
-
-        /**
-         * Test layout remove directive
-         */
-        $layout = new Mage_Core_Model_Layout();
-        $layout->getUpdate()->load(array('layout_test_handle_remove'));
-        $layout->generateXml()->generateElements();
-        $this->assertFalse($layout->getBlock('no_name2'));
-        $this->assertFalse($layout->getBlock('child_block1'));
-        $this->assertTrue($layout->isBlock('child_block2'));
-    }    
+    }
 
     /**
      * @expectedException Magento_Exception
      */
     public function testLayoutMoveDirectiveBroken()
     {
-        $layout = new Mage_Core_Model_Layout();
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->getUpdate()->load(array('layout_test_handle_move_broken'));
         $layout->generateXml()->generateElements();
     }
@@ -211,7 +204,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
      */
     public function testLayoutMoveAliasBroken()
     {
-        $layout = new Mage_Core_Model_Layout();
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->getUpdate()->load(array('layout_test_handle_move_alias_broken'));
         $layout->generateXml()->generateElements();
     }
@@ -221,7 +214,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
      */
     public function testGenerateElementsBroken()
     {
-        $layout = new Mage_Core_Model_Layout();
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->getUpdate()->load('layout_test_handle_remove_broken');
         $layout->generateXml()->generateElements();
     }
@@ -229,7 +222,9 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testRenderElement()
     {
         $utility = new Mage_Core_Utility_Layout($this);
-        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml',
+            $utility->getLayoutDependencies()
+        );
         $layout->getUpdate()->load(array('first_handle', 'a_handle', 'another_handle'));
         $layout->generateXml()->generateElements();
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
@@ -267,7 +262,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testSetUnsetBlock()
     {
         $expectedBlockName = 'block_' . __METHOD__;
-        $expectedBlock = new Mage_Core_Block_Text();
+        $expectedBlock = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text');
 
         $this->_layout->setBlock($expectedBlockName, $expectedBlock);
         $this->assertSame($expectedBlock, $this->_layout->getBlock($expectedBlockName));
@@ -333,7 +328,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testAddBlock()
     {
         $this->assertInstanceOf('Mage_Core_Block_Text', $this->_layout->addBlock('Mage_Core_Block_Text', 'block1'));
-        $block2 = new Mage_Core_Block_Text;
+        $block2 = Mage::getObjectManager()->create('Mage_Core_Block_Text');
         $block2->setNameInLayout('block2');
         $this->_layout->addBlock($block2, '', 'block1');
 
@@ -417,7 +412,9 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testSortSpecialCases($handle, $expectedResult)
     {
         $utility = new Mage_Core_Utility_Layout($this);
-        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/sort_special_cases.xml');
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/sort_special_cases.xml',
+            $utility->getLayoutDependencies()
+        );
         $layout->getUpdate()->load($handle);
         $layout->generateXml()->generateElements();
         $this->assertEquals($expectedResult, $layout->renderElement('root'));
@@ -497,7 +494,7 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testGetBlock()
     {
         $this->assertFalse($this->_layout->getBlock('test'));
-        $block = new Mage_Core_Block_Text;
+        $block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text');
         $this->_layout->setBlock('test', $block);
         $this->assertSame($block, $this->_layout->getBlock('test'));
     }
@@ -511,7 +508,9 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testGetBlockUnscheduled()
     {
         $utility = new Mage_Core_Utility_Layout($this);
-        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml',
+            $utility->getLayoutDependencies()
+        );
         $layout->getUpdate()->load(array('get_block_special_case'));
         $layout->generateXml()->generateElements();
         $this->assertInstanceOf('Mage_Core_Block_Text', $layout->getBlock('block1'));
@@ -524,7 +523,9 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
     public function testGetBlockUnscheduledException()
     {
         $utility = new Mage_Core_Utility_Layout($this);
-        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml');
+        $layout = $utility->getLayoutFromFixture(__DIR__ . '/_files/valid_layout_updates.xml',
+            $utility->getLayoutDependencies()
+        );
         $layout->getUpdate()->load(array('get_block_special_case_exception'));
         $layout->generateXml();
         $layout->generateElements();
@@ -532,6 +533,9 @@ class Mage_Core_Model_LayoutTest extends Mage_Core_Model_LayoutTestBase
 
     public function testGetParentName()
     {
+        /**
+         * Test get name
+         */
         $this->_layout->addContainer('one', 'One');
         $this->_layout->addContainer('two', 'Two', array(), 'one');
         $this->assertFalse($this->_layout->getParentName('one'));

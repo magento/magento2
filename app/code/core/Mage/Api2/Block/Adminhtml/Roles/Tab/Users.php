@@ -41,9 +41,9 @@ class Mage_Api2_Block_Adminhtml_Roles_Tab_Users extends Mage_Adminhtml_Block_Wid
     /**
      * Construct grid block
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('roleUsersGrid');
         $this->setData('use_ajax', true);
         $this->setSaveParametersInSession(true);

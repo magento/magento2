@@ -36,16 +36,41 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
     protected $_urls = array();
     protected $_title = '';
 
-    public function __construct()
-    {
-        parent::__construct();
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $request, $layout, $eventManager, $translator, $cache, $designPackage, $session, $storeConfig,
+            $frontController, $data
+        );
         $this->_urls = array(
             'base'      => Mage::getBaseUrl('web'),
             'baseSecure'=> Mage::getBaseUrl('web', true),
-            'current'   => $this->getRequest()->getRequestUri()
+            'current'   => $request->getRequestUri()
         );
 
-        $action = Mage::app()->getFrontController()->getAction();
+        $action = $frontController->getAction();
         if ($action) {
             $this->addBodyClass($action->getFullActionName('-'));
         }
@@ -76,14 +101,14 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
     public function getPrintLogoUrl ()
     {
         // load html logo
-        $logo = Mage::getStoreConfig('sales/identity/logo_html');
+        $logo = $this->_storeConfig->getConfig('sales/identity/logo_html');
         if (!empty($logo)) {
             $logo = 'sales/store/logo_html/' . $logo;
         }
 
         // load default logo
         if (empty($logo)) {
-            $logo = Mage::getStoreConfig('sales/identity/logo');
+            $logo = $this->_storeConfig->getConfig('sales/identity/logo');
             if (!empty($logo)) {
                 // prevent tiff format displaying in html
                 if (strtolower(substr($logo, -5)) === '.tiff' || strtolower(substr($logo, -4)) === '.tif') {
@@ -97,7 +122,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
         // buld url
         if (!empty($logo)) {
-            $logo = Mage::getStoreConfig('web/unsecure/base_media_url') . $logo;
+            $logo = $this->_storeConfig->getConfig('web/unsecure/base_media_url') . $logo;
         }
         else {
             $logo = '';
@@ -108,7 +133,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
     public function getPrintLogoText()
     {
-        return Mage::getStoreConfig('sales/identity/address');
+        return $this->_storeConfig->getConfig('sales/identity/address');
     }
 
     public function setHeaderTitle($title)
@@ -150,7 +175,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
     public function getAbsoluteFooter()
     {
-        return Mage::getStoreConfig('design/footer/absolute_footer');
+        return $this->_storeConfig->getConfig('design/footer/absolute_footer');
     }
 
     /**

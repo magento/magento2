@@ -34,11 +34,11 @@
 
 class Mage_Adminhtml_Block_Report_Customer_Orders extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'report_customer_orders';
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Customers by number of orders');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 }

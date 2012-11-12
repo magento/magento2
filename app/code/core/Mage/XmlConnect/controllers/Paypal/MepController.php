@@ -186,7 +186,8 @@ class Mage_XmlConnect_Paypal_MepController extends Mage_XmlConnect_Controller_Ac
 
             if (!isset($result['error'])) {
                 /** @var $message Mage_XmlConnect_Model_Simplexml_Element */
-                $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<message></message>');
+                $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                    array('data' => '<message></message>'));
                 $message->addChild('status', self::MESSAGE_STATUS_SUCCESS);
                 $message->addChild('text', $this->__('Shipping method has been set.'));
                 if ($this->_getQuote()->isVirtual()) {
@@ -270,7 +271,8 @@ class Mage_XmlConnect_Paypal_MepController extends Mage_XmlConnect_Controller_Ac
              * Format success report
              */
             /** @var $message Mage_XmlConnect_Model_Simplexml_Element */
-            $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<message></message>');
+            $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                array('data' => '<message></message>'));
             $message->addChild('status', self::MESSAGE_STATUS_SUCCESS);
 
             $orderId = $this->_checkout->getLastOrderId();
@@ -310,7 +312,10 @@ class Mage_XmlConnect_Paypal_MepController extends Mage_XmlConnect_Controller_Ac
         }
         $this->_getCheckoutSession()->setCartWasUpdated(false);
 
-        $this->_checkout = Mage::getSingleton('Mage_XmlConnect_Model_Paypal_Mep_Checkout', array('quote'  => $quote));
+        $this->_checkout = Mage::getSingleton('Mage_XmlConnect_Model_Paypal_Mep_Checkout',
+            array('params' =>
+                array('quote'  => $quote)
+        ));
     }
 
     /**

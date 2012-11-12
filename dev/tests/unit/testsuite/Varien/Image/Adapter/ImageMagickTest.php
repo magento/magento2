@@ -24,48 +24,27 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Varien_Object test case.
- */
 class Varien_Image_Adapter_ImageMagickTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Varien_Image_Adapter_ImageMagick
+     * @dataProvider watermarkDataProvider
      */
-    protected $_object;
-
-    public function tearDown()
+    public function testWatermark($imagePath, $expectedMessage)
     {
-        Magento_Test_Environment::getInstance()->cleanTmpDirOnShutdown();
+        $this->setExpectedException('LogicException', $expectedMessage);
+        $object = new Varien_Image_Adapter_ImageMagick;
+        $object->watermark($imagePath);
     }
 
     /**
-     * @dataProvider watermarkDataProvider
+     * @return array
      */
-    public function testWatermark($imagePath, $expectedResult)
-    {
-        try {
-            $this->_object = new Varien_Image_Adapter_ImageMagick;
-            $this->_object->watermark($imagePath);
-            $this->fail('An expected exception has not been raised.');
-        } catch (Exception $e) {
-            $this->assertContains($e->getMessage(), $expectedResult);
-        }
-    }
-
     public function watermarkDataProvider()
     {
-        $_tmpPath = Magento_Test_Environment::getInstance()->getTmpDir();
-        $imageAbsent = $_tmpPath . DIRECTORY_SEPARATOR . md5(time() + microtime(true)) . '2';
-        $imageExists = $_tmpPath . DIRECTORY_SEPARATOR . md5(time() + microtime(true)) . '1';
-        touch($imageExists);
-
         return array(
             array('', Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
-            array($imageAbsent, Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
-            array($imageExists, Varien_Image_Adapter_ImageMagick::ERROR_WRONG_IMAGE),
+            array(__DIR__ . '/not_exists', Varien_Image_Adapter_ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT),
+            array(__DIR__ . '/_files/invalid_image.jpg', Varien_Image_Adapter_ImageMagick::ERROR_WRONG_IMAGE),
         );
     }
 }
-

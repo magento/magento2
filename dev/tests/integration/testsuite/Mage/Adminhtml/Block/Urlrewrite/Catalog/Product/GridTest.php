@@ -35,7 +35,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_GridTest extends PHPUnit_F
      */
     public function testPrepareGrid()
     {
-        /** @var Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Grid $gridBlock */
+        /** @var $gridBlock Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Grid */
         $gridBlock = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Product_Grid');
         $gridBlock->toHtml();
 

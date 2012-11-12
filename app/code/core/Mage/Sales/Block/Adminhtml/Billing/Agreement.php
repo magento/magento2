@@ -35,12 +35,12 @@ class Mage_Sales_Block_Adminhtml_Billing_Agreement extends Mage_Adminhtml_Block_
      * Initialize billing agreements grid container
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'adminhtml_billing_agreement';
         $this->_blockGroup = 'Mage_Sales';
         $this->_headerText = Mage::helper('Mage_Sales_Helper_Data')->__('Billing Agreements');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 }

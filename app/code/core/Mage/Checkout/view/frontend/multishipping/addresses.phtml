@@ -72,7 +72,7 @@
             <?php endforeach; ?>
             </tbody>
         </table>
-        <script type="text/javascript">decorateTable('multiship-addresses-table')</script>
+        <script type="text/javascript">(function($) {$('#multiship-addresses-table').decorate('table')})(jQuery)</script>
         <div class="buttons-set">
             <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->__('Back to Shopping Cart') ?></a></p>
             <button type="submit" title="<?php echo $this->__('Continue to Shipping Information') ?>" class="button<?php if ($this->isContinueDisabled()):?> disabled<?php endif; ?>" onclick="$('can_continue_flag').value=1"<?php if ($this->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><span><?php echo $this->__('Continue to Shipping Information') ?></span></span></button>

@@ -33,9 +33,9 @@
  */
 class Mage_Adminhtml_Block_Api_Grid_Role extends Mage_Adminhtml_Block_Widget_Grid
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('roleGrid');
         $this->setSaveParametersInSession(true);
         $this->setDefaultSort('role_id');

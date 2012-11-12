@@ -40,19 +40,7 @@
             </li>
             <?php endforeach; ?>
         </ol>
-        <script type="text/javascript">
-            //<![CDATA[
-            (function($) {
-                $.mage.event.observe('mage.productView.initialize', function (e, o) {
-                    o.recentlyViewedItemSelector = '#recently-viewed-items';
-                });
-                $.mage.load.jsSync(
-                    "<?php echo $this->getSkinUrl('mage/decorate.js') ?>",
-                    "<?php echo $this->getSkinUrl('Mage_Checkout::js/product-view.js') ?>"
-                );
-            })(jQuery);
-            //]]>
-        </script>
+        <script type="text/javascript">(function($) {$('#recently-viewed-items').decorate('list', false)})(jQuery)</script>
     </div>
 </div>
 <?php endif; ?>

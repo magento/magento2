@@ -48,20 +48,15 @@ class Mage_Backend_Model_Menu_Builder
     protected $_menu;
 
     /**
-     * @param array $data
-     * @throws InvalidArgumentException
+     * @param Mage_Backend_Model_Menu_Item_Factory $menuItemFactory
+     * @param Mage_Backend_Model_Menu $menu
      */
-    public function __construct(array $data = array())
-    {
-        if (!isset($data['itemFactory']) || !($data['itemFactory'] instanceof Mage_Backend_Model_Menu_Item_Factory)) {
-            throw new InvalidArgumentException('Wrong item factory provided');
-        }
-        $this->_itemFactory = $data['itemFactory'];
-
-        if (!isset($data['menu']) || !($data['menu'] instanceof Mage_Backend_Model_Menu)) {
-            throw new InvalidArgumentException();
-        }
-        $this->_menu = $data['menu'];
+    public function __construct(
+        Mage_Backend_Model_Menu_Item_Factory $menuItemFactory,
+        Mage_Backend_Model_Menu $menu
+    ) {
+        $this->_itemFactory = $menuItemFactory;
+        $this->_menu = $menu;
     }
 
     /**

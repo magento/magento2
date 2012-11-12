@@ -34,15 +34,7 @@
  */
 class Mage_ProductAlert_Block_Email_Price extends Mage_ProductAlert_Block_Email_Abstract
 {
-    /**
-     * Constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('email/price.phtml');
-    }
+    protected $_template = 'email/price.phtml';
 
     /**
      * Retrive unsubscribe url for product

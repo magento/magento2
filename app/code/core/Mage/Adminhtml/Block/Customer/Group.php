@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Customer_Group extends Mage_Adminhtml_Block_Widget_Gr
      * Modify header & button labels
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'customer_group';
         $this->_headerText = Mage::helper('Mage_Customer_Helper_Data')->__('Customer Groups');
         $this->_addButtonLabel = Mage::helper('Mage_Customer_Helper_Data')->__('Add New Customer Group');
-        parent::__construct();
+        parent::_construct();
     }
 
     /**

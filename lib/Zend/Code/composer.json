@@ -1,0 +1,24 @@
+{
+    "name": "zendframework/zend-code",
+    "description": "provides facilities to generate arbitrary code using an object oriented interface",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "code"
+    ],
+    "autoload": {
+        "psr-0": {
+            "Zend\\Code\\": ""
+        }
+    },
+    "target-dir": "Zend/Code",
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "doctrine/common": ">=2.1"
+    },
+    "suggest": {
+        "doctrine/common": "Doctrine\\Common >=2.1 for annotation features"
+    }
+}

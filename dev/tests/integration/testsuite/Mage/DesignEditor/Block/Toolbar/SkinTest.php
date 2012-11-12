@@ -37,35 +37,12 @@ class Mage_DesignEditor_Block_Toolbar_SkinTest extends PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->_block = new Mage_DesignEditor_Block_Toolbar_Skin();
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_DesignEditor_Block_Toolbar_Skin');
     }
 
     protected function tearDown()
     {
         $this->_block = null;
-    }
-
-    public function testGetOptions()
-    {
-        Mage::getConfig()->getOptions()->setDesignDir(__DIR__ . '/../../../Core/Model/Design/Source/_files/design');
-        $options = $this->_block->getOptions();
-
-        $this->assertInternalType('array', $options);
-        $this->assertNotEmpty($options);
-
-        foreach ($options as $optGroup) {
-            $this->assertInternalType('array', $optGroup);
-            $this->assertArrayHasKey('label', $optGroup);
-            $this->assertArrayHasKey('value', $optGroup);
-            $this->assertInternalType('array', $optGroup['value']);
-            foreach ($optGroup['value'] as $option) {
-                $this->assertInternalType('array', $option);
-                $this->assertArrayHasKey('label', $option);
-                $this->assertArrayHasKey('value', $option);
-                $this->assertInternalType('string', $option['label']);
-                $this->assertInternalType('string', $option['value']);
-            }
-        }
     }
 
     public function testIsSkinSelected()

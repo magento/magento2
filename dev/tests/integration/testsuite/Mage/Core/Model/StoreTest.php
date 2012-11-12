@@ -34,9 +34,15 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $params = array(
+            'eventDispatcher' => Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager'),
+            'cacheManager'    => Mage::getObjectManager()->get('Mage_Core_Model_Cache')
+        );
+
         $this->_model = $this->getMock(
             'Mage_Core_Model_Store',
-            array('getUrl')
+            array('getUrl'),
+            $params
         );
     }
 

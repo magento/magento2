@@ -40,7 +40,7 @@ class Mage_Backend_Helper_DataTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $this->_helper = new Mage_Backend_Helper_Data(array('config' => $this->_configMock));
+        $this->_helper = new Mage_Backend_Helper_Data($this->_configMock);
     }
 
     public function testGetAreaFrontNameReturnsDefaultValueWhenCustomNotSet()

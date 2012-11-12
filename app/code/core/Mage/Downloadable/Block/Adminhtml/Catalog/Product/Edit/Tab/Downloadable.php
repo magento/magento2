@@ -44,16 +44,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable
 
     protected $_config = null;
 
-    /**
-     * Class constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-//        $this->setSkipGenerateContent(true);
-        $this->setTemplate('product/edit/downloadable.phtml');
-    }
+    protected $_template = 'product/edit/downloadable.phtml';
 
     /**
      * Get tab URL

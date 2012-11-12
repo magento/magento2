@@ -37,7 +37,7 @@ class Mage_Catalog_Model_Category_Attribute_ApiTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Category_Attribute_Api;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Category_Attribute_Api');
     }
 
     protected function tearDown()

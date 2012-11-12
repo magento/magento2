@@ -49,7 +49,7 @@ class Mage_XmlConnect_Block_Review_Form extends Mage_Core_Block_Template
     {
         $customer = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomer();
         /** @var $xmlReview Mage_XmlConnect_Model_Simplexml_Element */
-        $xmlReview = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<form></form>');
+        $xmlReview = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', array('data' => '<form></form>'));
         $xmlReview->addAttribute('name', 'review_form');
         $xmlReview->addAttribute('method', 'post');
 

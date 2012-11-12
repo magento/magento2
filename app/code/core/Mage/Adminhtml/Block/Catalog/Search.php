@@ -35,12 +35,12 @@
 
 class Mage_Adminhtml_Block_Catalog_Search extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'catalog_search';
         $this->_headerText = Mage::helper('Mage_Catalog_Helper_Data')->__('Search');
         $this->_addButtonLabel = Mage::helper('Mage_Catalog_Helper_Data')->__('Add New Search Term');
-        parent::__construct();
+        parent::_construct();
 
     }
 }

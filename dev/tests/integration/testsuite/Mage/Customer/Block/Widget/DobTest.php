@@ -32,7 +32,7 @@ class Mage_Customer_Block_Widget_DobTest extends PHPUnit_Framework_TestCase
 {
     public function testGetDateFormat()
     {
-        $block = new Mage_Customer_Block_Widget_Dob;
+        $block = Mage::getObjectManager()->create('Mage_Customer_Block_Widget_Dob');
         $this->assertNotEmpty($block->getDateFormat());
     }
 }

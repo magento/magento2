@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framework_TestCase
+class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**
      * Retrieve new invoice collection from an array of invoices' data
@@ -35,10 +35,14 @@ class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framewor
      */
     protected function _getInvoiceCollection(array $invoicesData)
     {
+        $className = 'Mage_Sales_Model_Order_Invoice';
         $result = new Varien_Data_Collection();
         foreach ($invoicesData as $oneInvoiceData) {
+            $arguments = $this->_getConstructArguments(
+                self::MODEL_ENTITY, $className, array('data' => $oneInvoiceData)
+            );
             /** @var $prevInvoice Mage_Sales_Model_Order_Invoice */
-            $prevInvoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'), array($oneInvoiceData));
+            $prevInvoice = $this->getMock($className, array('_init'), $arguments);
             $result->addItem($prevInvoice);
         }
         return $result;
@@ -54,14 +58,14 @@ class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framewor
     public function testCollect(array $prevInvoicesData, $orderShipping, $invoiceShipping, $expectedShipping)
     {
         /** @var $order Mage_Sales_Model_Order|PHPUnit_Framework_MockObject_MockObject */
-        $order = $this->getMock('Mage_Sales_Model_Order', array('_init', 'getInvoiceCollection'));
+        $order = $this->getMock('Mage_Sales_Model_Order', array('_init', 'getInvoiceCollection'), array(), '', false);
         $order->setData('shipping_amount', $orderShipping);
         $order->expects($this->any())
             ->method('getInvoiceCollection')
             ->will($this->returnValue($this->_getInvoiceCollection($prevInvoicesData)))
         ;
         /** @var $invoice Mage_Sales_Model_Order_Invoice|PHPUnit_Framework_MockObject_MockObject */
-        $invoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'));
+        $invoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'), array(), '', false);
         $invoice->setData('shipping_amount', $invoiceShipping);
         $invoice->setOrder($order);
 

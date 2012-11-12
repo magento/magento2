@@ -41,7 +41,7 @@ class Mage_ImportExport_Model_Resource_Import_DataTest extends PHPUnit_Framework
     {
         parent::setUp();
 
-        $this->_model = new Mage_ImportExport_Model_Resource_Import_Data();
+        $this->_model = Mage::getResourceModel('Mage_ImportExport_Model_Resource_Import_Data');
     }
 
     protected function tearDown()

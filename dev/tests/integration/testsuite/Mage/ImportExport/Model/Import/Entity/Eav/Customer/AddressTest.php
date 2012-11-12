@@ -391,7 +391,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_Customer_AddressTest extends PHP
         }
 
         // get addresses
-        $addressCollection = new Mage_Customer_Model_Resource_Address_Collection();
+        $addressCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Address_Collection');
         $addressCollection->addAttributeToSelect($requiredAttributes);
         $addresses = array();
         /** @var $address Mage_Customer_Model_Address */

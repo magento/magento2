@@ -64,14 +64,14 @@ class Mage_Admin_Model_Config extends Varien_Simplexml_Config
 
     /**
      * Load config from merged adminhtml.xml files
-     * @param array $arguments
+     * @param array $data
      */
-    public function __construct(array $arguments = array())
+    public function __construct(array $data = array())
     {
-        $this->_app = isset($arguments['app']) ? $arguments['app'] : Mage::app();
-        $this->_appConfig = isset($arguments['appConfig']) ? $arguments['appConfig'] : Mage::getConfig();
-        if (isset($arguments['helpers'])) {
-            $this->_helpers = $arguments['helpers'];
+        $this->_app = isset($data['app']) ? $data['app'] : Mage::app();
+        $this->_appConfig = isset($data['appConfig']) ? $data['appConfig'] : Mage::getConfig();
+        if (isset($data['helpers'])) {
+            $this->_helpers = $data['helpers'];
         }
 
 

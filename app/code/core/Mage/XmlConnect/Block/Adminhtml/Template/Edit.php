@@ -36,12 +36,12 @@ class Mage_XmlConnect_Block_Adminhtml_Template_Edit extends Mage_Adminhtml_Block
     /**
      * Constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'id';
         $this->_controller  = 'adminhtml_template';
         $this->_blockGroup  = 'Mage_XmlConnect';
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('delete', 'onclick', 'deleteConfirm(\''
             . $this->__('Warning: All related AirMail messages will be deleted!') . PHP_EOL

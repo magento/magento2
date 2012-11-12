@@ -37,7 +37,7 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2Test extends PHPUnit_
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2');
     }
 
     protected function tearDown()
@@ -50,13 +50,13 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2Test extends PHPUnit_
      */
     public function testPrepareTierPricesInvalidData()
     {
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $this->_model->prepareTierPrices($product, array(1));
     }
 
     public function testPrepareTierPricesInvalidWebsite()
     {
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $data = $this->_model->prepareTierPrices(
             $product,
             array((object) array('qty' => 3, 'price' => 8, 'website' => 100))
@@ -69,7 +69,7 @@ class Mage_Catalog_Model_Product_Attribute_Tierprice_Api_V2Test extends PHPUnit_
 
     public function testPrepareTierPrices()
     {
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
 
         $this->assertNull($this->_model->prepareTierPrices($product));
 

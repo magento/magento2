@@ -47,7 +47,7 @@ class Mage_Core_Model_Resource_Db_AbstractTest extends PHPUnit_Framework_TestCas
             'Mage_Core_Model_Resource_Db_Abstract',
             array('_construct', '_getWriteAdapter'),
             array(
-                array('resource' => $this->_resource)
+                $this->_resource
             )
         );
     }
@@ -64,16 +64,6 @@ class Mage_Core_Model_Resource_Db_AbstractTest extends PHPUnit_Framework_TestCas
             ->with('core_read')
         ;
         $this->_model->getReadConnection();
-    }
-
-    /**
-     * Test that only valid resource instance can be passed to the constructor
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructorException()
-    {
-        $this->_model->__construct(array('resource' => new stdClass()));
     }
 
     /**

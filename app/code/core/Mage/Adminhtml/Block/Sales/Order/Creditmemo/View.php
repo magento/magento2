@@ -38,13 +38,13 @@ class Mage_Adminhtml_Block_Sales_Order_Creditmemo_View extends Mage_Adminhtml_Bl
      * Add & remove control buttons
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'creditmemo_id';
         $this->_controller  = 'sales_order_creditmemo';
         $this->_mode        = 'view';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_removeButton('save');
         $this->_removeButton('reset');

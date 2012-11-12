@@ -264,7 +264,7 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
         if (empty($imagePath) || !file_exists($imagePath)) {
-            throw new Exception(self::ERROR_WATERMARK_IMAGE_ABSENT);
+            throw new LogicException(self::ERROR_WATERMARK_IMAGE_ABSENT);
         }
         $this->_checkCanProcess();
 
@@ -417,13 +417,13 @@ class Varien_Image_Adapter_ImageMagick extends Varien_Image_Adapter_Abstract
     /**
      * Check whether the adapter can work with the image
      *
-     * @throws Exception
+     * @throws LogicException
      * @return bool
      */
     protected function _checkCanProcess()
     {
         if (!$this->_canProcess()) {
-            throw new Exception(self::ERROR_WRONG_IMAGE);
+            throw new LogicException(self::ERROR_WRONG_IMAGE);
         }
         return true;
     }

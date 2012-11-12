@@ -38,9 +38,9 @@ abstract class Mage_Adminhtml_Block_System_Store_Edit_FormAbstract extends Mage_
      * Class constructor
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('coreStoreForm');
     }
 

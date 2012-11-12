@@ -52,15 +52,11 @@ class Magento_Performance_TestsuiteTest extends PHPUnit_Framework_TestCase
      */
     protected $_fixtureDir;
 
-    /**
-     * @var string
-     */
-    protected $_appBaseDir;
-
     protected function setUp()
     {
         $this->_fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
         $fixtureConfigData = include($this->_fixtureDir . DIRECTORY_SEPARATOR . 'config_data.php');
+
         $shell = $this->getMock('Magento_Shell', array('execute'));
         $this->_config = new Magento_Performance_Config(
             $fixtureConfigData,
@@ -85,68 +81,146 @@ class Magento_Performance_TestsuiteTest extends PHPUnit_Framework_TestCase
     /**
      * Setup expectation of a scenario warm up invocation
      *
-     * @param string $scenarioName
+     * @param string $scenarioTitle
+     * @param string $scenarioFile
      * @param integer $invocationIndex
+     * @param PHPUnit_Framework_MockObject_Stub $returnStub
      */
-    protected function _expectScenarioWarmUp($scenarioName, $invocationIndex)
-    {
-        $this->_handler
-            ->expects($this->at($invocationIndex))
+    protected function _expectScenarioWarmUp(
+        $scenarioTitle, $scenarioFile, $invocationIndex, PHPUnit_Framework_MockObject_Stub $returnStub = null
+    ) {
+        $scenarioFilePath = $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioFile;
+
+        /** @var $invocationMocker PHPUnit_Framework_MockObject_Builder_InvocationMocker */
+        $invocationMocker = $this->_handler->expects($this->at($invocationIndex));
+        $invocationMocker
             ->method('run')
             ->with(
-                $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioName . '.jmx',
-                $this->isInstanceOf('Magento_Performance_Scenario_Arguments'),
+                $this->logicalAnd(
+                    $this->isInstanceOf('Magento_Performance_Scenario'),
+                    $this->objectHasAttribute('_title', $scenarioTitle),
+                    $this->objectHasAttribute('_file', $scenarioFilePath)
+                ),
                 $this->isNull()
             )
-            ->will($this->returnValue(true))
         ;
+        if ($returnStub) {
+            $invocationMocker->will($returnStub);
+        }
     }
 
     /**
      * Setup expectation of a scenario invocation with report generation
      *
-     * @param string $scenarioName
+     * @param string $scenarioTitle
+     * @param string $scenarioFile
      * @param integer $invocationIndex
+     * @param PHPUnit_Framework_MockObject_Stub $returnStub
      */
-    protected function _expectScenarioRun($scenarioName, $invocationIndex)
-    {
-        $this->_handler
-            ->expects($this->at($invocationIndex))
+    protected function _expectScenarioRun(
+        $scenarioTitle, $scenarioFile, $invocationIndex, PHPUnit_Framework_MockObject_Stub $returnStub = null
+    ) {
+        $scenarioFilePath = $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioFile;
+        $reportFile = basename($scenarioFile, '.jmx') . '.jtl';
+
+        /** @var $invocationMocker PHPUnit_Framework_MockObject_Builder_InvocationMocker */
+        $invocationMocker = $this->_handler->expects($this->at($invocationIndex));
+        $invocationMocker
             ->method('run')
             ->with(
-                $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioName . '.jmx',
-                $this->isInstanceOf('Magento_Performance_Scenario_Arguments'),
-                $this->_fixtureDir . DIRECTORY_SEPARATOR . 'report' . DIRECTORY_SEPARATOR . $scenarioName . '.jtl'
+                $this->logicalAnd(
+                    $this->isInstanceOf('Magento_Performance_Scenario'),
+                    $this->objectHasAttribute('_title', $scenarioTitle),
+                    $this->objectHasAttribute('_file', $scenarioFilePath)
+                ),
+                $this->_fixtureDir . DIRECTORY_SEPARATOR . 'report' . DIRECTORY_SEPARATOR . $reportFile
             )
-            ->will($this->returnValue(true))
         ;
+        if ($returnStub) {
+            $invocationMocker->will($returnStub);
+        }
     }
 
     public function testRun()
     {
-        $this->_expectScenarioWarmUp('scenario_error', 0);
-        $this->_expectScenarioRun('scenario_error', 1);
+        $this->_expectScenarioWarmUp('Scenario with Error', 'scenario_error.jmx', 0);
+        $this->_expectScenarioRun('Scenario with Error', 'scenario_error.jmx', 1);
 
         /* Warm up is disabled for scenario */
-        $this->_expectScenarioRun('scenario_failure', 2);
+        $this->_expectScenarioRun('Scenario with Failure', 'scenario_failure.jmx', 2);
 
-        $this->_expectScenarioWarmUp('scenario', 3);
-        $this->_expectScenarioRun('scenario', 4);
+        $this->_expectScenarioWarmUp('Scenario', 'scenario.jmx', 3);
+        $this->_expectScenarioRun('Scenario', 'scenario.jmx', 4);
 
         $this->_object->run();
     }
 
-    public function testRunException()
+    public function testOnScenarioRun()
     {
-        $expectedScenario = $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario_error.jmx';
-        $this->setExpectedException(
-            'Magento_Exception', "Unable to run scenario '$expectedScenario', format is not supported."
-        );
         $this->_handler
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('run')
-            ->will($this->returnValue(false))
         ;
+        $notifications = array();
+        $this->_object->onScenarioRun(function ($scenario) use (&$notifications) {
+            $notifications[] = $scenario->getFile();
+        });
         $this->_object->run();
+        $this->assertEquals(array(
+            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario_error.jmx',
+            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario_failure.jmx',
+            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario.jmx'
+        ), $notifications);
+    }
+
+    /**
+     * @expectedException BadFunctionCallException
+     */
+    public function testOnScenarioRunException()
+    {
+        $this->_object->onScenarioRun('invalid_callback');
+    }
+
+    public function testOnScenarioFailure()
+    {
+        $scenario = new Magento_Performance_Scenario('Scenario with Error', 'scenario_error.jmx', array(), array(),
+            array());
+        $scenarioOneFailure = $this->throwException(
+            new Magento_Performance_Scenario_FailureException($scenario)
+        );
+        $this->_expectScenarioWarmUp('Scenario with Error', 'scenario_error.jmx', 0, $scenarioOneFailure);
+        $this->_expectScenarioRun('Scenario with Error', 'scenario_error.jmx', 1, $scenarioOneFailure);
+
+        /* Warm up is disabled for scenario */
+        $scenario = new Magento_Performance_Scenario('Scenario with Failure', 'scenario_failure.jmx', array(), array(),
+            array());
+        $scenarioTwoFailure = $this->throwException(
+            new Magento_Performance_Scenario_FailureException($scenario)
+        );
+        $this->_expectScenarioRun('Scenario with Failure', 'scenario_failure.jmx', 2, $scenarioTwoFailure);
+
+        $scenario = new Magento_Performance_Scenario('Scenario', 'scenario.jmx', array(), array(), array());
+        $scenarioThreeFailure = $this->throwException(
+            new Magento_Performance_Scenario_FailureException($scenario)
+        );
+        $this->_expectScenarioWarmUp('Scenario', 'scenario.jmx', 3);
+        $this->_expectScenarioRun('Scenario', 'scenario.jmx', 4, $scenarioThreeFailure);
+
+        $notifications = array();
+        $this->_object->onScenarioFailure(
+            function (Magento_Performance_Scenario_FailureException $actualFailure) use (&$notifications) {
+                $notifications[] = $actualFailure->getScenario()->getFile();
+            }
+        );
+        $this->_object->run();
+        $this->assertEquals(array('scenario_error.jmx', 'scenario_failure.jmx', 'scenario.jmx'), $notifications);
+    }
+
+    /**
+     * @expectedException BadFunctionCallException
+     */
+    public function testOnScenarioFailureException()
+    {
+        $this->_object->onScenarioFailure(array($this, 'invalid_callback'));
     }
 }

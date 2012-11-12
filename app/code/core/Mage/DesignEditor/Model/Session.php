@@ -26,6 +26,8 @@
 
 /**
  * Design editor session model
+ *
+ * @method int getThemeId()
  */
 class Mage_DesignEditor_Model_Session extends Mage_Backend_Model_Auth_Session
 {

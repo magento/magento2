@@ -35,11 +35,11 @@
 class Mage_Adminhtml_Block_Sales_Invoice extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'sales_invoice';
         $this->_headerText = Mage::helper('Mage_Sales_Helper_Data')->__('Invoices');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 

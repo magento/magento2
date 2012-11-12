@@ -34,7 +34,7 @@ class Mage_Weee_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Weee_Model_Observer();
+        $this->_model = Mage::getModel('Mage_Weee_Model_Observer');
     }
 
     protected function tearDown()
@@ -53,7 +53,7 @@ class Mage_Weee_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $this->_model->updateConfigurableProductOptions($eventObserver);
         $this->assertEquals(array(), $eventObserver->getEvent()->getResponseObject()->getAdditionalOptions());
 
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         Mage::register('current_product', $product->load(1));
 
         foreach (array(Mage_Weee_Model_Tax::DISPLAY_INCL, Mage_Weee_Model_Tax::DISPLAY_INCL_DESCR) as $mode) {

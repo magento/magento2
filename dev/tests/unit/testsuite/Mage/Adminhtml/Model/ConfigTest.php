@@ -40,7 +40,7 @@ class Mage_Adminhtml_Model_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testHasChildren($xmlData, $isSingleStoreMode, $node, $website, $store, $expectedResult, $message)
     {
-        $app = $this->getMock('Mage_Core_Model_App', array('isSingleStoreMode'), array(), '', true);
+        $app = $this->getMock('Mage_Core_Model_App', array('isSingleStoreMode'), array(), '', false);
         $app->expects($this->any())
             ->method('isSingleStoreMode')
             ->will($this->returnValue($isSingleStoreMode));

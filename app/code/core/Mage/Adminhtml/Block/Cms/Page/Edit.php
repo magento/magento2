@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
      *
      * @return void
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId   = 'page_id';
         $this->_controller = 'cms_page';
 
-        parent::__construct();
+        parent::_construct();
 
         if ($this->_isAllowedAction('Mage_Cms::save')) {
             $this->_updateButton('save', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Save Page'));

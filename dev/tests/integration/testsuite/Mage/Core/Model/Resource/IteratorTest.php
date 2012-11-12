@@ -41,7 +41,7 @@ class Mage_Core_Model_Resource_IteratorTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Iterator();
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Iterator');
     }
 
     protected function tearDown()
@@ -51,7 +51,7 @@ class Mage_Core_Model_Resource_IteratorTest extends PHPUnit_Framework_TestCase
 
     public function testWalk()
     {
-        $collection = new Mage_Core_Model_Resource_Store_Collection();
+        $collection = Mage::getResourceModel('Mage_Core_Model_Resource_Store_Collection');
         $this->_model->walk($collection->getSelect(), array(array($this, 'walkCallback')));
         $this->assertGreaterThan(0, $this->_callbackCounter);
     }

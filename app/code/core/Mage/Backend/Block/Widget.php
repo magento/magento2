@@ -86,8 +86,7 @@ class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
      * @return string
      */
     public function getButtonHtml($label, $onclick, $class='', $id=null) {
-        //@todo: Add UI id to button
-        return $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button', $this->getNameInLayout() .'.'. '-button')
+        return $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
             ->setData(array(
                 'label'     => $label,
                 'onclick'   => $onclick,

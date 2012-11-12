@@ -258,7 +258,7 @@ class Mage_Centinel_Model_Api extends Varien_Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            Mage::getModel('Mage_Core_Model_Log_Adapter', 'card_validation_3d_secure.log')
+            Mage::getModel('Mage_Core_Model_Log_Adapter', array('fileName' => 'card_validation_3d_secure.log'))
                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
                ->log($debugData);
         }

@@ -166,14 +166,15 @@ class Mage_ImportExport_Model_Import_Entity_CustomerComposite
             );
             $this->_dataSourceModels['customer']
                 = Mage::getResourceModel('Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data',
-                $arguments
-            );
+                    array('arguments' => $arguments)
+                );
         }
         if (isset($data['customer_entity'])) {
             $this->_customerEntity = $data['customer_entity'];
         } else {
             $data['data_source_model'] = $this->_dataSourceModels['customer'];
-            $this->_customerEntity = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer', $data);
+            $this->_customerEntity = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer',
+                array('data' => $data));
             unset($data['data_source_model']);
         }
         $this->_initCustomerAttributes();
@@ -188,7 +189,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerComposite
             );
             $this->_dataSourceModels['address']
                 = Mage::getResourceModel('Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data',
-                    $arguments
+                    array('arguments' => $arguments)
                 );
         }
         if (isset($data['address_entity'])) {
@@ -196,7 +197,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerComposite
         } else {
             $data['data_source_model'] = $this->_dataSourceModels['address'];
             $this->_addressEntity
-                = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address', $data);
+                = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address', array('data' => $data));
             unset($data['data_source_model']);
         }
         $this->_initAddressAttributes();
@@ -407,10 +408,10 @@ class Mage_ImportExport_Model_Import_Entity_CustomerComposite
     /**
      * Source model setter
      *
-     * @param Mage_ImportExport_Model_Import_Adapter_Abstract $source
+     * @param Mage_ImportExport_Model_Import_SourceAbstract $source
      * @return Mage_ImportExport_Model_Import_EntityAbstract
      */
-    public function setSource(Mage_ImportExport_Model_Import_Adapter_Abstract $source)
+    public function setSource(Mage_ImportExport_Model_Import_SourceAbstract $source)
     {
         $this->_customerEntity->setSource($source);
         $this->_addressEntity->setSource($source);

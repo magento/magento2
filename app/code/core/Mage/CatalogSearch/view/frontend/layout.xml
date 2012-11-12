@@ -123,9 +123,6 @@ Advanced search results
 
     <catalogsearch_term_popular translate="label" module="Mage_CatalogSearch" type="page" parent="default">
         <label>Popular Search Terms</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="head">
             <action method="setTitle" translate="title" module="Mage_CatalogSearch"><title>Search Terms</title></action>
         </reference>

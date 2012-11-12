@@ -31,7 +31,7 @@ class Mage_Catalog_Block_Product_ListTest extends PHPUnit_Framework_TestCase
     {
         $childBlock = new Varien_Object;
 
-        $block = $this->getMock('Mage_Catalog_Block_Product_List', array('getChildBlock'));
+        $block = $this->getMock('Mage_Catalog_Block_Product_List', array('getChildBlock'), array(), '', false);
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
             ->with('toolbar')

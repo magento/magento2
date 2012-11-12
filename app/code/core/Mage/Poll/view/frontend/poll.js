@@ -24,19 +24,14 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
-    // Default fields to initialize for poll
-    var pollInit = {
-        formId: '#pollForm',
-        pollAnswersId: '#poll-answers',
-        pollCheckedOption: 'input.poll_vote:checked'
-    };
-
-    $(document).ready(function () {
-        // Trigger initalize event
-        $.mage.event.trigger("mage.poll.initialize", pollInit);
-        $.mage.decorator.list(pollInit.pollAnswersId);
-        $(pollInit.formId).on('submit', function () {
-            return $(pollInit.pollCheckedOption).length > 0;
-        });
+    $.widget('mage.poll', {
+        options: {
+        },
+        _create: function() {
+            $(this.options.pollAnswersSelector).decorate('list');
+            this.element.on('submit', $.proxy(function() {
+                return $(this.options.pollCheckedOption).length > 0;
+            }, this));
+        }
     });
 })(jQuery);

@@ -73,7 +73,7 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_ImportExport_Model_Import();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Import');
     }
 
     protected function tearDown()
@@ -106,10 +106,11 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
     public function testValidateSource()
     {
         $this->_model->setEntity('catalog_product');
-        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false,
-            true, true, array('getColNames')
-        );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue(array('sku')));
+        /** @var Mage_ImportExport_Model_Import_SourceAbstract|PHPUnit_Framework_MockObject_MockObject $source */
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_SourceAbstract', array(
+            array('sku', 'name')
+        ));
+        $source->expects($this->any())->method('_getNextRow')->will($this->returnValue(false));
         $this->assertTrue($this->_model->validateSource($source));
     }
 
@@ -119,7 +120,7 @@ class Mage_ImportExport_Model_ImportTest extends PHPUnit_Framework_TestCase
      */
     public function testValidateSourceException()
     {
-        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false);
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_SourceAbstract', array(), '', false);
         $this->_model->validateSource($source);
     }
 

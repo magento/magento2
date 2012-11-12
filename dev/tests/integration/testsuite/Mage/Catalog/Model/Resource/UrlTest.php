@@ -34,7 +34,7 @@ class Mage_Catalog_Model_Resource_UrlTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Resource_Url();
+        $this->_model = Mage::getResourceModel('Mage_Catalog_Model_Resource_Url');
     }
 
     protected function tearDown()

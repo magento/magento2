@@ -84,24 +84,18 @@ class Mage_Catalog_Block_Product_View_Options_Type_Date extends Mage_Catalog_Blo
         $option = $this->getOption();
         $value = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $option->getId() . '/date');
 
-        //$require = $this->getOption()->getIsRequire() ? ' required-entry' : '';
-        $require = '';
-
         $yearStart = Mage::getSingleton('Mage_Catalog_Model_Product_Option_Type_Date')->getYearStart();
         $yearEnd = Mage::getSingleton('Mage_Catalog_Model_Product_Option_Type_Date')->getYearEnd();
 
         $calendar = $this->getLayout()
-            ->createBlock('Mage_Core_Block_Html_Date_Jquery_Calendar')
+            ->createBlock('Mage_Core_Block_Html_Date')
             ->setId('options_'.$this->getOption()->getId().'_date')
             ->setName('options['.$this->getOption()->getId().'][date]')
-            ->setClass('product-custom-option datetime-picker input-text' . $require)
+            ->setClass('product-custom-option datetime-picker input-text')
             ->setImage($this->getSkinUrl('Mage_Core::calendar.gif'))
             ->setDateFormat(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT))
             ->setValue($value)
             ->setYearsRange($yearStart . ':' . $yearEnd);
-        if (!$this->getSkipJsReloadPrice()) {
-            $calendar->setExtraParams('onchange="opConfig.reloadPrice()"');
-        }
 
         return $calendar->getHtml();
     }

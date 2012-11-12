@@ -34,12 +34,12 @@
 class Mage_Backend_Block_Widget_Accordion extends Mage_Backend_Block_Widget
 {
     protected $_items = array();
-    public function __construct() 
-    {
-        parent::__construct();
-        $this->setTemplate('Mage_Backend::widget/accordion.phtml');
-    }
-    
+
+    /**
+     * @var string
+     */
+    protected $_template = 'Mage_Backend::widget/accordion.phtml';
+
     public function getItems()
     {
         return $this->_items;

@@ -39,14 +39,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
      */
     protected $_element = null;
 
-    /**
-     * Internal constructor
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('instance/edit/layout.phtml');
-    }
+    protected $_template = 'instance/edit/layout.phtml';
 
     /**
      * Render given element (return html of element)

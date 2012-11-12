@@ -138,7 +138,7 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
      * Returns source adapter object.
      *
      * @param string $sourceFile Full path to source file
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     protected function _getSourceAdapter($sourceFile)
     {
@@ -392,7 +392,8 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
     public function expandSource()
     {
         /** @var $writer Mage_ImportExport_Model_Export_Adapter_Csv */
-        $writer  = Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv', self::getWorkingDir() . "big0.csv");
+        $writer  = Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv',
+            array('destination' => self::getWorkingDir() . "big0.csv"));
         $regExps = array('last' => '/(.*?)(\d+)$/', 'middle' => '/(.*?)(\d+)(.*)$/');
         $colReg  = array(
             'sku' => 'last', 'name' => 'last', 'description' => 'last', 'short_description' => 'last',
@@ -412,7 +413,7 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
         for ($i = 1; $i < $count; $i++) {
             $writer = Mage::getModel(
                 'Mage_ImportExport_Model_Export_Adapter_Csv',
-                self::getWorkingDir() . sprintf($filenameFormat, $i)
+                array('destination' => self::getWorkingDir() . sprintf($filenameFormat, $i))
             );
 
             $adapter = $this->_getSourceAdapter(self::getWorkingDir() . sprintf($filenameFormat, $i - 1));
@@ -444,7 +445,7 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
     {
         $entity    = $this->getEntity();
         /** @var $uploader Mage_Core_Model_File_Uploader */
-        $uploader  = Mage::getModel('Mage_Core_Model_File_Uploader', self::FIELD_NAME_SOURCE_FILE);
+        $uploader  = Mage::getModel('Mage_Core_Model_File_Uploader', array('fileId' => self::FIELD_NAME_SOURCE_FILE));
         $uploader->skipDbProcessing(true);
         $result    = $uploader->save(self::getWorkingDir());
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
@@ -480,10 +481,10 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
     /**
      * Validates source file and returns validation result.
      *
-     * @param Mage_ImportExport_Model_Import_Adapter_Abstract $source
+     * @param Mage_ImportExport_Model_Import_SourceAbstract $source
      * @return bool
      */
-    public function validateSource(Mage_ImportExport_Model_Import_Adapter_Abstract $source)
+    public function validateSource(Mage_ImportExport_Model_Import_SourceAbstract $source)
     {
         $this->addLogComment(Mage::helper('Mage_ImportExport_Helper_Data')->__('Begin data validation'));
         $adapter = $this->_getEntityAdapter()->setSource($source);

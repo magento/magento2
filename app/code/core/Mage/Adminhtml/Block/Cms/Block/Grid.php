@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Cms_Block_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('cmsBlockGrid');
         $this->setDefaultSort('block_identifier');
         $this->setDefaultDir('ASC');

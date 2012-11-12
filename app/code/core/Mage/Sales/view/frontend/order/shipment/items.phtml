@@ -61,7 +61,7 @@
             </tr>
         </tbody>
     </table>
-    <script type="text/javascript">decorateTable('my-tracking-table-<?php echo $_shipment->getId(); ?>')</script>
+    <script type="text/javascript">(function($) {$('#my-tracking-table-<?php echo $_shipment->getId(); ?>').decorate('table')})(jQuery)</script>
 <?php  endif; ?>
 <h3 class="table-caption"><?php echo $this->__('Items Shipped') ?></h3>
 <table class="data-table" id="my-shipment-table-<?php echo $_shipment->getId(); ?>">
@@ -84,6 +84,6 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-<script type="text/javascript">decorateTable('my-shipment-table-<?php echo $_shipment->getId(); ?>', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+<script type="text/javascript">(function($) {$('#my-shipment-table-<?php echo $_shipment->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
 <?php echo $this->getCommentsHtml($_shipment)?>
 <?php endforeach; ?>

@@ -889,7 +889,7 @@ class Mage_GoogleCheckout_Model_Api_Xml_Callback extends Mage_GoogleCheckout_Mod
 
         $order = $this->getOrder();
         if ($order->getBaseGrandTotal() == $totalChargeback) {
-            $creditmemo = Mage::getModel('Mage_Sales_Model_Service_Order', $order)
+            $creditmemo = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order))
                 ->prepareCreditmemo()
                 ->setPaymentRefundDisallowed(true)
                 ->setAutomaticallyCreated(true)
@@ -936,7 +936,7 @@ class Mage_GoogleCheckout_Model_Api_Xml_Callback extends Mage_GoogleCheckout_Mod
             $adjustment = array('adjustment_negative' => $order->getBaseGrandTotal() - $latestRefunded);
         }
 
-        $creditmemo = Mage::getModel('Mage_Sales_Model_Service_Order', $order)
+        $creditmemo = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order))
             ->prepareCreditmemo($adjustment)
             ->setPaymentRefundDisallowed(true)
             ->setAutomaticallyCreated(true)

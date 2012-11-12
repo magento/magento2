@@ -35,10 +35,7 @@
 class Mage_Adminhtml_Block_System_Currency extends Mage_Adminhtml_Block_Template
 {
 
-    protected function _construct()
-    {
-        $this->setTemplate('system/currency/rates.phtml');
-    }
+    protected $_template = 'system/currency/rates.phtml';
 
     protected function _prepareLayout()
     {

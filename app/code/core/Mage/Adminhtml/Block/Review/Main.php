@@ -34,10 +34,10 @@
 
 class Mage_Adminhtml_Block_Review_Main extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_addButtonLabel = Mage::helper('Mage_Review_Helper_Data')->__('Add New Review');
-        parent::__construct();
+        parent::_construct();
 
         $this->_controller = 'review';
 

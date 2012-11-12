@@ -37,9 +37,9 @@ class Mage_Adminhtml_Block_System_Design_Grid extends Mage_Adminhtml_Block_Widge
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('designGrid');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);

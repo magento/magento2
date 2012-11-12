@@ -34,7 +34,7 @@ class Mage_Core_Model_EncryptionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Encryption();
+        $this->_model = Mage::getModel('Mage_Core_Model_Encryption');
     }
 
     protected function tearDown()

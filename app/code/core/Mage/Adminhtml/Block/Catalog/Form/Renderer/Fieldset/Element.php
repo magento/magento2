@@ -37,10 +37,8 @@ class Mage_Adminhtml_Block_Catalog_Form_Renderer_Fieldset_Element
     /**
      * Initialize block template
      */
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Adminhtml::catalog/form/renderer/fieldset/element.phtml');
-    }
+
+    protected $_template = 'Mage_Adminhtml::catalog/form/renderer/fieldset/element.phtml';
 
     /**
      * Retrieve data object related with form

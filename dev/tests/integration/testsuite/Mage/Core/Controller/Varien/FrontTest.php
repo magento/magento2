@@ -34,7 +34,7 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Controller_Varien_Front;
+        $this->_model = Mage::getModel('Mage_Core_Controller_Varien_Front');
     }
 
     protected function tearDown()
@@ -67,7 +67,7 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
 
     public function testAddGetRouter()
     {
-        $router = new Mage_Core_Controller_Varien_Router_Default();
+        $router = Mage::getModel('Mage_Core_Controller_Varien_Router_Default');
         $this->assertNull($router->getFront());
         $this->_model->addRouter('test', $router);
         $this->assertSame($this->_model, $router->getFront());
@@ -78,7 +78,7 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
     public function testGetRouters()
     {
         $this->assertEmpty($this->_model->getRouters());
-        $this->_model->addRouter('test', new Mage_Core_Controller_Varien_Router_Default());
+        $this->_model->addRouter('test', Mage::getModel('Mage_Core_Controller_Varien_Router_Default'));
         $this->assertNotEmpty($this->_model->getRouters());
     }
 

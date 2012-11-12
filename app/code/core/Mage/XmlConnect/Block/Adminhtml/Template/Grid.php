@@ -36,9 +36,9 @@ class Mage_XmlConnect_Block_Adminhtml_Template_Grid extends Mage_Adminhtml_Block
     /**
      * Setting grid_id, sort order and sort direction
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('app_template_grid');
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('ASC');

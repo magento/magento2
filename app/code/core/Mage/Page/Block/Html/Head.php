@@ -34,13 +34,7 @@
  */
 class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 {
-    /**
-     * Initialize template
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('html/head.phtml');
-    }
+    protected $_template = 'html/head.phtml';
 
     /**
      * Add CSS file to HEAD entity

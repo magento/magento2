@@ -34,11 +34,11 @@
 
 class Mage_Adminhtml_Block_System_Store_Store extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller  = 'system_store';
         $this->_headerText  = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Manage Stores');
-        parent::__construct();
+        parent::_construct();
     }
 
     protected function _prepareLayout()

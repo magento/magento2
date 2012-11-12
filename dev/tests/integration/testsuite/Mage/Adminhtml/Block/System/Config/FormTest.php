@@ -29,10 +29,13 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
 {
     public function testDependenceHtml()
     {
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Adminhtml_Block_System_Config_Form */
         $block = $layout->createBlock('Mage_Adminhtml_Block_System_Config_Form', 'block');
         $block->setArea('adminhtml');
 
+        /** @var $childBlock Mage_Core_Block_Text */
         $childBlock = $layout->addBlock('Mage_Core_Block_Text', 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
@@ -56,7 +59,8 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset($section->getName() . '_' . $group->getName(), array());
 
-        $block = new Mage_Adminhtml_Block_System_Config_FormStub();
+        /** @var $block Mage_Adminhtml_Block_System_Config_FormStub */
+        $block = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_System_Config_FormStub');
         $block->setScope(Mage_Adminhtml_Block_System_Config_Form::SCOPE_WEBSITES);
         $block->setStubConfigData($configData);
         $block->initFields($fieldset, $group, $section);
@@ -92,7 +96,12 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
      */
     public function initFieldsInheritCheckboxDataProvider()
     {
-        $section = new Mage_Core_Model_Config_Element(file_get_contents(__DIR__ . '/_files/test_section_config.xml'));
+        /**
+         * @TODO: Need to use ObjectManager instead 'new'.
+         * On this moment we have next bug MAGETWO-4274 which blocker for this key.
+         */
+        /** @var $section Mage_Core_Model_Config_Element */
+        $section = new Mage_Core_Model_Config_Element(__DIR__ . '/_files/test_section_config.xml', 0, true);
         // @codingStandardsIgnoreStart
         $group = $section->groups->test_group;
         $field = $group->fields->test_field;
@@ -109,10 +118,13 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
 
     public function testInitFormAddsFieldsets()
     {
-        new Mage_Core_Controller_Front_Action(Mage::app()->getRequest(), Mage::app()->getResponse());
+        Mage::getModel(
+            'Mage_Core_Controller_Front_Action',
+            array('request' => Mage::app()->getRequest(), 'response' => Mage::app()->getResponse())
+        );
         Mage::app()->getRequest()->setParam('section', 'general');
-        $block = new Mage_Adminhtml_Block_System_Config_Form();
-        $block->setLayout(Mage::app()->getLayout());
+        /** @var $block Mage_Adminhtml_Block_System_Config_Form */
+        $block = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_System_Config_Form');
         $block->initForm();
         $expectedIds = array(
             'general_country' => array(
@@ -152,6 +164,7 @@ class Mage_Adminhtml_Block_System_Config_FormTest extends PHPUnit_Framework_Test
         );
         $elements = $block->getForm()->getElements();
         foreach ($elements as $element) {
+            /** @var $element Varien_Data_Form_Element_Fieldset */
             $this->assertInstanceOf('Varien_Data_Form_Element_Fieldset', $element);
             $this->assertArrayHasKey($element->getId(), $expectedIds);
             $fields = $element->getSortedElements();

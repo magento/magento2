@@ -41,7 +41,7 @@ class Mage_Catalog_Model_ProductPriceTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product');
     }
 
     protected function tearDown()

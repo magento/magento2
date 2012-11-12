@@ -40,7 +40,7 @@ class Mage_Core_Model_Resource_Entity_TableTest extends PHPUnit_Framework_TestCa
         $config->test_key   = 'test';
         // @codingStandardsIgnoreEnd
 
-        $this->_model = new Mage_Core_Model_Resource_Entity_Table($config);
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Entity_Table', array('config' => $config));
     }
 
     protected function tearDown()

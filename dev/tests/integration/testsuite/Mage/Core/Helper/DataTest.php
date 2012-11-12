@@ -50,7 +50,7 @@ class Mage_Core_Helper_DataTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_helper = new Mage_Core_Helper_Data;
+        $this->_helper = Mage::helper('Mage_Core_Helper_Data');
         $this->_dateTime = new DateTime;
         $this->_dateTime->setTimezone(new DateTimeZone(self::DATE_TIMEZONE));
     }

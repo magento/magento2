@@ -36,11 +36,11 @@ class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adm
     /**
      * Constructor. Initialization required variables for class instance.
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_CurrencySymbol_System';
         $this->_controller = 'adminhtml_system_currencysymbol';
-        parent::__construct();
+        parent::_construct();
     }
 
     /**

@@ -34,11 +34,7 @@
 class Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Upload extends Mage_Adminhtml_Block_Widget_Form
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('system/convert/profile/upload.phtml');
-    }
+    protected $_template = 'system/convert/profile/upload.phtml';
 
     public function getPostMaxSize()
     {

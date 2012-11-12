@@ -34,7 +34,7 @@ class Mage_Core_Model_Design_Backend_ExceptionsTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Design_Backend_Exceptions;
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Backend_Exceptions');
         $this->_model->setScope('default');
         $this->_model->setScopeId(0);
         $this->_model->setPath('design/theme/ua_regexp');

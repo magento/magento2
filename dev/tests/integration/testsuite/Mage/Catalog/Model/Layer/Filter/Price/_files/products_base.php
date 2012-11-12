@@ -31,12 +31,13 @@
 
 $testCases = include(dirname(__FILE__) . '/_algorithm_base_data.php');
 
-$installer = new Mage_Catalog_Model_Resource_Setup('catalog_setup');
+/** @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'catalog_setup'));
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */
-$category = new Mage_Catalog_Model_Category();
-
+/** @var $category Mage_Catalog_Model_Category */
+$category = Mage::getModel('Mage_Catalog_Model_Category');
 $category->setId(3)
     ->setName('Root Category')
     ->setParentId(2) /**/
@@ -50,7 +51,7 @@ $category->setId(3)
 
 $lastProductId = 0;
 foreach ($testCases as $index => $testCase) {
-    $category = new Mage_Catalog_Model_Category();
+    $category = Mage::getModel('Mage_Catalog_Model_Category');
     $position = $index + 1;
     $categoryId = $index + 4;
     $category->setId($categoryId)
@@ -66,7 +67,7 @@ foreach ($testCases as $index => $testCase) {
         ->save();
 
     foreach ($testCase[0] as $price) {
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $productId = $lastProductId + 1;
         $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
             ->setId($productId)

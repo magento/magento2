@@ -23,37 +23,89 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 CalendarTest = TestCase('CalendarTest');
-CalendarTest.prototype.testCalendar = function () {
-    /*:DOC +=
-        <div>
-            <input type="text" id="datepicker"/>
-            <script type="text/javascript">
-                //<![CDATA[
-                $.mage.event.observe("mage.calendar.initialize", function (event, initData) {
-                    var datepicker = {
-                        inputSelector: "#datepicker",
-                        locale: "",
-                        options: {
-                            buttonImage: "",
-                            buttonText: "Select Date",
-                            dateFormat: "mm-dd-yy",
-                            yearRange: "2012:2015"
-                        }
-                    };
-                    initData.datepicker.push(datepicker);
-                });
-                //]]>
-            </script>
-            <script type="text/javascript" src="/pub/lib/mage/calendar/calendar.js"></script>
-        </div>
-    */
-
-    var datepicker = $.datepicker._getInst($('#datepicker')[0]);
-    assertNotUndefined(datepicker);
-
-    assertEquals("Select Date", datepicker.settings.buttonText);
-    assertEquals("mm-dd-yy", datepicker.settings.dateFormat);
-    assertEquals("button", datepicker.settings.showOn);
-    assertEquals("2012:2015", datepicker.settings.yearRange);
+CalendarTest.prototype.testInit = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = jQuery('#calendar').calendar();
+    assertEquals(true, calendar.is(':mage-calendar'));
+    calendar.calendar('destroy');
 };
-
+CalendarTest.prototype.testGlobalConfigurationMerge = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    $.extend(true, $, {
+        calendarConfig: {
+            showOn: 'button',
+            showAnim: '',
+            buttonImageOnly: true,
+            showButtonPanel: true,
+            showWeek: true,
+            timeFormat: '',
+            showTime: false,
+            showHour: false,
+            showMinute: false
+        }
+    });
+    var calendar = $('#calendar').calendar();
+    assertEquals('button', calendar.calendar('option', 'showOn'));
+    assertEquals('', calendar.calendar('option', 'showAnim'));
+    assertEquals(true, calendar.calendar('option', 'buttonImageOnly'));
+    assertEquals(true, calendar.calendar('option', 'showButtonPanel'));
+    assertEquals(true, calendar.calendar('option', 'showWeek'));
+    assertEquals('', calendar.calendar('option', 'timeFormat'));
+    assertEquals(false, calendar.calendar('option', 'showTime'));
+    assertEquals(false, calendar.calendar('option', 'showHour'));
+    assertEquals(false, calendar.calendar('option', 'showMinute'));
+    calendar.calendar('destroy');
+    delete $.calendarConfig;
+};
+CalendarTest.prototype.testEnableAMPM = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar({timeFormat: 'hh:mm tt', ampm: false});
+    assertEquals(true, calendar.calendar('option', 'ampm'));
+    calendar.calendar('destroy');
+};
+CalendarTest.prototype.testDisableAMPM = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar({timeFormat: 'hh:mm'});
+    assertEquals(true, calendar.calendar('option', 'ampm') != true);
+    calendar.calendar('destroy');
+};
+CalendarTest.prototype.testWithServerTimezoneOffset = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var serverTimezoneSeconds = 1346122095,
+        calendar = $('#calendar').calendar({serverTimezoneSeconds: serverTimezoneSeconds}),
+        currentDate = new Date();
+    currentDate.setTime((serverTimezoneSeconds + currentDate.getTimezoneOffset() * 60) * 1000);
+    assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
+    calendar.calendar('destroy');
+}
+CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar(),
+        currentDate = new Date();
+    assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
+    calendar.calendar('destroy');
+}
+CalendarTest.prototype.testInitDateTimePicker = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar();
+    assertEquals(true, calendar.hasClass('hasDatepicker'));
+    calendar.calendar('destroy');
+}
+CalendarTest.prototype.testDateTimeMapping = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar({dateFormat: 'M/d/yy', timeFormat: 'h:mm a'});
+    assertEquals('mm/d/yy', calendar.calendar('option', 'dateFormat'));
+    assertEquals('h:mm tt', calendar.calendar('option', 'timeFormat'));
+    calendar.calendar('destroy');
+    calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy', timeFormat: 'HH:mm'});
+    assertEquals('MM/DD/yy', calendar.calendar('option', 'dateFormat'));
+    assertEquals('hh:mm', calendar.calendar('option', 'timeFormat'));
+    calendar.calendar('destroy');
+}
+CalendarTest.prototype.testDestroy = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var calendar = $('#calendar').calendar(),
+        calendarExist = calendar.is(':mage-calendar');
+    calendar.calendar('destroy');
+    assertEquals(true, calendarExist != calendar.is(':mage-calendar'));
+}

@@ -62,10 +62,12 @@ class Mage_Adminhtml_Block_Store_Switcher extends Mage_Adminhtml_Block_Template
      */
     protected $_hasDefaultOption = true;
 
-    public function __construct()
+    protected $_template = 'Mage_Adminhtml::store/switcher.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('Mage_Adminhtml::store/switcher.phtml');
+        parent::_construct();
+
         $this->setUseConfirm(true);
         $this->setUseAjax(true);
         $this->setDefaultStoreName($this->__('All Store Views'));

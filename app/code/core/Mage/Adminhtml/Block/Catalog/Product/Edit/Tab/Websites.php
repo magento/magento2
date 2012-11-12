@@ -35,14 +35,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Websites extends Mage_Adminh
 {
     protected $_storeFromHtml;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product/edit/websites.phtml');
-    }
+    protected $_template = 'catalog/product/edit/websites.phtml';
 
     /**
      * Retrieve edited product model instance

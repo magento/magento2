@@ -25,14 +25,7 @@
  */
 class Phoenix_Moneybookers_Block_Info extends Mage_Payment_Block_Info
 {
-    /**
-     * Constructor. Set template.
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('info.phtml');
-    }
+    protected $_template = 'info.phtml';
 
     /**
      * Returns code of payment method

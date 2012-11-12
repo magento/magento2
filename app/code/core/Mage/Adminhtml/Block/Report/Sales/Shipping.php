@@ -34,12 +34,15 @@
 
 class Mage_Adminhtml_Block_Report_Sales_Shipping extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+
+    protected $_template = 'report/grid/container.phtml';
+
+    protected function _construct()
     {
         $this->_controller = 'report_sales_shipping';
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Total Shipped Report');
-        parent::__construct();
-        $this->setTemplate('report/grid/container.phtml');
+        parent::_construct();
+
         $this->_removeButton('add');
         $this->addButton('filter_form_submit', array(
             'label'     => Mage::helper('Mage_Reports_Helper_Data')->__('Show Report'),

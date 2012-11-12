@@ -44,7 +44,7 @@ class Mage_Api2_Model_Auth_Adapter_Oauth extends Mage_Api2_Model_Auth_Adapter_Ab
     public function getUserParams(Mage_Api2_Model_Request $request)
     {
         /** @var $oauthServer Mage_Oauth_Model_Server */
-        $oauthServer   = Mage::getModel('Mage_Oauth_Model_Server', $request);
+        $oauthServer   = Mage::getModel('Mage_Oauth_Model_Server', array('request' => $request));
         $userParamsObj = (object) array('type' => null, 'id' => null);
 
         try {

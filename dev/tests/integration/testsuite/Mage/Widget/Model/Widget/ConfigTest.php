@@ -34,7 +34,7 @@ class Mage_Widget_Model_Widget_ConfigTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Widget_Model_Widget_Config;
+        $this->_model = Mage::getModel('Mage_Widget_Model_Widget_Config');
     }
 
     protected function tearDown()

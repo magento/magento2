@@ -37,7 +37,8 @@ class Mage_Adminhtml_Model_System_Config_Backend_Admin_RobotsTest extends PHPUni
      */
     protected function setUp()
     {
-        $this->_model = new Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots();
+        /** @var _model Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots */
+        $this->_model = Mage::getModel('Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots');
         $this->_model->setPath('design/search_engine_robots/custom_instructions');
         $this->_model->afterLoad();
     }

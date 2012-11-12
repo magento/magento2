@@ -37,13 +37,13 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Submission
     /**
      * Setting buttons for submit application page
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'application_id';
         $this->_controller  = 'adminhtml_mobile';
         $this->_blockGroup  = 'Mage_XmlConnect';
         $this->_mode = 'submission';
-        parent::__construct();
+        parent::_construct();
 
         $this->removeButton('delete');
         $this->removeButton('save');

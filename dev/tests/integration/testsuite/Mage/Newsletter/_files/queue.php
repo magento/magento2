@@ -28,14 +28,14 @@
 require __DIR__ . '/template.php';
 require __DIR__ . '/subscribers.php';
 
-$template = new Mage_Newsletter_Model_Template;
+$template = Mage::getModel('Mage_Newsletter_Model_Template');
 $template->load('fixture_tpl', 'template_code');
 $templateId = $template->getId();
 
 $currentStore = Mage::app()->getStore()->getId();
 $otherStore = Mage::app()->getStore('fixturestore')->getId();
 
-$queue = new Mage_Newsletter_Model_Queue;
+$queue = Mage::getModel('Mage_Newsletter_Model_Queue');
 $queue->setTemplateId($templateId)
     ->setNewsletterText('{{skin url="images/logo.gif"}}')
     ->setNewsletterSubject('Subject')

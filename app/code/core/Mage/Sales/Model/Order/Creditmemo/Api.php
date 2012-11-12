@@ -144,7 +144,7 @@ class Mage_Sales_Model_Order_Creditmemo_Api extends Mage_Sales_Model_Api_Resourc
         $creditmemoData = $this->_prepareCreateData($creditmemoData);
 
         /** @var $service Mage_Sales_Model_Service_Order */
-        $service = Mage::getModel('Mage_Sales_Model_Service_Order', $order);
+        $service = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order));
         /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
         $creditmemo = $service->prepareCreditmemo($creditmemoData);
 

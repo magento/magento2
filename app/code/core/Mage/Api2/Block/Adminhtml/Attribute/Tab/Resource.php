@@ -46,9 +46,9 @@ class Mage_Api2_Block_Adminhtml_Attribute_Tab_Resource extends Mage_Adminhtml_Bl
     /**
      * Constructor
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('api2_attribute_section_resources')
                 ->setData('default_dir', Varien_Db_Select::SQL_ASC)
@@ -56,9 +56,11 @@ class Mage_Api2_Block_Adminhtml_Attribute_Tab_Resource extends Mage_Adminhtml_Bl
                 ->setData('title', $this->__('Attribute Rules Information'))
                 ->setData('use_ajax', true);
 
+        $options = array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_ATTRIBUTE);
         $this->_treeModel = Mage::getModel(
             'Mage_Api2_Model_Acl_Global_Rule_Tree',
-            array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_ATTRIBUTE));
+            array('options' => $options)
+        );
 
         /** @var $permissions Mage_Api2_Model_Acl_Filter_Attribute_ResourcePermission */
         $permissions = Mage::getModel('Mage_Api2_Model_Acl_Filter_Attribute_ResourcePermission');

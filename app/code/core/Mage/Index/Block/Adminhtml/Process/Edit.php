@@ -27,13 +27,13 @@
 class Mage_Index_Block_Adminhtml_Process_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'process_id';
         $this->_controller = 'adminhtml_process';
         $this->_blockGroup = 'Mage_Index';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Save Process'));
         if (Mage::registry('current_index_process')) {

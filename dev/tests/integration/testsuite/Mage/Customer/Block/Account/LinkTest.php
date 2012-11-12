@@ -39,8 +39,9 @@ class Mage_Customer_Block_Account_LinkTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_block = new Mage_Customer_Block_Account_Link();
-        $layout = new Mage_Core_Model_Layout;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Customer_Block_Account_Link');
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_block->setLayout($layout);
         $layout->addBlock('Mage_Page_Block_Template_Links', 'links');
         $this->_links = $layout->getBlock('links');

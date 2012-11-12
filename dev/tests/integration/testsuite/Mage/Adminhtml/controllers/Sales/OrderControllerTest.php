@@ -47,7 +47,8 @@ class Mage_Adminhtml_Sales_OrderControllerTest extends Mage_Adminhtml_Utility_Co
      */
     public function testOrderViewAction()
     {
-        $order = new Mage_Sales_Model_Order;
+        /** @var $order Mage_Sales_Model_Order */
+        $order = Mage::getModel('Mage_Sales_Model_Order');
         $order->load('100000001', 'increment_id');
         $this->dispatch('backend/admin/sales_order/view/order_id/' . $order->getId());
         $this->assertContains('Los Angeles', $this->getResponse()->getBody());
@@ -65,7 +66,8 @@ class Mage_Adminhtml_Sales_OrderControllerTest extends Mage_Adminhtml_Utility_Co
      */
     public function testAddressActionNoVAT()
     {
-        $address = new Mage_Sales_Model_Order_Address;
+        /** @var $address Mage_Sales_Model_Order_Address */
+        $address = Mage::getModel('Mage_Sales_Model_Order_Address');
         $address->load('a_unique_firstname', 'firstname');
         $this->getRequest()->setParam('address_id', $address->getId());
         $this->dispatch('backend/admin/sales_order/address');

@@ -37,7 +37,7 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form_StoreTest extends PHPUnit_Fram
     {
         $registryData = array(
             'store_type' => 'store',
-            'store_data' => new Mage_Core_Model_Store(),
+            'store_data' => Mage::getModel('Mage_Core_Model_Store'),
             'store_action' => 'add'
         );
         foreach ($registryData as $key => $value) {
@@ -54,10 +54,10 @@ class Mage_Adminhtml_Block_System_Store_Edit_Form_StoreTest extends PHPUnit_Fram
 
     public function setUp()
     {
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
 
-        $this->_block = new Mage_Adminhtml_Block_System_Store_Edit_Form_Store();
-        $this->_block->setLayout($layout);
+        $this->_block = $layout->createBlock('Mage_Adminhtml_Block_System_Store_Edit_Form_Store');
 
         $this->_block->toHtml();
     }

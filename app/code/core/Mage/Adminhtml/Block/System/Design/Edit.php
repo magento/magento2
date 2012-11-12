@@ -26,10 +26,13 @@
 
 class Mage_Adminhtml_Block_System_Design_Edit extends Mage_Adminhtml_Block_Widget
 {
-    public function __construct()
+
+    protected $_template = 'system/design/edit.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('system/design/edit.phtml');
+        parent::_construct();
+
         $this->setId('design_edit');
     }
 

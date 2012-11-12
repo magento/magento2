@@ -67,7 +67,7 @@ class Mage_XmlConnect_Block_Catalog_Product_Options extends Mage_XmlConnect_Bloc
      */
     public function getProductCustomOptionsXmlObject(Mage_Catalog_Model_Product $product)
     {
-        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<product></product>');
+        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', array('data' => '<product></product>'));
         $optionsNode = $xmlModel->addChild('options');
 
         if (!$product->getId()) {

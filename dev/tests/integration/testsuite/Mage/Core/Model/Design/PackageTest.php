@@ -57,7 +57,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Design_Package();
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
         $this->_model->setDesignTheme('test/default/default', 'frontend');
     }
 

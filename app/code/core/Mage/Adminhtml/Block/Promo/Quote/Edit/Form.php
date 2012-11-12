@@ -35,9 +35,9 @@
 class Mage_Adminhtml_Block_Promo_Quote_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('promo_quote_form');
         $this->setTitle(Mage::helper('Mage_SalesRule_Helper_Data')->__('Rule Information'));
     }

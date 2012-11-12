@@ -36,11 +36,7 @@ class Mage_Payment_Block_Info_Instructions extends Mage_Payment_Block_Info
      */
     protected $_instructions;
 
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('info/instructions.phtml');
-    }
+    protected $_template = 'info/instructions.phtml';
 
     /**
      * Get instructions text from order payment

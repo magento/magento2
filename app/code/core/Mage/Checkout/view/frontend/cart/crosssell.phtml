@@ -54,6 +54,6 @@
         </li>
     <?php endforeach; ?>
     </ul>
-    <script type="text/javascript">decorateList('crosssell-products-list', 'none-recursive')</script>
+    <script type="text/javascript">(function($) {$('#crosssell-products-list').decorate('list', false)})(jQuery)</script>
 </div>
 <?php endif; ?>

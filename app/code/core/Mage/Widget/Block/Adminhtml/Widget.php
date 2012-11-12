@@ -33,9 +33,9 @@
  */
 class Mage_Widget_Block_Adminhtml_Widget extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->_blockGroup = 'Mage_Widget';
         $this->_controller = 'adminhtml';

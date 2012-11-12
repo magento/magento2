@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Catalog_Model_Product_Indexer_Flat
  */
-class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_TestCase
+class Mage_Catalog_Model_Product_Indexer_FlatTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**
      * @var Mage_Catalog_Model_Product_Indexer_Flat
@@ -42,7 +42,7 @@ class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Indexer_Flat;
+        $this->_model = $this->getModel('Mage_Catalog_Model_Product_Indexer_Flat');
         $this->_event = $this->getMock('Mage_Index_Model_Event',
             array('getFlatHelper', 'getEntity', 'getType', 'getDataObject'), array(), '', false
         );

@@ -31,15 +31,7 @@
  */
 class Mage_Install_Block_Begin extends Mage_Install_Block_Abstract
 {
-    /**
-     * Set template
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('begin.phtml');
-    }
+    protected $_template = 'begin.phtml';
 
     /**
      * Get wizard URL

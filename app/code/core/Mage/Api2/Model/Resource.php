@@ -452,7 +452,7 @@ abstract class Mage_Api2_Model_Resource
     {
         if (!$this->_filter) {
             /** @var $filter Mage_Api2_Model_Acl_Filter */
-            $filter = Mage::getModel('Mage_Api2_Model_Acl_Filter', $this);
+            $filter = Mage::getModel('Mage_Api2_Model_Acl_Filter', array('resource' => $this));
             $this->setFilter($filter);
         }
         return $this->_filter;

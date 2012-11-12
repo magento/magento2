@@ -39,7 +39,7 @@ class Mage_Catalog_Model_Category_ApiTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Category_Api;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Category_Api');
         Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
     }
 

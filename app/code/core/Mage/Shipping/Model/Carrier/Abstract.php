@@ -536,7 +536,8 @@ abstract class Mage_Shipping_Model_Carrier_Abstract extends Varien_Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            Mage::getModel('Mage_Core_Model_Log_Adapter', 'shipping_' . $this->getCarrierCode() . '.log')
+            Mage::getModel('Mage_Core_Model_Log_Adapter',
+                array('fileName' => 'shipping_' . $this->getCarrierCode() . '.log'))
                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
                ->log($debugData);
         }

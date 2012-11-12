@@ -34,3 +34,5 @@ if ($tableName) {
 }
 
 $installer->endSetup();
+
+Mage::dispatchEvent('theme_registration_from_filesystem');

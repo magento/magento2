@@ -35,6 +35,13 @@
 class Mage_Core_Model_Observer
 {
     /**
+     * Theme list
+     *
+     * @var array
+     */
+    protected $_themeList = array();
+
+    /**
      * Check if synchronize process is finished and generate notification message
      *
      * @param  Varien_Event_Observer $observer
@@ -104,5 +111,127 @@ class Mage_Core_Model_Observer
     {
         Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_OLD);
         Mage::dispatchEvent('core_clean_cache');
+    }
+
+    /**
+     * Theme registration
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Core_Model_Observer
+     */
+    public function themeRegistration(Varien_Event_Observer $observer)
+    {
+        $pathPattern = $observer->getEvent()->getPathPattern();
+        /** @var $themeCollection Mage_Core_Model_Theme_Collection */
+        $themeCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
+        try {
+            if ($pathPattern) {
+                $themeCollection->addTargetPattern($pathPattern);
+            } else {
+                $themeCollection->addDefaultPattern();
+            }
+            foreach ($themeCollection as $theme) {
+                $this->_saveThemeRecursively($theme, $themeCollection);
+            }
+        } catch (Mage_Core_Exception $e) {
+            Mage::logException($e);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Save theme recursively
+     *
+     * @throws Mage_Core_Exception
+     * @param Mage_Core_Model_Theme $theme
+     * @param Mage_Core_Model_Theme_Collection $collection
+     * @return Mage_Core_Model_Observer
+     */
+    protected function _saveThemeRecursively($theme, $collection)
+    {
+        $themeModel = $this->_loadThemeByPath($theme->getThemePath());
+        if ($themeModel->getId()) {
+            return $this;
+        }
+
+        $this->_addThemeToList($theme->getThemePath());
+        if ($theme->getParentTheme()) {
+            $parentTheme = $this->_prepareParentTheme($theme, $collection);
+            if (!$parentTheme->getId()) {
+                Mage::throwException('Invalid parent theme path');
+            }
+            $theme->setParentId($parentTheme->getId());
+        }
+
+        $theme->savePreviewImage()->save();
+        $this->_emptyThemeList();
+        return $this;
+    }
+
+    /**
+     * Prepare parent theme
+     *
+     * @param Mage_Core_Model_Theme $theme
+     * @param Mage_Core_Model_Theme_Collection $collection
+     * @return Mage_Core_Model_Theme
+     */
+    protected function _prepareParentTheme($theme, $collection)
+    {
+        $parentThemePath = implode('/', $theme->getParentTheme());
+        $themeModel = $this->_loadThemeByPath($parentThemePath);
+
+        if (!$themeModel->getId()) {
+            /**
+             * Find theme model in file system collection
+             */
+            $filesystemThemeModel = $collection->getItemByColumnValue('theme_path', $parentThemePath);
+            if ($filesystemThemeModel !== null) {
+                $this->_saveThemeRecursively($filesystemThemeModel, $collection);
+                return $filesystemThemeModel;
+            }
+        }
+
+        return $themeModel;
+    }
+
+    /**
+     * Add theme path to list
+     *
+     * @throws Mage_Core_Exception
+     * @param string $themePath
+     * @return Mage_Core_Model_Observer
+     */
+    protected function _addThemeToList($themePath)
+    {
+        if (in_array($themePath, $this->_themeList)) {
+            Mage::throwException('Invalid parent theme (сross-references) leads to an infinite loop.');
+        }
+        array_push($this->_themeList, $themePath);
+        return $this;
+    }
+
+    /**
+     * Clear theme list
+     *
+     * @return Mage_Core_Model_Observer
+     */
+    protected function _emptyThemeList()
+    {
+        $this->_themeList = array();
+        return $this;
+    }
+
+    /**
+     * Load theme by path
+     *
+     * @param string  $themePath
+     * @return Mage_Core_Model_Theme
+     */
+    protected function _loadThemeByPath($themePath)
+    {
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+        return $themeModel->load($themePath, 'theme_path');
     }
 }

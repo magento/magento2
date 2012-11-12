@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Checkout_Agreement_Edit_Form extends Mage_Adminhtml_B
      * Init class
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('checkoutAgreementForm');
         $this->setTitle(Mage::helper('Mage_Checkout_Helper_Data')->__('Terms and Conditions Information'));

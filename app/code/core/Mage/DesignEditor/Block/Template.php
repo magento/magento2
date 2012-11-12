@@ -55,10 +55,10 @@ class Mage_DesignEditor_Block_Template extends Mage_Core_Block_Template
     public function getRemoveButton($elementId)
     {
         /** @var $block Mage_DesignEditor_Block_Wrapper_Remove */
-        $block = Mage::getModel('Mage_DesignEditor_Block_Wrapper_Remove', array(
+        $block = Mage::getModel('Mage_DesignEditor_Block_Wrapper_Remove', array('data' => array(
             'template'   => 'wrapper/remove.phtml',
             'wrapped_element_id' => $elementId
-        ));
+        )));
         return $block->toHtml();
     }
 }

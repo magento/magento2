@@ -35,14 +35,8 @@
 class Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize
     extends Mage_Adminhtml_Block_System_Config_Form_Field
 {
-    /*
-     * Set template
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('system/config/system/storage/media/synchronize.phtml');
-    }
+
+    protected $_template = 'system/config/system/storage/media/synchronize.phtml';
 
     /**
      * Remove scope label

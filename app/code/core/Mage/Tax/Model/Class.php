@@ -41,7 +41,14 @@
 
 class Mage_Tax_Model_Class extends Mage_Core_Model_Abstract
 {
+    /**
+     * Defines Customer Tax Class string
+     */
     const TAX_CLASS_TYPE_CUSTOMER   = 'CUSTOMER';
+
+    /**
+     * Defines Product Tax Class string
+     */
     const TAX_CLASS_TYPE_PRODUCT    = 'PRODUCT';
 
     public function _construct()

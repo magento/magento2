@@ -50,20 +50,26 @@
     <div class="global-site-notice notice-cookie" id="notice-cookie-block" style="display: none">
         <div class="notice-inner">
             <p><?php echo $this->__('This website requires cookies to provide all of its features. For more information on what data is contained in the cookies, please see our <a href="%s">Privacy Policy page</a>. To accept cookies from this site, please click the Allow button below.', $this->getPrivacyPolicyLink()) ?></p>
-            <div class="actions"><button class="button" onclick="allowSaveCookie()"><span><span><?php echo $this->__('Allow');?></span></span></button></div>
+            <div class="actions"><button class="button"><span><span><?php echo $this->__('Allow');?></span></span></button></div>
         </div>
     </div>
     <script type="text/javascript">
-    /* <![CDATA[ */
-    function allowSaveCookie() {
-        Mage.Cookies.set('<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>', '<?php echo Mage::helper('Mage_Core_Helper_Cookie')->getAcceptedSaveCookiesWebsiteIds()?>', new Date(new Date().getTime() + <?php echo Mage::helper('Mage_Core_Helper_Cookie')->getCookieRestrictionLifetime() ?> * 1000));
-        if (Mage.Cookies.get('<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>')) {
-            window.location.reload();
-        } else {
-            window.location.href = '<?php echo Mage::getUrl('cms/index/noCookies')?>';
-        }
-    }
-    $('notice-cookie-block').show();
-    /* ]]> */
+        // <![CDATA[
+        (function($) {
+            $.mage.event.observe('mage.nocookies.initialize', function(e, o) {
+                o.cookieBlockSelector = '#notice-cookie-block';
+                o.cookieAllowButtonSelector = '#notice-cookie-block > .notice-inner > .actions > .button';
+                o.cookieName = '<?php echo Mage_Core_Helper_Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>';
+                o.cookieValue = '<?php echo Mage::helper('Mage_Core_Helper_Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>';
+                o.cookieExpires = new Date(new Date().getTime() + <?php echo Mage::helper('Mage_Core_Helper_Cookie')->getCookieRestrictionLifetime() ?> * 1000);
+                o.noCookiesUrl = '<?php echo Mage::getUrl('cms/index/noCookies') ?>';
+            });
+            $.mage.load.jsSync(
+                "<?php echo $this->getSkinUrl('jquery/jquery.cookie.js')?>",
+                "<?php echo $this->getSkinUrl('Mage_Page::js/cookies.js')?>",
+                "<?php echo $this->getSkinUrl('Mage_Page::js/notices.js')?>"
+            );
+        })(jQuery);
+        // ]]>
     </script>
 <?php endif; ?>

@@ -39,7 +39,7 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Mage_Page_Block_Html_Head;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Page_Block_Html_Head');
     }
 
     protected function tearDown()

@@ -33,8 +33,20 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_AbstractTest
 {
     public function testAddAttributesToForm()
     {
-        $block = $this->getMockForAbstractClass('Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract')
-            ->setLayout(new Mage_Core_Model_Layout);
+        $arguments = array(
+            Mage::getObjectManager()->get('Mage_Core_Controller_Request_Http'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Layout'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Translate'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Cache'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Design_Package'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Session'),
+            Mage::getObjectManager()->get('Mage_Core_Model_Store_Config'),
+            Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front')
+        );
+        /** @var $block Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract */
+        $block = $this->getMockForAbstractClass('Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract', $arguments);
+        $block->setLayout(Mage::getObjectManager()->create('Mage_Core_Model_Layout'));
 
         $method = new ReflectionMethod(
             'Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract', '_addAttributesToForm');
@@ -42,12 +54,15 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_AbstractTest
 
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('test_fieldset', array());
-        $dateAttribute = new Mage_Customer_Model_Attribute(array(
-            'attribute_code' => 'date',
-            'backend_type' => 'datetime',
-            'frontend_input' => 'date',
-            'frontend_label' => 'Date',
-        ));
+        $arguments = array(
+            'data' => array(
+                'attribute_code' => 'date',
+                'backend_type' => 'datetime',
+                'frontend_input' => 'date',
+                'frontend_label' => 'Date',
+            )
+        );
+        $dateAttribute = Mage::getObjectManager()->create('Mage_Customer_Model_Attribute', $arguments);
         $attributes = array('date' => $dateAttribute);
         $method->invoke($block, $attributes, $fieldset);
 

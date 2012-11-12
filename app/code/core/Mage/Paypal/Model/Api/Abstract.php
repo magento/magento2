@@ -568,7 +568,8 @@ abstract class Mage_Paypal_Model_Api_Abstract extends Varien_Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            Mage::getModel('Mage_Core_Model_Log_Adapter', 'payment_' . $this->_config->getMethodCode() . '.log')
+            Mage::getModel('Mage_Core_Model_Log_Adapter',
+                array('fileName' => 'payment_' . $this->_config->getMethodCode() . '.log'))
                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
                ->log($debugData);
         }

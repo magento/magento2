@@ -26,9 +26,9 @@
 
 class Mage_Adminhtml_Block_Api_Tab_Rolesusers extends Mage_Adminhtml_Block_Widget_Tabs {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $roleId = $this->getRequest()->getParam('rid', false);
 

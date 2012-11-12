@@ -55,7 +55,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
 
         $this->_logger = $this->getMock('Mage_Backend_Model_Menu_Logger');
 
-        $this->_model = new Mage_Backend_Model_Menu(array('logger' => $this->_logger));
+        $this->_model = new Mage_Backend_Model_Menu($this->_logger);
     }
 
     public function testAdd()
@@ -76,7 +76,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMock("Mage_Backend_Model_Menu", array(), array(array('logger' => $this->_logger)));
+        $subMenu = $this->getMock("Mage_Backend_Model_Menu", array(), array($this->_logger));
         $subMenu->expects($this->once())
             ->method("add")
             ->with($this->_items['item2']);
@@ -128,8 +128,8 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
 
     public function testGetRecursive()
     {
-        $menu1 = new Mage_Backend_Model_Menu(array('logger' => $this->_logger));
-        $menu2 = new Mage_Backend_Model_Menu(array('logger' => $this->_logger));
+        $menu1 = new Mage_Backend_Model_Menu($this->_logger);
+        $menu2 = new Mage_Backend_Model_Menu($this->_logger);
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
         $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menu1));
@@ -243,7 +243,7 @@ class Mage_Backend_Model_MenuTest extends PHPUnit_Framework_TestCase
     {
         $this->_logger->expects($this->any())->method('log');
 
-        $subMenu = new Mage_Backend_Model_Menu(array('logger' => $this->_logger));
+        $subMenu = new Mage_Backend_Model_Menu($this->_logger);
 
         $this->_items['item1']->expects($this->any())
             ->method("hasChildren")

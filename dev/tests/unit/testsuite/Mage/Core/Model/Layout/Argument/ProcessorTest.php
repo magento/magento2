@@ -38,27 +38,32 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectFactoryMock;
+    protected $_argumentUpdaterMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_processorConfigMock;
+    protected $_handlerFactory;
 
     protected function setUp()
     {
-        $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $this->_processorConfigMock = $this->getMock(
-            'Mage_Core_Model_Layout_Argument_ProcessorConfig',
-            array(),
-            array(),
-            '',
-            false);
+        $this->_argumentUpdaterMock = $this->getMock('Mage_Core_Model_Layout_Argument_Updater', array(), array(), '',
+            false
+        );
+        $this->_handlerFactory = $this->getMock('Mage_Core_Model_Layout_Argument_HandlerFactory', array(), array(), '',
+            false
+        );
 
-        $this->_model = new Mage_Core_Model_Layout_Argument_Processor(array(
-            'objectFactory' => $this->_objectFactoryMock,
-            'processorConfig' => $this->_processorConfigMock
-        ));
+        $this->_model = new Mage_Core_Model_Layout_Argument_Processor($this->_argumentUpdaterMock,
+            $this->_handlerFactory
+        );
+    }
+
+    protected function tearDown()
+    {
+        unset($this->_model);
+        unset($this->_argumentUpdaterMock);
+        unset($this->_handlerFactory);
     }
 
     /**
@@ -67,29 +72,16 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
      */
     public function testProcess($arguments)
     {
-        $argumentHandlerMock = $this->getMock(
-            'Mage_Core_Model_Layout_Argument_HandlerInterface',
-            array(),
-            array(),
-            '',
-            false);
+        $argumentHandlerMock = $this->getMock('Mage_Core_Model_Layout_Argument_HandlerInterface', array(), array(), '',
+            false
+        );
         $argumentHandlerMock->expects($this->once())
             ->method('process')
             ->will($this->returnValue($this->getMock('Dummy_Argument_Value_Class_Name', array(), array(), '', false)));
 
-        $factoryMock = $this->getMock(
-            'Mage_Core_Model_Layout_Argument_HandlerFactoryInterface',
-            array(),
-            array(),
-            '',
-            false);
-        $factoryMock->expects($this->once())
-            ->method('createHandler')
-            ->will($this->returnValue($argumentHandlerMock));
-
-        $this->_processorConfigMock->expects($this->once())->method('getArgumentHandlerFactoryByType')
+        $this->_handlerFactory->expects($this->once())->method('getArgumentHandlerByType')
             ->with($this->equalTo('dummy'))
-            ->will($this->returnValue($factoryMock));
+            ->will($this->returnValue($argumentHandlerMock));
 
         $processedArguments = $this->_model->process($arguments);
 
@@ -100,15 +92,15 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Incorrect handler factory
+     * @expectedExceptionMessage dummy type handler should implement Mage_Core_Model_Layout_Argument_HandlerInterface
      */
     public function testProcessIfArgumentHandlerFactoryIsIncorrect()
     {
-        $this->_processorConfigMock->expects($this->once())->method('getArgumentHandlerFactoryByType')
-            ->with($this->equalTo('incorrect'))
+        $this->_handlerFactory->expects($this->once())->method('getArgumentHandlerByType')
+            ->with($this->equalTo('dummy'))
             ->will($this->returnValue(new StdClass()));
 
-        $this->_model->process(array('argKey' => array('type' => 'incorrect', 'value' => 'incorrect_value')));
+        $this->_model->process(array('argKey' => array('type' => 'dummy', 'value' => 'incorrect_value')));
     }
 
     /**
@@ -117,19 +109,9 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
      */
     public function testProcessIfArgumentHandlerIsIncorrect()
     {
-        $dummyFactoryMock = $this->getMock(
-            'Mage_Core_Model_Layout_Argument_HandlerFactoryInterface',
-            array(),
-            array(),
-            '',
-            false);
-        $dummyFactoryMock->expects($this->once())
-            ->method('createHandler')
-            ->will($this->returnValue(new StdClass()));
-
-        $this->_processorConfigMock->expects($this->once())->method('getArgumentHandlerFactoryByType')
+        $this->_handlerFactory->expects($this->once())->method('getArgumentHandlerByType')
             ->with($this->equalTo('incorrect'))
-            ->will($this->returnValue($dummyFactoryMock));
+            ->will($this->returnValue(new StdClass()));
 
         $this->_model->process(array('argKey' => array('type' => 'incorrect', 'value' => 'incorrect_value')));
     }
@@ -167,8 +149,6 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
         );
     }
 
-
-
     public function testProcessWithArgumentUpdaters()
     {
         $arguments = array(
@@ -178,14 +158,7 @@ class Mage_Core_Model_Layout_Argument_ProcessorTest extends PHPUnit_Framework_Te
             )
         );
 
-        $argumentUpdaterMock = $this->getMock('Mage_Core_Model_Layout_Argument_Updater', array(), array(), '', false);
-        $argumentUpdaterMock->expects($this->once())->method('applyUpdaters')->will($this->returnValue(1));
-
-        $this->_objectFactoryMock
-            ->expects($this->once())
-            ->method('getModelInstance')
-            ->with('Mage_Core_Model_Layout_Argument_Updater')
-            ->will($this->returnValue($argumentUpdaterMock));
+        $this->_argumentUpdaterMock->expects($this->once())->method('applyUpdaters')->will($this->returnValue(1));
 
         $expected = array(
             'one' => 1,

@@ -94,6 +94,10 @@ class Mage_Catalog_Model_Resource_Product_Option_ValueTest extends PHPUnit_Frame
     public function testSaveValueTitles()
     {
         $object = new Stub_UnitTest_Mage_Catalog_Model_Resource_Product_Option_Value_Mage_Core_Model_Stub(
+            $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false),
+            $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false),
+            null,
+            null,
             self::$valueTitleData
         );
 

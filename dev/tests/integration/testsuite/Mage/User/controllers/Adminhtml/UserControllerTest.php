@@ -66,7 +66,7 @@ class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Cont
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }
 
-    /*
+    /**
      * @covers Mage_User_Adminhtml_UserController::editAction
      */
     public function testEditAction()

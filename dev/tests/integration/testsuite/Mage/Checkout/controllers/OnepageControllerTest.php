@@ -33,7 +33,7 @@ class Mage_Checkout_OnepageControllerTest extends Magento_Test_TestCase_Controll
     protected function setUp()
     {
         parent::setUp();
-        $quote = new Mage_Sales_Model_Quote();
+        $quote = Mage::getModel('Mage_Sales_Model_Quote');
         $quote->load('test01', 'reserved_order_id');
         Mage::getSingleton('Mage_Checkout_Model_Session')->setQuoteId($quote->getId());
     }
@@ -81,5 +81,15 @@ class Mage_Checkout_OnepageControllerTest extends Magento_Test_TestCase_Controll
     {
         $this->dispatch('checkout/onepage/review');
         $this->assertContains('checkout-review', $this->getResponse()->getBody());
+    }
+
+    /**
+     * @magentoConfigFixture current_store general/locale/code de_DE
+     */
+    public function testReviewActionLocalization()
+    {
+        $this->dispatch('checkout/onepage/review');
+        $this->assertNotContains('Place Order', $this->getResponse()->getBody());
+        $this->assertContains('Bestellung aufgeben', $this->getResponse()->getBody());
     }
 }

@@ -48,7 +48,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <script type="text/javascript">decorateTable('unavailable-shipping-table')</script>
+            <script type="text/javascript">(function($) {$('#unavailable-shipping-table').decorate('table')})(jQuery)</script>
         </div>
     </div>
 <?php endif; ?>

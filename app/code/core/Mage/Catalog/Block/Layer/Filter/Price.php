@@ -37,9 +37,9 @@ class Mage_Catalog_Block_Layer_Filter_Price extends Mage_Catalog_Block_Layer_Fil
      * Initialize Price filter module
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->_filterModelName = 'Mage_Catalog_Model_Layer_Filter_Price';
     }

@@ -550,4 +550,224 @@ class Mage_Customer_Model_Convert_Parser_Customer
         $this->setData($data);
         return $this;
     }
+
+    /**
+     * @deprecated not used anymore
+     */
+    public function parse()
+    {
+        $data = $this->getData();
+
+        $entityTypeId = Mage::getSingleton('Mage_Eav_Model_Config')->getEntityType('customer')->getId();
+        $result = array();
+        foreach ($data as $i=>$row) {
+            $this->setPosition('Line: '.($i+1));
+            try {
+
+                // validate SKU
+                if (empty($row['email'])) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__('Missing email, skipping the record.'), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+                $this->setPosition('Line: '.($i+1).', email: '.$row['email']);
+
+                // try to get entity_id by sku if not set
+                /*
+                if (empty($row['entity_id'])) {
+                    $row['entity_id'] = $this->getResource()->getProductIdBySku($row['email']);
+                }
+                */
+
+                // if attribute_set not set use default
+                if (empty($row['attribute_set'])) {
+                    $row['attribute_set'] = 'Default';
+                }
+
+                // get attribute_set_id, if not throw error
+                $row['attribute_set_id'] = $this->getAttributeSetId($entityTypeId, $row['attribute_set']);
+                if (!$row['attribute_set_id']) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__("Invalid attribute set specified, skipping the record."), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+
+                if (empty($row['group'])) {
+                    $row['group'] = 'General';
+                }
+
+                if (empty($row['firstname'])) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__('Missing firstname, skipping the record.'), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+                //$this->setPosition('Line: '.($i+1).', Firstname: '.$row['firstname']);
+
+                if (empty($row['lastname'])) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__('Missing lastname, skipping the record.'), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+                //$this->setPosition('Line: '.($i+1).', Lastname: '.$row['lastname']);
+
+                /*
+                // get product type_id, if not throw error
+                $row['type_id'] = $this->getProductTypeId($row['type']);
+                if (!$row['type_id']) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__("Invalid product type specified, skipping the record."), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+                */
+
+                // get store ids
+                $storeIds = $this->getStoreIds(isset($row['store']) ? $row['store'] : $this->getVar('store'));
+                if (!$storeIds) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__("Invalid store specified, skipping the record."), Varien_Convert_Exception::ERROR);
+                    continue;
+                }
+
+                // import data
+                $rowError = false;
+                foreach ($storeIds as $storeId) {
+                    $collection = $this->getCollection($storeId);
+                    //print_r($collection);
+                    $entity = $collection->getEntity();
+
+                    $model = Mage::getModel('Mage_Customer_Model_Customer');
+                    $model->setStoreId($storeId);
+                    if (!empty($row['entity_id'])) {
+                        $model->load($row['entity_id']);
+                    }
+                    foreach ($row as $field=>$value) {
+                        $attribute = $entity->getAttribute($field);
+                        if (!$attribute) {
+                            continue;
+                        }
+
+                        if ($attribute->usesSource()) {
+                            $source = $attribute->getSource();
+                            $optionId = $this->getSourceOptionId($source, $value);
+                            if (is_null($optionId)) {
+                                $rowError = true;
+                                $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                                    ->__("Invalid attribute option specified for attribute %s (%s), skipping the record.",
+                                        $field, $value), Varien_Convert_Exception::ERROR
+                                    );
+                                continue;
+                            }
+                            $value = $optionId;
+                        }
+                        $model->setData($field, $value);
+
+                    }//foreach ($row as $field=>$value)
+
+
+                    $billingAddress = $model->getPrimaryBillingAddress();
+                    $customer = Mage::getModel('Mage_Customer_Model_Customer')->load($model->getId());
+
+
+                    if (!$billingAddress  instanceof Mage_Customer_Model_Address) {
+                        $billingAddress = Mage::getModel('Mage_Customer_Model_Address');
+                        if ($customer->getId() && $customer->getDefaultBilling()) {
+                            $billingAddress->setId($customer->getDefaultBilling());
+                        }
+                    }
+
+                    $regions = Mage::getResourceModel('Mage_Directory_Model_Resource_Region_Collection')
+                        ->addRegionNameFilter($row['billing_region'])
+                        ->load();
+                    if ($regions) {
+                        foreach ($regions as $region) {
+                            $regionId = $region->getId();
+                        }
+                    }
+
+                    $billingAddress->setFirstname($row['firstname']);
+                    $billingAddress->setLastname($row['lastname']);
+                    $billingAddress->setCity($row['billing_city']);
+                    $billingAddress->setRegion($row['billing_region']);
+                    $billingAddress->setRegionId($regionId);
+                    $billingAddress->setCountryId($row['billing_country']);
+                    $billingAddress->setPostcode($row['billing_postcode']);
+                    $billingAddress->setStreet(array($row['billing_street1'],$row['billing_street2']));
+                    if (!empty($row['billing_telephone'])) {
+                        $billingAddress->setTelephone($row['billing_telephone']);
+                    }
+
+                    if (!$model->getDefaultBilling()) {
+                        $billingAddress->setCustomerId($model->getId());
+                        $billingAddress->setIsDefaultBilling(true);
+                        $billingAddress->save();
+                        $model->setDefaultBilling($billingAddress->getId());
+                        $model->addAddress($billingAddress);
+                        if ($customer->getDefaultBilling()) {
+                            $model->setDefaultBilling($customer->getDefaultBilling());
+                        } else {
+                            $model->setDefaultShipping($billingAddress->getId());
+                            $model->addAddress($billingAddress);
+                        }
+                    }
+
+                    $shippingAddress = $model->getPrimaryShippingAddress();
+                    if (!$shippingAddress instanceof Mage_Customer_Model_Address) {
+                        $shippingAddress = Mage::getModel('Mage_Customer_Model_Address');
+                        if ($customer->getId() && $customer->getDefaultShipping()) {
+                            $shippingAddress->setId($customer->getDefaultShipping());
+                        }
+                    }
+
+                    $regions = Mage::getResourceModel('Mage_Directory_Model_Resource_Region_Collection')
+                        ->addRegionNameFilter($row['shipping_region'])
+                        ->load();
+                    if ($regions) {
+                        foreach ($regions as $region) {
+                            $regionId = $region->getId();
+                        }
+                    }
+
+                    $shippingAddress->setFirstname($row['firstname']);
+                    $shippingAddress->setLastname($row['lastname']);
+                    $shippingAddress->setCity($row['shipping_city']);
+                    $shippingAddress->setRegion($row['shipping_region']);
+                    $shippingAddress->setRegionId($regionId);
+                    $shippingAddress->setCountryId($row['shipping_country']);
+                    $shippingAddress->setPostcode($row['shipping_postcode']);
+                    $shippingAddress->setStreet(array($row['shipping_street1'], $row['shipping_street2']));
+                    $shippingAddress->setCustomerId($model->getId());
+                    if (!empty($row['shipping_telephone'])) {
+                        $shippingAddress->setTelephone($row['shipping_telephone']);
+                    }
+
+                    if (!$model->getDefaultShipping()) {
+                        if ($customer->getDefaultShipping()) {
+                            $model->setDefaultShipping($customer->getDefaultShipping());
+                        } else {
+                            $shippingAddress->save();
+                            $model->setDefaultShipping($shippingAddress->getId());
+                            $model->addAddress($shippingAddress);
+
+                        }
+                        $shippingAddress->setIsDefaultShipping(true);
+                    }
+
+                    if (!$rowError) {
+                        $collection->addItem($model);
+                    }
+
+                } //foreach ($storeIds as $storeId)
+
+            } catch (Exception $e) {
+                if (!$e instanceof Mage_Dataflow_Model_Convert_Exception) {
+                    $this->addException(Mage::helper('Mage_Customer_Helper_Data')
+                        ->__('An error occurred while retrieving the option value: %s.', $e->getMessage()),
+                            Mage_Dataflow_Model_Convert_Exception::FATAL
+                        );
+                }
+            }
+        }
+        $this->setData($this->_collections);
+        return $this;
+    }
 }

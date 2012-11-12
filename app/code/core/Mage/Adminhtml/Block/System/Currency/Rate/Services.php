@@ -34,16 +34,7 @@
  */
 class Mage_Adminhtml_Block_System_Currency_Rate_Services extends Mage_Adminhtml_Block_Template
 {
-
-    /**
-     * Set import services template
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('system/currency/rate/services.phtml');
-    }
+    protected $_template = 'system/currency/rate/services.phtml';
 
     /**
      * Create import services form select element

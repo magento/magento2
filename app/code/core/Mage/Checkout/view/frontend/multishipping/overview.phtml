@@ -132,7 +132,7 @@
                         <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <script type="text/javascript">decorateTable('overview-table-<?php echo $_address->getId() ?>')</script>
+                    <script type="text/javascript">(function($) {$('#overview-table-<?php echo $_address->getId() ?>').decorate('table')})(jQuery)</script>
                 </div>
             <?php if($this->getShippingAddressCount()!=$_index+1): ?>
                 <div class="divider"></div>
@@ -182,7 +182,7 @@
                     <?php endforeach; ?>
                     </tbody>
                     </table>
-                    <script type="text/javascript">decorateTable('virtual-overview-table')</script>
+                    <script type="text/javascript">(function($) {$('#virtual-overview-table').decorate('table')})(jQuery)</script>
                 </div>
         </div>
         <?php endif; ?>

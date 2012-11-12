@@ -74,10 +74,10 @@
 </table>
 <?php endif; ?>
 <script type="text/javascript">
-//<![CDATA[
-    decorateTable('rss-table-misc');
-    decorateTable('rss-table-category');
-//]]>
+    (function($) {
+        $('#rss-table-misc').decorate('table');
+        $('#rss-table-category').decorate('table');
+    })(jQuery);
 </script>
 <?php else: ?>
     <p><?php echo $this->__('There are no Rss Feeds'); ?></p>

@@ -57,11 +57,8 @@ abstract class Mage_Catalog_Block_Layer_Filter_Abstract extends Mage_Core_Block_
      * Initialize filter template
      *
      */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('Mage_Catalog::layer/filter.phtml');
-    }
+
+    protected $_template = 'Mage_Catalog::layer/filter.phtml';
 
     /**
      * Initialize filter model object

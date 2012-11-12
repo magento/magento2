@@ -36,12 +36,10 @@ class Mage_Adminhtml_Block_Customer_Form_Element_Boolean extends Varien_Data_For
 {
     /**
      * Prepare default SELECT values
-     *
-     * @param array $attributes
      */
-    public function __construct($attributes=array())
+    protected function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setValues(array(
             array(
                 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('No'),

@@ -26,14 +26,7 @@
 
 class Mage_Paygate_Block_Authorizenet_Form_Cc extends Mage_Payment_Block_Form
 {
-    /**
-     * Set block template
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Paygate::form/cc.phtml');
-    }
+    protected $_template = 'Mage_Paygate::form/cc.phtml';
 
     /**
      * Retreive payment method form html

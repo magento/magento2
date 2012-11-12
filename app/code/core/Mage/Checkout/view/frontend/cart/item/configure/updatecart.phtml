@@ -33,7 +33,29 @@
         <label for="qty"><?php echo $this->__('Qty:') ?></label>
         <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
         <?php endif; ?>
-        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-updatecart-button"><span><span><?php echo $buttonTitle ?></span></span></button>
         <?php echo $this->getChildHtml('', true) ?>
     </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        (function ($) {
+            $.mage.event.observe('product.updatecart.button', function (event, cartData) {
+                var initData = {
+                    cartButtonId: "#product-updatecart-button",
+                    cartForm: "#product_addtocart_form"
+                };
+                cartData.cartFormData.push(initData);
+            });
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
+            $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Catalog::js/msrp.js') ?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('mage/validation/validate.js')?>");
+
+        })(jQuery);
+        //]]>
+    </script>
 <?php endif; ?>
+
+

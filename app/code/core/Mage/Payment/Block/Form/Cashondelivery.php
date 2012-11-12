@@ -37,14 +37,7 @@ class Mage_Payment_Block_Form_Cashondelivery extends Mage_Payment_Block_Form
      */
     protected $_instructions;
 
-    /**
-     * Block construction. Set block template.
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('form/cashondelivery.phtml');
-    }
+    protected $_template = 'form/cashondelivery.phtml';
 
     /**
      * Get instructions text from config

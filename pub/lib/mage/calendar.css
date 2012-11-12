@@ -24,6 +24,7 @@
  */
 .ui-datepicker {
     display: none;
+    z-index: 999999 !important;
 }
 .ui-datepicker .ui-datepicker-header {
     position: relative;

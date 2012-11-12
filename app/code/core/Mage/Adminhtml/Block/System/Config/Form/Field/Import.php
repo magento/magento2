@@ -35,14 +35,9 @@
 class Mage_Adminhtml_Block_System_Config_Form_Field_Import extends Varien_Data_Form_Element_Abstract
 {
 
-    /**
-     * Enter description here...
-     *
-     * @param array $data
-     */
-    public function __construct($data = array())
+    protected function _construct()
     {
-        parent::__construct($data);
+        parent::_construct();
         $this->setType('file');
     }
 

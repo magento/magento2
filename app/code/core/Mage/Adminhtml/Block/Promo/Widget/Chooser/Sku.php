@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct($arguments=array())
+    protected function _construct()
     {
-        parent::__construct($arguments);
+        parent::_construct();
 
         if ($this->getRequest()->getParam('current_grid_id')) {
             $this->setId($this->getRequest()->getParam('current_grid_id'));

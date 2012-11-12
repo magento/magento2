@@ -112,7 +112,8 @@ class Mage_XmlConnect_Block_Configuration extends Mage_Core_Block_Template
      */
     protected function _toHtml()
     {
-        $xml = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<configuration></configuration>');
+        $xml = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<configuration></configuration>'));
         $this->_buildRecursive($xml,
             Mage::helper('Mage_XmlConnect_Helper_Data')->excludeXmlConfigKeys($this->_app->getRenderConf())
         );

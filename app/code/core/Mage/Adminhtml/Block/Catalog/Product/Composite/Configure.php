@@ -35,13 +35,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Composite_Configure extends Mage_Admi
 {
     protected $_product;
 
-    /**
-     * Set template
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/composite/configure.phtml');
-    }
+    protected $_template = 'catalog/product/composite/configure.phtml';
 
     /**
      * Retrieve product object

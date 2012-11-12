@@ -37,12 +37,12 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit
     /**
      * Setting app action buttons for application
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'application_id';
         $this->_controller  = 'adminhtml_mobile';
         $this->_blockGroup  = 'Mage_XmlConnect';
-        parent::__construct();
+        parent::_construct();
         if ((bool)!Mage::getSingleton('Mage_Adminhtml_Model_Session')->getNewApplication()) {
             try {
                 $app = Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication();

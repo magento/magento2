@@ -141,18 +141,9 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
      * @param array $arguments
      * @throws InvalidArgumentException
      */
-    public function __construct(array $arguments = array())
+    public function __construct(Mage_Core_Model_Resource $resource)
     {
-        if (isset($arguments['resource'])) {
-            $this->_resources = $arguments['resource'];
-        } else {
-            $this->_resources = Mage::getSingleton('Mage_Core_Model_Resource');
-        }
-        if (!($this->_resources instanceof Mage_Core_Model_Resource)) {
-            throw new InvalidArgumentException(
-                'Argument "resource" is expected to be an instance of "Mage_Core_Model_Resource".'
-            );
-        }
+        $this->_resources = $resource;
         parent::__construct();
     }
 

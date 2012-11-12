@@ -37,11 +37,11 @@ class Mage_Adminhtml_Block_System_Variable extends Mage_Adminhtml_Block_Widget_G
     /**
      * Block constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'system_variable';
         $this->_headerText = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Custom Variables');
-        parent::__construct();
+        parent::_construct();
         $this->_updateButton('add', 'label', Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add New Variable'));
     }
 }

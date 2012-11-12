@@ -39,7 +39,7 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_DesignEditor_Model_Session();
+        $this->_model = Mage::getModel('Mage_DesignEditor_Model_Session');
     }
 
     protected function tearDown()
@@ -54,6 +54,7 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
+     * @magentoAppIsolation enabled
      */
     public function testIsDesignEditorActiveTrue()
     {
@@ -63,6 +64,7 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      * @magentoConfigFixture current_store admin/security/session_lifetime 100
+     * @magentoAppIsolation enabled
      */
     public function testIsDesignEditorActiveAdminSessionExpired()
     {
@@ -83,14 +85,14 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
 
     public static function loginAdmin()
     {
-        $auth = new Mage_Backend_Model_Auth();
+        $auth = Mage::getModel('Mage_Backend_Model_Auth');
         self::$_adminSession = $auth->getAuthStorage();
         $auth->login(Magento_Test_Bootstrap::ADMIN_NAME, Magento_Test_Bootstrap::ADMIN_PASSWORD);
     }
 
     public static function loginAdminRollback()
     {
-        $auth = new Mage_Backend_Model_Auth();
+        $auth = Mage::getModel('Mage_Backend_Model_Auth');
         $auth->setAuthStorage(self::$_adminSession);
         $auth->logout();
     }

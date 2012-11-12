@@ -52,7 +52,7 @@ class Mage_Install_IndexController extends Mage_Install_Controller_Action
     /**
      * Index action
      */
-    function indexAction()
+    public function indexAction()
     {
         $this->_forward('begin', 'wizard', 'install');
     }

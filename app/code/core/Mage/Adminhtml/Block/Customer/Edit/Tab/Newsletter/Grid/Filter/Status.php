@@ -36,7 +36,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid_Filter_Status exten
 
     protected static $_statuses;
 
-    public function __construct()
+    protected function _construct()
     {
         self::$_statuses = array(
                 null                                        => null,
@@ -46,7 +46,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid_Filter_Status exten
                 Mage_Newsletter_Model_Queue::STATUS_SENDING => Mage::helper('Mage_Customer_Helper_Data')->__('Sending'),
                 Mage_Newsletter_Model_Queue::STATUS_PAUSE   => Mage::helper('Mage_Customer_Helper_Data')->__('Paused'),
             );
-        parent::__construct();
+        parent::_construct();
     }
 
     protected function _getOptions()

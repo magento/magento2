@@ -44,13 +44,9 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(Mage_Core_Model_Config $applicationConfig)
     {
-        $this->_config = isset($data['config']) ? $data['config'] : Mage::getConfig();
-
-        if (false == ($this->_config instanceof Mage_Core_Model_Config)) {
-            throw new InvalidArgumentException("Required config object is invalid");
-        }
+        $this->_config = $applicationConfig;
     }
 
     public function getPageHelpUrl()

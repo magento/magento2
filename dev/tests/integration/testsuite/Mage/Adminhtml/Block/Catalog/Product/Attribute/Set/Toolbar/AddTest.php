@@ -29,7 +29,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_AddTest extends
 {
     public function testToHtmlFormId()
     {
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
 
         $block = $layout->addBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add', 'block');
         $block->setArea('adminhtml')->unsetChild('setForm');

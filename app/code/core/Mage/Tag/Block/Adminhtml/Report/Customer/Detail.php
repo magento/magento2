@@ -33,7 +33,8 @@
  */
 class Mage_Tag_Block_Adminhtml_Report_Customer_Detail extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_Tag';
         $this->_controller = 'adminhtml_report_customer_detail';
@@ -41,7 +42,7 @@ class Mage_Tag_Block_Adminhtml_Report_Customer_Detail extends Mage_Adminhtml_Blo
         $customer = Mage::getModel('Mage_Customer_Model_Customer')->load($this->getRequest()->getParam('id'));
         $customerName = $this->escapeHtml($customer->getName());
         $this->_headerText = Mage::helper('Mage_Tag_Helper_Data')->__('Tags Submitted by %s', $customerName);
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
         $this->setBackUrl($this->getUrl('*/report_tag/customer/'));
         $this->_addBackButton();

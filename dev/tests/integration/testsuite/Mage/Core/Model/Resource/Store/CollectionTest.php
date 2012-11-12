@@ -34,7 +34,7 @@ class Mage_Core_Model_Resource_Store_CollectionTest extends PHPUnit_Framework_Te
 
     public function setUp()
     {
-        $this->_collection = new Mage_Core_Model_Resource_Store_Collection();
+        $this->_collection = Mage::getResourceModel('Mage_Core_Model_Resource_Store_Collection');
     }
 
     protected function tearDown()

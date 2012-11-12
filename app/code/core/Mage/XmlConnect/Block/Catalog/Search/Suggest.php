@@ -45,7 +45,8 @@ class Mage_XmlConnect_Block_Catalog_Search_Suggest extends Mage_CatalogSearch_Bl
      */
     protected function _toHtml()
     {
-        $suggestXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<suggestions></suggestions>');
+        $suggestXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<suggestions></suggestions>'));
 
         if (!$this->getRequest()->getParam(Mage_CatalogSearch_Helper_Data::QUERY_VAR_NAME, false)) {
             return $suggestXmlObj->asNiceXml();
@@ -62,7 +63,8 @@ class Mage_XmlConnect_Block_Catalog_Search_Suggest extends Mage_CatalogSearch_Bl
                 . (int)$item['num_of_results'] . self::SUGGEST_ITEM_SEPARATOR;
         }
 
-        $suggestXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<suggestions>' . $items . '</suggestions>');
+        $suggestXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<suggestions>' . $items . '</suggestions>'));
 
         return $suggestXmlObj->asNiceXml();
     }

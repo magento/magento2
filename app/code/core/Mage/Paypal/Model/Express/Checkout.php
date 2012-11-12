@@ -135,22 +135,28 @@ class Mage_Paypal_Model_Express_Checkout
     protected $_order = null;
 
     /**
-     * Set quote and config instances
+     * Set config, session and quote instances
+     *
+     * @param Mage_Customer_Model_Session $customerSession
      * @param array $params
      */
-    public function __construct($params = array())
-    {
-        if (isset($params['quote']) && $params['quote'] instanceof Mage_Sales_Model_Quote) {
-            $this->_quote = $params['quote'];
-        } else {
-            throw new Exception('Quote instance is required.');
-        }
+    public function __construct(
+        Mage_Customer_Model_Session $customerSession,
+        $params = array()
+    ) {
+        $this->_customerSession = $customerSession;
+
         if (isset($params['config']) && $params['config'] instanceof Mage_Paypal_Model_Config) {
             $this->_config = $params['config'];
         } else {
             throw new Exception('Config instance is required.');
         }
-        $this->_customerSession = Mage::getSingleton('Mage_Customer_Model_Session');
+
+        if (isset($params['quote']) && $params['quote'] instanceof Mage_Sales_Model_Quote) {
+            $this->_quote = $params['quote'];
+        } else {
+            throw new Exception('Quote instance is required.');
+        }
     }
 
     /**
@@ -303,7 +309,8 @@ class Mage_Paypal_Model_Express_Checkout
         }
 
         // add line items
-        $paypalCart = Mage::getModel('Mage_Paypal_Model_Cart', array($this->_quote));
+        $parameters = array('params' => array($this->_quote));
+        $paypalCart = Mage::getModel('Mage_Paypal_Model_Cart', $parameters);
         $this->_api->setPaypalCart($paypalCart)
             ->setIsLineItemsEnabled($this->_config->lineItemsEnabled)
         ;
@@ -438,7 +445,10 @@ class Mage_Paypal_Model_Express_Checkout
     public function getShippingOptionsCallbackResponse(array $request)
     {
         // prepare debug data
-        $logger = Mage::getModel('Mage_Core_Model_Log_Adapter', 'payment_' . $this->_methodType . '.log');
+        $logger = Mage::getModel(
+            'Mage_Core_Model_Log_Adapter',
+            array('fileName' => 'payment_' . $this->_methodType . '.log')
+        );
         $debugData = array('request' => $request, 'response' => array());
 
         try {
@@ -543,7 +553,8 @@ class Mage_Paypal_Model_Express_Checkout
 
         $this->_ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $this->_quote);
+        $parameters = array('quote' => $this->_quote);
+        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $parameters);
         $service->submitAll();
         $this->_quote->save();
 

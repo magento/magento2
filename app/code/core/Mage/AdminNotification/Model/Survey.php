@@ -77,7 +77,9 @@ class Mage_AdminNotification_Model_Survey
     protected static function _getFlagModel()
     {
         if (self::$_flagModel === null) {
-            self::$_flagModel = Mage::getModel('Mage_Core_Model_Flag', array('flag_code' => self::$_flagCode))->loadSelf();
+            self::$_flagModel = Mage::getModel('Mage_Core_Model_Flag',
+                array('data' => array('flag_code' => self::$_flagCode)))
+                ->loadSelf();
         }
         return self::$_flagModel;
     }

@@ -35,15 +35,8 @@
 class Mage_Core_Block_Html_Link extends Mage_Core_Block_Template
 {
 
-    /**
-     * Internal constructor
-     *
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Core::link.phtml');
-        parent::_construct();
-    }
+    protected $_template = 'Mage_Core::link.phtml';
+
     /**
      * Prepare link attributes as serialized and formated string
      *

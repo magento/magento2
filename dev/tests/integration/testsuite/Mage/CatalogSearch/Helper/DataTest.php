@@ -34,7 +34,7 @@ class Mage_CatalogSearch_Helper_DataTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new Mage_CatalogSearch_Helper_Data;
+        $this->_helper = Mage::helper('Mage_CatalogSearch_Helper_Data');
     }
 
     protected function tearDown()
@@ -66,6 +66,7 @@ class Mage_CatalogSearch_Helper_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckNotesEscapesHtmlWhenQueryIsCut()
     {
+        /** @var $mock Mage_CatalogSearch_Helper_Data */
         $mock = $this->getMock('Mage_CatalogSearch_Helper_Data', array('getQueryText'));
         $mock->expects($this->any())
             ->method('getQueryText')

@@ -50,22 +50,37 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_Before extends Mage_Backend_
     /**
      * Constructor
      *
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Helper_Data $coreHelper
+     * @param Mage_ImportExport_Model_Import $importModel
      * @param array $data
      */
-    public function __construct(array $data = array())
-    {
-        parent::__construct($data);
-
-        if (isset($data['core_helper'])) {
-            $this->_coreHelper = $data['core_helper'];
-        } else {
-            $this->_coreHelper = Mage::helper('Mage_Core_Helper_Data');
-        }
-        if (isset($data['import_model'])) {
-            $this->_importModel = $data['import_model'];
-        } else {
-            $this->_importModel = Mage::getModel('Mage_ImportExport_Model_Import');
-        }
+    public function __construct( Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Helper_Data $coreHelper,
+        Mage_ImportExport_Model_Import $importModel,
+        array $data = array()
+    ) {
+        parent::__construct($request, $layout, $eventManager, $translator, $cache, $designPackage, $session,
+            $storeConfig, $frontController, $data
+        );
+        $this->_coreHelper = $coreHelper;
+        $this->_importModel = $importModel;
     }
 
     /**

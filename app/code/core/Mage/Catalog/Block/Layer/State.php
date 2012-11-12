@@ -33,15 +33,7 @@
  */
 class Mage_Catalog_Block_Layer_State extends Mage_Core_Block_Template
 {
-    /**
-     * Initialize Layer State template
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('layer/state.phtml');
-    }
+    protected $_template = 'layer/state.phtml';
 
     /**
      * Retrieve active filters

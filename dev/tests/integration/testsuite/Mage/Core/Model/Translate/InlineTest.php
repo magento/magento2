@@ -41,7 +41,7 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Translate_Inline();
+        $this->_model = Mage::getModel('Mage_Core_Model_Translate_Inline');
         /* Called getConfig as workaround for setConfig bug */
         Mage::app()->getStore($this->_storeId)->getConfig('dev/translate_inline/active');
         Mage::app()->getStore($this->_storeId)->setConfig('dev/translate_inline/active', true);
@@ -70,7 +70,7 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
         }
         $this->_model->processAjaxPost($inputArray);
 
-        $model = new Mage_Core_Model_Translate_String();
+        $model = Mage::getModel('Mage_Core_Model_Translate_String');
         $model->load($originalText);
         try {
             $this->assertEquals($translatedText, $model->getTranslate());

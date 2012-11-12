@@ -34,7 +34,7 @@ class Mage_Customer_Model_FormTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model= new Mage_Customer_Model_Form();
+        $this->_model= Mage::getModel('Mage_Customer_Model_Form');
         $this->_model->setFormCode('customer_account_create');
     }
 

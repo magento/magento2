@@ -34,7 +34,7 @@ class Mage_Backend_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Backend_Model_Observer();
+        $this->_model = Mage::getModel('Mage_Backend_Model_Observer');
     }
 
     protected function tearDown()

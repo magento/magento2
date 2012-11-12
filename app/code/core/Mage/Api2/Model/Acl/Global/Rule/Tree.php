@@ -121,8 +121,9 @@ class Mage_Api2_Model_Acl_Global_Rule_Tree extends Mage_Core_Helper_Abstract
      * Privileges for tree with resources and privileges.
      *
      * @param array $options
+     * @throws Exception
      */
-    public function __construct($options)
+    public function __construct($options = array())
     {
         $this->_type = $options['type'];
 

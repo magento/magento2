@@ -55,9 +55,26 @@ class Magento_Performance_Testsuite
      * @var array
      */
     protected $_warmUpArguments = array(
-        Magento_Performance_Scenario_Arguments::ARG_USERS => 1,
-        Magento_Performance_Scenario_Arguments::ARG_LOOPS => 2,
+        Magento_Performance_Scenario::ARG_USERS => 1,
+        Magento_Performance_Scenario::ARG_LOOPS => 2,
     );
+
+    /**
+     * @var callable
+     */
+    protected $_onScenarioRun;
+
+    /**
+     * @var callable
+     */
+    protected $_onScenarioFailure;
+
+    /**
+     * List of report files that have been used by scenarios
+     *
+     * @var array
+     */
+    protected $_reportFiles = array();
 
     /**
      * Constructor
@@ -76,49 +93,145 @@ class Magento_Performance_Testsuite
 
     /**
      * Run entire test suite of scenarios
-     *
-     * @throws Magento_Exception
      */
     public function run()
     {
+        $this->_reportFiles = array();
         $scenarios = $this->_getOptimizedScenarioList();
+        foreach ($scenarios as $scenario) {
+            /** @var $scenario Magento_Performance_Scenario */
+            $this->_application->applyFixtures($scenario->getFixtures());
 
-        foreach ($scenarios as $scenarioFile) {
-            $scenarioArguments = $this->_config->getScenarioArguments($scenarioFile);
-            $scenarioSettings = $this->_config->getScenarioSettings($scenarioFile);
-            $scenarioFixtures = $this->_config->getScenarioFixtures($scenarioFile);
-
-            $this->_application->applyFixtures($scenarioFixtures);
+            $this->_notifyScenarioRun($scenario);
 
             /* warm up cache, if any */
-            if (empty($scenarioSettings[self::SETTING_SKIP_WARM_UP])) {
-                $warmUpArgs = new Magento_Performance_Scenario_Arguments(
-                    $this->_warmUpArguments + (array)$scenarioArguments
-                );
-                $this->_scenarioHandler->run($scenarioFile, $warmUpArgs);
+            $settings = $scenario->getSettings();
+            if (empty($settings[self::SETTING_SKIP_WARM_UP])) {
+                try {
+                    $scenarioWarmUp = new Magento_Performance_Scenario(
+                        $scenario->getTitle(),
+                        $scenario->getFile(),
+                        $this->_warmUpArguments + $scenario->getArguments(),
+                        $scenario->getSettings(),
+                        $scenario->getFixtures()
+                    );
+                    $this->_scenarioHandler->run($scenarioWarmUp);
+                } catch (Magento_Performance_Scenario_FailureException $scenarioFailure) {
+                    // do not notify about failed warm up
+                }
             }
 
             /* full run with reports recording */
-            $scenarioName = preg_replace('/\..+?$/', '', basename($scenarioFile));
-            $reportFile = $this->_config->getReportDir() . DIRECTORY_SEPARATOR . $scenarioName . '.jtl';
-            if (!$this->_scenarioHandler->run($scenarioFile, $scenarioArguments, $reportFile)) {
-                throw new Magento_Exception("Unable to run scenario '$scenarioFile', format is not supported.");
+            $reportFile = $this->_getScenarioReportFile($scenario);
+            try {
+                $this->_scenarioHandler->run($scenario, $reportFile);
+            } catch (Magento_Performance_Scenario_FailureException $scenarioFailure) {
+                $this->_notifyScenarioFailure($scenarioFailure);
             }
         }
     }
 
     /**
-     * Compose optimal list of scenarios, so that Magento reinstalls will be reduced among scenario executions
+     * Returns unique report file for the scenario.
+     * Used in order to generate unique report file paths for different scenarios that are represented by same files.
+     *
+     * @param Magento_Performance_Scenario $scenario
+     * @return string
+     */
+    protected function _getScenarioReportFile(Magento_Performance_Scenario $scenario)
+    {
+        $basePath = $this->_config->getReportDir() . DIRECTORY_SEPARATOR
+            . pathinfo($scenario->getFile(), PATHINFO_FILENAME);
+        $iteration = 1;
+        do {
+            $suffix = ($iteration == 1) ? '' : '_' . $iteration;
+            $reportFile = $basePath . $suffix . '.jtl';
+            $iteration++;
+        } while (isset($this->_reportFiles[$reportFile]));
+
+        $this->_reportFiles[$reportFile] = true;
+        return $reportFile;
+    }
+
+    /**
+     * Set callback for scenario run event
+     *
+     * @param callable $callback
+     */
+    public function onScenarioRun($callback)
+    {
+        $this->_validateCallback($callback);
+        $this->_onScenarioRun = $callback;
+    }
+
+    /**
+     * Set callback for scenario failure event
+     *
+     * @param callable $callback
+     */
+    public function onScenarioFailure($callback)
+    {
+        $this->_validateCallback($callback);
+        $this->_onScenarioFailure = $callback;
+    }
+
+    /**
+     * Validate whether a callback refers to a valid function/method that can be invoked
+     *
+     * @param callable $callback
+     * @throws BadFunctionCallException
+     */
+    protected function _validateCallback($callback)
+    {
+        if (!is_callable($callback)) {
+            throw new BadFunctionCallException('Callback is invalid.');
+        }
+    }
+
+    /**
+     * Notify about scenario run event
+     *
+     * @param Magento_Performance_Scenario $scenario
+     */
+    protected function _notifyScenarioRun($scenario)
+    {
+        if ($this->_onScenarioRun) {
+            call_user_func($this->_onScenarioRun, $scenario);
+        }
+    }
+
+    /**
+     * Notify about scenario failure event
+     *
+     * @param Magento_Performance_Scenario_FailureException $scenarioFailure
+     */
+    protected function _notifyScenarioFailure(Magento_Performance_Scenario_FailureException $scenarioFailure)
+    {
+        if ($this->_onScenarioFailure) {
+            call_user_func($this->_onScenarioFailure, $scenarioFailure);
+        }
+    }
+
+    /**
+     * Compose optimal order of scenarios, so that Magento reinstalls will be reduced among scenario executions
      *
      * @return array
      */
     protected function _getOptimizedScenarioList()
     {
         $optimizer = new Magento_Performance_Testsuite_Optimizer();
-        $scenarios = array();
-        foreach ($this->_config->getScenarios() as $scenarioFile) {
-            $scenarios[$scenarioFile] = $this->_config->getScenarioFixtures($scenarioFile);
+        $scenarios = $this->_config->getScenarios();
+        $fixtureSets = array();
+        foreach ($scenarios as $scenario) {
+            /** @var $scenario Magento_Performance_Scenario */
+            $fixtureSets[] = $scenario->getFixtures();
         }
-        return $optimizer->run($scenarios);
+        $keys = $optimizer->optimizeFixtureSets($fixtureSets);
+
+        $result = array();
+        foreach ($keys as $key) {
+            $result[] = $scenarios[$key];
+        }
+        return $result;
     }
 }

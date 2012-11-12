@@ -26,7 +26,6 @@
  */
 
 $tests = array(
-    'unit-unit'        => array('../../tests/unit/framework/tests/unit', ''),
     'unit'             => array('../../tests/unit', ''),
     'unit-performance' => array('../../tests/performance/framework/tests/unit', ''),
     'unit-static'      => array('../../tests/static/framework/tests/unit', ''),

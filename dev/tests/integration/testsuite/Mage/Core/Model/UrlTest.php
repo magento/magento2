@@ -34,7 +34,7 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Url;
+        $this->_model = Mage::getModel('Mage_Core_Model_Url');
     }
 
     protected function tearDown()
@@ -121,7 +121,7 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Mage_Core_Model_Store', $this->_model->getStore());
 
-        $store = new Mage_Core_Model_Store;
+        $store = Mage::getModel('Mage_Core_Model_Store');
         $this->_model->setStore($store);
         $this->assertSame($store, $this->_model->getStore());
     }

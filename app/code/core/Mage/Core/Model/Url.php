@@ -337,9 +337,9 @@ class Mage_Core_Model_Url extends Varien_Object
      * @param mixed $data
      * @return Mage_Core_Model_Url
      */
-    public function setStore($data)
+    public function setStore($params)
     {
-        $this->setData('store', Mage::app()->getStore($data));
+        $this->setData('store', Mage::app()->getStore($params));
         return $this;
     }
 
@@ -1032,7 +1032,7 @@ class Mage_Core_Model_Url extends Varien_Object
             return $this;
         }
         /** @var $session Mage_Core_Model_Session */
-        $session = Mage::getSingleton('Mage_Core_Model_Session', $params);
+        $session = Mage::getSingleton('Mage_Core_Model_Session', array('data' => $params));
 
         $sessionId = $session->getSessionIdForHost($url);
         if (Mage::app()->getUseSessionVar() && !$sessionId) {

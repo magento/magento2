@@ -101,7 +101,8 @@ class Mage_XmlConnect_Model_Simplexml_Form_Abstract extends Varien_Object
     protected function _prepareXmlObject()
     {
         $this->setXmlObject(
-            Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<' . $this->_mainNode . '></' . $this->_mainNode . '>')
+            Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                array('data' => '<' . $this->_mainNode . '></' . $this->_mainNode . '>'))
         );
         return $this;
     }
@@ -182,7 +183,8 @@ class Mage_XmlConnect_Model_Simplexml_Form_Abstract extends Varien_Object
     public function getElements()
     {
         if (empty($this->_elements)) {
-            $this->_elements = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Collection', $this);
+            $this->_elements = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Collection',
+                array('container' => $this));
         }
         return $this->_elements;
     }
@@ -222,7 +224,7 @@ class Mage_XmlConnect_Model_Simplexml_Form_Abstract extends Varien_Object
             $className = 'Mage_XmlConnect_Model_Simplexml_Form_Element_' . uc_words($type);
         }
 
-        $element = Mage::getModel($className, $config);
+        $element = Mage::getModel($className, array('attributes' => $config));
         $element->setId($elementId);
         $this->addElement($element, $after);
         return $element;
@@ -250,7 +252,8 @@ class Mage_XmlConnect_Model_Simplexml_Form_Abstract extends Varien_Object
      */
     public function addFieldset($elementId, $config = array(), $after = false)
     {
-        $element = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Fieldset', $config);
+        $element = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Fieldset',
+            array('attributes' => $config));
         $element->setId($elementId);
         $this->addElement($element, $after);
         return $element;
@@ -265,7 +268,8 @@ class Mage_XmlConnect_Model_Simplexml_Form_Abstract extends Varien_Object
      */
     public function addValidator($config = array(), $after = false)
     {
-        $element = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Validator', $config);
+        $element = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form_Element_Validator',
+            array('attributes' => $config));
         $element->setId($this->getXmlId());
         $this->addElement($element, $after);
         return $element;

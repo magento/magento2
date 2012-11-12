@@ -36,9 +36,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Grid extends Mage_Adminhtml_Block_W
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('mobile_apps_grid');
         $this->setDefaultSort('application_id');
         $this->setDefaultDir('ASC');

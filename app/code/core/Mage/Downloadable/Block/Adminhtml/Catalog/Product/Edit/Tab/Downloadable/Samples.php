@@ -41,15 +41,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     protected $_config;
 
-    /**
-     * Class constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('product/edit/downloadable/samples.phtml');
-    }
+    protected $_template = 'product/edit/downloadable/samples.phtml';
 
     /**
      * Get model of the product that is being edited

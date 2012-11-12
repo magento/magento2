@@ -97,32 +97,29 @@
                     <tr>
                         <td colspan="50" class="a-right">
                             <?php if($this->getContinueShoppingUrl()): ?>
-                                <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+                                <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
                             <?php endif; ?>
                             <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo $this->__('Update Shopping Cart'); ?>" class="button btn-update"><span><span><?php echo $this->__('Update Shopping Cart'); ?></span></span></button>
                             <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo $this->__('Clear Shopping Cart'); ?>" class="button btn-empty" id="empty_cart_button"><span><span><?php echo $this->__('Clear Shopping Cart'); ?></span></span></button>
                             <!--[if lt IE 8]>
-                            <input type="hidden" id="update_cart_action_container" />
-                            <script type="text/javascript">
-                            //<![CDATA[
-                                Event.observe(window, 'load', function()
-                                {
-                                    // Internet Explorer (lt 8) does not support value attribute in button elements
-                                    $emptyCartButton = $('empty_cart_button');
-                                    $cartActionContainer = $('update_cart_action_container');
-                                    if ($emptyCartButton && $cartActionContainer) {
-                                        Event.observe($emptyCartButton, 'click', function()
-                                        {
-                                            $emptyCartButton.setAttribute('name', 'update_cart_action_temp');
-                                            $cartActionContainer.setAttribute('name', 'update_cart_action');
-                                            $cartActionContainer.setValue('empty_cart');
-                                        });
-                                    }
-
-                                });
-                            //]]>
-                            </script>
+                            <input type="hidden" value="" id="update_cart_action_container" />
                             <![endif]-->
+                            <script type="text/javascript">
+                                //<![CDATA[
+                                (function($) {
+                                    head.js("<?php echo $this->getSkinUrl('Mage_Checkout::js/shopping-cart.js')?>",
+                                        function() {
+                                            // Internet Explorer (lt 8) does not support value attribute in button elements
+                                            $('#shopping-cart-table').shoppingCart({
+                                                continueShoppingButton: 'button.btn-continue',
+                                                continueShoppingUrl: '<?php echo $this->getContinueShoppingUrl() ?>',
+                                                emptyCartButton: 'button.btn-empty',
+                                                updateCartActionContainer: '#update_cart_action_container'
+                                            });
+                                        });
+                                })(jQuery);
+                                //]]>
+                            </script>
                         </td>
                     </tr>
                 </tfoot>
@@ -132,7 +129,7 @@
                 <?php endforeach ?>
                 </tbody>
             </table>
-            <script type="text/javascript">decorateTable('shopping-cart-table')</script>
+            <script type="text/javascript">(function($) {$('#shopping-cart-table').decorate('table')})(jQuery)</script>
         </fieldset>
     </form>
     <div class="cart-collaterals">

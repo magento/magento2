@@ -44,7 +44,7 @@ class Mage_Wishlist_IndexControllerTest extends Magento_Test_TestCase_Controller
      */
     public function testItemColumnBlock()
     {
-        $session = new Mage_Customer_Model_Session;
+        $session = Mage::getModel('Mage_Customer_Model_Session');
         $session->login('customer@example.com', 'password');
         $this->dispatch('wishlist/index/index');
         $body = $this->getResponse()->getBody();

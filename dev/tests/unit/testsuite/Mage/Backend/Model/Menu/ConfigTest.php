@@ -29,7 +29,7 @@
 class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Core_Mode_Config
+     * @var Mage_Core_ModeL_Config
      */
     protected $_appConfigMock;
 
@@ -84,6 +84,11 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
     protected $_logger;
 
     /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_objectManagerMock;
+
+    /**
      * @var Mage_Backend_Model_Menu_Config
      */
     protected $_model;
@@ -91,8 +96,10 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $this->_appConfigMock->expects($this->any())
-            ->method('getModelInstance')
+
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $this->_objectManagerMock->expects($this->any())
+            ->method('create')
             ->will($this->returnCallback(array($this, 'getModelInstance')));
 
         $this->_cacheInstanceMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
@@ -115,15 +122,16 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 
         $this->_menuFactoryMock->expects($this->any())
             ->method('getMenuInstance')
-            ->will($this->returnValue($this->_menuMock));
-
-        $this->_model = new Mage_Backend_Model_Menu_Config(array(
-            'appConfig' => $this->_appConfigMock,
-            'cache' => $this->_cacheInstanceMock,
-            'eventManager' => $this->_eventManagerMock,
-            'menuFactory' => $this->_menuFactoryMock,
-            'logger' => $this->_logger
-        ));
+            ->will($this->returnValue($this->_menuMock));        
+        
+        $this->_model = new Mage_Backend_Model_Menu_Config(
+            $this->_cacheInstanceMock,
+            $this->_objectManagerMock,
+            $this->_appConfigMock,
+            $this->_eventManagerMock,
+            $this->_logger,
+            $this->_menuFactoryMock
+        );
     }
 
     public function testGetMenuConfigurationFiles()

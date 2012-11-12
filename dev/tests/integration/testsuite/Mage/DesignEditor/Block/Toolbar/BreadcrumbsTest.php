@@ -36,10 +36,12 @@ class Mage_DesignEditor_Block_Toolbar_BreadcrumbsTest extends PHPUnit_Framework_
     {
         $layoutUtility = new Mage_Core_Utility_Layout($this);
         $pageTypesFixture = __DIR__ . '/../../../Core/Model/Layout/_files/_handles.xml';
-        $this->_block = new Mage_DesignEditor_Block_Toolbar_Breadcrumbs(
-            array('template' => 'toolbar/breadcrumbs.phtml')
+        $layout = $layoutUtility->getLayoutFromFixture($pageTypesFixture, $layoutUtility->getLayoutDependencies());
+        $this->_block = $layout->createBlock(
+            'Mage_DesignEditor_Block_Toolbar_Breadcrumbs',
+            '',
+            array('data' => array('template' => 'toolbar/breadcrumbs.phtml'))
         );
-        $this->_block->setLayout($layoutUtility->getLayoutFromFixture($pageTypesFixture));
     }
 
     protected function tearDown()
@@ -59,7 +61,12 @@ class Mage_DesignEditor_Block_Toolbar_BreadcrumbsTest extends PHPUnit_Framework_
         /** @var $controllerAction Mage_Core_Controller_Varien_Action */
         $controllerAction = $this->getMockForAbstractClass(
             'Mage_Core_Controller_Varien_Action',
-            array(new Magento_Test_Request(), new Magento_Test_Response())
+            array(
+                new Magento_Test_Request(),
+                new Magento_Test_Response(),
+                Mage::getObjectManager(),
+                Mage::app()->getFrontController()
+            )
         );
         /* Note: controller action instance registers itself within the front controller immediately after creation */
         $controllerAction->getRequest()

@@ -33,9 +33,9 @@
  */
 class Mage_Adminhtml_Block_System_Convert_Profile_Edit_Tab_History extends Mage_Adminhtml_Block_Widget_Grid
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('history_grid');
         $this->setDefaultSort('performed_at', 'desc');
         $this->setUseAjax(true);

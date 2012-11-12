@@ -34,7 +34,9 @@ class Mage_Core_Model_Resource_SetupTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Setup('default_setup');
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Setup',
+            array('resourceName' => 'default_setup')
+        );
     }
 
     protected function tearDown()

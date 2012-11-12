@@ -45,17 +45,13 @@ class Mage_Rating_Model_Resource_Rating extends Mage_Core_Model_Resource_Db_Abst
     /**
      * Class constructor
      *
-     * @param array $arguments
-     * @throws InvalidArgumentException
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Model_App $app
      */
-    public function __construct(array $arguments = array())
+    public function __construct(Mage_Core_Model_Resource $resource, Mage_Core_Model_App $app)
     {
-        $this->_app = isset($arguments['app']) ? $arguments['app'] : Mage::app();
-
-        if (!($this->_app instanceof Mage_Core_Model_App)) {
-            throw new InvalidArgumentException('Required app object is invalid');
-        }
-        parent::__construct($arguments);
+        $this->_app = $app;
+        parent::__construct($resource);
     }
 
     /**

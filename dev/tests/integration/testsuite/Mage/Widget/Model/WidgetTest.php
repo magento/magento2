@@ -34,7 +34,7 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Widget_Model_Widget;
+        $this->_model = Mage::getModel('Mage_Widget_Model_Widget');
     }
 
     protected function tearDown()

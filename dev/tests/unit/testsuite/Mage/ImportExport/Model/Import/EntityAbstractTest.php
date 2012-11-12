@@ -119,7 +119,7 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
      */
     public function testAddRowError()
     {
-        $errorCode       = 'error_code ';
+        $errorCode = 'error_code ';
         $errorColumnName = 'error_column';
         $this->_model->addRowError($errorCode . '%s', 0, $errorColumnName);
 
@@ -619,12 +619,12 @@ class Mage_ImportExport_Model_Import_EntityAbstractTest extends PHPUnit_Framewor
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract|PHPUnit_Framework_MockObject_MockObject
+     * @return Mage_ImportExport_Model_Import_SourceAbstract|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source Mage_ImportExport_Model_Import_Adapter_Abstract|PHPUnit_Framework_MockObject_MockObject */
-        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false,
+        /** @var $source Mage_ImportExport_Model_Import_SourceAbstract|PHPUnit_Framework_MockObject_MockObject */
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_SourceAbstract', array(), '', false,
             true, true, array('getColNames')
         );
         $source->expects($this->any())

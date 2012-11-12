@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Customer_Storecredit extends Mage_Core_Block_Templat
     protected function _toHtml()
     {
         /** @var $xmlModel Mage_XmlConnect_Model_Simplexml_Element */
-        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<store_credits_info></store_credits_info>');
+        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<store_credits_info></store_credits_info>'));
 
         $accountBalance = $this->getLayout()
             ->addBlock('Enterprise_CustomerBalance_Block_Account_Balance', 'account_balance');

@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_Page_System_Config_Robots_Reset
  */
-class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends PHPUnit_Framework_TestCase
+class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**
      * @var Mage_Adminhtml_Block_Page_System_Config_Robots_Reset
@@ -42,7 +42,7 @@ class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends PHPUnit_F
 
     protected function setUp()
     {
-        $this->_resetRobotsBlock = new Mage_Adminhtml_Block_Page_System_Config_Robots_Reset();
+        $this->_resetRobotsBlock = $this->getBlock('Mage_Adminhtml_Block_Page_System_Config_Robots_Reset');
         $this->_mockRobotsHelper = $this->getMockBuilder('Mage_Page_Helper_Robots')
             ->setMethods(array('getRobotsDefaultCustomInstructions'))
             ->getMock();

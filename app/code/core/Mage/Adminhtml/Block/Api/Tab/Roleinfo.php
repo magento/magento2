@@ -30,11 +30,6 @@
  */
 class Mage_Adminhtml_Block_Api_Tab_Roleinfo extends Mage_Adminhtml_Block_Widget_Form
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function _beforeToHtml() {
         $this->_initForm();
 

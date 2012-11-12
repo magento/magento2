@@ -34,11 +34,11 @@
 
 class Mage_Adminhtml_Block_Checkout_Agreement extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller      = 'checkout_agreement';
         $this->_headerText      = Mage::helper('Mage_Checkout_Helper_Data')->__('Manage Terms and Conditions');
         $this->_addButtonLabel  = Mage::helper('Mage_Checkout_Helper_Data')->__('Add New Condition');
-        parent::__construct();
+        parent::_construct();
     }
 }

@@ -37,12 +37,12 @@ class Mage_Core_Block_Store_Switcher extends Mage_Core_Block_Template
     protected $_stores = array();
     protected $_loaded = false;
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_loadData();
         $this->setStores(array());
         $this->setLanguages(array());
-        return parent::__construct();
+        return parent::_construct();
     }
 
     protected function _loadData()

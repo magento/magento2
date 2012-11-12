@@ -33,14 +33,7 @@
  */
 class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Adminhtml_Block_Template
 {
-    /**
-     * Initialize template
-     *
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/attribute/set/main.phtml');
-    }
+    protected $_template = 'catalog/product/attribute/set/main.phtml';
 
     /**
      * Prepare Global Layout

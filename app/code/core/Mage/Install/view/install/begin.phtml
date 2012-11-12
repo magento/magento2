@@ -53,7 +53,9 @@
 <script type="text/javascript">
 //<![CDATA[
 (function($) {
-    $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Install::js/begin.js') ?>");
+    head.js("<?php echo $this->getSkinUrl('Mage_Install::js/install.js') ?>", function() {
+        $('#agree').begin({submitButtonSelector: '#submitButton'});
+    });
 })(jQuery);
 //]]>
 </script>

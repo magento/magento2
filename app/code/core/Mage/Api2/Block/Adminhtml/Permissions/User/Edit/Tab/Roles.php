@@ -46,9 +46,9 @@ class Mage_Api2_Block_Adminhtml_Permissions_User_Edit_Tab_Roles
      * Constructor
      * Prepare grid parameters
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('api2_roles_section')
             ->setDefaultSort('sort_order')

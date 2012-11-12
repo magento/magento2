@@ -32,9 +32,9 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Varien_Pear_Registry extends PEAR_Registry
+class Varien_Pear_Registry //extends PEAR_Registry
 {
-    function _initializeDepDB()
+/*    function _initializeDepDB()
     {
         if (!isset($this->_dependencyDB)) {
             static $initializing = false;
@@ -69,5 +69,5 @@ class Varien_Pear_Registry extends PEAR_Registry
                 $initializing = false;
             }
         }
-    }
+    }*/
 }

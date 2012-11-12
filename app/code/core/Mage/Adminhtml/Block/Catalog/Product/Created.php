@@ -36,12 +36,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Created extends Mage_Adminhtml_Block_
     protected $_configurableProduct;
     protected $_product;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product/created.phtml');
-    }
-
+    /**
+     * @var string
+     */
+    protected $_template = 'catalog/product/created.phtml';
 
     protected function _prepareLayout()
     {

@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_System_Convert_Gui_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('convertProfileGrid');
         $this->setDefaultSort('profile_id');
     }

@@ -408,7 +408,7 @@ class Mage_Eav_Model_Config
         if (isset($this->_attributeData[$entityTypeCode][$code])) {
             $data = $this->_attributeData[$entityTypeCode][$code];
             unset($this->_attributeData[$entityTypeCode][$code]);
-            $attribute = Mage::getModel($data['attribute_model'], $data);
+            $attribute = Mage::getModel($data['attribute_model'], array('data' => $data));
         } else {
             if (is_numeric($code)) {
                 $attribute = Mage::getModel($entityType->getAttributeModel())->load($code);

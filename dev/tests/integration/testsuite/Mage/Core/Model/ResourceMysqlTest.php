@@ -37,7 +37,7 @@ class Mage_Core_Model_ResourceMysqlTest extends PHPUnit_Framework_TestCase
         if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             $this->markTestSkipped('Test is designed to run on MySQL only.');
         }
-        $this->_model = new Mage_Core_Model_Resource();
+        $this->_model = Mage::getModel('Mage_Core_Model_Resource');
     }
 
     protected function tearDown()

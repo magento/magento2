@@ -26,17 +26,17 @@
  */
 
 $addressData = include(__DIR__ . '/address_data.php');
-$billingAddress = new Mage_Sales_Model_Order_Address($addressData);
+$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address', array('data' => $addressData));
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)
     ->setAddressType('shipping');
 
-$payment = new Mage_Sales_Model_Order_Payment();
+$payment = Mage::getModel('Mage_Sales_Model_Order_Payment');
 $payment->setMethod(Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS);
 
-$order = new Mage_Sales_Model_Order();
+$order = Mage::getModel('Mage_Sales_Model_Order');
 $order->setIncrementId('100000001')
     ->setSubtotal(100)
     ->setBaseSubtotal(100)

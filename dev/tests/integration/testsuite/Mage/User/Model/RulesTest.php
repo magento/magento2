@@ -37,7 +37,7 @@ class Mage_User_Model_RulesTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_User_Model_Rules;
+        $this->_model = Mage::getModel('Mage_User_Model_Rules');
     }
 
     protected function tearDown()

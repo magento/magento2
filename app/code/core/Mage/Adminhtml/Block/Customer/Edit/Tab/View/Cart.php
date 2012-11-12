@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Cart extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('customer_view_cart_grid');
         $this->setDefaultSort('added_at', 'desc');
         $this->setSortable(false);

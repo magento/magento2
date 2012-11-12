@@ -41,15 +41,7 @@ class Mage_Adminhtml_Block_Newsletter_Subscriber extends Mage_Adminhtml_Block_Te
      */
     protected $_queueCollection = null;
 
-    /**
-     * Constructor
-     *
-     * Initializes block
-     */
-    public function __construct()
-    {
-        $this->setTemplate('newsletter/subscriber/list.phtml');
-    }
+    protected $_template = 'newsletter/subscriber/list.phtml';
 
     /**
      * Prepares block to render

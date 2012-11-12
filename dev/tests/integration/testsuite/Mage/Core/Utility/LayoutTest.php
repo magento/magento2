@@ -72,7 +72,7 @@ class Mage_Core_Utility_LayoutTest extends PHPUnit_Framework_TestCase
     public function testGetLayoutFromFixture()
     {
         $layoutUpdateFile = __DIR__ . '/_files/_layout_update.xml';
-        $layout = $this->_utility->getLayoutFromFixture($layoutUpdateFile);
+        $layout = $this->_utility->getLayoutFromFixture($layoutUpdateFile, $this->_utility->getLayoutDependencies());
         $this->assertInstanceOf('Mage_Core_Model_Layout', $layout);
         $this->_assertLayoutUpdate($layout->getUpdate(), $layoutUpdateFile);
     }

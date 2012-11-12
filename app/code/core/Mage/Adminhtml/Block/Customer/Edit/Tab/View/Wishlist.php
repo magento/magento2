@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Wishlist extends Mage_Adminhtm
      *
      * @return void
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('customer_view_wishlist_grid');
         $this->setSortable(false);
         $this->setPagerVisibility(false);

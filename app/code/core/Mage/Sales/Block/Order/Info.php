@@ -36,11 +36,7 @@ class Mage_Sales_Block_Order_Info extends Mage_Core_Block_Template
 {
     protected $_links = array();
 
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('order/info.phtml');
-    }
+    protected $_template = 'order/info.phtml';
 
     protected function _prepareLayout()
     {

@@ -31,8 +31,9 @@ require __DIR__ . '/../../Catalog/_files/product_configurable.php';
 /** @var $product Mage_Catalog_Model_Product */
 $product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->load(1);
-
-$options = new Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection();
+/* Create simple products per each option */
+/** @var $options Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection */
+$options = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection');
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
 $requestInfo = new Varien_Object(array(
@@ -48,3 +49,7 @@ $cart->addProduct($product, $requestInfo);
 $cart->save();
 
 Mage::unregister('_singleton/Mage_Checkout_Model_Session');
+
+/** @var $objectManager Magento_Test_ObjectManager */
+$objectManager = Mage::getObjectManager();
+$objectManager->removeSharedInstance('Mage_Checkout_Model_Session');

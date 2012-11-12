@@ -36,9 +36,9 @@ class Mage_XmlConnect_Block_Adminhtml_Queue_Grid extends Mage_Adminhtml_Block_Wi
     /**
      * Setting grid_id, sort order and sort direction
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('app_queue_grid');
         $this->setDefaultSort('exec_time');
         $this->setDefaultDir('DESC');

@@ -70,7 +70,7 @@ class Mage_ImportExport_Model_Export_EntityAbstractTest extends PHPUnit_Framewor
      */
     public function testGetWriter()
     {
-        $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
+        $this->_model->setWriter(Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv'));
         $this->assertInstanceOf('Mage_ImportExport_Model_Export_Adapter_Csv', $this->_model->getWriter());
     }
 

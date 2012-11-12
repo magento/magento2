@@ -33,7 +33,8 @@ class Mage_Catalog_Model_Product_Type_ApiTest extends PHPUnit_Framework_TestCase
      */
     public function testItems($class)
     {
-        $model = new $class;
+        /** @var $model Mage_Catalog_Model_Product_Type_Api */
+        $model = Mage::getModel($class);
         $result = $model->items();
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);

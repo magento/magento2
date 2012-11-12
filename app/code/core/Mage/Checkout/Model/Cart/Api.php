@@ -158,7 +158,7 @@ class Mage_Checkout_Model_Cart_Api extends Mage_Checkout_Model_Api_Resource
         try {
             $quote->collectTotals();
             /** @var $service Mage_Sales_Model_Service_Quote */
-            $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $quote);
+            $service = Mage::getModel('Mage_Sales_Model_Service_Quote', array('quote' => $quote));
             $service->submitAll();
 
             if ($isNewCustomer) {

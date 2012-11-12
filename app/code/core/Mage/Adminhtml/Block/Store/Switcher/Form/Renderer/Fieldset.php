@@ -41,13 +41,7 @@ class Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset
      */
     protected $_element;
 
-    /**
-     * Constructor
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('store/switcher/form/renderer/fieldset.phtml');
-    }
+    protected $_template = 'store/switcher/form/renderer/fieldset.phtml';
 
     /**
      * Retrieve an element

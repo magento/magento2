@@ -33,9 +33,9 @@
  */
 class Mage_GoogleShopping_Block_Adminhtml_Types_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('types_grid');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);

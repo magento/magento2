@@ -34,7 +34,7 @@ class Mage_Core_Model_Resource_CacheTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Cache();
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Cache');
     }
 
     protected function tearDown()

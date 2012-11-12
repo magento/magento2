@@ -33,11 +33,8 @@
  */
 class Mage_Sales_Block_Order_Shipment extends Mage_Core_Block_Template
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('order/shipment.phtml');
-    }
+
+    protected $_template = 'order/shipment.phtml';
 
     protected function _prepareLayout()
     {

@@ -34,7 +34,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute_CollectionTest extends PHPUnit_Fr
 
     protected function setUp()
     {
-        $this->_model = new Mage_Eav_Model_Resource_Entity_Attribute_Collection();
+        $this->_model = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Collection');
     }
 
     protected function tearDown()
@@ -63,7 +63,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute_CollectionTest extends PHPUnit_Fr
 
     public function testSetAttributeGroupFilter()
     {
-        $collection = new Mage_Eav_Model_Resource_Entity_Attribute_Collection();
+        $collection = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Collection');
         $groupsPresent = $this->_getGroups($collection);
         $includeGroupId = current($groupsPresent);
 

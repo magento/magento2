@@ -28,7 +28,8 @@
 /**
  * Create dummy user
  */
-$user = new Mage_User_Model_User();
+/** @var $user Mage_User_Model_User */
+$user = Mage::getModel('Mage_User_Model_User');
 $user->setFirstname('Dummy')
     ->setLastname('Dummy')
     ->setEmail('dummy@dummy.com')

@@ -44,7 +44,8 @@ class Mage_XmlConnect_Block_Catalog_Product_Gallery extends Mage_XmlConnect_Bloc
         $product = Mage::getModel('Mage_Catalog_Model_Product')->setStoreId(Mage::app()->getStore()->getId())->load($productId);
         $collection = $product->getMediaGalleryImages();
 
-        $imagesNode = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<images></images>');
+        $imagesNode = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<images></images>'));
         $imageHelper = $this->helper('Mage_Catalog_Helper_Image');
 
         foreach ($collection as $item) {

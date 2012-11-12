@@ -32,6 +32,9 @@ class Mage_Tax_Helper_Data extends Mage_Core_Helper_Abstract
     const PRICE_CONVERSION_PLUS = 1;
     const PRICE_CONVERSION_MINUS = 2;
 
+    const CONFIG_DEFAULT_CUSTOMER_TAX_CLASS = 'tax/classes/default_customer_tax_class';
+    const CONFIG_DEFAULT_PRODUCT_TAX_CLASS = 'tax/classes/default_product_tax_class';
+
     /**
      * Tax configuration object
      *
@@ -878,4 +881,21 @@ class Mage_Tax_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $taxClassAmount;
     }
+
+    /**
+     * Retrieve default customer tax class from config
+     */
+    public function getDefaultCustomerTaxClass()
+    {
+        return Mage::getStoreConfig(self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS);
+    }
+
+    /**
+     * Retrieve default product tax class from config
+     */
+    public function getDefaultProductTaxClass()
+    {
+        return Mage::getStoreConfig(self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS);
+    }
+
 }

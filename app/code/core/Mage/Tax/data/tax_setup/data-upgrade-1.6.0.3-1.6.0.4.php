@@ -25,7 +25,10 @@
  */
 
 /** @var $catalogInstaller Mage_Catalog_Model_Resource_Setup */
-$catalogInstaller = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', 'catalog_setup');
+$catalogInstaller = Mage::getResourceModel(
+    'Mage_Catalog_Model_Resource_Setup',
+    array('resourceName' => 'catalog_setup')
+);
 
 $entityTypeId = $catalogInstaller->getEntityTypeId(Mage_Catalog_Model_Product::ENTITY);
 $attribute = $catalogInstaller->getAttribute(Mage_Catalog_Model_Product::ENTITY, 'tax_class_id');

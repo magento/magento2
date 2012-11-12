@@ -69,7 +69,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<script type="text/javascript">decorateTable('my-orders-table');</script>
+<script type="text/javascript">(function($) {$('#my-orders-table').decorate('table')})(jQuery)</script>
 <?php echo $this->getPagerHtml(); ?>
 <?php else: ?>
     <p><?php echo $this->__('You have placed no orders.'); ?></p>

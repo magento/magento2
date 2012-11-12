@@ -54,7 +54,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container extends
                 'theme'   => $this->getTheme(),
             );
             /** @var $layoutUpdate Mage_Core_Model_Layout_Merge */
-            $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Merge', $layoutUpdateParams);
+            $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $layoutUpdateParams));
             $layoutUpdate->addPageHandles(array($this->getLayoutHandle()));
             $layoutUpdate->load();
 

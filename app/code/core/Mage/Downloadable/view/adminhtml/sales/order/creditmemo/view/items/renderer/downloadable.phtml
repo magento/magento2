@@ -117,7 +117,7 @@
     <td class="a-right last">
         <?php echo $this->displayPrices(
             $_item->getBaseRowTotal()-$_item->getBaseDiscountAmount()+$_item->getBaseTaxAmount(),
-            $_item->getRowTotal()-$_item->getDiscountAmount()+$_item->getTaxAmount()+$_item->getWeeeTaxAppliedAmount
+            $_item->getRowTotal()-$_item->getDiscountAmount()+$_item->getTaxAmount()+$_item->getWeeeTaxAppliedAmount()
         ) ?>
     </td>
 </tr>

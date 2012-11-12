@@ -34,9 +34,9 @@
 class Mage_User_Block_User_Edit_Tabs extends Mage_Backend_Block_Widget_Tabs
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('page_tabs');
         $this->setDestElementId('edit_form');
         $this->setTitle(Mage::helper('Mage_User_Helper_Data')->__('User Information'));

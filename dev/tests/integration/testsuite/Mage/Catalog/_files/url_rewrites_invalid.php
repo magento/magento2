@@ -33,7 +33,8 @@ require dirname(__FILE__) . '/url_rewrites.php';
 /**
  * Invalid rewrite for product assigned to different category
  */
-$rewrite = new Mage_Core_Model_Url_Rewrite();
+/** @var $rewrite Mage_Core_Model_Url_Rewrite */
+$rewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
 $rewrite->setStoreId(1)
     ->setIdPath('product/1/4')
     ->setRequestPath('category-2/simple-product.html')
@@ -46,7 +47,7 @@ $rewrite->setStoreId(1)
 /**
  * Invalid rewrite for product assigned to category that doesn't belong to store
  */
-$rewrite = new Mage_Core_Model_Url_Rewrite();
+$rewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
 $rewrite->setStoreId(1)
     ->setIdPath('product/1/5')
     ->setRequestPath('category-5/simple-product.html')

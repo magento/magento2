@@ -40,17 +40,19 @@ class Mage_Adminhtml_Block_Catalog_Category_Tabs extends Mage_Adminhtml_Block_Wi
      */
     protected $_attributeTabBlock = 'Mage_Adminhtml_Block_Catalog_Category_Tab_Attributes';
 
+    protected $_template = 'widget/tabshoriz.phtml';
+
     /**
      * Initialize Tabs
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('category_info_tabs');
         $this->setDestElementId('category_tab_content');
         $this->setTitle(Mage::helper('Mage_Catalog_Helper_Data')->__('Category Data'));
-        $this->setTemplate('widget/tabshoriz.phtml');
+
     }
 
     /**

@@ -62,6 +62,11 @@ class Magento_Test_Annotation_AppIsolation
         $actualOptions = Mage::getConfig() ? Mage::getConfig()->getOptions()->getData() : array();
         $isConfigPolluted = array_intersect_assoc($expectedOptions, $actualOptions) !== $expectedOptions;
         if ($isConfigPolluted) {
+            /*
+             * Clearing of object manager cache required for correct reinitialization of configuration objects
+             * to refresh outdated information.
+             */
+            $this->_clearObjectManagerCache();
             Magento_Test_Bootstrap::getInstance()->initialize();
         }
         Mage::app()->getCache()->clean(
@@ -72,6 +77,18 @@ class Magento_Test_Annotation_AppIsolation
                 'DB_ORACLE_DDL', // Varien_Db_Adapter_Oracle::DDL_CACHE_TAG
             )
         );
+
+        $this->_clearObjectManagerCache();
+    }
+
+    /**
+     * Clear Object Manager cache but save old resource model
+     */
+    protected function _clearObjectManagerCache()
+    {
+        /** @var $objectManager Magento_Test_ObjectManager */
+        $objectManager = Mage::getObjectManager();
+        $objectManager->clearCache();
     }
 
     /**

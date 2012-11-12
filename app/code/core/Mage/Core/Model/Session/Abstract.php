@@ -653,7 +653,7 @@ class Mage_Core_Model_Session_Abstract extends Varien_Object
             return '';
         }
 
-        $httpHost = Mage::app()->getFrontController()->getRequest()->getHttpHost();
+        $httpHost = Mage::app()->getRequest()->getHttpHost();
         if (!$httpHost) {
             return '';
         }
@@ -714,7 +714,7 @@ class Mage_Core_Model_Session_Abstract extends Varien_Object
      */
     protected function _addHost()
     {
-        $host = Mage::app()->getFrontController()->getRequest()->getHttpHost();
+        $host = Mage::app()->getRequest()->getHttpHost();
         if (!$host) {
             return $this;
         }

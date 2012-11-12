@@ -70,17 +70,17 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      * 'themeConfig' may contain application config and theme config, respectively. If these these entries are not
      * present or null, then they will be retrieved from global application instance.
      *
-     * @param array $params
+     * @param array $data
      */
-    public function __construct($params)
+    public function __construct($data)
     {
-        $this->_area = $params['area'];
-        $this->_package = $params['package'];
-        $this->_theme = $params['theme'];
-        $this->_skin = $params['skin'];
-        $this->_locale = $params['locale'];
-        $this->_appConfig = isset($params['appConfig']) ? $params['appConfig'] : Mage::getConfig();
-        $this->_themeConfig = isset($params['themeConfig']) ? $params['themeConfig']
+        $this->_area = $data['area'];
+        $this->_package = $data['package'];
+        $this->_theme = $data['theme'];
+        $this->_skin = $data['skin'];
+        $this->_locale = $data['locale'];
+        $this->_appConfig = isset($data['appConfig']) ? $data['appConfig'] : Mage::getConfig();
+        $this->_themeConfig = isset($data['themeConfig']) ? $data['themeConfig']
             : Mage::getDesign()->getThemeConfig($this->_area);
     }
 

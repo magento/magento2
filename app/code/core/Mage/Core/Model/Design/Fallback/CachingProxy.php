@@ -109,18 +109,18 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
      * Following entries in $params are required: 'area', 'package', 'theme', 'skin', 'locale', 'canSaveMap',
      * 'mapDir', 'baseDir'.
      *
-     * @param array $params
+     * @param array $data
      */
-    public function __construct($params)
+    public function __construct(array $data = array())
     {
-        $this->_area = $params['area'];
-        $this->_package = $params['package'];
-        $this->_theme = $params['theme'];
-        $this->_skin = $params['skin'];
-        $this->_locale = $params['locale'];
-        $this->_canSaveMap = $params['canSaveMap'];
-        $this->_mapDir = $params['mapDir'];
-        $this->_basePath = $params['baseDir'] ? $params['baseDir'] . DIRECTORY_SEPARATOR : '';
+        $this->_area = $data['area'];
+        $this->_package = $data['package'];
+        $this->_theme = $data['theme'];
+        $this->_skin = $data['skin'];
+        $this->_locale = $data['locale'];
+        $this->_canSaveMap = $data['canSaveMap'];
+        $this->_mapDir = $data['mapDir'];
+        $this->_basePath = $data['baseDir'] ? $data['baseDir'] . DIRECTORY_SEPARATOR : '';
 
         $this->_mapFile =
             "{$this->_mapDir}/{$this->_area}_{$this->_package}_{$this->_theme}_{$this->_skin}_{$this->_locale}.ser";
@@ -146,11 +146,11 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         if (!$this->_fallback) {
             $this->_fallback = Mage::getModel('Mage_Core_Model_Design_Fallback', array(
-                'area' => $this->_area,
-                'package' => $this->_package,
-                'theme' => $this->_theme,
-                'skin' => $this->_skin,
-                'locale' => $this->_locale
+                'data' => array('area' => $this->_area,
+                    'package' => $this->_package,
+                    'theme' => $this->_theme,
+                    'skin' => $this->_skin,
+                    'locale' => $this->_locale)
             ));
         }
         return $this->_fallback;

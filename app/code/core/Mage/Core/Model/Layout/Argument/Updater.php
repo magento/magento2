@@ -34,20 +34,16 @@
 class Mage_Core_Model_Layout_Argument_Updater
 {
     /**
-     * @var Mage_Core_Model_Config
+     * @var Magento_ObjectManager
      */
-    protected $_objectFactory;
+    protected $_objectManager;
 
     /**
-     * @param array $args
-     * @throws InvalidArgumentException
+     * @param Magento_ObjectManager $objectManager
      */
-    public function __construct(array $args = array())
+    public function __construct(Magento_ObjectManager $objectManager)
     {
-        $this->_objectFactory = $args['objectFactory'];
-        if (false === ($this->_objectFactory instanceof Mage_Core_Model_Config)) {
-            throw new InvalidArgumentException('Passed wrong instance of object factory');
-        }
+        $this->_objectManager = $objectManager;
     }
 
     /**
@@ -61,8 +57,8 @@ class Mage_Core_Model_Layout_Argument_Updater
     public function applyUpdaters($value, array $updaters = array())
     {
         foreach ($updaters as $updater) {
-            /** @var Mage_Core_Model_Layout_Argument_UpdaterInterface $updaterInstance  */
-            $updaterInstance = $this->_objectFactory->getModelInstance($updater);
+            /** @var Mage_Core_Model_Layout_Argument_UpdaterInterface $updaterInstance */
+            $updaterInstance = $this->_objectManager->create($updater, array(), false);
             if (false === ($updaterInstance instanceof Mage_Core_Model_Layout_Argument_UpdaterInterface)) {
                 throw new InvalidArgumentException($updater
                         . ' should implement Mage_Core_Model_Layout_Argument_UpdaterInterface'

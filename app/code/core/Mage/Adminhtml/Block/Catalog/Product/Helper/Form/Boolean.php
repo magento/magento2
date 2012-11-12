@@ -33,9 +33,9 @@
  */
 class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Boolean extends Varien_Data_Form_Element_Select
 {
-    public function __construct($attributes=array())
+    protected function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setValues(array(
             array(
                 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('No'),

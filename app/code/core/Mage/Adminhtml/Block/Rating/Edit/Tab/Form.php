@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Backend_Block_Widget_Form
 {
     /**
      * Application instance
@@ -44,17 +44,34 @@ class Mage_Adminhtml_Block_Rating_Edit_Tab_Form extends Mage_Adminhtml_Block_Wid
     /**
      * Class constructor
      *
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_App $app
      * @param array $data
-     * @throws InvalidArgumentException
      */
-    public function __construct(array $data = array())
-    {
-        $this->_app = isset($data['app']) ? $data['app'] : Mage::app();
-
-        if (!($this->_app instanceof Mage_Core_Model_App)) {
-            throw new InvalidArgumentException('Required app object is invalid');
-        }
-        parent::__construct($data);
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_App $app,
+        array $data = array()
+    ) {
+        $this->_app = $app;
+        parent::__construct($request, $layout, $eventManager, $translator, $cache, $designPackage, $session,
+            $storeConfig, $frontController, $data);
     }
 
     /**

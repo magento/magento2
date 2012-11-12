@@ -75,7 +75,7 @@
     </tbody>
 <?php endif; ?>
 </table>
-<script type="text/javascript">decorateTable('my-tags-table')</script>
+<script type="text/javascript">(function($) {$('#my-tags-table').decorate('table')})(jQuery)</script>
 <?php echo $this->getToolbarHtml() ?>
 <div class="buttons-set">
     <p class="back-link"><a href="<?php echo $this->getUrl('*/*/')?>"><small>&laquo; </small><?php echo $this->__('Back to Tags List')?></a></p>

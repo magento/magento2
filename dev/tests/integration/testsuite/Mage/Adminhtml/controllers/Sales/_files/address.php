@@ -24,7 +24,8 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-$address = new Mage_Sales_Model_Order_Address();
+/** @var $address Mage_Sales_Model_Order_Address */
+$address = Mage::getModel('Mage_Sales_Model_Order_Address');
 $address->setRegion('CA')
     ->setPostcode('90210')
     ->setFirstname('a_unique_firstname')

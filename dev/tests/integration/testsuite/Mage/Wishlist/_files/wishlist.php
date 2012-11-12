@@ -28,7 +28,7 @@
 require __DIR__ . '/../../Customer/_files/customer.php';
 require __DIR__ . '/../../Catalog/_files/product_simple.php';
 
-$wishlist = new Mage_Wishlist_Model_Wishlist;
+$wishlist = Mage::getModel('Mage_Wishlist_Model_Wishlist');
 $wishlist->loadByCustomer($customer->getId(), true);
 $item = $wishlist->addNewItem($product, new Varien_Object(array(
 //    'product' => '1',

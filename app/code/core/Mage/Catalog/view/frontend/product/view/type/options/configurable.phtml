@@ -35,7 +35,7 @@ $_attributes = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getAl
         <dt><label class="required"><em>*</em><?php echo $_attribute->getLabel() ?></label></dt>
         <dd<?php if ($_attribute->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
             <div class="input-box">
-                <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
+                <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" data-validate="{required:true}" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="super-attribute-select">
                     <option><?php echo $this->__('Choose an Option...') ?></option>
                   </select>
               </div>
@@ -43,6 +43,10 @@ $_attributes = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getAl
     <?php endforeach; ?>
     </dl>
     <script type="text/javascript">
-        var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
+        (function ($) {
+            head.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/configurable.js') ?>", function () {
+                $.mage.configurable({"spConfig":<?php echo $this->getJsonConfig() ?>, "priceOptionInstance": priceOptionInstance});
+            })
+        })(jQuery);
     </script>
 <?php endif;?>

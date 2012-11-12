@@ -55,6 +55,8 @@ class Mage_Adminhtml_Block_System_Config_FormStub extends Mage_Adminhtml_Block_S
     {
         parent::_initObjects();
         $this->_configData = $this->_configDataStub;
-        $this->_defaultFieldRenderer = new Mage_Adminhtml_Block_System_Config_Form_Field();
+        $this->_defaultFieldRenderer = Mage::app()->getLayout()->createBlock(
+            'Mage_Adminhtml_Block_System_Config_Form_Field'
+        );
     }
 }

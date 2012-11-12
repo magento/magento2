@@ -29,7 +29,7 @@ class Mage_Core_Model_Config_SystemTest extends PHPUnit_Framework_TestCase
 {
     public function testLoad()
     {
-        $model = new Mage_Core_Model_Config_System;
+        $model = Mage::getModel('Mage_Core_Model_Config_System');
         $model->load('Mage_Core');
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode());
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode('sections'));

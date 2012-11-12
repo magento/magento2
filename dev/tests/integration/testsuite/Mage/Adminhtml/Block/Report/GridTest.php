@@ -32,7 +32,7 @@ class Mage_Adminhtml_Block_Report_GridTest extends PHPUnit_Framework_TestCase
 {
     public function testGetDateFormat()
     {
-        $block = new Mage_Adminhtml_Block_Report_Grid;
+        $block = Mage::getObjectManager()->create('Mage_Adminhtml_Block_Report_Grid');
         $this->assertNotEmpty($block->getDateFormat());
     }
 }

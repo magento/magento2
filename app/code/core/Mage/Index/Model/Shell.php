@@ -34,42 +34,11 @@
 class Mage_Index_Model_Shell extends Mage_Core_Model_ShellAbstract
 {
     /**
-     * Gets indexer instance
+     * Error status - whether errors have happened
      *
-     * @return Mage_Index_Model_Indexer
+     * @var bool
      */
-    protected function _getIndexer()
-    {
-        return Mage::getSingleton('Mage_Index_Model_Indexer');
-    }
-
-    /**
-     * Parses string with indexers and return array of indexer instances
-     *
-     * @param string $string
-     * @return array
-     */
-    protected function _parseIndexerString($string)
-    {
-        $processes = array();
-        if ($string == 'all') {
-            $collection = $this->_getIndexer()->getProcessesCollection();
-            foreach ($collection as $process) {
-                $processes[] = $process;
-            }
-        } else if (!empty($string)) {
-            $codes = explode(',', $string);
-            foreach ($codes as $code) {
-                $process = $this->_getIndexer()->getProcessByCode(trim($code));
-                if (!$process) {
-                    echo 'Warning: Unknown indexer with code ' . trim($code) . "\n";
-                } else {
-                    $processes[] = $process;
-                }
-            }
-        }
-        return $processes;
-    }
+    protected $_hasErrors = false;
 
     /**
      * Runs this model, assumed to be run by command-line
@@ -180,9 +149,11 @@ class Mage_Index_Model_Shell extends Mage_Core_Model_ShellAbstract
                 echo $process->getIndexer()->getName() . " index was successfully changed index mode\n";
             } catch (Mage_Core_Exception $e) {
                 echo $e->getMessage() . "\n";
+                $this->_hasErrors = true;
             } catch (Exception $e) {
                 echo $process->getIndexer()->getName() . " index process unknown error:\n";
                 echo $e . "\n";
+                $this->_hasErrors = true;
             }
         }
         return $this;
@@ -208,11 +179,62 @@ class Mage_Index_Model_Shell extends Mage_Core_Model_ShellAbstract
                 echo $process->getIndexer()->getName() . " index was rebuilt successfully\n";
             } catch (Mage_Core_Exception $e) {
                 echo $e->getMessage() . "\n";
+                $this->_hasErrors = true;
             } catch (Exception $e) {
                 echo $process->getIndexer()->getName() . " index process unknown error:\n";
                 echo $e . "\n";
+                $this->_hasErrors = true;
             }
         }
+    }
+
+    /**
+     * Parses string with indexers and return array of indexer instances
+     *
+     * @param string $string
+     * @return array
+     */
+    protected function _parseIndexerString($string)
+    {
+        $processes = array();
+        if ($string == 'all') {
+            $collection = $this->_getIndexer()->getProcessesCollection();
+            foreach ($collection as $process) {
+                $processes[] = $process;
+            }
+        } else if (!empty($string)) {
+            $codes = explode(',', $string);
+            foreach ($codes as $code) {
+                $process = $this->_getIndexer()->getProcessByCode(trim($code));
+                if (!$process) {
+                    echo 'Warning: Unknown indexer with code ' . trim($code) . "\n";
+                    $this->_hasErrors = true;
+                } else {
+                    $processes[] = $process;
+                }
+            }
+        }
+        return $processes;
+    }
+
+    /**
+     * Gets indexer instance
+     *
+     * @return Mage_Index_Model_Indexer
+     */
+    protected function _getIndexer()
+    {
+        return Mage::getSingleton('Mage_Index_Model_Indexer');
+    }
+
+    /**
+     * Return whether there errors have happened
+     *
+     * @return bool
+     */
+    public function hasErrors()
+    {
+        return $this->_hasErrors;
     }
 
     /**

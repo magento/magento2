@@ -183,7 +183,9 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
             $type = ucfirst($this->getConfigNode('type'));
             $this->_captcha[$formId] = $this->getConfig()->getModelInstance(
                 'Mage_Captcha_Model_' . $type,
-                array('formId' => $formId, 'helper' => $this)
+                array(
+                    'params' => array('formId' => $formId, 'helper' => $this)
+                )
             );
         }
         return $this->_captcha[$formId];

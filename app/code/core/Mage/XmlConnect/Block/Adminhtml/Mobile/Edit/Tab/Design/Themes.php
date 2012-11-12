@@ -33,12 +33,15 @@
  */
 class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Design_Themes extends Mage_Adminhtml_Block_Template
 {
+
+    protected $_template = 'form/element/themes.phtml';
+
     /**
-     * Set themes template and color fieldsets
+     * Set color fieldsets
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         try {
             $model = Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication();
@@ -46,7 +49,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Design_Themes extends Mage
             Mage::logException($e);
             return;
         }
-        $this->setTemplate('form/element/themes.phtml');
+
 
         $data = $model->getFormData();
         $this->setColorFieldset(array(

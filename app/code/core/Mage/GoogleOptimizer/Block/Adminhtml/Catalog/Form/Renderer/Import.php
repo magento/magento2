@@ -34,13 +34,8 @@
 class Mage_GoogleOptimizer_Block_Adminhtml_Catalog_Form_Renderer_Import
     extends Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element
 {
-    /**
-     * Set form template
-     */
-    public function __construct()
-    {
-        $this->setTemplate('catalog/form/renderer/import.phtml');
-    }
+
+    protected $_template = 'catalog/form/renderer/import.phtml';
 
     /**
      * Render form

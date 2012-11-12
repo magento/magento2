@@ -300,12 +300,13 @@ class Mage_Paypal_Model_Method_Agreement extends Mage_Sales_Model_Payment_Method
             )
         );
 
+        $parameters = array('params' => array($order));
         $api = $this->_pro->getApi()
             ->setReferenceId($billingAgreement->getReferenceId())
             ->setPaymentAction($this->_pro->getConfig()->paymentAction)
             ->setAmount($amount)
             ->setNotifyUrl(Mage::getUrl('paypal/ipn/'))
-            ->setPaypalCart(Mage::getModel('Mage_Paypal_Model_Cart', array($order)))
+            ->setPaypalCart(Mage::getModel('Mage_Paypal_Model_Cart', $parameters))
             ->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled)
             ->setInvNum($order->getIncrementId())
         ;

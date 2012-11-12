@@ -75,7 +75,9 @@ class Mage_Adminhtml_Model_System_Config_Source_Admin_Page
      */
     protected function _getMenuIterator(Mage_Backend_Model_Menu $menu)
     {
-        return $this->_objectFactory->getModelInstance('Mage_Backend_Model_Menu_Filter_Iterator', $menu->getIterator());
+        return $this->_objectFactory->getModelInstance('Mage_Backend_Model_Menu_Filter_Iterator',
+            array('iterator' => $menu->getIterator())
+        );
     }
 
     /**

@@ -118,7 +118,9 @@ class Integrity_Modular_MenuConfigFilesTest extends PHPUnit_Framework_TestCase
      */
     public function testMergedConfig()
     {
-        $model = new Mage_Backend_Model_Menu_Config_Menu($this->_getConfigurationFileList());
+        $model = Mage::getModel('Mage_Backend_Model_Menu_Config_Menu',
+            array('configFiles' => $this->_getConfigurationFileList())
+        );
         try {
             $this->assertInstanceOf('Mage_Backend_Model_Menu_Config_Menu', $model->validate());
         } catch (Magento_Exception $e) {

@@ -49,9 +49,37 @@
         <?php else: ?>
         <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
             <tbody>
-                <?php echo $_element->getChildrenHtml(); ?>
+                <?php echo $_element->getBasicChildrenHtml(); ?>
             </tbody>
         </table>
+        <?php if ($_element->hasAdvanced()): ?>
+        <div id="accordion" style="font-family: Arial,Helvetica,sans-serif;">
+            <h3 style="padding-left: 2em"><?php echo $_element->getAdvancedLabel() ?></h3>
+            <div style="padding: 0em">
+            <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
+                <tbody>
+                    <?php echo $_element->getAdvancedChildrenHtml(); ?>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <script type="text/javascript">
+        (function($) {
+            $(function() {
+                $( "#accordion" ).accordion({
+                    collapsible: true,
+                    animated: false,
+                    autoHeight: false,
+                    active: false,
+                    icons: {
+                        "header": "ui-icon-plus",
+                        "headerSelected": "ui-icon-minus"
+                    }
+                });
+            });
+        })(jQuery);
+        </script>
+        <?php endif; ?>
         <?php endif; ?>
     </div>
     <?php echo $_element->getSubFieldsetHtml() ?>

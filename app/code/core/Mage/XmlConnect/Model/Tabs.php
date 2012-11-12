@@ -52,7 +52,7 @@ class Mage_XmlConnect_Model_Tabs
      *
      * @param string $data
      */
-    public function __construct($data)
+    public function __construct($data = null)
     {
         $this->_enabledTabs = Mage::helper('Mage_XmlConnect_Helper_Data')->getDefaultApplicationDesignTabs();
         if (is_string($data)) {

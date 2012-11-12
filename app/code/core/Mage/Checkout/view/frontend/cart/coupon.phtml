@@ -29,14 +29,14 @@
         <h2><?php echo $this->__('Discount Codes') ?></h2>
         <div class="discount-form">
             <label for="coupon_code"><?php echo $this->__('Enter your coupon code if you have one.') ?></label>
-            <input type="hidden" name="remove" id="remove-coupone" value="0" />
+            <input type="hidden" name="remove" id="remove-coupon" value="0" />
             <div class="input-box">
                 <input class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
             </div>
             <div class="buttons-set">
-                <button type="button" title="<?php echo $this->__('Apply Coupon') ?>" class="button" onclick="discountForm.submit(false)" value="<?php echo $this->__('Apply Coupon') ?>"><span><span><?php echo $this->__('Apply Coupon') ?></span></span></button>
+                <button type="button" title="<?php echo $this->__('Apply Coupon') ?>" class="button apply-coupon" value="<?php echo $this->__('Apply Coupon') ?>"><span><span><?php echo $this->__('Apply Coupon') ?></span></span></button>
                 <?php if(strlen($this->getCouponCode())): ?>
-                    &nbsp; <button type="button" title="<?php echo $this->__('Cancel Coupon') ?>" class="button" onclick="discountForm.submit(true)" value="<?php echo $this->__('Cancel Coupon') ?>"><span><span><?php echo $this->__('Cancel Coupon') ?></span></span></button>
+                    &nbsp; <button type="button" title="<?php echo $this->__('Cancel Coupon') ?>" class="button cancel-coupon" value="<?php echo $this->__('Cancel Coupon') ?>"><span><span><?php echo $this->__('Cancel Coupon') ?></span></span></button>
                 <?php endif;?>
             </div>
         </div>
@@ -44,16 +44,18 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-var discountForm = new VarienForm('discount-coupon-form');
-discountForm.submit = function (isRemove) {
-    if (isRemove) {
-        $('coupon_code').removeClassName('required-entry');
-        $('remove-coupone').value = "1";
-    } else {
-        $('coupon_code').addClassName('required-entry');
-        $('remove-coupone').value = "0";
-    }
-    return VarienForm.prototype.submit.bind(discountForm)();
-}
+    (function($) {
+        head.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>",
+            "<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>",
+            "<?php echo $this->getSkinUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getSkinUrl('Mage_Checkout::js/discount-codes.js')?>", function() {
+                $('#discount-coupon-form').discountCode({
+                    couponCodeSelector: '#coupon_code', removeCouponSelector: '#remove-coupon',
+                    applyButton: 'button.apply-coupon', cancelButton: 'button.cancel-coupon'
+                });
+            });
+    })(jQuery);
 //]]>
 </script>

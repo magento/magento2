@@ -69,33 +69,41 @@ return array(
             'settings' => array(),
         ),
         'scenarios' => array(
-            'testsuite/add_to_cart.jmx' => array(
+            'Add to Cart' => array(
+                'file' => 'testsuite/add_to_cart.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),
-            'testsuite/advanced_search.jmx' => array(
+            'Advanced Search' => array(
+                'file' => 'testsuite/advanced_search.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),
-            'testsuite/category_view.jmx' => array(
+            'Category View' => array(
+                'file' => 'testsuite/category_view.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_category.php',
                 ),
             ),
-            'testsuite/checkout.jmx' => array(
+            'Checkout' => array(
+                'file' => 'testsuite/checkout.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),
-            'testsuite/home_page.jmx',
-            'testsuite/product_edit.jmx' => array(
+            'Home Page' => array(
+                'file' => 'testsuite/home_page.jmx',
+            ),
+            'Product Edit' => array(
+                'file' => 'testsuite/product_edit.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),
-            'testsuite/product_view.jmx' => array(
+            'Product View' => array(
+                'file' => 'testsuite/product_view.jmx',
                 'arguments' => array(
                     'product_url_key' => 'product-1.html',
                     'product_name'    => 'Product 1',
@@ -104,7 +112,8 @@ return array(
                     'testsuite/fixtures/catalog_product.php',
                 ),
             ),
-            'testsuite/quick_search.jmx' => array(
+            'Quick Search' => array(
+                'file' => 'testsuite/quick_search.jmx',
                 'fixtures' => array(
                     'testsuite/fixtures/catalog_product.php',
                 ),

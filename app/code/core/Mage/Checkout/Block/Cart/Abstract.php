@@ -40,9 +40,9 @@ abstract class Mage_Checkout_Block_Cart_Abstract extends Mage_Core_Block_Templat
     protected $_totals;
     protected $_itemRenders = array();
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->addItemRender('default', 'Mage_Checkout_Block_Cart_Item_Renderer', 'cart/item/default.phtml');
     }
 

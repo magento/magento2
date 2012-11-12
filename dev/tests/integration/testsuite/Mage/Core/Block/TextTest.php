@@ -34,7 +34,7 @@ class Mage_Core_Block_TextTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_block = new Mage_Core_Block_Text;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text');
     }
 
     public function tearDown()

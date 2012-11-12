@@ -44,12 +44,7 @@
                         <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" style="display:none;"<?php echo ($this->isStateProvinceRequired() ? ' class="validate-select"' : '') ?>>
                             <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                         </select>
-                       <script type="text/javascript">
-                       //<![CDATA[
-                           $('region_id').setAttribute('defaultValue',  "<?php echo $this->getEstimateRegionId() ?>");
-                       //]]>
-                       </script>
-                       <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getEstimateRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
+                        <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getEstimateRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
                    </div>
                 </li>
             <?php //endif; ?>
@@ -69,13 +64,30 @@
                 </li>
             </ul>
             <div class="buttons-set">
-                <button type="button" title="<?php echo $this->__('Get a Quote') ?>" onclick="coShippingMethodForm.submit()" class="button"><span><span><?php echo $this->__('Get a Quote') ?></span></span></button>
+                <button type="button" title="<?php echo $this->__('Get a Quote') ?>" class="button"><span><span><?php echo $this->__('Get a Quote') ?></span></span></button>
             </div>
         </form>
         <script type="text/javascript">
-        //<![CDATA[
-            new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>);
-        //]]>
+            (function ($) {
+                head.js(
+                    "<?php echo $this->getSkinUrl('jquery/jquery.validate.js') ?>",
+                    "<?php echo $this->getSkinUrl('jquery/additional-methods.js') ?>",
+                    "<?php echo $this->getSkinUrl('jquery/jquery.metadata.js') ?>",
+                    "<?php echo $this->getSkinUrl('jquery/jquery.hook.js') ?>",
+                    "<?php echo $this->getSkinUrl('mage/validation/validate.js') ?>",
+                    "<?php echo $this->getSkinUrl('Mage_Checkout::js/region-updater.js') ?>",
+                    function() {
+                        $('#country').regionUpdater({
+                            regionListId: '#region_id',
+                            regionInputId: '#region',
+                            postcodeId: '#postcode',
+                            formId: '#shipping-zip-form',
+                            regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
+                            defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
+                            countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>
+                        });
+                    });
+            })(jQuery);
         </script>
 
         <?php if (($_shippingRateGroups = $this->getEstimateRates())): ?>
@@ -111,29 +123,5 @@
             </div>
         </form>
         <?php endif; ?>
-        <script type="text/javascript">
-        //<![CDATA[
-            var coShippingMethodForm = new VarienForm('shipping-zip-form');
-            var countriesWithOptionalZip = <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>;
-
-            coShippingMethodForm.submit = function () {
-                var country = $F('country');
-                var optionalZip = false;
-
-                for (i=0; i < countriesWithOptionalZip.length; i++) {
-                    if (countriesWithOptionalZip[i] == country) {
-                        optionalZip = true;
-                    }
-                }
-                if (optionalZip) {
-                    $('postcode').removeClassName('required-entry');
-                }
-                else {
-                    $('postcode').addClassName('required-entry');
-                }
-                return VarienForm.prototype.submit.bind(coShippingMethodForm)();
-            }
-        //]]>
-        </script>
     </div>
 </div>

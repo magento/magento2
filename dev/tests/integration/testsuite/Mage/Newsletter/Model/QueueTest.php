@@ -46,12 +46,14 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
             $this->stringEndsWith('/skin/frontend/default/default/default/de_DE/images/logo.gif')
         );
 
-        $emailTemplate = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'));
+        $emailTemplate = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);
         $emailTemplate->expects($this->exactly(2))->method('_getMail')->will($this->onConsecutiveCalls(
             $subscriberOne, $subscriberTwo
         ));
 
-        $queue = new Mage_Newsletter_Model_Queue(array('email_template' => $emailTemplate));
+        $queue = Mage::getModel('Mage_Newsletter_Model_Queue',
+            array('data' => array('email_template' => $emailTemplate))
+        );
         $queue->load('Subject', 'newsletter_subject'); // fixture
         $queue->sendPerSubscriber();
     }
@@ -66,12 +68,14 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
         $brokenMail = $this->getMock('Zend_Mail', array('send'), array('utf-8'));
         $errorMsg = md5(microtime());
         $brokenMail->expects($this->any())->method('send')->will($this->throwException(new Exception($errorMsg, 99)));
-        $template = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'));
+        $template = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);
         $template->expects($this->any())->method('_getMail')->will($this->onConsecutiveCalls($mail, $brokenMail));
 
-        $queue = new Mage_Newsletter_Model_Queue(array('email_template' => $template));
+        $queue = Mage::getModel('Mage_Newsletter_Model_Queue',
+            array('data' => array('email_template' => $template))
+        );
         $queue->load('Subject', 'newsletter_subject'); // fixture
-        $problem = new Mage_Newsletter_Model_Problem;
+        $problem = Mage::getModel('Mage_Newsletter_Model_Problem');
         $problem->load($queue->getId(), 'queue_id');
         $this->assertEmpty($problem->getId());
 

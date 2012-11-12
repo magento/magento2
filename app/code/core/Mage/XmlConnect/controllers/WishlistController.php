@@ -307,7 +307,8 @@ class Mage_XmlConnect_WishlistController extends Mage_XmlConnect_Controller_Acti
             } else if ($e->getCode() == Mage_Wishlist_Model_Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
                 $item->delete();
 
-                $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<message></message>');
+                $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                    array('data' => '<message></message>'));
                 $message->addChild('status', self::MESSAGE_STATUS_SUCCESS);
                 $message->addChild('has_required_options', 1);
                 $message->addChild('product_id', $item->getProductId());

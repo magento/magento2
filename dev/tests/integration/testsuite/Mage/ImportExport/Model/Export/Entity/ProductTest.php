@@ -88,7 +88,7 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
     {
         parent::setUp();
 
-        $this->_model = new Mage_ImportExport_Model_Export_Entity_Product();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Export_Entity_Product');
 
         $this->_oldDisplayErrors  = ini_get('display_errors');
         $this->_oldErrorLevel = error_reporting();
@@ -119,7 +119,7 @@ class Mage_ImportExport_Model_Export_Entity_ProductTest extends PHPUnit_Framewor
         ini_set('display_errors', 1);
         Mage::setIsDeveloperMode(true);
 
-        $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
+        $this->_model->setWriter(Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv'));
         $this->assertNotEmpty($this->_model->export());
     }
 

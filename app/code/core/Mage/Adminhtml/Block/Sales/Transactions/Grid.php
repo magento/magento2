@@ -37,9 +37,9 @@ class Mage_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Block_
      * Set grid params
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('order_transactions');
         $this->setUseAjax(true);
         $this->setDefaultSort('created_at');

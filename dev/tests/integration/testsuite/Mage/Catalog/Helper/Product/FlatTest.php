@@ -34,7 +34,7 @@ class Mage_Catalog_Helper_Product_FlatTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new Mage_Catalog_Helper_Product_Flat;
+        $this->_helper = Mage::helper('Mage_Catalog_Helper_Product_Flat');
     }
 
     protected function tearDown()

@@ -27,11 +27,7 @@
 
 class Mage_Payment_Block_Info_Purchaseorder extends Mage_Payment_Block_Info
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Payment::info/purchaseorder.phtml');
-    }
+    protected $_template = 'Mage_Payment::info/purchaseorder.phtml';
 
     public function toPdf()
     {

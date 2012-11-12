@@ -81,9 +81,9 @@ class Mage_Api2_Model_Renderer_Xml implements Mage_Api2_Model_Renderer_Interface
     public function render($data)
     {
         /* @var $writer Mage_Api2_Model_Renderer_Xml_Writer */
-        $writer = Mage::getModel('Mage_Api2_Model_Renderer_Xml_Writer', array(
+        $writer = Mage::getModel('Mage_Api2_Model_Renderer_Xml_Writer', array('options' => array(
             'config' => new Zend_Config($this->_prepareData($data, true))
-        ));
+        )));
         return $writer->render();
     }
 

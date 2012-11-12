@@ -53,9 +53,9 @@ abstract class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Abstract
     /**
      * TODO
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setData(Mage::getSingleton('Mage_Connect_Model_Session')->getCustomExtensionPackageFormData());
     }
 

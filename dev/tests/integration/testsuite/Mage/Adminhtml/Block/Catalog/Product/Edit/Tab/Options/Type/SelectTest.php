@@ -29,7 +29,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_SelectTest exte
 {
     public function testToHtmlFormId()
     {
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Select */
         $block = $layout->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Select', 'select');
         $html = $block->getPriceTypeSelectHtml();
         $this->assertContains('select_{{select_id}}', $html);

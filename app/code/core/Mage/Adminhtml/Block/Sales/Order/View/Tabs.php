@@ -52,9 +52,9 @@ class Mage_Adminhtml_Block_Sales_Order_View_Tabs extends Mage_Adminhtml_Block_Wi
         Mage::throwException(Mage::helper('Mage_Sales_Helper_Data')->__('Cannot get the order instance.'));
     }
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_order_view_tabs');
         $this->setDestElementId('sales_order_view');
         $this->setTitle(Mage::helper('Mage_Sales_Helper_Data')->__('Order View'));

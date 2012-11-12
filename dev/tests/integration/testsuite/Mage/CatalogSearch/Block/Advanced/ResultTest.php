@@ -39,7 +39,7 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
 
     protected function setUp()
     {
-        $this->_layout = new Mage_Core_Model_Layout;
+        $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_block = $this->_layout->createBlock('Mage_CatalogSearch_Block_Advanced_Result', 'block');
     }
 
@@ -59,7 +59,9 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
             'position' => 'Label Position',
             'option3' => 'Label Option 2'
         );
-        $category = $this->getMock('Mage_Catalog_Model_Category', array('getAvailableSortByOptions'));
+        $category = $this->getMock(
+            'Mage_Catalog_Model_Category', array('getAvailableSortByOptions'), array(), '', false
+        );
         $category->expects($this->atLeastOnce())
             ->method('getAvailableSortByOptions')
             ->will($this->returnValue($sortOptions));
@@ -79,6 +81,7 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
 
     public function testSetListModes()
     {
+        /** @var $childBlock Mage_Core_Block_Text */
         $childBlock = $this->_layout->addBlock('Mage_Core_Block_Text', 'search_result_list', 'block');
         $this->assertEmpty($childBlock->getModes());
         $this->_block->setListModes();
@@ -87,6 +90,7 @@ class Mage_CatalogSearch_Block_Advanced_ResultTest extends PHPUnit_Framework_Tes
 
     public function testSetListCollection()
     {
+        /** @var $childBlock Mage_Core_Block_Text */
         $childBlock = $this->_layout->addBlock('Mage_Core_Block_Text', 'search_result_list', 'block');
         $this->assertEmpty($childBlock->getCollection());
         $this->_block->setListCollection();

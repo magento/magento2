@@ -49,7 +49,7 @@
         </li>
     <?php endforeach; ?>
     </ol>
-    <script type="text/javascript">decorateList('wishlist-sidebar');</script>
+    <script type="text/javascript">(function($) {$('#wishlist-sidebar').decorate('list', false)})(jQuery)</script>
     <div class="actions">
         <a href="<?php echo $this->helper('Mage_Wishlist_Helper_Data')->getListUrl() ?>"><?php echo $this->__('Go to Wishlist') ?></a>
     </div>

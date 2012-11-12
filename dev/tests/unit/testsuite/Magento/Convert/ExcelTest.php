@@ -99,11 +99,10 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
     {
         $ioFile = new Varien_Io_File();
 
-        $path = Magento_Test_Environment::getInstance()->getTmpDir();
         $name = md5(microtime());
-        $file = $path . DIRECTORY_SEPARATOR . $name . '.xml';
+        $file = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . $name . '.xml';
 
-        $ioFile->open(array('path' => $path));
+        $ioFile->open(array('path' => TESTS_TEMP_DIR));
         $ioFile->streamOpen($file, 'w+');
         $ioFile->streamLock(true);
 

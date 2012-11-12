@@ -43,9 +43,9 @@ class Mage_GoogleShopping_Block_Adminhtml_Store_Switcher extends Mage_Adminhtml_
     /**
      * Set overriden params
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setUseConfirm(false)->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
     }
 }

@@ -31,6 +31,11 @@
             <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form_Container" name="design_editor_launcher_form_container">
                 <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form" name="design_editor_launcher_form" as="form"/>
             </block>
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_List" name="design_editor_theme_list" as="list" template="Mage_DesignEditor::theme/list.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Item" name="design_editor_theme_item" as="item" template="Mage_DesignEditor::theme/item.phtml">
+                    <block type="Mage_Backend_Block_Template" name="design_editor_theme" as="theme" template="Mage_DesignEditor::theme.phtml" />
+                </block>
+            </block>
         </reference>
     </adminhtml_system_design_editor_index>
 

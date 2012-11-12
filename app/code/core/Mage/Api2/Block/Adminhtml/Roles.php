@@ -36,9 +36,9 @@ class Mage_Api2_Block_Adminhtml_Roles extends Mage_Adminhtml_Block_Widget_Grid_C
     /**
      * Construct grid container
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->_blockGroup = 'Mage_Api2';
         $this->_controller = 'adminhtml_roles';

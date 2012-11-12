@@ -33,11 +33,8 @@
  */
 class Mage_Sales_Block_Order_Creditmemo extends Mage_Sales_Block_Order_Creditmemo_Items
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('order/creditmemo.phtml');
-    }
+
+    protected $_template = 'order/creditmemo.phtml';
 
     protected function _prepareLayout()
     {

@@ -69,18 +69,20 @@ abstract class Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
      */
     protected $_isPreparedToRender = false;
 
+    protected $_template = 'Mage_Adminhtml::system/config/form/field/array.phtml';
+
     /**
      * Check if columns are defined, set template
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         if (!$this->_addButtonLabel) {
             $this->_addButtonLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add');
         }
-        parent::__construct();
+        parent::_construct();
         if (!$this->getTemplate()) {
-            $this->setTemplate('Mage_Adminhtml::system/config/form/field/array.phtml');
+
         }
     }
 

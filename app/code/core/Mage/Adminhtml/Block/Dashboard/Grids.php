@@ -34,12 +34,14 @@
 
 class Mage_Adminhtml_Block_Dashboard_Grids extends Mage_Adminhtml_Block_Widget_Tabs
 {
-    public function __construct()
+
+    protected $_template = 'widget/tabshoriz.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('grid_tab');
         $this->setDestElementId('grid_tab_content');
-        $this->setTemplate('widget/tabshoriz.phtml');
     }
 
     /**

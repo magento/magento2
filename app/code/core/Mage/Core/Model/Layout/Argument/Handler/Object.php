@@ -40,7 +40,7 @@ class Mage_Core_Model_Layout_Argument_Handler_Object extends Mage_Core_Model_Lay
      */
     public function process($value)
     {
-        $valueInstance = $this->_objectFactory->getModelInstance($value);
+        $valueInstance = $this->_objectManager->create($value, array(), false);
         return $valueInstance;
     }
 }

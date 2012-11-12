@@ -36,13 +36,13 @@ class Mage_Api2_Block_Adminhtml_Attribute_Edit extends Mage_Adminhtml_Block_Widg
     /**
      * Initialize edit form container
      */
-    public function __construct()
+    public function _construct()
     {
         $this->_objectId   = 'id';
         $this->_blockGroup = 'Mage_Api2';
         $this->_controller = 'adminhtml_attribute';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', $this->__('Save'))
             ->_removeButton('delete');

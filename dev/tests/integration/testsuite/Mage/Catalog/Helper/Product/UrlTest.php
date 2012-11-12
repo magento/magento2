@@ -42,7 +42,7 @@ class Mage_Catalog_Helper_Product_UrlTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new Mage_Catalog_Helper_Product_Url;
+        $this->_helper = Mage::helper('Mage_Catalog_Helper_Product_Url');
     }
 
     protected function tearDown()

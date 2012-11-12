@@ -32,10 +32,8 @@ interface Magento_Performance_Scenario_HandlerInterface
     /**
      * Run scenario and optionally write results to report file
      *
-     * @param string $scenarioFile
-     * @param Magento_Performance_Scenario_Arguments $scenarioArguments
+     * @param Magento_Performance_Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @return bool Whether handler was able to process scenario
      */
-    public function run($scenarioFile, Magento_Performance_Scenario_Arguments $scenarioArguments, $reportFile = null);
+    public function run(Magento_Performance_Scenario $scenario, $reportFile = null);
 }

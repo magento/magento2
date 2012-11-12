@@ -30,4 +30,4 @@
         <p class="required"><?php echo $this->__('* Required Fields') ?></p>
     <?php endif;?>
 </div>
-<script type="text/javascript">decorateGeneric($$('#product-options-wrapper dl'), ['last']);</script>
+<script type="text/javascript">(function($) {$('#product-options-wrapper dl').decorate('generic', ['last'])})(jQuery)</script>

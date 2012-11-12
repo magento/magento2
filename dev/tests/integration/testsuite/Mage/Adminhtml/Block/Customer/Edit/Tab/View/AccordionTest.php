@@ -34,10 +34,12 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_
 
     protected function setUp()
     {
-        $customer = new Mage_Customer_Model_Customer;
+        /** @var $customer Mage_Customer_Model_Customer */
+        $customer = Mage::getModel('Mage_Customer_Model_Customer');
         $customer->load(1);
         Mage::register('current_customer', $customer);
-        $layout = new Mage_Core_Model_Layout(array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
         $this->_block = $layout->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View_Accordion');
     }
 
@@ -47,7 +49,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_AccordionTest extends PHPUnit_
     }
 
     /**
-     * @magentoDataFixture Mage/Customer/_files/customer.php
+     * magentoDataFixture Mage/Customer/_files/customer.php
      */
     public function testToHtml()
     {

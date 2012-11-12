@@ -54,7 +54,7 @@
 <?php endforeach; ?>
 <script type="text/javascript">
 //<![CDATA[
-    decorateTable('wishlist-table');
+    (function($) {$('#wishlist-table').decorate('table')})(jQuery);
 
 <?php foreach ($columns as $column): ?>
     <?php echo $column->getJs();?>

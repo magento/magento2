@@ -36,9 +36,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Preview_Tabitems extends Mage_Admin
     /**
      * Set preview tab items template
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $deviceType = Mage::helper('Mage_XmlConnect_Helper_Data')->getDeviceType();
         if ($deviceType !== Mage_XmlConnect_Helper_Data::DEVICE_TYPE_DEFAULT) {

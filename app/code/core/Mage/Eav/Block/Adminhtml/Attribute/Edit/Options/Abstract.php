@@ -34,11 +34,7 @@
 abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends Mage_Adminhtml_Block_Widget
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('Mage_Adminhtml::catalog/product/attribute/options.phtml');
-    }
+    protected $_template = 'Mage_Adminhtml::catalog/product/attribute/options.phtml';
 
     /**
      * Preparing layout, adding buttons

@@ -32,6 +32,7 @@
  * @package     Mage_Core
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Mage_Core_Model_Layout extends Varien_Simplexml_Config
 {
@@ -92,6 +93,11 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      * @var Mage_Core_Model_Layout_Merge
      */
     protected $_update;
+
+    /**
+     * @var Mage_Core_Model_BlockFactory
+     */
+    protected $_blockFactory;
 
     /**
      * Blocks registry
@@ -172,34 +178,30 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     protected $_translator;
 
     /**
-     * Class constructor
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param array $arguments
-     * @throws InvalidArgumentException
+     * @param Mage_Core_Model_BlockFactory $blockFactory
+     * @param Magento_Data_Structure $structure
+     * @param Mage_Core_Model_Layout_Argument_Processor $argumentProcessor
+     * @param Mage_Core_Model_Layout_Translator $translator
+     * @param Mage_Core_Model_Layout_ScheduledStructure $scheduledStructure
+     * @param string $area
      */
-    public function __construct(array $arguments = array())
-    {
-        $this->_area = isset($arguments['area']) ? $arguments['area'] : Mage_Core_Model_Design_Package::DEFAULT_AREA;
-        if (isset($arguments['structure'])) {
-            if ($arguments['structure'] instanceof Magento_Data_Structure) {
-                $this->_structure = $arguments['structure'];
-            } else {
-                throw new InvalidArgumentException('Expected instance of Magento_Data_Structure.');
-            }
-        } else {
-            $this->_structure = Mage::getModel('Magento_Data_Structure');
-        }
-
-        $this->_argumentProcessor = isset($arguments['processor']) ? $arguments['processor'] : null;
-        $this->_translator = isset($arguments['translator']) ? $arguments['translator'] : null;
-
+    public function __construct(
+        Mage_Core_Model_BlockFactory $blockFactory,
+        Magento_Data_Structure $structure,
+        Mage_Core_Model_Layout_Argument_Processor $argumentProcessor,
+        Mage_Core_Model_Layout_Translator $translator,
+        Mage_Core_Model_Layout_ScheduledStructure $scheduledStructure,
+        $area = Mage_Core_Model_Design_Package::DEFAULT_AREA
+    ) {
+        $this->_blockFactory = $blockFactory;
+        $this->_area = $area;
+        $this->_structure = $structure;
+        $this->_argumentProcessor = $argumentProcessor;
+        $this->_translator = $translator;
         $this->_elementClass = Mage::getConfig()->getModelClassName('Mage_Core_Model_Layout_Element');
         $this->setXml(simplexml_load_string('<layout/>', $this->_elementClass));
         $this->_renderingOutput = new Varien_Object;
-
-        $this->_scheduledStructure = isset($arguments['scheduledStructure']) ?
-            $arguments['scheduledStructure'] :
-            Mage::getModel('Mage_Core_Model_Layout_ScheduledStructure');
+        $this->_scheduledStructure = $scheduledStructure;
     }
 
     /**
@@ -221,7 +223,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     public function getUpdate()
     {
         if (!$this->_update) {
-            $this->_update = Mage::getModel('Mage_Core_Model_Layout_Merge', array('area' => $this->getArea()));
+            $arguments = array('area' => $this->getArea());
+            $this->_update = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $arguments));
         }
         return $this->_update;
     }
@@ -345,20 +348,6 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     }
 
     /**
-     * Get translator object
-     *
-     * @return Mage_Core_Model_Abstract|Mage_Core_Model_Layout_Translator
-     */
-    protected function _getTranslator()
-    {
-        if (null === $this->_translator) {
-            $this->_translator = Mage::getModel('Mage_Core_Model_Layout_Translator');
-        }
-
-        return $this->_translator;
-    }
-
-    /**
      * Move element in scheduled structure
      *
      * @param string $element
@@ -473,7 +462,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
                     $arguments[$argument->getName()]['value'] = $value;
                 }
             } else {
-                $value = $this->_getTranslator()->translateArgument($argument, $moduleName);
+                $value = $this->_translator->translateArgument($argument, $moduleName);
                 if ('' !== $value) {
                     $arguments[$argument->getName()]['value'] = $value;
                 }
@@ -492,7 +481,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             if ($childNode->hasChildren()) {
                 $this->_fillArgumentsArray($childNode, $argumentsArray[$nodeName], $moduleName);
             } else {
-                $argumentsArray[$nodeName] = $this->_getTranslator()->translateArgument($childNode, $moduleName);
+                $argumentsArray[$nodeName] = $this->_translator->translateArgument($childNode, $moduleName);
             }
         }
     }
@@ -574,7 +563,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             list(
                 $row[self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME],
                 $row[self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER]
-            ) = $this->_beforeAfterToSibling($node);
+                ) = $this->_beforeAfterToSibling($node);
 
             // materialized path for referencing nodes in the plain array of _scheduledStructure
             if ($this->_scheduledStructure->hasPath($parentName)) {
@@ -665,7 +654,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
                 $this->_structure->setAsChild($name, $parentName, $alias);
             } else {
                 Mage::log("Broken reference: the '{$name}' element cannot be added as child to '{$parentName}, "
-                    . 'because the latter doesn\'t exist', Zend_Log::CRIT
+                        . 'because the latter doesn\'t exist', Zend_Log::CRIT
                 );
             }
         }
@@ -756,7 +745,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             $className = (string)$node['type'];
         }
 
-        $arguments = $this->_getArgumentProcessor()->process($arguments);
+        $arguments = $this->_argumentProcessor->process($arguments);
 
         $block = $this->_createBlock($className, $elementName, $arguments);
         if (!empty($node['template'])) {
@@ -825,7 +814,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
         $block = $this->getBlock($parentName);
         if (!empty($block)) {
             $args = $this->_extractArgs($node);
-            $this->_getTranslator()->translateActionParameters($node, $args);
+            $this->_translator->translateActionParameters($node, $args);
             call_user_func_array(array($block, $method), $args);
         }
 
@@ -887,7 +876,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             if ($childName !== $sibling) {
                 $siblingParentName = $this->_structure->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
-                    Mage::log("Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', "
+                    Mage::log(
+                        "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', "
                         . "but their parents are different: '{$parentName}' and '{$siblingParentName}' respectively.",
                         Zend_Log::CRIT
                     );
@@ -1335,23 +1325,6 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
     }
 
     /**
-     * Initialize and retrieve argument processor
-     *
-     * @return Mage_Core_Model_Layout_Argument_Processor
-     */
-    protected function _getArgumentProcessor()
-    {
-        if (null === $this->_argumentProcessor) {
-            $this->_argumentProcessor = Mage::getModel('Mage_Core_Model_Layout_Argument_Processor', array(
-                'processorConfig' => Mage::getModel('Mage_Core_Model_Layout_Argument_ProcessorConfig', array(
-                    'objectFactory' => Mage::app()->getConfig())),
-                'objectFactory' => Mage::app()->getConfig()
-            ));
-        }
-        return $this->_argumentProcessor;
-    }
-
-    /**
      * Create block object instance based on block type
      *
      * @param string|Mage_Core_Block_Abstract $block
@@ -1363,7 +1336,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
         if ($block && is_string($block)) {
             $block = Mage::getConfig()->getBlockClassName($block);
             if (Magento_Autoload::getInstance()->classExists($block)) {
-                $block = new $block($attributes);
+                $block = $this->_blockFactory->createBlock($block, $attributes);
             }
         }
         if (!$block instanceof Mage_Core_Block_Abstract) {
@@ -1492,7 +1465,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
                 Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Invalid block type: %s', $type));
             }
 
-            $helper = new $className();
+            $helper = Mage::getModel($type);
             if ($helper) {
                 if ($helper instanceof Mage_Core_Block_Abstract) {
                     $helper->setLayout($this);
@@ -1538,7 +1511,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             return $result;
         }
         foreach (array_reverse($node->xpath('ancestor::*[@module]')) as $element) {
-            $result = (string) $element->getAttribute('module');
+            $result = (string)$element->getAttribute('module');
             if ($result) {
                 //return Mage::getConfig()->getModuleConfig($result) ? $result : 'core';
                 return $result;
@@ -1552,5 +1525,15 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
             }
         }
         return 'Mage_Core';
+    }
+
+    /**
+     * Retrieve block factory
+     *
+     * @return Mage_Core_Model_BlockFactory
+     */
+    public function getBlockFactory()
+    {
+        return $this->_blockFactory;
     }
 }

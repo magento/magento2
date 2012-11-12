@@ -58,10 +58,6 @@ Default layout, loads most of the pages
 
     <customer_account_login translate="label" type="page" parent="customer_account">
         <label>Customer Account Login Form</label>
-        <!-- Mage_Customer -->
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -76,10 +72,6 @@ Layout for customer log out page
 
     <customer_account_logoutsuccess translate="label" type="page" parent="customer_account">
         <label>Customer Account Logout Success</label>
-        <!-- Mage_Customer -->
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -94,10 +86,6 @@ New customer registration
 
     <customer_account_create translate="label" type="page" parent="customer_account">
         <label>Customer Account Registration Form</label>
-        <!-- Mage_Customer -->
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -110,9 +98,6 @@ New customer registration
 
     <customer_account_forgotpassword translate="label" type="page" parent="customer_account">
         <label>Customer Forgot Password Form</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="head">
             <action method="setTitle" translate="title" module="Mage_Customer"><title>Forgot Your Password</title></action>
         </reference>
@@ -127,9 +112,6 @@ New customer registration
 
     <customer_account_resetpassword translate="label" type="page" parent="customer_account">
         <label>Reset a Password</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="head">
             <action method="setTitle" translate="title" module="Mage_Customer">
                 <title>Reset a Password</title>
@@ -150,9 +132,6 @@ New customer registration
 
     <customer_account_confirmation translate="label" type="page" parent="customer_account">
         <label>Customer Account Confirmation</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
             <action method="setHeaderTitle" translate="title" module="Mage_Customer"><title>Send confirmation link</title></action>
@@ -183,9 +162,6 @@ Customer account pages, rendered for all tabs in dashboard
 
     <customer_account translate="label" type="page" parent="default">
         <label>Customer My Account (All Pages)</label>
-        <!--remove name="catalog.compare.sidebar"/>
-        <remove name="sale.reorder.sidebar"/-->
-        <!-- Mage_Customer -->
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>

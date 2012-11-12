@@ -25,30 +25,37 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$billingAddress = new Mage_Sales_Model_Order_Address(array(
-    'firstname'  => 'guest',
-    'lastname'   => 'guest',
-    'email'      => 'customer@example.com',
-    'street'     => 'street',
-    'city'       => 'Los Angeles',
-    'region'     => 'CA',
-    'postcode'   => '1',
-    'country_id' => 'US',
-    'telephone'  => '1',
-));
+/** @var $billingAddress Mage_Sales_Model_Order_Address */
+$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address',
+    array(
+        'data' => array(
+            'firstname'  => 'guest',
+            'lastname'   => 'guest',
+            'email'      => 'customer@example.com',
+            'street'     => 'street',
+            'city'       => 'Los Angeles',
+            'region'     => 'CA',
+            'postcode'   => '1',
+            'country_id' => 'US',
+            'telephone'  => '1',
+        )
+    )
+);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)
     ->setAddressType('shipping');
 
-$order = new Mage_Sales_Model_Order();
+/** @var $order Mage_Sales_Model_Order */
+$order = Mage::getModel('Mage_Sales_Model_Order');
 $order->loadByIncrementId('100000001');
 $clonedOrder = clone $order;
 $order->setIncrementId('100000002');
 $order->save();
 
-$payment = new Mage_Sales_Model_Order_Payment();
+/** @var $payment Mage_Sales_Model_Order_Payment */
+$payment = Mage::getModel('Mage_Sales_Model_Order_Payment');
 $payment->setMethod('checkmo');
 
 $order = $clonedOrder;

@@ -44,7 +44,7 @@ class Legacy_FilesystemTest extends PHPUnit_Framework_TestCase
         return array(
             'Relocated to pub/errors' => array('errors'),
             'Eliminated with Mage_Compiler' => array('includes'),
-            'Relocated to pub/js' => array('js'),
+            'Relocated to pub/lib' => array('js'),
             'Relocated to pub/media' => array('media'),
             'Eliminated as not needed' => array('pkginfo'),
             'Dissolved into themes under app/design ' => array('skin'),

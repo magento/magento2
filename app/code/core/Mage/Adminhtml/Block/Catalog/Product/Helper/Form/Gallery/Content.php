@@ -34,12 +34,7 @@
  */
 class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends Mage_Adminhtml_Block_Widget
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product/helper/gallery.phtml');
-    }
+    protected $_template = 'catalog/product/helper/gallery.phtml';
 
     protected function _prepareLayout()
     {
@@ -97,12 +92,12 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
 
     public function getImagesJson()
     {
-        if(is_array($this->getElement()->getValue())) {
+        if (is_array($this->getElement()->getValue())) {
             $value = $this->getElement()->getValue();
-            if(count($value['images'])>0) {
+            if (is_array($value['images']) && count($value['images']) > 0) {
                 foreach ($value['images'] as &$image) {
                     $image['url'] = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')
-                                        ->getMediaUrl($image['file']);
+                        ->getMediaUrl($image['file']);
                 }
                 return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($value['images']);
             }

@@ -26,51 +26,25 @@
 ?>
 <?php $_option = $this->getOption(); ?>
 <?php $_fileInfo = $this->getFileInfo(); ?>
-<?php $_fileExists = $_fileInfo->hasData() ? true : false; ?>
+<?php $_fileExists = $_fileInfo->hasData(); ?>
 <?php $_fileName = 'options_' . $_option->getId() . '_file'; ?>
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
 <?php $_fieldValueAction = $_fileExists ? 'save_old' : 'save_new'; ?>
 <?php $_fileNamed = $_fileName . '_name'; ?>
-<?php $_rand = rand(); ?>
 
 <script type="text/javascript">
 //<![CDATA[
-    opFile<?php echo $_rand; ?> = {
-        initializeFile: function(inputBox) {
-            this.inputFile = inputBox.select('input[name="<?php echo $_fileName; ?>"]')[0];
-            this.inputFileAction = inputBox.select('input[name="<?php echo $_fieldNameAction; ?>"]')[0];
-            this.fileNameBox = inputBox.up('dd').select('.<?php echo $_fileNamed ?>')[0];
-        },
-
-        toggleFileChange: function(inputBox) {
-            this.initializeFile(inputBox);
-            inputBox.toggle();
-            this.fileChangeFlag = this.fileChangeFlag ? false : true;
-            if (!this.fileDeleteFlag) {
-                if (this.fileChangeFlag) {
-                     this.inputFileAction.value = 'save_new';
-                     this.inputFile.disabled = false;
-                 } else {
-                     this.inputFileAction.value = 'save_old';
-                     this.inputFile.disabled = true;
-                 }
-            }
-        },
-
-        toggleFileDelete: function(fileDeleteFlag, inputBox) {
-            this.initializeFile(inputBox);
-            this.fileDeleteFlag = fileDeleteFlag.checked ? true : false;
-            if (this.fileDeleteFlag) {
-                this.inputFileAction.value = '';
-                this.inputFile.disabled = true;
-                this.fileNameBox.setStyle({'text-decoration': 'line-through'});
-            } else {
-                this.inputFileAction.value = this.fileChangeFlag ? 'save_new' : 'save_old';
-                this.inputFile.disabled = (this.fileChangeFlag == 'save_old');
-                this.fileNameBox.setStyle({'text-decoration': 'none'});
-            }
-        }
-    };
+    (function($) {
+        head.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/file-option.js')?>", function() {
+            $('#input-box-<?php echo $_fileName ?>').fileOption({
+                fileName: '<?php echo $_fileName ?>',
+                fileNamed: '<?php echo $_fileNamed ?>',
+                fieldNameAction: '<?php echo $_fieldNameAction ?>',
+                changeFileSelector: '#change-<?php echo $_fileName ?>',
+                deleteFileSelector: '#delete-<?php echo $_fileName ?>'
+            });
+        });
+    })(jQuery);
 //]]>
 </script>
 
@@ -79,16 +53,16 @@
 <dd<?php if ($_option->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
     <?php if ($_fileExists): ?>
         <span class="<?php echo $_fileNamed ?>"><?php echo $_fileInfo->getTitle(); ?></span>
-        <a href="javascript:void(0)" class="label" onclick="opFile<?php echo $_rand; ?>.toggleFileChange($(this).next('.input-box'))">
+        <a href="javascript:void(0)" class="label" id="change-<?php echo $_fileName ?>" >
             <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Change') ?>
         </a>&nbsp;
-        <?php if (!$_option->getIsRequire()): ?>
-           <input type="checkbox" onclick="opFile<?php echo $_rand; ?>.toggleFileDelete($(this), $(this).next('.input-box'))" />
+        <?php if (! $_option->getIsRequire()): ?>
+           <input type="checkbox" id="delete-<?php echo $_fileName ?>" />
            <span class="label"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Delete') ?></span>
         <?php endif; ?>
     <?php endif; ?>
-    <div class="input-box" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
-        <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> onchange="opConfig.reloadPrice()" />
+    <div id="input-box-<?php echo $_fileName ?>" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+        <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
         <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
         <?php if ($_option->getFileExtension()): ?>
         <p class="no-margin"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Allowed file extensions to upload')?>: <strong><?php echo $_option->getFileExtension() ?></strong></p>

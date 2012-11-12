@@ -32,9 +32,9 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid extends Mage_Adminhtml_B
     /**
      * Set ajax/session parameters
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_recurring_profile_grid');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);

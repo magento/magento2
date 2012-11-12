@@ -30,11 +30,11 @@
 class Mage_Adminhtml_Block_Sales_Order_Address extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'sales_order';
         $this->_mode       = 'address';
-        parent::__construct();
+        parent::_construct();
         $this->_updateButton('save', 'label', Mage::helper('Mage_Sales_Helper_Data')->__('Save Order Address'));
         $this->_removeButton('delete');
     }

@@ -38,16 +38,15 @@ class Mage_Core_Model_Layout_Argument_Handler_Url extends Mage_Core_Model_Layout
      */
     protected $_urlModel;
 
-    public function __construct(array $args = array())
+    /**
+     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Model_Url $urlModel
+     */
+    public function __construct(Magento_ObjectManager $objectManager, Mage_Core_Model_Url $urlModel)
     {
-        parent::__construct($args);
-        if (!isset($args['urlModel'])) {
-            throw new InvalidArgumentException('Required url model is missing');
-        }
-        $this->_urlModel = $args['urlModel'];
-        if (false === ($this->_urlModel instanceof Mage_Core_Model_Url)) {
-            throw new InvalidArgumentException('Wrong url model passed');
-        }
+        parent::__construct($objectManager);
+
+        $this->_urlModel = $urlModel;
     }
 
     /**

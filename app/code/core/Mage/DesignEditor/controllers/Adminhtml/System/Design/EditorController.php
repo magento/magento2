@@ -34,10 +34,16 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
      */
     public function indexAction()
     {
-        $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
-        $this->loadLayout();
-        $this->_setActiveMenu('Mage_DesignEditor::system_design_editor');
-        $this->renderLayout();
+        try {
+            $this->_title($this->__('System'))->_title($this->__('Design'))->_title($this->__('Editor'));
+            $this->loadLayout();
+            $this->_setActiveMenu('Mage_DesignEditor::system_design_editor');
+            $this->renderLayout();
+        } catch (Exception $e) {
+            $this->_getSession()->addError($this->__('Cannot load list of themes.'));
+            $this->_redirectUrl($this->_getRefererUrl());
+            Mage::logException($e);
+        }
     }
 
     /**
@@ -47,18 +53,42 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
     {
         /** @var $session Mage_DesignEditor_Model_Session */
         $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
-        $session->activateDesignEditor();
-        /* Redirect to the frontend */
-        $query = Mage_Core_Model_Session_Abstract::SESSION_ID_QUERY_PARAM . '=' . urlencode($session->getSessionId());
-        if (!Mage::app()->hasSingleStore()) {
-            $storeId = (int)$this->getRequest()->getParam('store_id');
-            $store = Mage::app()->getStore($storeId);
-            $baseUrl = $store->getBaseUrl();
-            $query .= '&___store=' . urlencode($store->getCode());
-        } else {
-            $baseUrl = Mage::app()->getStore(true)->getBaseUrl();
+
+        $themeId = (int)$this->getRequest()->getParam('theme_id');
+        $skin = $this->getRequest()->get('theme_skin');
+        /** @var $theme Mage_Core_Model_Theme */
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        try {
+            $theme->load($themeId);
+            if (!$theme->getId()) {
+                Mage::throwException($this->__('The theme was not found.'));
+            }
+            $session->activateDesignEditor();
+            $session->setThemeId($theme->getId());
+            $session->setSkin($skin);
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            $this->_redirect('*/*/');
+            return;
+        } catch (Exception $e) {
+            $this->_getSession()->addError($this->__('The theme or skin was not found.'));
+            Mage::logException($e);
+            $this->_redirect('*/*/');
+            return;
         }
-        $this->_redirectUrl($baseUrl . '?' . $query);
+
+        /* Redirect to the frontend */
+        $query = array(Mage_Core_Model_Session_Abstract::SESSION_ID_QUERY_PARAM => urlencode($session->getSessionId()));
+        $storeId = (int)$this->getRequest()->getParam('store_id');
+        if (!Mage::app()->isSingleStoreMode() && $storeId) {
+            $storeId = (int)$this->getRequest()->getParam('store_id');
+            $params = array('_store' => $storeId);
+            $store = Mage::app()->getStore($storeId);
+            $query['___store'] = urlencode($store->getCode());
+        }
+        $params['_nosid'] = true;
+        $params['_query'] = $query;
+        $this->_redirectUrl(Mage::getUrl('/', $params));
     }
 
     /**

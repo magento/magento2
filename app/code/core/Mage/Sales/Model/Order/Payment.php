@@ -719,7 +719,7 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
             return $this;
         }
 
-        $serviceModel = Mage::getModel('Mage_Sales_Model_Service_Order', $order);
+        $serviceModel = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order));
         if ($invoice) {
             if ($invoice->getBaseTotalRefunded() > 0) {
                 $adjustment = array('adjustment_positive' => $amount);

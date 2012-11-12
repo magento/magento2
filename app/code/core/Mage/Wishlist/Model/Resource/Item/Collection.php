@@ -52,7 +52,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
      * If product out of stock, its item will be removed after load
      *
      * @var bool
-      */
+     */
     protected $_productInStock = false;
 
     /**
@@ -239,10 +239,10 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
     {
         $this->getSelect()
             ->join(
-                array('wishlist' => $this->getTable('wishlist')),
-                'main_table.wishlist_id = wishlist.wishlist_id',
-                array()
-            )
+            array('wishlist' => $this->getTable('wishlist')),
+            'main_table.wishlist_id = wishlist.wishlist_id',
+            array()
+        )
             ->where('wishlist.customer_id = ?', $customerId);
         return $this;
     }
@@ -368,7 +368,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
         if (isset($constraints['to'])) {
             $firstDay = new Zend_Date($now, Varien_Date::DATETIME_INTERNAL_FORMAT);
             $firstDay->subSecond($gmtOffset)
-                ->subDay(intval($constraints['to'])+1);
+                ->subDay(intval($constraints['to']) + 1);
             $filter['from'] = $firstDay;
         }
 
@@ -389,7 +389,7 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
     {
         if (!$this->_isProductNameJoined) {
             $entityTypeId = Mage::getResourceModel('Mage_Catalog_Model_Resource_Config')
-                    ->getEntityTypeId();
+                ->getEntityTypeId();
             $attribute = Mage::getModel('Mage_Catalog_Model_Entity_Attribute')
                 ->loadByCode($entityTypeId, 'name');
 
@@ -397,13 +397,13 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
 
             $this->getSelect()
                 ->join(
-                    array('product_name_table' => $attribute->getBackendTable()),
-                    'product_name_table.entity_id=main_table.product_id' .
-                        ' AND product_name_table.store_id=' . $storeId .
-                        ' AND product_name_table.attribute_id=' . $attribute->getId().
-                        ' AND product_name_table.entity_type_id=' . $entityTypeId,
-                    array()
-                );
+                array('product_name_table' => $attribute->getBackendTable()),
+                'product_name_table.entity_id=main_table.product_id' .
+                    ' AND product_name_table.store_id=' . $storeId .
+                    ' AND product_name_table.attribute_id=' . $attribute->getId().
+                    ' AND product_name_table.entity_type_id=' . $entityTypeId,
+                array()
+            );
 
             $this->_isProductNameJoined = true;
         }
@@ -443,7 +443,8 @@ class Mage_Wishlist_Model_Resource_Item_Collection extends Mage_Core_Model_Resou
      *
      * @return int
      */
-    public function getItemsQty(){
+    public function getItemsQty()
+    {
         if (is_null($this->_itemsQty)) {
             $this->_itemsQty = 0;
             foreach ($this as $wishlistItem) {

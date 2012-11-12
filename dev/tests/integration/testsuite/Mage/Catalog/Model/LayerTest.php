@@ -39,7 +39,7 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Layer;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Layer');
         $this->_model->setCurrentCategory(4);
     }
 
@@ -76,14 +76,28 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
     public function testApply()
     {
         $this->_model->getState()
-            ->addFilter(new Mage_Catalog_Model_Layer_Filter_Item(array(
-                'filter' => new Mage_Catalog_Model_Layer_Filter_Category(),
-                'value'  => 'expected-value-string',
-            )))
-            ->addFilter(new Mage_Catalog_Model_Layer_Filter_Item(array(
-                'filter' => new Mage_Catalog_Model_Layer_Filter_Decimal(),
-                'value'  => 1234,
-            )))
+            ->addFilter(
+                Mage::getModel(
+                    'Mage_Catalog_Model_Layer_Filter_Item',
+                    array(
+                        'data' => array(
+                            'filter' => Mage::getModel('Mage_Catalog_Model_Layer_Filter_Category'),
+                            'value'  => 'expected-value-string',
+                        )
+                    )
+                )
+            )
+            ->addFilter(
+                Mage::getModel(
+                    'Mage_Catalog_Model_Layer_Filter_Item',
+                    array(
+                        'data' => array(
+                            'filter' => Mage::getModel('Mage_Catalog_Model_Layer_Filter_Decimal'),
+                            'value'  => 1234,
+                        )
+                    )
+                )
+            )
         ;
 
         $this->_model->apply();
@@ -101,16 +115,17 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
 
     public function testGetSetCurrentCategory()
     {
-        $existingCategory = new Mage_Catalog_Model_Category;
+        $existingCategory = Mage::getModel('Mage_Catalog_Model_Category');
         $existingCategory->load(5);
 
         /* Category object */
-        $model = new Mage_Catalog_Model_Layer;
+        /** @var $model Mage_Catalog_Model_Layer */
+        $model = Mage::getModel('Mage_Catalog_Model_Layer');
         $model->setCurrentCategory($existingCategory);
         $this->assertSame($existingCategory, $model->getCurrentCategory());
 
         /* Category id */
-        $model = new Mage_Catalog_Model_Layer;
+        $model = Mage::getModel('Mage_Catalog_Model_Layer');
         $model->setCurrentCategory(3);
         $actualCategory = $model->getCurrentCategory();
         $this->assertInstanceOf('Mage_Catalog_Model_Category', $actualCategory);
@@ -120,7 +135,7 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
         /* Category in registry */
         Mage::register('current_category', $existingCategory);
         try {
-            $model = new Mage_Catalog_Model_Layer;
+            $model = Mage::getModel('Mage_Catalog_Model_Layer');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
             Mage::unregister('current_category');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
@@ -131,15 +146,15 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
 
 
         try {
-            $model = new Mage_Catalog_Model_Layer;
+            $model = Mage::getModel('Mage_Catalog_Model_Layer');
             $model->setCurrentCategory(new Varien_Object());
             $this->fail('Assign category of invalid class.');
         } catch (Mage_Core_Exception $e) {
         }
 
         try {
-            $model = new Mage_Catalog_Model_Layer;
-            $model->setCurrentCategory(new Mage_Catalog_Model_Category());
+            $model = Mage::getModel('Mage_Catalog_Model_Layer');
+            $model->setCurrentCategory(Mage::getModel('Mage_Catalog_Model_Category'));
             $this->fail('Assign category with invalid id.');
         } catch (Mage_Core_Exception $e) {
         }
@@ -172,7 +187,7 @@ class Mage_Catalog_Model_LayerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mage_Catalog_Model_Layer_State', $state);
         $this->assertSame($state, $this->_model->getState());
 
-        $state = new Mage_Catalog_Model_Layer_State;
+        $state = Mage::getModel('Mage_Catalog_Model_Layer_State');
         $this->_model->setState($state); // $this->_model->setData('state', state);
         $this->assertSame($state, $this->_model->getState());
     }

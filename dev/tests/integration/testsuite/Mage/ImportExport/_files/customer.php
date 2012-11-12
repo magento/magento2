@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 //Create customer
-$customer = new Mage_Customer_Model_Customer();
+$customer = Mage::getModel('Mage_Customer_Model_Customer');
 $customer->setWebsiteId(1)
     ->setEntityId(1)
     ->setEntityTypeId(1)
@@ -41,7 +41,7 @@ $customer->setWebsiteId(1)
 $customer->isObjectNew(true);
 
 // Create address
-$address = new Mage_Customer_Model_Address();
+$address = Mage::getModel('Mage_Customer_Model_Address');
 //  default_billing and default_shipping information would not be saved, it is needed only for simple check
 $address->addData(array(
     'firstname'         => 'Charles',

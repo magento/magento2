@@ -49,7 +49,7 @@ class Mage_Core_Model_LayoutTestBase extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layout = new Mage_Core_Model_Layout();
+        $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_layout->getUpdate()->addHandle('layout_test_handle_main');
         $this->_layout->getUpdate()->load('layout_test_handle_extra');
     }

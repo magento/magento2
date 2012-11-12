@@ -39,9 +39,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Form_Element_Page
      *
      * @param array $attributes
      */
-    public function __construct($attributes=array())
+    protected function _construct($attributes=array())
     {
-        parent::__construct($attributes);
+        parent::_construct($attributes);
         $this->setType('page');
     }
 

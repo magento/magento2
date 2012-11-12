@@ -34,15 +34,8 @@
 
 class Mage_Adminhtml_Block_System_Email_Template extends Mage_Adminhtml_Block_Template
 {
-    /**
-     * Set transactional emails grid template
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('system/email/template/list.phtml');
-    }
+
+    protected $_template = 'system/email/template/list.phtml';
 
     /**
      * Create add button and grid blocks

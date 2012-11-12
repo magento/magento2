@@ -40,7 +40,8 @@ class Mage_XmlConnect_Block_Checkout_Order_Review_Info extends Mage_Checkout_Blo
      */
     protected function _toHtml()
     {
-        $itemsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<products></products>');
+        $itemsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<products></products>'));
         $quote = Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote();
 
         $helper = Mage::helper('Mage_XmlConnect_Helper_Data');

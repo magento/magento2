@@ -39,9 +39,9 @@ class Mage_Api2_Block_Adminhtml_Roles_Tabs extends Mage_Adminhtml_Block_Widget_T
     /**
      * Constructor
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('role_info_tabs');
         $this->setDestElementId('role_edit_form');
         $this->setData('title', Mage::helper('Mage_Api2_Helper_Data')->__('Role Information'));

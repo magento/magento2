@@ -34,7 +34,7 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Email_Template_Filter;
+        $this->_model = Mage::getModel('Mage_Core_Model_Email_Template_Filter');
     }
 
     protected function tearDown()

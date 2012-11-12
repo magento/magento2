@@ -33,16 +33,12 @@
  */
 class Mage_Adminhtml_Block_Sales_Order extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = array())
+    protected function _construct()
     {
-
         $this->_controller = 'sales_order';
         $this->_headerText = Mage::helper('Mage_Sales_Helper_Data')->__('Orders');
         $this->_addButtonLabel = Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order');
-        parent::__construct();
+        parent::_construct();
         if (!Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::create')) {
             $this->_removeButton('add');
         }
@@ -57,5 +53,4 @@ class Mage_Adminhtml_Block_Sales_Order extends Mage_Adminhtml_Block_Widget_Grid_
     {
         return $this->getUrl('*/sales_order_create/start');
     }
-
 }

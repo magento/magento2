@@ -54,10 +54,7 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
      */
     protected $_destElementId = 'content';
 
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Backend::widget/tabs.phtml');
-    }
+    protected $_template = 'Mage_Backend::widget/tabs.phtml';
 
     /**
      * retrieve destination html element id

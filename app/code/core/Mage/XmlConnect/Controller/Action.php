@@ -141,7 +141,8 @@ abstract class Mage_XmlConnect_Controller_Action extends Mage_Core_Controller_Fr
     protected function _message($text, $status, $children = array())
     {
         /** @var $message Mage_XmlConnect_Model_Simplexml_Element */
-        $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<message></message>');
+        $message = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<message></message>'));
         $message->addCustomChild('status', $status);
         $message->addCustomChild('text', $text);
 

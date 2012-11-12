@@ -33,27 +33,20 @@ abstract class Mage_Backend_Model_Menu_DirectorAbstract
 
     /**
      * Factory model
-     * @var Mage_Core_Model_Config
+     * @var Magento_ObjectManager
      */
     protected $_factory;
 
     /**
-     * @param array $data
-     * @throws InvalidArgumentException if config storage is not present in $data array
+     * @param $menuConfig
+     * @param Magento_ObjectManager $factory
      */
-    public function __construct(array $data = array())
-    {
-        if (isset($data['config'])) {
-            $this->_configModel = $data['config'];
-        } else {
-            throw new InvalidArgumentException('Configuration storage model is required parameter');
-        }
-
-        if (isset($data['factory'])) {//} && $data['factory'] instanceof Mage_Core_Model_Config) {
-            $this->_factory = $data['factory'];
-        } else {
-            throw new InvalidArgumentException('Configuration factory model is required parameter');
-        }
+    public function __construct(
+        $menuConfig,
+        Magento_ObjectManager $factory
+    ) {
+        $this->_configModel = $menuConfig;
+        $this->_factory = $factory;
     }
 
     /**

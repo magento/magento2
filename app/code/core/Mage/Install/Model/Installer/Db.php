@@ -141,8 +141,8 @@ class Mage_Install_Model_Installer_Db extends Mage_Install_Model_Installer_Abstr
         $dbResource = $this->_getDbResource($data['db_model']);
         $data['db_pdo_type'] = $dbResource->getPdoType();
 
-        if (!isset($data['db_init_statemants'])) {
-            $data['db_init_statemants'] = (string) Mage::getConfig()
+        if (!isset($data['db_init_statements'])) {
+            $data['db_init_statements'] = (string) Mage::getConfig()
                 ->getNode(sprintf('install/databases/%s/initStatements', $data['db_model']));
         }
 

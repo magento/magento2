@@ -50,7 +50,7 @@
                 <li>
                     <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                     <div class="input-box">
-                        <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                        <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email" data-validate="{required:true,validateEmail:true}" />
                     </div>
                 </li>
                 <?php if ($this->isNewsletterEnabled()): ?>
@@ -157,13 +157,13 @@
                     <div class="field">
                         <label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" />
+                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" data-validate="{required:true,validatePassword:true}"/>
                         </div>
                     </div>
                     <div class="field">
                         <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" />
+                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" data-validate="{required:true, equalTo:'#password'}"/>
                         </div>
                     </div>
                 </li>
@@ -181,12 +181,23 @@
             <input name="context" type="hidden" value="checkout" />
         <?php endif; ?>
     </form>
+
     <script type="text/javascript">
-    //<![CDATA[
-        var dataForm = new VarienForm('form-validate', true);
-        <?php if($this->getShowAddressFields()): ?>
-        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, 'zip');
-        <?php endif; ?>
-    //]]>
+        (function ($) {
+            $.mage.event.observe('mage.register.initialize', function (event, initData) {
+                initData.formSelector = '#form-validate';
+                initData.dobInputSelector = '#dob';
+                initData.dobSelector = '.customer-dob';
+                initData.dobDaySelector = '#day';
+                initData.dobMonthSelector = '#month';
+                initData.dobYearSelector = '#year';
+            });
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('mage/validation/validate.js')?>");
+            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Customer::register.js') ?>");
+        })(jQuery);
     </script>
 </div>

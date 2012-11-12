@@ -27,15 +27,5 @@
 
 class Mage_Ogone_Block_Paypage extends Mage_Core_Block_Template
 {
-    /**
-     * Init pay page block
-     *
-     * @return Mage_Ogone_Block_Paypage
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('paypage.phtml');
-        return $this;
-    }
+    protected $_template = 'paypage.phtml';
 }

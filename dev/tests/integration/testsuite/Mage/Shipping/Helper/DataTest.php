@@ -34,7 +34,7 @@ class Mage_Shipping_Helper_DataTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_helper = new Mage_Shipping_Helper_Data;
+        $this->_helper = Mage::helper('Mage_Shipping_Helper_Data');
     }
 
     protected function tearDown()
@@ -52,7 +52,7 @@ class Mage_Shipping_Helper_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTrackingPopupUrlBySalesModel($modelName, $getIdMethod, $entityId, $code, $expected)
     {
-        $model = $this->getMock($modelName, array($getIdMethod, 'getProtectCode'));
+        $model = $this->getMock($modelName, array($getIdMethod, 'getProtectCode'), array(), '', false);
         $model->expects($this->any())
             ->method($getIdMethod)
             ->will($this->returnValue($entityId));

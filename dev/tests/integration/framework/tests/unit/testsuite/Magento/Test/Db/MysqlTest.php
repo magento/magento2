@@ -28,69 +28,47 @@
 class Magento_Test_Db_MysqlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var Magento_Shell|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_varDir;
+    protected $_shell;
 
     /**
-     * @var Magento_Test_Db_Mysql
+     * @var Magento_Test_Db_Mysql|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
-    /**
-     * @var string
-     */
-    protected $_commandPrefix;
-
     protected function setUp()
     {
-        $this->_varDir  = $this->_varDir  = sys_get_temp_dir();
+        $this->_shell = $this->getMock('Magento_Shell', array('execute'));
         $this->_model = $this->getMock(
             'Magento_Test_Db_Mysql',
-            array('_exec', '_createScript'),
-            array('host', 'user', 'pass', 'schema', $this->_varDir)
+            array('_createScript'),
+            array('host', 'user', 'pass', 'schema', __DIR__, $this->_shell)
         );
-        $this->_commandPrefix = '--protocol=TCP --host=' . escapeshellarg('host')
-            . ' --user=' . escapeshellarg('user') . ' --password=' . escapeshellarg('pass');
+    }
+
+    protected function tearDown()
+    {
+        $this->_shell = null;
+        $this->_model = null;
     }
 
     public function testCleanup()
     {
-        $this->_model->expects($this->once())
+        $expectedSqlFile = __DIR__ . DIRECTORY_SEPARATOR . 'drop_create_database.sql';
+        $this->_model
+            ->expects($this->once())
             ->method('_createScript')
+            ->with($expectedSqlFile, 'DROP DATABASE `schema`; CREATE DATABASE `schema`')
+        ;
+        $this->_shell
+            ->expects($this->once())
+            ->method('execute')
             ->with(
-                $this->_varDir . DIRECTORY_SEPARATOR . 'drop_create_database.sql',
-                'DROP DATABASE `schema`; CREATE DATABASE `schema`'
-            );
-
-        $command = 'mysql ' . $this->_commandPrefix . ' ' . escapeshellarg('schema') . ' < '
-            . escapeshellarg($this->_varDir . DIRECTORY_SEPARATOR . 'drop_create_database.sql');
-        $this->_model->expects($this->once())
-            ->method('_exec')
-            ->with($this->equalTo($command));
+                'mysql --protocol=TCP --host=%s --user=%s --password=%s %s < %s',
+                array('host', 'user', 'pass', 'schema', $expectedSqlFile)
+            )
+        ;
         $this->_model->cleanup();
-    }
-
-    public function testCreateBackup()
-    {
-        $command = 'mysqldump ' . $this->_commandPrefix . ' --skip-opt --quick --single-transaction --create-options'
-            . ' --disable-keys --set-charset --extended-insert --hex-blob --insert-ignore --add-drop-table '
-            . escapeshellarg('schema') . ' > ' . escapeshellarg($this->_varDir . DIRECTORY_SEPARATOR . 'test.sql');
-        $this->_model->expects($this->once())
-            ->method('_exec')
-            ->with($this->equalTo($command));
-
-        $this->_model->createBackup('test');
-    }
-
-    public function testRestoreBackup()
-    {
-        $command = 'mysql ' . $this->_commandPrefix . ' ' . escapeshellarg('schema') . ' < '
-            . escapeshellarg($this->_varDir . DIRECTORY_SEPARATOR . 'test.sql');
-        $this->_model->expects($this->once())
-            ->method('_exec')
-            ->with($this->equalTo($command));
-
-        $this->_model->restoreBackup('test');
     }
 }

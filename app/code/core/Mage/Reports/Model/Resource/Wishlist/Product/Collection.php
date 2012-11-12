@@ -38,7 +38,7 @@ class Mage_Reports_Model_Resource_Wishlist_Product_Collection extends Mage_Wishl
      * Resource initialization
      *
      */
-    protected function _construct()
+    public function _construct()
     {
         $this->_init('Mage_Wishlist_Model_Wishlist', 'Mage_Wishlist_Model_Resource_Wishlist');
     }

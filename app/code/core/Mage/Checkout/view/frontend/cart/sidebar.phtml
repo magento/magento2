@@ -84,10 +84,9 @@
                     o.url = '<?php echo $this->getCheckoutUrl();?>',
                     o.button = ':button[title=' + '<?php echo $this->__('Checkout') ?>' + ']',
                     o.confirmMessage = '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>',
-                    o.closeList = 'a[title=\'' + '<?php echo $this->__('Remove This Item')?>' + '\']';
+                    o.closeList = '#cart-sidebar  a.btn-remove'
                 });
-                $.mage.load.jsSync("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
-                $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Checkout::js/sidebar.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Checkout::js/sidebar.js') ?>");
             })(jQuery);
         </script>
         <?php else: ?>

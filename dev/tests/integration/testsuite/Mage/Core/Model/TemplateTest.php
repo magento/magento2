@@ -33,7 +33,7 @@ class Mage_Core_Model_TemplateTest extends PHPUnit_Framework_TestCase
      */
     public function testSetDesignConfigException($config)
     {
-        $model = new Mage_Core_Model_Email_Template; // Mage_Core_Model_Template is an abstract class
+        $model = Mage::getModel('Mage_Core_Model_Email_Template'); // Mage_Core_Model_Template is an abstract class
         $model->setDesignConfig($config);
     }
 

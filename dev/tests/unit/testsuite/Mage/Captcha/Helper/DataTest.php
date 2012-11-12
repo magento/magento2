@@ -63,7 +63,11 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
         $config = $this->_getConfigStub();
         $config->expects($this->once())
             ->method('getModelInstance')
-            ->with('Mage_Captcha_Model_Zend', array('formId' => 'user_create', 'helper' => $this->_object))
+            ->with('Mage_Captcha_Model_Zend',
+                array(
+                    'params' => array('formId' => 'user_create', 'helper' => $this->_object)
+                )
+            )
             ->will($this->returnValue(new Mage_Captcha_Model_Zend(array('formId' => 'user_create'))));
         $this->_object->setConfig($config);
 
@@ -93,11 +97,10 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFonts()
     {
-        $baseDir = Magento_Test_Environment::getInstance()->getTmpDir();
         $option = $this->_getOptionStub();
         $option->expects($this->any())
             ->method('getDir')
-            ->will($this->returnValue($baseDir));
+            ->will($this->returnValue(TESTS_TEMP_DIR));
         $this->_object->setOption($option);
 
         $fonts = $this->_object->getFonts();
@@ -105,7 +108,7 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($fonts['linlibertine']['label'], 'LinLibertine');
         $this->assertEquals(
             $fonts['linlibertine']['path'],
-            $baseDir . DIRECTORY_SEPARATOR . 'lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf'
+            TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf'
         );
     }
 
@@ -115,7 +118,7 @@ class Mage_Captcha_Helper_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImgDir()
     {
-        $captchaTmpDir = Magento_Test_Environment::getInstance()->getTmpDir() . DIRECTORY_SEPARATOR . 'captcha';
+        $captchaTmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'captcha';
         $option = $this->_getOptionStub();
         $option->expects($this->once())
             ->method('getDir')

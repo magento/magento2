@@ -37,11 +37,10 @@ class Mage_Adminhtml_Block_Customer_Form_Element_File extends Varien_Data_Form_E
     /**
      * Initialize Form Element
      *
-     * @param array $attributes
      */
-    public function __construct($attributes = array())
+    protected function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setType('file');
     }
 

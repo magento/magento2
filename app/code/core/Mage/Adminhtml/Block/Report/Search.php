@@ -38,11 +38,11 @@ class Mage_Adminhtml_Block_Report_Search extends Mage_Adminhtml_Block_Widget_Gri
      * Initialize Grid Container
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'report_search';
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Search Terms');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 }

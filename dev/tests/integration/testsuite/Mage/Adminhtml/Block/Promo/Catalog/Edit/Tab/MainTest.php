@@ -35,10 +35,10 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit_Tab_MainTest extends PHPUnit_Frame
      */
     public function testPrepareForm()
     {
-        Mage::register('current_promo_catalog_rule', new Mage_CatalogRule_Model_Rule);
+        Mage::register('current_promo_catalog_rule', Mage::getObjectManager()->create('Mage_CatalogRule_Model_Rule'));
 
-        $block = new Mage_Adminhtml_Block_Promo_Catalog_Edit_Tab_Main;
-        $block->setLayout(new Mage_Core_Model_Layout);
+        $block = Mage::getObjectManager()->create('Mage_Adminhtml_Block_Promo_Catalog_Edit_Tab_Main');
+        $block->setLayout(Mage::getObjectManager()->create('Mage_Core_Model_Layout'));
         $prepareFormMethod = new ReflectionMethod(
             'Mage_Adminhtml_Block_Promo_Catalog_Edit_Tab_Main', '_prepareForm');
         $prepareFormMethod->setAccessible(true);

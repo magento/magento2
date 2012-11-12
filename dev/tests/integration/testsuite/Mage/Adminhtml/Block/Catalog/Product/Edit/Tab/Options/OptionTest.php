@@ -30,7 +30,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_OptionTest extends P
     public function testGetOptionValuesCaching()
     {
         $block = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Option');
-        $productWithOptions = new Mage_Catalog_Model_Product();
+        /** @var $productWithOptions Mage_Catalog_Model_Product */
+        $productWithOptions = Mage::getModel('Mage_Catalog_Model_Product');
         $productWithOptions->setTypeId('simple')
             ->setId(1)
             ->setAttributeSetId(4)
@@ -47,8 +48,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_OptionTest extends P
             ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 
         $product = clone $productWithOptions;
-
-        $option = new Mage_Catalog_Model_Product_Option(array('id' => 1, 'title' => 'some_title'));
+        /** @var $option Mage_Catalog_Model_Product_Option */
+        $option = Mage::getModel(
+            'Mage_Catalog_Model_Product_Option',
+            array('data' => array('id' => 1, 'title' => 'some_title'))
+        );
         $productWithOptions->addOption($option);
 
         $block->setProduct($productWithOptions);

@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Framework_TestCase
+class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**#@+
      * Test attribute code
@@ -117,8 +117,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
 
         $attributeCollection = new Varien_Data_Collection();
         foreach ($this->_attributes as $attributeData) {
+            $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+            $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
-                array($attributeData), '', true, true, true, array('_construct')
+                $arguments, '', true, true, true, array('_construct')
             );
             $attributeCollection->addItem($attribute);
         }
@@ -196,6 +198,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
      */
     public function testExportItem()
     {
+        /** @var $writer Mage_ImportExport_Model_Export_Adapter_Abstract */
         $writer = $this->getMockForAbstractClass('Mage_ImportExport_Model_Export_Adapter_Abstract',
             array(), '', false, false, true, array('writeRow')
         );
@@ -206,9 +209,9 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
 
         $this->_model->setWriter($writer);
 
-        $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract',
-            array($this->_customerData)
-        );
+        $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+        $arguments['data'] = $this->_customerData;
+        $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract', $arguments);
 
         $this->_model->exportItem($item);
     }

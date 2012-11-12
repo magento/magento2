@@ -44,7 +44,7 @@ class Mage_Core_Controller_Varien_Router_AbstractTest extends PHPUnit_Framework_
 
     public function testGetSetFront()
     {
-        $expected = new Mage_Core_Controller_Varien_Front();
+        $expected = Mage::getModel('Mage_Core_Controller_Varien_Front');
         $this->assertNull($this->_model->getFront());
         $this->_model->setFront($expected);
         $this->assertSame($expected, $this->_model->getFront());

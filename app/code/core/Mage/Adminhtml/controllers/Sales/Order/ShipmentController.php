@@ -86,7 +86,8 @@ class Mage_Adminhtml_Sales_Order_ShipmentController extends Mage_Adminhtml_Contr
                 return false;
             }
             $savedQtys = $this->_getItemQtys();
-            $shipment = Mage::getModel('Mage_Sales_Model_Service_Order', $order)->prepareShipment($savedQtys);
+            $shipment = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order))
+                ->prepareShipment($savedQtys);
 
             $tracks = $this->getRequest()->getPost('tracking');
             if ($tracks) {

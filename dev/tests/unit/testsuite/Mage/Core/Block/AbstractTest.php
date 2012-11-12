@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
+class Mage_Core_Block_AbstractTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**
      * @param string $expectedResult
@@ -36,7 +36,8 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     public function testGetUiId($expectedResult, $nameInLayout, $methodArguments)
     {
         /** @var $block Mage_Core_Block_Abstract */
-        $block = $this->getMock('Mage_Core_Block_Abstract', null);
+        $block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract',
+            array(), '', false);
         $block->setNameInLayout($nameInLayout);
 
         $this->assertEquals(

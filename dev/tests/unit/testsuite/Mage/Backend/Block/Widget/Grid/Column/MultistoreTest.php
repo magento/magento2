@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends PHPUnit_Framework_TestCase
+class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends Magento_Test_TestCase_ObjectManagerAbstract
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_Column_Multistore
@@ -39,8 +39,23 @@ class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends PHPUnit_Frame
 
     public function setUp()
     {
-        $this->_appMock = $this->getMock('Mage_Core_Model_App');
-        $this->_model = new Mage_Backend_Block_Widget_Grid_Column_Multistore(array('app' => $this->_appMock));
+        $this->_appMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
+
+        $arguments = array(
+            'app' => $this->_appMock,
+        );
+        $arguments = $this->_getConstructArguments(self::BLOCK_ENTITY,
+            'Mage_Backend_Block_Widget_Grid_Column_Multistore', $arguments
+        );
+        $this->_model = $this->_getInstanceViaConstructor('Mage_Backend_Block_Widget_Grid_Column_Multistore',
+            $arguments
+        );
+    }
+
+    protected function tearDown()
+    {
+        unset($this->_model);
+        unset($this->_appMock);
     }
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()
