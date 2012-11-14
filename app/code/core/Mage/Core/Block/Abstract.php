@@ -95,6 +95,19 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     protected $_eventManager;
 
+
+    /**
+     * The prefix for the customized block events
+     * @var string
+     */
+    protected $_eventPrefix;
+
+    /**
+     * The object for the customized block events
+     * @var string
+     */
+    protected $_eventObject;
+
     /**
      * Class constructor
      *
@@ -614,6 +627,10 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     final public function toHtml()
     {
         Mage::dispatchEvent('core_block_abstract_to_html_before', array('block' => $this));
+        if ($this->_eventPrefix && $this->_eventObject) {
+            Mage::dispatchEvent($this->_eventPrefix . '_to_html_before', array($this->_eventObject => $this));
+        }
+        
         if (Mage::getStoreConfig('advanced/modules_disable_output/' . $this->getModuleName())) {
             return '';
         }
