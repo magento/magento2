@@ -138,7 +138,7 @@ $data = array(
     array('DE', 'THE', 'Thüringen'), array('AT', 'WI', 'Wien'), array('AT', 'NO', 'Niederösterreich'),
     array('AT', 'OO', 'Oberösterreich'), array('AT', 'SB', 'Salzburg'), array('AT', 'KN', 'Kärnten'),
     array('AT', 'ST', 'Steiermark'), array('AT', 'TI', 'Tirol'), array('AT', 'BL', 'Burgenland'),
-    array('AT', 'VB', 'Voralberg'), array('CH', 'AG', 'Aargau'), array('CH', 'AI', 'Appenzell Innerrhoden'),
+    array('AT', 'VB', 'Vorarlberg'), array('CH', 'AG', 'Aargau'), array('CH', 'AI', 'Appenzell Innerrhoden'),
     array('CH', 'AR', 'Appenzell Ausserrhoden'), array('CH', 'BE', 'Bern'), array('CH', 'BL', 'Basel-Landschaft'),
     array('CH', 'BS', 'Basel-Stadt'), array('CH', 'FR', 'Freiburg'), array('CH', 'GE', 'Genf'),
     array('CH', 'GL', 'Glarus'), array('CH', 'GR', 'Graubünden'), array('CH', 'JU', 'Jura'),
