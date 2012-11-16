@@ -79,6 +79,30 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Option extends Mage_Core_Model_Re
     }
 
     /**
+     * Add join with option sort order for collection select
+     *
+     * @param Mage_Eav_Model_Entity_Collection_Abstract $collection
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     * @param Zend_Db_Expr $valueExpr
+     * @param string $dir
+     * @return Mage_Eav_Model_Resource_Entity_Attribute_Option
+     */
+    public function addOptionSortToCollection($collection, $attribute, $valueExpr, $dir)
+    {
+        $attributeCode  = $attribute->getAttributeCode();
+        $optionTable    = $attributeCode . '_option_sort';
+        $tableJoinCond  = "{$optionTable}.option_id={$valueExpr}";
+        $collection->getSelect()
+            ->joinLeft(
+                array($optionTable => $this->getTable('eav_attribute_option')),
+                $tableJoinCond,
+                array()
+            )
+            ->order("{$optionTable}.sort_order {$dir}");
+        return $this;
+    }
+
+    /**
      * Retrieve Select for update Flat data
      *
      * @param Mage_Eav_Model_Entity_Attribute_Abstract $attribute
