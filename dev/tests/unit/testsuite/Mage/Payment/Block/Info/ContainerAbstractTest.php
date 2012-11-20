@@ -28,20 +28,21 @@
 /**
  * Test class for Mage_Payment_Block_Info_ContainerAbstract
  */
-class Mage_Payment_Block_Info_ContainerAbstractTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Payment_Block_Info_ContainerAbstractTest extends PHPUnit_Framework_TestCase
 {
     public function testSetInfoTemplate()
     {
         $block = $this->getMock('Mage_Payment_Block_Info_ContainerAbstract', array('getChildBlock', 'getPaymentInfo'),
             array(), '', false);
-        $paymentInfo = $this->getModel('Mage_Payment_Model_Info');
-        $methodInstance = $this->getModel('Mage_Payment_Model_Method_Checkmo');
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $paymentInfo = $objectManagerHelper->getModel('Mage_Payment_Model_Info');
+        $methodInstance = $objectManagerHelper->getModel('Mage_Payment_Model_Method_Checkmo');
         $paymentInfo->setMethodInstance($methodInstance);
         $block->expects($this->atLeastOnce())
             ->method('getPaymentInfo')
             ->will($this->returnValue($paymentInfo));
 
-        $childBlock = $this->getBlock('Mage_Core_Block_Template');
+        $childBlock = $objectManagerHelper->getBlock('Mage_Core_Block_Template');
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
             ->with('payment.info.checkmo')

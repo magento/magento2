@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Payment_Block_Info_Instructions
  */
-class Mage_Payment_Block_Info_InstructionsTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Payment_Block_Info_InstructionsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Varien_Object
@@ -47,9 +47,10 @@ class Mage_Payment_Block_Info_InstructionsTest extends Magento_Test_TestCase_Obj
 
     protected function setUp()
     {
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $this->_method = new Varien_Object();
-        $this->_info = $this->getModel('Mage_Payment_Model_Info');
-        $this->_instructions = $this->getBlock('Mage_Payment_Block_Info_Instructions');
+        $this->_info = $objectManagerHelper->getModel('Mage_Payment_Model_Info');
+        $this->_instructions = $objectManagerHelper->getBlock('Mage_Payment_Block_Info_Instructions');
 
         $this->_info->setMethodInstance($this->_method);
         $this->_instructions->setInfo($this->_info);

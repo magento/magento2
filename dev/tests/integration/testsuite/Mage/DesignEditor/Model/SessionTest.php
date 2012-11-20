@@ -129,17 +129,9 @@ class Mage_DesignEditor_Model_SessionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isHighlightingDisabled());
     }
 
-    public function testSetSkin()
+    public function testSetThemeId()
     {
-        $this->_model->setSkin('default/default/blank');
-        $this->assertEquals('default/default/blank', $this->_model->getSkin());
-    }
-
-    /**
-     * @expectedException Mage_Core_Exception
-     */
-    public function testSetSkinWrongValue()
-    {
-        $this->_model->setSkin('wrong/skin/applied');
+        $this->_model->setThemeId(0);
+        $this->assertEquals(0, $this->_model->getThemeId());
     }
 }

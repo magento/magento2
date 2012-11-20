@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_ColumnSet
@@ -75,10 +75,9 @@ class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends Magento_Test_TestCase
             'helper'           => $this->_helperMock,
             'generatorFactory' => $this->_factoryMock
         );
-        $arguments = $this->_getConstructArguments(self::BLOCK_ENTITY, 'Mage_Backend_Block_Widget_Grid_ColumnSet',
-            $arguments
-        );
-        $this->_model = $this->_getInstanceViaConstructor('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
+
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
     }
 
     public function tearDown()
@@ -151,10 +150,10 @@ class Mage_Backend_Block_Widget_Grid_ColumnSetTest extends Magento_Test_TestCase
                 'rowUrl' => array('generatorClass' => $generatorClass)
             )
         );
-        $arguments = $this->_getConstructArguments(self::BLOCK_ENTITY, 'Mage_Backend_Block_Widget_Grid_ColumnSet',
-            $arguments
-        );
-        $model = $this->_getInstanceViaConstructor('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
+
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        /** @var $model Mage_Backend_Block_Widget_Grid_ColumnSet */
+        $model = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_ColumnSet', $arguments);
 
         $url = $model->getRowUrl($itemMock);
         $this->assertEquals('http://localhost/mng/item/edit', $url);

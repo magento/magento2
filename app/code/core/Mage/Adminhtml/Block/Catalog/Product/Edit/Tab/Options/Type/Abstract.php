@@ -47,7 +47,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Options_Type_Abstract extend
         );
 
         $this->getChildBlock('option_price_type')->setName('product[options][{{option_id}}][price_type]')
-            ->setOptions(Mage::getSingleton('Mage_Adminhtml_Model_System_Config_Source_Product_Options_Price')
+            ->setOptions(Mage::getSingleton('Mage_Catalog_Model_Config_Source_Product_Options_Price')
             ->toOptionArray());
 
         return parent::_prepareLayout();

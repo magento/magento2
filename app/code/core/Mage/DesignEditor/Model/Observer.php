@@ -70,8 +70,8 @@ class Mage_DesignEditor_Model_Observer
         }
 
         /* Apply custom design to the current page */
-        if ($this->_getSession()->isDesignEditorActive() && $this->_getSession()->getSkin()) {
-            Mage::getDesign()->setDesignTheme($this->_getSession()->getSkin());
+        if ($this->_getSession()->isDesignEditorActive() && $theme->getThemePath()) {
+            Mage::getDesign()->setDesignTheme($theme->getThemePath());
         }
     }
 

@@ -97,8 +97,8 @@ class Mage_Oauth_Block_Adminhtml_Oauth_AuthorizedTokens_Grid extends Mage_Adminh
             'frame_callback' => array($this, 'decorateUserId')
         ));
 
-        /** @var $sourceYesNo Mage_Adminhtml_Model_System_Config_Source_Yesno */
-        $sourceYesNo = Mage::getSingleton('Mage_Adminhtml_Model_System_Config_Source_Yesno');
+        /** @var $sourceYesNo Mage_Backend_Model_Config_Source_Yesno */
+        $sourceYesNo = Mage::getSingleton('Mage_Backend_Model_Config_Source_Yesno');
         $this->addColumn('revoked', array(
             'header'    => $this->__('Revoked'),
             'index'     => 'revoked',

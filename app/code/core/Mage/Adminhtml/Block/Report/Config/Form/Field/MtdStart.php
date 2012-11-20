@@ -31,7 +31,7 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Report_Config_Form_Field_MtdStart extends Mage_Adminhtml_Block_System_Config_Form_Field
+class Mage_Adminhtml_Block_Report_Config_Form_Field_MtdStart extends Mage_Backend_Block_System_Config_Form_Field
 {
 
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)

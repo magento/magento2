@@ -107,7 +107,7 @@
                             <script type="text/javascript">
                                 //<![CDATA[
                                 (function($) {
-                                    head.js("<?php echo $this->getSkinUrl('Mage_Checkout::js/shopping-cart.js')?>",
+                                    head.js("<?php echo $this->getViewFileUrl('Mage_Checkout::js/shopping-cart.js')?>",
                                         function() {
                                             // Internet Explorer (lt 8) does not support value attribute in button elements
                                             $('#shopping-cart-table').shoppingCart({
@@ -139,8 +139,8 @@
                     <?php echo $_crosssell; ?>
                 <?php else: ?>
                 <div class="no-crosssell">
-                    <img src="<?php echo $this->getSkinUrl('images/media/callout1.jpg') ?>" alt="" />
-                    <img src="<?php echo $this->getSkinUrl('images/media/fpo_no_crosssell.gif') ?>" alt="" />
+                    <img src="<?php echo $this->getViewFileUrl('images/media/callout1.jpg') ?>" alt="" />
+                    <img src="<?php echo $this->getViewFileUrl('images/media/fpo_no_crosssell.gif') ?>" alt="" />
                 </div>
                 <?php endif; ?>
             </div>

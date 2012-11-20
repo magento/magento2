@@ -45,7 +45,7 @@ class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestC
     protected function setUp()
     {
         $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
-        $this->_model->setDesignTheme('test/default/default', 'frontend');
+        $this->_model->setDesignTheme('test/default', 'frontend');
     }
 
     protected function tearDown()
@@ -67,15 +67,14 @@ class Mage_Core_Model_Design_PackageFallbackTest extends PHPUnit_Framework_TestC
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }
 
-    public function testGetSkinFile()
+    public function testGetViewFile()
     {
-        $expected = '%s/frontend/package/custom_theme/skin/theme_nested_skin/Fixture_Module/fixture_script.js';
+        $expected = '%s/frontend/package/custom_theme/Fixture_Module/fixture_script.js';
         $params = array(
             'package' => 'package',
-            'theme' => 'custom_theme',
-            'skin' => 'theme_nested_skin'
+            'theme' => 'custom_theme'
         );
-        $actual = $this->_model->getSkinFile('Fixture_Module::fixture_script.js', $params);
+        $actual = $this->_model->getViewFile('Fixture_Module::fixture_script.js', $params);
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }
 

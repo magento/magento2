@@ -147,7 +147,7 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getHomePageUrl()
     {
-        return Mage::getModel('Mage_Backend_Model_Url')->getRouteUrl('adminhtml');
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getRouteUrl('adminhtml');
     }
 
     /**

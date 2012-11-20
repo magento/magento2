@@ -50,7 +50,7 @@ class Mage_XmlConnect_Model_TabsTest extends PHPUnit_Framework_TestCase
             $this->assertNotEmpty($tab['label']);
             $this->assertNotEmpty($tab['image']);
             $this->assertStringMatchesFormat(
-                'http://%s/media/skin/%s/%s/%s/%s/%s/Mage_XmlConnect/images/%s.png', $tab['image']
+                'http://%s/pub/media/theme/%s/%s/%s/%s/Mage_XmlConnect/images/%s.png', $tab['image']
             );
             $this->assertNotEmpty($tab['action']);
         }

@@ -50,7 +50,7 @@ class Mage_Adminhtml_Block_System_Store_Delete extends Mage_Adminhtml_Block_Widg
         $this->_removeButton('save');
         $this->_removeButton('reset');
 
-        $this->_updateButton('delete', 'area', 'footer');
+        $this->_updateButton('delete', 'region', 'footer');
         $this->_updateButton('delete', 'onclick', 'editForm.submit();');
 
         $this->_addButton('cancel', array(

@@ -35,7 +35,7 @@
 <script type="text/javascript">
 //<![CDATA[
     (function($) {
-        head.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/file-option.js')?>", function() {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/file-option.js')?>", function() {
             $('#input-box-<?php echo $_fileName ?>').fileOption({
                 fileName: '<?php echo $_fileName ?>',
                 fileNamed: '<?php echo $_fileNamed ?>',

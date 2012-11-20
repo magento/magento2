@@ -46,22 +46,22 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture                    install/design/theme/full_name   default/default/default
-     * @magentoConfigFixture                    adminhtml/design/theme/full_name default/default/default
-     * @magentoConfigFixture current_store      design/theme/full_name           default/iphone/default
-     * @magentoConfigFixture fixturestore_store design/theme/full_name           default/default/blue
+     * @magentoConfigFixture                    install/design/theme/full_name   default/basic
+     * @magentoConfigFixture                    adminhtml/design/theme/full_name default/basic
+     * @magentoConfigFixture current_store      design/theme/full_name           default/iphone
+     * @magentoConfigFixture fixturestore_store design/theme/full_name           default/demo_blue
      * @magentoAppIsolation  enabled
      * @dataProvider         getProcessedTemplateDataProvider
      */
     public function testGetProcessedTemplate($area, $store, $design)
     {
         $this->markTestIncomplete('Test partially fails bc of MAGETWO-557.');
-        $this->_model->setTemplateText('{{skin url="Mage_Page::favicon.ico"}}');
-        $this->assertStringEndsWith('skin/frontend/default/default/default/en_US/Mage_Page/favicon.ico',
+        $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
+        $this->assertStringEndsWith('theme/frontend/default/demo/en_US/Mage_Page/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
         $this->_model->emulateDesign($store, $area);
-        $expectedTemplateText = "skin/{$area}/{$design}/en_US/Mage_Page/favicon.ico";
+        $expectedTemplateText = "theme/{$area}/{$design}/en_US/Mage_Page/favicon.ico";
         $this->assertStringEndsWith($expectedTemplateText, $this->_model->getProcessedTemplate());
         $this->_model->revertDesign();
     }
@@ -72,10 +72,10 @@ class Mage_Newsletter_Model_TemplateTest extends PHPUnit_Framework_TestCase
     public function getProcessedTemplateDataProvider()
     {
         return array(
-            'install'        => array('install',   'default',      'default/default/default'),
-            'backend'        => array('adminhtml', 'admin',        'default/default/default'),
-            'frontend'       => array('frontend',  'default',      'default/iphone/default'),
-            'frontend store' => array('frontend',  'fixturestore', 'default/default/blue'),
+            'install'        => array('install',   'default',      'default/demo'),
+            'backend'        => array('adminhtml', 'admin',        'default/basic'),
+            'frontend'       => array('frontend',  'default',      'default/iphone'),
+            'frontend store' => array('frontend',  'fixturestore', 'default/demo_blue'),
         );
     }
 

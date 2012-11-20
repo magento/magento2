@@ -34,7 +34,8 @@
  * @method     Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer_Grid setUseAjax() setUseAjax(bool $flag)
  * @method     int getProductId() getProductId()
  */
-class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer_Grid extends Mage_Backend_Block_Widget_Grid
+class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Customer_Grid
+    extends Mage_Backend_Block_Widget_Grid_Extended
 {
     protected function _construct()
     {

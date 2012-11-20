@@ -34,8 +34,8 @@ class Mage_Adminhtml_Block_Cache_Grid extends Mage_Adminhtml_Block_Widget_Grid
     {
         parent::_construct();
         $this->setId('cache_grid');
-        $this->_filterVisibility = false;
-        $this->_pagerVisibility  = false;
+        $this->setFilterVisibility(false);
+        $this->setPagerVisibility(false);
         $this->_invalidatedTypes = Mage::app()->getCacheInstance()->getInvalidatedTypes();
     }
 

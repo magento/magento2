@@ -487,14 +487,14 @@ abstract class Mage_Rule_Model_Condition_Abstract
 
     public function getAddLinkHtml()
     {
-        $src = Mage::getDesign()->getSkinUrl('images/rule_component_add.gif');
+        $src = Mage::getDesign()->getViewFileUrl('images/rule_component_add.gif');
         $html = '<img src="' . $src . '" class="rule-param-add v-middle" alt="" title="' . Mage::helper('Mage_Rule_Helper_Data')->__('Add') . '"/>';
         return $html;
     }
 
     public function getRemoveLinkHtml()
     {
-        $src = Mage::getDesign()->getSkinUrl('images/rule_component_remove.gif');
+        $src = Mage::getDesign()->getViewFileUrl('images/rule_component_remove.gif');
         $html = ' <span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove" title="' . Mage::helper('Mage_Rule_Helper_Data')->__('Remove') . '"><img src="' . $src . '"  alt="" class="v-middle" /></a></span>';
         return $html;
     }

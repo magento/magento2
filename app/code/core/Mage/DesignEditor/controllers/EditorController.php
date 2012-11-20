@@ -120,11 +120,10 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
     }
 
     /**
-     * Sets new skin for viewed store and returns customer back to the previous address
+     * Sets new theme for viewed store and returns customer back to the previous address
      */
-    public function skinAction()
+    public function themeAction()
     {
-        $skin = $this->getRequest()->get('skin');
         $backUrl = $this->_getRefererUrl();
         $themeId = $this->getRequest()->get('theme_id');
         /** @var  $theme Mage_Core_Model_Theme */
@@ -135,7 +134,6 @@ class Mage_DesignEditor_EditorController extends Mage_Core_Controller_Front_Acti
                 Mage::throwException($this->__('The theme was not found.'));
             }
             $this->_session->setThemeId($themeId);
-            $this->_session->setSkin($skin);
         } catch (Mage_Core_Exception $e) {
             $this->_session->addError($e->getMessage());
         }

@@ -101,7 +101,7 @@
             <action method="removeItem"><type>css</type><name>print.css</name></action>
             <action method="removeItem"><type>js_css</type><name>extjs/resources/css/ext-all.css</name></action>
             <action method="removeItem"><type>js_css</type><name>extjs/resources/css/ytheme-magento.css</name></action>
-            <action method="removeItem"><type>skin_css</type><name>menu.css</name></action>
+            <action method="removeItem"><type>js_css</type><name>menu.css</name></action>
 
             <action method="removeItem"><type>js_css</type><name>mage/calendar.css</name></action>
             <action method="removeItem"><type>js</type><name>jquery/jquery-1.7.1.min.js</name></action>

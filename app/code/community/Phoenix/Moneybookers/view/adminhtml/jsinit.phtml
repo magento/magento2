@@ -36,7 +36,7 @@
         $('moneybookers_settings_activationstatus').up().insert('<button type="button" id="moneybookers_multifuncbutton" onclick="moneybookers.button()" style="display: none; margin-top: 1em;"><span id="moneybookers_multifuncbutton_label" style="display:block; margin-top:1em;"></span></button>');
         $('moneybookers_settings_activationstatus').up().insert('<span id="moneybookers_inf_div" style="display:block; margin-top:1em;"></span>');
         $('moneybookers_settings_activationstatus').up().insert('<input id="moneybookers_settings_customer_id_hidden" type="hidden"/>');
-        moneybookers = new Moneybookers('<?php echo $this->getSkinUrl('Phoenix_Moneybookers::banner.jpg'); ?>', '<?php echo $this->getUrl('*/moneybookers/activateemail'); ?>', '<?php echo $this->getUrl('*/moneybookers/checksecret'); ?>', '<?php echo $this->getUrl('*/moneybookers/checkemail');?>');
+        moneybookers = new Moneybookers('<?php echo $this->getViewFileUrl('Phoenix_Moneybookers::banner.jpg'); ?>', '<?php echo $this->getUrl('*/moneybookers/activateemail'); ?>', '<?php echo $this->getUrl('*/moneybookers/checksecret'); ?>', '<?php echo $this->getUrl('*/moneybookers/checkemail');?>');
     }
 //]]>
 </script>

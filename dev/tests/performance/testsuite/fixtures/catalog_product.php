@@ -42,7 +42,7 @@ if (!$setId) {
 }
 
 // Create product
-$product = new Mage_Catalog_Model_Product();
+$product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->setTypeId('simple')
     ->setAttributeSetId($setId)
     ->setWebsiteIds(array(1))
@@ -58,7 +58,7 @@ $product->setTypeId('simple')
     ->save()
 ;
 
-$stockItem = new Mage_CatalogInventory_Model_Stock_Item();
+$stockItem = Mage::getModel('Mage_CatalogInventory_Model_Stock_Item');
 $stockItem->setProductId($product->getId())
     ->setTypeId($product->getTypeId())
     ->setStockId(Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID)

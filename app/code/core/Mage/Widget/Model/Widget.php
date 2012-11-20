@@ -262,10 +262,10 @@ class Mage_Widget_Model_Widget extends Varien_Object
         if (is_object($widgetXml)) {
             $placeholder = (string)$widgetXml->placeholder_image;
         }
-        if (!$placeholder || !Mage::getDesign()->getSkinFile($placeholder)) {
+        if (!$placeholder || !Mage::getDesign()->getViewFile($placeholder)) {
             $placeholder = 'Mage_Widget::placeholder.gif';
         }
-        return Mage::getDesign()->getSkinUrl($placeholder);
+        return Mage::getDesign()->getViewFileUrl($placeholder);
     }
 
     /**

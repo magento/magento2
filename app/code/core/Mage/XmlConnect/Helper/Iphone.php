@@ -193,37 +193,37 @@ class Mage_XmlConnect_Helper_Iphone extends Mage_Core_Helper_Abstract
             $this->_tabs = array(
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Home'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_home.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_home.png'),
                     'action' => 'Home',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Shop'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_shop.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_shop.png'),
                     'action' => 'Shop',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Search'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_search.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_search.png'),
                     'action' => 'Search',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Cart'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_cart.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_cart.png'),
                     'action' => 'Cart',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('More'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_more.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_more.png'),
                     'action' => 'More',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Account'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_account.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_account.png'),
                     'action' => 'Account',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('More Info'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_page.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_page.png'),
                     'action' => 'AboutUs',
                 ),
             );

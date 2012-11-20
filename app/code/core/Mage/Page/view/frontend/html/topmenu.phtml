@@ -40,7 +40,7 @@
 </div>
 <script type="text/javascript">
     (function($) {
-        head.js("<?php echo $this->getSkinUrl('Mage_Page::js/menu.js') ?>", function() {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Page::js/menu.js') ?>", function() {
             $('#nav .parent').menu();
         });
     })(jQuery);

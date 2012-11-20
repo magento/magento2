@@ -34,7 +34,7 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        Mage::getDesign()->setDesignTheme('default/default/default', 'frontend');
+        Mage::getDesign()->setDesignTheme('default/demo', 'frontend');
     }
 
     protected function setUp()
@@ -83,12 +83,12 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n"
             . '<script type="text/javascript" '
-            . 'src="http://localhost/pub/media/skin/frontend/default/default/default/en_US/Mage_Bundle/bundle.js">'
+            . 'src="http://localhost/pub/media/theme/frontend/default/demo/en_US/Mage_Bundle/bundle.js">'
             . '</script>' . "\n"
             . '<link rel="stylesheet" type="text/css" media="all"'
             . ' href="http://localhost/pub/lib/tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
             . '<link rel="stylesheet" type="text/css" media="print" '
-                . 'href="http://localhost/pub/media/skin/frontend/default/default/default/en_US/css/styles.css" />'
+                . 'href="http://localhost/pub/media/theme/frontend/default/demo/en_US/css/styles.css" />'
                 . "\n"
             . '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://example.com/feed.xml" />'
                 . "\n"

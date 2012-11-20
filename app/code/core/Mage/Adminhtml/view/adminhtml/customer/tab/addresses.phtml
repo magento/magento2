@@ -39,10 +39,10 @@
         <li id="address_item_<?php echo $_address->getId() ?>">
             <?php if (!$this->isReadonly()): ?>
             <a href="#" class="btn-remove-address">
-                <img src="<?php echo $this->getSkinUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
+                <img src="<?php echo $this->getViewFileUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
             </a>
             <a href="#" id="select_button_<?php echo $_address->getId() ?>" class="select_button btn-edit-address">
-                <img src="<?php echo $this->getSkinUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
+                <img src="<?php echo $this->getViewFileUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
             </a>
             <?php endif;?>
             <address>
@@ -69,10 +69,10 @@
     <div id="address_item_template" class="no-display template">
         <?php if (!$this->isReadonly()): ?>
         <a href="#" class="btn-remove-address">
-            <img src="<?php echo $this->getSkinUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
+            <img src="<?php echo $this->getViewFileUrl('images/cancel_icon.gif') ?>" alt="Remove address" id="delete_button<?php echo ++$_iterator ?>" />
         </a>
         <a href="#" id="select_button_" class="select_button btn-edit-address">
-            <img src="<?php echo $this->getSkinUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
+            <img src="<?php echo $this->getViewFileUrl('images/edit_icon.gif') ?>" alt="Edit address"/>
         </a>
         <?php endif;?>
         <address><?php echo Mage::helper('Mage_Customer_Helper_Data')->__('New Customer Address') ?></address>
@@ -224,10 +224,6 @@ addressesModel.prototype = {
             $('_item'+this.itemCount+'firstname').value = $('_accountfirstname').value;
             $('_item'+this.itemCount+'lastname').value = $('_accountlastname').value;
 
-            if ($('_accountwebsite_id').value !== '' && undefined !== this.defaultCountries[$('_accountwebsite_id').value]) {
-                $('_item'+this.itemCount+'country_id').value = this.defaultCountries[$('_accountwebsite_id').value];
-            }
-
             Element.hide(newForm);
             var template = '<li id="' + this.baseItemId+this.itemCount + '">';
             deleteButtonId ++;
@@ -245,6 +241,13 @@ addressesModel.prototype = {
             this.addItemObservers(newItem);
             this.setActiveItem(newItem);
             this.bindCountryRegionRelation(newForm.id);
+
+            if ($('_accountwebsite_id').value !== ''
+                && undefined !== this.defaultCountries[$('_accountwebsite_id').value]
+            ) {
+                $('_item' + this.itemCount + 'country_id').value = this.defaultCountries[$('_accountwebsite_id').value];
+                fireEvent($('_item' + this.itemCount + 'country_id'), 'change');
+            }
 
             if( $('_item'+this.itemCount+'firstname').value ) this.syncFormData($('_item'+this.itemCount+'firstname'));
             if( $('_item'+this.itemCount+'lastname').value ) this.syncFormData($('_item'+this.itemCount+'lastname'));

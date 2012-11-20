@@ -997,6 +997,8 @@ class Mage_Core_Model_Url extends Varien_Object
         if ($query) {
             $mark = (strpos($url, '?') === false) ? '?' : ($escapeQuery ? '&amp;' : '&');
             $url .= $mark . $query;
+            $this->unsetData('query');
+            $this->unsetData('query_params');
         }
 
         if ($this->getFragment()) {

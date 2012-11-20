@@ -24,12 +24,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+
+<?php
+$fileHelper = Mage::helper('Mage_Core_Helper_File_Storage');
+?>
 <h4 class="icon-head head-edit-form fieldset-legend">Upload File</h4>
 <div id="messages">
     <ul class="messages">
         <li class="notice-msg">
             <ul>
-                <li><?php echo $this->__('Your server PHP settings allow you to upload files not more than %s at a time. Please modify post_max_size (currently is %s) and upload_max_filesize (currently is %s) values in php.ini if you want to upload larger files.', $this->getDataMaxSize(), $this->getPostMaxSize(), $this->getUploadMaxSize())?></li>
+                <li><?php echo $this->__('Your server PHP settings allow you to upload files not more than %s at a time. Please modify post_max_size (currently is %s) and upload_max_filesize (currently is %s) values in php.ini if you want to upload larger files.', $fileHelper->getMaxFileSizeInMb(), $fileHelper->getPostMaxSize(), $fileHelper->getUploadMaxSize())?></li>
             </ul>
         </li>
         <li class="notice-msg">

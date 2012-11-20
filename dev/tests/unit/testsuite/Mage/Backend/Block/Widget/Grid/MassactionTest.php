@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Block_Widget_Grid_Massaction
  */
-class Mage_Backend_Block_Widget_Grid_MassactionTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_Massaction
@@ -72,9 +72,14 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends Magento_Test_TestCas
             ->method('getId')
             ->will($this->returnValue('test_grid'));
 
-        $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout', array('getParentName', 'getBlock'), array(), '',
-            false, false
+        $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout', array('getParentName', 'getBlock', 'helper'),
+            array(), '', false, false
         );
+
+        $this->_backendHelperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
+        $this->_layoutMock->expects($this->any())
+            ->method('helper')
+            ->will($this->returnValue($this->_backendHelperMock));
         $this->_layoutMock->expects($this->any())
             ->method('getParentName')
             ->with('test_grid_massaction')
@@ -87,26 +92,19 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends Magento_Test_TestCas
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array('getParam'), array(), '',
             false
         );
-        $this->_backendHelperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '',
-            false
-        );
 
         $arguments = array(
             'layout'       => $this->_layoutMock,
-            'backendHelper'       => $this->_backendHelperMock,
             'request'      => $this->_requestMock,
+            'urlBuilder'   => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
             'data'         => array(
                 'massaction_id_field'  => 'test_id',
                 'massaction_id_filter' => 'test_id'
             )
         );
-        $arguments = $this->_getConstructArguments(self::BLOCK_ENTITY,
-            'Mage_Backend_Block_Widget_Grid_Massaction', $arguments
-        );
-        $this->_block = $this->_getInstanceViaConstructor('Mage_Backend_Block_Widget_Grid_Massaction',
-            $arguments
-        );
 
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Massaction', $arguments);
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 

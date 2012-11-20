@@ -260,17 +260,17 @@ class Mage_Core_Model_Translate_Inline
         }
         $ajaxUrl = $urlModel->getUrl($urlPrefix . '/ajax/translate',
             array('_secure'=>Mage::app()->getStore()->isCurrentlySecure()));
-        $trigImg = Mage::getDesign()->getSkinUrl('Mage_Core::fam_book_open.png');
+        $trigImg = Mage::getDesign()->getViewFileUrl('Mage_Core::fam_book_open.png');
 
         ob_start();
         $design = Mage::getDesign();
 ?>
-<script type="text/javascript" src="<?php echo $design->getSkinUrl('prototype/window.js') ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $design->getSkinUrl('prototype/windows/themes/default.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php echo $design->getSkinUrl('Mage_Core::prototype/magento.css') ?>"/>
-<script type="text/javascript" src="<?php echo $design->getSkinUrl('mage/edit-trigger.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $design->getSkinUrl('mage/translate-inline.js') ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $design->getSkinUrl('mage/translate-inline.css') ?>"/>
+<script type="text/javascript" src="<?php echo $design->getViewFileUrl('prototype/window.js') ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $design->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $design->getViewFileUrl('Mage_Core::prototype/magento.css') ?>"/>
+<script type="text/javascript" src="<?php echo $design->getViewFileUrl('mage/edit-trigger.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $design->getViewFileUrl('mage/translate-inline.js') ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $design->getViewFileUrl('mage/translate-inline.css') ?>"/>
 
 <script type="text/javascript">
     (function($){

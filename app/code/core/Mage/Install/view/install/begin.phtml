@@ -53,7 +53,7 @@
 <script type="text/javascript">
 //<![CDATA[
 (function($) {
-    head.js("<?php echo $this->getSkinUrl('Mage_Install::js/install.js') ?>", function() {
+    head.js("<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
         $('#agree').begin({submitButtonSelector: '#submitButton'});
     });
 })(jQuery);

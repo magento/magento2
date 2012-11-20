@@ -30,6 +30,6 @@
         <add id="Mage_Tax::sales_tax" title="Tax" module="Mage_Tax" sortOrder="105" parent="Mage_Adminhtml::system" resource="Mage_Tax::manage_tax"/>
         <add id="Mage_Tax::sales_tax_rules" title="Manage Tax Rules" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rule" resource="Mage_Tax::manage_tax"/>
         <add id="Mage_Tax::sales_tax_rates" title="Manage Tax Zones &amp; Rates" module="Mage_Tax" parent="Mage_Tax::sales_tax" action="adminhtml/tax_rate" resource="Mage_Tax::manage_tax"/>
-        <add id="Mage_Tax::system_convert_tax" title="Import / Export Tax Rates" sortOrder="50" module="Mage_Tax" parent="Mage_Adminhtml::system_convert" action="adminhtml/tax_rate/importExport" resource="Mage_Tax::import_export"/>
+        <add id="Mage_Tax::system_convert_tax" title="Import/Export Tax Rates" sortOrder="50" module="Mage_Tax" parent="Mage_Adminhtml::system_convert" action="adminhtml/tax_rate/importExport" resource="Mage_Tax::import_export"/>
     </menu>
 </config>

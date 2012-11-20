@@ -250,15 +250,15 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
     }
 
     /**
-     * Retrieve Skin URL directive
+     * Retrieve View URL directive
      *
      * @param array $construction
      * @return string
      */
-    public function skinDirective($construction)
+    public function viewDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
-        $url = Mage::getDesign()->getSkinUrl($params['url'], $params);
+        $url = Mage::getDesign()->getViewFileUrl($params['url'], $params);
         return $url;
     }
 

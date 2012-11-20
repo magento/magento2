@@ -34,8 +34,8 @@
             o.cookieExpireAt = $.cookie.defaults.expires;
         });
         $.mage.load.jsSync(
-            "<?php echo $this->getSkinUrl('Mage_Page::js/cookies.js')?>",
-            "<?php echo $this->getSkinUrl('Mage_PageCache::js/cookie.js')?>"
+            "<?php echo $this->getViewFileUrl('Mage_Page::js/cookies.js')?>",
+            "<?php echo $this->getViewFileUrl('Mage_PageCache::js/cookie.js')?>"
         );
     })(jQuery);
     //]]>

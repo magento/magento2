@@ -65,7 +65,7 @@ class Mage_Rule_Block_Editable extends Mage_Core_Block_Abstract
 
             if ($element->getExplicitApply()) {
                 $html .= ' <a href="javascript:void(0)" class="rule-param-apply"><img src="'
-                    . $this->getSkinUrl('images/rule_component_apply.gif') . '" class="v-middle" alt="'
+                    . $this->getViewFileUrl('images/rule_component_apply.gif') . '" class="v-middle" alt="'
                     . $this->__('Apply') . '" title="' . $this->__('Apply') . '" /></a> ';
             }
 

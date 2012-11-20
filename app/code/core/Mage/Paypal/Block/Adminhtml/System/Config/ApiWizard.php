@@ -27,7 +27,7 @@
 /**
  * Custom renderer for PayPal API credentials wizard popup
  */
-class Mage_Paypal_Block_Adminhtml_System_Config_ApiWizard extends Mage_Adminhtml_Block_System_Config_Form_Field
+class Mage_Paypal_Block_Adminhtml_System_Config_ApiWizard extends Mage_Backend_Block_System_Config_Form_Field
 {
     /**
      * Set template to itself

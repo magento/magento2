@@ -202,7 +202,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
                     $element->setValues($attribute->getSource()->getAllOptions(false, true));
                     $element->setCanBeEmpty(true);
                 } else if ($inputType == 'date') {
-                    $element->setImage($this->getSkinUrl('images/grid-cal.gif'));
+                    $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));
                     $element->setDateFormat(Mage::app()->getLocale()->getDateFormatWithLongYear());
                 } else if ($inputType == 'multiline') {
                     $element->setLineCount($attribute->getMultilineCount());

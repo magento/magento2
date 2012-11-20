@@ -28,7 +28,7 @@
  * Cache cleaner backend model
  *
  */
-class Mage_Contacts_Model_System_Config_Backend_Links extends Mage_Adminhtml_Model_System_Config_Backend_Cache
+class Mage_Contacts_Model_System_Config_Backend_Links extends Mage_Backend_Model_Config_Backend_Cache
 {
     /**
      * Cache tags to clean

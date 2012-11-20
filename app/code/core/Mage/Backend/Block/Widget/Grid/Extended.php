@@ -1250,4 +1250,19 @@ class Mage_Backend_Block_Widget_Grid_Extended
     {
         return $this->_subtotals;
     }
+
+    /**
+     * Generate list of grid buttons
+     *
+     * @return string
+     */
+    public function getMainButtonsHtml()
+    {
+        $html = '';
+        if($this->getFilterVisibility()) {
+            $html.= $this->getResetFilterButtonHtml();
+            $html.= $this->getSearchButtonHtml();
+        }
+        return $html;
+    }
 }

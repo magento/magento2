@@ -47,11 +47,6 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
     /**
      * @var string|null
      */
-    protected $_skin;
-
-    /**
-     * @var string|null
-     */
     protected $_locale;
 
     /**
@@ -66,7 +61,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
 
     /**
      * Constructor.
-     * Following entries in $params are required: 'area', 'package', 'theme', 'skin', 'locale'. The 'appConfig' and
+     * Following entries in $params are required: 'area', 'package', 'theme', 'locale'. The 'appConfig' and
      * 'themeConfig' may contain application config and theme config, respectively. If these these entries are not
      * present or null, then they will be retrieved from global application instance.
      *
@@ -77,7 +72,6 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         $this->_area = $data['area'];
         $this->_package = $data['package'];
         $this->_theme = $data['theme'];
-        $this->_skin = $data['skin'];
         $this->_locale = $data['locale'];
         $this->_appConfig = isset($data['appConfig']) ? $data['appConfig'] : Mage::getConfig();
         $this->_themeConfig = isset($data['themeConfig']) ? $data['themeConfig']
@@ -127,28 +121,23 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
     }
 
     /**
-     * Get skin file name, using fallback mechanism
+     * Get theme file name, using fallback mechanism
      *
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getSkinFile($file, $module = null)
+    public function getViewFile($file, $module = null)
     {
         $dir = $this->_appConfig->getOptions()->getDesignDir();
         $moduleDir = $module ? $this->_appConfig->getModuleDir('view', $module) : '';
-        $defaultSkin = Mage_Core_Model_Design_Package::DEFAULT_SKIN_NAME;
 
         $dirs = array();
         $theme = $this->_theme;
         $package = $this->_package;
         while ($theme) {
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/skin/{$this->_skin}/locale/{$this->_locale}";
-            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/skin/{$this->_skin}";
-            if ($this->_skin != $defaultSkin) {
-                $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/skin/{$defaultSkin}/locale/{$this->_locale}";
-                $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/skin/{$defaultSkin}";
-            }
+            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}/locale/{$this->_locale}";
+            $dirs[] = "{$dir}/{$this->_area}/{$package}/{$theme}";
             list($package, $theme) = $this->_getInheritedTheme($package, $theme);
         }
 
@@ -211,14 +200,14 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
     }
 
     /**
-     * Object notified, that skin file was published, thus it can return published file name on next calls
+     * Object notified, that theme file was published, thus it can return published file name on next calls
      *
      * @param string $publicFilePath
      * @param string $file
      * @param string|null $module
      * @return Mage_Core_Model_Design_FallbackInterface
      */
-    public function notifySkinFilePublished($publicFilePath, $file, $module = null)
+    public function notifyViewFilePublished($publicFilePath, $file, $module = null)
     {
         // Do nothing - we don't cache file paths in real fallback
         return $this;

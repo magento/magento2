@@ -95,7 +95,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
      */
     public function includeScript($file)
     {
-        return '<script type="text/javascript" src="' . Mage::getDesign()->getSkinUrl($file) . '"></script>' . "\n";
+        return '<script type="text/javascript" src="' . Mage::getDesign()->getViewFileUrl($file) . '"></script>' . "\n";
     }
 
     /**

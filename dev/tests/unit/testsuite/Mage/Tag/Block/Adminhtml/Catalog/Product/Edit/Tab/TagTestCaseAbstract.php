@@ -25,8 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract
-    extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag
@@ -57,6 +56,7 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract
 
     protected function setUp()
     {
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $helperMock = $this->getMock('Mage_Tag_Helper_Data', array('__'), array(), '', false);
         $helperMock->expects($this->any())
             ->method('__')
@@ -69,9 +69,10 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract
 
         $data = array(
             'authSession' => $authSession,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
             'data'        => array('helpers' => array('Mage_Tag_Helper_Data' => $helperMock))
         );
-        $this->_model = $this->getBlock($this->_modelName, $data);
+        $this->_model = $objectManagerHelper->getBlock($this->_modelName, $data);
     }
 
     protected function tearDown()

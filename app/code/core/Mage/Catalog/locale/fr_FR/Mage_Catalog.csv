@@ -264,7 +264,7 @@
 "Duplicate website group price customer group.","Copier le site internet prix de groupe clientèle."
 "Duplicate website tier price customer group and quantity.","Dupliquer le prix de groupe client du site et la quantité."
 "Duplicate website, country and state tax found.","Copie du site web, du pays et de la région trouvée."
-"E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}.Des chemins dynamiques ont un impact sur les performances du catalogue."
+"E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}.Des chemins dynamiques ont un impact sur les performances du catalogue."
 "Edit","Éditer"
 "Edit Attribute Set '%s'","Modifier le jeu d'attributs : '%s'"
 "Edit Product Attribute","Modifier l'attribut du produit"

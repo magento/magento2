@@ -51,46 +51,12 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
 
     protected $_template = 'Mage_Backend::widget/grid/massaction.phtml';
 
-    /**
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Model_Layout $layout
-     * @param Mage_Core_Model_Event_Manager $eventManager
-     * @param Mage_Core_Model_Translate $translator
-     * @param Mage_Core_Model_Cache $cache
-     * @param Mage_Core_Model_Design_Package $designPackage
-     * @param Mage_Core_Model_Session $session
-     * @param Mage_Core_Model_Store_Config $storeConfig
-     * @param Mage_Core_Controller_Varien_Front $frontController
-     * @param Mage_Backend_Helper_Data $backendHelper
-     * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        Mage_Core_Controller_Request_Http $request,
-        Mage_Core_Model_Layout $layout,
-        Mage_Core_Model_Event_Manager $eventManager,
-        Mage_Core_Model_Translate $translator,
-        Mage_Core_Model_Cache $cache,
-        Mage_Core_Model_Design_Package $designPackage,
-        Mage_Core_Model_Session $session,
-        Mage_Core_Model_Store_Config $storeConfig,
-        Mage_Core_Controller_Varien_Front $frontController,
-        Mage_Backend_Helper_Data $backendHelper,
-        array $data = array()
-    ) {
-        $this->_backendHelper = $backendHelper;
-
-        parent::__construct($request, $layout, $eventManager, $translator, $cache, $designPackage, $session,
-            $storeConfig, $frontController, $data
-        );
-    }
-
     protected function _construct()
     {
         parent::_construct();
 
-        $this->setErrorText($this->_backendHelper->jsQuoteEscape($this->_backendHelper->__('Please select items.')));
+        $this->setErrorText($this->helper('Mage_Backend_Helper_Data')
+            ->jsQuoteEscape($this->helper('Mage_Backend_Helper_Data')->__('Please select items.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {

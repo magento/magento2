@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Framework_TestCase
 {
     /**#@+
      * Test attribute code
@@ -115,9 +115,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends Magento_Tes
             ->method('__')
             ->will($this->returnArgument(0));
 
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $attributeCollection = new Varien_Data_Collection();
         foreach ($this->_attributes as $attributeData) {
-            $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+            $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
                 $arguments, '', true, true, true, array('_construct')
@@ -209,7 +210,8 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends Magento_Tes
 
         $this->_model->setWriter($writer);
 
-        $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
         $arguments['data'] = $this->_customerData;
         $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract', $arguments);
 

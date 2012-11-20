@@ -89,7 +89,7 @@ class Mage_XmlConnect_Block_Adminhtml_Queue_Edit_Form
             'time_format' => Mage::app()->getLocale()->getTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'label'     => $this->__('Start Date'),
             'title'     => $this->__('Start Date'),
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
             'note'      => $this->__('If leave this field empty, the message will be sent immediately'),
             'disabled'  => !$this->_fieldsEnabled,
             'required'  => false,

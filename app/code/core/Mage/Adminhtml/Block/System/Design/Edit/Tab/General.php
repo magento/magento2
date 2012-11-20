@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
                 'name'     => 'store_id',
                 'required' => true,
             ));
-            $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
             $field->setRenderer($renderer);
         } else {
             $fieldset->addField('store_id', 'hidden', array(
@@ -62,7 +62,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
             'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Date From'),
             'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Date From'),
             'name'     => 'date_from',
-            'image'    => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'    => $this->getViewFileUrl('images/grid-cal.gif'),
             'date_format' => $dateFormat,
             //'required' => true,
         ));
@@ -70,7 +70,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
             'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Date To'),
             'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Date To'),
             'name'     => 'date_to',
-            'image'    => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'    => $this->getViewFileUrl('images/grid-cal.gif'),
             'date_format' => $dateFormat,
             //'required' => true,
         ));

@@ -36,7 +36,7 @@
 </li>
 <li id="captcha-image-box-<?php echo $this->getFormId()?>">
     <div class="captcha-image">
-        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getSkinUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>">
+        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getViewFileUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>">
         <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
         <?php if ($captcha->isCaseSensitive()) :?>
         <div class="captcha-note">
@@ -46,7 +46,7 @@
     </div>
     <script type="text/javascript">//<![CDATA[
     (function ($) {
-        head.js("<?php echo $this->getSkinUrl('Mage_Captcha::captcha.js') ?>",function() {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Captcha::captcha.js') ?>",function() {
             $('#captcha-reload').captcha({
                 url: '<?php echo $this->getRefreshUrl()?>',
                 formSelector: '#<?php echo $this->getFormId()?>'

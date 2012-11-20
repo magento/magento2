@@ -98,27 +98,6 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Grid extends Mage_Adminhtml
             'filter_index' => 'main_table.magento_version_to'
         ));
 
-        $this->addColumn('action', array(
-            'header'   => $this->__('Action'),
-            'width'    => '100px',
-            'type'     => 'action',
-            'getter'   => 'getId',
-            'actions'  => array(
-                array(
-                    'caption' => $this->__('Edit'),
-                    'url'     => array('base' => '*/*/edit'),
-                    'field'   => 'id',
-                ),
-                array(
-                    'caption' => $this->__('Delete'),
-                    'url'     => array('base' => '*/*/delete'),
-                    'field'   => 'id',
-            )),
-            'filter'   => false,
-            'sortable' => false,
-            'index'    => 'theme',
-        ));
-
         return parent::_prepareColumns();
     }
 

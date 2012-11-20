@@ -49,7 +49,7 @@
                 });
             } else {
                 if (!settings.data) {
-                    this.options.data = {
+                    settings.data = {
                         form_key: FORM_KEY
                     };
                 }

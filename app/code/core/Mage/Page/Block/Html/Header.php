@@ -60,7 +60,7 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         if (empty($this->_data['logo_src'])) {
             $this->_data['logo_src'] = Mage::getStoreConfig('design/header/logo_src');
         }
-        return $this->getSkinUrl($this->_data['logo_src']);
+        return $this->getViewFileUrl($this->_data['logo_src']);
     }
 
     public function getLogoAlt()

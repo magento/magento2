@@ -58,7 +58,7 @@ class Mage_Core_Model_Config_DataTest extends PHPUnit_Framework_TestCase
     protected static function _refreshConfiguration()
     {
         Mage::app()->cleanCache(array(Mage_Core_Model_Config::CACHE_TAG));
-        Magento_Test_Bootstrap::getInstance()->initialize();
+        Magento_Test_Bootstrap::getInstance()->reinitialize();
     }
 
     protected function setUp()

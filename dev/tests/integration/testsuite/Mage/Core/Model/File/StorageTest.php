@@ -44,7 +44,7 @@ class Mage_Core_Model_File_StorageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('css', $config['allowed_resources']);
         $this->assertContains('css_secure', $config['allowed_resources']);
         $this->assertContains('js', $config['allowed_resources']);
-        $this->assertContains('skin', $config['allowed_resources']);
+        $this->assertContains('theme', $config['allowed_resources']);
         $this->assertEquals(1000, $config['update_time']);
     }
 }

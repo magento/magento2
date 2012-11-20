@@ -198,8 +198,8 @@ class Mage_Backend_Model_Auth_Session extends Mage_Core_Model_Session_Abstract i
         if ($this->getUser()) {
             $this->renewSession();
 
-            if (Mage::getSingleton('Mage_Adminhtml_Model_Url')->useSecretKey()) {
-                Mage::getSingleton('Mage_Adminhtml_Model_Url')->renewSecretUrls();
+            if (Mage::getSingleton('Mage_Backend_Model_Url')->useSecretKey()) {
+                Mage::getSingleton('Mage_Backend_Model_Url')->renewSecretUrls();
             }
 
             $this->setIsFirstPageAfterLogin(true);

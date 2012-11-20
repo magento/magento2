@@ -163,6 +163,7 @@ class Mage_Rss_CatalogControllerTest extends Magento_Test_TestCase_ControllerAbs
      */
     protected function _loginAdmin()
     {
+        Mage::getDesign()->setArea('adminhtml');
         $this->getRequest()->setServer(array(
             'PHP_AUTH_USER' => Magento_Test_Bootstrap::ADMIN_NAME,
             'PHP_AUTH_PW' => Magento_Test_Bootstrap::ADMIN_PASSWORD

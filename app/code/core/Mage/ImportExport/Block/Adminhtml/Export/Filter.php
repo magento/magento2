@@ -72,7 +72,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
             'class'        => 'input-text input-text-range-date',
             'date_format'  => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
-            'image'        => $this->getSkinUrl('images/grid-cal.gif')
+            'image'        => $this->getViewFileUrl('images/grid-cal.gif')
         );
         /** @var $selectBlock Mage_Core_Block_Html_Date */
         $dateBlock = $this->_layout->getBlockFactory()->createBlock('Mage_Core_Block_Html_Date', $arguments);

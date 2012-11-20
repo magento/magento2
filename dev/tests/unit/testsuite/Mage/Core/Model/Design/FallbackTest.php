@@ -33,11 +33,10 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      * @param string $area
      * @param string $package
      * @param string $theme
-     * @param string|null $skin
      * @param string|null $locale
      * @return Mage_Core_Model_Design_Fallback
      */
-    protected function _buildModel($area, $package, $theme, $skin, $locale)
+    protected function _buildModel($area, $package, $theme, $locale)
     {
         // Prepare config with directories
         $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
@@ -60,7 +59,6 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
             'area' => $area,
             'package' => $package,
             'theme' => $theme,
-            'skin' => $skin,
             'locale' => $locale,
             'appConfig' => $config,
             'themeConfig' => $themeConfig
@@ -81,7 +79,7 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFile($file, $area, $package, $theme, $module, $expectedFilename)
     {
-        $model = $this->_buildModel($area, $package, $theme, null, null);
+        $model = $this->_buildModel($area, $package, $theme, null);
 
         $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
         $actualFilename = $model->getFile($file, $module);
@@ -100,11 +98,11 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
                 'fixture_template.phtml', 'frontend', 'package', 'standalone_theme', null, null
             ),
             'same package & parent theme' => array(
-                'fixture_template_two.phtml', 'frontend', 'package', 'custom_theme_descendant', null,
+                'fixture_template_two.phtml', 'frontend', 'package', 'custom_theme3', null,
                 "%s/frontend/package/custom_theme/fixture_template_two.phtml",
             ),
             'same package & grandparent theme' => array(
-                'fixture_template.phtml', 'frontend', 'package', 'custom_theme_descendant', null,
+                'fixture_template.phtml', 'frontend', 'package', 'custom_theme3', null,
                 "%s/frontend/package/default/fixture_template.phtml",
             ),
             'parent package & parent theme' => array(
@@ -134,7 +132,7 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      */
     public function testLocaleFileFallback($file, $area, $package, $theme, $locale, $expectedFilename)
     {
-        $model = $this->_buildModel($area, $package, $theme, null, $locale);
+        $model = $this->_buildModel($area, $package, $theme, $locale);
 
         $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
         $actualFilename = $model->getLocaleFile($file);
@@ -153,11 +151,11 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
                 'fixture_translate.csv', 'frontend', 'package', 'standalone_theme', 'en_US', null
             ),
             'parent theme' => array(
-                'fixture_translate_two.csv', 'frontend', 'package', 'theme' => 'custom_theme_descendant', 'en_US',
+                'fixture_translate_two.csv', 'frontend', 'package', 'theme' => 'custom_theme3', 'en_US',
                 "%s/frontend/package/custom_theme/locale/en_US/fixture_translate_two.csv",
             ),
             'grandparent theme' => array(
-                'fixture_translate.csv', 'frontend', 'package', 'custom_theme_descendant', 'en_US',
+                'fixture_translate.csv', 'frontend', 'package', 'custom_theme3', 'en_US',
                 "%s/frontend/package/default/locale/en_US/fixture_translate.csv",
             ),
         );
@@ -170,17 +168,16 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      * @param string $area
      * @param string $package
      * @param string $theme
-     * @param string|null $skin
      * @param string|null $locale
      * @param string|null $module
      * @param string|null $expectedFilename
      */
-    protected function _testGetSkinFile($file, $area, $package, $theme, $skin, $locale, $module, $expectedFilename)
+    protected function _testGetSkinFile($file, $area, $package, $theme, $locale, $module, $expectedFilename)
     {
-        $model = $this->_buildModel($area, $package, $theme, $skin, $locale);
+        $model = $this->_buildModel($area, $package, $theme, $locale);
 
         $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
-        $actualFilename = $model->getSkinFile($file, $module);
+        $actualFilename = $model->getViewFile($file, $module);
         if ($expectedFilename) {
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
             $this->assertFileExists($actualFilename);
@@ -196,51 +193,50 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      * @param string $area
      * @param string $package
      * @param string $theme
-     * @param string $skin
      * @param string $locale
      * @param string|null $expectedFilename
      *
      * @dataProvider getSkinFileThemeDataProvider
      */
-    public function testGetSkinFileTheme($file, $area, $package, $theme, $skin, $locale, $expectedFilename)
+    public function testGetSkinFileTheme($file, $area, $package, $theme, $locale, $expectedFilename)
     {
-        $this->_testGetSkinFile($file, $area, $package, $theme, $skin, $locale, null, $expectedFilename);
+        $this->_testGetSkinFile($file, $area, $package, $theme, $locale, null, $expectedFilename);
     }
 
     public function getSkinFileThemeDataProvider()
     {
         return array(
             'no default theme inheritance' => array(
-                'fixture_script_two.js', 'frontend', 'package', 'standalone_theme', 'theme_nested_skin', 'en_US',
+                'fixture_script_two.js', 'frontend', 'package', 'standalone_theme', 'en_US',
                 null,
             ),
             'same theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin', 'en_US',
-                "%s/frontend/package/custom_theme/skin/default/fixture_script_two.js",
+                'fixture_script_two.js', 'frontend', 'package', 'custom_theme', 'en_US',
+                "%s/frontend/package/custom_theme/fixture_script_two.js",
             ),
             'parent theme & same skin' => array(
-                'fixture_script.js', 'frontend', 'package', 'custom_theme_descendant', 'theme_nested_skin', 'en_US',
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/fixture_script.js",
+                'fixture_script.js', 'frontend', 'package', 'custom_theme3', 'en_US',
+                "%s/frontend/package/custom_theme2/fixture_script.js",
             ),
             'parent theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'package', 'custom_theme_descendant', 'theme_nested_skin', 'en_US',
-                "%s/frontend/package/custom_theme/skin/default/fixture_script_two.js",
+                'fixture_script_two.js', 'frontend', 'package', 'custom_theme3', 'en_US',
+                "%s/frontend/package/custom_theme/fixture_script_two.js",
             ),
             'grandparent theme & same skin' => array(
-                'fixture_script_three.js', 'frontend', 'package', 'custom_theme_descendant', 'theme_nested_skin',
-                'en_US',  "%s/frontend/package/default/skin/theme_nested_skin/fixture_script_three.js",
+                'fixture_script_three.js', 'frontend', 'package', 'custom_theme3',
+                'en_US',  null,
             ),
             'grandparent theme & default skin' => array(
-                'fixture_script_four.js', 'frontend', 'package', 'custom_theme_descendant', 'theme_nested_skin',
-                'en_US', "%s/frontend/package/default/skin/default/fixture_script_four.js",
+                'fixture_script_four.js', 'frontend', 'package', 'custom_theme3',
+                'en_US', "%s/frontend/package/default/fixture_script_four.js",
             ),
             'parent package & same theme & same skin' => array(
-                'fixture_script.js', 'frontend', 'test', 'external_package_descendant', 'theme_nested_skin', 'en_US',
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/fixture_script.js",
+                'fixture_script.js', 'frontend', 'test', 'external_package_descendant', 'en_US',
+                null,
             ),
             'parent package & same theme & default skin' => array(
-                'fixture_script_two.js', 'frontend', 'test', 'external_package_descendant', 'theme_nested_skin',
-                'en_US', "%s/frontend/package/custom_theme/skin/default/fixture_script_two.js",
+                'fixture_script_two.js', 'frontend', 'test', 'external_package_descendant',
+                'en_US', "%s/frontend/package/custom_theme/fixture_script_two.js",
             ),
         );
     }
@@ -252,38 +248,37 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      * @param string $area
      * @param string $package
      * @param string $theme
-     * @param string $skin
      * @param string $locale
      * @param string|null $module
      * @param string|null $expectedFilename
      *
      * @dataProvider getSkinFileL10nDataProvider
      */
-    public function testGetSkinFileL10n($file, $area, $package, $theme, $skin, $locale, $module, $expectedFilename)
+    public function testGetSkinFileL10n($file, $area, $package, $theme, $locale, $module, $expectedFilename)
     {
-        $this->_testGetSkinFile($file, $area, $package, $theme, $skin, $locale, $module, $expectedFilename);
+        $this->_testGetSkinFile($file, $area, $package, $theme, $locale, $module, $expectedFilename);
     }
 
     public function getSkinFileL10nDataProvider()
     {
         return array(
             'general skin file' => array(
-                'fixture_script.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin', 'en_US', null,
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/fixture_script.js"
+                'fixture_script.js', 'frontend', 'package', 'custom_theme2', 'en_US', null,
+                "%s/frontend/package/custom_theme2/fixture_script.js"
             ),
             'localized skin file' => array(
-                'fixture_script.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin', 'ru_RU', null,
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/locale/ru_RU/fixture_script.js",
+                'fixture_script.js', 'frontend', 'package', 'custom_theme2', 'ru_RU', null,
+                "%s/frontend/package/custom_theme2/locale/ru_RU/fixture_script.js",
             ),
             'general modular skin file' => array(
-                'fixture_script.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin', 'en_US',
+                'fixture_script.js', 'frontend', 'package', 'custom_theme2', 'en_US',
                 'Fixture_Module',
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/Fixture_Module/fixture_script.js",
+                "%s/frontend/package/custom_theme2/Fixture_Module/fixture_script.js",
             ),
             'localized modular skin file' => array(
-                'fixture_script.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin', 'ru_RU',
+                'fixture_script.js', 'frontend', 'package', 'custom_theme2', 'ru_RU',
                 'Fixture_Module',
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/locale/ru_RU/Fixture_Module/fixture_script.js",
+                "%s/frontend/package/custom_theme2/locale/ru_RU/Fixture_Module/fixture_script.js",
             ),
         );
     }
@@ -295,25 +290,24 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      * @param string $area
      * @param string $package
      * @param string $theme
-     * @param string $skin
      * @param string|null $expectedFilename
      *
      * @dataProvider getSkinFileJsLibDataProvider
      */
-    public function testGetSkinFileJsLib($file, $area, $package, $theme, $skin, $expectedFilename)
+    public function testGetSkinFileJsLib($file, $area, $package, $theme, $expectedFilename)
     {
-        $this->_testGetSkinFile($file, $area, $package, $theme, $skin, 'en_US', null, $expectedFilename);
+        $this->_testGetSkinFile($file, $area, $package, $theme, 'en_US', null, $expectedFilename);
     }
 
     public function getSkinFileJsLibDataProvider()
     {
         return array(
             'lib file in theme' => array(
-                'mage/script.js', 'frontend', 'package', 'custom_theme', 'theme_nested_skin',
-                "%s/frontend/package/custom_theme/skin/theme_nested_skin/mage/script.js",
+                'mage/script.js', 'frontend', 'package', 'custom_theme2',
+                "%s/frontend/package/custom_theme2/mage/script.js",
             ),
             'lib file in js lib' => array(
-                'mage/script.js', 'frontend', 'package', 'custom_theme', 'default',
+                'mage/script.js', 'frontend', 'package', 'custom_theme',
                 '%s/pub/js/mage/script.js',
             ),
         );

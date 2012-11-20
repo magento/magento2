@@ -37,7 +37,7 @@ $otherStore = Mage::app()->getStore('fixturestore')->getId();
 
 $queue = Mage::getModel('Mage_Newsletter_Model_Queue');
 $queue->setTemplateId($templateId)
-    ->setNewsletterText('{{skin url="images/logo.gif"}}')
+    ->setNewsletterText('{{view url="images/logo.gif"}}')
     ->setNewsletterSubject('Subject')
     ->setNewsletterSenderName('CustomerSupport')
     ->setNewsletterSenderEmail('support@example.com')

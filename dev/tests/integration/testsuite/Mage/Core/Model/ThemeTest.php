@@ -122,4 +122,46 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($defPreviewImageUrl, $themeModel->getPreviewImageUrl());
     }
+
+    /**
+     * Test is virtual
+     */
+    public function testIsVirtual()
+    {
+        $themeCollection = new Mage_Core_Model_Theme_Collection();
+        Mage::unregister('_singleton/Mage_Core_Model_Theme_Collection');
+        Mage::register('_singleton/Mage_Core_Model_Theme_Collection', $themeCollection);
+
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+        $themeModel->setData($this->_getThemeValidData());
+
+        $this->assertTrue($themeModel->isVirtual());
+
+        $themeCollection->addItem($themeModel);
+        $this->assertFalse($themeModel->isVirtual());
+    }
+
+
+    /**
+     * Test id deletable
+     *
+     * @dataProvider isDeletableDataProvider
+     */
+    public function testIsDeletable($isVirtual)
+    {
+        $themeModel = $this->getMock('Mage_Core_Model_Theme', array('isVirtual'), array(), '', false);
+        $themeModel->expects($this->once())
+            ->method('isVirtual')
+            ->will($this->returnValue($isVirtual));
+        $this->assertEquals($isVirtual, $themeModel->isDeletable());
+    }
+
+    /**
+     * @return array
+     */
+    public function isDeletableDataProvider()
+    {
+        return array(array(true), array(false));
+    }
 }

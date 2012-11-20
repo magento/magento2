@@ -35,23 +35,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento Installation Wizard') ?></title>
 
-    <link rel="icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
-    <link rel="shortcut icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+    <link rel="icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+    <link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
 
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery-1.7.1.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/ui/jquery-ui.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/head.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery.cookie.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/mage.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/translate.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-1.7.1.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/ui/jquery-ui.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/head.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.cookie.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/mage.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate.js') ?>"></script>
 
-    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Install::css/mage-js-style.css') ?>" type="text/css"
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('Mage_Install::css/mage-js-style.css') ?>" type="text/css"
           media="all"/>
-    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Install::css/validate.css') ?>" type="text/css"
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('Mage_Install::css/validate.css') ?>" type="text/css"
           media="all"/>
-    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/reset.css') ?>" type="text/css" media="all"/>
-    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/boxes.css') ?>" type="text/css" media="all"/>
-    <link rel="stylesheet" href="<?php echo $this->getSkinUrl('css/clears.css') ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/reset.css') ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/boxes.css') ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/clears.css') ?>" type="text/css" media="all"/>
     <?php echo $this->helper('Mage_Core_Helper_Js')->getTranslatorScript() ?>
 </head>
 
@@ -61,7 +61,7 @@
     <div class="header-top-container">
         <div class="header-top">
             <h1 id="logo">
-                <a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getSkinUrl('images/logo.gif') ?>"
+                <a href="<?php echo $this->getUrl('') ?>"><img src="<?php echo $this->getViewFileUrl('images/logo.gif') ?>"
                                                                title="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>"
                                                                alt="<?php echo Mage::helper('Mage_Install_Helper_Data')->__('Magento') ?>"/></a>
             </h1>

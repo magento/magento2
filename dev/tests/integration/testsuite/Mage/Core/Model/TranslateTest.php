@@ -39,7 +39,7 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
             'design_dir' => dirname(__FILE__) . '/_files/design',
         ));
         Mage::getDesign()->setArea('frontend')
-            ->setDesignTheme('test/default/default');
+            ->setDesignTheme('test/default');
     }
 
     public function setUp()

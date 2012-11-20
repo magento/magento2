@@ -127,8 +127,8 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
         $result = array();
         foreach (array('adminhtml', 'frontend', 'install') as $area) {
             $result[] = array($area, false, false);
-            foreach (Mage::getDesign()->getDesignEntitiesStructure($area, false) as $package => $themes) {
-                foreach (array_keys($themes) as $theme) {
+            foreach (Mage::getDesign()->getDesignEntitiesStructure($area) as $package => $themes) {
+                foreach ($themes as $theme) {
                     $result[] = array($area, $package, $theme);
                 }
             }

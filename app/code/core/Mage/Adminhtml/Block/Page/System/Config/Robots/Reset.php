@@ -31,7 +31,7 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Page_System_Config_Robots_Reset extends Mage_Adminhtml_Block_System_Config_Form_Field
+class Mage_Adminhtml_Block_Page_System_Config_Robots_Reset extends Mage_Backend_Block_System_Config_Form_Field
 {
     /*
      * Set template

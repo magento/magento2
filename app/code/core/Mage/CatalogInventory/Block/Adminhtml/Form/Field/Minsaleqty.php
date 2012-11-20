@@ -31,7 +31,8 @@
  * @package    Mage_CatalogInventory
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Minsaleqty extends Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
+class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Minsaleqty
+    extends Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
 {
     /**
      * @var Mage_CatalogInventory_Block_Adminhtml_Form_Field_Customergroup

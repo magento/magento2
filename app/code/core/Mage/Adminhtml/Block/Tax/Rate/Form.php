@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Tax_Rate_Form extends Mage_Adminhtml_Block_Widget_For
         $rateObject = new Varien_Object(Mage::getSingleton('Mage_Tax_Model_Calculation_Rate')->getData());
         $form = new Varien_Data_Form();
 
-        $countries = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Country')->toOptionArray();
+        $countries = Mage::getModel('Mage_Directory_Model_Config_Source_Country')->toOptionArray();
         unset($countries[0]);
 
         if (!$rateObject->hasTaxCountryId()) {

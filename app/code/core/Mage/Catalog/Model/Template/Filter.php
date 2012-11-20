@@ -75,18 +75,18 @@ class Mage_Catalog_Model_Template_Filter extends Varien_Filter_Template
     }
 
     /**
-     * Retrieve Skin URL directive
+     * Retrieve View URL directive
      *
      * @param array $construction
      * @return string
-     * @see Mage_Core_Model_Email_Template_Filter::skinDirective() method has been copypasted
+     * @see Mage_Core_Model_Email_Template_Filter::viewDirective() method has been copypasted
      */
-    public function skinDirective($construction)
+    public function viewDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
         $params['_absolute'] = $this->_useAbsoluteLinks;
 
-        $url = Mage::getDesign()->getSkinUrl($params['url'], $params);
+        $url = Mage::getDesign()->getViewFileUrl($params['url'], $params);
 
         return $url;
     }

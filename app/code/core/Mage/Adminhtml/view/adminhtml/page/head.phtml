@@ -26,12 +26,12 @@
 ?>
 <meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>"/>
 <title><?php echo htmlspecialchars(html_entity_decode($this->getTitle())) ?></title>
-<link rel="icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
-<link rel="shortcut icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
 
 <script type="text/javascript">
-    var BLANK_URL = '<?php echo $this->getSkinUrl('blank.html') ?>';
-    var BLANK_IMG = '<?php echo $this->getSkinUrl('spacer.gif') ?>';
+    var BLANK_URL = '<?php echo $this->getViewFileUrl('blank.html') ?>';
+    var BLANK_IMG = '<?php echo $this->getViewFileUrl('spacer.gif') ?>';
     var BASE_URL = '<?php echo $this->getUrl('*') ?>';
     var FORM_KEY = '<?php echo $this->getFormKey() ?>';
 </script>
@@ -47,7 +47,7 @@
 <?php endif; ?>
 
 <?php if($this->getCanLoadTinyMce()): // TinyMCE is broken when loaded through index.php ?>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('tiny_mce/tiny_mce.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
 <?php endif; ?>
 
 <script type="text/javascript">

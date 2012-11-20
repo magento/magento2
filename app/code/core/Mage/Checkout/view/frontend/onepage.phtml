@@ -27,8 +27,8 @@
 <div class="page-title">
     <h1><?php echo $this->__('Checkout') ?></h1>
 </div>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('Mage_Checkout::onepage/accordion.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('Mage_Checkout::opcheckout.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getViewFileUrl('Mage_Checkout::onepage/accordion.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getViewFileUrl('Mage_Checkout::opcheckout.js') ?>"></script>
 <ol class="opc" id="checkoutSteps">
 <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
 <?php if (!$this->getChildBlock($_stepId) || !$this->getChildBlock($_stepId)->isShow()): continue; endif; $i++ ?>

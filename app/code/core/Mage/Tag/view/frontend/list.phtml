@@ -53,12 +53,12 @@
     <p class="note"><?php echo $this->__("Use spaces to separate tags. Use single quotes (') for phrases.") ?></p>
     <script type="text/javascript">
         (function($) {
-            head.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>",
-                "<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>",
-                "<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>",
-                "<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>",
-                "<?php echo $this->getSkinUrl('mage/validation/validate.js')?>",
-                "<?php echo $this->getSkinUrl('Mage_Tag::list.js')?>", function() {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Tag::list.js')?>", function() {
                     $('#addTagForm').tags();
                 }
             )

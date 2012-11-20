@@ -32,7 +32,7 @@ class Mage_Widget_Adminhtml_Widget_InstanceControllerTest extends Mage_Adminhtml
         parent::setUp();
 
         $this->getRequest()->setParam('type', 'Mage_Cms_Block_Widget_Page_Link');
-        $this->getRequest()->setParam('package_theme', 'default-default');
+        $this->getRequest()->setParam('package_theme', 'default-demo');
     }
 
     public function testEditAction()

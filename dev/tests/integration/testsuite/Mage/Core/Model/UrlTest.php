@@ -325,6 +325,24 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor', $result);
     }
 
+    /**
+     * Note: isolation flushes the URL memory cache
+     * @magentoAppIsolation enabled
+     */
+    public function testGetUrlDoesntAddQueryParamsOnConsequentCalls()
+    {
+        $result = $this->_model->getUrl('catalog/product/view', array(
+            '_query' => 'foo=bar',
+            '_nosid' => 1,
+        ));
+        $this->assertEquals('http://localhost/index.php/catalog/product/view/?foo=bar', $result);
+        $result = $this->_model->getUrl('catalog/product/view', array(
+            '_nosid' => 1,
+        ));
+        $this->assertEquals('http://localhost/index.php/catalog/product/view/', $result);
+    }
+
+
     public function testEscape()
     {
         $this->assertEquals('%22%27%3E%3C', $this->_model->escape('"\'><'));

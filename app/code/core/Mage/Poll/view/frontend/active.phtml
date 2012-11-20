@@ -46,7 +46,7 @@
             <script type="text/javascript">
                 //<![CDATA[
                 (function($) {
-                    head.js("<?php echo $this->getSkinUrl('Mage_Poll::poll.js')?>", function() {
+                    head.js("<?php echo $this->getViewFileUrl('Mage_Poll::poll.js')?>", function() {
                         $('#pollForm').poll({pollAnswersSelector: '#poll-answers', pollCheckedOption: 'input.poll_vote:checked'});
                     });
                 })(jQuery);

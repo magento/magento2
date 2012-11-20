@@ -67,7 +67,7 @@ class Mage_Core_Model_Variable_Config
     public function getWysiwygJsPluginSrc()
     {
         $editorPluginJs = 'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentovariable/editor_plugin.js';
-        return Mage::getDesign()->getSkinUrl($editorPluginJs);
+        return Mage::getDesign()->getViewFileUrl($editorPluginJs);
     }
 
     /**
@@ -77,6 +77,6 @@ class Mage_Core_Model_Variable_Config
      */
     public function getVariablesWysiwygActionUrl()
     {
-        return Mage::getSingleton('Mage_Adminhtml_Model_Url')->getUrl('*/system_variable/wysiwygPlugin');
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('*/system_variable/wysiwygPlugin');
     }
 }

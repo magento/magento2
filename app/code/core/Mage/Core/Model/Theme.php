@@ -95,7 +95,7 @@ class Mage_Core_Model_Theme extends Mage_Core_Model_Abstract
      */
     public function getCollectionFromFilesystem()
     {
-        return Mage::getModel('Mage_Core_Model_Theme_Collection');
+        return Mage::getSingleton('Mage_Core_Model_Theme_Collection');
     }
 
     /**
@@ -159,14 +159,35 @@ class Mage_Core_Model_Theme extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Check theme is existing in filesystem
+     * Check is theme deletable
      *
      * @return bool
      */
     public function isDeletable()
     {
+        return $this->isVirtual();
+    }
+
+    /**
+     * Check theme is existing in filesystem
+     *
+     * @return bool
+     */
+    public function isVirtual()
+    {
         $collection = $this->getCollectionFromFilesystem()->addDefaultPattern()->getItems();
         return !($this->getThemePath() && isset($collection[$this->getThemePath()]));
+    }
+
+    /**
+     * Check is theme has child themes
+     *
+     * @return bool
+     */
+    public function hasChildThemes()
+    {
+        $childThemes = $this->getCollection()->addFieldToFilter('parent_id', array('eq' => $this->getId()))->load();
+        return count($childThemes) > 0;
     }
 
     /**
@@ -416,44 +437,25 @@ class Mage_Core_Model_Theme extends Mage_Core_Model_Abstract
      */
     protected function _getPreviewImageDefaultUrl()
     {
-        return Mage::getDesign()->getSkinUrl('Mage_Core::theme/default_preview.jpg');
+        return Mage::getDesign()->getViewFileUrl('Mage_Core::theme/default_preview.jpg');
     }
 
     /**
-     * Get skin list
+     * Theme registration
      *
-     * @return array
+     * @param string $pathPattern
+     * @return Mage_Core_Model_Theme
      */
-    public function getSkinList()
+    public function themeRegistration($pathPattern)
     {
-        $result = array();
-        $skinPaths = glob($this->_getSkinFolderPattern(), GLOB_ONLYDIR);
-
-        foreach ($skinPaths as $skinPath) {
-            $skinPath = str_replace(DS, '/', $skinPath);
-            if (preg_match('/\/(?P<skin>[^\/.]+)$/i', $skinPath, $skinMatches)) {
-                $result[$skinMatches['skin']] = implode('/', array(
-                    $this->getThemePath(),
-                    $skinMatches['skin']
-                ));
-            }
+        if ($pathPattern) {
+            $this->getCollectionFromFilesystem()->addTargetPattern($pathPattern);
+        } else {
+            $this->getCollectionFromFilesystem()->addDefaultPattern();
         }
-        return $result;
-    }
+        $this->getCollectionFromFilesystem()->themeRegistration();
+        $this->getCollection()->checkParentInThemes();
 
-    /**
-     * Get skin folder pattern
-     *
-     * @return string
-     */
-    protected function _getSkinFolderPattern()
-    {
-        return implode(DS, array(
-            Mage::getBaseDir('design'),
-            Mage_Core_Model_Design_Package::DEFAULT_AREA,
-            $this->getThemePath(),
-            'skin',
-            '*'
-        ));
+        return $this;
     }
 }

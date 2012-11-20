@@ -29,7 +29,7 @@
  * Abstract class for downloadable tab tests
  */
 class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_TestCaseAbstract
-    extends Magento_Test_TestCase_ObjectManagerAbstract
+    extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links

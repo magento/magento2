@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Adminhtml_Block_Page_System_Config_Robots_Reset
  */
-class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Adminhtml_Block_Page_System_Config_Robots_Reset
@@ -42,7 +42,14 @@ class Mage_Adminhtml_Block_Page_System_Config_Robots_ResetTest extends Magento_T
 
     protected function setUp()
     {
-        $this->_resetRobotsBlock = $this->getBlock('Mage_Adminhtml_Block_Page_System_Config_Robots_Reset');
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_resetRobotsBlock = $objectManagerHelper->getBlock(
+            'Mage_Adminhtml_Block_Page_System_Config_Robots_Reset',
+            array(
+                'application' => $this->getMock('Mage_Core_Model_App', array(), array(), '', false),
+                'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
+            )
+        );
         $this->_mockRobotsHelper = $this->getMockBuilder('Mage_Page_Helper_Robots')
             ->setMethods(array('getRobotsDefaultCustomInstructions'))
             ->getMock();

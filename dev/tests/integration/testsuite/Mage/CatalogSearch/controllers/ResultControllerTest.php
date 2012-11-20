@@ -29,7 +29,7 @@ class Mage_CatalogSearch_ResultControllerTest extends Magento_Test_TestCase_Cont
 {
     /**
      * @magentoDataFixture Mage/CatalogSearch/_files/query.php
-     * @magentoConfigFixture current_store design/theme/full_name default/default/default
+     * @magentoConfigFixture current_store design/theme/full_name default/demo
      * @magentoConfigFixture current_store general/locale/code de_DE
      */
     public function testIndexActionTranslation()

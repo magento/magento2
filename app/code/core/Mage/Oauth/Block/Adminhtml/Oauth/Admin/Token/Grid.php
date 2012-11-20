@@ -87,8 +87,8 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Admin_Token_Grid extends Mage_Adminhtml_B
             'escape'    => true,
         ));
 
-        /** @var $sourceYesNo Mage_Adminhtml_Model_System_Config_Source_Yesno */
-        $sourceYesNo = Mage::getSingleton('Mage_Adminhtml_Model_System_Config_Source_Yesno');
+        /** @var $sourceYesNo Mage_Backend_Model_Config_Source_Yesno */
+        $sourceYesNo = Mage::getSingleton('Mage_Backend_Model_Config_Source_Yesno');
         $this->addColumn('revoked', array(
             'header'    => $this->__('Revoked'),
             'index'     => 'revoked',

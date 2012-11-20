@@ -124,4 +124,16 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
             }
         }
     }
+
+    /**
+     * Processing block html after rendering
+     *
+     * @param   string $html
+     * @return  string
+     */
+    protected function _afterToHtml($html)
+    {
+        Magento_Profiler::stop('customer/tabs');
+        return parent::_afterToHtml($html);
+    }
 }

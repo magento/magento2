@@ -29,6 +29,9 @@ class Mage_Rss_Block_Order_StatusTest extends PHPUnit_Framework_TestCase
 {
     public function testToHtml()
     {
+        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            $this->markTestIncomplete('bug: MAGETWO-4227');
+        }
         $block = Mage::app()->getLayout()->createBlock('Mage_Rss_Block_Order_Status');
         $this->assertEmpty($block->toHtml());
 

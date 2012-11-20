@@ -112,7 +112,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_General
                 'value' => $model->getType(),
         ));
 
-        $yesNoValues = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray();
+        $yesNoValues = Mage::getModel('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray();
 
         $fieldset->addField('browsing_mode', 'select', array(
             'label'     => $this->__('Catalog Only App?'),

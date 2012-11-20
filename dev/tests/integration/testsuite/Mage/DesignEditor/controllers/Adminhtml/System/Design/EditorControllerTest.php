@@ -43,7 +43,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
         $theme->setData(array(
             'package_title'        => 'Default',
             'parent_id'            => null,
-            'theme_path'           => 'default/default',
+            'theme_path'           => 'default/demo',
             'theme_version'        => '2.0.0.0',
             'theme_title'          => 'Default',
             'magento_version_from' => '2.0.0.0-dev1',
@@ -114,7 +114,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
     {
         $session = Mage::getModel('Mage_DesignEditor_Model_Session');
         $this->assertFalse($session->isDesignEditorActive());
-        $this->getRequest()->setParam('theme_skin', 'default/default/default');
         $this->getRequest()->setParam('theme_id', self::$_themeId);
         $this->dispatch('backend/admin/system_design_editor/launch');
         $this->assertTrue($session->isDesignEditorActive());

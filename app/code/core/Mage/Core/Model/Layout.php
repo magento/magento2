@@ -212,7 +212,12 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      */
     public function __destruct()
     {
+        if (isset($this->_update) && is_object($this->_update)) {
+            $this->_update->__destruct();
+            $this->_update = null;
+        }
         $this->_blocks = array();
+        $this->_xml = null;
     }
 
     /**

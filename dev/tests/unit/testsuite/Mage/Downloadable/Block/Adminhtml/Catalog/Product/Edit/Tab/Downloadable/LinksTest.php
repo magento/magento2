@@ -32,8 +32,12 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     {
         parent::setUp();
 
-        $this->_block = $this->getBlock(
-            'Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links'
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_block = $objectManagerHelper->getBlock(
+            'Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links',
+            array(
+                'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
+            )
         );
     }
 

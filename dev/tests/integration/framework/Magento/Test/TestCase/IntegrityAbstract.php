@@ -72,40 +72,21 @@ abstract class Magento_Test_TestCase_IntegrityAbstract extends PHPUnit_Framework
     }
 
     /**
-     * Returns flat array of skins currently located in system
-     *
-     * @return array
-     */
-    protected function _getDesignSkins()
-    {
-        $result = array();
-        foreach (array('adminhtml', 'frontend', 'install') as $area) {
-            $entities = Mage::getDesign()->getDesignEntitiesStructure($area, false);
-            foreach ($entities as $package => $themes) {
-                foreach ($themes as $theme => $skins) {
-                    foreach (array_keys($skins) as $skin) {
-                        $result[] = "{$area}/{$package}/{$theme}/{$skin}";
-                    }
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Returns design themes, present in system
+     * Returns flat array of themes currently located in system
      *
      * @return array
      */
     protected function _getDesignThemes()
     {
         $result = array();
-        foreach ($this->_getDesignSkins() as $skin) {
-            list ($area, $package, $theme) = explode('/', $skin);
-            $view = "{$area}/{$package}/{$theme}";
-            $result[$view] = $view;
+        foreach (array('adminhtml', 'frontend', 'install') as $area) {
+            $entities = Mage::getDesign()->getDesignEntitiesStructure($area);
+            foreach ($entities as $package => $themes) {
+                foreach ($themes as $theme) {
+                    $result[] = "{$area}/{$package}/{$theme}";
+                }
+            }
         }
-        $result = array_values($result); // Return flat array without some special keys
         return $result;
     }
 }

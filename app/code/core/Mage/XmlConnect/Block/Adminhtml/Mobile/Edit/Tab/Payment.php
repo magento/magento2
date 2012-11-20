@@ -60,7 +60,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Payment
         $this->setForm($form);
 
         $data = Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication()->getFormData();
-        $yesNoValues = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray();
+        $yesNoValues = Mage::getModel('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray();
 
         $fieldset = $form->addFieldset('onepage_checkout', array('legend' => $this->__('Standard Checkout')));
 
@@ -145,7 +145,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Payment
                         'value' => $paypalMepAllow
                 ));
 
-                $countries = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Country')->toOptionArray(true);
+                $countries = Mage::getModel('Mage_Directory_Model_Config_Source_Country')->toOptionArray(true);
 
                 if (empty($data['config_data[payment][paypalmep/allowspecific]'])) {
                     $countrySelected = array();

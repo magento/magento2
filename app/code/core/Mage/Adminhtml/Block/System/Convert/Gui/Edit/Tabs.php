@@ -57,11 +57,11 @@ class Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tabs extends Mage_Adminhtml_B
         ));
 
         if (!$new) {
-            if ($profile->getDirection()!='export') {
+            if ($profile->getDirection() != 'export') {
                 $this->addTab('upload', array(
                     'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Upload File'),
-                    'content'   => $this->getLayout()
-                        ->createBlock('Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Upload')->toHtml(),
+                    'content'   => $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Form')
+                        ->setTemplate('system/convert/profile/upload.phtml')->toHtml(),
                 ));
             }
 

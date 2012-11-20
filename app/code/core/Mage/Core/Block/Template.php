@@ -300,7 +300,7 @@ HTML;
     public function getBaseUrl()
     {
         if (!$this->_baseUrl) {
-            $this->_baseUrl = $this->_getUrlModel()->getBaseUrl();
+            $this->_baseUrl = $this->_urlBuilder->getBaseUrl();
         }
         return $this->_baseUrl;
     }

@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Eav_Model_Entity_Attribute_Set
  */
-class Mage_Eav_Model_Entity_Attribute_SetTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Eav_Model_Entity_Attribute_SetTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Eav_Model_Entity_Attribute_Set
@@ -48,7 +48,8 @@ class Mage_Eav_Model_Entity_Attribute_SetTest extends Magento_Test_TestCase_Obje
             'resource'  => $resource,
             'data'      => array('helper' => $helper)
         );
-        $this->_model = $this->getModel('Mage_Eav_Model_Entity_Attribute_Set', $arguments);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getModel('Mage_Eav_Model_Entity_Attribute_Set', $arguments);
     }
 
     protected function tearDown()

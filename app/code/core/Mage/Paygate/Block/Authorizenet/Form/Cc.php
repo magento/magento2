@@ -70,7 +70,7 @@ class Mage_Paygate_Block_Authorizenet_Form_Cc extends Mage_Payment_Block_Form
      */
     public function getAdminCancelUrl()
     {
-        return Mage::getModel('Mage_Adminhtml_Model_Url')->getUrl('adminhtml/paygate_authorizenet_payment/cancel');
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/paygate_authorizenet_payment/cancel');
     }
 
     /**

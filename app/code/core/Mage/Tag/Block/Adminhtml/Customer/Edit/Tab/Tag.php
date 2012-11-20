@@ -58,12 +58,14 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Model_Layout $layout
      * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
      * @param Mage_Core_Model_Translate $translator
      * @param Mage_Core_Model_Cache $cache
      * @param Mage_Core_Model_Design_Package $designPackage
      * @param Mage_Core_Model_Session $session
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
      * @param Mage_Core_Model_Authorization $authSession
      * @param array $data
      *
@@ -72,17 +74,19 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
     public function __construct(Mage_Core_Controller_Request_Http $request,
         Mage_Core_Model_Layout $layout,
         Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Backend_Model_Url $urlBuilder,
         Mage_Core_Model_Translate $translator,
         Mage_Core_Model_Cache $cache,
         Mage_Core_Model_Design_Package $designPackage,
         Mage_Core_Model_Session $session,
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
         Mage_Core_Model_Authorization $authSession,
         array $data = array()
     ) {
-        parent::__construct($request, $layout, $eventManager, $translator, $cache, $designPackage, $session,
-            $storeConfig, $frontController, $data
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data
         );
 
         $this->_authSession = $authSession;

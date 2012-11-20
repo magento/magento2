@@ -61,7 +61,7 @@
             },
             sequentialUploads: true,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: <?php echo $this->getDataMaxSizeInBytes() ?>,
+            maxFileSize: <?php echo Mage::helper('Mage_Core_Helper_File_Storage')->getMaxFileSize(); ?>,
             add: function(e, data) {
                 $.each(data.files, function (index, file) {
                     data.fileId =  Math.random().toString(36).substr(2,9);
@@ -104,7 +104,7 @@
                 {
                     action: 'load',
                     fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: <?php echo $this->getDataMaxSizeInBytes() ?> * 10
+                    maxFileSize: <?php echo Mage::helper('Mage_Core_Helper_File_Storage')->getMaxFileSize() ?> * 10
                 },
                 {
                     action: 'resize',

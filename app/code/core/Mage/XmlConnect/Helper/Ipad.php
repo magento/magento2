@@ -131,22 +131,22 @@ class Mage_XmlConnect_Helper_Ipad extends Mage_Core_Helper_Abstract
             $this->_tabs = array(
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Home'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_home.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_home.png'),
                     'action' => 'Home',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Search'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_search.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_search.png'),
                     'action' => 'Search',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Cart'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_cart.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_cart.png'),
                     'action' => 'Cart',
                 ),
                 array(
                     'label' => Mage::helper('Mage_XmlConnect_Helper_Data')->__('Account'),
-                    'image' => $design->getSkinUrl('Mage_XmlConnect::images/tab_account_ipad.png'),
+                    'image' => $design->getViewFileUrl('Mage_XmlConnect::images/tab_account_ipad.png'),
                     'action' => 'Account',
                 ),
             );

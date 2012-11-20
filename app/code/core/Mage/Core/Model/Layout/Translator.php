@@ -27,9 +27,9 @@
 class Mage_Core_Model_Layout_Translator
 {
     /**
-     * @var Mage_Core_Model_Helper_Registry
+     * @var Mage_Core_Model_Factory_Helper
      */
-    protected $_helperRegistry;
+    protected $_helperFactory;
 
     /**
      * @param array $data
@@ -37,13 +37,13 @@ class Mage_Core_Model_Layout_Translator
      */
     public function __construct(array $data = array())
     {
-        $this->_helperRegistry = isset($data['helperRegistry']) ?
+        $this->_helperFactory = isset($data['helperRegistry']) ?
             $data['helperRegistry'] :
-            Mage::getSingleton('Mage_Core_Model_Helper_Registry');
+            Mage::getSingleton('Mage_Core_Model_Factory_Helper');
 
-        if (false === ($this->_helperRegistry instanceof Mage_Core_Model_Helper_Registry)) {
+        if (false === ($this->_helperFactory instanceof Mage_Core_Model_Factory_Helper)) {
             throw new InvalidArgumentException(
-                'helperRegistry object has to instance of Mage_Core_Model_Helper_Registry'
+                'helperFactory object has to instance of Mage_Core_Model_Factory_Helper'
             );
         }
     }
@@ -182,6 +182,6 @@ class Mage_Core_Model_Layout_Translator
      */
     protected function _translateValue($value, $moduleName)
     {
-        return $this->_helperRegistry->get($moduleName)->__($value);
+        return $this->_helperFactory->get($moduleName)->__($value);
     }
 }

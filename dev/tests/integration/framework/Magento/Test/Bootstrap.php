@@ -246,15 +246,18 @@ class Magento_Test_Bootstrap
      */
     public function initialize()
     {
-        $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
-        $this->_resetApp();
-        if ($resource) {
-            Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
-        }
-
         Mage::setIsDeveloperMode($this->_isDeveloperMode);
         Mage::$headersSentThrowsException = false;
         Mage::app('', 'store', $this->_options);
+    }
+
+    /**
+     * Initialize an already installed Magento application
+     */
+    public function reinitialize()
+    {
+        $this->resetApp();
+        $this->initialize();
     }
 
     /**
@@ -285,18 +288,22 @@ class Magento_Test_Bootstrap
     /**
      * Reset application global state
      */
-    protected function _resetApp()
+    public function resetApp()
     {
-        /** @var $layout Mage_Core_Model_Layout */
-        $layout = Mage::registry('_singleton/Mage_Core_Model_Layout');
-        if ($layout) {
-            /* Force to cleanup circular references */
-            $layout->__destruct();
-        }
+        /** @var $objectManager Magento_Test_ObjectManager */
+        $objectManager = Mage::getObjectManager();
+        $objectManager->clearCache();
+
+        $resource = Mage::registry('_singleton/Mage_Core_Model_Resource');
+
         Mage::reset();
         Varien_Data_Form::setElementRenderer(null);
         Varien_Data_Form::setFieldsetRenderer(null);
         Varien_Data_Form::setFieldsetElementRenderer(null);
+
+        if ($resource) {
+            Mage::register('_singleton/Mage_Core_Model_Resource', $resource);
+        }
     }
 
     /**
@@ -455,7 +462,7 @@ class Magento_Test_Bootstrap
         $this->_ensureDirExists($this->_installDir);
         $this->_ensureDirExists($this->_installEtcDir);
         $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'media');
-        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'skin');
+        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'theme');
 
         /* Copy *.xml configuration files */
         $dirs = array(
@@ -544,6 +551,7 @@ class Magento_Test_Bootstrap
      */
     protected function _createAdminUser()
     {
+        /** @var $user Mage_User_Model_User */
         $user = mage::getModel('Mage_User_Model_User');
         $user->setData(array(
             'firstname' => 'firstname',
@@ -555,9 +563,11 @@ class Magento_Test_Bootstrap
         ));
         $user->save();
 
+        /** @var $roleAdmin Mage_User_Model_Role */
         $roleAdmin = Mage::getModel('Mage_User_Model_Role');
         $roleAdmin->load(self::ADMIN_ROLE_NAME, 'role_name');
 
+        /** @var $roleUser Mage_User_Model_Role */
         $roleUser = Mage::getModel('Mage_User_Model_Role');
         $roleUser->setData(array(
             'parent_id'  => $roleAdmin->getId(),

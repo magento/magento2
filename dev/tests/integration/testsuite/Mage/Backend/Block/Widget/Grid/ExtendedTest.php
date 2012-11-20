@@ -52,6 +52,12 @@ class Mage_Backend_Block_Widget_Grid_ExtendedTest extends PHPUnit_Framework_Test
         );
     }
 
+    protected function tearDown()
+    {
+        unset($this->_layoutMock);
+        unset($this->_block);
+    }
+
     public function testAddColumnAddsChildToColumnSet()
     {
         $this->assertInstanceOf(
@@ -76,5 +82,11 @@ class Mage_Backend_Block_Widget_Grid_ExtendedTest extends PHPUnit_Framework_Test
         $this->_block->sortColumnsByOrder();
         $columnNames = $this->_block->getLayout()->getChildNames($this->_block->getColumnSet()->getNameInLayout());
         $this->assertEquals($this->_block->getColumn('column2')->getNameInLayout(), $columnNames[0]);
+    }
+
+    public function testGetMainButtonsHtmlReturnsEmptyStringIfFiltersArentVisible()
+    {
+        $this->_block->setFilterVisibility(false);
+        $this->assertEquals('', $this->_block->getMainButtonsHtml());
     }
 }

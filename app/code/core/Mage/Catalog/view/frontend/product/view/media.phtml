@@ -43,14 +43,14 @@
 </p>
 <p class="zoom-notice" id="track_hint"><?php echo $this->__('Double click on above image to view full picture') ?></p>
 <div class="zoom no-bg">
-    <img id="zoom_out" src="<?php echo $this->getSkinUrl('images/slider_btn_zoom_out.gif') ?>" alt="<?php echo $this->__('Zoom Out') ?>" title="<?php echo $this->__('Zoom Out') ?>" class="btn-zoom-out" />
+    <img id="zoom_out" src="<?php echo $this->getViewFileUrl('images/slider_btn_zoom_out.gif') ?>" alt="<?php echo $this->__('Zoom Out') ?>" title="<?php echo $this->__('Zoom Out') ?>" class="btn-zoom-out" />
     <div id="slider"></div>
-    <img id="zoom_in" src="<?php echo $this->getSkinUrl('images/slider_btn_zoom_in.gif') ?>" alt="<?php echo $this->__('Zoom In') ?>" title="<?php echo $this->__('Zoom In') ?>" class="btn-zoom-in" />
+    <img id="zoom_in" src="<?php echo $this->getViewFileUrl('images/slider_btn_zoom_in.gif') ?>" alt="<?php echo $this->__('Zoom In') ?>" title="<?php echo $this->__('Zoom In') ?>" class="btn-zoom-in" />
 </div>
 <script type="text/javascript">
 //<![CDATA[
 (function ($) {
-    $.mage.load.css("<?php echo $this->getSkinUrl('Mage_Catalog::zoom.css') ?>");
+    $.mage.load.css("<?php echo $this->getViewFileUrl('Mage_Catalog::zoom.css') ?>");
     $.mage.event.observe('mage.zoom.initialize', function (event, initData) {
         initData.imageSelector = '#image',
         initData.sliderSelector = '#slider',
@@ -58,7 +58,7 @@
         initData.zoomInSelector = '#zoom_in',
         initData.zoomOutSelector = '#zoom_out'
     });
-    $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/zoom.js') ?>");
+    $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/zoom.js') ?>");
 })(jQuery);
 //]]>
 </script>
@@ -84,8 +84,8 @@
 </div>
 <script type="text/javascript">
     (function($) {
-        $.mage.load.jsSync("<?php echo $this->getSkinUrl('jquery/jquery.popupwindow.js')?>");
-        $.mage.load.jsSync("<?php echo $this->getSkinUrl('mage/popup-window.js')?>");
+        $.mage.load.jsSync("<?php echo $this->getViewFileUrl('jquery/jquery.popupwindow.js')?>");
+        $.mage.load.jsSync("<?php echo $this->getViewFileUrl('mage/popup-window.js')?>");
     })(jQuery);
 </script>
 <?php endif; ?>

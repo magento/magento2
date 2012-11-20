@@ -44,7 +44,7 @@ $_attributes = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getAl
     </dl>
     <script type="text/javascript">
         (function ($) {
-            head.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/configurable.js') ?>", function () {
+            head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/configurable.js') ?>", function () {
                 $.mage.configurable({"spConfig":<?php echo $this->getJsonConfig() ?>, "priceOptionInstance": priceOptionInstance});
             })
         })(jQuery);

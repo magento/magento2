@@ -51,12 +51,14 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
         'Mage_Core_Controller_Request_Http',
         'Mage_Core_Model_Layout',
         'Mage_Core_Model_Event_Manager',
+        'Mage_Backend_Model_Url',
         'Mage_Core_Model_Translate',
         'Mage_Core_Model_Cache',
         'Mage_Core_Model_Design_Package',
         'Mage_Core_Model_Session',
         'Mage_Core_Model_Store_Config',
         'Mage_Core_Controller_Varien_Front',
+        'Mage_Core_Model_Factory_Helper',
         'Mage_Backend_Helper_Data',
         'Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory',
     );
@@ -110,5 +112,11 @@ class Mage_Backend_Block_Widget_GridTest extends PHPUnit_Framework_TestCase
         $this->_block->setColumnFilters(array('filter' => 'Filter_Class'));
         $this->_block->setSortable(false);
         $this->_block->toHtml();
+    }
+
+    public function testGetMainButtonsHtmlReturnsEmptyStringIfFiltersArentVisible()
+    {
+        $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->will($this->returnValue(false));
+        $this->_block->getMainButtonsHtml();
     }
 }

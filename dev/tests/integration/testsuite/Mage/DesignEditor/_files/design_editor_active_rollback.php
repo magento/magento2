@@ -32,7 +32,6 @@ $auth->setAuthStorage($session);
 $session->deactivateDesignEditor();
 $auth->logout();
 $session->unsThemeId();
-$session->unsSkin();
 /** @var $theme Mage_Core_Model_Theme */
 $theme = Mage::getModel('Mage_Core_Model_Theme');
 $theme->load($session->getThemeId())->delete();

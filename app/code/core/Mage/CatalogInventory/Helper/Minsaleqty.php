@@ -107,7 +107,7 @@ class Mage_CatalogInventory_Helper_Minsaleqty
     }
 
     /**
-     * Encode value to be used in Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
+     * Encode value to be used in Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
      *
      * @param array
      * @return array
@@ -126,7 +126,7 @@ class Mage_CatalogInventory_Helper_Minsaleqty
     }
 
     /**
-     * Decode value from used in Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
+     * Decode value from used in Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
      *
      * @param array
      * @return array
@@ -173,7 +173,7 @@ class Mage_CatalogInventory_Helper_Minsaleqty
     }
 
     /**
-     * Make value readable by Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
+     * Make value readable by Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
      *
      * @param mixed $value
      * @return array

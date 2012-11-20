@@ -34,7 +34,6 @@
         <target name="magelib" label="Magento PHP Library file" uri="./lib" />
         <target name="magelocale" label="Magento Locale language file" uri="./app/locale" />
         <target name="magemedia" label="Magento Media library" uri="./media" />
-        <target name="mageskin" label="Magento Theme Skin (Images, CSS, JS)" uri="./skin" />
         <target name="mageweb" label="Magento Other web accessible file" uri="." />
         <target name="magetest" label="Magento PHPUnit test" uri="./tests" />
         <target name="mage" label="Magento other" uri="." />

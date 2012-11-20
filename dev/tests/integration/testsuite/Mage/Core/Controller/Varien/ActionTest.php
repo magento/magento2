@@ -276,9 +276,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture               install/design/theme/full_name   default/default/default
-     * @magentoConfigFixture               adminhtml/design/theme/full_name default/default/default
-     * @magentoConfigFixture current_store design/theme/full_name           default/iphone/default
+     * @magentoConfigFixture               install/design/theme/full_name   default/basic
+     * @magentoConfigFixture               adminhtml/design/theme/full_name default/basic
+     * @magentoConfigFixture current_store design/theme/full_name           default/demo
      * @magentoAppIsolation  enabled
      *
      * @dataProvider controllerAreaDesignDataProvider
@@ -309,9 +309,9 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     public function controllerAreaDesignDataProvider()
     {
         return array(
-            'install'  => array('Mage_Install_Controller_Action',    'install',   'default', 'default/default/default'),
-            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend',  'default', 'default/iphone/default'),
-            'backend'  => array('Mage_Adminhtml_Controller_Action',  'adminhtml', 'admin',   'default/default/default'),
+            'install'  => array('Mage_Install_Controller_Action',    'install',   'default', 'default/basic'),
+            'frontend' => array('Mage_Core_Controller_Front_Action', 'frontend',  'default', 'default/demo'),
+            'backend'  => array('Mage_Adminhtml_Controller_Action',  'adminhtml', 'admin',   'default/basic'),
             'api'      => array('Mage_Api_Controller_Action',        'adminhtml', 'admin',   ''),
         );
     }

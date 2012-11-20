@@ -62,4 +62,5 @@ return array(
     $this->_getRule('TYPE_LONGVARBINARY', null, 'Varien_Db_Ddl_Table::TYPE_BLOB'),
     $this->_getRule('HASH_ALGO'),
     $this->_getRule('SEESION_MAX_COOKIE_LIFETIME'),
+    $this->_getRule('URL_TYPE_SKIN'),
 );

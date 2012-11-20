@@ -28,7 +28,7 @@
 /**
  * Test theme model
  */
-class Mage_Core_Model_ThemeTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test load from configuration
@@ -39,8 +39,9 @@ class Mage_Core_Model_ThemeTest extends Magento_Test_TestCase_ObjectManagerAbstr
     {
         $themePath = implode(DIRECTORY_SEPARATOR, array(__DIR__, '_files', 'theme', 'theme.xml'));
 
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         /** @var $themeMock Mage_Core_Model_Theme */
-        $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+        $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
         $themeMock = $this->getMock('Mage_Core_Model_Theme', array('_init'), $arguments, '', true);
         $themeMock->loadFromConfiguration($themePath);
 
@@ -56,9 +57,10 @@ class Mage_Core_Model_ThemeTest extends Magento_Test_TestCase_ObjectManagerAbstr
     public function testLoadInvalidConfiguration()
     {
         $themePath = implode(DIRECTORY_SEPARATOR, array(__DIR__, '_files', 'theme', 'theme_invalid.xml'));
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
 
         /** @var $themeMock Mage_Core_Model_Theme */
-        $arguments = $this->_getConstructArguments(self::MODEL_ENTITY);
+        $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
         $themeMock = $this->getMock('Mage_Core_Model_Theme', array('_init'), $arguments, '', true);
         $themeMock->loadFromConfiguration($themePath);
 

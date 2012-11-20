@@ -389,7 +389,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         Magento_Profiler::start('load_modules_configuration');
         $resourceConfig = sprintf('config.%s.xml', $this->getResourceConnectionModel('core'));
         $this->loadModulesConfiguration(array('config.xml',$resourceConfig), $this);
-        Magento_Profiler::start('load_modules_configuration');
+        Magento_Profiler::stop('load_modules_configuration');
 
         /**
          * Prevent local.xml directives overwriting
@@ -1665,5 +1665,18 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     {
         $this->_currentAreaCode = $areaCode;
         return $this;
+    }
+
+    /**
+     * Cleanup circular references
+     *
+     * Destructor should be called explicitly in order to work around the PHP bug
+     * https://bugs.php.net/bug.php?id=62468
+     */
+    public function __destruct()
+    {
+        $this->_cacheLoadedSections = array();
+
+        parent::__destruct();
     }
 }

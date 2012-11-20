@@ -38,7 +38,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         Mage::getConfig()->setOptions(array(
             'design_dir' => dirname(dirname(__FILE__)) . '/_files/design',
         ));
-        Mage::getDesign()->setDesignTheme('test/default/default');
+        Mage::getDesign()->setDesignTheme('test/default');
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
 

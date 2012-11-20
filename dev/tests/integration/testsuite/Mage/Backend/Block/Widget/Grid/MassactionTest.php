@@ -43,7 +43,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         Mage::getConfig()->setOptions(array(
             'design_dir' => realpath( __DIR__ . '/../../_files/design'),
         ));
-        Mage::getDesign()->setDesignTheme('test/default/default', 'adminhtml');
+        Mage::getDesign()->setDesignTheme('test/default', 'adminhtml');
 
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');

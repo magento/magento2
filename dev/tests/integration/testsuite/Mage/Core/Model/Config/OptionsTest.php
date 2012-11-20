@@ -103,7 +103,6 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getSessionDir
      * @covers Mage_Core_Model_Config_Options::getUploadDir
      * @covers Mage_Core_Model_Config_Options::getExportDir
-     * @covers Mage_Core_Model_Config_Options::getSkinDir
      * @dataProvider getGettersDataProvider
      * @param string $method
      * @param string $message

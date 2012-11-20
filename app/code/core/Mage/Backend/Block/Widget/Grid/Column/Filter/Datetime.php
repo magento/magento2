@@ -133,7 +133,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Datetime extends Mage_Backend
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: '. ( $this->getColumn()->getFilterTime() ? 'true' : 'false') .',
-                        buttonImage: "'. Mage::getDesign()->getSkinUrl('images/grid-cal.gif') . '",
+                        buttonImage: "'. Mage::getDesign()->getViewFileUrl('images/grid-cal.gif') . '",
                         buttonText: "'.$this->escapeHtml(Mage::helper('Mage_Backend_Helper_Data')->__('Date selector')).'",
                         from: {
                             id: "'.$htmlId.'_from"

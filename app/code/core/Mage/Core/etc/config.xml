@@ -177,6 +177,11 @@
                 </observers>
             </show_synchronize_message>
         </events>
+        <design>
+            <theme>
+                <full_name>default/basic</full_name>
+            </theme>
+        </design>
         <di>
             <preferences>
                 <Mage_Core_Model_Url>Mage_Backend_Model_Url</Mage_Core_Model_Url>
@@ -193,12 +198,17 @@
                 </Mage_Core>
             </modules>
         </translate>
+        <design>
+            <theme>
+                <full_name>default/basic</full_name>
+            </theme>
+        </design>
     </install>
     <default>
         <design>
             <theme>
-                <full_name>default/default/default</full_name>
-                <allow_skin_files_duplication>1</allow_skin_files_duplication>
+                <full_name>default/demo</full_name>
+                <allow_view_files_duplication>1</allow_view_files_duplication>
             </theme>
             <pagination>
                 <list_allow_all>1</list_allow_all>
@@ -242,7 +252,7 @@
                     <compiled_css_folder>css</compiled_css_folder>
                     <compiled_css_secure_folder>css_secure</compiled_css_secure_folder>
                     <compiled_js_folder>js</compiled_js_folder>
-                    <design_skin_folder>skin</design_skin_folder>
+                    <design_theme_folder>theme</design_theme_folder>
                 </allowed_resources>
             </media_storage_configuration>
         </system>

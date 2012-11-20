@@ -46,8 +46,12 @@ class Mage_Adminhtml_Block_Cms_Wysiwyg_Images_Content_Uploader extends Mage_Admi
             $files[] = '*.' . $ext;
         }
         $this->getConfig()
-            ->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()->getUrl('*/*/upload', array('type' => $type)))
-            ->setParams($params)
+            ->setUrl(
+                Mage::getModel('Mage_Backend_Model_Url')
+                    ->addSessionParam()
+                    ->getUrl('*/*/upload', array('type' => $type)
+                )
+            )->setParams($params)
             ->setFileField('image')
             ->setFilters(array(
                 'images' => array(

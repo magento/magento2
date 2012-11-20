@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Block_Widget_Grid_Column
  */
-class Mage_Backend_Block_Widget_Grid_ColumnTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Backend_Block_Widget_Grid_Column
@@ -54,11 +54,10 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends Magento_Test_TestCase_Ob
 
         $arguments = array(
             'layout' => $this->_layoutMock,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
         );
-        $arguments = $this->_getConstructArguments(self::BLOCK_ENTITY, 'Mage_Backend_Block_Widget_Grid_Column',
-            $arguments
-        );
-        $this->_block = $this->_getInstanceViaConstructor('Mage_Backend_Block_Widget_Grid_Column', $arguments);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column', $arguments);
     }
 
     protected function tearDown()

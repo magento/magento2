@@ -61,6 +61,8 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo
+     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
      * @magentoAppIsolation enabled
      */
     public function testGetTemplateFile()
@@ -145,7 +147,7 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->_block->renderView());
         Mage::app()->getConfig()->getOptions()->setDesignDir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
-        Mage::getDesign()->setDesignTheme('default/default/default');
+        Mage::getDesign()->setDesignTheme('default/demo');
         $this->_block->setTemplate('dummy.phtml');
         $this->assertEquals('1234567890', $this->_block->renderView());
     }

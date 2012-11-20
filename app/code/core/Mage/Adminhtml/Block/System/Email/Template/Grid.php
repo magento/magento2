@@ -36,6 +36,7 @@ class Mage_Adminhtml_Block_System_Email_Template_Grid extends Mage_Adminhtml_Blo
 
     protected function _construct()
     {
+        parent::_construct();
         $this->setEmptyText(Mage::helper('Mage_Adminhtml_Helper_Data')->__('No Templates Found'));
         $this->setId('systemEmailTemplateGrid');
         $this->setUseAjax(true);

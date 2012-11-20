@@ -27,7 +27,7 @@
 ?>
 <div style="width:587px;margin:20px;position:relative;margin-left:-294px;left:50%">
     <div style="position:absolute;right:1px;top:0px;left: expression(parentNode.offsetWidth - offsetWidth - 1 + 'px');">
-        <div style="padding:5px;height:15px;width:15px;background-color:#F4F4F4" id="dashboard_<?php echo $this->getHtmlId() ?>_cal_div"><img src="<?php echo Mage::getDesign()->getSkinUrl('images/grid-cal.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" /></div>
+        <div style="padding:5px;height:15px;width:15px;background-color:#F4F4F4" id="dashboard_<?php echo $this->getHtmlId() ?>_cal_div"><img src="<?php echo Mage::getDesign()->getViewFileUrl('images/grid-cal.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" /></div>
         <div style="padding:5px;display:none;width:200px;" id="dashboard_<?php echo $this->getHtmlId() ?>_range_div" class="switcher">
             <?php echo $this->__('Select Range') ?>:
             <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changePeriod(this)">
@@ -36,7 +36,7 @@
                     <option value="<?php echo $_value ?>" <?php if($this->getRequest()->getParam('period')==$_value): ?> selected<?php endif; ?>><?php echo $_label ?></option>
                 <?php endforeach; ?>
             </select>
-            <img src="<?php echo Mage::getDesign()->getSkinUrl('images/dashboard-close.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" />
+            <img src="<?php echo Mage::getDesign()->getViewFileUrl('images/dashboard-close.gif') ?>" onclick="toggleCal('<?php echo $this->getHtmlId() ?>')" />
         </div>
     </div>
     <?php if($this->getCount()): ?>

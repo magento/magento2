@@ -105,7 +105,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     {
         $url = false;
         if (!$product->getImage()) {
-            $url = Mage::getDesign()->getSkinUrl('Mage_Catalog::images/product/placeholder/image.jpg');
+            $url = Mage::getDesign()->getViewFileUrl('Mage_Catalog::images/product/placeholder/image.jpg');
         }
         elseif ($attribute = $product->getResource()->getAttribute('image')) {
             $url = $attribute->getFrontend()->getUrl($product);
@@ -122,7 +122,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     {
         $url = false;
         if (!$product->getSmallImage()) {
-            $url = Mage::getDesign()->getSkinUrl('Mage_Catalog::images/product/placeholder/small_image.jpg');
+            $url = Mage::getDesign()->getViewFileUrl('Mage_Catalog::images/product/placeholder/small_image.jpg');
         }
         elseif ($attribute = $product->getResource()->getAttribute('small_image')) {
             $url = $attribute->getFrontend()->getUrl($product);

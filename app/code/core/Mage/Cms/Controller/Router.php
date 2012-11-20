@@ -35,6 +35,23 @@
 class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abstract
 {
     /**
+     * Event manager
+     *
+     * @var Mage_Core_Model_Event_Manager
+     */
+    protected $_eventManager;
+
+    /**
+     * Class constructor
+     *
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     */
+    public function  __construct(Mage_Core_Model_Event_Manager $eventManager)
+    {
+        $this->_eventManager = $eventManager;
+    }
+
+    /**
      * Initialize Controller Router
      *
      * @param Varien_Event_Observer $observer
@@ -70,7 +87,7 @@ class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abst
             'identifier' => $identifier,
             'continue'   => true
         ));
-        Mage::dispatchEvent('cms_controller_router_match_before', array(
+        $this->_eventManager->dispatch('cms_controller_router_match_before', array(
             'router'    => $this,
             'condition' => $condition
         ));
@@ -81,7 +98,7 @@ class Mage_Cms_Controller_Router extends Mage_Core_Controller_Varien_Router_Abst
                 ->setRedirect($condition->getRedirectUrl())
                 ->sendResponse();
             $request->setDispatched(true);
-            return Mage::getControllerInstance('Mage_Core_Controller_Varien_Action_Forward',
+            return Mage::getControllerInstance('Mage_Core_Controller_Varien_Action_Redirect',
                 $request,
                 Mage::app()->getFrontController()->getResponse()
             );

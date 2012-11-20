@@ -30,7 +30,7 @@
     <select id="select-language" title="<?php echo $this->__('Your Language') ?>" onchange="window.location.href=this.value" class="flags">
     <?php foreach ($this->getStores() as $_lang): ?>
         <?php $_selected = ($_lang->getId() == $this->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
-        <option value="<?php echo $_lang->getCurrentUrl() ?>" style="background-image:url('<?php echo $this->getSkinUrl('images/flags/flag_'.$_lang->getCode().'.gif') ?>');"<?php echo $_selected ?>><?php echo $this->escapeHtml($_lang->getName()) ?></option>
+        <option value="<?php echo $_lang->getCurrentUrl() ?>" style="background-image:url('<?php echo $this->getViewFileUrl('images/flags/flag_'.$_lang->getCode().'.gif') ?>');"<?php echo $_selected ?>><?php echo $this->escapeHtml($_lang->getName()) ?></option>
     <?php endforeach; ?>
     </select>
 </div>

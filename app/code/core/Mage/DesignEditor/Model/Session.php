@@ -87,41 +87,4 @@ class Mage_DesignEditor_Model_Session extends Mage_Backend_Model_Auth_Session
         $highlighting = Mage::getSingleton('Mage_Core_Model_Cookie')->get(self::COOKIE_HIGHLIGHTING);
         return 'off' == $highlighting;
     }
-
-    /**
-     * Sets skin to user session, so that next time everything will be rendered with this skin
-     *
-     * @param string $skin
-     * @return Mage_DesignEditor_Model_Session
-     */
-    public function setSkin($skin)
-    {
-        if ($skin && !$this->_isSkinApplicable($skin)) {
-            Mage::throwException(Mage::helper('Mage_DesignEditor_Helper_Data')->__("Skin doesn't exist"));
-        }
-        $this->setData('skin', $skin);
-        return $this;
-    }
-
-    /**
-     * Returns whether a skin is a valid one to set into user session
-     *
-     * @param string $skin
-     * @return bool
-     */
-    protected function _isSkinApplicable($skin)
-    {
-        if (!$skin) {
-            return false;
-        }
-        $options = Mage::getModel('Mage_Core_Model_Design_Source_Design')->getOptions();
-        foreach ($options as $optGroup) {
-            foreach ($optGroup['value'] as $option) {
-                if ($option['value'] == $skin) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

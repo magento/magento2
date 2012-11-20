@@ -45,7 +45,8 @@ class Mage_XmlConnect_Model_Catalog_Category_ImageTest extends PHPUnit_Framework
     public function testGetUrlPlaceholder($model)
     {
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/media/skin/frontend/%s/Mage_XmlConnect/images/catalog/category/placeholder/image.jpg',
+            'http://localhost/pub/media/theme/'
+                . 'frontend/%s/Mage_XmlConnect/images/catalog/category/placeholder/image.jpg',
             $model->getUrl()
         );
     }

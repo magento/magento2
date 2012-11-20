@@ -36,7 +36,7 @@ class Mage_Review_ProductControllerTest extends Magento_Test_TestCase_Controller
         $this->getRequest()->setParam('id', $productId);
         $this->dispatch('review/product/list');
         $result = $this->getResponse()->getBody();
-        $this->assertContains("media/skin/frontend/{$expectedDesign}/en_US/Mage_Page/favicon.ico", $result);
+        $this->assertContains("media/theme/frontend/{$expectedDesign}/en_US/Mage_Page/favicon.ico", $result);
     }
 
     /**
@@ -45,7 +45,7 @@ class Mage_Review_ProductControllerTest extends Magento_Test_TestCase_Controller
     public function listActionDesignDataProvider()
     {
         return array(
-            'custom product design' => array(2, 'default/default/blue'),
+            'custom product design' => array(2, 'default/demo_blue'),
         );
     }
 }

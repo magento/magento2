@@ -105,7 +105,9 @@
     });
     $(document).ready(function(){
         $('body').on('ajaxSend', function(e){
-            $(e.target).loader().loader('show');
+            $(e.target).loader({
+                icon: $('#loading_mask_loader img').attr('src')
+            }).loader('show');
         });
     });
 })(jQuery);

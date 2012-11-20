@@ -26,7 +26,7 @@
  */
 
 /**
- * Test for skin changing observer
+ * Test for theme changing observer
  */
 class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
 {
@@ -78,11 +78,10 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testPreDispatchApplyDesign()
     {
-        $newSkin = 'default/default/blank';
-        $this->assertNotEquals($newSkin, Mage::getDesign()->getDesignTheme());
-        Mage::getSingleton('Mage_DesignEditor_Model_Session')->setSkin($newSkin);
+        $newTheme = 'default/blank';
+        $this->assertNotEquals($newTheme, Mage::getDesign()->getDesignTheme());
         $this->_observer->preDispatch($this->_eventObserver);
-        $this->assertEquals($newSkin, Mage::getDesign()->getDesignTheme());
+        $this->assertEquals($newTheme, Mage::getDesign()->getDesignTheme());
     }
 
     /**
@@ -103,12 +102,11 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testPreDispatchApplyDesignInactive()
     {
-        $newSkin = 'default/default/blank';
-        $oldSkin = Mage::getDesign()->getDesignTheme();
-        $this->assertNotEquals($newSkin, $oldSkin);
-        Mage::getSingleton('Mage_DesignEditor_Model_Session')->setSkin($newSkin);
+        $newTheme = 'default/blank';
+        $oldTheme = Mage::getDesign()->getDesignTheme();
+        $this->assertNotEquals($newTheme, $oldTheme);
         $this->_observer->preDispatch($this->_eventObserver);
-        $this->assertEquals($oldSkin, Mage::getDesign()->getDesignTheme());
+        $this->assertEquals($oldTheme, Mage::getDesign()->getDesignTheme());
     }
 
     /**
@@ -187,7 +185,7 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     public function wrapPageElementDataProvider()
     {
         $removeLink = sprintf('<a href="#remove"><img src="%s" alt="Remove" /></a>',
-            Mage::getDesign()->getSkinUrl('images/btn_remove.gif')
+            Mage::getDesign()->getViewFileUrl('images/btn_remove.gif')
         );
         return array(
             'non-draggable block' => array(
@@ -263,7 +261,8 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
                 . '<div class="vde_element_title">draggable_block</div>%w'
                 . '<div class="vde_element_title vde_element_remove" id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr_remove">%w'
                     . '<a href="#remove">%w'
-                        . '<img src="' . Mage::getDesign()->getSkinUrl('images/btn_remove.gif') . '" alt="Remove" />%w'
+                        . '<img src="' . Mage::getDesign()->getViewFileUrl('images/btn_remove.gif')
+                        . '" alt="Remove" />%w'
                     . '</a>%w'
                 . '</div>%w'
             . '</div>%w'

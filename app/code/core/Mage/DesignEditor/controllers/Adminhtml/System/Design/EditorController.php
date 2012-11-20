@@ -55,7 +55,6 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
         $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
 
         $themeId = (int)$this->getRequest()->getParam('theme_id');
-        $skin = $this->getRequest()->get('theme_skin');
         /** @var $theme Mage_Core_Model_Theme */
         $theme = Mage::getModel('Mage_Core_Model_Theme');
         try {
@@ -65,13 +64,12 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorController extends Mage_Ad
             }
             $session->activateDesignEditor();
             $session->setThemeId($theme->getId());
-            $session->setSkin($skin);
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_redirect('*/*/');
             return;
         } catch (Exception $e) {
-            $this->_getSession()->addError($this->__('The theme or skin was not found.'));
+            $this->_getSession()->addError($this->__('The theme was not found.'));
             Mage::logException($e);
             $this->_redirect('*/*/');
             return;

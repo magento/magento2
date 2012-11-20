@@ -61,9 +61,9 @@ $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
                     o.clearAllConfirmMessage = '<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>',
                     o.clearAllSelector = '#compare-clear-all'
                 });
-                $.mage.load.jsSync("<?php echo $this->getSkinUrl('jquery/jquery.popupwindow.js') ?>");
-                $.mage.load.jsSync("<?php echo $this->getSkinUrl('mage/popup-window.js') ?>");
-                $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Catalog::js/compare.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('jquery/jquery.popupwindow.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('mage/popup-window.js') ?>");
+                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/compare.js') ?>");
             })(jQuery);
         </script>
         <?php else: ?>

@@ -28,7 +28,7 @@
 /**
  * Test case for Magento_Di
  */
-class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Magento_DiTest extends PHPUnit_Framework_TestCase
 {
     /**#@+
      * Parent classes for test classes
@@ -71,12 +71,14 @@ class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
             '_request'         => 'Mage_Core_Controller_Request_Http',
             '_layout'          => 'Mage_Core_Model_Layout',
             '_eventManager'    => 'Mage_Core_Model_Event_Manager',
+            '_urlBuilder'      => 'Mage_Core_Model_Url',
             '_translator'      => 'Mage_Core_Model_Translate',
             '_cache'           => 'Mage_Core_Model_Cache',
             '_designPackage'   => 'Mage_Core_Model_Design_Package',
             '_session'         => 'Mage_Core_Model_Session',
             '_storeConfig'     => 'Mage_Core_Model_Store_Config',
             '_frontController' => 'Mage_Core_Controller_Varien_Front',
+            '_helperFactory'   => 'Mage_Core_Model_Factory_Helper',
         ),
     );
 
@@ -92,6 +94,7 @@ class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
         ),
         self::TEST_CLASS_BLOCK => array(
             'eventManager'    => 'Mage_Core_Model_Event_Manager',
+            'urlBuilder'      => 'Mage_Core_Model_Url',
             'cache'           => 'Mage_Core_Model_Cache',
             'request'         => 'Mage_Core_Controller_Request_Http',
             'layout'          => 'Mage_Core_Model_Layout',
@@ -100,6 +103,7 @@ class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
             'session'         => 'Mage_Core_Model_Session',
             'storeConfig'     => 'Mage_Core_Model_Store_Config',
             'frontController' => 'Mage_Core_Controller_Varien_Front',
+            'helperFactory'   => 'Mage_Core_Model_Factory_Helper',
         ),
     );
 
@@ -141,14 +145,19 @@ class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
 
     protected function setUp()
     {
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         if (!self::$_isClassMocks) {
             $this->getMockForAbstractClass(
                 self::PARENT_CLASS_MODEL,
-                $this->_getConstructArguments(self::MODEL_ENTITY, self::PARENT_CLASS_MODEL),
+                $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
+                    self::PARENT_CLASS_MODEL
+                ),
                 self::TEST_CLASS_MODEL, false
             );
             $this->getMockForAbstractClass(self::PARENT_CLASS_BLOCK,
-                $this->_getConstructArguments(self::BLOCK_ENTITY, self::PARENT_CLASS_BLOCK),
+                $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
+                    self::PARENT_CLASS_BLOCK
+                ),
                 self::TEST_CLASS_BLOCK, false
             );
             self::$_isClassMocks = true;
@@ -227,9 +236,9 @@ class Magento_DiTest extends Magento_Test_TestCase_ObjectManagerAbstract
         // assert cache
         if (isset($this->_cachedInstances[$className])) {
             $expectedCache = array();
-            foreach ($this->_cachedInstances[$className] as $key => $class) {
+            foreach ($this->_cachedInstances[$className] as $class) {
                 $this->assertArrayHasKey($class, $this->_sharedInstances);
-                $expectedCache[$key] = $this->_sharedInstances[$class];
+                $expectedCache[$class] = $this->_sharedInstances[$class];
             }
             $this->assertAttributeEquals($expectedCache, '_cachedInstances', $this->_model);
         }

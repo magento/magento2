@@ -78,7 +78,7 @@
     case 'wysiwyg': ?>
     <span class="form_row">
       <label for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getLabel() ?>:</label>
-        <script type="text/javascript" src="<?php echo $this->getSkinUrl('tiny_mce/tiny_mce.js') ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
         <script type="text/javascript">
         //<![CDATA[
         tinyMCE.init({

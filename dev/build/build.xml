@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   dev
+ * @package    build
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<project name="Magento2" basedir="../../" default="init">
+    <property file="dev/build/build.properties" />
+    <property environment="env"/>
+    <tstamp>
+        <format property="timestamp" pattern="yyyyMMdd"/>
+    </tstamp>
+
+    <!-- copy the build customization files -->
+    <target name="init" if="env.build_customization_dir">
+        <copy todir="${basedir}" failonerror="true" overwrite="true">
+            <fileset dir="${basedir}/${env.build_customization_dir}"/>
+        </copy>
+    </target>
+
+    <target name="prepare-build-properties">
+        <condition property="dir.build_directory" value="${basedir}">
+            <not>
+                <isset property="dir.build_directory"/>
+            </not>
+        </condition>
+        <property name="dir.extruder" location="${dir.build_directory}/${extruder.dir}"/>
+    </target>
+
+    <!-- setup permissions for the application installation -->
+    <target name="prepare-installation" depends="prepare-build-properties">
+        <chmod perm="a+w">
+            <dirset dir="${dir.build_directory}/app/etc"/>
+            <dirset dir="${dir.build_directory}/pub/media"/>
+            <fileset dir="${dir.build_directory}/pub/media"/>
+            <dirset dir="${dir.build_directory}/var"/>
+        </chmod>
+    </target>
+
+    <!-- delete files, that don't belong to Community Edition, from working copy -->
+    <target name="prepare-ce" depends="prepare-build-properties">
+        <exec executable="php" failonerror="true">
+            <arg line="-f ${dir.extruder}/extruder.php --
+                -w ${dir.build_directory}
+                -l ${dir.extruder}/publication/extruder/common.txt
+                -l ${dir.extruder}/publication/extruder/ce.txt
+                -v
+                "/>
+        </exec>
+    </target>
+
+    <target name="jstestdriver-path-substitution">
+        <fail unless="env.JsTestDriver" message="Bamboo variable 'JsTestDriver' must be defined on your agent"/>
+        <copy file="${basedir}/dev/tests/js/jsTestDriver.php.dist" tofile="${basedir}/dev/tests/js/jsTestDriver.php"/>
+        <replace file="${basedir}/dev/tests/js/jsTestDriver.php">
+            <replacefilter token="{{path_to_jstestdriver_jar}}" value="${env.JsTestDriver}"/>
+        </replace>
+    </target>
+
+    <target name="js-test-php" depends="jstestdriver-path-substitution">
+        <exec dir="${basedir}/dev/tests/js" executable="php" failonerror="true">
+            <arg line="run_js_tests.php"/>
+        </exec>
+    </target>
+
+    <target name="prepare-ee" depends="prepare-build-properties">
+        <copy file="${dir.build_directory}/${enterprise-enabler.file}.dist" tofile="${dir.build_directory}/${enterprise-enabler.file}"/>
+
+        <replace file="${dir.build_directory}/downloader/config.ini" token="community" value="enterprise"/>
+        <replace file="${dir.build_directory}/app/Mage.php" token="self::EDITION_COMMUNITY" value="self::EDITION_ENTERPRISE"/>
+    </target>
+
+    <!-- deploy and run functional tests -->
+    <target name="functional-tests-with-deploy" description="Deploy Magento">
+        <fail unless="env.build_customization_dir" message="Bamboo variable 'customization_dir' must be defined" />
+        <!-- Functional tests params -->
+        <fail unless="env.deploy_directory" message="Bamboo variable 'deploy_directory' must be defined on your agent"/>
+        <fail unless="env.db_host" message="Bamboo variable 'db_host' must be defined on your agent"/>
+        <fail unless="env.db_name" message="Bamboo variable 'db_name' must be defined on your agent"/>
+        <fail unless="env.db_user" message="Bamboo variable 'db_user' must be defined on your agent"/>
+        <fail unless="env.db_password" message="Bamboo variable 'db_password' must be defined on your agent"/>
+        <fail unless="env.http_host" message="Bamboo variable 'http_host' must be defined on your agent (e.g. http://myhost.com/mypath/)"/>
+        <fail unless="env.https_host" message="Bamboo variable 'https_host' must be defined on your agent (e.g. https://myhost.com/mypath/)"/>
+
+        <fail unless="env.selenium_host" message="Bamboo variable 'selenium_host' must be defined on your agent"/>
+        <fail unless="env.selenium_port" message="Bamboo variable 'selenium_port' must be defined on your agent"/>
+        <fail unless="env.testsuite" message="Bamboo variable 'testsuite' must be defined on your agent (mage, enterprise)"/>
+
+        <property name="dir.build_directory" location="${env.deploy_directory}/${env.build.key}"/>
+
+        <delete dir="${dir.build_directory}" />
+
+        <copy todir="${dir.build_directory}" failonerror="true">
+            <fileset dir="${basedir}" defaultexcludes="no"/>
+        </copy>
+
+        <copy todir="${dir.build_directory}" failonerror="true" overwrite="true">
+            <fileset dir="${basedir}/${env.build_customization_dir}"/>
+        </copy>
+
+        <antcall target="prepare-installation" inheritAll="true" />
+
+        <replace file="${dir.build_directory}/dev/tests/functional/config/install.php">
+            <replacefilter token="{{db_model}}" value="${env.db_model}"/>
+            <replacefilter token="{{db_host}}" value="${env.db_host}"/>
+            <replacefilter token="{{db_name}}" value="${env.db_name}"/>
+            <replacefilter token="{{db_user}}" value="${env.db_user}"/>
+            <replacefilter token="{{db_password}}" value="${env.db_password}"/>
+            <replacefilter token="{{url}}" value="${env.http_host}${env.build.key}"/>
+            <replacefilter token="{{secure_url}}" value="${env.https_host}${env.build.key}"/>
+        </replace>
+
+
+        <replace file="${dir.build_directory}/dev/tests/functional/config/config.yml">
+            <replacefilter token="{{admin_url}}" value="${env.https_host}${env.build.key}/backend/admin"/>
+            <replacefilter token="{{url}}" value="${env.http_host}${env.build.key}"/>
+            <replacefilter token="{{selenium_host}}" value="${env.selenium_host}"/>
+            <replacefilter token="{{selenium_port}}" value="${env.selenium_port}"/>
+            <replacefilter token="{{selenium_testsuite}}" value="${env.testsuite}"/>
+        </replace>
+    </target>
+
+    <target name="functional-tests-with-deploy-ee" depends="functional-tests-with-deploy,prepare-ee">
+        <replace file="${dir.build_directory}/dev/tests/functional/config/config.yml">
+            <replacefilter token="{{enterprise_admin_url}}" value="${env.https_host}${env.build.key}/backend/admin"/>
+            <replacefilter token="{{enterprise_url}}" value="${env.http_host}${env.build.key}/"/>
+        </replace>
+    </target>
+
+    <target name="init-build-directory" unless="build.directory.initialized">
+        <fail unless="env.deploy_directory" message="Bamboo variable 'deploy_directory' must be defined."/>
+        <fail unless="env.build_number" message="Bamboo variable 'build_number' must be defined."/>
+        <fail unless="env.build_scope_name" message="Bamboo variable 'env.build_scope_name' must be defined."/>
+
+        <property name="dir.build_directory" location="${env.deploy_directory}/${env.build_scope_name}/${timestamp}-${env.build_number}"/>
+        <echo message="Build directory: ${dir.build_directory}" level="info"/>
+        <property name="build.directory.initialized" value="1" />
+    </target>
+
+    <target name="deploy" unless="build.deployed" depends="init-build-directory">
+        <delete dir="${dir.build_directory}"/>
+
+        <copy todir="${dir.build_directory}" failonerror="true">
+            <fileset dir="${basedir}" defaultexcludes="no"/>
+        </copy>
+        <property name="build.deployed" value="1" />
+    </target>
+
+    <target name="install" depends="init-build-directory">
+        <fail unless="env.install_properties_file" message="Bamboo variable 'build_properties_file' must be defined."/>
+        <fail unless="env.build_number" message="Bamboo variable 'build_number' must be defined."/>
+        <fail unless="env.db_host" message="Bamboo variable 'db_host' must be defined."/>
+        <fail unless="env.db_user" message="Bamboo variable 'db_user' must be defined."/>
+        <fail unless="env.db_password" message="Bamboo variable 'db_password' must be defined."/>
+        <fail unless="env.http_host" message="Bamboo variable 'http_host' must be defined."/>
+        <fail unless="env.https_host" message="Bamboo variable 'https_host' must be defined."/>
+        <fail unless="env.build_scope_name" message="Bamboo variable 'env.build_scope_name' must be defined."/>
+
+        <property name="db.name" value="${env.build_scope_name}_${timestamp}_${env.build_number}"/>
+
+        <property name="file.create_database" location="${dir.build_directory}/dev/build/bin/create-database.sh"/>
+        <chmod file="${file.create_database}" perm="ugo+rx"/>
+
+        <exec executable="${file.create_database}" failonerror="true">
+            <arg value="${env.db_host}"/>
+            <arg value="${db.name}"/>
+            <arg value="${env.db_user}"/>
+            <arg value="${env.db_password}"/>
+        </exec>
+
+        <antcall target="install-magento" inheritAll="true"/>
+
+        <mkdir dir="${dir.build_directory}/websites"/>
+    </target>
+
+    <target name="install-magento">
+        <replace file="${dir.build_directory}/${env.install_properties_file}" >
+            <replacefilter token="{{db_host}}" value="${env.db_host}"/>
+            <replacefilter token="{{db_name}}" value="${db.name}"/>
+            <replacefilter token="{{db_user}}" value="${env.db_user}"/>
+            <replacefilter token="{{db_password}}" value="${env.db_password}"/>
+            <replacefilter token="{{url}}" value="${env.http_host}${env.build_scope_name}/${timestamp}-${env.build_number}"/>
+            <replacefilter token="{{secure_url}}" value="${env.https_host}${env.build_scope_name}/${timestamp}-${env.build_number}"/>
+        </replace>
+
+        <exec executable="php" failonerror="true">
+            <arg line="-f ${dir.build_directory}/dev/build/publication/install.php --
+                --build_properties_file ${dir.build_directory}/${env.install_properties_file}
+                "/>
+        </exec>
+    </target>
+
+    <target name="upgrade" depends="init-build-directory">
+        <property name="dir.previous_build_directory" value="${dir.build_directory}/../current"/>
+        <property name="db.name" value="${env.build_scope_name}_${timestamp}_${env.build_number}"/>
+
+        <copy todir="${dir.build_directory}/websites" failonerror="false">
+            <fileset dir="${dir.previous_build_directory}/websites" />
+        </copy>
+
+        <copy todir="${dir.build_directory}/pub/media" failonerror="false">
+            <fileset dir="${dir.previous_build_directory}/pub/media"/>
+        </copy>
+
+        <chmod perm="a+w">
+            <dirset dir="${dir.build_directory}/pub/media"/>
+            <fileset dir="${dir.build_directory}/pub/media"/>
+        </chmod>
+
+        <property name="file.prepare_previous" location="${dir.build_directory}/dev/build/bin/prepare-previous.sh"/>
+        <chmod file="${file.prepare_previous}" perm="ugo+rx"/>
+
+        <exec executable="${file.prepare_previous}" failonerror="true">
+            <arg value="${env.db_host}"/>
+            <arg value="${db.name}"/>
+            <arg value="${env.db_user}"/>
+            <arg value="${env.db_password}"/>
+            <arg value="${dir.build_directory}"/>
+            <arg value="${dir.previous_build_directory}"/>
+            <arg value="${env.http_host}${env.build_scope_name}"/>
+            <arg value="${env.https_host}${env.build_scope_name}"/>
+        </exec>
+
+        <antcall target="install-magento" inheritAll="true"/>
+    </target>
+
+    <target name="update-current" depends="init-build-directory">
+        <property name="file.current" location="${dir.build_directory}/dev/build/bin/current.sh"/>
+        <chmod file="${file.current}" perm="ugo+rx"/>
+        <chmod file="${dir.build_directory}/dev/build/bin/include.sh" perm="ugo+rx"/>
+
+        <exec executable="${file.current}" failonerror="true">
+            <arg value="${env.db_host}"/>
+            <arg value="${db.name}"/>
+            <arg value="${env.db_user}"/>
+            <arg value="${env.db_password}"/>
+            <arg value="${dir.build_directory}"/>
+            <arg value=""/>
+            <arg value="${env.http_host}${env.build_scope_name}/current/"/>
+            <arg value="${env.https_host}${env.build_scope_name}/current/"/>
+        </exec>
+    </target>
+
+    <target name="remove-old-builds" depends="init-build-directory">
+        <property name="file.delete_old_builds" location="${dir.build_directory}/dev/build/bin/delete-old-builds.sh"/>
+        <chmod file="${file.delete_old_builds}" perm="ugo+rx"/>
+
+        <exec executable="${file.delete_old_builds}" failonerror="true">
+            <arg value="${env.build_scope_name}"/>
+            <arg value="${env.db_user}"/>
+            <arg value="${env.db_password}"/>
+        </exec>
+    </target>
+</project>

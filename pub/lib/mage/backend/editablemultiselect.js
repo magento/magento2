@@ -124,9 +124,9 @@
          */
         EditableMultiselect.prototype.makeMultiselectEditable = function() {
             var entityIdName = this.entityIdName,
-                entityValueName = this.entityValueName;
-
-            $('.mselect-list-item:not(.mselect-list-item-not-editable) label span').editable(this.saveUrl,
+                entityValueName = this.entityValueName,
+                selectList = $('#' + this.targetSelectId).next();
+            selectList.find('.mselect-list-item:not(.mselect-list-item-not-editable) label span').editable(this.saveUrl,
             {
                 type: 'text',
                 submit: '<button class="mselect-save" title="Save" type="submit" />',

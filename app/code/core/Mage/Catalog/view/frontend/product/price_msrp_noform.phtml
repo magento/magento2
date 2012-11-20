@@ -81,9 +81,9 @@
                 });
                 <?php endif; ?>
 
-                $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
-                $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
-                $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Catalog::js/msrp.js') ?>");
+                $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>");
+                $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>");
+                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>");
 
             })(jQuery);
             //]]>

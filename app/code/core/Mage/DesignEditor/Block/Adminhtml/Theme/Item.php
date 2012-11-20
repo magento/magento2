@@ -55,10 +55,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Item extends Mage_Backend_Block_Wi
         $previewButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $previewButton->setData(array(
             'label'   => $this->__('Launch'),
-            'onclick' => sprintf(
-                "$('theme_id').value='%s'; $('theme_skin').value=$('theme-skin-list-%s').value; editForm.submit();",
-                $themeId, $themeId
-            ),
+            'onclick' => sprintf("$('theme_id').value='%s'; editForm.submit();", $themeId),
             'class'   => 'save',
             'target'  => '_blank'
         ));

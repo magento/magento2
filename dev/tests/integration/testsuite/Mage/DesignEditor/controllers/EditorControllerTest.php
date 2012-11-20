@@ -99,55 +99,61 @@ class Mage_DesignEditor_EditorControllerTest extends Magento_Test_TestCase_Contr
     /**
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      */
-    public function testSkinAction()
+    public function testThemeAction()
     {
         $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
-        $this->getRequest()->setParam('skin', 'default/default/blank');
         $this->getRequest()->setParam('theme_id', $session->getThemeId());
-        $this->dispatch('design/editor/skin');
+        $this->dispatch('design/editor/theme');
         $this->assertRedirect();
 
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        $theme->load($session->getThemeId());
 
-        $this->assertEquals('default/default/blank', $session->getSkin());
+        $this->assertEquals('default/blank', $theme->getThemePath());
     }
 
     /**
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      */
-    public function testSkinActionWrongValue()
+    public function testThemeActionWrongValue()
     {
         $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
-        $this->getRequest()->setParam('skin', 'wrong/skin/applied');
         $this->getRequest()->setParam('theme_id', $session->getThemeId());
-        $this->dispatch('design/editor/skin');
+        $this->dispatch('design/editor/theme');
         $this->assertRedirect();
 
-        $this->assertNotEquals('wrong/skin/applied', $session->getSkin());
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        $theme->load($session->getThemeId());
+
+        $this->assertNotEquals('wrong/theme/applied', $theme->getThemePath());
     }
 
-    public function testSkinActionNonActivatedEditor()
+    public function testThemeActionNonActivatedEditor()
     {
-        $this->getRequest()->setParam('skin', 'default/default/blank');
-        $this->dispatch('design/editor/skin');
+        $this->getRequest()->setParam('theme_id', 0);
+        $this->dispatch('design/editor/theme');
         $this->assert404NotFound();
 
         $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
-        $this->assertNotEquals('default/default/blank', $session->getSkin());
+
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        $theme->load($session->getThemeId());
+
+        $this->assertNotEquals('default/blank', $theme->getThemePath());
     }
 
     /**
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      */
-    public function testSkinActionRedirectUrl()
+    public function testThemeActionRedirectUrl()
     {
         $expectedRedirectUrl = 'http://localhost/index.php/path/to/redirect/?value=1#anchor';
 
-        $this->getRequest()->setParam('skin', 'default/default/blank');
         $this->getRequest()->setParam(
             Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED,
             Mage::helper('Mage_Core_Helper_Data')->urlEncode($expectedRedirectUrl)
         );
-        $this->dispatch('design/editor/skin');
+        $this->dispatch('design/editor/theme');
         $this->assertRedirect($this->equalTo($expectedRedirectUrl));
     }
 }

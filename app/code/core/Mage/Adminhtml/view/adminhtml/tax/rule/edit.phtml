@@ -31,7 +31,8 @@
         function toggleLoadingMask()
         {
             var loaderArea = $('#html-body .wrapper')[0],
-                loadingMask = $('#loading-mask');
+                loadingMask = $('#loading-mask'),
+                flag = $('#loading-mask').is(':visible');
 
             loadingMask.css({
                 top:  0,
@@ -41,7 +42,7 @@
                 'z-index':1005
             });
             loadingMask.toggle();
-            toggleSelectsUnderBlock($('loading-mask'), false);
+            toggleSelectsUnderBlock($('loading-mask'), flag);
         }
 
         $.widget("adminhtml.dialogRates", $.ui.dialog, {
@@ -90,6 +91,25 @@
             this.settings = settings || {};
             this.isEntityEditable = this.settings.is_entity_editable || false;
 
+            this.edit = function() {
+                var that = $(this),
+                    index = that.parent().index(),
+                    select = that.closest('.mselect-list').prev(),
+                    id = select.find('option').eq(index).attr('value'),
+                    item;
+
+                for(var i = 0, c = taxRateCollection.length; i < c; i++) {
+                    if (taxRateCollection[i].tax_calculation_rate_id == id) {
+                        item = taxRateCollection[i];
+                        break;
+                    }
+                }
+                item.itemElement = that.prev();
+                $('#tax-rate-form')
+                    .dialogRates({itemRate: item})
+                    .dialogRates('open');
+            }
+
             TaxRateEditableMultiselect.prototype.init = function () {
                 var options = {
                     toggleAddButton:false,
@@ -110,7 +130,7 @@
                             ? itemsWrapper.children('.' + options.mselectListItemClass + ':last').after(mselectItemHtml)
                             : itemsWrapper.prepend(mselectItemHtml);
                     }
-                 };
+                };
                 var taxRateField = $('#tax_rate').parent(),
                     taxRateForm = $('#tax-rate-form');
 
@@ -134,24 +154,7 @@
                 taxRateField.find('.mselect-button-add').off('click');
 
                 taxRateField.find('.mselect-list')
-                    .on('click.mselect-edit', '.mselect-edit', function () {
-                        var that = $(this),
-                            index = that.parent().index(),
-                            select = that.closest('.mselect-list').prev(),
-                            id = select.find('option').eq(index).attr('value'),
-                            item;
-
-                        for(var i = 0, c = taxRateCollection.length; i < c; i++) {
-                            if (taxRateCollection[i].tax_calculation_rate_id == id) {
-                                item = taxRateCollection[i];
-                                break;
-                            }
-                        }
-                        item.itemElement = that.prev();
-                        taxRateForm
-                            .dialogRates({itemRate: item})
-                            .dialogRates('open');
-                    })
+                    .on('click.mselect-edit', '.mselect-edit', this.edit)
                     .on("click.mselect-delete", ".mselect-delete", function () {
                         if (!confirm('<?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Do you really want to delete this tax rate'); ?>')) {
                             return;
@@ -190,7 +193,8 @@
                         var el = $(this),
                             checkedClassName = 'mselect-checked';
                         el[el.is(':checked') ? 'addClass' : 'removeClass'](checkedClassName);
-                    });
+                    })
+                    .on('dblclick.mselect-list-item', '.mselect-list-item label span', this.edit);
 
                 taxRateForm.dialogRates({
                     title: '<?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Tax Rate'); ?>',

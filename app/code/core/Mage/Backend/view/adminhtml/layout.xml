@@ -42,4 +42,10 @@
             </block>
         </container>
     </adminhtml_auth_login>
+
+    <adminhtml_system_config_edit>
+        <reference name="left">
+            <block type="Mage_Backend_Block_System_Config_Switcher" name="adminhtml.system.config.switcher" before="-"/>
+        </reference>
+    </adminhtml_system_config_edit>
 </layout>

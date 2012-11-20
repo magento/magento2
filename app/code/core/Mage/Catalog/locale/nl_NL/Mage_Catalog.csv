@@ -264,7 +264,7 @@
 "Duplicate website group price customer group.","Dubbele website groep prijs klantengroep."
 "Duplicate website tier price customer group and quantity.","Dupliceer website prijs klantengroep en hoeveelheid."
 "Duplicate website, country and state tax found.","Dupliceer gevonden belasting van website, land en staat."
-"E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","Bijvoorbeeld {{media url=""pad/naar/plaatje.jpg""}} {{skin url=""pad/naar/plaatje.gif""}}. Dynamische opdrachtenverwerking heeft invloed op de performantie van de catalogus."
+"E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","Bijvoorbeeld {{media url=""pad/naar/plaatje.jpg""}} {{view url=""pad/naar/plaatje.gif""}}. Dynamische opdrachtenverwerking heeft invloed op de performantie van de catalogus."
 "Edit","Bewerken"
 "Edit Attribute Set '%s'","Bewerken attribuutset '%s'"
 "Edit Product Attribute","Bewerken productattribuut"

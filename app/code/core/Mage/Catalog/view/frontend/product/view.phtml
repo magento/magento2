@@ -35,7 +35,7 @@
 <?php $_product = $this->getProduct(); ?>
 <script type="text/javascript">
      (function ($) {
-         head.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/price-option.js') ?>", function () {
+         head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/price-option.js') ?>", function () {
              priceOptionInstance = $.mage.priceOption({"priceConfig":<?php echo $this->getJsonConfig() ?>});
          });
     })(jQuery);

@@ -264,7 +264,7 @@
 "Duplicate website group price customer group.","重复网站 团体价 客户群。"
 "Duplicate website tier price customer group and quantity.","副本网站层价格客户分组和数量。"
 "Duplicate website, country and state tax found.","找到副本网站、国家，以及州税率。"
-"E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","例如， {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}。动态指令解析将影响到分类的性能。"
+"E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","例如， {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}。动态指令解析将影响到分类的性能。"
 "Edit","编辑"
 "Edit Attribute Set '%s'","编辑属性集 '%s'"
 "Edit Product Attribute","编辑产品属性"

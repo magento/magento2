@@ -208,7 +208,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
             $value['options']['fields']['customsymbol']['inherit'] = 1;
         }
 
-        Mage::getModel('Mage_Adminhtml_Model_Config_Data')
+        Mage::getModel('Mage_Backend_Model_Config')
             ->setSection(self::CONFIG_SECTION)
             ->setWebsite(null)
             ->setStore(null)

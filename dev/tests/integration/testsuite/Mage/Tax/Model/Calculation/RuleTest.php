@@ -32,34 +32,6 @@
 class Mage_Tax_Model_Calculation_RuleTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Customer Tax Model Class Mock
-     *
-     * @var Mage_Tax_Model_Class
-     */
-    protected $_customerTaxClass;
-
-    /**
-     * Product Tax Model Class Mock
-     *
-     * @var Mage_Tax_Model_Class
-     */
-    protected $_productTaxClass;
-
-
-    protected function setUp()
-    {
-        $this->_customerTaxClass = $this->_getTaxClassMock(
-            'getCustomerClasses',
-            Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER
-        );
-
-        $this->_productTaxClass = $this->_getTaxClassMock(
-            'getProductClasses',
-             Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT
-        );
-    }
-
-    /**
      * Test that first value in multiselect applied as default if there is no default value in config
      *
      * @magentoConfigFixture default_store tax/classes/default_customer_tax_class 0
@@ -184,7 +156,7 @@ class Mage_Tax_Model_Calculation_RuleTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT,
-                array('Taxable Goods', 'Shipping', 'ProductTaxClass1', 'ProductTaxClass2')
+                array('Taxable Goods', 'ProductTaxClass1', 'ProductTaxClass2')
             ),
         );
     }

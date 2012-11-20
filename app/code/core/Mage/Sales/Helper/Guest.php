@@ -135,16 +135,16 @@ class Mage_Sales_Helper_Guest extends Mage_Core_Helper_Data
         $breadcrumbs->addCrumb(
             'home',
             array(
-                'label' => Mage::helper('Mage_Cms_Helper_Data')->__('Home'),
-                'title' => Mage::helper('Mage_Cms_Helper_Data')->__('Go to Home Page'),
+                'label' => Mage::helper('Mage_Sales_Helper_Guest')->__('Home'),
+                'title' => Mage::helper('Mage_Sales_Helper_Guest')->__('Go to Home Page'),
                 'link'  => Mage::getBaseUrl()
             )
         );
         $breadcrumbs->addCrumb(
             'cms_page',
             array(
-                'label' => 'Order Information',
-                'title' => 'Order Information'
+                'label' => Mage::helper('Mage_Sales_Helper_Guest')->__('Order Information'),
+                'title' => Mage::helper('Mage_Sales_Helper_Guest')->__('Order Information')
             )
         );
     }

@@ -136,8 +136,8 @@
         </payment>
         <google>
             <checkout>
-                <merchant_id backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <merchant_key backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <merchant_id backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <merchant_key backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <use_secure_callback_url>0</use_secure_callback_url>
                 <disable_default_tax_tables>0</disable_default_tax_tables>
                 <hide_cart_contents>1</hide_cart_contents>

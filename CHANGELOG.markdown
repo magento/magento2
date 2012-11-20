@@ -1,3 +1,32 @@
+2.0.0.0-dev31
+=============
+* Themes:
+  * Eliminated "skins" as a concept. Skins and themes are consolidated into one entity and now called just "themes"
+  * New themes out of the box are named by their distinctive characteristic (thus, "default" is renamed to "demo")
+  * Revised logic of handling "virtual" (which are present in database registry only, but not in the file system) VS "physical" themes
+* Dependency injection:
+  * Reduced memory leaks of integration tests caused by introduction of object manager
+  * Added compiler for dependency injection definitions and ability to run Magento application with the compiled definitions
+* `Mage_Adminhtml` breakdown:
+  * Implemented XML-schema for system configuration form declaration files (`etc/system.xml` in each module), refactored them to comply with schema and relocated to `etc/adminhtml/system.xml`
+  * Removed remnants of `Mage_Admin` module (replaced with `Mage_Backend` and others)
+  * Removed multiple obsolete models in `Mage_Adminhtml` module -- replaced with more generic classes in `Mage_Backend` (less classes overall)
+* Replaced `Magento_Test_TestCase_ObjectManagerAbstract` in unit testing framework by a helper in test suite
+* Made the PHP coding standard test (`Php_LiveCodeTest`) treat white/black lists as `glob()` patterns and verify correctness of the actual patterns
+* Consolidated `upload_max_filesize` logic into one helper
+* Bug fixes:
+  * Fatal error on Product Tags and Customers Tagged Product (on product editing page in backend)
+  * Trailing space in date caused by new "date picker" JavaScript component
+  * Impossibility to add product to an order in backend in IE8
+  * Not picking a template on customer "Shopping Cart" page at the backend
+  * "Use Default" checkbox is checked again after saving multiselect attribute config if option does not contain value
+  * "Single Store Mode" UI fixes
+  * Runtime error when previewing transactional email template
+  * Incorrect redirect after applying filter in grids
+  * Various asynchronous placement of profiler keys
+  * Various fixes in Taxes backend UI
+  * Various fixes in translation literals
+
 2.0.0.0-dev30
 =============
 * Framework changes

@@ -40,8 +40,8 @@
             o.domain = '<?php echo $this->getDomain()?>'
         });
         $.mage.load.jsSync(
-            "<?php echo $this->getSkinUrl('jquery/jquery.cookie.js') ?>",
-            "<?php echo $this->getSkinUrl('Mage_Page::js/cookie.js') ?>"
+            "<?php echo $this->getViewFileUrl('jquery/jquery.cookie.js') ?>",
+            "<?php echo $this->getViewFileUrl('Mage_Page::js/cookie.js') ?>"
         );
     })(jQuery);
     //]]>

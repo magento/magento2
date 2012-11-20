@@ -43,6 +43,13 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * List of classes to call __destruct() on
+     *
+     * @var array
+     */
+    protected $_classesToDestruct = array();
+
+    /**
      * Expected instance manager parametrized cache after clear
      *
      * @var array
@@ -55,12 +62,14 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_model);
+        unset($this->_classesToDestruct);
     }
 
     public function testClearCache()
     {
         $this->_prepareObjectManagerForClearCache();
         $this->_model->clearCache();
+        $this->assertAttributeEquals($this->_classesToDestruct, '_classesToDestruct', $this->_model);
     }
 
     /**
@@ -76,10 +85,9 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
         $diInstance->expects($this->exactly(3))
             ->method('instanceManager')
             ->will($this->returnValue($instanceManager));
-        $diInstance->expects($this->once())
+        $diInstance->expects($this->exactly(5))
             ->method('get')
-            ->with('Mage_Core_Model_Resource')
-            ->will($this->returnValue(self::TEST_RESOURCE));
+            ->will($this->returnCallback(array($this, 'getCallback')));
         $diInstance->expects($this->exactly(2))
             ->method('setInstanceManager')
             ->will($this->returnCallback(array($this, 'verifySetInstanceManager')));
@@ -94,6 +102,23 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
         $instanceManager->expects($this->at(1))
             ->method('addSharedInstance')
             ->with(self::TEST_RESOURCE, 'Mage_Core_Model_Resource');
+    }
+
+    /**
+     * Callback method for Zend\Di\Di::get
+     *
+     * @param string $className
+     * @return PHPUnit_Framework_MockObject_MockObject|string
+     */
+    public function getCallback($className)
+    {
+        if ($className != 'Mage_Core_Model_Resource') {
+            $this->_classesToDestruct[] = $className;
+            $mock = $this->getMock($className, array('__destruct'), array(), '', false);
+            return $mock;
+        } else {
+            return self::TEST_RESOURCE;
+        }
     }
 
     /**

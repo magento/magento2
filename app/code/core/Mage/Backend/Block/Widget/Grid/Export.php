@@ -52,38 +52,11 @@ class Mage_Backend_Block_Widget_Grid_Export
      */
     protected $_template = "Mage_Backend::widget/grid/export.phtml";
 
-    /**
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Model_Layout $layout
-     * @param Mage_Core_Model_Event_Manager $eventManager
-     * @param Mage_Core_Model_Translate $translator
-     * @param Mage_Core_Model_Cache $cache
-     * @param Mage_Core_Model_Design_Package $designPackage
-     * @param Mage_Core_Model_Session $session
-     * @param Mage_Core_Model_Store_Config $storeConfig
-     * @param Mage_Core_Controller_Varien_Front $frontController
-     * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        Mage_Core_Controller_Request_Http $request,
-        Mage_Core_Model_Layout $layout,
-        Mage_Core_Model_Event_Manager $eventManager,
-        Mage_Core_Model_Translate $translator,
-        Mage_Core_Model_Cache $cache,
-        Mage_Core_Model_Design_Package $designPackage,
-        Mage_Core_Model_Session $session,
-        Mage_Core_Model_Store_Config $storeConfig,
-        Mage_Core_Controller_Varien_Front $frontController,
-        array $data = array()
-    ) {
-        parent::__construct($request, $layout, $eventManager, $translator, $cache, $designPackage, $session,
-            $storeConfig, $frontController, $data
-        );
-
-        if (isset($data['exportTypes'])) {
-            foreach ($data['exportTypes'] as $type) {
+    protected function _construct()
+    {
+        parent::_construct();
+        if ($this->hasData('exportTypes')) {
+            foreach ($this->getData('exportTypes') as $type) {
                 if (!isset($type['urlPath']) || !isset($type['label'])) {
                     Mage::throwException('Invalid export type supplied for grid export block');
                 }

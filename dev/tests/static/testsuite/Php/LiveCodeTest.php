@@ -50,8 +50,8 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!is_dir(self::$_reportDir)) {
             mkdir(self::$_reportDir, 0777);
         }
-        self::$_whiteList = self::_readLists(__DIR__ .'/_files/whitelist/*.txt');
-        self::$_blackList = self::_readLists(__DIR__ .'/_files/blacklist/*.txt');
+        self::$_whiteList = self::_readLists(__DIR__ . '/_files/whitelist/*.txt');
+        self::$_blackList = self::_readLists(__DIR__ . '/_files/blacklist/*.txt');
     }
 
     public function testCodeStyle()
@@ -92,16 +92,29 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @param string $globPattern
      * @return array
+     * @throws Exception if any of the patterns don't return any result
      */
     protected static function _readLists($globPattern)
     {
-        $result = array();
+        $patterns = array();
         foreach (glob($globPattern) as $list) {
-            $result = array_merge($result, file($list));
+            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES));
         }
-        $map = function ($value) {
-            return trim($value) ? Utility_Files::init()->getPathToSource() . '/' . trim($value) : '';
-        };
-        return array_filter(array_map($map, $result), 'file_exists');
+        $result = array();
+        foreach ($patterns as $pattern) {
+            if (0 === strpos($pattern, '#')) {
+                continue;
+            }
+            /**
+             * Note that glob() for directories will be returned as is,
+             * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
+             */
+            $files = glob(Utility_Files::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
+            if (empty($files)) {
+                throw new Exception("The glob() pattern '{$pattern}' didn't return any result.");
+            }
+            $result = array_merge($result, $files);
+        }
+        return $result;
     }
 }

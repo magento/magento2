@@ -38,11 +38,6 @@ $data = array(
         'class_id'     => 3,
         'class_name'   => 'Retail Customer',
         'class_type'   => Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER
-    ),
-    array(
-        'class_id'     => 4,
-        'class_name'   => 'Shipping',
-        'class_type'   => Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT
     )
 );
 foreach ($data as $row) {

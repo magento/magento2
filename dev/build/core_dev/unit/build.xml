@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Apache Ant's build file for core development unit tests
+ *
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   dev
+ * @package    build
+ * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<project name="Core Development Unit Tests" basedir="../../../../" default="_unit_tests_all">
+    <import file="../util.xml"/>
+
+    <target name="_jstestdriver_path_substitution" description="JsTestDriver JAR file path substitution in configuration file from environment variable">
+        <fail unless="jstestdriver_config_file" message="Property 'jstestdriver_config_file' must be defined"/>
+        <fail unless="env.JsTestDriver" message="Environment variable 'JsTestDriver' must be defined"/>
+        <replace file="${jstestdriver_config_file}">
+            <replacefilter token="{{path_to_jstestdriver_jar}}" value="${env.JsTestDriver}"/>
+        </replace>
+    </target>
+
+    <target name="_unit_tests_magento" depends="_product_location" description="Product unit tests">
+        <exec dir="${product_root_dir}/dev/tests/unit" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/unit_tests_magento.xml"/>
+        </exec>
+    </target>
+    <target name="_unit_tests_integration_framework" depends="_product_location" description="Unit tests for integration testing framework">
+        <exec dir="${product_root_dir}/dev/tests/integration/framework/tests/unit" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/unit_tests_integration_framework.xml"/>
+        </exec>
+    </target>
+    <target name="_unit_tests_performance_framework" depends="_product_location" description="Unit tests for performance testing framework">
+        <exec dir="${product_root_dir}/dev/tests/performance/framework/tests/unit" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/unit_tests_performance_framework.xml"/>
+        </exec>
+    </target>
+    <target name="_unit_tests_static_framework" depends="_product_location" description="Unit tests for static code analysis framework">
+        <exec dir="${product_root_dir}/dev/tests/static/framework/tests/unit" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/unit_tests_static_framework.xml"/>
+        </exec>
+    </target>
+    <target name="_unit_tests_unit_framework" depends="_product_location" description="Unit tests for unit testing framework">
+        <exec dir="${product_root_dir}/dev/tests/unit/framework/tests/unit" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/unit_tests_unit_framework.xml"/>
+        </exec>
+    </target>
+
+    <target name="_unit_tests_all" description="All unit tests">
+        <antcall>
+            <target name="_unit_tests_magento"/>
+            <target name="_unit_tests_integration_framework"/>
+            <target name="_unit_tests_performance_framework"/>
+            <target name="_unit_tests_static_framework"/>
+            <target name="_unit_tests_unit_framework"/>
+        </antcall>
+    </target>
+
+    <target name="unit_tests_ee" description="Unit tests for EE">
+        <antcall target="_unit_tests_all"/>
+    </target>
+    <target name="unit_tests_ce" depends="_community_edition" description="Unit tests for CE">
+        <antcall target="_unit_tests_all"/>
+    </target>
+
+    <target name="unit_tests_js" depends="_product_location" description="Javascript unit tests">
+        <copy file="${product_root_dir}/dev/tests/js/jsTestDriver.php.dist"
+              tofile="${product_root_dir}/dev/tests/js/jsTestDriver.php" overwrite="true"/>
+        <antcall target="_jstestdriver_path_substitution">
+            <param name="jstestdriver_config_file" value="${product_root_dir}/dev/tests/js/jsTestDriver.php"/>
+        </antcall>
+        <exec executable="php" failonerror="true">
+            <arg value="${product_root_dir}/dev/tests/js/run_js_tests.php"/>
+        </exec>
+    </target>
+
+</project>

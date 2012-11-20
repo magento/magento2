@@ -63,21 +63,23 @@ class Mage_Core_Model_Theme_CollectionTest extends PHPUnit_Framework_TestCase
                 'theme_path'           => 'default/default',
                 'preview_image'        => '',
                 'theme_directory'      => implode(
-                    DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'design', 'frontend', 'default', 'default')
+                    DIRECTORY_SEPARATOR,
+                    array(__DIR__, '..', '_files', 'design', 'frontend', 'default', 'default')
                 )
             ),
-            'iphone' => array(
-                'theme_code'           => 'iphone',
+            'default_iphone' => array(
+                'theme_code'           => 'default_iphone',
                 'theme_title'          => 'Iphone',
                 'theme_version'        => '2.0.0.0',
                 'parent_theme'         => array('default', 'default'),
                 'is_featured'          => false,
                 'magento_version_from' => '2.0.0.0-dev1',
                 'magento_version_to'   => '*',
-                'theme_path'           => 'default/iphone',
+                'theme_path'           => 'default/default_iphone',
                 'preview_image'        => 'images/preview.png',
                 'theme_directory'      => implode(
-                    DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'design', 'frontend', 'default', 'iphone')
+                    DIRECTORY_SEPARATOR,
+                    array(__DIR__, '..', '_files', 'design', 'frontend', 'default', 'default_iphone')
                 )
             ),
         );

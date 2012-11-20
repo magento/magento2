@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Eav_Model_Attribute_Data_TextTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_Eav_Model_Attribute_Data_TextTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_Eav_Model_Attribute_Data_Text
@@ -51,8 +51,9 @@ class Mage_Eav_Model_Attribute_Data_TextTest extends Magento_Test_TestCase_Objec
         );
 
         $attributeClass = 'Mage_Eav_Model_Entity_Attribute_Abstract';
-        $arguments = $this->_getConstructArguments(
-            self::MODEL_ENTITY, $attributeClass, array('data' => $attributeData)
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $arguments = $objectManagerHelper->getConstructArguments(
+            Magento_Test_Helper_ObjectManager::MODEL_ENTITY, $attributeClass, array('data' => $attributeData)
         );
 
         /** @var $attribute Mage_Eav_Model_Entity_Attribute_Abstract|PHPUnit_Framework_MockObject_MockObject */

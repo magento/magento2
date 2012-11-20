@@ -36,9 +36,9 @@ $_controller = $this->helper('Mage_Authorizenet_Helper_Data')->getControllerName
 $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderAdminUrl();
 ?>
 <!-- IFRAME for request to our server -->
-<iframe id="order-directpost-iframe" allowtransparency="true" frameborder="0" name="iframeSubmitOrder" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getSkinUrl('blank.html') ?>"></iframe>
+<iframe id="order-directpost-iframe" allowtransparency="true" frameborder="0" name="iframeSubmitOrder" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
 <!-- IFRAME for request to Authorize.net -->
-<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getSkinUrl('blank.html') ?>"></iframe>
+<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
 <ul id="payment_form_<?php echo $_code ?>" style="display:none;">
     <li>
         <div class="input-box">

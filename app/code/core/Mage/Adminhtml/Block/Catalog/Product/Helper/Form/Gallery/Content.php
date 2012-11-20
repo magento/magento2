@@ -41,7 +41,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Gallery_Content extends M
         $this->addChild('uploader', 'Mage_Adminhtml_Block_Media_Uploader');
 
         $this->getUploader()->getConfig()
-            ->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')->addSessionParam()->getUrl('*/catalog_product_gallery/upload'))
+            ->setUrl(
+                Mage::getModel('Mage_Backend_Model_Url')
+                    ->addSessionParam()
+                    ->getUrl('*/catalog_product_gallery/upload')
+            )
             ->setFileField('image')
             ->setFilters(array(
                 'images' => array(

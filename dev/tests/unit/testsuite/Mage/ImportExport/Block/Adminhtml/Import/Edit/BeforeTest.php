@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_ImportExport_Block_Adminhtml_Import_Edit_Before
  */
-class Mage_ImportExport_Block_Adminhtml_Import_Edit_BeforeTest extends Magento_Test_TestCase_ObjectManagerAbstract
+class Mage_ImportExport_Block_Adminhtml_Import_Edit_BeforeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test model
@@ -100,9 +100,13 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit_BeforeTest extends Magento_T
 
         $arguments = array(
             'coreHelper'  => $coreHelper,
-            'importModel' => $importModel
+            'importModel' => $importModel,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
         );
-        $this->_model = $this->getBlock('Mage_ImportExport_Block_Adminhtml_Import_Edit_Before', $arguments);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getBlock('Mage_ImportExport_Block_Adminhtml_Import_Edit_Before',
+            $arguments
+        );
     }
 
     public function tearDown()

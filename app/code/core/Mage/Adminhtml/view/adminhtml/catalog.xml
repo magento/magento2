@@ -37,7 +37,7 @@
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product" name="products_list">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" as="store_switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" as="store_switcher">
                     <action method="setUseConfirm"><params>0</params></action>
                 </block>
             </block>
@@ -95,7 +95,7 @@
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet" name="attribute-set-info" template="Mage_Adminhtml::catalog/product/edit/attribute_set.phtml"></block>
         </reference>
         <reference name="left">
-            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" before="-"></block>
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" before="-"></block>
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs" name="product_tabs"></block>
         </reference>
         <reference name="js">
@@ -276,7 +276,7 @@ Layout handle for configurable products
 
     <adminhtml_catalog_product_action_attribute_edit>
         <reference name="left">
-            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" template="store/switcher.phtml" />
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" template="store/switcher.phtml" />
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tabs" name="attributes_tabs">
                 <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Attributes" name="tab_attributes"/>
                 <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute_Tab_Inventory" name="tab_inventory" template="catalog/product/edit/action/inventory.phtml" />

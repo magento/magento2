@@ -65,9 +65,9 @@
                 o.noCookiesUrl = '<?php echo Mage::getUrl('cms/index/noCookies') ?>';
             });
             $.mage.load.jsSync(
-                "<?php echo $this->getSkinUrl('jquery/jquery.cookie.js')?>",
-                "<?php echo $this->getSkinUrl('Mage_Page::js/cookies.js')?>",
-                "<?php echo $this->getSkinUrl('Mage_Page::js/notices.js')?>"
+                "<?php echo $this->getViewFileUrl('jquery/jquery.cookie.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Page::js/cookies.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Page::js/notices.js')?>"
             );
         })(jQuery);
         // ]]>

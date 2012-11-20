@@ -48,8 +48,8 @@ class Mage_Index_Block_Adminhtml_Process_Grid extends Mage_Adminhtml_Block_Widge
         parent::_construct();
         $this->_processModel = Mage::getSingleton('Mage_Index_Model_Process');
         $this->setId('indexer_processes_grid');
-        $this->_filterVisibility = false;
-        $this->_pagerVisibility  = false;
+        $this->setFilterVisibility(false);
+        $this->setPagerVisibility(false);
     }
 
     /**

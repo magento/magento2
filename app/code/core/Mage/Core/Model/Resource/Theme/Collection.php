@@ -61,4 +61,39 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
     {
         return array('' => '') + $this->_toOptionArray('theme_id', 'theme_title');
     }
+
+    /**
+     * Check whether all themes have non virtual parent theme
+     *
+     * @return Mage_Core_Model_Resource_Theme_Collection
+     */
+    public function checkParentInThemes()
+    {
+        /** @var $theme Mage_Core_Model_Theme */
+        foreach ($this as $theme) {
+            if ($theme->getParentId()) {
+                $theme->setParentId($this->_getParentThemeRecursively($theme->getParentId()));
+                $theme->save();
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Get parent non virtual theme recursively
+     *
+     * @param int $parentId
+     * @return int|null
+     */
+    protected function _getParentThemeRecursively($parentId)
+    {
+        /** @var $parentTheme Mage_Core_Model_Theme */
+        $parentTheme = $this->getItemById($parentId);
+        if (!$parentTheme->getId() || ($parentTheme->isVirtual() && !$parentTheme->getParentId())) {
+            $parentId = null;
+        } else if ($parentTheme->isVirtual()) {
+            $parentId = $this->_getParentThemeRecursively($parentTheme->getParentId());
+        }
+        return $parentId;
+    }
 }

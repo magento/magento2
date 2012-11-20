@@ -27,8 +27,8 @@
 <design>
     <package code="default">
         <title>Default</title>
-        <theme version="2.0.0.0" code="modern" parent="default" featured="1">
-            <title>Modern</title>
+        <theme version="2.0.0.0" code="modern" parent="demo" featured="1">
+            <title>Magento Modern</title>
             <requirements>
                 <magento_version from="2.0.0.0-dev1" to="*"/>
             </requirements>

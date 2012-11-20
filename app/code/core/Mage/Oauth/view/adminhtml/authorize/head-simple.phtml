@@ -34,15 +34,14 @@
 ?>
 <meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>"/>
 <title><?php echo htmlspecialchars(html_entity_decode($this->getTitle())) ?></title>
-<link rel="icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
-<link rel="shortcut icon" href="<?php echo $this->getSkinUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon"/>
 
 <script type="text/javascript">
 //<![CDATA[
     var BLANK_URL = '<?php echo $this->getJsUrl() ?>blank.html';
     var BLANK_IMG = '<?php echo $this->getJsUrl() ?>spacer.gif';
     var BASE_URL = '<?php echo $this->getUrl('*') ?>';
-    var SKIN_URL = '<?php echo $this->getSkinUrl() ?>';
     var FORM_KEY = '<?php echo $this->getFormKey() ?>';
 //]]>
 </script>

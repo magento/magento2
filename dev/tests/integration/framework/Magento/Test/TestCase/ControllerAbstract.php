@@ -84,12 +84,13 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
         $this->_request = null;
         $this->_response = null;
         $this->_objectManager = null;
+        $this->_runOptions = array();
     }
 
     /**
      * Run request
      *
-     * @return void
+     * @param string $uri
      */
     public function dispatch($uri)
     {
