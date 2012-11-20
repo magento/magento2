@@ -142,8 +142,12 @@ class Mage_Paypal_Model_Ipn
             throw $e;
         }
 
-        $response = preg_split('/^\r?$/m', $postbackResult, 2);
-        $response = trim($response[1]);
+        // In some cases, $postbackResult contains a full HTTP header response
+        $response = strtok($postbackResult, " \t\n\r");
+        while (($token = strtok(" \t\n\r")) !== false) {
+            $response = $token;
+        }
+
         if ($response != 'VERIFIED') {
             $this->_debugData['postback'] = $postbackQuery;
             $this->_debugData['postback_result'] = $postbackResult;
@@ -395,13 +399,18 @@ class Mage_Paypal_Model_Ipn
         $this->_order->save();
 
         // notify customer
-        $invoice = $payment->getCreatedInvoice();
-        if ($invoice && !$this->_order->getEmailSent()) {
-            $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
-                Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
-            )
-            ->setIsCustomerNotified(true)
-            ->save();
+        if (!$this->_order->getEmailSent()) {
+            $invoice = $payment->getCreatedInvoice();
+
+            // This can be reached if an invoice exists from a previous attempt, 
+            // resulting in a crash
+            if ($invoice instanceof Mage_Sales_Model_Abstract) {
+                $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
+                    Mage::helper('Mage_Paypal_Helper_Data')->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
+                )
+                ->setIsCustomerNotified(true)
+                ->save();
+            }
         }
     }
 
