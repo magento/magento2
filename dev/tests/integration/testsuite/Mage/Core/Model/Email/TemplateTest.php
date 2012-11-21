@@ -42,7 +42,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_mail = $this->getMock(
             'Zend_Mail', array('send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'), array('utf-8')
         );
-        $this->_model = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'));
+        $this->_model = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }
@@ -69,7 +69,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->assertSame($filter, $this->_model->getTemplateFilter());
         $this->assertEquals(Mage::app()->getStore()->getId(), $filter->getStoreId());
 
-        $filter = new Mage_Core_Model_Email_Template_Filter;
+        $filter = Mage::getModel('Mage_Core_Model_Email_Template_Filter');
         $this->_model->setTemplateFilter($filter);
         $this->assertSame($filter, $this->_model->getTemplateFilter());
     }
@@ -106,17 +106,17 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoConfigFixture fixturestore_store design/theme/full_name default/default/blue
+     * @magentoConfigFixture fixturestore_store design/theme/full_name default/demo_blue
      */
     public function testGetProcessedTemplate()
     {
-        $expectedSkinUrl = 'skin/frontend/default/default/blue/en_US/Mage_Page/favicon.ico';
-        $this->_model->setTemplateText('{{skin url="Mage_Page::favicon.ico"}}');
-        $this->assertStringEndsNotWith($expectedSkinUrl, $this->_model->getProcessedTemplate());
+        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
+        $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(array(
             'area' => 'frontend', 'store' => Mage::app()->getStore('fixturestore')->getId()
         ));
-        $this->assertStringEndsWith($expectedSkinUrl, $this->_model->getProcessedTemplate());
+        $this->assertStringEndsWith($expectedViewUrl, $this->_model->getProcessedTemplate());
     }
 
     /**
@@ -125,9 +125,9 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
      */
     public function testGetProcessedTemplateDesignChange()
     {
-        $this->_model->setTemplateText('{{skin url="Mage_Page::favicon.ico"}}');
+        $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsWith(
-            'skin/frontend/default/modern/default/en_US/Mage_Page/favicon.ico',
+            'theme/frontend/default/modern/en_US/Mage_Page/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
     }
@@ -135,17 +135,17 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoConfigFixture fixturestore_store design/theme/full_name default/default/blue
+     * @magentoConfigFixture fixturestore_store design/theme/full_name default/demo_blue
      */
     public function testGetProcessedTemplateSubject()
     {
-        $expectedSkinUrl = 'skin/frontend/default/default/blue/en_US/Mage_Page/favicon.ico';
-        $this->_model->setTemplateSubject('{{skin url="Mage_Page::favicon.ico"}}');
-        $this->assertStringEndsNotWith($expectedSkinUrl, $this->_model->getProcessedTemplateSubject(array()));
+        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $this->_model->setTemplateSubject('{{view url="Mage_Page::favicon.ico"}}');
+        $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(array(
             'area' => 'frontend', 'store' => Mage::app()->getStore('fixturestore')->getId()
         ));
-        $this->assertStringEndsWith($expectedSkinUrl, $this->_model->getProcessedTemplateSubject(array()));
+        $this->assertStringEndsWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
     }
 
     /**

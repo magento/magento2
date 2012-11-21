@@ -41,13 +41,19 @@ class Mage_ImportExport_Helper_Data extends Mage_Core_Helper_Data
     /**#@-*/
 
     /**
-     * Maximum size of uploaded files.
+     * Get maximum upload size message
      *
-     * @return int
+     * @return string
      */
-    public function getMaxUploadSize()
+    public function getMaxUploadSizeMessage()
     {
-        return min(ini_get('post_max_size'), ini_get('upload_max_filesize'));
+        $maxImageSize = Mage::helper('Mage_Core_Helper_File_Storage')->getMaxFileSizeInMb();
+        if ($maxImageSize) {
+            $message = $this->__('Total size of uploadable files must not exceed %sM', $maxImageSize);
+        } else {
+            $message = $this->__('System doesn\'t allow to get file upload settings');
+        }
+        return $message;
     }
 
     /**

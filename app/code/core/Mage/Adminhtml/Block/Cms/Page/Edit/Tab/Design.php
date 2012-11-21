@@ -27,9 +27,9 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
     extends Mage_Adminhtml_Block_Widget_Form
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 
@@ -85,7 +85,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
         $designFieldset->addField('custom_theme_from', 'date', array(
             'name'      => 'custom_theme_from',
             'label'     => Mage::helper('Mage_Cms_Helper_Data')->__('Custom Design From'),
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
             'date_format' => $dateFormat,
             'disabled'  => $isElementDisabled,
             'class'     => 'validate-date validate-date-range date-range-custom_theme-from'
@@ -94,7 +94,7 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
         $designFieldset->addField('custom_theme_to', 'date', array(
             'name'      => 'custom_theme_to',
             'label'     => Mage::helper('Mage_Cms_Helper_Data')->__('Custom Design To'),
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
             'date_format' => $dateFormat,
             'disabled'  => $isElementDisabled,
             'class'     => 'validate-date validate-date-range date-range-custom_theme-to'

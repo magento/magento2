@@ -39,10 +39,13 @@ class Mage_Adminhtml_Block_Catalog_Category_Widget_Chooser extends Mage_Adminhtm
      * Block construction
      * Defines tree template and init tree params
      */
-    public function __construct()
+
+    protected $_template = 'catalog/category/widget/tree.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('catalog/category/widget/tree.phtml');
+        parent::_construct();
+
         $this->_withProductCount = false;
     }
 

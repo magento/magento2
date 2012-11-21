@@ -34,7 +34,7 @@ class Mage_Widget_Model_Widget_ConfigTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Widget_Model_Widget_Config;
+        $this->_model = Mage::getModel('Mage_Widget_Model_Widget_Config');
     }
 
     protected function tearDown()
@@ -49,7 +49,7 @@ class Mage_Widget_Model_Widget_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPluginSettings()
     {
-        Mage::getDesign()->setDesignTheme('default/default/default', 'adminhtml');
+        Mage::getDesign()->setDesignTheme('default/basic', 'adminhtml');
 
         $config = new Varien_Object();
         $settings = $this->_model->getPluginSettings($config);

@@ -33,10 +33,8 @@
  */
 class Mage_GoogleOptimizer_Block_Adminhtml_Cms_Page_Edit_Renderer_Conversion extends Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element
 {
-    public function __construct()
-    {
-        $this->setTemplate('cms/edit/renderer/conversion.phtml');
-    }
+
+    protected $_template = 'cms/edit/renderer/conversion.phtml';
 
     public function render(Varien_Data_Form_Element_Abstract $element)
     {

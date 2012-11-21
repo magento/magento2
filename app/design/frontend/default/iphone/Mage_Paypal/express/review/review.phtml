@@ -99,7 +99,7 @@ $shippingAddress = $this->getShippingAddress();
             <button type="button" id="review_submit" value="<?php echo $this->__('Place Order') ?>" class="button btn-checkout"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
             <button type="button" id="update_order" class="button btn-checkout"><span><span><?php echo $this->__('Update Order Data') ?></span></span></button>
             <span class="please-wait" id="review-please-wait" style="display:none;">
-                <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
+                <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
             </span>
         </div>
     </form>

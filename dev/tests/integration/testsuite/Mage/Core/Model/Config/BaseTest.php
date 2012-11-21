@@ -29,11 +29,12 @@ class Mage_Core_Model_Config_BaseTest extends PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $config = new Mage_Core_Model_Config_Base(<<<XML
+        $xml = <<<XML
 <?xml version="1.0"?>
 <root><key>value</key></root>
-XML
-        );
+XML;
+        $config = Mage::getModel('Mage_Core_Model_Config_Base', array('sourceData' => $xml));
+
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $config->getNode('key'));
     }
 }

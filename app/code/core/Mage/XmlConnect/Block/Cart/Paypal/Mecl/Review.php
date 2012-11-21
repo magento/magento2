@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Cart_Paypal_Mecl_Review extends Mage_Paypal_Block_Ex
     protected function _toHtml()
     {
         /** @var $reviewXmlObj Mage_XmlConnect_Model_Simplexml_Element */
-        $reviewXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<mecl_cart_details></mecl_cart_details>');
+        $reviewXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<mecl_cart_details></mecl_cart_details>'));
 
         if ($this->getPaypalMessages()) {
             $reviewXmlObj->addChild('paypal_message', implode(PHP_EOL, $this->getPaypalMessages()));

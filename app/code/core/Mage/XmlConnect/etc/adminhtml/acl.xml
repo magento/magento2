@@ -28,7 +28,7 @@
 <config>
     <acl>
         <resources>
-            <resource id="Mage_Adminhtml::admin" module="Mage_XmlConnect">
+            <resource id="Mage_Adminhtml::admin">
                 <resource id="Mage_XmlConnect::xmlconnect" module="Mage_XmlConnect" title="Mobile" sortOrder="100">
                     <resource id="Mage_XmlConnect::mobile" module="Mage_XmlConnect" title="Manage Apps" sortOrder="10" />
                     <resource id="Mage_XmlConnect::history" module="Mage_XmlConnect" title="Submission History" sortOrder="20" />

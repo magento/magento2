@@ -44,9 +44,9 @@ class Mage_Sales_Block_Adminhtml_Customer_Edit_Tab_Agreement
      * Disable filters and paging
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('customer_edit_tab_agreements');
     }
 

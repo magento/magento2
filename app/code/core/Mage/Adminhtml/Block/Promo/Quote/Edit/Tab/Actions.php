@@ -120,7 +120,7 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit_Tab_Actions
             'label'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Apply to Shipping Amount'),
             'title'     => Mage::helper('Mage_SalesRule_Helper_Data')->__('Apply to Shipping Amount'),
             'name'      => 'apply_to_shipping',
-            'values'    => Mage::getSingleton('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray(),
+            'values'    => Mage::getSingleton('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray(),
         ));
 
         $fieldset->addField('simple_free_shipping', 'select', array(

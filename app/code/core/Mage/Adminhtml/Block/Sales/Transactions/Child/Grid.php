@@ -44,9 +44,9 @@ class Mage_Adminhtml_Block_Sales_Transactions_Child_Grid extends Mage_Adminhtml_
      * Disable pager and filter
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('transactionChildGrid');
         $this->setDefaultSort('created_at');
         $this->setPagerVisibility(false);

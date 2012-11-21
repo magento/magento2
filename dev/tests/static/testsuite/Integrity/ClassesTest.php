@@ -155,7 +155,6 @@ class Integrity_ClassesTest extends PHPUnit_Framework_TestCase
      * Determine that some files must be skipped because implementation, broken by some bug
      *
      * @param string $path
-     * @return true
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function skipBuggyFile($path)

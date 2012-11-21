@@ -59,34 +59,30 @@ class Mage_Tag_Block_Catalog_Product_Rss_Link extends Mage_Core_Block_Template
     protected $_coreUrlModel;
 
     /**
-     * Constructor
-     *
-     * @param array $data
+     * Initialize object
      */
-    public function __construct(array $data = array())
+    protected function _construct()
     {
-        parent::__construct($data);
-
-        if (isset($data['rss_catalog_tag_enabled'])) {
-            $this->_isRssEnabled = $data['rss_catalog_tag_enabled'];
+        if ($this->hasData('rss_catalog_tag_enabled')) {
+            $this->_isRssEnabled = $this->getData('rss_catalog_tag_enabled');
         } else {
-            $this->_isRssEnabled = Mage::getStoreConfig('rss/catalog/tag');
+            $this->_isRssEnabled = $this->_storeConfig->getConfig('rss/catalog/tag');
         }
 
-        if (isset($data['tag_id'])) {
-            $this->_tagId = $data['tag_id'];
+        if ($this->hasData('tag_id')) {
+            $this->_tagId = $this->getData('tag_id');
         } else {
             $this->_tagId = $this->getRequest()->getParam('tagId');
         }
 
-        if (isset($data['tag_model'])) {
-            $this->_tagModel = $data['tag_model'];
+        if ($this->hasData('tag_model')) {
+            $this->_tagModel = $this->getData('tag_model');
         } else {
             $this->_tagModel = Mage::getModel('Mage_Tag_Model_Tag');
         }
 
-        if (isset($data['core_url_model'])) {
-            $this->_coreUrlModel = $data['core_url_model'];
+        if ($this->hasData('core_url_model')) {
+            $this->_coreUrlModel = $this->getData('core_url_model');
         } else {
             $this->_coreUrlModel = Mage::getModel('Mage_Core_Model_Url');
         }

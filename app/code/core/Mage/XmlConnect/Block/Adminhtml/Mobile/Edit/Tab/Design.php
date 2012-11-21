@@ -35,15 +35,16 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Design
     extends Mage_Adminhtml_Block_Template
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
+    protected $_template = 'edit/tab/design.phtml';
+
     /**
-     * Set design tab template
      * Set to show global icon
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setShowGlobalIcon(true);
-        $this->setTemplate('edit/tab/design.phtml');
+
     }
 
     /**

@@ -272,7 +272,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
             return current($this->_items);
         }
 
-        return new $this->_itemObjectClass();
+        return Mage::getModel($this->_itemObjectClass);
     }
 
     /**
@@ -288,7 +288,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
             return end($this->_items);
         }
 
-        return new $this->_itemObjectClass();
+        return Mage::getModel($this->_itemObjectClass);
     }
 
     /**
@@ -570,7 +570,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
      */
     public function getNewEmptyItem()
     {
-        return new $this->_itemObjectClass();
+        return Mage::getModel($this->_itemObjectClass);
     }
 
     /**

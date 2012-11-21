@@ -28,13 +28,30 @@
 class Mage_Catalog_Model_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Stub class name for class under test
+     */
+    const STUB_CLASS = 'Mage_Catalog_Model_Abstract_Stub';
+
+    /**
      * @var Mage_Catalog_Model_Abstract
      */
     protected $_model;
 
+    /**
+     * Flag is stub class was created
+     *
+     * @var bool
+     */
+    protected static $_isStubClass = false;
+
     protected function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass('Mage_Catalog_Model_Abstract');
+        if (!self::$_isStubClass) {
+            $this->getMockForAbstractClass('Mage_Catalog_Model_Abstract', array(), self::STUB_CLASS, false);
+            self::$_isStubClass = true;
+        }
+
+        $this->_model = Mage::getModel(self::STUB_CLASS);
 
         $resourceProperty = new ReflectionProperty(get_class($this->_model), '_resourceName');
         $resourceProperty->setAccessible(true);

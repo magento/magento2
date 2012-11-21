@@ -32,7 +32,7 @@ class Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_WizardTest extends PHPUni
 {
     public function testGetShortDateFormat()
     {
-        $block = new Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Wizard;
+        $block = Mage::getObjectManager()->create('Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Wizard');
         $this->assertNotEmpty($block->getShortDateFormat());
     }
 }

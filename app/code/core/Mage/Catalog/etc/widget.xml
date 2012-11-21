@@ -54,7 +54,7 @@
                 <visible>1</visible>
                 <label>Display Page Control</label>
                 <type>select</type>
-                <source_model>Mage_Adminhtml_Model_System_Config_Source_Yesno</source_model>
+                <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
             </show_pager>
             <products_per_page translate="label">
                 <required>1</required>

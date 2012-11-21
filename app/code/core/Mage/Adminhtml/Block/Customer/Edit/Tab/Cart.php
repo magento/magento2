@@ -34,9 +34,9 @@
  */
 class Mage_Adminhtml_Block_Customer_Edit_Tab_Cart extends Mage_Adminhtml_Block_Widget_Grid
 {
-    public function __construct($attributes=array())
+    protected function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setUseAjax(true);
         $this->_parentTemplate = $this->getTemplate();
         $this->setTemplate('customer/tab/cart.phtml');

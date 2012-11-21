@@ -34,7 +34,7 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Widget_Model_Widget;
+        $this->_model = Mage::getModel('Mage_Widget_Model_Widget');
     }
 
     protected function tearDown()
@@ -65,8 +65,8 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
-        Mage::getDesign()->setDesignTheme('default/default/default', 'adminhtml');
-        $expectedPubFile = Mage::getBaseDir('media') . "/skin/adminhtml/default/default/default/en_US/{$expectedFile}";
+        Mage::getDesign()->setDesignTheme('default/basic', 'adminhtml');
+        $expectedPubFile = Mage::getBaseDir('media') . "/theme/adminhtml/default/basic/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
@@ -95,11 +95,11 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests, that skin file is found anywhere in skin folders, not only in module directory.
+     * Tests, that theme file is found anywhere in theme folders, not only in module directory.
      *
      * @magentoAppIsolation enabled
      */
-    public function testGetPlaceholderImageUrlAtSkin()
+    public function testGetPlaceholderImageUrlAtTheme()
     {
         Mage::getConfig()->getOptions()->setDesignDir(dirname(__DIR__) . '/_files/design');
         $actualFile = $this->testGetPlaceholderImageUrl(
@@ -108,7 +108,7 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
         );
 
         $expectedFile = dirname(__DIR__)
-            . '/_files/design/adminhtml/default/default/skin/default/Mage_Catalog/images/product_widget_new.gif';
+            . '/_files/design/adminhtml/default/basic/Mage_Catalog/images/product_widget_new.gif';
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

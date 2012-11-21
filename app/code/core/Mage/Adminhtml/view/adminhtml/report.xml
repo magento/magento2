@@ -40,7 +40,7 @@
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Product_Viewed" template="report/grid/container.phtml" name="product.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Adminhtml_Block_Report_Filter_Form" name="grid.filter.form">

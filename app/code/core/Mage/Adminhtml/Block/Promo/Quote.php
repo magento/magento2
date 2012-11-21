@@ -35,12 +35,12 @@
 
 class Mage_Adminhtml_Block_Promo_Quote extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'promo_quote';
         $this->_headerText = Mage::helper('Mage_SalesRule_Helper_Data')->__('Shopping Cart Price Rules');
         $this->_addButtonLabel = Mage::helper('Mage_SalesRule_Helper_Data')->__('Add New Rule');
-        parent::__construct();
+        parent::_construct();
         
     }
 }

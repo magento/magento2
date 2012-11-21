@@ -27,11 +27,8 @@
 
 class Mage_Payment_Block_Form_Cc extends Mage_Payment_Block_Form
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Payment::form/cc.phtml');
-    }
+
+    protected $_template = 'Mage_Payment::form/cc.phtml';
 
     /**
      * Retrieve payment configuration object

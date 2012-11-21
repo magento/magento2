@@ -35,12 +35,12 @@
 class Mage_Adminhtml_Block_Api_Role extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'api_role';
         $this->_headerText = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Roles');
         $this->_addButtonLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add New Role');
-        parent::__construct();
+        parent::_construct();
     }
 
 }

@@ -34,15 +34,7 @@
  */
 class Mage_Wishlist_Block_Share_Email_Items extends Mage_Wishlist_Block_Abstract
 {
-    /**
-     * Initialize template
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('email/items.phtml');
-    }
+    protected $_template = 'email/items.phtml';
 
     /**
      * Retrieve Product View URL

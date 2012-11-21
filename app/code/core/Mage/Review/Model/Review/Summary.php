@@ -34,10 +34,21 @@
 
 class Mage_Review_Model_Review_Summary extends Mage_Core_Model_Abstract
 {
-
-    public function __construct()
-    {
-        $this->_init('Mage_Review_Model_Resource_Review_Summary');
+    /**
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
+     * @param Mage_Review_Model_Resource_Review_Summary $resource
+     * @param Mage_Review_Model_Resource_Review_Summary $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Mage_Review_Model_Resource_Review_Summary $resource,
+        Mage_Review_Model_Resource_Review_Summary_Collection $resourceCollection,
+        array $data = array()
+    ) {
+        parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
     public function getEntityPkValue()

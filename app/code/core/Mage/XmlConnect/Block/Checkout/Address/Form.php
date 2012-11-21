@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Checkout_Address_Form extends Mage_Core_Block_Templa
     protected function _toHtml()
     {
         /** @var $xmlModel Mage_XmlConnect_Model_Simplexml_Element */
-        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<form></form>');
+        $xmlModel = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<form></form>'));
         $xmlModel->addAttribute('name', 'address_form');
         $xmlModel->addAttribute('method', 'post');
 

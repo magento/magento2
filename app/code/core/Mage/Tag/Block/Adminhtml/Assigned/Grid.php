@@ -39,9 +39,9 @@ class Mage_Tag_Block_Adminhtml_Assigned_Grid extends Mage_Adminhtml_Block_Widget
      * Set grid params
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_currentTagModel = Mage::registry('current_tag');
         $this->setId('tag_assigned_product_grid');
         $this->setDefaultSort('entity_id');

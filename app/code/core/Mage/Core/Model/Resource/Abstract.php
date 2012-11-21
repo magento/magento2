@@ -34,6 +34,10 @@
 abstract class Mage_Core_Model_Resource_Abstract
 {
     /**
+     * @var Varien_Db_Adapter_Interface
+     */
+    protected $_writeAdapter;
+    /**
      * Main constructor
      */
     public function __construct()

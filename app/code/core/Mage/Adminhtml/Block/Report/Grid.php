@@ -43,11 +43,6 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
 
     protected $_filters = array();
 
-    /**
-     * @var Mage_Core_Model_Locale
-     */
-    protected $_locale;
-
     protected $_defaultFilters = array(
             'report_from' => '',
             'report_to' => '',
@@ -65,12 +60,28 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
      */
     protected $_currentCurrencyCode = null;
 
-    public function __construct()
+    protected $_template = 'Mage_Adminhtml::report/grid.phtml';
+
+    /**
+     * Filter values array
+     *
+     * @var array
+     */
+    protected $_filterValues;
+
+    /**
+     * Locale instance
+     *
+     * @var Mage_Core_Model_Locale
+     */
+    protected $_locale;
+
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
-        $this->setTemplate('Mage_Adminhtml::report/grid.phtml');
+
         $this->setUseAjax(false);
         $this->setCountTotals(true);
     }
@@ -78,10 +89,10 @@ class Mage_Adminhtml_Block_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
     protected function _prepareLayout()
     {
         $this->setChild('store_switcher',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher')
+            $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher')
                 ->setUseConfirm(false)
                 ->setSwitchUrl($this->getUrl('*/*/*', array('store'=>null)))
-                ->setTemplate('report/store/switcher.phtml')
+                ->setTemplate('Mage_Adminhtml::report/store/switcher.phtml')
         );
 
         $this->addChild('refresh_button', 'Mage_Adminhtml_Block_Widget_Button', array(

@@ -32,14 +32,8 @@ class Mage_Paygate_Block_Authorizenet_Info_Cc extends Mage_Payment_Block_Info_Cc
      * @var bool
      */
     protected $_isCheckoutProgressBlockFlag = true;
-    /**
-     * Set block template
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Paygate::info/cc.phtml');
-    }
+
+    protected $_template = 'Mage_Paygate::info/cc.phtml';
 
     /**
      * Render as PDF

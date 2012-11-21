@@ -34,7 +34,7 @@ class Mage_Customer_Block_Account_Dashboard_InfoTest extends PHPUnit_Framework_T
 
     public function setUp()
     {
-        $this->_block = new Mage_Customer_Block_Account_Dashboard_Info;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Customer_Block_Account_Dashboard_Info');
     }
 
     public function tearDown()

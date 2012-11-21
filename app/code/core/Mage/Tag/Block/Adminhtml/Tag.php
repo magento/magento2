@@ -35,13 +35,13 @@
 class Mage_Tag_Block_Adminhtml_Tag extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_Tag';
         $this->_controller = 'adminhtml_tag';
         $this->_headerText = Mage::helper('Mage_Tag_Helper_Data')->__('Manage Tags');
         $this->_addButtonLabel = Mage::helper('Mage_Tag_Helper_Data')->__('Add New Tag');
-        parent::__construct();
+        parent::_construct();
     }
 
     public function getHeaderCssClass() {

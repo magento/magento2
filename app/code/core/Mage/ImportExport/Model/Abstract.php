@@ -93,7 +93,7 @@ abstract class Mage_ImportExport_Model_Abstract extends Varien_Object
             }
             $fileName = substr(strstr(Mage_ImportExport_Model_Scheduled_Operation::LOG_DIRECTORY, DS), 1)
                 . $dirName . $fileName . '.log';
-            $this->_logInstance = Mage::getModel('Mage_Core_Model_Log_Adapter', $fileName)
+            $this->_logInstance = Mage::getModel('Mage_Core_Model_Log_Adapter', array('fileName' => $fileName))
                 ->setFilterDataKeys($this->_debugReplacePrivateDataKeys);
         }
         $this->_logInstance->log($debugData);

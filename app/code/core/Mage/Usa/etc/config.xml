@@ -112,13 +112,13 @@
                 <dutypaymenttype>R</dutypaymenttype>
                 <free_method>G</free_method>
                 <gateway_url>https://eCommerce.airborne.com/ApiLandingTest.asp</gateway_url>
-                <id backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <id backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <model>Mage_Usa_Model_Shipping_Carrier_Dhl</model>
-                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <shipment_requesttype>0</shipment_requesttype>
                 <shipment_type>P</shipment_type>
-                <shipping_key backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <shipping_intlkey backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <shipping_key backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <shipping_intlkey backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <title>DHL (Deprecated)</title>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <max_package_weight>150</max_package_weight>
@@ -129,10 +129,10 @@
                 <additional_protection_rounding>0</additional_protection_rounding>
             </dhl>
             <fedex>
-                <account backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <meter_number backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <key backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <account backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <meter_number backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <key backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <sandbox_mode>0</sandbox_mode>
                 <shipment_requesttype>0</shipment_requesttype>
                 <active>0</active>
@@ -151,7 +151,7 @@
                 <handling_action>O</handling_action>
             </fedex>
             <ups>
-                <access_license_number backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <access_license_number backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <active>0</active>
                 <sallowspecific>0</sallowspecific>
                 <allowed_methods>1DM,1DML,1DA,1DAL,1DAPI,1DP,1DPL,2DM,2DML,2DA,2DAL,3DS,GND,GNDCOM,GNDRES,STD,XPR,WXS,XPRL,XDM,XDML,XPD,01,02,03,07,08,11,12,14,54,59,65</allowed_methods>
@@ -169,8 +169,8 @@
                 <title>United Parcel Service</title>
                 <tracking_xml_url>https://www.ups.com/ups.app/xml/Track</tracking_xml_url>
                 <unit_of_measure>LBS</unit_of_measure>
-                <username backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <username backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <min_package_weight>0.1</min_package_weight>
                 <max_package_weight>150</max_package_weight>
@@ -196,8 +196,8 @@
                 <model>Mage_Usa_Model_Shipping_Carrier_Usps</model>
                 <size>REGULAR</size>
                 <title>United States Postal Service</title>
-                <userid backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <userid backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <isproduction>0</isproduction>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <max_package_weight>70</max_package_weight>
@@ -214,8 +214,8 @@
                 <doc_methods>2,5,6,7,9,B,C,D,U,K,L,G,W,I,N,O,R,S,T,X</doc_methods>
                 <free_method>G</free_method>
                 <gateway_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_url>
-                <id backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <id backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <shipment_type>N</shipment_type>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>

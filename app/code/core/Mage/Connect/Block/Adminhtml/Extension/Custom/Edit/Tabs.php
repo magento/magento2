@@ -36,9 +36,9 @@ class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tabs extends Mage_Admin
     /**
     * Constructor
     */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('connect_extension_edit_tabs');
         $this->setDestElementId('edit_form');
         $this->setTitle(Mage::helper('Mage_Connect_Helper_Data')->__('Create Extension Package'));

@@ -212,7 +212,7 @@ class Mage_XmlConnect_Model_Theme
         $themeFileName = $this->_createCopy($filePath);
 
         /** @var $themeFileName Mage_XmlConnect_Model_Theme */
-        $themeFileName = Mage::getModel('Mage_XmlConnect_Model_Theme', $filePath);
+        $themeFileName = Mage::getModel('Mage_XmlConnect_Model_Theme', array('file' => $filePath));
         $themeFileName->setLabel($themeName);
         $fileName = basename($filePath);
         $themeFileName->setName(substr($fileName, 0, -4));

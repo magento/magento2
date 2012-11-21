@@ -33,9 +33,9 @@
  */
 class Mage_GoogleShopping_Block_Adminhtml_Items_Product extends Mage_Adminhtml_Block_Widget_Grid
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('googleshopping_selection_search_grid');
         $this->setDefaultSort('id');
         $this->setUseAjax(true);

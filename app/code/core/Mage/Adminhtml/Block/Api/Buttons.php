@@ -27,11 +27,7 @@
 class Mage_Adminhtml_Block_Api_Buttons extends Mage_Adminhtml_Block_Template
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('api/userinfo.phtml');
-    }
+    protected $_template = 'api/userinfo.phtml';
 
     protected function _prepareLayout()
     {

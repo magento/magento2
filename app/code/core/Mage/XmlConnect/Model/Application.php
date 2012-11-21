@@ -403,7 +403,7 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
             if (isset($this->_data['conf']['extra'])) {
                 $extra = $this->_data['conf']['extra'];
                 if (isset($extra['tabs'])) {
-                    $tabs = Mage::getModel('Mage_XmlConnect_Model_Tabs', $extra['tabs']);
+                    $tabs = Mage::getModel('Mage_XmlConnect_Model_Tabs', array('data' => $extra['tabs']));
                     $result['tabBar']['tabs'] = $tabs;
                 }
                 if (isset($extra['fontColors'])) {
@@ -610,7 +610,8 @@ class Mage_XmlConnect_Model_Application extends Mage_Core_Model_Abstract
     public function getEnabledTabsArray()
     {
         if ($this->getData('conf/extra/tabs')) {
-            return Mage::getModel('Mage_XmlConnect_Model_Tabs', $this->getData('conf/extra/tabs'))->getRenderTabs();
+            return Mage::getModel('Mage_XmlConnect_Model_Tabs', array('data' => $this->getData('conf/extra/tabs')))
+                ->getRenderTabs();
         }
         return array();
     }

@@ -54,7 +54,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <script type="text/javascript">decorateTable('my-reviews-table')</script>
+        <script type="text/javascript">(function($) {$('#my-reviews-table').decorate('table')})(jQuery)</script>
     <?php echo $this->getToolbarHtml() ?>
 <?php else: ?>
     <p><?php echo $this->__('You have submitted no reviews.') ?></p>

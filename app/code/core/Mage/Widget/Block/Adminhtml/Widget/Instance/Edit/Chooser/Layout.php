@@ -67,7 +67,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Ma
      */
     protected function _getLayoutUpdate(array $arguments)
     {
-        return Mage::getModel('Mage_Core_Model_Layout_Merge', $arguments);
+        return Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $arguments));
     }
 
     /**

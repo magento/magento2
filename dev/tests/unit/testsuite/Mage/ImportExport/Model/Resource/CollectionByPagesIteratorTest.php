@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_ImportExport_Model_Resource_CollectionByPagesIterator
  */
-class Mage_ImportExport_Model_Resource_CollectionByPagesIteratorTest extends Magento_Test_TestCase_ZendDbAdapterAbstract
+class Mage_ImportExport_Model_Resource_CollectionByPagesIteratorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Mage_ImportExport_Model_Resource_CollectionByPagesIterator
@@ -62,7 +62,9 @@ class Mage_ImportExport_Model_Resource_CollectionByPagesIteratorTest extends Mag
             array(), '', false, false
         );
 
-        $adapter = $this->_getAdapterMock('Zend_Db_Adapter_Pdo_Mysql', array('fetchAll'), null);
+        $adapter = $this->getMockForAbstractClass(
+            'Zend_Db_Adapter_Abstract', array(), '', false, true, true, array('fetchAll')
+        );
         $collectionMock->setConnection($adapter);
 
         $collectionMock->expects($this->exactly($pageCount + 1))

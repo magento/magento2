@@ -38,7 +38,8 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_FormTest extends PHPUnit_Framework_Te
      */
     protected function _getFormInstance($args = array())
     {
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Edit_Form */
         $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Edit_Form', 'block', $args);
         $block->toHtml();
@@ -131,7 +132,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_FormTest extends PHPUnit_Framework_Te
         $this->assertInstanceOf('Varien_Data_Form_Element_Select', $storeElement);
 
         // Check store selection elements has correct renderer
-        $this->assertInstanceOf('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element',
+        $this->assertInstanceOf('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element',
             $storeElement->getRenderer());
 
         // Check store elements has expected values

@@ -45,7 +45,7 @@ class Mage_Core_Model_ConfigFactoryTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Config;
+        $this->_model = Mage::getModel('Mage_Core_Model_Config');
         $this->_model->init(self::$_options);
     }
 
@@ -85,13 +85,6 @@ class Mage_Core_Model_ConfigFactoryTest extends PHPUnit_Framework_TestCase
     public function testGetHelperClassName()
     {
         $this->assertEquals('Mage_Core_Helper_Http', $this->_model->getHelperClassName('Mage_Core_Helper_Http'));
-    }
-
-    public function testGetResourceHelper()
-    {
-        $this->assertInstanceOf(
-            'Mage_Core_Model_Resource_Helper_Abstract', $this->_model->getResourceHelper('Mage_Core')
-        );
     }
 
     public function testGetModelClassName()

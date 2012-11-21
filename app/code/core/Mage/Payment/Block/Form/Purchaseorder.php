@@ -27,9 +27,7 @@
 
 class Mage_Payment_Block_Form_Purchaseorder extends Mage_Payment_Block_Form
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Payment::form/purchaseorder.phtml');
-    }
+
+    protected $_template = 'Mage_Payment::form/purchaseorder.phtml';
+
 }

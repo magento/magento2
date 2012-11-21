@@ -44,10 +44,9 @@ class Mage_Sales_Block_Order_Invoice_ItemsTest extends PHPUnit_Framework_TestCas
 
     public function setUp()
     {
-        $this->_layout = new Mage_Core_Model_Layout;
-        $this->_block = new Mage_Sales_Block_Order_Invoice_Items;
-        $this->_layout->addBlock($this->_block, 'block');
-        $this->_invoice = new Mage_Sales_Model_Order_Invoice;
+        $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
+        $this->_block = $this->_layout->createBlock('Mage_Sales_Block_Order_Invoice_Items', 'block');
+        $this->_invoice = Mage::getModel('Mage_Sales_Model_Order_Invoice');
     }
 
     protected function tearDown()

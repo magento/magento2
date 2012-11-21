@@ -136,24 +136,6 @@ class Tools_Migration_Acl_Generator
     }
 
     /**
-     * Get License Template for a file
-     *
-     * @param $file string File path
-     * @return string
-     */
-    public function getLicenseTemplate($file)
-    {
-        $content = $this->_fileManager->getContents($file);
-
-        $licenseTemplate = '';
-        if (preg_match('#<\?xml[^>]+>\s+<\!--(\s+/\*\*[\w\W\d\s]+\*/\s+)-->#', $content, $matches)) {
-            $licenseTemplate = $matches[1];
-        }
-
-        return $licenseTemplate;
-    }
-
-    /**
      * Get module name from file name
      *
      * @param $fileName string
@@ -427,16 +409,12 @@ class Tools_Migration_Acl_Generator
     /**
      * Get template for result DOMDocument
      *
-     * @param $licenseTemplate
      * @return DOMDocument
      */
-    public function getResultDomDocument($licenseTemplate)
+    public function getResultDomDocument()
     {
         $resultDom = new DOMDocument();
         $resultDom->formatOutput = true;
-
-        $comment = $resultDom->createComment($licenseTemplate);
-        $resultDom->appendChild($comment);
 
         $config = $resultDom->createElement('config');
         $resultDom->appendChild($config);
@@ -457,8 +435,7 @@ class Tools_Migration_Acl_Generator
     {
         foreach ($this->getAdminhtmlFiles() as $file) {
             $module = $this->getModuleName($file);
-            $licenseTemplate = $this->getLicenseTemplate($file);
-            $resultDom = $this->getResultDomDocument($licenseTemplate);
+            $resultDom = $this->getResultDomDocument();
 
             $adminhtmlDom = new DOMDocument();
             $adminhtmlDom->load($file);

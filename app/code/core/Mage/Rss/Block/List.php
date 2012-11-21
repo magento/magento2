@@ -115,19 +115,6 @@ class Mage_Rss_Block_List extends Mage_Core_Block_Template
         $this->resetRssFeed();
         $this->CategoriesRssFeed();
         return $this->getRssFeeds();
-
-/*      $section = Mage::getSingleton('Mage_Adminhtml_Model_Config')->getSections();
-        $catalogFeeds = $section->rss->groups->catalog->fields[0];
-        $res = array();
-        foreach($catalogFeeds as $code => $feed){
-            $prefix = self::XML_PATH_RSS_METHODS.'/catalog/'.$code;
-            if (!Mage::getStoreConfig($prefix) || $code=='tag') {
-                continue;
-            }
-            $res[$code] = $feed;
-        }
-        return $res;
-*/
     }
 
     public function getRssMiscFeeds()

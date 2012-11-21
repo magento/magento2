@@ -29,20 +29,21 @@
     <?php echo $this->getChildHtml('list_before')?>
     <?php if( $this->getCount() ): ?>
     <h3><?php echo $this->__('Other people marked this product with these tags:') ?></h3>
-    <ul id="<?php echo $this->getUniqueHtmlId('product-tags_'); ?>" class="product-tags">
+    <?php $_uniqueProductTagsId = $this->getUniqueHtmlId('product-tags_')?>
+    <ul id="<?php echo $_uniqueProductTagsId ?>" class="product-tags">
         <?php echo $this->renderTags('<li><a href="%1$s">%2$s</a> (%3$s)</li>') ?>
     </ul>
     <script type="text/javascript">
-        decorateGeneric($("<?php echo $this->getUniqueHtmlId('product-tags_'); ?>").select('li'), ['first', 'last']);
+        (function($) {$('#<?php echo $_uniqueProductTagsId?>').find('li').decorate('generic', ['first','last'])})(jQuery)
     </script>
     <?php endif; ?>
     <form id="addTagForm" action="<?php echo $this->getFormAction(); ?>" method="get">
-        <div class="form-add" <?php echo $this->getUiId() ?>>
+        <div class="form-add">
             <label for="productTagName"><?php echo $this->__('Add Your Tags:') ?></label>
             <div class="input-box">
-                <input type="text" class="input-text required-entry" name="productTagName" id="productTagName" <?php echo $this->getUiId('add','input') ?>/>
+                <input type="text" class="input-text" data-validate="{required:true}" name="productTagName" id="productTagName"/>
             </div>
-            <button type="button" title="<?php echo $this->__('Add Tags') ?>" class="button" onclick="submitTagForm()"<?php echo $this->getUiId('add','button') ?>>
+            <button type="submit" title="<?php echo $this->__('Add Tags') ?>" class="button">
                 <span>
                     <span><?php echo $this->__('Add Tags') ?></span>
                 </span>
@@ -51,13 +52,16 @@
     </form>
     <p class="note"><?php echo $this->__("Use spaces to separate tags. Use single quotes (') for phrases.") ?></p>
     <script type="text/javascript">
-    //<![CDATA[
-        var addTagFormJs = new VarienForm('addTagForm');
-        function submitTagForm(){
-            if(addTagFormJs.validator.validate()) {
-                addTagFormJs.form.submit();
-            }
-        }
-    //]]>
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Tag::list.js')?>", function() {
+                    $('#addTagForm').tags();
+                }
+            )
+        })(jQuery);
     </script>
 </div>

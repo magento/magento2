@@ -37,26 +37,17 @@ class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_Direc
     protected $_logger;
 
     /**
-     * @param array $data
-     * @throws InvalidArgumentException if config storage is not present in $data array
+     * @param DOMDocument $menuConfig
+     * @param Magento_ObjectManager $factory
+     * @param Mage_Backend_Model_Menu_Logger $menuLogger
      */
-    public function __construct(array $data = array())
-    {
-        parent::__construct($data);
-        if (false == ($this->_configModel instanceof DOMDocument)) {
-            throw new InvalidArgumentException('Configuration storage model is not instance of DOMDocument');
-        }
-
-        if (isset($data['logger'])) {
-            $this->_logger = $data['logger'];
-        } else {
-            throw new InvalidArgumentException("Logger model is required parameter");
-        }
-
-        if (false == ($this->_logger instanceof Mage_Backend_Model_Menu_Logger)) {
-            throw new InvalidArgumentException('Logger model is not an instance of Mage_Core_Model_Log');
-        }
-
+    public function __construct(
+        DOMDocument $menuConfig,
+        Magento_ObjectManager $factory,
+        Mage_Backend_Model_Menu_Logger $menuLogger
+    ) {
+        parent::__construct($menuConfig, $factory);
+        $this->_logger = $menuLogger;
         $this->_extractData();
     }
 
@@ -111,25 +102,25 @@ class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_Direc
     {
         switch ($data['type']) {
             case 'update':
-                $command = $this->_factory->getModelInstance(
+                $command = $this->_factory->create(
                     'Mage_Backend_Model_Menu_Builder_Command_Update',
-                    $data
+                    array('data' => $data)
                 );
                 $this->_logger->log(sprintf('Update on item with id %s was processed', $command->getId()));
                 break;
 
             case 'remove':
-                $command = $this->_factory->getModelInstance(
+                $command = $this->_factory->create(
                     'Mage_Backend_Model_Menu_Builder_Command_Remove',
-                    $data
+                    array('data' => $data)
                 );
                 $this->_logger->log(sprintf('Remove on item with id %s was processed', $command->getId()));
                 break;
 
             default:
-                $command = $this->_factory->getModelInstance(
+                $command = $this->_factory->create(
                     'Mage_Backend_Model_Menu_Builder_Command_Add',
-                    $data
+                    array('data' => $data)
                 );
                 break;
         }

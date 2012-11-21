@@ -37,9 +37,9 @@ class Mage_Adminhtml_Block_Customer_Online_Grid extends Mage_Adminhtml_Block_Wid
      * Initialize Grid block
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('onlineGrid');
         $this->setSaveParametersInSession(true);
         $this->setDefaultSort('last_activity');

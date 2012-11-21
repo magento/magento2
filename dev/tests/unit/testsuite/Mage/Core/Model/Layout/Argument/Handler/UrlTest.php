@@ -38,43 +38,27 @@ class Mage_Core_Model_Layout_Argument_Handler_UrlTest extends PHPUnit_Framework_
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectFactoryMock;
+    protected $_objectManagerMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_urlModelMock;
 
-
     protected function setUp()
     {
-        $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
         $this->_urlModelMock = $this->getMock('Mage_Core_Model_Url', array(), array(), '', false);
-        $this->_model = new Mage_Core_Model_Layout_Argument_Handler_Url(
-            array('objectFactory' => $this->_objectFactoryMock, 'urlModel' => $this->_urlModelMock)
+        $this->_model = new Mage_Core_Model_Layout_Argument_Handler_Url($this->_objectManagerMock,
+            $this->_urlModelMock
         );
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Required url model is missing
-     */
-    public function testHandlerCreationIfUrlModelIsMissing()
+    protected function tearDown()
     {
-        new Mage_Core_Model_Layout_Argument_Handler_Url(
-            array('objectFactory' => $this->_objectFactoryMock)
-        );
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Wrong url model passed
-     */
-    public function testHandlerCreationIfUrlModelIsIncorrect()
-    {
-        new Mage_Core_Model_Layout_Argument_Handler_Url(
-            array('objectFactory' => $this->_objectFactoryMock, 'urlModel' => new StdClass())
-        );
+        unset($this->_model);
+        unset($this->_objectManagerMock);
+        unset($this->_urlModelMock);
     }
 
     public function testProcess()

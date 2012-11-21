@@ -110,7 +110,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteClasses($content, $file)
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_classes*.php', $content, $file);
-        foreach ($declarations as $entity => $suggestion) {
+        foreach ($declarations as $declaration) {
+            list($entity, $suggestion) = $declaration;
             $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Class '$entity' is obsolete. $suggestion"
             );
@@ -124,7 +125,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteMethods($content, $file)
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_methods*.php', $content, $file);
-        foreach ($declarations as $method => $suggestion) {
+        foreach ($declarations as $declaration) {
+            list($method, $suggestion) = $declaration;
             $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($method, '/') . '\s*\(/iS', $content,
                 "Method '$method' is obsolete. $suggestion"
             );
@@ -141,12 +143,12 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
         );
         $this->_assertNotRegExp('/\->getUsedProductIds\(([^\)]+,\s*[^\)]+)?\)/', $content,
             'Backwards-incompatible change: method getUsedProductIds($product)'
-            . ' must be invoked with one and only one argument - product model object'
+                . ' must be invoked with one and only one argument - product model object'
         );
 
         $this->_assertNotRegExp('#->_setActiveMenu\([\'"]([\w\d/_]+)[\'"]\)#Ui', $content,
             'Backwards-incompatible change: method _setActiveMenu()'
-            . ' must be invoked with menu item identifier than xpath for menu item'
+                . ' must be invoked with menu item identifier than xpath for menu item'
         );
 
         $this->assertEquals(0,
@@ -171,7 +173,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteProperties($content, $file)
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_properties*.php', $content, $file);
-        foreach ($declarations as $entity => $suggestion) {
+        foreach ($declarations as $declaration) {
+            list($entity, $suggestion) = $declaration;
             $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Property '$entity' is obsolete. $suggestion"
             );
@@ -196,7 +199,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _testObsoleteConstants($content, $file)
     {
         $declarations = $this->_getRelevantConfigEntities('obsolete_constants*.php', $content, $file);
-        foreach ($declarations as $entity => $suggestion) {
+        foreach ($declarations as $declaration) {
+            list($entity, $suggestion) = $declaration;
             $this->_assertNotRegExp('/[^a-z\d_]' . preg_quote($entity, '/') . '[^a-z\d_]/iS', $content,
                 "Constant '$entity' is obsolete. $suggestion"
             );
@@ -216,7 +220,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     /**
      * Retrieve configuration items, whose 'class_scope' match to the content, in the following format:
      *   array(
-     *     '<entity>' => '<suggestion>',
+     *     array('<entity>', '<suggestion>'),
      *     ...
      *   )
      *
@@ -228,7 +232,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _getRelevantConfigEntities($fileNamePattern, $content, $file)
     {
         $result = array();
-        foreach ($this->_loadConfigFiles($fileNamePattern) as $entity => $info) {
+        foreach ($this->_loadConfigFiles($fileNamePattern) as $info) {
             $class = $info['class_scope'];
             $regexp = '/(class|extends)\s+' . preg_quote($class, '/') . '(\s|;)/S';
             /* Note: strpos is used just to prevent excessive preg_match calls */
@@ -240,7 +244,7 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
                     continue;
                 }
             }
-            $result[$entity] = $info['suggestion'];
+            $result[] = array($info['obsolete_entity'], $info['suggestion']);
         }
         return $result;
     }
@@ -260,43 +264,8 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
         foreach (glob(dirname(__FILE__) . '/_files/' . $fileNamePattern, GLOB_BRACE) as $configFile) {
             $config = array_merge($config, include($configFile));
         }
-        $result = $this->_normalizeConfigData($config);
-        self::$_configFilesCache[$fileNamePattern] = $result;
-        return $result;
-    }
-
-    /**
-     * Convert config data to the uniform format:
-     *   array(
-     *     '<entity>' => array(
-     *       'suggestion' => '<suggestion>',
-     *       'class_scope' => '<class_scope>',
-     *     ),
-     *     ...
-     *   )
-     *
-     * @param array $config
-     * @return array
-     */
-    protected function _normalizeConfigData(array $config)
-    {
-        $result = array();
-        foreach ($config as $key => $value) {
-            $row = array('suggestion' => null, 'class_scope' => null, 'directory' => null);
-            if (is_string($key)) {
-                $row = array_merge($row, $value);
-                if ($row['suggestion']) {
-                    $row['suggestion'] = sprintf(self::SUGGESTION_MESSAGE, $row['suggestion']);
-                }
-                if ($row['directory']) {
-                    $row['directory'] = Utility_Files::init()->getPathToSource() . '/' . $row['directory'];
-                }
-                $result[$key] = $row;
-            } else {
-                $result[$value] = $row;
-            }
-        }
-        return $result;
+        self::$_configFilesCache[$fileNamePattern] = $config;
+        return $config;
     }
 
     /**
@@ -312,5 +281,37 @@ class Legacy_ObsoleteCodeTest extends PHPUnit_Framework_TestCase
     protected function _assertNotRegexp($regex, $content, $message)
     {
         $this->assertSame(0, preg_match($regex, $content), $message);
+    }
+
+    /**
+     * Add class rule
+     *
+     * @param string $name
+     * @param null|string $suggestion
+     * @param null|string $directory
+     * @return array
+     */
+    protected function _getClassRule($name, $suggestion = null, $directory = null)
+    {
+        return $this->_getRule($name, null, $suggestion, $directory);
+    }
+
+    /**
+     * Get rule
+     *
+     * @param string $obsoleteEntity
+     * @param null|string $classScope
+     * @param null|string $suggestion
+     * @param null|string $directory
+     * @return array
+     */
+    protected function _getRule($obsoleteEntity, $classScope = null, $suggestion = null, $directory = null)
+    {
+        return array(
+            'obsolete_entity' => $obsoleteEntity,
+            'class_scope' => $classScope,
+            'suggestion' => $suggestion,
+            'directory' => $directory
+        );
     }
 }

@@ -34,46 +34,6 @@
 class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Action
 {
     /**
-     * save class action
-     *
-     */
-    public function saveAction()
-    {
-        if ($postData = $this->getRequest()->getPost()) {
-
-            $model = Mage::getModel('Mage_Tax_Model_Class')->setData($postData);
-
-            try {
-                $model->save();
-                $classId    = $model->getId();
-                $classType  = $model->getClassType();
-                $classUrl   = '*/tax_class_' . strtolower($classType);
-
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(
-                    Mage::helper('Mage_Tax_Helper_Data')->__('The tax class has been saved.')
-                );
-                $this->_redirect($classUrl);
-
-                return ;
-            } catch (Mage_Core_Exception $e) {
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->setClassData($postData);
-                $this->_redirectReferer();
-            } catch (Exception $e) {
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(
-                    Mage::helper('Mage_Tax_Helper_Data')->__('An error occurred while saving this tax class.')
-                );
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->setClassData($postData);
-                $this->_redirectReferer();
-            }
-
-            $this->_redirectReferer();
-            return;
-        }
-        $this->getResponse()->setRedirect($this->getUrl('*/tax_class'));
-    }
-
-    /**
      * Save Tax Class via AJAX
      */
     public function ajaxSaveAction()
@@ -116,6 +76,38 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
     }
 
     /**
+     * Delete Tax Class via AJAX
+     */
+    public function ajaxDeleteAction()
+    {
+        $classId = (int)$this->getRequest()->getParam('class_id');
+        try {
+            $classModel = Mage::getModel('Mage_Tax_Model_Class')->load($classId);
+            Mage::register('tax_class_model', $classModel);
+            $this->_checkTaxClassUsage($classModel);
+            $classModel->delete();
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => true,
+                'error' => false,
+                'error_message' => ''
+            ));
+        } catch (Mage_Core_Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => $e->getMessage()
+            ));
+        } catch (Exception $e) {
+            $responseContent = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'success' => false,
+                'error' => true,
+                'error_message' => Mage::helper('Mage_Tax_Helper_Data')->__('An error occurred while deleting this tax class.')
+            ));
+        }
+        $this->getResponse()->setBody($responseContent);
+    }
+
+    /**
      * Validate/Filter Tax Class Type
      *
      * @param string $classType
@@ -151,20 +143,30 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
     }
 
     /**
-     * Initialize action
+     * Check if customer tax class exists and has not been used yet (in Tax Rules or Customer Groups)
      *
-     * @return Mage_Adminhtml_Controller_Action
+     * @param Mage_Tax_Model_Class $classModel
+     * @throws Mage_Core_Exception
      */
-    protected function _initAction()
+    protected function _checkTaxClassUsage(Mage_Tax_Model_Class $classModel)
     {
-        $classType = strtolower($this->getRequest()->getParam('classType'));
-        $this->loadLayout()
-            ->_setActiveMenu('sales/tax/tax_classes_' . $classType)
-            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Sales'), Mage::helper('Mage_Tax_Helper_Data')->__('Sales'))
-            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Tax'), Mage::helper('Mage_Tax_Helper_Data')->__('Tax'))
-        ;
+        if (!$classModel->getId()) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('This class no longer exists.'));
+        }
 
-        return $this;
+        $ruleCollection = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->getCollection()
+            ->setClassTypeFilter($classModel->getClassType(), $classModel->getId());
+
+        if ($ruleCollection->getSize() > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used in Tax Rules. You have to delete the rules it is used in first.'));
+        }
+
+        $customerGroupCollection = Mage::getModel('Mage_Customer_Model_Group')->getCollection()
+            ->addFieldToFilter('tax_class_id', $classModel->getId());
+        $groupCount = $customerGroupCollection->getSize();
+        if ($groupCount > 0) {
+            Mage::throwException(Mage::helper('Mage_Tax_Helper_Data')->__('You cannot delete this tax class as it is used for %d customer groups.', $groupCount));
+        }
     }
 
     /**
@@ -174,7 +176,6 @@ class Mage_Adminhtml_Tax_ClassController extends Mage_Adminhtml_Controller_Actio
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::classes_product')
-            || Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::classes_customer');
+        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Tax::manage_tax');
     }
 }

@@ -89,25 +89,37 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
     public function tunnelAction()
     {
         $httpClient = new Varien_Http_Client();
+        $error = $this->__('invalid request');
+        $httpCode = 400;
         $gaData = $this->getRequest()->getParam('ga');
         $gaHash = $this->getRequest()->getParam('h');
         if ($gaData && $gaHash) {
             $newHash = Mage::helper('Mage_Adminhtml_Helper_Dashboard_Data')->getChartDataHash($gaData);
             if ($newHash == $gaHash) {
                 if ($params = unserialize(base64_decode(urldecode($gaData)))) {
-                    $response = $httpClient->setUri(Mage_Adminhtml_Block_Dashboard_Graph::API_URL)
+                    try {
+                        $response = $httpClient->setUri(Mage_Adminhtml_Block_Dashboard_Graph::API_URL)
                             ->setParameterGet($params)
                             ->setConfig(array('timeout' => 5))
                             ->request('GET');
 
-                    $headers = $response->getHeaders();
+                        $headers = $response->getHeaders();
 
-                    $this->getResponse()
-                        ->setHeader('Content-type', $headers['Content-type'])
-                        ->setBody($response->getBody());
+                        $this->getResponse()
+                            ->setHeader('Content-type', $headers['Content-type'])
+                            ->setBody($response->getBody());
+                        return;
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                        $error = $this->__('see error log for details');
+                        $httpCode = 503;
+                    }
                 }
             }
         }
+        $this->getResponse()->setBody($this->__('Service unavailable: %s', $error))
+            ->setHeader('Content-Type', 'text/plain; charset=UTF-8')
+            ->setHttpResponseCode($httpCode);
     }
 
     protected function _isAllowed()

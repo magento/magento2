@@ -40,7 +40,8 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_EditTest extends PHPUnit_
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
-        $layout = new Mage_Core_Model_Layout(array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
 
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit */
         $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_Edit', '', $blockAttributes);
@@ -210,14 +211,16 @@ class Mage_Adminhtml_Block_Urlrewrite_Catalog_Category_EditTest extends PHPUnit_
      */
     public function prepareLayoutDataProvider()
     {
-        $urlRewrite = new Mage_Core_Model_Url_Rewrite();
-        $category = new Mage_Catalog_Model_Category(array(
-            'entity_id' => 1,
-            'name' => 'Test category'
-        ));
-        $existingUrlRewrite = new Mage_Core_Model_Url_Rewrite(array(
-            'url_rewrite_id' => 1,
-        ));
+        /** @var $urlRewrite Mage_Core_Model_Url_Rewrite */
+        $urlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
+        /** @var $category Mage_Catalog_Model_Category */
+        $category = Mage::getModel('Mage_Catalog_Model_Category',
+            array('data' => array('entity_id' => 1, 'name' => 'Test category'))
+        );
+        /** @var $existingUrlRewrite Mage_Core_Model_Url_Rewrite */
+        $existingUrlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite',
+            array('data' => array('url_rewrite_id' => 1))
+        );
 
         return array(
             // Creating URL rewrite when category selected

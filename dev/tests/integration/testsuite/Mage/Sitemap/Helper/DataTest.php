@@ -34,7 +34,7 @@ class Mage_Sitemap_Helper_DataTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new Mage_Sitemap_Helper_Data();
+        $this->_helper = Mage::helper('Mage_Sitemap_Helper_Data');
     }
 
     protected function tearDown()

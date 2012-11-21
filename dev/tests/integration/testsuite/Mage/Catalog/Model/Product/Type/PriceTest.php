@@ -37,7 +37,7 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_Price;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Type_Price');
     }
 
     protected function tearDown()
@@ -52,7 +52,8 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
 
     public function testGetFinalPrice()
     {
-        $product = new Mage_Catalog_Model_Product;
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
 
         // regular & tier prices
@@ -74,7 +75,8 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
      */
     public function testGetChildFinalPrice()
     {
-        $product = new Mage_Catalog_Model_Product;
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
 
         // regular & tier prices
@@ -92,7 +94,7 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
 
     public function testGetTierPrice()
     {
-        $product = new Mage_Catalog_Model_Product;
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
         $this->assertEquals(8.0, $this->_model->getTierPrice(2, $product));
         $this->assertEquals(5.0, $this->_model->getTierPrice(5, $product));
@@ -100,21 +102,21 @@ class Mage_Catalog_Model_Product_Type_PriceTest extends PHPUnit_Framework_TestCa
 
     public function testGetTierPriceCount()
     {
-        $product = new Mage_Catalog_Model_Product;
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
         $this->assertEquals(2, $this->_model->getTierPriceCount($product));
     }
 
     public function testGetFormatedTierPrice()
     {
-        $product = new Mage_Catalog_Model_Product;
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
         $this->assertEquals('<span class="price">$8.00</span>', $this->_model->getFormatedTierPrice(2, $product));
     }
 
     public function testGetFormatedPrice()
     {
-        $product = new Mage_Catalog_Model_Product;
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // fixture
         $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }

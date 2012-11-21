@@ -34,7 +34,7 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Cache();
+        $this->_model = Mage::getModel('Mage_Core_Model_Cache');
     }
 
     public function tearDown()
@@ -44,7 +44,9 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorBackendDatabase()
     {
-        $model = new Mage_Core_Model_Cache(array('backend' => 'Database'));
+        $model = Mage::getModel('Mage_Core_Model_Cache',
+            array('options' => array('backend' => 'Database'))
+        );
         $backend = $model->getFrontend()->getBackend();
         $this->assertInstanceOf('Varien_Cache_Backend_Database', $backend);
     }
@@ -62,7 +64,9 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
 
             }
         }
-        $model = new Mage_Core_Model_Cache(array('backend' => $optionCode));
+        $model = Mage::getModel('Mage_Core_Model_Cache',
+            array('options' => array('backend' => $optionCode))
+        );
         $backend = $model->getFrontend()->getBackend();
         $this->assertInstanceOf('Zend_Cache_Backend_TwoLevels', $backend);
     }

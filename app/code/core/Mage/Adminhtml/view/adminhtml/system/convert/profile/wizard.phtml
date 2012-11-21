@@ -525,7 +525,7 @@ Event.observe(window, 'load', function(){
                     (function( $ ) {
                         $("#customer_filter_created_at_range").dateRange({
                             dateFormat: "<?php echo $this->getShortDateFormat() ?>",
-                            buttonImage: "<?php echo $this->getSkinUrl('images/grid-cal.gif') ?>",
+                            buttonImage: "<?php echo $this->getViewFileUrl('images/grid-cal.gif') ?>",
                             buttonText: "<?php echo $this->__('Date selector') ?>",
                             from: {
                                 id: "customer_filter_created_at_from"

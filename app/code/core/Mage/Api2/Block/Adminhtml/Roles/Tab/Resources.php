@@ -53,9 +53,9 @@ class Mage_Api2_Block_Adminhtml_Roles_Tab_Resources extends Mage_Adminhtml_Block
     /**
      * Constructor
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('api2_role_section_resources')
                 ->setData('default_dir', Varien_Db_Select::SQL_ASC)
@@ -63,8 +63,9 @@ class Mage_Api2_Block_Adminhtml_Roles_Tab_Resources extends Mage_Adminhtml_Block
                 ->setData('title', Mage::helper('Mage_Api2_Helper_Data')->__('Api Rules Information'))
                 ->setData('use_ajax', true);
 
+        $options = array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_PRIVILEGE);
         $this->_treeModel = Mage::getModel(
-            'Mage_Api2_Model_Acl_Global_Rule_Tree', array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_PRIVILEGE)
+            'Mage_Api2_Model_Acl_Global_Rule_Tree', array('options' => $options)
         );
     }
 

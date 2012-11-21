@@ -76,9 +76,10 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
      */
     protected function _composeXml($area, $package, $theme)
     {
-        $layoutUpdate = new Mage_Core_Model_Layout_Merge(array(
-            'area' => $area, 'package' => $package, 'theme' => $theme
-        ));
+        $layoutUpdate = Mage::getModel(
+            'Mage_Core_Model_Layout_Merge',
+            array('arguments' => array('area' => $area, 'package' => $package, 'theme' => $theme))
+        );
         return $layoutUpdate->getFileLayoutUpdatesXml();
     }
 
@@ -126,8 +127,8 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
         $result = array();
         foreach (array('adminhtml', 'frontend', 'install') as $area) {
             $result[] = array($area, false, false);
-            foreach (Mage::getDesign()->getDesignEntitiesStructure($area, false) as $package => $themes) {
-                foreach (array_keys($themes) as $theme) {
+            foreach (Mage::getDesign()->getDesignEntitiesStructure($area) as $package => $themes) {
+                foreach ($themes as $theme) {
                     $result[] = array($area, $package, $theme);
                 }
             }

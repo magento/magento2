@@ -51,11 +51,15 @@ class Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data
     /**
      * Class constructor
      *
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Helper_Data $coreHelper
      * @param array $arguments
      */
-    public function __construct(array $arguments = array())
-    {
-        parent::__construct($arguments);
+    public function __construct(Mage_Core_Model_Resource $resource,
+        Mage_Core_Helper_Data $coreHelper,
+        array $arguments = array()
+    ) {
+        parent::__construct($resource, $coreHelper, $arguments);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];

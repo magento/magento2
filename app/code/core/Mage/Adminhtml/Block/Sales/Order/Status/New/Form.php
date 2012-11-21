@@ -29,9 +29,9 @@
  */
 class Mage_Adminhtml_Block_Sales_Order_Status_New_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('new_order_status');
     }
 
@@ -101,7 +101,7 @@ class Mage_Adminhtml_Block_Sales_Order_Status_New_Form extends Mage_Adminhtml_Bl
             'legend' => Mage::helper('Mage_Sales_Helper_Data')->__('Store View Specific Labels'),
             'table_class' => 'form-list stores-tree',
         ));
-        $renderer = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset');
+        $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset');
         $fieldset->setRenderer($renderer);
 
         foreach (Mage::app()->getWebsites() as $website) {

@@ -35,9 +35,9 @@ class Mage_Adminhtml_Block_Report_Product_Lowstock_Grid extends Mage_Adminhtml_B
 {
 //    protected $_saveParametersInSession = true;
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('gridLowstock');
         $this->setUseAjax(false);
     }

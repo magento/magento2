@@ -67,8 +67,7 @@ class Mage_Core_Model_Authorization
 
         /** @var $aclBuilder Mage_Core_Model_Acl_Builder */
         $aclBuilder = Mage::getSingleton('Mage_Core_Model_Acl_Builder', array(
-            'areaConfig' => Mage::getConfig()->getAreaConfig(),
-            'objectFactory' => Mage::getConfig(),
+            'data' => array('areaConfig' => Mage::getConfig()->getAreaConfig(), 'objectFactory' => Mage::getConfig())
         ));
 
         /** @var $policyObject Magento_Authorization_Policy **/

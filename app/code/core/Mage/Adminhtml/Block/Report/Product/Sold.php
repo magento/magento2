@@ -38,11 +38,11 @@ class Mage_Adminhtml_Block_Report_Product_Sold extends Mage_Adminhtml_Block_Widg
      * Initialize container block settings
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'report_product_sold';
         $this->_headerText = Mage::helper('Mage_Reports_Helper_Data')->__('Products Ordered');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 }

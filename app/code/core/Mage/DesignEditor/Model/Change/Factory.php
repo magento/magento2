@@ -40,7 +40,7 @@ class Mage_DesignEditor_Model_Change_Factory
     public static function getInstance($change)
     {
         $class = self::getClass($change);
-        $model = Mage::getModel($class, $change);
+        $model = Mage::getModel($class, array('data' => $change));
         if (!$model instanceof Mage_DesignEditor_Model_ChangeAbstract) {
             throw new Magento_Exception(sprintf('Invalid change class "%s"', $class));
         }

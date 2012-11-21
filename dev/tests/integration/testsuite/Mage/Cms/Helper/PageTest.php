@@ -35,11 +35,16 @@ class Mage_Cms_Helper_PageTest extends PHPUnit_Framework_TestCase
     {
         $page = Mage::getSingleton('Mage_Cms_Model_Page');
         $page->load('page_design_modern', 'identifier'); // fixture
-        $helper = new Mage_Cms_Helper_Page;
+        /** @var $helper Mage_Cms_Helper_Page */
+        $helper = Mage::helper('Mage_Cms_Helper_Page');
         $result = $helper->renderPage(
-            new Mage_Core_Controller_Front_Action(new Magento_Test_Request, new Magento_Test_Response), $page->getId()
+            Mage::getModel(
+                'Mage_Core_Controller_Front_Action',
+                array('request' => new Magento_Test_Request, 'response' => new Magento_Test_Response)
+            ),
+            $page->getId()
         );
-        $this->assertEquals('default/modern/default', Mage::getDesign()->getDesignTheme());
+        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme());
         $this->assertTrue($result);
     }
 }

@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-class Varien_Pear_Frontend extends PEAR_Frontend
+class Varien_Pear_Frontend// extends PEAR_Frontend
 {
     protected $_logStream = null;
     protected $_outStream = null;

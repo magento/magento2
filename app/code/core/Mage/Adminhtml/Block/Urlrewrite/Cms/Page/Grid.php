@@ -36,9 +36,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Cms_Page_Grid extends Mage_Adminhtml_Block
     /**
      * Constructor
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setUseAjax(true);
     }
 

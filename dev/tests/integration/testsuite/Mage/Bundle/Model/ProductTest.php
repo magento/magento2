@@ -38,7 +38,7 @@ class Mage_Bundle_Model_ProductTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product');
         $this->_model->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_BUNDLE);
     }
 
@@ -60,12 +60,12 @@ class Mage_Bundle_Model_ProductTest extends PHPUnit_Framework_TestCase
         $this->assertSame($typeInstance, $this->_model->getTypeInstance());
 
         // singleton getter
-        $otherProduct = new Mage_Catalog_Model_Product;
+        $otherProduct = Mage::getModel('Mage_Catalog_Model_Product');
         $otherProduct->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_BUNDLE);
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
-        $customTypeInstance = new Mage_Bundle_Model_Product_Type;
+        $customTypeInstance = Mage::getModel('Mage_Bundle_Model_Product_Type');
         $this->_model->setTypeInstance($customTypeInstance);
         $this->assertSame($customTypeInstance, $this->_model->getTypeInstance());
     }

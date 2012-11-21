@@ -34,7 +34,7 @@ class Mage_Adminhtml_Block_Report_Sales_Bestsellers_GridTest extends PHPUnit_Fra
 
     protected function setUp()
     {
-        $this->_block = new Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Sales_Bestsellers_Grid');
     }
 
     protected function tearDown()

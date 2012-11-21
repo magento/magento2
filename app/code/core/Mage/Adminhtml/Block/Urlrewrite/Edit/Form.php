@@ -60,9 +60,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
      * Set form id and title
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('urlrewrite_form');
         $this->setTitle(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Block Information'));
     }
@@ -197,9 +197,9 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
                 'value' => Mage::app()->getStore(true)->getId()
             ), 'id_path');
         } else {
-            /** @var $renderer Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element */
+            /** @var $renderer Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element */
             $renderer = $this->getLayout()
-                ->createBlock('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+                ->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
 
             $storeElement = $fieldset->addField('store_id', 'select', array(
                 'label'    => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Store'),

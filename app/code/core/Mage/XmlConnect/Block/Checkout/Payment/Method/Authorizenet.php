@@ -122,7 +122,8 @@ class Mage_XmlConnect_Block_Checkout_Payment_Method_Authorizenet extends Mage_Pa
     {$verification}
 </fieldset>
 EOT;
-        $fieldsetXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', $xml);
+        $fieldsetXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => $xml));
         $formXmlObj->appendChild($fieldsetXmlObj);
     }
 }

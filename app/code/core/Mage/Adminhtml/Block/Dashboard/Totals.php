@@ -34,11 +34,7 @@
  */
 class Mage_Adminhtml_Block_Dashboard_Totals extends Mage_Adminhtml_Block_Dashboard_Bar
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('dashboard/totalbar.phtml');
-    }
+    protected $_template = 'dashboard/totalbar.phtml';
 
     protected function _prepareLayout()
     {

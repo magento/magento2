@@ -180,7 +180,7 @@ class Mage_Catalog_Model_Product_Option_Api extends Mage_Catalog_Model_Api_Resou
      */
     public function types()
     {
-        $path = Mage_Adminhtml_Model_System_Config_Source_Product_Options_Type::PRODUCT_OPTIONS_GROUPS_PATH;
+        $path = Mage_Catalog_Model_Config_Source_Product_Options_Type::PRODUCT_OPTIONS_GROUPS_PATH;
         $types = array();
         foreach (Mage::getConfig()->getNode($path)->children() as $group) {
             $groupTypes = Mage::getConfig()->getNode($path . '/' . $group->getName() . '/types')->children();

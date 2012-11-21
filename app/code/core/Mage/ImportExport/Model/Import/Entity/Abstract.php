@@ -182,7 +182,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
     /**
      * Source model.
      *
-     * @var Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @var Mage_ImportExport_Model_Import_SourceAbstract
      */
     protected $_source;
 
@@ -209,7 +209,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
     /**
      * Inner source object getter.
      *
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     protected function _getSource()
     {
@@ -320,7 +320,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number.
      * @param string $colName OPTIONAL Column name.
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     public function addRowError($errorCode, $errorRowNum, $colName = null)
     {
@@ -502,7 +502,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      * Source object getter.
      *
      * @throws Exception
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     public function getSource()
     {
@@ -644,10 +644,10 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
     /**
      * Source model setter.
      *
-     * @param Mage_ImportExport_Model_Import_Adapter_Abstract $source
+     * @param Mage_ImportExport_Model_Import_SourceAbstract $source
      * @return Mage_ImportExport_Model_Import_Entity_Abstract
      */
-    public function setSource(Mage_ImportExport_Model_Import_Adapter_Abstract $source)
+    public function setSource(Mage_ImportExport_Model_Import_SourceAbstract $source)
     {
         $this->_source = $source;
         $this->_dataValidated = false;

@@ -42,7 +42,7 @@ class Mage_Catalog_Model_ProductGettersTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product');
     }
 
     protected function tearDown()
@@ -93,11 +93,12 @@ class Mage_Catalog_Model_ProductGettersTest extends PHPUnit_Framework_TestCase
         $this->assertSame($typeInstance, $this->_model->getTypeInstance());
 
         // singleton
-        $otherProduct = new Mage_Catalog_Model_Product;
+        /** @var $otherProduct Mage_Catalog_Model_Product */
+        $otherProduct = Mage::getModel('Mage_Catalog_Model_Product');
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
-        $simpleTypeInstance = new Mage_Catalog_Model_Product_Type_Simple;
+        $simpleTypeInstance = Mage::getModel('Mage_Catalog_Model_Product_Type_Simple');
         $this->_model->setTypeInstance($simpleTypeInstance);
         $this->assertSame($simpleTypeInstance, $this->_model->getTypeInstance());
     }
@@ -154,7 +155,9 @@ class Mage_Catalog_Model_ProductGettersTest extends PHPUnit_Framework_TestCase
 
     public function testGetMediaAttributes()
     {
-        $model = new Mage_Catalog_Model_Product(array('media_attributes' => 'test'));
+        $model = Mage::getModel('Mage_Catalog_Model_Product',
+            array('data' => array('media_attributes' => 'test'))
+        );
         $this->assertEquals('test', $model->getMediaAttributes());
 
         $attributes = $this->_model->getMediaAttributes();
@@ -166,7 +169,8 @@ class Mage_Catalog_Model_ProductGettersTest extends PHPUnit_Framework_TestCase
 
     public function testGetMediaGalleryImages()
     {
-        $model = new Mage_Catalog_Model_Product;
+        /** @var $model Mage_Catalog_Model_Product */
+        $model = Mage::getModel('Mage_Catalog_Model_Product');
         $this->assertEmpty($model->getMediaGalleryImages());
 
         $this->_model->setMediaGallery(array('images' => array(array('file' => 'magento_image.jpg'))));

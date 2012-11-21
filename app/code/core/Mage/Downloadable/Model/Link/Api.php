@@ -63,7 +63,7 @@ class Mage_Downloadable_Model_Link_Api extends Mage_Catalog_Model_Api_Resource
 
         $result = array();
         try {
-            $uploader = Mage::getModel('Mage_Downloadable_Model_Link_Api_Uploader', $fileInfo);
+            $uploader = Mage::getModel('Mage_Downloadable_Model_Link_Api_Uploader', array('file' => $fileInfo));
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $result = $uploader->save($tmpPath);

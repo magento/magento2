@@ -42,7 +42,8 @@ class Mage_XmlConnect_Block_Checkout_Shipping_Method_Available
     protected function _toHtml()
     {
         /** @var $methodsXmlObj Mage_XmlConnect_Model_Simplexml_Element */
-        $methodsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<shipping_methods></shipping_methods>');
+        $methodsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<shipping_methods></shipping_methods>'));
         $_shippingRateGroups = $this->getShippingRates();
         if ($_shippingRateGroups) {
             $store = $this->getQuote()->getStore();

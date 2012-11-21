@@ -44,18 +44,12 @@ class Mage_Adminhtml_Block_Newsletter_Subscriber_Grid extends Mage_Adminhtml_Blo
      * Constructor
      *
      * Set main configuration of grid
-     *
-     * @param array $attributes
-     * @throws InvalidArgumentException
      */
-    public function __construct(array $attributes = array())
+    protected function _construct()
     {
-        $this->_app = isset($attributes['app']) ? $attributes['app'] : Mage::app();
+        $this->_app = Mage::app();
 
-        if (!($this->_app instanceof Mage_Core_Model_App)) {
-            throw new InvalidArgumentException('Required application object is invalid');
-        }
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setId('subscriberGrid');
         $this->setUseAjax(true);
         $this->setDefaultSort('subscriber_id', 'desc');

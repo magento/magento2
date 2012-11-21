@@ -39,18 +39,18 @@ class Mage_Adminhtml_Block_System_Store_Delete extends Mage_Adminhtml_Block_Widg
      * Class constructor
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'item_id';
         $this->_mode = 'delete';
         $this->_controller = 'system_store';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_removeButton('save');
         $this->_removeButton('reset');
 
-        $this->_updateButton('delete', 'area', 'footer');
+        $this->_updateButton('delete', 'region', 'footer');
         $this->_updateButton('delete', 'onclick', 'editForm.submit();');
 
         $this->_addButton('cancel', array(

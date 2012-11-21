@@ -39,7 +39,7 @@ class Mage_Catalog_Model_UrlTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Url;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Url');
     }
 
     protected function tearDown()
@@ -55,7 +55,8 @@ class Mage_Catalog_Model_UrlTest extends PHPUnit_Framework_TestCase
      */
     protected function _loadRewrite($idPath)
     {
-        $rewrite = new Mage_Core_Model_Url_Rewrite();
+        /** @var $rewrite Mage_Core_Model_Url_Rewrite */
+        $rewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
         $rewrite->loadByIdPath($idPath);
         return $rewrite;
     }

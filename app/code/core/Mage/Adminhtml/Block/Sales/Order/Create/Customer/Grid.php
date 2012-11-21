@@ -32,9 +32,9 @@
 class Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_order_create_customer_grid');
         $this->setRowClickCallback('order.selectCustomer.bind(order)');
         $this->setUseAjax(true);

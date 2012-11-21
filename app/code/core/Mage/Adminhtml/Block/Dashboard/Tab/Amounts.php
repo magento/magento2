@@ -39,10 +39,10 @@ class Mage_Adminhtml_Block_Dashboard_Tab_Amounts extends Mage_Adminhtml_Block_Da
      *
      * @return void
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->setHtmlId('amounts');
-        parent::__construct();
+        parent::_construct();
     }
 
     /**

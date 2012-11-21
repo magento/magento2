@@ -27,9 +27,6 @@
 
 class Mage_Ogone_Block_Placeform extends Mage_Core_Block_Template
 {
-    public function __construct()
-    {
-    }
 
     /**
      * Get checkout session namespace

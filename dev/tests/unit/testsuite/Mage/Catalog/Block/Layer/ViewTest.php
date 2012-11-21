@@ -31,7 +31,7 @@ class Mage_Catalog_Block_Layer_ViewTest extends PHPUnit_Framework_TestCase
     {
         $childBlock = new Varien_Object;
 
-        $block = $this->getMock('Mage_Catalog_Block_Layer_View', array('getChildBlock'));
+        $block = $this->getMock('Mage_Catalog_Block_Layer_View', array('getChildBlock'), array(), '', false);
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
             ->with('layer_state')

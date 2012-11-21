@@ -32,7 +32,7 @@ class Mage_Adminhtml_Block_Report_Filter_FormTest extends PHPUnit_Framework_Test
 {
     public function testPrepareForm()
     {
-        $layout = new Mage_Core_Model_Layout;
+        $layout = Mage::getObjectManager()->create('Mage_Core_Model_Layout');
         $block = $layout->addBlock('Mage_Adminhtml_Block_Report_Filter_Form');
         $prepareFormMethod = new ReflectionMethod(
             'Mage_Adminhtml_Block_Report_Filter_Form', '_prepareForm');

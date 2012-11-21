@@ -29,16 +29,11 @@
     <acl>
         <resources>
             <resource id="Mage_Adminhtml::admin">
-                <resource id="Mage_Sales::sales">
-                    <resource id="Mage_Tax::sales_tax" module="Mage_Tax" title="Tax" sortOrder="500">
-                        <resource id="Mage_Tax::classes_customer" title="Customer Tax Classes" sortOrder="0" />
-                        <resource id="Mage_Tax::classes_product" title="Product Tax Classes" sortOrder="10" />
-                        <resource id="Mage_Tax::import_export" title="Import / Export Tax Rates" sortOrder="20" />
-                        <resource id="Mage_Tax::tax_rates" title="Manage Tax Zones &amp; Rates" sortOrder="30" />
-                        <resource id="Mage_Tax::rules" title="Manage Tax Rules" sortOrder="40" />
-                    </resource>
-                </resource>
                 <resource id="Mage_Adminhtml::system">
+                    <resource id="Mage_Tax::manage_tax" module="Mage_Tax" title="Tax Management" sortOrder="500" />
+                    <resource id="Mage_Adminhtml::convert">
+                        <resource id="Mage_Tax::import_export" title="Import / Export Tax Rates" sortOrder="50" />
+                    </resource>
                     <resource id="Mage_Adminhtml::config">
                         <resource id="Mage_Tax::config_tax" title="Tax Section" sortOrder="55" />
                     </resource>

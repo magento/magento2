@@ -219,7 +219,7 @@
             <stringProp name="TestPlan.comments">Also assumes that the product can be added to cart</stringProp>
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">product_id</stringProp>
-            <stringProp name="RegexExtractor.regex">&lt;form action=&quot;http.+/product/(\d+)/&quot; method=&quot;post&quot; id=&quot;product_addtocart_form&quot;&gt;</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;form action=&quot;http.+?/product/(\d+)/&quot; method=&quot;post&quot;\s+id=&quot;product_addtocart_form&quot;&gt;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>

@@ -154,18 +154,18 @@
                 <logo>nowAccepting_150x60</logo>
             </style>
             <wpp>
-                <api_password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <api_signature backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <api_username backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <api_password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <api_signature backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <api_username backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <button_flavor>dynamic</button_flavor>
             </wpp>
             <wpuk>
-                <user backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <pwd backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <user backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <pwd backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
             </wpuk>
             <fetch_reports>
-                <ftp_login backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <ftp_password backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <ftp_login backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <ftp_password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <schedule>1</schedule>
                 <time>00,00,00</time>
             </fetch_reports>
@@ -223,8 +223,8 @@
                 <useccv>1</useccv>
                 <tender>C</tender>
                 <verbosity>MEDIUM</verbosity>
-                <user backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
-                <pwd backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <user backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
+                <pwd backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <group>paypal</group>
             </verisign>
             <paypal_billing_agreement>
@@ -238,7 +238,7 @@
                 <model>Mage_Paypal_Model_Payflowlink</model>
                 <payment_action>Authorization</payment_action>
                 <verbosity>HIGH</verbosity>
-                <pwd backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <pwd backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <group>paypal</group>
                 <title>Credit Card</title>
             </payflow_link>
@@ -246,7 +246,7 @@
                 <model>Mage_Paypal_Model_Payflowadvanced</model>
                 <payment_action>Authorization</payment_action>
                 <verbosity>HIGH</verbosity>
-                <pwd backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <pwd backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <group>paypal</group>
                 <title>Credit Card</title>
                 <partner>PayPal</partner>

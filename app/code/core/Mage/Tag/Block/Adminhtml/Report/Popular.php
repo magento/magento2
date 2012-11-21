@@ -33,22 +33,23 @@
  */
 class Mage_Tag_Block_Adminhtml_Report_Popular extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_Tag';
         $this->_controller = 'adminhtml_report_popular';
         $this->_headerText = Mage::helper('Mage_Tag_Helper_Data')->__('Popular Tags');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 
     protected function _prepareLayout()
     {
         $this->setChild('store_switcher',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher')
+            $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher')
                 ->setUseConfirm(false)
                 ->setSwitchUrl($this->getUrl('*/*/*', array('store'=>null)))
-                ->setTemplate('report/store/switcher.phtml')
+                ->setTemplate('Mage_Adminhtml::report/store/switcher.phtml')
         );
 
         return parent::_prepareLayout();

@@ -26,14 +26,7 @@
 
 class Mage_Paygate_Block_Authorizenet_Form_Cc extends Mage_Payment_Block_Form
 {
-    /**
-     * Set block template
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Paygate::form/cc.phtml');
-    }
+    protected $_template = 'Mage_Paygate::form/cc.phtml';
 
     /**
      * Retreive payment method form html
@@ -77,7 +70,7 @@ class Mage_Paygate_Block_Authorizenet_Form_Cc extends Mage_Payment_Block_Form
      */
     public function getAdminCancelUrl()
     {
-        return Mage::getModel('Mage_Adminhtml_Model_Url')->getUrl('adminhtml/paygate_authorizenet_payment/cancel');
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/paygate_authorizenet_payment/cancel');
     }
 
     /**

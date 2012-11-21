@@ -49,7 +49,9 @@
             <input type="checkbox" id="inventory_use_config_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_manage_stock]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>/>
             <label for="inventory_use_config_manage_stock" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_config_manage_stock').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
 <?php if(!$this->getProduct()->isComposite()): ?>
@@ -61,7 +63,9 @@
                 <?php endif;?>
                 <input type="text" class="input-text required-entry validate-number" id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>" <?php echo $_readonly;?>/>
             </td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
         <tr>
@@ -72,7 +76,9 @@
             <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?> />
             <label for="inventory_use_config_min_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_min_qty').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
         <tr>
@@ -83,7 +89,9 @@
             <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?> />
             <label for="inventory_use_config_min_sale_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_config_min_sale_qty').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
         <tr>
@@ -94,7 +102,9 @@
             <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?> />
             <label for="inventory_use_config_max_sale_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_config_max_sale_qty').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
         <?php if($this->canUseQtyDecimals()): ?>
@@ -105,7 +115,9 @@
                 <option value="1"<?php if($this->getFieldValue('is_qty_decimal')==1): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
             </select>
             </td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 
         <?php if (!$this->isVirtual()) : ?>
@@ -116,7 +128,9 @@
                 <option value="1"<?php if($this->getFieldValue('is_decimal_divided') == 1): ?> selected="selected"<?php endif; ?>><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Yes') ?></option>
             </select>
             </td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
         <?php endif; ?>
 
@@ -135,7 +149,9 @@
             <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?> />
             <label for="inventory_use_config_backorders" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_config_backorders').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
         <tr>
             <td class="label"><label for="inventory_notify_stock_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Notify for Quantity Below') ?></label></td>
@@ -145,7 +161,9 @@
             <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>/>
             <label for="inventory_use_config_notify_stock_qty" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use_config_notify_stock_qty').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
 <?php endif; ?>
         <tr>
@@ -160,7 +178,9 @@
             <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>/>
             <label for="inventory_use_config_enable_qty_increments" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
             <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventory_use_config_enable_qty_increments').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
         <tr>
             <td class="label"><label for="inventory_qty_increments"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty Increments') ?></label></td>
@@ -170,7 +190,9 @@
                 <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>/>
                 <label for="inventory_use_config_qty_increments" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Config Settings') ?></label>
                 <?php if (!$this->isReadonly()):?><script type="text/javascript">toggleValueElements($('inventory_use_config_qty_increments'), $('inventory_use_config_qty_increments').parentNode);</script><?php endif; ?></td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
         <tr>
             <td class="label"><label for="inventory_stock_availability"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Stock Availability') ?></label></td>
@@ -181,7 +203,9 @@
             <?php endforeach; ?>
             </select>
             </td>
+            <?php if (!Mage::app()->isSingleStoreMode()): ?>
             <td class="value scope-label"><?php echo Mage::helper('Mage_Adminhtml_Helper_Data')->__('[GLOBAL]') ?></td>
+            <?php endif; ?>
         </tr>
         </table>
     </fieldset>

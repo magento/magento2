@@ -36,12 +36,12 @@ class Mage_Paypal_Block_Adminhtml_Settlement_Report extends Mage_Adminhtml_Block
     /**
      * Prepare grid container, add additional buttons
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_Paypal';
         $this->_controller = 'adminhtml_settlement_report';
         $this->_headerText = Mage::helper('Mage_Paypal_Helper_Data')->__('PayPal Settlement Reports');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
         $message = Mage::helper('Mage_Paypal_Helper_Data')->__('Connecting to PayPal SFTP server to fetch new reports. Are you sure you want to proceed?');
         if (true == Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Paypal::fetch')) {

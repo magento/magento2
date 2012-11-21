@@ -63,7 +63,7 @@
         </table>
         <script type="text/javascript">
         //<![CDATA[
-            decorateTable('my-apps-table');
+            (function($) {$('#my-apps-table').decorate('table')})(jQuery)
         //]]>
         </script>
     <?php echo $this->getToolbarHtml() ?>

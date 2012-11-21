@@ -36,7 +36,7 @@ class Mage_ImportExport_Model_ExportTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_ImportExport_Model_Export();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Export');
     }
 
     protected function tearDown()

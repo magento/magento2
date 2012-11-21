@@ -34,7 +34,7 @@ class Mage_Catalog_Model_Resource_Eav_AttributeTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_model= new Mage_Catalog_Model_Resource_Eav_Attribute();
+        $this->_model= Mage::getResourceModel('Mage_Catalog_Model_Resource_Eav_Attribute');
     }
 
     protected function tearDown()

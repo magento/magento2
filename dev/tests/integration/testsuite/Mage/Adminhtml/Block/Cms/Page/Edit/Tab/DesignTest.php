@@ -36,9 +36,9 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_DesignTest extends PHPUnit_Framewor
     public function testPrepareForm()
     {
         Mage::getConfig()->setCurrentAreaCode(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
-        Mage::register('cms_page', new Mage_Cms_Model_Page);
+        Mage::register('cms_page', Mage::getObjectManager()->create('Mage_Cms_Model_Page'));
 
-        $block = new Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design;
+        $block = Mage::getObjectManager()->create('Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design');
         $prepareFormMethod = new ReflectionMethod(
             'Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design', '_prepareForm');
         $prepareFormMethod->setAccessible(true);

@@ -27,15 +27,10 @@
 -->
 
 <layout>
-    <adminhtml_system_config_edit>
-        <reference name="left">
-            <block type="Mage_Adminhtml_Block_System_Config_Switcher" name="adminhtml.system.config.switcher" before="-"/>
-        </reference>
-    </adminhtml_system_config_edit>
     <adminhtml_dashboard_index>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Dashboard" name="dashboard">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" as="store_switcher" template="store/switcher.phtml">
+                <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" as="store_switcher" template="store/switcher.phtml">
                     <action method="setUseConfirm"><params>0</params></action>
                 </block>
             </block>

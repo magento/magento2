@@ -140,7 +140,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
                 // generate thumbnail "on the fly" if it does not exists
                 if(! $thumbUrl) {
-                    $thumbUrl = Mage::getSingleton('Mage_Adminhtml_Model_Url')->getUrl('*/*/thumbnail', array('file' => $item->getId()));
+                    $thumbUrl = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('*/*/thumbnail', array('file' => $item->getId()));
                 }
 
                 $size = @getimagesize($item->getFilename());
@@ -150,7 +150,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
                     $item->setHeight($size[1]);
                 }
             } else {
-                $thumbUrl = Mage::getDesign()->getSkinUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
+                $thumbUrl = Mage::getDesign()->getViewFileUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
             }
 
             $item->setThumbUrl($thumbUrl);

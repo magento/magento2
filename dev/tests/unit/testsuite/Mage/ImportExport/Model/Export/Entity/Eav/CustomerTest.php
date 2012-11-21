@@ -115,10 +115,13 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
             ->method('__')
             ->will($this->returnArgument(0));
 
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $attributeCollection = new Varien_Data_Collection();
         foreach ($this->_attributes as $attributeData) {
+            $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
+            $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
-                array($attributeData), '', true, true, true, array('_construct')
+                $arguments, '', true, true, true, array('_construct')
             );
             $attributeCollection->addItem($attribute);
         }
@@ -196,6 +199,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
      */
     public function testExportItem()
     {
+        /** @var $writer Mage_ImportExport_Model_Export_Adapter_Abstract */
         $writer = $this->getMockForAbstractClass('Mage_ImportExport_Model_Export_Adapter_Abstract',
             array(), '', false, false, true, array('writeRow')
         );
@@ -206,9 +210,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
 
         $this->_model->setWriter($writer);
 
-        $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract',
-            array($this->_customerData)
-        );
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $arguments = $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
+        $arguments['data'] = $this->_customerData;
+        $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract', $arguments);
 
         $this->_model->exportItem($item);
     }

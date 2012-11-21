@@ -35,7 +35,7 @@ class Mage_Install_Helper_DataTest extends PHPUnit_Framework_TestCase
         @mkdir($subFolderA, 0777, true);
         @mkdir($subFolderB, 0777, true);
         @file_put_contents($subFolderB . 'test.txt', 'Some text here');
-        $helper = new Mage_Install_Helper_Data();
+        $helper = Mage::helper('Mage_Install_Helper_Data');
         $helper->setVarSubFolders(array($rootFolder));
         $helper->cleanVarFolder();
         $this->assertFalse(is_dir($rootFolder));

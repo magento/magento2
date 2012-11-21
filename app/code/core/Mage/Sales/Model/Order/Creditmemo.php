@@ -331,7 +331,8 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
     {
         if ($price) {
             if (!isset($this->_calculators[$type])) {
-                $this->_calculators[$type] = Mage::getModel('Mage_Core_Model_Calculator', $this->getStore());
+                $this->_calculators[$type] = Mage::getModel('Mage_Core_Model_Calculator',
+                    array('store' => $this->getStore()));
             }
             $price = $this->_calculators[$type]->deltaRound($price, $negative);
         }

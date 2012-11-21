@@ -33,13 +33,16 @@
  */
 class Mage_Adminhtml_Block_Catalog_Category_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct()
+    /**
+     * @var string
+     */
+    protected $_template = 'catalog/category/edit.phtml';
+
+    protected function _construct()
     {
         $this->_objectId    = 'entity_id';
         $this->_controller  = 'catalog_category';
         $this->_mode        = 'edit';
-
-        parent::__construct();
-        $this->setTemplate('catalog/category/edit.phtml');
+        parent::_construct();
     }
 }

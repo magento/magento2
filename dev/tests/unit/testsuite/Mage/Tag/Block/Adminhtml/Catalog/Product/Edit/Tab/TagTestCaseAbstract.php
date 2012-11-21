@@ -56,22 +56,23 @@ class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_TagTestCaseAbstract exte
 
     protected function setUp()
     {
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         $helperMock = $this->getMock('Mage_Tag_Helper_Data', array('__'), array(), '', false);
         $helperMock->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0));
 
-        $authSession = $this->getMock('Mage_Backend_Model_Auth_Session', array('isAllowed'), array(), '', false);
+        $authSession = $this->getMock('Mage_Core_Model_Authorization', array('isAllowed'), array(), '', false);
         $authSession->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnCallback(array($this, 'isAllowedCallback')));
 
         $data = array(
-            'helpers'      => array('Mage_Tag_Helper_Data' => $helperMock),
-            'auth_session' => $authSession
+            'authSession' => $authSession,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
+            'data'        => array('helpers' => array('Mage_Tag_Helper_Data' => $helperMock))
         );
-
-        $this->_model = new $this->_modelName($data);
+        $this->_model = $objectManagerHelper->getBlock($this->_modelName, $data);
     }
 
     protected function tearDown()

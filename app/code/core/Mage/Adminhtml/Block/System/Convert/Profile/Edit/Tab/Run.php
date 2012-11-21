@@ -33,11 +33,8 @@
  */
 class Mage_Adminhtml_Block_System_Convert_Profile_Edit_Tab_Run extends Mage_Adminhtml_Block_Template
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('system/convert/profile/run.phtml');
-    }
+
+    protected $_template = 'system/convert/profile/run.phtml';
 
     public function getRunButtonHtml()
     {

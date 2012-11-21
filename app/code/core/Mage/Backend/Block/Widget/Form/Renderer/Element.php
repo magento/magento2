@@ -36,10 +36,7 @@ class Mage_Backend_Block_Widget_Form_Renderer_Element extends Mage_Backend_Block
 {
     protected $_element;
 
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Backend::widget/form/renderer/element.phtml');
-    }
+    protected $_template = 'Mage_Backend::widget/form/renderer/element.phtml';
 
     public function getElement()
     {

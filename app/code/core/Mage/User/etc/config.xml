@@ -61,6 +61,13 @@
                 </admin_emails_forgot_email_template>
             </email>
         </template>
+        <di>
+            <Mage_User_Model_User><shared>0</shared></Mage_User_Model_User>
+            <Mage_User_Model_Role><shared>0</shared></Mage_User_Model_Role>
+            <preferences>
+                <Mage_Backend_Model_Auth_Credential_StorageInterface>Mage_User_Model_User</Mage_Backend_Model_Auth_Credential_StorageInterface>
+            </preferences>
+        </di>
     </global>
     <default>
         <admin>

@@ -1500,7 +1500,7 @@ class Mage_Adminhtml_Model_Sales_Order_Create extends Varien_Object implements M
         $this->_prepareQuoteItems();
 
         /** @var $service Mage_Sales_Model_Service_Quote */
-        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $quote);
+        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', array('quote' => $quote));
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $originalId = $oldOrder->getOriginalIncrementId();

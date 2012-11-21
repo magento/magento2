@@ -29,6 +29,7 @@ class Mage_Catalog_Model_Convert_Adapter_ProductTest extends PHPUnit_Framework_T
 {
     public function testLoadWithoutIssues()
     {
+        /** @var $model Mage_Catalog_Model_Convert_Adapter_Product */
         $model = $this->getMock('Mage_Catalog_Model_Convert_Adapter_Product', array('addException'));
 
         $exceptionWas = false;
@@ -36,7 +37,7 @@ class Mage_Catalog_Model_Convert_Adapter_ProductTest extends PHPUnit_Framework_T
             if ($level == Varien_Convert_Exception::FATAL) {
                 $exceptionWas = true;
             }
-            return new Mage_Dataflow_Model_Convert_Exception($error);
+            return Mage::getModel('Mage_Dataflow_Model_Convert_Exception', array('message' => $error));
         };
 
         $model->expects($this->any())

@@ -35,9 +35,9 @@
 class Mage_Tag_Block_Adminhtml_Customer extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         switch( $this->getRequest()->getParam('ret') ) {
             case 'all':

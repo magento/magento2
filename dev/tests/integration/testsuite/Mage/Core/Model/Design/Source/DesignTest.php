@@ -39,7 +39,7 @@ class Mage_Core_Model_Design_Source_DesignTest extends PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Design_Source_Design;
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Source_Design');
     }
 
     protected function tearDown()
@@ -51,38 +51,33 @@ class Mage_Core_Model_Design_Source_DesignTest extends PHPUnit_Framework_TestCas
     {
         $fixture = array(
             array(
-                'label' => 'Default / Default',
+                'label' => 'Default',
                 'value' => array(
                     array(
-                        'label' => 'default (incompatible version)',
-                        'value' => 'default/default/default',
+                        'label' => 'Default (incompatible version)',
+                        'value' => 'default/default',
+                    ),
+                    array(
+                        'label' => 'Theme G (incompatible version)',
+                        'value' => 'default/g',
                     ),
                 ),
             ),
             array(
-                'label' => 'Default / Theme G',
+                'label' => 'Package A',
                 'value' => array(
                     array(
-                        'label' => 'default (incompatible version)',
-                        'value' => 'default/g/default',
+                        'label' => 'Theme D (incompatible version)',
+                        'value' => 'a/d',
                     ),
                 ),
             ),
             array(
-                'label' => 'Package A / Theme D',
+                'label' => 'Package B',
                 'value' => array(
                     array(
-                        'label' => 'y (incompatible version)',
-                        'value' => 'a/d/y',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'Package B / Theme E',
-                'value' => array(
-                    array(
-                        'label' => 'x (incompatible version)',
-                        'value' => 'b/e/x',
+                        'label' => 'Theme E (incompatible version)',
+                        'value' => 'b/e',
                     ),
                 ),
             ),

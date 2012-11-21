@@ -116,7 +116,7 @@
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <script type="text/javascript">decorateTable('shipping-table-<?php echo $_address->getId() ?>')</script>
+                <script type="text/javascript">(function($) {$('#shipping-table-<?php echo $_address->getId()?>').decorate('table')})(jQuery)</script>
                 <?php echo $this->helper('Mage_GiftMessage_Helper_Message')->getInline('multishipping_adress', $_address); ?>
             </div>
         </div>

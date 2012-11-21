@@ -39,7 +39,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
 
     protected function setUp()
     {
-        $this->_model = new Mage_ImportExport_Model_Export_Entity_Eav_Customer();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Export_Entity_Eav_Customer');
     }
 
     protected function tearDown()
@@ -63,7 +63,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
         }
         $expectedAttributes = array_diff($expectedAttributes, $this->_model->getDisabledAttributes());
 
-        $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
+        $this->_model->setWriter(Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv'));
         $data = $this->_model->export();
         $this->assertNotEmpty($data);
 
@@ -169,7 +169,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
         /**
          * Change type of created_at attribute. In this case we have possibility to test date rage filter
          */
-        $attributeCollection = new Mage_Customer_Model_Resource_Attribute_Collection();
+        $attributeCollection = Mage::getResourceModel('Mage_Customer_Model_Resource_Attribute_Collection');
         $attributeCollection->addFieldToFilter('attribute_code', 'created_at');
         /** @var $createdAtAttribute Mage_Customer_Model_Attribute */
         $createdAtAttribute = $attributeCollection->getFirstItem();
@@ -187,7 +187,9 @@ class Mage_ImportExport_Model_Export_Entity_Eav_CustomerTest extends PHPUnit_Fra
         );
         $this->_model->setParameters($parameters);
         /** @var $customers Mage_Customer_Model_Resource_Customer_Collection */
-        $collection = $this->_model->filterEntityCollection(new Mage_Customer_Model_Resource_Customer_Collection());
+        $collection = $this->_model->filterEntityCollection(
+            Mage::getResourceModel('Mage_Customer_Model_Resource_Customer_Collection')
+        );
         $collection->load();
 
         $this->assertCount(1, $collection);

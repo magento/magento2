@@ -36,4 +36,4 @@ if (!empty($_SERVER['MAGE_LOCAL_CONFIG'])) {
     $options['local_config'] = $_SERVER['MAGE_LOCAL_CONFIG'];
 }
 
-Mage::run($mageRunCode, $mageRunType, $options);
+Mage::run($mageRunCode, $mageRunType);

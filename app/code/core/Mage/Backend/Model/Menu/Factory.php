@@ -26,14 +26,34 @@
 class Mage_Backend_Model_Menu_Factory
 {
     /**
-     * Retrieve menu object
-     *
-     * @param array $arguments
-     * @return false|Mage_Core_Model_Abstract
+     * @var Mage_Backend_Model_Menu_Logger
      */
-    public function getMenuInstance(array $arguments = array())
+    protected $_logger;
+
+    /**
+     * @var Magento_ObjectManager
+     */
+    protected $_factory;
+
+    /**
+     * @param Magento_ObjectManager $factory
+     * @param Mage_Backend_Model_Menu_Logger $menuLogger
+     */
+    public function __construct(Magento_ObjectManager $factory, Mage_Backend_Model_Menu_Logger $menuLogger)
     {
-        $arguments = array_merge(array('logger' => Mage::getSingleton('Mage_Backend_Model_Menu_Logger')), $arguments);
-        return Mage::getModel('Mage_Backend_Model_Menu', $arguments);
+        $this->_factory = $factory;
+        $this->_logger = $menuLogger;
+    }
+
+    /**
+     * Retrieve menu model
+     * @param string $path
+     * @return Mage_Backend_Model_Menu
+     */
+    public function getMenuInstance($path = '')
+    {
+        return $this->_factory->create(
+            'Mage_Backend_Model_Menu', array('menuLogger' => $this->_logger, 'pathInMenuStructure' => $path)
+        );
     }
 }

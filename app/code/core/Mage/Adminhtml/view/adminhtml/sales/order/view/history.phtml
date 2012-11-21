@@ -63,7 +63,7 @@
                 <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Notification Not Applicable') ?>
                 <?php elseif ($_item->getIsCustomerNotified()): ?>
                 <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Notified') ?>
-                <img src="<?php echo $this->getSkinUrl('images/ico_success.gif') ?>" width="16" height="16" alt="" />
+                <img src="<?php echo $this->getViewFileUrl('images/ico_success.gif') ?>" width="16" height="16" alt="" />
                 <?php else: ?>
                 <?php echo $this->helper('Mage_Sales_Helper_Data')->__('Not Notified') ?>
                 <?php endif; ?>

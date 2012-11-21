@@ -38,9 +38,9 @@ class Mage_Catalog_Block_Product_View_Options extends Mage_Core_Block_Template
 
     protected $_optionRenders = array();
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->addOptionRenderer(
             'default',
             'Mage_Catalog_Block_Product_View_Options_Type_Default',

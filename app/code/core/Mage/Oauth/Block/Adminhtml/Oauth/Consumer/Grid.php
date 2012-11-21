@@ -43,9 +43,9 @@ class Mage_Oauth_Block_Adminhtml_Oauth_Consumer_Grid extends Mage_Adminhtml_Bloc
     /**
      * Construct grid block
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('consumerGrid');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);

@@ -29,11 +29,11 @@ class Mage_Adminhtml_Block_Cache extends Mage_Adminhtml_Block_Widget_Grid_Contai
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'cache';
         $this->_headerText = Mage::helper('Mage_Core_Helper_Data')->__('Cache Storage Management');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
         $this->_addButton('flush_magento', array(
             'label'     => Mage::helper('Mage_Core_Helper_Data')->__('Flush Magento Cache'),

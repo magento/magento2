@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('catalog_category_products');
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);

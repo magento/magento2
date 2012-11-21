@@ -35,11 +35,7 @@
 class Mage_Customer_Block_Newsletter extends Mage_Customer_Block_Account_Dashboard // Mage_Core_Block_Template
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('form/newsletter.phtml');
-    }
+    protected $_template = 'form/newsletter.phtml';
 
     public function getIsSubscribed()
     {

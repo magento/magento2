@@ -39,7 +39,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_PriceTest extends PHPUnit_Fra
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Attribute_Backend_Price;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Attribute_Backend_Price');
         $this->_model->setAttribute(
             Mage::getSingleton('Mage_Eav_Model_Config')->getAttribute('catalog_product', 'price')
         );
@@ -82,7 +82,8 @@ class Mage_Catalog_Model_Product_Attribute_Backend_PriceTest extends PHPUnit_Fra
      */
     public function testAfterSave()
     {
-        $product = new Mage_Catalog_Model_Product();
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
         $product->setOrigData();
         $product->setPrice(9.99);

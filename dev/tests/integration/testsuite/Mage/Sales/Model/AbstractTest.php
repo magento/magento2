@@ -31,7 +31,7 @@ class Mage_Sales_Model_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testAfterCommitCallbackOrderGrid()
     {
-        $collection = new Mage_Sales_Model_Resource_Order_Grid_Collection;
+        $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Grid_Collection');
         $this->assertEquals(1, $collection->count());
         foreach ($collection as $order) {
             $this->assertInstanceOf('Mage_Sales_Model_Order', $order);
@@ -44,13 +44,13 @@ class Mage_Sales_Model_AbstractTest extends PHPUnit_Framework_TestCase
         $adapter = Mage::getResourceSingleton('Mage_Core_Model_Resource')->getConnection('write');
         $this->assertEquals(0, $adapter->getTransactionLevel(), 'This test must be outside a transaction.');
 
-        $localOrderModel = new Mage_Sales_Model_Order;
+        $localOrderModel = Mage::getModel('Mage_Sales_Model_Order');
         $resource = $localOrderModel->getResource();
         $resource->beginTransaction();
         try {
             /** @var $order Mage_Sales_Model_Order */
             require __DIR__ . '/../_files/order.php';
-            $collection = new Mage_Sales_Model_Resource_Order_Grid_Collection;
+            $collection = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Grid_Collection');
             $this->assertEquals(0, $collection->count());
             $resource->rollBack();
         } catch (Exception $e) {

@@ -44,10 +44,12 @@ class Mage_Eav_Model_Entity_Attribute_SetTest extends PHPUnit_Framework_TestCase
             ->method('__')
             ->will($this->returnArgument(0));
 
-        $this->_model = new Mage_Eav_Model_Entity_Attribute_Set(array(
+        $arguments = array(
             'resource'  => $resource,
-            'helper'    => $helper
-        ));
+            'data'      => array('helper' => $helper)
+        );
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getModel('Mage_Eav_Model_Entity_Attribute_Set', $arguments);
     }
 
     protected function tearDown()

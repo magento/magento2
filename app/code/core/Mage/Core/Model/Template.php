@@ -87,11 +87,14 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
      *
      * @param array $data
      */
-    public function __construct(array $data = array())
-    {
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        array $data = array()
+    ) {
         $this->_area = isset($data['area']) ? $data['area'] : null;
         $this->_store = isset($data['store']) ? $data['store'] : null;
-        parent::__construct($data);
+        parent::__construct($eventDispatcher, $cacheManager, null, null, $data);
     }
 
     /**

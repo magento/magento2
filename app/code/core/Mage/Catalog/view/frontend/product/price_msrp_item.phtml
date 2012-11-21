@@ -33,74 +33,86 @@
  */
 ?>
 <?php
-    /** @var $_coreHelper Mage_Core_Helper_Data */
-    $_coreHelper = $this->helper('Mage_Core_Helper_Data');
-    /** @var $_catalogHelper Mage_Catalog_Helper_Data */
-    $_catalogHelper = $this->helper('Mage_Catalog_Helper_Data');
+/** @var $_coreHelper Mage_Core_Helper_Data */
+$_coreHelper = $this->helper('Mage_Core_Helper_Data');
+/** @var $_catalogHelper Mage_Catalog_Helper_Data */
+$_catalogHelper = $this->helper('Mage_Catalog_Helper_Data');
 
-    /** @var $_product Mage_Catalog_Model_Product */
-    $_product = $this->getProduct();
-    $_id = $_product->getId();
-    $_msrpPrice = '';
-    $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElementIdPrefix() : 'product-price-';
+/** @var $_product Mage_Catalog_Model_Product */
+$_product = $this->getProduct();
+$_id = $_product->getId();
+$_msrpPrice = '';
+$priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElementIdPrefix() : 'product-price-';
 ?>
-    <div class="price-box map-info">
+<div class="price-box map-info">
     <?php $_price = $this->helper('Mage_Tax_Helper_Data')->getPrice($_product, $_product->getMsrp()) ?>
-        <?php if($_product->getMsrp()): ?>
-            <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(),true,true) ?>
-            <span class="old-price" ><?php echo $_msrpPrice ?></span>
-        <?php endif; ?>
+    <?php if ($_product->getMsrp()): ?>
+    <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(), true, true) ?>
+    <span class="old-price"><?php echo $_msrpPrice ?></span>
+    <?php endif; ?>
 
-        <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
-            <?php $priceElementId = $priceElementIdPrefix . $_id . $this->getIdSuffix(); ?>
-            <span id="<?php echo $priceElementId ?>" style="display:none"></span>
-            <?php $popupId = 'msrp-popup-' . $_id . $_coreHelper->getRandomString(20); ?>
-            <a href="#" id="<?php echo($popupId);?>"><?php echo $this->__('Click for price'); ?></a>
-            <script type="text/javascript">
-                Event.observe(window, 'load', function() {
-                    var priceElement = $("<?php echo $priceElementId ?>"),
-                        realPrice = <?php echo $this->getRealPriceJs($_product) ?>,
-                        priceHtml = realPrice.stripScripts();
+    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
+    <?php $priceElementId = $priceElementIdPrefix . $_id . $this->getIdSuffix(); ?>
+    <span id="<?php echo $priceElementId ?>" style="display:none"></span>
+    <?php $popupId = 'msrp-popup-' . $_id . $_coreHelper->getRandomString(20); ?>
+    <a href="#" id="<?php echo($popupId);?>"><?php echo $this->__('Click for price'); ?></a>
 
-                    priceElement.innerHTML = priceHtml;
-                    realPrice.evalScripts();
-                    var originalOptionPriceReload;
-                    if (typeof(optionsPrice) != 'undefined' && optionsPrice && optionsPrice.reload) {
-                        originalOptionPriceReload = optionsPrice.reload;
-                        Product.OptionsPrice.prototype.reload = function() {
-                            if (originalOptionPriceReload) {
-                                originalOptionPriceReload.call(this);
-                            }
-                            if ($('<?php echo $popupId ?>') == Catalog.Map.active) {
-                                Element.update(
-                                    $('map-popup-price'),
-                                    $("<?php echo $priceElementId ?>").innerHTML
-                                );
-                            }
-                        }
-                    }
+    <script type="text/javascript">
+        //<![CDATA[
+        (function ($) {
+            <?php if ($this->helper('Mage_Catalog_Helper_Data')->isShowPriceOnGesture($_product)): ?>
+                $.mage.event.observe('mage.price.helplink', function (event, clickForPrice) {
+                    var helpLink = {
+                        popupId: "#<?php echo($popupId);?>",
+                        productName: '<?php echo $_product->getName() ?>',
+                        realPrice: '<?php echo $this->getRealPriceJs($_product) ?>',
+                        msrpPrice: '<?php echo $_msrpPrice ?>',
+                        priceElementId: '<?php echo $priceElementId ?>'
+                    };
+                    clickForPrice.helpLink.push(helpLink);
                 });
 
-                Catalog.Map.addHelpLink(
-                    $('<?php echo $popupId ?>'),
-                    "<?php echo $_product->getName() ?>",
-                    $("<?php echo $priceElementId ?>"),
-                    '<?php echo $_msrpPrice ?>',
-                    "<?php echo $_product->isSalable() ? $_product->getAddToCartUrl() : '' ?>"
-                );
-            </script>
-        <?php else: ?>
-            <span class="msrp-price-hide-message">
+                $.mage.event.observe('map.popup.close', function (event, initData) {
+                    initData.closeButtonId = '#map-popup-close';
+                });
+
+                $.mage.event.observe('map.popup.button', function (event, popupCartData) {
+                    var initData = {
+                        cartButtonId: "#map-popup-button",
+                        cartForm: "#product_addtocart_form"
+                    };
+                    popupCartData.cartData.push(initData);
+                });
+
+                <?php endif; ?>
+
+            $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>");
+            $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>");
+            $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>");
+        })(jQuery);
+        //]]>
+    </script>
+
+    <?php else: ?>
+    <span class="msrp-price-hide-message">
                 <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
             </span>
-        <?php endif; ?>
+    <?php endif; ?>
 
-        <?php $helpLinkId = 'msrp-help-' . $_id . $_coreHelper->getRandomString(20); ?>
-        <a href="#" id="<?php echo($helpLinkId);?>"><?php echo $this->__("What's this?"); ?></a>
-        <script type="text/javascript">
-            Catalog.Map.addHelpLink(
-                $('<?php echo $helpLinkId ?>'),
-                "<?php echo $this->__("What's this?"); ?>"
-            );
-        </script>
-    </div>
+    <?php $helpLinkId = 'msrp-help-' . $_id . $_coreHelper->getRandomString(20); ?>
+    <a href="#" id="<?php echo($helpLinkId);?>"><?php echo $this->__("What's this?"); ?></a>
+    <script type="text/javascript">
+        //<![CDATA[
+        (function ($) {
+            $.mage.event.observe('mage.popup.whatsthislink', function (event, helpLinkData) {
+                var helpText = {
+                    helpLinkId: "#<?php echo($helpLinkId);?>",
+                    productName: '<?php echo $_product->getName() ?>'
+                };
+                helpLinkData.helpText.push(helpText);
+            });
+        })(jQuery);
+        //]]>
+    </script>
+
+</div>

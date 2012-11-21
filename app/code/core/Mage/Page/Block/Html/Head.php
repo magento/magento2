@@ -34,13 +34,7 @@
  */
 class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
 {
-    /**
-     * Initialize template
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('html/head.phtml');
-    }
+    protected $_template = 'html/head.phtml';
 
     /**
      * Add CSS file to HEAD entity
@@ -359,7 +353,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
      */
     protected function _getFaviconFile()
     {
-        $folderName = Mage_Adminhtml_Model_System_Config_Backend_Image_Favicon::UPLOAD_DIR;
+        $folderName = Mage_Backend_Model_Config_Backend_Image_Favicon::UPLOAD_DIR;
         $storeConfig = Mage::getStoreConfig('design/head/shortcut_icon');
         $faviconFile = Mage::getBaseUrl('media') . $folderName . '/' . $storeConfig;
         $absolutePath = Mage::getBaseDir('media') . '/' . $folderName . '/' . $storeConfig;
@@ -367,7 +361,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
         if (!is_null($storeConfig) && $this->_isFile($absolutePath)) {
             $url = $faviconFile;
         } else {
-            $url = $this->getSkinUrl('Mage_Page::favicon.ico');
+            $url = $this->getViewFileUrl('Mage_Page::favicon.ico');
         }
         return $url;
     }

@@ -40,12 +40,9 @@
 </div>
 <script type="text/javascript">
     (function($) {
-        $.mage.event.observe('mage.menu.initialize', function (event, initData) {
-            initData.menuSelector = '#nav .parent';
-            initData.showDelay = 100;
-            initData.hideDelay = 100;
+        head.js("<?php echo $this->getViewFileUrl('Mage_Page::js/menu.js') ?>", function() {
+            $('#nav .parent').menu();
         });
-        $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Page::js/menu.js') ?>");
     })(jQuery);
 </script>
 <?php endif ?>

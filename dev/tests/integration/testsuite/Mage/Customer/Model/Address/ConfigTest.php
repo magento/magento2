@@ -34,7 +34,7 @@ class Mage_Customer_Model_Address_ConfigTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model= new Mage_Customer_Model_Address_Config();
+        $this->_model= Mage::getModel('Mage_Customer_Model_Address_Config');
     }
 
     protected function tearDown()

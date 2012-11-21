@@ -34,12 +34,6 @@
  */
 class Mage_Adminhtml_Block_Notification_Toolbar extends Mage_Adminhtml_Block_Template
 {
-    /**
-     * Initialize Toolbar block
-     *
-     */
-    protected function _construct()
-    {}
 
     /**
      * Retrieve helper

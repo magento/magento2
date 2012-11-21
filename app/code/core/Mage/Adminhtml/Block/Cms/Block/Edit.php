@@ -34,12 +34,12 @@
  */
 class Mage_Adminhtml_Block_Cms_Block_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'block_id';
         $this->_controller = 'cms_block';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Save Block'));
         $this->_updateButton('delete', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Delete Block'));

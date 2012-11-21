@@ -132,7 +132,7 @@
                         <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <script type="text/javascript">decorateTable('overview-table-<?php echo $_address->getId() ?>')</script>
+                    <script type="text/javascript">(function($) {$('#overview-table-<?php echo $_address->getId() ?>').decorate('table')})(jQuery)</script>
                 </div>
             <?php if($this->getShippingAddressCount()!=$_index+1): ?>
                 <div class="divider"></div>
@@ -182,7 +182,7 @@
                     <?php endforeach; ?>
                     </tbody>
                     </table>
-                    <script type="text/javascript">decorateTable('virtual-overview-table')</script>
+                    <script type="text/javascript">(function($) {$('#virtual-overview-table').decorate('table')})(jQuery)</script>
                 </div>
         </div>
         <?php endif; ?>
@@ -201,7 +201,7 @@
                         </div>
                     </div>
                     <span class="please-wait" id="review-please-wait" style="display:none;">
-                        <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
+                        <img src="<?php echo $this->getViewFileUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Submitting order information...') ?>" title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle" /> <?php echo $this->__('Submitting order information...') ?>
                     </span>
                 </div>
             </div>

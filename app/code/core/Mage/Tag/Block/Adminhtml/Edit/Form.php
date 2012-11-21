@@ -35,9 +35,9 @@
 class Mage_Tag_Block_Adminhtml_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('tag_form');
         $this->setTitle(Mage::helper('Mage_Tag_Helper_Data')->__('Block Information'));
     }

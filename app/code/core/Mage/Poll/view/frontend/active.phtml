@@ -46,13 +46,9 @@
             <script type="text/javascript">
                 //<![CDATA[
                 (function($) {
-                    $.mage.event.observe('mage.poll.initialize', function (event, initData) {
-                        initData.formId = '#pollForm';
-                        pollAnswersId = '#poll-answers';
-                        pollCheckedOption = 'input.poll_vote:checked';
+                    head.js("<?php echo $this->getViewFileUrl('Mage_Poll::poll.js')?>", function() {
+                        $('#pollForm').poll({pollAnswersSelector: '#poll-answers', pollCheckedOption: 'input.poll_vote:checked'});
                     });
-                    $.mage.load.js("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
-                    $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Poll::poll.js') ?>");
                 })(jQuery);
                 //]]>
             </script>

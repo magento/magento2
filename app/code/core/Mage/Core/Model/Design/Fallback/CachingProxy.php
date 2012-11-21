@@ -48,11 +48,6 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     /**
      * @var string|null
      */
-    protected $_skin;
-
-    /**
-     * @var string|null
-     */
     protected $_locale;
 
     /**
@@ -106,24 +101,23 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
 
     /**
      * Constructor.
-     * Following entries in $params are required: 'area', 'package', 'theme', 'skin', 'locale', 'canSaveMap',
+     * Following entries in $params are required: 'area', 'package', 'theme', 'locale', 'canSaveMap',
      * 'mapDir', 'baseDir'.
      *
-     * @param array $params
+     * @param array $data
      */
-    public function __construct($params)
+    public function __construct(array $data = array())
     {
-        $this->_area = $params['area'];
-        $this->_package = $params['package'];
-        $this->_theme = $params['theme'];
-        $this->_skin = $params['skin'];
-        $this->_locale = $params['locale'];
-        $this->_canSaveMap = $params['canSaveMap'];
-        $this->_mapDir = $params['mapDir'];
-        $this->_basePath = $params['baseDir'] ? $params['baseDir'] . DIRECTORY_SEPARATOR : '';
+        $this->_area = $data['area'];
+        $this->_package = $data['package'];
+        $this->_theme = $data['theme'];
+        $this->_locale = $data['locale'];
+        $this->_canSaveMap = $data['canSaveMap'];
+        $this->_mapDir = $data['mapDir'];
+        $this->_basePath = $data['baseDir'] ? $data['baseDir'] . DIRECTORY_SEPARATOR : '';
 
         $this->_mapFile =
-            "{$this->_mapDir}/{$this->_area}_{$this->_package}_{$this->_theme}_{$this->_skin}_{$this->_locale}.ser";
+            "{$this->_mapDir}/{$this->_area}_{$this->_package}_{$this->_theme}_{$this->_locale}.ser";
         $this->_map = file_exists($this->_mapFile) ? unserialize(file_get_contents($this->_mapFile)) : array();
     }
 
@@ -146,11 +140,10 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         if (!$this->_fallback) {
             $this->_fallback = Mage::getModel('Mage_Core_Model_Design_Fallback', array(
-                'area' => $this->_area,
-                'package' => $this->_package,
-                'theme' => $this->_theme,
-                'skin' => $this->_skin,
-                'locale' => $this->_locale
+                'data' => array('area' => $this->_area,
+                    'package' => $this->_package,
+                    'theme' => $this->_theme,
+                    'locale' => $this->_locale)
             ));
         }
         return $this->_fallback;
@@ -238,32 +231,32 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     }
 
     /**
-     * Get skin file name, using map and fallback mechanism
+     * Get Theme file name, using map and fallback mechanism
      *
      * @param string $file
      * @param string|null $module
      * @return string
      */
-    public function getSkinFile($file, $module = null)
+    public function getViewFile($file, $module = null)
     {
-        $result = $this->_getFromMap('skin', $file, $module);
+        $result = $this->_getFromMap('view', $file, $module);
         if (!$result) {
-            $result = $this->_getFallback()->getSkinFile($file, $module);
-            $this->_setToMap('skin', $file, $module, $result);
+            $result = $this->_getFallback()->getViewFile($file, $module);
+            $this->_setToMap('view', $file, $module, $result);
         }
         return $result;
     }
 
     /**
-     * Object notified, that skin file was published, thus it can return published file name on next calls
+     * Object notified, that theme file was published, thus it can return published file name on next calls
      *
      * @param string $publicFilePath
      * @param string $file
      * @param string|null $module
      * @return Mage_Core_Model_Design_FallbackInterface
      */
-    public function notifySkinFilePublished($publicFilePath, $file, $module = null)
+    public function notifyViewFilePublished($publicFilePath, $file, $module = null)
     {
-        return $this->_setToMap('skin', $file, $module, $publicFilePath);
+        return $this->_setToMap('view', $file, $module, $publicFilePath);
     }
 }

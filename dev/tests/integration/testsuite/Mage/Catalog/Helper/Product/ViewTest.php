@@ -41,12 +41,15 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new Mage_Catalog_Helper_Product_View;
+        $this->_helper = Mage::helper('Mage_Catalog_Helper_Product_View');
         $request = new Magento_Test_Request();
         $request->setRouteName('catalog')
             ->setControllerName('product')
             ->setActionName('view');
-        $this->_controller = new Mage_Catalog_ProductController($request, new Magento_Test_Response);
+        $this->_controller = Mage::getModel(
+            'Mage_Catalog_ProductController',
+            array('request' => $request, 'response' => new Magento_Test_Response)
+        );
     }
 
     /**
@@ -65,7 +68,8 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
     public function testInitProductLayout()
     {
         $uniqid = uniqid();
-        $product = new Mage_Catalog_Model_Product;
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->setTypeId(Mage_Catalog_Model_Product_Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
         Mage::register('product', $product);
 
@@ -95,7 +99,10 @@ class Mage_Catalog_Helper_Product_ViewTest extends PHPUnit_Framework_TestCase
      */
     public function testPrepareAndRenderWrongController()
     {
-        $controller = new Mage_Core_Controller_Front_Action(new Magento_Test_Request, new Magento_Test_Response);
+        $controller = Mage::getModel(
+            'Mage_Core_Controller_Front_Action',
+            array('request' => new Magento_Test_Request, 'response' => new Magento_Test_Response)
+        );
         $this->_helper->prepareAndRender(10, $controller);
     }
 

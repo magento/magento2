@@ -34,7 +34,8 @@ class Mage_Catalog_Product_CompareControllerTest extends Magento_Test_TestCase_C
 {
     protected function _requireVisitorWithNoProducts()
     {
-        $visitor = new Mage_Log_Model_Visitor;
+        /** @var $visitor Mage_Log_Model_Visitor */
+        $visitor = Mage::getModel('Mage_Log_Model_Visitor');
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt(now())
             ->save();
@@ -46,17 +47,20 @@ class Mage_Catalog_Product_CompareControllerTest extends Magento_Test_TestCase_C
 
     protected function _requireVisitorWithTwoProducts()
     {
-        $visitor = new Mage_Log_Model_Visitor;
+        /** @var $visitor Mage_Log_Model_Visitor */
+        $visitor = Mage::getModel('Mage_Log_Model_Visitor');
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt(now())
             ->save();
 
-        $item = new Mage_Catalog_Model_Product_Compare_Item;
+        /** @var $item Mage_Catalog_Model_Product_Compare_Item */
+        $item = Mage::getModel('Mage_Catalog_Model_Product_Compare_Item');
         $item->setVisitorId($visitor->getId())
             ->setProductId(1)
             ->save();
 
-        $item = new Mage_Catalog_Model_Product_Compare_Item;
+        /** @var $item Mage_Catalog_Model_Product_Compare_Item */
+        $item = Mage::getModel('Mage_Catalog_Model_Product_Compare_Item');
         $item->setVisitorId($visitor->getId())
             ->setProductId(2)
             ->save();
@@ -73,7 +77,8 @@ class Mage_Catalog_Product_CompareControllerTest extends Magento_Test_TestCase_C
      */
     protected function _assertCompareListEquals(array $expectedProductIds)
     {
-        $compareItems = new Mage_Catalog_Model_Resource_Product_Compare_Item_Collection;
+        /** @var $compareItems Mage_Catalog_Model_Resource_Product_Compare_Item_Collection */
+        $compareItems = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Compare_Item_Collection');
         $compareItems->useProductItem(true); // important
         $compareItems->setVisitorId(
             Mage::getSingleton('Mage_Log_Model_Visitor')->getId()

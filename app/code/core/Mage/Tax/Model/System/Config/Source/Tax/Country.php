@@ -25,7 +25,7 @@
  */
 
 
-class Mage_Tax_Model_System_Config_Source_Tax_Country extends Mage_Adminhtml_Model_System_Config_Source_Country
+class Mage_Tax_Model_System_Config_Source_Tax_Country extends Mage_Directory_Model_Config_Source_Country
 {
     protected $_options;
 

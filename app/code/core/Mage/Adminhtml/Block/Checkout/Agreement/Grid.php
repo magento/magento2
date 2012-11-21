@@ -26,9 +26,9 @@
 class Mage_Adminhtml_Block_Checkout_Agreement_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setDefaultSort('agreement_id');
         $this->setId('agreementGrid');
         $this->setDefaultDir('asc');

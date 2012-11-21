@@ -265,7 +265,7 @@
 "Duplicate website group price customer group.","Duplicate website group price customer group."
 "Duplicate website tier price customer group and quantity.","Duplicate website tier price customer group and quantity."
 "Duplicate website, country and state tax found.","Duplicate website, country and state tax found."
-"E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{skin url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance."
+"E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance.","E.g. {{media url=""path/to/image.jpg""}} {{view url=""path/to/picture.gif""}}. Dynamic directives parsing impacts catalog performance."
 "Edit","Edit"
 "Edit Attribute Set '%s'","Edit Attribute Set '%s'"
 "Edit Product Attribute","Edit Product Attribute"

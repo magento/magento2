@@ -35,12 +35,12 @@
 class Mage_Adminhtml_Block_Customer extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'customer';
         $this->_headerText = Mage::helper('Mage_Customer_Helper_Data')->__('Manage Customers');
         $this->_addButtonLabel = Mage::helper('Mage_Customer_Helper_Data')->__('Add New Customer');
-        parent::__construct();
+        parent::_construct();
     }
 
 }

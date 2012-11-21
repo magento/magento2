@@ -37,10 +37,12 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
 
     protected $_withProductCount;
 
-    public function __construct()
+    protected $_template = 'catalog/category/tree.phtml';
+
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('catalog/category/tree.phtml');
+        parent::_construct();
         $this->setUseAjax(true);
         $this->_withProductCount = true;
     }
@@ -71,7 +73,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
         }
 
         $this->setChild('store_switcher',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Store_Switcher')
+            $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher')
                 ->setSwitchUrl($this->getUrl('*/*/*', array('_current'=>true, '_query'=>false, 'store'=>null)))
                 ->setTemplate('store/switcher/enhanced.phtml')
         );

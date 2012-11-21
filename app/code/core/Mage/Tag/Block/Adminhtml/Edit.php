@@ -39,13 +39,13 @@ class Mage_Tag_Block_Adminhtml_Edit extends Mage_Adminhtml_Block_Widget_Form_Con
      *
      * @return void
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId   = 'tag_id';
         $this->_controller = 'adminhtml';
         $this->_blockGroup = 'Mage_Tag';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Tag_Helper_Data')->__('Save Tag'));
         $this->_updateButton('delete', 'label', Mage::helper('Mage_Tag_Helper_Data')->__('Delete Tag'));

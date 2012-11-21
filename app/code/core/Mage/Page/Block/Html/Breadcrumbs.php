@@ -50,13 +50,23 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
      */
     protected $_crumbs = null;
 
-    function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('html/breadcrumbs.phtml');
-    }
+    /**
+     * Cache key info
+     *
+     * @var null|array
+     */
+    protected $_cacheKeyInfo = null;
 
-    function addCrumb($crumbName, $crumbInfo, $after = false)
+    protected $_template = 'html/breadcrumbs.phtml';
+
+    /**
+     * Add crumb
+     *
+     * @param string $crumbName
+     * @param array $crumbInfo
+     * @return Mage_Page_Block_Html_Breadcrumbs
+     */
+    public function addCrumb($crumbName, $crumbInfo)
     {
         $properties = array('label', 'title', 'link', 'first', 'last', 'readonly');
         foreach ($properties as $key) {
@@ -70,6 +80,29 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
         return $this;
     }
 
+    /**
+     * Get cache key informative items
+     * Provide string array key to share specific info item with FPC placeholder
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        if (is_null($this->_cacheKeyInfo)) {
+            $this->_cacheKeyInfo = parent::getCacheKeyInfo() + array(
+                'crumbs' => base64_encode(serialize($this->_crumbs)),
+                'name'   => $this->getNameInLayout()
+            );
+        }
+
+        return $this->_cacheKeyInfo;
+    }
+
+    /**
+     * Render block HTML
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         if (is_array($this->_crumbs)) {

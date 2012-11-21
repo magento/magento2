@@ -53,7 +53,7 @@ class Mage_ImportExport_Model_Import_Entity_Eav_CustomerValidateTest extends PHP
     {
         parent::setUp();
 
-        $this->_model = new Mage_ImportExport_Model_Import_Entity_Eav_Customer();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Eav_Customer');
         $this->_model->setParameters(array(
             'behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_ADD_UPDATE
         ));

@@ -29,13 +29,29 @@
     <?php echo $this->getFormatedPrice() ?></dt>
 <dd<?php if ($_option->getDecoratedIsLast()):?> class="last"<?php endif; ?>>
     <div class="input-box">
-    <?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_FIELD): ?>
-        <input type="text" onchange="opConfig.reloadPrice()" id="options_<?php echo $_option->getId() ?>_text" class="input-text<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php echo $_option->getMaxCharacters() ? ' validate-length maximum-length-'.$_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php echo $_option->getId() ?>]" value="<?php echo $this->escapeHtml($this->getDefaultValue()) ?>" />
-    <?php elseif ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_AREA): ?>
-        <textarea id="options_<?php echo $_option->getId() ?>_text" onchange="opConfig.reloadPrice()" class="<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php echo $_option->getMaxCharacters() ? ' validate-length maximum-length-'.$_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php echo $_option->getId() ?>]" rows="5" cols="25"><?php echo $this->escapeHtml($this->getDefaultValue()) ?></textarea>
-    <?php endif; ?>
-    <?php if ($_option->getMaxCharacters()): ?>
+        <?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_FIELD): ?>
+        <?php $_textValidate = null;
+        if($_option->getIsRequire()){
+            $_textValidate['required'] = true;
+        }
+        if($_option->getMaxCharacters()){
+            $_textValidate['maxlength'] = $_option->getMaxCharacters();
+        }
+        ?>
+        <input type="text" id="options_<?php echo $_option->getId() ?>_text" class="input-text  product-custom-option"  <?php if(!empty($_textValidate))echo 'data-validate='.json_encode($_textValidate) ; ?>  name="options[<?php echo $_option->getId() ?>]" value="<?php echo $this->escapeHtml($this->getDefaultValue()) ?>" />
+        <?php elseif ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_AREA): ?>
+        <?php $_textAreaValidate = null;
+        if($_option->getIsRequire()){
+            $_textAreaValidate['required'] = true;
+        }
+        if($_option->getMaxCharacters()){
+            $_textAreaValidate['maxlength'] = $_option->getMaxCharacters();
+        }
+        ?>
+        <textarea id="options_<?php echo $_option->getId() ?>_text" class="product-custom-option" <?php if(!empty($_textAreaValidate))echo 'data-validate='.json_encode($_textAreaValidate) ; ?> name="options[<?php echo $_option->getId() ?>]" rows="5" cols="25"><?php echo $this->escapeHtml($this->getDefaultValue()) ?></textarea>
+        <?php endif; ?>
+        <?php if ($_option->getMaxCharacters()): ?>
         <p class="note"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Maximum number of characters:')?> <strong><?php echo $_option->getMaxCharacters() ?></strong></p>
-    <?php endif; ?>
+        <?php endif; ?>
     </div>
 </dd>

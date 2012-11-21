@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Cms_Page extends Mage_Adminhtml_Block_Widget_Grid_Con
     /**
      * Block constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'cms_page';
         $this->_headerText = Mage::helper('Mage_Cms_Helper_Data')->__('Manage Pages');
 
-        parent::__construct();
+        parent::_construct();
 
         if ($this->_isAllowedAction('Mage_Cms::save')) {
             $this->_updateButton('add', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Add New Page'));

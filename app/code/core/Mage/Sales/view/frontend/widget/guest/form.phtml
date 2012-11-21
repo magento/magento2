@@ -38,8 +38,8 @@
                            <label class="required"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Find Order By:') ?></label>
                            <div class="input-box">
                                <select name="oar_type" id="quick_search_type_id" class="select" title="" onchange="showIdentifyBlock(this.value);">
-                                   <option value="email">Email Address</option>
-                                   <option value="zip">ZIP Code</option>
+                                   <option value="email"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Email Address') ?></option>
+                                   <option value="zip"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('ZIP Code') ?></option>
                                </select>
                            </div>
                        </li>

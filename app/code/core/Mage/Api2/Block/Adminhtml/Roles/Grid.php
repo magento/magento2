@@ -36,9 +36,9 @@ class Mage_Api2_Block_Adminhtml_Roles_Grid extends Mage_Adminhtml_Block_Widget_G
     /**
      * Construct grid block
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('rolesGrid');
         $this->setUseAjax(true);
         $this->setSaveParametersInSession(true);

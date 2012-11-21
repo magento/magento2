@@ -35,14 +35,14 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
     /**
      * @var string
      */
-    protected static $_tmpSkinDir;
+    protected static $_tmpThemeDir;
 
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
         self::$_tmpMediaDir = realpath(Magento_Test_Bootstrap::getInstance()->getTmpDir())
             . DIRECTORY_SEPARATOR . 'media';
-        self::$_tmpSkinDir = self::$_tmpMediaDir . DIRECTORY_SEPARATOR . 'skin';
+        self::$_tmpThemeDir = self::$_tmpMediaDir . DIRECTORY_SEPARATOR . 'theme';
     }
 
     public function setUp()
@@ -74,18 +74,18 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
         $this->_testInstallProhibitedWhenNonWritable(self::$_tmpMediaDir);
     }
 
-    public function testPreDispatchNonWritableSkin()
+    public function testPreDispatchNonWritableTheme()
     {
         mkdir(self::$_tmpMediaDir, 0777);
         $this->_runOptions['media_dir'] = self::$_tmpMediaDir;
 
-        mkdir(self::$_tmpSkinDir, 0444);
-        $this->_testInstallProhibitedWhenNonWritable(self::$_tmpSkinDir);
+        mkdir(self::$_tmpThemeDir, 0444);
+        $this->_testInstallProhibitedWhenNonWritable(self::$_tmpThemeDir);
     }
 
     /**
      * Tests that when $nonWritableDir folder is read-only, the installation controller prohibits continuing
-     * installation and points to fix issue with skin directory.
+     * installation and points to fix issue with theme directory.
      *
      * @param string $nonWritableDir
      */
@@ -98,6 +98,6 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
         $this->dispatch('install/index');
 
         $this->assertEquals(503, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(self::$_tmpSkinDir, $this->getResponse()->getBody());
+        $this->assertContains(self::$_tmpThemeDir, $this->getResponse()->getBody());
     }
 }

@@ -29,23 +29,26 @@ class Mage_Catalog_Block_Product_View_AdditionalTest extends PHPUnit_Framework_T
 {
     public function testGetChildHtmlList()
     {
-        $layout = new Mage_Core_Model_Layout;
-        $block = new Mage_Catalog_Block_Product_View_Additional;
-        $layout->addBlock($block, 'block');
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Catalog_Block_Product_View_Additional */
+        $block = $layout->createBlock('Mage_Catalog_Block_Product_View_Additional', 'block');
 
-        $child1 = $layout->addBlock('Mage_Core_Block_Text', 'child1', 'block');
-        $expectedHtml1 = '<b>Any html of child1</b>';
-        $child1->setText($expectedHtml1);
+        /** @var $childFirst Mage_Core_Block_Text */
+        $childFirst = $layout->addBlock('Mage_Core_Block_Text', 'child1', 'block');
+        $htmlFirst = '<b>Any html of child1</b>';
+        $childFirst->setText($htmlFirst);
 
-        $child2 = $layout->addBlock('Mage_Core_Block_Text', 'child2', 'block');
-        $expectedHtml2 = '<b>Any html of child2</b>';
-        $child2->setText($expectedHtml2);
+        /** @var $childSecond Mage_Core_Block_Text */
+        $childSecond = $layout->addBlock('Mage_Core_Block_Text', 'child2', 'block');
+        $htmlSecond = '<b>Any html of child2</b>';
+        $childSecond->setText($htmlSecond);
 
         $list = $block->getChildHtmlList();
 
         $this->assertInternalType('array', $list);
         $this->assertCount(2, $list);
-        $this->assertContains($expectedHtml1, $list);
-        $this->assertContains($expectedHtml2, $list);
+        $this->assertContains($htmlFirst, $list);
+        $this->assertContains($htmlSecond, $list);
     }
 }

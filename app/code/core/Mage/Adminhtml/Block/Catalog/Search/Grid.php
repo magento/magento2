@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Catalog_Search_Grid extends Mage_Adminhtml_Block_Widg
      * Init Grid default properties
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('catalog_search_grid');
         $this->setDefaultSort('name');
         $this->setDefaultDir('ASC');

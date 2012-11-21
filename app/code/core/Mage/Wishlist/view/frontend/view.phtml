@@ -42,7 +42,7 @@
                         <?php echo $this->getBlockHtml('formkey');?>
                         <?php $this->getChildBlock('items')->setItems($this->getWishlistItems()); ?>
                         <?php echo $this->getChildHtml('items');?>
-                        <script type="text/javascript">decorateTable('wishlist-table')</script>
+                        <script type="text/javascript">(function($) {$('#wishlist-table').decorate('table')})(jQuery)</script>
                 <?php else: ?>
                     <p class="wishlist-empty"><?php echo $this->__('You have no items in your wishlist.') ?></p>
                 <?php endif ?>

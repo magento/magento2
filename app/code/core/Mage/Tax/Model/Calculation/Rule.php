@@ -53,11 +53,43 @@ class Mage_Tax_Model_Calculation_Rule extends Mage_Core_Model_Abstract
     protected $_calculationModel    = null;
 
     /**
+     * Helper
+     *
+     * @var Mage_Tax_Helper_Data
+     */
+    protected $_helper;
+
+    /**
+     * Tax Model Class
+     *
+     * @var Mage_Tax_Model_Class
+     */
+    protected $_taxClass;
+
+    /**
      * Varien model constructor
      */
-    protected function _construct()
-    {
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Mage_Tax_Helper_Data $taxHelper,
+        Mage_Tax_Model_Class $taxClass,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $eventDispatcher,
+            $cacheManager,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+
         $this->_init('Mage_Tax_Model_Resource_Calculation_Rule');
+
+        $this->_helper = $taxHelper;
+        $this->_taxClass = $taxClass;
     }
 
     /**
@@ -129,6 +161,63 @@ class Mage_Tax_Model_Calculation_Rule extends Mage_Core_Model_Abstract
     public function getProductTaxClasses()
     {
         return $this->getCalculationModel()->getProductTaxClasses($this->getId());
+    }
+
+    /**
+     * Check Customer Tax Class and if it is empty - use defaults
+     *
+     * @return int|array|null
+     */
+    public function getCustomerTaxClassWithDefault()
+    {
+        $customerClasses = $this->getAllOptionsForClass(Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER);
+        if (empty($customerClasses)) {
+            return null;
+        }
+
+        $configValue = $this->_helper->getDefaultCustomerTaxClass();
+        if (!empty($configValue)) {
+            return $configValue;
+        }
+
+        $firstClass = array_shift($customerClasses);
+        return isset($firstClass['value']) ? $firstClass['value'] : null;
+    }
+
+    /**
+     * Check Product Tax Class and if it is empty - use defaults
+     *
+     * @return int|array|null
+     */
+    public function getProductTaxClassWithDefault()
+    {
+        $productClasses = $this->getAllOptionsForClass(Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT);
+        if (empty($productClasses)) {
+            return null;
+        }
+
+        $configValue = $this->_helper->getDefaultProductTaxClass();
+        if (!empty($configValue)) {
+            return $configValue;
+        }
+
+        $firstClass = array_shift($productClasses);
+        return isset($firstClass['value']) ? $firstClass['value'] : null;
+    }
+
+    /**
+     * Get all possible options for specified class name (customer|product)
+     *
+     * @param string $classFilter
+     * @return array
+     */
+    public function getAllOptionsForClass($classFilter) {
+        $classes = $this->_taxClass
+            ->getCollection()
+            ->setClassTypeFilter($classFilter)
+            ->toOptionArray();
+
+        return $classes;
     }
 }
 

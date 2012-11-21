@@ -35,16 +35,26 @@ class Mage_User_Block_Role_Tab_EditTest extends PHPUnit_Framework_TestCase
      */
     protected $_block;
 
+    /**
+     * Mage_User_Model_Role
+     *
+     * @magentoAppIsolation enabled
+     */
     public function setUp()
     {
-        $roleAdmin = new Mage_User_Model_Role();
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
+
+        $roleAdmin = Mage::getModel('Mage_User_Model_Role');
         $roleAdmin->load(Magento_Test_Bootstrap::ADMIN_ROLE_NAME, 'role_name');
         Mage::app()->getRequest()->setParam('rid', $roleAdmin->getId());
 
-        $aclMock = $this->getMock('Magento_Acl');
-        $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
+        $aclMock = $this->getMock('Magento_Acl', array(), array(), '', false);
+        $aclMock->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue(true));
 
-        $this->_block = new Mage_User_Block_Role_Tab_Edit(array('acl' => $aclMock));
+        $this->_block = Mage::getObjectManager()->create(
+            'Mage_User_Block_Role_Tab_Edit', array('data' => array('acl' => $aclMock)));
     }
 
     protected function tearDown()

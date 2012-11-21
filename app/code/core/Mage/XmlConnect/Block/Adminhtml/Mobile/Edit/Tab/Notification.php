@@ -39,9 +39,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Notification
      * Constructor
      * Setting view options
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 
@@ -59,7 +59,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Notification
 
         $data = Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication()->getFormData();
 
-        $yesNoValues = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray();
+        $yesNoValues = Mage::getModel('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray();
 
         $fieldset = $form->addFieldset('notifications', array(
             'legend'    => $this->__('Urban Airship Push Notification'),

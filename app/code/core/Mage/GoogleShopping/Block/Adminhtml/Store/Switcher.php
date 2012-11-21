@@ -31,7 +31,7 @@
  * @package    Mage_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_GoogleShopping_Block_Adminhtml_Store_Switcher extends Mage_Adminhtml_Block_Store_Switcher
+class Mage_GoogleShopping_Block_Adminhtml_Store_Switcher extends Mage_Backend_Block_Store_Switcher
 {
     /**
      * Whether the switcher should show default option
@@ -43,9 +43,9 @@ class Mage_GoogleShopping_Block_Adminhtml_Store_Switcher extends Mage_Adminhtml_
     /**
      * Set overriden params
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setUseConfirm(false)->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
     }
 }

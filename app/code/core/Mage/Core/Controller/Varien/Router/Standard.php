@@ -35,8 +35,9 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(array $options = array())
+    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
     {
+        $this->_objectManager = $objectManager;
     }
 
     /**

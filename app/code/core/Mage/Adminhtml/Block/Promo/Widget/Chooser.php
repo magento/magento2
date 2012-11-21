@@ -31,12 +31,10 @@ class Mage_Adminhtml_Block_Promo_Widget_Chooser extends Mage_Adminhtml_Block_Wid
 {
     /**
      * Block constructor, prepare grid params
-     *
-     * @param array $arguments
      */
-    public function __construct($arguments=array())
+    protected function _construct()
     {
-        parent::__construct($arguments);
+        parent::_construct();
         $this->setDefaultSort('rule_id');
         $this->setDefaultDir('ASC');
         $this->setUseAjax(true);

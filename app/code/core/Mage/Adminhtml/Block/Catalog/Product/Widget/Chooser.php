@@ -37,12 +37,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Widget_Chooser extends Mage_Adminhtml
 
     /**
      * Block construction, prepare grid params
-     *
-     * @param array $arguments Object data
      */
-    public function __construct($arguments=array())
+    protected function _construct()
     {
-        parent::__construct($arguments);
+        parent::_construct();
         $this->setDefaultSort('name');
         $this->setUseAjax(true);
     }

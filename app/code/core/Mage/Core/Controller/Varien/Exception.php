@@ -58,20 +58,6 @@ class Mage_Core_Controller_Varien_Exception extends Exception
     }
 
     /**
-     * Prepare data for redirecting
-     *
-     * @param string $path
-     * @param array $arguments
-     * @return Mage_Core_Controller_Varien_Exception
-     */
-    public function prepareRedirect($path, $arguments = array())
-    {
-        $this->_resultCallback = self::RESULT_REDIRECT;
-        $this->_resultCallbackParams = array($path, $arguments);
-        return $this;
-    }
-
-    /**
      * Prepare data for running a custom action
      *
      * @param string $actionName

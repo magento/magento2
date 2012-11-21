@@ -44,7 +44,7 @@ class Mage_Widget_Model_Widget_Config extends Varien_Object
     {
         $settings = array(
             'widget_plugin_src'   =>
-                Mage::getDesign()->getSkinUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'),
+                Mage::getDesign()->getViewFileUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'),
             'widget_placeholders' => Mage::getModel('Mage_Widget_Model_Widget')->getPlaceholderImageUrls(),
             'widget_window_url'   => $this->getWidgetWindowUrl($config)
         );
@@ -77,7 +77,7 @@ class Mage_Widget_Model_Widget_Config extends Varien_Object
         if (count($skipped) > 0) {
             $params['skip_widgets'] = $this->encodeWidgetsToQuery($skipped);
         }
-        return Mage::getSingleton('Mage_Adminhtml_Model_Url')->getUrl('*/widget/index', $params);
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('*/widget/index', $params);
     }
 
     /**

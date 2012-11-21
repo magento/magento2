@@ -1029,7 +1029,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Sales" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form_Order" name="grid.filter.form">
@@ -1055,7 +1055,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Tax" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form" name="grid.filter.form">
@@ -1081,7 +1081,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Shipping" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form" name="grid.filter.form">
@@ -1102,7 +1102,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Invoiced" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form" name="grid.filter.form">
@@ -1123,7 +1123,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Refunded" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form" name="grid.filter.form">
@@ -1144,7 +1144,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Coupons" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form_Coupon" name="grid.filter.form">
@@ -1170,7 +1170,7 @@
         <update handle="report_sales"/>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Sales_Bestsellers" template="report/grid/container.phtml" name="sales.report.grid.container">
-                <block type="Mage_Adminhtml_Block_Store_Switcher" template="report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Sales_Block_Adminhtml_Report_Filter_Form" name="grid.filter.form">

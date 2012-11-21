@@ -38,8 +38,8 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
             'area' => 'frontend',
             'base_controller' => 'Mage_Core_Controller_Front_Action'
         );
-        $this->_model = new Mage_Core_Controller_Varien_Router_Base($options);
-        $this->_model->setFront(new Mage_Core_Controller_Varien_Front());
+        $this->_model = Mage::getModel('Mage_Core_Controller_Varien_Router_Base', array('options' => $options));
+        $this->_model->setFront(Mage::getModel('Mage_Core_Controller_Varien_Front'));
     }
 
     protected function tearDown()
@@ -53,7 +53,7 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
      */
     public function testConstructor(array $options)
     {
-        new Mage_Core_Controller_Varien_Router_Base($options);
+        Mage::getModel('Mage_Core_Controller_Varien_Router_Base', array('options' => $options));
     }
 
     public function initOptionsDataProvider()

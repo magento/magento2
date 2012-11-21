@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Wishlist extends Mage_Wishlist_Block_Customer_Wishli
     protected function _toHtml()
     {
         /** @var Mage_XmlConnect_Model_Simplexml_Element $wishlistXmlObj */
-        $wishlistXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<wishlist></wishlist>');
+        $wishlistXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<wishlist></wishlist>'));
         /**
          * Apply offset and count
          */

@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Checkout_Agreement_Edit extends Mage_Adminhtml_Block_
      * Init class
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'id';
         $this->_controller = 'checkout_agreement';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Checkout_Helper_Data')->__('Save Condition'));
         $this->_updateButton('delete', 'label', Mage::helper('Mage_Checkout_Helper_Data')->__('Delete Condition'));

@@ -41,7 +41,7 @@
             <block type="Mage_DesignEditor_Block_Toolbar_Breadcrumbs" name="design_editor_toolbar_breadcrumbs" template="toolbar/breadcrumbs.phtml"/>
             <block type="Mage_DesignEditor_Block_Template" name="design_editor_toolbar_row" template="toolbar/row.phtml">
                 <block type="Mage_DesignEditor_Block_Toolbar_HandlesHierarchy" name="design_editor_toolbar_handles_hierarchy" template="toolbar/handles_hierarchy.phtml"/>
-                <block type="Mage_DesignEditor_Block_Toolbar_Skin" name="design_editor_toolbar_skin" template="toolbar/skin.phtml"/>
+                <block type="Mage_DesignEditor_Block_Toolbar_Theme" name="design_editor_toolbar_theme" template="toolbar/theme.phtml"/>
                 <block type="Mage_DesignEditor_Block_Template" name="design_editor_toolbar_highlighting" template="toolbar/highlighting.phtml"/>
                 <block type="Mage_DesignEditor_Block_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="toolbar/buttons.phtml"/>
                 <block type="Mage_DesignEditor_Block_Toolbar_History" name="design_editor_toolbar_history" template="toolbar/history.phtml"/>

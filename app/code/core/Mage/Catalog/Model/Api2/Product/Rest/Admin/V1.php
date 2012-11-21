@@ -134,9 +134,11 @@ class Mage_Catalog_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catalog_Model_A
     protected function _create(array $data)
     {
         /* @var $validator Mage_Catalog_Model_Api2_Product_Validator_Product */
-        $validator = Mage::getModel('Mage_Catalog_Model_Api2_Product_Validator_Product', array(
-            'operation' => self::OPERATION_CREATE
-        ));
+        $validator = Mage::getModel('Mage_Catalog_Model_Api2_Product_Validator_Product',
+            array('options' =>
+                array(
+                    'operation' => self::OPERATION_CREATE
+        )));
 
         if (!$validator->isValidData($data)) {
             foreach ($validator->getErrors() as $error) {
@@ -192,10 +194,12 @@ class Mage_Catalog_Model_Api2_Product_Rest_Admin_V1 extends Mage_Catalog_Model_A
         /** @var $product Mage_Catalog_Model_Product */
         $product = $this->_getProduct();
         /* @var $validator Mage_Catalog_Model_Api2_Product_Validator_Product */
-        $validator = Mage::getModel('Mage_Catalog_Model_Api2_Product_Validator_Product', array(
-            'operation' => self::OPERATION_UPDATE,
-            'product'   => $product
-        ));
+        $validator = Mage::getModel('Mage_Catalog_Model_Api2_Product_Validator_Product',
+            array('options' =>
+                array(
+                    'operation' => self::OPERATION_UPDATE,
+                    'product'   => $product
+        )));
 
         if (!$validator->isValidData($data)) {
             foreach ($validator->getErrors() as $error) {

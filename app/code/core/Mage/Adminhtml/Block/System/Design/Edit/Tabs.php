@@ -26,9 +26,9 @@
 
 class Mage_Adminhtml_Block_System_Design_Edit_Tabs extends Mage_Adminhtml_Block_Widget_Tabs
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('design_tabs');
         $this->setDestElementId('design_edit_form');
         $this->setTitle(Mage::helper('Mage_Core_Helper_Data')->__('Design Change'));

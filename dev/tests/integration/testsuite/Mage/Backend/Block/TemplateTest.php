@@ -39,7 +39,7 @@ class Mage_Backend_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Mage_Backend_Block_Template;
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Template');
     }
 
     protected function tearDown()
@@ -66,7 +66,5 @@ class Mage_Backend_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
         Mage::app()->getStore()->setConfig('advanced/modules_disable_output/dummy', 'false');
         $this->assertTrue($this->_block->isOutputEnabled('dummy'));
-
-
     }
 }

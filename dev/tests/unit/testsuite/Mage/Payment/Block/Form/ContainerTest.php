@@ -25,12 +25,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * Test class for Mage_Payment_Block_Form_ContainerAbstract
+ */
 class Mage_Payment_Block_Form_ContainerAbstractTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers Mage_Payment_Block_Form_ContainerAbstract::getChildBlock
+     */
     public function testSetMethodFormTemplate()
     {
-        $childBlockA = new Mage_Core_Block_Template;
-        $childBlockB = new Mage_Core_Block_Template;
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $childBlockA = $objectManagerHelper->getBlock('Mage_Core_Block_Template');
+        $childBlockB = $objectManagerHelper->getBlock('Mage_Core_Block_Template');
 
         $func = function ($blockName) use ($childBlockA, $childBlockB) {
             switch ($blockName) {
@@ -41,8 +48,8 @@ class Mage_Payment_Block_Form_ContainerAbstractTest extends PHPUnit_Framework_Te
             }
             return null;
         };
-
-        $block = $this->getMock('Mage_Payment_Block_Form_Container', array('getChildBlock'));
+        $block = $this->getMock('Mage_Payment_Block_Form_Container', array('getChildBlock'),
+            array(), '', false);
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
             ->will($this->returnCallback($func));

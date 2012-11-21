@@ -229,7 +229,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
 
         switch ($this->getAttribute()) {
             case 'sku': case 'category_ids':
-                $image = Mage::getDesign()->getSkinUrl('images/rule_chooser_trigger.gif');
+                $image = Mage::getDesign()->getViewFileUrl('images/rule_chooser_trigger.gif');
                 break;
         }
 
@@ -348,7 +348,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
-                    $element->setImage(Mage::getDesign()->getSkinUrl('images/grid-cal.gif'));
+                    $element->setImage(Mage::getDesign()->getViewFileUrl('images/grid-cal.gif'));
                     break;
             }
         }

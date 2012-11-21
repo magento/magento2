@@ -35,11 +35,14 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle extends Mage_A
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
     protected $_product = null;
-    public function __construct()
+
+    protected $_template = 'product/edit/bundle.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setSkipGenerateContent(true);
-        $this->setTemplate('product/edit/bundle.phtml');
+
     }
 
     public function getTabUrl()

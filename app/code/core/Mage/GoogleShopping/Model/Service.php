@@ -103,7 +103,8 @@ class Mage_GoogleShopping_Model_Service extends Varien_Object
 
             if ($this->getConfig()->getIsDebug($storeId)) {
                 $this->_service
-                    ->setLogAdapter(Mage::getModel('Mage_Core_Model_Log_Adapter', 'googleshopping.log'), 'log')
+                    ->setLogAdapter(Mage::getModel('Mage_Core_Model_Log_Adapter',
+                    array('fileName' => 'googleshopping.log')), 'log')
                     ->setDebug(true);
             }
         }

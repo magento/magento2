@@ -39,9 +39,9 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     /**
      * Class constructor
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->addItemRender(
             'default',
             'Mage_Checkout_Block_Cart_Item_Renderer',

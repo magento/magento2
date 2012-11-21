@@ -56,6 +56,10 @@ class Mage_DesignEditor_Block_Adminhtml_Launcher_Form extends Mage_Adminhtml_Blo
             ));
         }
 
+        $form->addField('theme_id', 'hidden', array(
+            'name' => 'theme_id'
+        ));
+
         $this->setForm($form);
         $form->setUseContainer(true);
 

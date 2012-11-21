@@ -37,10 +37,7 @@ class Mage_Backend_Block_Widget_Form_Element_Gallery extends Mage_Backend_Block_
 
     protected $_element = null;
 
-    public function __construct()
-    {
-        $this->setTemplate('Mage_Backend::widget/form/element/gallery.phtml');
-    }
+    protected $_template = 'Mage_Backend::widget/form/element/gallery.phtml';
 
     public function render(Varien_Data_Form_Element_Abstract $element)
     {

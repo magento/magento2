@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_System_Store_Delete_Form extends Mage_Adminhtml_Block
     /**
      * Init form
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('store_delete_form');
         $this->setTitle(Mage::helper('Mage_Cms_Helper_Data')->__('Block Information'));
     }

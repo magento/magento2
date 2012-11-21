@@ -37,9 +37,9 @@ class Mage_Checkout_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
      * Prepare Quote Item Product URLs
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->prepareItemUrls();
     }
 

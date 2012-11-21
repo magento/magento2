@@ -33,7 +33,7 @@ interface Mage_DesignEditor_Model_History_CompactInterface
      * Set change collection
      *
      * @param Mage_DesignEditor_Model_Change_Collection $collection
-     * @return Mage_DesignEditor_Model_History_Compact_Layout
+     * @return Mage_DesignEditor_Model_History_CompactInterface
      */
     public function setChangesCollection(Mage_DesignEditor_Model_Change_Collection $collection);
 

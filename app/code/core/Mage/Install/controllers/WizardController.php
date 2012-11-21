@@ -37,7 +37,7 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
             return;
         }
 
-        if (!$this->_verifySkin()) {
+        if (!$this->_verifyTheme()) {
             return;
         }
 
@@ -46,21 +46,21 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
     }
 
     /**
-     * Verify that the folder for skin publication is writable. Web installation is unable to proceed without write
+     * Verify that the folder for theme publication is writable. Web installation is unable to proceed without write
      * permissions.
      *
      * @return bool
      */
-    protected  function _verifySkin()
+    protected  function _verifyTheme()
     {
-        $pubSkin = Mage::getDesign()->getPublicSkinDir();
+        $pubTheme = Mage::getDesign()->getPublicDir();
 
-        if (is_dir($pubSkin)) {
-            $isWritable = is_writable($pubSkin);
+        if (is_dir($pubTheme)) {
+            $isWritable = is_writable($pubTheme);
         } else {
-            $isWritable = @mkdir($pubSkin, 0777, true);
+            $isWritable = @mkdir($pubTheme, 0777, true);
             if ($isWritable) {
-                rmdir($pubSkin);
+                rmdir($pubTheme);
             }
         }
 
@@ -68,7 +68,7 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
             $this->setFlag('', self::FLAG_NO_DISPATCH, true);
             $this->getResponse()->setHeader('Content-Type', 'text/plain;charset=UTF-8')
                 ->setHttpResponseCode(503)
-                ->setBody("To proceed with installation, ensure that the path '{$pubSkin}' is writable.")
+                ->setBody("To proceed with installation, ensure that the path '{$pubTheme}' is writable.")
             ;
             return false;
         }

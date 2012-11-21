@@ -40,11 +40,10 @@ class Mage_Adminhtml_Block_Catalog_Category_Edit_Form extends Mage_Adminhtml_Blo
      */
     protected $_additionalButtons = array();
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/category/edit/form.phtml');
-    }
+    /**
+     * @var string
+     */
+    protected $_template = 'catalog/category/edit/form.phtml';
 
     protected function _prepareLayout()
     {

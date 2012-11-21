@@ -33,14 +33,7 @@
  */
 class Mage_Adminhtml_Block_Catalog_Product extends Mage_Adminhtml_Block_Widget_Container
 {
-    /**
-     * Set template
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product.phtml');
-    }
+    protected $_template = 'catalog/product.phtml';
 
     /**
      * Prepare button and grid

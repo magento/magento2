@@ -34,7 +34,7 @@ class Mage_Catalog_Model_Product_Type_Configurable_AttributeTest extends PHPUnit
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_Configurable_Attribute;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Product_Type_Configurable_Attribute');
     }
 
     protected function tearDown()

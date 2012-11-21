@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Price extends Varien_Data_Form_Element_Text
 {
 
-    public function __construct($attributes=array())
+    protected function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->addClass('validate-zero-or-greater');
     }
 

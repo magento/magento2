@@ -27,6 +27,10 @@
 
 /**
  * Test class for Mage_ImportExport_Model_Import_Entity_Product
+ *
+ * The "CouplingBetweenObjects" warning is caused by tremendous complexity of the original class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framework_TestCase
 {
@@ -37,7 +41,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
 
     public function setUp()
     {
-        $this->_model = new Mage_ImportExport_Model_Import_Entity_Product();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Import_Entity_Product');
     }
 
     public function tearDown()
@@ -67,19 +71,19 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
     /**
      * Test if visibility properly saved after import
      *
-     * @magentoDataFixture Mage/Catalog/_files/multiple_products.php
+     * magentoDataFixture Mage/Catalog/_files/multiple_products.php
      */
     public function testSaveProductsVisibility()
     {
         $existingProductIds = array(10, 11, 12);
         $productsBeforeImport = array();
         foreach ($existingProductIds as $productId) {
-            $product = new Mage_Catalog_Model_Product();
+            $product = Mage::getModel('Mage_Catalog_Model_Product');
             $product->load($productId);
             $productsBeforeImport[] = $product;
         }
 
-        $source = new Mage_ImportExport_Model_Import_Adapter_Csv(__DIR__ . '/_files/products_to_import.csv');
+        $source = new Mage_ImportExport_Model_Import_Source_Csv(__DIR__ . '/_files/products_to_import.csv');
         $this->_model->setParameters(array(
             'behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE,
             'entity' => 'catalog_product'
@@ -90,7 +94,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
         /** @var $productBeforeImport Mage_Catalog_Model_Product */
         foreach ($productsBeforeImport as $productBeforeImport) {
             /** @var $productAfterImport Mage_Catalog_Model_Product */
-            $productAfterImport = new Mage_Catalog_Model_Product();
+            $productAfterImport = Mage::getModel('Mage_Catalog_Model_Product');
             $productAfterImport->load($productBeforeImport->getId());
 
             $this->assertEquals(
@@ -106,19 +110,19 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
     /**
      * Test if stock item quantity properly saved after import
      *
-     * @magentoDataFixture Mage/Catalog/_files/multiple_products.php
+     * magentoDataFixture Mage/Catalog/_files/multiple_products.php
      */
     public function testSaveStockItemQty()
     {
         $existingProductIds = array(10, 11, 12);
         $stockItems = array();
         foreach ($existingProductIds as $productId) {
-            $stockItem = new Mage_CatalogInventory_Model_Stock_Item();
+            $stockItem = Mage::getModel('Mage_CatalogInventory_Model_Stock_Item');
             $stockItem->loadByProduct($productId);
             $stockItems[$productId] = $stockItem;
         }
 
-        $source = new Mage_ImportExport_Model_Import_Adapter_Csv(__DIR__ . '/_files/products_to_import.csv');
+        $source = new Mage_ImportExport_Model_Import_Source_Csv(__DIR__ . '/_files/products_to_import.csv');
         $this->_model->setParameters(array(
             'behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE,
             'entity' => 'catalog_product'
@@ -130,7 +134,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
         foreach ($stockItems as $productId => $stockItmBeforeImport) {
 
             /** @var $stockItemAfterImport Mage_CatalogInventory_Model_Stock_Item */
-            $stockItemAfterImport = new Mage_CatalogInventory_Model_Stock_Item();
+            $stockItemAfterImport = Mage::getModel('Mage_CatalogInventory_Model_Stock_Item');
             $stockItemAfterImport->loadByProduct($productId);
 
             $this->assertEquals(
@@ -156,13 +160,13 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/product_with_custom_options.csv';
-        $source = new Mage_ImportExport_Model_Import_Adapter_Csv($pathToFile);
+        $source = new Mage_ImportExport_Model_Import_Source_Csv($pathToFile);
         $this->_model->setSource($source)
             ->setParameters(array('behavior' => $behavior))
             ->isDataValid();
         $this->_model->importData();
 
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1); // product from fixture
         $options = $product->getProductOptionsCollection();
 
@@ -208,13 +212,14 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
         $existingProductIds = array(10, 11, 12);
         $productsBeforeImport = array();
         foreach ($existingProductIds as $productId) {
-            $product = new Mage_Catalog_Model_Product();
+            $product = Mage::getObjectManager()->create('Mage_Catalog_Model_Product');
             $product->load($productId);
             $productsBeforeImport[$product->getSku()] = $product;
         }
 
-        $resource = __DIR__ . '/_files/products_to_import_with_datetime.csv';
-        $source = new Mage_ImportExport_Model_Import_Adapter_Csv($resource);
+        $source = new Mage_ImportExport_Model_Import_Source_Csv(
+            __DIR__ . '/_files/products_to_import_with_datetime.csv'
+        );
         $this->_model->setParameters(array(
             'behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE,
             'entity' => 'catalog_product'
@@ -228,7 +233,7 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
             $productBeforeImport = $productsBeforeImport[$row['sku']];
 
             /** @var $productAfterImport Mage_Catalog_Model_Product */
-            $productAfterImport = new Mage_Catalog_Model_Product();
+            $productAfterImport = Mage::getObjectManager()->create('Mage_Catalog_Model_Product');
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
                 @strtotime($row['news_from_date']),
@@ -404,6 +409,76 @@ class Mage_ImportExport_Model_Import_Entity_ProductTest extends PHPUnit_Framewor
                 '$behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_REPLACE
             )
         );
+    }
+
+    /**
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     */
+    public function testSaveMediaImage()
+    {
+        if (Magento_Test_Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
+            $this->markTestIncomplete('bug: MAGETWO-4227');
+        }
+        $attribute = Mage::getModel('Mage_Catalog_Model_Entity_Attribute');
+        $attribute->loadByCode('catalog_product', 'media_gallery');
+        $data = implode(',', array(
+            // minimum required set of attributes + media images
+            'sku', '_attribute_set', '_type', '_product_websites', 'name', 'price',
+            'description', 'short_description', 'weight', 'status', 'visibility', 'tax_class_id',
+            '_media_attribute_id', '_media_image', '_media_label', '_media_position', '_media_is_disabled'
+        )) . "\n";
+        $data .= implode(',', array(
+            'test_sku', 'Default', Mage_Catalog_Model_Product_Type::DEFAULT_TYPE, 'base', 'Product Name', '9.99',
+            'Product description', 'Short desc.', '1',
+            Mage_Catalog_Model_Product_Status::STATUS_ENABLED,
+            Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH, 0,
+            $attribute->getId(), 'magento_image.jpg', 'Image Label', '1', '0'
+        )) . "\n";
+        $data = 'data://text/plain;base64,' . base64_encode($data);
+        $fixture = new Mage_ImportExport_Model_Import_Source_Csv($data);
+
+        foreach (new Mage_Catalog_Model_Resource_Product_Collection as $product) {
+            $this->fail("Unexpected precondition - product exists: '{$product->getId()}'.");
+        }
+
+        $this->_model->setSource($fixture)
+            ->setParameters(array('behavior' => Mage_ImportExport_Model_Import::BEHAVIOR_APPEND))
+            ->isDataValid();
+        $this->_model->importData();
+
+        $resource = new Mage_Catalog_Model_Resource_Product;
+        $productId = $resource->getIdBySku('test_sku'); // fixture
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
+        $product->load($productId);
+        $gallery = $product->getMediaGalleryImages();
+        $this->assertInstanceOf('Varien_Data_Collection', $gallery);
+        $items = $gallery->getItems();
+        $this->assertCount(1, $items);
+        $item = array_pop($items);
+        $this->assertInstanceOf('Varien_Object', $item);
+        $this->assertEquals('/m/a/magento_image.jpg', $item->getFile());
+        $this->assertEquals('Image Label', $item->getLabel());
+    }
+
+    /**
+     * Copy a fixture image into media import directory
+     */
+    public static function mediaImportImageFixture()
+    {
+        $dir = Mage::getBaseDir('media') . '/import';
+        mkdir($dir);
+        copy(__DIR__ . '/../../../../Catalog/_files/magento_image.jpg', "{$dir}/magento_image.jpg");
+    }
+
+    /**
+     * Cleanup media import and catalog directories
+     */
+    public static function mediaImportImageFixtureRollback()
+    {
+        $media = Mage::getBaseDir('media');
+        Varien_Io_File::rmdirRecursive("{$media}/import");
+        Varien_Io_File::rmdirRecursive("{$media}/catalog");
     }
 
     /**

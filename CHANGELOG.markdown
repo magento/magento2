@@ -1,9 +1,88 @@
+2.0.0.0-dev31
+=============
+* Themes:
+  * Eliminated "skins" as a concept. Skins and themes are consolidated into one entity and now called just "themes"
+  * New themes out of the box are named by their distinctive characteristic (thus, "default" is renamed to "demo")
+  * Revised logic of handling "virtual" (which are present in database registry only, but not in the file system) VS "physical" themes
+* Dependency injection:
+  * Reduced memory leaks of integration tests caused by introduction of object manager
+  * Added compiler for dependency injection definitions and ability to run Magento application with the compiled definitions
+* `Mage_Adminhtml` breakdown:
+  * Implemented XML-schema for system configuration form declaration files (`etc/system.xml` in each module), refactored them to comply with schema and relocated to `etc/adminhtml/system.xml`
+  * Removed remnants of `Mage_Admin` module (replaced with `Mage_Backend` and others)
+  * Removed multiple obsolete models in `Mage_Adminhtml` module -- replaced with more generic classes in `Mage_Backend` (less classes overall)
+* Replaced `Magento_Test_TestCase_ObjectManagerAbstract` in unit testing framework by a helper in test suite
+* Made the PHP coding standard test (`Php_LiveCodeTest`) treat white/black lists as `glob()` patterns and verify correctness of the actual patterns
+* Consolidated `upload_max_filesize` logic into one helper
+* Bug fixes:
+  * Fatal error on Product Tags and Customers Tagged Product (on product editing page in backend)
+  * Trailing space in date caused by new "date picker" JavaScript component
+  * Impossibility to add product to an order in backend in IE8
+  * Not picking a template on customer "Shopping Cart" page at the backend
+  * "Use Default" checkbox is checked again after saving multiselect attribute config if option does not contain value
+  * "Single Store Mode" UI fixes
+  * Runtime error when previewing transactional email template
+  * Incorrect redirect after applying filter in grids
+  * Various asynchronous placement of profiler keys
+  * Various fixes in Taxes backend UI
+  * Various fixes in translation literals
+
+2.0.0.0-dev30
+=============
+* Framework changes
+  * Added dependency injection of framework capability
+    * Adopted Zend\Di component of Zend Framework 2 library
+    * Implemented object manager in Magento application
+    * Refactored multiple base classes to dependency injection principle (dependencies are declared in constructor)
+  * Themes/View
+    * Implemented storing themes registry in database, basic CRUD of themes, automatic registration of themes in database from file system out of the box
+    * Renamed `Mage_Core_Model_Layout_Update` into `Mage_Core_Model_Layout_Merge`, the former becomes an entity domain model. Similar changes with `Mage_Core_Model_Resource_Layout` -> `Mage_Core_Model_Resource_Layout_Update`, `Mage_Core_Model_Layout_Data` -> `Mage_Core_Model_Layout_Update`
+* Performance tests
+  * Improved indexers running script `dev/shell/indexer.php` to return appropriate exit code upon success/failure
+  * Implemented running the same performance scenario file with different parameters
+  * Slightly refactored framework class `Magento_Performance_Testsuite_Optimizer` for better visibility of algorithm
+* Visual design editor
+  * Added ability to remove elements in editor UI
+  * Revised history of changes VDE toolbar and algorithm of "compacting" operations (moving, removing elements) as a layout update XML
+  * Added selection of themes to VDE launcher page
+* Refactored JavaScript of some UI elements to jQuery:
+  * "Simple" and "configurable" product view pages
+  * "Create Account" page
+  * "Shopping Cart" page
+  * CAPTCHA
+  * Newsletter subscription
+* Tax management UX improvements
+  * Split Basic and Advanced Settings for Tax Rule Management UI
+  * Moved the Import/Export functionality to Tax Rate page
+  * Moved Tax menu to System from Sales
+* Implemented the editable multiselect JavaScript component
+* Added mentioning sitemap in `robots.txt` after generation
+* Removed creation of DB backup in integration testing framework
+* Fixed logic of order of loading ACL resources in backend
+* Fixed JavaScript error during installation when one of files in `pub/media` is not writable
+* Fixed structure of legacy test fixtures that allowed ambiguous keys in declaration
+* Fixed inability to restore admin password when CAPTCHA is enabled
+* Various minor UX fixes (labels, buttons, redirects, etc...)
+* GitHub requests:
+  * [#59](https://github.com/magento/magento2/issues/59) -- implemented handling of unexpected situations in admin/dashboard/tunnel action
+  * [#66](https://github.com/magento/magento2/issues/66)
+    * refactored ImageMagick adapter unit test to avoid system operation
+    * simplified unit testing framework -- removed unused classes, simplified handling logic of directory `dev/tests/unit/tmp` and removed it from VCS
+  * [#73](https://github.com/magento/magento2/pull/73), [#74](https://github.com/magento/magento2/pull/74) -- fixes in docblock tags
+  * [#75](https://github.com/magento/magento2/pull/75), [#96](https://github.com/magento/magento2/pull/96) -- fixed translation module contexts in a few places
+  * [#80](https://github.com/magento/magento2/issues/80) -- fixed some runtime errors in import/export module
+  * [#81](https://github.com/magento/magento2/issues/81) -- removed usage of "remove" directive in places where it is overridden by setting root template anyway
+  * [#87](https://github.com/magento/magento2/issues/87) -- changed paths of files to include from relative into absolute in `dev/shell/indexer.php` and `log.php`
+  * [#88](https://github.com/magento/magento2/issues/88) -- provided comments for values that can be configured in `app/etc/local.xml` file
+  * [#90](https://github.com/magento/magento2/issues/90) -- slightly optimized logic of implementation of loading configurable product attributes
+
 2.0.0.0-dev29
 =============
-* Implemented and verified ability to upgrade DB from CE 1.7 (EE 1.12) to 2.x
+* Added scripts that allow upgrading database from CE 1.7 (EE 1.12) to 2.x
 * Replaced calendar UI component with jQuery calendar
+* Removed store scope selector from backend customers management
+* Renamed `pub/js` (was known as `js` in Magento 1.x) into `pub/lib`
 * Restored back the public access to `pub/cron.php` entry point (in the previous patch it was denied by mistake)
-* Fixed typo in label of "Catalog Search" index in UI
 
 2.0.0.0-dev28
 =============
@@ -525,10 +604,10 @@
 2.0.0.0-dev02
 =============
 Deprecated code & minor fixes update:
-* Eliminated remnants of `htmlescape` implementation
-* Eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
-* Disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
-* Minor refactoring of data fixtures rollback capability in integration testing framework
+* eliminated remnants of `htmlescape` implementation
+* eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
+* disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
+* minor refactoring of data fixtures rollback capability in integration testing framework
 
 2.0.0.0-dev01
 =============

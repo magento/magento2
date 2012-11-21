@@ -34,7 +34,7 @@
             <exclude>testsuite/integrity</exclude>
         </testsuite>
     </testsuites>
-     <!-- Code coverage filters -->
+    <!-- Code coverage filters -->
     <filter>
         <whitelist>
             <!-- All CE modules -->
@@ -47,16 +47,6 @@
             </exclude>
         </whitelist>
     </filter>
-    <!-- Code coverage report, optional -->
-<!--
-    <logging>
-        <log type="coverage-html" target="../../build/report/integration/coverage"
-            title="Magento 2 Integration Tests Code Coverage"
-            charset="UTF-8" yui="true" highlight="true"
-            lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="../../build/report/integration/clover.xml"/>
-    </logging>
--->
     <!-- PHP INI settings and constants definition -->
     <php>
         <includePath>.</includePath>
@@ -67,8 +57,8 @@
         <const name="TESTS_GLOBAL_CONFIG_FILES" value="../../../app/etc/*.xml"/>
         <!-- Semicolon-separated 'glob' patterns, that match module declaration XML configuration files -->
         <const name="TESTS_MODULE_CONFIG_FILES" value="../../../app/etc/modules/*.xml;etc/modules/*.xml"/>
-        <!-- Environment cleanup, optional. Possible values: uninstall, restoreDatabase -->
-        <const name="TESTS_CLEANUP_ACTION" value="uninstall"/>
+        <!-- Whether to cleanup the application before running tests or not -->
+        <const name="TESTS_CLEANUP" value="enabled"/>
         <!-- CSV Profiler Output file -->
         <!--<const name="TESTS_PROFILER_FILE" value="profiler.csv"/>-->
         <!-- Bamboo compatible CSV Profiler Output file name -->

@@ -41,9 +41,9 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Submission_History
      * Set use AJAX for grid
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('history_grid');
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('ASC');

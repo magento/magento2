@@ -36,12 +36,12 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit extends Mage_Adminhtml_Block_Widge
      * Add "Save and Apply" button
      * Add "Save and Continue" button
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'id';
         $this->_controller = 'promo_catalog';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_addButton('save_apply', array(
             'class'   => 'save',

@@ -34,9 +34,9 @@
 class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('bundle_selection_search_grid');
         $this->setRowClickCallback('bSelection.productGridRowClick.bind(bSelection)');
         $this->setCheckboxCheckCallback('bSelection.productGridCheckboxCheck.bind(bSelection)');

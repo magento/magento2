@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Review_Product_Grid extends Mage_Adminhtml_Block_Catalog_Product_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setRowClickCallback('review.gridRowClick');
         $this->setUseAjax(true);
     }

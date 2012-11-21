@@ -150,7 +150,7 @@ class Mage_Adminhtml_Block_Report_Filter_Form extends Mage_Adminhtml_Block_Widge
         $fieldset->addField('from', 'date', array(
             'name'      => 'from',
             'date_format' => $dateFormat,
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
             'label'     => Mage::helper('Mage_Reports_Helper_Data')->__('From'),
             'title'     => Mage::helper('Mage_Reports_Helper_Data')->__('From'),
             'required'  => true
@@ -159,7 +159,7 @@ class Mage_Adminhtml_Block_Report_Filter_Form extends Mage_Adminhtml_Block_Widge
         $fieldset->addField('to', 'date', array(
             'name'      => 'to',
             'date_format' => $dateFormat,
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
+            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
             'label'     => Mage::helper('Mage_Reports_Helper_Data')->__('To'),
             'title'     => Mage::helper('Mage_Reports_Helper_Data')->__('To'),
             'required'  => true

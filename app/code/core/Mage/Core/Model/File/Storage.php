@@ -108,7 +108,9 @@ class Mage_Core_Model_File_Storage extends Mage_Core_Model_Abstract
                 break;
             case self::STORAGE_MEDIA_DATABASE:
                 $connection = (isset($params['connection'])) ? $params['connection'] : null;
-                $model = Mage::getModel('Mage_Core_Model_File_Storage_Database', array('connection' => $connection));
+                $arguments = array('connection' => $connection);
+                $model = Mage::getModel('Mage_Core_Model_File_Storage_Database',
+                    array('connectionName' => $arguments));
                 break;
             default:
                 return false;

@@ -86,21 +86,6 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $file
-     * @param $expected
-     *
-     */
-    public function testGetLicenseTemplate()
-    {
-        $this->_fileManagerMock->expects($this->once())
-            ->method('getContents')
-            ->with('someFile')
-            ->will($this->returnValue('<?xml version="1.0"?> <!-- /** license_notice */ -->'));
-        $actual = $this->_model->getLicenseTemplate('someFile');
-        $this->assertEquals(' /** license_notice */ ', $actual);
-    }
-
-    /**
      * @param $filePath
      * @param $expectedModuleName
      *
@@ -285,19 +270,17 @@ class Tools_Migration_Acl_GeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testGetResultDomDocument()
     {
-        $expectedDccument = <<<TEMPLATE
+        $expectedDocument = <<<TEMPLATE
 <config>
   <acl>
     <resources xpath="config/acl/resources"/>
   </acl>
 </config>
 TEMPLATE;
-        $dom = $this->_model->getResultDomDocument('license_placeholder');
+        $dom = $this->_model->getResultDomDocument();
         $expectedDom = new DOMDocument();
         $expectedDom->formatOutput = true;
-
-        $this->assertContains('license_placeholder', $dom->saveXML());
-        $this->assertEquals($expectedDccument, $dom->saveXML($dom->documentElement));
+        $this->assertEquals($expectedDocument, $dom->saveXML($dom->documentElement));
     }
 
     public function testParseAdminhtmlFiles()

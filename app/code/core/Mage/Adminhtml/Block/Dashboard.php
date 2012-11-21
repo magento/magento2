@@ -33,12 +33,7 @@ class Mage_Adminhtml_Block_Dashboard extends Mage_Adminhtml_Block_Template
      */
     const XML_PATH_ENABLE_CHARTS = 'admin/dashboard/enable_charts';
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('dashboard/index.phtml');
-
-    }
+    protected $_template = 'dashboard/index.phtml';
 
     protected function _prepareLayout()
     {

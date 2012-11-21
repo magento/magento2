@@ -31,7 +31,7 @@
  * @package    Mage_Backup
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backup_Model_Config_Source_Type
+class Mage_Backup_Model_Config_Source_Type implements Mage_Core_Model_Option_ArrayInterface
 {
     /**
      * return possible options

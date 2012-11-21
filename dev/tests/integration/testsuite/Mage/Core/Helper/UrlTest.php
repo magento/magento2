@@ -34,7 +34,7 @@ class Mage_Core_Helper_UrlTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_helper = new Mage_Core_Helper_Url;
+        $this->_helper = Mage::helper('Mage_Core_Helper_Url');
     }
 
     protected function tearDown()

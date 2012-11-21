@@ -241,6 +241,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Adminhtml_Utility_Contr
          */
         $this->assertCount(4, $customer->getAddressesCollection());
 
+        /** @var $savedCustomer Mage_Customer_Model_Customer */
         $savedCustomer = Mage::getModel('Mage_Customer_Model_Customer');
         $savedCustomer->load($customer->getId());
         /**

@@ -40,7 +40,7 @@
                 </li>
             <?php endforeach; ?>
             </ol>
-            <script type="text/javascript">decorateList('widget-new-products-<?php echo $suffix; ?>', 'none-recursive')</script>
+            <script type="text/javascript">(function($) {$('#widget-new-products-<?php echo $suffix; ?>').decorate('list', false)})(jQuery)</script>
         </div>
     </div>
 </div>

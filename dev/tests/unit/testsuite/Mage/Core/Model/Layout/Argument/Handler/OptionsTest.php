@@ -38,15 +38,18 @@ class Mage_Core_Model_Layout_Argument_Handler_OptionsTest extends PHPUnit_Framew
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectFactoryMock;
-
+    protected $_objectManagerMock;
 
     protected function setUp()
     {
-        $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $this->_model = new Mage_Core_Model_Layout_Argument_Handler_Options(
-            array('objectFactory' => $this->_objectFactoryMock)
-        );
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $this->_model = new Mage_Core_Model_Layout_Argument_Handler_Options($this->_objectManagerMock);
+    }
+
+    protected function tearDown()
+    {
+        unset($this->_objectManagerMock);
+        unset($this->_model);
     }
 
     /**
@@ -54,8 +57,8 @@ class Mage_Core_Model_Layout_Argument_Handler_OptionsTest extends PHPUnit_Framew
      */
     public function testProcessIfOptionModelIncorrect()
     {
-        $this->_objectFactoryMock->expects($this->once())
-            ->method('getModelInstance')
+        $this->_objectManagerMock->expects($this->once())
+            ->method('create')
             ->with('StdClass')
             ->will($this->returnValue(new StdClass()));
         $this->_model->process('StdClass');
@@ -71,8 +74,8 @@ class Mage_Core_Model_Layout_Argument_Handler_OptionsTest extends PHPUnit_Framew
             'Option_Array_Model',
             false);
         $optionsModel->expects($this->once())->method('toOptionArray')->will($this->returnValue($optionArray));
-        $this->_objectFactoryMock->expects($this->once())
-            ->method('getModelInstance')
+        $this->_objectManagerMock->expects($this->once())
+            ->method('create')
             ->with('Option_Array_Model')
             ->will($this->returnValue($optionsModel));
         $this->assertEquals($optionArray, $this->_model->process('Option_Array_Model'));

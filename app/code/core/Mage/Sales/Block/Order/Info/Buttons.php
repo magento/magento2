@@ -34,11 +34,8 @@
  */
 class Mage_Sales_Block_Order_Info_Buttons extends Mage_Core_Block_Template
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('order/info/buttons.phtml');
-    }
+
+    protected $_template = 'order/info/buttons.phtml';
 
     /**
      * Retrieve current order model instance

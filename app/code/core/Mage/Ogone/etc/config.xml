@@ -130,7 +130,7 @@
             <ogone>
                 <model>Mage_Ogone_Model_Api</model>
                 <title>Ogone</title>
-                <secret_key backend_model="Mage_Adminhtml_Model_System_Config_Backend_Encrypted"/>
+                <secret_key backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <payment_action>authorize</payment_action>
                 <hashing_algorithm>sha256</hashing_algorithm>
                 <template>ogone</template>

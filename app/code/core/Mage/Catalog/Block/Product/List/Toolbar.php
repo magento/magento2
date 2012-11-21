@@ -144,6 +144,10 @@ class Mage_Catalog_Block_Product_List_Toolbar extends Mage_Core_Block_Template
      */
     protected $_paramsMemorizeAllowed = true;
 
+
+    protected $_template = 'product/list/toolbar.phtml';
+
+
     /**
      * Retrieve Catalog Config object
      *
@@ -184,7 +188,7 @@ class Mage_Catalog_Block_Product_List_Toolbar extends Mage_Core_Block_Template
                 $this->_availableMode = array('list' => $this->__('List'), 'grid' => $this->__('Grid'));
                 break;
         }
-        $this->setTemplate('product/list/toolbar.phtml');
+
     }
 
     /**

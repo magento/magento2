@@ -24,9 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once '../../app/bootstrap.php';
+require_once __DIR__ . '/../../app/bootstrap.php';
 Mage::app('admin', 'store');
 
 /** @var $shell Mage_Log_Model_Shell */
-$shell = Mage::getModel('Mage_Log_Model_Shell', basename(__FILE__));
+$shell = Mage::getModel('Mage_Log_Model_Shell', array('entryPoint' => basename(__FILE__)));
 $shell->run();

@@ -542,7 +542,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
         $data['address_entity']  = $addressEntity;
         $this->_model = new Mage_ImportExport_Model_Import_Entity_CustomerComposite($data);
 
-        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_Adapter_Abstract', array(), '', false);
+        $source = $this->getMockForAbstractClass('Mage_ImportExport_Model_Import_SourceAbstract', array(), '', false);
         $this->_model->setSource($source);
     }
 
@@ -598,7 +598,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
     {
         $this->_getModelMockForPrepareRowForDb();
         $pathToCsvFile = __DIR__ . '/_files/customer_composite_prepare_row_for_db.csv';
-        $source = new Mage_ImportExport_Model_Import_Adapter_Csv($pathToCsvFile);
+        $source = new Mage_ImportExport_Model_Import_Source_Csv($pathToCsvFile);
         $this->_model->setSource($source);
         $this->_model->validateData();  // assertions processed in self::verifyPrepareRowForDbData
     }

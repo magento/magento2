@@ -33,10 +33,8 @@
  */
 class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mage_Adminhtml_Block_Template
 {
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/attribute/set/toolbar/add.phtml');
-    }
+
+    protected $_template = 'catalog/product/attribute/set/toolbar/add.phtml';
 
     protected function _prepareLayout()
     {

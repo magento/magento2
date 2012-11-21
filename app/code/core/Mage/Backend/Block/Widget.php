@@ -86,8 +86,7 @@ class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
      * @return string
      */
     public function getButtonHtml($label, $onclick, $class='', $id=null) {
-        //@todo: Add UI id to button
-        return $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button', $this->getNameInLayout() .'.'. '-button')
+        return $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
             ->setData(array(
                 'label'     => $label,
                 'onclick'   => $onclick,
@@ -100,7 +99,7 @@ class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
 
     public function getGlobalIcon()
     {
-        return '<img src="'.$this->getSkinUrl('images/fam_link.gif').'" alt="'.$this->__('Global Attribute').'" title="'.$this->__('This attribute shares the same value in all the stores').'" class="attribute-global"/>';
+        return '<img src="'.$this->getViewFileUrl('images/fam_link.gif').'" alt="'.$this->__('Global Attribute').'" title="'.$this->__('This attribute shares the same value in all the stores').'" class="attribute-global"/>';
     }
 }
 

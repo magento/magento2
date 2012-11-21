@@ -49,13 +49,6 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
     protected $_sessionTable;
 
     /**
-     * Database read connection
-     *
-     * @var Varien_Db_Adapter_Interface
-     */
-    protected $_read;
-
-    /**
      * Database write connection
      *
      * @var Varien_Db_Adapter_Interface
@@ -65,18 +58,16 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
     /**
      * Constructor
      *
+     * @param Mage_Core_Model_Resource $resource
      */
-    public function __construct()
+    public function __construct(Mage_Core_Model_Resource $resource)
     {
-        $resource = Mage::getSingleton('Mage_Core_Model_Resource');
         $this->_sessionTable = $resource->getTableName('core_session');
-        $this->_read         = $resource->getConnection('core_read');
         $this->_write        = $resource->getConnection('core_write');
     }
 
     /**
-     * Destrucor
-     *
+     * Destructor
      */
     public function __destruct()
     {
@@ -90,10 +81,10 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
      */
     public function hasConnection()
     {
-        if (!$this->_read) {
+        if (!$this->_write) {
             return false;
         }
-        if (!$this->_read->isTableExists($this->_sessionTable)) {
+        if (!$this->_write->isTableExists($this->_sessionTable)) {
             return false;
         }
 
@@ -147,46 +138,51 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
     /**
      * Fetch session data
      *
-     * @param string $sessId
+     * @param string $sessionId
      * @return string
      */
-    public function read($sessId)
+    public function read($sessionId)
     {
-        $select = $this->_read->select()
-                ->from($this->_sessionTable, array('session_data'))
-                ->where('session_id = :session_id');
-        $bind = array(
-            'session_id'      => $sessId,
-        );
+        // need to use write connection to get the most fresh DB sessions
+        $select = $this->_write->select()
+            ->from($this->_sessionTable, array('session_data'))
+            ->where('session_id = :session_id');
+        $bind = array('session_id' => $sessionId);
+        $data = $this->_write->fetchOne($select, $bind);
 
-        $data = $this->_read->fetchOne($select, $bind);
+        // if session data is a base64 encoded string
+        if (base64_decode($data, true) !== false) {
+            $data = base64_decode($data);
+        }
         return $data;
     }
 
     /**
      * Update session
      *
-     * @param string $sessId
-     * @param string $sessData
+     * @param string $sessionId
+     * @param string $sessionData
      * @return boolean
      */
-    public function write($sessId, $sessData)
+    public function write($sessionId, $sessionData)
     {
-        $bindValues = array('session_id' => $sessId);
+        // need to use write connection to get the most fresh DB sessions
+        $bindValues = array('session_id' => $sessionId);
         $select = $this->_write->select()
-                ->from($this->_sessionTable)
-                ->where('session_id = :session_id');
-        $exists = $this->_read->fetchOne($select, $bindValues);
+            ->from($this->_sessionTable)
+            ->where('session_id = :session_id');
+        $exists = $this->_write->fetchOne($select, $bindValues);
 
+        // encode session serialized data to prevent insertion of incorrect symbols
         $bind = array(
             'session_expires' => time(),
-            'session_data' => $sessData
+            'session_data'    => base64_encode($sessionData),
         );
 
         if ($exists) {
-            $this->_write->update($this->_sessionTable, $bind, array('session_id=?' => $sessId));
+            $this->_write->update($this->_sessionTable, $bind, array('session_id=?' => $sessionId));
         } else {
-            $bind['session_id'] = $sessId;
+            $bind['session_id'] = $sessionId;
             $this->_write->insert($this->_sessionTable, $bind);
         }
         return true;

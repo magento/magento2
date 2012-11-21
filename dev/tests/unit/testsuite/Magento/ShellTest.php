@@ -41,41 +41,43 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $phpCommand
-     * @param string $expectedRaw
-     * @param string $expectedFull
+     * @param bool $isVerbose
+     * @param string $expectedOutput
+     * @param string $expectedResult
      * @dataProvider executeDataProvider
      */
-    public function testExecute($phpCommand, $expectedRaw, $expectedFull)
+    public function testExecute($phpCommand, $isVerbose, $expectedOutput, $expectedResult = '')
     {
-        // non-verbose
-        $shell = new Magento_Shell();
-        $rawResult = $shell->execute('php -r %s', array($phpCommand), $fullResult);
-        $this->assertEquals($expectedRaw, $rawResult);
-        $this->assertEquals($expectedFull, $fullResult);
-
-        // verbose
-        $this->expectOutputString($expectedFull);
-        $shell = new Magento_Shell(true);
-        $shell->execute('php -r %s', array($phpCommand));
+        $this->expectOutputString($expectedOutput);
+        $shell = new Magento_Shell($isVerbose);
+        $actualResult = $shell->execute('php -r %s', array($phpCommand));
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     public function executeDataProvider()
     {
-        $quote = escapeshellarg('\'""');
-        $quote = $quote[0];
+        $quote = substr(escapeshellarg(' '), 0, 1);
+        $eol = PHP_EOL;
         return array(
-            'STDOUT' => array('echo 27182;', array('27182'),
-                "php -r {$quote}echo 27182;{$quote} 2>&1" . PHP_EOL . '27182' . PHP_EOL . PHP_EOL
+            'capture STDOUT' => array(
+                'echo 27181;', false, '', '27181',
             ),
-            'STDERR' => array('fwrite(STDERR, 27183);', array('27183'),
-                "php -r {$quote}fwrite(STDERR, 27183);{$quote} 2>&1" . PHP_EOL . '27183' . PHP_EOL . PHP_EOL
+            'print STDOUT' => array(
+                'echo 27182;', true, "php -r {$quote}echo 27182;{$quote} 2>&1{$eol}27182{$eol}", '27182',
+            ),
+            'capture STDERR' => array(
+                'fwrite(STDERR, 27183);', false, '', '27183',
+            ),
+            'print STDERR' => array(
+                'fwrite(STDERR, 27184);', true, "php -r {$quote}fwrite(STDERR, 27184);{$quote} 2>&1{$eol}27184{$eol}",
+                '27184',
             ),
         );
     }
 
     /**
      * @expectedException Magento_Exception
-     * @expectedExceptionMessage Command `non_existing_command` returned non-zero exit code
+     * @expectedExceptionMessage Command `non_existing_command 2>&1` returned non-zero exit code
      * @expectedExceptionCode 0
      */
     public function testExecuteFailure()
@@ -86,18 +88,21 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param string $phpCommand
-     * @param string $expectedRaw
-     * @param string $expectedFull
+     * @param bool $isVerbose
+     * @param string $expectedOutput
+     * @param string $expectedError
      * @dataProvider executeDataProvider
      */
-    public function testExecuteFailureDetails($phpCommand, $expectedRaw, $expectedFull)
+    public function testExecuteFailureDetails($phpCommand, $isVerbose, $expectedOutput, $expectedError)
     {
         try {
             /* Force command to return non-zero exit code */
-            $this->testExecute($phpCommand . ' exit(42);', $expectedRaw, $expectedFull);
+            $phpFailingCommand = $phpCommand . ' exit(42);';
+            $expectedOutput = str_replace($phpCommand, $phpFailingCommand, $expectedOutput);
+            $this->testExecute($phpFailingCommand, $isVerbose, $expectedOutput);
         } catch (Magento_Exception $e) {
             $this->assertInstanceOf('Exception', $e->getPrevious());
-            $this->assertEquals(implode(PHP_EOL, $expectedRaw), $e->getPrevious()->getMessage());
+            $this->assertEquals($expectedError, $e->getPrevious()->getMessage());
             $this->assertEquals(42, $e->getPrevious()->getCode());
         }
     }

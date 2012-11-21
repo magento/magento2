@@ -34,7 +34,7 @@ class Mage_Log_Model_Resource_ShellTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Log_Model_Resource_Shell;
+        $this->_model = Mage::getResourceModel('Mage_Log_Model_Resource_Shell');
     }
 
     protected function tearDown()

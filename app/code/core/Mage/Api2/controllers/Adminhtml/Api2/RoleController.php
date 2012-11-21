@@ -207,7 +207,7 @@ class Mage_Api2_Adminhtml_Api2_RoleController extends Mage_Adminhtml_Controller_
             /** @var $ruleTree Mage_Api2_Model_Acl_Global_Rule_Tree */
             $ruleTree = Mage::getSingleton(
                 'Mage_Api2_Model_Acl_Global_Rule_Tree',
-                array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_PRIVILEGE)
+                array('options' => array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_PRIVILEGE))
             );
             $resources = $ruleTree->getPostResources();
             $id = $role->getId();

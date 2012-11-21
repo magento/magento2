@@ -28,16 +28,16 @@
 class Mage_Sales_Model_Order_ShipmentTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoConfigFixture current_store design/theme/full_name default/default/default
+     * @magentoConfigFixture current_store design/theme/full_name default/demo
      * @magentoDataFixture Mage/Sales/_files/order.php
      */
     public function testSendEmail()
     {
-        $order = new Mage_Sales_Model_Order();
+        $order = Mage::getModel('Mage_Sales_Model_Order');
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
 
-        $shipment = new Mage_Sales_Model_Order_Shipment();
+        $shipment = Mage::getModel('Mage_Sales_Model_Order_Shipment');
         $shipment->setOrder($order);
 
         $payment = $order->getPayment();

@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Catalog_Filters extends Mage_XmlConnect_Block_Catalo
     protected function _toHtml()
     {
         $categoryId         = $this->getRequest()->getParam('category_id', null);
-        $categoryXmlObj     = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<category></category>');
+        $categoryXmlObj     = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<category></category>'));
         $filtersCollection  = Mage::getResourceModel('Mage_XmlConnect_Model_Resource_Filter_Collection')
             ->setCategoryId($categoryId);
 

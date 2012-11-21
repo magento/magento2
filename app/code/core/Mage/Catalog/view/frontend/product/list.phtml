@@ -101,9 +101,8 @@ $_helper = $this->helper('Mage_Catalog_Helper_Output');
             $.mage.event.observe('mage.grid.initialize', function (event, initData) {
                 initData.listId = '#products-list';
             });
-            $.mage.load.js("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/grid.js') ?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
+            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/grid.js') ?>");
+            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
         })(jQuery);
         //]]>
     </script>
@@ -163,12 +162,11 @@ $_helper = $this->helper('Mage_Catalog_Helper_Output');
         //<![CDATA[
         (function($) {
             $.mage.event.observe('mage.grid.initialize', function (event, initData) {
-                initData.genericSelector = 'ul.products-grid';
+                initData.genericSelector = 'ul.products-grid > li';
                 initData.decoratorParam = ['odd', 'even', 'first', 'last'];
             });
-            $.mage.load.js("<?php echo $this->getSkinUrl('mage/decorate.js') ?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/grid.js') ?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
+            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/grid.js') ?>");
+            $.mage.load.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/mage-attributes-processing.js') ?>");
         })(jQuery);
         //]]>
     </script>

@@ -98,6 +98,21 @@
         <migration>
             <path_to_aliases_map_file>app/etc/aliases_to_classes_map.json</path_to_aliases_map_file>
         </migration>
+        <events>
+            <theme_registration_from_filesystem>
+                <observers>
+                    <theme_registration_observer>
+                        <class>Mage_Core_Model_Observer</class>
+                        <method>themeRegistration</method>
+                    </theme_registration_observer>
+                </observers>
+            </theme_registration_from_filesystem>
+        </events>
+        <di>
+            <Magento_Data_Structure>
+                <shared>0</shared>
+            </Magento_Data_Structure>
+        </di>
     </global>
     <frontend>
         <routers>
@@ -162,6 +177,16 @@
                 </observers>
             </show_synchronize_message>
         </events>
+        <design>
+            <theme>
+                <full_name>default/basic</full_name>
+            </theme>
+        </design>
+        <di>
+            <preferences>
+                <Mage_Core_Model_Url>Mage_Backend_Model_Url</Mage_Core_Model_Url>
+            </preferences>
+        </di>
     </adminhtml>
     <install>
         <translate>
@@ -173,12 +198,17 @@
                 </Mage_Core>
             </modules>
         </translate>
+        <design>
+            <theme>
+                <full_name>default/basic</full_name>
+            </theme>
+        </design>
     </install>
     <default>
         <design>
             <theme>
-                <full_name>default/default/default</full_name>
-                <allow_skin_files_duplication>1</allow_skin_files_duplication>
+                <full_name>default/demo</full_name>
+                <allow_view_files_duplication>1</allow_view_files_duplication>
             </theme>
             <pagination>
                 <list_allow_all>1</list_allow_all>
@@ -222,7 +252,7 @@
                     <compiled_css_folder>css</compiled_css_folder>
                     <compiled_css_secure_folder>css_secure</compiled_css_secure_folder>
                     <compiled_js_folder>js</compiled_js_folder>
-                    <design_skin_folder>skin</design_skin_folder>
+                    <design_theme_folder>theme</design_theme_folder>
                 </allowed_resources>
             </media_storage_configuration>
         </system>

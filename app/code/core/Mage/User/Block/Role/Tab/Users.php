@@ -27,9 +27,9 @@
 class Mage_User_Block_Role_Tab_Users extends Mage_Backend_Block_Widget_Tabs
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $roleId = $this->getRequest()->getParam('rid', false);
 

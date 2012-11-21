@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$recurringProfile = new Mage_Sales_Model_Recurring_Profile();
+$recurringProfile = Mage::getModel('Mage_Sales_Model_Recurring_Profile');
 $recurringProfile->addData(array(
     'store_id'                => 1,
     'method_code'             => Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS,

@@ -33,7 +33,7 @@ class Mage_Captcha_Block_Captcha_ZendTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_block = Mage::app()->getLayout()
+         $this->_block = Mage::app()->getLayout()
             ->createBlock('Mage_Captcha_Block_Captcha_Zend');
     }
 

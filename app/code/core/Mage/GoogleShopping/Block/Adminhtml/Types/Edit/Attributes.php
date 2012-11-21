@@ -34,10 +34,8 @@
 class Mage_GoogleShopping_Block_Adminhtml_Types_Edit_Attributes
     extends Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element
 {
-    public function __construct()
-    {
-        $this->setTemplate('types/edit/attributes.phtml');
-    }
+
+    protected $_template = 'types/edit/attributes.phtml';
 
     /**
      * Preparing global layout

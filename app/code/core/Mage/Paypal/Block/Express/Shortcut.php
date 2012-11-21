@@ -66,7 +66,8 @@ class Mage_Paypal_Block_Express_Shortcut extends Mage_Core_Block_Template
     protected function _beforeToHtml()
     {
         $result = parent::_beforeToHtml();
-        $config = Mage::getModel('Mage_Paypal_Model_Config', array($this->_paymentMethodCode));
+        $params = array($this->_paymentMethodCode);
+        $config = Mage::getModel('Mage_Paypal_Model_Config', array('params' => $params));
         $isInCatalog = $this->getIsInCatalogProduct();
         $quote = ($isInCatalog || '' == $this->getIsQuoteAllowed())
             ? null : Mage::getSingleton('Mage_Checkout_Model_Session')->getQuote();
@@ -113,10 +114,14 @@ class Mage_Paypal_Block_Express_Shortcut extends Mage_Core_Block_Template
         if ($isInCatalog || null === $quote) {
             $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl(Mage::app()->getLocale()->getLocaleCode()));
         } else {
-            $this->setImageUrl(Mage::getModel($this->_checkoutType, array(
-                'quote'  => $quote,
-                'config' => $config,
-            ))->getCheckoutShortcutImageUrl());
+            $parameters = array(
+                'params' => array(
+                    'quote' => $quote,
+                    'config' => $config,
+                ),
+            );
+            $checkoutModel = Mage::getModel($this->_checkoutType, $parameters);
+            $this->setImageUrl($checkoutModel->getCheckoutShortcutImageUrl());
         }
 
         // ask whether to create a billing agreement

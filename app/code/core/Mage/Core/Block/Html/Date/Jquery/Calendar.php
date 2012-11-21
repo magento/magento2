@@ -51,7 +51,7 @@ class Mage_Core_Block_Html_Date_Jquery_Calendar extends Mage_Core_Block_Html_Dat
     {
         $urlPath = sprintf(self::LOCALIZED_URL_PATH, $locale);
         try {
-            $urlPath = $this->getSkinUrl($urlPath);
+            $urlPath = $this->getViewFileUrl($urlPath);
         } catch (Magento_Exception $e) {
             $urlPath = null;
         }
@@ -83,7 +83,7 @@ class Mage_Core_Block_Html_Date_Jquery_Calendar extends Mage_Core_Block_Html_Dat
         }
 
         /* First include jquery-ui. */
-        $jsFiles = '"' . $this->getSkinUrl("jquery/ui/jquery-ui.js") . '", ';
+        $jsFiles = '"' . $this->getViewFileUrl("jquery/ui/jquery-ui.js") . '", ';
 
         /* There are a small handful of localized files that use the 5 character locale. */
         $locale = str_replace('_', '-', Mage::app()->getLocale()->getLocaleCode());
@@ -105,8 +105,8 @@ class Mage_Core_Block_Html_Date_Jquery_Calendar extends Mage_Core_Block_Html_Dat
             $jsFiles .= '"' . $localizedJsFilePath . '", ';
         }
 
-        $jsFiles .= '"' . $this->getSkinUrl("mage/calendar/calendar.js") . '"'; /* Lastly, the datepicker. */
-        $cssFile = '"' . $this->getSkinUrl("mage/calendar/css/calendar.css") . '"';
+        $jsFiles .= '"' . $this->getViewFileUrl("mage/calendar/calendar.js") . '"'; /* Lastly, the datepicker. */
+        $cssFile = '"' . $this->getViewFileUrl("mage/calendar/css/calendar.css") . '"';
 
         $html
             .= '

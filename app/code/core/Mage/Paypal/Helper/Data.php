@@ -63,11 +63,12 @@ class Mage_Paypal_Helper_Data extends Mage_Core_Helper_Abstract
      * @return string
      */
     public function getElementBackendConfig(Varien_Data_Form_Element_Abstract $element) {
-        $config = $element->getFieldConfig()->backend_congif;
-        if (!$config) {
+        $config = $element->getFieldConfig();
+        if (!array_key_exists('backend_congif', $config)) {
             return false;
         }
-        $config = $config->asCanonicalArray();
+
+        $config = $config['backend_congif'];
         if (isset($config['enable_for_countries'])) {
             $config['enable_for_countries'] = explode(',', str_replace(' ', '', $config['enable_for_countries']));
         }

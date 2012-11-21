@@ -42,7 +42,8 @@ class Mage_Catalog_Model_Product_Indexer_FlatTest extends PHPUnit_Framework_Test
 
     public function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Indexer_Flat;
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getModel('Mage_Catalog_Model_Product_Indexer_Flat');
         $this->_event = $this->getMock('Mage_Index_Model_Event',
             array('getFlatHelper', 'getEntity', 'getType', 'getDataObject'), array(), '', false
         );

@@ -35,15 +35,17 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Submission_Tab_Container
     extends Mage_Adminhtml_Block_Template
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
+
+    protected $_template = 'submission/container.phtml';
+
     /**
      * Constructor
-     * Setting view parameters, template
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setShowGlobalIcon(true);
-        $this->setTemplate('submission/container.phtml');
+
     }
 
     /**

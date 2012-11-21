@@ -29,11 +29,8 @@
  */
 class Mage_Centinel_Block_Logo extends Mage_Core_Block_Template
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('logo.phtml');
-    }
+
+    protected $_template = 'logo.phtml';
 
     /**
      * Return code of payment method

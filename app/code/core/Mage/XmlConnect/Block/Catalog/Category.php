@@ -41,7 +41,8 @@ class Mage_XmlConnect_Block_Catalog_Category extends Mage_XmlConnect_Block_Catal
     protected function _toHtml()
     {
         /** @var $categoryXmlObj Mage_XmlConnect_Model_Simplexml_Element */
-        $categoryXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<category></category>');
+        $categoryXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<category></category>'));
         $categoryId     = $this->getRequest()->getParam('id', null);
         if ($categoryId === null) {
             $categoryId = Mage::app()->getStore()->getRootCategoryId();

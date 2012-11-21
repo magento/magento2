@@ -67,7 +67,10 @@ class Mage_Tag_Block_Catalog_Product_Rss_LinkTest extends PHPUnit_Framework_Test
             'tag_model'               => $tagModelMock,
             'core_url_model'          => $urlModelMock
         );
-        $this->_model = new Mage_Tag_Block_Catalog_Product_Rss_Link($data);
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getBlock('Mage_Tag_Block_Catalog_Product_Rss_Link',
+            array('data' => $data)
+        );
 
         $this->assertSame($expected, $this->_model->getLinkUrl());
     }

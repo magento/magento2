@@ -24,45 +24,38 @@
  */
 /*jshint browser:true jquery:true */
 (function ($) {
-    // Default fields to initialize for menu
-    var menuInit = {
-        showDelay: 100,
-        hideDelay: 100,
-        menuSelector: '#nav .parent'
-    };
+    $.widget('mage.menu', {
+        options: {
+            showDelay: 100,
+            hideDelay: 100
+        },
 
-    function show(subElement) {
-        if (subElement.data('hideTimeId')) {
-            clearTimeout(subElement.data('hideTimeId'));
-        }
-        subElement.data('showTimeId', setTimeout(function () {
-            if (!subElement.hasClass('shown-sub')) {
+        _create: function() {
+            this.element.hover($.proxy(function () {
+                $(this.element).addClass('over');
+                this._show(this.element.children('ul'));
+            }, this), $.proxy(function () {
+                $(this.element).removeClass('over');
+                this._hide(this.element.children('ul'));
+            }, this));
+        },
+
+        _show: function(subElement) {
+            if (subElement.data('hideTimeId')) {
+                clearTimeout(subElement.data('hideTimeId'));
+            }
+            subElement.data('showTimeId', setTimeout(function () {
                 subElement.addClass('shown-sub');
-            }
-        }, menuInit.showDelay));
-    }
+            }), this.options.showDelay);
+        },
 
-    function hide(subElement) {
-        if (subElement.data('showTimeId')) {
-            clearTimeout(subElement.data('showTimeId'));
-        }
-        subElement.data('hideTimeId', setTimeout(function () {
-            if (subElement.hasClass('shown-sub')) {
+        _hide: function(subElement) {
+            if (subElement.data('showTimeId')) {
+                clearTimeout(subElement.data('showTimeId'));
+            }
+            subElement.data('hideTimeId', setTimeout(function () {
                 subElement.removeClass('shown-sub');
-            }
-        }, menuInit.hideDelay));
-    }
-
-    $(document).ready(function () {
-        // Trigger initalize event
-        $.mage.event.trigger("mage.menu.initialize", menuInit);
-        $(menuInit.menuSelector).on('mouseover', function () {
-            $(this).addClass('over');
-            show($(this).children('ul'));
-        });
-        $(menuInit.menuSelector).on('mouseout', function () {
-            $(this).removeClass('over');
-            hide($(this).children('ul'));
-        });
+            }), this.options.hideDelay);
+        }
     });
 })(jQuery);

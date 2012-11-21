@@ -41,6 +41,8 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
      */
     protected $_form;
 
+    protected $_template = 'Mage_Backend::widget/form.phtml';
+
     /**
      * Class constructor
      *
@@ -48,7 +50,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('Mage_Backend::widget/form.phtml');
+
         $this->setDestElementId('edit_form');
         $this->setShowGlobalIcon(false);
     }
@@ -134,7 +136,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
     /**
      * This method is called before rendering HTML
      *
-     * @return Mage_Backend_Block_Widget_Form
+     * @return Mage_Backend_Block_Widget_Form|Mage_Core_Block_Abstract
      */
     protected function _beforeToHtml()
     {
@@ -200,7 +202,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
                     $element->setValues($attribute->getSource()->getAllOptions(false, true));
                     $element->setCanBeEmpty(true);
                 } else if ($inputType == 'date') {
-                    $element->setImage($this->getSkinUrl('images/grid-cal.gif'));
+                    $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));
                     $element->setDateFormat(Mage::app()->getLocale()->getDateFormatWithLongYear());
                 } else if ($inputType == 'multiline') {
                     $element->setLineCount($attribute->getMultilineCount());

@@ -45,12 +45,6 @@ set_include_path(implode(
     )
 ));
 
-if (defined('TESTS_CLEANUP_ACTION') && TESTS_CLEANUP_ACTION) {
-    $cleanupAction = TESTS_CLEANUP_ACTION;
-} else {
-    $cleanupAction = Magento_Test_Bootstrap::CLEANUP_NONE;
-}
-
 if (defined('TESTS_LOCAL_CONFIG_FILE') && TESTS_LOCAL_CONFIG_FILE) {
     $localXmlFile = "$testsBaseDir/" . TESTS_LOCAL_CONFIG_FILE;
     if (!is_file($localXmlFile) && substr($localXmlFile, -5) != '.dist') {
@@ -72,10 +66,9 @@ if (defined('TESTS_MODULE_CONFIG_FILES') && TESTS_MODULE_CONFIG_FILES) {
     $moduleEtcFiles = "../../../app/etc/modules/*.xml";
 }
 
-$developerMode = false;
-if (defined('TESTS_MAGENTO_DEVELOPER_MODE') && TESTS_MAGENTO_DEVELOPER_MODE == 'enabled') {
-    $developerMode = true;
-}
+$isCleanupEnabled = (defined('TESTS_CLEANUP') && TESTS_CLEANUP == 'enabled');
+
+$isDeveloperMode = (defined('TESTS_MAGENTO_DEVELOPER_MODE') && TESTS_MAGENTO_DEVELOPER_MODE == 'enabled');
 
 /* Enable profiler if necessary */
 if (defined('TESTS_PROFILER_FILE') && TESTS_PROFILER_FILE) {
@@ -108,6 +101,10 @@ $eventManager = new Magento_Test_EventManager(array(
 Magento_Test_Event_PhpUnit::setDefaultEventManager($eventManager);
 Magento_Test_Event_Magento::setDefaultEventManager($eventManager);
 
+/* Initialize object manager instance */
+Mage::setRoot();
+Mage::initializeObjectManager(null, new Magento_Test_ObjectManager());
+
 /* Bootstrap the application */
 Magento_Test_Bootstrap::setInstance(new Magento_Test_Bootstrap(
     $magentoBaseDir,
@@ -116,8 +113,9 @@ Magento_Test_Bootstrap::setInstance(new Magento_Test_Bootstrap(
     $moduleEtcFiles,
     'etc/integration-tests-config.xml',
     $testsTmpDir,
-    $cleanupAction,
-    $developerMode
+    new Magento_Shell(),
+    $isCleanupEnabled,
+    $isDeveloperMode
 ));
 
 Utility_Files::init(new Utility_Files($magentoBaseDir));

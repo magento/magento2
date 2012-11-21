@@ -57,6 +57,17 @@ class Varien_Data_Form_Abstract extends Varien_Object
     public function __construct($attributes = array())
     {
         parent::__construct($attributes);
+        $this->_construct();
+    }
+
+    /**
+     * Internal constructor, that is called from real constructor
+     *
+     * Please override this one instead of overriding real __construct constructor
+     *
+     */
+    protected function _construct()
+    {
     }
 
     /**

@@ -75,12 +75,14 @@ class Mage_Page_Block_Html_Pager extends Mage_Core_Block_Template
      */
     protected $_frameEnd;
 
+    protected $_template = 'Mage_Page::html/pager.phtml';
+
     protected function _construct()
     {
         parent::_construct();
         $this->setData('show_amounts', true);
         $this->setData('use_container', true);
-        $this->setTemplate('Mage_Page::html/pager.phtml');
+
     }
 
     /**

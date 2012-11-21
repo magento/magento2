@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Options extends Ma
      *
      * @return void
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->addOptionRenderer(
             'default',
             'Mage_Catalog_Block_Product_View_Options_Type_Default',

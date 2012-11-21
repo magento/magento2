@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 //Create customer
-$customer = new Mage_Customer_Model_Customer();
+$customer = Mage::getModel('Mage_Customer_Model_Customer');
 $customer
     ->setWebsiteId(0)
     ->setEntityId(1)
@@ -43,7 +43,7 @@ $customer->isObjectNew(true);
 $customer->save();
 
 // Create and set addresses
-$addressFirst = new Mage_Customer_Model_Address();
+$addressFirst = Mage::getModel('Mage_Customer_Model_Address');
 $addressFirst->addData(array(
     'entity_id'         => 1,
     'firstname'         => 'Betsy',
@@ -59,7 +59,7 @@ $addressFirst->isObjectNew(true);
 $customer->addAddress($addressFirst);
 $customer->setDefaultBilling($addressFirst->getId());
 
-$addressSecond = new Mage_Customer_Model_Address();
+$addressSecond = Mage::getModel('Mage_Customer_Model_Address');
 $addressSecond->addData(array(
     'entity_id'         => 2,
     'firstname'         => 'Anthony',

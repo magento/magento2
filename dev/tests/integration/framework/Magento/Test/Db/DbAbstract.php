@@ -59,11 +59,16 @@ abstract class Magento_Test_Db_DbAbstract
     protected $_schema = '';
 
     /**
-     * DB backup file
+     * Path to a temporary directory in the file system
      *
      * @var string
      */
     protected $_varPath = '';
+
+    /**
+     * @var Magento_Shell
+     */
+    protected $_shell;
 
     /**
      * Set initial essential parameters
@@ -73,69 +78,26 @@ abstract class Magento_Test_Db_DbAbstract
      * @param string $password
      * @param string $schema
      * @param string $varPath
+     * @param Magento_Shell $shell
      * @throws Magento_Exception
      */
-    public function __construct($host, $user, $password, $schema, $varPath)
+    public function __construct($host, $user, $password, $schema, $varPath, Magento_Shell $shell)
     {
+        if (!is_dir($varPath) || !is_writable($varPath)) {
+            throw new Magento_Exception("The specified '$varPath' is not a directory or not writable.");
+        }
         $this->_host = $host;
         $this->_user = $user;
         $this->_password = $password;
         $this->_schema = $schema;
-
         $this->_varPath = $varPath;
-        if (!is_dir($this->_varPath) || !is_writable($this->_varPath)) {
-            throw new Magento_Exception(
-                sprintf('The specified "%s" is not a directory or not writable.', $this->_varPath)
-            );
-        }
-    }
-
-    /**
-     * Perform additional operations on an empty database, if needed
-     *
-     * @return bool
-     */
-    public function verifyEmptyDatabase()
-    {
-        return true;
+        $this->_shell = $shell;
     }
 
     /**
      * Remove all DB objects
-     *
-     * @return bool
      */
     abstract public function cleanup();
-
-    /**
-     * Create database backup
-     *
-     * @param string $name
-     * @return bool
-     */
-    abstract public function createBackup($name);
-
-    /**
-     * Restore database from backup
-     *
-     * @param string $name
-     * @return bool
-     */
-    abstract public function restoreBackup($name);
-
-    /**
-     * Execute external command.
-     * Utility method that is used in children classes
-     *
-     * @param string $command
-     * @param array $output
-     * @return boolean
-     */
-    protected function _exec($command, &$output = null)
-    {
-        exec($command, $output, $return);
-        return 0 == $return;
-    }
 
     /**
      * Create file with sql script content.

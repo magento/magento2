@@ -37,9 +37,9 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Totals extends Mage_Adminhtml_Bloc
     protected $_totalRenderers;
     protected $_defaultRenderer = 'Mage_Adminhtml_Block_Sales_Order_Create_Totals_Default';
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_order_create_totals');
     }
 

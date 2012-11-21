@@ -35,15 +35,17 @@
  */
 class Mage_Sales_Block_Reorder_Sidebar extends Mage_Core_Block_Template
 {
+    protected $_template = 'order/history.phtml';
+
     /**
-     * Init orders and templates
+     * Init orders
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         if ($this->_getCustomerSession()->isLoggedIn()) {
-            $this->setTemplate('order/history.phtml');
+
             $this->initOrders();
         }
 

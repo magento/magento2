@@ -31,18 +31,11 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Websites extends Mage_Adminhtml_Block_Store_Switcher
+class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Websites extends Mage_Backend_Block_Store_Switcher
 {
     protected $_storeFromHtml;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product/edit/websites.phtml');
-    }
+    protected $_template = 'catalog/product/edit/websites.phtml';
 
     /**
      * Retrieve edited product model instance

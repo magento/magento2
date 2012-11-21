@@ -40,14 +40,14 @@ class Mage_Adminhtml_Block_Sales_Order_Invoice_View extends Mage_Adminhtml_Block
      */
     protected $_session;
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'invoice_id';
         $this->_controller  = 'sales_order_invoice';
         $this->_mode        = 'view';
         $this->_session = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_removeButton('save');
         $this->_removeButton('reset');

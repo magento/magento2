@@ -53,9 +53,6 @@ Default layout, loads most of the pages
 
     <checkout_cart_index translate="label" type="page" parent="default">
         <label>Shopping Cart</label>
-        <remove name="right"/>
-        <remove name="left"/>
-        <!-- Mage_Checkout -->
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -115,10 +112,6 @@ will be rendered on all checkout pages
 
     <checkout_multishipping translate="label" type="page" parent="checkout_cart_index">
         <label>Multishipping Checkout</label>
-        <!-- Mage_Checkout -->
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>
@@ -303,9 +296,6 @@ One page checkout main layout
 
     <checkout_onepage_index translate="label" type="page" parent="default">
         <label>One Page Checkout</label>
-        <!-- Mage_Checkout -->
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>2columns-right.phtml</template></action>
         </reference>

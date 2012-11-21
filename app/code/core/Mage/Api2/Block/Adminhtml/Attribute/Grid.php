@@ -38,9 +38,9 @@ class Mage_Api2_Block_Adminhtml_Attribute_Grid extends Mage_Adminhtml_Block_Widg
      *
      * @param array $attributes
      */
-    public function __construct($attributes = array())
+    public function _construct()
     {
-        parent::__construct($attributes);
+        parent::_construct();
         $this->setId('api2_attributes');
     }
 

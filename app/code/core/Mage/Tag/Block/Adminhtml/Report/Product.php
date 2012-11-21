@@ -33,12 +33,12 @@
  */
 class Mage_Tag_Block_Adminhtml_Report_Product extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    public function _construct()
     {
         $this->_blockGroup = 'Mage_Tag';
         $this->_controller = 'adminhtml_report_product';
         $this->_headerText = Mage::helper('Mage_Tag_Helper_Data')->__('Products Tags');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 

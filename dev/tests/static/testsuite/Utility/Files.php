@@ -269,7 +269,7 @@ class Utility_Files
             array(
                 "{$this->_path}/app/code/{$pool}/{$namespace}/{$module}/view/{$area}",
                 "{$this->_path}/app/design/{$area}/{$package}/{$theme}/skin/{$skin}",
-                "{$this->_path}/pub/js/{mage,varien}"
+                "{$this->_path}/pub/lib/{mage,varien}"
             ),
             '*.js'
         );

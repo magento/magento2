@@ -699,7 +699,7 @@ class Mage_Checkout_Model_Type_Onepage
                 break;
         }
 
-        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', $this->getQuote());
+        $service = Mage::getModel('Mage_Sales_Model_Service_Quote', array('quote' => $this->getQuote()));
         $service->submitAll();
 
         if ($isNewCustomer) {

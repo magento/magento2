@@ -1,0 +1,1 @@
+# Magento Enterprise Edition publishing is not implemented yet

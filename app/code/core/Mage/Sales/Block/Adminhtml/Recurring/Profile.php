@@ -40,10 +40,10 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile extends Mage_Adminhtml_Block_
     /**
      * Set header text and remove "add" btn
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_headerText = Mage::helper('Mage_Sales_Helper_Data')->__('Recurring Profiles (beta)');
-        parent::__construct();
+        parent::_construct();
         $this->_removeButton('add');
     }
 }

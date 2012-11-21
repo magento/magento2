@@ -83,6 +83,11 @@
                 </types>
             </connection>
         </resource>
+        <di>
+            <Magento_Data_Structure>
+                <shared>0</shared>
+            </Magento_Data_Structure>
+        </di>
     </global>
     <default>
         <system>

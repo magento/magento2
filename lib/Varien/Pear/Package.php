@@ -31,7 +31,7 @@
  * @package    Varien_Pear
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
+/*
 require_once "Varien/Pear.php";
 
 require_once "PEAR/PackageFileManager.php";
@@ -42,7 +42,7 @@ require_once "PEAR/PackageFileManager2.php";
 require_once "PEAR/PackageFile/v2.php";
 require_once "PEAR/PackageFile/v2/rw.php";
 require_once "PEAR/PackageFile/v2/Validator.php";
-require_once "PEAR/PackageFile/Generator/v2.php";
+require_once "PEAR/PackageFile/Generator/v2.php";*/
 
 // add missing but required constant...
 define ('PEAR_PACKAGEFILEMANAGER_NOSVNENTRIES', 1001);

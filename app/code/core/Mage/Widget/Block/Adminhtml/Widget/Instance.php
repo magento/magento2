@@ -36,12 +36,12 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance extends Mage_Adminhtml_Block_W
     /**
      * Block constructor
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_blockGroup = 'Mage_Widget';
         $this->_controller = 'adminhtml_widget_instance';
         $this->_headerText = Mage::helper('Mage_Widget_Helper_Data')->__('Manage Widget Instances');
-        parent::__construct();
+        parent::_construct();
         $this->_updateButton('add', 'label', Mage::helper('Mage_Widget_Helper_Data')->__('Add New Widget Instance'));
     }
 }

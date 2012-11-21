@@ -28,13 +28,13 @@
 class Mage_Core_Model_Resource_LayoutTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Mage_Core_Model_Resource_Layout
+     * @var Mage_Core_Model_Resource_Layout_Update
      */
     protected $_model;
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Layout_Update();
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Layout_Update');
     }
 
     protected function tearDown()

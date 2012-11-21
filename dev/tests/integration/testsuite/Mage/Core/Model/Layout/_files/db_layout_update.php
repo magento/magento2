@@ -27,7 +27,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$layoutUpdate = new Mage_Core_Model_Layout_Update;
+$layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Update');
 $layoutUpdate->setData((array(
     'handle' => 'fixture_handle',
     'xml' => '<reference name="root"><block type="Mage_Core_Block_Template" template="dummy.phtml"/></reference>',

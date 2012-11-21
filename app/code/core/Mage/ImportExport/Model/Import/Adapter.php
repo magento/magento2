@@ -39,23 +39,23 @@ class Mage_ImportExport_Model_Import_Adapter
      * @param string $type Adapter type ('csv', 'xml' etc.)
      * @param mixed $options OPTIONAL Adapter constructor options
      * @throws Exception
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     public static function factory($type, $options = null)
     {
         if (!is_string($type) || !$type) {
             Mage::throwException(Mage::helper('Mage_ImportExport_Helper_Data')->__('Adapter type must be a non empty string'));
         }
-        $adapterClass = __CLASS__ . '_' . ucfirst(strtolower($type));
+        $adapterClass = 'Mage_ImportExport_Model_Import_Source_' . ucfirst(strtolower($type));
 
         if (!class_exists($adapterClass)) {
             Mage::throwException("'{$type}' file extension is not supported");
         }
         $adapter = new $adapterClass($options);
 
-        if (! $adapter instanceof Mage_ImportExport_Model_Import_Adapter_Abstract) {
+        if (! $adapter instanceof Mage_ImportExport_Model_Import_SourceAbstract) {
             Mage::throwException(
-                Mage::helper('Mage_ImportExport_Helper_Data')->__('Adapter must be an instance of Mage_ImportExport_Model_Import_Adapter_Abstract')
+                Mage::helper('Mage_ImportExport_Helper_Data')->__('Adapter must be an instance of Mage_ImportExport_Model_Import_SourceAbstract')
             );
         }
         return $adapter;
@@ -65,7 +65,7 @@ class Mage_ImportExport_Model_Import_Adapter
      * Create adapter instance for specified source file.
      *
      * @param string $source Source file path.
-     * @return Mage_ImportExport_Model_Import_Adapter_Abstract
+     * @return Mage_ImportExport_Model_Import_SourceAbstract
      */
     public static function findAdapterFor($source)
     {

@@ -26,16 +26,12 @@
 (function ($) {
     $(document).ready(function () {
         var cookieInit = {
-        // Default values
+            expires: null,
             path: '/',
-            domain: document.domain
+            domain: document.domain,
+            secure: false
         };
-        // Trigger initialize event
         $.mage.event.trigger('mage.cookie.init', cookieInit);
-
-        $.cookie.defaults = {
-            path: cookieInit.path,
-            domain: cookieInit.domain
-        };
+        $.extend($.cookie.defaults, cookieInit);
     });
 })(jQuery);

@@ -35,15 +35,7 @@
 class Mage_Bundle_Block_Adminhtml_Catalog_Product_Composite_Fieldset_Options_Type_Radio
     extends Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Radio
 {
-    /**
-     * Set template
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('product/composite/fieldset/options/type/radio.phtml');
-    }
+    protected $_template = 'product/composite/fieldset/options/type/radio.phtml';
 
     /**
      * @param  string $elementId

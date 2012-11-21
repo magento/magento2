@@ -52,9 +52,9 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      * @param array $options
      * @throws InvalidArgumentException
      */
-    public function __construct(array $options = array())
+    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
     {
-        parent::__construct($options);
+        parent::__construct($objectManager, $options);
         $this->_areaFrontName = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
         if (empty($this->_areaFrontName)) {
             throw new InvalidArgumentException('Area Front Name should be defined');

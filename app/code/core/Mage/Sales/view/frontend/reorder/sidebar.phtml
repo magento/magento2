@@ -57,7 +57,7 @@
                 </li>
             <?php endforeach; ?>
             </ol>
-            <script type="text/javascript">decorateList('cart-sidebar-reorder')</script>
+            <script type="text/javascript">(function($) {$('#cart-sidebar-reorder').decorate('list', false)})(jQuery)</script>
             <div id="cart-sidebar-reorder-advice-container"></div>
             <div class="actions">
                 <?php if ($_showAddButtonFlag): ?>

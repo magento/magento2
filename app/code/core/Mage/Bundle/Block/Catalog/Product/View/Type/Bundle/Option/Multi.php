@@ -35,13 +35,6 @@
 class Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option_Multi
     extends Mage_Bundle_Block_Catalog_Product_View_Type_Bundle_Option
 {
-    /**
-     * Set template
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/view/type/bundle/option/multi.phtml');
-    }
+    protected $_template = 'catalog/product/view/type/bundle/option/multi.phtml';
+
 }

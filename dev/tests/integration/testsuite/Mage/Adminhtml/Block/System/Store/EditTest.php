@@ -53,7 +53,9 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
     {
         $this->_initStoreTypesInRegistry($registryData);
 
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Adminhtml_Block_System_Store_Edit */
         $block = $layout->createBlock('Mage_Adminhtml_Block_System_Store_Edit', 'block');
         $block->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML);
 
@@ -67,15 +69,15 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
     {
         return array(
             array(
-                array('store_type'=>'website', 'store_data'=> new Mage_Core_Model_Website()),
+                array('store_type'=>'website', 'store_data'=> Mage::getModel('Mage_Core_Model_Website')),
                 'Mage_Adminhtml_Block_System_Store_Edit_Form_Website'
             ),
             array(
-                array('store_type'=>'group', 'store_data'=> new Mage_Core_Model_Store_Group()),
+                array('store_type'=>'group', 'store_data'=> Mage::getModel('Mage_Core_Model_Store_Group')),
                 'Mage_Adminhtml_Block_System_Store_Edit_Form_Group'
             ),
             array(
-                array('store_type'=>'store', 'store_data'=> new Mage_Core_Model_Store()),
+                array('store_type'=>'store', 'store_data'=> Mage::getModel('Mage_Core_Model_Store')),
                 'Mage_Adminhtml_Block_System_Store_Edit_Form_Store'
             )
         );
@@ -89,7 +91,9 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
     {
         $this->_initStoreTypesInRegistry($registryData);
 
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Adminhtml_Block_System_Store_Edit */
         $block = $layout->createBlock('Mage_Adminhtml_Block_System_Store_Edit', 'block');
         $block->setArea(Mage_Core_Model_App_Area::AREA_ADMINHTML);
 
@@ -105,7 +109,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'website',
-                    'store_data' => new Mage_Core_Model_Website(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Website'),
                     'store_action' => 'add'
                 ),
                 'New Website'
@@ -113,7 +117,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'website',
-                    'store_data' => new Mage_Core_Model_Website(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Website'),
                     'store_action' => 'edit'
                 ),
                 'Edit Website'
@@ -121,7 +125,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'group',
-                    'store_data' => new Mage_Core_Model_Store_Group(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Store_Group'),
                     'store_action' => 'add'
                 ),
                 'New Store'
@@ -129,7 +133,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'group',
-                    'store_data' => new Mage_Core_Model_Store_Group(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Store_Group'),
                     'store_action' => 'edit'
                 ),
                 'Edit Store'
@@ -137,7 +141,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'store',
-                    'store_data' => new Mage_Core_Model_Store(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Store'),
                     'store_action' => 'add'
                 ),
                 'New Store View'
@@ -145,7 +149,7 @@ class Mage_Adminhtml_Block_System_Store_EditTest extends PHPUnit_Framework_TestC
             array(
                 array(
                     'store_type' => 'store',
-                    'store_data' => new Mage_Core_Model_Store(),
+                    'store_data' => Mage::getModel('Mage_Core_Model_Store'),
                     'store_action' => 'edit'
                 ),
                 'Edit Store View'

@@ -33,12 +33,14 @@
  */
 class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection extends Mage_Adminhtml_Block_Widget
 {
+    protected $_template = 'product/edit/bundle/option/selection.phtml';
+
     /**
      * Initialize bundle option selection block
      */
-    public function __construct()
+    protected function _construct()
     {
-        $this->setTemplate('product/edit/bundle/option/selection.phtml');
+
         $this->setCanReadPrice(true);
         $this->setCanEditPrice(true);
     }
@@ -121,7 +123,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selecti
                 'class' => 'select'
             ))
             ->setName($this->getFieldName().'[{{parentIndex}}][{{index}}][selection_can_change_qty]')
-            ->setOptions(Mage::getSingleton('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray());
+            ->setOptions(Mage::getSingleton('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray());
 
         return $select->getHtml();
     }

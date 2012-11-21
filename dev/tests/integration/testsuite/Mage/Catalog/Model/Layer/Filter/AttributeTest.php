@@ -44,7 +44,8 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $attribute = new Mage_Catalog_Model_Entity_Attribute();
+        /** @var $attribute Mage_Catalog_Model_Entity_Attribute */
+        $attribute = Mage::getModel('Mage_Catalog_Model_Entity_Attribute');
         $attribute->loadByCode('catalog_product', 'attribute_with_option');
         foreach ($attribute->getSource()->getAllOptions() as $optionInfo) {
             if ($optionInfo['label'] == 'Option Label') {
@@ -53,9 +54,9 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
             }
         }
 
-        $this->_model = new Mage_Catalog_Model_Layer_Filter_Attribute;
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Layer_Filter_Attribute');
         $this->_model->setData(array(
-            'layer' => new Mage_Catalog_Model_Layer(),
+            'layer' => Mage::getModel('Mage_Catalog_Model_Layer'),
             'attribute_model' => $attribute,
         ));
     }
@@ -76,7 +77,7 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
 
         $request = new Magento_Test_Request();
         $request->setParam('attribute', array());
-        $this->_model->apply($request, new Mage_Core_Block_Text());
+        $this->_model->apply($request, Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text'));
 
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
     }
@@ -87,7 +88,7 @@ class Mage_Catalog_Model_Layer_Filter_AttributeTest extends PHPUnit_Framework_Te
 
         $request = new Magento_Test_Request();
         $request->setParam('attribute', $this->_attributeOptionId);
-        $this->_model->apply($request, new Mage_Core_Block_Text());
+        $this->_model->apply($request, Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text'));
 
         $this->assertNotEmpty($this->_model->getLayer()->getState()->getFilters());
     }

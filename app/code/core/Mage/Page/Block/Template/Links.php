@@ -48,14 +48,7 @@ class Mage_Page_Block_Template_Links extends Mage_Core_Block_Template
      */
     protected $_cacheKeyInfo = null;
 
-    /**
-     * Set default template
-     *
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('template/links.phtml');
-    }
+    protected $_template = 'template/links.phtml';
 
     /**
      * Get all links

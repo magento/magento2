@@ -31,13 +31,5 @@
  */
 class Mage_Sales_Block_Adminhtml_Billing_Agreement_View_Form extends Mage_Adminhtml_Block_Template
 {
-    /**
-     * Define custom template
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('billing/agreement/view/form.phtml');
-    }
+    protected $_template = 'billing/agreement/view/form.phtml';
 }

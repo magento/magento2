@@ -200,3 +200,10 @@
 ## http://developer.yahoo.com/performance/rules.html#etags
 
     #FileETag none
+
+###########################################
+## Deny access  to cron.php
+    <Files cron.php>
+        order allow,deny
+        deny from all
+    </Files>

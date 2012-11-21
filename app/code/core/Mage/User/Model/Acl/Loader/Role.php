@@ -62,7 +62,9 @@ class Mage_User_Model_Acl_Loader_Role implements Magento_Acl_Loader
                 case Mage_User_Model_Acl_Role_Group::ROLE_TYPE:
                     $roleId = $role['role_type'] . $role['role_id'];
                     $acl->addRole(
-                        $this->_objectFactory->getModelInstance('Mage_User_Model_Acl_Role_Group', $roleId),
+                        $this->_objectFactory->getModelInstance('Mage_User_Model_Acl_Role_Group',
+                            array('roleId' => $roleId)
+                        ),
                         $parent
                     );
                     break;
@@ -71,7 +73,9 @@ class Mage_User_Model_Acl_Loader_Role implements Magento_Acl_Loader
                     $roleId = $role['role_type'] . $role['user_id'];
                     if (!$acl->hasRole($roleId)) {
                         $acl->addRole(
-                            $this->_objectFactory->getModelInstance('Mage_User_Model_Acl_Role_User', $roleId),
+                            $this->_objectFactory->getModelInstance('Mage_User_Model_Acl_Role_User',
+                                array('roleId' => $roleId)
+                            ),
                             $parent
                         );
                     } else {

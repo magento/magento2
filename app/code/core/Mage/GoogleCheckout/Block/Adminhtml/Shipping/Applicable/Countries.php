@@ -25,7 +25,7 @@
  */
 
 class Mage_GoogleCheckout_Block_Adminhtml_Shipping_Applicable_Countries
-    extends Mage_Adminhtml_Block_System_Config_Form_Field
+    extends Mage_Backend_Block_System_Config_Form_Field
 {
     protected $_addRowButtonHtml = array();
     protected $_removeRowButtonHtml = array();

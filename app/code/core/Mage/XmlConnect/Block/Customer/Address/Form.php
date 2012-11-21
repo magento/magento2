@@ -107,10 +107,11 @@ class Mage_XmlConnect_Block_Customer_Address_Form extends Mage_Customer_Block_Ad
 
         /** @var Mage_XmlConnect_Model_Simplexml_Form $fromXmlObj */
         $fromXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Form', array(
-            'xml_id' => 'address_form',
-            'action' => $action,
-            'use_container' => true
-        ));
+            'attributes' => array(
+                'xml_id'        => 'address_form',
+                'action'        => $action,
+                'use_container' => true
+        )));
 
         $contactInfoFieldset = $fromXmlObj->addFieldset('contact_info', array(
             'legend' => $this->__('Contact Information')

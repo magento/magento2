@@ -35,7 +35,7 @@ class Mage_Core_Model_Layout_TranslatorTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helperRegistryMock;
+    protected $_helperFactoryMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
@@ -49,7 +49,7 @@ class Mage_Core_Model_Layout_TranslatorTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperRegistryMock = $this->getMock('Mage_Core_Model_Helper_Registry', array(), array(), '', false);
+        $this->_helperFactoryMock = $this->getMock('Mage_Core_Model_Factory_Helper', array(), array(), '', false);
         $this->_helperMock = $this->getMock('Mage_Core_Helper_Data', array(), array(), '', false);
         $this->_helperMock->expects($this->any())->method('__')->with('test')->will($this->returnValue('translated'));
 
@@ -75,7 +75,7 @@ XML;
         $this->_xmlDocument = simplexml_load_string($string, 'Varien_Simplexml_Element');
 
         $params = array(
-            'helperRegistry' => $this->_helperRegistryMock
+            'helperRegistry' => $this->_helperFactoryMock
         );
         $this->_object = new Mage_Core_Model_Layout_Translator($params);
     }
@@ -86,7 +86,7 @@ XML;
     public function testTranslateActionParametersWithNonTranslatedArgument()
     {
         $args = array('one' => 'test');
-        $this->_helperRegistryMock->expects($this->never())->method('get');
+        $this->_helperFactoryMock->expects($this->never())->method('get');
 
         $this->_object->translateActionParameters($this->_xmlDocument->action_one, $args);
         $this->assertEquals('test', $args['one']);
@@ -99,7 +99,7 @@ XML;
     {
         $args = array('one' => 'test', 'two' => 'test', 'three' => 'test');
         $expected = array('one' => 'translated', 'two' => 'translated', 'three' => 'test');
-        $this->_helperRegistryMock->expects($this->exactly(2))
+        $this->_helperFactoryMock->expects($this->exactly(2))
             ->method('get')
             ->with('Some_Module')
             ->will($this->returnValue($this->_helperMock));
@@ -116,7 +116,7 @@ XML;
         $args = array('one' => array('some', 'data'), 'two' => array('value' => 'test'), 'three' => 'test');
         $expected = array('one' =>  array('some', 'data'), 'two' => array('value' => 'translated'), 'three' => 'test');
 
-        $this->_helperRegistryMock->expects($this->exactly(1))
+        $this->_helperFactoryMock->expects($this->exactly(1))
             ->method('get')
             ->with('Some_Module')
             ->will($this->returnValue($this->_helperMock));
@@ -132,7 +132,7 @@ XML;
     {
         $args = array('two' => 'test', 'three' => 'test');
         $expected = array('two' => 'translated', 'three' => 'test');
-        $this->_helperRegistryMock->expects($this->once())
+        $this->_helperFactoryMock->expects($this->once())
             ->method('get')
             ->with('Mage_Core')
             ->will($this->returnValue($this->_helperMock));
@@ -146,7 +146,7 @@ XML;
      */
     public function testTranslateArgumentWithDefaultModuleAndSelfTranslatedMode()
     {
-        $this->_helperRegistryMock->expects($this->once())
+        $this->_helperFactoryMock->expects($this->once())
             ->method('get')
             ->with('Some_Module')
             ->will($this->returnValue($this->_helperMock));
@@ -163,7 +163,7 @@ XML;
      */
     public function testTranslateArgumentWithoutModuleAndSelfTranslatedMode()
     {
-        $this->_helperRegistryMock->expects($this->once())
+        $this->_helperFactoryMock->expects($this->once())
             ->method('get')
             ->with('Mage_Core')
             ->will($this->returnValue($this->_helperMock));
@@ -177,7 +177,7 @@ XML;
      */
     public function testTranslateArgumentWithoutModuleAndNoSelfTranslatedMode()
     {
-        $this->_helperRegistryMock->expects($this->never())->method('get');
+        $this->_helperFactoryMock->expects($this->never())->method('get');
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments->node_no_self_translated);
         $this->assertEquals('test', $actual);
     }
@@ -187,7 +187,7 @@ XML;
      */
     public function testTranslateArgumentViaParentNodeWithParentModule()
     {
-        $this->_helperRegistryMock->expects($this->once())
+        $this->_helperFactoryMock->expects($this->once())
             ->method('get')
             ->with('Some_Module')
             ->will($this->returnValue($this->_helperMock));
@@ -201,7 +201,7 @@ XML;
      */
     public function testTranslateArgumentViaParentNodeWithOwnModule()
     {
-        $this->_helperRegistryMock->expects($this->once())
+        $this->_helperFactoryMock->expects($this->once())
             ->method('get')
             ->with('Other_Module')
             ->will($this->returnValue($this->_helperMock));
@@ -215,7 +215,7 @@ XML;
      */
     public function testTranslateArgumentViaParentWithNodeThatIsNotInTranslateList()
     {
-        $this->_helperRegistryMock->expects($this->never())->method('get');
+        $this->_helperFactoryMock->expects($this->never())->method('get');
         $actual = $this->_object->translateArgument($this->_xmlDocument->arguments_parent->node_no_translated);
         $this->assertEquals('no translated', $actual);
     }

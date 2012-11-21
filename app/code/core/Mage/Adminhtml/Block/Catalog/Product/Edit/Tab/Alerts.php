@@ -35,11 +35,7 @@
 
 class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Alerts extends Mage_Adminhtml_Block_Template
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('catalog/product/tab/alert.phtml');
-    }
+    protected $_template = 'catalog/product/tab/alert.phtml';
 
     protected function _prepareLayout()
     {

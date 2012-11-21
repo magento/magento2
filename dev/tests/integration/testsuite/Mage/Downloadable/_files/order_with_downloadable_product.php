@@ -25,29 +25,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$billingAddress = new Mage_Sales_Model_Order_Address(array(
-    'firstname'  => 'guest',
-    'lastname'   => 'guest',
-    'email'      => 'customer@example.com',
-    'street'     => 'street',
-    'city'       => 'Los Angeles',
-    'region'     => 'CA',
-    'postcode'   => '1',
-    'country_id' => 'US',
-    'telephone'  => '1',
-));
+$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address',
+    array(
+        'data' => array(
+            'firstname'  => 'guest',
+            'lastname'   => 'guest',
+            'email'      => 'customer@example.com',
+            'street'     => 'street',
+            'city'       => 'Los Angeles',
+            'region'     => 'CA',
+            'postcode'   => '1',
+            'country_id' => 'US',
+            'telephone'  => '1',
+        )
+    )
+);
 $billingAddress->setAddressType('billing');
 
-$payment = new Mage_Sales_Model_Order_Payment();
+$payment = Mage::getModel('Mage_Sales_Model_Order_Payment');
 $payment->setMethod('checkmo');
 
-$orderItem = new Mage_Sales_Model_Order_Item();
+$orderItem = Mage::getModel('Mage_Sales_Model_Order_Item');
 $orderItem->setProductId(1)
     ->setProductType(Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE)
     ->setBasePrice(100)
     ->setQtyOrdered(1);
 
-$order = new Mage_Sales_Model_Order();
+$order = Mage::getModel('Mage_Sales_Model_Order');
 $order->addItem($orderItem)
     ->setIncrementId('100000001')
     ->setCustomerIsGuest(true)

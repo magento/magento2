@@ -32,9 +32,9 @@
 class Mage_Adminhtml_Block_Sales_Creditmemo_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('sales_creditmemo_grid');
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('DESC');

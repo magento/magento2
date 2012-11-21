@@ -40,7 +40,9 @@ class Mage_Adminhtml_Block_Urlrewrite_EditTest extends PHPUnit_Framework_TestCas
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
-        $layout = new Mage_Core_Model_Layout(array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
+
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => Mage_Core_Model_App_Area::AREA_ADMINHTML));
 
         /** @var $block Mage_Adminhtml_Block_Urlrewrite_Edit */
         $block = $layout->createBlock('Mage_Adminhtml_Block_Urlrewrite_Edit', '', $blockAttributes);
@@ -146,10 +148,12 @@ class Mage_Adminhtml_Block_Urlrewrite_EditTest extends PHPUnit_Framework_TestCas
      */
     public function prepareLayoutDataProvider()
     {
-        $urlRewrite = new Mage_Core_Model_Url_Rewrite();
-        $existingUrlRewrite = new Mage_Core_Model_Url_Rewrite(array(
-            'url_rewrite_id' => 1,
-        ));
+        /** @var $urlRewrite Mage_Core_Model_Url_Rewrite */
+        $urlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite');
+        /** @var $existingUrlRewrite Mage_Core_Model_Url_Rewrite */
+        $existingUrlRewrite = Mage::getModel('Mage_Core_Model_Url_Rewrite',
+            array('data' => array('url_rewrite_id' => 1))
+        );
 
         return array(
             // Creating new URL rewrite

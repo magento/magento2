@@ -32,7 +32,7 @@ class Mage_Review_Model_Resource_Review_Product_CollectionTest extends PHPUnit_F
      */
     public function testGetResultingIds()
     {
-        $collection = new Mage_Review_Model_Resource_Review_Product_Collection();
+        $collection = Mage::getResourceModel('Mage_Review_Model_Resource_Review_Product_Collection');
         $collection->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED);
         $actual = $collection->getResultingIds();
         $this->assertCount(2, $actual);

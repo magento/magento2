@@ -34,12 +34,12 @@
 
 class Mage_Adminhtml_Block_System_Convert_Gui extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_controller = 'system_convert_gui';
         $this->_headerText = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Profiles');
         $this->_addButtonLabel = Mage::helper('Mage_Adminhtml_Helper_Data')->__('Add New Profile');
 
-        parent::__construct();
+        parent::_construct();
     }
 }

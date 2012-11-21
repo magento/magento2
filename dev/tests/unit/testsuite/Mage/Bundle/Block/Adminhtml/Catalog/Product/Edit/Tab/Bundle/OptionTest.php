@@ -45,7 +45,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_OptionTest
             ->will($this->returnValue($itemsBlock));
 
         $block = $this->getMock('Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option',
-            array('getLayout'));
+            array('getLayout'), array(), '', false);
         $block->expects($this->atLeastOnce())
             ->method('getLayout')
             ->will($this->returnValue($layout));

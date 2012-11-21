@@ -25,7 +25,4 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-// Application test is exposed in global space
-/** @var $applicationTestForFixtures Magento_ApplicationTest */
-$applicationTestForFixtures = $GLOBALS['applicationTestForFixtures'];
-$applicationTestForFixtures->addFixtureEvent('fixture2');
+$this->applied[] = 'fixture2';

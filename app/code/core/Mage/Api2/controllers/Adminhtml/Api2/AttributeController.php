@@ -102,7 +102,7 @@ class Mage_Api2_Adminhtml_Api2_AttributeController extends Mage_Adminhtml_Contro
             /** @var $ruleTree Mage_Api2_Model_Acl_Global_Rule_Tree */
             $ruleTree = Mage::getSingleton(
                 'Mage_Api2_Model_Acl_Global_Rule_Tree',
-                array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_ATTRIBUTE)
+                array('options' => array('type' => Mage_Api2_Model_Acl_Global_Rule_Tree::TYPE_ATTRIBUTE))
             );
 
             /** @var $attribute Mage_Api2_Model_Acl_Filter_Attribute */

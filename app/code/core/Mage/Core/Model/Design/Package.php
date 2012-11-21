@@ -29,20 +29,27 @@ class Mage_Core_Model_Design_Package
 {
     const DEFAULT_AREA    = 'frontend';
     const DEFAULT_PACKAGE = 'default';
-    const DEFAULT_THEME   = 'default';
+    const DEFAULT_THEME   = 'demo';
 
     const SCOPE_SEPARATOR = '::';
 
     const PUBLIC_MERGE_DIR  = '_merged';
     const PUBLIC_MODULE_DIR = '_module';
 
+    /**#@+
+     * Extensions group for static files
+     */
     const CONTENT_TYPE_CSS = 'css';
     const CONTENT_TYPE_JS  = 'js';
+    /**#@-*/
 
-    /**
-     * The name of the default skins in the context of a theme
+    /**#@+
+     * Protected extensions group for publication mechanism
      */
-    const DEFAULT_SKIN_NAME = 'default';
+    const CONTENT_TYPE_PHP   = 'php';
+    const CONTENT_TYPE_PHTML = 'phtml';
+    const CONTENT_TYPE_XML   = 'xml';
+    /**#@-*/
 
     /**
      * The name of the default theme in the context of a package
@@ -54,7 +61,15 @@ class Mage_Core_Model_Design_Package
      */
     const PUBLIC_CACHE_TAG = 'design_public';
 
+    /**
+     * Common node path to theme design configuration
+     */
     const XML_PATH_THEME = 'design/theme/full_name';
+
+    /**
+     * Path to configuration node for file duplication
+     */
+    const XML_PATH_ALLOW_DUPLICATION = 'default/design/theme/allow_view_files_duplication';
 
     /**
      * PCRE that matches non-absolute URLs in CSS content
@@ -85,13 +100,6 @@ class Mage_Core_Model_Design_Package
      * @var string
      */
     protected $_theme;
-
-    /**
-     * Package skin
-     *
-     * @var string
-     */
-    protected $_skin;
 
     /**
      * Package root directory
@@ -132,7 +140,7 @@ class Mage_Core_Model_Design_Package
 
     /**
      * Array of fallback model, controlling rules of fallback and inheritance for appropriate
-     * area, package, theme, skin, locale
+     * area, package, theme, locale
      *
      * @var array
      */
@@ -147,13 +155,15 @@ class Mage_Core_Model_Design_Package
     public function setArea($area)
     {
         $this->_area = $area;
+        $this->_name = null;
+        $this->_theme = null;
         return $this;
     }
 
     /**
      * Retrieve package area
      *
-     * @return unknown
+     * @return string
      */
     public function getArea()
     {
@@ -171,7 +181,7 @@ class Mage_Core_Model_Design_Package
     public function getPackageName()
     {
         if (!$this->_name) {
-            $this->_name = self::DEFAULT_PACKAGE;
+            $this->_setDefaultDesignTheme();
         }
         return $this->_name;
     }
@@ -184,29 +194,42 @@ class Mage_Core_Model_Design_Package
     public function getTheme()
     {
         if (!$this->_theme) {
-            $this->_theme = self::DEFAULT_THEME;
+            $this->_setDefaultDesignTheme();
         }
 
         return $this->_theme;
     }
 
     /**
-     * Skin getter
+     * Set default theme and package which were loaded from configuration file
      *
-     * @return string
+     * @return Mage_Core_Model_Design_Package
      */
-    public function getSkin()
+    protected function _setDefaultDesignTheme()
     {
-        if (!$this->_skin) {
-            $this->_skin = self::DEFAULT_SKIN_NAME;
-        }
-        return $this->_skin;
+        list($this->_name, $this->_theme) = $this->_getDefaultDesignTheme($this->getArea());
+        return $this;
     }
 
     /**
-     * Set package, theme and skin for current area
+     * Get default theme and package which were loaded from configuration file
      *
-     * $themePath name must contain package, theme and skin names separated by "/"
+     * @param string $area
+     * @return Mage_Core_Model_Design_Package
+     */
+    protected function _getDefaultDesignTheme($area)
+    {
+        $themeParts = explode('/', (string)Mage::getConfig()->getNode("{$area}/design/theme/full_name"));
+        if (2 !== count($themeParts)) {
+            $themeParts = array(self::DEFAULT_PACKAGE, self::DEFAULT_THEME);
+        }
+        return $themeParts;
+    }
+
+    /**
+     * Set package and theme for current area
+     *
+     * $themePath name must contain package and theme names separated by "/"
      *
      * @param string $themePath
      * @param string $area
@@ -215,19 +238,18 @@ class Mage_Core_Model_Design_Package
     public function setDesignTheme($themePath, $area = null)
     {
         $parts = explode('/', $themePath);
-        if (3 !== count($parts)) {
+        if (2 !== count($parts)) {
             Mage::throwException(
                 Mage::helper('Mage_Core_Helper_Data')->__('Invalid fully qualified design name: "%s".', $themePath)
             );
         }
-        list($package, $theme, $skin) = $parts;
+        list($package, $theme) = $parts;
         if ($area) {
             $this->setArea($area);
         }
 
         $this->_name = $package;
         $this->_theme = $theme;
-        $this->_skin = $skin;
         return $this;
     }
 
@@ -238,7 +260,7 @@ class Mage_Core_Model_Design_Package
      */
     public function getDesignTheme()
     {
-        return $this->getPackageName() . '/' . $this->getTheme() . '/' . $this->getSkin();
+        return $this->getPackageName() . '/' . $this->getTheme();
     }
 
     /**
@@ -249,18 +271,22 @@ class Mage_Core_Model_Design_Package
      */
     protected function _updateParamDefaults(array &$params)
     {
-        if (empty($params['area'])) {
-            $params['area'] = $this->getArea();
+        if (!empty($params['area']) && $params['area'] !== $this->getArea()
+            && (empty($params['package']) || !array_key_exists('theme', $params))
+        ) {
+            list($params['package'], $params['theme']) = $this->_getDefaultDesignTheme($params['area']);
+        } else {
+            if (empty($params['area'])) {
+                $params['area'] = $this->getArea();
+            }
+            if (empty($params['package'])) {
+                $params['package'] = $this->getPackageName();
+            }
+            if (!array_key_exists('theme', $params)) {
+                $params['theme'] = $this->getTheme();
+            }
         }
-        if (empty($params['package'])) {
-            $params['package'] = $this->getPackageName();
-        }
-        if (!array_key_exists('theme', $params)) {
-            $params['theme'] = $this->getTheme();
-        }
-        if (!array_key_exists('skin', $params)) {
-            $params['skin'] = $this->getSkin();
-        }
+
         if (!array_key_exists('module', $params)) {
             $params['module'] = false;
         }
@@ -298,17 +324,17 @@ class Mage_Core_Model_Design_Package
     }
 
     /**
-     * Find a skin file using fallback mechanism
+     * Find a view file using fallback mechanism
      *
      * @param string $file
      * @param array $params
      * @return string
      */
-    public function getSkinFile($file, array $params = array())
+    public function getViewFile($file, array $params = array())
     {
         $file = $this->_extractScope($file, $params);
         $this->_updateParamDefaults($params);
-        return $this->_getFallback($params)->getSkinFile($file, $params['module']);
+        return $this->_getFallback($params)->getViewFile($file, $params['module']);
     }
 
     /**
@@ -343,7 +369,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _getFallback($params)
     {
-        $cacheKey = "{$params['area']}|{$params['package']}|{$params['theme']}|{$params['skin']}|{$params['locale']}";
+        $cacheKey = "{$params['area']}|{$params['package']}|{$params['theme']}|{$params['locale']}";
         if (!isset($this->_fallback[$cacheKey])) {
             $params['canSaveMap'] = (bool) (string) Mage::app()->getConfig()
                 ->getNode('global/dev/design_fallback/allow_map_update');
@@ -353,7 +379,7 @@ class Mage_Core_Model_Design_Package
             $model = $this->_isDeveloperMode() ?
                 'Mage_Core_Model_Design_Fallback' :
                 'Mage_Core_Model_Design_Fallback_CachingProxy';
-            $this->_fallback[$cacheKey] = Mage::getModel($model, $params);
+            $this->_fallback[$cacheKey] = Mage::getModel($model, array('data' => $params));
         }
         return $this->_fallback[$cacheKey];
     }
@@ -463,27 +489,27 @@ class Mage_Core_Model_Design_Package
      */
     public function cleanMergedJsCss()
     {
-        $dir = $this->_buildPublicSkinFilename(self::PUBLIC_MERGE_DIR);
+        $dir = $this->_buildPublicViewFilename(self::PUBLIC_MERGE_DIR);
         $result = Varien_Io_File::rmdirRecursive($dir);
         $result = $result && Mage::helper('Mage_Core_Helper_File_Storage_Database')->deleteFolder($dir);
         return $result;
     }
 
     /**
-     * Get url to file base on skin file identifier.
+     * Get url to file base on theme file identifier.
      * Publishes file there, if needed.
      *
      * @param string $file
      * @param array $params
      * @return string
      */
-    public function getSkinUrl($file, array $params = array())
+    public function getViewFileUrl($file, array $params = array())
     {
         $isSecure = isset($params['_secure']) ? (bool) $params['_secure'] : null;
         unset($params['_secure']);
         $this->_updateParamDefaults($params);
         /* Identify public file */
-        $publicFile = $this->_publishSkinFile($file, $params);
+        $publicFile = $this->_publishViewFile($file, $params);
         /* Build url to public file */
         if (Mage::helper('Mage_Core_Helper_Data')->isStaticFilesSigned()) {
             $fileMTime = filemtime($publicFile);
@@ -506,7 +532,7 @@ class Mage_Core_Model_Design_Package
     protected function _getPublicFileUrl($file, $isSecure = null)
     {
         $publicDirUrlTypes = array(
-            Mage_Core_Model_Store::URL_TYPE_SKIN => Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'skin',
+            Mage_Core_Model_Store::URL_TYPE_THEME  => Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'theme',
             Mage_Core_Model_Store::URL_TYPE_JS    => Mage::getBaseDir('js'),
         );
         foreach ($publicDirUrlTypes as $publicUrlType => $publicDir) {
@@ -575,62 +601,55 @@ class Mage_Core_Model_Design_Package
             }
         } else {
             foreach ($files as $file) {
-                $urls[] = $this->getSkinUrl($file);
+                $urls[] = $this->getViewFileUrl($file);
             }
         }
         return $urls;
     }
 
     /**
-     * Check, if requested skin file has public access, and move it to public folder, if the file has no public access
+     * Check, if requested theme file has public access, and move it to public folder, if the file has no public access
      *
-     * @param  string $skinFile
+     * @param  string $themeFile
      * @param  array $params
      * @return string
      * @throws Magento_Exception
      */
-    protected function _publishSkinFile($skinFile, $params)
+    protected function _publishViewFile($themeFile, $params)
     {
-        $skinFile = $this->_extractScope($skinFile, $params);
+        $themeFile = $this->_extractScope($themeFile, $params);
+        $file = $this->getViewFile($themeFile, $params);
 
-        $file = $this->getSkinFile($skinFile, $params);
-
-        $dotPosition = strrpos($skinFile, '.');
-        $extension = strtolower(substr($skinFile, $dotPosition + 1));
-        $staticContentTypes = array(
-            Mage_Core_Model_Design_Package::CONTENT_TYPE_JS,
-            Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS,
-        );
-        if (!Mage::getIsDeveloperMode() && !empty($extension) &&
-            in_array($extension, $staticContentTypes)
+        $extension = $this->_getExtension($themeFile);
+        if (!Mage::getIsDeveloperMode() && !empty($extension)
+            && in_array($extension, array(self::CONTENT_TYPE_JS, self::CONTENT_TYPE_CSS))
         ) {
             $minifiedPath = str_replace('.' . $extension, '.min.' . $extension, $file);
             if (file_exists($minifiedPath)) {
                 $file = $minifiedPath;
-                $skinFile = str_replace('.' . $extension, '.min.' . $extension, $skinFile);
+                $themeFile = str_replace('.' . $extension, '.min.' . $extension, $themeFile);
             }
         }
 
         if (!file_exists($file)) {
-            throw new Magento_Exception("Unable to locate skin file '{$file}'.");
+            throw new Magento_Exception("Unable to locate theme file '{$file}'.");
         }
 
         if (!$this->_needToProcessFile($file)) {
             return $file;
         }
 
-        $isDuplicationAllowed = (string)Mage::getConfig()->getNode('default/design/theme/allow_skin_files_duplication');
-        $isCssFile = ($extension === Mage_Core_Model_Design_Package::CONTENT_TYPE_CSS);
+        $isCssFile = $this->_isCssFile($themeFile);
+        $isDuplicationAllowed = (string)Mage::getConfig()->getNode(self::XML_PATH_ALLOW_DUPLICATION);
         if ($isDuplicationAllowed || $isCssFile) {
-            $publicFile = $this->_buildPublicSkinRedundantFilename($skinFile, $params);
+            $publicFile = $this->_buildPublicViewRedundantFilename($themeFile, $params);
         } else {
-            $publicFile = $this->_buildPublicSkinSufficientFilename($file, $params);
-            $this->_setPublicFileIntoCache($skinFile, $params, $publicFile);
+            $publicFile = $this->_buildPublicViewSufficientFilename($file, $params);
+            $this->_setPublicFileIntoCache($themeFile, $params, $publicFile);
         }
 
-        $fileMTime = filemtime($file);
-
         /* Validate whether file needs to be published */
+        $fileMTime = filemtime($file);
         if (!file_exists($publicFile) || $fileMTime != filemtime($publicFile)) {
             $publicDir = dirname($publicFile);
             if (!is_dir($publicDir)) {
@@ -639,7 +658,7 @@ class Mage_Core_Model_Design_Package
 
             /* Process relative urls for CSS files */
             if ($isCssFile) {
-                $content = $this->_getPublicCssContent($file, dirname($publicFile), $skinFile, $params);
+                $content = $this->_getPublicCssContent($file, dirname($publicFile), $themeFile, $params);
                 file_put_contents($publicFile, $content);
             } else {
                 if (is_file($file)) {
@@ -651,12 +670,12 @@ class Mage_Core_Model_Design_Package
             if (is_file($publicFile)) {
                 touch($publicFile, $fileMTime);
             }
-        } else if ($isCssFile) {
-            // Trigger related skin files publication, if CSS file itself has not been changed
-            $this->_getPublicCssContent($file, dirname($publicFile), $skinFile, $params);
+        } elseif ($isCssFile) {
+            // Trigger related theme files publication, if CSS file itself has not been changed
+            $this->_getPublicCssContent($file, dirname($publicFile), $themeFile, $params);
         }
 
-        $this->_getFallback($params)->notifySkinFilePublished($publicFile, $skinFile, $params['module']);
+        $this->_getFallback($params)->notifyViewFilePublished($publicFile, $themeFile, $params['module']);
         return $publicFile;
     }
 
@@ -675,8 +694,13 @@ class Mage_Core_Model_Design_Package
             return false;
         }
 
-        $skinPath = $this->getPublicSkinDir() . DIRECTORY_SEPARATOR;
-        if (strncmp($filePath, $skinPath, strlen($skinPath)) !== 0) {
+        $protectedExtensions = array(self::CONTENT_TYPE_PHP, self::CONTENT_TYPE_PHTML, self::CONTENT_TYPE_XML);
+        if (in_array($this->_getExtension($filePath), $protectedExtensions)) {
+            return false;
+        }
+
+        $themePath = $this->getPublicDir() . DIRECTORY_SEPARATOR;
+        if (strncmp($filePath, $themePath, strlen($themePath)) !== 0) {
             return true;
         }
 
@@ -686,12 +710,24 @@ class Mage_Core_Model_Design_Package
     /**
      * Check whether $file is a CSS-file
      *
-     * @param string $file
+     * @param string $filePath
      * @return bool
      */
-    protected function _isCssFile($file)
+    protected function _isCssFile($filePath)
     {
-        return (bool) preg_match('/\.css$/', $file);
+        return $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
+    }
+
+    /**
+     * Get file extension by file path
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected function _getExtension($filePath)
+    {
+        $dotPosition = strrpos($filePath, '.');
+        return strtolower(substr($filePath, $dotPosition + 1));
     }
 
     /**
@@ -700,50 +736,49 @@ class Mage_Core_Model_Design_Package
      * @param string $file
      * @return string
      */
-    protected function _buildPublicSkinFilename($file)
+    protected function _buildPublicViewFilename($file)
     {
-        return $this->getPublicSkinDir() . DIRECTORY_SEPARATOR . $file;
+        return $this->getPublicDir() . DIRECTORY_SEPARATOR . $file;
     }
 
     /**
-     * Return directory for skin files publication
+     * Return directory for theme files publication
      *
      * @return string
      */
-    public function getPublicSkinDir()
+    public function getPublicDir()
     {
-        return Mage::getBaseDir('media')  . DIRECTORY_SEPARATOR . 'skin';
+        return Mage::getBaseDir('media')  . DIRECTORY_SEPARATOR . 'theme';
     }
 
     /**
-     * Build public filename for a skin file that always includes area/package/theme/skin/locate parameters
+     * Build public filename for a theme file that always includes area/package/theme/locate parameters
      *
      * @param string $file
      * @param array $params
      * @return string
      */
-    protected function _buildPublicSkinRedundantFilename($file, array $params)
+    protected function _buildPublicViewRedundantFilename($file, array $params)
     {
         $publicFile = $params['area']
             . DIRECTORY_SEPARATOR . $params['package']
             . DIRECTORY_SEPARATOR . $params['theme']
-            . DIRECTORY_SEPARATOR . $params['skin']
             . DIRECTORY_SEPARATOR . $params['locale']
             . ($params['module'] ? DIRECTORY_SEPARATOR . $params['module'] : '')
             . DIRECTORY_SEPARATOR . $file
         ;
-        $publicFile = $this->_buildPublicSkinFilename($publicFile);
+        $publicFile = $this->_buildPublicViewFilename($publicFile);
         return $publicFile;
     }
 
     /**
-     * Build public filename for a skin file that sufficiently depends on the passed parameters
+     * Build public filename for a view file that sufficiently depends on the passed parameters
      *
      * @param string $filename
      * @param array $params
      * @return string
      */
-    protected function _buildPublicSkinSufficientFilename($filename, array $params)
+    protected function _buildPublicViewSufficientFilename($filename, array $params)
     {
         $designDir = Mage::getBaseDir('design') . DIRECTORY_SEPARATOR;
         if (0 === strpos($filename, $designDir)) {
@@ -752,11 +787,11 @@ class Mage_Core_Model_Design_Package
         } else {
             // modular file
             $module = $params['module'];
-            $moduleDir = Mage::getModuleDir('skin', $module) . DIRECTORY_SEPARATOR;
+            $moduleDir = Mage::getModuleDir('theme', $module) . DIRECTORY_SEPARATOR;
             $publicFile = substr($filename, strlen($moduleDir));
             $publicFile = self::PUBLIC_MODULE_DIR . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . $publicFile;
         }
-        $publicFile = $this->_buildPublicSkinFilename($publicFile);
+        $publicFile = $this->_buildPublicViewFilename($publicFile);
         return $publicFile;
     }
 
@@ -789,7 +824,7 @@ class Mage_Core_Model_Design_Package
         $content = file_get_contents($filePath);
         $relativeUrls = $this->_extractCssRelativeUrls($content);
         foreach ($relativeUrls as $urlNotation => $fileUrl) {
-            $relatedFilePathPublic = $this->_publishRelatedSkinFile($fileUrl, $filePath, $fileName, $params);
+            $relatedFilePathPublic = $this->_publishRelatedViewFile($fileUrl, $filePath, $fileName, $params);
             $fileUrlNew = basename($relatedFilePathPublic);
             $offset = $this->_getFilesOffset($relatedFilePathPublic, $publicDir);
             if ($offset) {
@@ -807,30 +842,30 @@ class Mage_Core_Model_Design_Package
      * @param string $fileUrl URL to the file that was extracted from $parentFilePath
      * @param string $parentFilePath path to the file
      * @param string $parentFileName original file name identifier that was requested for processing
-     * @param array $params theme/skin/module parameters array
+     * @param array $params theme/module parameters array
      * @return string
      */
-    protected function _publishRelatedSkinFile($fileUrl, $parentFilePath, $parentFileName, $params)
+    protected function _publishRelatedViewFile($fileUrl, $parentFilePath, $parentFileName, $params)
     {
         if (strpos($fileUrl, self::SCOPE_SEPARATOR)) {
-            $relativeSkinFile = $fileUrl;
+            $relativeThemeFile = $fileUrl;
         } else {
             /* Check if module file overridden on theme level based on _module property and file path */
             if ($params['module'] && strpos($parentFilePath, Mage::getBaseDir('design')) === 0) {
                 /* Add module directory to relative URL for canonization */
-                $relativeSkinFile = dirname($params['module'] . DIRECTORY_SEPARATOR . $parentFileName)
+                $relativeThemeFile = dirname($params['module'] . DIRECTORY_SEPARATOR . $parentFileName)
                     . DIRECTORY_SEPARATOR . $fileUrl;
-                $relativeSkinFile   = $this->_canonize($relativeSkinFile);
-                if (strpos($relativeSkinFile, $params['module']) === 0) {
-                    $relativeSkinFile = str_replace($params['module'], '', $relativeSkinFile);
+                $relativeThemeFile   = $this->_canonize($relativeThemeFile);
+                if (strpos($relativeThemeFile, $params['module']) === 0) {
+                    $relativeThemeFile = str_replace($params['module'], '', $relativeThemeFile);
                 } else {
                     $params['module'] = false;
                 }
             } else {
-                $relativeSkinFile = $this->_canonize(dirname($parentFileName) . DIRECTORY_SEPARATOR . $fileUrl);
+                $relativeThemeFile = $this->_canonize(dirname($parentFileName) . DIRECTORY_SEPARATOR . $fileUrl);
             }
         }
-        return $this->_publishSkinFile($relativeSkinFile, $params);
+        return $this->_publishViewFile($relativeThemeFile, $params);
     }
 
     /**
@@ -884,15 +919,15 @@ class Mage_Core_Model_Design_Package
         $filesToMerge = array();
         $mergedFile = array();
         $jsDir = Mage::getBaseDir('js');
-        $publicDir = $this->_buildPublicSkinFilename('');
+        $publicDir = $this->_buildPublicViewFilename('');
         foreach ($files as $file) {
             $params = array();
             $this->_updateParamDefaults($params);
-            $filesToMerge[$file] = $this->_publishSkinFile($file, $params);
+            $filesToMerge[$file] = $this->_publishViewFile($file, $params);
             $mergedFile[] = str_replace('\\', '/', str_replace(array($jsDir, $publicDir), '', $filesToMerge[$file]));
         }
         $mergedFile = self::PUBLIC_MERGE_DIR . DIRECTORY_SEPARATOR . md5(implode('|', $mergedFile)) . ".{$contentType}";
-        $mergedFile = $this->_buildPublicSkinFilename($mergedFile);
+        $mergedFile = $this->_buildPublicViewFilename($mergedFile);
         $mergedMTimeFile  = $mergedFile . '.dat';
         $filesMTimeData = '';
         foreach ($filesToMerge as $file) {
@@ -956,12 +991,12 @@ class Mage_Core_Model_Design_Package
      * Calculate offset between public file and public directory
      *
      * Case 1: private file to public folder - Exception;
-     *  app/design/frontend/default/default/skin/default/style.css
-     *  pub/skin/frontend/default/default/skin/default/style.css
+     *  app/design/frontend/default/default/default/style.css
+     *  pub/theme/frontend/default/default/default/style.css
      *
-     * Case 2: public file to public folder - $fileOffset = '../frontend/default/default/skin/default';
-     *  pub/skin/frontend/default/default/skin/default/style.css -> img/empty.gif
-     *  pub/skin/_merged/hash.css -> ../frontend/default/default/skin/default/img/empty.gif
+     * Case 2: public file to public folder - $fileOffset = '../frontend/default/default/default';
+     *  pub/theme/frontend/default/default/default/style.css -> img/empty.gif
+     *  pub/theme/_merged/hash.css -> ../frontend/default/default/default/img/empty.gif
      *
      * @throws Magento_Exception
      * @param string $originalFile path to original file
@@ -1035,8 +1070,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _getRequestedFileCacheKey($params)
     {
-        return $params['area'] . '/' . $params['package'] . '/' . $params['theme'] . '/'
-            . $params['skin'] . '/' . $params['locale'];
+        return $params['area'] . '/' . $params['package'] . '/' . $params['theme'] . '/' . $params['locale'];
     }
 
     /**
@@ -1079,106 +1113,28 @@ class Mage_Core_Model_Design_Package
      * The format of the result is a multidimensional array with following structure
      * array (
      *     'package_name' => array (
-     *         'theme_name' => array (
-     *             'skin_name' => true
-     *          )
+     *         '0' => 'theme_name_1',
+     *         '1' => 'theme_name_2',
      *     )
      * )
      *
      * @param string $area
-     * @param bool $addInheritedSkins
      * @return array
      */
-    public function getDesignEntitiesStructure($area, $addInheritedSkins = true)
+    public function getDesignEntitiesStructure($area)
     {
-        $areaThemeConfig = $this->getThemeConfig($area);
-        $areaStructure = $this->_getDesignEntitiesFilesystemStructure($area);
+        $areaStructure = array();
 
-        foreach ($areaStructure as $packageName => &$themes) {
-            foreach ($themes as $themeName => &$skins) {
+        /** @var $themeCollection Mage_Core_Model_Theme_Collection */
+        $themeCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
+        $themeCollection->addDefaultPattern($area);
 
-                /**
-                 * Join to theme inherited skins
-                 */
-                if ($addInheritedSkins) {
-                    $currentPackage = $packageName;
-                    $currentTheme = $themeName;
-                    while ($inheritedPackageTheme = $areaThemeConfig->getParentTheme($currentPackage, $currentTheme)) {
-                        list($inheritedPackage, $inheritedTheme) = $inheritedPackageTheme;
-                        if (!isset($areaStructure[$inheritedPackage][$inheritedTheme])) {
-                            break;
-                        }
-                        $areaStructure[$packageName][$themeName] = array_merge(
-                            $areaStructure[$packageName][$themeName],
-                            $areaStructure[$inheritedPackage][$inheritedTheme]
-                        );
-                        $currentPackage = $inheritedPackage;
-                        $currentTheme = $inheritedTheme;
-                    }
-                }
-
-                /**
-                 * Delete themes without skins or sort skins
-                 */
-                if (empty($areaStructure[$packageName][$themeName])) {
-                    unset($areaStructure[$packageName][$themeName]);
-                } else {
-                    ksort($skins);
-                }
-            }
-            /**
-             * Delete packages without themes or sort themes
-             */
-            if (empty($areaStructure[$packageName])) {
-                unset($areaStructure[$packageName]);
-            }
-            ksort($themes);
+        /** @var $theme Mage_Core_Model_Theme */
+        foreach ($themeCollection as $theme) {
+            list($package, $theme) = explode('/', $theme->getThemePath());
+            $areaStructure[$package][] = $theme;
         }
-
-        ksort($areaStructure);
         return $areaStructure;
-    }
-
-    /**
-     * Get entities file system structure of area
-     *
-     * The format of the result is a multidimensional array with following structure
-     * array (
-     *     'package_name' => array (
-     *         'theme_name' => array (
-     *             'skin_name' => true
-     *          )
-     *     )
-     * )
-     *
-     * @param string $area
-     * @return array
-     */
-    protected function _getDesignEntitiesFilesystemStructure($area)
-    {
-        $areaDirPath = Mage::app()->getConfig()->getOptions()->getDesignDir() . DIRECTORY_SEPARATOR . $area;
-        $structure = array();
-
-        $themePaths = glob($areaDirPath . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
-        foreach ($themePaths as $themePath) {
-            $themePath = str_replace(DIRECTORY_SEPARATOR, '/', $themePath);
-            if (preg_match('/\/([^\/.]+)\/([^\/.]+)\/([^\/.]+)$/i', $themePath, $packageThemeMatches)) {
-                list (, , $packageName, $themeName) = $packageThemeMatches;
-                $structure[$packageName][$themeName] = array();
-            } else {
-                continue;
-            }
-            $skinPaths = glob($areaDirPath . DIRECTORY_SEPARATOR . $packageName . DIRECTORY_SEPARATOR .
-                $themeName . DIRECTORY_SEPARATOR . 'skin' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
-            foreach ($skinPaths as $skinPath) {
-                $skinPath = str_replace(DIRECTORY_SEPARATOR, '/', $skinPath);
-                if (preg_match('/\/([^\/.]+)$/i', $skinPath, $skinMatches)) {
-                    $structure[$packageName][$themeName][$skinMatches[1]] = true;
-                }
-            }
-        }
-
-        return $structure;
     }
 
     /**

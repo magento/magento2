@@ -32,11 +32,11 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 
-class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Grid extends Mage_Backend_Block_Widget_Grid
+class Mage_Tag_Block_Adminhtml_Catalog_Product_Edit_Tab_Tag_Grid extends Mage_Backend_Block_Widget_Grid_Extended
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('tag_grid');
         $this->setDefaultSort('name');
         $this->setDefaultDir('ASC');

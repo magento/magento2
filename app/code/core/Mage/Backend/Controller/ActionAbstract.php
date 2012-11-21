@@ -72,13 +72,17 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
      *
      * @param Zend_Controller_Request_Abstract $request
      * @param Zend_Controller_Response_Abstract $response
+     * @param Magento_ObjectManager $objectManager
+     * @param Mage_Core_Controller_Varien_Front $frontController
      * @param array $invokeArgs
      */
     public function __construct(Zend_Controller_Request_Abstract $request,
-                                Zend_Controller_Response_Abstract $response,
-                                array $invokeArgs = array()
+        Zend_Controller_Response_Abstract $response,
+        Magento_ObjectManager $objectManager,
+        Mage_Core_Controller_Varien_Front $frontController,
+        array $invokeArgs = array()
     ) {
-        parent::__construct($request, $response, $invokeArgs);
+        parent::__construct($request, $response, $objectManager, $frontController, $invokeArgs);
 
         $this->_helper = isset($invokeArgs['helper']) ?
             $invokeArgs['helper'] :

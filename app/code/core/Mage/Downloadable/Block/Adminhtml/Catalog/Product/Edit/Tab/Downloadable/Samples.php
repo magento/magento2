@@ -41,15 +41,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     protected $_config;
 
-    /**
-     * Class constructor
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('product/edit/downloadable/samples.phtml');
-    }
+    protected $_template = 'product/edit/downloadable/samples.phtml';
 
     /**
      * Get model of the product that is being edited
@@ -181,7 +173,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     public function getConfigJson()
     {
-        $this->getConfig()->setUrl(Mage::getModel('Mage_Adminhtml_Model_Url')
+        $this->getConfig()->setUrl(Mage::getModel('Mage_Backend_Model_Url')
             ->addSessionParam()
             ->getUrl('*/downloadable_file/upload', array('type' => 'samples', '_secure' => true)));
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));

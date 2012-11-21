@@ -39,14 +39,7 @@ class Phoenix_Moneybookers_Block_Form extends Mage_Payment_Block_Form
      */
     protected $_defaultInfoLocale = 'en';
 
-    /**
-     * Constructor. Set template.
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('form.phtml');
-    }
+    protected $_template = 'form.phtml';
 
     /**
      * Return payment logo image src
@@ -66,8 +59,8 @@ class Phoenix_Moneybookers_Block_Form extends Mage_Payment_Block_Form
             'Phoenix_Moneybookers::images/' . $payment . '.gif'
         );
         foreach ($images as $image) {
-            if (file_exists($design->getSkinFile($image))) {
-                return $design->getSkinUrl($image);
+            if (file_exists($design->getViewFile($image))) {
+                return $design->getViewFileUrl($image);
             }
         }
         return false;

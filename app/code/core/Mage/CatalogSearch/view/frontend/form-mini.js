@@ -24,159 +24,145 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
-    $(document).ready(function () {
+    $.widget('mage.catalogSearch', {
 
-        var searchInit = {
-            // Default values
+        options: {
+            autocomplete: 'off',
             minSearchLength: 2,
             responseFieldElements: 'ul li',
-            selectClass: 'selected',
-            // Filled in initialization event
-            placeholder: null,
-            destinationSelector: null,
-            fieldSelector: null,
-            formSelector: null
-        };
-        // Trigger initialize event
-        $.mage.event.trigger('mage.catalogsearch.initialize', searchInit);
+            selectClass: 'selected'
+        },
 
-        var responseList = {
-            indexList: null,
-            selected: null
-        };
+        _create: function() {
+            this.responseList = { indexList: null, selected: null };
+            this.autoComplete = $(this.options.destinationSelector);
+            this.searchForm = $(this.options.formSelector);
 
-        function getFirstVisibleElement() {
-            if (responseList.indexList) {
-                var firstElement = responseList.indexList.first();
-                return  firstElement.is(':visible') ? firstElement : firstElement.next();
-            }
-            return false;
-        }
+            this.element.attr('autocomplete', this.options.autocomplete);
 
-        function getLastElement() {
-            if (responseList.indexList) {
-                return responseList.indexList.last();
-            }
-            return false;
-        }
+            this.element.on('blur', $.proxy(function() {
+                if (this.element.val() === '') {
+                    this.element.val(this.options.placeholder);
+                }
+                setTimeout($.proxy(function () {
+                    this.autoComplete.hide();
+                }, this), 250);
+            }, this));
 
-        function resetResponseList(all) {
-            // To reset the selected attribute on every ajax response,result hide and mouse out from list
-            responseList.selected = null;
+            this.element.trigger('blur');
+
+            this.element.on('focus', $.proxy(function() {
+                if (this.element.val() === this.options.placeholder) {
+                    this.element.val('');
+                }
+            }, this));
+
+            this.element.on('keydown', $.proxy(this._onKeyDown, this));
+            this.element.on('input propertychange', $.proxy(this._onPropertyChange, this));
+
+            this.searchForm.on('submit', $.proxy(this._onSubmit, this));
+        },
+
+        _getFirstVisibleElement: function() {
+            return this.responseList.indexList ? this.responseList.indexList.first() : false;
+        },
+
+        _getLastElement: function() {
+            return this.responseList.indexList ? this.responseList.indexList.last() : false;
+        },
+
+        _resetResponseList: function(all) {
+            this.responseList.selected = null;
             if (all === true) {
-            // To reset the list on search result hide
-                responseList.indexList = null;
+                this.responseList.indexList = null;
             }
-        }
+        },
 
-        $(searchInit.fieldSelector).on('blur', function () {
-            if ($(this).val() === '') {
-                $(this).val(searchInit.placeholder);
+        _onSubmit: function(e) {
+            if (this.element.val() === this.options.placeholder || this.element.val() === '') {
+                e.preventDefault();
             }
-            // use setTimeout to make sure submit event happens before blur event
-            setTimeout(function () {
-                $(searchInit.destinationSelector).hide();
-            }, 250);
-        });
-
-        $(searchInit.fieldSelector).trigger('blur');
-
-        $(searchInit.fieldSelector).on('focus', function () {
-            if ($(this).val() === searchInit.placeholder) {
-                $(this).val('');
+            if (this.responseList.selected) {
+                this.element.val(this.responseList.selected.attr('title'));
             }
-        });
+        },
 
-        $(searchInit.fieldSelector).on('keydown', function (e) {
-
+        _onKeyDown: function (e) {
             var keyCode = e.keyCode || e.which;
-
             switch (keyCode) {
-
                 case $.mage.constant.KEY_ESC:
-                    resetResponseList(true);
-                    $(searchInit.destinationSelector).hide();
+                    this._resetResponseList(true);
+                    this.autoComplete.hide();
                     break;
                 case $.mage.constant.KEY_TAB:
-                    $(searchInit.formSelector).trigger('submit');
+                    this.searchForm.trigger('submit');
                     break;
                 case $.mage.constant.KEY_DOWN:
-                    if (responseList.indexList) {
-                        if (!responseList.selected) {
-                            getFirstVisibleElement().addClass(searchInit.selectClass);
-                            responseList.selected = getFirstVisibleElement();
+                    if (this.responseList.indexList) {
+                        if (!this.responseList.selected) {
+                            this._getFirstVisibleElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getFirstVisibleElement();
                         }
-                        else if (!getLastElement().hasClass(searchInit.selectClass)) {
-                            responseList.selected = responseList.selected.removeClass(searchInit.selectClass).next().addClass(searchInit.selectClass);
+                        else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
                         } else {
-                            responseList.selected.removeClass(searchInit.selectClass);
-                            getFirstVisibleElement().addClass(searchInit.selectClass);
-                            responseList.selected = getFirstVisibleElement();
+                            this.responseList.selected.removeClass(this.options.selectClass);
+                            this._getFirstVisibleElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getFirstVisibleElement();
                         }
                     }
                     break;
                 case $.mage.constant.KEY_UP:
-                    if (responseList.indexList !== null) {
-                        if (!getFirstVisibleElement().hasClass(searchInit.selectClass)) {
-                            responseList.selected = responseList.selected.removeClass(searchInit.selectClass).prev().addClass(searchInit.selectClass);
+                    if (this.responseList.indexList !== null) {
+                        if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
 
                         } else {
-                            responseList.selected.removeClass(searchInit.selectClass);
-                            getLastElement().addClass(searchInit.selectClass);
-                            responseList.selected = getLastElement();
+                            this.responseList.selected.removeClass(this.options.selectClass);
+                            this._getLastElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getLastElement();
                         }
                     }
                     break;
                 default:
                     return true;
             }
-        });
+        },
 
-        $(searchInit.formSelector).on('submit', function (e) {
-            if ($(searchInit.fieldSelector).val() === searchInit.placeholder || $(searchInit.fieldSelector).val() === '') {
-                e.preventDefault();
-            }
-            if (responseList.selected) {
-                $(searchInit.fieldSelector).val(responseList.selected.attr('title'));
-            }
-        });
-
-        $(searchInit.fieldSelector).on('input propertychange', function () {
-
-            var searchField = $(this);
-            var clonePostion = {
+        _onPropertyChange: function () {
+            var searchField = this.element;
+            var clonePosition = {
                 position: 'absolute',
                 left: searchField.offset().left,
                 top: searchField.offset().top + searchField.outerHeight(),
                 width: searchField.outerWidth()
             };
-
-            if ($(this).val().length >= parseInt(searchInit.minSearchLength, 10)) {
-                $.get(searchInit.url, {q: $(this).val()}, function (data) {
-                    responseList.indexList = $(searchInit.destinationSelector).html(data)
-                        .css(clonePostion)
+            if (searchField.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                $.get(this.options.url, {q: searchField.val()}, $.proxy(function (data) {
+                    this.responseList.indexList = this.autoComplete.html(data)
+                        .css(clonePosition)
                         .show()
-                        .find(searchInit.responseFieldElements);
-                    resetResponseList(false);
-                    responseList.indexList.on('click',function () {
-                        responseList.selected = $(this);
-                        $(searchInit.formSelector).trigger('submit');
-                    }).on('hover',function () {
-                        responseList.indexList.removeClass(searchInit.selectClass);
-                        $(this).addClass(searchInit.selectClass);
-                        responseList.selected = $(this);
-                    }).on('mouseout', function () {
-                        if (!getLastElement() && getLastElement().hasClass(searchInit.selectClass)) {
-                            $(this).removeClass(searchInit.selectClass);
-                            resetResponseList(false);
+                        .find(this.options.responseFieldElements + ':visible');
+                    this._resetResponseList(false);
+                    this.responseList.indexList.on('click', $.proxy(function (e) {
+                        this.responseList.selected = $(e.target);
+                        this.searchForm.trigger('submit');
+                    }, this)).on('hover', $.proxy(function (e) {
+                        this.responseList.indexList.removeClass(this.options.selectClass);
+                        $(e.target).addClass(this.options.selectClass);
+                        this.responseList.selected = $(e.target);
+                    }, this)).on('mouseout', $.proxy(function (e) {
+                        if (!this._getLastElement() && this._getLastElement().hasClass(this.options.selectClass)) {
+                            $(e.target).removeClass(this.options.selectClass);
+                            this._resetResponseList(false);
                         }
-                    });
-                });
+                    }, this));
+                }, this));
             } else {
-                resetResponseList(true);
-                $(searchInit.destinationSelector).hide();
+                this._resetResponseList(true);
+                this.autoComplete.hide();
             }
-        });
+        }
+
     });
 })(jQuery);
-

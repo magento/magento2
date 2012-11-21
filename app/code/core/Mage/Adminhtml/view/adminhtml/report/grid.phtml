@@ -74,7 +74,7 @@ $numColumns = sizeof($this->getColumns());
                 (function( $ ) {
                     $("#<?php echo $this->getSuffixId('period_date_range') ?>").dateRange({
                         dateFormat: "<?php echo $this->getDateFormat() ?>",
-                        buttonImage: "<?php echo $this->getSkinUrl('images/grid-cal.gif') ?>",
+                        buttonImage: "<?php echo $this->getViewFileUrl('images/grid-cal.gif') ?>",
                         buttonText: "<?php echo $this->__('Select Date') ?>",
                         from: {
                             id: "<?php echo $this->getSuffixId('period_date_from')?>"
@@ -89,7 +89,7 @@ $numColumns = sizeof($this->getColumns());
         <?php endif; ?>
         <?php if($this->getExportVisibility()): ?>
             <td class="a-right">
-                <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+                <img src="<?php echo $this->getViewFileUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
                 <select name="<?php echo $this->getSuffixId('export')?>" id="<?php echo $this->getSuffixId('export')?>" style="width:8em;">
                 <?php foreach ($this->getExportTypes() as $_type): ?>
                     <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>

@@ -30,7 +30,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
 {
     public function testGetUploadButtonsHtml()
     {
-        $block = new Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links;
+        $block = Mage::app()->getLayout()->createBlock(
+            'Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Links'
+        );
         self::performUploadButtonTest($block);
     }
 
@@ -41,10 +43,13 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     public static function performUploadButtonTest(Mage_Core_Block_Abstract $block)
     {
-        $layout = new Mage_Core_Model_Layout;
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->addBlock($block, 'links');
         $expected = uniqid();
-        $text = new Mage_Core_Block_Text(array('text' => $expected));
+        $text = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text', '',
+            array('data' => array('text' => $expected))
+        );
         $block->unsetChild('upload_button');
         $layout->addBlock($text, 'upload_button', 'links');
         self::assertEquals($expected, $block->getUploadButtonHtml());

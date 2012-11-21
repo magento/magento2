@@ -31,12 +31,12 @@
 <li id="captcha-input-box-<?php echo $this->getFormId()?>">
     <label for="captcha_<?php echo $this->getFormId() ?>" class="required"><em>*</em><?php echo $this->__('Please type the letters below')?></label>
     <div class="input-box captcha">
-        <input name="<?php echo Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId()?>]" type="text" class="input-text required-entry" id="captcha_<?php echo $this->getFormId() ?>" />
+        <input name="<?php echo Mage_Captcha_Helper_Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId()?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?php echo $this->getFormId() ?>" />
     </div>
 </li>
 <li id="captcha-image-box-<?php echo $this->getFormId()?>">
     <div class="captcha-image">
-        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getSkinUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>" onclick="$('<?php echo $this->getFormId()?>').captcha.refresh(this)">
+        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getViewFileUrl('Mage_Captcha::reload.png') ?>" alt="<?php echo $this->__('Reload captcha') ?>">
         <img id="<?php echo $this->getFormId() ?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
         <?php if ($captcha->isCaseSensitive()) :?>
         <div class="captcha-note">
@@ -45,6 +45,13 @@
         <?php endif; ?>
     </div>
     <script type="text/javascript">//<![CDATA[
-        $('<?php echo $this->getFormId() ?>').captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php echo $this->getFormId() ?>');
+    (function ($) {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Captcha::captcha.js') ?>",function() {
+            $('#captcha-reload').captcha({
+                url: '<?php echo $this->getRefreshUrl()?>',
+                formSelector: '#<?php echo $this->getFormId()?>'
+            });
+        });
+    })(jQuery);
     //]]></script>
 </li>

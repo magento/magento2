@@ -31,7 +31,7 @@ class Mage_Tax_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Tax_Model_Config;
+        $this->_model = Mage::getModel('Mage_Tax_Model_Config');
     }
 
     protected function tearDown()

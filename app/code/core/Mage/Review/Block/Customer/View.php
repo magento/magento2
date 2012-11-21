@@ -34,10 +34,13 @@
 
 class Mage_Review_Block_Customer_View extends Mage_Catalog_Block_Product_Abstract
 {
-    public function __construct()
+
+    protected $_template = 'customer/view.phtml';
+
+    protected function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('customer/view.phtml');
+        parent::_construct();
+
 
         $this->setReviewId($this->getRequest()->getParam('id', false));
     }

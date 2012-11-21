@@ -31,14 +31,8 @@
 <meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>"/>
 <link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
 <link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/jquery-1.7.1.min.js')?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('jquery/head.js')?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/mage.js')?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('mage/translate.js')?>"></script>
-<link rel="stylesheet" href="<?php echo $this->getSkinUrl('jquery/ui/css/jquery-ui.css')?>" type="text/css"
-      media="all"/>
-<link rel="stylesheet" href="<?php echo $this->getSkinUrl('Mage_Page::css/validate.css') ?>" type="text/css"
-      media="all"/>
+<link rel="stylesheet" href="<?php echo $this->getViewFileUrl('jquery/ui/css/jquery-ui.css')?>" type="text/css" media="all"/>
+<link rel="stylesheet" href="<?php echo $this->getViewFileUrl('Mage_Page::css/validate.css') ?>" type="text/css" media="all"/>
 <?php echo $this->getCssJsHtml() ?>
 <?php echo $this->getChildHtml() ?>
 <?php echo $this->getIncludes() ?>

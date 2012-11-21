@@ -40,6 +40,11 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
     protected static $_moduleEtcFiles;
 
     /**
+     * @var Magento_Shell|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_shell;
+
+    /**
      * @var Magento_Test_Db_DbAbstract|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_db;
@@ -63,15 +68,11 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->_shell = $this->getMock('Magento_Shell', array('execute'));
         $this->_db = $this->getMock(
             'Magento_Test_Db_DbAbstract',
-            array(
-                'verifyEmptyDatabase',
-                'cleanup',
-                'createBackup',
-                'restoreBackup',
-            ),
-            array('host', 'user', 'password', 'schema', self::$_tmpDir)
+            array('cleanup'),
+            array('host', 'user', 'password', 'schema', self::$_tmpDir, $this->_shell)
         );
         /* Suppress calling the constructor at this step */
         $this->_bootstrap = $this->getMock(
@@ -100,15 +101,21 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         $this->_callBootstrapConstructor();
     }
 
+    protected function tearDown()
+    {
+        $this->_shell = null;
+        $this->_db = null;
+        $this->_bootstrap = null;
+    }
+
     /**
      * Explicitly call the constructor method of the underlying bootstrap object
      *
      * @param string|null $localXmlFile
-     * @param string $cleanupAction
+     * @param bool $isCleanupEnabled
      */
-    protected function _callBootstrapConstructor(
-        $localXmlFile = null, $cleanupAction = Magento_Test_Bootstrap::CLEANUP_NONE
-    ) {
+    protected function _callBootstrapConstructor($localXmlFile = null, $isCleanupEnabled = false)
+    {
         $this->_bootstrap->__construct(
             self::$_magentoDir,
             ($localXmlFile ? $localXmlFile : self::$_localXmlFile),
@@ -116,7 +123,8 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             self::$_moduleEtcFiles,
             '',
             self::$_tmpDir,
-            $cleanupAction
+            $this->_shell,
+            $isCleanupEnabled
         );
     }
 
@@ -176,10 +184,6 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             ->method('_isInstalled')
             ->will($this->returnValue(false))
         ;
-        $this->_db
-            ->expects($this->once())
-            ->method('verifyEmptyDatabase')
-        ;
         $this->_bootstrap
             ->expects($this->once())
             ->method('_install')
@@ -201,12 +205,8 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         $this->_callBootstrapConstructor();
     }
 
-    public function testConstructorCleanupNone()
+    public function testConstructorCleanupDisabled()
     {
-        $this->_db
-            ->expects($this->never())
-            ->method('restoreBackup')
-        ;
         $this->_db
             ->expects($this->never())
             ->method('cleanup')
@@ -215,52 +215,20 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('_cleanupFilesystem')
         ;
-        $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_NONE);
+        $this->_callBootstrapConstructor(null, false);
     }
 
-    public function testConstructorCleanupUninstall()
+    public function testConstructorCleanupEnabled()
     {
         $this->_db
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('cleanup')
-            ->will($this->returnValue(true))
         ;
         $this->_bootstrap
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('_cleanupFilesystem')
         ;
-        $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_UNINSTALL);
-    }
-
-    /**
-     * @expectedException Magento_Exception
-     */
-    public function testConstructorCleanupUninstallWithFail()
-    {
-        $this->_db
-            ->expects($this->exactly(1))
-            ->method('cleanup')
-            ->will($this->returnValue(false))
-        ;
-        $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_UNINSTALL);
-    }
-
-    public function testConstructorCleanupRestoreDb()
-    {
-        $this->_db
-            ->expects($this->exactly(1))
-            ->method('restoreBackup')
-            ->with(Magento_Test_Bootstrap::DB_BACKUP_NAME)
-        ;
-        $this->_callBootstrapConstructor(null, Magento_Test_Bootstrap::CLEANUP_RESTORE_DB);
-    }
-
-    /**
-     * @expectedException Magento_Exception
-     */
-    public function testConstructorCleanupException()
-    {
-        $this->_callBootstrapConstructor(null, 'invalidCleanupAction');
+        $this->_callBootstrapConstructor(null, true);
     }
 
     /**

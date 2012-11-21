@@ -83,7 +83,8 @@ class Mage_Adminhtml_Sales_Order_InvoiceController extends Mage_Adminhtml_Contro
                 return false;
             }
             $savedQtys = $this->_getItemQtys();
-            $invoice = Mage::getModel('Mage_Sales_Model_Service_Order', $order)->prepareInvoice($savedQtys);
+            $invoice = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $order))
+                ->prepareInvoice($savedQtys);
             if (!$invoice->getTotalQty()) {
                 Mage::throwException($this->__('Cannot create an invoice without products.'));
             }
@@ -119,7 +120,8 @@ class Mage_Adminhtml_Sales_Order_InvoiceController extends Mage_Adminhtml_Contro
     protected function _prepareShipment($invoice)
     {
         $savedQtys = $this->_getItemQtys();
-        $shipment = Mage::getModel('Mage_Sales_Model_Service_Order', $invoice->getOrder())->prepareShipment($savedQtys);
+        $shipment = Mage::getModel('Mage_Sales_Model_Service_Order', array('order' => $invoice->getOrder()))
+            ->prepareShipment($savedQtys);
         if (!$shipment->getTotalQty()) {
             return false;
         }

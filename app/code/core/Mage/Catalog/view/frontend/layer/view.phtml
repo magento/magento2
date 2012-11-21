@@ -52,7 +52,7 @@
                 <?php endif; ?>
                 <?php endforeach; ?>
             </dl>
-            <script type="text/javascript">decorateDataList('narrow-by-list')</script>
+            <script type="text/javascript">(function($) {$('#narrow-by-list').decorate('dataList')})(jQuery)</script>
         <?php endif; ?>
     </div>
 </div>

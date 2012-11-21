@@ -60,6 +60,6 @@
     </tbody>
     <?php endforeach; ?>
 </table>
-<script type="text/javascript">decorateTable('my-refund-table-<?php echo $_creditmemo->getId(); ?>', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+<script type="text/javascript">(function($) {$('#my-refund-table-<?php echo $_creditmemo->getId(); ?>').decorate('table', {'tbody': ['odd','even'], 'tbody tr': ['first','last']})})(jQuery)</script>
 <?php echo $this->getCommentsHtml($_creditmemo)?>
 <?php endforeach; ?>

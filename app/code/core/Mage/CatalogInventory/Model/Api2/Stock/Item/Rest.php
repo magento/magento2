@@ -84,8 +84,8 @@ abstract class Mage_CatalogInventory_Model_Api2_Stock_Item_Rest
 
         /* @var $validator Mage_CatalogInventory_Model_Api2_Stock_Item_Validator_Item */
         $validator = Mage::getModel('Mage_CatalogInventory_Model_Api2_Stock_Item_Validator_Item', array(
-            'resource' => $this
-        ));
+            'options' => array('resource' => $this))
+        );
 
         if (!$validator->isValidData($data)) {
             foreach ($validator->getErrors() as $error) {
@@ -120,8 +120,8 @@ abstract class Mage_CatalogInventory_Model_Api2_Stock_Item_Rest
 
                 /* @var $validator Mage_CatalogInventory_Model_Api2_Stock_Item_Validator_Item */
                 $validator = Mage::getModel('Mage_CatalogInventory_Model_Api2_Stock_Item_Validator_Item', array(
-                    'resource' => $this
-                ));
+                    'options' => array('resource' => $this))
+                );
                 if (!$validator->isValidSingleItemDataForMultiUpdate($itemData)) {
                     foreach ($validator->getErrors() as $error) {
                         $this->_errorMessage($error, Mage_Api2_Model_Server::HTTP_BAD_REQUEST, array(

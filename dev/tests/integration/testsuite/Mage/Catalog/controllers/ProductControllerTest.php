@@ -38,7 +38,8 @@ class Mage_Catalog_ProductControllerTest extends Magento_Test_TestCase_Controlle
 
     protected function _getProductImageFile()
     {
-        $product = new Mage_Catalog_Model_Product();
+        /** @var $product Mage_Catalog_Model_Product */
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
         $images = $product->getMediaGalleryImages()->getItems();
         $image = reset($images);

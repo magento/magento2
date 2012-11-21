@@ -38,13 +38,27 @@
                 </observers>
             </controller_front_init_before>
         </events>
-        <rewrites>
-            <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
-        </rewrites>
+        <di>
+            <aliases>
+                <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
+            </aliases>
+        </di>
         <dev>
             <design_fallback>
                 <allow_map_update>0</allow_map_update>
             </design_fallback>
         </dev>
     </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Mage_Core>
+                    <files>
+                        <!-- Translation files are relative to app/code/<pool>/<Namespace>/<Module>/locale/<locale> -->
+                        <fixture>../../../../../../../dev/tests/integration/testsuite/Mage/Core/_files/fixture.csv</fixture>
+                    </files>
+                </Mage_Core>
+            </modules>
+        </translate>
+    </frontend>
 </config>

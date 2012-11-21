@@ -55,8 +55,18 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
      */
     protected $_baseController = null;
 
-    public function __construct(array $options = array())
+    /**
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
+
+    /**
+     * @param Magento_ObjectManager $objectManager
+     * @param array $options
+     */
+    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
     {
+        $this->_objectManager = $objectManager;
         $this->_area           = isset($options['area']) ? $options['area'] : null;
         $this->_baseController = isset($options['base_controller']) ? $options['base_controller'] : null;
 
@@ -155,6 +165,8 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
         if (false == $this->_canProcess($params)) {
             return null;
         }
+
+        $this->_objectManager->loadAreaConfiguration($this->_area);
 
         return $this->_matchController($request, $params);
     }

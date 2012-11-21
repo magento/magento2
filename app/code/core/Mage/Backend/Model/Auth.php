@@ -45,6 +45,18 @@ class Mage_Backend_Model_Auth
     protected $_credentialStorage = null;
 
     /**
+     * @param Mage_Backend_Model_Auth_StorageInterface $authStorage
+     * @param Mage_Backend_Model_Auth_Credential_StorageInterface $credentialStorage
+     */
+    public function __construct(
+        Mage_Backend_Model_Auth_StorageInterface $authStorage,
+        Mage_Backend_Model_Auth_Credential_StorageInterface $credentialStorage
+    ) {
+        $this->_authStorage = $authStorage;
+        $this->_credentialStorage = $credentialStorage;
+    }
+
+    /**
      * Set auth storage if it is instance of Mage_Backend_Model_Auth_StorageInterface
      *
      * @param Mage_Backend_Model_Auth_StorageInterface $storage
@@ -68,9 +80,6 @@ class Mage_Backend_Model_Auth
      */
     public function getAuthStorage()
     {
-        if (is_null($this->_authStorage)) {
-            $this->_authStorage = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
-        }
         return $this->_authStorage;
     }
 
@@ -113,9 +122,6 @@ class Mage_Backend_Model_Auth
      */
     public function getCredentialStorage()
     {
-        if (is_null($this->_credentialStorage)) {
-            $this->_initCredentialStorage();
-        }
         return $this->_credentialStorage;
     }
 

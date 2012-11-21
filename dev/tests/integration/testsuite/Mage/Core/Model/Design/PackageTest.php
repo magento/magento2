@@ -38,7 +38,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     {
         $fixtureDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files';
         Mage::app()->getConfig()->getOptions()->setDesignDir($fixtureDir . DIRECTORY_SEPARATOR . 'design');
-        Varien_Io_File::rmdirRecursive(Mage::app()->getConfig()->getOptions()->getMediaDir() . '/skin');
+        Varien_Io_File::rmdirRecursive(Mage::app()->getConfig()->getOptions()->getMediaDir() . '/theme');
 
         $ioAdapter = new Varien_Io_File();
         $ioAdapter->cp(
@@ -57,8 +57,8 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Core_Model_Design_Package();
-        $this->_model->setDesignTheme('test/default/default', 'frontend');
+        $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
+        $this->_model->setDesignTheme('test/default', 'frontend');
     }
 
     protected function tearDown()
@@ -83,18 +83,11 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('default', $this->_model->getTheme());
     }
 
-    public function testGetSkin()
-    {
-        $this->assertEquals('default', $this->_model->getSkin());
-    }
-
     public function testSetDesignTheme()
     {
-        $this->_model->setDesignTheme('test/test/test', 'test');
+        $this->_model->setDesignTheme('test/test', 'test');
         $this->assertEquals('test', $this->_model->getArea());
         $this->assertEquals('test', $this->_model->getPackageName());
-        $this->assertEquals('test', $this->_model->getSkin());
-        $this->assertEquals('test', $this->_model->getSkin());
     }
 
     /**
@@ -102,12 +95,12 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
      */
     public function testSetDesignThemeException()
     {
-        $this->_model->setDesignTheme('test/test');
+        $this->_model->setDesignTheme('test/test/test');
     }
 
     public function testGetDesignTheme()
     {
-        $this->assertEquals('test/default/default', $this->_model->getDesignTheme());
+        $this->assertEquals('test/default', $this->_model->getDesignTheme());
     }
 
     /**
@@ -155,7 +148,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     public function testGetOptimalCssUrls()
     {
         $expected = array(
-            'http://localhost/pub/media/skin/frontend/test/default/default/en_US/css/styles.css',
+            'http://localhost/pub/media/theme/frontend/test/default/en_US/css/styles.css',
             'http://localhost/pub/lib/mage/translate-inline.css',
         );
         $params = array(
@@ -181,11 +174,11 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array('css/styles.css', 'mage/calendar.css'),
-                array('http://localhost/pub/media/skin/_merged/808bc0a77c00a5d3c5c0bc388a6e93cf.css')
+                array('http://localhost/pub/media/theme/_merged/dce6f2a22049cd09bbfbe344fc73b037.css')
             ),
             array(
                 array('css/styles.css'),
-                array('http://localhost/pub/media/skin/frontend/test/default/default/en_US/css/styles.css',)
+                array('http://localhost/pub/media/theme/frontend/test/default/en_US/css/styles.css',)
             ),
         );
     }
@@ -194,7 +187,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     public function testGetOptimalJsUrls()
     {
         $expected = array(
-            'http://localhost/pub/media/skin/frontend/test/default/default/en_US/js/tabs.js',
+            'http://localhost/pub/media/theme/frontend/test/default/en_US/js/tabs.js',
             'http://localhost/pub/lib/jquery/jquery-ui-timepicker-addon.js',
             'http://localhost/pub/lib/mage/calendar.js',
         );
@@ -222,7 +215,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array('js/tabs.js', 'mage/calendar.js', 'jquery/jquery-ui-timepicker-addon.js'),
-                array('http://localhost/pub/media/skin/_merged/9618f79ac5a7d716fabb220ef0e5c0cb.js',)
+                array('http://localhost/pub/media/theme/_merged/51cf03344697f37c2511aa0ad3391d56.js',)
             ),
             array(
                 array('mage/calendar.js'),
@@ -234,12 +227,7 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     public function testGetDesignEntitiesStructure()
     {
         $expectedResult = array(
-            'package_one' => array(
-                'theme_one' => array(
-                    'skin_one' => true,
-                    'skin_two' => true
-                )
-            )
+            'package_one' => array('theme_one')
         );
         $this->assertSame($expectedResult, $this->_model->getDesignEntitiesStructure('design_area'));
     }
@@ -267,27 +255,27 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $file
      * @param string $result
-     * @covers Mage_Core_Model_Design_Package::getSkinUrl
-     * @dataProvider getSkinUrlDataProvider
+     * @covers Mage_Core_Model_Design_Package::getViewUrl
+     * @dataProvider getViewUrlDataProvider
      * @magentoConfigFixture current_store dev/static/sign 0
      */
-    public function testGetSkinUrl($devMode, $file, $result)
+    public function testGetViewUrl($devMode, $file, $result)
     {
         Mage::setIsDeveloperMode($devMode);
-        $this->assertEquals($this->_model->getSkinUrl($file), $result);
+        $this->assertEquals($this->_model->getViewFileUrl($file), $result);
     }
 
     /**
      * @param string $file
      * @param string $result
      * @covers Mage_Core_Model_Design_Package::getSkinUrl
-     * @dataProvider getSkinUrlDataProvider
+     * @dataProvider getViewUrlDataProvider
      * @magentoConfigFixture current_store dev/static/sign 1
      */
-    public function testGetSkinUrlSigned($devMode, $file, $result)
+    public function testGetViewUrlSigned($devMode, $file, $result)
     {
         Mage::setIsDeveloperMode($devMode);
-        $url = $this->_model->getSkinUrl($file);
+        $url = $this->_model->getViewFileUrl($file);
         $this->assertEquals(strpos($url, $result), 0);
         $lastModified = array();
         preg_match('/.*\?(.*)$/i', $url, $lastModified);
@@ -300,13 +288,13 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getSkinUrlDataProvider()
+    public function getViewUrlDataProvider()
     {
         return array(
             array(
                 false,
                 'Mage_Page::favicon.ico',
-                'http://localhost/pub/media/skin/frontend/test/default/default/en_US/Mage_Page/favicon.ico',
+                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/favicon.ico',
             ),
             array(
                 true,
@@ -321,22 +309,22 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
             array(
                 true,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/skin/frontend/test/default/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
                 false,
                 'Mage_Page::menu.js',
-                'http://localhost/pub/media/skin/frontend/test/default/default/en_US/Mage_Page/menu.js'
+                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Page/menu.js'
             ),
             array(
                 false,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/skin/frontend/test/default/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
             array(
                 true,
                 'Mage_Catalog::widgets.css',
-                'http://localhost/pub/media/skin/frontend/test/default/default/en_US/Mage_Catalog/widgets.css'
+                'http://localhost/pub/media/theme/frontend/test/default/en_US/Mage_Catalog/widgets.css'
             ),
         );
     }

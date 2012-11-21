@@ -133,12 +133,19 @@ abstract class Mage_Core_Model_ShellAbstract
         $current = null;
         foreach ($this->_rawArgs as $arg) {
             $match = array();
-            if (preg_match('#^--([\w\d_-]{1,})$#', $arg, $match) || preg_match('#^-([\w\d_]{1,})$#', $arg, $match)) {
-                $current = $match[1];
-                $this->_args[$current] = true;
+            if (preg_match('#^--([\w\d_-]{1,})(=(.*))?$#', $arg, $match)
+                || preg_match('#^-([\w\d_]{1,})$#', $arg, $match) ) {
+                if (isset($match[3])) {
+                    $this->_args[$match[1]] = $match[3];
+                    $current = null;
+                } else {
+                    $current = $match[1];
+                    $this->_args[$current] = true;
+                }
             } else {
                 if ($current) {
                     $this->_args[$current] = $arg;
+                    $current = null;
                 } else if (preg_match('#^([\w\d_]{1,})$#', $arg, $match)) {
                     $this->_args[$match[1]] = true;
                 }

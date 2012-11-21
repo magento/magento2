@@ -44,13 +44,22 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
     protected $_items = array();
 
     /**
+     * Path to template file in theme
+     *
+     * @var string
+     */
+    protected $_template = 'Mage_Backend::widget/grid/massaction_extended.phtml';
+
+    /**
      * Sets Massaction template
      */
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
-        $this->setTemplate('Mage_Backend::widget/grid/massaction_extended.phtml');
-        $this->setErrorText(Mage::helper('Mage_Backend_Helper_Data')->jsQuoteEscape(Mage::helper('Mage_Backend_Helper_Data')->__('Please select items.')));
+        parent::_construct();
+        $this->setErrorText(
+            Mage::helper('Mage_Backend_Helper_Data')
+                ->jsQuoteEscape(Mage::helper('Mage_Backend_Helper_Data')->__('Please select items.'))
+        );
     }
 
     /**

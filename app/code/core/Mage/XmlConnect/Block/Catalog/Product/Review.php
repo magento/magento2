@@ -48,7 +48,8 @@ class Mage_XmlConnect_Block_Catalog_Product_Review extends Mage_XmlConnect_Block
     public function reviewToXmlObject(Mage_Review_Model_Review $review, $itemNodeName = 'item')
     {
         $rating = 0;
-        $item = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<' . $itemNodeName . '></' . $itemNodeName . '>');
+        $item = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<' . $itemNodeName . '></' . $itemNodeName . '>'));
         if ($review->getId()) {
             $item->addChild('review_id', $review->getId());
             $item->addChild('created_at', $this->formatDate($review->getCreatedAt()));

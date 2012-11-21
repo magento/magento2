@@ -34,11 +34,8 @@
 
 class Mage_Review_Block_View extends Mage_Catalog_Block_Product_Abstract
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('view.phtml');
-    }
+
+    protected $_template = 'view.phtml';
 
     /**
      * Retrieve current product model from registry

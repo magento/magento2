@@ -34,11 +34,7 @@
 class Mage_GoogleShopping_Block_Adminhtml_Items extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('items.phtml');
-    }
+    protected $_template = 'items.phtml';
 
     /**
      * Preparing layout

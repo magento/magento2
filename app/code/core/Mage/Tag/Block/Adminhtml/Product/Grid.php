@@ -34,9 +34,9 @@
 class Mage_Tag_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         if (Mage::registry('current_tag')) {
             $this->setId('tag_product_grid' . Mage::registry('current_tag')->getId());
         }

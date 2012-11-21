@@ -35,11 +35,7 @@
 class Mage_GoogleShopping_Block_Adminhtml_Captcha extends Mage_Adminhtml_Block_Template
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('captcha.phtml');
-    }
+    protected $_template = 'captcha.phtml';
 
     /**
      * Get HTML code for confirm captcha button

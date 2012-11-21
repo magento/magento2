@@ -34,14 +34,7 @@
 class Mage_Adminhtml_Block_Customer_Edit_Renderer_Attribute_Group
     extends Mage_Adminhtml_Block_Widget_Form_Renderer_Fieldset_Element
 {
-    /**
-     * Override parent constructor just for setting custom template
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('customer/edit/tab/account/form/renderer/group.phtml');
-    }
+    protected $_template = 'customer/edit/tab/account/form/renderer/group.phtml';
 
     /**
      * Retrieve disable auto group change element HTML ID

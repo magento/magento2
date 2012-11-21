@@ -25,6 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/** @var $query Mage_CatalogSearch_Model_Query */
 $query = Mage::getModel('Mage_CatalogSearch_Model_Query');
 $query->setStoreId(1);
 $query

@@ -35,25 +35,15 @@ abstract class Mage_Core_Model_Layout_Argument_HandlerAbstract
     implements Mage_Core_Model_Layout_Argument_HandlerInterface
 {
     /**
-     * @var Mage_Core_Model_Config
+     * @var Magento_ObjectManager
      */
-    protected $_objectFactory;
+    protected $_objectManager;
 
     /**
-     * Common constructor of argument types
-     * @param array $args
-     * @throws InvalidArgumentException
+     * @param Magento_ObjectManager $objectManager
      */
-    public function __construct(array $args = array())
+    public function __construct(Magento_ObjectManager $objectManager)
     {
-        if (!isset($args['objectFactory'])) {
-            throw new InvalidArgumentException('Not all required parameters were passed');
-        }
-
-        $this->_objectFactory = $args['objectFactory'];
-
-        if (false === ($this->_objectFactory instanceof Mage_Core_Model_Config)) {
-            throw new InvalidArgumentException('Passed wrong instance of object factory');
-        }
+        $this->_objectManager = $objectManager;
     }
 }

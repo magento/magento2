@@ -43,9 +43,9 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
     /**
      * Set grid parameters.
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
 
         $this->_helper = Mage::helper('Mage_ImportExport_Helper_Data');
 
@@ -67,13 +67,15 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
      */
     protected function _getDateFromToHtmlWithValue(Mage_Eav_Model_Entity_Attribute $attribute, $value)
     {
-        $dateBlock = new Mage_Core_Block_Html_Date(array(
+        $arguments = array(
             'name'         => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
             'class'        => 'input-text input-text-range-date',
             'date_format'  => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
-            'image'        => $this->getSkinUrl('images/grid-cal.gif')
-        ));
+            'image'        => $this->getViewFileUrl('images/grid-cal.gif')
+        );
+        /** @var $selectBlock Mage_Core_Block_Html_Date */
+        $dateBlock = $this->_layout->getBlockFactory()->createBlock('Mage_Core_Block_Html_Date', $arguments);
         $fromValue = null;
         $toValue   = null;
         if (is_array($value) && count($value) == 2) {
@@ -128,12 +130,14 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             }
         }
         if (($size = count($options))) {
-            $selectBlock = new Mage_Core_Block_Html_Select(array(
+            $arguments = array(
                 'name'         => $this->getFilterElementName($attribute->getAttributeCode()). '[]',
                 'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class'        => 'multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
-            ));
+            );
+            /** @var $selectBlock Mage_Core_Block_Html_Select */
+            $selectBlock = $this->_layout->getBlockFactory()->createBlock('Mage_Core_Block_Html_Select', $arguments);
             return $selectBlock->setOptions($options)
                 ->setValue($value)
                 ->getHtml();
@@ -195,11 +199,13 @@ class Mage_ImportExport_Block_Adminhtml_Export_Filter extends Mage_Adminhtml_Blo
             } else {
                 array_unshift($options, array('value' => '', 'label' => ''));
             }
-            $selectBlock = new Mage_Core_Block_Html_Select(array(
+            $arguments = array(
                 'name'         => $this->getFilterElementName($attribute->getAttributeCode()),
                 'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class'        => 'select select-export-filter'
-            ));
+            );
+            /** @var $selectBlock Mage_Core_Block_Html_Select */
+            $selectBlock = $this->_layout->getBlockFactory()->createBlock('Mage_Core_Block_Html_Select', $arguments);
             return $selectBlock->setOptions($options)
                 ->setValue($value)
                 ->getHtml();

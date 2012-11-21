@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Sitemap_Edit extends Mage_Adminhtml_Block_Widget_Form
     /**
      * Init container
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'sitemap_id';
         $this->_controller = 'sitemap';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_addButton('generate', array(
             'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save & Generate'),

@@ -42,7 +42,7 @@ class Mage_Core_Model_Layout_Argument_Handler_Options extends Mage_Core_Model_La
     public function process($value)
     {
         /** @var $valueInstance Mage_Core_Model_Option_ArrayInterface */
-        $valueInstance = $this->_objectFactory->getModelInstance($value);
+        $valueInstance = $this->_objectManager->create($value, array(), false);
         if (false === ($valueInstance instanceof Mage_Core_Model_Option_ArrayInterface)) {
             throw new InvalidArgumentException('Incorrect option model');
         }

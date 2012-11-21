@@ -38,9 +38,10 @@ class Mage_Adminhtml_Block_Page_Footer extends Mage_Adminhtml_Block_Template
     const LOCALE_CACHE_KEY      = 'footer_locale';
     const LOCALE_CACHE_TAG      = 'adminhtml';
 
+    protected $_template = 'page/footer.phtml';
+
     protected function _construct()
     {
-        $this->setTemplate('page/footer.phtml');
         $this->setShowProfiler(true);
     }
 

@@ -50,14 +50,16 @@ class Mage_ImportExport_Model_Resource_Import_Data
     /**
      * Class constructor
      *
+     * @param Mage_Core_Model_Resource $resource
+     * @param Mage_Core_Helper_Data $coreHelper
      * @param array $arguments
      */
-    public function __construct(array $arguments = array())
-    {
-        parent::__construct($arguments);
-
-        $this->_jsonHelper = isset($arguments['json_helper']) ? $arguments['json_helper']
-            : Mage::helper('Mage_Core_Helper_Data');
+    public function __construct(Mage_Core_Model_Resource $resource,
+        Mage_Core_Helper_Data $coreHelper,
+        array $arguments = array()
+    ) {
+        parent::__construct($resource);
+        $this->_jsonHelper = $coreHelper;
     }
 
     /**

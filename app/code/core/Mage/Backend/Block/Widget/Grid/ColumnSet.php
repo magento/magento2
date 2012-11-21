@@ -24,6 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ *
+ * @category    Mage
+ * @package     Mage_Core
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
 {
     /**
@@ -98,46 +104,62 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     protected $_isCollapsed;
 
     /**
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws InvalidArgumentException
-     * @param array $data
+     * Path to template file in theme
+     *
+     * @var string
      */
-    public function __construct(array $data = array())
-    {
-        $this->_helper = isset($data['helper']) ? $data['helper'] : Mage::helper('Mage_Backend_Helper_Data');
-        unset($data['helper']);
+    protected $_template = 'Mage_Backend::widget/grid/column_set.phtml';
 
-        if (false === ($this->_helper instanceof Mage_Core_Helper_Abstract)) {
-            throw new InvalidArgumentException('Passed wrong parameters');
-        }
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Core_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Backend_Helper_Data $helper
+     * @param Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory $generatorFactory
+     * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Backend_Helper_Data $helper,
+        Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory $generatorFactory,
+        array $data = array()
+    ) {
+        $this->_helper = $helper;
 
+        $generatorClassName = 'Mage_Backend_Model_Widget_Grid_Row_UrlGenerator';
         if (isset($data['rowUrl'])) {
             $rowUrlParams = $data['rowUrl'];
-            if (isset($rowUrlParams['generator'])) {
-                $this->_rowUrlGenerator = $rowUrlParams['generator'];
-            } else {
-                $generatorClassName = 'Mage_Backend_Model_Widget_Grid_Row_UrlGenerator';
-                if (isset($data['generatorClass'])) {
-                    $generatorClassName = $rowUrlParams['generatorClass'];
-                }
-                $objectFactory = isset($data['objectFactory']) ? $data['objectFactory'] : Mage::app()->getConfig();
-                if (false === ($objectFactory instanceof Mage_Core_Model_Config)) {
-                    throw new InvalidArgumentException('Passed wrong parameters');
-                }
-                unset($data['objectFactory']);
-                $this->_rowUrlGenerator = $objectFactory->getModelInstance($generatorClassName, $rowUrlParams);
+            if (isset($rowUrlParams['generatorClass'])) {
+                $generatorClassName = $rowUrlParams['generatorClass'];
             }
-
-            if (false === ($this->_rowUrlGenerator instanceof Mage_Backend_Model_Widget_Grid_Row_UrlGenerator)) {
-                throw new InvalidArgumentException('Passed wrong parameters');
-            }
+            $this->_rowUrlGenerator
+                = $generatorFactory->createUrlGenerator($generatorClassName, array('args' => $rowUrlParams));
         }
 
-        parent::__construct($data);
-        $this->setTemplate('Mage_Backend::widget/grid/column_set.phtml');
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data);
         $this->setEmptyText($this->_helper->__('No records found.'));
     }
-
 
     /**
      * Retrieve the list of columns

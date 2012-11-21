@@ -35,10 +35,15 @@ class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framewor
      */
     protected function _getInvoiceCollection(array $invoicesData)
     {
+        $className = 'Mage_Sales_Model_Order_Invoice';
         $result = new Varien_Data_Collection();
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
         foreach ($invoicesData as $oneInvoiceData) {
+            $arguments = $objectManagerHelper->getConstructArguments(
+                Magento_Test_Helper_ObjectManager::MODEL_ENTITY, $className, array('data' => $oneInvoiceData)
+            );
             /** @var $prevInvoice Mage_Sales_Model_Order_Invoice */
-            $prevInvoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'), array($oneInvoiceData));
+            $prevInvoice = $this->getMock($className, array('_init'), $arguments);
             $result->addItem($prevInvoice);
         }
         return $result;
@@ -54,14 +59,14 @@ class Mage_Sales_Model_Order_Invoice_Total_ShippingTest extends PHPUnit_Framewor
     public function testCollect(array $prevInvoicesData, $orderShipping, $invoiceShipping, $expectedShipping)
     {
         /** @var $order Mage_Sales_Model_Order|PHPUnit_Framework_MockObject_MockObject */
-        $order = $this->getMock('Mage_Sales_Model_Order', array('_init', 'getInvoiceCollection'));
+        $order = $this->getMock('Mage_Sales_Model_Order', array('_init', 'getInvoiceCollection'), array(), '', false);
         $order->setData('shipping_amount', $orderShipping);
         $order->expects($this->any())
             ->method('getInvoiceCollection')
             ->will($this->returnValue($this->_getInvoiceCollection($prevInvoicesData)))
         ;
         /** @var $invoice Mage_Sales_Model_Order_Invoice|PHPUnit_Framework_MockObject_MockObject */
-        $invoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'));
+        $invoice = $this->getMock('Mage_Sales_Model_Order_Invoice', array('_init'), array(), '', false);
         $invoice->setData('shipping_amount', $invoiceShipping);
         $invoice->setOrder($order);
 

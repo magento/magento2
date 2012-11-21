@@ -57,7 +57,7 @@ class Mage_Core_Model_Session_Abstract_VarienTest extends PHPUnit_Framework_Test
         /**
          * @var Mage_Core_Model_Session_Abstract_Varien
          */
-        $model = new Mage_Core_Model_Session_Abstract();
+        $model = Mage::getModel('Mage_Core_Model_Session_Abstract');
         //There is no any possibility to determine whether session already started or not in php before 5.4
         $model->setSkipEmptySessionCheck(true);
         $model->start();

@@ -127,7 +127,7 @@
                 <?php endif; ?>
                 </tbody>
             </table>
-            <script type="text/javascript">decorateTable('tracking-table-popup-<?php echo $_id++ ?>');</script>
+            <script type="text/javascript">(function($) {$('#tracking-table-popup-<?php echo $_id++ ?>').decorate('table')})(jQuery)</script>
             <?php if (is_object($track) && sizeof($track->getProgressdetail())>0): ?>
                 <br />
                 <table class="data-table" id="track-history-table-<?php echo $track->getTracking(); ?>">
@@ -156,7 +156,7 @@
                    <?php endforeach; ?>
                    </tbody>
                 </table>
-                <script type="text/javascript">decorateTable('track-history-table-<?php echo $track->getTracking(); ?>');</script>
+                <script type="text/javascript">(function($) {$('#track-history-table-<?php echo $track->getTracking(); ?>').decorate('table')})(jQuery)</script>
             <?php endif; ?>
             <div class="divider"></div>
             <?php if($counter!=$rowCount): ?>

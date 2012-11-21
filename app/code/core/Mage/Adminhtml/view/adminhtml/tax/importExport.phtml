@@ -24,17 +24,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="content-header">
-    <table cellspacing="0">
-        <tr>
-            <td><h3 class="icon-head head-tax-rate-importExport"><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Import / Export Tax Rates') ?></h3></td>
-        </tr>
-    </table>
-</div>
 <div class="entry-edit">
     <?php if (!$this->getIsReadonly()): ?>
     <div class="box-left">
-        <form id="import_form" action="<?php echo $this->getUrl('*/*/importPost') ?>" method="post" enctype="multipart/form-data">
+        <form id="import_form" action="<?php echo $this->getUrl('*/tax_rate/importPost') ?>" method="post" enctype="multipart/form-data">
             <?php echo $this->getBlockHtml('formkey')?>
             <div class="entry-edit-head">
                 <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Import Tax Rates') ?></h4>
@@ -42,16 +35,35 @@
             <fieldset>
                 <legend><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Import Tax Rates') ?></legend>
                 <input type="file" name="import_rates_file" class="input-file required-entry"/>
-                <?php echo $this->getButtonHtml('Import Tax Rates', "this.form.submit()") ?>
+                <?php echo $this->getButtonHtml('Import Tax Rates', '', 'import-submit') ?>
             </fieldset>
         </form>
         <script type="text/javascript">
             var importForm = new varienForm('import_form');
+            (function ($) {
+                $('.import-submit').click(function(){
+                    if($(':input[name="import_rates_file"]').val()) {
+                        var loaderArea = $('#html-body .wrapper')[0],
+                                loadingMask = $('#loading-mask');
+
+                        loadingMask.css({
+                            top:  0,
+                            left: 0,
+                            width: document.body.offsetWidth,
+                            height: document.body.offsetHeight,
+                            'z-index':1005
+                        });
+                        loadingMask.toggle();
+                        toggleSelectsUnderBlock($('loading-mask'), false);
+                        this.form.submit();
+                    }
+                });
+            })(jQuery);
         </script>
     </div>
     <?php endif; ?>
     <div class="<?php if ($this->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">
-        <form id="export_form" action="<?php echo $this->getUrl('*/*/exportPost') ?>" method="post" enctype="multipart/form-data">
+        <form id="export_form" action="<?php echo $this->getUrl('*/tax_rate/exportPost') ?>" method="post" enctype="multipart/form-data">
             <?php echo $this->getBlockHtml('formkey')?>
             <div class="entry-edit-head">
                 <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Export Tax Rates') ?></h4>

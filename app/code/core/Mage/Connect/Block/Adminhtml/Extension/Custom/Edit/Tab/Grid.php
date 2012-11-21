@@ -37,9 +37,9 @@ class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Grid extends Mage_A
      * Initialize Grid block
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_defaultLimit = 200;
         $this->setId('extension_custom_edit_grid');
         $this->setUseAjax(true);

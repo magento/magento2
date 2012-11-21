@@ -36,7 +36,7 @@
         <h1><?php echo $this->__('Billing Information') ?></h1>
     </div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-    <script src="<?php echo $this->getSkinUrl('Mage_Checkout::multishipping/payment.js') ?>" type="text/javascript"></script>
+    <script src="<?php echo $this->getViewFileUrl('Mage_Checkout::multishipping/payment.js') ?>" type="text/javascript"></script>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="multishipping-billing-form">
         <div class="col2-set">
             <div class="col-1 col-narrow">
@@ -58,7 +58,7 @@
                     <div class="box-content">
                         <div class="tool-tip" id="payment-tool-tip" style="display:none;">
                             <div class="btn-close"><a href="#" id="payment-tool-tip-close" title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a></div>
-                            <div class="tool-tip-content"><img src="<?php echo $this->getSkinUrl('Mage_Checkout::cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
+                            <div class="tool-tip-content"><img src="<?php echo $this->getViewFileUrl('Mage_Checkout::cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
                         </div>
                         <!-- Payment methods forms list -->
                         <dl class="sp-methods">

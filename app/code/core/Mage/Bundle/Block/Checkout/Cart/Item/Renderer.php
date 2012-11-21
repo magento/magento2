@@ -35,9 +35,9 @@ class Mage_Bundle_Block_Checkout_Cart_Item_Renderer extends Mage_Checkout_Block_
 {
     protected $_configurationHelper = null;
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_configurationHelper = Mage::helper('Mage_Bundle_Helper_Catalog_Product_Configuration');
     }
 

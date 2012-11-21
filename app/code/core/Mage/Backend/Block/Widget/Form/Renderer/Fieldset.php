@@ -36,10 +36,7 @@ class Mage_Backend_Block_Widget_Form_Renderer_Fieldset extends Mage_Backend_Bloc
 {
     protected $_element;
 
-    protected function _construct()
-    {
-        $this->setTemplate('Mage_Backend::widget/form/renderer/fieldset.phtml');
-    }
+    protected $_template = 'Mage_Backend::widget/form/renderer/fieldset.phtml';
 
     public function getElement()
     {

@@ -41,7 +41,7 @@ class Mage_Core_Model_LayoutTestBase extends PHPUnit_Framework_TestCase
         Mage::getConfig()->setOptions(array(
             'design_dir' => dirname(__FILE__) . '/_files/design',
         ));
-        Mage::getDesign()->setDesignTheme('test/default/default');
+        Mage::getDesign()->setDesignTheme('test/default');
 
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
@@ -49,7 +49,7 @@ class Mage_Core_Model_LayoutTestBase extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layout = new Mage_Core_Model_Layout();
+        $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_layout->getUpdate()->addHandle('layout_test_handle_main');
         $this->_layout->getUpdate()->load('layout_test_handle_extra');
     }

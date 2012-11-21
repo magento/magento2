@@ -25,7 +25,7 @@
 /**
  * A custom "Import" adapter for Mage_ImportExport module that allows generating arbitrary data rows
  */
-class Magento_ImportExport_Fixture_Generator extends Mage_ImportExport_Model_Import_Adapter_Abstract
+class Magento_ImportExport_Fixture_Generator extends Mage_ImportExport_Model_Import_SourceAbstract
 {
     /**
      * Data row pattern
@@ -54,15 +54,14 @@ class Magento_ImportExport_Fixture_Generator extends Mage_ImportExport_Model_Imp
      */
     public function __construct(array $rowPattern, $limit)
     {
-        $this->_pattern     = $rowPattern;
-        $this->_colNames    = array_keys($rowPattern);
-        $this->_colQuantity = count($rowPattern);
         foreach ($rowPattern as $key => $value) {
             if (is_callable($value) || is_string($value) && (false !== strpos($value, '%s'))) {
                 $this->_dynamicColumns[$key] = $value;
             }
         }
+        $this->_pattern = $rowPattern;
         $this->_limit = (int)$limit;
+        parent::__construct(array_keys($rowPattern));
     }
 
     /**
@@ -72,31 +71,20 @@ class Magento_ImportExport_Fixture_Generator extends Mage_ImportExport_Model_Imp
      */
     public function valid()
     {
-        return $this->_currentKey <= $this->_limit;
+        return $this->_key + 1 <= $this->_limit;
     }
 
-    /**
-     * Generate new element ("Iterator")
-     */
-    public function next()
+    protected function _getNextRow()
     {
-        $this->_currentKey++;
-        $this->_currentRow = $this->_pattern;
+        $row = $this->_pattern;
         foreach ($this->_dynamicColumns as $key => $dynamicValue) {
+            $index = $this->_key + 1;
             if (is_callable($dynamicValue)) {
-                $this->_currentRow[$key] = call_user_func($dynamicValue, $this->_currentKey);
+                $row[$key] = call_user_func($dynamicValue, $index);
             } else {
-                $this->_currentRow[$key] = str_replace('%s', $this->_currentKey, $dynamicValue);
+                $row[$key] = str_replace('%s', $index, $dynamicValue);
             }
         }
-    }
-
-    /**
-     * Generate first element ("Iterator")
-     */
-    public function rewind()
-    {
-        $this->_currentKey = 0;
-        $this->next();
+        return $row;
     }
 }

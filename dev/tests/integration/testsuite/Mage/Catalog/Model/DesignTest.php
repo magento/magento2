@@ -37,7 +37,7 @@ class Mage_Catalog_Model_DesignTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Design();
+        $this->_model = Mage::getModel('Mage_Catalog_Model_Design');
     }
 
     protected function tearDown()
@@ -47,9 +47,8 @@ class Mage_Catalog_Model_DesignTest extends PHPUnit_Framework_TestCase
 
     public function testApplyCustomDesign()
     {
-        $this->_model->applyCustomDesign('package/theme/skin');
+        $this->_model->applyCustomDesign('package/theme');
         $this->assertEquals('package', Mage::getDesign()->getPackageName());
         $this->assertEquals('theme', Mage::getDesign()->getTheme());
-        $this->assertEquals('skin', Mage::getDesign()->getSkin());
     }
 }

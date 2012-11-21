@@ -42,7 +42,7 @@ class Mage_Authorizenet_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getAdminUrl($route, $params)
     {
-        return Mage::getModel('Mage_Adminhtml_Model_Url')->getUrl($route, $params);
+        return Mage::getSingleton('Mage_Backend_Model_Url')->getUrl($route, $params);
     }
 
     /**

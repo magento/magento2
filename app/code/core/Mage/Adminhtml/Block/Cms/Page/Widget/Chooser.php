@@ -38,9 +38,9 @@ class Mage_Adminhtml_Block_Cms_Page_Widget_Chooser extends Mage_Adminhtml_Block_
      *
      * @param array $arguments Object data
      */
-    public function __construct($arguments=array())
+    protected function _construct()
     {
-        parent::__construct($arguments);
+        parent::_construct();
         //$this->setDefaultSort('name');
         $this->setUseAjax(true);
         $this->setDefaultFilter(array('chooser_is_active' => '1'));

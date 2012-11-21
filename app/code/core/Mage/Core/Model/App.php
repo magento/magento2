@@ -136,6 +136,13 @@ class Mage_Core_Model_App
     protected $_frontController;
 
     /**
+     * Flag to identify whether front controller is initialized
+     *
+     * @var bool
+     */
+    protected $_isFrontControllerInitialized = false;
+
+    /**
      * Cache object
      *
      * @var Mage_Core_Model_Cache
@@ -143,10 +150,10 @@ class Mage_Core_Model_App
     protected $_cache;
 
     /**
-    * Use Cache
-    *
-    * @var array
-    */
+     * Use Cache
+     *
+     * @var array
+     */
     protected $_useCache;
 
     /**
@@ -241,10 +248,20 @@ class Mage_Core_Model_App
     protected $_isCacheLocked = null;
 
     /**
+     * Object manager
+     *
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
+
+    /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct(Mage_Core_Controller_Varien_Front $frontController,
+        Magento_ObjectManager $objectManager
+    ) {
+        $this->_frontController = $frontController;
+        $this->_objectManager = $objectManager;
     }
 
     /**
@@ -268,6 +285,7 @@ class Mage_Core_Model_App
         $this->_initBaseConfig();
         $this->_initCache();
         $this->_config->init($options);
+        $this->_objectManager->loadAreaConfiguration();
         Magento_Profiler::stop('init_config');
 
         if (Mage::isInstalled($options)) {
@@ -349,6 +367,7 @@ class Mage_Core_Model_App
 
             $this->_initModules();
             $this->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
+            $this->_objectManager->loadAreaConfiguration();
 
             if ($this->_config->isLocalConfigLoaded()) {
                 $scopeCode = isset($params['scope_code']) ? $params['scope_code'] : '';
@@ -407,7 +426,7 @@ class Mage_Core_Model_App
             $options = array();
         }
         $options = array_merge($options, $cacheInitOptions);
-        $this->_cache = Mage::getModel('Mage_Core_Model_Cache', $options);
+        $this->_cache = Mage::getModel('Mage_Core_Model_Cache', array('options' => $options));
         $this->_isCacheLocked = false;
         return $this;
     }
@@ -763,7 +782,6 @@ class Mage_Core_Model_App
      */
     protected function _initFrontController()
     {
-        $this->_frontController = new Mage_Core_Controller_Varien_Front();
         Magento_Profiler::start('init_front_controller');
         $this->_frontController->init();
         Magento_Profiler::stop('init_front_controller');
@@ -816,7 +834,10 @@ class Mage_Core_Model_App
     public function getArea($code)
     {
         if (!isset($this->_areas[$code])) {
-            $this->_areas[$code] = new Mage_Core_Model_App_Area($code);
+            $this->_areas[$code] = $this->_objectManager->create(
+                'Mage_Core_Model_App_Area',
+                array('areaCode' => $code)
+            );
         }
         return $this->_areas[$code];
     }
@@ -1109,8 +1130,9 @@ class Mage_Core_Model_App
      */
     public function getFrontController()
     {
-        if (!$this->_frontController) {
+        if (!$this->_isFrontControllerInitialized) {
             $this->_initFrontController();
+            $this->_isFrontControllerInitialized = true;
         }
         return $this->_frontController;
     }
@@ -1234,7 +1256,7 @@ class Mage_Core_Model_App
     public function getRequest()
     {
         if (empty($this->_request)) {
-            $this->_request = new Mage_Core_Controller_Request_Http();
+            $this->_request = $this->_objectManager->get('Mage_Core_Controller_Request_Http');
         }
         return $this->_request;
     }
@@ -1259,7 +1281,7 @@ class Mage_Core_Model_App
     public function getResponse()
     {
         if (empty($this->_response)) {
-            $this->_response = new Mage_Core_Controller_Response_Http();
+            $this->_response = $this->_objectManager->get('Mage_Core_Controller_Response_Http');
             $this->_response->headersSentThrowsException = Mage::$headersSentThrowsException;
             $this->_response->setHeader("Content-Type", "text/html; charset=UTF-8");
         }

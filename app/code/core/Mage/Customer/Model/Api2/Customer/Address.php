@@ -50,7 +50,8 @@ class Mage_Customer_Model_Api2_Customer_Address extends Mage_Api2_Model_Resource
      */
     protected function _getValidator()
     {
-        return Mage::getModel('Mage_Customer_Model_Api2_Customer_Address_Validator', array('resource' => $this));
+        return Mage::getModel('Mage_Customer_Model_Api2_Customer_Address_Validator',
+            array('options' => array('resource' => $this)));
     }
 
     /**

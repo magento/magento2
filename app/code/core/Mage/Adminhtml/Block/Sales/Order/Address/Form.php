@@ -35,11 +35,7 @@
 class Mage_Adminhtml_Block_Sales_Order_Address_Form
     extends Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
 {
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('sales/order/address/form.phtml');
-    }
+    protected $_template = 'sales/order/address/form.phtml';
 
     /**
      * Order address getter

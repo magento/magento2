@@ -34,13 +34,13 @@
 
 class Mage_Adminhtml_Block_Sales_Order_Create extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'order_id';
         $this->_controller = 'sales_order';
         $this->_mode = 'create';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->setId('sales_order_create');
 

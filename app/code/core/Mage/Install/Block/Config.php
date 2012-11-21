@@ -31,11 +31,7 @@
  */
 class Mage_Install_Block_Config extends Mage_Install_Block_Abstract
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('config.phtml');
-    }
+    protected $_template = 'config.phtml';
 
     /**
      * Retrieve form data post url

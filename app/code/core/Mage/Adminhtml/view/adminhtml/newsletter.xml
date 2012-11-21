@@ -56,7 +56,7 @@
         <reference name="root">
             <action method="setTemplate"><template>newsletter/preview/iframeswitcher.phtml</template></action>
             <block type="Mage_Adminhtml_Block_Newsletter_Queue_Preview_Form" name="preview_form" />
-            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" template="newsletter/preview/store.phtml" />
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" template="Mage_Adminhtml::newsletter/preview/store.phtml" />
         </reference>
     </adminhtml_newsletter_queue_preview>
 
@@ -64,7 +64,7 @@
         <reference name="root">
             <action method="setTemplate"><template>newsletter/preview/iframeswitcher.phtml</template></action>
             <block type="Mage_Adminhtml_Block_Newsletter_Template_Preview_Form" name="preview_form" />
-            <block type="Mage_Adminhtml_Block_Store_Switcher" name="store_switcher" template="newsletter/preview/store.phtml" />
+            <block type="Mage_Backend_Block_Store_Switcher" name="store_switcher" template="Mage_Adminhtml::newsletter/preview/store.phtml" />
         </reference>
     </adminhtml_newsletter_template_preview>
 

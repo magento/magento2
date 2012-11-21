@@ -43,7 +43,8 @@ class Mage_XmlConnect_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
         $cartMessages   = $this->getMessages();
         $quote          = $this->getQuote();
         /** @var $xmlObject Mage_XmlConnect_Model_Simplexml_Element */
-        $xmlObject      = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<cart></cart>');
+        $xmlObject      = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<cart></cart>'));
         $xmlObject->addAttribute('is_virtual', (int)$this->helper('Mage_Checkout_Helper_Cart')->getIsVirtualQuote());
         $xmlObject->addAttribute('summary_qty', (int)$this->helper('Mage_Checkout_Helper_Cart')->getSummaryCount());
         if (strlen($quote->getCouponCode())) {
@@ -240,7 +241,8 @@ class Mage_XmlConnect_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
             $crossellXml = '<crosssell></crosssell>';
         }
 
-        $crossSellXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', $crossellXml);
+        $crossSellXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => $crossellXml));
         $xmlObject->appendChild($crossSellXmlObj);
 
         return $xmlObject->asNiceXml();

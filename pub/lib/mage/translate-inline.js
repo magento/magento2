@@ -22,6 +22,7 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/*jshint browser:true jquery:true */
 (function($) {
     $.widget("mage.translateInline", {
         options: {
@@ -68,9 +69,11 @@
          * @protected
          */
         _create: function() {
-            this.element.is(document) ?
-                $('body').addClass('trnslate-inline-area') :
+            if (this.element.is(document)) {
+                $('body').addClass('trnslate-inline-area');
+            } else {
                 this.element.addClass('trnslate-inline-area');
+            }
             this._initTranslateDialog();
             this._initEditTrigger();
             this._bind();
@@ -105,7 +108,7 @@
                             offset.left,
                             offset.top + $(e.target).outerHeight()]);
                     }
-                }, this))
+                }, this));
             }
         },
         /**

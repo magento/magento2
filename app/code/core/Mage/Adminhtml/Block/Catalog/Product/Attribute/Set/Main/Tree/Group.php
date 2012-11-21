@@ -32,8 +32,5 @@
 
 class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Tree_Group extends Mage_Adminhtml_Block_Template
 {
-    protected function _construct()
-    {
-        $this->setTemplate('catalog/product/attribute/set/main/tree/group.phtml');
-    }
+    protected $_template = 'catalog/product/attribute/set/main/tree/group.phtml';
 }

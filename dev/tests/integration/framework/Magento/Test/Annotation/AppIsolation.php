@@ -38,13 +38,106 @@ class Magento_Test_Annotation_AppIsolation
     private $_hasNonIsolatedTests = true;
 
     /**
+     * Should clearStaticVariables() be invoked in endTestSuite()
+     *
+     * @var bool
+     */
+    protected $_runClearStatics = false;
+
+    /**
+     * Directories to clear static variables
+     *
+     * @var array
+     */
+    protected static $_cleanableFolders = array(
+        '/app/code/',
+        '/dev/tests/',
+        '/lib/',
+    );
+
+    /**
+     * Classes to exclude from static variables cleaning
+     *
+     * @var array
+     */
+    protected static $_classesToSkip = array(
+        'Mage',
+        'Magento_Autoload',
+        'Magento_Test_Bootstrap',
+        'Magento_Test_Event_Magento',
+        'Magento_Test_Event_PhpUnit',
+        'Magento_Test_Annotation_AppIsolation',
+    );
+
+    /**
+     * Check whether it is allowed to clean given class static variables
+     *
+     * @param ReflectionClass $reflectionClass
+     * @return bool
+     */
+    protected static function _isClassCleanable(ReflectionClass $reflectionClass)
+    {
+        // 1. do not process php internal classes
+        if ($reflectionClass->isInternal()) {
+            return false;
+        }
+
+        // 2. do not process blacklisted classes from integration framework
+        foreach (self::$_classesToSkip as $notCleanableClass) {
+            if ($reflectionClass->getName() == $notCleanableClass
+                || is_subclass_of($reflectionClass->getName(), $notCleanableClass)
+            ) {
+                return false;
+            }
+        }
+
+        // 3. process only files from specific folders
+        $fileName = $reflectionClass->getFileName();
+
+        if ($fileName) {
+            $fileName = str_replace('\\', '/', $fileName);
+            foreach (self::$_cleanableFolders as $directory) {
+                if (stripos($fileName, $directory) !== false) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Clear static variables (after running controller test case)
+     * @TODO: workaround to reduce memory leak
+     * @TODO: refactor all code where objects are stored to static variables to use object manager instead
+     */
+    public static function clearStaticVariables()
+    {
+        $classes = get_declared_classes();
+
+        foreach ($classes as $class) {
+            $reflectionCLass = new ReflectionClass($class);
+            if (self::_isClassCleanable($reflectionCLass)) {
+                $staticProperties = $reflectionCLass->getProperties(ReflectionProperty::IS_STATIC);
+                foreach ($staticProperties as $staticProperty) {
+                    $staticProperty->setAccessible(true);
+                    $value = $staticProperty->getValue();
+                    if (is_object($value) || (is_array($value) && is_object(current($value)))) {
+                        $staticProperty->setValue(null);
+                    }
+                    unset($value);
+                }
+            }
+        }
+    }
+
+    /**
      * Isolate global application objects
      */
     protected function _isolateApp()
     {
         if ($this->_hasNonIsolatedTests) {
             $this->_cleanupCache();
-            Magento_Test_Bootstrap::getInstance()->initialize();
+            Magento_Test_Bootstrap::getInstance()->reinitialize();
             $this->_hasNonIsolatedTests = false;
         }
     }
@@ -54,16 +147,6 @@ class Magento_Test_Annotation_AppIsolation
      */
     protected function _cleanupCache()
     {
-        /*
-         * Cache cleanup relies on the initialized config object, which could be polluted from within a test.
-         * For instance, any test could explicitly call Mage::reset() to destroy the config object.
-         */
-        $expectedOptions = Magento_Test_Bootstrap::getInstance()->getAppOptions();
-        $actualOptions = Mage::getConfig() ? Mage::getConfig()->getOptions()->getData() : array();
-        $isConfigPolluted = array_intersect_assoc($expectedOptions, $actualOptions) !== $expectedOptions;
-        if ($isConfigPolluted) {
-            Magento_Test_Bootstrap::getInstance()->initialize();
-        }
         Mage::app()->getCache()->clean(
             Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
             array(Mage_Core_Model_Config::CACHE_TAG,
@@ -103,15 +186,31 @@ class Magento_Test_Annotation_AppIsolation
             }
             $isIsolationEnabled = $isolation === array('enabled');
         } else {
-            /* Controller tests should be isolated by default */
-            $isIsolationEnabled = $test instanceof Magento_Test_TestCase_ControllerAbstract;
+            if ($test instanceof Magento_Test_TestCase_ControllerAbstract) {
+                $this->_runClearStatics = true;
+                /* Controller tests should be isolated by default */
+                $isIsolationEnabled = true;
+            } else {
+                $isIsolationEnabled = false;
+            }
         }
 
         if ($isIsolationEnabled) {
             $this->_isolateApp();
         }
+    }
 
-        /* Forced garbage collection to avoid process non-zero exit code (exec returned: 139) caused by PHP bug  */
-        gc_collect_cycles();
+    /**
+     * Clear static cache
+     */
+    public function endTestSuite()
+    {
+        if ($this->_runClearStatics) {
+            self::clearStaticVariables();
+            // forced garbage collection to avoid process non-zero exit code (exec returned: 139) caused by PHP bug
+            gc_collect_cycles();
+
+            $this->_runClearStatics = false;
+        }
     }
 }

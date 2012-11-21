@@ -33,9 +33,9 @@
  */
 class Mage_Adminhtml_Block_System_Currency_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('currency_edit_form');
         $this->setTitle(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Currency Information'));
     }

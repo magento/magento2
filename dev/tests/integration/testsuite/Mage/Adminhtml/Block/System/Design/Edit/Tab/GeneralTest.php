@@ -35,8 +35,8 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_GeneralTest extends PHPUnit_Fr
      */
     public function testPrepareForm()
     {
-        Mage::register('design', new Mage_Core_Model_Design);
-        $layout = new Mage_Core_Model_Layout;
+        Mage::register('design', Mage::getObjectManager()->create('Mage_Core_Model_Design'));
+        $layout = Mage::getObjectManager()->create('Mage_Core_Model_Layout');
         $block = $layout->addBlock('Mage_Adminhtml_Block_System_Design_Edit_Tab_General');
         $prepareFormMethod = new ReflectionMethod(
             'Mage_Adminhtml_Block_System_Design_Edit_Tab_General', '_prepareForm');

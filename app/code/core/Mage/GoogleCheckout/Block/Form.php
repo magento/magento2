@@ -33,14 +33,5 @@
  */
 class Mage_GoogleCheckout_Block_Form extends Mage_Payment_Block_Form
 {
-
-    /**
-     * Varien constructor
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('form.phtml');
-        parent::_construct();
-    }
-
+    protected $_template = 'form.phtml';
 }

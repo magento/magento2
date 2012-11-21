@@ -34,7 +34,7 @@ class Mage_Paypal_PayflowControllerTest extends Magento_Test_TestCase_Controller
     {
         parent::setUp();
 
-        $order = new Mage_Sales_Model_Order();
+        $order = Mage::getModel('Mage_Sales_Model_Order');
         $order->load('100000001', 'increment_id');
         $order->getPayment()->setMethod(Mage_Paypal_Model_Config::METHOD_PAYFLOWLINK);
         $order->save();

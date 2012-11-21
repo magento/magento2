@@ -34,7 +34,10 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Mage_Core_Block_Template;
+        $params = array(
+            'layout' => Mage::getObjectManager()->create('Mage_Core_Model_Layout', array(), false)
+        );
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Template', '', $params);
     }
 
     protected function tearDown()
@@ -44,7 +47,9 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $block = new Mage_Core_Block_Template(array('template' => 'value'));
+        $block = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Template', '',
+            array('data' => array('template' => 'value'))
+        );
         $this->assertEquals('value', $block->getTemplate());
     }
 
@@ -56,6 +61,8 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo
+     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
      * @magentoAppIsolation enabled
      */
     public function testGetTemplateFile()
@@ -79,8 +86,8 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
 
     public function testGetArea()
     {
-        $this->assertEmpty($this->_block->getArea());
-        $this->_block->setLayout(new Mage_Core_Model_Layout(array('area' => 'some_area')));
+        $this->assertEquals('frontend', $this->_block->getArea());
+        $this->_block->setLayout(Mage::getModel('Mage_Core_Model_Layout', array('area' => 'some_area')));
         $this->assertEquals('some_area', $this->_block->getArea());
         $this->_block->setArea('another_area');
         $this->assertEquals('another_area', $this->_block->getArea());
@@ -106,7 +113,7 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->_block->getDirectOutput());
 
-        $layout = new Mage_Core_Model_Layout;
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->setDirectOutput(true);
         $this->_block->setLayout($layout);
         $this->assertTrue($this->_block->getDirectOutput());
@@ -125,7 +132,7 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
      */
     public function testFetchView()
     {
-        $layout = new Mage_Core_Model_Layout;
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->setDirectOutput(true);
         $this->_block->setLayout($layout);
         $this->assertTrue($this->_block->getDirectOutput());
@@ -140,7 +147,7 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->_block->renderView());
         Mage::app()->getConfig()->getOptions()->setDesignDir(__DIR__ . DIRECTORY_SEPARATOR . '_files');
-        Mage::getDesign()->setDesignTheme('default/default/default');
+        Mage::getDesign()->setDesignTheme('default/demo');
         $this->_block->setTemplate('dummy.phtml');
         $this->assertEquals('1234567890', $this->_block->renderView());
     }

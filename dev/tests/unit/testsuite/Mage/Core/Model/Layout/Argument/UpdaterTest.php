@@ -38,7 +38,7 @@ class Mage_Core_Model_Layout_Argument_UpdaterTest extends PHPUnit_Framework_Test
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectFactoryMock;
+    protected $_objectManagerMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
@@ -47,40 +47,27 @@ class Mage_Core_Model_Layout_Argument_UpdaterTest extends PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create'), array(), '', false);
+        $this->_argUpdaterMock = $this->getMock('Mage_Core_Model_Layout_Argument_UpdaterInterface', array(), array(),
+            '', false
+        );
 
-        $this->_argUpdaterMock = $this->getMock(
-            'Mage_Core_Model_Layout_Argument_UpdaterInterface',
-            array(),
-            array(),
-            '',
-            false);
-
-        $this->_model = new Mage_Core_Model_Layout_Argument_Updater(array(
-            'objectFactory' => $this->_objectFactoryMock,
-        ));
+        $this->_model = new Mage_Core_Model_Layout_Argument_Updater($this->_objectManagerMock);
     }
 
     protected function tearDown()
     {
         unset($this->_model);
         unset($this->_argUpdaterMock);
-        unset($this->_objectFactoryMock);
-    }
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructWithInvalidObjectFactory()
-    {
-        new Mage_Core_Model_Layout_Argument_Updater(array('objectFactory' => new StdClass()));
+        unset($this->_objectManagerMock);
     }
 
     public function testApplyUpdatersWithValidUpdaters()
     {
         $value = 1;
 
-        $this->_objectFactoryMock->expects($this->exactly(2))
-            ->method('getModelInstance')
+        $this->_objectManagerMock->expects($this->exactly(2))
+            ->method('create')
             ->with($this->logicalOr('Dummy_Updater_1', 'Dummy_Updater_2'))
             ->will($this->returnValue($this->_argUpdaterMock));
 
@@ -98,8 +85,8 @@ class Mage_Core_Model_Layout_Argument_UpdaterTest extends PHPUnit_Framework_Test
      */
     public function testApplyUpdatersWithInvalidUpdaters()
     {
-        $this->_objectFactoryMock->expects($this->once())
-            ->method('getModelInstance')
+        $this->_objectManagerMock->expects($this->once())
+            ->method('create')
             ->with('Dummy_Updater_1')
             ->will($this->returnValue(new StdClass()));
         $updaters = array('Dummy_Updater_1', 'Dummy_Updater_2');

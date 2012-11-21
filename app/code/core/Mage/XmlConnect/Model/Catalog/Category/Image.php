@@ -136,9 +136,9 @@ class Mage_XmlConnect_Model_Catalog_Category_Image extends Mage_Catalog_Model_Pr
         } elseif (file_exists($baseDir . '/watermark/' . $file)) {
             $filePath = $baseDir . '/watermark/' . $file;
         } else {
-            $skinFile = Mage::getDesign()->getSkinFile($file);
-            if (file_exists($skinFile)) {
-                $filePath = $skinFile;
+            $viewFile = Mage::getDesign()->getViewFile($file);
+            if (file_exists($viewFile)) {
+                $filePath = $viewFile;
             }
         }
 
@@ -182,7 +182,7 @@ class Mage_XmlConnect_Model_Catalog_Category_Image extends Mage_Catalog_Model_Pr
     public function getUrl()
     {
         if ($this->_newFile === true) {
-            $url = Mage::getDesign()->getSkinUrl(
+            $url = Mage::getDesign()->getViewFileUrl(
                 'Mage_XmlConnect::images/catalog/category/placeholder/' . $this->getDestinationSubdir(). '.jpg'
             );
         } else {

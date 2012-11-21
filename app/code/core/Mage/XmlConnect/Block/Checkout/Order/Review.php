@@ -40,14 +40,16 @@ class Mage_XmlConnect_Block_Checkout_Order_Review extends Mage_Checkout_Block_On
      */
     protected function _toHtml()
     {
-        $orderXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<order></order>');
+        $orderXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<order></order>'));
 
         /**
          * Order items
          */
         $products = $this->getChildHtml('order_products');
         if ($products) {
-            $productsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', $products);
+            $productsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                array('data' => $products));
             $orderXmlObj->appendChild($productsXmlObj);
         }
 
@@ -56,7 +58,8 @@ class Mage_XmlConnect_Block_Checkout_Order_Review extends Mage_Checkout_Block_On
          */
         $totalsXml = $this->getChildHtml('totals');
         if ($totalsXml) {
-            $totalsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', $totalsXml);
+            $totalsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                array('data' => $totalsXml));
             $orderXmlObj->appendChild($totalsXmlObj);
         }
 
@@ -65,7 +68,8 @@ class Mage_XmlConnect_Block_Checkout_Order_Review extends Mage_Checkout_Block_On
          */
         $agreements = $this->getChildHtml('agreements');
         if ($agreements) {
-            $agreementsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', $agreements);
+            $agreementsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+                array('data' => $agreements));
             $orderXmlObj->appendChild($agreementsXmlObj);
         }
 

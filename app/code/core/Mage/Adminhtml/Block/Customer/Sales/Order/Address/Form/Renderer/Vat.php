@@ -41,13 +41,7 @@ class Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
      */
     protected $_validateButton = null;
 
-    /**
-     * Set custom template for 'VAT number'
-     */
-    protected function _construct()
-    {
-        $this->setTemplate('customer/sales/order/create/address/form/renderer/vat.phtml');
-    }
+    protected $_template = 'customer/sales/order/create/address/form/renderer/vat.phtml';
 
     /**
      * Retrieve validate button block
@@ -63,7 +57,7 @@ class Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
             $vatElementId = $this->_element->getHtmlId();
 
             $countryElementId = $form->getElement('country_id')->getHtmlId();
-            $validateUrl = Mage::getSingleton('Mage_Adminhtml_Model_Url')
+            $validateUrl = Mage::getSingleton('Mage_Backend_Model_Url')
                 ->getUrl('*/customer_system_config_validatevat/validateAdvanced');
 
             $groupSuggestionMessage = Mage::helper('Mage_Customer_Helper_Data')->__('The customer is currently assigned to Customer Group %s.')

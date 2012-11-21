@@ -76,7 +76,7 @@ class Mage_Backend_Model_Acl_Loader_Resource implements Magento_Acl_Loader
             /** @var $resource Magento_Acl_Resource */
             $resource = $this->_objectFactory->getModelInstance(
                 'Magento_Acl_Resource',
-                $resourceConfig->getAttribute('id')
+                array('resourceId' => $resourceConfig->getAttribute('id'))
             );
             $acl->addResource($resource, $parent);
             if ($resourceConfig->hasChildNodes()) {

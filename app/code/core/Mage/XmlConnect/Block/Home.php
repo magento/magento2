@@ -46,7 +46,7 @@ class Mage_XmlConnect_Block_Home extends Mage_XmlConnect_Block_Catalog
     protected function _toHtml()
     {
         /** @var $homeXmlObj Mage_XmlConnect_Model_Simplexml_Element */
-        $homeXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<home></home>');
+        $homeXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', array('data' => '<home></home>'));
 
         $categoryCollection = array();
         $helper = Mage::helper('Mage_Catalog_Helper_Category');

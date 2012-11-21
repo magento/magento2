@@ -34,9 +34,9 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_View_Tab_Orders
     /**
      * Initialize basic parameters
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('recurring_profile_orders')
             ->setUseAjax(true)
             ->setSkipGenerateContent(true)

@@ -40,7 +40,8 @@ class Mage_XmlConnect_Block_Customer_Address_List extends Mage_Core_Block_Templa
      */
     protected function _toHtml()
     {
-        $addressXmlObj          = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<address></address>');
+        $addressXmlObj          = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<address></address>'));
         $customer               = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomer();
 
         $_billingAddssesId      = $customer->getDefaultBilling();

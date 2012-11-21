@@ -34,9 +34,9 @@
 abstract class Mage_Eav_Block_Adminhtml_Attribute_Grid_Abstract extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('attributeGrid');
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');

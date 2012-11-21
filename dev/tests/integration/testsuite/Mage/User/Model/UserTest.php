@@ -42,7 +42,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_User_Model_User;
+        $this->_model = Mage::getModel('Mage_User_Model_User');
     }
 
     protected function tearDown()
@@ -91,7 +91,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     public static function roleDataFixture()
     {
-        self::$_newRole = new Mage_User_Model_Role;
+        self::$_newRole = Mage::getModel('Mage_User_Model_Role');
         self::$_newRole->setName('admin_role')
             ->setRoleType('G')
             ->setPid('1');
@@ -181,7 +181,8 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     public function testGetCollection()
     {
-        $this->assertInstanceOf('Mage_Core_Model_Resource_Db_Collection_Abstract', $this->_model->getCollection());
+        $this->assertInstanceOf('Mage_Core_Model_Resource_Db_Collection_Abstract',
+            $this->_model->getCollection());
     }
 
     public function testSendPasswordResetConfirmationEmail()
@@ -205,7 +206,7 @@ class Mage_User_Model_UserTest extends PHPUnit_Framework_TestCase
 
     public function testGetAclRole()
     {
-        $newuser = new Mage_User_Model_User();
+        $newuser = Mage::getModel('Mage_User_Model_User');
         $newuser->setUserId(10);
         $this->assertNotEquals($this->_model->getAclRole(), $newuser->getAclRole());
     }

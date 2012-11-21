@@ -193,7 +193,7 @@ abstract class Mage_Rule_Model_Resource_Rule_Collection_Abstract
      * @param Mage_Rule_Model_Environment $env
      * @return Mage_Rule_Model_Resource_Rule_Collection_Abstract
      */
-    public function setEnv(Mage_Rule_Model_Environment $env = null)
+    public function setEnv( $env = null)
     {
         $this->_env = $env;
         return $this;

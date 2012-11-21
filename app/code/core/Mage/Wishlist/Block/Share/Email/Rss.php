@@ -34,9 +34,6 @@
  */
 class Mage_Wishlist_Block_Share_Email_Rss extends Mage_Core_Block_Template
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('email/rss.phtml');
-    }
+
+    protected $_template = 'email/rss.phtml';
 }

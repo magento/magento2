@@ -22,6 +22,7 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/*jshint browser:true jquery:true */
 (function($){
     $.widget("mage.editTrigger", {
         options: {

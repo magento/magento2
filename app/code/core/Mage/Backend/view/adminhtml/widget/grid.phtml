@@ -54,7 +54,7 @@ $numColumns = sizeof($this->getColumns());
     <?php else: ?>
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
-<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
     <table cellspacing="0" class="actions">
         <tr>
         <?php if($this->getPagerVisibility()): ?>
@@ -64,17 +64,17 @@ $numColumns = sizeof($this->getColumns());
             <?php $_curPage  = $this->getCollection()->getCurPage() ?>
             <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
             <?php if($_curPage>1): ?>
-                <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;" <?php echo $this->getUiId('previous') ?>><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
+                <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;" <?php echo $this->getUiId('previous') ?>><img src="<?php echo $this->getViewFileUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
             <?php else: ?>
-                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
+                <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_left_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
             <?php endif; ?>
 
             <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $this->getUiId('current-page') ?>/>
 
             <?php if($_curPage < $_lastPage): ?>
-                <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"<?php echo $this->getUiId('next') ?>><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
+                <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"<?php echo $this->getUiId('next') ?>><img src="<?php echo $this->getViewFileUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
             <?php else: ?>
-                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
+                <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_right_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
             <?php endif; ?>
 
             <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>

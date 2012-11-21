@@ -33,7 +33,7 @@ class Mage_Paypal_ExpressControllerTest extends Magento_Test_TestCase_Controller
      */
     public function testReviewAction()
     {
-        $quote = new Mage_Sales_Model_Quote();
+        $quote = Mage::getModel('Mage_Sales_Model_Quote');
         $quote->load('test01', 'reserved_order_id');
         Mage::getSingleton('Mage_Checkout_Model_Session')->setQuoteId($quote->getId());
 

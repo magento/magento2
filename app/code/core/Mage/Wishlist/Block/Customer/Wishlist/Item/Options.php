@@ -46,9 +46,9 @@ class Mage_Wishlist_Block_Customer_Wishlist_Item_Options extends Mage_Wishlist_B
     /**
      * Initialize block
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         Mage::dispatchEvent('product_option_renderer_init', array('block' => $this));
     }
 

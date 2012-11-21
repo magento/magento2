@@ -33,20 +33,20 @@ $addressData = array(
     'telephone'  => '11111111',
     'country_id' => 'US',
 );
-$billingAddress = new Mage_Sales_Model_Order_Address($addressData);
+$billingAddress = Mage::getModel('Mage_Sales_Model_Order_Address', $addressData);
 $shippingAddress = clone $billingAddress;
 
-$item = new Mage_Sales_Model_Order_Item();
+$item = Mage::getModel('Mage_Sales_Model_Order_Item');
 $item->setOriginalPrice(100)
     ->setPrice(100)
     ->setQtyOrdered(1)
     ->setRowTotal(100)
     ->setSubtotal(100);
 
-$payment = new Mage_Sales_Model_Order_Payment();
+$payment = Mage::getModel('Mage_Sales_Model_Order_Payment');
 $payment->setMethod('checkmo');
 
-$order = new Mage_Sales_Model_Order();
+$order = Mage::getModel('Mage_Sales_Model_Order');
 $order->setBaseSubtotal(100)
     ->setSubtotal(100)
     ->setBaseGrandTotal(100)

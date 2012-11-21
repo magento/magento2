@@ -34,7 +34,7 @@ class Mage_GiftMessage_Block_Message_InlineTest extends PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $this->_block = new Mage_GiftMessage_Block_Message_Inline();
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_GiftMessage_Block_Message_Inline');
     }
 
     protected function tearDown()
@@ -47,7 +47,7 @@ class Mage_GiftMessage_Block_Message_InlineTest extends PHPUnit_Framework_TestCa
      */
     public function testThumbnail()
     {
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(1);
 
         $size = $this->_block->getThumbnailSize();

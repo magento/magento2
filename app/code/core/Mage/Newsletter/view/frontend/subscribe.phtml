@@ -47,18 +47,18 @@
     </form>
     <script type="text/javascript">
         //<![CDATA[
-        (function ($) {
-            $.mage.event.observe('mage.newsletter.initialize', function (event, initData) {
-                initData.newsletterId = '#newsletter-validate-detail';
-                initData.newsletterInputId = '#newsletter';
-                initData.placeholder = '<?php echo $this->__('Enter your email address') ?>';
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+                "<?php echo $this->getViewFileUrl('Mage_Newsletter::newsletter.js')?>", function() {
+                    $('#newsletter').newsletter({
+                        formSelector: '#newsletter-validate-detail',
+                        placeholder: '<?php echo $this->__('Enter your email address') ?>'
+                    });
             });
-            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('mage/validation/validate.js')?>");
-            $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Newsletter::newsletter.js') ?>");
         })(jQuery);
         //]]>
     </script>

@@ -49,7 +49,7 @@ class Mage_Backend_Model_Menu_Item
      * @var Mage_Core_Helper_Abstract
      */
     protected $_moduleHelper;
-    
+
     /**
      * Module helper name
      *
@@ -160,29 +160,37 @@ class Mage_Backend_Model_Menu_Item
     protected $_serializedSubmenu;
 
     /**
+     * @param Mage_Backend_Model_Menu_Item_Validator $validator
+     * @param Mage_Core_Model_Authorization $authorization
+     * @param Mage_Core_Model_Config $applicationConfig
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Backend_Model_Menu_Factory $menuFactory
+     * @param Mage_Backend_Model_Url $urlModel
+     * @param Mage_Core_Helper_Abstract $helper
      * @param array $data
-     * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
-    public function __construct(array $data = array())
-    {
-        if (!isset($data['validator'])
-            || !$data['validator'] instanceof Mage_Backend_Model_Menu_Item_Validator) {
-            throw new InvalidArgumentException('Wrong validator object provided');
-        }
-
-        $this->_validator = $data['validator'];
+    public function __construct(
+        Mage_Backend_Model_Menu_Item_Validator $validator,
+        Mage_Core_Model_Authorization $authorization,
+        Mage_Core_Model_Config $applicationConfig,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Backend_Model_Menu_Factory $menuFactory,
+        Mage_Backend_Model_Url $urlModel,
+        Mage_Core_Helper_Abstract $helper,
+        array $data = array()
+    ) {
+        $this->_validator = $validator;
         $this->_validator->validate($data);
 
-        $this->_acl = $data['acl'];
-        $this->_appConfig = $data['appConfig'];
-        $this->_storeConfig = $data['storeConfig'];
-        $this->_menuFactory = $data['menuFactory'];
-        $this->_urlModel = $data['urlModel'];
+        $this->_acl = $authorization;
+        $this->_appConfig = $applicationConfig;
+        $this->_storeConfig = $storeConfig;
+        $this->_menuFactory = $menuFactory;
+        $this->_urlModel = $urlModel;
+        $this->_moduleHelper = $helper;
 
         $this->_id = $data['id'];
         $this->_title = $data['title'];
-        $this->_moduleHelper = $data['module'];
         $this->_action = isset($data['action']) ? $data['action'] : null;
         $this->_resource = isset($data['resource']) ? $data['resource'] : null;
         $this->_dependsOnModule = isset($data['dependsOnModule']) ? $data['dependsOnModule'] : null;
@@ -451,38 +459,44 @@ class Mage_Backend_Model_Menu_Item
 
     public function __sleep()
     {
-        $this->_moduleHelperName = get_class($this->_moduleHelper);
-        if ($this->_submenu) {
-            $this->_serializedSubmenu = $this->_submenu->serialize();
+        if (Mage::getIsSerializable()) {
+            $this->_moduleHelperName = get_class($this->_moduleHelper);
+            if ($this->_submenu) {
+                $this->_serializedSubmenu = $this->_submenu->serialize();
+            }
+            return array(
+                '_parentId',
+                '_moduleHelperName',
+                '_sortIndex',
+                '_dependsOnConfig',
+                '_id',
+                '_resource',
+                '_path',
+                '_action',
+                '_dependsOnModule',
+                '_tooltip',
+                '_title',
+                '_serializedSubmenu'
+            );
+        } else {
+            return array_keys(get_object_vars($this));
         }
-        return array(
-            '_parentId',
-            '_moduleHelperName',
-            '_sortIndex',
-            '_dependsOnConfig',
-            '_id',
-            '_resource',
-            '_path',
-            '_action',
-            '_dependsOnModule',
-            '_tooltip',
-            '_title',
-            '_serializedSubmenu'
-        );
     }
 
     public function __wakeup()
     {
-        $this->_moduleHelper = Mage::helper($this->_moduleHelperName);
-        $this->_validator = Mage::getSingleton('Mage_Backend_Model_Menu_Item_Validator');
-        $this->_acl = Mage::getSingleton('Mage_Core_Model_Authorization');
-        $this->_appConfig = Mage::getConfig();
-        $this->_storeConfig =  Mage::getSingleton('Mage_Core_Model_Store_Config');
-        $this->_menuFactory = Mage::getSingleton('Mage_Backend_Model_Menu_Factory');
-        $this->_urlModel = Mage::getSingleton('Mage_Backend_Model_Url');
-        if ($this->_serializedSubmenu) {
-            $this->_submenu = $this->_menuFactory->getMenuInstance();
-            $this->_submenu->unserialize($this->_serializedSubmenu);
+        if (Mage::getIsSerializable()) {
+            $this->_moduleHelper = Mage::helper($this->_moduleHelperName);
+            $this->_validator = Mage::getSingleton('Mage_Backend_Model_Menu_Item_Validator');
+            $this->_acl = Mage::getSingleton('Mage_Core_Model_Authorization');
+            $this->_appConfig = Mage::getConfig();
+            $this->_storeConfig =  Mage::getSingleton('Mage_Core_Model_Store_Config');
+            $this->_menuFactory = Mage::getSingleton('Mage_Backend_Model_Menu_Factory');
+            $this->_urlModel = Mage::getSingleton('Mage_Backend_Model_Url');
+            if ($this->_serializedSubmenu) {
+                $this->_submenu = $this->_menuFactory->getMenuInstance();
+                $this->_submenu->unserialize($this->_serializedSubmenu);
+            }
         }
     }
 }

@@ -182,6 +182,7 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
          */
         $upload   = new Zend_File_Transfer_Adapter_Http();
         $file = $processingParams->getFilesPrefix() . 'options_' . $option->getId() . '_file';
+        $maxFileSize = $this->getFileStorageHelper()->getMaxFileSize();
         try {
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
@@ -195,9 +196,9 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
 
         } catch (Exception $e) {
             // when file exceeds the upload_max_filesize, $_FILES is empty
-            if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > $this->_getUploadMaxFilesize()) {
+            if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > $maxFileSize) {
                 $this->setIsValid(false);
-                $value = $this->_bytesToMbytes($this->_getUploadMaxFilesize());
+                $value = $this->getFileStorageHelper()->getMaxFileSizeInMb();
                 Mage::throwException(
                     Mage::helper('Mage_Catalog_Helper_Data')->__("The file you uploaded is larger than %s Megabytes allowed by server", $value)
                 );
@@ -245,7 +246,7 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
         }
 
         // Maximum filesize
-        $upload->addValidator('FilesSize', false, array('max' => $this->_getUploadMaxFilesize()));
+        $upload->addValidator('FilesSize', false, array('max' => $maxFileSize));
 
         /**
          * Upload process
@@ -383,9 +384,10 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
             }
         }
 
-        // Maximum filesize
+        // Maximum file size
+        $maxFileSize = $this->getFileStorageHelper()->getMaxFileSize();
         $validatorChain->addValidator(
-                new Zend_Validate_File_FilesSize(array('max' => $this->_getUploadMaxFilesize()))
+                new Zend_Validate_File_FilesSize(array('max' => $maxFileSize))
         );
 
 
@@ -424,11 +426,11 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
             } elseif ($errorCode == Zend_Validate_File_Extension::FALSE_EXTENSION) {
                 $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' for '%s' has an invalid extension", $fileInfo['title'], $option->getTitle());
             } elseif ($errorCode == Zend_Validate_File_ImageSize::WIDTH_TOO_BIG
-                || $errorCode == Zend_Validate_File_ImageSize::HEIGHT_TOO_BIG)
-            {
+                || $errorCode == Zend_Validate_File_ImageSize::HEIGHT_TOO_BIG) {
                 $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("Maximum allowed image size for '%s' is %sx%s px.", $option->getTitle(), $option->getImageSizeX(), $option->getImageSizeY());
             } elseif ($errorCode == Zend_Validate_File_FilesSize::TOO_BIG) {
-                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' you uploaded is larger than %s Megabytes allowed by server", $fileInfo['title'], $this->_bytesToMbytes($this->_getUploadMaxFilesize()));
+                $maxFileSize = $this->getFileStorageHelper()->getMaxFileSizeInMb();
+                $result[] = Mage::helper('Mage_Catalog_Helper_Data')->__("The file '%s' you uploaded is larger than %s Megabytes allowed by server", $fileInfo['title'], $maxFileSize);
             }
         }
         return $result;
@@ -783,46 +785,12 @@ class Mage_Catalog_Model_Product_Option_Type_File extends Mage_Catalog_Model_Pro
     }
 
     /**
-     * Max upload filesize in bytes
+     * Get file storage helper
      *
-     * @return int
+     * @return Mage_Core_Helper_File_Storage
      */
-    protected function _getUploadMaxFilesize()
+    public function getFileStorageHelper()
     {
-        return min($this->_getBytesIniValue('upload_max_filesize'), $this->_getBytesIniValue('post_max_size'));
-    }
-
-    /**
-     * Return php.ini setting value in bytes
-     *
-     * @param string $ini_key php.ini Var name
-     * @return int Setting value
-     */
-    protected function _getBytesIniValue($ini_key)
-    {
-        $_bytes = @ini_get($ini_key);
-
-        // kilobytes
-        if (stristr($_bytes, 'k')) {
-            $_bytes = intval($_bytes) * 1024;
-        // megabytes
-        } elseif (stristr($_bytes, 'm')) {
-            $_bytes = intval($_bytes) * 1024 * 1024;
-        // gigabytes
-        } elseif (stristr($_bytes, 'g')) {
-            $_bytes = intval($_bytes) * 1024 * 1024 * 1024;
-        }
-        return (int)$_bytes;
-    }
-
-    /**
-     * Simple converrt bytes to Megabytes
-     *
-     * @param int $bytes
-     * @return int
-     */
-    protected function _bytesToMbytes($bytes)
-    {
-        return round($bytes / (1024 * 1024));
+        return Mage::helper('Mage_Core_Helper_File_Storage');
     }
 }

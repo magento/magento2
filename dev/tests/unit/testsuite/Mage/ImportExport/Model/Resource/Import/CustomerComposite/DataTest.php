@@ -104,12 +104,21 @@ class Mage_ImportExport_Model_Resource_Import_CustomerComposite_DataTest extends
      * @covers Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data::_prepareAddressRowData
      *
      * @dataProvider getNextBunchDataProvider
+     * @param string $entityType
+     * @param array $bunchData
+     * @param array $expectedData
      */
     public function testGetNextBunch($entityType, $bunchData, $expectedData)
     {
         $dependencies = $this->_getDependencies($entityType, $bunchData);
 
-        $object = new Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data($dependencies);
+        $resource = $dependencies['resource'];
+        $coreHelper = $dependencies['json_helper'];
+        unset($dependencies['resource'], $dependencies['json_helper']);
+
+        $object = new Mage_ImportExport_Model_Resource_Import_CustomerComposite_Data($resource, $coreHelper,
+            $dependencies
+        );
         $this->assertEquals($expectedData, $object->getNextBunch());
     }
 

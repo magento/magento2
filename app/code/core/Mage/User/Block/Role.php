@@ -45,11 +45,11 @@ class Mage_User_Block_Role extends Mage_Backend_Block_Widget_Grid_Container
     protected $_blockGroup = 'Mage_User';
 
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_headerText = Mage::helper('Mage_User_Helper_Data')->__('Roles');
         $this->_addButtonLabel = Mage::helper('Mage_User_Helper_Data')->__('Add New Role');
-        parent::__construct();
+        parent::_construct();
     }
 
     public function getCreateUrl()

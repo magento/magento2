@@ -919,7 +919,7 @@ class Mage_Sales_Model_Quote_Address extends Mage_Customer_Model_Address_Abstrac
         if ($this->_totalCollector === null) {
             $this->_totalCollector = Mage::getSingleton(
                 'Mage_Sales_Model_Quote_Address_Total_Collector',
-                array('store'=>$this->getQuote()->getStore())
+                array('store' => $this->getQuote()->getStore())
             );
         }
         return $this->_totalCollector;

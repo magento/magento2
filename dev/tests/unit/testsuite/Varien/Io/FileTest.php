@@ -36,7 +36,7 @@ class Varien_Io_FileTest extends PHPUnit_Framework_TestCase
      * @var string $_file
      */
     protected $_file;
-    
+
     public function testChmodRecursive()
     {
         try {

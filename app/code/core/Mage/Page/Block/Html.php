@@ -36,16 +36,17 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
     protected $_urls = array();
     protected $_title = '';
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
+
         $this->_urls = array(
             'base'      => Mage::getBaseUrl('web'),
             'baseSecure'=> Mage::getBaseUrl('web', true),
-            'current'   => $this->getRequest()->getRequestUri()
+            'current'   => $this->_request->getRequestUri()
         );
 
-        $action = Mage::app()->getFrontController()->getAction();
+        $action = $this->_frontController->getAction();
         if ($action) {
             $this->addBodyClass($action->getFullActionName('-'));
         }
@@ -76,14 +77,14 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
     public function getPrintLogoUrl ()
     {
         // load html logo
-        $logo = Mage::getStoreConfig('sales/identity/logo_html');
+        $logo = $this->_storeConfig->getConfig('sales/identity/logo_html');
         if (!empty($logo)) {
             $logo = 'sales/store/logo_html/' . $logo;
         }
 
         // load default logo
         if (empty($logo)) {
-            $logo = Mage::getStoreConfig('sales/identity/logo');
+            $logo = $this->_storeConfig->getConfig('sales/identity/logo');
             if (!empty($logo)) {
                 // prevent tiff format displaying in html
                 if (strtolower(substr($logo, -5)) === '.tiff' || strtolower(substr($logo, -4)) === '.tif') {
@@ -97,7 +98,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
         // buld url
         if (!empty($logo)) {
-            $logo = Mage::getStoreConfig('web/unsecure/base_media_url') . $logo;
+            $logo = $this->_storeConfig->getConfig('web/unsecure/base_media_url') . $logo;
         }
         else {
             $logo = '';
@@ -108,7 +109,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
     public function getPrintLogoText()
     {
-        return Mage::getStoreConfig('sales/identity/address');
+        return $this->_storeConfig->getConfig('sales/identity/address');
     }
 
     public function setHeaderTitle($title)
@@ -150,7 +151,7 @@ class Mage_Page_Block_Html extends Mage_Core_Block_Template
 
     public function getAbsoluteFooter()
     {
-        return Mage::getStoreConfig('design/footer/absolute_footer');
+        return $this->_storeConfig->getConfig('design/footer/absolute_footer');
     }
 
     /**

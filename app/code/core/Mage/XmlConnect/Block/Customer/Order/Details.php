@@ -62,7 +62,8 @@ class Mage_XmlConnect_Block_Customer_Order_Details extends Mage_Payment_Block_In
     protected function _toHtml()
     {
         /** @var $orderXmlObj Mage_XmlConnect_Model_Simplexml_Element */
-        $orderXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<order_details></order_details>');
+        $orderXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<order_details></order_details>'));
 
         $order = $this->_getOrder();
 

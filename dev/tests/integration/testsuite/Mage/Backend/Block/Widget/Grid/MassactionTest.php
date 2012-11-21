@@ -43,7 +43,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         Mage::getConfig()->setOptions(array(
             'design_dir' => realpath( __DIR__ . '/../../_files/design'),
         ));
-        Mage::getDesign()->setDesignTheme('test/default/default', 'adminhtml');
+        Mage::getDesign()->setDesignTheme('test/default', 'adminhtml');
 
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
@@ -51,7 +51,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_layout = new Mage_Core_Model_Layout(array('area' => 'adminhtml'));
+        $this->_layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => 'adminhtml'));
         $this->_layout->getUpdate()->load('layout_test_grid_handle');
         $this->_layout->generateXml();
         $this->_layout->generateElements();
@@ -73,7 +73,8 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      */
     public function testMassactionDefaultValues()
     {
-        $blockEmpty = new Mage_Backend_Block_Widget_Grid_Massaction();
+        /** @var $blockEmpty Mage_Backend_Block_Widget_Grid_Massaction */
+        $blockEmpty = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid_Massaction');
         $this->assertEmpty($blockEmpty->getItems());
         $this->assertEquals(0, $blockEmpty->getCount());
         $this->assertSame('[]', $blockEmpty->getItemsJson());

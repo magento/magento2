@@ -34,9 +34,15 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $params = array(
+            'eventDispatcher' => Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager'),
+            'cacheManager'    => Mage::getObjectManager()->get('Mage_Core_Model_Cache')
+        );
+
         $this->_model = $this->getMock(
             'Mage_Core_Model_Store',
-            array('getUrl')
+            array('getUrl'),
+            $params
         );
     }
 
@@ -125,10 +131,10 @@ class Mage_Core_Model_StoreTest extends PHPUnit_Framework_TestCase
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, false, true,  'http://localhost/pub/media/'),
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, true,  false, 'http://localhost/pub/media/'),
             array(Mage_Core_Model_Store::URL_TYPE_MEDIA, true,  true,  'http://localhost/pub/media/'),
-            array(Mage_Core_Model_Store::URL_TYPE_SKIN, false, false, 'http://localhost/pub/media/skin/'),
-            array(Mage_Core_Model_Store::URL_TYPE_SKIN, false, true,  'http://localhost/pub/media/skin/'),
-            array(Mage_Core_Model_Store::URL_TYPE_SKIN, true,  false, 'http://localhost/pub/media/skin/'),
-            array(Mage_Core_Model_Store::URL_TYPE_SKIN, true,  true,  'http://localhost/pub/media/skin/')
+            array(Mage_Core_Model_Store::URL_TYPE_THEME, false, false, 'http://localhost/pub/media/theme/'),
+            array(Mage_Core_Model_Store::URL_TYPE_THEME, false, true,  'http://localhost/pub/media/theme/'),
+            array(Mage_Core_Model_Store::URL_TYPE_THEME, true,  false, 'http://localhost/pub/media/theme/'),
+            array(Mage_Core_Model_Store::URL_TYPE_THEME, true,  true,  'http://localhost/pub/media/theme/')
         );
     }
 

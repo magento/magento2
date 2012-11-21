@@ -152,7 +152,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
     /*
     * @var boolean
     */
-    public $_isCollapsed;
+    protected $_isCollapsed;
 
     /**
      * Count subtotals
@@ -168,13 +168,14 @@ class Mage_Backend_Block_Widget_Grid_Extended
      */
     protected $_subtotals = array();
 
-    public function __construct(array $data = array())
+    protected $_template = 'Mage_Backend::widget/grid/extended.phtml';
+
+    protected function _construct()
     {
-        parent::__construct($data);
-        $this->setTemplate('Mage_Backend::widget/grid/extended.phtml');
+        parent::_construct();
         $this->_emptyText = Mage::helper('Mage_Backend_Helper_Data')->__('No records found.');
     }
-    
+
     /**
      * Initialize child blocks
      *
@@ -185,25 +186,25 @@ class Mage_Backend_Block_Widget_Grid_Extended
         $this->setChild('export_button',
             $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
                 ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Export'),
-                    'onclick'   => $this->getJsObjectName().'.doExport()',
-                    'class'   => 'task'
-                ))
+                'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Export'),
+                'onclick'   => $this->getJsObjectName().'.doExport()',
+                'class'   => 'task'
+            ))
         );
         $this->setChild('reset_filter_button',
             $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
                 ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Reset Filter'),
-                    'onclick'   => $this->getJsObjectName().'.resetFilter()',
-                ))
+                'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Reset Filter'),
+                'onclick'   => $this->getJsObjectName().'.resetFilter()',
+            ))
         );
         $this->setChild('search_button',
             $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
                 ->setData(array(
-                    'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Search'),
-                    'onclick'   => $this->getJsObjectName().'.doFilter()',
-                    'class'   => 'task'
-                ))
+                'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Search'),
+                'onclick'   => $this->getJsObjectName().'.doFilter()',
+                'class'   => 'task'
+            ))
         );
         return parent::_prepareLayout();
     }
@@ -407,14 +408,14 @@ class Mage_Backend_Block_Widget_Grid_Extended
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Grid_Column')
-                ->setData(array(
-                    'index'        => $this->getMassactionIdField(),
-                    'filter_index' => $this->getMassactionIdFilter(),
-                    'type'         => 'massaction',
-                    'name'         => $this->getMassactionBlock()->getFormFieldName(),
-                    'align'        => 'center',
-                    'is_system'    => true
-                ));
+            ->setData(array(
+            'index'        => $this->getMassactionIdField(),
+            'filter_index' => $this->getMassactionIdFilter(),
+            'type'         => 'massaction',
+            'name'         => $this->getMassactionBlock()->getFormFieldName(),
+            'align'        => 'center',
+            'is_system'    => true
+        ));
 
         if ($this->getNoFilterMassactionColumn()) {
             $massactionColumn->setData('filter', false);
@@ -1248,5 +1249,20 @@ class Mage_Backend_Block_Widget_Grid_Extended
     public function getSubTotals()
     {
         return $this->_subtotals;
+    }
+
+    /**
+     * Generate list of grid buttons
+     *
+     * @return string
+     */
+    public function getMainButtonsHtml()
+    {
+        $html = '';
+        if($this->getFilterVisibility()) {
+            $html.= $this->getResetFilterButtonHtml();
+            $html.= $this->getSearchButtonHtml();
+        }
+        return $html;
     }
 }

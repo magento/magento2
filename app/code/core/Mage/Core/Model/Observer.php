@@ -105,4 +105,22 @@ class Mage_Core_Model_Observer
         Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_OLD);
         Mage::dispatchEvent('core_clean_cache');
     }
+
+    /**
+     * Theme registration
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Mage_Core_Model_Observer
+     */
+    public function themeRegistration(Varien_Event_Observer $observer)
+    {
+        $pathPattern = $observer->getEvent()->getPathPattern();
+        try {
+            Mage::getModel('Mage_Core_Model_Theme')->themeRegistration($pathPattern);
+        } catch (Mage_Core_Exception $e) {
+            Mage::logException($e);
+        }
+
+        return $this;
+    }
 }

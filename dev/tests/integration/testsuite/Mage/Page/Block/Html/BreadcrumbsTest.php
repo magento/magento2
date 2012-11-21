@@ -34,7 +34,7 @@ class Mage_Page_Block_Html_BreadcrumbsTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Mage_Page_Block_Html_Breadcrumbs();
+        $this->_block = Mage::app()->getLayout()->createBlock('Mage_Page_Block_Html_Breadcrumbs');
     }
 
     protected function tearDown()
@@ -55,5 +55,28 @@ class Mage_Page_Block_Html_BreadcrumbsTest extends PHPUnit_Framework_TestCase
         $this->assertContains('test label', $html);
         $this->assertContains('test title', $html);
         $this->assertContains('test link', $html);
+    }
+
+    public function testGetCacheKeyInfo()
+    {
+        $crumbs = array(
+            'test' => array(
+                'label'    => 'test label',
+                'title'    => 'test title',
+                'link'     => 'test link',
+            )
+        );
+        foreach ($crumbs as $crumbName => &$crumb) {
+            $this->_block->addCrumb($crumbName, $crumb);
+            $crumb += array(
+                'first'    => null,
+                'last'     => null,
+                'readonly' => null,
+            );
+        }
+
+        $cacheKeyInfo = $this->_block->getCacheKeyInfo();
+        $crumbsFromCacheKey = unserialize(base64_decode($cacheKeyInfo['crumbs']));
+        $this->assertEquals($crumbs, $crumbsFromCacheKey);
     }
 }

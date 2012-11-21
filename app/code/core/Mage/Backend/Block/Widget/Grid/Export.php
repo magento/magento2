@@ -24,6 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Mage_Backend_Block_Widget_Grid_Export
     extends Mage_Backend_Block_Widget
     implements Mage_Backend_Block_Widget_Grid_ExportInterface
@@ -49,20 +52,17 @@ class Mage_Backend_Block_Widget_Grid_Export
      */
     protected $_template = "Mage_Backend::widget/grid/export.phtml";
 
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = array())
+    protected function _construct()
     {
-        if (isset($data['exportTypes'])) {
-            foreach ($data['exportTypes'] as $type) {
+        parent::_construct();
+        if ($this->hasData('exportTypes')) {
+            foreach ($this->getData('exportTypes') as $type) {
                 if (!isset($type['urlPath']) || !isset($type['label'])) {
                     Mage::throwException('Invalid export type supplied for grid export block');
                 }
                 $this->addExportType($type['urlPath'], $type['label']);
             }
         }
-        parent::__construct($data);
     }
 
     /**

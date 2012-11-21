@@ -34,7 +34,7 @@ class Mage_Core_Model_VariableTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Variable();
+        $this->_model = Mage::getModel('Mage_Core_Model_Variable');
     }
 
     public function tearDown()
@@ -56,7 +56,7 @@ class Mage_Core_Model_VariableTest extends PHPUnit_Framework_TestCase
         ));
         $this->_model->save();
 
-        $variable = new Mage_Core_Model_Variable();
+        $variable = Mage::getModel('Mage_Core_Model_Variable');
         $variable->loadByCode('test_code');
         $this->assertEquals($this->_model->getName(), $variable->getName());
         $this->_model->delete();

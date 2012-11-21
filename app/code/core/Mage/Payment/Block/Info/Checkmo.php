@@ -31,11 +31,7 @@ class Mage_Payment_Block_Info_Checkmo extends Mage_Payment_Block_Info
     protected $_payableTo;
     protected $_mailingAddress;
 
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('Mage_Payment::info/checkmo.phtml');
-    }
+    protected $_template = 'Mage_Payment::info/checkmo.phtml';
 
     /**
      * Enter description here...

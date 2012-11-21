@@ -24,26 +24,23 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
-    // Default fields to initialize for grid
     var gridInit = {
-        listId: null,
-        decoratorParams: null,
-        genericSelector: null
+        listId: undefined,
+        decoratorParams: undefined,
+        genericSelector: undefined
     };
 
     $(document).ready(function () {
-        // Trigger initalize event
         $.mage.event.trigger("mage.grid.initialize", gridInit);
-
         if (gridInit.listId) {
-            $.mage.decorator.list(gridInit.listId);
+            $(gridInit.listId).decorate('list');
         }
         if (gridInit.genericSelector) {
             if (gridInit.decoratorParams) {
-                $.mage.decorator.general($(gridInit.genericSelector), gridInit.decoratorParams);
+                $(gridInit.genericSelector).decorate('generic', gridInit.decoratorParams);
             }
             else {
-                $.mage.decorator.general($(gridInit.genericSelector));
+                $(gridInit.genericSelector).decorate('generic');
             }
         }
     });

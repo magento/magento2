@@ -109,16 +109,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
      */
     protected $_htmlId = '';
 
-    /**
-     * Initialize object
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('dashboard/graph.phtml');
-    }
+    protected $_template = 'dashboard/graph.phtml';
 
     /**
      * Get tab template
@@ -195,7 +186,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
 
         $this->_allSeries = $this->getRowsData($this->_dataRows);
 
-        foreach ($this->_axisMaps as $axis => $attr){
+        foreach ($this->_axisMaps as $axis => $attr) {
             $this->setAxisLabels($axis, $this->getRowsData($attr, true));
         }
 
@@ -210,7 +201,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
         $dates = array();
         $datas = array();
 
-        while($dateStart->compare($dateEnd) < 0){
+        while ($dateStart->compare($dateEnd) < 0) {
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
@@ -241,7 +232,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
          */
         if (count($dates) > 8 && count($dates) < 15) {
             $c = 1;
-        } else if (count($dates) >= 15){
+        } else if (count($dates) >= 15) {
             $c = 2;
         } else {
             $c = 0;
@@ -332,9 +323,9 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
                     $currentvalue = $thisdataarray[$j];
                     if (is_numeric($currentvalue)) {
                         if ($yrange) {
-                         $ylocation = (4095 * ($yorigin + $currentvalue) / $yrange);
+                            $ylocation = (4095 * ($yorigin + $currentvalue) / $yrange);
                         } else {
-                          $ylocation = 0;
+                            $ylocation = 0;
                         }
                         $firstchar = floor($ylocation / 64);
                         $secondchar = $ylocation % 64;
@@ -364,7 +355,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
         if (sizeof($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
             $indexid = 0;
-            foreach ($this->_axisLabels as $idx=>$labels){
+            foreach ($this->_axisLabels as $idx=>$labels) {
                 if ($idx == 'x') {
                     /**
                      * Format date
@@ -453,11 +444,11 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
     {
         $items = $this->getCollection()->getItems();
         $options = array();
-        foreach ($items as $item){
+        foreach ($items as $item) {
             if ($single) {
                 $options[] = max(0, $item->getData($attributes));
             } else {
-                foreach ((array)$attributes as $attr){
+                foreach ((array)$attributes as $attr) {
                     $options[$attr][] = max(0, $item->getData($attr));
                 }
             }
@@ -541,11 +532,12 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
      */
     protected function _prepareData()
     {
-        $availablePeriods = array_keys($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods());
-        $period = $this->getRequest()->getParam('period');
-
-        $this->getDataHelper()->setParam('period',
-            ($period && in_array($period, $availablePeriods)) ? $period : '24h'
-        );
+        if (!is_null($this->getDataHelperName())) {
+            $availablePeriods = array_keys($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods());
+            $period = $this->getRequest()->getParam('period');
+            $this->getDataHelper()->setParam('period',
+               ($period && in_array($period, $availablePeriods)) ? $period : '24h'
+            );
+        }
     }
 }

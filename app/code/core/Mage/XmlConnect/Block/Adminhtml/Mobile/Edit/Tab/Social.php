@@ -49,7 +49,7 @@ class Mage_XmlConnect_Block_Adminhtml_Mobile_Edit_Tab_Social
 
         $data = Mage::helper('Mage_XmlConnect_Helper_Data')->getApplication()->getFormData();
 
-        $yesNoValues = Mage::getModel('Mage_Adminhtml_Model_System_Config_Source_Yesno')->toOptionArray();
+        $yesNoValues = Mage::getModel('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray();
 
         /**
          * Default values for social networks is DISABLED

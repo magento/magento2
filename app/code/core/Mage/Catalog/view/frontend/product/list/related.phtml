@@ -52,7 +52,7 @@
             </li>
         <?php endforeach ?>
         </ol>
-        <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
+        <script type="text/javascript">(function($) {$('#block-related').decorate('list', false)})(jQuery)</script>
     </div>
     <script type="text/javascript">
     //<![CDATA[

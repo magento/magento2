@@ -34,10 +34,13 @@
 
 class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search extends Mage_Adminhtml_Block_Widget
 {
+
+    protected $_template = 'product/edit/bundle/option/search.phtml';
+
     protected function _construct()
     {
         $this->setId('bundle_option_selection_search');
-        $this->setTemplate('product/edit/bundle/option/search.phtml');
+
     }
 
     public function getHeaderText()

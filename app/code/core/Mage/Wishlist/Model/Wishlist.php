@@ -71,11 +71,20 @@ class Mage_Wishlist_Model_Wishlist extends Mage_Core_Model_Abstract
     protected $_storeIds = null;
 
     /**
-     * Initialize resource model
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
+     * @param array $data
+     * @param Mage_Wishlist_Model_Resource_Wishlist $resource
+     * @param Mage_Wishlist_Model_Resource_Wishlist_Collection $resourceCollection
      */
-    protected function _construct()
-    {
-        $this->_init('Mage_Wishlist_Model_Resource_Wishlist');
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Mage_Wishlist_Model_Resource_Wishlist $resource,
+        Mage_Wishlist_Model_Resource_Wishlist_Collection $resourceCollection,
+        array $data = array()
+    ) {
+        parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -137,7 +146,7 @@ class Mage_Wishlist_Model_Wishlist extends Mage_Core_Model_Abstract
     public function loadByCode($code)
     {
         $this->_getResource()->load($this, $code, 'sharing_code');
-        if(!$this->getShared()) {
+        if (!$this->getShared()) {
             $this->setId(null);
         }
 
@@ -500,8 +509,8 @@ class Mage_Wishlist_Model_Wishlist extends Mage_Core_Model_Abstract
      * Basically it can hold
      * - 'current_config', Varien_Object or array - current buyRequest that configures product in this item,
      *   used to restore currently attached files
-     * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs), so they won't
-     *   intersect with other submitted options
+     * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
+     * so they won't intersect with other submitted options
      *
      * For more options see Mage_Catalog_Helper_Product->addParamsToBuyRequest()
      *

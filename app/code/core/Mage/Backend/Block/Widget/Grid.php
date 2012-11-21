@@ -29,7 +29,10 @@
  *
  * @category   Mage
  * @package    Mage_Backend
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @method string getRowClickCallback() getRowClickCallback()
+ * @method Mage_Backend_Block_Widget_Grid setRowClickCallback() setRowClickCallback(string $value)
  */
 class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
 {
@@ -106,38 +109,34 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
      */
     protected $_rssLists = array();
 
-    /**
-     * @param array $data
-     */
-    public function __construct(array $data = array())
+    protected $_template = 'Mage_Backend::widget/grid.phtml';
+
+    protected function _construct()
     {
-        parent::__construct($data);
-        $this->setTemplate('Mage_Backend::widget/grid.phtml');
-        $this->setRowClickCallback('openGridRow');
+        parent::_construct();
 
-        $this->setData(
-            'filter_visibility',
-            array_key_exists('filter_visibility', $data) ? $data['filter_visibility'] : true
-        );
-
-        if (isset($data['id'])) {
-            $this->setId($data['id']);
+        if (!$this->getRowClickCallback()) {
+            $this->setRowClickCallback('openGridRow');
         }
 
-        if (isset($data['default_sort'])) {
-            $this->setDefaultSort($data['default_sort']);
+        if ($this->hasData('id')) {
+            $this->setId($this->getData('id'));
         }
 
-        if (isset($data['default_dir'])) {
-            $this->setDefaultDir($data['default_dir']);
+        if ($this->hasData('default_sort')) {
+            $this->setDefaultSort($this->getData('default_sort'));
         }
 
-        if (isset($data['save_parameters_in_session'])) {
-            $this->setSaveParametersInSession($data['save_parameters_in_session']);
+        if ($this->hasData('default_dir')) {
+            $this->setDefaultDir($this->getData('default_dir'));
         }
 
-        if (isset($data['rssList']) && is_array($data['rssList'])) {
-            foreach ($data['rssList'] as $item) {
+        if ($this->hasData('save_parameters_in_session')) {
+            $this->setSaveParametersInSession($this->getData('save_parameters_in_session'));
+        }
+
+        if ($this->hasData('rssList') && is_array($this->getData('rssList'))) {
+            foreach ($this->getData('rssList') as $item) {
                 $this->addRssList($item['url'], $item['label']);
             }
         }
@@ -547,7 +546,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
      *
      * @param boolean $visible
      */
-    public function setPagerVisibility($visible=true)
+    public function setPagerVisibility($visible = true)
     {
         $this->_pagerVisibility = $visible;
     }
@@ -567,7 +566,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
      *
      * @param boolean $visible
      */
-    public function setMessageBlockVisibility($visible=true)
+    public function setMessageBlockVisibility($visible = true)
     {
         $this->_messageBlockVisibility = $visible;
     }
@@ -712,6 +711,16 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
     }
 
     /**
+     * Retrieve grid reload url
+     *
+     * @return string;
+     */
+    public function getGridUrl()
+    {
+        return $this->hasData('grid_url') ? $this->getData('grid_url') : $this->getAbsoluteGridUrl();
+    }
+
+    /**
      * Grid url getter
      * Version of getGridUrl() but with parameters
      *
@@ -821,7 +830,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
     public function getMainButtonsHtml()
     {
         $html = '';
-        if($this->getData('filter_visibility')) {
+        if($this->getColumnSet()->isFilterVisible()) {
             $html.= $this->getResetFilterButtonHtml();
             $html.= $this->getSearchButtonHtml();
         }

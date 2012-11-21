@@ -68,17 +68,19 @@ class Mage_Eav_Model_Entity_Attribute_Set extends Mage_Core_Model_Abstract
      *
      * @param array $data
      */
-    public function __construct(array $data = array())
-    {
-        if (isset($data['resource'])) {
-            $this->_resource = $data['resource'];
-            unset($data['resource']);
-        }
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
         if (isset($data['helper'])) {
             $this->_helperInstance = $data['helper'];
             unset($data['helper']);
         }
-        parent::__construct($data);
+
+        parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
     /**

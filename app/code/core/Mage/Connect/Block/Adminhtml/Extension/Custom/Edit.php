@@ -38,13 +38,13 @@ class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit extends Mage_Adminhtml_
      *
      * Initializes edit form container, adds necessary buttons
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId    = 'id';
         $this->_blockGroup  = 'Mage_Connect';
         $this->_controller  = 'adminhtml_extension_custom';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_removeButton('back');
         $this->_updateButton('reset', 'onclick', "resetPackage()");

@@ -39,8 +39,21 @@ class Mage_Backend_Block_Widget_Grid_Column_MultistoreTest extends PHPUnit_Frame
 
     public function setUp()
     {
-        $this->_appMock = $this->getMock('Mage_Core_Model_App');
-        $this->_model = new Mage_Backend_Block_Widget_Grid_Column_Multistore(array('app' => $this->_appMock));
+        $this->_appMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
+
+        $arguments = array(
+            'application' => $this->_appMock,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
+        );
+
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_model = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column_Multistore', $arguments);
+    }
+
+    protected function tearDown()
+    {
+        unset($this->_model);
+        unset($this->_appMock);
     }
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()

@@ -65,9 +65,8 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        $.mage.event.observe('mage.install.initialize', function (e, o) {
-            o.changeUrl = '<?php echo $this->getChangeUrl();?>'
+        head.js("<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
+            $('#locale').setLocale({url: '<?php echo $this->getChangeUrl();?>'});
         });
-        $.mage.load.jsSync("<?php echo $this->getSkinUrl('Mage_Install::js/locale.js') ?>");
     })(jQuery);
 </script>

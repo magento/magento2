@@ -26,7 +26,7 @@
  */
 
 /**
- * Test for skin changing observer
+ * Test for theme changing observer
  */
 class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_observer = new Mage_DesignEditor_Model_Observer;
+        $this->_observer = Mage::getModel('Mage_DesignEditor_Model_Observer');
 
         $this->_eventObserver = new Varien_Event_Observer();
         $this->_eventObserver->setEvent(new Varien_Event(array('layout' => Mage::app()->getLayout())));
@@ -78,23 +78,23 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testPreDispatchApplyDesign()
     {
-        $newSkin = 'default/default/blank';
-        $this->assertNotEquals($newSkin, Mage::getDesign()->getDesignTheme());
-        Mage::getSingleton('Mage_DesignEditor_Model_Session')->setSkin($newSkin);
+        $newTheme = 'default/blank';
+        $this->assertNotEquals($newTheme, Mage::getDesign()->getDesignTheme());
         $this->_observer->preDispatch($this->_eventObserver);
-        $this->assertEquals($newSkin, Mage::getDesign()->getDesignTheme());
+        $this->assertEquals($newTheme, Mage::getDesign()->getDesignTheme());
     }
 
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/DesignEditor/_files/design_editor_active.php
      */
-    public function testPreDispatchApplyDesignIgnoreNoSkin()
+    public function testPreDispatchWrongThemeId()
     {
-        $currentSkin = Mage::getDesign()->getDesignTheme();
-        $this->assertEmpty(Mage::getSingleton('Mage_DesignEditor_Model_Session')->getSkin());
+        /** @var $session Mage_DesignEditor_Model_Session */
+        $session = Mage::getSingleton('Mage_DesignEditor_Model_Session');
+        $session->setThemeId(0);
         $this->_observer->preDispatch($this->_eventObserver);
-        $this->assertEquals($currentSkin, Mage::getDesign()->getDesignTheme());
+        $this->assertFalse($session->isDesignEditorActive());
     }
 
     /**
@@ -102,12 +102,11 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testPreDispatchApplyDesignInactive()
     {
-        $newSkin = 'default/default/blank';
-        $oldSkin = Mage::getDesign()->getDesignTheme();
-        $this->assertNotEquals($newSkin, $oldSkin);
-        Mage::getSingleton('Mage_DesignEditor_Model_Session')->setSkin($newSkin);
+        $newTheme = 'default/blank';
+        $oldTheme = Mage::getDesign()->getDesignTheme();
+        $this->assertNotEquals($newTheme, $oldTheme);
         $this->_observer->preDispatch($this->_eventObserver);
-        $this->assertEquals($oldSkin, Mage::getDesign()->getDesignTheme());
+        $this->assertEquals($oldTheme, Mage::getDesign()->getDesignTheme());
     }
 
     /**
@@ -148,8 +147,10 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testSetDesignEditorFlag()
     {
-        $headBlock = new Mage_Page_Block_Html_Head();
-        $layout = new Mage_Core_Model_Layout();
+        /** @var $headBlock Mage_Page_Block_Html_Head */
+        $headBlock = Mage::app()->getLayout()->createBlock('Mage_Page_Block_Html_Head');
+        /** @var $layout Mage_Core_Model_Layout */
+        $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->addBlock($headBlock, 'head');
         $this->assertEmpty($headBlock->getDesignEditorActive());
         $observerData = new Varien_Event_Observer(array('event' => new Varien_Object(array('layout' => $layout))));
@@ -184,7 +185,7 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     public function wrapPageElementDataProvider()
     {
         $removeLink = sprintf('<a href="#remove"><img src="%s" alt="Remove" /></a>',
-            Mage::getDesign()->getSkinUrl('images/btn_remove.gif')
+            Mage::getDesign()->getViewFileUrl('images/btn_remove.gif')
         );
         return array(
             'non-draggable block' => array(
@@ -260,7 +261,8 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
                 . '<div class="vde_element_title">draggable_block</div>%w'
                 . '<div class="vde_element_title vde_element_remove" id="vde_element_ZHJhZ2dhYmxlX2Jsb2Nr_remove">%w'
                     . '<a href="#remove">%w'
-                        . '<img src="' . Mage::getDesign()->getSkinUrl('images/btn_remove.gif') . '" alt="Remove" />%w'
+                        . '<img src="' . Mage::getDesign()->getViewFileUrl('images/btn_remove.gif')
+                        . '" alt="Remove" />%w'
                     . '</a>%w'
                 . '</div>%w'
             . '</div>%w'
@@ -285,9 +287,9 @@ class Mage_DesignEditor_Model_ObserverTest extends PHPUnit_Framework_TestCase
     protected function _wrapElement($elementName, $elementHtml)
     {
         // create a layout object mock with fixture data
-        $utility = new Mage_Core_Utility_Layout($this);
-        $layoutMock = $utility->getLayoutFromFixture(
-            __DIR__ . '/../_files/observer_test.xml', array(array('structure' => new Magento_Data_Structure))
+        $utility = new Mage_Core_Utility_Layout($this);;
+        $layoutMock = $utility->getLayoutFromFixture(__DIR__ . '/../_files/observer_test.xml',
+            $utility->getLayoutDependencies()
         );
 
         // load the fixture data. This will populate layout structure as well

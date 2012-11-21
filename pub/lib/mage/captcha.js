@@ -50,3 +50,5 @@ Captcha.prototype = {
         });
     }
 };
+
+

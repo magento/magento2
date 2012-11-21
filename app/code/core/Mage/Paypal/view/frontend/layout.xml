@@ -45,9 +45,6 @@
 
     <paypal_express_review translate="label" type="page" parent="default">
         <label>PayPal Express Order Review Form</label>
-        <remove name="right"/>
-        <remove name="left"/>
-
         <reference name="root">
             <action method="setTemplate"><template>1column.phtml</template></action>
         </reference>

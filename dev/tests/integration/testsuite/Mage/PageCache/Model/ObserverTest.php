@@ -34,7 +34,7 @@ class Mage_PageCache_Model_ObserverTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_observer = new Mage_PageCache_Model_Observer;
+        $this->_observer = Mage::getModel('Mage_PageCache_Model_Observer');
     }
 
     protected function tearDown()

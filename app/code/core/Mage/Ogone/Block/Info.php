@@ -29,13 +29,5 @@
  */
 class Mage_Ogone_Block_Info extends Mage_Payment_Block_Info_Cc
 {
-    /**
-     * Init ogone payment information block to use on admin area
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('info.phtml');
-    }
+    protected $_template = 'info.phtml';
 }

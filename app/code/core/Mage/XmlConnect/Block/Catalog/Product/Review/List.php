@@ -47,7 +47,8 @@ class Mage_XmlConnect_Block_Catalog_Product_Review_List extends Mage_XmlConnect_
      */
     public function getReviewsXmlObject()
     {
-        $reviewsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element', '<reviews></reviews>');
+        $reviewsXmlObj = Mage::getModel('Mage_XmlConnect_Model_Simplexml_Element',
+            array('data' => '<reviews></reviews>'));
         $collection    = $this->_getReviewCollection();
 
         if (!$collection) {

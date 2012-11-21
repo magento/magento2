@@ -33,16 +33,7 @@
  */
 class Mage_Paypal_Block_Payflow_Link_Form extends Mage_Payment_Block_Form
 {
-    /**
-     * Internal constructor
-     * Set payment method code
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('payflowlink/info.phtml');
-    }
+    protected $_template = 'payflowlink/info.phtml';
 
     /**
      * Get frame action URL

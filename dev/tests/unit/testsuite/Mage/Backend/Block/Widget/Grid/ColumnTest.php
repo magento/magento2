@@ -45,34 +45,25 @@ class Mage_Backend_Block_Widget_Grid_ColumnTest extends PHPUnit_Framework_TestCa
      */
     protected $_blockMock;
 
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_eventManagerMock;
-
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager', array(), array(), '', false, false);
         $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false, false);
-
-        $this->_blockMock = $this->getMock(
-            'Mage_Core_Block_Template',
-            array('setColumn', 'getHtml'),
-            array(),
-            '',
-            false,
-            false
+        $this->_blockMock = $this->getMock('Mage_Core_Block_Template', array('setColumn', 'getHtml'), array(), '',
+            false, false
         );
 
-        $this->_block = new Mage_Backend_Block_Widget_Grid_Column(array('eventManager' => $this->_eventManagerMock));
-        $this->_block->setLayout($this->_layoutMock);
+        $arguments = array(
+            'layout' => $this->_layoutMock,
+            'urlBuilder' => $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false)
+        );
+        $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
+        $this->_block = $objectManagerHelper->getBlock('Mage_Backend_Block_Widget_Grid_Column', $arguments);
     }
 
     protected function tearDown()
     {
         unset($this->_layoutMock);
         unset($this->_blockMock);
-        unset($this->_eventManagerMock);
         unset($this->_block);
     }
 

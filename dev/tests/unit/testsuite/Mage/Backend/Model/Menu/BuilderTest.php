@@ -48,12 +48,9 @@ class Mage_Backend_Model_Menu_BuilderTest extends PHPUnit_Framework_TestCase
     {
         $this->_factoryMock = $this->getMock("Mage_Backend_Model_Menu_Item_Factory", array(), array(), '', false);
         $this->_menuMock = $this->getMock('Mage_Backend_Model_Menu', array(),
-            array(array('logger' => $this->getMock('Mage_Backend_Model_Menu_Logger'))));
+            array($this->getMock('Mage_Backend_Model_Menu_Logger')));
 
-        $this->_model = new Mage_Backend_Model_Menu_Builder(array(
-            'itemFactory' => $this->_factoryMock,
-            'menu' => $this->_menuMock
-        ));
+        $this->_model = new Mage_Backend_Model_Menu_Builder($this->_factoryMock, $this->_menuMock);
     }
 
     public function testProcessCommand()

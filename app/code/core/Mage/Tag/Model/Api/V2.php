@@ -40,7 +40,7 @@ class Mage_Tag_Model_Api_V2 extends Mage_Tag_Model_Api
      * @param string|int $store
      * @return array
      */
-    public function items($productId, $store)
+    public function items($productId, $store = null)
     {
         $result = parent::items($productId, $store);
         foreach ($result as $key => $tag) {

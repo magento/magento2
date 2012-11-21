@@ -102,7 +102,7 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
 
     /**
      * Return logo URL for emails
-     * Take logo from skin if custom logo is undefined
+     * Take logo from theme if custom logo is undefined
      *
      * @param  Mage_Core_Model_Store|int|string $store
      * @return string
@@ -112,13 +112,13 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         $store = Mage::app()->getStore($store);
         $fileName = $store->getConfig(self::XML_PATH_DESIGN_EMAIL_LOGO);
         if ($fileName) {
-            $uploadDir = Mage_Adminhtml_Model_System_Config_Backend_Email_Logo::UPLOAD_DIR;
+            $uploadDir = Mage_Backend_Model_Config_Backend_Email_Logo::UPLOAD_DIR;
             $fullFileName = Mage::getBaseDir('media') . DS . $uploadDir . DS . $fileName;
             if (file_exists($fullFileName)) {
                 return Mage::getBaseUrl('media') . $uploadDir . '/' . $fileName;
             }
         }
-        return Mage::getDesign()->getSkinUrl('Mage_Core::logo_email.gif');
+        return Mage::getDesign()->getViewFileUrl('Mage_Core::logo_email.gif');
     }
 
     /**

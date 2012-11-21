@@ -37,7 +37,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
 ?>
 <div class="buttons-set">
 <!-- IFRAME for request to Authorize.net -->
-<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getSkinUrl('blank.html') ?>"></iframe>
+<iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
 
 <form id="co-directpost-form" action="#" method="post">
 <fieldset>
@@ -104,7 +104,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderFrontU
 </div>
 <div class="tool-tip" id="directpost-tool-tip" style="display:none;">
     <div class="btn-close"><a href="#" id="directpost-tool-tip-close" title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a></div>
-    <div class="tool-tip-content"><img src="<?php echo $this->getSkinUrl('Mage_Checkout::cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
+    <div class="tool-tip-content"><img src="<?php echo $this->getViewFileUrl('Mage_Checkout::cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
 </div>
 <script type="text/javascript">
 //<![CDATA[

@@ -79,7 +79,10 @@ class Magento_Test_EntityTest extends PHPUnit_Framework_TestCase
 
         $this->_model = $this->getMock(
             'Mage_Core_Model_Abstract',
-            array('load', 'save', 'delete', 'getIdFieldName')
+            array('load', 'save', 'delete', 'getIdFieldName'),
+            array(),
+            '',
+            false
         );
 
         $this->_model->expects($this->atLeastOnce())

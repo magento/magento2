@@ -115,11 +115,13 @@
 </form>
 <script type="text/javascript">
     (function ($) {
-        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.validate.js')?>");
-        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/additional-methods.js')?>");
-        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.metadata.js')?>");
-        $.mage.load.js("<?php echo $this->getSkinUrl('jquery/jquery.hook.js')?>");
-        $.mage.load.js("<?php echo $this->getSkinUrl('mage/validation/validate.js')?>");
-        $.mage.load.js("<?php echo $this->getSkinUrl('Mage_Install::js/create-admin.js') ?>");
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
+                $('#form-validate').createAdmin();
+            });
     })(jQuery);
 </script>

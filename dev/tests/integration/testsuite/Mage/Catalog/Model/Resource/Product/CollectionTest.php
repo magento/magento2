@@ -38,7 +38,7 @@ class Mage_Catalog_Model_Resource_Product_CollectionTest extends PHPUnit_Framewo
      */
     protected function setUp()
     {
-        $this->_collection = new Mage_Catalog_Model_Resource_Product_Collection;
+        $this->_collection = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection');
     }
 
     protected function tearDown()

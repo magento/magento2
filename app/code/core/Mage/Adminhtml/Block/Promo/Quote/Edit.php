@@ -36,12 +36,12 @@ class Mage_Adminhtml_Block_Promo_Quote_Edit extends Mage_Adminhtml_Block_Widget_
      * Add standard buttons
      * Add "Save and Continue" button
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'id';
         $this->_controller = 'promo_quote';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_addButton('save_and_continue_edit', array(
             'class'   => 'save',

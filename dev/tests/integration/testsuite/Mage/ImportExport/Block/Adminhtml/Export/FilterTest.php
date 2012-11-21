@@ -33,19 +33,20 @@ class Mage_ImportExport_Block_Adminhtml_Export_FilterTest
 {
     public function testGetDateFromToHtmlWithValue()
     {
-        $block = new Mage_ImportExport_Block_Adminhtml_Export_Filter;
+        $block = Mage::getObjectManager()->create('Mage_ImportExport_Block_Adminhtml_Export_Filter');
         $method = new ReflectionMethod(
                     'Mage_ImportExport_Block_Adminhtml_Export_Filter', '_getDateFromToHtmlWithValue');
         $method->setAccessible(true);
 
-        $attribute = new Mage_Eav_Model_Entity_Attribute(
-           array(
-               'attribute_code' => 'date',
-               'backend_type' => 'datetime',
-               'frontend_input' => 'date',
-               'frontend_label' => 'Date',
+        $arguments = array(
+            'data' => array(
+                'attribute_code' => 'date',
+                'backend_type'   => 'datetime',
+                'frontend_input' => 'date',
+                'frontend_label' => 'Date',
             )
         );
+        $attribute = Mage::getObjectManager()->create('Mage_Eav_Model_Entity_Attribute', $arguments);
         $html = $method->invoke($block, $attribute, null);
         $this->assertNotEmpty($html);
 

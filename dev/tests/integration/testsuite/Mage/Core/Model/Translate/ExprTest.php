@@ -37,7 +37,10 @@ class Mage_Core_Model_Translate_ExprTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Translate_Expr($this->_expectedText, $this->_expectedModule);
+        $this->_model = Mage::getModel(
+            'Mage_Core_Model_Translate_Expr',
+            array('text' => $this->_expectedText, 'module' => $this->_expectedModule)
+        );
     }
 
     protected function tearDown()

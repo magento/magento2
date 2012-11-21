@@ -455,7 +455,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
     protected function _getOrigObject($object)
     {
         $className  = get_class($object);
-        $origObject = new $className();
+        $origObject = Mage::getModel($className);
         $origObject->setData(array());
         $origObject->setStoreId($object->getStoreId());
         $this->load($origObject, $object->getData($this->getEntityIdField()));

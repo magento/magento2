@@ -33,10 +33,10 @@ class Mage_Sales_Model_QuoteTest extends PHPUnit_Framework_TestCase
      */
     public function testCollectTotalsWithVirtual()
     {
-        $quote = new Mage_Sales_Model_Quote();
+        $quote = Mage::getModel('Mage_Sales_Model_Quote');
         $quote->load('test01', 'reserved_order_id');
 
-        $product = new Mage_Catalog_Model_Product();
+        $product = Mage::getModel('Mage_Catalog_Model_Product');
         $product->load(21);
         $quote->addProduct($product);
         $quote->collectTotals();

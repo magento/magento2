@@ -36,32 +36,27 @@
 abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_Backend_Block_Widget
 {
     /**
+     * Backend data helper
+     *
+     * @var Mage_Backend_Helper_Data
+     */
+    protected $_backendHelper;
+
+    /**
      * Massaction items
      *
      * @var array
      */
     protected $_items = array();
 
-    /**
-     * Backend helper
-     *
-     * @var Mage_Backend_Helper_Data
-     */
-    protected $_helper;
+    protected $_template = 'Mage_Backend::widget/grid/massaction.phtml';
 
-    /**
-     * Sets Massaction template
-     */
-    public function __construct(array $data = array())
+    protected function _construct()
     {
-        parent::__construct($data);
-        $this->setTemplate('Mage_Backend::widget/grid/massaction.phtml');
+        parent::_construct();
 
-        $this->_helper = isset($data['helper'])? $data['helper'] : Mage::helper('Mage_Backend_Helper_Data');
-        if (!($this->_helper instanceof Mage_Backend_Helper_Data)) {
-            throw new InvalidArgumentException('Helper must be instance of Mage_Backend_Helper_Data');
-        }
-        $this->setErrorText($this->_helper->jsQuoteEscape($this->_helper->__('Please select items.')));
+        $this->setErrorText($this->helper('Mage_Backend_Helper_Data')
+            ->jsQuoteEscape($this->helper('Mage_Backend_Helper_Data')->__('Please select items.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -109,7 +104,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
      */
     public function getItem($itemId)
     {
-        if(isset($this->_items[$itemId])) {
+        if (isset($this->_items[$itemId])) {
             return $this->_items[$itemId];
         }
 
@@ -208,7 +203,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
      */
     public function getSelectedJson()
     {
-        if($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
+        if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
         } else {
@@ -223,7 +218,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
      */
     public function getSelected()
     {
-        if($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
+        if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
         } else {
@@ -244,13 +239,13 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
     public function getJavaScript()
     {
         return " var {$this->getJsObjectName()} = new varienGridMassaction('{$this->getHtmlId()}', "
-                . "{$this->getGridJsObjectName()}, '{$this->getSelectedJson()}'"
-                . ", '{$this->getFormFieldNameInternal()}', '{$this->getFormFieldName()}');"
-                . "{$this->getJsObjectName()}.setItems({$this->getItemsJson()}); "
-                . "{$this->getJsObjectName()}.setGridIds('{$this->getGridIdsJson()}');"
-                . ($this->getUseAjax() ? "{$this->getJsObjectName()}.setUseAjax(true);" : '')
-                . ($this->getUseSelectAll() ? "{$this->getJsObjectName()}.setUseSelectAll(true);" : '')
-                . "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';";
+            . "{$this->getGridJsObjectName()}, '{$this->getSelectedJson()}'"
+            . ", '{$this->getFormFieldNameInternal()}', '{$this->getFormFieldName()}');"
+            . "{$this->getJsObjectName()}.setItems({$this->getItemsJson()}); "
+            . "{$this->getJsObjectName()}.setGridIds('{$this->getGridIdsJson()}');"
+            . ($this->getUseAjax() ? "{$this->getJsObjectName()}.setUseAjax(true);" : '')
+            . ($this->getUseSelectAll() ? "{$this->getJsObjectName()}.setUseSelectAll(true);" : '')
+            . "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';";
     }
 
     public function getGridIdsJson()
@@ -261,7 +256,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
 
         $gridIds = $this->getParentBlock()->getCollection()->getAllIds();
 
-        if(!empty($gridIds)) {
+        if (!empty($gridIds)) {
             return join(",", $gridIds);
         }
         return '';

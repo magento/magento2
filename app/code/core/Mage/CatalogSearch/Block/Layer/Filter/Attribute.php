@@ -34,9 +34,9 @@ class Mage_CatalogSearch_Block_Layer_Filter_Attribute extends Mage_Catalog_Block
      * Set filter model name
      *
      */
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->_filterModelName = 'catalogsearch/layer_filter_attribute';
     }
 }

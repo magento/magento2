@@ -38,7 +38,7 @@
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div>
     <div class="print-head">
-        <img src="<?php echo $this->getPrintLogoUrl() ? $this->getPrintLogoUrl() : $this->getSkinUrl('images/logo_print.gif') ?>" class="logo" alt="" />
+        <img src="<?php echo $this->getPrintLogoUrl() ? $this->getPrintLogoUrl() : $this->getViewFileUrl('images/logo_print.gif') ?>" class="logo" alt="" />
         <?php if ($this->getPrintLogoText()):?>
             <address><?php echo nl2br($this->escapeHtml($this->getPrintLogoText())) ?></address>
         <?php endif;?>

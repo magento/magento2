@@ -241,38 +241,36 @@ class Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection
             }
 
             $values = array();
-
-            foreach ($this->_items as $item) {
-               $productAttribute = $item->getProductAttribute();
-               if (!($productAttribute instanceof Mage_Eav_Model_Entity_Attribute_Abstract)) {
-                   continue;
-               }
-               $options = $productAttribute->getFrontend()->getSelectOptions();
-               foreach ($options as $option) {
-                   $usedProducts = $this->getProduct()
-                       ->getTypeInstance()
-                       ->getUsedProducts($this->getProduct());
-                   foreach ($usedProducts as $associatedProduct) {
-                        if (!empty($option['value'])
-                            && $option['value'] == $associatedProduct->getData(
-                                                        $productAttribute->getAttributeCode())) {
-                            // If option available in associated product
-                            if (!isset($values[$item->getId() . ':' . $option['value']])) {
-                                // If option not added, we will add it.
-                                $values[$item->getId() . ':' . $option['value']] = array(
-                                    'product_super_attribute_id' => $item->getId(),
-                                    'value_index'                => $option['value'],
-                                    'label'                      => $option['label'],
-                                    'default_label'              => $option['label'],
-                                    'store_label'                => $option['label'],
-                                    'is_percent'                 => 0,
-                                    'pricing_value'              => null,
-                                    'use_default_value'          => true
-                                );
+            $usedProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct());
+            if ($usedProducts) {
+                foreach ($this->_items as $item) {
+                    $productAttribute = $item->getProductAttribute();
+                    if (!($productAttribute instanceof Mage_Eav_Model_Entity_Attribute_Abstract)) {
+                        continue;
+                    }
+                    $itemId = $item->getId();
+                    $options = $productAttribute->getFrontend()->getSelectOptions();
+                    foreach ($options as $option) {
+                        foreach ($usedProducts as $associatedProduct) {
+                            $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
+                            if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
+                                // If option available in associated product
+                                if (!isset($values[$item->getId() . ':' . $option['value']])) {
+                                    $values[$itemId . ':' . $option['value']] = array(
+                                        'product_super_attribute_id' => $itemId,
+                                        'value_index'                => $option['value'],
+                                        'label'                      => $option['label'],
+                                        'default_label'              => $option['label'],
+                                        'store_label'                => $option['label'],
+                                        'is_percent'                 => 0,
+                                        'pricing_value'              => null,
+                                        'use_default_value'          => true
+                                    );
+                                }
                             }
                         }
-                   }
-               }
+                    }
+                }
             }
 
             foreach ($pricings[0] as $pricing) {

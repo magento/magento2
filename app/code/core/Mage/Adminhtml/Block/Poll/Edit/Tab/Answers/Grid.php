@@ -34,9 +34,9 @@
 class Mage_Adminhtml_Block_Poll_Edit_Tab_Answers_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
+    protected function _construct()
     {
-        parent::__construct();
+        parent::_construct();
         $this->setId('answersGrid');
         $this->setDefaultSort('answer_id');
         $this->setDefaultDir('ASC');

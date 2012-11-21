@@ -29,7 +29,7 @@
     <div class="head">
         <h5><?php echo $this->getHeaderText() ?> <span class="normal">(<?php echo $this->getItemCount() ?>)</span></h5>
         <a href="#" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Refresh') ?>" onclick="order.loadArea('sidebar_<?php echo $this->getDataId() ?>', 'sidebar_data_<?php echo $this->getDataId() ?>');return false;">
-            <img src="<?php echo $this->getSkinUrl('images/fam_refresh.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Refresh') ?>" width="16" height="16"/>
+            <img src="<?php echo $this->getViewFileUrl('images/fam_refresh.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Refresh') ?>" width="16" height="16"/>
         </a>
     </div>
     <div class="content">
@@ -56,9 +56,9 @@
                 <th><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Price') ?></th>
                 <?php endif; ?>
                 <?php if($this->canRemoveItems()): ?>
-                <th class="a-center"><img src="<?php echo $this->getSkinUrl('images/fam_bin.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Remove') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Remove') ?>" width="16" height="16"/></th>
+                <th class="a-center"><img src="<?php echo $this->getViewFileUrl('images/fam_bin.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Remove') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Remove') ?>" width="16" height="16"/></th>
                 <?php endif; ?>
-                <th class="a-center"><img src="<?php echo $this->getSkinUrl('images/fam_package_go.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add To Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add To Order') ?>" width="16" height="16"/></th>
+                <th class="a-center"><img src="<?php echo $this->getViewFileUrl('images/fam_package_go.gif') ?>" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add To Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add To Order') ?>" width="16" height="16"/></th>
             </tr>
             <?php foreach ($this->getItems() as $_item): ?>
             <tr>
@@ -78,9 +78,9 @@
                 <?php endif; ?>
                 <td class="a-center">
                     <?php if ($_item->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE && $this->getDataId() == 'wishlist'): ?>
-                        <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $this->getProductId($_item) ?>, <?php echo $this->getItemId($_item) ?>); return false;"><img src="<?php echo $this->getSkinUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                        <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $this->getProductId($_item) ?>, <?php echo $this->getItemId($_item) ?>); return false;"><img src="<?php echo $this->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" width="16" height="16"/></a>
                     <?php elseif ($_item->getTypeId() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE): ?>
-                        <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $this->getProductId($_item) ?>); return false;"><img src="<?php echo $this->getSkinUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                        <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $this->getProductId($_item) ?>); return false;"><img src="<?php echo $this->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Configure and Add to Order') ?>" width="16" height="16"/></a>
                     <?php else: ?>
                         <input type="checkbox" name="sidebar[<?php echo $this->getSidebarStorageAction() ?>][<?php echo $this->getIdentifierId($_item) ?>]" value="<?php echo $this->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>" title="<?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Add To Order') ?>"/>
                     <?php endif; ?>

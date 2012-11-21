@@ -88,8 +88,12 @@ class Mage_User_Model_Acl_Loader_RoleTest extends PHPUnit_Framework_TestCase
             )));
 
 
-        $this->_objectFactoryMock->expects($this->at(0))->method('getModelInstance')->with($this->anything(), 'G1');
-        $this->_objectFactoryMock->expects($this->at(1))->method('getModelInstance')->with($this->anything(), 'U1');
+        $this->_objectFactoryMock->expects($this->at(0))->method('getModelInstance')->with($this->anything(),
+            array('roleId' => 'G1')
+        );
+        $this->_objectFactoryMock->expects($this->at(1))->method('getModelInstance')->with($this->anything(),
+            array('roleId' => 'U1')
+        );
 
         $aclMock = $this->getMock('Magento_Acl');
         $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);

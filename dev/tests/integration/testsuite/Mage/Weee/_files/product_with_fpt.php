@@ -25,13 +25,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$installer = new Mage_Catalog_Model_Resource_Setup('catalog_setup');
+$installer = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'catalog_setup'));
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
-$entityModel = new Mage_Eav_Model_Entity();
+$entityModel = Mage::getModel('Mage_Eav_Model_Entity');
 $entityTypeId = $entityModel->setType(Mage_Catalog_Model_Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-$attribute = new Mage_Catalog_Model_Resource_Eav_Attribute();
+$attribute = Mage::getResourceModel('Mage_Catalog_Model_Resource_Eav_Attribute');
 $attribute->setAttributeCode('fpt_for_all')
     ->setEntityTypeId($entityTypeId)
     ->setAttributeGroupId($groupId)
@@ -40,7 +40,7 @@ $attribute->setAttributeCode('fpt_for_all')
     ->setIsUserDefined(1)
     ->save();
 
-$product = new Mage_Catalog_Model_Product();
+$product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId($attributeSetId)

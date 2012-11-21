@@ -26,8 +26,10 @@
  */
 
 /* Create attribute */
-$installer = new Mage_Catalog_Model_Resource_Setup('catalog_setup');
-$attribute = new Mage_Catalog_Model_Resource_Eav_Attribute();
+/** @var $installer Mage_Catalog_Model_Resource_Setup */
+$installer = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'catalog_setup'));
+/** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+$attribute = Mage::getResourceModel('Mage_Catalog_Model_Resource_Eav_Attribute');
 $attribute->setData(
     array(
         'attribute_code'    => 'test_configurable',
@@ -70,13 +72,15 @@ $attribute->save();
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
 
 /* Create simple products per each option */
-$options = new Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection();
+/** @var $options Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection */
+$options = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection');
 $options->setAttributeFilter($attribute->getId());
 
 $attributeValues = array();
 $productsData = array();
 foreach ($options as $option) {
-    $product = new Mage_Catalog_Model_Product();
+    /** @var $product Mage_Catalog_Model_Product */
+    $product = Mage::getModel('Mage_Catalog_Model_Product');
     $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
         ->setId($option->getId()*10)
         ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
@@ -106,7 +110,9 @@ foreach ($options as $option) {
     $productsData[$product->getId()] = array($dataOption);
     $attributeValues[] = $dataOption;
 }
-$product = new Mage_Catalog_Model_Product();
+
+/** @var $product Mage_Catalog_Model_Product */
+$product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
     ->setId(1)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))

@@ -1,0 +1,21 @@
+{
+    "name": "zendframework/zend-stdlib",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "stdlib"
+    ],
+    "autoload": {
+        "psr-0": {
+            "Zend\\Stdlib\\": ""
+        }
+    },
+    "target-dir": "Zend/Stdlib",
+    "suggest": {
+        "pecl-weakref": "Implementation of weak references for Stdlib\\CallbackHandler"
+    },
+    "require": {
+        "php": ">=5.3.3"
+    }
+}

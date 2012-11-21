@@ -62,8 +62,7 @@ class Mage_Backend_Model_Auth_Session extends Mage_Core_Model_Session_Abstract i
         } else {
             $areaConfig = Mage::getConfig()->getAreaConfig(Mage::helper('Mage_Backend_Helper_Data')->getAreaCode());
             $this->_aclBuilder = Mage::getSingleton('Mage_Core_Model_Acl_Builder', array(
-                'areaConfig' => $areaConfig,
-                'objectFactory' => Mage::getConfig()
+                'data' => array('areaConfig' => $areaConfig, 'objectFactory' => Mage::getConfig())
             ));
         }
         $this->init('admin');
@@ -199,8 +198,8 @@ class Mage_Backend_Model_Auth_Session extends Mage_Core_Model_Session_Abstract i
         if ($this->getUser()) {
             $this->renewSession();
 
-            if (Mage::getSingleton('Mage_Adminhtml_Model_Url')->useSecretKey()) {
-                Mage::getSingleton('Mage_Adminhtml_Model_Url')->renewSecretUrls();
+            if (Mage::getSingleton('Mage_Backend_Model_Url')->useSecretKey()) {
+                Mage::getSingleton('Mage_Backend_Model_Url')->renewSecretUrls();
             }
 
             $this->setIsFirstPageAfterLogin(true);

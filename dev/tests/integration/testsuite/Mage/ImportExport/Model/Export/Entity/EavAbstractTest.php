@@ -53,7 +53,7 @@ class Mage_ImportExport_Model_Export_Entity_EavAbstractTest extends PHPUnit_Fram
 
     protected function setUp()
     {
-        $customerAttributes = new Mage_Customer_Model_Resource_Attribute_Collection();
+        $customerAttributes = Mage::getResourceModel('Mage_Customer_Model_Resource_Attribute_Collection');
 
         $this->_model = $this->getMockForAbstractClass('Mage_ImportExport_Model_Export_Entity_EavAbstract', array(),
             '', false);

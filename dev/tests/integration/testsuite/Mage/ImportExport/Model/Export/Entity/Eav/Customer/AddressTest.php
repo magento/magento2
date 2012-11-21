@@ -48,7 +48,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = new Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address();
+        $this->_model = Mage::getModel('Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address');
 
         /** @var $website Mage_Core_Model_Website */
         foreach (Mage::app()->getWebsites(true) as $website) {
@@ -85,7 +85,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
         $defaultAddressMap
             = Mage_ImportExport_Model_Import_Entity_Eav_Customer_Address::getDefaultAddressAttributeMapping();
 
-        $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
+        $this->_model->setWriter(Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv'));
         $this->_model->setParameters(array());
 
         $data = $this->_csvToArray($this->_model->export(), $entityIdCode);
@@ -156,7 +156,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
     {
         $entityIdCode = Mage_ImportExport_Model_Export_Entity_Eav_Customer_Address::COLUMN_ADDRESS_ID;
 
-        $this->_model->setWriter(new Mage_ImportExport_Model_Export_Adapter_Csv());
+        $this->_model->setWriter(Mage::getModel('Mage_ImportExport_Model_Export_Adapter_Csv'));
 
         $filterData = array(
             'export_filter' => array(

@@ -37,7 +37,7 @@ class Mage_User_Model_Resource_Rules_CollectionTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_collection = new Mage_User_Model_Resource_Rules_Collection();
+        $this->_collection = Mage::getResourceModel('Mage_User_Model_Resource_Rules_Collection');
     }
 
     protected function tearDown()
@@ -47,7 +47,7 @@ class Mage_User_Model_Resource_Rules_CollectionTest extends PHPUnit_Framework_Te
 
     public function testGetByRoles()
     {
-        $user = new Mage_User_Model_User;
+        $user = Mage::getModel('Mage_User_Model_User');
         $user->loadByUsername(Magento_Test_Bootstrap::ADMIN_NAME);
         $this->_collection->getByRoles($user->getRole()->getId());
 

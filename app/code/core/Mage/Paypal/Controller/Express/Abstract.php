@@ -45,12 +45,34 @@ abstract class Mage_Paypal_Controller_Express_Abstract extends Mage_Core_Control
     protected $_quote = false;
 
     /**
+     * Config mode type
+     *
+     * @var string
+     */
+    protected $_configType;
+
+    /**
+     * Config method type
+     *
+     * @var string
+     */
+    protected $_configMethod;
+
+    /**
+     * Checkout mode type
+     *
+     * @var string
+     */
+    protected $_checkoutType;
+
+    /**
      * Instantiate config
      */
     protected function _construct()
     {
         parent::_construct();
-        $this->_config = Mage::getModel($this->_configType, array($this->_configMethod));
+        $parameters = array('params' => array($this->_configMethod));
+        $this->_config = Mage::getModel($this->_configType, $parameters);
     }
 
     /**
@@ -380,10 +402,14 @@ abstract class Mage_Paypal_Controller_Express_Abstract extends Mage_Core_Control
             $this->getResponse()->setHeader('HTTP/1.1','403 Forbidden');
             Mage::throwException(Mage::helper('Mage_Paypal_Helper_Data')->__('Unable to initialize Express Checkout.'));
         }
-        $this->_checkout = Mage::getSingleton($this->_checkoutType, array(
-            'config' => $this->_config,
-            'quote'  => $quote,
-        ));
+
+        $parameters = array(
+            'params' => array(
+                'quote' => $quote,
+                'config' => $this->_config,
+            ),
+        );
+        $this->_checkout = Mage::getSingleton($this->_checkoutType, $parameters);
     }
 
     /**

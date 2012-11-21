@@ -38,12 +38,12 @@ class Mage_Adminhtml_Block_Tax_Rule_Edit extends Mage_Adminhtml_Block_Widget_For
      * Init class
      *
      */
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'rule';
         $this->_controller = 'tax_rule';
 
-        parent::__construct();
+        parent::_construct();
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Tax_Helper_Data')->__('Save Rule'));
         $this->_updateButton('delete', 'label', Mage::helper('Mage_Tax_Helper_Data')->__('Delete Rule'));

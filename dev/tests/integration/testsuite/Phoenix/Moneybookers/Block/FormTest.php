@@ -34,12 +34,14 @@ class Phoenix_Moneybookers_Block_FormTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = new Phoenix_Moneybookers_Block_Form;
+        /** @var $blockFactory Mage_Core_Model_BlockFactory */
+        $blockFactory = Mage::getObjectManager()->get('Mage_Core_Model_BlockFactory');
+        $this->_block = $blockFactory->createBlock('Phoenix_Moneybookers_Block_Form');
     }
 
     protected function tearDown()
     {
-        $this->_block = null;
+        unset($this->_block);
     }
 
     public function testConstruct()

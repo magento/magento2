@@ -70,7 +70,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
     protected function _construct()
     {
         parent::_construct();
-        $this->_url = Mage::getModel('Mage_Backend_Model_Url');
+        $this->_url = Mage::getSingleton('Mage_Backend_Model_Url');
         $this->setCacheTags(array(self::CACHE_TAGS));
     }
 
@@ -195,7 +195,7 @@ class Mage_Backend_Block_Menu extends Mage_Backend_Block_Template
      */
     protected function _getMenuIterator($menu)
     {
-        return Mage::getModel('Mage_Backend_Model_Menu_Filter_Iterator', $menu->getIterator());
+        return Mage::getModel('Mage_Backend_Model_Menu_Filter_Iterator', array('iterator' => $menu->getIterator()));
     }
 
     /**

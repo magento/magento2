@@ -34,7 +34,8 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
      */
     public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = array())
     {
-        $store = new Mage_Core_Model_Store();
+        /** @var $store Mage_Core_Model_Store */
+        $store = Mage::getModel('Mage_Core_Model_Store');
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
@@ -48,7 +49,8 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
         $this->assertNotEmpty($messages, "Could not save category");
         $this->assertEquals('The category has been saved.', current($messages)->getCode());
 
-        $category = new Mage_Catalog_Model_Category();
+        /** @var $category Mage_Catalog_Model_Category */
+        $category = Mage::getModel('Mage_Catalog_Model_Category');
         $category->setStoreId($storeId);
         $category->load(2);
 
@@ -150,7 +152,7 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
                         'landing_page'             => '1',
                         'is_anchor'                => '1',
                         'custom_apply_to_products' => '0',
-                        'custom_design'            => 'default/default/blank',
+                        'custom_design'            => 'default/blank',
                         'custom_design_from'       => '',
                         'custom_design_to'         => '',
                         'page_layout'              => '',
@@ -187,7 +189,7 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
                     'default_sort_by'          => NULL,
                     'display_mode'             => 'PRODUCTS',
                     'meta_title'               => 'Custom Title',
-                    'custom_design'            => 'default/default/blank',
+                    'custom_design'            => 'default/blank',
                     'page_layout'              => NULL,
                     'is_active'                => '0',
                     'include_in_menu'          => '0',

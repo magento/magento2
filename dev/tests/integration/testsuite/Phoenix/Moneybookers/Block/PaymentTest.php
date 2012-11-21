@@ -28,12 +28,29 @@
 class Phoenix_Moneybookers_Block_PaymentTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    protected $_localeCode;
+
+    protected function setUp()
+    {
+        $this->_localeCode = Mage::app()->getLocale()->getLocale();
+    }
+
+    protected function tearDown()
+    {
+        Mage::app()->getLocale()->setLocale($this->_localeCode);
+    }
+
+    /**
      * @dataProvider getMoneybookersLogoSrcDataProvider
      */
     public function testGetMoneybookersLogoSrc($localeCode, $expectedFile)
     {
         Mage::app()->getLocale()->setLocale($localeCode);
-        $block = new Phoenix_Moneybookers_Block_Payment;
+        /** @var $blockFactory Mage_Core_Model_BlockFactory */
+        $blockFactory = Mage::getObjectManager()->get('Mage_Core_Model_BlockFactory');
+        $block = $blockFactory->createBlock('Phoenix_Moneybookers_Block_Payment');
         $this->assertStringEndsWith($expectedFile, $block->getMoneybookersLogoSrc());
     }
 

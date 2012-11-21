@@ -27,13 +27,13 @@
 class Mage_Adminhtml_Block_Sales_Order_Status_New extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 
-    public function __construct()
+    protected function _construct()
     {
         $this->_objectId = 'status';
         $this->_controller = 'sales_order_status';
         $this->_mode = 'new';
 
-        parent::__construct();
+        parent::_construct();
         $this->_updateButton('save', 'label', Mage::helper('Mage_Sales_Helper_Data')->__('Save Status'));
         $this->_removeButton('delete');
     }

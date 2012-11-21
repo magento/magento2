@@ -26,11 +26,17 @@
 ?>
 
 <script type="text/javascript">
-    var lifetime = <?php echo Mage::helper('Mage_PageCache_Helper_Data')->getNoCacheCookieLifetime(); ?>;
-    var expireAt = Mage.Cookies.expires;
-    if (lifetime > 0) {
-        expireAt = new Date();
-        expireAt.setTime(expireAt.getTime() + lifetime * 1000);
-    }
-    Mage.Cookies.set('<?php echo Mage_PageCache_Helper_Data::NO_CACHE_COOKIE; ?>', 1, expireAt);
+    //<![CDATA[
+    (function($) {
+        $.mage.event.observe('mage.nocachecookie.initialize', function(e, o) {
+            o.cookieName = '<?php echo Mage_PageCache_Helper_Data::NO_CACHE_COOKIE ?>'
+            o.cookieLifetime = <?php echo Mage::helper('Mage_PageCache_Helper_Data')->getNoCacheCookieLifetime() ?>;
+            o.cookieExpireAt = $.cookie.defaults.expires;
+        });
+        $.mage.load.jsSync(
+            "<?php echo $this->getViewFileUrl('Mage_Page::js/cookies.js')?>",
+            "<?php echo $this->getViewFileUrl('Mage_PageCache::js/cookie.js')?>"
+        );
+    })(jQuery);
+    //]]>
 </script>

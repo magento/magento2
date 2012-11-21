@@ -36,15 +36,6 @@ include_once "Maged/Connect.php";
 
 class Maged_Model_Connect extends Maged_Model
 {
-
-    /**
-     * Constructor
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-    }
-
     /**
      * Retrive object of Maged_Connect
      *

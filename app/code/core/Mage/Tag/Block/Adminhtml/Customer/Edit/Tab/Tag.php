@@ -25,6 +25,8 @@
  *
  * @method Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag setTitle() setTitle(string $title)
  * @method string getTitle() getTitle()
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_Template
     implements Mage_Backend_Block_Widget_Tab_Interface
@@ -51,30 +53,72 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
     protected $_authSession;
 
     /**
-     * Dependency injections, set identifier and title
+     * Class constructor
      *
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Authorization $authSession
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct(array $data = array())
-    {
-        parent::__construct();
+    public function __construct(Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Backend_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Authorization $authSession,
+        array $data = array()
+    ) {
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data
+        );
 
+        $this->_authSession = $authSession;
         if (isset($data['helpers'])) {
             $this->_helpers = $data['helpers'];
         }
-        if (isset($data['current_customer'])) {
-            $this->_customer = $data['current_customer'];
-        } else {
-            $this->_customer = Mage::registry('current_customer');
-        }
-        if (isset($data['auth_session'])) {
-            $this->_authSession = $data['auth_session'];
-        } else {
-            $this->_authSession = Mage::getSingleton('Mage_Core_Model_Authorization');
-        }
-
         $this->setId('tags');
         $this->setTitle($this->_helper('Mage_Tag_Helper_Data')->__('Product Tags'));
+    }
+
+    /**
+     * Set customer object
+     *
+     * @param Mage_Customer_Model_Customer $customer
+     */
+    public function setCustomer(Mage_Customer_Model_Customer $customer)
+    {
+        $this->_customer = $customer;
+    }
+
+    /**
+     * Retrieve current customer instance
+     *
+     * @return Mage_Customer_Model_Customer
+     */
+    public function getCustomer()
+    {
+        if (!$this->_customer) {
+            $this->_customer = Mage::registry('current_customer');
+        }
+
+        return $this->_customer;
     }
 
     /**
@@ -115,10 +159,10 @@ class Mage_Tag_Block_Adminhtml_Customer_Edit_Tab_Tag extends Mage_Backend_Block_
      */
     public function canShowTab()
     {
-        if (!$this->_customer) {
+        if (!$this->getCustomer()) {
             return false;
         }
-        return $this->_customer->getId() && $this->_authSession->isAllowed('Mage_Tag::tag');
+        return $this->getCustomer()->getId() && $this->_authSession->isAllowed('Mage_Tag::tag');
     }
 
     /**

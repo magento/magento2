@@ -69,7 +69,7 @@ class Mage_Catalog_Model_Product_Option_Api_V2 extends Mage_Catalog_Model_Produc
      * @param int|string|null $store
      * @return array
      */
-    public function items($productId, $store)
+    public function items($productId, $store = null)
     {
         $result = parent::items($productId, $store);
         foreach ($result as $key => $option) {

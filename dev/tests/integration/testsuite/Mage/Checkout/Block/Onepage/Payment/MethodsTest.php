@@ -51,7 +51,7 @@ class Mage_Checkout_Block_Onepage_Payment_MethodsTest extends PHPUnit_Framework_
     {
         $expectedTitle = 'Free Method';
         $expectedLabel = 'Label After Html';
-        $method = new Mage_Payment_Model_Method_Free;
+        $method = Mage::getModel('Mage_Payment_Model_Method_Free');
 
         $block = $this->_block->getLayout()->createBlock('Mage_Core_Block_Text')
             ->setMethodTitle($expectedTitle)

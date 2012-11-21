@@ -34,7 +34,7 @@ class Mage_Core_Model_Resource_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Mage_Core_Model_Resource_Config();
+        $this->_model = Mage::getResourceModel('Mage_Core_Model_Resource_Config');
     }
 
     protected function tearDown()

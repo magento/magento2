@@ -34,15 +34,13 @@
 
 class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    /**
-     * Update block controls
-     */
-    public function __construct()
+
+    protected function _construct()
     {
         $this->_objectId = 'attribute_id';
         $this->_controller = 'catalog_product_attribute';
 
-        parent::__construct();
+        parent::_construct();
 
         if($this->getRequest()->getParam('popup')) {
             $this->_removeButton('back');
