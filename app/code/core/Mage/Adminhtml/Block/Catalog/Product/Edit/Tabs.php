@@ -102,12 +102,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 ));
             }
 
-            $this->addTab('categories', array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Categories'),
-                'url'       => $this->getUrl('*/*/categories', array('_current' => true)),
-                'class'     => 'ajax',
-            ));
-
             $this->addTab('related', array(
                 'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Related Products'),
                 'url'       => $this->getUrl('*/*/related', array('_current' => true)),

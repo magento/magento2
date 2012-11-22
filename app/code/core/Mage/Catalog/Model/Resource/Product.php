@@ -191,7 +191,6 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
     {
         $this->_saveWebsiteIds($product)
             ->_saveCategories($product);
-
         return parent::_afterSave($product);
     }
 

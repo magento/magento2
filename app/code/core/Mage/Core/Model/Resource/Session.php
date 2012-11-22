@@ -150,9 +150,10 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
         $bind = array('session_id' => $sessionId);
         $data = $this->_write->fetchOne($select, $bind);
 
-        // if session data is a base64 encoded string
-        if (base64_decode($data, true) !== false) {
-            $data = base64_decode($data);
+        // check if session data is a base64 encoded string
+        $decodedData = base64_decode($data, true);
+        if ($decodedData !== false) {
+            $data = $decodedData;
         }
         return $data;
     }
@@ -174,9 +175,10 @@ class Mage_Core_Model_Resource_Session implements Zend_Session_SaveHandler_Inter
         $exists = $this->_write->fetchOne($select, $bindValues);
 
         // encode session serialized data to prevent insertion of incorrect symbols
+        $sessionData = base64_encode($sessionData);
         $bind = array(
             'session_expires' => time(),
-            'session_data'    => base64_encode($sessionData),
+            'session_data'    => $sessionData,
         );
 
         if ($exists) {

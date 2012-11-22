@@ -1237,10 +1237,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      */
     public function createBlock($type, $name = '', array $attributes = array())
     {
-        $isAnonymousBlock = empty($name);
         $name = $this->_createStructuralElement($name, self::TYPE_BLOCK, $type);
         $block = $this->_createBlock($type, $name, $attributes);
-        $block->setIsAnonymous($isAnonymousBlock);
         return $block;
     }
 

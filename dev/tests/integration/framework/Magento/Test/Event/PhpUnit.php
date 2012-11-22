@@ -153,7 +153,7 @@ class Magento_Test_Event_PhpUnit implements PHPUnit_Framework_TestListener
         if ($suite instanceof PHPUnit_Framework_TestSuite_DataProvider) {
             return;
         }
-        $this->_eventManager->fireEvent('endTestSuite', array(), true);
+        $this->_eventManager->fireEvent('endTestSuite', array($suite), true);
     }
 
     /**

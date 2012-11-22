@@ -41,30 +41,17 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
     protected function _prepareLayout()
     {
         $onclick = "setSuperSettings('" . $this->getContinueUrl() . "','attribute-checkbox', 'attributes')";
-        $this->addChild('continue_button', 'Mage_Adminhtml_Block_Widget_Button', array(
-            'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Continue'),
-            'onclick'   => $onclick,
-            'class'     => 'save'
+        $this->addChild('continue_button', 'Mage_Backend_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Continue'),
+            'onclick' => $onclick,
+            'class' => 'save',
         ));
 
-        $backButton = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button')
-            ->setData(array(
-                'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
-                'onclick'   => "setLocation('".$this->getBackUrl()."')",
-                'class'     => 'back'
-            ));
-
-        $this->setChild('back_button', $backButton);
-
-        $this->setChild('change_attribute_set_button',
-            $this->getLayout()->createBlock(
-                'Mage_Adminhtml_Block_Widget_Button',
-                $this->getNameInLayout() . '-change-attribute-set'
-            )->setData(array(
-                'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Change Attribute Set'),
-                'onclick' => "jQuery('#attribute-set-info').dialog('open');"
-            ))
-        );
+        $this->addChild('back_button', 'Mage_Backend_Block_Widget_Button', array(
+            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
+            'onclick' => "setLocation('" . $this->getBackUrl() . "')",
+            'class' => 'back'
+        ));
 
         parent::_prepareLayout();
     }
@@ -97,12 +84,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
 
         $fieldset->addField('req_text', 'note', array(
             'text' => '<ul class="messages"><li class="notice-msg"><ul><li>'
-                    .  $this->__('Only attributes with scope "Global", input type "Dropdown" and Use To Create Configurable Product "Yes" are available.')
-                    . '</li></ul></li></ul>'
-        ));
-
-        $fieldset->addField('change_attribute_set_button', 'note', array(
-            'text' => $this->getChildHtml('change_attribute_set_button'),
+                .  $this->__('Only attributes with scope "Global", input type "Dropdown" and Use To Create Configurable Product "Yes" are available.')
+                . '</li></ul></li></ul>'
         ));
 
         $hasAttributes = false;
@@ -153,7 +136,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
      */
     public function getContinueUrl()
     {
-        return $this->getUrl('*/*/new', array(
+        return $this->getUrl($this->_getProduct()->getId() ? '*/*/edit' : '*/*/new', array(
             '_current'   => true,
             'attributes' => '{{attributes}}'
         ));

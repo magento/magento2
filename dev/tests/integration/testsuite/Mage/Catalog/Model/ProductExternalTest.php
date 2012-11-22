@@ -98,20 +98,6 @@ class Mage_Catalog_Model_ProductExternalTest extends PHPUnit_Framework_TestCase
         $this->assertSame($categoryTwo, $this->_model->getCategory());
     }
 
-    public function testSetCategoryIds()
-    {
-        $this->_model->setCategoryIds('1,2,,3');
-        $this->assertEquals(array(0 => 1, 1 => 2, 3 => 3), $this->_model->getData('category_ids'));
-    }
-
-    /**
-     * @expectedException Mage_Core_Exception
-     */
-    public function testSetCategoryIdsException()
-    {
-        $this->_model->setCategoryIds(1);
-    }
-
     public function testGetCategoryIds()
     {
         // none

@@ -173,7 +173,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
             }
             if ( ($inputType = $attribute->getFrontend()->getInputType())
                  && !in_array($attribute->getAttributeCode(), $exclude)
-                 && ('media_image' != $inputType)
+                 && (('media_image' != $inputType) || ($attribute->getAttributeCode() == 'image'))
                  ) {
 
                 $fieldType      = $inputType;

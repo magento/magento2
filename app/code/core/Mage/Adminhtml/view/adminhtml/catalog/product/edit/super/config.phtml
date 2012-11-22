@@ -23,6 +23,11 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config */
+if (!count($this->getSelectedAttributes())) {
+    echo $this->getChildHtml('super_settings');
+} else {
 ?>
 <?php if (!$this->isReadonly()):?>
 <div class="entry-edit">
@@ -151,3 +156,4 @@ Validation.add(
 </script>
 
 <div><input type="hidden" name="affect_configurable_product_attributes" value="1" /></div>
+<?php } ?>

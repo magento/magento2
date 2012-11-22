@@ -46,15 +46,6 @@
         </routers>
     </admin>
     <adminhtml>
-        <translate>
-            <modules>
-                <Mage_Theme>
-                    <files>
-                        <default>Mage_Theme.csv</default>
-                    </files>
-                </Mage_Theme>
-            </modules>
-        </translate>
         <layout>
             <updates>
                 <theme module="Mage_Theme">

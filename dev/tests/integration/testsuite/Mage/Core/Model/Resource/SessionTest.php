@@ -52,10 +52,17 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_sessionData = array(
+    protected $_sourceData = array(
         self::SESSION_NEW    => array('new key'      => 'new value'),
         self::SESSION_EXISTS => array('existing key' => 'existing value'),
     );
+
+    /**
+     * Data as objects for serialization
+     *
+     * @var array
+     */
+    protected $_sessionData;
 
     /**
      * @var Magento_Test_ObjectManager
@@ -92,6 +99,12 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         $resource            = $this->_objectManager->get('Mage_Core_Model_Resource');
         $this->_connection   = $resource->getConnection('core_write');
         $this->_sessionTable = $resource->getTableName('core_session');
+
+        // session stores serialized objects with protected properties
+        // we need to test this case to ensure that DB adapter successfully processes "\0" symbols in serialized data
+        foreach ($this->_sourceData as $key => $data) {
+            $this->_sessionData[$key] = new Varien_Object($data);
+        }
     }
 
     protected function tearDown()
@@ -100,6 +113,7 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         unset($this->_model);
         unset($this->_connection);
         unset($this->_sessionTable);
+        unset($this->_sessionData);
     }
 
     public function testHasConnection()
@@ -164,7 +178,9 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
      */
     public function readEncodedDataProvider()
     {
-        $sessionData = serialize($this->_sessionData[self::SESSION_NEW]);
+        // we can't use object data as a fixture because not encoded serialized object
+        // might cause DB adapter fatal error, so we have to use array as a fixture
+        $sessionData = serialize($this->_sourceData[self::SESSION_NEW]);
         return array(
             'session_encoded'     => array('$sessionData' => base64_encode($sessionData)),
             'session_not_encoded' => array('$sessionData' => $sessionData),
@@ -187,6 +203,6 @@ class Mage_Core_Model_Resource_SessionTest extends PHPUnit_Framework_TestCase
         $this->_connection->insertOnDuplicate($this->_sessionTable, $sessionRecord, array(self::COLUMN_SESSION_DATA));
 
         $sessionData = $this->_model->read(self::SESSION_ID);
-        $this->assertEquals($this->_sessionData[self::SESSION_NEW], unserialize($sessionData));
+        $this->assertEquals($this->_sourceData[self::SESSION_NEW], unserialize($sessionData));
     }
 }

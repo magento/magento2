@@ -8,8 +8,15 @@ app/code/core/Mage/Adminhtml/Block/Customer/Edit/Tab/Account.php
 app/code/core/Mage/Adminhtml/Model/Observer.php
 app/code/core/Mage/Adminhtml/Block/Urlrewrite
 app/code/core/Mage/Adminhtml/Block/Page/System/Config/Robots/Reset.php
+app/code/core/Mage/Adminhtml/Block/Catalog/Product/Helper/Form/Category.php
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit
 app/code/core/Mage/Adminhtml/Block/System/Store/Edit.php
+app/code/core/Mage/Backend/Model/Acl/Config.php
+app/code/core/Mage/Backend/Block/Widget/Grid/ColumnSet.php
+app/code/core/Mage/Backend/Block/Widget/Grid/Export.php
+app/code/core/Mage/Backend/Block/Widget/Grid/ExportInterface.php
+app/code/core/Mage/CatalogInventory/Block/Adminhtml/Form/Field/Stock.php
+app/code/core/Mage/Backend/controllers/Adminhtml/SystemController.php
 app/code/core/Mage/Adminhtml/controllers/UrlrewriteController.php
 app/code/core/Mage/Core/Block/Abstract.php
 app/code/core/Mage/Core/data

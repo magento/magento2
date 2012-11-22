@@ -308,9 +308,6 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
             $this->unsetChild($alias);
         }
         if ($block instanceof self) {
-            if ($block->getIsAnonymous()) {
-                $block->setNameInLayout($this->getNameInLayout() . '.' . $alias);
-            }
             $block = $block->getNameInLayout();
         }
         $layout->setChild($thisName, $block, $alias);
@@ -319,10 +316,10 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     }
 
     /**
-     * Create block and set as child
+     * Create block with name: {parent}.{alias} and set as child
      *
      * @param string $alias
-     * @param Mage_Core_Block_Abstract $block
+     * @param string $block
      * @param array $data
      * @return Mage_Core_Block_Abstract new block
      */
@@ -647,7 +644,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
          * Check framing options
          */
         if ($this->_frameOpenTag) {
-            $html = '<'.$this->_frameOpenTag.'>'.$html.'<'.$this->_frameCloseTag.'>';
+            $html = '<' . $this->_frameOpenTag . '>' . $html . '<' . $this->_frameCloseTag . '>';
         }
 
         return $html;
@@ -682,7 +679,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     public function getUiId()
     {
-        return ' data-ui-id="' . call_user_func_array(array($this, 'getJsId'), func_get_args()). '" ';
+        return ' data-ui-id="' . call_user_func_array(array($this, 'getJsId'), func_get_args()) . '" ';
     }
 
     /**
@@ -739,10 +736,28 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      * @param string $file path to file in theme
      * @param array $params
      * @return string
+     * @throws Magento_Exception
      */
     public function getViewFileUrl($file = null, array $params = array())
     {
-        return Mage::getDesign()->getViewFileUrl($file, $params);
+        try {
+            return Mage::getDesign()->getViewFileUrl($file, $params);
+        } catch (Magento_Exception $e) {
+            Mage::logException($e);
+            return $this->_getNotFoundUrl();
+        }
+    }
+
+    /**
+     * Get 404 file not found url
+     *
+     * @param string $route
+     * @param array $params
+     * @return string
+     */
+    protected function _getNotFoundUrl($route = '', $params = array('_direct' => 'core/index/notfound'))
+    {
+        return $this->getUrl($route, $params);
     }
 
     /**

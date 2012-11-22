@@ -42,7 +42,7 @@
             <?php echo $this->getDuplicateButtonHtml() ?>
         <?php endif; ?>
     <?php endif; ?>
-    <?php if($this->getProductSetId() && $this->getIsConfigured()): ?>
+    <?php if ($this->getProductSetId()): ?>
         <?php echo $this->getChangeAttributeSetButtonHtml() ?>
         <?php echo $this->getSaveButtonHtml() ?>
         <?php echo $this->getSaveAndEditButtonHtml() ?>
@@ -85,26 +85,24 @@
         setLocation(template.evaluate({attribute_set:$F(setElement),type:$F(typeElement)}));
     }
 
-     function setSuperSettings(urlTemplate, attributesClass, validateField) {
+    function setSuperSettings(urlTemplate, attributesClass, validateField) {
         var attributesFields = $$('.' + attributesClass);
         var attributes = Form.serializeElements(attributesFields, true).attribute;
-        if(typeof attributes == 'string') {
+        if (typeof attributes == 'string') {
             attributes = [attributes];
         }
 
-        if(!attributes) {
+        if (!attributes) {
             $(validateField).value = 'no-attributes';
         } else {
             $(validateField).value = 'has-attributes';
         }
 
-        if (productForm.validator.validate()) {
-            var template = new Template(urlTemplate, productTemplateSyntax);
-            var url = template.evaluate({
-                attributes: encode_base64(attributes.join(',')).replace(new RegExp('/','g'),'%2F').replace(new RegExp('=','g'),'%3D')
-            });
-            setLocation(url);
-        }
+        var template = new Template(urlTemplate, productTemplateSyntax);
+        var url = template.evaluate({
+            attributes: encode_base64(attributes.join(',')).replace(new RegExp('/', 'g'), '%2F').replace(new RegExp('=', 'g'), '%3D')
+        });
+        jQuery('#product_edit_form').attr('action', url + '&active_tab=configurable').submit();
     }
 
     function checkMaxLength(Object, MaxLen)
@@ -115,7 +113,7 @@
         return 1;
     }
 
-Event.observe(window, 'load', function() {
+jQuery(function() {
     var objName = '<?php echo $this->getSelectedTabId() ?>';
     if (objName) {
         obj = $(objName);

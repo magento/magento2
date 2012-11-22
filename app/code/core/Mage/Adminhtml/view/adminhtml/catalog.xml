@@ -51,7 +51,6 @@
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addCss"><file>Mage_Adminhtml::css/ui-lightness/jquery-ui-1.8.21.custom.css</file></action>
-
             <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/vendor/jquery.ui.widget.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
@@ -59,6 +58,10 @@
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::catalog/jquery.category-selector.css</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/jquery.category-selector.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/jquery.base-image-uploader.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::catalog/jquery.base-image-uploader.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
@@ -81,7 +84,6 @@
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addCss"><file>Mage_Adminhtml::css/ui-lightness/jquery-ui-1.8.21.custom.css</file></action>
-
             <action method="addCss"><file>Mage_Adminhtml::jquery/fileUploader/css/jquery.fileupload-ui.css</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/vendor/jquery.ui.widget.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
@@ -89,6 +91,10 @@
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/load-image.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/canvas-to-blob.min.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::catalog/jquery.category-selector.css</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/jquery.category-selector.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::catalog/jquery.base-image-uploader.js</file></action>
+            <action method="addCss"><file>Mage_Adminhtml::catalog/jquery.base-image-uploader.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit" name="product_edit"></block>
@@ -104,12 +110,6 @@
             <block type="Mage_Core_Block_Template" name="catalog.wysiwyg.js" template="Mage_Adminhtml::catalog/wysiwyg/js.phtml"/>
         </reference>
     </adminhtml_catalog_product_edit>
-
-    <adminhtml_catalog_product_categories>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Categories" name="catalog.product.edit.tab.categories"/>
-        </container>
-    </adminhtml_catalog_product_categories>
 
     <adminhtml_catalog_product_reviews>
         <container name="root" label="Root" output="1">
@@ -261,9 +261,15 @@ Layout handle for configurable products
 -->
 
     <adminhtml_catalog_product_configurable_new>
-        <remove name="product_tabs"/>
-        <reference name="left">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs_Configurable" name="configurable_product_tabs"/>
+        <reference name="product_tabs">
+            <action method="addTab">
+                <name>configurable</name>
+                <block>Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config</block>
+            </action>
+            <action method="bindShadowTabs">
+                <first>configurable</first>
+                <second>customer_options</second>
+            </action>
         </reference>
     </adminhtml_catalog_product_configurable_new>
 

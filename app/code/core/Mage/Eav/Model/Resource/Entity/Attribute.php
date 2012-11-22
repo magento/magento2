@@ -362,7 +362,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
             return $this;
         }
 
-        $defaultValue = null;
+        $defaultValue = $object->getDefault() ?: array();
         if (isset($option['value'])) {
             if (!is_array($object->getDefault())) {
                 $object->setDefault(array());

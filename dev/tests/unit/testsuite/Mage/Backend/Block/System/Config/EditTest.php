@@ -130,7 +130,6 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
         );
         $block->expects($this->once())->method('initForm');
         $block->expects($this->once())->method('getNameInLayout')->will($this->returnValue('test_block_name'));
-        $block->expects($this->once())->method('getIsAnonymous')->will($this->returnValue(false));
 
         $this->_layoutMock->expects($this->once())
             ->method('createBlock')

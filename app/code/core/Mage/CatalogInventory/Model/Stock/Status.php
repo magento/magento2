@@ -536,4 +536,23 @@ class Mage_CatalogInventory_Model_Stock_Status extends Mage_Core_Model_Abstract
         $this->_getResource()->addIsInStockFilterToCollection($collection);
         return $this;
     }
+
+    /**
+     * Get options for stock attribute in product creation
+     *
+     * @return array
+     */
+    static public function getAllOptions()
+    {
+        return array(
+            array(
+                'value' => Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK,
+                'label' => Mage::helper('Mage_CatalogInventory_Helper_Data')->__('In Stock'),
+            ),
+            array(
+                'value' => Mage_CatalogInventory_Model_Stock::STOCK_OUT_OF_STOCK,
+                'label' => Mage::helper('Mage_CatalogInventory_Helper_Data')->__('Out of Stock')
+            ),
+        );
+    }
 }

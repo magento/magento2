@@ -24,7 +24,9 @@
  * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+/**
+ * @magentoAppIsolation enabled
+ */
 class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -92,6 +94,19 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($childBlock->getParentBlock());
         $parentBlock->setChild('block2', $childBlock);
         $this->assertSame($parentBlock, $childBlock->getParentBlock());
+    }
+
+    /**
+     * @covers Mage_Core_Block_Abstract::addChild
+     */
+    public function testAddChild()
+    {
+        $parentBlock = $this->_createBlockWithLayout('testAddChild', 'testAddChild', 'Mage_Core_Block_Text');
+        $child = $parentBlock->addChild('testAddChildAlias', 'Mage_Core_Block_Text', array('content' => 'content'));
+        $this->assertInstanceOf('Mage_Core_Block_Text', $child);
+        $this->assertEquals('testAddChild.testAddChildAlias', $child->getNameInLayout());
+        $this->assertEquals($child, $parentBlock->getChildBlock('testAddChildAlias'));
+        $this->assertEquals('content', $child->getContent());
     }
 
     public function testSetGetNameInLayout()
@@ -220,6 +235,7 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_block->getChildBlock($childAlias));
 
         // With layout
+        /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout');
         $layout->addBlock($this->_block, $parentName);
         $layout->addBlock($child, $childName);
@@ -227,7 +243,7 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->_block->setChild($childAlias, $child);
         $result = $this->_block->getChildBlock($childAlias);
         $this->assertInstanceOf('Mage_Core_Block_Text', $result);
-        $this->assertEquals($parentName . '.' .  $childAlias, $result->getNameInLayout());
+        $this->assertEquals($childName, $result->getNameInLayout());
         $this->assertEquals($child, $result);
     }
 
@@ -465,6 +481,13 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     {
         $this->assertStringStartsWith('http://localhost/pub/media/theme/frontend/', $this->_block->getViewFileUrl());
         $this->assertStringEndsWith('css/styles.css', $this->_block->getViewFileUrl('css/styles.css'));
+
+        /**
+         * File is not exist
+         */
+        $this->assertStringEndsWith(
+            '/core/index/notfound', $this->_block->getViewFileUrl('not_exist_folder/wrong_bad_file.xyz')
+        );
     }
 
     public function testGetSetMessagesBlock()
@@ -656,6 +679,14 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         return array($blocks, $names);
     }
 
+    /**
+     * Create Block with Layout
+     *
+     * @param string $name
+     * @param null|string $alias
+     * @param null|string $type
+     * @return Mage_Core_Block_Abstract
+     */
     protected function _createBlockWithLayout($name = 'block', $alias = null,
         $type = 'Mage_Core_Block_Abstract'
     ) {

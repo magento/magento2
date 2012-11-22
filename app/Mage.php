@@ -170,7 +170,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '31',
+            'number'    => '32',
         );
     }
 

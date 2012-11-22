@@ -503,6 +503,16 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     }
 
     /**
+     * Category list suggestion based on already entered symbols
+     */
+    public function suggestCategoriesAction()
+    {
+        $this->getResponse()->setBody($this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Category_Tree')
+            ->getSuggestedCategoriesJson($this->getRequest()->getParam('name_part'))
+        );
+    }
+
+    /**
      * Check if admin has permissions to visit related pages
      *
      * @return boolean
