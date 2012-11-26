@@ -60,7 +60,7 @@ $linkAnchorText = $this->getObjectData($row, "{$index}_link_text");
 $linkText = $linkUrl ? ($linkAnchorText ? $linkAnchorText : $value) : '';
 $linkFormat = $linkUrl ? '<a href="%s">%s</a>' : '';
 ?>
-                <td<?php $this->getObjectData($row, 'is_amount') ? ' class="a-right"' : '' ?>><?php
+                <td<?php echo $this->getObjectData($row, 'is_amount') ? ' class="a-right"' : '' ?>><?php
 if ($linkFormat) {
     echo sprintf($nobr, sprintf($linkFormat, $this->escapeHtml($linkUrl), $this->escapeHtml($linkText)));
 } else {
