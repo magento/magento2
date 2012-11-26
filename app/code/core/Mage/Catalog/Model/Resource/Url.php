@@ -628,9 +628,9 @@ class Mage_Catalog_Model_Resource_Url extends Mage_Core_Model_Resource_Db_Abstra
             $attributes[$row['entity_id']] = $row['value'];
         }
         unset($rowSet);
-        foreach ($productIds as $productIds) {
-            if (!isset($attributes[$productIds])) {
-                $attributes[$productIds] = null;
+        foreach ($productIds as $productId) {
+            if (!isset($attributes[$productId])) {
+                $attributes[$productId] = null;
             }
         }
 
