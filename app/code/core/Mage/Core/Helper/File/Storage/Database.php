@@ -61,7 +61,6 @@ class Mage_Core_Helper_File_Storage_Database extends Mage_Core_Helper_Abstract
 
     /**
      * Check if we use DB storage
-     * Note: Disabled as not completed feature
      *
      * @return bool
      */
