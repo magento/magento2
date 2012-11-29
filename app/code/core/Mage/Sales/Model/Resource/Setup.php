@@ -144,6 +144,56 @@ class Mage_Sales_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
         }
         return $this;
     }
+    
+
+     /**
+     * Removed entity attribute. Overwrited for flat entities support
+     *
+     * @param mixed $entityTypeId
+     * @param mixed $code
+     * @return Mage_Sales_Model_Resource_Setup
+     */
+    public function removeAttribute($entityTypeId, $code)
+    {
+        if (array_key_exists($entityTypeId, $this->_flatEntityTables) &&
+            $this->_flatTableExist($this->_flatEntityTables[$entityTypeId]))
+        {
+            $this->_removeFlatAttribute($this->_flatEntityTables[$entityTypeId], $code);
+            $this->_removeGridAttribute($this->_flatEntityTables[$entityTypeId], $code, $entityTypeId);
+        } else {
+            parent::removeAttribute($entityTypeId, $code, $attr);
+        }
+        return $this;
+    }
+     
+    /**
+     * Remove attribute column in the table
+     *
+     * @param string $table
+     * @param string $attribute
+     * @return Mage_Sales_Model_Resource_Setup
+     */
+    protected function _removeFlatAttribute($table, $attribute)
+    {
+        $this->getConnection()->dropColumn($this->getTable($table), $attribute);
+        return $this;
+    }
+ 
+    /**
+     * Remove attribute from grid table if necessary
+     *
+     * @param string $table
+     * @param string $attribute
+     * @param string $entityTypeId
+     * @return Mage_Sales_Model_Resource_Setup
+     */
+    protected function _removeGridAttribute($table, $attribute, $entityTypeId)
+    {
+        if (in_array($entityTypeId, $this->_flatEntitiesGrid)) {
+            $this->getConnection()->dropColumn($this->getTable($table . '_grid'), $attribute);
+        }
+        return $this;
+    }
 
     /**
      * Retrieve definition of column for create in flat table
