@@ -21,7 +21,7 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -36,8 +36,6 @@
             <!-- Cryptography key, used to encrypt sensitive information. -->
             <key>{{key}}</key>
         </crypt>
-        <!-- Whether to disable modules in 'local' code pool. Put "1" or "true" to disable. -->
-        <disable_local_modules>false</disable_local_modules>
         <resources>
             <db>
                 <!-- A prefix to use for names of Magento tables in DB. Helps to avoid table name conflicts, if other

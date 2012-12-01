@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -122,9 +122,9 @@
             <resource>Mage_Adminhtml::config_design</resource>
             <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Design Theme</label>
-                <field id="full_name" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
-                    <source_model>Mage_Core_Model_Design_Source_Design::getOptions</source_model>
+                    <source_model>Mage_Core_Model_Theme::getLabelsCollectionForSystemConfiguration</source_model>
                     <backend_model>Mage_Core_Model_Design_Backend_Theme</backend_model>
                 </field>
                 <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">

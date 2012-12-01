@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Adminhtml
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,7 +53,7 @@ class Mage_Backend_Model_Config_Source_Admin_PageTest extends PHPUnit_Framework_
 
     public function setUp()
     {
-        $logger = $this->getMock('Mage_Backend_Model_Menu_Logger');
+        $logger = $this->getMock('Mage_Core_Model_Logger', array(), array(), '', false);
         $this->_menuModel = new Mage_Backend_Model_Menu($logger);
         $this->_menuSubModel = new Mage_Backend_Model_Menu($logger);
 

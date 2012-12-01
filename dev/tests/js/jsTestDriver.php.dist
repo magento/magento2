@@ -23,7 +23,7 @@
  *
  * @category    tests
  * @package     js
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  * @return array
@@ -35,7 +35,7 @@ return array(
         '/pub/lib/globalize',
         '/pub/lib/mage/localization',
         '/pub/lib/mage/validation',
-        '/pub/lib/jquery/ui/jquery-ui.js',
+        '/pub/lib/jquery/jquery-ui-1.9.1.custom.min.js',
         '/pub/lib/jquery/ui/i18n',
         '/pub/lib/jquery/jquery-ui-timepicker-addon.js',
         '/pub/lib/jquery/jquery.tmpl.min.js',
@@ -50,6 +50,7 @@ return array(
         '/pub/lib/mage/loader.js',
         '/pub/lib/mage/edit-trigger.js',
         '/pub/lib/mage/translate-inline.js',
+        '/pub/lib/mage/backend/form.js',
     ),
     'test' => array('/dev/tests/js/testsuite'),
     'serve' => array('/pub/lib/mage/calendar'),

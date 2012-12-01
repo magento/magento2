@@ -20,33 +20,12 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <script type="text/javascript">
 //<![CDATA[
-function saveAndContinueEdit(){
-    disableElements('save');
-    var activeTab = product_attribute_tabsJsTabs.activeTab.id;
-    if (editForm.submit($('edit_form').action+'back/edit/tab/' + activeTab) == false) {
-        enableElements('save');
-     }
-    varienGlobalEvents.attachEventHandler('formValidateAjaxComplete', function (){
-        enableElements('save');
-    });
-}
-
-function saveAttribute(){
-    disableElements('save');
-    if (editForm.submit() == false){
-        enableElements('save');
-    }
-    varienGlobalEvents.attachEventHandler('formValidateAjaxComplete', function (){
-        enableElements('save');
-    });
-}
-
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
         $(select).next('select').removeClassName('no-display');
@@ -351,8 +330,8 @@ function saveAttributeInNewSet(promptMessage)
             })
         });
     }
-
-    saveAttribute();
+    // Temporary solution will replaced after refactoring of attributes functionality
+    jQuery('#edit_form').triggerHandler('save');
 }
 
 if($('frontend_input')){

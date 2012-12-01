@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -159,13 +159,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      * @var bool
      */
     protected $_isLocalConfigLoaded = false;
-
-    /**
-     * Flag which allow to use modules from local code pool
-     *
-     * @var bool
-     */
-    protected $_canUseLocalModules = null;
 
     /**
      * Active modules array per namespace
@@ -445,40 +438,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $this->_allowCacheForInit = false;
         $this->_useCache = false;
         return $this->init($options);
-    }
-
-    /**
-     * Check local modules enable/disable flag
-     * If local modules are disbled remove local modules path from include dirs
-     *
-     * return true if local modules enabled and false if disabled
-     *
-     * @return bool
-     */
-    protected function _canUseLocalModules()
-    {
-        if ($this->_canUseLocalModules !== null) {
-            return $this->_canUseLocalModules;
-        }
-
-        $disableLocalModules = (string)$this->getNode('global/disable_local_modules');
-        if (!empty($disableLocalModules)) {
-            $disableLocalModules = (('true' === $disableLocalModules) || ('1' === $disableLocalModules));
-        } else {
-            $disableLocalModules = false;
-        }
-
-        if ($disableLocalModules) {
-            set_include_path(
-                // excluded '/app/code/local'
-                BP . DS . 'app' . DS . 'code' . DS . 'community' . PS .
-                BP . DS . 'app' . DS . 'code' . DS . 'core' . PS .
-                BP . DS . 'lib' . PS .
-                Mage::registry('original_include_path')
-            );
-        }
-        $this->_canUseLocalModules = !$disableLocalModules;
-        return $this->_canUseLocalModules;
     }
 
     /**
@@ -943,8 +902,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     public function loadModulesConfiguration($fileName, $mergeToObject = null, $mergeModel=null)
     {
-        $disableLocalModules = !$this->_canUseLocalModules();
-
         if ($mergeToObject === null) {
             $mergeToObject = clone $this->_prototype;
             $mergeToObject->loadString('<config/>');
@@ -955,9 +912,6 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $modules = $this->getNode('modules')->children();
         foreach ($modules as $modName=>$module) {
             if ($module->is('active')) {
-                if ($disableLocalModules && ('local' === (string)$module->codePool)) {
-                    continue;
-                }
                 if (!is_array($fileName)) {
                     $fileName = array($fileName);
                 }
@@ -991,10 +945,9 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function getModuleConfigurationFiles($filename)
     {
         $result = array();
-        $disableLocalModules = !$this->_canUseLocalModules();
         $modules = $this->getNode('modules')->children();
         foreach ($modules as $moduleName => $module) {
-            if ((!$module->is('active')) || $disableLocalModules && ('local' === (string)$module->codePool)) {
+            if ((!$module->is('active'))) {
                 continue;
             }
             $file = $this->getModuleDir('etc', $moduleName) . DIRECTORY_SEPARATOR . $filename;

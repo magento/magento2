@@ -21,10 +21,13 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @group module::Mage_Layout_Merge
+ */
 class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -102,8 +105,9 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture frontend/design/theme/full_name test/default
+     * @magentoConfigFixture default_store design/theme/full_name test/default
      * @magentoConfigFixture adminhtml/design/theme/full_name test/default
      * @dataProvider layoutDirectiveDataProvider
      *
@@ -113,10 +117,17 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
      */
     public function testLayoutDirective($currentArea, $directiveParams, $expectedOutput)
     {
-        $this->_emulateCurrentArea($currentArea);
-        Mage::getConfig()->setOptions(array('design_dir' => dirname(__DIR__) . '/_files/design'));
-        Mage::getDesign()->setDesignTheme('test/default');
+        $this->markTestIncomplete('MAGETWO-5812');
 
+        /** @var $themeUtility Mage_Core_Utility_Theme */
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(dirname(__DIR__) . '/_files/design'));
+        $themeUtility->registerThemes()->setDesignTheme('test/default', $currentArea);
+
+        Mage::getConfig()->cleanCache();
+        $themeFrontend = $themeUtility->getThemeByParams('test/default', 'frontend');
+        Mage::app()->getStore('default')->setConfig('design/theme/theme_id', $themeFrontend->getId());
+
+        $this->_emulateCurrentArea($currentArea);
         $actualOutput = $this->_model->layoutDirective(array(
             '{{layout ' . $directiveParams . '}}',
             'layout',
@@ -125,6 +136,9 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
         $this->assertEquals($expectedOutput, trim($actualOutput));
     }
 
+    /**
+     * @return array
+     */
     public function layoutDirectiveDataProvider()
     {
         $result = array(
@@ -164,6 +178,5 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
         $layout = Mage::getSingleton('Mage_Core_Model_Layout', array('area' => $area));
         $this->assertEquals($area, $layout->getArea());
         $this->assertEquals($area, Mage::app()->getLayout()->getArea());
-        Mage::getDesign()->setArea($area);
     }
 }

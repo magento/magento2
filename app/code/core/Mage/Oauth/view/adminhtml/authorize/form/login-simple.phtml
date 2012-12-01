@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -38,7 +38,7 @@
         <div class="form-box">
             <?php echo $this->getMessagesBlock()->toHtml() ?>
             <?php if (!$this->getHasException()) : ?>
-            <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="loginForm">
+            <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="login-form">
                 <fieldset class="fieldset">
                     <h2 class="legend"><?php echo $this->getFormTitle() ?></h2>
                     <p class="description"><?php echo $this->__('Log in to use <strong>%s</strong>', $this->getConsumer()->getName()) ?></p>

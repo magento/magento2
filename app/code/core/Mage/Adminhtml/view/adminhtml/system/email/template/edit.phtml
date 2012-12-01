@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -111,8 +111,8 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-    var templateForm = new varienForm('email_template_edit_form');
-    var templatePreviewForm = new varienForm('email_template_preview_form');
+    jQuery('#email_template_edit_form').form().validation();
+    jQuery('#email_template_preview_form').form().validation();
     var templateControl = {
         unconvertedText: '',
         typeChange: false,
@@ -150,7 +150,8 @@
             if (this.typeChange) {
                 $('change_flag_element').value = '1';
             }
-            templateForm.submit();
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            jQuery('#email_template_edit_form').triggerHandler('save');
             return false;
         },
         preview: function() {
@@ -169,7 +170,8 @@
                 $('preview_styles').value = $('template_styles').value;
             }
 
-            templatePreviewForm.submit();
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            jQuery('#email_template_preview_form').triggerHandler('save');
             return false;
         },
 
@@ -180,9 +182,10 @@
         },
 
         load: function() {
-            var form = new varienForm('email_template_load_form');
+            // Temporary solution will be replaced after refactoring of email templates functionality
+            var form = jQuery('#email_template_load_form').validation();
 
-            if (!form.validator.validate()) {
+            if (!form.valid()) {
                 return;
             }
 

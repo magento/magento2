@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -124,7 +124,7 @@ $table = $installer->getConnection()
     ->addColumn('instance_type', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
         ), 'Instance Type')
     ->addColumn('package_theme', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
-        ), 'Package Theme')
+         ), 'Package Theme')
     ->addColumn('title', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
         ), 'Widget Title')
     ->addColumn('store_ids', Varien_Db_Ddl_Table::TYPE_TEXT, 255, array(
@@ -193,7 +193,8 @@ $table = $installer->getConnection()
         ), 'Layout Update Id')
     ->addIndex($installer->getIdxName('widget_instance_page_layout', 'page_id'), 'page_id')
     ->addIndex($installer->getIdxName('widget_instance_page_layout', 'layout_update_id'), 'layout_update_id')
-    ->addIndex($installer->getIdxName('widget_instance_page_layout', array('layout_update_id', 'page_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE),
+    ->addIndex($installer->getIdxName('widget_instance_page_layout',
+        array('layout_update_id', 'page_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE),
         array('layout_update_id', 'page_id'),
         array('type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
     ->addForeignKey($installer->getFkName('widget_instance_page_layout', 'page_id', 'widget_instance_page', 'page_id'),

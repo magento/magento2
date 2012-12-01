@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Core>
-            <version>1.6.0.5</version>
+            <version>1.6.0.6</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_Core>
@@ -82,11 +82,6 @@
         <request>
             <direct_front_name/>
         </request>
-        <log>
-            <core>
-                <writer_model>Zend_Log_Writer_Stream</writer_model>
-            </core>
-        </log>
         <dev>
             <page_type>
                 <render_inherited>0</render_inherited>

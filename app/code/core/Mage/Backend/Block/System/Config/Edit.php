@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -76,9 +76,11 @@ class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
     protected function _prepareLayout()
     {
         $this->addChild('save_button', 'Mage_Backend_Block_Widget_Button', array(
-            'label'     => $this->helper('Mage_Backend_Helper_Data')->__('Save Config'),
-            'onclick'   => 'configForm.submit()',
+            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Save Config'),
             'class' => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#config-edit-form')
+            ),
         ));
         return parent::_prepareLayout();
     }

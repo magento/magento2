@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,8 +40,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Add extends Mag
     {
         $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute Set'),
-            'onclick'   => 'if (addSet.submit()) disableElements(\'save\');',
-            'class' => 'save'
+            'class' => 'save',
+            'data_attr' => array(
+                'widget-button' => array('event' => 'save', 'related' => '#set-prop-form')
+            )
         ));
         $this->addChild('back_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),

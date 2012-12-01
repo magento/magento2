@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var varienTabs = new Class.create();
@@ -70,6 +70,35 @@ varienTabs.prototype = {
 
         this.displayFirst = activeTabId;
         Event.observe(window,'load',this.moveTabContentInDest.bind(this));
+        Event.observe(window,'load',this.bindOnbeforeSubmit.bind(this));
+        Event.observe(window,'load',this.bindOnInvalid.bind(this));
+    },
+
+    bindOnInvalid: function() {
+        jQuery.each(this.tabs, jQuery.proxy(function(i, tab) {
+            jQuery('#' + this.getTabContentElementId(tab))
+                .on('highlight.validate', function() {
+                    jQuery(tab).addClass('error').find('.error').show();
+                })
+                .on('focusin', jQuery.proxy(function() {
+                    this.showTabContentImmediately(tab);
+                }, this));
+        }, this));
+    },
+
+    bindOnbeforeSubmit: function() {
+        jQuery('#' + this.destElementId).on('beforeSubmit', jQuery.proxy(function(e, data) {
+            var tabsIdValue = this.activeTab.id;
+            if (this.tabsBlockPrefix) {
+                if (this.activeTab.id.startsWith(this.tabsBlockPrefix)) {
+                    tabsIdValue = tabsIdValue.substr(this.tabsBlockPrefix.length);
+                }
+            }
+            jQuery(this.tabs).removeClass('error');
+            var options = {action: {args: {}}};
+            options.action.args[this.tabIdArgument || 'tab'] = tabsIdValue;
+            data = data ? jQuery.extend(data, options) : options;
+        }, this));
     },
     
     setSkipDisplayFirstTab : function(){

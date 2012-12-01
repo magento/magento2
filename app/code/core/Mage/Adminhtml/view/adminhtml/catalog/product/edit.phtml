@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -49,37 +49,14 @@
     <?php endif; ?>
     </p>
 </div>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product_edit_form" enctype="multipart/form-data">
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
     <div style="display:none"></div>
 </form>
 <script type="text/javascript">
 //<![CDATA[
     var productTemplateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
-    var productForm = new varienForm('product_edit_form', '<?php echo $this->getValidationUrl() ?>');
-    productForm._processValidationResult = function(transport) {
-        var response = transport.responseText.evalJSON();
-        if (response.error){
-            if (response.attribute && $(response.attribute)) {
-                $(response.attribute).setHasError(true, productForm);
-                Validation.ajaxError($(response.attribute), response.message);
-                if (!Prototype.Browser.IE){
-                    $(response.attribute).focus();
-                }
-            }
-            else if ($('messages')) {
-                $('messages').innerHTML = '<ul class="messages"><li class="error-msg"><ul><li>' + response.message + '</li></ul></li></ul>';
-            }
-        }
-        else{
-            productForm._submit();
-        }
-    };
-    function saveAndContinueEdit(urlTemplate) {
-        var template = new Template(urlTemplate, productTemplateSyntax);
-        var url = template.evaluate({tab_id:product_info_tabsJsTabs.activeTab.id});
-        productForm.submit(url);
-    }
+    jQuery('#product-edit-form').form().validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
     function setSettings(urlTemplate, setElement, typeElement) {
         var template = new Template(urlTemplate, productTemplateSyntax);
         setLocation(template.evaluate({attribute_set:$F(setElement),type:$F(typeElement)}));
@@ -102,7 +79,7 @@
         var url = template.evaluate({
             attributes: encode_base64(attributes.join(',')).replace(new RegExp('/', 'g'), '%2F').replace(new RegExp('=', 'g'), '%3D')
         });
-        jQuery('#product_edit_form').attr('action', url + '&active_tab=configurable').submit();
+        jQuery('#product-edit-form').attr('action', url + '&active_tab=configurable').submit();
     }
 
     function checkMaxLength(Object, MaxLen)
@@ -199,11 +176,5 @@ jQuery(function() {
         new Autogenerator(masks).bindAll();
     })(jQuery);
 });
-
-Validation.addAllThese([
-    ['validate-super-product-attributes', '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Please select one or more attributes.') ?>', function(v) {
-        return (v != "no-attributes");
-    }]
-]);
 //]]>
 </script>

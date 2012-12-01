@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -35,11 +35,11 @@ return array(
     $this->_getRule('_children', 'Mage_Core_Block_Abstract'),
     $this->_getRule('_childrenHtmlCache', 'Mage_Core_Block_Abstract'),
     $this->_getRule('_childGroups', 'Mage_Core_Block_Abstract'),
+    $this->_getRule('_canUseLocalModules'),
     $this->_getRule('_currencyNameTable'),
     $this->_getRule('_combineHistory'),
     $this->_getRule('_searchTextFields'),
     $this->_getRule('_skipFieldsByModel'),
-    $this->_getRule('_imageFields', 'Mage_Catalog_Model_Convert_Adapter_Product'),
     $this->_getRule('_parent', 'Mage_Core_Block_Abstract'),
     $this->_getRule('_parentBlock', 'Mage_Core_Block_Abstract'),
     $this->_getRule('_setAttributes', 'Mage_Catalog_Model_Product_Type_Abstract'),
@@ -67,4 +67,5 @@ return array(
     $this->_getRule('_ship_id'),
     $this->_getRule('_sortedChildren'),
     $this->_getRule('_sortInstructions'),
+    $this->_getRule('_config', 'Mage_Core_Model_Design_Package'),
 );

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Widget
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,8 +33,8 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_MainTest extends PHPU
         $block = Mage::app()->getLayout()->createBlock(
             'Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main');
         $block->toHtml();
-        $element = $block->getForm()->getElement('package_theme');
-        $this->assertInstanceOf('Varien_Data_Form_Element_Text', $element);
+        $element = $block->getForm()->getElement('theme_id');
+        $this->assertInstanceOf('Varien_Data_Form_Element_Select', $element);
         $this->assertTrue($element->getDisabled());
     }
 }

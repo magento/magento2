@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogSearch
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -79,9 +79,6 @@ class Mage_CatalogSearch_Model_Indexer_Fulltext extends Mage_Index_Model_Indexer
             Mage_Index_Model_Event::TYPE_SAVE
         ),
         Mage_Core_Model_Config_Data::ENTITY => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
-        Mage_Catalog_Model_Convert_Adapter_Product::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE
         ),
         Mage_Catalog_Model_Category::ENTITY => array(
@@ -204,10 +201,6 @@ class Mage_CatalogSearch_Model_Indexer_Fulltext extends Mage_Index_Model_Indexer
         switch ($event->getEntity()) {
             case Mage_Catalog_Model_Product::ENTITY:
                 $this->_registerCatalogProductEvent($event);
-                break;
-
-            case Mage_Catalog_Model_Convert_Adapter_Product::ENTITY:
-                $event->addNewData('catalogsearch_fulltext_reindex_all', true);
                 break;
 
             case Mage_Core_Model_Config_Data::ENTITY:

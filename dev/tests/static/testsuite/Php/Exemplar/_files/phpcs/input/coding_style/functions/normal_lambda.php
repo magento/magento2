@@ -1,10 +1,11 @@
 <?php
-spl_autoload_register(function ($class) {
-    $file = str_replace('_', '/', $class) . '.php';
-    require_once $file;
+do_something(function ($argument) {
+    if ($argument) {
+        do_something_else();
+    }
 });
 
 $greet = function ($name)
 {
-    echo 'Hello!';
+    echo "Hello, {$name}!";
 };

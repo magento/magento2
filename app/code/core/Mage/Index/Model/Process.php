@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Index
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -577,10 +577,10 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
      */
     public function safeProcessEvent(Mage_Index_Model_Event $event)
     {
-        if ($this->isLocked()) {
+        if (!$this->matchEvent($event)) {
             return $this;
         }
-        if (!$this->matchEvent($event)) {
+        if ($this->isLocked()) {
             return $this;
         }
         $this->lock();

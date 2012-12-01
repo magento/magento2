@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -169,7 +169,7 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      *
      * @param string $package
      * @param string $theme
-     * @return string|null
+     * @return array|null
      */
     public function getParentTheme($package, $theme)
     {

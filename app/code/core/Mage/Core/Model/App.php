@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -283,13 +283,16 @@ class Mage_Core_Model_App
         $this->_config = Mage::getConfig();
         $this->_config->setOptions($options);
         $this->_initBaseConfig();
+        $logger = $this->_initLogger();
         $this->_initCache();
         $this->_config->init($options);
+        $this->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
         $this->_objectManager->loadAreaConfiguration();
         Magento_Profiler::stop('init_config');
 
         if (Mage::isInstalled($options)) {
             $this->_initCurrentStore($code, $type);
+            $logger->initForStore($this->_store);
             $this->_initRequest();
         }
         return $this;
@@ -364,7 +367,7 @@ class Mage_Core_Model_App
             $this->getResponse()->sendResponse();
         } else {
             Magento_Profiler::start('init');
-
+            $logger = $this->_initLogger();
             $this->_initModules();
             $this->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
             $this->_objectManager->loadAreaConfiguration();
@@ -373,6 +376,7 @@ class Mage_Core_Model_App
                 $scopeCode = isset($params['scope_code']) ? $params['scope_code'] : '';
                 $scopeType = isset($params['scope_type']) ? $params['scope_type'] : 'store';
                 $this->_initCurrentStore($scopeCode, $scopeType);
+                $logger->initForStore($this->_store);
                 $this->_initRequest();
                 Mage_Core_Model_Resource_Setup::applyAllDataUpdates();
             }
@@ -453,6 +457,20 @@ class Mage_Core_Model_App
     }
 
     /**
+     * Initialize logging of system messages and errors
+     *
+     * @return Mage_Core_Model_Logger
+     */
+    protected function _initLogger()
+    {
+        /** @var $logger Mage_Core_Model_Logger */
+        $logger = $this->_objectManager->get('Mage_Core_Model_Logger');
+        $logger->addStreamLog(Mage_Core_Model_Logger::LOGGER_SYSTEM)
+            ->addStreamLog(Mage_Core_Model_Logger::LOGGER_EXCEPTION);
+        return $logger;
+    }
+
+    /**
      * Check whether modules updates processing should be skipped
      *
      * @return bool
@@ -519,6 +537,7 @@ class Mage_Core_Model_App
         }
         $this->_useSessionInUrl = $this->getStore()->getConfig(
             Mage_Core_Model_Session_Abstract::XML_PATH_USE_FRONTEND_SID);
+        Mage::dispatchEvent('core_app_init_current_store_after');
         return $this;
     }
 

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -134,7 +134,12 @@ class Mage_Core_Model_Translate_InlineTest extends PHPUnit_Framework_TestCase
     {
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
-        $expectedText = str_replace('{{design_package}}', Mage::getDesign()->getPackageName(), $expectedText);
+
+        $expectedText = str_replace(
+            '{{design_package}}',
+            Mage::getDesign()->getDesignTheme()->getPackageCode(),
+            $expectedText
+        );
         return array(
             'plain text'  => array('text with no translations and tags', 'text with no translations and tags'),
             'html string' => array($originalText, $expectedText),

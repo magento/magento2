@@ -23,7 +23,7 @@
  * @category    tests
  * @package     integration
  * @subpackage  integrity
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,13 +31,12 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param string $area
-     * @param string $package
-     * @param string $theme
+     * @param int $themeId
      * @dataProvider areasAndThemesDataProvider
      */
-    public function testHandlesHierarchy($area, $package, $theme)
+    public function testHandlesHierarchy($area, $themeId)
     {
-        $xml = $this->_composeXml($area, $package, $theme);
+        $xml = $this->_composeXml($area, $themeId);
 
         /**
          * There could be used an xpath "/layouts/*[@type or @owner or @parent]", but it randomly produced bugs, by
@@ -70,15 +69,14 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
      * Composes full layout xml for designated parameters
      *
      * @param string $area
-     * @param string $package
-     * @param string $theme
+     * @param int $themeId
      * @return Mage_Core_Model_Layout_Element
      */
-    protected function _composeXml($area, $package, $theme)
+    protected function _composeXml($area, $themeId)
     {
         $layoutUpdate = Mage::getModel(
             'Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => $area, 'package' => $package, 'theme' => $theme))
+            array('arguments' => array('area' => $area, 'theme' => $themeId))
         );
         return $layoutUpdate->getFileLayoutUpdatesXml();
     }
@@ -125,26 +123,22 @@ class Integrity_LayoutTest extends PHPUnit_Framework_TestCase
     public function areasAndThemesDataProvider()
     {
         $result = array();
-        foreach (array('adminhtml', 'frontend', 'install') as $area) {
-            $result[] = array($area, false, false);
-            foreach (Mage::getDesign()->getDesignEntitiesStructure($area) as $package => $themes) {
-                foreach ($themes as $theme) {
-                    $result[] = array($area, $package, $theme);
-                }
-            }
+        $themeCollection = Mage::getModel('Mage_Core_Model_Theme')->getCollection();
+        /** @var $themeCollection Mage_Core_Model_Theme */
+        foreach ($themeCollection as $theme) {
+            $result[] = array($theme->getArea(), $theme->getId());
         }
         return $result;
     }
 
     /**
      * @param string $area
-     * @param string $package
-     * @param string $theme
+     * @param int $themeId
      * @dataProvider areasAndThemesDataProvider
      */
-    public function testHandleLabels($area, $package, $theme)
+    public function testHandleLabels($area, $themeId)
     {
-        $xml = $this->_composeXml($area, $package, $theme);
+        $xml = $this->_composeXml($area, $themeId);
 
         $xpath = '/layouts/*['
             . '@type="' . Mage_Core_Model_Layout_Merge::TYPE_PAGE . '"'

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once __DIR__ . '/../../../../../../lib/Varien/Simplexml/Element.php';
@@ -247,6 +247,7 @@ class Magento_Test_Bootstrap
     public function initialize()
     {
         Mage::setIsDeveloperMode($this->_isDeveloperMode);
+        Mage_Core_Utility_Theme::registerDesignMock();
         Mage::$headersSentThrowsException = false;
         Mage::app('', 'store', $this->_options);
     }
@@ -512,11 +513,6 @@ class Magento_Test_Bootstrap
 
         /* Switch an application to installed mode */
         $this->initialize();
-        /**
-         * Initialization of front controller with all routers.
-         * Should be here as needed only once after installation process.
-         */
-        Mage::app()->getFrontController();
     }
 
     /**

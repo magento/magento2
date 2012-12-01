@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -49,7 +49,7 @@ Default layout, loads most of the pages
         <!-- Mage_Catalog -->
         <reference name="left">
             <block type="Mage_Core_Block_Template" name="left.permanent.callout" template="Mage_Page::callouts/left_col.phtml">
-                <action method="setImgSrc"><src>images/media/col_left_callout.jpg</src></action>
+                <action method="setImgSrc"><src>Mage_Catalog::images/media/col_left_callout.jpg</src></action>
                 <action method="setImgAlt" translate="alt" module="Mage_Catalog"><alt>Our customer service is available 24/7. Call us at (555) 555-0123.</alt></action>
                 <action method="setLinkUrl"><url>checkout/cart</url></action>
             </block>
@@ -57,7 +57,7 @@ Default layout, loads most of the pages
         <reference name="right">
             <block type="Mage_Catalog_Block_Product_Compare_Sidebar" before="cart_sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
             <block type="Mage_Core_Block_Template" name="right.permanent.callout" template="Mage_Page::callouts/right_col.phtml">
-                <action method="setImgSrc"><src>images/media/col_right_callout.jpg</src></action>
+                <action method="setImgSrc"><src>Mage_Catalog::images/media/col_right_callout.jpg</src></action>
                 <action method="setImgAlt" translate="alt" module="Mage_Catalog"><alt>Keep your eyes open for our special Back to School items and save A LOT!</alt></action>
             </block>
         </reference>

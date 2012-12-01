@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -29,7 +29,6 @@ return array(
     $this->_getRule('__set', 'Varien_Object'),
     $this->_getRule('_addMinimalPrice', 'Mage_Catalog_Model_Resource_Product_Collection'),
     $this->_getRule('_addTaxPercents', 'Mage_Catalog_Model_Resource_Product_Collection'),
-    $this->_getRule('_addToXml', 'Mage_XmlConnect_Block_Checkout_Payment_Method_List'),
     $this->_getRule('_afterSaveCommit', 'Mage_Core_Model_Abstract'),
     $this->_getRule('_afterSetConfig', 'Mage_Eav_Model_Entity_Abstract'),
     $this->_getRule('_aggregateByOrderCreatedAt', 'Mage_SalesRule_Model_Resource_Report_Rule'),
@@ -41,12 +40,12 @@ return array(
     $this->_getRule('_avoidDoubleTransactionProcessing'),
     $this->_getRule('_beforeChildToHtml'),
     $this->_getRule('_calculatePrice', 'Mage_Sales_Model_Quote_Item_Abstract'),
+    $this->_getRule('_canUseLocalModules'),
     $this->_getRule('_checkUrlSettings', 'Mage_Adminhtml_Controller_Action'),
     $this->_getRule('_collectOrigData', 'Mage_Catalog_Model_Resource_Abstract'),
     $this->_getRule('_decodeInput', 'Mage_Adminhtml_Catalog_ProductController'),
     $this->_getRule('_emailOrderConfirmation', 'Mage_Checkout_Model_Type_Abstract'),
     $this->_getRule('_escapeValue', 'Mage_Adminhtml_Block_Widget_Grid_Column_Filter_Abstract'),
-    $this->_getRule('_formatAddress', 'Mage_XmlConnect_Block_Customer_Order_Details'),
     $this->_getRule('_getAddressTaxRequest', 'Mage_Tax_Model_Sales_Total_Quote_Shipping'),
     $this->_getRule('_getAggregationPerStoreView'),
     $this->_getRule('_getAttributeFilterBlockName', 'Mage_Catalog_Block_Layer_View'),
@@ -300,6 +299,7 @@ return array(
     $this->_getRule('orderedAction', 'Mage_Adminhtml_Report_ProductController'),
     $this->_getRule('parseDateTime', 'Mage_Core_Model_Date'),
     $this->_getRule('postDispatchMyAccountSave'),
+    $this->_getRule('postDispatchSystemImportExportRun'),
     $this->_getRule('prepareCacheId', 'Mage_Core_Model_App'),
     $this->_getRule('prepareGoogleOptimizerScripts'),
     $this->_getRule('preprocess', 'Mage_Newsletter_Model_Template'),
@@ -382,10 +382,6 @@ return array(
     $this->_getRule('asSimplexml', 'Mage_Core_Model_Layout_Update', 'Mage_Core_Model_Layout_Merge'),
     $this->_getRule('getFileLayoutUpdatesXml', 'Mage_Core_Model_Layout_Update', 'Mage_Core_Model_Layout_Merge'),
     $this->_getRule('getContainers', 'Mage_Core_Model_Layout_Update', 'Mage_Core_Model_Layout_Merge'),
-    $this->_getRule('parse', 'Mage_Catalog_Model_Convert_Parser_Product', null,
-            'app\code\core\Mage\Catalog\Model\Convert\Parser'),
-    $this->_getRule('parse', 'Mage_Customer_Model_Convert_Parser_Customer', null,
-        'app\code\core\Mage\Customer\Model\Convert\Parser'),
     $this->_getRule('getPostMaxSize', 'Mage_Adminhtml_Block_Media_Uploader',
         'Mage_Core_Helper_File_Storage::getPostMaxSize()'),
     $this->_getRule('getUploadMaxSize', 'Mage_Adminhtml_Block_Media_Uploader',
@@ -409,4 +405,14 @@ return array(
     $this->_getRule('_getUploadMaxFilesize', 'Mage_Catalog_Model_Product_Option_Type_File'),
     $this->_getRule('_bytesToMbytes', 'Mage_Catalog_Model_Product_Option_Type_File'),
     $this->_getRule('getMaxUploadSize', 'Mage_ImportExport_Helper_Data', 'getMaxUploadSizeMessage'),
+    $this->_getRule('getOptions', 'Mage_Core_Model_Design_Source_Design',
+        'Mage_Core_Model_Theme::getThemeCollectionOptionArray'),
+    $this->_getRule('getThemeOptions', 'Mage_Core_Model_Design_Source_Design',
+        'Mage_Core_Model_Theme::getThemeCollectionOptionArray'),
+    $this->_getRule('isThemeCompatible', 'Mage_Core_Model_Design_Package', 'Mage_Core_Model_Theme::isThemeCompatible'),
+    $this->_getRule('setPackageTheme', 'Mage_Widget_Model_Widget_Instance', 'setThemeId'),
+    $this->_getRule('getPackageTheme', 'Mage_Widget_Model_Widget_Instance', 'getThemeId'),
+    $this->_getRule('getPackage', 'Mage_Widget_Model_Widget_Instance'),
+    $this->_getRule('getTheme', 'Mage_Widget_Model_Widget_Instance'),
+    $this->_getRule('_parsePackageTheme', 'Mage_Widget_Model_Widget_Instance'),
 );

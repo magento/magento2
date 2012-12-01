@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -151,11 +151,13 @@ function checkButtonsRelation() {
 
 function submitCreditMemo() {
     if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=0;
-    editForm.submit()
+    // Temporary solution will be replaced after refactoring order functionality
+    jQuery('#edit_form').triggerHandler('save');
 }
 function submitCreditMemoOffline() {
     if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=1;
-    editForm.submit()
+    // Temporary solution will be replaced after refactoring order functionality
+    jQuery('#edit_form').triggerHandler('save');
 }
 
 var sendEmailCheckbox = $('send_email');

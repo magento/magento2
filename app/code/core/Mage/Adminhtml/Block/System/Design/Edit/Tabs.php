@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,7 +30,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tabs extends Mage_Adminhtml_Block_
     {
         parent::_construct();
         $this->setId('design_tabs');
-        $this->setDestElementId('design_edit_form');
+        $this->setDestElementId('design-edit-form');
         $this->setTitle(Mage::helper('Mage_Core_Helper_Data')->__('Design Change'));
     }
 

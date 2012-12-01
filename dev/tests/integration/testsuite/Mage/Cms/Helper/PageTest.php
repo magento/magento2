@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Cms
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,7 +44,7 @@ class Mage_Cms_Helper_PageTest extends PHPUnit_Framework_TestCase
             ),
             $page->getId()
         );
-        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme());
+        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme()->getThemePath());
         $this->assertTrue($result);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -160,9 +160,7 @@ class Mage_Widget_Model_Resource_Widget_Instance extends Mage_Core_Model_Resourc
             foreach ($storeIds as $storeId) {
                 $data[] = array(
                     'store_id'         => $storeId,
-                    'area'             => $widgetInstance->getArea(),
-                    'package'          => $widgetInstance->getPackage(),
-                    'theme'            => $widgetInstance->getTheme(),
+                    'theme_id'         => $widgetInstance->getThemeId(),
                     'layout_update_id' => $layoutUpdateId);
             }
             $writeAdapter->insertMultiple($layoutUpdateLinkTable, $data);

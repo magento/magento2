@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CurrencySymbol
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -81,8 +81,10 @@ class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adm
         $block = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button');
         $block->setData(array(
             'label'     => Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('Save Currency Symbols'),
-            'onclick'   => 'currencySymbolsForm.submit();',
-            'class'     => 'save'
+            'class'     => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#currency-symbols-form')
+            )
         ));
 
         return $block->toHtml();

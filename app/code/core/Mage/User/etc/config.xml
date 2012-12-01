@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_User
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_User>
-            <version>1.6.1.2</version>
+            <version>1.6.1.3</version>
             <active>true</active>
             <codePool>core</codePool>
         </Mage_User>

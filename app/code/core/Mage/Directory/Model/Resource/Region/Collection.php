@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Directory
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -181,7 +181,7 @@ class Mage_Directory_Model_Resource_Region_Collection extends Mage_Core_Model_Re
             array_unshift($options, array(
                 'title '=> null,
                 'value' => '0',
-                'label' => Mage::helper('Mage_Directory_Helper_Data')->__('-- Please select --')
+                'label' => Mage::helper('Mage_Directory_Helper_Data')->__('--Please select--')
             ));
         }
         return $options;

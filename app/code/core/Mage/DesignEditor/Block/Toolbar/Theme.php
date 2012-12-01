@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,12 +47,12 @@ class Mage_DesignEditor_Block_Toolbar_Theme extends Mage_Core_Block_Template
     /**
      * Returns whether theme selected in current store design
      *
-     * @param string $theme
+     * @param int|string $theme
      * @return bool
      */
     public function isThemeSelected($theme)
     {
-        $currentTheme = Mage::getDesign()->getDesignTheme();
+        $currentTheme = Mage::getDesign()->getDesignTheme()->getId();
         return $currentTheme == $theme;
     }
 

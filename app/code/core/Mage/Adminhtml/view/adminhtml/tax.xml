@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -32,9 +32,8 @@
             <action method="addJs"><file>jquery/editableMultiselect/js/jquery.editable.js</file></action>
             <action method="addJs"><file>jquery/editableMultiselect/js/jquery.multiselect.js</file></action>
             <action method="addJs"><file>mage/backend/editablemultiselect.js</file></action>
-            <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
             <action method="addCss"><file>jquery/editableMultiselect/css/jquery.multiselect.css</file></action>
-            <action method="addCss"><file>Mage_Adminhtml::css/ui-lightness/jquery-ui-1.8.21.custom.css</file></action>
+            <action method="addCss"><file>Mage_Core::prototype/magento.css</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Tax_Rule_Edit"></block>

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -38,8 +38,9 @@
     </table>
 </div>
 <?php if( $form ): ?>
-<?php echo $form->toHtml(); ?>
+<?php echo $form->toHtml();?>
+
 <script type="text/javascript">
-    var wigetForm = new varienForm('<?php echo $form->getForm()->getId() ?>');
+    jQuery('#<?php echo $form->getForm()->getId() ?>').form().validation();
 </script>
 <?php endif; ?>

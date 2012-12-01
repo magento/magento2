@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,7 +42,10 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
     public function _initAction()
     {
         parent::_initAction();
-        $this->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Products'), Mage::helper('Mage_Reports_Helper_Data')->__('Products'));
+        $this->_addBreadcrumb(
+            Mage::helper('Mage_Reports_Helper_Data')->__('Products'),
+            Mage::helper('Mage_Reports_Helper_Data')->__('Products')
+        );
         return $this;
     }
 
@@ -55,11 +58,12 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
         $this->_title($this->__('Reports'))
              ->_title($this->__('Products'))
              ->_title($this->__('Products Ordered'));
-
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_products_sold')
-            ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Products Ordered'), Mage::helper('Mage_Reports_Helper_Data')->__('Products Ordered'))
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Product_Sold'))
+            ->_addBreadcrumb(
+                Mage::helper('Mage_Reports_Helper_Data')->__('Products Ordered'),
+                Mage::helper('Mage_Reports_Helper_Data')->__('Products Ordered')
+            )
             ->renderLayout();
     }
 
@@ -69,12 +73,11 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function exportSoldCsvAction()
     {
+        $this->loadLayout();
         $fileName   = 'products_ordered.csv';
-        $content    = $this->getLayout()
-            ->createBlock('Mage_Adminhtml_Block_Report_Product_Sold_Grid')
-            ->getCsv();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        /** @var Mage_Backend_Block_Widget_Grid_ExportInterface $exportBlock */
+        $exportBlock = $this->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
+        $this->_prepareDownloadResponse($fileName, $exportBlock->getCsvFile());
     }
 
     /**
@@ -83,12 +86,11 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
      */
     public function exportSoldExcelAction()
     {
+        $this->loadLayout();
         $fileName   = 'products_ordered.xml';
-        $content    = $this->getLayout()
-            ->createBlock('Mage_Adminhtml_Block_Report_Product_Sold_Grid')
-            ->getExcel($fileName);
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        /** @var Mage_Backend_Block_Widget_Grid_ExportInterface $exportBlock */
+        $exportBlock = $this->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
+        $this->_prepareDownloadResponse($fileName, $exportBlock->getExcelFile($fileName));
     }
 
     /**
@@ -103,7 +105,10 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_products_viewed')
-            ->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Most Viewed Report'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Most Viewed Report'));
+            ->_addBreadcrumb(
+                Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Most Viewed Report'),
+                Mage::helper('Mage_Adminhtml_Helper_Data')->__('Products Most Viewed Report')
+            );
 
         $gridBlock = $this->getLayout()->getBlock('report_product_viewed.grid');
         $filterFormBlock = $this->getLayout()->getBlock('grid.filter.form');
@@ -152,7 +157,10 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Reports::report_products_lowstock')
-            ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Low Stock'), Mage::helper('Mage_Reports_Helper_Data')->__('Low Stock'))
+            ->_addBreadcrumb(
+                Mage::helper('Mage_Reports_Helper_Data')->__('Low Stock'),
+                Mage::helper('Mage_Reports_Helper_Data')->__('Low Stock')
+            )
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Product_Lowstock'))
             ->renderLayout();
     }
@@ -197,7 +205,10 @@ class Mage_Adminhtml_Report_ProductController extends Mage_Adminhtml_Controller_
 
         $this->_initAction()
             ->_setActiveMenu('Mage_Downloadable::report_products_downloads')
-            ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Downloads'), Mage::helper('Mage_Reports_Helper_Data')->__('Downloads'))
+            ->_addBreadcrumb(
+                Mage::helper('Mage_Reports_Helper_Data')->__('Downloads'),
+                Mage::helper('Mage_Reports_Helper_Data')->__('Downloads')
+            )
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Report_Product_Downloads'))
             ->renderLayout();
     }

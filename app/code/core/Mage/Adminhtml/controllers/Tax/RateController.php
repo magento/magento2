@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -82,7 +82,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
             ->_addContent(
                 $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Save')
                 ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Add New Tax Rate'))
-                ->assign('form', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form'))
+                ->assign('form',
+                    $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form', 'tax_rate_form')
+                )
             )
             ->renderLayout();
     }
@@ -211,7 +213,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
             ->_addContent(
                 $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Save')
                 ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Edit Tax Rate'))
-                ->assign('form', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form'))
+                ->assign('form',
+                    $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form', 'tax_rate_form')
+                )
             )
             ->renderLayout();
     }

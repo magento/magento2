@@ -21,110 +21,27 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 class Mage_Core_Model_Design_Source_DesignTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Mage_Core_Model_Design_Source_Design
-     */
-    protected $_model = null;
-
-    public static function setUpBeforeClass()
+    public function testGetAllOptions()
     {
-        Mage::getConfig()->getOptions()->setDesignDir(__DIR__ . '/_files/design');
-    }
+        /** @var $model Mage_Core_Model_Design_Source_Design */
+        $model = Mage::getObjectManager()->create('Mage_Core_Model_Design_Source_Design');
 
-    protected function setUp()
-    {
-        $this->_model = Mage::getModel('Mage_Core_Model_Design_Source_Design');
-    }
+        /** @var $expectedCollection Mage_Core_Model_Theme_Collection */
+        $expectedCollection = Mage::getModel('Mage_Core_Model_Resource_Theme_Collection');
+        $expectedCollection->addFilter('area', 'frontend');
 
-    protected function tearDown()
-    {
-        $this->_model = null;
-    }
+        $expectedItemsCount = count($expectedCollection);
 
-    public function testGetAllOptionsSorting()
-    {
-        $fixture = array(
-            array(
-                'label' => 'Default',
-                'value' => array(
-                    array(
-                        'label' => 'Default (incompatible version)',
-                        'value' => 'default/default',
-                    ),
-                    array(
-                        'label' => 'Theme G (incompatible version)',
-                        'value' => 'default/g',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'Package A',
-                'value' => array(
-                    array(
-                        'label' => 'Theme D (incompatible version)',
-                        'value' => 'a/d',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'Package B',
-                'value' => array(
-                    array(
-                        'label' => 'Theme E (incompatible version)',
-                        'value' => 'b/e',
-                    ),
-                ),
-            ),
-        );
-        $this->assertSame($fixture, $this->_model->getAllOptions(false));
-    }
+        $labelsCollection = $model->getAllOptions(false);
+        $this->assertEquals($expectedItemsCount, count($labelsCollection));
 
-    public function testGetThemeOptionsSorting()
-    {
-        $fixture = array(
-            array(
-                'label' => 'Default',
-                'value' => array(
-                    array(
-                        'label' => 'Default (incompatible version)',
-                        'value' => 'default/default',
-                    ),
-                    array(
-                        'label' => 'Theme G (incompatible version)',
-                        'value' => 'default/g',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'Package A',
-                'value' => array(
-                    array(
-                        'label' => 'Theme D (incompatible version)',
-                        'value' => 'a/d',
-                    ),
-                ),
-            ),
-            array(
-                'label' => 'Package B',
-                'value' => array(
-                    array(
-                        'label' => 'Theme E (incompatible version)',
-                        'value' => 'b/e',
-                    ),
-                ),
-            ),
-        );
-        $this->assertSame($fixture, $this->_model->getThemeOptions());
-    }
-
-    public function testGetOptions()
-    {
-        $this->assertSame($this->_model->getAllOptions(false), $this->_model->getOptions());
+        $labelsCollection = $model->getAllOptions(true);
+        $this->assertEquals(++$expectedItemsCount, count($labelsCollection));
     }
 }

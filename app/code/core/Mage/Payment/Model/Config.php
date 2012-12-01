@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Payment
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -90,7 +90,7 @@ class Mage_Payment_Model_Config
         $modelName = $config['model'];
 
         $className = Mage::getConfig()->getModelClassName($modelName);
-        if (!Magento_Autoload::getInstance()->classExists($className)) {
+        if (!class_exists($className)) {
             return false;
         }
 

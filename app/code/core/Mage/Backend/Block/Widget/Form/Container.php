@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,8 +70,10 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
 
         $this->_addButton('save', array(
             'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Save'),
-            'onclick'   => 'editForm.submit();',
             'class'     => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#edit_form')
+            )
         ), 1);
     }
 

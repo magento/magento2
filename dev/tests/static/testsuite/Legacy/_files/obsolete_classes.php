@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -83,6 +83,16 @@ return array(
     $this->_getClassRule('Mage_Adminhtml_Block_Permissions_Usernroles'),
     $this->_getClassRule('Mage_Adminhtml_Permissions_UserController'),
     $this->_getClassRule('Mage_Adminhtml_Permissions_RoleController'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Grid', 'Mage_Reports_Block_Adminhtml_Grid'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Accounts',
+        'Mage_Reports_Block_Adminhtml_Customer_Accounts'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Accounts_Grid'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Totals', 'Mage_Reports_Block_Adminhtml_Customer_Totals'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Totals_Grid'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Product_Sold', 'Mage_Reports_Block_Adminhtml_Product_Sold'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Product_Sold_Grid'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Orders', 'Mage_Reports_Block_Adminhtml_Customer_Orders'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Report_Customer_Orders_Grid'),
     $this->_getClassRule('Mage_Adminhtml_Block_Report_Product_Ordered'),
     $this->_getClassRule('Mage_Adminhtml_Block_Report_Product_Ordered_Grid'),
     $this->_getClassRule('Mage_Adminhtml_Block_Sales'),
@@ -522,12 +532,17 @@ return array(
     $this->_getClassRule('Mage_Adminhtml_System_ConfigController', 'Mage_Backend_Adminhtml_System_ConfigController'),
     $this->_getClassRule('Mage_Bundle_Product_EditController', 'Mage_Bundle_Adminhtml_Bundle_SelectionController'),
     $this->_getClassRule('Mage_Bundle_SelectionController', 'Mage_Bundle_Adminhtml_Bundle_SelectionController'),
+    $this->_getClassRule('Mage_Catalog_Model_Convert'),
+    $this->_getClassRule('Mage_Catalog_Model_Convert_Adapter_Catalog'),
+    $this->_getClassRule('Mage_Catalog_Model_Convert_Adapter_Product'),
+    $this->_getClassRule('Mage_Catalog_Model_Convert_Parser_Product'),
     $this->_getClassRule('Mage_Catalog_Model_Entity_Product_Attribute_Frontend_Image'),
     $this->_getClassRule('Mage_Catalog_Model_Resource_Product_Attribute_Frontend_Image'),
     $this->_getClassRule('Mage_Catalog_Model_Resource_Product_Attribute_Frontend_Tierprice'),
     $this->_getClassRule('Mage_Core_Block_Flush'),
     $this->_getClassRule('Mage_Core_Block_Template_Facade'),
     $this->_getClassRule('Mage_Core_Controller_Varien_Router_Admin', 'Mage_Backend_Controller_Router_Default'),
+    $this->_getClassRule('Mage_Core_Model_Convert'),
     $this->_getClassRule('Mage_Core_Model_Config_System'),
     $this->_getClassRule('Mage_Core_Model_Design_Source_Apply'),
     $this->_getClassRule('Mage_Core_Model_Language'),
@@ -537,9 +552,14 @@ return array(
     $this->_getClassRule('Mage_Core_Model_Session_Abstract_Zend'),
     $this->_getClassRule('Mage_Core_Model_Layout_Data', 'Mage_Core_Model_Layout_Update'),
     $this->_getClassRule('Mage_Customer_Block_Account'),
+    $this->_getClassRule('Mage_Customer_Model_Convert_Adapter_Customer'),
+    $this->_getClassRule('Mage_Customer_Model_Convert_Parser_Customer'),
     $this->_getClassRule('Mage_Directory_Model_Resource_Currency_Collection'),
     $this->_getClassRule('Mage_Downloadable_FileController', 'Mage_Downloadable_Adminhtml_Downloadable_FileController'),
     $this->_getClassRule('Mage_Downloadable_Product_EditController', 'Mage_Adminhtml_Catalog_ProductController'),
+    $this->_getClassRule('Mage_Eav_Model_Convert_Adapter_Entity'),
+    $this->_getClassRule('Mage_Eav_Model_Convert_Adapter_Grid'),
+    $this->_getClassRule('Mage_Eav_Model_Convert_Parser_Abstract'),
     $this->_getClassRule('Mage_GiftMessage_Block_Message_Form'),
     $this->_getClassRule('Mage_GiftMessage_Block_Message_Helper'),
     $this->_getClassRule('Mage_GiftMessage_IndexController'),
@@ -643,7 +663,6 @@ return array(
     $this->_getClassRule('Mage_User_Model_Resource_Roles_Collection'),
     $this->_getClassRule('Mage_User_Model_Resource_Roles_User_Collection'),
     $this->_getClassRule('Mage_Wishlist_Model_Resource_Product_Collection'),
-    $this->_getClassRule('Mage_XmlConnect_Helper_Payment'),
     $this->_getClassRule('Varien_Convert_Action'),
     $this->_getClassRule('Varien_Convert_Action_Abstract'),
     $this->_getClassRule('Varien_Convert_Action_Interface'),
@@ -675,5 +694,4 @@ return array(
     $this->_getClassRule('Varien_Convert_Validator_Interface'),
     $this->_getClassRule('Varien_File_Uploader_Image'),
     $this->_getClassRule('Varien_Profiler', 'Magento_Profiler'),
-    $this->_getClassRule('Mage_Adminhtml_Block_System_Convert_Gui_Edit_Tab_Upload'),
 );

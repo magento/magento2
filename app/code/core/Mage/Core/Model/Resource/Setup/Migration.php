@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -160,12 +160,6 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
             }
 
             $this->_initConfigs($data);
-        }
-
-        if (isset($data['autoload'])) {
-            $this->_autoload = $data['autoload'];
-        } else {
-            $this->_autoload = Magento_Autoload::getInstance();
         }
 
         if (isset($data['core_helper'])) {
@@ -543,7 +537,7 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
     {
         $className = implode('_', array_map('ucfirst', explode('_', $module . '_' . $type . '_' . $name)));
 
-        if (Magento_Autoload::getInstance()->classExists($className)) {
+        if (class_exists($className)) {
             return $className;
         }
 
@@ -754,7 +748,6 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
             'paypaluk'          => 'Mage_PaypalUk',
             'productalert'      => 'Mage_ProductAlert',
             'salesrule'         => 'Mage_SalesRule',
-            'xmlconnect'        => 'Mage_XmlConnect',
         );
     }
 }

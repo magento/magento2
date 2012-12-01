@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -91,14 +91,26 @@ class Mage_Adminhtml_Block_Newsletter_Queue_Edit extends Mage_Adminhtml_Block_Te
 
         $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save Newsletter'),
-            'onclick'   => 'queueControl.save()',
-            'class'     => 'save'
+            'class'     => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#queue_edit_form'),
+            )
         ));
 
         $this->addChild('save_and_resume', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save and Resume'),
-            'onclick'   => 'queueControl.resume()',
-            'class'     => 'save'
+            'class'     => 'save',
+            'data_attr' => array(
+                'widget-button' => array(
+                    'event' => 'save',
+                    'related' => '#queue_edit_form',
+                    'eventData' => array(
+                        'action' => array(
+                            'args' => array('_resume' => 1),
+                        ),
+                    )
+                ),
+            ),
         ));
 
         $this->addChild('reset_button', 'Mage_Adminhtml_Block_Widget_Button', array(

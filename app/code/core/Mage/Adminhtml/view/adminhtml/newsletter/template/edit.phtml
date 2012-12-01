@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Adminhtml_Block_Newsletter_Template_Edit */
@@ -63,8 +63,8 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-    var templateForm = new varienForm('newsletter_template_edit_form');
-    var templatePreviewForm = new varienForm('newsletter_template_preview_form');
+    jQuery('#newsletter_template_edit_form').form().validation();
+    jQuery('#newsletter_template_preview_form').form().validation();
     var templateControl = {
 
         unconvertedText: '',
@@ -115,7 +115,8 @@
             if(this.isEditor()) {
                 tinyMCE.triggerSave();
             }
-            templateForm.submit();
+            // Temporary solution will be replaced after refactoring of newsletter functionality
+            jQuery('#newsletter_template_edit_form').triggerHandler('save');
             return false;
         },
 
@@ -129,7 +130,8 @@
                if(!value) {
                    if(value !== null) {
                        $('code').value = '';
-                       templateForm.submit();
+                       // Temporary solution will be replaced after refactoring of newsletter functionality
+                       jQuery('#newsletter_template_edit_form').triggerHandler('save');
                    }
                    return false;
                } else {
@@ -142,7 +144,8 @@
             if(this.isEditor()) {
                 tinyMCE.triggerSave();
             }
-            templateForm.submit();
+            // Temporary solution will be replaced after refactoring of newsletter functionality
+            jQuery('#newsletter_template_edit_form').triggerHandler('save');
             return false;
         },
 
@@ -154,7 +157,7 @@
             }
             if (this.isEditor() && tinyMCE.get(this.id)) {
                 tinyMCE.triggerSave();
-                $('preview_text').value = $(this.id).value;
+                $('preview_text').value = tinyMCE.get(this.id).getContent();
                 tinyMCE.triggerSave();
             } else {
                 $('preview_text').value = $(this.id).value;
@@ -165,7 +168,8 @@
             if ($('id') != undefined) {
                 $('preview_id').value = $('id').value;
             }
-            templatePreviewForm.submit();
+            // Temporary solution will be replaced after refactoring of newsletter functionality
+            jQuery('#newsletter_template_preview_form').triggerHandler('save');
             return false;
         },
 

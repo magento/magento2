@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class Mage_Reports_Model_Resource_Customer_Collection extends Mage_Customer_Mode
      *
      * @var boolean
      */
-    protected $_addOrderStatisticsIsFilter   = false;
+    protected $_addOrderStatFilter   = false;
 
     /**
      * Customer id table name
@@ -67,14 +67,14 @@ class Mage_Reports_Model_Resource_Customer_Collection extends Mage_Customer_Mode
      *
      * @var string
      */
-    protected $_orderEntityTableName;
+    protected $_orderEntityTable;
 
     /**
      * Order entity field name
      *
      * @var string
      */
-    protected $_orderEntityFieldName;
+    protected $_orderEntityField;
 
     /**
      * Add cart info to collection
@@ -115,14 +115,14 @@ class Mage_Reports_Model_Resource_Customer_Collection extends Mage_Customer_Mode
     /**
      * Order for each customer
      *
-     * @param string $from
-     * @param string $to
+     * @param string $fromDate
+     * @param string $toDate
      * @return Mage_Reports_Model_Resource_Customer_Collection
      */
-    public function joinOrders($from = '', $to = '')
+    public function joinOrders($fromDate = '', $toDate = '')
     {
-        if ($from != '' && $to != '') {
-            $dateFilter = " AND orders.created_at BETWEEN '{$from}' AND '{$to}'";
+        if ($fromDate != '' && $toDate != '') {
+            $dateFilter = " AND orders.created_at BETWEEN '{$fromDate}' AND '{$toDate}'";
         } else {
             $dateFilter = '';
         }
@@ -199,7 +199,7 @@ class Mage_Reports_Model_Resource_Customer_Collection extends Mage_Customer_Mode
     public function addOrdersStatistics($isFilter = false)
     {
         $this->_addOrderStatistics          = true;
-        $this->_addOrderStatisticsIsFilter  = (bool)$isFilter;
+        $this->_addOrderStatFilter  = (bool)$isFilter;
         return $this;
     }
 
@@ -217,7 +217,7 @@ class Mage_Reports_Model_Resource_Customer_Collection extends Mage_Customer_Mode
             $baseSubtotalRefunded   = $adapter->getIfNullSql('orders.base_subtotal_refunded', 0);
             $baseSubtotalCanceled   = $adapter->getIfNullSql('orders.base_subtotal_canceled', 0);
 
-            $totalExpr = ($this->_addOrderStatisticsIsFilter)
+            $totalExpr = ($this->_addOrderStatFilter)
                 ? "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded})*orders.base_to_global_rate"
                 : "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded}";
 

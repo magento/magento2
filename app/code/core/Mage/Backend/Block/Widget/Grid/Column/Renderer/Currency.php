@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,6 +43,70 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
     protected static $_currencies = array();
 
     /**
+     * Application object
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * Locale
+     *
+     * @var Mage_Core_Model_Locale
+     */
+    protected $_locale;
+
+    /**
+     * @var Mage_Directory_Model_Currency_DefaultLocator
+     */
+    protected $_currencyLocator;
+
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_MOdel_App $app
+     * @param Mage_Core_Model_Locale $locale
+     * @param Mage_Directory_Model_Currency_DefaultLocator $currencyLocator
+     * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Backend_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_MOdel_App $app,
+        Mage_Core_Model_Locale $locale,
+        Mage_Directory_Model_Currency_DefaultLocator $currencyLocator,
+        array $data = array()
+    ) {
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data
+        );
+        $this->_app = $app;
+        $this->_locale = $locale;
+        $this->_currencyLocator = $currencyLocator;
+    }
+
+
+    /**
      * Renders grid column
      *
      * @param   Varien_Object $row
@@ -52,15 +116,10 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
     {
         if ($data = (string)$row->getData($this->getColumn()->getIndex())) {
             $currency_code = $this->_getCurrencyCode($row);
-
-            if (!$currency_code) {
-                return $data;
-            }
-
             $data = floatval($data) * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && ($data > 0) ? '+' : '';
             $data = sprintf("%f", $data);
-            $data = Mage::app()->getLocale()->currency($currency_code)->toCurrency($data);
+            $data = $this->_locale->currency($currency_code)->toCurrency($data);
             return $sign . $data;
         }
         return $this->getColumn()->getDefault();
@@ -70,7 +129,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
      * Returns currency code, false on error
      *
      * @param $row
-     * @return string|false
+     * @return string
      */
     protected function _getCurrencyCode($row)
     {
@@ -80,7 +139,8 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
         if ($code = $row->getData($this->getColumn()->getCurrency())) {
             return $code;
         }
-        return false;
+
+        return $this->_currencyLocator->getDefaultCurrency($this->_request);
     }
 
     /**
@@ -97,7 +157,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
             return floatval($rate);
         }
-        return 1;
+        return $this->_app->getStore()->getBaseCurrency()->getRate($this->_getCurrencyCode($row));
     }
 
     /**
@@ -110,3 +170,4 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency
         return parent::renderCss() . ' a-right';
     }
 }
+

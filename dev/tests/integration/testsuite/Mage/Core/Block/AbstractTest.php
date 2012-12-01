@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 /**
@@ -43,6 +43,7 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        Mage::getDesign()->setDefaultDesignTheme();
         $this->_block = $this->getMockForAbstractClass('Mage_Core_Block_Abstract',
             $this->_getBlockDependencies()
         );
@@ -638,11 +639,16 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
      * App isolation is enabled, because config options object is affected
      *
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testGetVar()
     {
-        Mage::getConfig()->getOptions()->setDesignDir(dirname(__DIR__) . '/Model/_files/design');
-        Mage::getDesign()->setDesignTheme('test/default');
+        /** @var $themeUtility Mage_Core_Utility_Theme */
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
+            dirname(__DIR__) . '/Model/_files/design/'
+        ));
+        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
+
         $this->assertEquals('Core Value1', $this->_block->getVar('var1'));
         $this->assertEquals('value1', $this->_block->getVar('var1', 'Namespace_Module'));
         $this->_block->setModuleName('Namespace_Module');

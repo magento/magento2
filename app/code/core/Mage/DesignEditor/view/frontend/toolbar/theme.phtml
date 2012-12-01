@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -33,7 +33,7 @@
     <div class="vde_toolbar_cell_content">
         <dl id="<?php echo $this->getSelectHtmlId(); ?>">
             <?php foreach ($this->getTheme()->getCollection() as $theme): ?>
-                <?php $checked = $this->isThemeSelected($theme->getThemePath()) ? ' checked' : '' ?>
+                <?php $checked = $this->isThemeSelected($theme->getId()) ? ' checked' : '' ?>
                 <dd class="vde_cell_list_item<?php echo $checked ?>">
                     <?php $url = $this->getUrl('design/editor/theme', array('_query' => array(
                         'theme_id' => $theme->getId()

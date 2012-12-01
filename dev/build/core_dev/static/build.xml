@@ -23,7 +23,7 @@
  *
  * @category   dev
  * @package    build
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -41,6 +41,8 @@
     <target name="_static_tests_no_js" depends="_product_location" description="All static tests without JS static test">
         <copy file="${basedir}/dev/build/core_dev/static/phpunit.php.xml"
               tofile="${product_root_dir}/dev/tests/static/phpunit.xml" overwrite="true"/>
+        <copy file="${basedir}/dev/build/core_dev/static/pdepend.xml"
+              tofile="${product_root_dir}/dev/tests/static/pdepend.xml" overwrite="true"/>
         <exec dir="${product_root_dir}/dev/tests/static" executable="phpunit" failonerror="true">
             <arg line="--log-junit ${basedir}/static_tests_no_js.xml"/>
         </exec>

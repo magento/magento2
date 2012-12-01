@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -143,12 +143,6 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
                 $data['conditions'] = $data['rule']['conditions'];
                 unset($data['rule']);
 
-                $autoApply = false;
-                if (!empty($data['auto_apply'])) {
-                    $autoApply = true;
-                    unset($data['auto_apply']);
-                }
-
                 $model->loadPost($data);
 
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setPageData($model->getData());
@@ -159,7 +153,7 @@ class Mage_Adminhtml_Promo_CatalogController extends Mage_Adminhtml_Controller_A
                     Mage::helper('Mage_CatalogRule_Helper_Data')->__('The rule has been saved.')
                 );
                 Mage::getSingleton('Mage_Adminhtml_Model_Session')->setPageData(false);
-                if ($autoApply) {
+                if ($this->getRequest()->getParam('auto_apply')) {
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
                 } else {

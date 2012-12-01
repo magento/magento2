@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_ImportExport
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,8 @@ class Mage_ImportExport_Block_Adminhtml_Import_Edit extends Mage_Adminhtml_Block
             ->removeButton('reset')
             ->_updateButton('save', 'label', $this->__('Check Data'))
             ->_updateButton('save', 'id', 'upload_button')
-            ->_updateButton('save', 'onclick', 'editForm.postToFrame();');
+            ->_updateButton('save', 'onclick', 'varienImport.postToFrame();')
+            ->_updateButton('save', 'data_attr', '');
 
         $this->_objectId   = 'import_id';
         $this->_blockGroup = 'Mage_ImportExport';

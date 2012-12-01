@@ -21,10 +21,15 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ *
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ */
 class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -43,6 +48,11 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         Mage::getConfig()->setOptions(array(
             'design_dir' => realpath( __DIR__ . '/../../_files/design'),
         ));
+
+        /** @var $themeRegistration Mage_Core_Model_Theme_Registration */
+        $themeRegistration = Mage::getObjectManager()->create('Mage_Core_Model_Theme_Registration');
+        $themeRegistration->register();
+
         Mage::getDesign()->setDesignTheme('test/default', 'adminhtml');
 
         /* Disable loading and saving layout cache */
@@ -86,15 +96,15 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
     {
         $javascript = $this->_block->getJavaScript();
 
-        $expectedItem1 =  '#"option_id1":{"label":"Option One",'
+        $expectedItemFirst = '#"option_id1":{"label":"Option One",'
             . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
             . '"complete":"Test","id":"option_id1"}#';
-        $this->assertRegExp($expectedItem1, $javascript);
+        $this->assertRegExp($expectedItemFirst, $javascript);
 
-        $expectedItem2 =  '#"option_id2":{"label":"Option Two",'
+        $expectedItemSecond = '#"option_id2":{"label":"Option Two",'
             . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
             . '"confirm":"Are you sure\?","id":"option_id2"}#';
-        $this->assertRegExp($expectedItem2, $javascript);
+        $this->assertRegExp($expectedItemSecond, $javascript);
     }
 
     public function testJavascriptWithAddedItem()
@@ -137,6 +147,9 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $this->assertEquals($expectedItem['blockname'], $actualItem->getBlockName());
     }
 
+    /**
+     * @return array
+     */
     public function itemsDataProvider()
     {
         return array(

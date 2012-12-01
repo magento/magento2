@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,11 +85,11 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     protected $_countSubTotals = false;
 
     /**
-     * SubTotals
+     * Count totals
      *
-     * @var array
+     * @var boolean
      */
-    protected $_subtotals = array();
+    protected $_countTotals = false;
 
     /**
      * Columns to group by
@@ -111,6 +111,16 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     protected $_template = 'Mage_Backend::widget/grid/column_set.phtml';
 
     /**
+     * @var Mage_Backend_Model_Widget_Grid_SubTotals
+     */
+    protected $_subTotals = null;
+
+    /**
+     * @var Mage_Backend_Model_Widget_Grid_Totals
+     */
+    protected $_totals = null;
+
+    /**
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Model_Layout $layout
      * @param Mage_Core_Model_Event_Manager $eventManager
@@ -127,6 +137,7 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         Mage_Core_Controller_Request_Http $request,
@@ -142,6 +153,8 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
         Mage_Core_Model_Factory_Helper $helperFactory,
         Mage_Backend_Helper_Data $helper,
         Mage_Backend_Model_Widget_Grid_Row_UrlGeneratorFactory $generatorFactory,
+        Mage_Backend_Model_Widget_Grid_SubTotals $subtotals,
+        Mage_Backend_Model_Widget_Grid_Totals $totals,
         array $data = array()
     ) {
         $this->_helper = $helper;
@@ -156,9 +169,26 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
                 = $generatorFactory->createUrlGenerator($generatorClassName, array('args' => $rowUrlParams));
         }
 
+        $this->setFilterVisibility(
+            array_key_exists('filter_visibility', $data) ? (bool) $data['filter_visibility'] : true
+        );
+
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
             $session, $storeConfig, $frontController, $helperFactory, $data);
-        $this->setEmptyText($this->_helper->__('No records found.'));
+
+        $this->setEmptyText($this->_helper->__(
+            isset($data['empty_text'])? $data['empty_text'] : 'No records found.'
+        ));
+
+        $this->setEmptyCellLabel($this->_helper->__(
+            isset($data['empty_cell_label'])? $data['empty_cell_label'] : 'No records found.'
+        ));
+
+        $this->setCountSubTotals(isset($data['count_subtotals'])? (bool) $data['count_subtotals'] : false);
+        $this->_subTotals = $subtotals;
+
+        $this->setCountTotals(isset($data['count_totals'])? (bool) $data['count_totals'] : false);
+        $this->_totals = $totals;
     }
 
     /**
@@ -244,6 +274,9 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
         foreach ($columns as $columnId => $column) {
             $column->setId($columnId);
             $column->setGrid($this->getGrid());
+            if ($column->isGrouped()) {
+                $this->isColumnGrouped($column->getIndex(), true);
+            }
         }
         $last = array_pop($columns);
         if ($last) {
@@ -278,6 +311,17 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     }
 
     /**
+     * Has children of specified item
+     *
+     * @param Varien_Object $item
+     * @return bool
+     */
+    public function hasMultipleRows($item)
+    {
+        return $item->hasChildren() && count($item->getChildren()) > 0;
+    }
+
+    /**
      * Retrieve columns for multiple rows
      * @return array
      */
@@ -299,8 +343,19 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     public function shouldRenderSubTotal($item)
     {
         return ($this->getCountSubTotals() &&
-            count($this->getSubTotals()) > 0 &&
             count($this->getMultipleRows($item)) > 0
+        );
+    }
+
+    /**
+     * Check whether total should be rendered
+     *
+     * @return boolean
+     */
+    public function shouldRenderTotal()
+    {
+        return ($this->getCountTotals() &&
+            count($this->getCollection()) > 0
         );
     }
 
@@ -314,7 +369,8 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     public function getRowspan($item, $column)
     {
         if ($this->isColumnGrouped($column)) {
-            return count($this->getMultipleRows($item)) + count($this->_groupedColumn);
+            return count($this->getMultipleRows($item)) + count($this->_groupedColumn) - 1
+                + (int)$this->shouldRenderSubTotal($item);
         }
         return false;
     }
@@ -358,34 +414,6 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     public function getEmptyCellColspan()
     {
         return $this->getColumnCount() - count($this->_groupedColumn);
-    }
-
-    /**
-     * Retrieve subtotal item
-     *        $this->getUrl()
-     * @param Varien_Object $item
-     * @return Varien_Object
-     */
-    public function getSubTotalItem($item)
-    {
-        foreach ($this->getSubTotals() as $subtotalItem) {
-            foreach ($this->_groupedColumn as $groupedColumn) {
-                if ($subtotalItem->getData($groupedColumn) == $item->getData($groupedColumn)) {
-                    return $subtotalItem;
-                }
-            }
-        }
-        return '';
-    }
-
-    /**
-     * Retrieve columns to render
-     *
-     * @return array
-     */
-    public function getSubTotalColumns()
-    {
-        return $this->getColumns();
     }
 
     /**
@@ -482,7 +510,7 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
      * Set label for empty cell
      *
      * @param string $label
-     * @return Mage_Backend_Block_Widget_Grid
+     * @return Mage_Backend_Block_Widget_Grid_ColumnSet
      */
     public function setEmptyCellLabel($label)
     {
@@ -551,24 +579,97 @@ class Mage_Backend_Block_Widget_Grid_ColumnSet extends Mage_Core_Block_Template
     }
 
     /**
-     * Set subtotal items
+     * Set totals
      *
-     * @param array $items
+     * @param boolean $flag
      * @return Mage_Backend_Block_Widget_Grid
      */
-    public function setSubTotals(array $items)
+    public function setCountTotals($flag = true)
     {
-        $this->_subtotals = $items;
+        $this->_countTotals = $flag;
         return $this;
+    }
+
+    /**
+     * Return count totals
+     *
+     * @return mixed
+     */
+    public function getCountTotals()
+    {
+        return $this->_countTotals;
+    }
+
+    /**
+     * Retrieve subtotal for item
+     *
+     * @param $item Varien_Object
+     * @return Varien_Object
+     */
+    public function getSubTotals($item)
+    {
+        $this->_prepareSubTotals();
+        $this->_subTotals->reset();
+        return $this->_subTotals->countTotals($item->getChildren());
     }
 
     /**
      * Retrieve subtotal items
      *
-     * @return array
+     * @return Varien_Object
      */
-    public function getSubTotals()
+    public function getTotals()
     {
-        return $this->_subtotals;
+        $this->_prepareTotals();
+        $this->_totals->reset();
+        return $this->_totals->countTotals($this->getCollection());
     }
+
+    /**
+     * Update item with first sub-item data
+     *
+     * @param $item Varien_Object
+     */
+    public function updateItemByFirstMultiRow(Varien_Object $item)
+    {
+        $multiRows = $this->getMultipleRows($item);
+        if (is_object($multiRows) && $multiRows instanceof Varien_Data_Collection) {
+            /** @var $multiRows Varien_Data_Collection */
+            $item->addData($multiRows->getFirstItem()->getData());
+        } elseif (is_array($multiRows)) {
+            $firstItem = $multiRows[0];
+            $item->addData($firstItem);
+        }
+    }
+
+    /**
+     * Prepare sub-total object for counting sub-totals
+     */
+    public function _prepareSubTotals()
+    {
+        $columns = $this->_subTotals->getColumns();
+        if (empty($columns)) {
+            foreach ($this->getMultipleRowColumns() as $column) {
+                if ($column->getTotal()) {
+                    $this->_subTotals->setColumn($column->getIndex(), $column->getTotal());
+                }
+            }
+        }
+    }
+
+    /**
+     * Prepare total object for counting totals
+     */
+    public function _prepareTotals()
+    {
+        $columns = $this->_totals->getColumns();
+        if (empty($columns)) {
+            foreach ($this->getColumns() as $column) {
+                if ($column->getTotal()) {
+                    $this->_totals->setColumn($column->getIndex(), $column->getTotal());
+                }
+            }
+        }
+    }
+
 }

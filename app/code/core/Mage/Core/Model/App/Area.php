@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -92,16 +92,12 @@ class Mage_Core_Model_App_Area
     public function detectDesign($request = null)
     {
         if ($this->_code == self::AREA_FRONTEND) {
-            $areaDesign = Mage::getStoreConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME);
-            $this->_getDesign()->setDesignTheme($areaDesign, self::AREA_FRONTEND);
             $designExceptionApplied = ($request && $this->_applyUserAgentDesignException($request));
             if (!$designExceptionApplied) {
                 $this->_getDesignChange()
                     ->loadChange(Mage::app()->getStore()->getId())
                     ->changeDesign($this->_getDesign());
             }
-        } else {
-            $this->_getDesign()->setArea($this->_code);
         }
     }
 
@@ -190,7 +186,6 @@ class Mage_Core_Model_App_Area
     protected function _initEvents()
     {
         Mage::app()->addEventArea($this->_code);
-        #Mage::app()->getConfig()->loadEventObservers($this->_code);
         return $this;
     }
 

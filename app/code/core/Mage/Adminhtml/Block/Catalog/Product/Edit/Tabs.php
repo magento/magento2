@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
     {
         parent::_construct();
         $this->setId('product_info_tabs');
-        $this->setDestElementId('product_edit_form');
+        $this->setDestElementId('product-edit-form');
         $this->setTitle(Mage::helper('Mage_Catalog_Helper_Data')->__('Product Information'));
     }
 

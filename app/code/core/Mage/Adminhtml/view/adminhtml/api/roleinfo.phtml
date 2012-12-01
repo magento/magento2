@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /** @var $this Mage_Adminhtml_Block_Api_Tab_Roleinfo */
@@ -39,9 +39,9 @@
         </tr>
     </table>
 </div>
-<form action="<?php echo $this->getUrl('*/*/saverole') ?>" method="post" id="role_edit_form">
+<form action="<?php echo $this->getUrl('*/*/saverole') ?>" method="post" id="role-edit-form">
     <?php echo $this->getBlockHtml('formkey')?>
 </form>
 <script type="text/javascript">
-    var roleForm = new varienForm('role_edit_form');
+    jQuery('#role-edit-form').form().validation();
 </script>

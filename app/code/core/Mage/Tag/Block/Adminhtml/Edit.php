@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tag
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,8 +56,16 @@ class Mage_Tag_Block_Adminhtml_Edit extends Mage_Adminhtml_Block_Widget_Form_Con
 
         $this->addButton('save_and_edit_button', array(
             'label'   => Mage::helper('Mage_Tag_Helper_Data')->__('Save and Continue Edit'),
-            'onclick' => "saveAndContinueEdit('" . $this->getSaveAndContinueUrl() . "')",
-            'class'   => 'save'
+            'class'   => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#edit_form',
+                    'eventData' => array(
+                        'action' => array(
+                            'args' => array('ret' => 'edit', 'continue' => 'index'),
+                        ),
+                    ),
+                ),
+            ),
         ), 1);
     }
 

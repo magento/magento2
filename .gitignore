@@ -8,7 +8,6 @@ atlassian*
 /index.php
 /nbproject
 /sitemap
-/staging
 /.htaccess.orig
 /.idea
 /app/config_sandbox
@@ -29,7 +28,6 @@ atlassian*
 /pub/media/*
 /pub/media/customer/*
 /pub/media/downloadable/*
-/pub/media/xmlconnect/*
 /var/*
 dev/api-tests/config.php
 dev/api-tests/integration/tmp/*

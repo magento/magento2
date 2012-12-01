@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -166,9 +166,9 @@ class Magento_Test_Annotation_ConfigFixture
     }
 
     /**
-     * Handler for 'initFrontControllerBefore' event
+     * Reassign configuration data whenever application is reset
      */
-    public function initFrontControllerBefore()
+    public function initStoreAfter()
     {
         /* process events triggered from within a test only */
         if ($this->_currentTest) {

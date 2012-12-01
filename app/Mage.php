@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -170,7 +170,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '32',
+            'number'    => '33',
         );
     }
 
@@ -681,7 +681,6 @@ final class Mage
             Magento_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
             Magento_Profiler::stop('self::app::init');
-            self::$_app->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
         }
         return self::$_app;
     }
@@ -785,7 +784,7 @@ final class Mage
      */
     protected static function _setConfigModel($options = array())
     {
-        if (isset($options['config_model']) && Magento_Autoload::getInstance()->classExists($options['config_model'])) {
+        if (isset($options['config_model']) && class_exists($options['config_model'])) {
             $alternativeConfigModelName = $options['config_model'];
             unset($options['config_model']);
             $alternativeConfigModel = new $alternativeConfigModelName($options);
@@ -834,90 +833,32 @@ final class Mage
     }
 
     /**
-     * log facility (??)
+     * log a message to system log or arbitrary file
      *
      * @param string $message
      * @param integer $level
      * @param string $file
      * @param bool $forceLog
      */
-    public static function log($message, $level = null, $file = '', $forceLog = false)
+    public static function log($message, $level = null, $file = 'system.log', $forceLog = false)
     {
-        if (!self::getConfig()) {
-            return;
+        $level = is_null($level) ? Zend_Log::DEBUG : $level;
+        if (empty($file) || $file == 'system.log') {
+            $file = 'system.log';
+            $key = Mage_Core_Model_Logger::LOGGER_SYSTEM;
+        } elseif ($file == 'exception.log') {
+            $key = Mage_Core_Model_Logger::LOGGER_EXCEPTION;
+        } else {
+            $forceLog = true;
+            $key = $file;
         }
-
-        try {
-            $logActive = self::getStoreConfig('dev/log/active');
-            if (empty($file)) {
-                $file = self::getStoreConfig('dev/log/file');
-            }
+        /** @var $logger Mage_Core_Model_Logger */
+        $logger = self::$_objectManager->get('Mage_Core_Model_Logger');
+        if ($forceLog && !$logger->hasLog($key)) {
+            $logger->addStreamLog($key, $file);
         }
-        catch (Exception $e) {
-            $logActive = true;
-        }
-
-        if (!self::$_isDeveloperMode && !$logActive && !$forceLog) {
-            return;
-        }
-
-        $level  = is_null($level) ? Zend_Log::DEBUG : $level;
-        $file = empty($file) ? 'system.log' : $file;
-
-        try {
-            if (!isset(self::$_loggers[$file])) {
-                $logFile = self::_expandLogFileName($file);
-
-                $format = '%timestamp% %priorityName% (%priority%): %message%' . PHP_EOL;
-                $formatter = new Zend_Log_Formatter_Simple($format);
-                $writerModel = (string)self::getConfig()->getNode('global/log/core/writer_model');
-                if (!self::$_app || !$writerModel || !is_subclass_of($writerModel, 'Zend_Log_Writer_Stream')) {
-                    $writerModel = 'Zend_Log_Writer_Stream';
-                }
-                /** @var $writer Zend_Log_Writer_Stream */
-                $writer = new $writerModel($logFile);
-                $writer->setFormatter($formatter);
-                self::$_loggers[$file] = new Zend_Log($writer);
-            }
-
-            if (is_array($message) || is_object($message)) {
-                $message = print_r($message, true);
-            }
-
-            self::$_loggers[$file]->log($message, $level);
-        }
-        catch (Exception $e) {
-        }
+        $logger->log($message, $level, $key);
     }
-
-    /**
-     * Expand log file name to absolute path, if necessary
-     *
-     * @param string $file
-     * @return string
-     */
-    protected static function _expandLogFileName($file)
-    {
-        /*
-         * Check whether a file is a wrapper
-         * @link http://www.php.net/manual/en/wrappers.php
-         */
-        if (preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
-            return $file;
-        }
-        $dir  = self::getBaseDir('var') . DIRECTORY_SEPARATOR . 'log';
-        $file = $dir . DIRECTORY_SEPARATOR . $file;
-        if (!is_dir($dir)) {
-            mkdir($dir);
-            chmod($dir, 0777);
-        }
-        if (!file_exists($file)) {
-            file_put_contents($file, '');
-            chmod($file, 0777);
-        }
-        return $file;
-    }
-
 
     /**
      * Write exception to log
@@ -926,11 +867,7 @@ final class Mage
      */
     public static function logException(Exception $e)
     {
-        if (!self::getConfig()) {
-            return;
-        }
-        $file = self::getStoreConfig('dev/log/exception_file');
-        self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
+        self::$_objectManager->get('Mage_Core_Model_Logger')->logException($e);
     }
 
     /**

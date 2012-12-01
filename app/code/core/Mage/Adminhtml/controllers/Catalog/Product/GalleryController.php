@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ class Mage_Adminhtml_Catalog_Product_GalleryController extends Mage_Adminhtml_Co
     public function uploadAction()
     {
         try {
-            $uploader = new Mage_Core_Model_File_Uploader('image');
+            $uploader = Mage::getModel('Mage_Core_Model_File_Uploader', array('image'));
             $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
             $uploader->addValidateCallback('catalog_product_image',
                 Mage::helper('Mage_Catalog_Helper_Image'), 'validateUploadFile');
@@ -51,26 +51,18 @@ class Mage_Adminhtml_Catalog_Product_GalleryController extends Mage_Adminhtml_Co
                 'action' => $this
             ));
 
-            /**
-             * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
-             */
-            $result['tmp_name'] = str_replace(DS, "/", $result['tmp_name']);
-            $result['path'] = str_replace(DS, "/", $result['path']);
+            unset($result['tmp_name']);
+            unset($result['path']);
 
-            $result['url'] = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')->getTmpMediaUrl($result['file']);
+            $result['url'] = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config')
+                ->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';
-            $result['cookie'] = array(
-                'name'     => session_name(),
-                'value'    => $this->_getSession()->getSessionId(),
-                'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path'     => $this->_getSession()->getCookiePath(),
-                'domain'   => $this->_getSession()->getCookieDomain()
-            );
 
         } catch (Exception $e) {
             $result = array(
                 'error' => $e->getMessage(),
-                'errorcode' => $e->getCode());
+                'errorcode' => $e->getCode()
+            );
         }
 
         $this->getResponse()->setBody(Mage::helper('Mage_Core_Helper_Data')->jsonEncode($result));

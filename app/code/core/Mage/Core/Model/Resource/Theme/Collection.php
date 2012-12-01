@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,13 +53,35 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
     }
 
     /**
+     * Add area filter
+     *
+     * @param string $area
+     * @return Mage_Core_Model_Resource_Theme_Collection
+     */
+    public function addAreaFilter($area)
+    {
+        $this->getSelect()->where('main_table.area=?', $area);
+        return $this;
+    }
+
+    /**
      * Return array for select field
      *
      * @return array
      */
     public function toOptionArray()
     {
-        return array('' => '') + $this->_toOptionArray('theme_id', 'theme_title');
+        return$this->_toOptionArray('theme_id', 'theme_title');
+    }
+
+    /**
+     * Return array for grid column
+     *
+     * @return array
+     */
+    public function toOptionHash()
+    {
+        return $this->_toOptionHash('theme_id', 'theme_title');
     }
 
     /**
@@ -95,5 +117,20 @@ class Mage_Core_Model_Resource_Theme_Collection extends Mage_Core_Model_Resource
             $parentId = $this->_getParentThemeRecursively($parentTheme->getParentId());
         }
         return $parentId;
+    }
+
+    /**
+     * Get theme from DB by area and theme_path
+     *
+     * @param string $fullPath
+     * @return Mage_Core_Model_Theme
+     */
+    public function getThemeByFullPath($fullPath)
+    {
+        list($area, $themePath) = explode('/', $fullPath, 2);
+        $this->addFieldToFilter('area', $area);
+        $this->addFieldToFilter('theme_path', $themePath);
+
+        return $this->getFirstItem();
     }
 }

@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -180,15 +180,6 @@ Onepage Checkout Review Page
             <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::onepage/review/item.phtml</template></action>
         </reference>
     </paypaluk_express_review_details>
-
-    <xmlconnect_cart_index>
-        <reference name="xmlconnect.cart">
-            <action method="addItemRender"><type>bundle</type><block>Mage_Bundle_Block_Checkout_Cart_Item_Renderer</block><template>Mage_Checkout::cart/item/default.phtml</template></action>
-        </reference>
-        <reference name="xmlconnect.catalog.product.price">
-            <action method="addRenderer"><type>bundle</type><renderer>Mage_XmlConnect_Block_Catalog_Product_Price_Bundle</renderer></action>
-        </reference>
-    </xmlconnect_cart_index>
 
 <!--
 Additional block for bundle product type

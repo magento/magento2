@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -203,13 +203,6 @@ return array(
     'customer_entity_varchar' => 'customer_entity_varchar',
     'cybermut/api_debug' => 'cybermut_api_debug',
     'cybersource/api_debug' => 'cybersource_api_debug',
-    'dataflow/batch' => 'dataflow_batch',
-    'dataflow/batch_export' => 'dataflow_batch_export',
-    'dataflow/batch_import' => 'dataflow_batch_import',
-    'dataflow/import' => 'dataflow_import_data',
-    'dataflow/profile' => 'dataflow_profile',
-    'dataflow/profile_history' => 'dataflow_profile_history',
-    'dataflow/session' => 'dataflow_session',
     'directory/country' => 'directory_country',
     'directory/country_format' => 'directory_country_format',
     'directory/country_name' => 'directory_country_name',
@@ -421,10 +414,4 @@ return array(
     'wishlist/item' => 'wishlist_item',
     'wishlist/item_option' => 'wishlist_item_option',
     'wishlist/wishlist' => 'wishlist',
-    'xmlconnect/application' => 'xmlconnect_application',
-    'xmlconnect/application_design' => 'xmlconnect_application',
-    'xmlconnect/configData' => 'xmlconnect_config_data',
-    'xmlconnect/history' => 'xmlconnect_history',
-    'xmlconnect/queue' => 'xmlconnect_queue',
-    'xmlconnect/template' => 'xmlconnect_notification_template',
 );

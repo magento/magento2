@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -86,18 +86,26 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
         return;
     }
 
+    /**
+     * Forward request for a graph image to the web-service
+     *
+     * This is done in order to include the image to a HTTPS-page regardless of web-service settings
+     */
     public function tunnelAction()
     {
-        $httpClient = new Varien_Http_Client();
         $error = $this->__('invalid request');
         $httpCode = 400;
-        $gaData = $this->getRequest()->getParam('ga');
-        $gaHash = $this->getRequest()->getParam('h');
+        $gaData = $this->_request->getParam('ga');
+        $gaHash = $this->_request->getParam('h');
         if ($gaData && $gaHash) {
-            $newHash = Mage::helper('Mage_Adminhtml_Helper_Dashboard_Data')->getChartDataHash($gaData);
+            /** @var $helper Mage_Adminhtml_Helper_Dashboard_Data */
+            $helper = $this->_objectManager->get('Mage_Adminhtml_Helper_Dashboard_Data');
+            $newHash = $helper->getChartDataHash($gaData);
             if ($newHash == $gaHash) {
                 if ($params = unserialize(base64_decode(urldecode($gaData)))) {
                     try {
+                        /** @var $httpClient Varien_Http_Client */
+                        $httpClient = $this->_objectManager->create('Varien_Http_Client');
                         $response = $httpClient->setUri(Mage_Adminhtml_Block_Dashboard_Graph::API_URL)
                             ->setParameterGet($params)
                             ->setConfig(array('timeout' => 5))
@@ -105,19 +113,18 @@ class Mage_Adminhtml_DashboardController extends Mage_Adminhtml_Controller_Actio
 
                         $headers = $response->getHeaders();
 
-                        $this->getResponse()
-                            ->setHeader('Content-type', $headers['Content-type'])
+                        $this->_response->setHeader('Content-type', $headers['Content-type'])
                             ->setBody($response->getBody());
                         return;
                     } catch (Exception $e) {
-                        Mage::logException($e);
+                        $this->_objectManager->get('Mage_Core_Model_Logger')->logException($e);
                         $error = $this->__('see error log for details');
                         $httpCode = 503;
                     }
                 }
             }
         }
-        $this->getResponse()->setBody($this->__('Service unavailable: %s', $error))
+        $this->_response->setBody($this->__('Service unavailable: %s', $error))
             ->setHeader('Content-Type', 'text/plain; charset=UTF-8')
             ->setHttpResponseCode($httpCode);
     }

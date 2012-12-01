@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -567,8 +567,19 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
     {
         $area = Mage::app()->getArea($this->getLayout()->getArea());
         $area->load();
+        $this->_initDefaultTheme();
         $area->detectDesign($this->getRequest());
+        return $this;
+    }
 
+    /**
+     * Initialize theme
+     *
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    protected function _initDefaultTheme()
+    {
+        Mage::getDesign()->setDefaultDesignTheme();
         return $this;
     }
 

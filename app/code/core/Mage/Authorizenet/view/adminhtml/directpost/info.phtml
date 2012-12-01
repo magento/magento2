@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -55,7 +55,7 @@ $_orderUrl = $this->helper('Mage_Authorizenet_Helper_Data')->getPlaceOrderAdminU
     <li>
         <div class="input-box">
             <label for="<?php echo $_code ?>_cc_number"><?php echo Mage::helper('Mage_Payment_Helper_Data')->__('Credit Card Number') ?> <span class="required">*</span></label><br/>
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo Mage::helper('Mage_Payment_Helper_Data')->__('Credit Card Number') ?>" class="input-text validate-cc-number" value="<?php echo $this->getInfoData('cc_number')?>" />
+            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo Mage::helper('Mage_Payment_Helper_Data')->__('Credit Card Number') ?>" class="input-text required-entry validate-cc-number" value="<?php echo $this->getInfoData('cc_number')?>" />
         </div>
     </li>
     <li>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -263,12 +263,17 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
             try {
                 $response = false;
                 $data = $this->getRequest()->getPost('history');
+                if (empty($data['comment']) && ($data['status'] == $order->getDataByKey('status'))) {
+                    Mage::throwException($this->__('Comment text cannot be empty.'));
+                }
+
                 $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
                 $visible = isset($data['is_visible_on_front']) ? $data['is_visible_on_front'] : false;
 
-                $order->addStatusHistoryComment($data['comment'], $data['status'])
-                    ->setIsVisibleOnFront($visible)
-                    ->setIsCustomerNotified($notify);
+                $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
+                $history->setIsVisibleOnFront($visible);
+                $history->setIsCustomerNotified($notify);
+                $history->save();
 
                 $comment = trim(strip_tags($data['comment']));
 
@@ -277,14 +282,12 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
 
                 $this->loadLayout('empty');
                 $this->renderLayout();
-            }
-            catch (Mage_Core_Exception $e) {
+            } catch (Mage_Core_Exception $e) {
                 $response = array(
                     'error'     => true,
                     'message'   => $e->getMessage(),
                 );
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $response = array(
                     'error'     => true,
                     'message'   => $this->__('Cannot add order history.')
@@ -675,6 +678,10 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
                 break;
             case 'reviewpayment':
                 $aclResource = 'Mage_Sales::review_payment';
+                break;
+            case 'address':
+            case 'addresssave':
+                $aclResource = 'Mage_Sales::actions_edit';
                 break;
             default:
                 $aclResource = 'Mage_Sales::sales_order';

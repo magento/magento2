@@ -20,26 +20,23 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <script type="text/javascript">
 //<![CDATA[
-function setSettings(urlTemplate, typeElement, packageThemeElement) {
-    if (!editForm.validate()) {
+function setSettings(urlTemplate, typeElement, themeElement) {
+    if (!jQuery('#edit_form').valid()) {
         return false;
     }
     typeElement = $F(typeElement);
-    packageThemeElement = $F(packageThemeElement).replace(/\//g, "-");
+    themeElement = $F(themeElement);
 
     setLocation(new Template(urlTemplate, /(^|.|\r|\n)({{(\w+)}})/).evaluate({
         'type': typeElement,
-        'package_theme': packageThemeElement
+        'theme_id': themeElement
     }));
-}
-function saveAndContinueEdit(){
-    editForm.submit($('edit_form').action + 'back/edit/');
 }
 //]]>
 </script>

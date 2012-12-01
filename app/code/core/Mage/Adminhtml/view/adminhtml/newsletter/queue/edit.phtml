@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Adminhtml_Block_Newsletter_Queue_Edit */
@@ -45,9 +45,6 @@
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="queue_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
-    <div class="no-display">
-        <input type="hidden" name="_resume" id="_resume_flag" value="" />
-    </div>
     <?php echo $this->getChildHtml('form') ?>
 </form>
 <form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
@@ -61,19 +58,15 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-var queueForm = new varienForm('queue_edit_form');
-var newsletterPreviewForm = new varienForm('newsletter_queue_preview_form');
+jQuery('#queue_edit_form').form().validation();
+jQuery('#newsletter_queue_preview_form').form().validation();
 
 var queueControl = {
     id: 'text',
-    save: function() {
-        $('_resume_flag').value = '';
-        queueForm.submit();
-    },
     preview: function() {
         if (this.isEditor() && tinyMCE.get(this.id)) {
             tinyMCE.triggerSave();
-            $('preview_text').value = $(this.id).value;
+            $('preview_text').value = tinyMCE.get(this.id).getContent();
             tinyMCE.triggerSave();
         } else {
             $('preview_text').value = $(this.id).value;
@@ -84,15 +77,12 @@ var queueControl = {
         if ($('id') != undefined) {
             $('preview_id').value = $('id').value;
         }
-        newsletterPreviewForm.submit();
+        // Temporary solution will be replaced after refactoring of newsletter queue functionality
+        jQuery('#newsletter_queue_preview_form').trigger('save');
         return false;
     },
     isEditor: function() {
         return (typeof tinyMceEditors != 'undefined' && tinyMceEditors.get(this.id) != undefined)
-    },
-    resume: function() {
-        $('_resume_flag').value = '1';
-        queueForm.submit();
     }
 };
 //]]>

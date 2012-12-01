@@ -70,7 +70,7 @@
 "Magento","Magento"
 "Magento Connect Manager Deployment","Implementação do Gerenciador de Conexão Magento"
 "Magento Installation Wizard","Assistente de Instalação Magento"
-"Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.","Magento é uma marca comercial da Magento Inc.© Direitos Autorais©, %s Magento Inc."
+"Magento is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.","Magento é uma marca comercial da X.commerce, Inc.© Direitos Autorais©, %s X.commerce, Inc."
 "Magento uses this key to encrypt passwords, credit cards and more. If this field is left empty the system will create an encryption key for you and will display it on the next page.","Magento usa essa chave para criptografar senhas, cartões de crédito e muito mais. Se este campo é deixado em branco o sistema irá criar para você uma chave criptografada e vai exibi-la na próxima página."
 "Manual Downloads and Upgrades","Transferências de Manual e Atualizações"
 "No resource for %s DB model.","Nenhum recurso para o modelo %s DB."

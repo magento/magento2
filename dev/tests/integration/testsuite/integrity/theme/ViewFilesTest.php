@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,18 +31,15 @@
 class Integrity_Theme_ViewFilesTest extends Magento_Test_TestCase_IntegrityAbstract
 {
     /**
-     * @param string $application
-     * @param string $package
-     * @param string $theme
+     * @param Mage_Core_Model_Theme $theme
      * @param string $file
      * @dataProvider viewFilesFromThemesDataProvider
      */
-    public function testViewFilesFromThemes($application, $package, $theme, $file)
+    public function testViewFilesFromThemes($theme, $file)
     {
         $params = array(
-            'area'    => $application,
-            'package' => $package,
-            'theme'   => $theme
+            'area'       => $theme->getArea(),
+            'themeModel' => $theme
         );
         $viewFile = Mage::getDesign()->getViewFile($file, $params);
         $this->assertFileExists($viewFile);
@@ -108,39 +105,35 @@ class Integrity_Theme_ViewFilesTest extends Magento_Test_TestCase_IntegrityAbstr
 
         // Find files, declared in views
         $files = array();
-        foreach ($themes as $themeDesign) {
-            list($area, $package, $theme) = explode('/', $themeDesign);
-            $this->_collectGetViewUrlInvokes($area, $package, $theme, $files);
+        foreach ($themes as $theme) {
+            $this->_collectGetViewUrlInvokes($theme, $files);
         }
 
         // Populate data provider in correspondence of themes to view files
         $result = array();
-        foreach ($themes as $themeDesign) {
-            list($area, $package, $theme) = explode('/', $themeDesign);
-            if (!isset($files[$area][$package][$theme])) {
+        foreach ($themes as $theme) {
+            if (!isset($files[$theme->getArea()][$theme->getId()])) {
                 continue;
             }
-            foreach (array_unique($files[$area][$package][$theme]) as $file) {
-                $result["{$area}/{$package}/{$theme}/{$file}"] =
-                    array($area, $package, $theme, $file);
+            foreach (array_unique($files[$theme->getArea()][$theme->getId()]) as $file) {
+                $result["{$theme->getArea()}//{$theme->getId()}/{$file}"] =
+                    array($theme, $file);
             }
         }
-
         return array_values($result);
     }
 
     /**
      * Collect getViewUrl() from theme templates
      *
-     * @param string    $area
-     * @param string    $package
-     * @param string    $theme
-     * @param array     &$files
+     * @param Mage_Core_Model_Theme $theme
+     * @param array &$files
      */
-    protected function _collectGetViewUrlInvokes($area, $package, $theme, &$files)
+    protected function _collectGetViewUrlInvokes($theme, &$files)
     {
-        $searchDir = Mage::getBaseDir('design') . DIRECTORY_SEPARATOR . $area . DIRECTORY_SEPARATOR . $package
-                . DIRECTORY_SEPARATOR . $theme;
+        $themePath = str_replace(Mage_Core_Model_Theme::PATH_SEPARATOR, DIRECTORY_SEPARATOR, $theme->getThemePath());
+        $searchDir = Mage::getBaseDir('design') . DIRECTORY_SEPARATOR . $theme->getArea()
+            . DIRECTORY_SEPARATOR . $themePath;
         $dirLength = strlen($searchDir);
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($searchDir)) as $fileInfo) {
             // Check that file path is valid
@@ -151,13 +144,13 @@ class Integrity_Theme_ViewFilesTest extends Magento_Test_TestCase_IntegrityAbstr
 
             // Scan file for references to other files
             foreach ($this->_findReferencesToViewFile($fileInfo) as $file) {
-                $files[$area][$package][$theme][] = $file;
+                $files[$theme->getArea()][$theme->getId()][] = $file;
             }
         }
 
         // Collect "addCss" and "addJs" from theme layout
         $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => $area, 'package' => $package, 'theme' => $theme))
+            array('arguments' => array('area' => $theme->getArea(), 'themeId' => $theme->getId()))
         );
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();
         $elements = $fileLayoutUpdates->xpath('//action[@method="addCss" or @method="addJs"]/*[1]');
@@ -167,7 +160,7 @@ class Integrity_Theme_ViewFilesTest extends Magento_Test_TestCase_IntegrityAbstr
                 if ($this->_isFileForDisabledModule($viewFile)) {
                     continue;
                 }
-                $files[$area][$package][$theme][] = $viewFile;
+                $files[$theme->getArea()][$theme->getId()][] = $viewFile;
             }
         }
     }

@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -104,9 +104,6 @@
             <action method="removeItem"><type>js_css</type><name>menu.css</name></action>
 
             <action method="removeItem"><type>js_css</type><name>mage/calendar.css</name></action>
-            <action method="removeItem"><type>js</type><name>jquery/jquery-1.7.1.min.js</name></action>
-            <action method="removeItem"><type>js</type><name>mage/jquery-no-conflict.js</name></action>
-            <action method="removeItem"><type>js</type><name>jquery/jquery-ui-1.8.18.custom.min.js</name></action>
             <action method="removeItem"><type>js</type><name>jquery/jquery-ui-timepicker-addon.js</name></action>
             <action method="removeItem"><type>js</type><name>mage/calendar.js</name></action>
 

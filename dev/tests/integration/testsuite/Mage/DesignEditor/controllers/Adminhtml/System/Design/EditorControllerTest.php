@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_DesignEditor
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,7 +41,9 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
     {
         $theme = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
         $theme->setData(array(
-            'package_title'        => 'Default',
+            'theme_code'           => 'default',
+            'package_code'         => 'default',
+            'area'                 => 'frontend',
             'parent_id'            => null,
             'theme_path'           => 'default/demo',
             'theme_version'        => '2.0.0.0',
@@ -73,7 +75,7 @@ class Mage_DesignEditor_Adminhtml_System_Design_EditorControllerTest extends Mag
         $expectedFormAction = 'http://localhost/index.php/backend/admin/system_design_editor/launch/';
         $this->assertContains('Visual Design Editor', $content);
         $this->assertContains('<form id="edit_form" action="' . $expectedFormAction, $content);
-        $this->assertContains("editForm = new varienForm('edit_form'", $content);
+        $this->assertContains("jQuery('#edit_form').form()", $content);
     }
 
     /**

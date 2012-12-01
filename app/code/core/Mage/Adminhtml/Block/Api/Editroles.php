@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,7 +29,7 @@ class Mage_Adminhtml_Block_Api_Editroles extends Mage_Adminhtml_Block_Widget_Tab
     {
         parent::_construct();
         $this->setId('role_info_tabs');
-        $this->setDestElementId('role_edit_form');
+        $this->setDestElementId('role-edit-form');
         $this->setTitle(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Role Information'));
     }
 

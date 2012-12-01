@@ -30,7 +30,7 @@ abstract class LicenseAbstract
     public function getCopyright()
     {
         $year = date('Y');
-        return "Copyright (c) {$year} Magento Inc. (http://www.magentocommerce.com)";
+        return "Copyright (c) {$year} X.commerce, Inc. (http://www.magentocommerce.com)";
     }
 
     /**

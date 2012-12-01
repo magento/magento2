@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,14 +33,13 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
     /**
      * Theme registration test
      *
-     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testThemeRegistration()
     {
-        $pathPattern = implode(DS, array(__DIR__, '_files', 'design', 'frontend', 'default', '*', 'theme.xml'));
+        Mage::app()->getConfig()->getOptions()->setDesignDir(dirname(__FILE__) . DS . '_files' . DS . 'design');
 
         $eventObserver = $this->_createEventObserverForThemeRegistration();
-        $eventObserver->getEvent()->setPathPattern($pathPattern);
 
         /** @var $observer Mage_Core_Model_Observer */
         $observer = Mage::getModel('Mage_Core_Model_Observer');
@@ -52,10 +51,10 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $iphoneModel = $this->_getThemeModel();
         $iphoneModel->load('default/default_iphone', 'theme_path');
 
-        $this->assertEquals('Default', $defaultModel->getThemeTitle());
+        $this->assertEquals('default', $defaultModel->getThemeCode());
         $this->assertEquals(null, $defaultModel->getParentId());
 
-        $this->assertEquals('Iphone', $iphoneModel->getThemeTitle());
+        $this->assertEquals('default_iphone', $iphoneModel->getThemeCode());
         $this->assertEquals($defaultModel->getId(), $iphoneModel->getParentId());
     }
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -119,18 +119,20 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
             'values'   => $this->getTypesOptionsArray()
         ));
 
-        $fieldset->addField('package_theme', 'select', array(
-            'name'     => 'package_theme',
-            'label'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Package/Theme'),
-            'title'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Package/Theme'),
+        $fieldset->addField('theme_id', 'select', array(
+            'name'     => 'theme_id',
+            'label'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Theme'),
+            'title'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Theme'),
             'required' => true,
-            'values'   => $this->getPackageThemeOptionsArray()
+            'values'   => Mage::getSingleton('Mage_Core_Model_Theme')->getLabelsCollection(
+                $this->__('-- Please Select --')
+            )
         ));
         $continueButton = $this->getLayout()
             ->createBlock('Mage_Adminhtml_Block_Widget_Button')
             ->setData(array(
                 'label'     => Mage::helper('Mage_Widget_Helper_Data')->__('Continue'),
-                'onclick'   => "setSettings('" . $this->getContinueUrl() . "', 'type', 'package_theme')",
+                'onclick'   => "setSettings('" . $this->getContinueUrl() . "', 'type', 'theme_id')",
                 'class'     => 'save'
             ));
         $fieldset->addField('continue_button', 'note', array(
@@ -151,8 +153,8 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
     {
         return $this->getUrl('*/*/*', array(
             '_current' => true,
-            'type' => '{{type}}',
-            'package_theme' => '{{package_theme}}'
+            'type'     => '{{type}}',
+            'theme_id' => '{{theme_id}}'
         ));
     }
 
@@ -181,17 +183,5 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Settings
     protected function _sortWidgets($a, $b)
     {
         return strcmp($a["label"], $b["label"]);
-    }
-
-    /**
-     * Retrieve package/theme options array
-     *
-     * @return array
-     */
-    public function getPackageThemeOptionsArray()
-    {
-        $options = Mage::getModel('Mage_Core_Model_Design_Source_Design')->getThemeOptions();
-        array_unshift($options, array('value' => '', 'label' => Mage::helper('Mage_Adminhtml_Helper_Data')->__('-- Please Select --')));
-        return $options;
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,6 +30,11 @@
 class Mage_Backend_Model_Menu extends ArrayObject
 {
     /**
+     * Name of special logger key for debugging building menu
+     */
+    const LOGGER_KEY = 'menu-debug';
+
+    /**
      * Path in tree structure
      *
      * @var string
@@ -37,7 +42,7 @@ class Mage_Backend_Model_Menu extends ArrayObject
     protected $_path = '';
 
     /**
-     * @var Mage_Backend_Model_Menu_Logger
+     * @var Mage_Core_Model_Logger
      */
     protected $_logger;
 
@@ -74,7 +79,10 @@ class Mage_Backend_Model_Menu extends ArrayObject
             $index = intval($index);
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
-                $this->_logger->log(sprintf('Add of item with id %s was processed', $item->getId()));
+                $this->_logger->logDebug(
+                    sprintf('Add of item with id %s was processed', $item->getId()),
+                    self::LOGGER_KEY
+                );
             } else {
                 $this->add($item, $parentId, $index + 1);
             }
@@ -135,7 +143,10 @@ class Mage_Backend_Model_Menu extends ArrayObject
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $result = true;
-                $this->_logger->log(sprintf('Remove on item with id %s was processed', $item->getId()));
+                $this->_logger->logDebug(
+                    sprintf('Remove on item with id %s was processed', $item->getId()),
+                    self::LOGGER_KEY
+                );
                 break;
             }
 
@@ -203,6 +214,20 @@ class Mage_Backend_Model_Menu extends ArrayObject
                 }
             }
         }
+        return $result;
+    }
+
+    /**
+     * Hack to unset logger instance which cannot be serialized
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        $logger = $this->_logger;
+        unset($this->_logger);
+        $result = parent::serialize();
+        $this->_logger = $logger;
         return $result;
     }
 }

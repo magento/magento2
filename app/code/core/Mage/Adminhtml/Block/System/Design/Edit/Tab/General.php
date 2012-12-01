@@ -20,17 +20,24 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml_Block_Widget_Form
 {
 
+    /**
+     * Initialise form fields
+     *
+     * @return Mage_Adminhtml_Block_System_Design_Edit_Tab_General
+     */
     protected function _prepareForm()
     {
         $form = new Varien_Data_Form();
 
-        $fieldset = $form->addFieldset('general', array('legend'=>Mage::helper('Mage_Core_Helper_Data')->__('General Settings')));
+        $fieldset = $form->addFieldset('general', array(
+            'legend' => Mage::helper('Mage_Core_Helper_Data')->__('General Settings'))
+        );
 
         if (!Mage::app()->isSingleStoreMode()) {
             $field = $fieldset->addField('store_id', 'select', array(
@@ -40,7 +47,8 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
                 'name'     => 'store_id',
                 'required' => true,
             ));
-            $renderer = $this->getLayout()->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
+            $renderer = $this->getLayout()
+                ->createBlock('Mage_Backend_Block_Store_Switcher_Form_Renderer_Fieldset_Element');
             $field->setRenderer($renderer);
         } else {
             $fieldset->addField('store_id', 'hidden', array(
@@ -52,7 +60,9 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
         $fieldset->addField('design', 'select', array(
             'label'    => Mage::helper('Mage_Core_Helper_Data')->__('Custom Design'),
             'title'    => Mage::helper('Mage_Core_Helper_Data')->__('Custom Design'),
-            'values'   => Mage::getSingleton('Mage_Core_Model_Design_Source_Design')->getAllOptions(),
+            'values'   => Mage::getModel('Mage_Core_Model_Theme')->getLabelsCollection(
+                Mage::helper('Mage_Core_Helper_Data')->__('-- Please Select --')
+            ),
             'name'     => 'design',
             'required' => true,
         ));
@@ -76,7 +86,7 @@ class Mage_Adminhtml_Block_System_Design_Edit_Tab_General extends Mage_Adminhtml
         ));
 
         $formData = Mage::getSingleton('Mage_Adminhtml_Model_Session')->getDesignData(true);
-        if (!$formData){
+        if (!$formData) {
             $formData = Mage::registry('design')->getData();
         } else {
             $formData = $formData['design'];

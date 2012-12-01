@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Backend_Model_Menu_Config
@@ -60,7 +60,7 @@ class Mage_Backend_Model_Menu_Config
     protected $_menu;
 
     /**
-     * @var Mage_Backend_Model_Menu_Logger
+     * @var Mage_Core_Model_Logger
      */
     protected $_logger;
 
@@ -69,7 +69,7 @@ class Mage_Backend_Model_Menu_Config
      * @param Magento_ObjectManager $factory
      * @param Mage_Core_Model_Config $config
      * @param Mage_Core_Model_Event_Manager $eventManager
-     * @param Mage_Backend_Model_Menu_Logger $menuLogger
+     * @param Mage_Core_Model_Logger $logger
      * @param Mage_Backend_Model_Menu_Factory $menuFactory
      */
     public function __construct(
@@ -77,14 +77,14 @@ class Mage_Backend_Model_Menu_Config
         Magento_ObjectManager $factory,
         Mage_Core_Model_Config $config,
         Mage_Core_Model_Event_Manager $eventManager,
-        Mage_Backend_Model_Menu_Logger $menuLogger,
+        Mage_Core_Model_Logger $logger,
         Mage_Backend_Model_Menu_Factory $menuFactory
     ) {
         $this->_cache = $cache;
         $this->_factory = $factory;
         $this->_appConfig = $config;
         $this->_eventManager = $eventManager;
-        $this->_logger = $menuLogger;
+        $this->_logger = $logger;
         $this->_menuFactory = $menuFactory;
     }
 
@@ -96,6 +96,8 @@ class Mage_Backend_Model_Menu_Config
      */
     public function getMenu()
     {
+        $store = $this->_factory->get('Mage_Core_Model_App')->getStore();
+        $this->_logger->addStoreLog(Mage_Backend_Model_Menu::LOGGER_KEY, $store);
         try {
             $this->_initMenu();
             return $this->_menu;

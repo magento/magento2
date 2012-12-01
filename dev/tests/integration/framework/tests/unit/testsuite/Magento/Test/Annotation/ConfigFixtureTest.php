@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -124,7 +124,7 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
     /**
      * @magentoConfigFixture some/config/path some_config_value
      */
-    public function testInitFrontControllerBeforeOutOfScope()
+    public function testInitStoreAfterOfScope()
     {
         $this->_object
             ->expects($this->never())
@@ -134,13 +134,13 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->expects($this->never())
             ->method('_setConfigValue')
         ;
-        $this->_object->initFrontControllerBefore();
+        $this->_object->initStoreAfter();
     }
 
     /**
      * @magentoConfigFixture web/unsecure/base_url http://example.com/
      */
-    public function testInitFrontControllerBefore()
+    public function testInitStoreAfter()
     {
         $this->_object->startTest($this);
         $this->_object
@@ -154,6 +154,6 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->method('_setConfigValue')
             ->with('web/unsecure/base_url', 'http://example.com/')
         ;
-        $this->_object->initFrontControllerBefore();
+        $this->_object->initStoreAfter();
     }
 }

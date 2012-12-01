@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Install
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,5 +38,22 @@ class Mage_Install_Controller_Action extends Mage_Core_Controller_Varien_Action
     {
         parent::_construct();
         $this->setFlag('', self::FLAG_NO_CHECK_INSTALLATION, true);
+    }
+
+    /**
+     * Initialize theme
+     *
+     * @return Mage_Install_Controller_Action
+     */
+    protected function _initDefaultTheme()
+    {
+        $design = Mage::getDesign();
+        /** @var $themesCollection Mage_Core_Model_Theme_Collection */
+        $themesCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
+        $themeModel = $themesCollection->addDefaultPattern($design->getArea())
+            ->addFilter('theme_path', $design->getConfigurationDesignTheme($design->getArea(), array('useId' => false)))
+            ->getFirstItem();
+        $design->setDesignTheme($themeModel);
+        return $this;
     }
 }

@@ -17,7 +17,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true */
@@ -106,7 +106,7 @@
          */
         _destroy: function(){
             this.element[this._picker()]('destroy');
-            $.Widget.prototype.destroy.call(this);
+            this._super();
         }
     });
 
@@ -206,14 +206,14 @@
         /**
          * destroy two instances of datetimepicker
          */
-        destroy: function(){
+        _destroy: function(){
             if(this.options.from) {
                 this.element.find('#' + this.options.from.id)[this._picker()]('destroy');
             }
             if(this.options.to) {
                 this.element.find('#' + this.options.to.id)[this._picker()]('destroy');
             }
-            $.Widget.prototype.destroy.call(this);
+            this._super();
         }
     });
 })(jQuery);

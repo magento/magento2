@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -55,11 +55,17 @@ Supported layout update handles (special):
         <block type="Mage_Adminhtml_Block_Page" name="root" output="1" template="admin/page.phtml">
             <block type="Mage_Adminhtml_Block_Page_Head" name="head" as="head" template="page/head.phtml">
                 <action method="setTitle" translate="title"><title>Magento Admin</title></action>
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-1.8.2.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-                <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui-1.9.1.custom.min.js</file></action>
                 <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
-                <action method="addJs"><file>mage/backend/ajax-setup.js</file></action>
+                <action method="addJs"><file>jquery/jquery.validate.js</file></action>
+                <action method="addJs"><file>mage/translate.js</file></action>
+                <action method="addJs"><file>mage/validation.js</file></action>
+                <action method="addJs"><file>mage/backend/validation.js</file></action>
+                <action method="addJs"><file>mage/backend/notification.js</file></action>
+                <action method="addJs"><file>mage/backend/bootstrap.js</file></action>
+                <action method="addJs"><file>mage/backend/form.js</file></action>
                 <action method="addJs"><file>mage/loader.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/fix-extjs-defer.js</file><params/><if/><condition>can_load_ext_js</condition></action>
@@ -73,7 +79,6 @@ Supported layout update handles (special):
                 <action method="addJs"><file>lib/ccard.js</file></action>
                 <action method="addJs"><file>prototype/validation.js</file></action>
                 <action method="addJs"><file>varien/js.js</file></action>
-                <action method="addJs"><file>mage/translate.js</file></action>
 
                 <action method="addJs"><file>mage/adminhtml/hash.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/events.js</file></action>
@@ -88,9 +93,6 @@ Supported layout update handles (special):
                 <action method="addJs"><file>lib/ds-sleight.js</file><params>defer</params><if>lt IE 7</if></action>
 
                 <action method="addCss"><file>mage/calendar.css</file><params/></action>
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
-                <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-                <action method="addJs"><file>jquery/jquery-ui-1.8.18.custom.min.js</file></action>
                 <action method="addJs"><file>jquery/jquery-ui-timepicker-addon.js</file><!--<if/><condition>can_load_calendar_js</condition>--></action>
                 <action method="addJs"><file>mage/calendar.js</file><!--<if/><condition>can_load_calendar_js</condition>--></action>
 

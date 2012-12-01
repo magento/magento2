@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -53,9 +53,9 @@
             </tbody>
         </table>
         <?php if ($_element->hasAdvanced()): ?>
-        <div id="accordion" style="font-family: Arial,Helvetica,sans-serif;">
-            <h3 style="padding-left: 2em"><?php echo $_element->getAdvancedLabel() ?></h3>
-            <div style="padding: 0em">
+        <div style="border:1px solid #d3d3d3;">
+            <h3 style="padding-left: 2em; cursor: " id="advanced_block_title"> <span id="advanced_block_indicator">+</span> <?php echo $_element->getAdvancedLabel() ?></h3>
+            <div style="padding: 0em; display:none;" id="advanced_block_content">
             <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
                 <tbody>
                     <?php echo $_element->getAdvancedChildrenHtml(); ?>
@@ -66,14 +66,13 @@
         <script type="text/javascript">
         (function($) {
             $(function() {
-                $( "#accordion" ).accordion({
-                    collapsible: true,
-                    animated: false,
-                    autoHeight: false,
-                    active: false,
-                    icons: {
-                        "header": "ui-icon-plus",
-                        "headerSelected": "ui-icon-minus"
+                $( "#advanced_block_title" ).click(function() {
+                    $('#advanced_block_content').toggle();
+                    if ($('#advanced_block_content').css('display') == 'block') {
+                        $('#advanced_block_indicator').html('-');
+                    } else {
+                        $('#advanced_block_indicator').html('+');
+
                     }
                 });
             });

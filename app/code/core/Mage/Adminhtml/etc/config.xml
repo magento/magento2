@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -130,9 +130,6 @@
                 <customer module="Mage_Adminhtml">
                     <file>customer.xml</file>
                 </customer>
-                <dataflow module="Mage_Adminhtml">
-                    <file>dataflow.xml</file>
-                </dataflow>
                 <newsletter module="Mage_Adminhtml">
                     <file>newsletter.xml</file>
                 </newsletter>

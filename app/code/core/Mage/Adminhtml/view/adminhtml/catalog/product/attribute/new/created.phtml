@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -31,7 +31,7 @@ function addAttribute(closeAfter) {
         var data = <?php echo $this->getAttributesBlockJson() ?>;
         if (data.newAttributeSetId) {
             (function($) {
-                $('#product_edit_form').trigger('product:changeAttributeSet', [data.newAttributeSetId]);
+                $('#product-edit-form').trigger('product:changeAttributeSet', [data.newAttributeSetId]);
             })(window.opener.jQuery);
         } else {
             window.opener.Product.AttributesBridge.addAttributeRow(data);

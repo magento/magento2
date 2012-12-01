@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Theme
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,7 +49,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Grid extends Mage_Adminhtml
     {
         /** @var $collection Mage_Core_Model_Resource_Theme_Collection */
         $collection = Mage::getResourceModel('Mage_Core_Model_Resource_Theme_Collection');
-        $collection->addParentTitle();
+        $collection->addAreaFilter(Mage_Core_Model_App_Area::AREA_FRONTEND)->addParentTitle();
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;

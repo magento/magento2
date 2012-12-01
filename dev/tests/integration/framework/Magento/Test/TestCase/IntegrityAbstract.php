@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Test
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -78,15 +78,8 @@ abstract class Magento_Test_TestCase_IntegrityAbstract extends PHPUnit_Framework
      */
     protected function _getDesignThemes()
     {
-        $result = array();
-        foreach (array('adminhtml', 'frontend', 'install') as $area) {
-            $entities = Mage::getDesign()->getDesignEntitiesStructure($area);
-            foreach ($entities as $package => $themes) {
-                foreach ($themes as $theme) {
-                    $result[] = "{$area}/{$package}/{$theme}";
-                }
-            }
-        }
-        return $result;
+        /** @var $theme Mage_Core_Model_Theme */
+        $theme = Mage::getModel('Mage_Core_Model_Theme');
+        return $theme->getCollection()->getItems();
     }
 }

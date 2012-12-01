@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,17 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Item extends Mage_Backend_Block_Wi
         $previewButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $previewButton->setData(array(
             'label'   => $this->__('Launch'),
-            'onclick' => sprintf("$('theme_id').value='%s'; editForm.submit();", $themeId),
+            'data_attr'  => array(
+                'widget-button' => array(
+                    'event' => 'save',
+                    'related' => '#edit_form',
+                    'eventData' => array(
+                        'action' => array('args' => array(
+                            'theme_id' => $themeId
+                        )),
+                    )
+                ),
+            ),
             'class'   => 'save',
             'target'  => '_blank'
         ));

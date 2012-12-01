@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -44,9 +44,9 @@
             <?php echo $this->getSaveButtonHtml() ?>
    </table>
 </div>
-<form action="<?php echo $this->getUrl('*/*/saveuser') ?>" method="post" id="user_edit_form">
+<form action="<?php echo $this->getUrl('*/*/saveuser') ?>" method="post" id="user-edit-form">
     <?php echo $this->getBlockHtml('formkey')?>
 </form>
 <script type="text/javascript">
-    var userForm = new varienForm('user_edit_form');
+    jQuery('#user-edit-form').form().validation();
 </script>

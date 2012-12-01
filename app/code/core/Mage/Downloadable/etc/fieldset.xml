@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -81,55 +81,4 @@
             </downloadable_sales_copy_link>
         </fieldsets>
     </global>
-    <admin>
-        <fieldsets>
-            <catalog_product_dataflow>
-                <qty>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </qty>
-                <min_qty>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </min_qty>
-                <is_qty_decimal>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </is_qty_decimal>
-                <backorders>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </backorders>
-                <min_sale_qty>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </min_sale_qty>
-                <max_sale_qty>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </max_sale_qty>
-                <is_in_stock>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </is_in_stock>
-                <notify_stock_qty>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </notify_stock_qty>
-                <manage_stock>
-                    <product_type>
-                        <downloadable/>
-                    </product_type>
-                </manage_stock>
-            </catalog_product_dataflow>
-        </fieldsets>
-    </admin>
 </config>

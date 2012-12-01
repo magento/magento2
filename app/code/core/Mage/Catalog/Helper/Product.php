@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -213,7 +213,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
 
     /**
      * Return information array of product attribute input types
-     * Only a small number of settings returned, so we won't break anything in current dataflow
+     * Only a small number of settings returned, so we won't break anything in current data flow
      * As soon as development process goes on we need to add there all possible settings
      *
      * @param string $inputType

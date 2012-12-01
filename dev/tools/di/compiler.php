@@ -20,7 +20,7 @@
  *
  * @category   Tools
  * @package    DI
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,15 +32,16 @@ define('BP', realpath(__DIR__ . '/../../..'));
 /**
  * Require necessary files
  */
-require_once BP . '/lib/Magento/Autoload.php';
 require_once BP . '/app/code/core/Mage/Core/functions.php';
 require_once BP . '/app/Mage.php';
 
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
-$paths[] = BP . DS . 'lib';
-Magento_Autoload::getInstance()->addIncludePath($paths);
+require __DIR__ . '/../../../app/autoload.php';
+Magento_Autoload_IncludePath::addIncludePath(array(
+    BP . DS . 'app' . DS . 'code' . DS . 'local',
+    BP . DS . 'app' . DS . 'code' . DS . 'community',
+    BP . DS . 'app' . DS . 'code' . DS . 'core',
+    BP . DS . 'lib',
+));
 Mage::setRoot();
 $definitions = array();
 

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -287,6 +287,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
      * @param string $expectedArea
      * @param string $expectedStore
      * @param string $expectedDesign
+     * @group one
      */
     public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign)
     {
@@ -299,10 +300,11 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
             Mage::app()->getFrontController()
         );
         $controller->preDispatch();
+
         $this->assertEquals($expectedArea, Mage::getDesign()->getArea());
         $this->assertEquals($expectedStore, Mage::app()->getStore()->getCode());
         if ($expectedDesign) {
-            $this->assertEquals($expectedDesign, Mage::getDesign()->getDesignTheme());
+            $this->assertEquals($expectedDesign, Mage::getDesign()->getDesignTheme()->getThemePath());
         }
     }
 

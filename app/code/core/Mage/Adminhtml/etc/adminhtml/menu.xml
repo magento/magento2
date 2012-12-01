@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -34,8 +34,6 @@
         <add id="Mage_Adminhtml::system_design" title="Design" module="Mage_Adminhtml" sortOrder="30" parent="Mage_Adminhtml::system" resource="Mage_Adminhtml::design"/>
         <add id="Mage_Adminhtml::system_design_schedule" title="Schedule" module="Mage_Adminhtml" sortOrder="10" parent="Mage_Adminhtml::system_design" action="adminhtml/system_design" resource="Mage_Adminhtml::schedule"/>
         <add id="Mage_Adminhtml::system_convert" title="Import/Export" module="Mage_Adminhtml" sortOrder="40" parent="Mage_Adminhtml::system" resource="Mage_Adminhtml::convert"/>
-        <add id="Mage_Adminhtml::system_convert_gui" title="Dataflow - Profiles" module="Mage_Adminhtml" sortOrder="30" parent="Mage_Adminhtml::system_convert" action="adminhtml/system_convert_gui" resource="Mage_Adminhtml::gui"/>
-        <add id="Mage_Adminhtml::system_convert_profiles" title="Dataflow - Advanced Profiles" module="Mage_Adminhtml" sortOrder="40" parent="Mage_Adminhtml::system_convert" action="adminhtml/system_convert_profile" resource="Mage_Adminhtml::profiles"/>
         <add id="Mage_Adminhtml::system_currency" title="Manage Currency Rates" module="Mage_Adminhtml" sortOrder="50" parent="Mage_Adminhtml::system" action="adminhtml/system_currency" resource="Mage_CurrencySymbol::system_currency"/>
         <add id="Mage_Adminhtml::system_email_template" title="Transactional Emails" module="Mage_Adminhtml" sortOrder="60" parent="Mage_Adminhtml::system" action="adminhtml/system_email_template" resource="Mage_Adminhtml::email_template"/>
         <add id="Mage_Adminhtml::system_variable" title="Custom Variables" module="Mage_Adminhtml" sortOrder="65" parent="Mage_Adminhtml::system" action="adminhtml/system_variable" resource="Mage_Adminhtml::variable"/>

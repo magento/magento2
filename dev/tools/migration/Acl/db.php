@@ -20,15 +20,13 @@
  *
  * @category   Tools
  * @package    acl_db
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $rootDir = realpath(__DIR__ . '/../../../..');
-require_once $rootDir . '/lib/Magento/Autoload.php';
-$paths[] = $rootDir . '/lib';
-$paths[] = $rootDir . '/dev';
-Magento_Autoload::getInstance()->addIncludePath($paths);
+require $rootDir . '/app/autoload.php';
+Magento_Autoload_IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
 $defaultReportFile = 'report.log';
 
 try {

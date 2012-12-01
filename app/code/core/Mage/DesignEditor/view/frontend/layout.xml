@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -29,6 +29,7 @@
     <design_editor_toolbar>
         <reference name="head">
             <action method="addJs"><file>Mage_DesignEditor::js/settimeout_override.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui-1.9.0.custom.min.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/change/layout.js</file></action>

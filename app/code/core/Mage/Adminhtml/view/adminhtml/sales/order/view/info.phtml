@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -153,7 +153,9 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-billing-address"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Billing Address') ?></h4>
-            <div class="tools"><?php echo $this->getAddressEditLink($_order->getBillingAddress())?></div>
+            <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_edit')) : ?>
+            <div class="tools"><?php echo $this->getAddressEditLink($_order->getBillingAddress()); ?></div>
+            <?php endif; ?>
         </div>
         <fieldset>
             <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
@@ -166,7 +168,9 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-shipping-address"><?php echo Mage::helper('Mage_Sales_Helper_Data')->__('Shipping Address') ?></h4>
-            <div class="tools"><?php echo $this->getAddressEditLink($_order->getShippingAddress())?></div>
+            <?php if (Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Sales::actions_edit')) : ?>
+            <div class="tools"><?php echo $this->getAddressEditLink($_order->getShippingAddress()); ?></div>
+            <?php endif; ?>
         </div>
         <fieldset>
             <address><?php echo $_order->getShippingAddress()->format('html') ?></address>

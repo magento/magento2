@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,12 +29,11 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test crud operations for theme model using valid data
-     *
-     * @magentoDbIsolation enabled
      */
     public function testCrud()
     {
-        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
         $themeModel->setData($this->_getThemeValidData());
 
         $crud = new Magento_Test_Entity($themeModel, array('theme_version' => '2.0.0.1'));
@@ -43,16 +42,25 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * Load from configuration
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testLoadFromConfiguration()
     {
-        $themePath = implode(DS, array(__DIR__, '_files', 'design', 'frontend', 'default', 'default', 'theme.xml'));
+        $designPath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design';
+        /** @var $themeUtility Mage_Core_Utility_Theme */
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array($designPath));
+        $themeUtility->registerThemes()->setDesignTheme('default/default', 'frontend');
+
+        $themePath = implode(DS, array('frontend', 'default', 'default', 'theme.xml'));
 
         /** @var $themeModel Mage_Core_Model_Theme */
-        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
-        $themeModel->loadFromConfiguration($themePath);
+        $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
+        $theme = $themeModel->getCollectionFromFilesystem()->setBaseDir($designPath)->addTargetPattern($themePath)
+            ->getFirstItem();
 
-        $this->assertEquals($this->_expectedThemeDataFromConfiguration(), $themeModel->getData());
+        $this->assertEquals($this->_expectedThemeDataFromConfiguration(), $theme->getData());
     }
 
     /**
@@ -63,15 +71,16 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
     public function _expectedThemeDataFromConfiguration()
     {
         return array(
-            'theme_code'           => 'default',
+            'area'                 => 'frontend',
             'theme_title'          => 'Default',
             'theme_version'        => '2.0.0.0',
-            'parent_theme'         => null,
+            'parent_id'            => null,
+            'parent_theme_path'    => null,
             'is_featured'          => true,
             'magento_version_from' => '2.0.0.0-dev1',
             'magento_version_to'   => '*',
             'theme_path'           => 'default/default',
-            'preview_image'        => '',
+            'preview_image'        => null,
             'theme_directory'      => implode(
                 DIRECTORY_SEPARATOR, array(__DIR__, '_files', 'design', 'frontend', 'default', 'default')
             )
@@ -87,9 +96,11 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'theme_code'           => 'space',
+            'area'                 => 'space_area',
             'theme_title'          => 'Space theme',
             'theme_version'        => '2.0.0.0',
-            'parent_theme'         => null,
+            'parent_id'            => null,
+            'parent_theme_path'    => null,
             'is_featured'          => false,
             'magento_version_from' => '2.0.0.0-dev1',
             'magento_version_to'   => '*',
@@ -125,21 +136,16 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test is virtual
+     *
+     * @magentoAppIsolation enabled
      */
     public function testIsVirtual()
     {
-        $themeCollection = new Mage_Core_Model_Theme_Collection();
-        Mage::unregister('_singleton/Mage_Core_Model_Theme_Collection');
-        Mage::register('_singleton/Mage_Core_Model_Theme_Collection', $themeCollection);
-
         /** @var $themeModel Mage_Core_Model_Theme */
-        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+        $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
         $themeModel->setData($this->_getThemeValidData());
 
         $this->assertTrue($themeModel->isVirtual());
-
-        $themeCollection->addItem($themeModel);
-        $this->assertFalse($themeModel->isVirtual());
     }
 
 
@@ -163,5 +169,49 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
     public function isDeletableDataProvider()
     {
         return array(array(true), array(false));
+    }
+
+    public function testIsThemeCompatible()
+    {
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+
+        $themeModel->setMagentoVersionFrom('2.0.0.0')->setMagentoVersionTo('*');
+        $this->assertFalse($themeModel->isThemeCompatible());
+
+        $themeModel->setMagentoVersionFrom('1.0.0.0')->setMagentoVersionTo('*');
+        $this->assertTrue($themeModel->isThemeCompatible());
+    }
+
+    public function testCheckThemeCompatible()
+    {
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+
+        $themeModel->setMagentoVersionFrom('2.0.0.0')->setMagentoVersionTo('*')->setThemeTitle('Title');
+        $themeModel->checkThemeCompatible();
+        $this->assertEquals('Title (incompatible version)', $themeModel->getThemeTitle());
+
+        $themeModel->setMagentoVersionFrom('1.0.0.0')->setMagentoVersionTo('*')->setThemeTitle('Title');
+        $themeModel->checkThemeCompatible();
+        $this->assertEquals('Title', $themeModel->getThemeTitle());
+    }
+
+    public function testGetLabelsCollection()
+    {
+        /** @var $themeModel Mage_Core_Model_Theme */
+        $themeModel = Mage::getModel('Mage_Core_Model_Theme');
+
+        /** @var $expectedCollection Mage_Core_Model_Theme_Collection */
+        $expectedCollection = Mage::getModel('Mage_Core_Model_Resource_Theme_Collection');
+        $expectedCollection->addFilter('area', 'frontend');
+
+        $expectedItemsCount = count($expectedCollection);
+
+        $labelsCollection = $themeModel->getLabelsCollection();
+        $this->assertEquals($expectedItemsCount, count($labelsCollection));
+
+        $labelsCollection = $themeModel->getLabelsCollection('-- Please Select --');
+        $this->assertEquals(++$expectedItemsCount, count($labelsCollection));
     }
 }

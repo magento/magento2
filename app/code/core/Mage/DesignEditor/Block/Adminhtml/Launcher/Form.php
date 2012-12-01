@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,10 +55,6 @@ class Mage_DesignEditor_Block_Adminhtml_Launcher_Form extends Mage_Adminhtml_Blo
                 'values'    => Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm(),
             ));
         }
-
-        $form->addField('theme_id', 'hidden', array(
-            'name' => 'theme_id'
-        ));
 
         $this->setForm($form);
         $form->setUseContainer(true);

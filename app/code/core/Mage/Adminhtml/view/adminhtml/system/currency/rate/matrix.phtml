@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -30,7 +30,7 @@ $_oldRates = $this->getOldRates();
 $_newRates = $this->getNewRates();
 $_rates = ( $_newRates ) ? $_newRates : $_oldRates;
 ?>
-<form name="rateForm" id="rateForm" method="post" action="<?php echo $this->getRatesFormAction(); ?>">
+<form name="rateForm" id="rate-form" method="post" action="<?php echo $this->getRatesFormAction(); ?>">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="grid">
         <table cellspacing="0">
@@ -70,5 +70,5 @@ $_rates = ( $_newRates ) ? $_newRates : $_oldRates;
     </div>
 </form>
 <script type="text/javascript">
-    currencyForm = new varienForm('rateForm');
+    jQuery('#rate-form').form().validation();
 </script>
