@@ -68,17 +68,19 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
     }
 
     /**
-     * Get html for element
+     * Get html of element
      *
      * @return string
      */
     public function getElementHtml()
     {
-        return parent::getElementHtml()
-            . "<script>//<![CDATA[\n jQuery("
-            . $this->_getCodeHelper()->jsonEncode('#' . $this->getHtmlId())
-            . ").categorySelector(" . $this->_getCodeHelper()->jsonEncode($this->_getSelectorOptions()) . ");
-            \n//]]></script>";
+        /** @var $coreHelper Mage_Core_Helper_Data */
+        $coreHelper = Mage::helper('Mage_Core_Helper_Data');
+        return parent::getElementHtml() . "\n"
+            . '<script>//<![CDATA[' . "\n"
+            . 'jQuery(' . $coreHelper->jsonEncode('#' . $this->getHtmlId()) . ').categorySelector('
+            . $coreHelper->jsonEncode($this->_getSelectorOptions()) . ')' . "\n"
+            . '//]]></script>';
     }
 
     /**
@@ -89,28 +91,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Category extends Varien_D
     protected function _getSelectorOptions()
     {
         return array(
-            'url' => $this->_getBackendHelper()->getUrl('adminhtml/catalog_category/suggestCategories'),
+            'url' => Mage::helper('Mage_Backend_Helper_Data')->getUrl('adminhtml/catalog_category/suggestCategories'),
         );
     }
-
-    /**
-     * Get backend area helper
-     *
-     * @return Mage_Backend_Helper_Data"
-     */
-    protected function _getBackendHelper()
-    {
-        return Mage::helper("Mage_Backend_Helper_Data");
-    }
-
-    /**
-     * Get code module helper
-     *
-     * @return Mage_Backend_Helper_Data"
-     */
-    protected function _getCodeHelper()
-    {
-        return Mage::helper("Mage_Core_Helper_Data");
-    }
-
 }

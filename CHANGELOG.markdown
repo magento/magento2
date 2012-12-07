@@ -1,3 +1,24 @@
+2.0.0.0-dev34
+=============
+* Test Framework:
+  * Created `CodingStandard_ToolInterface` - new interface for coding standard static tests. Refactored `CodeSniffer` class as an implementation of the interface
+  * Fixed DB isolation in integration tests after themes refactoring
+  * Minor test fixes
+* Changes in product creation process
+  * Added ability to change product type "on the fly" depending on selected options
+  * Added ability of new category creation on "General" tab
+  * Moved "Associated Products" tab contents to collapsible block on "General" tab for configurable products
+  * Visual enhancement made for base image and Virtual/Downloadable checkbox
+  * Refactored implementation of associated products in backend (admin) to make them configurable through grid layout, rather than hard-coded.
+  * Enhanced product variation matrix for configurable products
+  * Changed "Apply To" feature in product attributes management due to changes in product creation process
+* Fixed XSS vulnerabilities in `Mage_Wishlist_IndexController`, `Mage_Adminhtml_Block_Review_Edit_Form`, `Mage_Catalog_Product_CompareController`
+* Bug fixes
+  * Fixed error on `Catalog -> Google Content -> Manage Items page`
+  * Fixed bug with "Update Attributes" mass action for products on backend caused by setting incorrect inheritance of `Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute`
+  * Added additional validation of "quantity" field to fix issues with inventory during product saving
+  * Added additional validation into `EAV` models to forbid creation of two products with the same unique multi-select attribute
+
 2.0.0.0-dev33
 =============
 * Improved Themes functionality to meet the following requirements:

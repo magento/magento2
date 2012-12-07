@@ -129,7 +129,9 @@ class Mage_GoogleShopping_Model_Resource_Item_Collection extends Mage_Core_Model
         $this->getSelect()
             ->joinLeft(
                 array('types' => $this->getTable('googleshopping_types')),
-                'main_table.type_id=types.type_id');
+                'main_table.type_id=types.type_id'
+            );
+        Mage::getResourceHelper('Mage_Core')->prepareColumnsList($this->getSelect()); // avoid column name collision
 
         return $this;
     }

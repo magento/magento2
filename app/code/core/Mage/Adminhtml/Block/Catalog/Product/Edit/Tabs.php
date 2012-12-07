@@ -39,7 +39,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
     {
         parent::_construct();
         $this->setId('product_info_tabs');
-        $this->setDestElementId('product-edit-form');
+        $this->setDestElementId('product-edit-form-tabs');
         $this->setTitle(Mage::helper('Mage_Catalog_Helper_Data')->__('Product Information'));
     }
 
@@ -74,7 +74,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                     continue;
                 }
 
-                $this->addTab('group_'.$group->getId(), array(
+                $this->addTab('group_' . $group->getId(), array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__($group->getAttributeGroupName()),
                     'content'   => $this->_translateHtml($tabAttributesBlock->setGroup($group)
                         ->setGroupAttributes($attributes)
@@ -119,11 +119,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
                 'url'       => $this->getUrl('*/*/crosssell', array('_current' => true)),
                 'class'     => 'ajax',
             ));
-
-            $storeId = 0;
-            if ($this->getRequest()->getParam('store')) {
-                $storeId = Mage::app()->getStore($this->getRequest()->getParam('store'))->getId();
-            }
 
             $alertPriceAllow = Mage::getStoreConfig('catalog/productalert/allow_price');
             $alertStockAllow = Mage::getStoreConfig('catalog/productalert/allow_stock');

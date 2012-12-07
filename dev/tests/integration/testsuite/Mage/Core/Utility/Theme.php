@@ -96,7 +96,7 @@ class Mage_Core_Utility_Theme
 
         $callBackFixture = function ($area, $params) use ($package, $packageMock) {
             $area = $area ? $area : $packageMock->getArea();
-            if (isset($params['useId']) && $params['useId'] == false) {
+            if (isset($params['useId']) && $params['useId'] === false) {
                 return $package->getConfigurationDesignTheme($area, $params);
             } else {
                 $params['useId'] = false;

@@ -405,6 +405,7 @@ select.multiselect option       { padding:3px 4px; border-bottom:1px solid #ddd;
 .fieldset-wide .form-list td.value { width:auto !important; }
 .fieldset-wide .form-list td.value input.input-text,
 .fieldset-wide .form-list td.value textarea { width:98% !important; }
+#weight {width: 110px !important; }
 /*.fieldset-wide .form-list td.value select { display:block; }*/
 .fieldset-wide .form-list td.scope-label { white-space:nowrap; width:1px; }
 .fieldset-wide .form-list td.note { width:120px; }

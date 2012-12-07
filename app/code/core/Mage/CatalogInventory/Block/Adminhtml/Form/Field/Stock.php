@@ -102,10 +102,10 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
      */
     public function setValue($value)
     {
-        if (isset($value['qty'])) {
+        if (is_array($value) && isset($value['qty'])) {
             $this->_qty->setValue($value['qty']);
         }
-        if (isset($value['is_in_stock'])) {
+        if (is_array($value) && isset($value['is_in_stock'])) {
             parent::setValue($value['is_in_stock']);
         }
         return $this;
@@ -129,7 +129,7 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
      */
     protected function _isProductComposite()
     {
-        if (null === $this->_isProductComposite) {
+        if ($this->_isProductComposite === null) {
             $this->_isProductComposite = $this->_qty->getForm()->getDataObject()->isComposite();
         }
         return $this->_isProductComposite;
@@ -142,7 +142,7 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
      */
     protected function _disableFields()
     {
-        if (!$this->_isProductComposite() && null === $this->_qty->getValue()) {
+        if (!$this->_isProductComposite() && $this->_qty->getValue() === null) {
             $this->setDisabled('disabled');
         }
         if ($this->_isProductComposite()) {
@@ -164,16 +164,20 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
             <script>
             //<![CDATA[
                 jQuery(function($) {
-                    var qty = $('#$quantityFieldId');
-                    var isInStock = $('#$inStockFieldId');
-                    var disabler = function(){
+                    var qty = $('#$quantityFieldId'),
+                        isInStock = $('#$inStockFieldId'),
+                        manageStock = $('#inventory_manage_stock').removeClass('disabled').removeAttr('disabled'),
+                        useConfigManageStock = $('#inventory_use_config_manage_stock');
+
+                    var disabler = function() {
                         if ('' === qty.val()) {
                             isInStock.attr('disabled', 'disabled');
+                            manageStock.val(0);
                         } else {
                             isInStock.removeAttr('disabled');
+                            manageStock.val(1);
                         }
                     };
-                    qty.bind('keyup change blur', disabler);
 
                     //Associated fields
                     var fieldsAssociations = {
@@ -189,7 +193,7 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                             $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
                         }
                     };
-                    //Get key by value form object
+                    //Get key by value from object
                     var getKeyByValue = function(object, value) {
                         var returnVal = false;
                         $.each(object, function(objKey, objValue){
@@ -201,10 +205,12 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                     };
                     $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
                         $('#' + generalTabField + ', #' + advancedTabField)
-                            .bind('focus blur change keyup click', filler);
+                            .bind('focus blur change keyup click', filler)
+                            .bind('keyup change blur', disabler);
                         filler.call($('#' + generalTabField));
                         filler.call($('#' + advancedTabField));
                     });
+                    disabler();
                 });
             //]]>
             </script>

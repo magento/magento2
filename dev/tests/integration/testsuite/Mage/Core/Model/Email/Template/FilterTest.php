@@ -117,15 +117,11 @@ class Mage_Core_Model_Email_Template_FilterTest extends PHPUnit_Framework_TestCa
      */
     public function testLayoutDirective($currentArea, $directiveParams, $expectedOutput)
     {
-        $this->markTestIncomplete('MAGETWO-5812');
-
         /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(dirname(__DIR__) . '/_files/design'));
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design'
+        ));
         $themeUtility->registerThemes()->setDesignTheme('test/default', $currentArea);
-
-        Mage::getConfig()->cleanCache();
-        $themeFrontend = $themeUtility->getThemeByParams('test/default', 'frontend');
-        Mage::app()->getStore('default')->setConfig('design/theme/theme_id', $themeFrontend->getId());
 
         $this->_emulateCurrentArea($currentArea);
         $actualOutput = $this->_model->layoutDirective(array(

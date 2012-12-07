@@ -43,4 +43,23 @@ class Mage_Catalog_Model_Product_Type_Virtual extends Mage_Catalog_Model_Product
     {
         return true;
     }
+
+    /**
+     * Check that product of this type has weight
+     *
+     * @return bool
+     */
+    public function hasWeight()
+    {
+        return false;
+    }
+
+    /**
+     * Delete data specific for Virtual product type
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function deleteTypeSpecificData(Mage_Catalog_Model_Product $product)
+    {
+    }
 }

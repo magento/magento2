@@ -31,6 +31,10 @@
  * @method Mage_Catalog_Model_Resource_Product _getResource()
  * @method Mage_Catalog_Model_Product setHasError(bool $value)
  * @method null|bool getHasError()
+ * @method Mage_Catalog_Model_Product setTypeId(string $typeId)
+ * @method string getTypeId()
+ * @method Mage_Catalog_Model_Product setAssociatedProductIds(array $productIds)
+ * @method array getAssociatedProductIds()
  *
  * @category    Mage
  * @package     Mage_Catalog
@@ -119,7 +123,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         Mage_Catalog_Model_Resource_Product $resource,
         Mage_Catalog_Model_Resource_Product_Collection $resourceCollection,
         array $data = array()
-    ) {  
+    ) {
         parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
@@ -265,7 +269,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Set type instance for the product
      *
-     * @param Mage_Catalog_Model_Product_Type_Abstract $instance  Product type instance
+     * @param Mage_Catalog_Model_Product_Type_Abstract|null $instance  Product type instance
      * @return Mage_Catalog_Model_Product
      */
     public function setTypeInstance($instance)

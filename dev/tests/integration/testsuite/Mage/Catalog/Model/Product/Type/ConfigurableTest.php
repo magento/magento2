@@ -38,7 +38,7 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
     /**
      * @var Mage_Catalog_Model_Product
      */
-    protected $_product = null;
+    protected $_product;
 
     protected function setUp()
     {
@@ -73,23 +73,6 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
         $ids = $this->_model->getChildrenIds(1, false);
         $this->assertArrayHasKey(0, $ids);
         $this->assertTrue(2 === count($ids[0]));
-    }
-
-    // testGetParentIdsByChild is after testGetConfigurableAttributesAsArray, because depends on it.
-
-    public function testGetEditableAttributes()
-    {
-        $attributes = $this->_model->getEditableAttributes($this->_product);
-
-        // applicable to all types
-        $this->assertArrayHasKey('sku', $attributes);
-        $this->assertArrayHasKey('name', $attributes);
-
-        // applicable to configurable
-        $this->assertArrayHasKey('price', $attributes);
-
-        // not applicable to configurable
-        $this->assertArrayNotHasKey('weight', $attributes);
     }
 
     public function testCanUseAttribute()
@@ -382,6 +365,39 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
         $buyRequest = new Varien_Object(array('super_attribute' => array('10', 'string')));
         $result = $this->_model->processBuyRequest($this->_product, $buyRequest);
         $this->assertEquals(array('super_attribute' => array(10)), $result);
+    }
+
+    public function testSaveProductRelationsOneChild()
+    {
+        $oldChildrenIds = $this->_product->getTypeInstance()->getChildrenIds(1);
+        $oldChildrenIds = reset($oldChildrenIds);
+        $oneChildId = reset($oldChildrenIds);
+        $this->assertNotEmpty($oldChildrenIds);
+        $this->assertNotEmpty($oneChildId);
+
+        $this->_product->setAssociatedProductIds(array($oneChildId));
+        $this->_model->save($this->_product);
+        $this->_product->load(1);
+
+        $this->assertEquals(
+            array(array($oneChildId => $oneChildId)),
+            $this->_product->getTypeInstance()->getChildrenIds(1)
+        );
+    }
+
+    public function testSaveProductRelationsNoChildren()
+    {
+        $childrenIds = $this->_product->getTypeInstance()->getChildrenIds(1);
+        $this->assertNotEmpty(reset($childrenIds));
+
+        $this->_product->setAssociatedProductIds(array());
+        $this->_model->save($this->_product);
+        $this->_product->load(1);
+
+        $this->assertEquals(
+            array(array()),
+            $this->_product->getTypeInstance()->getChildrenIds(1)
+        );
     }
 
     /**

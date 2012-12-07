@@ -34,6 +34,7 @@
  */
 class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Catalog_Category_Abstract
 {
+    const XML_PATH_SUGGESTED_CATEGORIES_LIMIT = 'global/catalog/suggested_categories/limit';
 
     protected $_withProductCount;
 
@@ -119,7 +120,9 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
 
         $matchingNamesCollection = clone $collection;
         $matchingNamesCollection->addAttributeToFilter('name', array('like' => "%{$namePart}%"))
+            ->addAttributeToFilter('entity_id', array('neq' => Mage_Catalog_Model_Category::TREE_ROOT_ID))
             ->addAttributeToSelect('path')
+            ->setPageSize((string)Mage::getConfig()->getNode(self::XML_PATH_SUGGESTED_CATEGORIES_LIMIT))
             ->setStoreId($storeId);
 
         $shownCategoriesIds = array();

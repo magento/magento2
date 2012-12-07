@@ -145,7 +145,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         /**
          * Check if we have data in session (if duering category save was exceprion)
          */
-        $data = Mage::getSingleton('Mage_Adminhtml_Model_Session')->getCategoryData(true);
+        $data = $this->_getSession()->getCategoryData(true);
         if (isset($data['general'])) {
             $category->addData($data['general']);
         }
@@ -331,9 +331,9 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
 
             /**
              * Proceed with $_POST['use_config']
-             * set into category model for proccessing through validation
+             * set into category model for processing through validation
              */
-            $category->setData("use_post_data_config", $this->getRequest()->getPost('use_config'));
+            $category->setData('use_post_data_config', $this->getRequest()->getPost('use_config'));
 
             try {
                 $validate = $category->validate();
@@ -348,13 +348,10 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
                     }
                 }
 
-                /**
-                 * Unset $_POST['use_config'] before save
-                 */
                 $category->unsetData('use_post_data_config');
 
                 $category->save();
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('The category has been saved.'));
+                $this->_getSession()->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('The category has been saved.'));
                 $refreshTree = 'true';
             }
             catch (Exception $e){
@@ -363,10 +360,26 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
                 $refreshTree = 'false';
             }
         }
-        $url = $this->getUrl('*/*/edit', array('_current' => true, 'id' => $category->getId()));
-        $this->getResponse()->setBody(
-            '<script type="text/javascript">parent.updateContent("' . $url . '", {}, '.$refreshTree.');</script>'
-        );
+
+        if ($this->getRequest()->getPost('return_session_messages_only')) {
+            $category->load($category->getId()); // to obtain truncated category name
+
+            /** @var $block Mage_Core_Block_Messages */
+            $block = Mage::getSingleton('Mage_Core_Block_Messages');
+            $block->setMessages($this->_getSession()->getMessages(true));
+            $body = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(array(
+                'messages' => $block->getGroupedHtml(),
+                'error'    => $refreshTree !== 'true',
+                'category' => $category->toArray(),
+            ));
+        } else {
+            $url = $this->getUrl('*/*/edit', array('_current' => true, 'id' => $category->getId()));
+            $body = '<script type="text/javascript">parent.updateContent("'
+                . $url . '", {}, ' . $refreshTree
+                . ');</script>';
+        }
+
+        $this->getResponse()->setBody($body);
     }
 
     /**
@@ -390,7 +403,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
 
         try {
             $category->move($parentNodeId, $prevNodeId);
-            $this->getResponse()->setBody("SUCCESS");
+            $this->getResponse()->setBody('SUCCESS');
         }
         catch (Mage_Core_Exception $e) {
             $this->getResponse()->setBody($e->getMessage());
@@ -415,15 +428,15 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
                 Mage::getSingleton('Mage_Backend_Model_Auth_Session')->setDeletedPath($category->getPath());
 
                 $category->delete();
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('The category has been deleted.'));
+                $this->_getSession()->addSuccess(Mage::helper('Mage_Catalog_Helper_Data')->__('The category has been deleted.'));
             }
             catch (Mage_Core_Exception $e){
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError($e->getMessage());
+                $this->_getSession()->addError($e->getMessage());
                 $this->getResponse()->setRedirect($this->getUrl('*/*/edit', array('_current'=>true)));
                 return;
             }
             catch (Exception $e){
-                Mage::getSingleton('Mage_Adminhtml_Model_Session')->addError(Mage::helper('Mage_Catalog_Helper_Data')->__('An error occurred while trying to delete the category.'));
+                $this->_getSession()->addError(Mage::helper('Mage_Catalog_Helper_Data')->__('An error occurred while trying to delete the category.'));
                 $this->getResponse()->setRedirect($this->getUrl('*/*/edit', array('_current'=>true)));
                 return;
             }

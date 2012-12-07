@@ -39,7 +39,7 @@ $this->getConfigJson();
                 <td class="label"><label for="name"><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('Title')?></label>
                 </td>
                 <td class="value">
-                    <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $_product->getId()?$_product->getSamplesTitle():$this->getSamplesTitle() ?>" <?php echo ($_product->getStoreId() && $this->getUsedDefault())?'disabled="disabled"':'' ?> />
+                    <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo ($_product->getStoreId() && $this->getUsedDefault())?'disabled="disabled"':'' ?> />
                 </td>
                 <td class="scope-label"><?php echo !Mage::app()->isSingleStoreMode() ? Mage::helper('Mage_Adminhtml_Helper_Data')->__('[STORE VIEW]') : ''; ?></td>
                 <td class="value use-default">

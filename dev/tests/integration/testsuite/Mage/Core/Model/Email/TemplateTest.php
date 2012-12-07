@@ -82,8 +82,7 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     public function testLoadDefault()
     {
         Mage::app()->getConfig()->getOptions()
-            ->setLocaleDir(dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'locale')
-        ;
+            ->setLocaleDir(dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'locale');
 
         $this->_model->loadDefault('customer_create_account_email_template');
         $this->assertNotEmpty($this->_model->getTemplateText());
@@ -108,11 +107,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoConfigFixture fixturestore_store design/theme/full_name default/demo_blue
+     * @magentoConfigFixture fixturestore_store design/theme/full_name test/default
+     * @magentoDataFixture Mage/Core/Model/Email/_files/theme_registration.php
      */
     public function testGetProcessedTemplate()
     {
-        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'theme/frontend/test/default/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateText('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(array(
@@ -137,11 +137,12 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Mage/Core/_files/store.php
-     * @magentoConfigFixture fixturestore_store design/theme/full_name default/demo_blue
+     * @magentoConfigFixture fixturestore_store design/theme/full_name test/default
+     * @magentoDataFixture Mage/Core/Model/Email/_files/theme_registration.php
      */
     public function testGetProcessedTemplateSubject()
     {
-        $expectedViewUrl = 'theme/frontend/default/demo_blue/en_US/Mage_Page/favicon.ico';
+        $expectedViewUrl = 'theme/frontend/test/default/en_US/Mage_Page/favicon.ico';
         $this->_model->setTemplateSubject('{{view url="Mage_Page::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(array(

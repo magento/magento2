@@ -24,24 +24,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Constants definition
- */
-define('DS', DIRECTORY_SEPARATOR);
-define('BP', realpath(__DIR__ . '/../../..'));
-/**
- * Require necessary files
- */
-require_once BP . '/lib/Magento/Autoload.php';
-require_once BP . '/app/code/core/Mage/Core/functions.php';
-require_once BP . '/app/Mage.php';
-
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'local';
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'community';
-$paths[] = BP . DS . 'app' . DS . 'code' . DS . 'core';
-$paths[] = BP . DS . 'lib';
-Magento_Autoload::getInstance()->addIncludePath($paths);
-Mage::setRoot();
+require_once __DIR__ . '/../../../app/bootstrap.php';
 Mage::setIsDeveloperMode(true);
 
 try {

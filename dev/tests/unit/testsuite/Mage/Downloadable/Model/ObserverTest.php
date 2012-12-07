@@ -159,6 +159,32 @@ class Mage_Downloadable_Model_ObserverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get downloadable data without is_delete flag
+     *
+     * @return array
+     */
+    protected function _getDownloadableData()
+    {
+        return array(
+            'sample' => array(array('id' => 1, 'is_delete' => '')),
+            'link' => array(array('id' => 2, 'is_delete' => ''))
+        );
+    }
+
+    /**
+     * Get downloadable data with set is_delete flag
+     *
+     * @return array
+     */
+    protected function _getDownloadableDataForDelete()
+    {
+        return array(
+            'sample' => array(array('id' => 1, 'is_delete' => '1')),
+            'link' => array(array('id' => 2, 'is_delete' => '1'))
+        );
+    }
+
+    /**
      * Set products to observer
      *
      * @param array $currentProduct

@@ -44,7 +44,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
-            dirname(dirname(__FILE__)) . '/_files/design',
+            dirname(__DIR__) . '/_files/design',
             Mage::getDesign()
         ));
         $this->_themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
@@ -215,10 +215,14 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testLoad()
     {
         $layoutHandle = 'layout_test_handle';
         $expectedText = 'Text declared in the frontend/test/test_theme';
+        /** @var $model Mage_Core_Model_Layout_Merge */
         $model = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => array(
             'area'       => 'frontend',
             'themeId'    => $this->_themeUtility->getThemeByParams('test/test_theme', 'frontend')->getId()

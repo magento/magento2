@@ -166,7 +166,7 @@ varienGrid.prototype = {
         if(this.useAjax){
             new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
                 loaderArea: this.containerId,
-                parameters: this.reloadParams,
+                parameters: jQuery.param(this.reloadParams),
                 evalScripts: true,
                 onFailure: this._processFailure.bind(this),
                 onComplete: this.initGridAjax.bind(this),

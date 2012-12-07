@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Adminhtml
+ * @package     Mage_Adminhtml
  * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
@@ -28,8 +28,11 @@
 class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @param null|int $productId
+     * @param string $expectedUrl
+     *
      * @magentoAppIsolation enabled
-     * @dataProvider getGetContinueUrlProvider
+     * @dataProvider getContinueUrlDataProvider
      */
     public function testGetContinueUrl($productId, $expectedUrl)
     {
@@ -43,12 +46,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends P
             ->disableOriginalConstructor()
             ->setMethods(array('getUrl'))
             ->getMock();
-        $urlModel->expects($this->at(2))->method('getUrl')->with($this->equalTo($expectedUrl))
+        $urlModel->expects($this->any())->method('getUrl')->with($this->equalTo($expectedUrl))
             ->will($this->returnValue('url'));
 
         Mage::register('current_product', $product);
 
         $layout = Mage::getModel('Mage_Core_Model_Layout');
+        /** @var $block Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings */
         $block = $layout->createBlock(
             'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings',
             'block',
@@ -62,7 +66,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_SettingsTest extends P
     /**
      * @return array
      */
-    public function getGetContinueUrlProvider()
+    public static function getContinueUrlDataProvider()
     {
         return array(
             array(null, '*/*/new'),

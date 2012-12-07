@@ -375,6 +375,7 @@ Product.Configurable.prototype = {
         this.grid.rows.each( function(row) {
             this.rowInit(this.grid, row);
         }.bind(this));
+        this.updateGrid();
     },
     createAttributes : function() {
         this.attributes.each( function(attribute, index) {
@@ -583,6 +584,7 @@ Product.Configurable.prototype = {
     },
     updateGrid : function() {
         this.grid.reloadParams = {
+            'attributes[]': this.attributes.map(function(el) { return el.attribute_id; }),
             'products[]' :this.links.keys().size() ? this.links.keys() : [ 0 ],
             'new_products[]' :this.newProducts
         };
@@ -737,7 +739,6 @@ Product.Configurable.prototype = {
     },
     updateSaveInput : function() {
         $(this.idPrefix + 'save_attributes').value = Object.toJSON(this.attributes);
-        $(this.idPrefix + 'save_links').value = Object.toJSON(this.links);
     },
     initializeAdvicesForSimpleForm : function() {
         if ($(this.idPrefix + 'simple_form').advicesInited) {

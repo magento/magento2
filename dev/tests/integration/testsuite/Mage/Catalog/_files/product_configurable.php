@@ -30,42 +30,38 @@
 $installer = Mage::getResourceModel('Mage_Catalog_Model_Resource_Setup', array('resourceName' => 'catalog_setup'));
 /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 $attribute = Mage::getResourceModel('Mage_Catalog_Model_Resource_Eav_Attribute');
-$attribute->setData(
-    array(
-        'attribute_code'    => 'test_configurable',
-        'entity_type_id'    => $installer->getEntityTypeId('catalog_product'),
-        'is_global'         => 1,
-        'is_user_defined'   => 1,
-        'frontend_input'    => 'select',
-        'is_unique'         => 0,
-        'is_required'       => 1,
-        'is_configurable'   => 1,
-        'is_searchable'     => 0,
-        'is_visible_in_advanced_search' => 0,
-        'is_comparable'     => 0,
-        'is_filterable'     => 0,
-        'is_filterable_in_search'   => 0,
-        'is_used_for_promo_rules'   => 0,
-        'is_html_allowed_on_front'  => 1,
-        'is_visible_on_front'       => 0,
-        'used_in_product_listing'   => 0,
-        'used_for_sort_by'          => 0,
-        'frontend_label' => array(
-            0   => 'Test Configurable'
+$attribute->setData(array(
+    'attribute_code'                => 'test_configurable',
+    'entity_type_id'                => $installer->getEntityTypeId('catalog_product'),
+    'is_global'                     => 1,
+    'is_user_defined'               => 1,
+    'frontend_input'                => 'select',
+    'is_unique'                     => 0,
+    'is_required'                   => 1,
+    'is_configurable'               => 1,
+    'is_searchable'                 => 0,
+    'is_visible_in_advanced_search' => 0,
+    'is_comparable'                 => 0,
+    'is_filterable'                 => 0,
+    'is_filterable_in_search'       => 0,
+    'is_used_for_promo_rules'       => 0,
+    'is_html_allowed_on_front'      => 1,
+    'is_visible_on_front'           => 0,
+    'used_in_product_listing'       => 0,
+    'used_for_sort_by'              => 0,
+    'frontend_label'                => array('Test Configurable'),
+    'backend_type'                  => 'int',
+    'option'                        => array(
+        'value' => array(
+            'option_0' => array('Option 1'),
+            'option_1' => array('Option 2'),
         ),
-        'option' => array(
-            'value' => array(
-                'option_0'  => array(0 => 'Option 1'),
-                'option_1'  => array(0 => 'Option 2'),
-            ),
-            'order' => array(
-                'option_0' => 1,
-                'option_1' => 2,
-            )
-        ),
-        'backend_type' => 'int',
-    )
-);
+        'order' => array(
+            'option_0' => 1,
+            'option_1' => 2,
+        )
+    ),
+));
 $attribute->save();
 
 /* Assign attribute to attribute set */
@@ -77,38 +73,35 @@ $options = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Opti
 $options->setAttributeFilter($attribute->getId());
 
 $attributeValues = array();
-$productsData = array();
+$productIds = array();
 foreach ($options as $option) {
     /** @var $product Mage_Catalog_Model_Product */
     $product = Mage::getModel('Mage_Catalog_Model_Product');
     $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
-        ->setId($option->getId()*10)
+        ->setId($option->getId() * 10)
         ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
         ->setWebsiteIds(array(1))
-        ->setName('Configurable Option'.$option->getId())
-        ->setSku('simple_'.$option->getId())
+        ->setName('Configurable Option' . $option->getId())
+        ->setSku('simple_' . $option->getId())
         ->setPrice(10)
         ->setTestConfigurable($option->getId())
         ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-        ->setStockData(
-            array(
-                'use_config_manage_stock'   => 1,
-                'qty'                       => 100,
-                'is_qty_decimal'            => 0,
-                'is_in_stock'               => 1,
-            )
-        )
+        ->setStockData(array(
+            'use_config_manage_stock' => 1,
+            'qty'                     => 100,
+            'is_qty_decimal'          => 0,
+            'is_in_stock'             => 1,
+        ))
         ->save();
-    $dataOption = array(
+    $attributeValues[] = array(
         'label'         => 'test',
         'attribute_id'  => $attribute->getId(),
         'value_index'   => $option->getId(),
         'is_percent'    => false,
         'pricing_value' => 5,
     );
-    $productsData[$product->getId()] = array($dataOption);
-    $attributeValues[] = $dataOption;
+    $productIds[] = $product->getId();
 }
 
 /** @var $product Mage_Catalog_Model_Product */
@@ -122,21 +115,15 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
     ->setPrice(100)
     ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
     ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
-    ->setStockData(
-        array(
-            'use_config_manage_stock'   => 1,
-            'is_in_stock'               => 1,
-        )
-    )
-    ->setConfigurableProductsData($productsData)
-    ->setConfigurableAttributesData(
-        array(
-            array(
-                'attribute_id'  => $attribute->getId(),
-                'attribute_code'=> $attribute->getAttributeCode(),
-                'frontend_label'=> 'test',
-                'values' => $attributeValues,
-            )
-        )
-    )
+    ->setStockData(array(
+        'use_config_manage_stock' => 1,
+        'is_in_stock'             => 1,
+    ))
+    ->setAssociatedProductIds($productIds)
+    ->setConfigurableAttributesData(array(array(
+        'attribute_id'   => $attribute->getId(),
+        'attribute_code' => $attribute->getAttributeCode(),
+        'frontend_label' => 'test',
+        'values'         => $attributeValues,
+    )))
     ->save();

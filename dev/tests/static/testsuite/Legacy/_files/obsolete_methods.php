@@ -24,6 +24,8 @@
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/** @var $this Legacy_ObsoleteCodeTest */
 return array(
     $this->_getRule('__get', 'Varien_Object'),
     $this->_getRule('__set', 'Varien_Object'),
@@ -167,6 +169,7 @@ return array(
     $this->_getRule('drawItem', 'Mage_Catalog_Block_Navigation'),
     $this->_getRule('dropKey', 'Varien_Db_Adapter_Pdo_Mysql'),
     $this->_getRule('editAction', 'Mage_Tag_CustomerController'),
+    $this->_getRule('escapeJs', 'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config'),
     $this->_getRule('exportOrderedCsvAction'),
     $this->_getRule('exportOrderedExcelAction'),
     $this->_getRule('fetchItemsCount', 'Mage_Wishlist_Model_Resource_Wishlist'),
@@ -186,6 +189,7 @@ return array(
     $this->_getRule('getAllOrderEntityIds', 'Mage_Rss_Model_Resource_Order'),
     $this->_getRule('getAllOrderEntityTypeIds', 'Mage_Rss_Model_Resource_Order'),
     $this->_getRule('getAnonSuffix'),
+    $this->_getRule('getAttributesJson', 'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config', 'getAttributes'),
     $this->_getRule('getBaseTaxAmount', 'Mage_Sales_Model_Quote_Item_Abstract'),
     $this->_getRule('getCheckoutMehod', 'Mage_Checkout_Model_Type_Onepage'),
     $this->_getRule('getChild', null, 'Mage_Core_Block_Abstract::getChildBlock()', 'app'),

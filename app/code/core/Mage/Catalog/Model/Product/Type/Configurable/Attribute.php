@@ -37,6 +37,9 @@
  * @method int getPosition()
  * @method Mage_Catalog_Model_Product_Type_Configurable_Attribute setPosition(int $value)
  *
+ * @method Mage_Catalog_Model_Product_Type_Configurable_Attribute setProductAttribute(Mage_Eav_Model_Entity_Attribute_Abstract $value)
+ * @method Mage_Eav_Model_Entity_Attribute_Abstract getProductAttribute()
+ *
  * @category    Mage
  * @package     Mage_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -96,5 +99,29 @@ class Mage_Catalog_Model_Product_Type_Configurable_Attribute extends Mage_Core_M
         $this->_getResource()->saveLabel($this);
         $this->_getResource()->savePrices($this);
         return $this;
+    }
+
+    /**
+     * Load counfigurable attribute by product and product's attribute
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Eav_Model_Attribute  $attribute
+     */
+    public function loadByProductAndAttribute($product, $attribute)
+    {
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        if ($id) {
+            $this->load($id);
+        }
+    }
+
+    /**
+     * Delete configurable attributes by product id
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function deleteByProduct($product)
+    {
+        $this->_getResource()->deleteAttributesByProductId($product->getId());
     }
 }

@@ -120,14 +120,15 @@ class Mage_Catalog_Product_CompareController extends Mage_Core_Controller_Front_
                 }
 
                 $item->loadByProduct($product);
-
+                /** @var $helper Mage_Catalog_Helper_Product_Compare */
+                $helper = Mage::helper('Mage_Catalog_Helper_Product_Compare');
                 if($item->getId()) {
                     $item->delete();
                     Mage::getSingleton('Mage_Catalog_Model_Session')->addSuccess(
-                        $this->__('The product %s has been removed from comparison list.', $product->getName())
+                        $this->__('The product %s has been removed from comparison list.', $helper->escapeHtml($product->getName()))
                     );
-                    Mage::dispatchEvent('catalog_product_compare_remove_product', array('product'=>$item));
-                    Mage::helper('Mage_Catalog_Helper_Product_Compare')->calculate();
+                    Mage::dispatchEvent('catalog_product_compare_remove_product', array('product' => $item));
+                    $helper->calculate();
                 }
             }
         }

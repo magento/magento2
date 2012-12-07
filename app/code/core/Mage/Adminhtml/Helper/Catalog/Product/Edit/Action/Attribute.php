@@ -32,7 +32,7 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute extends Mage_Core_Helper_Data
+class Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute extends Mage_Backend_Helper_Data
 {
     /**
      * Selected products for mass-update

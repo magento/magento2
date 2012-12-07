@@ -88,6 +88,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
     public function getSampleData()
     {
         $samplesArr = array();
+        if ($this->getProduct()->getTypeId() !== Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+            return $samplesArr;
+        }
         $samples = $this->getProduct()->getTypeInstance()->getSamples($this->getProduct());
         $fileHelper = Mage::helper('Mage_Downloadable_Helper_File');
         foreach ($samples as $item) {
@@ -139,7 +142,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Sa
      */
     public function getSamplesTitle()
     {
-        return Mage::getStoreConfig(Mage_Downloadable_Model_Sample::XML_PATH_SAMPLES_TITLE);
+        return $this->getProduct()->getId() && $this->getProduct()->getTypeId() == 'downloadable'
+            ? $this->getProduct()->getSamplesTitle()
+            : Mage::getStoreConfig(Mage_Downloadable_Model_Sample::XML_PATH_SAMPLES_TITLE);
     }
 
     /**

@@ -111,7 +111,7 @@ class Mage_Core_Model_Layout_Merge
             $this->_themeId = $arguments['themeId'];
         } elseif (isset($arguments['area'])) {
             $this->_area = $arguments['area'];
-            $this->_themeId = null;
+            $this->_themeId = Mage::getDesign()->getConfigurationDesignTheme($arguments['area']);
         } else {
             $this->_area = Mage::getDesign()->getArea();
             $this->_themeId = Mage::getDesign()->getDesignTheme()->getId();

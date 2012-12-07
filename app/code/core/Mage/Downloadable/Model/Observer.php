@@ -65,6 +65,34 @@ class Mage_Downloadable_Model_Observer
 
         return $this;
     }
+    /**
+     * Change product type on the fly depending on selected options
+     *
+     * @param  Varien_Event_Observer $observer
+     * @return Mage_Downloadable_Model_Observer
+     */
+    public function transitionProductType(Varien_Event_Observer $observer)
+    {
+        $request = $observer->getEvent()->getRequest();
+        $product = $observer->getEvent()->getProduct();
+        $downloadable = $request->getPost('downloadable');
+        $isTransitionalType = $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+            || $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
+            || $product->getTypeId() === Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE;
+
+        if ($isTransitionalType) {
+            if ($product->hasIsVirtual()) {
+                if ($downloadable) {
+                    $product->setTypeId(Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE);
+                } else {
+                    $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL);
+                }
+            } else {
+                $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+            }
+        }
+        return $this;
+    }
 
     /**
      * Save data from order to purchased links

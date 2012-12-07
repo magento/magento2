@@ -81,4 +81,30 @@ class Mage_Catalog_Model_Product_Attribute_Backend_StockTest extends PHPUnit_Fra
         $this->assertEquals(5, $stockData['qty']);
         $this->assertNull($object->getData(self::ATTRIBUTE_NAME));
     }
+
+    public function testBeforeSaveQtyIsEmpty()
+    {
+        $object = new Varien_Object(array(
+            self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => ''),
+            'stock_data'         => array('is_in_stock' => 2, 'qty' => '')
+        ));
+
+        $this->_model->beforeSave($object);
+
+        $stockData = $object->getStockData();
+        $this->assertNull($stockData['qty']);
+    }
+
+    public function testBeforeSaveQtyIsZero()
+    {
+        $object = new Varien_Object(array(
+            self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => 0),
+            'stock_data'         => array('is_in_stock' => 2, 'qty' => 0)
+        ));
+
+        $this->_model->beforeSave($object);
+
+        $stockData = $object->getStockData();
+        $this->assertEquals(0, $stockData['qty']);
+    }
 }

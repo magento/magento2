@@ -213,9 +213,9 @@ class Mage_Wishlist_IndexController
              */
             $session->setAddActionReferer($referer);
 
-            Mage::helper('Mage_Wishlist_Helper_Data')->calculate();
-
-            $message = $this->__('%1$s has been added to your wishlist. Click <a href="%2$s">here</a> to continue shopping.', $product->getName(), Mage::helper('Mage_Core_Helper_Data')->escapeUrl($referer));
+            /** @var $helper Mage_Wishlist_Helper_Data */
+            $helper = Mage::helper('Mage_Wishlist_Helper_Data')->calculate();
+            $message = $this->__('%1$s has been added to your wishlist. Click <a href="%2$s">here</a> to continue shopping.', $helper->escapeHtml($product->getName()), Mage::helper('Mage_Core_Helper_Data')->escapeUrl($referer));
             $session->addSuccess($message);
         }
         catch (Mage_Core_Exception $e) {

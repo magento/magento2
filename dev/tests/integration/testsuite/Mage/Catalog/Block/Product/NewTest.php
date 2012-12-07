@@ -61,7 +61,7 @@ class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Mage::app()->getStore()->getId(), $info[1]);
 
         $this->assertSame(2, array_shift($keys));
-        $this->assertEquals(Mage::getDesign()->getDesignTheme()->getId(), $info[2]);
+        $this->assertEquals(Mage_Core_Model_Theme::CACHE_TAG_NO_THEME, $info[2]);
 
         $this->assertSame(3, array_shift($keys));
         $this->assertEquals(Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId(), $info[3]);

@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.19</version>
+            <version>1.6.0.0.20</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -87,6 +87,14 @@
                     </catalog_add_topmenu_items>
                 </observers>
             </page_block_html_topmenu_gethtml_before>
+            <catalog_product_transition_product_type>
+                <observers>
+                    <type_transition>
+                        <class>Mage_Catalog_Model_Observer</class>
+                        <method>transitionProductType</method>
+                    </type_transition>
+                </observers>
+            </catalog_product_transition_product_type>
         </events>
         <catalog>
             <product>
@@ -227,11 +235,19 @@
                         <description/>
                         <sku/>
                     </used_in_autogeneration>
+                    <weight>
+                        <type_switcher translate="label">
+                            <label>Virtual</label>
+                        </type_switcher>
+                    </weight>
                 </attributes>
             </product>
             <content>
                 <tempate_filter>Mage_Catalog_Model_Template_Filter</tempate_filter>
             </content>
+            <suggested_categories>
+                <limit>10</limit>
+            </suggested_categories>
         </catalog>
         <eav_attributes>
             <catalog_product>

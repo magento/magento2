@@ -36,7 +36,7 @@
 
 <?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
 <?php $_showWebsite= $this->isMultiWebsites(); ?>
-<tr>
+<tr id="attribute-<?php echo $_htmlId?>-container">
     <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
     <td colspan="10" class="grid tier">
     <table cellspacing="0" class="data border" id="tiers_table">

@@ -87,13 +87,17 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $product->setAttributeSetId($setId);
         }
 
-        $attributes = $this->getRequest()->getParam('attributes');
-        if ($attributes && $product->isConfigurable() &&
-            (!$productId || !$product->getTypeInstance()->getUsedProductAttributeIds($product))) {
-            $product->getTypeInstance()->setUsedProductAttributeIds(
-                explode(",", base64_decode(urldecode($attributes))),
-                $product
-            );
+        if ($this->getRequest()->has('attributes')) {
+            $attributes = $this->getRequest()->getParam('attributes');
+            if (!empty($attributes)) {
+                $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+                $this->_objectManager->get('Mage_Catalog_Model_Product_Type_Configurable')->setUsedProductAttributeIds(
+                    $attributes,
+                    $product
+                );
+            } else {
+                $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+            }
         }
 
         // Required attributes of simple product for configurable creation
@@ -120,7 +124,6 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             /* @var $configProduct Mage_Catalog_Model_Product */
             $data = array();
             foreach ($configProduct->getTypeInstance()->getEditableAttributes($configProduct) as $attribute) {
-
                 /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
                 if(!$attribute->getIsUnique()
                     && $attribute->getFrontend()->getInputType()!='gallery'
@@ -255,8 +258,8 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
 
         $_additionalLayoutPart = '';
         if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
-            && !($product->getTypeInstance()->getUsedProductAttributeIds($product)))
-        {
+           && !($product->getTypeInstance()->getUsedProductAttributeIds($product))
+        ) {
             $_additionalLayoutPart = '_new';
         }
 
@@ -644,21 +647,29 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         /**
          * Initialize data for configurable product
          */
-        if (($data = $this->getRequest()->getPost('configurable_products_data'))
-            && !$product->getConfigurableReadonly()
-        ) {
-            $product->setConfigurableProductsData(Mage::helper('Mage_Core_Helper_Data')->jsonDecode($data));
-        }
-        if (($data = $this->getRequest()->getPost('configurable_attributes_data'))
-            && !$product->getConfigurableReadonly()
-        ) {
-            $product->setConfigurableAttributesData(Mage::helper('Mage_Core_Helper_Data')->jsonDecode($data));
-        }
 
-        $product->setCanSaveConfigurableAttributes(
-            (bool) $this->getRequest()->getPost('affect_configurable_product_attributes')
-                && !$product->getConfigurableReadonly()
-        );
+        $attributes = $this->getRequest()->getParam('attributes');
+        if (!empty($attributes)) {
+            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+            $this->_objectManager->get('Mage_Catalog_Model_Product_Type_Configurable')->setUsedProductAttributeIds(
+                $attributes,
+                $product
+            );
+
+            $product->setAssociatedProductIds($this->getRequest()->getPost('associated_product_ids', array()));
+
+            $data = $this->getRequest()->getPost('configurable_attributes_data');
+            if ($data) {
+                $product->setConfigurableAttributesData(Mage::helper('Mage_Core_Helper_Data')->jsonDecode($data));
+            }
+
+            $product->setCanSaveConfigurableAttributes(
+                (bool)$this->getRequest()->getPost('affect_configurable_product_attributes')
+            );
+        } elseif ($product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL);
+            $product->setTypeInstance(null);
+        }
 
         /**
          * Initialize product options
@@ -715,6 +726,10 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $this->_filterStockData($data['product']['stock_data']);
 
             $product = $this->_initProductSave($this->_initProduct());
+            Mage::dispatchEvent(
+                'catalog_product_transition_product_type',
+                array('product' => $product, 'request' => $this->getRequest())
+            );
 
             try {
                 if (isset($data['product'][$product->getIdFieldName()])) {

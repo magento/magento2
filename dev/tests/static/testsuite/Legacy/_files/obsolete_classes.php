@@ -58,6 +58,7 @@ return array(
     $this->_getClassRule('Mage_Adminhtml_Block_Api_Edituser'),
     $this->_getClassRule('Mage_Adminhtml_Block_Api_Tab_Userroles'),
     $this->_getClassRule('Mage_Adminhtml_Block_Catalog'),
+    $this->_getClassRule('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Grid'),
     $this->_getClassRule('Mage_Adminhtml_Block_Page_Menu', 'Mage_Backend_Block_Menu'),
     $this->_getClassRule('Mage_Adminhtml_Block_Permissions_User'),
     $this->_getClassRule('Mage_Adminhtml_Block_Permissions_User_Grid'),

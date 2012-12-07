@@ -51,7 +51,8 @@
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
-    <div style="display:none"></div>
+    <div id="product-edit-form-tabs"></div>
+    <?php echo $this->getChildHtml('product-type-tabs') ?>
 </form>
 <script type="text/javascript">
 //<![CDATA[
@@ -99,7 +100,9 @@ jQuery(function() {
         product_info_tabsJsTabs.showTabContent(obj);
     }
     Product.AttributesBridge.setTabsObject(product_info_tabsJsTabs);
-
+    window.varienGlobalEvents.attachEventHandler('tabChangeBefore', function(data) {
+        jQuery('#config_super_product')[data.first ? 'show' : 'hide']();
+    });
     (function ($) {
 
         var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
@@ -176,5 +179,11 @@ jQuery(function() {
         new Autogenerator(masks).bindAll();
     })(jQuery);
 });
+
+jQuery(function($) {
+    var data = <?php echo $this->getTypeSwitcherData();?>;
+    new TypeSwitcher(data).bindAll();
+});
+
 //]]>
 </script>

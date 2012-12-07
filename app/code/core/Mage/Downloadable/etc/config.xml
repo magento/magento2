@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Mage_Downloadable>
-            <version>1.6.0.0.2</version>
+            <version>1.6.0.0.3</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -79,6 +79,13 @@
                         </allow_product_types>
                     </grouped>
                 </type>
+                <attributes>
+                    <weight>
+                        <type_switcher translate="label">
+                            <label>Virtual / Downloadable</label>
+                        </type_switcher>
+                    </weight>
+                </attributes>
             </product>
         </catalog>
         <pdf>
@@ -149,6 +156,14 @@
                     </downloadable_observer>
                 </observers>
             </sales_order_save_commit_after>
+            <catalog_product_transition_product_type>
+                <observers>
+                    <type_transition>
+                        <class>Mage_Downloadable_Model_Observer</class>
+                        <method>transitionProductType</method>
+                    </type_transition>
+                </observers>
+            </catalog_product_transition_product_type>
         </events>
     </adminhtml>
     <frontend>

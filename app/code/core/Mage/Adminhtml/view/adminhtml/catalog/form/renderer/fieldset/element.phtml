@@ -41,7 +41,7 @@
     <td class="hidden" colspan="100"><?php echo trim($_element->getElementHtml()) ?></td>
 </tr>
 <?php else: ?>
-<tr>
+<tr id="attribute-<?php echo $_element->getHtmlId()?>-container">
     <td class="label"><?php echo trim($this->getElementLabelHtml()) ?></td>
     <td class="value">
         <?php echo trim($this->getElementHtml()) ?>

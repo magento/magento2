@@ -49,7 +49,8 @@ class Mage_Catalog_Model_Observer
             /** @var $categoryFlatHelper Mage_Catalog_Helper_Category_Flat */
             $categoryFlatHelper = Mage::helper('Mage_Catalog_Helper_Category_Flat');
             if ($categoryFlatHelper->isAvailable() && $categoryFlatHelper->isBuilt()) {
-                Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')->synchronize(null, array($store->getId()));
+                Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')
+                    ->synchronize(null, array($store->getId()));
             }
             Mage::getResourceSingleton('Mage_Catalog_Model_Resource_Product')->refreshEnabledIndex($store);
         }
@@ -71,7 +72,8 @@ class Mage_Catalog_Model_Observer
         /** @var $categoryFlatHelper Mage_Catalog_Helper_Category_Flat */
         $categoryFlatHelper = Mage::helper('Mage_Catalog_Helper_Category_Flat');
         if ($categoryFlatHelper->isAvailable() && $categoryFlatHelper->isBuilt()) {
-            Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')->synchronize(null, array($store->getId()));
+            Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')
+                ->synchronize(null, array($store->getId()));
         }
         Mage::getResourceModel('Mage_Catalog_Model_Resource_Product')->refreshEnabledIndex($store);
         return $this;
@@ -93,7 +95,8 @@ class Mage_Catalog_Model_Observer
                 /** @var $categoryFlatHelper Mage_Catalog_Helper_Category_Flat */
                 $categoryFlatHelper = Mage::helper('Mage_Catalog_Helper_Category_Flat');
                 if ($categoryFlatHelper->isAvailable() && $categoryFlatHelper->isBuilt()) {
-                    Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')->synchronize(null, array($store->getId()));
+                    Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')
+                        ->synchronize(null, array($store->getId()));
                 }
             }
         }
@@ -131,7 +134,8 @@ class Mage_Catalog_Model_Observer
         /** @var $categoryFlatHelper Mage_Catalog_Helper_Category_Flat */
         $categoryFlatHelper = Mage::helper('Mage_Catalog_Helper_Category_Flat');
         if ($categoryFlatHelper->isAvailable() && $categoryFlatHelper->isBuilt()) {
-            Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')->move($categoryId, $prevParentId, $parentId);
+            Mage::getResourceModel('Mage_Catalog_Model_Resource_Category_Flat')
+                ->move($categoryId, $prevParentId, $parentId);
         }
         return $this;
     }
@@ -211,7 +215,10 @@ class Mage_Catalog_Model_Observer
      */
     public function addCatalogToTopmenuItems(Varien_Event_Observer $observer)
     {
-        $this->_addCategoriesToMenu(Mage::helper('Mage_Catalog_Helper_Category')->getStoreCategories(), $observer->getMenu());
+        $this->_addCategoriesToMenu(
+            Mage::helper('Mage_Catalog_Helper_Category')->getStoreCategories(),
+            $observer->getMenu()
+        );
     }
 
     /**
@@ -269,5 +276,23 @@ class Mage_Catalog_Model_Observer
 
         $categoryPathIds = explode(',', $currentCategory->getPathInStore());
         return in_array($category->getId(), $categoryPathIds);
+    }
+
+    /**
+     * Change product type on the fly depending on selected options
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function transitionProductType(Varien_Event_Observer $observer)
+    {
+        $product = $observer->getProduct();
+        $isTransitionalType = $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+            || $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL;
+        if ($isTransitionalType) {
+            $product->setTypeId($product->hasIsVirtual()
+                ? Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
+                : Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+            );
+        }
     }
 }

@@ -48,9 +48,11 @@ class Mage_Adminhtml_Block_Review_Edit_Form extends Mage_Adminhtml_Block_Widget_
 
         $fieldset = $form->addFieldset('review_details', array('legend' => Mage::helper('Mage_Review_Helper_Data')->__('Review Details'), 'class' => 'fieldset-wide'));
 
+        /** @var $helper Mage_Review_Helper_Data */
+        $helper = Mage::helper('Mage_Review_Helper_Data');
         $fieldset->addField('product_name', 'note', array(
             'label'     => Mage::helper('Mage_Review_Helper_Data')->__('Product'),
-            'text'      => '<a href="' . $this->getUrl('*/catalog_product/edit', array('id' => $product->getId())) . '" onclick="this.target=\'blank\'">' . $product->getName() . '</a>'
+            'text'      => '<a href="' . $this->getUrl('*/catalog_product/edit', array('id' => $product->getId())) . '" onclick="this.target=\'blank\'">' . $helper->escapeHtml($product->getName()) . '</a>'
         ));
 
         if ($customer->getId()) {

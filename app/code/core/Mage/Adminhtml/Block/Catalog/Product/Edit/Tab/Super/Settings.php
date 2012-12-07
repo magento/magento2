@@ -26,7 +26,7 @@
 
 
 /**
- * Create Configuranle procuct Settings Tab Block
+ * Create Configurable product Settings Tab Block
  *
  * @category   Mage
  * @package    Mage_Adminhtml
@@ -40,19 +40,14 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
      */
     protected function _prepareLayout()
     {
-        $onclick = "setSuperSettings('" . $this->getContinueUrl() . "','attribute-checkbox', 'attributes')";
+        $onclick = "jQuery('#product-edit-form').attr('action', "
+            . $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getContinueUrl())
+            . ").addClass('ignore-validate').submit();";
         $this->addChild('continue_button', 'Mage_Backend_Block_Widget_Button', array(
-            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Continue'),
+            'label'   => Mage::helper('Mage_Catalog_Helper_Data')->__('Generate Variations'),
             'onclick' => $onclick,
-            'class' => 'save',
+            'class'   => 'save',
         ));
-
-        $this->addChild('back_button', 'Mage_Backend_Block_Widget_Button', array(
-            'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Back'),
-            'onclick' => "setLocation('" . $this->getBackUrl() . "')",
-            'class' => 'back'
-        ));
-
         parent::_prepareLayout();
     }
 
@@ -75,51 +70,41 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
     {
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('settings', array(
-            'legend'=>Mage::helper('Mage_Catalog_Helper_Data')->__('Select Configurable Attributes ')
+            'legend'=>Mage::helper('Mage_Catalog_Helper_Data')->__('Select Configurable Attributes')
         ));
 
         $product    = $this->_getProduct();
         $attributes = $product->getTypeInstance()
             ->getSetAttributes($product);
 
-        $fieldset->addField('req_text', 'note', array(
-            'text' => '<ul class="messages"><li class="notice-msg"><ul><li>'
-                .  $this->__('Only attributes with scope "Global", input type "Dropdown" and Use To Create Configurable Product "Yes" are available.')
-                . '</li></ul></li></ul>'
-        ));
-
         $hasAttributes = false;
+        $usedAttributes = $product->isConfigurable()
+            ? $this->_getProduct()->getTypeInstance()->getUsedProductAttributeIds($this->_getProduct())
+            : array();
+
+        $configurableType = Mage::getSingleton('Mage_Catalog_Model_Product_Type_Configurable');
 
         foreach ($attributes as $attribute) {
-            if ($product->getTypeInstance()->canUseAttribute($attribute, $product)) {
+            if ($configurableType->canUseAttribute($attribute, $product)) {
                 $hasAttributes = true;
-                $fieldset->addField('attribute_'.$attribute->getAttributeId(), 'checkbox', array(
+                $fieldset->addField('attribute_' . $attribute->getAttributeId(), 'checkbox', array(
                     'label' => $attribute->getFrontend()->getLabel(),
                     'title' => $attribute->getFrontend()->getLabel(),
-                    'name'  => 'attribute',
-                    'class' => 'attribute-checkbox',
-                    'value' => $attribute->getAttributeId()
+                    'name'  => 'attributes[]',
+                    'class' => 'configurable-attribute-checkbox',
+                    'value' => $attribute->getAttributeId(),
+                    'checked' => in_array($attribute->getAttributeId(), $usedAttributes)
                 ));
             }
         }
 
         if ($hasAttributes) {
-            $fieldset->addField('attributes', 'hidden', array(
-                'name'  => 'attribute_validate',
-                'value' => '',
-                'class' => 'validate-super-product-attributes'
-            ));
-
             $fieldset->addField('continue_button', 'note', array(
                 'text' => $this->getChildHtml('continue_button'),
             ));
-        }
-        else {
+        } else {
             $fieldset->addField('note_text', 'note', array(
                 'text' => $this->__('This attribute set does not have attributes which we can use for configurable product')
-            ));
-            $fieldset->addField('back_button', 'note', array(
-                'text' => $this->getChildHtml('back_button'),
             ));
         }
 
@@ -137,8 +122,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
     public function getContinueUrl()
     {
         return $this->getUrl($this->_getProduct()->getId() ? '*/*/edit' : '*/*/new', array(
-            '_current'   => true,
-            'attributes' => '{{attributes}}'
+            '_current' => true,
         ));
     }
 
