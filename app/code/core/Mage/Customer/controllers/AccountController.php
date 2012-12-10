@@ -805,7 +805,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $this->_getSession()->setCustomer($customer)
                     ->addSuccess($this->__('The account information has been saved.'));
 
-                $this->_redirect('customer/account');
+                $this->_redirectSuccess('customer/account');
                 return;
             } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->setCustomerFormData($this->getRequest()->getPost())
