@@ -624,7 +624,7 @@ class Mage_Core_Model_Resource_Setup
                 switch ($fileType) {
                     case 'php':
                         $conn   = $this->getConnection();
-                        $result = $this->includeFile($fileName);
+                        $result = $this->_includeFile($fileName);
                         break;
                     case 'sql':
                         $sql = file_get_contents($fileName);
@@ -657,7 +657,7 @@ class Mage_Core_Model_Resource_Setup
         return $version;
     }
 
-    protected function includeFile($fileName) {
+    protected function _includeFile($fileName) {
         return include $fileName;
     }
 
