@@ -25,7 +25,7 @@
  */
 
 
-class Mage_Core_Controller_Varien_Front extends Varien_Object
+class Mage_Core_Controller_Varien_Front extends Varien_Object implements Mage_Core_Controller_FrontInterface
 {
     protected $_defaults = array();
 

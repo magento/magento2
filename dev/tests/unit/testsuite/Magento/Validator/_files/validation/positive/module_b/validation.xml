@@ -27,34 +27,27 @@
  */
 -->
 <validation>
-    <entity name="test_entity">
+    <entity name="test_entity_a">
         <rules>
-            <rule name="test_rule_constraint_2">
-                <constraints>
-                    <constraint class="Magento_Validator_Test" field="constraint_field"/>
-                </constraints>
+            <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
+                <property_constraints>
+                    <property name="int">
+                        <constraint class="Magento_Validator_Test_NotEmpty"/>
+                    </property>
+                </property_constraints>
+            </rule>
+            <rule name="check_alnum_has_valid_value">
+                <property_constraints>
+                    <property name="alnum">
+                        <constraint class="Magento_Validator_Test_Alnum"/>
+                    </property>
+                </property_constraints>
             </rule>
         </rules>
         <groups>
-            <group name="test_group_b">
+            <group name="check_alnum">
                 <uses>
-                    <use rule="test_rule_constraint_2"/>
-                </uses>
-            </group>
-        </groups>
-    </entity>
-    <entity name="test_entity_b">
-        <rules>
-            <rule name="test_rule">
-                <constraints>
-                    <constraint class="Zend_Validate_Int" field="test_field"/>
-                </constraints>
-            </rule>
-        </rules>
-        <groups>
-            <group name="test_group_c">
-                <uses>
-                    <use rule="test_rule"/>
+                    <use rule="check_alnum_has_valid_value"/>
                 </uses>
             </group>
         </groups>

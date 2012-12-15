@@ -25,7 +25,7 @@
  */
 
 /**
- * Acl role user grid
+ * Acl role user grid.
  *
  * @category   Mage
  * @package    Mage_User

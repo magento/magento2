@@ -42,11 +42,11 @@ class Mage_Backend_Block_Widget_Breadcrumbs extends Mage_Backend_Block_Template
 
     protected $_template = 'Mage_Backend::widget/breadcrumbs.phtml';
 
-
     protected function _construct()
     {
-
-        $this->addLink(Mage::helper('Mage_Backend_Helper_Data')->__('Home'), Mage::helper('Mage_Backend_Helper_Data')->__('Home'), $this->getUrl('*'));
+        $this->addLink(Mage::helper('Mage_Backend_Helper_Data')->__('Home'),
+            Mage::helper('Mage_Backend_Helper_Data')->__('Home'), $this->getUrl('*')
+        );
     }
 
     public function addLink($label, $title=null, $url=null)

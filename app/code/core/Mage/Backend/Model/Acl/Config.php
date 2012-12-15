@@ -32,7 +32,7 @@
  * @package     Mage_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Model_Acl_Config
+class Mage_Backend_Model_Acl_Config implements Mage_Core_Model_Acl_Config_ConfigInterface
 {
     const CACHE_ID = 'backend_acl_resources';
 

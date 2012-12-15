@@ -47,10 +47,6 @@ class Mage_Adminhtml_Model_Email_Template extends Mage_Core_Model_Email_Template
         }
         $paths = array();
 
-        $configSections = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')
-            ->getConfiguration()
-            ->getSections();
-
         // find nodes which are using $templateCode value
         $defaultCfgNodes = Mage::getConfig()->getXpath('default/*/*[*="' . $templateCode . '"]');
         if (!is_array($defaultCfgNodes)) {
@@ -79,9 +75,10 @@ class Mage_Adminhtml_Model_Email_Template extends Mage_Core_Model_Email_Template
             return array();
         }
 
-        $templatePaths = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')
-            ->getConfiguration()
-            ->getFieldsByAttribute('source_model', 'Mage_Backend_Model_Config_Source_Email_Template');
+        /** @var Mage_Backend_Model_Config_Structure $configStructure  */
+        $configStructure = Mage::getSingleton('Mage_Backend_Model_Config_Structure');
+        $templatePaths = $configStructure
+            ->getFieldPathsByAttribute('source_model', 'Mage_Backend_Model_Config_Source_Email_Template');
 
         if (!count($templatePaths)) {
             return array();

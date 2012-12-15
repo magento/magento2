@@ -38,7 +38,7 @@ class Magento_Acl_Role_Registry extends Zend_Acl_Role_Registry
      * @return Magento_Acl_Role_Registry
      * @throws Zend_Acl_Role_Registry_Exception
      */
-    function addParent($role, $parents)
+    public function addParent($role, $parents)
     {
         try {
             if ($role instanceof Zend_Acl_Role_Interface) {

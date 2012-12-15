@@ -56,7 +56,9 @@ class Mage_Core_Model_Resource_Store_CollectionTest extends PHPUnit_Framework_Te
     public function testSetWithoutDefaultFilter()
     {
         $this->_collection->setWithoutDefaultFilter();
-        $this->assertContains('store_id > 0', (string)$this->_collection->getSelect());
+        $quote = $this->_getQuoteIdentifierSymbol();
+
+        $this->assertContains("{$quote}store_id{$quote} > 0", (string)$this->_collection->getSelect());
     }
 
     /**
@@ -68,16 +70,38 @@ class Mage_Core_Model_Resource_Store_CollectionTest extends PHPUnit_Framework_Te
     public function testAddFilters()
     {
         $this->_collection->addGroupFilter(1);
-        $this->assertContains('group_id IN', (string)$this->_collection->getSelect(), 'Group filter');
+        $quote = $this->_getQuoteIdentifierSymbol();
+        $this->assertContains("{$quote}group_id{$quote} IN", (string)$this->_collection->getSelect(), 'Group filter');
 
         $this->_collection->addIdFilter(1);
-        $this->assertContains('store_id IN', (string)$this->_collection->getSelect(), 'Id filter');
+        $this->assertContains("{$quote}store_id{$quote} IN", (string)$this->_collection->getSelect(), 'Id filter');
 
         $this->_collection->addWebsiteFilter(1);
-        $this->assertContains('website_id IN', (string)$this->_collection->getSelect(), 'Website filter');
+        $this->assertContains(
+            "{$quote}website_id{$quote} IN",
+            (string)$this->_collection->getSelect(),
+            'Website filter'
+        );
 
         $this->_collection->addCategoryFilter(1);
-        $this->assertContains('root_category_id IN', (string)$this->_collection->getSelect(), 'Category filter');
+        $this->assertContains(
+            "{$quote}root_category_id{$quote} IN",
+            (string)$this->_collection->getSelect(),
+            'Category filter'
+        );
+    }
+
+    /**
+     * Get quote symbol from adapter.
+     *
+     * @return string
+     */
+    protected function _getQuoteIdentifierSymbol()
+    {
+        /** @var Zend_Db_Adapter_Abstract $adapter */
+        $adapter = $this->_collection->getConnection();
+        $quote = $adapter->getQuoteIdentifierSymbol();
+        return $quote;
     }
 
     public function testToOptionArrayHash()

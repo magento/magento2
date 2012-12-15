@@ -17,16 +17,7 @@ app/code/core/Mage/Adminhtml/Block/System/Store/Edit.php
 app/code/core/Mage/Adminhtml/controllers/Report/CustomerController.php
 app/code/core/Mage/Adminhtml/controllers/Report/ProductController.php
 app/code/core/Mage/Adminhtml/controllers/UrlrewriteController.php
-app/code/core/Mage/Backend/Model/Acl/Config.php
-app/code/core/Mage/Backend/Block/System/Config/Form/Field/Regexceptions.php
-app/code/core/Mage/Backend/Block/Widget/Grid/ColumnSet.php
-app/code/core/Mage/Backend/Block/Widget/Grid/Column/Filter/Theme.php
-app/code/core/Mage/Backend/Block/Widget/Grid/Export.php
-app/code/core/Mage/Backend/Block/Widget/Grid/ExportInterface.php
-app/code/core/Mage/Backend/Block/System/Config/Form/Field.php
-app/code/core/Mage/Backend/controllers/Adminhtml/System/ConfigController.php
-app/code/core/Mage/Backend/controllers/Adminhtml/SystemController.php
-app/code/core/Mage/Backend/Model/Widget/Grid
+app/code/core/Mage/Backend
 app/code/core/Mage/Catalog/Block/Product/Configurable
 app/code/core/Mage/Catalog/Model/Resource/Product/Collection
 app/code/core/Mage/CatalogInventory/Block/Adminhtml/Form/Field/Stock.php
@@ -75,6 +66,7 @@ app/code/core/Mage/Core/Controller/Varien/Router/Standard.php
 app/code/core/Mage/Core/Controller/Varien/Router/Abstract.php
 app/code/core/Mage/Cms/Controller/Router.php
 app/code/core/Mage/Page/Helper/Robots.php
+app/code/core/Mage/Webapi
 dev/shell
 dev/tests/integration
 dev/tests/js

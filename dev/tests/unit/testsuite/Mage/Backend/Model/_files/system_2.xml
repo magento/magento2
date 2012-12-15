@@ -41,11 +41,24 @@
                     <backend_model>Mage_Backend_Model_Config_Backend_Encrypted</backend_model>
                 </field>
             </group>
-            <group id="group_2" type="text">
-                <label>Group 2</label>
+            <group id="group_level_1" type="text">
+                <label>Group Level 1</label>
                 <field id="field_3" translate="label" showInWebsite="1" type="text">
                     <label>Field 3</label>
                 </field>
+                <group id="group_level_2" type="text">
+                    <label>Group Level 2</label>
+                    <field id="field_3.1" translate="label" showInWebsite="1" type="text">
+                        <label>Field 3.1</label>
+                    </field>
+                    <group id="group_level_3" type="text">
+                        <label>Group Level 3</label>
+                        <field id="field_3.1.1" translate="label" showInWebsite="1" type="text">
+                            <label>Field 3.1.1</label>
+                            <backend_model>Mage_Backend_Model_Config_Backend_Encrypted</backend_model>
+                        </field>
+                    </group>
+                </group>
             </group>
         </section>
         <section id="section_2" type="text">
@@ -80,6 +93,15 @@
                         <field id="field_3">0</field>
                     </depends>
                 </field>
+                <field id="field_5" translate="label" showInWebsite="1" type="text">
+                    <label></label>
+                </field>
+            </group>
+            <group id="group_4" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Group 4</label>
+                <depends>
+                    <field id="section_2/group_3/field_5">1</field>
+                </depends>
             </group>
         </section>
     </system>

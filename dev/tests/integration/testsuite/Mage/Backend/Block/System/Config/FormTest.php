@@ -31,9 +31,9 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
     {
         /** @var $layout Mage_Core_Model_Layout */
         $layout = Mage::getModel('Mage_Core_Model_Layout');
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
         /** @var $block Mage_Backend_Block_System_Config_Form */
         $block = $layout->createBlock('Mage_Backend_Block_System_Config_Form', 'block');
-        $block->setArea('adminhtml');
 
         /** @var $childBlock Mage_Core_Block_Text */
         $childBlock = $layout->addBlock('Mage_Core_Block_Text', 'element_dependence', 'block');
@@ -47,17 +47,18 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
 
     /**
      * @covers Mage_Backend_Block_System_Config_Form::initFields
-     * @param $section Mage_Core_Model_Config_Element
-     * @param $group Mage_Core_Model_Config_Element
-     * @param $field Mage_Core_Model_Config_Element
+     * @param $section Mage_Backend_Model_Config_Structure_Element_Section
+     * @param $group Mage_Backend_Model_Config_Structure_Element_Group
+     * @param $field Mage_Backend_Model_Config_Structure_Element_Field
      * @param array $configData
      * @param bool $expectedUseDefault
      * @dataProvider initFieldsInheritCheckboxDataProvider
      */
     public function testInitFieldsUseDefaultCheckbox($section, $group, $field, array $configData, $expectedUseDefault)
     {
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
         $form = new Varien_Data_Form();
-        $fieldset = $form->addFieldset($section['id'] . '_' . $group['id'], array());
+        $fieldset = $form->addFieldset($section->getId() . '_' . $group->getId(), array());
 
         /** @var $block Mage_Backend_Block_System_Config_FormStub */
         $block = Mage::app()->getLayout()->createBlock('Mage_Backend_Block_System_Config_FormStub');
@@ -66,10 +67,10 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $block->initFields($fieldset, $group, $section);
 
         $fieldsetSel = 'fieldset';
-        $valueSel = sprintf('input#%s_%s_%s', $section['id'], $group['id'], $field['id']);
+        $valueSel = sprintf('input#%s_%s_%s', $section->getId(), $group->getId(), $field->getId());
         $valueDisabledSel = sprintf('%s[disabled="disabled"]', $valueSel);
-        $useDefaultSel = sprintf('input#%s_%s_%s_inherit.checkbox', $section['id'], $group['id'],
-            $field['id']);
+        $useDefaultSel = sprintf('input#%s_%s_%s_inherit.checkbox', $section->getId(), $group->getId(),
+            $field->getId());
         $useDefaultCheckedSel = sprintf('%s[checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
 
@@ -96,15 +97,32 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
      */
     public function initFieldsInheritCheckboxDataProvider()
     {
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
+        Mage::getConfig()->setOptions(array('global_ban_use_cache' => 1));
+
+        $configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false, false);
+        $configMock->expects($this->any())->method('getModuleConfigurationFiles')
+            ->will($this->returnValue(array(__DIR__ . '/_files/test_section_config.xml')));
+        $configMock->expects($this->any())->method('getAreaConfig')->will($this->returnValue('adminhtml'));
+
+        $structureReader = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader',
+            array('config' => $configMock)
+        );
+        /** @var Mage_Backend_Model_Config_Structure $structure  */
         $structure = Mage::getSingleton('Mage_Backend_Model_Config_Structure', array(
-            'sourceFiles' => array(__DIR__ . '/_files/test_section_config.xml')
+            'structureReader' => $structureReader,
         ));
-        // @codingStandardsIgnoreStart
-        $section = $structure->getSection('test_section');
-        $group = $section['groups']['test_group'];
-        $field = $group['fields']['test_field'];
-        $fieldPath = isset($field['config_path']) ? (string) $field['config_path'] : null;
-        // @codingStandardsIgnoreEnd
+
+        /** @var Mage_Backend_Model_Config_Structure_Element_Section $section  */
+        $section = $structure->getElement('test_section');
+
+        /** @var Mage_Backend_Model_Config_Structure_Element_Group $group  */
+        $group = $structure->getElement('test_section/test_group');
+
+        /** @var Mage_Backend_Model_Config_Structure_Element_Field $field  */
+        $field = $structure->getElement('test_section/test_group/test_field');
+
+        $fieldPath = $field->getConfigPath();
 
         return array(
             array($section, $group, $field, array(), true),

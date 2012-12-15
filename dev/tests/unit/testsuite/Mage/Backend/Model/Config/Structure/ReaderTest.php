@@ -42,16 +42,19 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
      */
     protected $_cacheMock;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_converterMock;
+
     public function setUp()
     {
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_cacheMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
         $this->_cacheMock->expects($this->any())->method('canUse')->will($this->returnValue(true));
-
-        $this->_model = new Mage_Backend_Model_Config_Structure_Reader(array(
-            'config' => $this->_appConfigMock,
-            'cache' => $this->_cacheMock
-        ));
+        $this->_converterMock = $this->getMock(
+            'Mage_Backend_Model_Config_Structure_Converter', array(), array(), '', false
+        );
     }
 
     public function testGetConfigurationLoadsConfigFromCacheWhenCacheIsEnabled()
@@ -64,31 +67,32 @@ class Mage_Backend_Model_Config_Structure_ReaderTest extends PHPUnit_Framework_T
             ->with(Mage_Backend_Model_Config_Structure_Reader::CACHE_SYSTEM_CONFIGURATION_STRUCTURE)
             ->will($this->returnValue($cachedData));
 
-        $this->assertEquals($cachedObject, $this->_model->getConfiguration());
+        $model = new Mage_Backend_Model_Config_Structure_Reader(
+            $this->_appConfigMock, $this->_cacheMock, $this->_converterMock
+        );
+        $this->assertEquals($cachedObject, $model->getData());
     }
 
     public function testGetConfigurationLoadsConfigFromFilesAndCachesIt()
     {
+        $expected = array('var' => 'val');
         $this->_cacheMock->expects($this->once())->method('load')->will($this->returnValue(false));
 
-        $testFiles = array('file1', 'file2');
-
+        $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue(
+            array('config' => array('system' => $expected))
+        ));
+        $filePath = dirname(dirname(__DIR__)) . '/_files';
         $this->_appConfigMock->expects($this->once())
             ->method('getModuleConfigurationFiles')
-            ->will($this->returnValue($testFiles));
-
-        $configMock = new StdClass();
-        $configMock->foo = "bar";
-
-        $this->_appConfigMock->expects($this->once())
-            ->method('getModelInstance')
-            ->with('Mage_Backend_Model_Config_Structure', array('sourceFiles' => $testFiles))
-            ->will($this->returnValue($configMock));
+            ->will($this->returnValue(array($filePath . '/system_2.xml')));
 
         $this->_cacheMock->expects($this->once())->method('save')->with(
-            $this->isType('string')
+            serialize($expected)
         );
 
-        $this->assertEquals($configMock, $this->_model->getConfiguration());
+        $model = new Mage_Backend_Model_Config_Structure_Reader(
+            $this->_appConfigMock, $this->_cacheMock, $this->_converterMock, false
+        );
+        $this->assertEquals($expected, $model->getData());
     }
 }

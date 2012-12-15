@@ -9,7 +9,6 @@ app/code/core/Mage/Install/Model/Installer/Db/{Mssql,Oracle}.php
 app/code/core/Mage/Install/view/install/db/{mssql,oracle}.phtml
 app/code/core/Mage/Install/view/install/layout_{oracle,mssql}.xml
 app/etc/config.{oracle,mssql}.xml
-dev/api-tests
 dev/tests/functional
 dev/tests/integration/etc/local-{oracle,mssql}.xml.dist
 dev/tests/integration/framework/Magento/Test/Db/cleanup_database.{oracle,mssql}.sql

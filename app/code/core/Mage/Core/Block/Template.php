@@ -340,7 +340,7 @@ HTML;
     protected function _getAllowSymlinks()
     {
         if (is_null($this->_allowSymlinks)) {
-            $this->_allowSymlinks = Mage::getStoreConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
+            $this->_allowSymlinks = $this->_storeConfig->getConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
         }
         return $this->_allowSymlinks;
     }

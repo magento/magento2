@@ -378,7 +378,7 @@ implements Mage_HTTP_IClient
         }
 
         $this->curlOption(CURLOPT_URL, $uri);
-        $this->curlOption(CURLOPT_SSL_VERIFYPEER, FALSE);
+        $this->curlOption(CURLOPT_SSL_VERIFYPEER, true);
         $this->curlOption(CURLOPT_SSL_VERIFYHOST, 2);
 
         // force method to POST if secured

@@ -357,7 +357,7 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
     public function initConfigCache()
     {
         /**
-         * Funtionality related with config separation
+         * Functionality related with config separation
          */
         if ($this->_configCache === null) {
             $code = $this->getCode();
@@ -471,6 +471,10 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
             if ($placeholder == 'unsecure_public_url' || $placeholder == 'secure_public_url') {
                 $pubName = Mage_Core_Model_Config_Options::PUB_DIRECTORY;
                 $url.= (substr(dirname($_SERVER['SCRIPT_FILENAME']), -4) == '/' . $pubName) ? '' : $pubName . '/';
+                // @TODO: investigate how to build correct public URLs from API
+                if (Mage::registry('custom_entry_point')) {
+                    $url .= $pubName . '/';
+                }
             }
 
             if ($url) {

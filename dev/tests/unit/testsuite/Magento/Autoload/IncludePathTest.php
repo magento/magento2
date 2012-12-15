@@ -68,7 +68,7 @@ class Magento_Autoload_IncludePathTest extends PHPUnit_Framework_TestCase
         $fixture = uniqid();
         $this->assertNotContains($fixture, get_include_path());
         Magento_Autoload_IncludePath::addIncludePath(array($fixture), true);
-        $this->assertStringEndsWith(PATH_SEPARATOR . $fixture, get_include_path());
+        $this->assertStringStartsWith($fixture . PATH_SEPARATOR, get_include_path());
     }
 
     /**

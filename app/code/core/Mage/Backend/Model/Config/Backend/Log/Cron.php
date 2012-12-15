@@ -47,14 +47,11 @@ class Mage_Backend_Model_Config_Backend_Log_Cron extends Mage_Core_Model_Config_
         $enabled    = $this->getData('groups/log/fields/enabled/value');
         $time       = $this->getData('groups/log/fields/time/value');
         $frequncy   = $this->getData('groups/log/fields/frequency/value');
-        $errorEmail = $this->getData('groups/log/fields/error_email/value');
 
-        $frequencyDaily     = Mage_Cron_Model_Config_Source_Frequency::CRON_DAILY;
         $frequencyWeekly    = Mage_Cron_Model_Config_Source_Frequency::CRON_WEEKLY;
         $frequencyMonthly   = Mage_Cron_Model_Config_Source_Frequency::CRON_MONTHLY;
 
         if ($enabled) {
-            $cronDayOfWeek = date('N');
             $cronExprArray = array(
                 intval($time[1]),                                   # Minute
                 intval($time[0]),                                   # Hour
@@ -63,8 +60,7 @@ class Mage_Backend_Model_Config_Backend_Log_Cron extends Mage_Core_Model_Config_
                 ($frequncy == $frequencyWeekly) ? '1' : '*',        # Day of the Week
             );
             $cronExprString = join(' ', $cronExprArray);
-        }
-        else {
+        } else {
             $cronExprString = '';
         }
 

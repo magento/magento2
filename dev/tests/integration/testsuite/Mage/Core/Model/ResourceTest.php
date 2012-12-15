@@ -1,5 +1,7 @@
 <?php
 /**
+ * Test for Mage_Core_Model_Resource
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,13 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Mage_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Core_Model_ResourceTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -55,5 +53,26 @@ class Mage_Core_Model_ResourceTest extends PHPUnit_Framework_TestCase
         $this->assertContains($tablePrefix, $tableName);
         $this->assertContains($tableSuffix, $tableName);
         $this->assertContains($tableNameOrig, $tableName);
+    }
+
+    /**
+     * Init profiler during creation of DB connect
+     */
+    public function testProfilerInit()
+    {
+        $connReadConfig = Mage::getConfig()->getResourceConnectionConfig('core_read');
+        $profilerConfig = $connReadConfig->addChild('profiler');
+        $profilerConfig->addChild('class', 'Mage_Core_Model_Resource_Db_Profiler');
+        $profilerConfig->addChild('enabled', 'true');
+
+        /** @var Zend_Db_Adapter_Abstract $connection */
+        $connection = $this->_model->getConnection('core_read');
+        /** @var Mage_Core_Model_Resource_Db_Profiler $profiler */
+        $profiler = $connection->getProfiler();
+
+        $this->assertInstanceOf('Mage_Core_Model_Resource_Db_Profiler', $profiler);
+        $this->assertTrue($profiler->getEnabled());
+        $this->assertAttributeEquals((string)$connReadConfig->host, '_host', $profiler);
+        $this->assertAttributeEquals((string)$connReadConfig->type, '_type', $profiler);
     }
 }

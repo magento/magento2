@@ -37,10 +37,10 @@
     <ul class="dropdown-menu" <?php echo $this->getUiId("dropdown-menu"); ?>>
         <?php foreach ($this->getOptions() as $key => $option): ?>
         <li>
-            <span class="item<?php if($option['default']):?> item-default<?php endif; ?>" onclick="<?php echo $option['onclick']?>", <?php echo $this->getUiId("item", $key)?>>
+            <span class="item<?php if ($option['default']):?> item-default<?php endif; ?>" onclick="<?php echo $option['onclick']?>", <?php echo $this->getUiId("item", $key)?>>
                 <?php echo $option['label']?>
             </span>
-            <?php if(isset($option['hint'])): ?>
+            <?php if (isset($option['hint'])): ?>
             <div class="tooltip" <?php echo $this->getUiId("item", $key, "tooltip"); ?>>
                 <a href="<?php echo $option['hint']['href'] ?>" class="help"><?php echo $option['hint']['label'] ?></a>
             </div>

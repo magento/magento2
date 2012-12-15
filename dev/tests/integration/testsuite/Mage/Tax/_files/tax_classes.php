@@ -54,6 +54,8 @@ $taxRate = array(
 );
 $rate = Mage::getModel('Mage_Tax_Model_Calculation_Rate')->setData($taxRate)->save();
 
+Mage::register('_fixture/Mage_Tax_Model_Calculation_Rate', $rate);
+
 $ruleData = array(
     'code' => 'Test Rule',
     'priority' => '0',
@@ -66,3 +68,7 @@ $ruleData = array(
 $taxRule = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->setData($ruleData)->save();
 
 Mage::register('_fixture/Mage_Tax_Model_Calculation_Rule', $taxRule);
+
+$ruleData['code'] = 'Test Rule Duplicate';
+
+Mage::getModel('Mage_Tax_Model_Calculation_Rule')->setData($ruleData)->save();

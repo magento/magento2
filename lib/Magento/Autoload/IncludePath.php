@@ -55,7 +55,7 @@ class Magento_Autoload_IncludePath
         $result = implode(PATH_SEPARATOR, (array)$path);
         $includePath = get_include_path();
         if ($includePath) {
-            $result = $includePath . PATH_SEPARATOR . $result;
+            $result = $result . PATH_SEPARATOR . $includePath;
         }
         set_include_path($result);
     }

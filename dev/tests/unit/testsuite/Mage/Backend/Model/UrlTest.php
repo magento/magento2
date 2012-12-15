@@ -54,18 +54,31 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
     protected $_coreHelperMock;
 
     /**
+     * @var Mage_Core_Controller_Request_Http
+     */
+    protected $_storeConfigMock;
+
+    /**
+     * @var Mage_Core_Controller_Request_Http
+     */
+    protected $_menuConfigMock;
+
+    /**
+     * @var Mage_Core_Controller_Request_Http
+     */
+    protected $_backendHelperMock;
+
+    /**
      * @var Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
-    /**
-     * @var array
-     */
-    protected $_routes;
-
     public function setUp()
     {
         $this->_menuMock = $this->getMock('Mage_Backend_Model_Menu', array(), array(), '', false);
+
+        $this->_menuConfigMock = $this->getMock('Mage_Backend_Model_Menu_Config', array(), array(), '', false);
+        $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
 
         $this->_coreSessionMock = $this->getMock('Mage_Core_Model_Session', array('getFormKey'), array(), '', false);
         $this->_coreSessionMock->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
@@ -87,20 +100,18 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
         $helperMock = $this->getMock('Mage_Backend_Helper_Data', array(), array(), '', false);
         $helperMock->expects($this->any())->method('getAreaFrontName')
             ->will($this->returnValue($this->_areaFrontName));
+        $this->_storeConfigMock = $this->getMock('Mage_Core_Model_Store_Config', array(), array(), '', false);
+        $this->_storeConfigMock->expects($this->any())
+            ->method('getConfig')
+            ->with(Mage_Backend_Model_Url::XML_PATH_STARTUP_MENU_ITEM)
+            ->will($this->returnValue('Mage_Adminhtml::system_acl_roles'));
 
-        $this->_routes = array(
-            'admin' => 'adminhtml',
-            'adminhtml' => '',
-        );
-
-        $this->_model = new Mage_Backend_Model_Url(array(
-                'startupMenuItemId' => 'Mage_Adminhtml::system_acl_roles',
-                'menu' => $this->_menuMock,
-                'backendHelper' => $helperMock,
-                'coreSession' => $this->_coreSessionMock,
-                'coreHelper' => $this->_coreHelperMock,
-                'routes' => $this->_routes,
-            )
+        $this->_model = new Mage_Backend_Model_Url(
+            $helperMock,
+            $this->_coreHelperMock,
+            $this->_coreSessionMock,
+            $this->_storeConfigMock,
+            $this->_menuConfigMock
         );
 
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false);
@@ -169,13 +180,13 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
         $helperMock->expects($this->once())->method('getAreaFrontName')
             ->will($this->returnValue($this->_areaFrontName));
 
-        $urlModel = new Mage_Backend_Model_Url(array(
-            'startupMenuItemId' => 'Mage_Adminhtml::system_acl_roles',
-            'menu' => $this->_menuMock,
-            'backendHelper' => $helperMock,
-            'coreSession' => $this->_coreSessionMock,
-            'coreHelper' => $this->_coreHelperMock,
-        ));
+        $urlModel = new Mage_Backend_Model_Url(
+            $helperMock,
+            $this->_coreHelperMock,
+            $this->_coreSessionMock,
+            $this->_storeConfigMock,
+            $this->_menuConfigMock
+        );
 
         $urlModel->getAreaFrontName();
     }
@@ -204,13 +215,13 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
         $helperMock->expects($this->once())->method('getAreaFrontName')
             ->will($this->returnValue(''));
 
-        $urlModel = new Mage_Backend_Model_Url(array(
-            'startupMenuItemId' => 'Mage_Adminhtml::system_acl_roles',
-            'menu' => $this->_menuMock,
-            'backendHelper' => $helperMock,
-            'coreSession' => $this->_coreSessionMock,
-            'coreHelper' => $this->_coreHelperMock,
-        ));
+        $urlModel = new Mage_Backend_Model_Url(
+            $helperMock,
+            $this->_coreHelperMock,
+            $this->_coreSessionMock,
+            $this->_storeConfigMock,
+            $this->_menuConfigMock
+        );
 
         $moduleFrontName = 'moduleFrontName';
         $controllerName = 'controllerName';

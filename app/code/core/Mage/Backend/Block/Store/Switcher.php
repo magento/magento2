@@ -30,6 +30,7 @@
  * @category   Mage
  * @package    Mage_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Backend_Block_Store_Switcher extends Mage_Backend_Block_Template
 {
@@ -90,6 +91,25 @@ class Mage_Backend_Block_Store_Switcher extends Mage_Backend_Block_Template
      */
     protected $_storeGroupFactory;
 
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_App $application
+     * @param Mage_Core_Model_Website_Factory $websiteFactory
+     * @param Mage_Core_Model_Store_Group_Factory $storeGroupFactory
+     * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Mage_Core_Controller_Request_Http $request,
         Mage_Core_Model_Layout $layout,
@@ -148,7 +168,7 @@ class Mage_Backend_Block_Store_Switcher extends Mage_Backend_Block_Template
     {
         $websites = $this->_application->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
-            foreach ($websites as $websiteId => $website) {
+            foreach (array_keys($websites) as $websiteId) {
                 if (!in_array($websiteId, $websiteIds)) {
                     unset($websites[$websiteId]);
                 }
@@ -213,7 +233,7 @@ class Mage_Backend_Block_Store_Switcher extends Mage_Backend_Block_Template
         }
         $stores = $group->getStores();
         if ($storeIds = $this->getStoreIds()) {
-            foreach ($stores as $storeId => $store) {
+            foreach (array_keys($stores) as $storeId) {
                 if (!in_array($storeId, $storeIds)) {
                     unset($stores[$storeId]);
                 }

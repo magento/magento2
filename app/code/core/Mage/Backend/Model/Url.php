@@ -69,38 +69,34 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
     protected $_coreSession;
 
     /**
-     * @var array
+     * Menu config
+     *
+     * @var Mage_Backend_Model_Menu_Config
      */
-    protected $_routes;
+    protected $_menuConfig;
 
-    public function __construct(array $data = array())
-    {
+    /**
+     * @param Mage_Backend_Helper_Data $backendHelper
+     * @param Mage_Core_Helper_Data $coreHelper
+     * @param Mage_Core_Model_Session $coreSession
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Backend_Model_Menu_Config $menuConfig
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Backend_Helper_Data $backendHelper,
+        Mage_Core_Helper_Data $coreHelper,
+        Mage_Core_Model_Session $coreSession,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Backend_Model_Menu_Config $menuConfig,
+        array $data = array()
+    ) {
         parent::__construct($data);
-        $this->_startupMenuItemId = isset($data['startupMenuItemId']) ?
-            $data['startupMenuItemId'] :
-            Mage::getStoreConfig(self::XML_PATH_STARTUP_MENU_ITEM);
-
-        $this->_menu = isset($data['menu']) ? $data['menu'] : null;
-
-        $this->_backendHelper = isset($data['backendHelper']) ?
-            $data['backendHelper'] :
-            Mage::helper('Mage_Backend_Helper_Data');
-
-        if (false == ($this->_backendHelper instanceof Mage_Backend_Helper_Data)) {
-            throw new InvalidArgumentException('Backend helper is corrupted');
-        }
-
-        $this->_coreSession = isset($data['coreSession']) ?
-            $data['coreSession'] :
-            Mage::getSingleton('Mage_Core_Model_Session');
-
-        $this->_coreHelper = isset($data['coreHelper']) ?
-            $data['coreHelper'] :
-            Mage::helper('Mage_Core_Helper_Data');
-
-        $this->_routes = isset($data['routes']) ?
-            $data['routes'] :
-            array();
+        $this->_startupMenuItemId = $storeConfig->getConfig(self::XML_PATH_STARTUP_MENU_ITEM);
+        $this->_backendHelper = $backendHelper;
+        $this->_coreSession = $coreSession;
+        $this->_coreHelper = $coreHelper;
+        $this->_menuConfig = $menuConfig;
     }
 
     /**
@@ -108,7 +104,7 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
      *
      * @return bool
      */
-    public function getSecure()
+    public function isSecure()
     {
         if ($this->hasData('secure_is_forced')) {
             return $this->getData('secure');
@@ -155,14 +151,13 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
             return $result;
         }
 
-        $routeName = $this->getRouteName() ? $this->getRouteName() : '*';
-        $controllerName = $this->getControllerName() ? $this->getControllerName() : $this->getDefaultControllerName();
-        $actionName = $this->getActionName() ? $this->getActionName() : $this->getDefaultActionName();
+        $routeName = $this->getRouteName('*');
+        $controllerName = $this->getControllerName($this->getDefaultControllerName());
+        $actionName = $this->getActionName($this->getDefaultActionName());
 
         if ($cacheSecretKey) {
             $secret = array(self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$");
-        }
-        else {
+        } else {
             $secret = array(
                 self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName)
             );
@@ -308,7 +303,7 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
     protected function _getMenu()
     {
         if (is_null($this->_menu)) {
-            $this->_menu = Mage::getSingleton('Mage_Backend_Model_Menu_Config')->getMenu();
+            $this->_menu = $this->_menuConfig->getMenu();
         }
         return $this->_menu;
     }

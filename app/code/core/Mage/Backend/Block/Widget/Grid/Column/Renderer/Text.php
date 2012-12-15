@@ -57,8 +57,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Text
             $data = parent::_getValue($row);
             $string = is_null($data) ? $defaultValue : $data;
             return $this->escapeHtml($string);
-        }
-        elseif (preg_match_all($this->_variablePattern, $format, $matches)) {
+        } elseif (preg_match_all($this->_variablePattern, $format, $matches)) {
             // Parsing of format string
             $formattedString = $format;
             foreach ($matches[0] as $matchIndex=>$match) {

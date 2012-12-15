@@ -249,7 +249,7 @@ class Mage_Core_Model_Url extends Varien_Object
     public function getConfigData($key, $prefix = null)
     {
         if (is_null($prefix)) {
-            $prefix = 'web/' . ($this->getSecure() ? 'secure' : 'unsecure').'/';
+            $prefix = 'web/' . ($this->isSecure() ? 'secure' : 'unsecure').'/';
         }
         $path = $prefix . $key;
 
@@ -305,7 +305,7 @@ class Mage_Core_Model_Url extends Varien_Object
      *
      * @return bool
      */
-    public function getSecure()
+    public function isSecure()
     {
         if ($this->hasData('secure_is_forced')) {
             return (bool)$this->getData('secure');
@@ -382,7 +382,7 @@ class Mage_Core_Model_Url extends Varien_Object
             $this->setType(Mage_Core_Model_Store::URL_TYPE_DIRECT_LINK);
         }
 
-        return $this->getStore()->getBaseUrl($this->getType(), $this->getSecure());
+        return $this->getStore()->getBaseUrl($this->getType(), $this->isSecure());
     }
 
     /**
@@ -538,11 +538,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve route name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getRouteName()
+    public function getRouteName($default = null)
     {
-        return $this->_getData('route_name');
+        return $this->_getData('route_name') ? $this->_getData('route_name') : $default;
     }
 
     /**
@@ -565,11 +566,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve controller name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getControllerName()
+    public function getControllerName($default = null)
     {
-        return $this->_getData('controller_name');
+        return $this->_getData('controller_name') ? $this->_getData('controller_name') : null;
     }
 
     /**
@@ -591,11 +593,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve action name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getActionName()
+    public function getActionName($default = null)
     {
-        return $this->_getData('action_name');
+        return $this->_getData('action_name') ? $this->_getData('action_name') : $default;
     }
 
     /**
@@ -1038,7 +1041,7 @@ class Mage_Core_Model_Url extends Varien_Object
 
         $sessionId = $session->getSessionIdForHost($url);
         if (Mage::app()->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->getSecure() ? 'S' : 'U'); // Secure/Unsecure
+            $this->setQueryParam('___SID', $this->isSecure() ? 'S' : 'U'); // Secure/Unsecure
         } else if ($sessionId) {
             $this->setQueryParam($session->getSessionIdQueryParam(), $sessionId);
         }

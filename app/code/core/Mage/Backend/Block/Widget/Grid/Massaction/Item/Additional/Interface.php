@@ -34,5 +34,5 @@
  */
 interface Mage_Backend_Block_Widget_Grid_Massaction_Item_Additional_Interface
 {
-    function createFromConfiguration(array $configuration);
+    public function createFromConfiguration(array $configuration);
 }

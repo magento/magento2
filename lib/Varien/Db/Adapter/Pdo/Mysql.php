@@ -1,5 +1,7 @@
 <?php
 /**
+ * Mysql PDO DB adapter
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,14 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Varien
- * @package    Varien_Db
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Mysql PDO DB adapter
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements Varien_Db_Adapter_Interface
 {
@@ -442,6 +438,13 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
                 $this->_debugStat(self::DEBUG_QUERY, $sql, $bind, $result);
                 return $result;
             } catch (Exception $e) {
+                // Finalize broken query
+                $profiler = $this->getProfiler();
+                if ($profiler instanceof Varien_Db_Profiler) {
+                    /** @var Varien_Db_Profiler $profiler */
+                    $profiler->queryEndLast();
+                }
+
                 /** @var $pdoException PDOException */
                 $pdoException = null;
                 if ($e instanceof PDOException) {

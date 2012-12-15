@@ -1,66 +1,55 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Server
- * @subpackage Method
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Callback.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Server
  */
+
+namespace Zend\Server\Method;
+
+use Zend\Server;
 
 /**
  * Method callback metadata
  *
  * @category   Zend
  * @package    Zend_Server
- * @subpackage Method
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @subpackage Zend_Server_Method
  */
-class Zend_Server_Method_Callback
+class Callback
 {
     /**
      * @var string Class name for class method callback
      */
-    protected $_class;
+    protected $class;
 
     /**
      * @var string Function name for function callback
      */
-    protected $_function;
+    protected $function;
 
     /**
      * @var string Method name for class method callback
      */
-    protected $_method;
+    protected $method;
 
     /**
      * @var string Callback type
      */
-    protected $_type;
+    protected $type;
 
     /**
      * @var array Valid callback types
      */
-    protected $_types = array('function', 'static', 'instance');
+    protected $types = array('function', 'static', 'instance');
 
     /**
      * Constructor
      *
      * @param  null|array $options
-     * @return void
      */
     public function __construct($options = null)
     {
@@ -73,7 +62,7 @@ class Zend_Server_Method_Callback
      * Set object state from array of options
      *
      * @param  array $options
-     * @return Zend_Server_Method_Callback
+     * @return \Zend\Server\Method\Callback
      */
     public function setOptions(array $options)
     {
@@ -90,14 +79,14 @@ class Zend_Server_Method_Callback
      * Set callback class
      *
      * @param  string $class
-     * @return Zend_Server_Method_Callback
+     * @return \Zend\Server\Method\Callback
      */
     public function setClass($class)
     {
         if (is_object($class)) {
             $class = get_class($class);
         }
-        $this->_class = $class;
+        $this->class = $class;
         return $this;
     }
 
@@ -108,18 +97,18 @@ class Zend_Server_Method_Callback
      */
     public function getClass()
     {
-        return $this->_class;
+        return $this->class;
     }
 
     /**
      * Set callback function
      *
      * @param  string $function
-     * @return Zend_Server_Method_Callback
+     * @return \Zend\Server\Method\Callback
      */
     public function setFunction($function)
     {
-        $this->_function = (string) $function;
+        $this->function = (string) $function;
         $this->setType('function');
         return $this;
     }
@@ -131,18 +120,18 @@ class Zend_Server_Method_Callback
      */
     public function getFunction()
     {
-        return $this->_function;
+        return $this->function;
     }
 
     /**
      * Set callback class method
      *
      * @param  string $method
-     * @return Zend_Server_Method_Callback
+     * @return \Zend\Server\Method\Callback
      */
     public function setMethod($method)
     {
-        $this->_method = $method;
+        $this->method = $method;
         return $this;
     }
 
@@ -153,23 +142,22 @@ class Zend_Server_Method_Callback
      */
     public function getMethod()
     {
-        return $this->_method;
+        return $this->method;
     }
 
     /**
      * Set callback type
      *
      * @param  string $type
-     * @return Zend_Server_Method_Callback
-     * @throws Zend_Server_Exception
+     * @return Callback
+     * @throws Server\Exception\InvalidArgumentException
      */
     public function setType($type)
     {
-        if (!in_array($type, $this->_types)) {
-            #require_once 'Zend/Server/Exception.php';
-            throw new Zend_Server_Exception('Invalid method callback type  passed to ' . __CLASS__ . '::' . __METHOD__);
+        if (!in_array($type, $this->types)) {
+            throw new Server\Exception\InvalidArgumentException('Invalid method callback type "' . $type . '" passed to ' . __CLASS__ . '::' . __METHOD__);
         }
-        $this->_type = $type;
+        $this->type = $type;
         return $this;
     }
 
@@ -180,7 +168,7 @@ class Zend_Server_Method_Callback
      */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**

@@ -23,11 +23,18 @@
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Xml_Generator
 {
+    /**
+     * This value is used to replace numeric keys while formatting data for xml output.
+     */
+    const DEFAULT_ENTITY_ITEM_NAME = 'item';
+
     protected $_dom = null;
     protected $_currentDom;
+
+    /** @var string */
+    protected $_defaultIndexedArrayItemName;
 
     public function __construct()
     {
@@ -61,7 +68,7 @@ class Mage_Xml_Generator
         $parentNode = $this->_getCurrentDom();
         if(!$content || !count($content)) {
             return $this;
-        }        
+        }
         foreach ($content as $_key=>$_item) {
             try{
                 $node = $this->getDom()->createElement($_key);
@@ -94,7 +101,7 @@ class Mage_Xml_Generator
                 $this->_setCurrentDom($node)->arrayToXml($_item);
             } elseif (is_array($_item) && isset($_item[0])) {
                 foreach($_item as $k=>$v) {
-                    $this->_setCurrentDom($node)->arrayToXml($v);
+                    $this->_setCurrentDom($node)->arrayToXml(array($this->_getIndexedArrayItemName() => $v));
                 }
             }
         }
@@ -112,4 +119,27 @@ class Mage_Xml_Generator
         return $this;
     }
 
+    /**
+     * Set xml node name to use instead of numeric index during numeric arrays conversion.
+     *
+     * @param $name
+     * @return Mage_Xml_Generator
+     */
+    public function setIndexedArrayItemName($name)
+    {
+        $this->_defaultIndexedArrayItemName = $name;
+        return $this;
+    }
+
+    /**
+     * Get xml node name to use instead of numeric index during numeric arrays conversion.
+     *
+     * @return string
+     */
+    protected function _getIndexedArrayItemName()
+    {
+        return isset($this->_defaultIndexedArrayItemName)
+            ? $this->_defaultIndexedArrayItemName
+            : self::DEFAULT_ENTITY_ITEM_NAME;
+    }
 }

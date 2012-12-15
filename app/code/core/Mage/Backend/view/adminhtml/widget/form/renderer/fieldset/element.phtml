@@ -32,7 +32,7 @@ $_trId    = $_element->getHtmlContainerId();
 $_class   = $_element->getFieldsetHtmlClass();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> <?php echo $this->getUiId('form-row',$_element->getId()) ?>>
+<tr<?php if ($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?> <?php echo $this->getUiId('form-row',$_element->getId()) ?>>
     <?php if ($_element->getType()=='hidden'): ?>
     <td colspan="2" class="hidden" <?php echo $this->getUiId($_element->getId()) ?>><?php echo trim($_element->getElementHtml()) ?></td>
     <?php else: ?>

@@ -64,7 +64,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Select extends Mage_Backend_B
     protected function _renderOption($option, $value)
     {
         $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '' );
-        return '<option value="'. $this->escapeHtml($option['value']).'"'.$selected.'>'.$this->escapeHtml($option['label']).'</option>';
+        return '<option value="'
+            . $this->escapeHtml($option['value']).'"'.$selected.'>'
+            . $this->escapeHtml($option['label']) . '</option>';
     }
 
     public function getHtml()
@@ -73,7 +75,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Select extends Mage_Backend_B
             . $this->getUiId('filter', $this->_getHtmlName())
             . 'class="no-changes">';
         $value = $this->getValue();
-        foreach ($this->_getOptions() as $option){
+        foreach ($this->_getOptions() as $option) {
             if (is_array($option['value'])) {
                 $html .= '<optgroup label="' . $this->escapeHtml($option['label']) . '">';
                 foreach ($option['value'] as $subOption) {

@@ -44,7 +44,8 @@ class Mage_Backend_Model_Config_Backend_Currency_Base extends Mage_Backend_Model
     protected function _afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Selected base currency is not available in installed currencies.'));
+            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')
+                ->__('Selected base currency is not available in installed currencies.'));
         }
 
         return $this;

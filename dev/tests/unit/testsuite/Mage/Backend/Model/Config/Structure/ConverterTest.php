@@ -34,7 +34,25 @@ class Mage_Backend_Model_Config_Structure_ConverterTest extends PHPUnit_Framewor
 
     public function setUp()
     {
-        $this->_model = new Mage_Backend_Model_Config_Structure_Converter();
+        $factoryMock = $this->getMock('Mage_Backend_Model_Config_Structure_Mapper_Factory',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
+
+        $mapperMock = $this->getMock('Mage_Backend_Model_Config_Structure_Mapper_Dependencies',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
+        $mapperMock->expects($this->any())->method('map')->will($this->returnArgument(0));
+        $factoryMock->expects($this->any())->method('create')->will($this->returnValue($mapperMock));
+
+        $this->_model = new Mage_Backend_Model_Config_Structure_Converter($factoryMock);
     }
 
     public function testConvertCorrectlyConvertsConfigStructureToArray()

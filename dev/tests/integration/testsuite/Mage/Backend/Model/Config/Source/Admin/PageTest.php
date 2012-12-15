@@ -32,6 +32,7 @@ class Mage_Backend_Model_Config_Source_Admin_PageTest extends Mage_Adminhtml_Uti
 {
     public function testToOptionArray()
     {
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
         $this->dispatch('backend/admin/system_config/edit/section/admin');
 
         $dom = PHPUnit_Util_XML::load($this->getResponse()->getBody(), true);

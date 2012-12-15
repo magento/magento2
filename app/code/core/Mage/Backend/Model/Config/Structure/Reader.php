@@ -33,57 +33,127 @@
  * @package     Mage_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Model_Config_Structure_Reader
+class Mage_Backend_Model_Config_Structure_Reader extends Magento_Config_XmlAbstract
 {
     const CACHE_SYSTEM_CONFIGURATION_STRUCTURE = 'backend_system_configuration_structure';
 
     /**
-     * @var Mage_Core_Model_Cache
+     * Turns runtime validation on/off
+     *
+     * @var bool
      */
-    protected $_cache;
-
-
-    /**
-     * @var Mage_Core_Model_Config
-     */
-    protected $_appConfig;
+    protected $_runtimeValidation;
 
     /**
-     * @param array $data
+     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Backend_Model_Config_Structure_Converter $structureConverter
+     * @param bool $runtimeValidation
      */
-    public function __construct(array $data = array())
-    {
-        $this->_appConfig = isset($data['config']) ? $data['config'] : Mage::getConfig();
-        $this->_cache = isset($data['cache']) ? $data['cache'] : Mage::app()->getCacheInstance();
+    public function __construct(
+        Mage_Core_Model_Config $config,
+        Mage_Core_Model_Cache $cache,
+        Mage_Backend_Model_Config_Structure_Converter $structureConverter,
+        $runtimeValidation = true
+    ) {
+        $this->_runtimeValidation = $runtimeValidation;
+        $this->_converter = $structureConverter;
+
+        if ($cache->canUse('config')
+            && ($cachedData = $cache->load(self::CACHE_SYSTEM_CONFIGURATION_STRUCTURE))) {
+            $this->_data = unserialize($cachedData);
+        } else {
+            $fileNames = $config
+                ->getModuleConfigurationFiles('adminhtml' . DIRECTORY_SEPARATOR . 'system.xml');
+            parent::__construct($fileNames);
+
+            if ($cache->canUse('config')) {
+                $cache->save(
+                    serialize($this->_data),
+                    self::CACHE_SYSTEM_CONFIGURATION_STRUCTURE,
+                    array(Mage_Core_Model_Config::CACHE_TAG)
+                );
+            }
+        }
     }
 
     /**
-     * Load system configuration
+     * Get absolute path to the XML-schema file
      *
-     * @return Mage_Backend_Model_Config_Structure
+     * @return string
      */
-    public function getConfiguration()
+    public function getSchemaFile()
     {
-        if ($this->_cache->canUse('config')) {
-            $cache = $this->_cache->load(self::CACHE_SYSTEM_CONFIGURATION_STRUCTURE);
-            if ($cache) {
-                return unserialize($cache);
-            }
-        }
+        return __DIR__ . '/system.xsd';
+    }
 
-        $fileNames = $this->_appConfig->getModuleConfigurationFiles('adminhtml' . DIRECTORY_SEPARATOR . 'system.xml');
-        $config = $this->_appConfig->getModelInstance(
-            'Mage_Backend_Model_Config_Structure', array('sourceFiles' => $fileNames)
+    /**
+     * Get absolute path to the XML-schema file
+     *
+     * @return string
+     */
+    public function getPerFileSchemaFile()
+    {
+        return __DIR__ . '/system_file.xsd';
+    }
+
+    /**
+     * Extract configuration data from the DOM structure
+     *
+     * @param DOMDocument $dom
+     * @return array|DOMNodeList
+     */
+    protected function _extractData(DOMDocument $dom)
+    {
+        $data = $this->_converter->convert($dom);
+        return $data['config']['system'];
+    }
+
+    /**
+     * Get XML-contents, initial for merging
+     *
+     * @return string
+     */
+    protected function _getInitialXml()
+    {
+        return '<?xml version="1.0" encoding="utf-8"?><config><system></system></config>';
+    }
+
+    /**
+     * Get list of paths to identifiable nodes
+     *
+     * @return array
+     */
+    protected function _getIdAttributes()
+    {
+        return array(
+            '/config/system/tab' => 'id',
+            '/config/system/section' => 'id',
+            '/config/system/section/group' => 'id',
+            '/config/system/section/group/field' => 'id',
+            '/config/system/section/group/group/field' => 'id',
+            '/config/system/section/group/group/group/field' => 'id',
+            '/config/system/section/group/group/group/group/field' => 'id',
         );
+    }
 
-        if ($this->_cache->canUse('config')) {
-            $this->_cache->save(
-                serialize($config),
-                self::CACHE_SYSTEM_CONFIGURATION_STRUCTURE,
-                array(Mage_Core_Model_Config::CACHE_TAG)
-            );
-        }
+    /**
+     * Check whether runtime validation should be performed
+     *
+     * @return bool
+     */
+    protected function _isRuntimeValidated()
+    {
+        return $this->_runtimeValidation;
+    }
 
-        return $config;
+    /**
+     * Retrieve all sections system configuration layout
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->_data;
     }
 }

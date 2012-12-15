@@ -1,5 +1,7 @@
 <?php
 /**
+ * Resources and connections registry and factory
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,16 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Core
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * Resources and connections registry and factory
- *
  */
 class Mage_Core_Model_Resource
 {
@@ -159,11 +153,20 @@ class Mage_Core_Model_Resource
         // try to get adapter and create connection
         $className  = $this->_getConnectionAdapterClassName($type);
         if ($className) {
-            // define profiler settings
-            $config['profiler'] = isset($config['profiler']) && $config['profiler'] != 'false';
-
             $connection = new $className($config);
             if ($connection instanceof Varien_Db_Adapter_Interface) {
+                /** @var Zend_Db_Adapter_Abstract $connection */
+
+                // Set additional params for Magento profiling tool
+                $profiler = $connection->getProfiler();
+                if ($profiler instanceof Varien_Db_Profiler) {
+                    /** @var Varien_Db_Profiler $profiler */
+                    $profiler->setType($type);
+
+                    $host = !empty($config['host']) ? $config['host'] : '';
+                    $profiler->setHost($host);
+                }
+
                 // run after initialization statements
                 if (!empty($config['initStatements'])) {
                     $connection->query($config['initStatements']);
@@ -176,6 +179,7 @@ class Mage_Core_Model_Resource
         // try to get connection from type
         if (!$connection) {
             $typeInstance = $this->getConnectionTypeInstance($type);
+            /** @var Mage_Core_Model_Resource_Type_Abstract $typeInstance */
             $connection = $typeInstance->getConnection($config);
             if (!$connection instanceof Varien_Db_Adapter_Interface) {
                 $connection = false;
@@ -216,7 +220,6 @@ class Mage_Core_Model_Resource
         }
         return $this->_connectionTypes[$type];
     }
-
 
     /**
      * Get resource table name, validated by db adapter

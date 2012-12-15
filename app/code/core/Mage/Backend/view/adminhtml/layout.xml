@@ -44,8 +44,17 @@
     </adminhtml_auth_login>
 
     <adminhtml_system_config_edit>
+        <reference name="js">
+            <block type="Mage_Backend_Block_Template" template="Mage_Adminhtml::system/shipping/ups.phtml"/>
+            <block type="Mage_Backend_Block_Template" template="system/config/js.phtml"/>
+            <block type="Mage_Backend_Block_Template" template="Mage_Adminhtml::system/shipping/applicable_country.phtml"/>
+        </reference>
         <reference name="left">
+            <block type="Mage_Backend_Block_System_Config_Tabs" name="adminhtml.system.config.tabs" before="-"/>
             <block type="Mage_Backend_Block_System_Config_Switcher" name="adminhtml.system.config.switcher" before="-"/>
+        </reference>
+        <reference name="content">
+            <block type="Mage_Backend_Block_System_Config_Edit" />
         </reference>
     </adminhtml_system_config_edit>
 </layout>

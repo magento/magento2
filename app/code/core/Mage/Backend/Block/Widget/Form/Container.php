@@ -48,12 +48,12 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
         parent::_construct();
 
         $this->_addButton('back', array(
-            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Back'),
+            'label'     => $this->__('Back'),
             'onclick'   => 'setLocation(\'' . $this->getBackUrl() . '\')',
             'class'     => 'back',
         ), -1);
         $this->_addButton('reset', array(
-            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Reset'),
+            'label'     => $this->__('Reset'),
             'onclick'   => 'setLocation(window.location.href)',
         ), -1);
 
@@ -61,15 +61,15 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
 
         if (! empty($objId)) {
             $this->_addButton('delete', array(
-                'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Delete'),
+                'label'     => $this->__('Delete'),
                 'class'     => 'delete',
-                'onclick'   => 'deleteConfirm(\''. Mage::helper('Mage_Backend_Helper_Data')->__('Are you sure you want to do this?')
-                    .'\', \'' . $this->getDeleteUrl() . '\')',
+                'onclick'   => 'deleteConfirm(\'' . $this->__('Are you sure you want to do this?')
+                    . '\', \'' . $this->getDeleteUrl() . '\')',
             ));
         }
 
         $this->_addButton('save', array(
-            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Save'),
+            'label'     => $this->__('Save'),
             'class'     => 'save',
             'data_attr'  => array(
                 'widget-button' => array('event' => 'save', 'related' => '#edit_form')

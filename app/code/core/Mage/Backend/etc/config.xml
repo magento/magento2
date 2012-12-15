@@ -74,7 +74,50 @@
         <di>
             <preferences>
                 <Mage_Backend_Model_Auth_StorageInterface>Mage_Backend_Model_Auth_Session</Mage_Backend_Model_Auth_StorageInterface>
+                <Mage_Backend_Model_Config_Structure_SearchInterface>Mage_Backend_Model_Config_Structure</Mage_Backend_Model_Config_Structure_SearchInterface>
             </preferences>
+            <Mage_Backend_Model_Config_Structure_Element_Iterator_Tab>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Iterator_Tab>
+            <Mage_Backend_Model_Config_Structure_Element_Iterator_Section>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Iterator_Section>
+            <Mage_Backend_Model_Config_Structure_Element_Iterator_Group>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Iterator_Group>
+            <Mage_Backend_Model_Config_Structure_Element_Iterator_Field>
+                <parameters>
+                    <groupFlyweight>Mage_Backend_Model_Config_Structure_Element_Group_Proxy</groupFlyweight>
+                </parameters>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Iterator_Field>
+            <Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper>
+                <parameters>
+                    <fieldLocator>Mage_Backend_Model_Config_Structure_Search_Proxy</fieldLocator>
+                </parameters>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Dependency_Mapper>
+            <Mage_Backend_Model_Config_Structure_Element_Tab>
+                <parameters>
+                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Section</childrenIterator>
+                </parameters>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Tab>
+            <Mage_Backend_Model_Config_Structure_Element_Section>
+                <parameters>
+                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Group</childrenIterator>
+                </parameters>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Section>
+            <Mage_Backend_Model_Config_Structure_Element_Group>
+                <parameters>
+                    <childrenIterator>Mage_Backend_Model_Config_Structure_Element_Iterator_Field</childrenIterator>
+                </parameters>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Group>
+            <Mage_Backend_Model_Config_Structure_Element_Group_Proxy>
+                <shared>0</shared>
+            </Mage_Backend_Model_Config_Structure_Element_Group_Proxy>
         </di>
     </global>
     <admin>

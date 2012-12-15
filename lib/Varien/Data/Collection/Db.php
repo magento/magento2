@@ -411,7 +411,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected function _translateCondition($field, $condition)
     {
         $field = $this->_getMappedField($field);
-        return $this->_getConditionSql($field, $condition);
+        return $this->_getConditionSql($this->getConnection()->quoteIdentifier($field), $condition);
     }
 
     /**

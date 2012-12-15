@@ -25,90 +25,74 @@
  */
 
 /**
- * Presentation layer validator class.
+ * Validator class that represents chain of validators.
  */
-class Magento_Validator
+class Magento_Validator extends Magento_Validator_ValidatorAbstract
 {
-    /** @var string */
-    protected $_entityName;
-    /** @var string */
-    protected $_groupName;
-    /** @var Magento_Validator_Config */
-    protected $_config;
-    /** @var array */
-    protected $_messages = array();
+    /**
+     * Validator chain
+     *
+     * @var array
+     */
+    protected $_validators = array();
 
     /**
-     * Set validation entity and group names, load validator config.
+     * Adds a validator to the end of the chain
      *
-     * @param string $entityName
-     * @param string $groupName
-     * @param Magento_Validator_Config $config
-     * @throws InvalidArgumentException
+     * @param Magento_Validator_ValidatorInterface $validator
+     * @param boolean $breakChainOnFailure
+     * @return Magento_Validator
      */
-    public function __construct($entityName, $groupName, Magento_Validator_Config $config)
+    public function addValidator(Magento_Validator_ValidatorInterface $validator, $breakChainOnFailure = false)
     {
-        if (!$entityName) {
-            throw new InvalidArgumentException('Validation entity name is required.');
+        if (!$validator->hasTranslator()) {
+            $validator->setTranslator($this->getTranslator());
         }
-        $this->_entityName = $entityName;
-
-        if (!$groupName) {
-            throw new InvalidArgumentException('Validation group name is required.');
-        }
-        $this->_groupName = $groupName;
-
-        $this->_config = $config;
+        $this->_validators[] = array(
+            'instance' => $validator,
+            'breakChainOnFailure' => (boolean)$breakChainOnFailure
+        );
+        return $this;
     }
 
     /**
-     * Validate input data against validation rules, defined in config group.
+     * Returns true if and only if $value passes all validations in the chain
      *
-     * @param array $data
-     * @throws Magento_Exception
-     * @return bool
+     * @param mixed $value
+     * @return boolean
      */
-    public function isValid(array $data)
+    public function isValid($value)
     {
-        $isValid = true;
-        $rules = $this->_config->getValidationRules($this->_entityName, $this->_groupName);
-        foreach ($rules as $rule) {
-            foreach ($rule as $constraintConfig) {
-                $constraint = $constraintConfig['constraint'];
-                $field = isset($constraintConfig['field']) ? $constraintConfig['field'] : null;
-                if ($constraint instanceof Zend_Validate_Interface) {
-                    /** @var Zend_Validate_Interface $constraint */
-                    $value = isset($data[$field]) ? $data[$field] : null;
-                    if (!$constraint->isValid($value)) {
-                        foreach ($constraint->getMessages() as $error) {
-                            $this->_messages[$field][] = $error;
-                        }
-                        $isValid = false;
-                    }
-                } else {
-                    /** @var Magento_Validator_ConstraintAbstract $constraint */
-                    if (!$constraint->isValidData($data, $field)) {
-                        foreach ($constraint->getErrors() as $errorFieldName => $errors) {
-                            foreach ($errors as $error) {
-                                $this->_messages[$errorFieldName][] = $error;
-                            }
-                        }
-                        $isValid = false;
-                    }
-                }
+        $result = true;
+        $this->_clearMessages();
+
+        /** @var $validator Zend_Validate_Interface */
+        foreach ($this->_validators as $element) {
+            $validator = $element['instance'];
+            if ($validator->isValid($value)) {
+                continue;
+            }
+            $result = false;
+            $this->_addMessages($validator->getMessages());
+            if ($element['breakChainOnFailure']) {
+                break;
             }
         }
 
-        return $isValid;
+        return $result;
     }
 
     /**
-     * Get validation messages.
+     * Set translator to chain.
      *
-     * @return array
+     * @param Magento_Translate_AdapterInterface|null $translator
+     * @return Magento_Validator_ValidatorAbstract
      */
-    public function getMessages()
+    public function setTranslator($translator = null)
     {
-        return $this->_messages;
+        foreach ($this->_validators as $validator) {
+            $validator['instance']->setTranslator($translator);
+        }
+        return parent::setTranslator($translator);
     }
 }

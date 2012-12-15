@@ -39,10 +39,25 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
     public function getHtml()
     {
         $html  = '<div class="range">';
-        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('From').':</span> <input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$this->_getHtmlId().'_from" value="'.$this->getEscapedValue('from').'" class="input-text no-changes"  ' . $this->getUiId('filter', $this->_getHtmlName(), 'from') .  '/></div>';
-        $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('To').' : </span><input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$this->_getHtmlId().'_to" value="'.$this->getEscapedValue('to').'" class="input-text no-changes" '  . $this->getUiId('filter', $this->_getHtmlName(), 'to') .  '/></div>';
-        if ($this->getDisplayCurrencySelect())
-            $html .= '<div class="range-line"><span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('In').' : </span>' . $this->_getCurrencySelectHtml() . '</div>';
+        $html .= '<div class="range-line"><span class="label">'
+            . Mage::helper('Mage_Backend_Helper_Data')->__('From')
+            . ':</span> <input type="text" name="'
+            . $this->_getHtmlName()
+            . '[from]" id="' . $this->_getHtmlId() . '_from" value="'
+            . $this->getEscapedValue('from') . '" class="input-text no-changes"  '
+            . $this->getUiId('filter', $this->_getHtmlName(), 'from') . '/></div>';
+        $html .= '<div class="range-line"><span class="label">'
+            . Mage::helper('Mage_Backend_Helper_Data')->__('To')
+            . ' : </span><input type="text" name="'
+            . $this->_getHtmlName() . '[to]" id="' . $this->_getHtmlId() . '_to" value="'.$this->getEscapedValue('to')
+            . '" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'to') . '/></div>';
+
+        if ($this->getDisplayCurrencySelect()) {
+            $html .= '<div class="range-line"><span class="label">'
+                . Mage::helper('Mage_Backend_Helper_Data')->__('In') . ' : </span>'
+                . $this->_getCurrencySelectHtml() . '</div>';
+        }
+
         $html .= '</div>';
 
         return $html;
@@ -68,23 +83,25 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
 
     protected function _getCurrencyModel()
     {
-        if (is_null($this->_currencyModel))
+        if (is_null($this->_currencyModel)) {
             $this->_currencyModel = Mage::getModel('Mage_Directory_Model_Currency');
+        }
 
         return $this->_currencyModel;
     }
 
     protected function _getCurrencySelectHtml()
     {
-
         $value = $this->getEscapedValue('currency');
-        if (!$value)
+        if (!$value) {
             $value = $this->getColumn()->getCurrencyCode();
+        }
 
         $html  = '';
         $html .= '<select name="'.$this->_getHtmlName().'[currency]" id="'.$this->_getHtmlId().'_currency">';
         foreach ($this->_getCurrencyList() as $currency) {
-            $html .= '<option value="' . $currency . '" '.($currency == $value ? 'selected="selected"' : '').'>' . $currency . '</option>';
+            $html .= '<option value="' . $currency . '" '
+                . ($currency == $value ? 'selected="selected"' : '').'>' . $currency . '</option>';
         }
         $html .= '</select>';
         return $html;
@@ -104,7 +121,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
             return $this->getData('value', $index);
         }
         $value = $this->getData('value');
-        if ((isset($value['from']) && strlen($value['from']) > 0) || (isset($value['to']) && strlen($value['to']) > 0)) {
+        if ((isset($value['from']) && strlen($value['from']) > 0)
+            || (isset($value['to']) && strlen($value['to']) > 0)
+        ) {
             return $value;
         }
         return null;
@@ -122,11 +141,13 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
         }
         $rate = $this->_getRate($displayCurrency, $this->getColumn()->getCurrencyCode());
 
-        if (isset($value['from']))
+        if (isset($value['from'])) {
             $value['from'] *= $rate;
+        }
 
-        if (isset($value['to']))
+        if (isset($value['to'])) {
             $value['to'] *= $rate;
+        }
 
         $this->prepareRates($displayCurrency);
         return $value;

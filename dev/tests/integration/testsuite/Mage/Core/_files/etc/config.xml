@@ -60,14 +60,6 @@
                     </test_router>
                 </routers>
             </test_area3>
-            <test_area4>
-                <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
-                <routers>
-                </routers>
-            </test_area4>
-            <test_area5>
-                <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
-            </test_area5>
         </areas>
     </global>
     <test_area1>

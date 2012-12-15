@@ -38,14 +38,14 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizeController extends Mage_Adminhtml_Cont
      *
      * @var string
      */
-    protected $_sessionName = 'admin/session';
+    protected $_sessionName = 'Mage_Backend_Model_Auth_Session';
 
     /**
      * Array of actions which can be processed without secret key validation
      *
      * @var array
      */
-    public $_publicActions = array('index', 'simple', 'confirm', 'confirmSimple','reject', 'rejectSimple');
+    protected $_publicActions = array('index', 'simple', 'confirm', 'confirmSimple','reject', 'rejectSimple');
 
     /**
      * Disable showing of login form
@@ -172,7 +172,7 @@ class Mage_Oauth_Adminhtml_Oauth_AuthorizeController extends Mage_Adminhtml_Cont
         $this->loadLayout();
 
         /** @var $block Mage_Oauth_Block_Adminhtml_Oauth_Authorize */
-        $block = $this->getLayout()->getBlock('content')->getChildBlock('oauth.authorize.confirm');
+        $block = $this->getLayout()->getBlock('oauth.authorize.confirm');
         $block->setIsSimple($simple);
 
         try {

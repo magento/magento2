@@ -57,7 +57,7 @@ class Mage_Backend_Block_System_Config_Form_Field_Select_Allowspecific extends V
      */
     public function getHtml()
     {
-        if(!$this->getValue() || 1 != $this->getValue()) {
+        if (!$this->getValue() || 1 != $this->getValue()) {
             $element = $this->getForm()->getElement($this->_getSpecificCountryElementId());
             $element->setDisabled('disabled');
         }

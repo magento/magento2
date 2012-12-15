@@ -115,6 +115,25 @@ class Mage_Eav_Model_Entity_Attribute extends Mage_Eav_Model_Entity_Attribute_Ab
     }
 
     /**
+     * Load entity_attribute_id into $this by $this->attribute_set_id
+     *
+     * @return Mage_Core_Model_Abstract
+     */
+    public function loadEntityAttributeIdBySet()
+    {
+        // load attributes collection filtered by attribute_id and attribute_set_id
+        $filteredAttributes = $this->getResourceCollection()
+            ->setAttributeSetFilter($this->getAttributeSetId())
+            ->addFieldToFilter('entity_attribute.attribute_id', $this->getId())
+            ->load();
+        if (count($filteredAttributes) > 0) {
+            // getFirstItem() can be used as we can have one or zero records in the collection
+            $this->setEntityAttributeId($filteredAttributes->getFirstItem()->getEntityAttributeId());
+        }
+        return $this;
+    }
+
+    /**
      * Prepare data for save
      *
      * @return Mage_Eav_Model_Entity_Attribute

@@ -1,3 +1,44 @@
+2.0.0.0-dev35
+=============
+* Enhancements of System Configuration:
+  * Introduced new items that can be configured in the similar to Magento 1.x way, using xml files: nested groups in System Configuration form, group dependencies, intersected dependencies
+  * Enhanced handling of field dependencies, required fields functionality
+  * Changed Configuration structure to be represented as an object model
+  * Improved performance of configuration rendering
+* Implemented new API in `Mage_Webapi` module
+  * Removed `Mage_Api` and `Mage_Api2` modules as obsolete API implementation
+  * Added support of REST and SOAP 1.2 [WS-I 2.0](http://ws-i.org/Profiles/BasicProfile-2.0-2010-11-09.html) APIs
+  * Introduced versioning per API resource. The application will support old version(s) of API after upgrading to not make old API requests fail
+  * Unified implementation for all API types
+  * Significantly simplified coverage of new API resources
+  * Added two-legged `OAuth` 1.0 for REST authentication
+  * Added WS-Security for SOAP authentication
+  * Added automatic generation of REST routes and SOAP WSDL on the basis of API class interface and annotations
+  * Introduced generation of API reference from annotated WSDL (for SOAP API)
+* Introduced service layer. Business logic should be implemented once on service layer and could be utilized from different types of controller (e.g., general or API)
+  * Business logic is implemented on service layer to be utilized from different types of controller (e.g., general or API)
+  * Implemented abstract service layer class - `Mage_Core_Service_ServiceAbstract`
+  * Implemented concrete service layers for customers, orders and quotes. Appropriate duplicate logic has been eliminated from controllers and API
+* Improved validation approach:
+  * Added support of describing validation rules in a module's configuration file - `validation.xml` in the module's `etc` directory
+  * Added `Mage_Core_Model_Validator_Factory`
+  * Added new validators to Magento Validator library
+  * Added `Magento_Translate_Adapter` as a translator for the validators
+  * New approach is utilized in `Mage_Customer`, `Mage_Eav` and `Mage_Webapi` modules
+* Added profiling of DB and cache requests
+* Minor Improvements:
+  * Added an ability to choose the image for logo and upload it from backend web-interface
+  * Added notification in backend in case of product SKU change
+* Bug fixes:
+  * Fixed bug in `Mage_Adminhtml_Sales_Order_CreditmemoController` that changed item’s stock status after each comment
+  * Removed `Debug` section in `System -> Configuration -> Advanced -> Developer` for default configuration scope
+  * Fixed bug in `Mage_Tax_Model_Resource_Calculation` that prevented placing order with two tax rules having the same rate
+  * Removed `Url Options` section in `System -> Configuration -> General -> Web` for website and store configuration scope
+  * Changed backend template for UPS shipping provider to fix translation issue
+* Fixed security issue - set `CURLOPT_SSL_VERIFYPEER` to `true` by default in cUrl calls
+* Added `Zend/Escaper`, `Zend/I18`, `Zend/Validator` ZF2 libraries
+* Updated `Zend/Server` and `Zend/Soap` libraries to ZF2 versions
+
 2.0.0.0-dev34
 =============
 * Test Framework:

@@ -149,7 +149,9 @@ class Mage_Adminhtml_Sales_Order_CreditmemoController extends Mage_Adminhtml_Con
                 } elseif ($orderItem->getParentItem() && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
                     $creditmemoItem->setBackToStock(true);
                 } elseif (empty($savedData)) {
-                    $creditmemoItem->setBackToStock(Mage::helper('Mage_CatalogInventory_Helper_Data')->isAutoReturnEnabled());
+                    $creditmemoItem->setBackToStock(
+                        Mage::helper('Mage_CatalogInventory_Helper_Data')->isAutoReturnEnabled()
+                    );
                 } else {
                     $creditmemoItem->setBackToStock(false);
                 }
@@ -387,12 +389,12 @@ class Mage_Adminhtml_Sales_Order_CreditmemoController extends Mage_Adminhtml_Con
                 Mage::throwException($this->__('The Comment Text field cannot be empty.'));
             }
             $creditmemo = $this->_initCreditmemo();
-            $creditmemo->addComment(
+            $comment = $creditmemo->addComment(
                 $data['comment'],
                 isset($data['is_customer_notified']),
                 isset($data['is_visible_on_front'])
             );
-            $creditmemo->save();
+            $comment->save();
             $creditmemo->sendUpdateEmail(!empty($data['is_customer_notified']), $data['comment']);
 
             $this->loadLayout();

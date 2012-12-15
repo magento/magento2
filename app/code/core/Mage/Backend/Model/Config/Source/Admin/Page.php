@@ -104,11 +104,10 @@ class Mage_Backend_Model_Config_Source_Admin_Page implements Mage_Core_Model_Opt
                 if ($menuItem->hasChildren()) {
                     $this->_createOptions($optionArray, $menuItem->getChildren(), $level + 1);
                 }
-            }
-            else {
+            } else {
                 $children = array();
 
-                if($menuItem->hasChildren()) {
+                if ($menuItem->hasChildren()) {
                     $this->_createOptions($children, $menuItem->getChildren(), $level + 1);
                 }
 

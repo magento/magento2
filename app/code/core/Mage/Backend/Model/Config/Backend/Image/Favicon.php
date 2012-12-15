@@ -86,7 +86,8 @@ class Mage_Backend_Model_Config_Backend_Image_Favicon extends Mage_Backend_Model
      * @param  $token
      * @return string
      */
-    protected function _getUploadRoot($token) {
+    protected function _getUploadRoot($token)
+    {
         return Mage::getBaseDir($token);
     }
 }

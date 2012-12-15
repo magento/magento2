@@ -44,7 +44,9 @@ abstract class Mage_Backend_Model_Config_Backend_Currency_Abstract extends Mage_
     protected function _getAllowedCurrencies()
     {
         if ($this->getData('groups/options/fields/allow/inherit')) {
-            return explode(',', Mage::getConfig()->getNode('currency/options/allow', $this->getScope(), $this->getScopeId()));
+            return explode(
+                ',', Mage::getConfig()->getNode('currency/options/allow', $this->getScope(), $this->getScopeId())
+            );
         }
         return $this->getData('groups/options/fields/allow/value');
     }

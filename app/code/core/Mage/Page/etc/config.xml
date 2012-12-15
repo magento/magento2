@@ -147,7 +147,6 @@ Disallow: /*SID=
                 </default_custom_instructions>
             </search_engine_robots>
             <header translate="welcome" module="Mage_Page">
-                <logo_src>images/logo.gif</logo_src>
                 <logo_alt>Magento Commerce</logo_alt>
                 <welcome>Default welcome msg!</welcome>
             </header>

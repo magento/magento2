@@ -110,11 +110,9 @@ function addNewImage()
 
         if (j==2) {
             newCell.appendChild( new_row_input );
-        }
-        else if (j==3) {
+        } else if (j==3) {
             newCell.innerHTML = new_row_button;
-        }
-        else {
+        } else {
             newCell.innerHTML = new_file_input.replace(/%j%/g, j).replace(/%id%/g, id);
         }
 
@@ -131,8 +129,7 @@ function deleteImage(image)
     if (image>0) {
         document.getElementById('<?php echo $this->getElement()->getName() ?>_delete_'+image).value=image;
         document.getElementById('<?php echo $this->getElement()->getName() ?>_tr_'+image).style.display='none';
-    }
-    else {
+    } else {
         image.parentNode.parentNode.parentNode.removeChild( image.parentNode.parentNode );
     }
 }

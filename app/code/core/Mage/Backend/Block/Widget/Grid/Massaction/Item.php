@@ -67,11 +67,11 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Item extends Mage_Backend_Block_
      */
     public function setAdditionalActionBlock($block)
     {
-        if(is_string($block)) {
+        if (is_string($block)) {
             $block = $this->getLayout()->createBlock($block);
         } elseif (is_array($block)) {
             $block = $this->_createFromConfig($block);
-        } elseif(!($block instanceof Mage_Core_Block_Abstract)) {
+        } elseif (!($block instanceof Mage_Core_Block_Abstract)) {
             Mage::throwException('Unknown block type');
         }
 

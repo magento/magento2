@@ -30,6 +30,8 @@ dev/tests/static/testsuite/Legacy/_files/obsolete_properties_ee.php
 dev/tests/static/testsuite/Legacy/_files/words_ee.xml
 dev/tests/static/testsuite/Legacy/Enterprise
 dev/tests/static/testsuite/Php/_files/{whitelist,blacklist}/ee.txt
+dev/tests/unit/testsuite/Magento/Profiler/Driver/PinbaTest.php
+dev/tests/unit/testsuite/Magento/Profiler/_files/pinba_functions.php
 dev/tests/unit/testsuite/Enterprise
 dev/tools/migration/factory_table_names/replace_ee.php
 dev/tools/migration/aliases_map/composite_modules_ee.php
@@ -40,5 +42,6 @@ downloader/skin/install/images/enterprise.gif
 downloader/template/enterprise
 downloader/template/professional
 lib/Apache
+lib/Magento/Profiler/Driver/Pinba.php
 pub/errors/enterprise
 pub/errors/pro

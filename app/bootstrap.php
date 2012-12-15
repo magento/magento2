@@ -18,9 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /* PHP version validation */
@@ -97,15 +96,22 @@ if (file_exists($definitionsFile)) {
     Mage::initializeObjectManager($definitionsFile);
 }
 
+$output = null;
 if (isset($_SERVER['MAGE_PROFILER'])) {
     switch ($_SERVER['MAGE_PROFILER']) {
         case 'firebug':
-            Magento_Profiler::registerOutput(new Magento_Profiler_Output_Firebug());
+            $output = new Magento_Profiler_Driver_Standard_Output_Firebug();
             break;
         case 'csv':
-            Magento_Profiler::registerOutput(new Magento_Profiler_Output_Csvfile(__DIR__ . '/../var/log/profiler.csv'));
+            $output = new Magento_Profiler_Driver_Standard_Output_Csvfile(__DIR__ . '/../var/log/profiler.csv');
             break;
         default:
-            Magento_Profiler::registerOutput(new Magento_Profiler_Output_Html());
+            $output = new Magento_Profiler_Driver_Standard_Output_Html();
     }
+}
+
+if ($output) {
+    $driver = new Magento_Profiler_Driver_Standard();
+    $driver->registerOutput($output);
+    Magento_Profiler::add($driver);
 }

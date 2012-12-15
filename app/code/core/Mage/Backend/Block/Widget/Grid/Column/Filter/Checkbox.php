@@ -60,8 +60,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox extends Mage_Backend
     {
         if ($this->getValue()) {
             return $this->getColumn()->getValue();
-        }
-        else {
+        } else {
             return array(
                 array('neq'=>$this->getColumn()->getValue()),
                 array('is'=>new Zend_Db_Expr('NULL'))

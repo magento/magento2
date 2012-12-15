@@ -46,6 +46,17 @@
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
             </group>
+            <group id="browser_capabilities" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Browser Capabilities Detection</label>
+                <field id="cookies" translate="label" module="Mage_Cms" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redirect to CMS-page if Cookies are Disabled</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                </field>
+                <field id="javascript" translate="label" module="Mage_Cms" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Notice if JavaScript is Disabled</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                </field>
+            </group>
         </section>
         <section id="cms" translate="label" module="Mage_Cms" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Content Management</label>

@@ -31,7 +31,7 @@ $_trId    = $_element->getHtmlContainerId();
 $_class   = $_element->getFieldsetHtmlClass();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
-<tr<?php if($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?>>
+<tr<?php if ($_trId): ?> id="<?php echo $_trId ?>"<?php endif; ?>>
     <?php if ($_element->getType()=='hidden'): ?>
     <td colspan="2" class="hidden"><?php echo trim($_element->getElementHtml()) ?></td>
     <?php else: ?>

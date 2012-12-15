@@ -103,8 +103,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Store
 
         if (empty($origStores)) {
             return '';
-        }
-        elseif (in_array(0, $origStores) && count($origStores) == 1 && !$skipAllStoresLabel) {
+        } elseif (in_array(0, $origStores) && count($origStores) == 1 && !$skipAllStoresLabel) {
             return Mage::helper('Mage_Backend_Helper_Data')->__('All Store Views');
         }
 

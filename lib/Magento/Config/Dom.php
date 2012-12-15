@@ -167,6 +167,7 @@ class Magento_Config_Dom
     {
         $dom = new DOMDocument();
         $dom->loadXML($xml);
+        $rr = $dom->saveXML();
         return $dom;
     }
 

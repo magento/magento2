@@ -33,14 +33,22 @@
  */
 class Mage_Customer_Model_Customer_Attribute_Backend_Website extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
 {
+    /**
+     * Before save
+     *
+     * @param Varien_Object $object
+     * @return Mage_Customer_Model_Customer_Attribute_Backend_Website
+     */
     public function beforeSave($object)
     {
         if ($object->getId()) {
             return $this;
         }
+
         if (!$object->hasData('website_id')) {
             $object->setData('website_id', Mage::app()->getStore()->getWebsiteId());
         }
+
         return $this;
     }
 }

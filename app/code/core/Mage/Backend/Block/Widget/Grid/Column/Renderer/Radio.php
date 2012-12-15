@@ -68,15 +68,4 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio
         $html .= 'value="' . $row->getId() . '" class="radio"' . $checked . '/>';
         return $html;
     }
-
-    /*
-    public function renderHeader()
-    {
-        $checked = '';
-        if ($filter = $this->getColumn()->getFilter()) {
-            $checked = $filter->getValue() ? 'checked' : '';
-        }
-        return '<input type="checkbox" name="'.$this->getColumn()->getName().'" onclick="'.$this->getColumn()->getGrid()->getJsObjectName().'.checkCheckboxes(this)" class="checkbox" '.$checked.' title="'.Mage::helper('Mage_Backend_Helper_Data')->__('Select All').'"/>';
-    }
-    */
 }

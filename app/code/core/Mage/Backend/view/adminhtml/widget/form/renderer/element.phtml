@@ -25,11 +25,11 @@
  */
 ?>
 <?php $_element = $this->getElement() ?>
-<?php if($_element->getNoSpan() !== true): ?>
+<?php if ($_element->getNoSpan() !== true): ?>
 <span class="field-row">
 <?php endif; ?>
 <?php echo $_element->getLabelHtml() ?>
 <?php echo $_element->getElementHtml() ?>
-<?php if($_element->getNoSpan() !== true): ?>
+<?php if ($_element->getNoSpan() !== true): ?>
 </span>
 <?php endif; ?>

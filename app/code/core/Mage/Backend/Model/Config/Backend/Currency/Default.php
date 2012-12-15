@@ -45,11 +45,17 @@ class Mage_Backend_Model_Config_Backend_Currency_Default extends Mage_Backend_Mo
     protected function _afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Selected default display currency is not available in installed currencies.'));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Selected default display currency is not available in installed currencies.')
+            );
         }
 
         if (!in_array($this->getValue(), $this->_getAllowedCurrencies())) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Selected default display currency is not available in allowed currencies.'));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Selected default display currency is not available in allowed currencies.')
+            );
         }
 
         return $this;

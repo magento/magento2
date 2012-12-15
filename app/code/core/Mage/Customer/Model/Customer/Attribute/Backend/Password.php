@@ -33,23 +33,42 @@
  */
 class Mage_Customer_Model_Customer_Attribute_Backend_Password extends Mage_Eav_Model_Entity_Attribute_Backend_Abstract
 {
+    const MIN_PASSWORD_LENGTH = 6;
+
     /**
      * Special processing before attribute save:
      * a) check some rules for password
      * b) transform temporary attribute 'password' into real attribute 'password_hash'
+     *
+     * @param Varien_Object $object
      */
     public function beforeSave($object)
     {
-        $password = trim($object->getPassword());
-        $len = Mage::helper('Mage_Core_Helper_String')->strlen($password);
-        if ($len) {
-             if ($len < 6) {
-                Mage::throwException(Mage::helper('Mage_Customer_Helper_Data')->__('The password must have at least 6 characters. Leading or trailing spaces will be ignored.'));
+        $password = $object->getPassword();
+        /** @var Mage_Core_Helper_String $stringHelper */
+        $stringHelper = Mage::helper('Mage_Core_Helper_String');
+
+        $length = $stringHelper->strlen($password);
+        if ($length > 0) {
+            if ($length < self::MIN_PASSWORD_LENGTH) {
+                Mage::throwException(Mage::helper('Mage_Customer_Helper_Data')->
+                    __('The password must have at least %s characters.', self::MIN_PASSWORD_LENGTH));
             }
+
+            if ($stringHelper->substr($password, 0, 1) == ' ' ||
+                $stringHelper->substr($password, $length - 1, 1) == ' ') {
+                Mage::throwException(Mage::helper('Mage_Customer_Helper_Data')->
+                    __('The password can not begin or end with a space.'));
+            }
+
             $object->setPasswordHash($object->hashPassword($password));
         }
     }
 
+    /**
+     * @param Varien_Object $object
+     * @return bool
+     */
     public function validate($object)
     {
         if ($password = $object->getPassword()) {

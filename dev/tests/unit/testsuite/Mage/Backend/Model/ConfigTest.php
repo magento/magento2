@@ -50,17 +50,22 @@ class Mage_Backend_Model_ConfigTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectFactoryMock;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_appConfigMock;
 
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_applicationMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_configLoaderMock;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_dataFactoryMock;
 
     public function setUp()
     {
@@ -73,25 +78,27 @@ class Mage_Backend_Model_ConfigTest extends PHPUnit_Framework_TestCase
             $this->returnValue($structureMock)
         );
         $this->_transFactoryMock = $this->getMock(
-            'Mage_Backend_Model_Resource_Transaction_Factory', array(), array(), '', false
+            'Mage_Core_Model_Resource_Transaction_Factory', array(), array(), '', false
         );
-        $this->_objectFactoryMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
-        $this->_applicationMock = $this->getMock('Mage_Core_Model_Application', array(), array(), '', false);
+        $this->_configLoaderMock = $this->getMock('Mage_Backend_Model_Config_Loader', array(), array(), '', false);
+        $this->_applicationMock = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
+        $this->_dataFactoryMock = $this->getMock('Mage_Core_Model_Config_Data_Factory', array(), array(), '', false);
 
-        $this->_model = new Mage_Backend_Model_Config(array(
-            'eventManager' => $this->_eventManagerMock,
-            'structureReader' => $this->_structureReaderMock,
-            'transactionFactory' => $this->_transFactoryMock,
-            'objectFactory' => $this->_objectFactoryMock,
-            'applicationConfig' => $this->_appConfigMock,
-            'application' => $this->_appConfigMock
-        ));
+        $this->_model = new Mage_Backend_Model_Config(
+            $this->_applicationMock,
+            $this->_appConfigMock,
+            $this->_eventManagerMock,
+            $structureMock,
+            $this->_transFactoryMock,
+            $this->_configLoaderMock,
+            $this->_dataFactoryMock
+        );
     }
 
     public function testSaveDoesNotDoAnythingIfGroupsAreNotPassed()
     {
-        $this->_structureReaderMock->expects($this->never())->method('getConfiguration');
+        $this->_configLoaderMock->expects($this->never())->method('getConfigByPath');
         $this->_model->save();
     }
 

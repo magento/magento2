@@ -82,24 +82,28 @@ class Mage_Backend_Block_Widget extends Mage_Backend_Block_Template
      * @param string $label
      * @param string $onclick
      * @param string $class
-     * @param string $id
+     * @param string $buttonId
      * @return string
      */
-    public function getButtonHtml($label, $onclick, $class='', $id=null) {
+    public function getButtonHtml($label, $onclick, $class = '', $buttonId = null)
+    {
         return $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button')
             ->setData(array(
                 'label'     => $label,
                 'onclick'   => $onclick,
                 'class'     => $class,
                 'type'      => 'button',
-                'id'        => $id,
+                'id'        => $buttonId,
             ))
             ->toHtml();
     }
 
     public function getGlobalIcon()
     {
-        return '<img src="'.$this->getViewFileUrl('images/fam_link.gif').'" alt="'.$this->__('Global Attribute').'" title="'.$this->__('This attribute shares the same value in all the stores').'" class="attribute-global"/>';
+        return '<img src="' . $this->getViewFileUrl('images/fam_link.gif')
+            . '" alt="' . $this->__('Global Attribute')
+            . '" title="' . $this->__('This attribute shares the same value in all the stores')
+            . '" class="attribute-global"/>';
     }
 }
 

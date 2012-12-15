@@ -619,7 +619,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
         $this->setData('base_adjustment_positive', $amount);
 
         $amount = $this->getStore()->roundPrice(
-            $amount*$this->getOrder()->getStoreToOrderRate()
+            $amount*$this->getOrder()->getBaseToOrderRate()
         );
         $this->setData('adjustment_positive', $amount);
         return $this;
@@ -637,7 +637,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
         $this->setData('base_adjustment_negative', $amount);
 
         $amount = $this->getStore()->roundPrice(
-            $amount*$this->getOrder()->getStoreToOrderRate()
+            $amount*$this->getOrder()->getBaseToOrderRate()
         );
         $this->setData('adjustment_negative', $amount);
         return $this;
@@ -647,10 +647,11 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
      * Adds comment to credit memo with additional possibility to send it to customer via email
      * and show it in customer account
      *
+     * @param Mage_Sales_Model_Order_Creditmemo_Comment|string $comment
      * @param bool $notify
      * @param bool $visibleOnFront
      *
-     * @return Mage_Sales_Model_Order_Creditmemo
+     * @return Mage_Sales_Model_Order_Creditmemo_Comment
      */
     public function addComment($comment, $notify=false, $visibleOnFront=false)
     {
@@ -666,8 +667,8 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
         if (!$comment->getId()) {
             $this->getCommentsCollection()->addItem($comment);
         }
-        $this->_hasDataChanges = true;
-        return $this;
+
+        return $comment;
     }
 
     public function getCommentsCollection($reload=false)

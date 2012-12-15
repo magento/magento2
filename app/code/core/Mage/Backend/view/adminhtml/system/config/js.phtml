@@ -35,7 +35,7 @@ freeModel.prototype = {
     },
     bindFreeMethodCutoffCostRelation : function(parentId)
     {
-        if(parentId) {
+        if (parentId) {
             // todo: fix bug in IE
             var freeMethodElements = $$('#'+parentId+' .free-method');
         } else {
@@ -91,7 +91,7 @@ originModel.prototype = {
     },
     bindCountryRegionRelation : function(parentId)
     {
-        if(parentId) {
+        if (parentId) {
             // todo: fix bug in IE
             var countryElements = $$('#'+parentId+' .countries');
         } else {
@@ -154,9 +154,9 @@ originModel.prototype = {
             if (data.length) {
                 var html = '<select name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" class="required-entry select" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
                 for (var i in data) {
-                    if(data[i].label) {
+                    if (data[i].label) {
                         html+= '<option value="'+data[i].value+'"';
-                        if(this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)) {
+                        if (this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)) {
                             html+= ' selected';
                         }
                         html+='>'+data[i].label+'<\/option>';
@@ -215,15 +215,13 @@ perPageModel.prototype = {
 
                 this.gridElement.up(1).show();
                 this.gridValuesElement.up(1).show();
-            }
-            else if (this.listModeElement.value == 'grid-list' || this.listModeElement.value == 'list-grid') {
+            } else if (this.listModeElement.value == 'grid-list' || this.listModeElement.value == 'list-grid') {
                 this.listElement.up(1).show();
                 this.listValuesElement.up(1).show();
 
                 this.gridElement.up(1).show();
                 this.gridValuesElement.up(1).show();
-            }
-            else if (this.listModeElement.value == 'list') {
+            } else if (this.listModeElement.value == 'list') {
                 this.listElement.up(1).show();
                 this.listValuesElement.up(1).show();
 

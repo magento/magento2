@@ -61,22 +61,20 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox
         $value  = $row->getData($this->getColumn()->getIndex());
         if (is_array($values)) {
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
-        }
-        else {
+        } else {
             $checked = ($value === $this->getColumn()->getValue()) ? ' checked="checked"' : '';
         }
 
         $disabledValues = $this->getColumn()->getDisabledValues();
         if (is_array($disabledValues)) {
             $disabled = in_array($value, $disabledValues) ? ' disabled="disabled"' : '';
-        }
-        else {
+        } else {
             $disabled = ($value === $this->getColumn()->getDisabledValue()) ? ' disabled="disabled"' : '';
         }
 
         $this->setDisabled($disabled);
 
-        if ($this->getNoObjectId() || $this->getColumn()->getUseIndex()){
+        if ($this->getNoObjectId() || $this->getColumn()->getUseIndex()) {
             $v = $value;
         } else {
             $v = ($row->getId() != "") ? $row->getId():$value;
@@ -107,7 +105,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox
      */
     public function renderHeader()
     {
-        if($this->getColumn()->getHeader()) {
+        if ($this->getColumn()->getHeader()) {
             return parent::renderHeader();
         }
 

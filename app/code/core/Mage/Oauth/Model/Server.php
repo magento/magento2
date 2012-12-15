@@ -86,7 +86,7 @@ class Mage_Oauth_Model_Server
     const TIME_DEVIATION = 600;
 
     /**
-     * Value of callback URL when it is established or if cliaent is unable to receive callbacks
+     * Value of callback URL when it is established or if the client is unable to receive callbacks
      *
      * @link http://tools.ietf.org/html/rfc5849#section-2.1     Requirement in RFC-5849
      */
@@ -95,7 +95,7 @@ class Mage_Oauth_Model_Server
     /**
      * Consumer object
      *
-     * @var Mage_Oauth_Model_Consumer
+     * @var Mage_Oauth_Model_ConsumerInterface
      */
     protected $_consumer;
 
@@ -162,7 +162,7 @@ class Mage_Oauth_Model_Server
     /**
      * Request object
      *
-     * @var Mage_Core_Controller_Request_Http
+     * @var Zend_Controller_Request_Http
      */
     protected $_request;
 
@@ -187,33 +187,48 @@ class Mage_Oauth_Model_Server
      */
     protected $_token;
 
+    /** @var Mage_Oauth_Model_Token_Factory */
+    protected $_tokenFactory;
+
+    /** @var Mage_Oauth_Model_Consumer_Factory */
+    protected $_consumerFactory;
+
+    /** @var Mage_Oauth_Model_Nonce_Factory */
+    protected $_nonceFactory;
+
     /**
      * Internal constructor not depended on params
      *
      * @param Zend_Controller_Request_Http $request OPTIONAL Request object (If not specified - use singleton)
+     * @param Mage_Oauth_Model_Token_Factory $tokenFactory
+     * @param Mage_Oauth_Model_Consumer_Factory $consumerFactory
+     * @param Mage_Oauth_Model_Nonce_Factory $nonceFactory
      * @throws Exception
      */
-    public function __construct($request = null)
-    {
-        if (is_object($request)) {
-            if (!$request instanceof Zend_Controller_Request_Http) {
-                throw new Exception('Invalid request object passed');
-            }
-            $this->_request = $request;
-        } else {
-            $this->_request = Mage::app()->getRequest();
-        }
+    public function __construct(
+        Zend_Controller_Request_Http $request,
+        Mage_Oauth_Model_Token_Factory $tokenFactory,
+        Mage_Oauth_Model_Consumer_Factory $consumerFactory,
+        Mage_Oauth_Model_Nonce_Factory $nonceFactory
+    ) {
+        $this->_request = $request;
+        $this->_tokenFactory = $tokenFactory;
+        $this->_consumerFactory = $consumerFactory;
+        $this->_nonceFactory = $nonceFactory;
     }
 
     /**
      * Retrieve protocol and request parameters from request object
      *
+     * @param string $authHeaderValue
      * @link http://tools.ietf.org/html/rfc5849#section-3.5
      * @return Mage_Oauth_Model_Server
      */
-    protected function _fetchParams()
+    protected function _fetchParams($authHeaderValue = null)
     {
-        $authHeaderValue = $this->_request->getHeader('Authorization');
+        if (is_null($authHeaderValue)) {
+            $authHeaderValue = $this->_request->getHeader('Authorization');
+        }
 
         if ($authHeaderValue && 'oauth' === strtolower(substr($authHeaderValue, 0, 5))) {
             $authHeaderValue = substr($authHeaderValue, 6); // ignore 'OAuth ' at the beginning
@@ -298,9 +313,8 @@ class Mage_Oauth_Model_Server
      */
     protected function _initConsumer()
     {
-        $this->_consumer = Mage::getModel('Mage_Oauth_Model_Consumer');
-
-        $this->_consumer->load($this->_protocolParams['oauth_consumer_key'], 'key');
+        $this->_consumer = $this->_consumerFactory->create();
+        $this->_consumer->loadByKey($this->_protocolParams['oauth_consumer_key']);
 
         if (!$this->_consumer->getId()) {
             $this->_throwException('', self::ERR_CONSUMER_KEY_REJECTED);
@@ -315,7 +329,7 @@ class Mage_Oauth_Model_Server
      */
     protected function _initToken()
     {
-        $this->_token = Mage::getModel('Mage_Oauth_Model_Token');
+        $this->_token = $this->_tokenFactory->create();
 
         if (self::REQUEST_INITIATE != $this->_requestType) {
             $this->_validateTokenParam();
@@ -467,9 +481,7 @@ class Mage_Oauth_Model_Server
         if ($timestamp <= 0 || $timestamp > (time() + self::TIME_DEVIATION)) {
             $this->_throwException('', self::ERR_TIMESTAMP_REFUSED);
         }
-        /** @var $nonceObj Mage_Oauth_Model_Nonce */
-        $nonceObj = Mage::getModel('Mage_Oauth_Model_Nonce');
-
+        $nonceObj = $this->_nonceFactory->create();
         $nonceObj->load($nonce, 'nonce');
 
         if ($nonceObj->getTimestamp() == $timestamp) {
@@ -503,10 +515,6 @@ class Mage_Oauth_Model_Server
                 $this->_throwException($paramName, self::ERR_PARAMETER_REJECTED);
             }
         }
-        // validate consumer key length
-        if (strlen($this->_protocolParams['oauth_consumer_key']) != Mage_Oauth_Model_Consumer::KEY_LENGTH) {
-            $this->_throwException('', self::ERR_CONSUMER_KEY_REJECTED);
-        }
         // validate signature method
         if (!in_array($this->_protocolParams['oauth_signature_method'], self::getSupportedSignatureMethods())) {
             $this->_throwException('', self::ERR_SIGNATURE_METHOD_REJECTED);
@@ -536,13 +544,13 @@ class Mage_Oauth_Model_Server
             array_merge($this->_params, $this->_protocolParams),
             $this->_protocolParams['oauth_signature_method'],
             $this->_consumer->getSecret(),
-            $this->_token->getSecret(),
+            !is_null($this->_token) ? $this->_token->getSecret() : null,
             $this->_request->getMethod(),
             $this->_request->getScheme() . '://' . $this->_request->getHttpHost() . $this->_request->getRequestUri()
         );
 
         if ($calculatedSign != $this->_protocolParams['oauth_signature']) {
-            $this->_throwException($calculatedSign, self::ERR_SIGNATURE_INVALID);
+            $this->_throwException('Invalid signature.', self::ERR_SIGNATURE_INVALID);
         }
     }
 
@@ -687,8 +695,6 @@ class Mage_Oauth_Model_Server
             }
             if (self::ERR_PARAMETER_ABSENT == $eCode) {
                 $errorMsg .= '&oauth_parameters_absent=' . $eMsg;
-            } elseif (self::ERR_SIGNATURE_INVALID == $eCode) {
-                $errorMsg .= '&debug_sbs=' . $eMsg;
             } elseif ($eMsg) {
                 $errorMsg .= '&message=' . $eMsg;
             }

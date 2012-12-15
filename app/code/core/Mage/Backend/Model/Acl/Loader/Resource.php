@@ -70,7 +70,7 @@ class Mage_Backend_Model_Acl_Loader_Resource implements Magento_Acl_Loader
     {
         /** @var $resourceConfig DOMElement */
         foreach ($resources as $resourceConfig) {
-            if (!($resourceConfig instanceof DOMElement)){
+            if (!($resourceConfig instanceof DOMElement)) {
                 continue;
             }
             /** @var $resource Magento_Acl_Resource */

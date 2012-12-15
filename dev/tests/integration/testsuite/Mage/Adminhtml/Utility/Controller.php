@@ -46,6 +46,7 @@ class Mage_Adminhtml_Utility_Controller extends Magento_Test_TestCase_Controller
     {
         parent::setUp();
 
+        Mage::setCurrentArea('adminhtml');
         Mage::getSingleton('Mage_Backend_Model_Url')->turnOffSecretKey();
 
         $this->_auth = Mage::getModel('Mage_Backend_Model_Auth');

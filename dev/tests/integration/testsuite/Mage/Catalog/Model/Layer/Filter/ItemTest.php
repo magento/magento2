@@ -69,13 +69,11 @@ class Mage_Catalog_Model_Layer_Filter_ItemTest extends PHPUnit_Framework_TestCas
 
     public function testGetUrl()
     {
-        Mage::getModel(
+        $action = Mage::getModel(
             'Mage_Core_Controller_Front_Action',
             array('request' => new Magento_Test_Request(), 'response' => new Magento_Test_Response())
         );
-        /*
-         * Mage::app()->getFrontController()->setAction($action); // done in action's constructor
-         */
+        Mage::app()->getFrontController()->setAction($action); // done in action's constructor
         $this->assertStringEndsWith('/?cat%5B0%5D=valuePart1&cat%5B1%5D=valuePart2', $this->_model->getUrl());
     }
 

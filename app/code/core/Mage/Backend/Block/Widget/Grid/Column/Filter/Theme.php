@@ -48,9 +48,8 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Theme
                 'label' => ''
             ));
         }
-        $htmlSelect = '<select name="%s" id="%s" class="no-changes" %s>%s</select>';
         $html = sprintf(
-            $htmlSelect,
+            '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
             $this->_getHtmlName(),
             $this->_getHtmlId(),
             $this->getUiId('filter', $this->_getHtmlName()),

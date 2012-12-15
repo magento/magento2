@@ -245,7 +245,6 @@
         <section id="general">
             <group id="store_information">
                 <field id="validate_vat_number" translate="button_label" sortOrder="28" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label></label>
                     <button_label>Validate VAT Number</button_label>
                     <frontend_model>Mage_Adminhtml_Block_Customer_System_Config_Validatevat</frontend_model>
                 </field>

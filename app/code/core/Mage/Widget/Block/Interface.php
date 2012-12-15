@@ -34,13 +34,6 @@
 interface Mage_Widget_Block_Interface
 {
     /**
-     * Produce and return widget's html output
-     *
-     * @return string
-     */
-    public function toHtml();
-
-    /**
      * Add data to the widget.
      * Retains previous data in the widget.
      *

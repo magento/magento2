@@ -55,7 +55,7 @@ class Mage_Backend_Block_System_Config_FormStub extends Mage_Backend_Block_Syste
     {
         parent::_initObjects();
         $this->_configData = $this->_configDataStub;
-        $this->_defaultFieldRenderer = Mage::app()->getLayout()->createBlock(
+        $this->_fieldRenderer = Mage::app()->getLayout()->createBlock(
             'Mage_Backend_Block_System_Config_Form_Field'
         );
     }

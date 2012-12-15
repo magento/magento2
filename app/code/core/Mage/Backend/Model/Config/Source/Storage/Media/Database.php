@@ -67,7 +67,7 @@ class Mage_Backend_Model_Config_Source_Storage_Media_Database implements Mage_Co
      */
     public function toOptionArray()
     {
-        $media_storages = array();
+        $mediaStorages = array();
 
         $this->_connections = (array) Mage::app()->getConfig()->getNode('global/resources')->children();
         foreach (array_keys($this->_connections) as $connectionName) {
@@ -76,12 +76,12 @@ class Mage_Backend_Model_Config_Source_Storage_Media_Database implements Mage_Co
                 continue;
             }
 
-            $media_storages[] = array('value' => $connectionName, 'label' => $connectionName);
+            $mediaStorages[] = array('value' => $connectionName, 'label' => $connectionName);
         }
-        sort($media_storages);
-        reset($media_storages);
+        sort($mediaStorages);
+        reset($mediaStorages);
 
-        return $media_storages;
+        return $mediaStorages;
     }
 
 }

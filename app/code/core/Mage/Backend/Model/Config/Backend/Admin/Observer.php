@@ -29,9 +29,9 @@ class Mage_Backend_Model_Config_Backend_Admin_Observer
     /**
      * Log out user and redirect him to new admin custom url
      *
-     * @param Varien_Event_Observer $observer
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function afterCustomUrlChanged($observer)
+    public function afterCustomUrlChanged()
     {
         if (is_null(Mage::registry('custom_admin_path_redirect'))) {
             return;

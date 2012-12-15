@@ -27,8 +27,9 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Oauth::system_api_oauth_consumer" title="REST - OAuth Consumers" module="Mage_Oauth" sortOrder="50" parent="Mage_Api::system_api" action="adminhtml/oauth_consumer" resource="Mage_Oauth::consumer"/>
-        <add id="Mage_Oauth::system_api_oauth_authorized_tokens" title="REST - OAuth Authorized Tokens" module="Mage_Oauth" sortOrder="60" parent="Mage_Api::system_api" action="adminhtml/oauth_authorizedTokens" resource="Mage_Oauth::authorizedTokens"/>
-        <add id="Mage_Oauth::system_api_oauth_admin_token" title="REST - My Apps" module="Mage_Oauth" sortOrder="70" parent="Mage_Api::system_api" action="adminhtml/oauth_admin_token" resource="Mage_Oauth::oauth_admin_token"/>
+        <!-- Menu elements has been disabled untill 3-legged oAuth functionality is needed. -->
+        <!--<add id="Mage_Oauth::system_api_oauth_consumer" title="REST - OAuth Consumers" module="Mage_Oauth" sortOrder="50" parent="Mage_Api::system_api" action="adminhtml/oauth_consumer" resource="Mage_Oauth::consumer"/>-->
+        <!--<add id="Mage_Oauth::system_api_oauth_authorized_tokens" title="REST - OAuth Authorized Tokens" module="Mage_Oauth" sortOrder="60" parent="Mage_Api::system_api" action="adminhtml/oauth_authorizedTokens" resource="Mage_Oauth::authorizedTokens"/>-->
+        <!--<add id="Mage_Oauth::system_api_oauth_admin_token" title="REST - My Apps" module="Mage_Oauth" sortOrder="70" parent="Mage_Api::system_api" action="adminhtml/oauth_admin_token" resource="Mage_Oauth::oauth_admin_token"/>-->
     </menu>
 </config>

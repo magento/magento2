@@ -27,6 +27,9 @@
 /**
  * EAV attribute resource model (Using Forms)
  *
+ * @method Mage_Eav_Model_Attribute_Data_Abstract|null getDataModel() Get data model linked to attribute or null.
+ * @method string|null getFrontendInput() Get attribute type for user interface form or null
+ *
  * @category   Mage
  * @package    Mage_Eav
  * @author     Magento Core Team <core@magentocommerce.com>

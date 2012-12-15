@@ -51,8 +51,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Options
                 foreach ($value as $item) {
                     if (isset($options[$item])) {
                         $res[] = $this->escapeHtml($options[$item]);
-                    }
-                    elseif ($showMissingOptionValues) {
+                    } elseif ($showMissingOptionValues) {
                         $res[] = $this->escapeHtml($item);
                     }
                 }

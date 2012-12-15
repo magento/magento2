@@ -134,7 +134,7 @@ class Mage_Core_Model_App
     /**
      * Application front controller
      *
-     * @var Mage_Core_Controller_Varien_Front
+     * @var Mage_Core_Controller_FrontInterface
      */
     protected $_frontController;
 
@@ -260,10 +260,8 @@ class Mage_Core_Model_App
     /**
      * Constructor
      */
-    public function __construct(Mage_Core_Controller_Varien_Front $frontController,
-        Magento_ObjectManager $objectManager
-    ) {
-        $this->_frontController = $frontController;
+    public function __construct(Magento_ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -807,10 +805,43 @@ class Mage_Core_Model_App
      */
     protected function _initFrontController()
     {
+        $this->_frontController = $this->_getFrontControllerByCurrentArea();
         Magento_Profiler::start('init_front_controller');
         $this->_frontController->init();
         Magento_Profiler::stop('init_front_controller');
         return $this;
+    }
+
+    /**
+     * Instantiate proper front controller instance depending on current area
+     *
+     * @return Mage_Core_Controller_FrontInterface
+     */
+    protected function _getFrontControllerByCurrentArea()
+    {
+        /**
+         * TODO: Temporary implementation for API. Must be reconsidered during implementation
+         * TODO: of ability to set different front controllers in different area.
+         * TODO: See also related changes in Mage_Core_Model_Config.
+         */
+        // TODO: Assure that everything work fine work in areas without routers (e.g. URL generation)
+        /** Default front controller class */
+        $frontControllerClass = 'Mage_Core_Controller_Varien_Front';
+        $pathParts = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        if ($pathParts) {
+            /** If area front name is used it is expected to be set on the first place in path info */
+            $frontName = reset($pathParts);
+            foreach ($this->getConfig()->getAreas() as $areaCode => $areaInfo) {
+                if (isset($areaInfo['front_controller'])
+                    && isset($areaInfo['frontName']) && ($frontName == $areaInfo['frontName'])
+                ) {
+                    $this->getConfig()->setCurrentAreaCode($areaCode);
+                    $frontControllerClass = $areaInfo['front_controller'];
+                    break;
+                }
+            }
+        }
+        return $this->_objectManager->create($frontControllerClass);
     }
 
     /**
@@ -1553,5 +1584,15 @@ class Mage_Core_Model_App
             unset($this->_websites[$website->getWebsiteId()]);
             unset($this->_websites[$website->getCode()]);
         }
+    }
+
+    /**
+     * Check if developer mode is enabled.
+     *
+     * @return bool
+     */
+    public function isDeveloperMode()
+    {
+        return Mage::getIsDeveloperMode();
     }
 }

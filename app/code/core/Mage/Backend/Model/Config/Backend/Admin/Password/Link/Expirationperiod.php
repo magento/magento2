@@ -42,12 +42,12 @@ class Mage_Backend_Model_Config_Backend_Admin_Password_Link_Expirationperiod
     protected function _beforeSave()
     {
         parent::_beforeSave();
-        $resetPasswordLinkExpirationPeriod = (int)$this->getValue();
+        $expirationPeriod = (int)$this->getValue();
 
-        if ($resetPasswordLinkExpirationPeriod < 1) {
-            $resetPasswordLinkExpirationPeriod = (int)$this->getOldValue();
+        if ($expirationPeriod < 1) {
+            $expirationPeriod = (int)$this->getOldValue();
         }
-        $this->setValue((string)$resetPasswordLinkExpirationPeriod);
+        $this->setValue((string)$expirationPeriod);
         return $this;
     }
 }

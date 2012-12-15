@@ -36,6 +36,11 @@
  */
 class Mage_Customer_Model_Address extends Mage_Customer_Model_Address_Abstract
 {
+    /**
+     * Customer entity
+     *
+     * @var Mage_Customer_Model_Customer
+     */
     protected $_customer;
 
     protected function _construct()

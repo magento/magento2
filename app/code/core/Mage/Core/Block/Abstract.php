@@ -39,6 +39,7 @@
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Mage_Core_Block_Abstract extends Varien_Object
+    implements Mage_Core_Block
 {
     /**
      * @var Mage_Core_Model_Design_Package
