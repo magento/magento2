@@ -131,10 +131,8 @@ class Mage_Eav_Model_Entity_Attribute_Source_Table extends Mage_Eav_Model_Entity
             ->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
 
         Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Option')
-            ->addOptionValueToCollection($collection, $this->getAttribute(), $valueExpr);
-
-        $collection->getSelect()
-            ->order("{$this->getAttribute()->getAttributeCode()} {$dir}");
+            ->addOptionValueToCollection($collection, $this->getAttribute(), $valueExpr)
+            ->addOptionSortToCollection($collection, $this->getAttribute(), $valueExpr, $dir);
 
         return $this;
     }
