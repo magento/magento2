@@ -54,35 +54,34 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
     protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     /**
-     * Helper
-     *
      * @var Mage_Backend_Helper_Data
      */
     protected $_helper;
 
     /**
-     * Session model
-     *
      * @var Mage_Backend_Model_Session
      */
     protected $_session;
 
     /**
-     * Constructor
-     *
-     * @param Zend_Controller_Request_Abstract $request
-     * @param Zend_Controller_Response_Abstract $response
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Response_Http $response
+     * @param string $areaCode
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Layout_Factory $layoutFactory
      * @param array $invokeArgs
      */
-    public function __construct(Zend_Controller_Request_Abstract $request,
-        Zend_Controller_Response_Abstract $response,
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Controller_Response_Http $response,
+        $areaCode = null,
         Magento_ObjectManager $objectManager,
         Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Layout_Factory $layoutFactory,
         array $invokeArgs = array()
     ) {
-        parent::__construct($request, $response, $objectManager, $frontController, $invokeArgs);
+        parent::__construct($request, $response, $areaCode, $objectManager, $frontController, $layoutFactory);
 
         $this->_helper = isset($invokeArgs['helper']) ?
             $invokeArgs['helper'] :

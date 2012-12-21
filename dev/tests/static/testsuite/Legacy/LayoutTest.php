@@ -106,7 +106,9 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
 
         $this->_testObsoleteReferences($layoutXml);
 
-        $selectorHeadBlock = '(name()="block" or name()="reference") and (@name="head" or @name="convert_root_head")';
+        $selectorHeadBlock = '
+            (name()="block" or name()="reference") and (@name="head" or @name="convert_root_head" or @name="vde_head")
+        ';
         $this->assertSame(array(),
             $layoutXml->xpath(
                 '//*[' . $selectorHeadBlock . ']/action[@method="addItem"]'

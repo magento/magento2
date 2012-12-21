@@ -1,3 +1,24 @@
+2.0.0.0-dev36
+=============
+* Visual design editor refactored
+  * VDE controls and VDE actions moved to backend area
+  * Added IFRAME that allows to navigate through frontend pages in Navigation Mode and to modify blocks position in Design Mode
+  * Inline JavaScript code is disabled in Design Mode
+  * Store selection is performed on saving instead of reviewing the theme. List of all available stores is shown during assigning the theme to a store
+  * `System -> Design -> Editor` page divided into two tabs:
+    * "Available Themes" tab contains all available themes
+    * "My Customizations" tab contains themes customized by the store administrator and consists of area with themes assigned to stores and area with unassigned themes
+  * Added `vde` area code and `Mage_DesignEditor_Controller_Varien_Router_Standard` to handle requests from design editor
+  * Added ability to use custom layout instance in controllers to use specific layout, when design editor is launched
+* JavaScript updates
+  * Replaced `varienTabs` class with an analogous jQuery widget
+  * Displaying of loader during AJAX requests became optional
+* Removed `dev/api-tests` directory added by mistake
+* Bug fixes
+  * Impossible to login to backend with APC enabled. Added call of `session_write_close()` in the session model destructor
+  * Unnecessary regions shown when no country is selected in `System -> Sales -> Shipping Settings -> Origin`
+  * Fixed various bugs caused by virtual themes implementation and other themes improvements
+
 2.0.0.0-dev35
 =============
 * Enhancements of System Configuration:
@@ -206,11 +227,10 @@
 
 2.0.0.0-dev29
 =============
-* Added scripts that allow upgrading database from CE 1.7 (EE 1.12) to 2.x
+* Implemented and verified ability to upgrade DB from CE 1.7 (EE 1.12) to 2.x
 * Replaced calendar UI component with jQuery calendar
-* Removed store scope selector from backend customers management
-* Renamed `pub/js` (was known as `js` in Magento 1.x) into `pub/lib`
 * Restored back the public access to `pub/cron.php` entry point (in the previous patch it was denied by mistake)
+* Fixed typo in label of "Catalog Search" index in UI
 
 2.0.0.0-dev28
 =============
@@ -658,7 +678,7 @@
 =============
 * Implemented a tool for migrating factory table names from 1.x to 2.x. The tool replaces table names by list of names associations
 * Changed Unit tests suite running from usage AllTests.php in each directory to configuration in phpunit.xml.dist. Now all tests in `testsuite` directory are launched, there is no necessity to add new tests to the config
-* Implemented in Visual Desig Editor:
+* Implemented in Visual Design Editor:
   * Containers highlighting
   * Dropping of elements
 * Fixed some issues:
@@ -732,10 +752,10 @@
 2.0.0.0-dev02
 =============
 Deprecated code & minor fixes update:
-* eliminated remnants of `htmlescape` implementation
-* eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
-* disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
-* minor refactoring of data fixtures rollback capability in integration testing framework
+* Eliminated remnants of `htmlescape` implementation
+* Eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
+* Disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
+* Minor refactoring of data fixtures rollback capability in integration testing framework
 
 2.0.0.0-dev01
 =============

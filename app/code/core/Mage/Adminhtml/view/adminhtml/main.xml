@@ -57,7 +57,7 @@ Supported layout update handles (special):
                 <action method="setTitle" translate="title"><title>Magento Admin</title></action>
                 <action method="addJs"><file>jquery/jquery-1.8.2.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-                <action method="addJs"><file>jquery/jquery-ui-1.9.1.custom.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui-1.9.2.custom.min.js</file></action>
                 <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
                 <action method="addJs"><file>jquery/jquery.validate.js</file></action>
                 <action method="addJs"><file>mage/translate.js</file></action>
@@ -82,9 +82,9 @@ Supported layout update handles (special):
 
                 <action method="addJs"><file>mage/adminhtml/hash.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/events.js</file></action>
-                <action method="addJs"><file>mage/adminhtml/loader.js</file></action>
+                <action method="addJs"><file>mage/adminhtml/varienLoader.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/grid.js</file></action>
-                <action method="addJs"><file>mage/adminhtml/tabs.js</file></action>
+                <action method="addJs"><file>mage/backend/tabs.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/form.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/accordion.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/tools.js</file></action>
@@ -110,14 +110,14 @@ Supported layout update handles (special):
             </block>
 
             <block type="Mage_Adminhtml_Block_Page_Notices" name="global_notices" as="global_notices" template="page/notices.phtml" />
-            <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header"></block>
+            <block type="Mage_Adminhtml_Block_Page_Header" name="header" as="header"/>
             <container name="notifications" as="notifications" label="Notifications">
-                <block type="Mage_Adminhtml_Block_Notification_Baseurl" name="notification_baseurl" as="notification_baseurl" template="notification/baseurl.phtml"></block>
-                <block type="Mage_Adminhtml_Block_Cache_Notifications" name="cache_notifications" template="system/cache/notifications.phtml"></block>
+                <block type="Mage_Adminhtml_Block_Notification_Baseurl" name="notification_baseurl" as="notification_baseurl" template="notification/baseurl.phtml"/>
+                <block type="Mage_Adminhtml_Block_Cache_Notifications" name="cache_notifications" template="system/cache/notifications.phtml"/>
                 <block type="Mage_Adminhtml_Block_Notification_Survey" name="notification_survey" template="notification/survey.phtml"/>
-                <block type="Mage_Adminhtml_Block_Notification_Security" name="notification_security" as="notification_security" template="notification/security.phtml"></block>
+                <block type="Mage_Adminhtml_Block_Notification_Security" name="notification_security" as="notification_security" template="notification/security.phtml"/>
             </container>
-            <block type="Mage_Adminhtml_Block_Widget_Breadcrumbs" name="breadcrumbs" as="breadcrumbs"></block>
+            <block type="Mage_Adminhtml_Block_Widget_Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
 
             <!--<update handle="formkey"/> this won't work, see the try/catch and a jammed exception in Mage_Core_Model_Layout::createBlock() -->
             <block type="Mage_Core_Block_Template" name="formkey" as="formkey" template="Mage_Adminhtml::admin/formkey.phtml"/>
@@ -204,19 +204,19 @@ Supported layout update handles (special):
 
     <preview>
         <block type="Mage_Core_Block_Template" name="root" output="1" template="Mage_Adminhtml::newsletter/template/preview.phtml">
-            <block type="Mage_Adminhtml_Block_Newsletter_Template_Preview" name="content" as="content"></block>
+            <block type="Mage_Adminhtml_Block_Newsletter_Template_Preview" name="content" as="content"/>
         </block>
     </preview>
 
     <newsletter_template_preview>
         <block type="Mage_Core_Block_Template" name="root" output="1" template="Mage_Adminhtml::newsletter/template/preview.phtml">
-            <block type="Mage_Adminhtml_Block_Newsletter_Template_Preview" name="content" as="content"></block>
+            <block type="Mage_Adminhtml_Block_Newsletter_Template_Preview" name="content" as="content"/>
         </block>
     </newsletter_template_preview>
 
     <newsletter_queue_preview>
         <block type="Mage_Core_Block_Template" name="root" output="1" template="Mage_Adminhtml::newsletter/queue/preview.phtml">
-            <block type="Mage_Adminhtml_Block_Newsletter_Queue_Preview" name="content" as="content"></block>
+            <block type="Mage_Adminhtml_Block_Newsletter_Queue_Preview" name="content" as="content"/>
         </block>
     </newsletter_queue_preview>
 
@@ -226,7 +226,7 @@ Supported layout update handles (special):
 
     <systemPreview>
         <block type="Mage_Core_Block_Template" name="root" output="1" template="Mage_Adminhtml::system/email/template/preview.phtml">
-            <block type="Mage_Adminhtml_Block_System_Email_Template_Preview" name="content" as="content"></block>
+            <block type="Mage_Adminhtml_Block_System_Email_Template_Preview" name="content" as="content"/>
         </block>
     </systemPreview>
 

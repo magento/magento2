@@ -80,8 +80,8 @@
 function categorySubmit(url, useAjax) {
     var activeTab = $('active_tab_id');
     if (activeTab) {
-        if (activeTab.tabsJsObject && activeTab.tabsJsObject.activeTab) {
-            activeTab.value = activeTab.tabsJsObject.activeTab.id;
+        if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
+            activeTab.value = activeTab.tabsJsObject.tabs('activeAnchor').prop('id');
         }
     }
 

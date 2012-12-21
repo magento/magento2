@@ -310,7 +310,9 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     public function testGetBlockHtml()
     {
         // Without layout
-        $block1 = Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text');
+        /** @var $blockFactory Mage_Core_Model_BlockFactory */
+        $blockFactory = Mage::getObjectManager()->get('Mage_Core_Model_BlockFactory');
+        $block1 = $blockFactory->createBlock('Mage_Core_Block_Text');
         $block1->setText('Block text');
         $block1->setNameInLayout('block');
         $html = $this->_block->getBlockHtml('block');

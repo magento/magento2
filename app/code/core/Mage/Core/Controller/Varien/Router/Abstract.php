@@ -35,6 +35,19 @@ abstract class Mage_Core_Controller_Varien_Router_Abstract
     protected $_front;
 
     /**
+     * @var Mage_Core_Controller_Varien_Action_Factory
+     */
+    protected $_controllerFactory;
+
+    /**
+     * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
+     */
+    public function __construct(Mage_Core_Controller_Varien_Action_Factory $controllerFactory)
+    {
+        $this->_controllerFactory = $controllerFactory;
+    }
+
+    /**
      * Assign front controller instance
      *
      * @param $front Mage_Core_Controller_Varien_Front
@@ -66,5 +79,5 @@ abstract class Mage_Core_Controller_Varien_Router_Abstract
         return $frontName;
     }
 
-    abstract public function match(Zend_Controller_Request_Http $request);
+    abstract public function match(Mage_Core_Controller_Request_Http $request);
 }

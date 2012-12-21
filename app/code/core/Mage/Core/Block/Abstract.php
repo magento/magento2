@@ -75,9 +75,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     protected $_layout;
 
     /**
-     * Request object
-     *
-     * @var Zend_Controller_Request_Http
+     * @var Mage_Core_Controller_Request_Http
      */
     protected $_request;
 
@@ -152,17 +150,17 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         Mage_Core_Model_Factory_Helper $helperFactory,
         array $data = array()
     ) {
-        $this->_request = $request;
-        $this->_layout = $layout;
-        $this->_eventManager = $eventManager;
-        $this->_urlBuilder = $urlBuilder;
-        $this->_translator = $translator;
-        $this->_cache = $cache;
-        $this->_designPackage = $designPackage;
-        $this->_session = $session;
-        $this->_storeConfig = $storeConfig;
+        $this->_request         = $request;
+        $this->_layout          = $layout;
+        $this->_eventManager    = $eventManager;
+        $this->_urlBuilder      = $urlBuilder;
+        $this->_translator      = $translator;
+        $this->_cache           = $cache;
+        $this->_designPackage   = $designPackage;
+        $this->_session         = $session;
+        $this->_storeConfig     = $storeConfig;
         $this->_frontController = $frontController;
-        $this->_helperFactory = $helperFactory;
+        $this->_helperFactory   = $helperFactory;
 
         parent::__construct($data);
         $this->_construct();

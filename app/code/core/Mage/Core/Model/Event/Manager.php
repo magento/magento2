@@ -36,7 +36,7 @@ class Mage_Core_Model_Event_Manager
      * @param array $params
      * @return Mage_Core_Model_App
      */
-    public function dispatch($eventName, $params)
+    public function dispatch($eventName, array $params = array())
     {
         return Mage::dispatchEvent($eventName, $params);
     }

@@ -92,17 +92,15 @@
     }
 
 jQuery(function() {
-    var objName = '<?php echo $this->getSelectedTabId() ?>';
-    if (objName) {
-        obj = $(objName);
-        //IE fix (bubbling event model)
-        product_info_tabsJsTabs.setSkipDisplayFirstTab();
-        product_info_tabsJsTabs.showTabContent(obj);
+    <?php if ($this->getSelectedTabId()): ?>
+    if(jQuery('#<?php echo $this->getSelectedTabId() ?>').length) {
+        jQuery('#<?php echo $this->getSelectedTabId() ?>').trigger('click');
     }
-    Product.AttributesBridge.setTabsObject(product_info_tabsJsTabs);
-    window.varienGlobalEvents.attachEventHandler('tabChangeBefore', function(data) {
-        jQuery('#config_super_product')[data.first ? 'show' : 'hide']();
-    });
+    <?php endif; ?>
+    jQuery(window).on('tabsbeforeactivate', function(e, ui){
+        jQuery('#config_super_product')[ui.newTab.index() ? 'hide' : 'show']();
+    }).triggerHandler('tabsbeforeactivate', [{newTab: jQuery('#<?php echo $this->getSelectedTabId() ?>').closest('li')}]);
+
     (function ($) {
 
         var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;

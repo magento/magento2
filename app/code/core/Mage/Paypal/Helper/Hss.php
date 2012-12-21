@@ -57,7 +57,7 @@ class Mage_Paypal_Helper_Hss extends Mage_Core_Helper_Abstract
             }
         }
 
-        if ($blockObject = Mage::getSingleton('Mage_Core_Model_Layout')->getBlock($block)) {
+        if ($blockObject = Mage::app()->getLayout()->getBlock($block)) {
             return $blockObject->getTemplate();
         }
 

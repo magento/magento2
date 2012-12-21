@@ -127,8 +127,12 @@ originModel.prototype = {
             var regionElement  = $(countryElement.id.replace(/country_id/, 'region_id'));
             if (regionElement) {
                 this.regionElement = regionElement;
-                var url = this.regionsUrl+'parent/'+countryElement.value;
-                this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                if (countryElement.value.length) {
+                    var url = this.regionsUrl+'parent/'+countryElement.value;
+                    this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                } else {
+                    this.clearRegionField(this.regionElement.disabled);
+                }
             }
         }
     },
@@ -140,8 +144,12 @@ originModel.prototype = {
             var regionElement  = $(countryElement.id.replace(/country_id/, 'region_id'));
             if (regionElement) {
                 this.regionElement = regionElement;
-                var url = this.regionsUrl+'parent/'+countryElement.value;
-                this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                if (countryElement.value.length) {
+                    var url = this.regionsUrl+'parent/'+countryElement.value;
+                    this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                } else {
+                    this.clearRegionField(this.regionElement.disabled);
+                }
             }
         }
     },
@@ -169,14 +177,16 @@ originModel.prototype = {
                 parentNode.innerHTML = html;
                 this.regionElement = $(regionElementId);
             } else if (this.reload) {
-                var html = '<input type="text" name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" class="input-text" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
-                var parentNode = this.regionElement.parentNode;
-                var regionElementId = this.regionElement.id;
-                parentNode.innerHTML = html;
-                this.regionElement = $(regionElementId);
-                //this.regionElement.replace(html);
+                this.clearRegionField(disabled);
             }
         }
+    },
+    clearRegionField: function(disabled) {
+        var html = '<input type="text" name="' + this.regionElement.name + '" id="' + this.regionElement.id + '" class="input-text" title="' + this.regionElement.title + '"' + (disabled ? " disabled" : "") + '>';
+        var parentNode = this.regionElement.parentNode;
+        var regionElementId = this.regionElement.id;
+        parentNode.innerHTML = html;
+        this.regionElement = $(regionElementId);
     }
 }
 

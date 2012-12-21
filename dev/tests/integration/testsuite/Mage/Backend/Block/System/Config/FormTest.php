@@ -136,7 +136,9 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
     {
         Mage::getModel(
             'Mage_Core_Controller_Front_Action',
-            array('request' => Mage::app()->getRequest(), 'response' => Mage::app()->getResponse())
+            array('request' => Mage::app()->getRequest(), 'response' => Mage::app()->getResponse(),
+                'areaCode' => 'adminhtml'
+            )
         );
         Mage::app()->getRequest()->setParam('section', 'general');
         /** @var $block Mage_Backend_Block_System_Config_Form */

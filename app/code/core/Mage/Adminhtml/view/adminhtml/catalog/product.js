@@ -53,10 +53,11 @@ Product.Gallery.prototype = {
                 '(^|.|\\r|\\n)(__([a-zA-Z0-9_]+)__)', ''));
         this.fixParentTable();
         this.updateImages();
-        varienGlobalEvents.attachEventHandler('moveTab', this.onImageTabMove
-                .bind(this));
+        jQuery('#' + this.containerId)
+            .closest('.ui-tabs-panel')
+            .on('move.tabs', jQuery.proxy(this.onImageTabMove, this));
     },
-    onImageTabMove : function(event) {
+    onImageTabMove : function(event, tab) {
         var imagesTab = false;
         this.container.ancestors().each( function(parentItem) {
             if (parentItem.tabObject) {
@@ -65,7 +66,7 @@ Product.Gallery.prototype = {
             }
         }.bind(this));
 
-        if (imagesTab && event.tab && event.tab.name && imagesTab.name == event.tab.name) {
+        if (imagesTab && tab && tab.name && imagesTab.name === tab.name) {
             this.container.select('input[type="radio"]').each(function(radio) {
                 radio.observe('change', this.onChangeRadio);
             }.bind(this));
@@ -270,18 +271,10 @@ Product.AttributesBridge = {
     getAttributes : function(tabId) {
         return this.bindTabs2Attributes[tabId];
     },
-    setTabsObject : function(tabs) {
-        this.tabsObject = tabs;
-    },
-    getTabsObject : function() {
-        return this.tabsObject;
-    },
     addAttributeRow : function(data) {
-        $H(data).each( function(item) {
-            if (this.getTabsObject().activeTab.name != item.key) {
-                this.getTabsObject().showTabContent($(item.key));
-            }
-            this.getAttributes(item.key).addRow(item.value);
+        $H(data).each(function(item) {
+            var element = this.getAttributes(item.key).addRow(item.value);
+            jQuery(element).trigger('focus');
         }.bind(this));
     }
 };
@@ -318,6 +311,7 @@ Product.Attributes.prototype = {
             window.scrollTo(0, Position.cumulativeOffset(element)[1]
                     + element.offsetHeight);
         }
+        return element;
     }
 };
 

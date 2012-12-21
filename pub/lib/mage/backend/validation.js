@@ -92,9 +92,10 @@
                 type: 'POST',
                 dataType: 'json',
                 data: this.element.serialize(),
-                context: this,
-                success: this._onSuccess,
-                error: this._onError
+                context: $('body'),
+                success: $.proxy(this._onSuccess, this),
+                error: $.proxy(this._onError, this),
+                showLoader: true
             });
         },
 

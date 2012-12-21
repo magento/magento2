@@ -77,18 +77,25 @@ function recalculateTax()
 }
 
 // Bind tab changes
-function bindActiveProductTab(event) {
-    if(event.tab && event.tab.name && $('store_switcher')){
-        $('store_switcher').switchParams = 'active_tab/'+event.tab.name+'/';
+function bindActiveProductTab(event, ui) {
+    var anchor = jQuery(ui.newTab).find('a');
+    if (anchor && anchor.name && $('store_switcher')) {
+        $('store_switcher').switchParams = 'active_tab/'+anchor.name+'/';
     }
 }
-varienGlobalEvents.attachEventHandler('showTab', bindActiveProductTab);
+//varienGlobalEvents.attachEventHandler('showTab', bindActiveProductTab);
+jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
 <?php if($tabsBlock = $this->getLayout()->getBlock('product_tabs')): ?>
-if(<?php echo $tabsBlock->getJsObjectName() ?> && <?php echo $tabsBlock->getJsObjectName() ?>.activeTab && $('store_switcher')){
-    $('store_switcher').switchParams = 'active_tab/'+<?php echo $tabsBlock->getJsObjectName() ?>.activeTab.name+'/';
-}
+jQuery(document).ready(function(){
+    if (jQuery('#<?php echo $tabsBlock->getId() ?>').length && jQuery('#<?php echo $tabsBlock->getId() ?>').is(':mage-tabs')) {
+        var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
+        if (activeAnchor && $('store_switcher')) {
+            $('store_switcher').switchParams = 'active_tab/' + activeAnchor.prop('name') + '/';
+        }
+    }
+});
 <?php endif; ?>
 //]]>
 </script>

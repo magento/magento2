@@ -22,7 +22,7 @@
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-HistoryTest = TestCase('HistoryTest');
+HistoryTest = TestCase('DesignEditor_HistoryTest');
 HistoryTest.prototype.testInit = function() {
     jQuery(window).vde_history();
     assertEquals(true, jQuery(window).is(':vde-vde_history'));

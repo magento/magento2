@@ -60,6 +60,33 @@
         },
 
         /**
+         * Check if field value is changed
+         * @protected
+         * @param {Object} e event object
+         */
+        _changesObserver: function(e) {
+            var target = $(e.target);
+            if (e.type === 'focus' || e.type === 'focusin') {
+                this.currentField = {
+                    statuses: {
+                        checked: target.is(':checked'),
+                        selected: target.is(':selected')
+                    },
+                    val: target.val()
+                };
+
+            } else {
+                if (this.currentField) {
+                    var changed = target.val() !== this.currentField.val ||
+                        target.is(':checked') !== this.currentField.statuses.checked ||
+                        target.is(':selected') !== this.currentField.statuses.selected;
+                    if (changed) {
+                        target.trigger('changed');
+                    }
+                }
+            }
+        },
+        /**
          * Get array with handler names
          * @protected
          * @return {Array} Array of handler names
@@ -90,7 +117,9 @@
          * @protected
          */
         _bind: function() {
-            this.element.on(this._getHandlers().join(' '), $.proxy(this._submit, this));
+            this.element
+                .on(this._getHandlers().join(' '), $.proxy(this._submit, this))
+                .on('focus blur focusin focusout', $.proxy(this._changesObserver, this));
         },
 
         /**
@@ -152,7 +181,7 @@
         _submit: function(e, data) {
             this._rollback();
             this._beforeSubmit(e.type, data);
-            this.element.triggerHandler('submit');
+            this.element.trigger('submit');
         }
     });
 

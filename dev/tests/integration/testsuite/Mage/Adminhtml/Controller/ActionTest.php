@@ -39,8 +39,10 @@ class Mage_Adminhtml_Controller_ActionTest extends Magento_Test_TestCase_Control
             array(
                 'request'         => new Magento_Test_Request(),
                 'response'        => new Magento_Test_Response(),
+                'areaCode'        => 'adminhtml',
                 'objectManager'   => Mage::getObjectManager(),
-                'frontController' => Mage::getModel('Mage_Core_Controller_Varien_Front')
+                'frontController' => Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
+                'layoutFactory'   => Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory')
             )
         );
     }

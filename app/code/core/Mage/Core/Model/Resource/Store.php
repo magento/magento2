@@ -97,7 +97,7 @@ class Mage_Core_Model_Resource_Store extends Mage_Core_Model_Resource_Db_Abstrac
     protected function _afterDelete(Mage_Core_Model_Abstract $model)
     {
         $where = array(
-            'scope = ?'    => 'stores',
+            'scope = ?'    => Mage_Core_Model_Config::SCOPE_STORES,
             'scope_id = ?' => $model->getStoreId()
         );
 

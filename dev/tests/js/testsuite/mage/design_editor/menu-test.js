@@ -22,7 +22,7 @@
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-MenuTest = TestCase('MenuTest');
+MenuTest = TestCase('DesignEditor_MenuTest');
 MenuTest.prototype.testInit = function() {
     /*:DOC += <div id="menu"></div> */
     var menu = jQuery('#menu').vde_menu();

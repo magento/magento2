@@ -38,9 +38,8 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testThemeRegistration()
     {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(dirname(__FILE__) . DS . '_files' . DS . 'design');
-
         $eventObserver = $this->_createEventObserverForThemeRegistration();
+        $eventObserver->getEvent()->setBaseDir(dirname(__FILE__) . DS . '_files' . DS . 'design');
 
         /** @var $observer Mage_Core_Model_Observer */
         $observer = Mage::getModel('Mage_Core_Model_Observer');
@@ -52,10 +51,10 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
         $iphoneModel = $this->_getThemeModel();
         $iphoneModel->load('default/default_iphone', 'theme_path');
 
-        $this->assertEquals('default', $defaultModel->getThemeCode());
+        $this->assertEquals('Default', $defaultModel->getThemeTitle());
         $this->assertEquals(null, $defaultModel->getParentId());
 
-        $this->assertEquals('default_iphone', $iphoneModel->getThemeCode());
+        $this->assertEquals('Iphone', $iphoneModel->getThemeTitle());
         $this->assertEquals($defaultModel->getId(), $iphoneModel->getParentId());
     }
 

@@ -170,7 +170,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '35',
+            'number'    => '36',
         );
     }
 
@@ -561,24 +561,6 @@ final class Mage
             self::register($registryKey, self::getObjectManager()->get($modelClass, $arguments));
         }
         return self::registry($registryKey);
-    }
-
-    /**
-     * Retrieve Controller instance by ClassName
-     *
-     * @param string $class
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Controller_Response_Http $response
-     * @param array $invokeArgs
-     * @return Mage_Core_Controller_Front_Action
-     */
-    public static function getControllerInstance($class, $request, $response, array $invokeArgs = array())
-    {
-        return self::getObjectManager()->create($class, array(
-            'request' => $request,
-            'response' => $response,
-            'invokeArgs' => $invokeArgs
-        ));
     }
 
     /**

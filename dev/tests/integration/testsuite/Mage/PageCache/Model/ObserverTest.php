@@ -45,24 +45,24 @@ class Mage_PageCache_Model_ObserverTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoConfigFixture current_store system/external_page_cache/enabled 1
      */
-    public function testDesignEditorSessionActivate()
+    public function testSetNoCacheCookie()
     {
         /** @var $cookie Mage_Core_Model_Cookie */
         $cookie = Mage::getSingleton('Mage_Core_Model_Cookie');
         $this->assertEmpty($cookie->get(Mage_PageCache_Helper_Data::NO_CACHE_COOKIE));
-        $this->_observer->designEditorSessionActivate(new Varien_Event_Observer());
+        $this->_observer->setNoCacheCookie(new Varien_Event_Observer());
         $this->assertNotEmpty($cookie->get(Mage_PageCache_Helper_Data::NO_CACHE_COOKIE));
     }
 
     /**
      * @magentoConfigFixture current_store system/external_page_cache/enabled 1
      */
-    public function testDesignEditorSessionDeactivate()
+    public function testDeleteNoCacheCookie()
     {
         /** @var $cookie Mage_Core_Model_Cookie */
         $cookie = Mage::getSingleton('Mage_Core_Model_Cookie');
         $cookie->set(Mage_PageCache_Helper_Data::NO_CACHE_COOKIE, '1');
-        $this->_observer->designEditorSessionDeactivate(new Varien_Event_Observer());
+        $this->_observer->deleteNoCacheCookie(new Varien_Event_Observer());
         $this->assertEmpty($cookie->get(Mage_PageCache_Helper_Data::NO_CACHE_COOKIE));
     }
 }

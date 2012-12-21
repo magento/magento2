@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-TreeTest = TestCase('TreeTest');
+TreeTest = TestCase('DesignEditor_TreeTest');
 TreeTest.prototype.testInit = function() {
     /*:DOC += <div id="tree"></div> */
     var tree = jQuery('#tree').vde_tree();
@@ -41,7 +41,7 @@ TreeTest.prototype.testDefaultOptions = function() {
     assertEquals(false, themes.icons);
     tree.vde_tree('destroy');
 };
-var TreeTestAsync = AsyncTestCase('TreeTestAsync');
+var TreeTestAsync = AsyncTestCase('DesignEditor_TreeTestAsync');
 TreeTestAsync.prototype.testTreeLoadWithInitialSelect = function(queue) {
     /*:DOC +=
      <div id="tree">
@@ -117,7 +117,7 @@ TreeTestAsync.prototype.testTreeSelectNodeOnLoad = function(queue) {
             })
             .on('select_node.jstree', function(e, data) {
                 linkSelected(jQuery(data.rslt.obj).find('a:first').attr('href'));
-            })
+            });
         tree.vde_tree();
     });
     queue.call('Step 2: Check if "select_node" event is triggered', function() {
@@ -133,24 +133,25 @@ TreeTestAsync.prototype.testTreeSelectNode = function(queue) {
             <li rel="tree_element"><a href="#link">All Pages</a></li>
         </ul>
      </div>
+     <iframe name="vde_container_frame" id="vde_container_frame" class="vde_container_frame"></iframe>
      */
     var tree = jQuery('#tree');
     var linkSelectedEventIsTriggered = false;
     var locationIsChanged = false;
     queue.call('Step 1: Bind callback on "link_selected" event and initialize tree widget', function(callbacks) {
         var nodeSelected = callbacks.add(function(url) {
-            locationIsChanged = window.location.hash == url;
+            locationIsChanged = $('.vde_container_frame').attr('src') == url;
         });
         tree
             .on('loaded.jstree', function() {
                 tree.on('select_node.jstree', function(e, data) {
                     nodeSelected(jQuery(data.rslt.obj).find('a:first').attr('href'));
-                })
+                });
                 jQuery('li[rel="tree_element"] a').trigger('click');
             })
             .on('link_selected.vde_tree', function() {
                 linkSelectedEventIsTriggered = true;
-            })
+            });
         tree.vde_tree();
     });
     queue.call('Step 2: Check if "link_selected" event is triggered', function() {

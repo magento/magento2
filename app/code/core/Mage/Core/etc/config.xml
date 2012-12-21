@@ -277,7 +277,8 @@
             <routers>
                 <standard>
                     <area>frontend</area>
-                    <class>Mage_Core_Controller_Varien_Router_Standard</class>
+                    <class>Mage_Core_Controller_Varien_Router_Base</class>
+                    <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
                 </standard>
             </routers>
             <url>
@@ -379,7 +380,8 @@
                 <routers>
                     <standard>
                         <area>frontend</area>
-                        <class>Mage_Core_Controller_Varien_Router_Standard</class>
+                        <class>Mage_Core_Controller_Varien_Router_Base</class>
+                        <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
                     </standard>
                 </routers>
             </web>

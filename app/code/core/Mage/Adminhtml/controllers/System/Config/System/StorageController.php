@@ -155,7 +155,7 @@ class Mage_Adminhtml_System_Config_System_StorageController extends Mage_Adminht
 
                     $state = Mage_Core_Model_File_Storage_Flag::STATE_NOTIFIED;
                 case Mage_Core_Model_File_Storage_Flag::STATE_NOTIFIED:
-                    $block = Mage::getSingleton('Mage_Core_Model_Layout')
+                    $block = Mage::app()->getLayout()
                         ->createBlock('Mage_Adminhtml_Block_Notification_Toolbar')
                         ->setTemplate('notification/toolbar.phtml');
                     $result['html'] = $block->toHtml();

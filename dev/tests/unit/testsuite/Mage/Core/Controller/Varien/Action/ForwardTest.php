@@ -36,22 +36,28 @@ class Mage_Core_Controller_Varien_Action_ForwardTest extends PHPUnit_Framework_T
     protected $_object = null;
 
     /**
-     * @var Zend_Controller_Request_Http
+     * @var Mage_Core_Controller_Request_Http
      */
     protected $_request;
 
     /**
-     * @var Zend_Controller_Response_Http
+     * @var Mage_Core_Controller_Response_Http
      */
     protected $_response;
 
     protected function setUp()
     {
-        $this->_request = new Zend_Controller_Request_Http();
-
-        $this->_response = new Zend_Controller_Response_Http();
+        $this->_request  = new Mage_Core_Controller_Request_Http();
+        $this->_response = new Mage_Core_Controller_Response_Http();
 
         $this->_object = new Mage_Core_Controller_Varien_Action_Forward($this->_request, $this->_response);
+    }
+
+    protected function tearDown()
+    {
+        unset($this->_object);
+        unset($this->_request);
+        unset($this->_response);
     }
 
     /**

@@ -97,7 +97,7 @@ class Mage_Core_Model_Resource_Website extends Mage_Core_Model_Resource_Db_Abstr
     protected function _afterDelete(Mage_Core_Model_Abstract $model)
     {
         $where = array(
-            'scope = ?'    => 'websites',
+            'scope = ?'    => Mage_Core_Model_Config::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId()
         );
 
@@ -110,7 +110,7 @@ class Mage_Core_Model_Resource_Website extends Mage_Core_Model_Resource_Db_Abstr
     /**
      * Retrieve default stores select object
      * Select fields website_id, store_id
-     * 
+     *
      * @param boolean $withDefault include/exclude default admin website
      * @return Varien_Db_Select
      */

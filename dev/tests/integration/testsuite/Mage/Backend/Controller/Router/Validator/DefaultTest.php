@@ -38,11 +38,11 @@ class Mage_Backend_Controller_Router_Validator_DefaultTest extends PHPUnit_Frame
     public function testConstructWithEmptyAreaFrontName()
     {
         $options = array(
-            'area' => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
-            'base_controller' => 'Mage_Backend_Controller_ActionAbstract',
+            'areaCode' => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
+            'baseController' => 'Mage_Backend_Controller_ActionAbstract',
             'frontName' => 'backend'
         );
-        Mage::getModel('Mage_Backend_Controller_Router_Default', array('options' => $options));
+        Mage::getModel('Mage_Backend_Controller_Router_Default', $options);
     }
 
     /**
@@ -52,10 +52,9 @@ class Mage_Backend_Controller_Router_Validator_DefaultTest extends PHPUnit_Frame
     public function testConstructWithNotEmptyAreaFrontName()
     {
         $options = array(
-            'area' => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
-            'base_controller' => 'Mage_Backend_Controller_ActionAbstract',
-            'frontName' => 'backend'
+            'areaCode'       => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
+            'baseController' => 'Mage_Backend_Controller_ActionAbstract',
         );
-        Mage::getModel('Mage_Backend_Controller_Router_Default', array('options' => $options));
+        Mage::getModel('Mage_Backend_Controller_Router_Default', $options);
     }
 }

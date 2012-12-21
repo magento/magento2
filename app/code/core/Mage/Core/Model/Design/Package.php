@@ -62,11 +62,6 @@ class Mage_Core_Model_Design_Package
     /**#@-*/
 
     /**
-     * The name of the default theme in the context of a package
-     */
-    const DEFAULT_THEME_NAME = 'default';
-
-    /**
      * Published file cache storage tag
      */
     const PUBLIC_CACHE_TAG = 'design_public';

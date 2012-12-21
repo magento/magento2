@@ -27,7 +27,6 @@
 ?>
 <script type="text/javascript">//<[CDATA[
 (function($) {
-    'use strict';
     $(function() {
         $('#product-edit-form').bind('product:changeAttributeSet', function(event, attributeSetId) {
             if ($('.tab-item-link.ajax.changed').length > 0
@@ -41,7 +40,6 @@
             uri += 'set=' + window.encodeURIComponent(attributeSetId);
             $form.attr('action', uri).addClass('ignore-validate').submit();
         });
-
         $('#attribute-set-info').dialog({
             title: '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Select Attribute Set'); ?>',
             autoOpen: false,

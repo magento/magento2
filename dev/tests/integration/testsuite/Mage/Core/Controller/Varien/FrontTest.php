@@ -28,18 +28,19 @@
 class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
+
+    /**
      * @var Mage_Core_Controller_Varien_Front
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_model = Mage::getModel('Mage_Core_Controller_Varien_Front');
-    }
-
-    protected function tearDown()
-    {
-        $this->_model = null;
+        $this->_objectManager = Mage::getObjectManager();
+        $this->_model = $this->_objectManager->create('Mage_Core_Controller_Varien_Front');
     }
 
     public function testSetGetDefault()
@@ -105,9 +106,9 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
     public function testGetRouterByRoute()
     {
         $this->_model->init();
-        $this->assertInstanceOf('Mage_Core_Controller_Varien_Router_Standard', $this->_model->getRouterByRoute(''));
+        $this->assertInstanceOf('Mage_Core_Controller_Varien_Router_Base', $this->_model->getRouterByRoute(''));
         $this->assertInstanceOf(
-            'Mage_Core_Controller_Varien_Router_Standard',
+            'Mage_Core_Controller_Varien_Router_Base',
             $this->_model->getRouterByRoute('checkout')
         );
         $this->assertInstanceOf('Mage_Core_Controller_Varien_Router_Default', $this->_model->getRouterByRoute('test'));
@@ -117,11 +118,11 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
     {
         $this->_model->init();
         $this->assertInstanceOf(
-            'Mage_Core_Controller_Varien_Router_Standard',
+            'Mage_Core_Controller_Varien_Router_Base',
             $this->_model->getRouterByFrontName('')
         );
         $this->assertInstanceOf(
-            'Mage_Core_Controller_Varien_Router_Standard',
+            'Mage_Core_Controller_Varien_Router_Base',
             $this->_model->getRouterByFrontName('checkout')
         );
         $this->assertInstanceOf(
@@ -130,17 +131,42 @@ class Mage_Core_Controller_Varien_FrontTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRewrite()
+    /**
+     * @param string $sourcePath
+     * @param string $resultPath
+     *
+     * @dataProvider applyRewritesDataProvider
+     * @magentoConfigFixture global/rewrite/test_url/from /test\/(\w*)/
+     * @magentoConfigFixture global/rewrite/test_url/to   new_test/$1/subdirectory
+     * @magentoDataFixture Mage/Core/_files/url_rewrite.php
+     * @magentoDbIsolation enabled
+     */
+    public function testApplyRewrites($sourcePath, $resultPath)
     {
-        $route      = $this->_model->getRequest()->getRouteName();
-        $controller = $this->_model->getRequest()->getControllerName();
-        $action     = $this->_model->getRequest()->getActionName();
+        /** @var $request Mage_Core_Controller_Request_Http */
+        $request = $this->_objectManager->create('Mage_Core_Controller_Request_Http');
+        $request->setPathInfo($sourcePath);
 
-        $this->_model->rewrite();
+        $this->_model->applyRewrites($request);
+        $this->assertEquals($resultPath, $request->getPathInfo());
+    }
 
-        $this->assertEquals($route, $this->_model->getRequest()->getRouteName());
-        $this->assertEquals($controller, $this->_model->getRequest()->getControllerName());
-        $this->assertEquals($action, $this->_model->getRequest()->getActionName());
-        $this->markTestIncomplete('Requires an URL rewrite fixture.');
+    /**
+     * Data provider for testApplyRewrites
+     *
+     * @return array
+     */
+    public function applyRewritesDataProvider()
+    {
+        return array(
+            'url rewrite' => array(
+                '$sourcePath' => '/test_rewrite_path',      // data from fixture
+                '$resultPath' => 'cms/page/view/page_id/1', // data from fixture
+            ),
+            'configuration rewrite' => array(
+                '$sourcePath' => '/test/url/',
+                '$resultPath' => '/new_test/url/subdirectory/',
+            ),
+        );
     }
 }

@@ -50,9 +50,11 @@
          * @param {Object}
          */
         _add: function(e, jqXHR) {
-            var response = $.parseJSON(jqXHR.responseText);
-            if (response.error) {
-                this.element.append($.tmpl('globalNotification', response));
+            if($.mage.isJSON(jqXHR.responseText)) {
+                var response = $.parseJSON(jqXHR.responseText);
+                if (response.error) {
+                    this.element.append($.tmpl('globalNotification', response));
+                }
             }
         }
     });

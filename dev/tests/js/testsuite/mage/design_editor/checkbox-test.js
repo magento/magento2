@@ -22,7 +22,7 @@
  * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-CheckboxTest = TestCase('CheckboxTest');
+CheckboxTest = TestCase('DesignEditor_CheckboxTest');
 CheckboxTest.prototype.testInit = function() {
     /*:DOC += <div id="checkbox"></div> */
     var checkbox = jQuery('#checkbox').vde_checkbox();

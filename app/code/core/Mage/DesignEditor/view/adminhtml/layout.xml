@@ -27,21 +27,79 @@
 -->
 <layout>
     <adminhtml_system_design_editor_index>
+        <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/infinitescroll.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
         <reference name="content">
-            <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form_Container" name="design_editor_launcher_form_container">
-                <block type="Mage_DesignEditor_Block_Adminhtml_Launcher_Form" name="design_editor_launcher_form" as="form"/>
-            </block>
-            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_List" name="design_editor_theme_list" as="list" template="Mage_DesignEditor::theme/list.phtml">
-                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Item" name="design_editor_theme_item" as="item" template="Mage_DesignEditor::theme/item.phtml">
-                    <block type="Mage_Backend_Block_Template" name="design_editor_theme" as="theme" template="Mage_DesignEditor::theme.phtml" />
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tabs" name="theme.selector.tabs">
+                <action method="addTab"><name>available_themes</name><block>available.themes.tab</block></action>
+                <action method="addTab"><name>customizations</name><block>customizations.themes.tab</block></action>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Available" name="available.themes.tab">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="available.theme.item" as="item" template="Mage_DesignEditor::theme.phtml"/>
+                    </block>
+                </block>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Customizations" name="customizations.themes.tab" template="Mage_DesignEditor::theme/selector/myCustomizationsTab.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Assigned" name="assigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="assigned.theme" as="theme" template="Mage_DesignEditor::theme_customizations.phtml"/>
+                    </block>
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Unassigned" name="unassigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="unassigned.theme" as="theme" template="Mage_DesignEditor::theme_customizations.phtml" />
+                    </block>
                 </block>
             </block>
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
         </reference>
     </adminhtml_system_design_editor_index>
 
-    <adminhtml_system_design_editor_exit>
-        <reference name="content">
-            <block type="Mage_Adminhtml_Block_Template" name="design_editor_exit" as="exit" template="Mage_DesignEditor::exit.phtml"/>
+    <adminhtml_system_design_editor_firstentrance>
+        <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/infinitescroll.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
         </reference>
-    </adminhtml_system_design_editor_exit>
+        <reference name="content">
+            <block type="Mage_Backend_Block_Template" name="available.theme.list.container" as="theme_container" template="Mage_DesignEditor::theme/selector/firstEntrance.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme.phtml" />
+                </block>
+            </block>
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+        </reference>
+    </adminhtml_system_design_editor_firstentrance>
+
+    <adminhtml_system_design_editor_loadthemelist>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available_ajax.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme.phtml"/>
+            </block>
+        </container>
+    </adminhtml_system_design_editor_loadthemelist>
+
+    <adminhtml_system_design_editor_launch>
+        <reference name="root">
+            <action method="setTemplate"><file>Mage_DesignEditor::editor.phtml</file></action>
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
+            <action method="addJs"><file>jquery/jquery.iframe-auto-height.plugin.1.9.0.js</file></action>
+            <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
+            <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
+        </reference>
+        <reference name="content">
+            <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Container" name="design_editor" template="Mage_DesignEditor::editor/container.phtml">
+                <block type="Mage_Backend_Block_Template" name="design_editor_toolbar" template="Mage_DesignEditor::editor/toolbar.phtml">
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchy" name="design_editor_toolbar_handles_hierarchy" template="Mage_DesignEditor::editor/toolbar/handles_hierarchy.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_ViewOptions" name="design_editor_toolbar_view_options" template="Mage_DesignEditor::editor/toolbar/view_options.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_Buttons" name="design_editor_toolbar_buttons" template="Mage_DesignEditor::editor/toolbar/buttons.phtml" />
+                </block>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
+            </block>
+        </reference>
+    </adminhtml_system_design_editor_launch>
 </layout>

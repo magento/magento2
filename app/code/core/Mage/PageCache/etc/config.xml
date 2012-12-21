@@ -46,22 +46,22 @@
             </controls>
         </external_cache>
         <events>
-            <design_editor_session_activate>
+            <design_editor_activate>
                 <observers>
                     <mage_pagecache>
                         <class>Mage_PageCache_Model_Observer</class>
-                        <method>designEditorSessionActivate</method>
+                        <method>setNoCacheCookie</method>
                     </mage_pagecache>
                 </observers>
-            </design_editor_session_activate>
-            <design_editor_session_deactivate>
+            </design_editor_activate>
+            <design_editor_deactivate>
                 <observers>
                     <mage_pagecache>
                         <class>Mage_PageCache_Model_Observer</class>
-                        <method>designEditorSessionDeactivate</method>
+                        <method>deleteNoCacheCookie</method>
                     </mage_pagecache>
                 </observers>
-            </design_editor_session_deactivate>
+            </design_editor_deactivate>
         </events>
     </global>
     <adminhtml>

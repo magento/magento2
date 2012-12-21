@@ -37,14 +37,11 @@
 class Mage_DesignEditor_Block_Template extends Mage_Core_Block_Template
 {
     /**
-     * Check whether highlighting of elements is disabled or not
+     * Path to template file in theme.
      *
-     * @return bool
+     * @var string
      */
-    public function isHighlightingDisabled()
-    {
-        return Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled();
-    }
+    protected $_template = 'wrapping.phtml';
 
     /**
      * Get remove button for block/container wrapper

@@ -34,7 +34,7 @@
  * @package    Mage_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controller_Varien_DispatchableInterface
+abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_Varien_ActionAbstract
 {
     const FLAG_NO_CHECK_INSTALLATION    = 'no-install-check';
     const FLAG_NO_DISPATCH              = 'no-dispatch';
@@ -53,16 +53,12 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
     const XML_PAGE_TYPE_RENDER_INHERITED = 'global/dev/page_type/render_inherited';
 
     /**
-     * Request object
-     *
-     * @var Zend_Controller_Request_Abstract
+     * @var Mage_Core_Controller_Request_Http
      */
     protected $_request;
 
     /**
-     * Response object
-     *
-     * @var Zend_Controller_Response_Abstract
+     * @var Mage_Core_Controller_Response_Http
      */
     protected $_response;
 
@@ -139,31 +135,35 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
     protected $_frontController = null;
 
     /**
+     * @var Mage_Core_Model_Layout_Factory
+     */
+    protected $_layoutFactory;
+
+    /**
      * Constructor
      *
-     * @param Zend_Controller_Request_Abstract $request
-     * @param Zend_Controller_Response_Abstract $response
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Response_Http $response
+     * @param string $areaCode
      * @param Magento_ObjectManager $objectManager
      * @param Mage_Core_Controller_Varien_Front $frontController
-     * @param array $invokeArgs
+     * @param Mage_Core_Model_Layout_Factory $layoutFactory
      */
     public function __construct(
-        Zend_Controller_Request_Abstract $request,
-        Zend_Controller_Response_Abstract $response,
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Controller_Response_Http $response,
+        $areaCode = null,
         Magento_ObjectManager $objectManager,
         Mage_Core_Controller_Varien_Front $frontController,
-        array $invokeArgs = array()
+        Mage_Core_Model_Layout_Factory $layoutFactory
     ) {
-        $this->_request = $request;
-        $this->_response= $response;
-        $this->_objectManager = $objectManager;
+        parent::__construct($request, $response, $areaCode);
 
+        $this->_objectManager   = $objectManager;
         $this->_frontController = $frontController;
-
+        $this->_layoutFactory   = $layoutFactory;
         $this->_frontController->setAction($this);
-        if (!$this->_currentArea) {
-            $this->_currentArea = isset($invokeArgs['areaCode']) ? $invokeArgs['areaCode'] : null;
-        }
+
         $this->_construct();
     }
 
@@ -186,26 +186,6 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
     public function hasAction($action)
     {
         return method_exists($this, $this->getActionMethodName($action));
-    }
-
-    /**
-     * Retrieve request object
-     *
-     * @return Mage_Core_Controller_Request_Http
-     */
-    public function getRequest()
-    {
-        return $this->_request;
-    }
-
-    /**
-     * Retrieve response object
-     *
-     * @return Mage_Core_Controller_Response_Http
-     */
-    public function getResponse()
-    {
-        return $this->_response;
     }
 
     /**
@@ -247,27 +227,13 @@ abstract class Mage_Core_Controller_Varien_Action implements Mage_Core_Controlle
     }
 
     /**
-     * Retrieve full bane of current action current controller and
-     * current module
-     *
-     * @param   string $delimiter
-     * @return  string
-     */
-    public function getFullActionName($delimiter = '_')
-    {
-        return $this->getRequest()->getRequestedRouteName().$delimiter.
-            $this->getRequest()->getRequestedControllerName().$delimiter.
-            $this->getRequest()->getRequestedActionName();
-    }
-
-    /**
      * Retrieve current layout object
      *
      * @return Mage_Core_Model_Layout
      */
     public function getLayout()
     {
-        return Mage::getSingleton('Mage_Core_Model_Layout', array('area' => $this->_currentArea));
+        return $this->_layoutFactory->createLayout(array('area' => $this->_currentArea));
     }
 
     /**

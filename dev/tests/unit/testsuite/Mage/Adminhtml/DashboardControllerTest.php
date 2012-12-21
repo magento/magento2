@@ -26,8 +26,8 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
     public function testTunnelAction()
     {
         $fixture = uniqid();
-        /** @var $request Zend_Controller_Request_Abstract|PHPUnit_Framework_MockObject_MockObject */
-        $request = $this->getMockForAbstractClass('Zend_Controller_Request_Abstract');
+        /** @var $request Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject */
+        $request = $this->getMockForAbstractClass('Mage_Core_Controller_Request_Http');
         $request->setParam('ga', urlencode(base64_encode(serialize(array(1)))));
         $request->setParam('h', $fixture);
 
@@ -55,7 +55,7 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
 
     public function testTunnelAction400()
     {
-        $controller = $this->_factory($this->getMockForAbstractClass('Zend_Controller_Request_Abstract'));
+        $controller = $this->_factory($this->getMockForAbstractClass('Mage_Core_Controller_Request_Http'));
         $controller->tunnelAction();
         $this->assertEquals(400, $controller->getResponse()->getHttpResponseCode());
     }
@@ -63,8 +63,8 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
     public function testTunnelAction503()
     {
         $fixture = uniqid();
-        /** @var $request Zend_Controller_Request_Abstract|PHPUnit_Framework_MockObject_MockObject */
-        $request = $this->getMockForAbstractClass('Zend_Controller_Request_Abstract');
+        /** @var $request Mage_Core_Controller_Request_Http|PHPUnit_Framework_MockObject_MockObject */
+        $request = $this->getMockForAbstractClass('Mage_Core_Controller_Request_Http');
         $request->setParam('ga', urlencode(base64_encode(serialize(array(1)))));
         $request->setParam('h', $fixture);
 
@@ -97,24 +97,31 @@ class Mage_Adminhtml_DashboardControllerTest extends PHPUnit_Framework_TestCase
     /**
      * Create the tested object
      *
-     * @param Zend_Controller_Request_Abstract $request
-     * @param Zend_Controller_Response_Abstract|null $response
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Response_Http|null $response
      * @param Magento_ObjectManager_Zend|null $objectManager
      * @return Mage_Adminhtml_DashboardController|PHPUnit_Framework_MockObject_MockObject
      */
     protected function _factory($request, $response = null, $objectManager = null)
     {
         if (!$response) {
-            /** @var $response Zend_Controller_Response_Abstract|PHPUnit_Framework_MockObject_MockObject */
-            $response = $this->getMockForAbstractClass('Zend_Controller_Response_Abstract');
+            /** @var $response Mage_Core_Controller_Response_Http|PHPUnit_Framework_MockObject_MockObject */
+            $response = $this->getMockForAbstractClass('Mage_Core_Controller_Response_Http');
             $response->headersSentThrowsException = false;
         }
         if (!$objectManager) {
             $objectManager = new Magento_ObjectManager_Zend;
         }
+
+        $routerFactory  = $this->getMock('Mage_Core_Controller_Varien_Router_Factory', array(), array(), '', false);
+        $rewriteFactory = $this->getMock('Mage_Core_Model_Url_RewriteFactory', array(), array(), '', false);
+        $varienFront = new Mage_Core_Controller_Varien_Front($routerFactory, $rewriteFactory);
+        $layoutFactory = $this->getMock('Mage_Core_Model_Layout_Factory', array(), array(), '', false);
+
         return $this->getMock('Mage_Adminhtml_DashboardController', array('__'), array(
-            $request, $response, $objectManager,
-            new Mage_Core_Controller_Varien_Front, array('helper' => 1, 'session' => 1, 'translator' => 1)
+            $request, $response, null, $objectManager,
+            $varienFront, $layoutFactory,
+            array('helper' => 1, 'session' => 1, 'translator' => 1)
         ));
     }
 }

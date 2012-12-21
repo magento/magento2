@@ -209,7 +209,7 @@ class Mage_Core_Model_Email_Template_Filter extends Varien_Filter_Template
         $layout->generateXml();
         $layout->generateElements();
 
-        foreach ($layout->getAllBlocks() as $blockName => $block) {
+        foreach ($layout->getAllBlocks() as $block) {
             /* @var $block Mage_Core_Block_Abstract */
             foreach ($params as $k => $v) {
                 if (in_array($k, $skipParams)) {

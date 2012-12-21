@@ -470,7 +470,7 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve route path
      *
-     * @param array $routParams
+     * @param array $routeParams
      * @return string
      */
     public function getRoutePath($routeParams = array())
@@ -725,11 +725,14 @@ class Mage_Core_Model_Url extends Varien_Object
      *
      * @param string $routePath
      * @param array $routeParams
-     *
      * @return string
      */
     public function getRouteUrl($routePath = null, $routeParams = null)
     {
+        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+            return $routePath;
+        }
+
         $this->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
@@ -948,6 +951,10 @@ class Mage_Core_Model_Url extends Varien_Object
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
+        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+            return $routePath;
+        }
+
         $escapeQuery = false;
 
         /**
@@ -1179,7 +1186,7 @@ class Mage_Core_Model_Url extends Varien_Object
     public function isOwnOriginUrl()
     {
         $storeDomains = array();
-        $referer = parse_url(Mage::app()->getFrontController()->getRequest()->getServer('HTTP_REFERER'), PHP_URL_HOST);
+        $referer = parse_url(Mage::app()->getRequest()->getServer('HTTP_REFERER'), PHP_URL_HOST);
         foreach (Mage::app()->getStores() as $store) {
             $storeDomains[] = parse_url($store->getBaseUrl(), PHP_URL_HOST);
             $storeDomains[] = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, true), PHP_URL_HOST);

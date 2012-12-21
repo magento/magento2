@@ -79,6 +79,14 @@ class Mage_Core_Model_Session_Abstract extends Varien_Object
     protected $_skipSessionIdFlag   = false;
 
     /**
+     * This method needs to support sessions with APC enabled
+     */
+    public function __destruct()
+    {
+        session_write_close();
+    }
+
+    /**
      * Configure session handler and start session
      *
      * @param string $sessionName

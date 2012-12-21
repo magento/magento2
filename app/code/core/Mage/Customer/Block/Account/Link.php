@@ -113,9 +113,10 @@ class Mage_Customer_Block_Account_Link extends Mage_Core_Block_Abstract
      */
     protected function _addLink($target, $text, $url, $title, $position, $textBefore='', $textAfter='')
     {
+        /** @var $target Mage_Page_Block_Template_Links */
         $target = $this->getLayout()->getBlock($target);
         if ($target && method_exists($target, 'addLink')) {
-            $target->addLink($text, $url, $title, false, array(), $position, null, null, $textBefore, $textAfter);
+            $target->addLink($text, $url, $title, true, array(), $position, null, null, $textBefore, $textAfter);
         }
         return $this;
     }

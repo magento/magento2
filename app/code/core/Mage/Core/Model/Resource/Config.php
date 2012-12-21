@@ -62,8 +62,8 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
             ->from($this->getTable('core_website'), array('website_id', 'code', 'name'));
         $rowset = $read->fetchAssoc($select);
         foreach ($rowset as $w) {
-            $xmlConfig->setNode('websites/'.$w['code'].'/system/website/id', $w['website_id']);
-            $xmlConfig->setNode('websites/'.$w['code'].'/system/website/name', $w['name']);
+            $xmlConfig->setNode('websites/' . $w['code'] . '/system/website/id', $w['website_id']);
+            $xmlConfig->setNode('websites/' . $w['code'] . '/system/website/name', $w['name']);
             $websites[$w['website_id']] = array('code' => $w['code']);
         }
 
@@ -76,12 +76,15 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
             if (!isset($websites[$s['website_id']])) {
                 continue;
             }
-            $xmlConfig->setNode('stores/'.$s['code'].'/system/store/id', $s['store_id']);
-            $xmlConfig->setNode('stores/'.$s['code'].'/system/store/name', $s['name']);
-            $xmlConfig->setNode('stores/'.$s['code'].'/system/website/id', $s['website_id']);
-            $xmlConfig->setNode('websites/'.$websites[$s['website_id']]['code'].'/system/stores/'.$s['code'], $s['store_id']);
+            $xmlConfig->setNode('stores/' . $s['code'] . '/system/store/id', $s['store_id']);
+            $xmlConfig->setNode('stores/' . $s['code'] . '/system/store/name', $s['name']);
+            $xmlConfig->setNode('stores/' . $s['code'] . '/system/website/id', $s['website_id']);
+            $xmlConfig->setNode(
+                'websites/' . $websites[$s['website_id']]['code'] . '/system/stores/' . $s['code'],
+                $s['store_id']
+            );
             $stores[$s['store_id']] = array('code'=>$s['code']);
-            $websites[$s['website_id']]['stores'][$s['store_id']] = $s['code'];
+            $websites[$s['website_id']][Mage_Core_Model_Config::SCOPE_STORES][$s['store_id']] = $s['code'];
         }
 
         $substFrom = array();
@@ -98,7 +101,7 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
 
         // set default config values from database
         foreach ($rowset as $r) {
-            if ($r['scope'] !== 'default') {
+            if ($r['scope'] !== Mage_Core_Model_Store::DEFAULT_CODE) {
                 continue;
             }
             $value = str_replace($substFrom, $substTo, $r['value']);
@@ -115,7 +118,7 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
         $deleteWebsites = array();
         // set websites config values from database
         foreach ($rowset as $r) {
-            if ($r['scope'] !== 'websites') {
+            if ($r['scope'] !== Mage_Core_Model_Config::SCOPE_WEBSITES) {
                 continue;
             }
             $value = str_replace($substFrom, $substTo, $r['value']);
@@ -130,9 +133,9 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
         // extend website config values to all associated stores
         foreach ($websites as $website) {
             $extendSource = $xmlConfig->getNode('websites/' . $website['code']);
-            if (isset($website['stores'])) {
-                foreach ($website['stores'] as $sCode) {
-                    $storeNode = $xmlConfig->getNode('stores/'.$sCode);
+            if (isset($website[Mage_Core_Model_Config::SCOPE_STORES])) {
+                foreach ($website[Mage_Core_Model_Config::SCOPE_STORES] as $sCode) {
+                    $storeNode = $xmlConfig->getNode('stores/' . $sCode);
                     /**
                      * $extendSource DO NOT need overwrite source
                      */
@@ -144,7 +147,7 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
         $deleteStores = array();
         // set stores config values from database
         foreach ($rowset as $r) {
-            if ($r['scope'] !== 'stores') {
+            if ($r['scope'] !== Mage_Core_Model_Config::SCOPE_STORES) {
                 continue;
             }
             $value = str_replace($substFrom, $substTo, $r['value']);
@@ -158,14 +161,14 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
 
         if ($deleteWebsites) {
             $this->_getWriteAdapter()->delete($this->getMainTable(), array(
-                'scope = ?'      => 'websites',
+                'scope = ?'      => Mage_Core_Model_Config::SCOPE_WEBSITES,
                 'scope_id IN(?)' => $deleteWebsites,
             ));
         }
 
         if ($deleteStores) {
             $this->_getWriteAdapter()->delete($this->getMainTable(), array(
-                'scope=?'        => 'stores',
+                'scope=?'        => Mage_Core_Model_Config::SCOPE_STORES,
                 'scope_id IN(?)' => $deleteStores,
             ));
         }

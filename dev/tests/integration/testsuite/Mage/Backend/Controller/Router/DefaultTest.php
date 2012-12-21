@@ -40,12 +40,11 @@ class Mage_Backend_Controller_Router_DefaultTest extends PHPUnit_Framework_TestC
     protected function setUp()
     {
         $options = array(
-            'area' => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
-            'base_controller' => 'Mage_Backend_Controller_ActionAbstract',
-            'frontName' => 'backend'
+            'areaCode'        => Mage::helper('Mage_Backend_Helper_Data')->getAreaCode(),
+            'baseController'  => 'Mage_Backend_Controller_ActionAbstract',
         );
-        $this->_frontMock = $this->getMock('Mage_Core_Controller_Varien_Front');
-        $this->_model = Mage::getModel('Mage_Backend_Controller_Router_Default', array('options' => $options));
+        $this->_frontMock = $this->getMock('Mage_Core_Controller_Varien_Front', array(), array(), '', false);
+        $this->_model = Mage::getModel('Mage_Backend_Controller_Router_Default', $options);
         $this->_model->setFront($this->_frontMock);
     }
 

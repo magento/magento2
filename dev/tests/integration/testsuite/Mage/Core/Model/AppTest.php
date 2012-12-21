@@ -222,13 +222,6 @@ class Mage_Core_Model_AppTest extends PHPUnit_Framework_TestCase
         $this->assertSame($locale, $this->_model->getLocale());
     }
 
-    public function testGetLayout()
-    {
-        $layout = $this->_mageModel->getLayout();
-        $this->assertInstanceOf('Mage_Core_Model_Layout', $layout);
-        $this->assertSame($layout, $this->_mageModel->getLayout());
-    }
-
     public function testGetTranslator()
     {
         $translate = $this->_model->getTranslator();

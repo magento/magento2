@@ -35,40 +35,16 @@ class Mage_Core_Controller_Varien_Router_BaseTest extends PHPUnit_Framework_Test
     protected function setUp()
     {
         $options = array(
-            'area' => 'frontend',
-            'base_controller' => 'Mage_Core_Controller_Front_Action'
+            'areaCode' => 'frontend',
+            'baseController' => 'Mage_Core_Controller_Front_Action'
         );
-        $this->_model = Mage::getModel('Mage_Core_Controller_Varien_Router_Base', array('options' => $options));
+        $this->_model = Mage::getModel('Mage_Core_Controller_Varien_Router_Base', $options);
         $this->_model->setFront(Mage::getModel('Mage_Core_Controller_Varien_Front'));
     }
 
     protected function tearDown()
     {
         $this->_model = null;
-    }
-
-    /**
-     * @dataProvider initOptionsDataProvider
-     * @expectedException Mage_Core_Exception
-     */
-    public function testConstructor(array $options)
-    {
-        Mage::getModel('Mage_Core_Controller_Varien_Router_Base', array('options' => $options));
-    }
-
-    public function initOptionsDataProvider()
-    {
-        return array(
-            array(
-                array()
-            ),
-            array(
-                array('area' => 'frontend')
-            ),
-            array(
-                array('base_controller' => 'Mage_Core_Controller_Front_Action')
-            )
-        );
     }
 
     public function testCollectRoutes()

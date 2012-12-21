@@ -92,7 +92,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_New_Product_Created extends
     public function getAttributesBlockJson()
     {
         $result = array(
-            $this->getRequest()->getParam('tab') => $this->getChildHtml('attributes')
+            $this->getRequest()->getParam('product_tab') => $this->getChildHtml('attributes')
         );
         $newAttributeSetId = $this->getRequest()->getParam('new_attribute_set_id');
         if ($newAttributeSetId) {

@@ -31,6 +31,10 @@
  * @method Mage_Core_Model_Resource_Website getResource()
  * @method Mage_Core_Model_Website setCode(string $value)
  * @method string getName()
+ * @method string getGroupTitle()
+ * @method string getStoreTitle()
+ * @method string getStoreId()
+ * @method string getGroupId()
  * @method Mage_Core_Model_Website setName(string $value)
  * @method int getSortOrder()
  * @method Mage_Core_Model_Website setSortOrder(int $value)
@@ -67,7 +71,7 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
     protected $_configCache = array();
 
     /**
-     * Website Group Coleection array
+     * Website Group Collection array
      *
      * @var array
      */
@@ -178,14 +182,14 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
             return $this;
         }
         if (is_numeric($code)) {
-            foreach (Mage::getConfig()->getNode('websites')->children() as $websiteCode=>$website) {
-                if ((int)$website->system->website->id==$code) {
+            foreach (Mage::getConfig()->getNode('websites')->children() as $websiteCode => $website) {
+                if ((int)$website->system->website->id == $code) {
                     $code = $websiteCode;
                     break;
                 }
             }
         } else {
-            $website = Mage::getConfig()->getNode('websites/'.$code);
+            $website = Mage::getConfig()->getNode('websites/' . $code);
         }
         if (!empty($website)) {
             $this->setCode($code);
@@ -204,14 +208,13 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
     public function getConfig($path) {
         if (!isset($this->_configCache[$path])) {
 
-            $config = Mage::getConfig()->getNode('websites/'.$this->getCode().'/'.$path);
+            $config = Mage::getConfig()->getNode('websites/' . $this->getCode() . '/' . $path);
             if (!$config) {
                 return false;
-                #throw Mage::exception('Mage_Core', Mage::helper('Mage_Core_Helper_Data')->__('Invalid website\'s configuration path: %s', $path));
             }
             if ($config->hasChildren()) {
                 $value = array();
-                foreach ($config->children() as $k=>$v) {
+                foreach ($config->children() as $k => $v) {
                     $value[$k] = $v;
                 }
             } else {
@@ -244,6 +247,7 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
      * Set website groups
      *
      * @param array $groups
+     * @return Mage_Core_Model_Website
      */
     public function setGroups($groups)
     {
@@ -255,7 +259,7 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
             if ($this->getDefaultGroupId() == $group->getId()) {
                 $this->_defaultGroup = $group;
             }
-            $this->_groupsCount ++;
+            $this->_groupsCount++;
         }
         return $this;
     }
@@ -534,7 +538,7 @@ class Mage_Core_Model_Website extends Mage_Core_Model_Abstract
      * Retrieve default stores select object
      * Select fields website_id, store_id
      *
-     * @param $withDefault include/exclude default admin website
+     * @param bool $withDefault include/exclude default admin website
      * @return Varien_Db_Select
      */
     public function getDefaultStoresSelect($withDefault = false)

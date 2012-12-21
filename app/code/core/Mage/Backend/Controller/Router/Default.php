@@ -47,13 +47,20 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
     protected $_areaFrontName;
 
     /**
+     * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
      * @param Magento_ObjectManager $objectManager
-     * @param array $options
+     * @param string $areaCode
+     * @param string $baseController
      * @throws InvalidArgumentException
      */
-    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
-    {
-        parent::__construct($objectManager, $options);
+    public function __construct(
+        Mage_Core_Controller_Varien_Action_Factory $controllerFactory,
+        Magento_ObjectManager $objectManager,
+        $areaCode,
+        $baseController
+    ) {
+        parent::__construct($controllerFactory, $objectManager, $areaCode, $baseController);
+
         $this->_areaFrontName = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
         if (empty($this->_areaFrontName)) {
             throw new InvalidArgumentException('Area Front Name should be defined');
@@ -99,9 +106,9 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
     }
 
     /**
-     * dummy call to pass through checking
+     * Dummy call to pass through checking
      *
-     * @return unknown
+     * @return boolean
      */
     protected function _beforeModuleMatch()
     {
@@ -207,7 +214,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
         $file = Mage::getModuleDir('controllers', $realModule);
-        return $file . DS . ucfirst($this->_area) . DS . uc_words($controller, DS) . 'Controller.php';
+        return $file . DS . ucfirst($this->_areaCode) . DS . uc_words($controller, DS) . 'Controller.php';
     }
 
     /**
@@ -232,7 +239,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
 
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
-        return $realModule . '_' . ucfirst($this->_area) . '_' . uc_words($controller) . 'Controller';
+        return $realModule . '_' . ucfirst($this->_areaCode) . '_' . uc_words($controller) . 'Controller';
     }
 
     /**
