@@ -1369,8 +1369,16 @@ class Mage_Core_Model_App
                         'type'  => (string)$obsConfig->type,
                         'model' => $obsConfig->class ? (string)$obsConfig->class : $obsConfig->getClassName(),
                         'method'=> (string)$obsConfig->method,
+						'priority' => $obsConfig->priority ? (int)$obsConfig->priority : 0,
                     );
                 }
+				usort($observers, function($a, $b){
+					if($a['priority']==$b['priority']){
+						return 0;
+					} else {
+						return $a['priority']<$b['priority'] ? -1 : 1;
+					}
+				});
                 $events[$eventName]['observers'] = $observers;
                 $this->_events[$area][$eventName]['observers'] = $observers;
             }
