@@ -508,6 +508,8 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     protected function _afterLoad()
     {
+        parent::_afterLoad();
+
         if ($this->_addUrlRewrite) {
            $this->_addUrlRewrite($this->_urlRewriteCategory);
         }

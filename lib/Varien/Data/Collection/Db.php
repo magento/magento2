@@ -101,6 +101,13 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected $_isOrdersRendered = false;
 
     /**
+     * Callbacks to be executed after collection is loaded
+     *
+     * @var array
+     */
+    protected $_afterLoadCallbacks = array();
+
+    /**
      * @param Zend_Db_Adapter_Abstract|null $conn
      */
     public function __construct($conn = null)
@@ -669,8 +676,24 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
         return $this;
     }
 
+    /**
+     * @param callable $callback
+     * @return Varien_Data_Collection_Db
+     */
+    public function addAfterLoadCallback($callback)
+    {
+        $this->_afterLoadCallbacks[] = $callback;
+        return $this;
+    }
+
     protected function _afterLoad()
     {
+        foreach ($this->_afterLoadCallbacks as $callback) {
+            if (is_callable($callback)) {
+                call_user_func($callback, $this);
+            }
+        }
+        $this->_afterLoadCallbacks = array();
         return $this;
     }
 

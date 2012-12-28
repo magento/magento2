@@ -75,9 +75,8 @@ class Mage_Review_Model_Observer
     public function catalogBlockProductCollectionBeforeToHtml(Varien_Event_Observer $observer)
     {
         $productCollection = $observer->getEvent()->getCollection();
-        if ($productCollection instanceof Varien_Data_Collection) {
-            $productCollection->load();
-            Mage::getModel('Mage_Review_Model_Review')->appendSummary($productCollection);
+        if ($productCollection instanceof Varien_Data_Collection_Db) {
+            $productCollection->addAfterLoadCallback(array(Mage::getModel('Mage_Review_Model_Review'), 'appendSummary'));
         }
 
         return $this;
