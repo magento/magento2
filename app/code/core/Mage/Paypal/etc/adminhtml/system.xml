@@ -53,7 +53,7 @@
                     <label>Email Associated with PayPal Merchant Account</label>
                     <comment>
                         <![CDATA[<a href="http://www.magentocommerce.com/paypal">Start accepting payments via PayPal!</a>]]>
-</comment>
+                    </comment>
                     <tooltip>Don't have a PayPal account? Simply enter your email address.</tooltip>
                     <config_path>paypal/general/business_account</config_path>
                     <validate>validate-email</validate>
@@ -63,24 +63,24 @@
                 <label>Select a PayPal Solution</label>
                 <help_url>
                     <![CDATA[https://merchant.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=merchant/home]]>
-</help_url>
+                </help_url>
                 <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_Fieldset_Global</frontend_model>
                 <field id="express" translate="label comment" type="checkbox" sortOrder="10" showInDefault="1" showInWebsite="1">
                     <label>Express Checkout</label>
                     <comment>Add an Express Checkout button to your existing shopping cart for quick and easy credit card payments. PayPal handles all payment processing.</comment>
                     <demo_url>
                         <![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_express_checkout]]>
-</demo_url>
+                    </demo_url>
                     <more_url>
                         <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=ECA]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>all</enable_for_countries>
                         <urls>
                             <JP translate="switcher fieldset">
                                 <more_url>
                                     <![CDATA[https://cms.paypal.com/jp/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_jp/ExpressCheckout&nav=3.1.1]]>
-</more_url>
+                                </more_url>
                             </JP>
                         </urls>
                     </attribute>
@@ -91,17 +91,17 @@
                     <comment>PayPal processes all of your orders, and you get paid.</comment>
                     <demo_url>
                         <![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_WPS]]>
-</demo_url>
+                    </demo_url>
                     <more_url>
                         <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=WPSA]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>all</enable_for_countries>
                         <urls>
                             <JP translate="switcher fieldset">
                                 <more_url>
                                     <![CDATA[https://cms.paypal.com/jp/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_jp/WebsitePaymentsStandard&nav=3.1.2]]>
-</more_url>
+                                </more_url>
                             </JP>
                         </urls>
                     </attribute>
@@ -112,10 +112,10 @@
                     <comment>Process credit cards directly on your website with PayPal&#8217;s all-in-one online payment processing solution.</comment>
                     <demo_url>
                         <![CDATA[https://merchant.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=merchant/demo_wpp]]>
-</demo_url>
+                    </demo_url>
                     <more_url>
                         <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=WPPROA]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>US, CA, GB</enable_for_countries>
                     </attribute>
@@ -134,7 +134,7 @@
                     <comment>Don&#8217;t have a PayPal merchant account? You can still accept credit card payments through the Payflow Pro Gateway.</comment>
                     <more_url>
                         <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_simple-referral-flow&partner_id=NB9WWHYEMVUMS&product_id=payflow_pro]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>US, CA, AU, NZ</enable_for_countries>
                     </attribute>
@@ -147,14 +147,14 @@
                         <enable_for_countries>US, GB</enable_for_countries>
                     </attribute>
                     <config_path>payment/paypaluk_express/active</config_path>
-                    <attribute type="is_simplified" hello='sadfsdf'>1</attribute>
+                    <attribute type="is_simplified">1</attribute>
                 </field>
                 <field id="payflow_link" translate="label comment" type="checkbox" sortOrder="50" showInDefault="1" showInWebsite="1">
                     <label>Payflow Link (for USA and Canada)</label>
                     <comment>Accept payments with a PCI-compliant checkout that keeps customers on your site. For use with your own merchant account.</comment>
                     <more_url>
                         <![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_payflow-link-overview-outside]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>US, CA</enable_for_countries>
                     </attribute>
@@ -172,10 +172,10 @@
                     <label>Website Payments Pro Hosted Solution</label>
                     <comment>
                         <![CDATA[Payments by cards + seller protection - <strong style="color:red">Contact PayPal before activating</strong>]]>
-</comment>
+                    </comment>
                     <more_url>
                         <![CDATA[https://cms.paypal.com/cms_content/GB/en_GB/files/developer/HostedSolution.pdf]]>
-</more_url>
+                    </more_url>
                     <attribute type="backend_congif">
                         <enable_for_countries>all</enable_for_countries>
                         <disable_for_countries>US,CA</disable_for_countries>
@@ -201,7 +201,7 @@
                             <JP translate="switcher fieldset">
                                 <more_url>
                                     <![CDATA[https://www.paypal-japan.com/wpp/]]>
-</more_url>
+                                </more_url>
                             </JP>
                         </urls>
                     </attribute>
@@ -250,11 +250,11 @@
                     <button_label>Get Credentials from PayPal</button_label>
                     <button_url>
                         <![CDATA[https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
-</button_url>
+                    </button_url>
                     <attribute type="sandbox_button_label">Sandbox Credentials</attribute>
                     <attribute type="sandbox_button_url">
                         <![CDATA[https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
-</attribute>
+                    </attribute>
                     <frontend_model>Mage_Paypal_Block_Adminhtml_System_Config_ApiWizard</frontend_model>
                 </field>
                 <field id="sandbox_flag" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1">
@@ -366,7 +366,7 @@
                     <comment>Whether to create a billing agreement, if there are no active billing agreements available.</comment>
                     <tooltip>
                         <![CDATA[Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.]]>
-</tooltip>
+                    </tooltip>
                     <config_path>payment/paypal_express/allow_ba_signup</config_path>
                     <source_model>Mage_Paypal_Model_Config::getExpressCheckoutBASignupOptions</source_model>
                 </field>
@@ -490,7 +490,7 @@
                     <label>Allowed Credit Card Types</label>
                     <comment>
                         <![CDATA[3D Secure validation is required for Maestro cards. Supporting of American Express cards require additional agreement. Learn more at <a href="http://www.paypal.com/amexupdate">http://www.paypal.com/amexupdate</a>.]]>
-</comment>
+                    </comment>
                     <config_path>payment/paypal_direct/cctypes</config_path>
                     <source_model>Mage_Paypal_Model_Config::getWppCcTypesAsOptionArray</source_model>
                 </field>
@@ -533,7 +533,7 @@
                     <label>Enabled</label>
                     <comment>
                         <![CDATA[Will appear as a payment option only for customers who have at least one active billing agreement.]]>
-</comment>
+                    </comment>
                     <config_path>payment/paypal_billing_agreement/active</config_path>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
@@ -674,7 +674,7 @@
                     <label>Allowed Credit Card Types</label>
                     <comment>
                         <![CDATA[3D Secure validation is required for Maestro cards.]]>
-</comment>
+                    </comment>
                     <config_path>payment/paypaluk_direct/cctypes</config_path>
                     <source_model>Mage_Paypal_Model_Config::getWppPeCcTypesAsOptionArray</source_model>
                 </field>
@@ -800,7 +800,7 @@
                     <label>Allowed Credit Card Types</label>
                     <comment>
                         <![CDATA[Supporting of American Express cards require additional agreement. Learn more at <a href="http://www.paypal.com/amexupdate">http://www.paypal.com/amexupdate</a>.]]>
-</comment>
+                    </comment>
                     <config_path>payment/verisign/cctypes</config_path>
                     <source_model>Mage_Paypal_Model_Config::getPayflowproCcTypesAsOptionArray</source_model>
                 </field>
@@ -963,21 +963,21 @@
                     <config_path>paypal/style/page_style</config_path>
                     <tooltip>
                         <![CDATA[Allowable values: "paypal", "primary" (default), your_custom_value (a custom payment page style from your merchant account profile).]]>
-</tooltip>
+                    </tooltip>
                 </field>
                 <field id="paypal_hdrimg" translate="label tooltip" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Image URL</label>
                     <config_path>paypal/style/paypal_hdrimg</config_path>
                     <tooltip>
                         <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style="color:red">https</strong> is highly encouraged.]]>
-</tooltip>
+                    </tooltip>
                 </field>
                 <field id="paypal_hdrbackcolor" translate="label tooltip" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Background Color</label>
                     <config_path>paypal/style/paypal_hdrbackcolor</config_path>
                     <tooltip>
                         <![CDATA[The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.]]>
-</tooltip>
+                    </tooltip>
                 </field>
                 <field id="paypal_hdrbordercolor" translate="label tooltip" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Header Border Color</label>
@@ -989,7 +989,7 @@
                     <config_path>paypal/style/paypal_payflowcolor</config_path>
                     <tooltip>
                         <![CDATA[The background color for the checkout page around the header and payment form.]]>
-</tooltip>
+                    </tooltip>
                 </field>
             </group>
             <group id="payflow_link" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">

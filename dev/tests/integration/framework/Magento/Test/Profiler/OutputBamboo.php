@@ -38,20 +38,12 @@ class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Driver_Standar
     /**
      * Constructor
      *
-     * @param string $filename  Filename of the target file to write results to
-     * @param array  $metrics   Metrics to be included into result.
-     *                          Supported format: array(
-     *                              'metric name 1' => array(
-     *                                  'profiler key 1', ...
-     *                              ), ...
-     *                          );
-     * @param string $delimiter
-     * @param string $enclosure
+     * @param array|null $config
      */
-    public function __construct($filename, array $metrics, $delimiter = ',', $enclosure = '"')
+    public function __construct(array $config = null)
     {
-        parent::__construct($filename, $delimiter, $enclosure);
-        $this->_metrics = $metrics;
+        parent::__construct($config);
+        $this->_metrics = isset($config['metrics']) ? (array)$config['metrics'] : array();
     }
 
     /**

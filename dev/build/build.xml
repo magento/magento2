@@ -86,6 +86,7 @@
 
     <target name="prepare-ee" depends="prepare-build-properties">
         <copy file="${dir.build_directory}/${enterprise-enabler.file}.dist" tofile="${dir.build_directory}/${enterprise-enabler.file}"/>
+        <copy file="${dir.build_directory}/${saas-enabler.file}.dist" tofile="${dir.build_directory}/${saas-enabler.file}"/>
 
         <replace file="${dir.build_directory}/downloader/config.ini" token="community" value="enterprise"/>
         <replace file="${dir.build_directory}/app/Mage.php" token="self::EDITION_COMMUNITY" value="self::EDITION_ENTERPRISE"/>

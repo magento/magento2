@@ -45,16 +45,13 @@ class Mage_Adminhtml_System_Email_TemplateController extends Mage_Adminhtml_Cont
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Adminhtml::system_email_template');
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Transactional Emails'));
-
-        $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Email_Template', 'template'));
         $this->renderLayout();
     }
 
     public function gridAction()
     {
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Email_Template_Grid')->toHtml()
-        );
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
 

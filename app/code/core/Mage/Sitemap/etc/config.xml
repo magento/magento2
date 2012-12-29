@@ -64,6 +64,13 @@
                 </Mage_Sitemap>
             </modules>
         </translate>
+        <layout>
+            <updates>
+                <sitemap module="Mage_Sitemap">
+                    <file>layout.xml</file>
+                </sitemap>
+            </updates>
+        </layout>
     </adminhtml>
     <default>
         <sitemap>

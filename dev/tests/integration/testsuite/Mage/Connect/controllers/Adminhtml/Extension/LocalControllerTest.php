@@ -28,7 +28,7 @@
 /**
  * Test Mage_Connect_Adminhtml_Extension_LocalController
  */
-class Mage_Connect_Adminhtml_Extension_LocalControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Connect_Adminhtml_Extension_LocalControllerTest extends Mage_Backend_Utility_Controller
 {
     public function testIndexAction()
     {

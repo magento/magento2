@@ -51,10 +51,6 @@ class Mage_Adminhtml_Newsletter_ProblemController extends Mage_Adminhtml_Control
 
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Problem Reports'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Problem Reports'));
 
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Problem', 'problem')
-        );
-
         $this->renderLayout();
     }
 
@@ -93,8 +89,8 @@ class Mage_Adminhtml_Newsletter_ProblemController extends Mage_Adminhtml_Control
         }
                 $this->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('Mage_Adminhtml_Model_Session')->getMessages(true));
 
-        $grid = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Problem_Grid');
-        $this->getResponse()->setBody($grid->toHtml());
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     protected function _isAllowed()

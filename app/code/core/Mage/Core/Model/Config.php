@@ -668,7 +668,8 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
         $sectionKey = implode('_', $sectionPath);
 
         if (!isset($this->_cacheLoadedSections[$sectionKey])) {
-            Magento_Profiler::start('init_config_section:' . $sectionKey);
+            Magento_Profiler::start('init_config_section:' . $sectionKey, array('group' => 'init_config_section',
+                'section_key' => $sectionKey));
             $this->_cacheLoadedSections[$sectionKey] = $this->_loadSectionCache($sectionKey);
             Magento_Profiler::stop('init_config_section:' . $sectionKey);
         }
@@ -1352,7 +1353,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     {
         $className = $this->getModelClassName($modelClass);
         if (class_exists($className)) {
-            Magento_Profiler::start('FACTORY:' . $className);
+            Magento_Profiler::start('FACTORY:' . $className, array('group' => 'FACTORY', 'class_name' => $className));
             $obj = $this->_objectManager->create($className, $constructArguments);
             Magento_Profiler::stop('FACTORY:' . $className);
             return $obj;

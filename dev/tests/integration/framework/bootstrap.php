@@ -73,19 +73,21 @@ $isDeveloperMode = (defined('TESTS_MAGENTO_DEVELOPER_MODE') && TESTS_MAGENTO_DEV
 /* Enable profiler if necessary */
 if (defined('TESTS_PROFILER_FILE') && TESTS_PROFILER_FILE) {
     $driver = new Magento_Profiler_Driver_Standard();
-    $driver->registerOutput(new Magento_Profiler_Driver_Standard_Output_Csvfile(
-        $testsBaseDir . DIRECTORY_SEPARATOR . TESTS_PROFILER_FILE
-    ));
+    $driver->registerOutput(new Magento_Profiler_Driver_Standard_Output_Csvfile(array(
+        'baseDir' => $testsBaseDir,
+        'filePath' => TESTS_PROFILER_FILE
+    )));
     Magento_Profiler::add($driver);
 }
 
 /* Enable profiler with bamboo friendly output format */
 if (defined('TESTS_BAMBOO_PROFILER_FILE') && defined('TESTS_BAMBOO_PROFILER_METRICS_FILE')) {
     $driver = new Magento_Profiler_Driver_Standard();
-    $driver->registerOutput(new Magento_Test_Profiler_OutputBamboo(
-        $testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_FILE,
-        require($testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_METRICS_FILE)
-    ));
+    $driver->registerOutput(new Magento_Test_Profiler_OutputBamboo(array(
+        'baseDir' => $testsBaseDir,
+        'filePath' => TESTS_BAMBOO_PROFILER_FILE,
+        'metrics' => require($testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_METRICS_FILE)
+    )));
     Magento_Profiler::add($driver);
 }
 

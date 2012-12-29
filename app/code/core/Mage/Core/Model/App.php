@@ -1384,7 +1384,7 @@ class Mage_Core_Model_App
 
             foreach ($events[$eventName]['observers'] as $obsName => $obs) {
                 $observer->setData(array('event' => $event));
-                Magento_Profiler::start('OBSERVER:' . $obsName);
+                Magento_Profiler::start('OBSERVER:' . $obsName, array('group' => 'OBSERVER', 'observer' => $obsName));
                 switch ($obs['type']) {
                     case 'disabled':
                         break;

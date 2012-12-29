@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Backend_Adminhtml_System_ConfigControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Backend_Adminhtml_System_ConfigControllerTest extends Mage_Backend_Utility_Controller
 {
     public function testEditAction()
     {

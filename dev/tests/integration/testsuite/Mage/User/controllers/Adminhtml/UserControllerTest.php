@@ -28,7 +28,7 @@
 /**
  * @group module:Mage_User
  */
-class Mage_User_Adminhtml_UserControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_User_Adminhtml_UserControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * @covers Mage_User_Adminhtml_UserController::indexAction

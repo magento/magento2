@@ -27,10 +27,7 @@
  */
 -->
 <view>
-    <vars module="Namespace_Module">
-        <var name="var1">Value1</var>
-    </vars>
-    <vars module="Namespace_Module"><!-- duplicate vars module -->
+   <vars module="Namespace_Module1">
         <var name="var1">Value1</var>
         <var name="var1">Value1</var><!-- duplicate var name -->
     </vars>

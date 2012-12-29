@@ -58,7 +58,6 @@ class Mage_Adminhtml_Block_Backup extends Mage_Adminhtml_Block_Template
             'onclick' => "return backup.backup('" . Mage_Backup_Helper_Data::TYPE_MEDIA . "')",
             'class'  => ''
         ));
-        $this->addChild('backupsGrid', 'Mage_Adminhtml_Block_Backup_Grid');
 
         $this->addChild('dialogs', 'Mage_Adminhtml_Block_Backup_Dialogs');
     }

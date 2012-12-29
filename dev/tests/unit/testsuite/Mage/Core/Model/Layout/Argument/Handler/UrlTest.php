@@ -76,6 +76,21 @@ class Mage_Core_Model_Layout_Argument_Handler_UrlTest extends PHPUnit_Framework_
         $this->assertEquals($expectedUrl, $this->_model->process(array('path' => $path, 'params' => $params)));
     }
 
+    public function testProcessWithoutUrlParams()
+    {
+        $expectedUrl = "http://generated-url.com";
+
+        $path = 'module/controller/action';
+        $params = null;
+
+        $this->_urlModelMock->expects($this->once())
+            ->method('getUrl')
+            ->with($this->equalTo($path), $this->equalTo($params))
+            ->will($this->returnValue($expectedUrl));
+
+        $this->assertEquals($expectedUrl, $this->_model->process(array('path' => $path)));
+    }
+
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Passed value has incorrect format

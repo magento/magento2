@@ -32,16 +32,16 @@
                 <label>Ogone</label>
                 <comment>
                     <![CDATA[<br />
-<div class="custom-options">
-<div class="box">
-<p class="grand-total"><br /><b>Signing up with Ogone</b></p>
-<p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
-<p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
-<p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
-</div>
-</div>
-]]>
-</comment>
+                    <div class="custom-options">
+                    <div class="box">
+                    <p class="grand-total"><br /><b>Signing up with Ogone</b></p>
+                    <p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
+                    <p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
+                    <p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
+                    </div>
+                    </div>
+                    ]]>
+                </comment>
                 <field id="active" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
@@ -61,24 +61,24 @@
                     <label>SHA-IN Pass Phrase</label>
                     <comment>
                         <![CDATA[Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.]]>
-</comment>
+                    </comment>
                     <backend_model>Mage_Backend_Model_Config_Backend_Encrypted</backend_model>
                 </field>
                 <field id="secret_key_in" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>SHA-OUT Pass Phrase</label>
                     <comment>
                         <![CDATA[Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.]]>
-</comment>
+                    </comment>
                     <backend_model>Mage_Backend_Model_Config_Backend_Encrypted</backend_model>
                 </field>
                 <field id="shamode" translate="label comment tooltip" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Hash All Parameters</label>
                     <comment>
                         <![CDATA[Enabling this feature needs adjusting "Technical information > Global security parameters" on merchant administration.]]>
-</comment>
+                    </comment>
                     <tooltip>
                         <![CDATA[To hash <strong>all parameters</strong>, select the following options in the "Global security parameters" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>"Hash algorithm" same as "Hashing Algorithm" below</li><li>UTF-8</li></ul>]]>
-</tooltip>
+                    </tooltip>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
                 <field id="hashing_algorithm" translate="label" type="select" sortOrder="37" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -109,25 +109,25 @@
                     <label>Background Color of Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "white".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="txtcolor" translate="label comment" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Text Color of the Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "black".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="tblbgcolor" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Table Background Color of the Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "white".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="tbltxtcolor" translate="label comment" type="text" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Table Text Color of the Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "black".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="buttonbgcolor" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Button Background Color of the Ogone Template</label>
@@ -136,19 +136,19 @@
                     <label>Button Text Color of the Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "white".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="fonttype" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Font Family of the Ogone Template</label>
                     <comment>
                         <![CDATA[E.g: "Verdana".]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="logo" translate="label comment" type="text" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo of the Ogone Template</label>
                     <comment>
                         <![CDATA[URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="pmlist" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Layout of Payment Methods</label>

@@ -37,9 +37,12 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
 
     /**
      * Start output buffering
+     *
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config = null)
     {
+        parent::__construct($config);
         ob_start();
     }
 
@@ -65,8 +68,8 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
 
         // setup the wildfire channel
         $firebugChannel = Zend_Wildfire_Channel_HttpHeaders::getInstance();
-        $firebugChannel->setRequest($this->_request ? $this->_request : new Zend_Controller_Request_Http());
-        $firebugChannel->setResponse($this->_response ? $this->_response : new Zend_Controller_Response_Http());
+        $firebugChannel->setRequest($this->getRequest());
+        $firebugChannel->setResponse($this->getResponse());
 
         // flush the wildfire headers into the response object
         $firebugChannel->flush();
@@ -100,6 +103,19 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     }
 
     /**
+     * Request getter
+     *
+     * @return Zend_Controller_Request_Abstract
+     */
+    public function getRequest()
+    {
+        if (!$this->_request) {
+            $this->_request = new Zend_Controller_Request_Http();
+        }
+        return $this->_request;
+    }
+
+    /**
      * Response setter
      *
      * @param Zend_Controller_Response_Abstract $response
@@ -108,4 +124,18 @@ class Magento_Profiler_Driver_Standard_Output_Firebug extends Magento_Profiler_D
     {
         $this->_response = $response;
     }
+
+    /**
+     * Request getter
+     *
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function getResponse()
+    {
+        if (!$this->_response) {
+            $this->_response = new Zend_Controller_Response_Http();
+        }
+        return $this->_response;
+    }
+
 }

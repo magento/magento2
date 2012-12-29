@@ -42,15 +42,114 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
     /**
      * Constructor
      *
-     * @param Magento_Profiler_Driver_Standard_Stat|null $stat
+     * @param array|null $config
      */
-    public function __construct(Magento_Profiler_Driver_Standard_Stat $stat = null)
+    public function __construct(array $config = null)
     {
-        if (!$stat) {
-            $stat = new Magento_Profiler_Driver_Standard_Stat();
-        }
-        $this->_stat = $stat;
+        $this->_initOutputs($config);
+        $this->_initStat($config);
         register_shutdown_function(array($this, 'display'));
+    }
+
+    /**
+     * Init outputs by configuration
+     *
+     * @param array|null $config
+     */
+    protected function _initOutputs(array $config = null)
+    {
+        if (!$config) {
+            return;
+        }
+
+        $outputFactory = $this->_getOutputFactory($config);
+        foreach ($this->_getOutputConfigs($config) as $code => $outputConfig) {
+            $outputConfig = $this->_parseOutputConfig($outputConfig);
+            if (false === $outputConfig) {
+                continue;
+            }
+            if (!isset($outputConfig['type']) && !is_numeric($code)) {
+                $outputConfig['type'] = $code;
+            }
+            if (!isset($outputConfig['baseDir']) && isset($config['baseDir'])) {
+                $outputConfig['baseDir'] = $config['baseDir'];
+            }
+            $this->registerOutput($outputFactory->create($outputConfig));
+        }
+    }
+
+    /**
+     * Parses output config
+     *
+     * @param mixed $outputConfig
+     * @return array|bool
+     */
+    protected function _parseOutputConfig($outputConfig)
+    {
+        $result = false;
+        if (is_array($outputConfig)) {
+            $result = $outputConfig;
+        } elseif (is_scalar($outputConfig) && $outputConfig) {
+            if (is_numeric($outputConfig)) {
+                $result = array();
+            } else {
+                $result = array(
+                    'type' => $outputConfig
+                );
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get output configs
+     *
+     * @param array $config
+     * @return array
+     */
+    protected function _getOutputConfigs(array $config = null)
+    {
+        $result = array();
+        if (isset($config['outputs'])) {
+            $result = $config['outputs'];
+        } elseif (isset($config['output'])) {
+            $result[] = $config['output'];
+        }
+        return $result;
+    }
+
+    /**
+     * Gets output factory from configuration or create new one
+     *
+     * @param array|null $config
+     * @return Magento_Profiler_Driver_Standard_Output_Factory
+     */
+    protected function _getOutputFactory(array $config = null)
+    {
+        if (isset($config['outputFactory'])
+            && $config['outputFactory'] instanceof Magento_Profiler_Driver_Standard_Output_Factory
+        ) {
+            $result = $config['outputFactory'];
+        } else {
+            $result = new Magento_Profiler_Driver_Standard_Output_Factory();
+        }
+        return $result;
+    }
+
+    /**
+     * Init timers statistics object from configuration or create new one
+     *
+     * @param array $config|null
+     */
+    protected function _initStat(array $config = null)
+    {
+        if (isset($config['stat'])
+            && $config['stat'] instanceof Magento_Profiler_Driver_Standard_Stat
+        ) {
+            $this->_stat = $config['stat'];
+        } else {
+            $this->_stat = new Magento_Profiler_Driver_Standard_Stat();
+        }
     }
 
     /**
@@ -68,7 +167,6 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      *
      * @param string $timerId
      * @param array|null $tags
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function start($timerId, array $tags = null)

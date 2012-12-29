@@ -28,7 +28,7 @@
 /**
  * All controller actions must be run with logged in admin user
  */
-class Mage_DesignEditor_PageControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_DesignEditor_PageControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * Default page type url

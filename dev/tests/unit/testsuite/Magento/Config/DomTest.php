@@ -102,9 +102,6 @@ class Magento_Config_DomTest extends PHPUnit_Framework_TestCase
             $errors = array();
             $this->assertFalse($config->validate($schema, $errors));
             $this->assertNotEmpty($errors);
-            foreach ($errors as $error) {
-                $this->assertInstanceOf('libXMLError', $error);
-            }
         }
     }
 

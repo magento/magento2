@@ -25,3 +25,6 @@ lib/Varien/Db/Adapter/Pdo/Mssql.php
 lib/Varien/Db/Statement/Oracle.php
 lib/Varien/Db/Statement/Pdo/Mssql.php
 lib/Varien/Db/Statement/Sqlsrv.php
+app/code/core/Saas
+dev/tests/unit/testsuite/Saas
+dev/tests/js/testsuite/saas

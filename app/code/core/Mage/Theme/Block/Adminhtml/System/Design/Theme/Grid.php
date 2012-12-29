@@ -58,7 +58,7 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Grid extends Mage_Adminhtml
     /**
      * Define grid columns
      *
-     * @return Mage_Adminhtml_Block_System_Design_Grid|Mage_Backend_Block_Widget_Grid
+     * @return Mage_Backend_Block_Widget_Grid
      */
     protected function _prepareColumns()
     {

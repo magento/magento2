@@ -158,7 +158,8 @@ class Mage_Core_Model_App_Area
         if (isset($this->_loadedParts[$part])) {
             return $this;
         }
-        Magento_Profiler::start('load_area:' . $this->_code . '.' . $part);
+        Magento_Profiler::start('load_area:' . $this->_code . '.' . $part,
+            array('group' => 'load_area', 'area_code' => $this->_code, 'part' => $part));
         switch ($part) {
             case self::PART_CONFIG:
                 $this->_initConfig();

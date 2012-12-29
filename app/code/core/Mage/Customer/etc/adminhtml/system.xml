@@ -179,7 +179,7 @@
                     <label>Prefix Dropdown Options</label>
                     <comment>
                         <![CDATA[Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="middlename_show" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Middle Name (initial)</label>
@@ -197,7 +197,7 @@
                     <label>Suffix Dropdown Options</label>
                     <comment>
                         <![CDATA[Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="dob_show" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Date of Birth</label>

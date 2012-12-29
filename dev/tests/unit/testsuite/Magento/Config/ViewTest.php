@@ -65,9 +65,11 @@ class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Value Three', $this->_model->getVarValue('Three', 'three'));
     }
 
+    /**
+     * @expectedException Magento_Exception
+     */
     public function testInvalidXml()
     {
-        $this->markTestIncomplete('Bug: invalid XML-document is bypassed in Magento_Config_Dom::_mergeNode()');
         new Magento_Config_View(array(__DIR__ . '/_files/view_invalid.xml'));
     }
 }

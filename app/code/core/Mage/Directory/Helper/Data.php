@@ -118,7 +118,7 @@ class Mage_Directory_Helper_Data extends Mage_Core_Helper_Abstract
     public function getRegionJson()
     {
 
-        Magento_Profiler::start('TEST: '.__METHOD__);
+        Magento_Profiler::start('TEST: '.__METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
         if (!$this->_regionJson) {
             $cacheKey = 'DIRECTORY_REGIONS_JSON_STORE'.Mage::app()->getStore()->getId();
             if (Mage::app()->useCache('config')) {

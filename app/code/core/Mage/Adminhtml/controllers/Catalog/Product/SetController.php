@@ -50,13 +50,6 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
             Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attribute Sets'),
             Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attribute Sets'));
 
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main')
-        );
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid')
-        );
-
         $this->renderLayout();
     }
 
@@ -95,11 +88,10 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     public function setGridAction()
     {
-        $this->_setTypeId();
-        $this->getResponse()->setBody(
-            $this->getLayout()
-                ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid')
-                ->toHtml());
+
+       $this->_setTypeId();
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     /**

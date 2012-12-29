@@ -48,16 +48,65 @@
     </adminhtml_auth_resetpassword>
 
     <!-- admin acl roles grid page -->
+    <adminhtml_user_role_grid_block>
+        <reference name="adminhtml.user.role.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="adminhtml.role.grid" as="grid">
+                <arguments>
+                    <id>roleGrid</id>
+                    <dataSource type="object">Mage_User_Model_Resource_Role_Grid_Collection</dataSource>
+                    <save_parameters_in_session>1</save_parameters_in_session>
+                    <default_sort>role_id</default_sort>
+                    <default_dir>asc</default_dir>
+                    <use_ajax>1</use_ajax>
+                    <grid_url type="url">
+                        <path>*/*/roleGrid</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" as="grid.columnSet" name="permission.role.grid.columnSet">
+                    <arguments>
+                        <id>roleGrid</id>
+                        <rowUrl>
+                            <path>*/*/editrole</path>
+                            <extraParamsTemplate>
+                                <rid>getId</rid>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="role_id">
+                        <arguments>
+                            <header translate="true" module="Mage_User">ID</header>
+                            <width>50px</width>
+                            <align>right</align>
+                            <index>role_id</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="role_name">
+                        <arguments>
+                            <header translate="true" module="Mage_User">Role Name</header>
+                            <type>text</type>
+                            <index>role_name</index>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_user_role_grid_block>
+
     <adminhtml_user_role_index>
+        <update handle="formkey"/>
+        <update handle="adminhtml_user_role_grid_block"/>
         <reference name="content">
-            <block type="Mage_User_Block_Role" name="adminhtml.user.role.index" />
+            <block type="Mage_User_Block_Role" name="adminhtml.user.role.container" />
         </reference>
     </adminhtml_user_role_index>
 
     <adminhtml_user_role_rolegrid>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_User_Block_Role_Grid" name="adminhtml.user.role.grid"/>
-        </container>
+        <update handle="formkey"/>
+        <update handle="adminhtml_user_role_grid_block" />
+        <container label="User Role Grid Container"  name="adminhtml.user.role.container" output="1" />
     </adminhtml_user_role_rolegrid>
 
     <!-- admin acl roles edit page -->
@@ -82,8 +131,9 @@
     </adminhtml_user_role_editrolegrid>
 
     <adminhtml_user_index>
+        <update handle="adminhtml_user_grid_block"/>
         <reference name="content">
-            <block type="Mage_User_Block_User" name="adminhtml.user.index"/>
+            <block type="Mage_User_Block_User" name="adminhtml.user.grid.container"/>
         </reference>
     </adminhtml_user_index>
 
@@ -100,9 +150,9 @@
     </adminhtml_user_edit>
 
     <adminhtml_user_rolegrid>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_User_Block_User_Grid" name="adminhtml.user.rolegrid"/>
-        </container>
+        <update handle="formkey"/>
+        <update handle="adminhtml_user_grid_block"/>
+        <container label='Admin User Container' name="adminhtml.user.grid.container" output="1"/>
     </adminhtml_user_rolegrid>
 
     <adminhtml_user_rolesgrid>
@@ -110,4 +160,80 @@
             <block type="Mage_User_Block_User_Edit_Tab_Roles" name="adminhtml.user.rolesgrid"/>
         </container>
     </adminhtml_user_rolesgrid>
+
+    <adminhtml_user_grid_block>
+        <reference name="adminhtml.user.grid.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="adminhtml.user.grid" as="grid">
+                <arguments>
+                    <id>permissionsUserGrid</id>
+                    <dataSource type="object">Mage_User_Model_Resource_User_Collection</dataSource>
+                    <use_ajax>1</use_ajax>
+                    <default_sort>username</default_sort>
+                    <default_dir>asc</default_dir>
+                    <grid_url type="url">
+                        <path>*/*/roleGrid</path>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" as="grid.columnSet" name="permission.user.grid.columnSet">
+                    <arguments>
+                        <id>permissionsUserGrid</id>
+                        <rowUrl>
+                            <generatorClass>Mage_Backend_Model_Widget_Grid_Row_UrlGenerator</generatorClass>
+                            <path>*/*/edit</path>
+                            <extraParamsTemplate>
+                                <user_id>getId</user_id>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="user_id">
+                        <arguments>
+                            <header translate="true" module="Mage_User">ID</header>
+                            <width>5px</width>
+                            <align>right</align>
+                            <sortable>true</sortable>
+                            <index>user_id</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="username">
+                        <arguments>
+                            <header translate="true" module="Mage_User">User Name</header>
+                            <type>text</type>
+                            <index>username</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="firstname">
+                        <arguments>
+                            <header translate="true" module="Mage_User">First Name</header>
+                            <type>text</type>
+                            <index>firstname</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="lastname">
+                        <arguments>
+                            <header translate="true" module="Mage_User">Last Name</header>
+                            <type>text</type>
+                            <index>lastname</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="email">
+                        <arguments>
+                            <header translate="true" module="Mage_User">Email</header>
+                            <type>text</type>
+                            <width>40px</width>
+                            <align>left</align>
+                            <index>email</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="is_active">
+                        <arguments>
+                            <header translate="true" module="Mage_User">Status</header>
+                            <type>options</type>
+                            <options type="options">Mage_User_Model_Statuses</options>
+                            <index>is_active</index>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_user_grid_block>
  </layout>

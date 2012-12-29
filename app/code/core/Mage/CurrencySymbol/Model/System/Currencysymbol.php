@@ -251,7 +251,7 @@ class Mage_CurrencySymbol_Model_System_Currencysymbol
     /**
      * Clear translate cache
      *
-     * @return Saas_Translate_Helper_Data
+     * @return Mage_CurrencySymbol_Model_System_Currencysymbol
      */
     public function clearCache()
     {

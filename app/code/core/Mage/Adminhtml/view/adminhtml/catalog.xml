@@ -477,4 +477,44 @@ Additional block in composite_fieldset block dependant on product type
         </container>
     </adminhtml_catalog_product_customoptions>
 
+    <adminhtml_catalog_product_set_index>
+        <update handle="formkey"/>
+        <update handle="adminhtml_catalog_product_set_block"/>
+        <reference name="content">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main" name="adminhtml.catalog.product.set.container"/>
+        </reference>
+    </adminhtml_catalog_product_set_index>
+
+    <adminhtml_catalog_product_set_block>
+        <reference name='adminhtml.catalog.product.set.container'>
+            <block type="Mage_Backend_Block_Widget_Grid" name='adminhtml.catalog.product.set.grid' as='grid'>
+                <arguments>
+                    <id>setGrid</id>
+                    <dataSource type="object">Mage_Eav_Model_Resource_Entity_Attribute_Grid_Collection</dataSource>
+                    <default_sort>set_name</default_sort>
+                    <default_dir>ASC</default_dir>
+                    <save_parameters_in_session>1</save_parameters_in_session>
+                </arguments>
+                <block type='Mage_Backend_Block_Widget_Grid_ColumnSet' name='adminhtml.catalog.product.set.grid.columnSet' as='grid.columnSet'>
+                    <arguments>
+                        <id>setGrid</id>
+                        <rowUrl>
+                            <path>*/*/edit</path>
+                            <extraParamsTemplate>
+                                <id>getAttributeSetId</id>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type='Mage_Backend_Block_Widget_Grid_Column' as='set_name'>
+                        <arguments>
+                            <header translate='true' module='Mage_Catalog'>Set Name</header>
+                            <align>left</align>
+                            <sortable>1</sortable>
+                            <index>attribute_set_name</index>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_set_block>
 </layout>

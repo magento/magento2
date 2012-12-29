@@ -49,10 +49,6 @@ class Mage_Adminhtml_Block_Newsletter_Problem extends Mage_Adminhtml_Block_Templ
 
     protected function _prepareLayout()
     {
-        $this->setChild('grid',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Problem_Grid','newsletter.problem.grid')
-        );
-
         $this->setChild('deleteButton',
             $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Button','del.button')
                 ->setData(

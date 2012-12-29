@@ -208,7 +208,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
     public function roleGridAction()
     {
-        $this->loadLayout();
+        $this->loadLayout(false);
         $this->renderLayout();
     }
 

@@ -75,9 +75,8 @@ class Mage_Adminhtml_System_VariableController extends Mage_Adminhtml_Controller
     {
         $this->_title($this->__('System'))->_title($this->__('Custom Variables'));
 
-        $this->_initLayout()
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Variable'))
-            ->renderLayout();
+        $this->_initLayout();
+        $this->renderLayout();
     }
 
     /**

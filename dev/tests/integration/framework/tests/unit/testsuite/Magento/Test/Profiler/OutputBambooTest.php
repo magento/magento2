@@ -101,10 +101,10 @@ class Magento_Test_Profiler_OutputBambooTest extends PHPUnit_Framework_TestCase
         /**
          * @link http://php.net/manual/en/wrappers.php.php
          */
-        $this->_output = new Magento_Test_Profiler_OutputBamboo(
-            'php://filter/write=dataCollectorFilter/resource=php://memory',
-            array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
-        );
+        $this->_output = new Magento_Test_Profiler_OutputBamboo(array(
+            'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
+            'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
+        ));
     }
 
     public function testDisplay()

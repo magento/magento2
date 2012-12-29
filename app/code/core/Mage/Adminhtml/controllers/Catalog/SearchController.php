@@ -41,9 +41,8 @@ class Mage_Adminhtml_Catalog_SearchController extends Mage_Adminhtml_Controller_
         $this->_title($this->__('Catalog'))->_title($this->__('Search Terms'));
 
         $this->_initAction()
-            ->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'))
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Search'))
-            ->renderLayout();
+            ->_addBreadcrumb(Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'), Mage::helper('Mage_Catalog_Helper_Data')->__('Catalog'));
+            $this->renderLayout();
     }
 
     public function newAction()
@@ -81,7 +80,7 @@ class Mage_Adminhtml_Catalog_SearchController extends Mage_Adminhtml_Controller_
 
         $this->getLayout()->getBlock('head')->setCanLoadRulesJs(true);
 
-        $this->getLayout()->getBlock('catalog_search_edit')
+        $this->getLayout()->getBlock('adminhtml.catalog.search.edit')
             ->setData('action', $this->getUrl('*/catalog_search/save'));
 
         $this

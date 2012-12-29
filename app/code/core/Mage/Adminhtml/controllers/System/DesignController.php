@@ -30,18 +30,15 @@ class Mage_Adminhtml_System_DesignController extends Mage_Adminhtml_Controller_A
     public function indexAction()
     {
         $this->_title($this->__('System'))->_title($this->__('Design'));
-
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Adminhtml::system');
-        $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Design'));
         $this->renderLayout();
     }
 
     public function gridAction()
     {
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Design_Grid')->toHtml()
-        );
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     public function newAction()

@@ -168,7 +168,7 @@ class Mage_Sales_Model_Resource_Quote_Item_Collection extends Mage_Core_Model_Re
      */
     protected function _assignProducts()
     {
-        Magento_Profiler::start('QUOTE:'.__METHOD__);
+        Magento_Profiler::start('QUOTE:'.__METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
         $productIds = array();
         foreach ($this as $item) {
             $productIds[] = (int)$item->getProductId();

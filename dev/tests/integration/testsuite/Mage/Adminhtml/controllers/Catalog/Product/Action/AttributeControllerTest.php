@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Catalog_Product_Action_AttributeControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Adminhtml_Catalog_Product_Action_AttributeControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * @covers Mage_Adminhtml_Catalog_Product_Action_AttributeController::saveAction

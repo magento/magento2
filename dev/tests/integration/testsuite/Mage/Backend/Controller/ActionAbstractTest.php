@@ -28,7 +28,7 @@
 /**
  * Test class for Mage_Backend_Controller_ActionAbstract.
  */
-class Mage_Backend_Controller_ActionAbstractTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Backend_Controller_ActionAbstractTest extends Mage_Backend_Utility_Controller
 {
     /**
      * Check redirection to startup page for logged user

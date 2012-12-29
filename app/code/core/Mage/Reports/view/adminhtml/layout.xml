@@ -334,4 +334,210 @@
         <update handle="adminhtml_report_customer_accounts_grid"/>
         <container name="adminhtml.report.grid.container" label="Report Customer Accounts Grid Container"/>
     </adminhtml_report_customer_exportaccountsexcel>
+
+    <adminhtml_report_review_customer>
+        <update handle="adminhtml_report_review_customer_grid" />
+        <reference name="content">
+            <block name='adminhtml.report.grid.container' type="Mage_Adminhtml_Block_Report_Review_Customer"/>
+        </reference>
+    </adminhtml_report_review_customer>
+
+    <adminhtml_report_review_customer_grid>
+        <reference name="adminhtml.report.grid.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="adminhtml.block.report.review.customer.grid" as='grid'>
+                <arguments>
+                    <id>customers_grid</id>
+                    <default_sort>review_cnt</default_sort>
+                    <default_dir>desc</default_dir>
+                    <dataSource type="object">Mage_Reports_Model_Resource_Review_Customer_Collection</dataSource>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_Export" name ="adminhtml.block.report.review.customer.export" as="grid.export">
+                    <arguments>
+                        <exportTypes>
+                            <csv>
+                                <urlPath>*/*/exportCustomerCsv</urlPath>
+                                <label translate="true" module="Mage_Reports">CSV</label>
+                            </csv>
+                            <excel>
+                                <urlPath>*/*/exportCustomerExcel</urlPath>
+                                <label translate="true" module="Mage_Reports">Excel XML</label>
+                            </excel>
+                        </exportTypes>
+                    </arguments>
+                </block>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" as="grid.columnSet" name="adminhtml.block.report.review.customer.grid.columnSet">
+                    <arguments>
+                        <filter_visibility>0</filter_visibility>
+                        <id>customers_grid</id>
+                        <rowUrl>
+                            <path>*/catalog_product_review</path>
+                            <extraParamsTemplate>
+                                <customerid>getCustomerId</customerid>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="customer_name">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Customer Name</header>
+                            <index>customer_name</index>
+                            <type>text</type>
+                            <id>customer_name</id>
+                            <default translate="true" module="Mage_Reports">Guest</default>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="review_cnt">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Number Of Reviews</header>
+                            <width>40px</width>
+                            <align>right</align>
+                            <type>text</type>
+                            <index>review_cnt</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="action">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Action</header>
+                            <width>100px</width>
+                            <align>center</align>
+                            <filter>0</filter>
+                            <sortable>0</sortable>
+                            <is_system>1</is_system>
+                            <renderer>Mage_Adminhtml_Block_Report_Grid_Column_Renderer_Customer</renderer>
+                            <id>action</id>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_report_review_customer_grid>
+
+    <adminhtml_report_review_exportcustomercsv>
+        <update handle="adminhtml_report_review_customer_grid"/>
+        <container name="adminhtml.report.review.customer.grid.container" label="Export CSV"/>
+    </adminhtml_report_review_exportcustomercsv>
+
+    <adminhtml_report_review_exportcustomerexcel>
+        <update handle="adminhtml_report_review_customer_grid"/>
+        <container name="adminhtml.report.review.customer.grid.container" label="Export Excel"/>
+    </adminhtml_report_review_exportcustomerexcel>
+
+    <adminhtml_report_review_product>
+        <update handle="adminhtml_report_review_product_grid" />
+        <reference name="content">
+            <block name='adminhtml.report.grid.container' type="Mage_Adminhtml_Block_Report_Review_Product"/>
+        </reference>
+    </adminhtml_report_review_product>
+
+    <adminhtml_report_review_product_grid>
+        <reference name="adminhtml.report.grid.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="adminhtml.block.report.review.product.grid" as='grid'>
+                <arguments>
+                    <id>gridProducts</id>
+                    <default_sort>review_cnt</default_sort>
+                    <default_dir>desc</default_dir>
+                    <dataSource type="object">Mage_Reports_Model_Resource_Review_Product_Collection</dataSource>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_Export" name ="adminhtml.block.report.review.product.export" as="grid.export">
+                    <arguments>
+                        <exportTypes>
+                            <csv>
+                                <urlPath>*/*/exportProductCsv</urlPath>
+                                <label translate="true" module="Mage_Reports">CSV</label>
+                            </csv>
+                            <excel>
+                                <urlPath>*/*/exportProductExcel</urlPath>
+                                <label translate="true" module="Mage_Reports">Excel XML</label>
+                            </excel>
+                        </exportTypes>
+                    </arguments>
+                </block>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" as="grid.columnSet" name="adminhtml.block.report.review.product.grid.columnSet">
+                    <arguments>
+                        <filter_visibility>0</filter_visibility>
+                        <id>gridProducts</id>
+                        <rowUrl>
+                            <path>*/catalog_product_review</path>
+                            <extraParamsTemplate>
+                                <productId>getrId</productId>
+                            </extraParamsTemplate>
+                        </rowUrl>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="entity_id">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">ID</header>
+                            <width>50px</width>
+                            <index>entity_id</index>
+                            <type>text</type>
+                            <id>entity_id</id>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Product Name</header>
+                            <type>text</type>
+                            <index>name</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="review_cnt">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Number of Reviews</header>
+                            <width>50px</width>
+                            <align>right</align>
+                            <id>review_cnt</id>
+                            <index>review_cnt</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="avg_rating">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Avg. Rating</header>
+                            <width>50px</width>
+                            <align>right</align>
+                            <id>avg_rating</id>
+                            <index>avg_rating</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="avg_rating_approved">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Avg. Approved Rating</header>
+                            <width>50px</width>
+                            <align>right</align>
+                            <id>avg_rating_approved</id>
+                            <index>avg_rating_approved</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="last_created">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Last Review</header>
+                            <width>150px</width>
+                            <type>datetime</type>
+                            <id>last_created</id>
+                            <index>last_created</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="action">
+                        <arguments>
+                            <header translate="true" module="Mage_Reports">Action</header>
+                            <width>100px</width>
+                            <align>center</align>
+                            <filter>0</filter>
+                            <sortable>0</sortable>
+                            <renderer>Mage_Adminhtml_Block_Report_Grid_Column_Renderer_Product</renderer>
+                            <id>action</id>
+                            <is_system>1</is_system>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_report_review_product_grid>
+
+    <adminhtml_report_review_exportproductcsv>
+        <update handle="adminhtml_report_review_product_grid"/>
+        <container name="adminhtml.report.review.product.grid.container" label="Export CSV"/>
+    </adminhtml_report_review_exportproductcsv>
+
+    <adminhtml_report_review_exportproductexcel>
+        <update handle="adminhtml_report_review_product_grid"/>
+        <container name="adminhtml.report.review.product.grid.container" label="Export Excel"/>
+    </adminhtml_report_review_exportproductexcel>
 </layout>

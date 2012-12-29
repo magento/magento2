@@ -77,7 +77,7 @@
                     <base_url type="media" scope_info="1">sales/store/logo</base_url>
                     <comment>
                         <![CDATA[Default logo, will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If you see image distortion in PDF, try to use larger image]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="logo_html" translate="label comment" type="image" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo for HTML Print View</label>
@@ -86,7 +86,7 @@
                     <base_url type="media" scope_info="1">sales/store/logo_html</base_url>
                     <comment>
                         <![CDATA[Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="address" translate="label" type="textarea" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Address</label>

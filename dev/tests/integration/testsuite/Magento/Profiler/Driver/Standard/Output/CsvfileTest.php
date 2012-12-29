@@ -51,9 +51,11 @@ class Magento_Profiler_Driver_Standard_Output_CsvfileTest extends PHPUnit_Framew
      */
     public function testDisplay($statFile, $expectedFile, $delimiter = ',', $enclosure = '"')
     {
-        $this->_output = new Magento_Profiler_Driver_Standard_Output_Csvfile(
-            $this->_outputFile, $delimiter, $enclosure
-        );
+        $this->_output = new Magento_Profiler_Driver_Standard_Output_Csvfile(array(
+            'filePath' => $this->_outputFile,
+            'delimiter' => $delimiter,
+            'enclosure' => $enclosure
+        ));
         $stat = include $statFile;
         $this->_output->display($stat);
         $this->assertFileEquals($expectedFile, $this->_outputFile);

@@ -67,9 +67,6 @@ class Mage_Adminhtml_UrlrewriteController extends Mage_Adminhtml_Controller_Acti
 
         $this->loadLayout();
         $this->_setActiveMenu('Mage_Catalog::catalog_urlrewrite');
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Urlrewrite')
-        );
         $this->renderLayout();
     }
 

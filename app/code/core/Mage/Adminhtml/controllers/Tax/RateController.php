@@ -45,14 +45,8 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
              ->_title($this->__('Manage Tax Zones and Rates'));
 
         $this->_initAction()
-            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'), Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'))
-            ->_addContent(
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Add', 'tax_rate_toolbar')
-                    ->assign('createUrl', $this->getUrl('*/tax_rate/add'))
-                    ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'))
-            )
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid', 'tax_rate_grid'))
-            ->renderLayout();
+            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'), Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'));
+        $this ->renderLayout();
     }
 
     /**
@@ -294,11 +288,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
      */
     public function exportCsvAction()
     {
-        $fileName   = 'rates.csv';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid')
-            ->getCsvFile();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->loadLayout(false);
+        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        $this->_prepareDownloadResponse('rates.csv', $content->getCsvFile());
     }
 
     /**
@@ -306,11 +298,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
      */
     public function exportXmlAction()
     {
-        $fileName   = 'rates.xml';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid')
-            ->getExcelFile();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->loadLayout(false);
+        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        $this->_prepareDownloadResponse('rates.xml', $content->getExcelFile());
     }
 
     /**
@@ -548,7 +538,7 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
 
             $content .= $rate->toString($template) . "\n";
         }
-
+        $this->loadLayout();
         $this->_prepareDownloadResponse('tax_rates.csv', $content);
     }
 

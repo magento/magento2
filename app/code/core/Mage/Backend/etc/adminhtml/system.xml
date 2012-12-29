@@ -133,7 +133,7 @@
                     <backend_model>Mage_Core_Model_Design_Backend_Exceptions</backend_model>
                     <comment>
                         <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
-</comment>
+                    </comment>
                     <tooltip>Find a string in client user-agent header and switch to specific design theme for that browser.</tooltip>
                 </field>
             </group>
@@ -482,7 +482,7 @@
                     <backend_model>Mage_Backend_Model_Config_Backend_Store</backend_model>
                     <comment>
                         <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Auto-redirect to Base URL</label>

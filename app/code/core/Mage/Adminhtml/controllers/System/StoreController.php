@@ -56,7 +56,6 @@ class Mage_Adminhtml_System_StoreController extends Mage_Adminhtml_Controller_Ac
              ->_title($this->__('Stores'));
 
         $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_System_Store_Store'))
             ->renderLayout();
     }
 

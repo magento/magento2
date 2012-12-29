@@ -96,22 +96,20 @@ if (file_exists($definitionsFile)) {
     Mage::initializeObjectManager($definitionsFile);
 }
 
-$output = null;
-if (isset($_SERVER['MAGE_PROFILER'])) {
-    switch ($_SERVER['MAGE_PROFILER']) {
-        case 'firebug':
-            $output = new Magento_Profiler_Driver_Standard_Output_Firebug();
-            break;
-        case 'csv':
-            $output = new Magento_Profiler_Driver_Standard_Output_Csvfile(__DIR__ . '/../var/log/profiler.csv');
-            break;
-        default:
-            $output = new Magento_Profiler_Driver_Standard_Output_Html();
-    }
-}
+if (!empty($_SERVER['MAGE_PROFILER'])) {
+    $profilerConfigData = $_SERVER['MAGE_PROFILER'];
 
-if ($output) {
-    $driver = new Magento_Profiler_Driver_Standard();
-    $driver->registerOutput($output);
-    Magento_Profiler::add($driver);
+    $profilerConfig = array(
+        'baseDir' => dirname(__DIR__),
+        'tagFilters' => array()
+    );
+
+    if (is_scalar($profilerConfigData)) {
+        $profilerConfig['driver'] = array(
+            'output' => is_numeric($profilerConfigData) ? 'html' : $profilerConfigData
+        );
+    } elseif (is_array($profilerConfigData)) {
+        $profilerConfig = array_merge($profilerConfig, $profilerConfigData);
+    }
+    Magento_Profiler::applyConfig($profilerConfig);
 }

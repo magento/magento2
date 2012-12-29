@@ -52,6 +52,17 @@ class Mage_Core_Model_Resource_Website_Collection extends Mage_Core_Model_Resour
     }
 
     /**
+     * Apply custom filtering
+     */
+    protected function _renderFiltersBefore()
+    {
+        if (!$this->getLoadDefault()) {
+            $this->getSelect()->where('main_table.website_id > ?', 0);
+        }
+        parent::_renderFiltersBefore();
+    }
+
+    /**
      * Set flag for load default (admin) website
      *
      * @param boolean $loadDefault
@@ -123,14 +134,10 @@ class Mage_Core_Model_Resource_Website_Collection extends Mage_Core_Model_Resour
      */
     public function load($printQuery = false, $logQuery = false)
     {
-        if (!$this->getLoadDefault()) {
-            $this->getSelect()->where('main_table.website_id > ?', 0);
-        }
         $this->unshiftOrder('main_table.name', Varien_Db_Select::SQL_ASC)       // website name SECOND
              ->unshiftOrder('main_table.sort_order', Varien_Db_Select::SQL_ASC); // website sort order FIRST
 
         return parent::load($printQuery, $logQuery);
-
     }
 
     /**

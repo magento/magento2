@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Sales_Order_CreditmemoControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Adminhtml_Sales_Order_CreditmemoControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * @magentoConfigFixture current_store cataloginventory/item_options/auto_return 1

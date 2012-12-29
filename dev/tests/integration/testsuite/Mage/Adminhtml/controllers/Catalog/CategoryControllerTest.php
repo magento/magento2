@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * @magentoDataFixture Mage/Core/_files/store.php
@@ -280,5 +280,26 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
                 ),
             ),
         );
+    }
+
+    public function testSaveActionCategoryWithDangerRequest()
+    {
+        $this->getRequest()->setPost(array(
+            'general' => array(
+                'path' => '1',
+                'name' => 'test',
+                'is_active' => '1',
+                'entity_id' => 1500,
+                'include_in_menu' => '1',
+                'available_sort_by' => 'name',
+                'default_sort_by' => 'name',
+            ),
+        ));
+        $this->dispatch('backend/admin/catalog_category/save');
+        /** @var Mage_Backend_Model_Session $session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Session');
+        $errorMessages = $session->getMessages()->getErrors();
+        $this->assertCount(1, $errorMessages);
+        $this->assertEquals('Unable to save the category', $errorMessages[0]->getCode());
     }
 }

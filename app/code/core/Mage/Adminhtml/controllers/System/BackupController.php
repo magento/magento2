@@ -51,8 +51,6 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tools'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Tools'));
         $this->_addBreadcrumb(Mage::helper('Mage_Adminhtml_Helper_Data')->__('Backups'), Mage::helper('Mage_Adminhtml_Helper_Data')->__('Backup'));
 
-        $this->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Backup', 'backup'));
-
         $this->renderLayout();
     }
 
@@ -61,7 +59,8 @@ class Mage_Adminhtml_System_BackupController extends Mage_Adminhtml_Controller_A
      */
     public function gridAction()
     {
-        $this->getResponse()->setBody($this->getLayout()->createBlock('Mage_Adminhtml_Block_Backup_Grid')->toHtml());
+        $this->renderLayot(false);
+        $this->renderLayout();
     }
 
     /**

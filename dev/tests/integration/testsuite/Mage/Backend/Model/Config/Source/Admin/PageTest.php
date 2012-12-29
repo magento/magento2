@@ -28,7 +28,7 @@
 /**
  * Test Mage_Backend_Model_Config_Source_Admin_Page
  */
-class Mage_Backend_Model_Config_Source_Admin_PageTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Backend_Model_Config_Source_Admin_PageTest extends Mage_Backend_Utility_Controller
 {
     public function testToOptionArray()
     {
