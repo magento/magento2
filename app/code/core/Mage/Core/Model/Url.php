@@ -369,6 +369,8 @@ class Mage_Core_Model_Url extends Varien_Object
         }
         if (isset($params['_type'])) {
             $this->setType($params['_type']);
+        } else {
+            $this->setType(Mage_Core_Model_Store::URL_TYPE_LINK);
         }
         if (isset($params['_secure'])) {
             $this->setSecure($params['_secure']);
