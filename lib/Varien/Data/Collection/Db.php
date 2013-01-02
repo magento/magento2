@@ -608,6 +608,37 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     }
 
     /**
+     * Overridden to use _idFieldName by default.
+     *
+     * @param   string $valueField
+     * @param   string $labelField
+     * @param array $additional
+     * @return  array
+     */
+    protected function _toOptionArray($valueField = NULL, $labelField = 'name', $additional = array())
+    {
+        if ($valueField === NULL) {
+            $valueField = $this->getIdFieldName();
+        }
+        return parent::_toOptionArray($valueField, $labelField, $additional);
+    }
+
+    /**
+     * Overridden to use _idFieldName by default.
+     *
+     * @param   string $valueField
+     * @param   string $labelField
+     * @return  array
+     */
+    protected function _toOptionHash($valueField = NULL, $labelField = 'name')
+    {
+        if ($valueField === NULL) {
+            $valueField = $this->getIdFieldName();
+        }
+        return parent::_toOptionHash($valueField, $labelField);
+    }
+
+    /**
      * Convert items array to hash for select options
      * unsing fetchItem method
      *
@@ -622,8 +653,11 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      * @param   string $labelField
      * @return  array
      */
-    protected function _toOptionHashOptimized($valueField='id', $labelField='name')
+    protected function _toOptionHashOptimized($valueField=NULL, $labelField='name')
     {
+        if ($valueField === NULL) {
+            $valueField = $this->getIdFieldName();
+        }
         $result = array();
         while ($item = $this->fetchItem()) {
             $result[$item->getData($valueField)] = $item->getData($labelField);
