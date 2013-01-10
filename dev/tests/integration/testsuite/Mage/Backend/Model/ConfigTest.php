@@ -21,13 +21,10 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_Backend
- */
 class Mage_Backend_Model_Config_DataTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -38,6 +35,7 @@ class Mage_Backend_Model_Config_DataTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveWithSingleStoreModeEnabled($groups)
     {
+        Mage::getConfig()->setCurrentAreaCode('adminhtml');
         /** @var $_configDataObject Mage_Backend_Model_Config */
         $_configDataObject = Mage::getModel('Mage_Backend_Model_Config');
         $_configData = $_configDataObject->setSection('dev')

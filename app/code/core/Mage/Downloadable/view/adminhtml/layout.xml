@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -29,8 +29,13 @@
 <layout>
 
     <adminhtml_catalog_product_downloadable>
+        <update handle="adminhtml_catalog_product_superconfig_config"/>
         <reference name="product_tabs">
             <action method="addTab"><name>downloadable_items</name><block>Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable</block></action>
+        </reference>
+        <reference name="product-type-tabs">
+            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config"
+                   name="admin.product.edit.tab.super.config.grid.container"></block>
         </reference>
     </adminhtml_catalog_product_downloadable>
 

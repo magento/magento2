@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -405,7 +405,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
     {
         $url = $this->_getData('url');
         if (is_null($url)) {
-            Magento_Profiler::start('REWRITE: '.__METHOD__);
+            Magento_Profiler::start('REWRITE: '.__METHOD__, array('group' => 'REWRITE', 'method' => __METHOD__));
 
             if ($this->hasData('request_path') && $this->getRequestPath() != '') {
                 $this->setData('url', $this->getUrlInstance()->getDirectUrl($this->getRequestPath()));
@@ -441,7 +441,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
      */
     public function getCategoryIdUrl()
     {
-        Magento_Profiler::start('REGULAR: '.__METHOD__);
+        Magento_Profiler::start('REGULAR: '.__METHOD__, array('group' => 'REGULAR', 'method' => __METHOD__));
         $urlKey = $this->getUrlKey() ? $this->getUrlKey() : $this->formatUrlKey($this->getName());
         $url = $this->getUrlInstance()->getUrl('catalog/category/view', array(
             's'=>$urlKey,

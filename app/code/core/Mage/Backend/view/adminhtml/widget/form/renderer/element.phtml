@@ -20,16 +20,16 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php $_element = $this->getElement() ?>
-<?php if($_element->getNoSpan() !== true): ?>
+<?php if ($_element->getNoSpan() !== true): ?>
 <span class="field-row">
 <?php endif; ?>
 <?php echo $_element->getLabelHtml() ?>
 <?php echo $_element->getElementHtml() ?>
-<?php if($_element->getNoSpan() !== true): ?>
+<?php if ($_element->getNoSpan() !== true): ?>
 </span>
 <?php endif; ?>

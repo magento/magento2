@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,14 +31,25 @@
 class Magento_Config_Dom
 {
     /**
+     * Dom document
+     *
      * @var DOMDocument
      */
     protected $_dom;
 
     /**
+     * List of id attributes for merge
+     *
      * @var array
      */
     protected $_idAttributes;
+
+    /**
+     * Schema validation file
+     *
+     * @var string
+     */
+    protected $_schemaFile;
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -48,9 +59,12 @@ class Magento_Config_Dom
      *
      * @param string $xml
      * @param array $idAttributes
+     * @param string $schemaFile
+     * @throws Magento_Config_Dom_ValidationException
      */
-    public function __construct($xml, array $idAttributes = array())
+    public function __construct($xml, array $idAttributes = array(), $schemaFile = null)
     {
+        $this->_schemaFile   = $schemaFile;
         $this->_dom          = $this->_initDom($xml);
         $this->_idAttributes = $idAttributes;
     }
@@ -60,6 +74,7 @@ class Magento_Config_Dom
      *
      * @param string $xml
      * @return void
+     * @throws Magento_Config_Dom_ValidationException
      */
     public function merge($xml)
     {
@@ -80,12 +95,7 @@ class Magento_Config_Dom
      */
     protected function _mergeNode(DOMElement $node, $parentPath)
     {
-        /* Identify node path based on parent path and node attributes */
-        $path = $parentPath . '/' . $node->tagName;
-        $idAttribute = $this->_findIdAttribute($path);
-        if ($idAttribute && $id = $node->getAttribute($idAttribute)) {
-            $path .= "[@{$idAttribute}='{$id}']";
-        }
+        $path = $this->_getNodePathByParent($node, $parentPath);
 
         $matchedNode = $this->_getMatchedNode($path);
 
@@ -113,6 +123,23 @@ class Magento_Config_Dom
             $newNode = $this->_dom->importNode($node, true);
             $parentMatchedNode->appendChild($newNode);
         }
+    }
+
+    /**
+     * Identify node path based on parent path and node attributes
+     *
+     * @param DOMElement $node
+     * @param string $parentPath
+     * @return string
+     */
+    protected function _getNodePathByParent(DOMElement $node, $parentPath)
+    {
+        $path = $parentPath . '/' . $node->tagName;
+        $idAttribute = $this->_findIdAttribute($path);
+        if ($idAttribute && $value = $node->getAttribute($idAttribute)) {
+            $path .= "[@{$idAttribute}='{$value}']";
+        }
+        return $path;
     }
 
     /**
@@ -148,6 +175,32 @@ class Magento_Config_Dom
     }
 
     /**
+     * Validate dom document
+     *
+     * @param DOMDocument $dom
+     * @param string $schemaFileName
+     * @return array
+     */
+    protected function _validateDomDocument(DOMDocument $dom, $schemaFileName)
+    {
+        libxml_use_internal_errors(true);
+        $result = $dom->schemaValidate($schemaFileName);
+        $errors = array();
+        if (!$result) {
+            $validationErrors = libxml_get_errors();
+            if (count($validationErrors)) {
+                foreach ($validationErrors as $error) {
+                    $errors[] = "{$error->message} Line: {$error->line}\n";
+                }
+            } else {
+                $errors[] = 'Unknown validation error';
+            }
+        }
+        libxml_use_internal_errors(false);
+        return $errors;
+    }
+
+    /**
      * DOM document getter
      *
      * @return DOMDocument
@@ -162,27 +215,31 @@ class Magento_Config_Dom
      *
      * @param string $xml
      * @return DOMDocument
+     * @throws Magento_Config_Dom_ValidationException
      */
     protected function _initDom($xml)
     {
         $dom = new DOMDocument();
         $dom->loadXML($xml);
+        if ($this->_schemaFile) {
+            $errors = $this->_validateDomDocument($dom, $this->_schemaFile);
+            if (count($errors)) {
+                throw new Magento_Config_Dom_ValidationException(implode("\n", $errors));
+            }
+        }
         return $dom;
     }
 
     /**
      * Validate self contents towards to specified schema
      *
-     * @param string $schemaFile absolute path to schema file
+     * @param string $schemaFileName absolute path to schema file
      * @param array &$errors
      * @return bool
      */
-    public function validate($schemaFile, &$errors = array())
+    public function validate($schemaFileName, &$errors = array())
     {
-        libxml_use_internal_errors(true);
-        $result = $this->_dom->schemaValidate($schemaFile);
-        $errors = libxml_get_errors();
-        libxml_use_internal_errors(false);
-        return $result;
+        $errors = $this->_validateDomDocument($this->_dom, $schemaFileName);
+        return !count($errors);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -529,5 +529,23 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
             return true;
         }
         return false;
+    }
+
+    /**
+     * Retrieve a member of the $_FILES super global
+     *
+     * If no $key is passed, returns the entire $_FILES array.
+     *
+     * @param string $key
+     * @param mixed $default Default value to use if key not found
+     * @return mixed
+     */
+    public function getFiles($key = null, $default = null)
+    {
+        if (null === $key) {
+            return $_FILES;
+        }
+
+        return (isset($_FILES[$key])) ? $_FILES[$key] : $default;
     }
 }

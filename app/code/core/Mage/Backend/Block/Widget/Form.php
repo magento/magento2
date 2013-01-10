@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,7 +33,6 @@
  */
 class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
 {
-
     /**
      * Form Object
      *
@@ -119,7 +118,7 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
     {
         $this->_form = $form;
         $this->_form->setParent($this);
-        $this->_form->setBaseUrl(Mage::getBaseUrl());
+        $this->_form->setBaseUrl($this->_urlBuilder->getBaseUrl());
         return $this;
     }
 
@@ -168,12 +167,12 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
         $this->_addElementTypes($fieldset);
         foreach ($attributes as $attribute) {
             /* @var $attribute Mage_Eav_Model_Entity_Attribute */
-            if (!$attribute || ($attribute->hasIsVisible() && !$attribute->getIsVisible())) {
+            if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }
             if ( ($inputType = $attribute->getFrontend()->getInputType())
                  && !in_array($attribute->getAttributeCode(), $exclude)
-                 && ('media_image' != $inputType)
+                 && (('media_image' != $inputType) || ($attribute->getAttributeCode() == 'image'))
                  ) {
 
                 $fieldType      = $inputType;
@@ -196,18 +195,47 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
 
                 $element->setAfterElementHtml($this->_getAdditionalElementHtml($element));
 
-                if ($inputType == 'select') {
-                    $element->setValues($attribute->getSource()->getAllOptions(true, true));
-                } else if ($inputType == 'multiselect') {
-                    $element->setValues($attribute->getSource()->getAllOptions(false, true));
-                    $element->setCanBeEmpty(true);
-                } else if ($inputType == 'date') {
-                    $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));
-                    $element->setDateFormat(Mage::app()->getLocale()->getDateFormatWithLongYear());
-                } else if ($inputType == 'multiline') {
-                    $element->setLineCount($attribute->getMultilineCount());
-                }
+                $this->_applyTypeSpecificConfig($inputType, $element, $attribute);
             }
+        }
+    }
+
+    /**
+     * Check whether attribute is visible
+     *
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     * @return bool
+     */
+    protected function _isAttributeVisible(Mage_Eav_Model_Entity_Attribute $attribute)
+    {
+        return !(!$attribute || ($attribute->hasIsVisible() && !$attribute->getIsVisible()));
+    }
+    /**
+     * Apply configuration specific for different element type
+     *
+     * @param string $inputType
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @param Mage_Eav_Model_Entity_Attribute $attribute
+     */
+    protected function _applyTypeSpecificConfig($inputType, $element, Mage_Eav_Model_Entity_Attribute $attribute)
+    {
+        switch ($inputType) {
+            case 'select':
+                $element->setValues($attribute->getSource()->getAllOptions(true, true));
+                break;
+            case 'multiselect':
+                $element->setValues($attribute->getSource()->getAllOptions(false, true));
+                $element->setCanBeEmpty(true);
+                break;
+            case 'date':
+                $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));
+                $element->setDateFormat(Mage::app()->getLocale()->getDateFormatWithLongYear());
+                break;
+            case 'multiline':
+                $element->setLineCount($attribute->getMultilineCount());
+                break;
+            default:
+                break;
         }
     }
 
@@ -235,10 +263,11 @@ class Mage_Backend_Block_Widget_Form extends Mage_Backend_Block_Widget
     }
 
     /**
-     * Enter description here...
+     * Render additional element
      *
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getAdditionalElementHtml($element)
     {

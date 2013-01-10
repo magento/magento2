@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,32 +31,8 @@
  * @package    Mage_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Controller_ActionAbstract
+class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Controller_System_ConfigAbstract
 {
-    /**
-     * Whether current section is allowed
-     *
-     * @var bool
-     */
-    protected $_isSectionAllowed = true;
-
-    /**
-     * Controller pre-dispatch method
-     * Check if current section is found and is allowed
-     *
-     * @return Mage_Backend_Adminhtml_System_ConfigController
-     */
-    public function preDispatch()
-    {
-        parent::preDispatch();
-
-        if ($this->getRequest()->getParam('section')) {
-            $this->_isSectionAllowed = $this->_isSectionAllowed($this->getRequest()->getParam('section'));
-        }
-
-        return $this;
-    }
-
     /**
      * Index action
      *
@@ -78,14 +54,12 @@ class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Contro
         $website = $this->getRequest()->getParam('website');
         $store   = $this->getRequest()->getParam('store');
 
-        /** @var $systemConfig Mage_Backend_Model_Config_Structure */
-        $systemConfig = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')->getConfiguration();
-
-        $sections     = $systemConfig->getSections($current);
-        $section      = isset($sections[$current]) ? $sections[$current] : array();
-        $hasChildren  = $systemConfig->hasChildren($section, $website, $store);
-        if (!$hasChildren && $current) {
-            $this->_redirect('*/*/', array('website'=>$website, 'store'=>$store));
+        /** @var $configStructure Mage_Backend_Model_Config_Structure */
+        $configStructure = Mage::getSingleton('Mage_Backend_Model_Config_Structure');
+        /** @var $section Mage_Backend_Model_Config_Structure_Element_Section */
+        $section = $configStructure->getElement($current);
+        if ($current && !$section->isVisible($website, $store)) {
+            return $this->_redirect('*/*/', array('website' => $website, 'store' => $store));
         }
 
         $this->loadLayout();
@@ -96,120 +70,10 @@ class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Contro
         $this->_addBreadcrumb(
             Mage::helper('Mage_Backend_Helper_Data')->__('System'),
             Mage::helper('Mage_Backend_Helper_Data')->__('System'),
-            $this->getUrl('*/system')
+            $this->getUrl('*\/system')
         );
 
-        $this->getLayout()->addBlock('Mage_Backend_Block_System_Config_Tabs', '', 'left')->initTabs();
-
-        if ($this->_isSectionAllowed) {
-            $this->_addContent($this->getLayout()->createBlock('Mage_Backend_Block_System_Config_Edit')->initForm());
-
-            $this->_addJs($this->getLayout()
-                ->createBlock('Mage_Backend_Block_Template')
-                ->setTemplate('Mage_Adminhtml::system/shipping/ups.phtml'));
-            $this->_addJs($this->getLayout()
-                ->createBlock('Mage_Backend_Block_Template')
-                ->setTemplate('system/config/js.phtml'));
-            $this->_addJs($this->getLayout()
-                ->createBlock('Mage_Backend_Block_Template')
-                ->setTemplate('Mage_Adminhtml::system/shipping/applicable_country.phtml'));
-
-            $this->renderLayout();
-        }
-    }
-
-    /**
-     * Save configuration
-     */
-    public function saveAction()
-    {
-        /* @var $session Mage_Adminhtml_Model_Session */
-        $session = Mage::getSingleton('Mage_Backend_Model_Session');
-
-        try {
-            if (!$this->_isSectionAllowed($this->getRequest()->getParam('section'))) {
-                throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('This section is not allowed.'));
-            }
-
-            // custom save logic
-            $this->_saveSection();
-            $section = $this->getRequest()->getParam('section');
-            $website = $this->getRequest()->getParam('website');
-            $store   = $this->getRequest()->getParam('store');
-            Mage::getModel('Mage_Backend_Model_Config')->setSection($section)->setWebsite($website)
-                ->setStore($store)->setGroups($this->_getGroupsForSave())->save();
-
-            // re-init configuration
-            Mage::getConfig()->reinit();
-            Mage::dispatchEvent('admin_system_config_section_save_after', array(
-                'website' => $website, 'store'   => $store, 'section' => $section
-            ));
-            Mage::app()->reinitStores();
-
-            // website and store codes can be used in event implementation, so set them as well
-            Mage::dispatchEvent("admin_system_config_changed_section_{$section}", array(
-                'website' => $website, 'store' => $store
-            ));
-            $session->addSuccess(Mage::helper('Mage_Backend_Helper_Data')->__('The configuration has been saved.'));
-        } catch (Mage_Core_Exception $e) {
-            $messages = explode("\n", $e->getMessage());
-            array_walk($messages, create_function(
-                '$message', 'Mage::getSingleton(\'Mage_Backend_Model_Session\')->addError($message);'
-            ));
-        } catch (Exception $e) {
-            $session->addException($e,
-                Mage::helper('Mage_Backend_Helper_Data')->__('An error occurred while saving this configuration:')
-                    . ' ' . $e->getMessage());
-        }
-
-        $this->_saveState($this->getRequest()->getPost('config_state'));
-        $this->_redirect('*/*/edit', array('_current' => array('section', 'website', 'store')));
-    }
-
-    /**
-     * Get groups for save
-     *
-     * @return array|null
-     */
-    protected function _getGroupsForSave()
-    {
-        $groups = $this->getRequest()->getPost('groups');
-
-        if (isset($_FILES['groups']['name']) && is_array($_FILES['groups']['name'])) {
-            /**
-             * Carefully merge $_FILES and $_POST information
-             * None of '+=' or 'array_merge_recursive' can do this correct
-             */
-            foreach ($_FILES['groups']['name'] as $groupName => $group) {
-                if (is_array($group)) {
-                    foreach ($group['fields'] as $fieldName => $field) {
-                        if (!empty($field['value'])) {
-                            $groups[$groupName]['fields'][$fieldName] = array('value' => $field['value']);
-                        }
-                    }
-                }
-            }
-        }
-        return $groups;
-    }
-
-    /**
-     * Custom save logic for section
-     */
-    protected function _saveSection()
-    {
-        $method = '_save' . uc_words($this->getRequest()->getParam('section'), '');
-        if (method_exists($this, $method)) {
-            $this->$method();
-        }
-    }
-
-    /**
-     * Advanced save procedure
-     */
-    protected function _saveAdvanced()
-    {
-        Mage::app()->cleanCache(array('layout', Mage_Core_Model_Layout_Merge::LAYOUT_GENERAL_CACHE_TAG));
+        $this->renderLayout();
     }
 
     /**
@@ -217,7 +81,7 @@ class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Contro
      */
     public function stateAction()
     {
-        if ($this->getRequest()->getParam('isAjax') == 1 && $this->getRequest()->getParam('container') != ''
+        if ($this->getRequest()->getParam('isAjax') && $this->getRequest()->getParam('container') != ''
             && $this->getRequest()->getParam('value') != ''
         ) {
             $configState = array(
@@ -245,71 +109,5 @@ class Mage_Backend_Adminhtml_System_ConfigController extends Mage_Backend_Contro
         $gridBlock->setWebsiteId($website->getId())->setConditionName($conditionName);
         $content    = $gridBlock->getCsvFile();
         $this->_prepareDownloadResponse($fileName, $content);
-    }
-
-    /**
-     * Check is allow modify system configuration
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Adminhtml::config');
-    }
-
-    /**
-     * Check if specified section allowed in ACL
-     *
-     * Will forward to deniedAction(), if not allowed.
-     *
-     * @param string $section
-     * @throws Exception
-     * @return bool
-     */
-    protected function _isSectionAllowed($section)
-    {
-        try {
-            $section = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')
-                ->getConfiguration()
-                ->getSection($section);
-            if (!Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed($section['resource'])) {
-                throw new Exception('');
-            }
-            return true;
-        } catch (Zend_Acl_Exception $e) {
-            $this->norouteAction();
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        } catch (Exception $e) {
-            $this->deniedAction();
-            $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        }
-    }
-
-    /**
-     * Save state of configuration field sets
-     *
-     * @param array $configState
-     * @return bool
-     */
-    protected function _saveState($configState = array())
-    {
-        $adminUser = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser();
-        if (is_array($configState)) {
-            $extra = $adminUser->getExtra();
-            if (!is_array($extra)) {
-                $extra = array();
-            }
-            if (!isset($extra['configState'])) {
-                $extra['configState'] = array();
-            }
-            foreach ($configState as $fieldset => $state) {
-                $extra['configState'][$fieldset] = $state;
-            }
-            $adminUser->saveExtra($extra);
-        }
-
-        return true;
     }
 }

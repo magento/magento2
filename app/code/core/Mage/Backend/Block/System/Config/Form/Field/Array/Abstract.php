@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -93,15 +93,28 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
     public function addColumn($name, $params)
     {
         $this->_columns[$name] = array(
-            'label'     => empty($params['label']) ? 'Column' : $params['label'],
-            'size'      => empty($params['size'])  ? false    : $params['size'],
-            'style'     => empty($params['style'])  ? null    : $params['style'],
-            'class'     => empty($params['class'])  ? null    : $params['class'],
+            'label'     => $this->_getParam($params, 'label', 'Column'),
+            'size'      => $this->_getParam($params, 'size', false),
+            'style'     => $this->_getParam($params, 'style'),
+            'class'     => $this->_getParam($params, 'class'),
             'renderer'  => false,
         );
         if ((!empty($params['renderer'])) && ($params['renderer'] instanceof Mage_Core_Block_Abstract)) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
+    }
+
+    /**
+     * Retrieve param
+     *
+     * @param array $params
+     * @param string $paramName
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    protected function _getParam($params, $paramName, $defaultValue = null)
+    {
+        return empty($params[$paramName]) ? $defaultValue : $params[$paramName];
     }
 
     /**
@@ -122,6 +135,7 @@ abstract class Mage_Backend_Block_System_Config_Form_Field_Array_Abstract
      * Prepare existing row data object
      *
      * @param Varien_Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareArrayRow(Varien_Object $row)
     {

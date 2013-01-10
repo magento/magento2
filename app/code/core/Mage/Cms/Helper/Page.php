@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,14 +52,14 @@ class Mage_Cms_Helper_Page extends Mage_Core_Helper_Abstract
         return $this->_renderPage($action, $pageId);
     }
 
-   /**
-    * Renders CMS page
-    *
-    * @param Mage_Core_Controller_Front_Action $action
-    * @param integer $pageId
-    * @param bool $renderLayout
-    * @return boolean
-    */
+    /**
+     * Renders CMS page
+     *
+     * @param Mage_Core_Controller_Front_Action|Mage_Core_Controller_Varien_Action $action
+     * @param integer $pageId
+     * @param bool $renderLayout
+     * @return boolean
+     */
     protected function _renderPage(Mage_Core_Controller_Varien_Action  $action, $pageId = null, $renderLayout = true)
     {
 
@@ -103,7 +103,9 @@ class Mage_Cms_Helper_Page extends Mage_Core_Helper_Abstract
         $action->loadLayoutUpdates();
         $layoutUpdate = ($page->getCustomLayoutUpdateXml() && $inRange)
             ? $page->getCustomLayoutUpdateXml() : $page->getLayoutUpdateXml();
-        $action->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+        if (!empty($layoutUpdate)) {
+            $action->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+        }
         $action->generateLayoutXml()->generateLayoutBlocks();
 
         $contentHeadingBlock = $action->getLayout()->getBlock('page_content_heading');

@@ -19,7 +19,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 .paypal-payment-notice { background:url(logo.gif) no-repeat 5px center #eaf0ee; border:1px solid #ccc; margin-bottom:10px; padding:10px 5px 5px 115px; }

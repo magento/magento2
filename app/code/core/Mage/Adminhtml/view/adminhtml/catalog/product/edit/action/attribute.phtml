@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -36,26 +36,9 @@
         </tr>
     </table>
 </div>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="attributes_edit_form" enctype="multipart/form-data">
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="attributes-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
 </form>
 <script type="text/javascript">
-var attributesForm = new varienForm('attributes_edit_form', '<?php echo $this->getValidationUrl() ?>');
-attributesForm._processValidationResult = function(transport) {
-    var response = transport.responseText.evalJSON();
-
-    if (response.error){
-        if (response.attribute && $(response.attribute)) {
-            $(response.attribute).setHasError(true, attributesForm);
-            Validation.ajaxError($(response.attribute), response.message);
-            if (!Prototype.Browser.IE){
-                $(response.attribute).focus();
-            }
-        } else if ($('messages')) {
-            $('messages').innerHTML = '<ul class="messages"><li class="error-msg"><ul><li>' + response.message + '</li></ul></li></ul>';
-        }
-    } else {
-        attributesForm._submit();
-    }
-}; 
+    jQuery('#attributes-edit-form').form().validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
 </script>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,7 +168,7 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
     }
 
     /**
-     * Adding new nitice message
+     * Adding new notice message
      *
      * @param   string $message
      * @return  Mage_Core_Block_Messages
@@ -208,12 +208,13 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
      * @param   string $type
      * @return  string
      */
-    public function getHtml($type=null)
+    public function getHtml($type = null)
     {
         $html = '<' . $this->_messagesFirstLevelTagName . ' id="admin_messages">';
         foreach ($this->getMessages($type) as $message) {
-            $html.= '<' . $this->_messagesSecondLevelTagName . ' class="'.$message->getType().'-msg" ' . $this->getUiId('message') . '>'
-                . ($this->_escapeMessageFlag) ? $this->escapeHtml($message->getText()) : $message->getText()
+            $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $message->getType() . '-msg" '
+                . $this->getUiId('message') . '>'
+                . $this->_escapeMessageFlag ? $this->escapeHtml($message->getText()) : $message->getText()
                 . '</' . $this->_messagesSecondLevelTagName . '>';
         }
         $html .= '</' . $this->_messagesFirstLevelTagName . '>';
@@ -223,8 +224,7 @@ class Mage_Core_Block_Messages extends Mage_Core_Block_Template
     /**
      * Retrieve messages in HTML format grouped by type
      *
-     * @param   string $type
-     * @return  string
+     * @return string
      */
     public function getGroupedHtml()
     {

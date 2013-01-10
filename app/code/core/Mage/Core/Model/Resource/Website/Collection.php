@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,6 +49,17 @@ class Mage_Core_Model_Resource_Website_Collection extends Mage_Core_Model_Resour
     {
         $this->setFlag('load_default_website', false);
         $this->_init('Mage_Core_Model_Website', 'Mage_Core_Model_Resource_Website');
+    }
+
+    /**
+     * Apply custom filtering
+     */
+    protected function _renderFiltersBefore()
+    {
+        if (!$this->getLoadDefault()) {
+            $this->getSelect()->where('main_table.website_id > ?', 0);
+        }
+        parent::_renderFiltersBefore();
     }
 
     /**
@@ -123,14 +134,10 @@ class Mage_Core_Model_Resource_Website_Collection extends Mage_Core_Model_Resour
      */
     public function load($printQuery = false, $logQuery = false)
     {
-        if (!$this->getLoadDefault()) {
-            $this->getSelect()->where('main_table.website_id > ?', 0);
-        }
         $this->unshiftOrder('main_table.name', Varien_Db_Select::SQL_ASC)       // website name SECOND
              ->unshiftOrder('main_table.sort_order', Varien_Db_Select::SQL_ASC); // website sort order FIRST
 
         return parent::load($printQuery, $logQuery);
-
     }
 
     /**

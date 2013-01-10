@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,13 +49,6 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
         $this->_addBreadcrumb(
             Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attribute Sets'),
             Mage::helper('Mage_Catalog_Helper_Data')->__('Manage Attribute Sets'));
-
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Toolbar_Main')
-        );
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid')
-        );
 
         $this->renderLayout();
     }
@@ -95,11 +88,10 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
 
     public function setGridAction()
     {
-        $this->_setTypeId();
-        $this->getResponse()->setBody(
-            $this->getLayout()
-                ->createBlock('Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid')
-                ->toHtml());
+
+       $this->_setTypeId();
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     /**

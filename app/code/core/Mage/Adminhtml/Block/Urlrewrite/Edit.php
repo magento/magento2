@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,9 +168,11 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit extends Mage_Adminhtml_Block_Widget_C
     {
         $this->_addButton('save', array(
             'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save'),
-            'onclick' => 'editForm.submit()',
             'class'   => 'save',
-            'level'   => -1
+            'level'   => -1,
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#edit_form'),
+            ),
         ));
     }
 

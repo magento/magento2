@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,6 +29,16 @@ class Mage_Core_IndexController extends Mage_Core_Controller_Front_Action {
 
     function indexAction()
     {
-        
+
+    }
+
+    /**
+     * 404 not found action
+     */
+    public function notFoundAction()
+    {
+        $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
+        $this->getResponse()->setHttpResponseCode(404);
+        $this->getResponse()->setBody($this->__('Requested resource not found'));
     }
 }

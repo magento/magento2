@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,13 +69,18 @@ class Mage_Catalog_Model_Layer_Filter_ItemTest extends PHPUnit_Framework_TestCas
 
     public function testGetUrl()
     {
-        Mage::getModel(
+        $action = Mage::getModel(
             'Mage_Core_Controller_Front_Action',
-            array('request' => new Magento_Test_Request(), 'response' => new Magento_Test_Response())
+            array(
+                new Magento_Test_Request(),
+                new Magento_Test_Response(),
+                'frontend',
+                Mage::getObjectManager(),
+                Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
+                Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory')
+            )
         );
-        /*
-         * Mage::app()->getFrontController()->setAction($action); // done in action's constructor
-         */
+        Mage::app()->getFrontController()->setAction($action); // done in action's constructor
         $this->assertStringEndsWith('/?cat%5B0%5D=valuePart1&cat%5B1%5D=valuePart2', $this->_model->getUrl());
     }
 

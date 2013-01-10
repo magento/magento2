@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Page
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -77,10 +77,13 @@
                     <comment>This action will delete your custom instructions and reset robots.txt file to system's default settings.</comment>
                 </field>
             </group>
-            <group id="header" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="header" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Header</label>
-                <field id="logo_src" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo Image Src</label>
+                <field id="logo_src" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo Image</label>
+                    <comment>Allowed file types:PNG, GIF, JPG, JPEG.</comment>
+                    <backend_model>Mage_Backend_Model_Config_Backend_Image_Logo</backend_model>
+                    <base_url type="media" scope_info="1">logo</base_url>
                 </field>
                 <field id="logo_alt" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image Alt</label>

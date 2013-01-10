@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,9 +97,14 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $this->_appConfigMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
 
-        $this->_objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock(
+            'Magento_ObjectManager_Zend', array('create', 'get'), array(), '', false
+        );
         $this->_objectManagerMock->expects($this->any())
             ->method('create')
+            ->will($this->returnCallback(array($this, 'getModelInstance')));
+        $this->_objectManagerMock->expects($this->any())
+            ->method('get')
             ->will($this->returnCallback(array($this, 'getModelInstance')));
 
         $this->_cacheInstanceMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
@@ -114,7 +119,9 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
 
         $this->_eventManagerMock = $this->getMock('Mage_Core_Model_Event_Manager');
 
-        $this->_logger = $this->getMock('Mage_Backend_Model_Menu_Logger');
+        $this->_logger = $this->getMock(
+            'Mage_Core_Model_Logger', array('addStoreLog', 'log', 'logException'), array(), '', false
+        );
 
         $this->_menuMock = $this->getMock('Mage_Backend_Model_Menu', array(), array(), '', false);
 
@@ -368,6 +375,12 @@ class Mage_Backend_Model_Menu_ConfigTest extends PHPUnit_Framework_TestCase
             return $this->_configMenuMock;
         } elseif ($model == 'Mage_Backend_Model_Menu_Builder') {
             return $this->_menuBuilderMock;
+        } elseif ($model == 'Mage_Core_Model_App') {
+            $appMock = $this->getMock('Mage_Core_Model_App', array('getStore'), array(), '', false);
+            $appMock->expects($this->any())
+                ->method('getStore')
+                ->will($this->returnValue($this->getMock('Mage_Core_Model_Store', array(), array(), '', false)));
+            return $appMock;
         } else {
             return $this->getMock($model, array(), $arguments, '', false);
         }

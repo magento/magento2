@@ -21,128 +21,157 @@
  * @category    Magento
  * @package     Magento_Validator
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Test case for Magento_Validator
- *
- * @group validator
  */
 class Magento_ValidatorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Magento_Validator
+     */
+    protected $_validator;
 
     /**
-     * @expectedException InvalidArgumentException
+     * Set up
      */
-    public function testConstructException()
+    protected function setUp()
     {
-        /** @var Magento_Validator_Config $configMock */
-        $configMock = $this->getMockBuilder('Magento_Validator_Config')->disableOriginalConstructor()->getMock();
-        new Magento_Validator(null, null, $configMock);
+        $this->_validator = new Magento_Validator();
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * Cleanup validator instance to unset default translator if any
      */
-    public function testConstructEmptyGroupNameException()
+    protected function tearDown()
     {
-        /** @var Magento_Validator_Config $configMock */
-        $configMock = $this->getMockBuilder('Magento_Validator_Config')->disableOriginalConstructor()->getMock();
-        new Magento_Validator('test_entity', null, $configMock);
+        unset($this->_validator);
     }
 
     /**
-     * @param array $dataToValidate
-     * @param PHPUnit_Framework_MockObject_MockObject $zendConstraintMock
-     * @param PHPUnit_Framework_MockObject_MockObject $mageConstraintMock
-     * @param Magento_Validator_Config $configMock
-     * @dataProvider dataProviderForValidator
+     * Test isValid method
+     *
+     * @dataProvider isValidDataProvider
+     *
+     * @param mixed $value
+     * @param Magento_Validator_ValidatorInterface[] $validators
+     * @param boolean $expectedResult
+     * @param array $expectedMessages
+     * @param boolean $breakChainOnFailure
      */
-    public function testIsValid($dataToValidate, $zendConstraintMock, $mageConstraintMock, $configMock)
-    {
-        $zendConstraintMock->expects($this->once())
-            ->method('isValid')
-            ->with($dataToValidate['test_field'])
-            ->will($this->returnValue(true));
+    public function testIsValid($value, $validators, $expectedResult, $expectedMessages = array(),
+        $breakChainOnFailure = false
+    ) {
+        foreach ($validators as $validator) {
+            $this->_validator->addValidator($validator, $breakChainOnFailure);
+        }
 
-        $mageConstraintMock->expects($this->once())
-            ->method('isValidData')
-            ->with($dataToValidate, 'test_field_constraint')
-            ->will($this->returnValue(true));
-
-        $validator = new Magento_Validator('test_entity', 'test_group_a', $configMock);
-        $this->assertTrue($validator->isValid($dataToValidate));
+        $this->assertEquals($expectedResult, $this->_validator->isValid($value));
+        $this->assertEquals($expectedMessages, $this->_validator->getMessages($value));
     }
 
     /**
-     * @param array $dataToValidate
-     * @param PHPUnit_Framework_MockObject_MockObject $zendConstraintMock
-     * @param PHPUnit_Framework_MockObject_MockObject $mageConstraintMock
-     * @param Magento_Validator_Config $configMock
-     * @dataProvider dataProviderForValidator
+     * Data provider for testIsValid
+     *
+     * @return array
      */
-    public function testGetErrors($dataToValidate, $zendConstraintMock, $mageConstraintMock, $configMock)
+    public function isValidDataProvider()
     {
-        $expectedZendErrors = array('Test Zend_Validate_Interface constraint error.');
-        $zendConstraintMock->expects($this->once())
-            ->method('isValid')
-            ->with($dataToValidate['test_field'])
+        $result = array();
+        $value = 'test';
+
+        // Case 1. Validators fails without breaking chain
+        $validatorA = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorA->expects($this->once())->method('isValid')
+            ->with($value)->will($this->returnValue(false));
+        $validatorA->expects($this->once())->method('getMessages')
+            ->will($this->returnValue(array('foo' => array('Foo message 1'), 'bar' => array('Foo message 2'))));
+
+        $validatorB = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorB->expects($this->once())->method('isValid')
+            ->with($value)->will($this->returnValue(false));
+        $validatorB->expects($this->once())->method('getMessages')
+            ->will($this->returnValue(array('foo' => array('Bar message 1'), 'bar' => array('Bar message 2'))));
+
+        $result[] = array($value, array($validatorA, $validatorB), false, array(
+            'foo' => array('Foo message 1', 'Bar message 1'),
+            'bar' => array('Foo message 2', 'Bar message 2')
+        ));
+
+        // Case 2. Validators fails with breaking chain
+        $validatorA = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorA->expects($this->once())->method('isValid')
+            ->with($value)
             ->will($this->returnValue(false));
-        $zendConstraintMock->expects($this->once())
-            ->method('getMessages')
-            ->will($this->returnValue($expectedZendErrors));
+        $validatorA->expects($this->once())->method('getMessages')
+            ->will($this->returnValue(array('field' => 'Error message')));
 
-        $expectedMageErrors = array(
-            'test_field_constraint' => array('Test Magento_Validator_ConstraintInterface constraint error.')
-        );
-        $mageConstraintMock->expects($this->once())
-            ->method('isValidData')
-            ->with($dataToValidate, 'test_field_constraint')
-            ->will($this->returnValue(false));
-        $mageConstraintMock->expects($this->once())
-            ->method('getErrors')
-            ->will($this->returnValue($expectedMageErrors));
+        $validatorB = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorB->expects($this->never())->method('isValid');
 
-        $validator = new Magento_Validator('test_entity', 'test_group_a', $configMock);
-        $this->assertFalse($validator->isValid($dataToValidate));
-        $expectedErrors = array_merge(array('test_field' => $expectedZendErrors),
-            $expectedMageErrors);
-        $actualErrors = $validator->getMessages();
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $result[] = array($value, array($validatorA, $validatorB), false, array('field' => 'Error message'), true);
+
+        // Case 3. Validators succeed
+        $validatorA = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorA->expects($this->once())->method('isValid')
+            ->with($value)->will($this->returnValue(true));
+        $validatorA->expects($this->never())->method('getMessages');
+
+        $validatorB = $this->getMock('Magento_Validator_ValidatorInterface');
+        $validatorB->expects($this->once())->method('isValid')
+            ->with($value)->will($this->returnValue(true));
+        $validatorB->expects($this->never())->method('getMessages');
+
+        $result[] = array($value, array($validatorA, $validatorB), true);
+
+        return $result;
     }
 
-    public function dataProviderForValidator()
+    /**
+     * Test addValidator
+     */
+    public function testAddValidator()
     {
-        $dataToValidate = array(
-            'test_field' => 'test_value',
-            'test_field_constraint' => 'test value constraint',
-        );
+        $fooValidator = new Magento_Validator_Test_True();
+        $classConstraint = new Magento_Validator_Constraint($fooValidator, 'id');
+        $propertyValidator = new Magento_Validator_Constraint_Property($classConstraint, 'name', 'id');
 
-        $zendConstraintMock = $this->getMock('Zend_Validate_Alnum', array('isValid', 'getMessages'));
-        $mageConstraintMock = $this->getMock('Magento_Validator_Constraint', array('isValidData', 'getErrors'));
-        $validationRules = array(
-            'test_rule' => array(
-                array(
-                    'constraint' => $zendConstraintMock,
-                    'field' => 'test_field'
-                ),
-                array(
-                    'constraint' => $mageConstraintMock,
-                    'field' => 'test_field_constraint'
-                ),
+        /** @var Magento_Translate_AdapterAbstract $translator */
+        $translator= $this->getMockBuilder('Magento_Translate_AdapterAbstract')
+            ->getMockForAbstractClass();
+        Magento_Validator_ValidatorAbstract::setDefaultTranslator($translator);
+
+        $this->_validator->addValidator($classConstraint);
+        $this->_validator->addValidator($propertyValidator);
+        $expected = array(
+            array(
+                'instance' => $classConstraint,
+                'breakChainOnFailure' => false
             ),
+            array(
+                'instance' => $propertyValidator,
+                'breakChainOnFailure' => false
+            )
         );
+        $this->assertAttributeEquals($expected, '_validators', $this->_validator);
+        $this->assertEquals($translator, $fooValidator->getTranslator(), 'Translator was not set');
+    }
 
-        $configMock = $this->getMockBuilder('Magento_Validator_Config')->disableOriginalConstructor()->getMock();
-        $configMock->expects($this->once())
-            ->method('getValidationRules')
-            ->with('test_entity', 'test_group_a')
-            ->will($this->returnValue($validationRules));
-
-        return array(
-            array($dataToValidate, $zendConstraintMock, $mageConstraintMock, $configMock)
-        );
+    /**
+     * Check that translator passed into validator in chain
+     */
+    public function testSetTranslator()
+    {
+        $fooValidator = new Magento_Validator_Test_True();
+        $this->_validator->addValidator($fooValidator);
+        /** @var Magento_Translate_AdapterAbstract $translator */
+        $translator= $this->getMockBuilder('Magento_Translate_AdapterAbstract')
+            ->getMockForAbstractClass();
+        $this->_validator->setTranslator($translator);
+        $this->assertEquals($translator, $fooValidator->getTranslator());
+        $this->assertEquals($translator, $this->_validator->getTranslator());
     }
 }

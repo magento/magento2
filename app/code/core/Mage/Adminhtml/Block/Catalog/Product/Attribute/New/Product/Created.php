@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -92,7 +92,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_New_Product_Created extends
     public function getAttributesBlockJson()
     {
         $result = array(
-            $this->getRequest()->getParam('tab') => $this->getChildHtml('attributes')
+            $this->getRequest()->getParam('product_tab') => $this->getChildHtml('attributes')
         );
         $newAttributeSetId = $this->getRequest()->getParam('new_attribute_set_id');
         if ($newAttributeSetId) {

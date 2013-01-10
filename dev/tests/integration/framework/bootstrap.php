@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,17 +32,9 @@ $testsBaseDir = dirname(__DIR__);
 $testsTmpDir = "$testsBaseDir/tmp";
 $magentoBaseDir = realpath("$testsBaseDir/../../../");
 
-/*
- * Setup include path for autoload purpose.
- * Include path setup is intentionally moved out from the phpunit.xml to simplify maintenance of CI builds.
- */
-set_include_path(implode(
-    PATH_SEPARATOR,
-    array(
-        "$testsBaseDir/framework",
-        "$testsBaseDir/testsuite",
-        get_include_path()
-    )
+Magento_Autoload_IncludePath::addIncludePath(array(
+    "$testsBaseDir/framework",
+    "$testsBaseDir/testsuite",
 ));
 
 if (defined('TESTS_LOCAL_CONFIG_FILE') && TESTS_LOCAL_CONFIG_FILE) {
@@ -72,17 +64,23 @@ $isDeveloperMode = (defined('TESTS_MAGENTO_DEVELOPER_MODE') && TESTS_MAGENTO_DEV
 
 /* Enable profiler if necessary */
 if (defined('TESTS_PROFILER_FILE') && TESTS_PROFILER_FILE) {
-    Magento_Profiler::registerOutput(
-        new Magento_Profiler_Output_Csvfile($testsBaseDir . DIRECTORY_SEPARATOR . TESTS_PROFILER_FILE)
-    );
+    $driver = new Magento_Profiler_Driver_Standard();
+    $driver->registerOutput(new Magento_Profiler_Driver_Standard_Output_Csvfile(array(
+        'baseDir' => $testsBaseDir,
+        'filePath' => TESTS_PROFILER_FILE
+    )));
+    Magento_Profiler::add($driver);
 }
 
 /* Enable profiler with bamboo friendly output format */
 if (defined('TESTS_BAMBOO_PROFILER_FILE') && defined('TESTS_BAMBOO_PROFILER_METRICS_FILE')) {
-    Magento_Profiler::registerOutput(new Magento_Test_Profiler_OutputBamboo(
-        $testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_FILE,
-        require($testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_METRICS_FILE)
-    ));
+    $driver = new Magento_Profiler_Driver_Standard();
+    $driver->registerOutput(new Magento_Test_Profiler_OutputBamboo(array(
+        'baseDir' => $testsBaseDir,
+        'filePath' => TESTS_BAMBOO_PROFILER_FILE,
+        'metrics' => require($testsBaseDir . DIRECTORY_SEPARATOR . TESTS_BAMBOO_PROFILER_METRICS_FILE)
+    )));
+    Magento_Profiler::add($driver);
 }
 
 /*
@@ -91,6 +89,7 @@ if (defined('TESTS_BAMBOO_PROFILER_FILE') && defined('TESTS_BAMBOO_PROFILER_METR
  * To allow config fixtures to deal with fixture stores, data fixtures should be processed before config fixtures.
  */
 $eventManager = new Magento_Test_EventManager(array(
+    new Magento_Test_ClearProperties(),
     new Magento_Test_Annotation_AppIsolation(),
     new Magento_Test_Event_Transaction(new Magento_Test_EventManager(array(
         new Magento_Test_Annotation_DbIsolation(),
@@ -102,12 +101,12 @@ Magento_Test_Event_PhpUnit::setDefaultEventManager($eventManager);
 Magento_Test_Event_Magento::setDefaultEventManager($eventManager);
 
 /* Initialize object manager instance */
-Mage::setRoot();
 Mage::initializeObjectManager(null, new Magento_Test_ObjectManager());
 
 /* Bootstrap the application */
 Magento_Test_Bootstrap::setInstance(new Magento_Test_Bootstrap(
     $magentoBaseDir,
+    $testsBaseDir,
     $localXmlFile,
     $globalEtcFiles,
     $moduleEtcFiles,

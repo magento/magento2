@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Tax
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,8 +46,10 @@ class Mage_Tax_Model_Resource_Calculation_Rule_CollectionTest extends PHPUnit_Fr
     public function setClassTypeFilterDataProvider()
     {
         return array(
-            array(Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT, 1, '/cd\.product_tax_class_id = [\S]{0,1}1[\S]{0,1}/'),
-            array(Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER, 1, '/cd\.customer_tax_class_id = [\S]{0,1}1[\S]{0,1}/')
+            array(Mage_Tax_Model_Class::TAX_CLASS_TYPE_PRODUCT, 1,
+                '/`?cd`?\.`?product_tax_class_id`? = [\S]{0,1}1[\S]{0,1}/'),
+            array(Mage_Tax_Model_Class::TAX_CLASS_TYPE_CUSTOMER, 1,
+                '/`?cd`?\.`?customer_tax_class_id`? = [\S]{0,1}1[\S]{0,1}/')
         );
     }
 

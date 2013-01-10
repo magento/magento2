@@ -2,7 +2,7 @@
 /**
  * Graph data structure
  *
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Magento_Data_Graph
@@ -49,28 +49,28 @@ class Magento_Data_Graph
             $this->_nodes[$node] = $node;
         }
         foreach ($relations as $pair) {
-            list($from, $to) = $pair;
-            $this->addRelation($from, $to);
+            list($fromNode, $toNode) = $pair;
+            $this->addRelation($fromNode, $toNode);
         }
     }
 
     /**
      * Set a relation between nodes
      *
-     * @param string|int $from
-     * @param string|int $to
+     * @param string|int $fromNode
+     * @param string|int $toNode
      * @return Magento_Data_Graph
      * @throws InvalidArgumentException
      */
-    public function addRelation($from, $to)
+    public function addRelation($fromNode, $toNode)
     {
-        if ($from == $to) {
-            throw new InvalidArgumentException("Graph node '{$from}' is linked to itself.");
+        if ($fromNode == $toNode) {
+            throw new InvalidArgumentException("Graph node '{$fromNode}' is linked to itself.");
         }
-        $this->_assertNode($from, true);
-        $this->_assertNode($to, true);
-        $this->_from[$from][$to] = $to;
-        $this->_to[$to][$from] = $from;
+        $this->_assertNode($fromNode, true);
+        $this->_assertNode($toNode, true);
+        $this->_from[$fromNode][$toNode] = $toNode;
+        $this->_to[$toNode][$fromNode] = $fromNode;
         return $this;
     }
 
@@ -129,41 +129,41 @@ class Magento_Data_Graph
      * Returns path as array of nodes or empty array if path does not exist.
      * Only first found path is returned. It will be not necessary the shortest or optimal in any way.
      *
-     * @param string|int $from
-     * @param string|int $to
+     * @param string|int $fromNode
+     * @param string|int $toNode
      * @param int $mode
      * @return array
      */
-    public function dfs($from, $to, $mode = self::DIRECTIONAL)
+    public function dfs($fromNode, $toNode, $mode = self::DIRECTIONAL)
     {
-        $this->_assertNode($from, true);
-        $this->_assertNode($to, true);
-        return $this->_dfs($from, $to, $this->getRelations($mode));
+        $this->_assertNode($fromNode, true);
+        $this->_assertNode($toNode, true);
+        return $this->_dfs($fromNode, $toNode, $this->getRelations($mode));
     }
 
     /**
      * Recursive sub-routine of dfs()
      *
-     * @param string|int $from
-     * @param string|int $to
+     * @param string|int $fromNode
+     * @param string|int $toNode
      * @param array $graph
      * @param array &$visited
      * @param array $stack
      * @return array
      * @link http://en.wikipedia.org/wiki/Depth-first_search
      */
-    protected function _dfs($from, $to, $graph, &$visited = array(), $stack = array())
+    protected function _dfs($fromNode, $toNode, $graph, &$visited = array(), $stack = array())
     {
-        $stack[] = $from;
-        $visited[$from] = $from;
-        if (isset($graph[$from][$to])) {
-            $stack[] = $to;
+        $stack[] = $fromNode;
+        $visited[$fromNode] = $fromNode;
+        if (isset($graph[$fromNode][$toNode])) {
+            $stack[] = $toNode;
             return $stack;
         }
-        if (isset($graph[$from])) {
-            foreach ($graph[$from] as $node) {
+        if (isset($graph[$fromNode])) {
+            foreach ($graph[$fromNode] as $node) {
                 if (!isset($visited[$node])) {
-                    $result = $this->_dfs($node, $to, $graph, $visited, $stack);
+                    $result = $this->_dfs($node, $toNode, $graph, $visited, $stack);
                     if ($result) {
                         return $result;
                     }

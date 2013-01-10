@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_CatalogInventory
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -58,7 +58,7 @@
             <group id="item_options" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <comment>
                     <![CDATA[<strong>Note</strong> that these settings are applicable to cart line items, not the whole cart.]]>
-</comment>
+                </comment>
                 <label>Product Stock Options</label>
                 <field id="manage_stock" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Manage Stock</label>

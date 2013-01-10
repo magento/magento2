@@ -21,14 +21,14 @@
  *
  * @category    design
  * @package     default_modern
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout version="0.1.0">
     <default>
         <reference name="footer_links">
-            <action method="addLink" translate="label title" module="Mage_Rss" ifconfig="rss/config/active"><label>RSS</label><url>rss</url><title>RSS</title><prepare>true</prepare><urlParams/><position/><li/><a>class="link-rss"</a></action>
+            <action method="addLink" translate="label title" module="Mage_Rss" ifconfig="rss/config/active"><label>RSS</label><url>rss</url><title>RSS</title><urlParams/><position/><li/><a>class="link-rss"</a></action>
         </reference>
         <block type="Mage_Rss_Block_List" name="head_rss" ifconfig="rss/config/active" />
     </default>

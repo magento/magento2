@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,14 +30,11 @@ $installer->startSetup();
 
 $tableName = $installer->getTable('admin_rule');
 if ($tableName) {
-    $installer->getConnection()->delete($tableName,  array('resource_id = ?' => 'admin/system/tools/compiler'));
+    $installer->getConnection()->delete($tableName, array('resource_id = ?' => 'admin/system/tools/compiler'));
 }
 $tableName = $installer->getTable('core_resource');
 if ($tableName) {
-    $installer->getConnection()->delete($tableName,  array('code = ?' => 'admin_setup'));
+    $installer->getConnection()->delete($tableName, array('code = ?' => 'admin_setup'));
 }
 
-
 $installer->endSetup();
-
-Mage::dispatchEvent('theme_registration_from_filesystem');

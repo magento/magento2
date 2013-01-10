@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,14 +47,20 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
     protected $_areaFrontName;
 
     /**
-     * Fetch area front name from params
-     *
-     * @param array $options
+     * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
+     * @param Magento_ObjectManager $objectManager
+     * @param string $areaCode
+     * @param string $baseController
      * @throws InvalidArgumentException
      */
-    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
-    {
-        parent::__construct($objectManager, $options);
+    public function __construct(
+        Mage_Core_Controller_Varien_Action_Factory $controllerFactory,
+        Magento_ObjectManager $objectManager,
+        $areaCode,
+        $baseController
+    ) {
+        parent::__construct($controllerFactory, $objectManager, $areaCode, $baseController);
+
         $this->_areaFrontName = Mage::helper('Mage_Backend_Helper_Data')->getAreaFrontName();
         if (empty($this->_areaFrontName)) {
             throw new InvalidArgumentException('Area Front Name should be defined');
@@ -66,15 +72,28 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      */
     public function fetchDefault()
     {
-        $defaultModuleFrontName = (string) Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName');
+        $moduleFrontName = (string) Mage::getConfig()->getNode('admin/routers/adminhtml/args/frontName');
         // set defaults
-        $d = explode('/', $this->_getDefaultPath());
+        $pathParts = explode('/', $this->_getDefaultPath());
         $this->getFront()->setDefault(array(
-            'area'       => !empty($d[0]) ? $d[0] : '',
-            'module'     => !empty($d[1]) ? $d[1] : $defaultModuleFrontName,
-            'controller' => !empty($d[2]) ? $d[2] : 'index',
-            'action'     => !empty($d[3]) ? $d[3] : 'index'
+            'area'       => $this->_getParamWithDefaultValue($pathParts, 0, ''),
+            'module'     => $this->_getParamWithDefaultValue($pathParts, 1, $moduleFrontName),
+            'controller' => $this->_getParamWithDefaultValue($pathParts, 2, 'index'),
+            'action'     => $this->_getParamWithDefaultValue($pathParts, 3, 'index'),
         ));
+    }
+
+    /**
+     * Retrieve array param by key, or default value
+     *
+     * @param array $array
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    protected function _getParamWithDefaultValue($array, $key, $defaultValue)
+    {
+        return !empty($array[$key]) ? $array[$key] : $defaultValue;
     }
 
     /**
@@ -87,9 +106,9 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
     }
 
     /**
-     * dummy call to pass through checking
+     * Dummy call to pass through checking
      *
-     * @return unknown
+     * @return boolean
      */
     protected function _beforeModuleMatch()
     {
@@ -100,6 +119,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      * checking if we installed or not and doing redirect
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function _afterModuleMatch()
     {
@@ -128,6 +148,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      *
      * @param string $path
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _shouldBeSecure($path)
     {
@@ -153,6 +174,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
      *
      * @param string $configArea
      * @param bool $useRouterName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collectRoutes($configArea, $useRouterName)
     {
@@ -192,7 +214,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
         $file = Mage::getModuleDir('controllers', $realModule);
-        return $file . DS . ucfirst($this->_area) . DS . uc_words($controller, DS) . 'Controller.php';
+        return $file . DS . ucfirst($this->_areaCode) . DS . uc_words($controller, DS) . 'Controller.php';
     }
 
     /**
@@ -217,7 +239,7 @@ class Mage_Backend_Controller_Router_Default extends Mage_Core_Controller_Varien
 
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
-        return $realModule . '_' . ucfirst($this->_area) . '_' . uc_words($controller) . 'Controller';
+        return $realModule . '_' . ucfirst($this->_areaCode) . '_' . uc_words($controller) . 'Controller';
     }
 
     /**

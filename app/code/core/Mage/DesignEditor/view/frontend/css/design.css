@@ -1,0 +1,295 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     Mage_DesignEditor
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+#vde_toolbar {
+    position: fixed;
+    margin-top: -54pt;
+    width: 100%;
+    z-index: 999;
+    font:10pt Arial, Helvetica, sans-serif;
+    color:#555;
+    text-align:left;
+    box-shadow:0 0 4pt 1pt #cbcbcb;
+}
+.vde_breadcrumbs, #vde_toolbar_row {
+    padding:0 3em;
+    height:26pt;
+    line-height:26pt;
+    vertical-align:middle;
+}
+.vde_breadcrumbs {
+    text-transform:uppercase;
+    background:white;
+}
+
+#vde_toolbar_row {
+    background:#f0efe9;
+    border-top:1pt solid #dddcd8;
+    border-bottom:1pt solid #dddcd8;
+    position:relative;
+    z-index:100;
+}
+
+#vde_toolbar_row .vde_toolbar_cell {
+    float: left;
+    margin-left:-11pt;
+    margin-right:10pt;
+    border-right:1pt solid transparent;
+    border-left:1pt solid transparent;
+    padding:0 10pt;
+    position:relative;
+}
+#vde_toolbar_row .vde_toolbar_cell:hover, #vde_toolbar_row .vde_toolbar_cell.active {
+    background-color:white;
+    border-right:1pt solid #deddd9;
+    border-left:1pt solid #deddd9;
+}
+#vde_toolbar_buttons {
+    float: right;
+    z-index: 1000;
+    position: relative;
+    line-height:21pt;
+    padding:2pt 0;
+}
+#vde_toolbar_buttons a.vde_button {
+    display:block;
+    border:1px solid #c9c6be;
+    box-shadow:0 0 1pt 0 #c9c6be;
+    border-radius:3pt;
+    padding:0 1.7em;
+    color:#555;
+    text-decoration:none;
+    background-image:url(../images/button.png);
+    background-size:contain;
+    float: left;
+    margin-right:3px;
+}
+#vde_toolbar_buttons a.vde_button:hover {
+    box-shadow:0 0 1pt 1pt #c9c6be;
+    background-image:url(../images/button_hover.png);
+}
+#vde_toolbar .item-msg {
+    border-style: solid;
+    border-width: 1px;
+    padding: 4px;
+}
+
+#vde_toolbar .error {
+    border-color: red;
+    color: red;
+}
+
+.vde_element_wrapper {
+    margin-bottom: 3px;
+    padding: 0px 2px 2px 2px;
+    border: 2px solid #69a8cf;
+    border-radius: 4px;
+}
+.vde_element_title {
+    font-family:Arial, Helvetica, sans-serif;
+    margin: -2px 0 0 -4px;
+    padding: 0;
+    border-width: 2px 5px 6px 7px;
+    border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
+    border-image-outset: fill;
+    -webkit-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
+    color: black;
+    font-size: 8pt;
+    font-weight: bold;
+    max-width: 150px;
+    height: 18px;
+    overflow: hidden;
+    text-align: left;
+    line-height: 17px;
+    cursor: default;
+}
+.vde_element_remove {
+    margin: -26px -6px 0px -4px;
+    padding: 0px;
+    border-width: 2px 5px 6px 7px;
+    border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    border-image-outset: fill;
+    -webkit-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    max-width: 20px;
+    height: 18px;
+    overflow: hidden;
+    text-align: right;
+    line-height: 17px;
+    cursor: default;
+    float: right;
+}
+.vde_element_wrapper.vde_container {
+    border: 2px solid #7bc361;
+}
+.vde_container > .vde_element_title {
+    border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
+    -webkit-border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
+}
+.vde_element_wrapper.vde_stub {
+    border: 2px solid #92978d;
+}
+.vde_stub > .vde_element_title {
+    border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    -webkit-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
+}
+.vde_container.vde_container_hover {
+    border-color: #006400;
+}
+.vde_container.vde_container_hover > .vde_element_title {
+    border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
+    -webkit-border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
+    -moz-border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
+}
+.vde_placeholder {
+    background-color: #F5F5DC;
+}
+.vde_wrapper_hidden, .vde_wrapper_hidden .vde_element_title {
+    display: none;
+}
+
+.vde_toolbar_cell_title {
+    font-weight: bold;
+    cursor: pointer;
+    padding-right:12pt;
+    background: url(../images/arrow_down.png) right center no-repeat;
+}
+.vde_toolbar_cell.active .vde_toolbar_cell_title {
+    background-image: url(../images/arrow_up.png);
+}
+.vde_toolbar_cell_value {
+    font-weight: normal;
+}
+#vde_toolbar_row .vde_toolbar_cell_content, #vde_toolbar_row .vde_toolbar_cell_content * {
+    color:#f0efe9;
+}
+.vde_toolbar_cell_content {
+    display: none;
+    position: absolute;
+    top:2.5em;
+    left:0;
+    background: #494949;
+    padding:.5em 0;
+    z-index: 190;
+    min-width:20em;
+    margin-top:1pt;
+    border-radius:0 0 5pt 5pt;
+    -moz-box-shadow:0 1pt 2pt 1pt #6c6c6c;
+    -webkit-box-shadow:0 1pt 2pt 1pt #6c6c6c;
+    box-shadow:0 1pt 2pt 1pt #6c6c6c;
+}
+.vde_toolbar_cell.active .vde_toolbar_cell_content {
+    display: block;
+}
+.vde_toolbar_cell_content > div {
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0 10px;
+}
+.vde_toolbar_cell_content .vde_cell_list_item {
+    padding-left:18pt;
+    cursor: pointer;
+}
+.vde_toolbar_cell_content .vde_cell_list_group {
+    padding-left:5pt;
+    font-style:italic;
+    cursor:default;
+}
+.vde_toolbar_cell_content .vde_cell_list_item:hover, #vde_handles_tree .jstree-clicked, #vde_handles_tree .jstree-hovered {
+    background-color:#7b7b7b;
+}
+.vde_toolbar_cell_content .checked {
+    background:url(../images/checked.png) no-repeat 5pt center;
+}
+.vde_breadcrumbs a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #2483c7;
+}
+
+.vde_breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.vde_breadcrumbs .vde_breadcrumbs_separator {
+    margin:0 0.3em;
+}
+
+#visual_design_editor_theme a {
+    display:block;
+    text-decoration:none;
+}
+.ui-sortable-helper {
+    opacity: 0.9;
+}
+
+#vde_handles_hierarchy .vde_toolbar_cell_content {
+    padding: 1em .5em 1em 0;
+}
+#vde_handles_tree {
+    max-height: 30em; /* max allowed height */
+    overflow: hidden; /* don't display native scrollbars */
+    padding-right: .5em;
+    text-align: left;
+    background-color: transparent;
+}
+#vde_handles_tree li {
+    overflow: hidden;
+}
+#vde_handles_tree a {
+    margin-left: .5em;
+    padding: .5em;
+    width: 100%;
+}
+#vde_handles_tree .jstree-clicked, #vde_handles_tree .jstree-hovered {
+    border: none;
+}
+#vde_handles_tree .jstree-closed > .jstree-icon {
+    background: url(../images/jstree_plus_minus.png) top left no-repeat;
+}
+#vde_handles_tree .jstree-open > .jstree-icon {
+    background: url(../images/jstree_plus_minus.png) top right no-repeat;
+}
+#vde_handles_tree .vde_option_fragment a {
+    color: #eea243;
+}
+
+.vde_history_toolbar {
+    position: fixed;
+    left:0; top:150px;
+    width:220px;
+    background: #f0efe9;
+    border-bottom: 1pt solid #dddcd8;
+    box-shadow: 0 0 4pt 1pt #cbcbcb;
+    padding: 0 3pt;
+    line-height: 13pt;
+}
+.vde_history_toolbar ul {}
+.vde_history_toolbar ul li {
+    white-space: nowrap;
+    overflow: hidden;
+}

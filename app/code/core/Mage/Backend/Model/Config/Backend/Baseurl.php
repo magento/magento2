@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,11 +34,16 @@ class Mage_Backend_Model_Config_Backend_Baseurl extends Mage_Core_Model_Config_D
         if (!preg_match('#^{{((un)?secure_)?(base|public)_url}}#', $value)) {
             $parsedUrl = parse_url($value);
             if (!isset($parsedUrl['scheme']) || !isset($parsedUrl['host'])) {
-                Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('The %s you entered is invalid. Please make sure that it follows "http://domain.com/" format.', $this->getFieldConfig()->label));
+                $fieldConfig = $this->getFieldConfig();
+                $exceptionMsg = Mage::helper('Mage_Core_Helper_Data')
+                    ->__('The %s you entered is invalid. Please make sure that it follows "http://domain.com/" format.',
+                    $fieldConfig['label']
+                );
+                Mage::throwException($exceptionMsg);
             }
         }
 
-        $value = rtrim($value,  '/');
+        $value = rtrim($value, '/');
         /**
          * If value is special ({{}}) we don't need add slash
          */

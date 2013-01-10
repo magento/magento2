@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,22 +30,18 @@
  * @category   Mage
  * @package    Mage_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
 {
     const DEFAULT_SECTION_BLOCK = 'Mage_Backend_Block_System_Config_Form';
 
     /**
-     * Sections configuration
+     * Form block class name
      *
-     * @var array
+     * @var string
      */
-    protected $_section;
-
-    /**
-     * @var Mage_Backend_Model_Config_StructureInterface
-     */
-    protected $_systemConfig;
+    protected $_formBlockName;
 
     /**
      * Block template File
@@ -54,36 +50,82 @@ class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
      */
     protected $_template = 'Mage_Backend::system/config/edit.phtml';
 
-    protected  function _construct()
-    {
-        $this->_systemConfig = $this->hasData('systemConfig') ?
-            $this->getData('systemConfig') :
-            Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')->getConfiguration();
+    /**
+     * Configuration structure
+     *
+     * @var Mage_Backend_Model_Config_Structure
+     */
+    protected $_configStructure;
 
-        parent::_construct();
-
-        $sectionCode = $this->getRequest()->getParam('section');
-
-        $this->_section = $this->_systemConfig->getSection($sectionCode);
-
-        $this->setTitle($this->_section['label']);
-        $this->setHeaderCss(isset($this->_section['header_css']) ? $this->_section['header_css'] : '');
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Backend_Model_Config_Structure $configStructure
+     * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Backend_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Backend_Model_Config_Structure $configStructure,
+        array $data = array()
+    ) {
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data
+        );
+        $this->_configStructure = $configStructure;
     }
 
     /**
+     * Prepare layout object
+     *
      * @return Mage_Core_Block_Abstract
      */
     protected function _prepareLayout()
     {
+        /** @var $section Mage_Backend_Model_Config_Structure_Element_Section */
+        $section = $this->_configStructure->getElement($this->getRequest()->getParam('section'));
+        $this->_formBlockName = $section->getFrontendModel();
+        if (empty($this->_formBlockName)) {
+            $this->_formBlockName = self::DEFAULT_SECTION_BLOCK;
+        }
+        $this->setTitle($section->getLabel());
+        $this->setHeaderCss($section->getHeaderCss());
+
         $this->addChild('save_button', 'Mage_Backend_Block_Widget_Button', array(
-            'label'     => $this->helper('Mage_Backend_Helper_Data')->__('Save Config'),
-            'onclick'   => 'configForm.submit()',
+            'label'     => Mage::helper('Mage_Backend_Helper_Data')->__('Save Config'),
             'class' => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#config-edit-form')
+            ),
         ));
+        $block = $this->getLayout()->createBlock($this->_formBlockName);
+        $this->setChild('form', $block);
         return parent::_prepareLayout();
     }
 
     /**
+     * Retrieve rendered save buttons
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -92,26 +134,12 @@ class Mage_Backend_Block_System_Config_Edit extends Mage_Backend_Block_Widget
     }
 
     /**
+     * Retrieve config save url
+     *
      * @return string
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/*/save', array('_current' => true));
-    }
-
-    /**
-     * @return Mage_Backend_Block_System_Config_Edit
-     */
-    public function initForm()
-    {
-        $blockName = isset($this->_section['frontend_model']) ? $this->_section['frontend_model'] : '';
-        if (empty($blockName)) {
-            $blockName = self::DEFAULT_SECTION_BLOCK;
-        }
-
-        $block = $this->getLayout()->createBlock($blockName);
-        $block->initForm();
-        $this->setChild('form', $block);
-        return $this;
+        return $this->getUrl('*/system_config_save/index', array('_current' => true));
     }
 }

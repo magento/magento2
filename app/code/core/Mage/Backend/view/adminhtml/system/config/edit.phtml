@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -38,16 +38,16 @@
     <table cellspacing="0">
         <tr>
             <td>
-                <h3<?php if($this->getHeaderCss()): ?> class="<?php echo $this->getHeaderCss()?>"<?php endif; ?>><?php echo Mage::helper('Mage_Backend_Helper_Data')->__($this->getTitle()) ?></h3>
+                <h3<?php if ($this->getHeaderCss()): ?> class="<?php echo $this->getHeaderCss()?>"<?php endif; ?>><?php echo Mage::helper('Mage_Backend_Helper_Data')->__($this->getTitle()) ?></h3>
             </td>
             <td class="form-buttons"><?php echo $this->getSaveButtonHtml() ?></td>
          </tr>
     </table>
 </div>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config_edit_form" enctype="multipart/form-data">
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
     <?php echo $this->getChildHtml('form') ?>
 </form>
 <script type="text/javascript">
-    var configForm = new varienForm('config_edit_form');
+    jQuery('#config-edit-form').form().validation();
 </script>

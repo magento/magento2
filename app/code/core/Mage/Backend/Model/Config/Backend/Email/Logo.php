@@ -20,17 +20,17 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
  /**
- * Backend model for uploading transactional emails custom logo image
- *
- * @category   Mage
- * @package    Mage_Backend
- * @author     Magento Core Team <core@magentocommerce.com>
- */
+  * Backend model for uploading transactional emails custom logo image
+  *
+  * @category   Mage
+  * @package    Mage_Backend
+  * @author     Magento Core Team <core@magentocommerce.com>
+  */
 class Mage_Backend_Model_Config_Backend_Email_Logo extends Mage_Backend_Model_Config_Backend_Image
 {
     /**
@@ -87,8 +87,10 @@ class Mage_Backend_Model_Config_Backend_Email_Logo extends Mage_Backend_Model_Co
         $fileTmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
 
         if ($this->getOldValue() && ($fileTmpName || $deleteFlag)) {
-            $io = new Varien_Io_File();
-            $io->rm($this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN) . DS . self::UPLOAD_DIR . DS . $this->getOldValue());
+            $ioService = new Varien_Io_File();
+            $ioService->rm(
+                $this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN) . DS . self::UPLOAD_DIR . DS . $this->getOldValue()
+            );
         }
         return parent::_beforeSave();
     }

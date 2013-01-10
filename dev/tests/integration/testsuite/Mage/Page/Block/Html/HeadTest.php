@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Page
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,24 @@ class Mage_Page_Block_Html_HeadTest extends PHPUnit_Framework_TestCase
     public function testAddCssException()
     {
         $this->_block->addCss('');
+    }
+
+    public function testGetCssJsHtmlBadLink()
+    {
+        $this->_block->addJs('varien/js.js')
+            ->addJs('varien/form.js', '', 'lt IE 7')
+            ->addCss('not_exist_folder/wrong_bad_file.xyz')
+            ->addCss('css/styles.css', '   media="print" ')
+            ->addJs('not_exist_folder/wrong_bad_file2.xyz');
+
+        $this->assertEquals('<script type="text/javascript" src="http://localhost/index.php/core/index/notfound">'
+            . '</script>' . "\n" . '<!--[if lt IE 7]>' . "\n"
+            . '<script type="text/javascript" src="http://localhost/pub/lib/varien/form.js"></script>' . "\n"
+            . '<![endif]-->' . "\n" . '<link rel="stylesheet" type="text/css" media="all"'
+            . ' href="http://localhost/index.php/core/index/notfound" />' . "\n"
+            . '<link rel="stylesheet" type="text/css" media="print"'
+            . ' href="http://localhost/pub/media/theme/frontend/default/demo/en_US/css/styles.css" />'
+            . "\n", $this->_block->getCssJsHtml());
     }
 
     public function testGetCssJsHtml()

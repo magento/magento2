@@ -21,14 +21,14 @@
  * @category    Magento
  * @package     Magento_Test
  * @subpackage  integration_test
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Class that used for output Magento Profiler results in format compatible with Bamboo Jmeter plugin
  */
-class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Output_Csvfile
+class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Driver_Standard_Output_Csvfile
 {
     /**
      * @var array
@@ -38,31 +38,27 @@ class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Output_Csvfile
     /**
      * Constructor
      *
-     * @param string $filename  Filename of the target file to write results to
-     * @param array  $metrics   Metrics to be included into result.
-     *                          Supported format: array(
-     *                              'metric name 1' => array(
-     *                                  'profiler key 1', ...
-     *                              ), ...
-     *                          );
-     * @param string $delimiter
-     * @param string $enclosure
+     * @param array|null $config
      */
-    public function __construct($filename, array $metrics, $delimiter = ',', $enclosure = '"')
+    public function __construct(array $config = null)
     {
-        parent::__construct($filename, null, $delimiter, $enclosure);
-        $this->_metrics = $metrics;
+        parent::__construct($config);
+        $this->_metrics = isset($config['metrics']) ? (array)$config['metrics'] : array();
     }
 
     /**
      * Calculate metric value from set of timer names
      *
+     * @param Magento_Profiler_Driver_Standard_Stat $stat
      * @param array $timerNames
      * @param string $fetchKey
      * @return int
      */
-    protected function _aggregateTimerValues(array $timerNames, $fetchKey = Magento_Profiler::FETCH_AVG)
-    {
+    protected function _aggregateTimerValues(
+        Magento_Profiler_Driver_Standard_Stat $stat,
+        array $timerNames,
+        $fetchKey = Magento_Profiler_Driver_Standard_Stat::AVG
+    ) {
         /* Prepare pattern that matches timers with deepest nesting level only */
         $nestingSep = preg_quote(Magento_Profiler::NESTING_SEPARATOR, '/');
         array_map('preg_quote', $timerNames, array('/'));
@@ -70,9 +66,9 @@ class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Output_Csvfile
 
         /* Sum profiler values for matched timers */
         $result = 0;
-        foreach ($this->_getTimers() as $timerId) {
+        foreach ($this->_getTimerIds($stat) as $timerId) {
             if (preg_match($pattern, $timerId)) {
-                $result += Magento_Profiler::fetch($timerId, $fetchKey);
+                $result += $stat->fetch($timerId, $fetchKey);
             }
         }
 
@@ -86,13 +82,14 @@ class Magento_Test_Profiler_OutputBamboo extends Magento_Profiler_Output_Csvfile
      * Write content into an opened file handle
      *
      * @param resource $fileHandle
+     * @param Magento_Profiler_Driver_Standard_Stat $stat
      */
-    protected function _writeFileContent($fileHandle)
+    protected function _writeFileContent($fileHandle, Magento_Profiler_Driver_Standard_Stat $stat)
     {
         /* First column must be a timestamp */
         $result = array('Timestamp' => time());
         foreach ($this->_metrics as $metricName => $timerNames) {
-            $result[$metricName] = $this->_aggregateTimerValues($timerNames);
+            $result[$metricName] = $this->_aggregateTimerValues($stat, $timerNames);
         }
         fputcsv($fileHandle, array_keys($result), $this->_delimiter, $this->_enclosure);
         fputcsv($fileHandle, array_values($result), $this->_delimiter, $this->_enclosure);

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,11 +43,17 @@ class Mage_Backend_Model_Config_Backend_Email_Sender extends Mage_Core_Model_Con
     {
         $value = $this->getValue();
         if (!preg_match("/^[\S ]+$/", $value)) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Invalid sender name "%s". Please use only visible characters and spaces.', $value));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Invalid sender name "%s". Please use only visible characters and spaces.', $value)
+            );
         }
 
         if (strlen($value) > 255) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Maximum sender name length is 255. Please correct your settings.'));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Maximum sender name length is 255. Please correct your settings.')
+            );
         }
         return $this;
     }

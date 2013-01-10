@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,10 +42,10 @@ return array(
     'api/rule' => 'api_rule',
     'api/session' => 'api_session',
     'api/user' => 'api_user',
-    'api2/acl_attribute' => 'api2_acl_attribute',
-    'api2/acl_role' => 'api2_acl_role',
-    'api2/acl_rule' => 'api2_acl_rule',
-    'api2/acl_user' => 'api2_acl_user',
+    'webapi/acl_attribute' => 'webapi_acl_attribute',
+    'webapi/acl_role' => 'webapi_acl_role',
+    'webapi/acl_rule' => 'webapi_acl_rule',
+    'webapi/acl_user' => 'webapi_acl_user',
     'array(\'catalog/category\', \'datetime\')' => 'catalog_category_entity_datetime',
     'array(\'catalog/category\', \'decimal\')' => 'catalog_category_entity_decimal',
     'array(\'catalog/category\', \'int\')' => 'catalog_category_entity_int',
@@ -203,13 +203,6 @@ return array(
     'customer_entity_varchar' => 'customer_entity_varchar',
     'cybermut/api_debug' => 'cybermut_api_debug',
     'cybersource/api_debug' => 'cybersource_api_debug',
-    'dataflow/batch' => 'dataflow_batch',
-    'dataflow/batch_export' => 'dataflow_batch_export',
-    'dataflow/batch_import' => 'dataflow_batch_import',
-    'dataflow/import' => 'dataflow_import_data',
-    'dataflow/profile' => 'dataflow_profile',
-    'dataflow/profile_history' => 'dataflow_profile_history',
-    'dataflow/session' => 'dataflow_session',
     'directory/country' => 'directory_country',
     'directory/country_format' => 'directory_country_format',
     'directory/country_name' => 'directory_country_name',
@@ -421,10 +414,4 @@ return array(
     'wishlist/item' => 'wishlist_item',
     'wishlist/item_option' => 'wishlist_item_option',
     'wishlist/wishlist' => 'wishlist',
-    'xmlconnect/application' => 'xmlconnect_application',
-    'xmlconnect/application_design' => 'xmlconnect_application',
-    'xmlconnect/configData' => 'xmlconnect_config_data',
-    'xmlconnect/history' => 'xmlconnect_history',
-    'xmlconnect/queue' => 'xmlconnect_queue',
-    'xmlconnect/template' => 'xmlconnect_notification_template',
 );

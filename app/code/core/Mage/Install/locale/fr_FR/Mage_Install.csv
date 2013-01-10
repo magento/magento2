@@ -70,7 +70,7 @@
 "Magento","Magento"
 "Magento Connect Manager Deployment","Déploiement du Magento Connect Manager"
 "Magento Installation Wizard","Assistant d'installation Magento"
-"Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.","Magento est une marque de Magento Inc. Copyright &copy; %s Magento Inc."
+"Magento is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.","Magento est une marque de X.commerce, Inc. Copyright &copy; %s X.commerce, Inc."
 "Magento uses this key to encrypt passwords, credit cards and more. If this field is left empty the system will create an encryption key for you and will display it on the next page.","Magento utilise cette clé pour crypter les mots de passe, numéros de cartes de crédit et plus encore. Si ce champ est laissé vide le système créera une clé de cryptage pour vous et l'affichera sur la page suivante."
 "Manual Downloads and Upgrades","Téléchargement de mode d'emploi et mises à niveau"
 "No resource for %s DB model.","Aucune ressource pour le modèle DB %s"

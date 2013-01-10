@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,12 +36,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     protected $_area;
 
     /**
-     * @var string
-     */
-    protected $_package;
-
-    /**
-     * @var string
+     * @var Mage_Core_Model_Theme
      */
     protected $_theme;
 
@@ -109,15 +104,14 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     public function __construct(array $data = array())
     {
         $this->_area = $data['area'];
-        $this->_package = $data['package'];
-        $this->_theme = $data['theme'];
+        $this->_theme = $data['themeModel'];
         $this->_locale = $data['locale'];
         $this->_canSaveMap = $data['canSaveMap'];
         $this->_mapDir = $data['mapDir'];
         $this->_basePath = $data['baseDir'] ? $data['baseDir'] . DIRECTORY_SEPARATOR : '';
 
         $this->_mapFile =
-            "{$this->_mapDir}/{$this->_area}_{$this->_package}_{$this->_theme}_{$this->_locale}.ser";
+            "{$this->_mapDir}/{$this->_area}_{$this->_theme->getId()}_{$this->_locale}.ser";
         $this->_map = file_exists($this->_mapFile) ? unserialize(file_get_contents($this->_mapFile)) : array();
     }
 
@@ -140,10 +134,11 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         if (!$this->_fallback) {
             $this->_fallback = Mage::getModel('Mage_Core_Model_Design_Fallback', array(
-                'data' => array('area' => $this->_area,
-                    'package' => $this->_package,
-                    'theme' => $this->_theme,
-                    'locale' => $this->_locale)
+                'data' => array(
+                    'area'       => $this->_area,
+                    'themeModel' => $this->_theme,
+                    'locale'     => $this->_locale
+                )
             ));
         }
         return $this->_fallback;

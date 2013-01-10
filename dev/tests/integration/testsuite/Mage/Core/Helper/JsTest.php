@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -71,8 +71,7 @@ class Mage_Core_Helper_JsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('<script type="text/javascript" src="http://localhost/pub/lib/blank.html"></script>' . "\n",
             $this->_helper->includeScript(self::FILE)
         );
-        $script = '<script type="text/javascript" '
-            . 'src="http://localhost/pub/media/theme/frontend/%s/%s/%s/images/spacer.gif"></script>';
+        $script = '<script type="text/javascript" src="http://localhost/pub/lib/images/spacer.gif"></script>';
         $this->assertStringMatchesFormat($script, $this->_helper->includeScript('images/spacer.gif'));
     }
 }

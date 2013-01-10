@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_PageCache
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -105,12 +105,12 @@ class Mage_PageCache_Model_Observer
     }
 
     /**
-     * Temporary disabling full page caching if Design Editor was launched.
+     * Temporary disabling full page caching by setting bo-cache cookie
      *
      * @param Varien_Event_Observer $observer
      * @return Mage_PageCache_Model_Observer
      */
-    public function designEditorSessionActivate(Varien_Event_Observer $observer)
+    public function setNoCacheCookie(Varien_Event_Observer $observer)
     {
         if (!$this->isCacheEnabled()) {
             return $this;
@@ -120,12 +120,12 @@ class Mage_PageCache_Model_Observer
     }
 
     /**
-     * Activating full page cache after Design Editor was deactivated
+     * Activating full page cache aby deleting no-cache cookie
      *
      * @param Varien_Event_Observer $observer
      * @return Mage_PageCache_Model_Observer
      */
-    public function designEditorSessionDeactivate(Varien_Event_Observer $observer)
+    public function deleteNoCacheCookie(Varien_Event_Observer $observer)
     {
         if (!$this->isCacheEnabled()) {
             return $this;

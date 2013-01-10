@@ -21,10 +21,13 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -32,19 +35,24 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var Mage_Core_Utility_Theme
+     */
+    protected $_themeUtility;
+
     protected function setUp()
     {
-        /* Point application to predefined layout fixtures */
-        Mage::getConfig()->setOptions(array(
-            'design_dir' => dirname(dirname(__FILE__)) . '/_files/design',
+        $this->_themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
+            dirname(__DIR__) . '/_files/design',
+            Mage::getDesign()
         ));
-        Mage::getDesign()->setDesignTheme('test/default');
+        $this->_themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
+
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
-
-        $this->_model = Mage::getModel('Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => 'frontend', 'package' => 'test', 'theme'   => 'default'))
-        );
+        $this->_model = Mage::getModel('Mage_Core_Model_Layout_Merge', array(
+            'arguments' => array('area' => 'frontend', 'themeId' => Mage::getDesign()->getDesignTheme()->getId())
+        ));
     }
 
     protected function tearDown()
@@ -144,6 +152,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that, regarding of the current area, page types hierarchy getter retrieves the front-end page types
+     * @throws Exception
      */
     public function testGetPageHandlesHierarchyFromBackend()
     {
@@ -151,6 +160,7 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('frontend', $area, 'Test assumes that front-end is the current area.');
 
         /* use new instance to ensure that in-memory caching, if any, won't affect test results */
+        /** @var $model Mage_Core_Model_Layout_Merge */
         $model = Mage::getModel('Mage_Core_Model_Layout_Merge');
         $frontendPageTypes = $model->getPageHandlesHierarchy();
         $this->assertNotEmpty($frontendPageTypes);
@@ -204,13 +214,18 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testLoad()
     {
         $layoutHandle = 'layout_test_handle';
         $expectedText = 'Text declared in the frontend/test/test_theme';
-        $model = Mage::getModel('Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => 'frontend', 'package' => 'test', 'theme'=> 'test_theme'))
-        );
+        /** @var $model Mage_Core_Model_Layout_Merge */
+        $model = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => array(
+            'area'       => 'frontend',
+            'themeId'    => $this->_themeUtility->getThemeByParams('test/test_theme', 'frontend')->getId()
+        )));
         $this->assertNotContains($layoutHandle, $model->getHandles());
         $this->assertNotContains($expectedText, $model->asString());
         $model->load($layoutHandle);
@@ -229,26 +244,35 @@ class Mage_Core_Model_Layout_MergeTest extends PHPUnit_Framework_TestCase
         $expectedTextThemeOne = 'Text declared in the frontend/test/test_theme';
         $expectedTextThemeTwo = 'Text declared in the frontend/test/cache_test_theme';
 
-        $model = Mage::getModel('Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => 'frontend', 'package' => 'test', 'theme'=> 'test_theme'))
-        );
+        $model = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => array(
+            'area'    => 'frontend',
+            'themeId' => $this->_themeUtility->getThemeByParams('test/test_theme', 'frontend')->getId()
+        )));
         $model->load($layoutHandle);
         $this->assertContains($expectedTextThemeOne, $model->asString());
         $this->assertNotContains($expectedTextThemeTwo, $model->asString());
 
-        $model = Mage::getModel('Mage_Core_Model_Layout_Merge',
-            array('arguments' => array('area' => 'frontend', 'package' => 'test', 'theme'=> 'cache_test_theme'))
-        );
+        $model = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => array(
+            'area'    => 'frontend',
+            'themeId' => $this->_themeUtility->getThemeByParams('test/cache_test_theme', 'frontend')->getId()
+        )));
         $model->load($layoutHandle);
         $this->assertContains($expectedTextThemeTwo, $model->asString());
         $this->assertNotContains($expectedTextThemeOne, $model->asString());
     }
 
-    /**
-     * @magentoDataFixture Mage/Core/Model/Layout/_files/db_layout_update.php
-     */
     public function testFetchDbLayoutUpdates()
     {
+        $update = '<reference name="root"><block type="Mage_Core_Block_Template" template="dummy.phtml"/></reference>';
+        $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Update')->setData((array(
+            'handle' => 'fixture_handle',
+            'xml' => $update,
+            'sort_order' => 0,
+            'store_id' => 1,
+            'theme_id' => Mage::getDesign()->getDesignTheme()->getId()
+        )));
+        $layoutUpdate->save();
+
         $this->_model->load('fixture_handle');
         $this->assertStringMatchesFormat(
             '<reference name="root">%w<block type="Mage_Core_Block_Template" template="dummy.phtml"/>%w</reference>',

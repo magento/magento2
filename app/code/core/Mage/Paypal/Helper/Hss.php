@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Paypal
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,7 +57,7 @@ class Mage_Paypal_Helper_Hss extends Mage_Core_Helper_Abstract
             }
         }
 
-        if ($blockObject = Mage::getSingleton('Mage_Core_Model_Layout')->getBlock($block)) {
+        if ($blockObject = Mage::app()->getLayout()->getBlock($block)) {
             return $blockObject->getTemplate();
         }
 

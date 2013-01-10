@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,13 +30,31 @@
 class Mage_Backend_Model_Menu_Config_Menu extends Magento_Config_XmlAbstract
 {
     /**
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_Config $config
+     * @param array $configFiles
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        Mage_Core_Model_Config $config,
+        array $configFiles
+    ) {
+        parent::__construct($configFiles);
+        $this->_config = $config;
+    }
+
+    /**
      * Path to menu.xsd
      *
      * @return string
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/menu.xsd';
+        return $this->_config->getModuleDir('etc', 'Mage_Backend') . DIRECTORY_SEPARATOR . 'menu.xsd';
     }
 
     /**

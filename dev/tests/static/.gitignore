@@ -1,4 +1,4 @@
-*.xml
+/*.xml
 framework/tests/unit/*.xml
 report/
 tmp/

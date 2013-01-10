@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,6 +52,11 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
      */
     protected $_urlModelMock;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_sectionMock;
+
     protected function setUp()
     {
         $this->_systemConfigMock = $this->getMock('Mage_Backend_Model_Config_Structure',
@@ -61,7 +66,7 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http',
             array(), array(), '', false, false
         );
-        $this->_requestMock->expects($this->once())
+        $this->_requestMock->expects($this->any())
             ->method('getParam')
             ->with('section')
             ->will($this->returnValue('test_section'));
@@ -72,15 +77,13 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
 
         $this->_urlModelMock = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false, false);
 
-        $sections = array(
-            'frontend_model' => 'Some_Frontend_Model',
-            'label' => 'test_label'
+        $this->_sectionMock = $this->getMock(
+            'Mage_Backend_Model_Config_Structure_Element_Section', array(), array(), '', false
         );
-        $this->_systemConfigMock->expects($this->once())
-            ->method('getSection')
+        $this->_systemConfigMock->expects($this->any())
+            ->method('getElement')
             ->with('test_section')
-            ->will($this->returnValue($sections)
-        );
+            ->will($this->returnValue($this->_sectionMock));
 
         $data = array(
             'data' => array(
@@ -88,7 +91,8 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
             ),
             'request' => $this->_requestMock,
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->_urlModelMock
+            'urlBuilder' => $this->_urlModelMock,
+            'configStructure' => $this->_systemConfigMock
         );
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
@@ -111,7 +115,7 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
 
     public function testGetSaveUrl()
     {
-        $expectedUrl = '*/*/save';
+        $expectedUrl = '*/system_config_save/index';
         $expectedParams = array('_current' => true);
 
         $this->_urlModelMock->expects($this->once())
@@ -121,24 +125,5 @@ class Mage_Backend_Block_System_Config_EditTest extends PHPUnit_Framework_TestCa
         );
 
         $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());
-    }
-
-    public function testInitFormWhenFrontendModelIsSet()
-    {
-        $block = $this->getMock('Mage_Core_Block_Template',
-            array('initForm', 'getNameInLayout', 'getIsAnonymous'), array(), '', false, false
-        );
-        $block->expects($this->once())->method('initForm');
-        $block->expects($this->once())->method('getNameInLayout')->will($this->returnValue('test_block_name'));
-        $block->expects($this->once())->method('getIsAnonymous')->will($this->returnValue(false));
-
-        $this->_layoutMock->expects($this->once())
-            ->method('createBlock')
-            ->with('Some_Frontend_Model')
-            ->will($this->returnValue($block)
-        );
-
-        $this->_layoutMock->expects($this->once())->method('setChild')->with(null, 'test_block_name', 'form');
-        $this->_object->initForm();
     }
 }

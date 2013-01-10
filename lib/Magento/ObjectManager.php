@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_ObjectManager
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,7 +52,51 @@ interface Magento_ObjectManager
      *
      * @abstract
      * @param string $areaCode
-     * @return mixed
+     * @return Magento_ObjectManager
      */
     public function loadAreaConfiguration($areaCode = null);
+
+    /**
+     * Add shared instance
+     *
+     * @param object $instance
+     * @param string $classOrAlias
+     * @return Magento_ObjectManager
+     */
+    public function addSharedInstance($instance, $classOrAlias);
+
+    /**
+     * Remove shared instance
+     *
+     * @param string $classOrAlias
+     * @return Magento_ObjectManager
+     */
+    public function removeSharedInstance($classOrAlias);
+
+    /**
+     * Check whether object manager has shared instance of given class (alias)
+     *
+     * @param string $classOrAlias
+     * @return bool
+     */
+    public function hasSharedInstance($classOrAlias);
+
+    /**
+     * Add alias
+     *
+     * @param  string $alias
+     * @param  string $class
+     * @param  array  $parameters
+     * @return Magento_ObjectManager
+     * @throws Zend\Di\Exception\InvalidArgumentException
+     */
+    public function addAlias($alias, $class, array $parameters = array());
+
+    /**
+     * Get class name by alias
+     *
+     * @param string
+     * @return string|bool
+     */
+    public function getClassFromAlias($alias);
 }

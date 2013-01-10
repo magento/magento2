@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -118,21 +118,21 @@
                 <adminnotification module="Mage_Adminhtml">
                     <file>adminnotification.xml</file>
                 </adminnotification>
+                <backup module="Mage_Adminhtml">
+                    <file>backup.xml</file>
+                </backup>
                 <catalog module="Mage_Adminhtml">
                     <file>catalog.xml</file>
                 </catalog>
-                <catalogsearch module="Mage_Adminhtml">
-                    <file>catalogsearch.xml</file>
-                </catalogsearch>
                 <cms module="Mage_Adminhtml">
                     <file>cms.xml</file>
                 </cms>
                 <customer module="Mage_Adminhtml">
                     <file>customer.xml</file>
                 </customer>
-                <dataflow module="Mage_Adminhtml">
-                    <file>dataflow.xml</file>
-                </dataflow>
+                <design module="Mage_Adminhtml">
+                    <file>system/design/design.xml</file>
+                </design>
                 <newsletter module="Mage_Adminhtml">
                     <file>newsletter.xml</file>
                 </newsletter>
@@ -145,9 +145,21 @@
                 <sales module="Mage_Adminhtml">
                     <file>sales.xml</file>
                 </sales>
+                <store module="Mage_Adminhtml">
+                    <file>system/store/store.xml</file>
+                </store>
+                <system module="Mage_Adminhtml">
+                    <file>system/email/template.xml</file>
+                </system>
                 <tax module="Mage_Adminhtml">
                     <file>tax.xml</file>
                 </tax>
+                <urlrewrite module="Mage_Adminhtml">
+                    <file>urlrewrite.xml</file>
+                </urlrewrite>
+                <system_variable module="Mage_Adminhtml">
+                    <file>variable.xml</file>
+                </system_variable>
             </updates>
         </layout>
         <sales>

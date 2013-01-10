@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Theme
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,6 +114,7 @@ class Mage_Theme_Adminhtml_System_Design_ThemeController extends Mage_Adminhtml_
      */
     public function deleteAction()
     {
+        $redirectBack = (bool)$this->getRequest()->getParam('back', false);
         $themeId = $this->getRequest()->getParam('id');
         try {
             if ($themeId) {
@@ -126,7 +127,10 @@ class Mage_Theme_Adminhtml_System_Design_ThemeController extends Mage_Adminhtml_
             $this->_getSession()->addException($e, $this->__('Cannot delete the theme.'));
             Mage::logException($e);
         }
-        $this->_redirect('*/*/');
+        /**
+         * @todo Temporary solution. Theme module should not know about the existence of editor module.
+         */
+        $redirectBack ? $this->_redirect('*/system_design_editor/index/') : $this->_redirect('*/*/');
     }
 
     /**

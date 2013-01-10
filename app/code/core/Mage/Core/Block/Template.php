@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -173,7 +173,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         if (strpos($scriptPath, realpath(Mage::getBaseDir('design'))) === 0 || $this->_getAllowSymlinks()) {
             $this->_viewDir = $dir;
         } else {
-            Mage::log('Not valid script path:' . $dir, Zend_Log::CRIT, null, null, true);
+            Mage::log('Not valid script path:' . $dir, Zend_Log::CRIT, null, true);
         }
         return $this;
     }
@@ -211,7 +211,8 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      */
     public function fetchView($fileName)
     {
-        Magento_Profiler::start('TEMPLATE:' . $fileName);
+        $viewShortPath = str_replace(Mage::getBaseDir(), '', $fileName);
+        Magento_Profiler::start('TEMPLATE:' . $fileName, array('group' => 'TEMPLATE', 'file_name' => $viewShortPath));
 
         // EXTR_SKIP protects from overriding
         // already defined variables
@@ -245,7 +246,7 @@ HTML;
             ) {
                 include $templateFile;
             } else {
-                Mage::log("Invalid template file: '{$fileName}'", Zend_Log::CRIT, null, null, true);
+                Mage::log("Invalid template file: '{$fileName}'", Zend_Log::CRIT, null, true);
             }
 
         } catch (Exception $e) {
@@ -340,7 +341,7 @@ HTML;
     protected function _getAllowSymlinks()
     {
         if (is_null($this->_allowSymlinks)) {
-            $this->_allowSymlinks = Mage::getStoreConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
+            $this->_allowSymlinks = $this->_storeConfig->getConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
         }
         return $this->_allowSymlinks;
     }

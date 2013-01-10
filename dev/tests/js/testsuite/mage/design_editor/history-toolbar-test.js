@@ -19,10 +19,10 @@
  *
  * @category    mage.design_editor
  * @package     test
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-HistoryToolbarTest = TestCase('HistoryToolbarTest');
+HistoryToolbarTest = TestCase('DesignEditor_HistoryToolbarTest');
 HistoryToolbarTest.prototype.testInit = function() {
     /*:DOC += <div class="vde_history_toolbar"></div> */
     var container = jQuery('.vde_history_toolbar').vde_historyToolbar();

@@ -20,19 +20,27 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
     extends Mage_Adminhtml_Block_Widget_Form
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
+    /**
+     * Prepare form tab configuration
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 
+    /**
+     * Initialise form fields
+     *
+     * @return Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
+     */
     protected function _prepareForm()
     {
         /*
@@ -103,7 +111,9 @@ class Mage_Adminhtml_Block_Cms_Page_Edit_Tab_Design
         $designFieldset->addField('custom_theme', 'select', array(
             'name'      => 'custom_theme',
             'label'     => Mage::helper('Mage_Cms_Helper_Data')->__('Custom Theme'),
-            'values'    => Mage::getModel('Mage_Core_Model_Design_Source_Design')->getAllOptions(),
+            'values'    => Mage::getModel('Mage_Core_Model_Theme')->getLabelsCollection(
+                Mage::helper('Mage_Cms_Helper_Data')->__('-- Please Select --')
+            ),
             'disabled'  => $isElementDisabled
         ));
 

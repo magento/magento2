@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,9 +48,11 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
      */
     public function testInitDesign()
     {
+        $defaultTheme = Mage::getDesign()->setDefaultDesignTheme()->getDesignTheme();
         $this->_model->load(Mage_Core_Model_App_Area::PART_DESIGN);
-        $design = Mage::getDesign();
-        $this->assertEquals('default/demo', $design->getDesignTheme());
+        $design = Mage::getDesign()->setDefaultDesignTheme();
+
+        $this->assertEquals($defaultTheme->getThemePath(), $design->getDesignTheme()->getThemePath());
         $this->assertEquals('frontend', $design->getArea());
 
         // try second time and make sure it won't load second time
@@ -59,14 +61,16 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name default/demo
+     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
      * @magentoAppIsolation enabled
      */
     public function testDetectDesignGlobalConfig()
     {
+        /** @var $model Mage_Core_Model_App_Area */
         $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'adminhtml'));
         $model->detectDesign();
-        $this->assertEquals('default/demo', Mage::getDesign()->getDesignTheme());
+        $theme = Mage::getDesign()->getConfigurationDesignTheme('adminhtml', array('useId' => false));
+        $this->assertEquals('default/basic', $theme);
     }
 
     /**
@@ -76,7 +80,8 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     public function testDetectDesignStoreConfig()
     {
         $this->_model->detectDesign();
-        $this->assertEquals('default/blank', Mage::getDesign()->getDesignTheme());
+        $theme = Mage::getDesign()->getConfigurationDesignTheme('frontend', array('useId' => false));
+        $this->assertEquals('default/blank', $theme);
     }
 
     // @codingStandardsIgnoreStart
@@ -89,7 +94,7 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox';
         $this->_model->detectDesign(new Zend_Controller_Request_Http);
-        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme());
+        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme()->getThemePath());
     }
 
     /**
@@ -99,14 +104,14 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
     public function testDetectDesignDesignChange()
     {
         $this->_model->detectDesign();
-        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme());
+        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart
     /**
      * Test that non-frontend areas are not affected neither by user-agent reg expressions, nor by the "design change"
      *
-     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:22:"default/modern";}}
+     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:22:"default/demo_blue";}}
      * magentoDataFixture Mage/Core/_files/design_change.php
      * @magentoAppIsolation enabled
      */
@@ -116,7 +121,7 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox';
         $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'install'));
         $model->detectDesign(new Zend_Controller_Request_Http);
-        $this->assertNotEquals('default/modern', Mage::getDesign()->getDesignTheme());
-        $this->assertNotEquals('default/demo_blue', Mage::getDesign()->getDesignTheme());
+        $this->assertNotEquals('default/modern', Mage::getDesign()->getDesignTheme()->getThemePath());
+        $this->assertNotEquals('default/demo_blue', Mage::getDesign()->getDesignTheme()->getThemePath());
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Install
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,7 +77,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
      */
     public function __construct()
     {
-        Mage::init();
+        Mage::app();
         $this->_getInstaller()->setDataModel($this->_getDataModel());
     }
 
@@ -359,7 +359,7 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
         $dbConfig = Mage::getConfig()->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
         $modelName = 'Mage_Install_Model_Installer_Db_' . ucfirst($dbConfig->model);
 
-        if (!Magento_Autoload::getInstance()->classExists($modelName)) {
+        if (!class_exists($modelName)) {
             $this->addError('Database uninstall is not supported for the ' . ucfirst($dbConfig->model) . '.');
             return false;
         }

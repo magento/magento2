@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Select
         $name = $this->getColumn()->getName() ? $this->getColumn()->getName() : $this->getColumn()->getId();
         $html = '<select name="' . $this->escapeHtml($name) . '" ' . $this->getColumn()->getValidateClass() . '>';
         $value = $row->getData($this->getColumn()->getIndex());
-        foreach ($this->getColumn()->getOptions() as $val => $label){
+        foreach ($this->getColumn()->getOptions() as $val => $label) {
             $selected = ( ($val == $value && (!is_null($value))) ? ' selected="selected"' : '' );
             $html .= '<option value="' . $this->escapeHtml($val) . '"' . $selected . '>';
             $html .= $this->escapeHtml($label) . '</option>';

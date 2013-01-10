@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -38,14 +38,14 @@
             <action method="addJs"><file>varien/form.js</file></action>
             <action method="addJs"><file>Mage_Page::menu.js</file></action>
             <action method="addCss"><file>mage/calendar.css</file><params/></action>
-            <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+            <action method="addJs"><file>jquery/jquery.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>jquery/head.js</file></action>
             <action method="addJs"><file>mage/mage.js</file></action>
             <action method="addJs"><file>mage/decorate.js</file></action>
             <action method="addJs"><file>mage/translate.js</file></action>
             <action method="addJs"><file>Mage_Page::js/cookies.js</file></action>
-            <action method="addJs"><file>jquery/ui/jquery-ui.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui.min.js</file></action>
             <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
             <action method="addJs"><file>mage/loader.js</file></action>
         </reference>

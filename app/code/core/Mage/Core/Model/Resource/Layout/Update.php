@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,10 +47,8 @@ class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db
     public function fetchUpdatesByHandle($handle, $params = array())
     {
         $bind = array(
-            'store_id'  => Mage::app()->getStore()->getId(),
-            'area'      => Mage::getSingleton('Mage_Core_Model_Design_Package')->getArea(),
-            'package'   => Mage::getSingleton('Mage_Core_Model_Design_Package')->getPackageName(),
-            'theme'     => Mage::getSingleton('Mage_Core_Model_Design_Package')->getTheme()
+            'store_id' => Mage::app()->getStore()->getId(),
+            'theme_id' => Mage::getDesign()->getDesignTheme()->getThemeId(),
         );
 
         foreach ($params as $key => $value) {
@@ -68,9 +66,7 @@ class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db
                 ->join(array('link'=>$this->getTable('core_layout_link')),
                     'link.layout_update_id=layout_update.layout_update_id', '')
                 ->where('link.store_id IN (0, :store_id)')
-                ->where('link.area = :area')
-                ->where('link.package = :package')
-                ->where('link.theme = :theme')
+                ->where('link.theme_id = :theme_id')
                 ->where('layout_update.handle = :layout_update_handle')
                 ->order('layout_update.sort_order ' . Varien_Db_Select::SQL_ASC);
 
@@ -83,17 +79,15 @@ class Mage_Core_Model_Resource_Layout_Update extends Mage_Core_Model_Resource_Db
      * Update a "layout update link" if relevant data is provided
      *
      * @param Mage_Core_Model_Abstract $object
-     * @return Mage_Core_Model_Resource_Layout
+     * @return Mage_Core_Model_Resource_Layout_Update
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
         $data = $object->getData();
-        if (isset($data['store_id']) && isset($data['area']) && isset($data['package']) && isset($data['theme'])) {
+        if (isset($data['store_id']) && isset($data['theme_id'])) {
             $this->_getWriteAdapter()->insertOnDuplicate($this->getTable('core_layout_link'), array(
-                'store_id' => $data['store_id'],
-                'area' => $data['area'],
-                'package' => $data['package'],
-                'theme' => $data['theme'],
+                'store_id'         => $data['store_id'],
+                'theme_id'         => $data['theme_id'],
                 'layout_update_id' => $object->getId(),
             ));
         }

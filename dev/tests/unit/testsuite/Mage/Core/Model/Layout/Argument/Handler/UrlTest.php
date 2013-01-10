@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,6 +74,21 @@ class Mage_Core_Model_Layout_Argument_Handler_UrlTest extends PHPUnit_Framework_
             ->will($this->returnValue($expectedUrl));
 
         $this->assertEquals($expectedUrl, $this->_model->process(array('path' => $path, 'params' => $params)));
+    }
+
+    public function testProcessWithoutUrlParams()
+    {
+        $expectedUrl = "http://generated-url.com";
+
+        $path = 'module/controller/action';
+        $params = null;
+
+        $this->_urlModelMock->expects($this->once())
+            ->method('getUrl')
+            ->with($this->equalTo($path), $this->equalTo($params))
+            ->will($this->returnValue($expectedUrl));
+
+        $this->assertEquals($expectedUrl, $this->_model->process(array('path' => $path)));
     }
 
     /**

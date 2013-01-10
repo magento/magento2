@@ -21,13 +21,10 @@
  * @category    Magento
  * @package     Mage_User
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group module:Mage_User
- */
 class Mage_User_Model_Resource_Rules_CollectionTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -52,7 +49,10 @@ class Mage_User_Model_Resource_Rules_CollectionTest extends PHPUnit_Framework_Te
         $this->_collection->getByRoles($user->getRole()->getId());
 
         $where = $this->_collection->getSelect()->getPart(Zend_Db_Select::WHERE);
-        $this->assertContains("(role_id = '" . $user->getRole()->getId()."')", $where);
+        /** @var Zend_Db_Adapter_Abstract $adapter */
+        $adapter = $this->_collection->getConnection();
+        $quote = $adapter->getQuoteIdentifierSymbol();
+        $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId()."')", $where);
     }
 
     public function testAddSortByLength()

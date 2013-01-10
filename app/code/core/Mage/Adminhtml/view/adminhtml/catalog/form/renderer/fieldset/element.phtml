@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -41,7 +41,7 @@
     <td class="hidden" colspan="100"><?php echo trim($_element->getElementHtml()) ?></td>
 </tr>
 <?php else: ?>
-<tr>
+<tr id="attribute-<?php echo $_element->getHtmlId()?>-container">
     <td class="label"><?php echo trim($this->getElementLabelHtml()) ?></td>
     <td class="value">
         <?php echo trim($this->getElementHtml()) ?>

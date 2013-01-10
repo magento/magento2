@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,15 +49,15 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Price
     public function render(Varien_Object $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
-            $currency_code = $this->_getCurrencyCode($row);
+            $currencyCode = $this->_getCurrencyCode($row);
 
-            if (!$currency_code) {
+            if (!$currencyCode) {
                 return $data;
             }
 
             $data = floatval($data) * $this->_getRate($row);
             $data = sprintf("%f", $data);
-            $data = Mage::app()->getLocale()->currency($currency_code)->toCurrency($data);
+            $data = Mage::app()->getLocale()->currency($currencyCode)->toCurrency($data);
             return $data;
         }
         return $this->getColumn()->getDefault();

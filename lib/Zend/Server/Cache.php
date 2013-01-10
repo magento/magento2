@@ -1,38 +1,29 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Server
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Cache.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Server
  */
 
+namespace Zend\Server;
+
+use Zend\Stdlib\ErrorHandler;
+
 /**
- * Zend_Server_Cache: cache server definitions
+ * \Zend\Server\Cache: cache server definitions
  *
  * @category   Zend
  * @package    Zend_Server
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Server_Cache
+class Cache
 {
     /**
      * @var array Methods to skip when caching server
      */
-    protected static $_skipMethods = array();
+    protected static $skipMethods = array();
 
     /**
      * Cache a file containing the dispatch list.
@@ -44,10 +35,10 @@ class Zend_Server_Cache
      * on success.
      *
      * @param  string $filename
-     * @param  Zend_Server_Interface $server
+     * @param  \Zend\Server\Server $server
      * @return bool
      */
-    public static function save($filename, Zend_Server_Interface $server)
+    public static function save($filename, Server $server)
     {
         if (!is_string($filename)
             || (!file_exists($filename) && !is_writable(dirname($filename))))
@@ -57,10 +48,10 @@ class Zend_Server_Cache
 
         $methods = $server->getFunctions();
 
-        if ($methods instanceof Zend_Server_Definition) {
-            $definition = new Zend_Server_Definition();
+        if ($methods instanceof Definition) {
+            $definition = new Definition();
             foreach ($methods as $method) {
-                if (in_array($method->getName(), self::$_skipMethods)) {
+                if (in_array($method->getName(), self::$skipMethods)) {
                     continue;
                 }
                 $definition->addMethod($method);
@@ -68,7 +59,10 @@ class Zend_Server_Cache
             $methods = $definition;
         }
 
-        if (0 === @file_put_contents($filename, serialize($methods))) {
+        ErrorHandler::start();
+        $test = file_put_contents($filename, serialize($methods));
+        ErrorHandler::stop();
+        if (0 === $test) {
             return false;
         }
 
@@ -85,17 +79,17 @@ class Zend_Server_Cache
      * request. Sample usage:
      *
      * <code>
-     * if (!Zend_Server_Cache::get($filename, $server)) {
-     *     #require_once 'Some/Service/Class.php';
-     *     #require_once 'Another/Service/Class.php';
+     * if (!Zend\Server\Cache::get($filename, $server)) {
+     *     require_once 'Some/Service/ServiceClass.php';
+     *     require_once 'Another/Service/ServiceClass.php';
      *
-     *     // Attach Some_Service_Class with namespace 'some'
-     *     $server->attach('Some_Service_Class', 'some');
+     *     // Attach Some\Service\ServiceClass with namespace 'some'
+     *     $server->attach('Some\Service\ServiceClass', 'some');
      *
-     *     // Attach Another_Service_Class with namespace 'another'
-     *     $server->attach('Another_Service_Class', 'another');
+     *     // Attach Another\Service\ServiceClass with namespace 'another'
+     *     $server->attach('Another\Service\ServiceClass', 'another');
      *
-     *     Zend_Server_Cache::save($filename, $server);
+     *     Zend\Server\Cache::save($filename, $server);
      * }
      *
      * $response = $server->handle();
@@ -103,10 +97,10 @@ class Zend_Server_Cache
      * </code>
      *
      * @param  string $filename
-     * @param  Zend_Server_Interface $server
+     * @param  \Zend\Server\Server $server
      * @return bool
      */
-    public static function get($filename, Zend_Server_Interface $server)
+    public static function get($filename, Server $server)
     {
         if (!is_string($filename)
             || !file_exists($filename)
@@ -115,12 +109,17 @@ class Zend_Server_Cache
             return false;
         }
 
-
-        if (false === ($dispatch = @file_get_contents($filename))) {
+        ErrorHandler::start();
+        $dispatch = file_get_contents($filename);
+        ErrorHandler::stop();
+        if (false === $dispatch) {
             return false;
         }
 
-        if (false === ($dispatchArray = @unserialize($dispatch))) {
+        ErrorHandler::start(E_NOTICE);
+        $dispatchArray = unserialize($dispatch);
+        ErrorHandler::stop();
+        if (false === $dispatchArray) {
             return false;
         }
 

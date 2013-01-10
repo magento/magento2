@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -100,13 +100,6 @@ final class Mage
     public static $headersSentThrowsException   = true;
 
     /**
-     * Is installed flag
-     *
-     * @var bool
-     */
-    static private $_isInstalled;
-
-    /**
      * Logger entities
      *
      * @var array
@@ -153,7 +146,7 @@ final class Mage
     {
         $i = self::getVersionInfo();
         return trim("{$i['major']}.{$i['minor']}.{$i['revision']}" . ($i['patch'] != '' ? ".{$i['patch']}" : "")
-                        . "-{$i['stability']}{$i['number']}", '.-');
+            . "-{$i['stability']}{$i['number']}", '.-');
     }
 
     /**
@@ -170,7 +163,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '31',
+            'number'    => '38',
         );
     }
 
@@ -200,7 +193,6 @@ final class Mage
         self::$_objects         = null;
         self::$_isDownloader    = false;
         self::$_isDeveloperMode = false;
-        self::$_isInstalled     = null;
         self::$_loggers         = array();
         self::$_design          = null;
         // do not reset $headersSentThrowsException
@@ -268,38 +260,20 @@ final class Mage
     }
 
     /**
-     * Set application root absolute path
-     *
-     * @param string $appRoot
-     * @throws Mage_Core_Exception
-     */
-    public static function setRoot($appRoot = '')
-    {
-        if (self::$_appRoot) {
-            return ;
-        }
-
-        if ('' === $appRoot) {
-            // automagically find application root by dirname of Mage.php
-            $appRoot = dirname(__FILE__);
-        }
-
-        $appRoot = realpath($appRoot);
-
-        if (is_dir($appRoot) && is_readable($appRoot)) {
-            self::$_appRoot = $appRoot;
-        } else {
-            self::throwException($appRoot . ' is not a directory or not readable by this user');
-        }
-    }
-
-    /**
      * Retrieve application root absolute path
      *
      * @return string
+     * @throws Magento_Exception
      */
     public static function getRoot()
     {
+        if (!self::$_appRoot) {
+            $appRootDir = __DIR__;
+            if (!is_readable($appRootDir)) {
+                throw new Magento_Exception("Application root directory '$appRootDir' is not readable.");
+            }
+            self::$_appRoot = $appRootDir;
+        }
         return self::$_appRoot;
     }
 
@@ -466,7 +440,7 @@ final class Mage
      */
     public static function dispatchEvent($name, array $data = array())
     {
-        Magento_Profiler::start('EVENT:' . $name);
+        Magento_Profiler::start('EVENT:' . $name, array('group' => 'EVENT', 'name' => $name));
         $result = self::app()->dispatchEvent($name, $data);
         Magento_Profiler::stop('EVENT:'.$name);
         return $result;
@@ -564,24 +538,6 @@ final class Mage
     }
 
     /**
-     * Retrieve Controller instance by ClassName
-     *
-     * @param string $class
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Controller_Response_Http $response
-     * @param array $invokeArgs
-     * @return Mage_Core_Controller_Front_Action
-     */
-    public static function getControllerInstance($class, $request, $response, array $invokeArgs = array())
-    {
-        return self::getObjectManager()->create($class, array(
-            'request' => $request,
-            'response' => $response,
-            'invokeArgs' => $invokeArgs
-        ));
-    }
-
-    /**
      * Returns block singleton instance, if current action exists. Otherwise returns FALSE.
      *
      * @param string $className
@@ -672,16 +628,12 @@ final class Mage
     public static function app($code = '', $type = 'store', $options = array())
     {
         if (null === self::$_app) {
-            self::setRoot();
             self::$_app = self::getObjectManager()->get('Mage_Core_Model_App');
             self::$_events = new Varien_Event_Collection();
-            self::_setIsInstalled($options);
-            self::_setConfigModel($options);
 
             Magento_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
             Magento_Profiler::stop('self::app::init');
-            self::$_app->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
         }
         return self::$_app;
     }
@@ -705,10 +657,7 @@ final class Mage
     public static function init($code = '', $type = 'store', $options = array(), $modules = array())
     {
         try {
-            self::setRoot();
-            self::$_app     = self::getObjectManager()->create('Mage_Core_Model_App');
-            self::_setIsInstalled($options);
-            self::_setConfigModel($options);
+            self::$_app = self::getObjectManager()->create('Mage_Core_Model_App');
 
             if (!empty($modules)) {
                 self::$_app->initSpecified($code, $type, $options, $modules);
@@ -738,7 +687,6 @@ final class Mage
     {
         try {
             Magento_Profiler::start('mage');
-            self::setRoot();
             if (isset($options['edition'])) {
                 self::$_currentEdition = $options['edition'];
             }
@@ -750,7 +698,6 @@ final class Mage
                 self::$_app->setResponse($options['response']);
             }
             self::$_events = new Varien_Event_Collection();
-            self::_setIsInstalled($options);
             self::$_app->run(array(
                 'scope_code' => $code,
                 'scope_type' => $type,
@@ -767,157 +714,48 @@ final class Mage
     }
 
     /**
-     * Set application isInstalled flag based on given options
+     * Shortcut for the application "is installed" getter
      *
-     * @param array $options
-     */
-    protected static function _setIsInstalled($options = array())
-    {
-        if (isset($options['is_installed'])) {
-            self::$_isInstalled = (bool) $options['is_installed'];
-        }
-    }
-
-    /**
-     * Set application Config model
-     *
-     * @param array $options
-     */
-    protected static function _setConfigModel($options = array())
-    {
-        if (isset($options['config_model']) && Magento_Autoload::getInstance()->classExists($options['config_model'])) {
-            $alternativeConfigModelName = $options['config_model'];
-            unset($options['config_model']);
-            $alternativeConfigModel = new $alternativeConfigModelName($options);
-        } else {
-            $alternativeConfigModel = null;
-        }
-
-        if (!is_null($alternativeConfigModel) && ($alternativeConfigModel instanceof Mage_Core_Model_Config)) {
-            self::$_config = $alternativeConfigModel;
-        } else {
-            self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
-        }
-    }
-
-    /**
-     * Retrieve application installation flag
-     *
-     * @param string|array $options
      * @return bool
+     * @throws Magento_Exception
+     *
+     * @todo Remove in favour of Mage_Core_Model_App::isInstalled() as soon as dependencies on application are injected
      */
-    public static function isInstalled($options = array())
+    public static function isInstalled()
     {
-        if (self::$_isInstalled === null) {
-            self::setRoot();
-
-            if (is_string($options)) {
-                $options = array('etc_dir' => $options);
-            }
-            $etcDir = self::getRoot() . DS . 'etc';
-            if (!empty($options['etc_dir'])) {
-                $etcDir = $options['etc_dir'];
-            }
-            $localConfigFile = $etcDir . DS . 'local.xml';
-
-            self::$_isInstalled = false;
-
-            if (is_readable($localConfigFile)) {
-                $localConfig = simplexml_load_file($localConfigFile);
-                date_default_timezone_set('UTC');
-                if (($date = $localConfig->global->install->date) && strtotime($date)) {
-                    self::$_isInstalled = true;
-                }
-            }
+        if (!self::$_app) {
+            throw new Magento_Exception('Application instance has not been initialized yet.');
         }
-        return self::$_isInstalled;
+        return self::$_app->isInstalled();
     }
 
     /**
-     * log facility (??)
+     * log a message to system log or arbitrary file
      *
      * @param string $message
      * @param integer $level
      * @param string $file
      * @param bool $forceLog
      */
-    public static function log($message, $level = null, $file = '', $forceLog = false)
+    public static function log($message, $level = null, $file = 'system.log', $forceLog = false)
     {
-        if (!self::getConfig()) {
-            return;
+        $level = is_null($level) ? Zend_Log::DEBUG : $level;
+        if (empty($file) || $file == 'system.log') {
+            $file = 'system.log';
+            $key = Mage_Core_Model_Logger::LOGGER_SYSTEM;
+        } elseif ($file == 'exception.log') {
+            $key = Mage_Core_Model_Logger::LOGGER_EXCEPTION;
+        } else {
+            $forceLog = true;
+            $key = $file;
         }
-
-        try {
-            $logActive = self::getStoreConfig('dev/log/active');
-            if (empty($file)) {
-                $file = self::getStoreConfig('dev/log/file');
-            }
+        /** @var $logger Mage_Core_Model_Logger */
+        $logger = self::$_objectManager->get('Mage_Core_Model_Logger');
+        if ($forceLog && !$logger->hasLog($key)) {
+            $logger->addStreamLog($key, $file);
         }
-        catch (Exception $e) {
-            $logActive = true;
-        }
-
-        if (!self::$_isDeveloperMode && !$logActive && !$forceLog) {
-            return;
-        }
-
-        $level  = is_null($level) ? Zend_Log::DEBUG : $level;
-        $file = empty($file) ? 'system.log' : $file;
-
-        try {
-            if (!isset(self::$_loggers[$file])) {
-                $logFile = self::_expandLogFileName($file);
-
-                $format = '%timestamp% %priorityName% (%priority%): %message%' . PHP_EOL;
-                $formatter = new Zend_Log_Formatter_Simple($format);
-                $writerModel = (string)self::getConfig()->getNode('global/log/core/writer_model');
-                if (!self::$_app || !$writerModel || !is_subclass_of($writerModel, 'Zend_Log_Writer_Stream')) {
-                    $writerModel = 'Zend_Log_Writer_Stream';
-                }
-                /** @var $writer Zend_Log_Writer_Stream */
-                $writer = new $writerModel($logFile);
-                $writer->setFormatter($formatter);
-                self::$_loggers[$file] = new Zend_Log($writer);
-            }
-
-            if (is_array($message) || is_object($message)) {
-                $message = print_r($message, true);
-            }
-
-            self::$_loggers[$file]->log($message, $level);
-        }
-        catch (Exception $e) {
-        }
+        $logger->log($message, $level, $key);
     }
-
-    /**
-     * Expand log file name to absolute path, if necessary
-     *
-     * @param string $file
-     * @return string
-     */
-    protected static function _expandLogFileName($file)
-    {
-        /*
-         * Check whether a file is a wrapper
-         * @link http://www.php.net/manual/en/wrappers.php
-         */
-        if (preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
-            return $file;
-        }
-        $dir  = self::getBaseDir('var') . DIRECTORY_SEPARATOR . 'log';
-        $file = $dir . DIRECTORY_SEPARATOR . $file;
-        if (!is_dir($dir)) {
-            mkdir($dir);
-            chmod($dir, 0777);
-        }
-        if (!file_exists($file)) {
-            file_put_contents($file, '');
-            chmod($file, 0777);
-        }
-        return $file;
-    }
-
 
     /**
      * Write exception to log
@@ -926,11 +764,7 @@ final class Mage
      */
     public static function logException(Exception $e)
     {
-        if (!self::getConfig()) {
-            return;
-        }
-        $file = self::getStoreConfig('dev/log/exception_file');
-        self::log("\n" . $e->__toString(), Zend_Log::ERR, $file);
+        self::$_objectManager->get('Mage_Core_Model_Logger')->logException($e);
     }
 
     /**
@@ -959,6 +793,7 @@ final class Mage
      * Display exception
      *
      * @param Exception $e
+     * @param string $extra
      */
     public static function printException(Exception $e, $extra = '')
     {

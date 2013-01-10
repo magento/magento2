@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,7 +168,7 @@ class Mage_Sales_Model_Resource_Quote_Item_Collection extends Mage_Core_Model_Re
      */
     protected function _assignProducts()
     {
-        Magento_Profiler::start('QUOTE:'.__METHOD__);
+        Magento_Profiler::start('QUOTE:'.__METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
         $productIds = array();
         foreach ($this as $item) {
             $productIds[] = (int)$item->getProductId();

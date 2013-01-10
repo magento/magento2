@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Cms
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,11 +40,18 @@ class Mage_Cms_Helper_PageTest extends PHPUnit_Framework_TestCase
         $result = $helper->renderPage(
             Mage::getModel(
                 'Mage_Core_Controller_Front_Action',
-                array('request' => new Magento_Test_Request, 'response' => new Magento_Test_Response)
+                array(
+                    new Magento_Test_Request(),
+                    new Magento_Test_Response(),
+                    'frontend',
+                    Mage::getObjectManager(),
+                    Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Front'),
+                    Mage::getObjectManager()->get('Mage_Core_Model_Layout_Factory')
+                )
             ),
             $page->getId()
         );
-        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme());
+        $this->assertEquals('default/modern', Mage::getDesign()->getDesignTheme()->getThemePath());
         $this->assertTrue($result);
     }
 }

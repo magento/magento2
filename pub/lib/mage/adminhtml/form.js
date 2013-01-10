@@ -19,95 +19,22 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-var varienForm = new Class.create();
 
-varienForm.prototype = {
-    initialize : function(formId, validationUrl){
-        this.formId = formId;
-        this.validationUrl = validationUrl;
-        this.submitUrl = false;
-
-        if($(this.formId)){
-            this.validator  = new Validation(this.formId, {onElementValidate : this.checkErrors.bind(this)});
-        }
-        this.errorSections = $H({});
-    },
-
-    checkErrors : function(result, elm){
-        if(!result)
-            elm.setHasError(true, this);
-        else
-            elm.setHasError(false, this);
-    },
-
-    validate : function(){
-        if(this.validator && this.validator.validate()){
-            if(this.validationUrl){
-                this._validate();
+/*
+ * @TODO Need to be removed after refactoring all dependent of the form the components
+ */
+(function($) {
+    $(document).ready(function() {
+        $(document).on("beforeSubmit", function(e) {
+            if (typeof varienGlobalEvents !== 'undefined') {
+                varienGlobalEvents.fireEvent("formSubmit", $(e.target).attr('id'));
             }
-            return true;
-        }
-        return false;
-    },
-
-    submit : function(url){
-        if (typeof varienGlobalEvents != undefined) {
-            varienGlobalEvents.fireEvent('formSubmit', this.formId);
-        }
-        this.errorSections = $H({});
-        this.canShowError = true;
-        this.submitUrl = url;
-        if(this.validator && this.validator.validate()){
-            if(this.validationUrl){
-                this._validate();
-            }
-            else{
-                this._submit();
-            }
-            return true;
-        }
-        return false;
-    },
-
-    _validate : function(){
-        new Ajax.Request(this.validationUrl,{
-            method: 'post',
-            parameters: $(this.formId).serialize(),
-            onComplete: this._processValidationResult.bind(this),
-            onFailure: this._processFailure.bind(this)
         });
-    },
-
-    _processValidationResult : function(transport){
-        if (typeof varienGlobalEvents != undefined) {
-            varienGlobalEvents.fireEvent('formValidateAjaxComplete', transport);
-        }
-        var response = transport.responseText.evalJSON();
-        if(response.error){
-            if($('messages')){
-                $('messages').innerHTML = response.message;
-            }
-        }
-        else{
-            this._submit();
-        }
-    },
-
-    _processFailure : function(transport){
-        location.href = BASE_URL;
-    },
-
-    _submit : function(){
-        var $form = $(this.formId);
-        if(this.submitUrl){
-            $form.action = this.submitUrl;
-        }
-        $form.submit();
-    }
-}
+    });
+})(jQuery);
 
 /**
  * redeclare Validation.isVisible function

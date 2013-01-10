@@ -21,11 +21,10 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-
 <layout>
     <adminhtml_report_statistics_index>
         <reference name="content">
@@ -40,7 +39,7 @@
         </reference>
         <reference name="content">
             <block type="Mage_Adminhtml_Block_Report_Product_Viewed" template="report/grid/container.phtml" name="product.report.grid.container">
-                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Adminhtml::report/store/switcher/enhanced.phtml" name="store.switcher">
+                <block type="Mage_Backend_Block_Store_Switcher" template="Mage_Reports::store/switcher/enhanced.phtml" name="store.switcher">
                     <action method="setStoreVarName"><var_name>store_ids</var_name></action>
                 </block>
                 <block type="Mage_Adminhtml_Block_Report_Filter_Form" name="grid.filter.form">

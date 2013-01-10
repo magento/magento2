@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,19 @@ abstract class Mage_Core_Controller_Varien_Router_Abstract
      * @var Mage_Core_Controller_Varien_Front
      */
     protected $_front;
+
+    /**
+     * @var Mage_Core_Controller_Varien_Action_Factory
+     */
+    protected $_controllerFactory;
+
+    /**
+     * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
+     */
+    public function __construct(Mage_Core_Controller_Varien_Action_Factory $controllerFactory)
+    {
+        $this->_controllerFactory = $controllerFactory;
+    }
 
     /**
      * Assign front controller instance
@@ -66,5 +79,5 @@ abstract class Mage_Core_Controller_Varien_Router_Abstract
         return $frontName;
     }
 
-    abstract public function match(Zend_Controller_Request_Http $request);
+    abstract public function match(Mage_Core_Controller_Request_Http $request);
 }

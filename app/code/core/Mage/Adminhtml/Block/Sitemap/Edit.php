@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,17 @@ class Mage_Adminhtml_Block_Sitemap_Edit extends Mage_Adminhtml_Block_Widget_Form
 
         $this->_addButton('generate', array(
             'label'   => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save & Generate'),
-            'onclick' => "$('generate').value=1; editForm.submit();",
+            'data_attr'  => array(
+                'widget-button' => array(
+                    'event' => 'save',
+                    'related' => '#edit_form',
+                    'eventData' => array(
+                        'action' => array('args' => array(
+                            'generate' => '1'
+                        )),
+                    ),
+                ),
+            ),
             'class'   => 'add',
         ));
     }

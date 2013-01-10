@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -53,10 +53,6 @@
                     <resource id="Mage_Adminhtml::variable" title="Custom Variables" sortOrder="45" />
                     <resource id="Mage_Adminhtml::myaccount" title="My Account" sortOrder="50" />
                     <resource id="Mage_Adminhtml::tools" title="Tools" sortOrder="60" />
-                    <resource id="Mage_Adminhtml::convert" title="Import/Export">
-                        <resource id="Mage_Adminhtml::gui" title="Dataflow - Profiles" />
-                        <resource id="Mage_Adminhtml::profiles" title="Dataflow - Advanced Profiles" />
-                    </resource>
                     <resource id="Mage_Adminhtml::cache" title="Cache Management" />
                     <resource id="Mage_Adminhtml::extensions" title="Magento Connect">
                         <resource id="Mage_Adminhtml::local" title="Magento Connect Manager" sortOrder="0" />

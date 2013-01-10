@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,13 +114,13 @@ class Mage_Core_Model_Observer
      */
     public function themeRegistration(Varien_Event_Observer $observer)
     {
+        $baseDir = $observer->getEvent()->getBaseDir();
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
-            Mage::getModel('Mage_Core_Model_Theme')->themeRegistration($pathPattern);
+            Mage::getModel('Mage_Core_Model_Theme_Registration')->register($baseDir, $pathPattern);
         } catch (Mage_Core_Exception $e) {
             Mage::logException($e);
         }
-
         return $this;
     }
 }

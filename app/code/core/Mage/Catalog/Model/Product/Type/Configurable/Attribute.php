@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,6 +36,9 @@
  * @method Mage_Catalog_Model_Product_Type_Configurable_Attribute setAttributeId(int $value)
  * @method int getPosition()
  * @method Mage_Catalog_Model_Product_Type_Configurable_Attribute setPosition(int $value)
+ *
+ * @method Mage_Catalog_Model_Product_Type_Configurable_Attribute setProductAttribute(Mage_Eav_Model_Entity_Attribute_Abstract $value)
+ * @method Mage_Eav_Model_Entity_Attribute_Abstract getProductAttribute()
  *
  * @category    Mage
  * @package     Mage_Catalog
@@ -96,5 +99,29 @@ class Mage_Catalog_Model_Product_Type_Configurable_Attribute extends Mage_Core_M
         $this->_getResource()->saveLabel($this);
         $this->_getResource()->savePrices($this);
         return $this;
+    }
+
+    /**
+     * Load counfigurable attribute by product and product's attribute
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Eav_Model_Attribute  $attribute
+     */
+    public function loadByProductAndAttribute($product, $attribute)
+    {
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        if ($id) {
+            $this->load($id);
+        }
+    }
+
+    /**
+     * Delete configurable attributes by product id
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function deleteByProduct($product)
+    {
+        $this->_getResource()->deleteAttributesByProductId($product->getId());
     }
 }

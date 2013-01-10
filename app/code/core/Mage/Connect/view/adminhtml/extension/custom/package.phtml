@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -50,7 +50,7 @@ function loadPackage()
     location.href = url+(url.indexOf('?')==-1 ? '?':'&')+'id='+package;
 }
 
-function saveAsPackage()
+function saveAsPackage(e)
 {
     _defaultPackageName = '';
     if ($('_packagefile_name')) {
@@ -59,17 +59,17 @@ function saveAsPackage()
         _defaultPackageName = $('_packagename').getValue();
     }
     var package = prompt('Please enter package file name', _defaultPackageName);
-    if (!package) return false;
+    if (!package) {
+        return e.stopImmediatePropagation();
+    }
     if ($('_packagefile_name')) {
         $('_packagefile_name').value = package;
     }
-    return editForm.submit();
 }
 
 function createPackage()
 {
     $('_create').value = 1;
-    editForm.submit();
 }
 
 function resetPackage()

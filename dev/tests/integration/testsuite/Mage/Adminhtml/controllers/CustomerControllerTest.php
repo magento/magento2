@@ -21,11 +21,11 @@
  * @category    Mage
  * @package     Mage_Adminhtml
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_CustomerControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Adminhtml_CustomerControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * Base controller URL
@@ -79,7 +79,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Adminhtml_Utility_Contr
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
     }
 
     public function testSaveActionWithInvalidCustomerAddressData()
@@ -106,7 +106,7 @@ class Mage_Adminhtml_CustomerControllerTest extends Mage_Adminhtml_Utility_Contr
          * Check that customer data were set to session
          */
         $this->assertEquals($post, Mage::getSingleton('Mage_Backend_Model_Session')->getCustomerData());
-        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit/key'));
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key'));
     }
 
     /**

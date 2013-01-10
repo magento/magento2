@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -108,13 +108,13 @@ class Mage_Core_Model_UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @magentoAppIsolation enabled
      */
-    public function testGetSecure()
+    public function testIsSecure()
     {
-        $this->assertFalse($this->_model->getSecure());
+        $this->assertFalse($this->_model->isSecure());
         $this->_model->setSecureIsForced(1);
-        $this->assertTrue(is_bool($this->_model->getSecure()));
+        $this->assertTrue(is_bool($this->_model->isSecure()));
         Mage::app()->getStore()->setId(Mage_Core_Model_App::ADMIN_STORE_ID);
-        $this->assertFalse($this->_model->getSecure());
+        $this->assertFalse($this->_model->isSecure());
     }
 
     public function testSetGetStore()

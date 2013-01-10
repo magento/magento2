@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,10 @@ class Mage_Cms_Controller_RouterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Mage_Cms_Controller_Router(new Mage_Core_Model_Event_ManagerStub());
+        $this->_model = new Mage_Cms_Controller_Router(
+            Mage::getObjectManager()->get('Mage_Core_Controller_Varien_Action_Factory'),
+            new Mage_Core_Model_Event_ManagerStub()
+        );
     }
 
     /**
@@ -42,7 +45,7 @@ class Mage_Cms_Controller_RouterTest extends PHPUnit_Framework_TestCase
      */
     public function testMatch()
     {
-        $request = new Zend_Controller_Request_Http();
+        $request = new Mage_Core_Controller_Request_Http();
         //Open Node
         $request->setPathInfo('parent_node');
         $controller = $this->_model->match($request);
@@ -62,7 +65,7 @@ class Mage_Core_Model_Event_ManagerStub extends Mage_Core_Model_Event_Manager
      * @param array $params
      * @return Mage_Core_Model_App|null
      */
-    public function dispatch($eventName, $params)
+    public function dispatch($eventName, array $params = array())
     {
         switch ($eventName) {
             case 'cms_controller_router_match_before' :

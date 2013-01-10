@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -28,18 +28,29 @@
     <h3 <?php echo $this->getUiId('title') ?>><?php echo $this->getTitle() ?></h3>
 <?php endif ?>
 <?php if(!empty($tabs)): ?>
-<ul id="<?php echo $this->getId() ?>" <?php echo $this->getUiId('tab', $this->getId()) ?> class="tabs">
+<div id="<?php echo $this->getId() ?>">
+<ul <?php echo $this->getUiId('tab', $this->getId()) ?> class="<?php echo $this->getIsHoriz() ? 'tabs-horiz' : 'tabs' ?>">
 <?php foreach ($tabs as $_tab): ?>
 <?php if (!$this->canShowTab($_tab)): continue;  endif; ?>
+    <?php $_tabClass = 'tab-item-link ' . $this->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+    <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $this->getTabUrl($_tab) != '#') ? 'link' : '' ?>
+    <?php $_tabHref = $this->getTabUrl($_tab) == '#' ? '#' . $this->getTabId($_tab) . '_content' : $this->getTabUrl($_tab) ?>
     <li <?php if($this->getTabIsHidden($_tab)): ?> style="display:none"<?php endif; ?><?php echo $this->getUiId('tab', 'item', $_tab->getId()) ?>>
-        <a href="<?php echo $this->getTabUrl($_tab) ?>" id="<?php echo $this->getTabId($_tab) ?>" name="<?php echo $this->getTabId($_tab, false) ?>" title="<?php echo $this->getTabTitle($_tab) ?>" class="tab-item-link <?php echo $this->getTabClass($_tab) ?><?php if (preg_match('/\s?ajax\s?/', $_tab->getClass())) {?> notloaded<?php }?>"<?php echo $this->getUiId('tab', 'link', $_tab->getId()) ?>>
+        <a href="<?php echo $_tabHref ?>" id="<?php echo $this->getTabId($_tab) ?>" name="<?php echo $this->getTabId($_tab, false) ?>" title="<?php echo $this->getTabTitle($_tab) ?>" class="<?php echo $_tabClass;?>" data-tab-type="<?php echo $_tabType;?>" <?php echo $this->getUiId('tab', 'link', $_tab->getId()) ?>>
             <span><span class="changed" title="<?php echo $this->__('The information in this tab has been changed.') ?>"></span><span class="error" title="<?php echo $this->__('This tab contains invalid data. Please solve the problem before saving.') ?>"></span><?php echo $this->getTabLabel($_tab); ?></span>
         </a>
         <div id="<?php echo $this->getTabId($_tab) ?>_content" style="display:none;"<?php echo $this->getUiId('tab', 'content', $_tab->getId()) ?>><?php echo $this->getTabContent($_tab) ?></div>
     </li>
 <?php endforeach; ?>
 </ul>
+</div>
 <script type="text/javascript">
-    var <?php echo $this->getJsObjectName() ?> = new varienTabs('<?php echo $this->getId() ?>', '<?php echo $this->getDestElementId() ?>', '<?php echo $this->getActiveTabId() ?>', <?php echo $this->getAllShadowTabs()?>);
+    jQuery(function() {
+        jQuery('#<?php echo $this->getId() ?>').tabs({
+            active: '<?php echo $this->getActiveTabId() ?>',
+            destination: '#<?php echo $this->getDestElementId() ?>',
+            shadowTabs: <?php echo $this->getAllShadowTabs()?>
+        });
+    });
 </script>
 <?php endif; ?>

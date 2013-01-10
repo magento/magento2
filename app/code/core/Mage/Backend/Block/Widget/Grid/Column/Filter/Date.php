@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,29 +48,31 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
     {
         $htmlId = Mage::helper('Mage_Core_Helper_Data')->uniqHash($this->_getHtmlId());
         $format = $this->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-        $html = '<div class="range" id="'.$htmlId.'_range"><div class="range-line date">'
-            . '<span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('From').':</span>'
-            . '<input type="text" name="'.$this->_getHtmlName().'[from]" id="'.$htmlId.'_from"'
-                . ' value="'.$this->getEscapedValue('from').'" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'from') .  '/>'
+        $html = '<div class="range" id="' . $htmlId . '_range"><div class="range-line date">'
+            . '<span class="label">' . $this->__('From') . ':</span>'
+            . '<input type="text" name="' . $this->_getHtmlName() . '[from]" id="' . $htmlId . '_from"'
+                . ' value="' . $this->getEscapedValue('from') . '" class="input-text no-changes" '
+                . $this->getUiId('filter', $this->_getHtmlName(), 'from') . '/>'
             . '</div>';
-        $html.= '<div class="range-line date">'
-            . '<span class="label">' . Mage::helper('Mage_Backend_Helper_Data')->__('To').' :</span>'
-            . '<input type="text" name="'.$this->_getHtmlName().'[to]" id="'.$htmlId.'_to"'
-                . ' value="'.$this->getEscapedValue('to').'" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'to') .  '/>'
+        $html .= '<div class="range-line date">'
+            . '<span class="label">' . $this->__('To') . ' :</span>'
+            . '<input type="text" name="' . $this->_getHtmlName() . '[to]" id="' . $htmlId . '_to"'
+                . ' value="' . $this->getEscapedValue('to') . '" class="input-text no-changes" '
+                . $this->getUiId('filter', $this->_getHtmlName(), 'to') . '/>'
             . '</div></div>';
-        $html.= '<input type="hidden" name="'.$this->_getHtmlName().'[locale]"'
-            . ' value="'.$this->getLocale()->getLocaleCode().'"/>';
-        $html.= '<script type="text/javascript">
+        $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"'
+            . ' value="' . $this->getLocale()->getLocaleCode() . '"/>';
+        $html .= '<script type="text/javascript">
             (function( $ ) {
-                $("#'.$htmlId.'_range").dateRange({
-                    dateFormat: "'.$format.'",
-                    buttonImage: "' . Mage::getDesign()->getViewFileUrl('images/grid-cal.gif') . '",
-                    buttonText: "'.$this->escapeHtml(Mage::helper('Mage_Backend_Helper_Data')->__('Date selector')).'",
+                $("#' . $htmlId . '_range").dateRange({
+                    dateFormat: "' . $format . '",
+                    buttonImage: "' . $this->getViewFileUrl('images/grid-cal.gif') . '",
+                    buttonText: "' . $this->escapeHtml($this->__('Date selector')) . '",
                     from: {
-                        id: "'.$htmlId.'_from"
+                        id: "' . $htmlId . '_from"
                     },
                     to: {
-                        id: "'.$htmlId.'_to"
+                        id: "' . $htmlId . '_to"
                     }
                 })
             })(jQuery)
@@ -170,8 +172,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Date extends Mage_Backend_Blo
             $dateObj->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE);
 
             return $dateObj;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

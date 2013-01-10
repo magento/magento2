@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,8 @@ class Mage_Backend_Model_Config_Backend_Image_Adapter extends Mage_Core_Model_Co
         try {
             $adapter->checkDependencies();
         } catch (Exception $e) {
-            $message = Mage::helper('Mage_Core_Helper_Data')->__('The specified image adapter cannot be used because of some missed dependencies.');
+            $message = Mage::helper('Mage_Core_Helper_Data')
+                ->__('The specified image adapter cannot be used because of some missed dependencies.');
             throw new Mage_Core_Exception($message);
         }
 

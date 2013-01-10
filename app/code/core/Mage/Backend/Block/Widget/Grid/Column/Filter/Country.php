@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Country extends Mage_Backend_
         $options = Mage::getResourceModel('Mage_Directory_Model_Resource_Country_Collection')
             ->load()
             ->toOptionArray(false);
-        array_unshift($options, array('value'=>'', 'label'=>Mage::helper('Mage_Backend_Helper_Data')->__('All Countries')));
+        array_unshift($options,
+            array('value'=>'', 'label'=>Mage::helper('Mage_Backend_Helper_Data')->__('All Countries'))
+        );
         return $options;
     }
 }

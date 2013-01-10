@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleCheckout
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -35,7 +35,7 @@
                 <label>Google Checkout</label>
                 <comment>
                     <![CDATA[<a href="http://www.magentocommerce.com/redirect/google-checkout/" target="_blank">Signup for Google Checkout</a>]]>
-</comment>
+                </comment>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enable</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
@@ -109,7 +109,7 @@
                     <label>Enable Carrier Calculated</label>
                     <comment>
                         <![CDATA[<strong style="color:red">Warning!</strong> This option disables the merchant calculated shipping. With this option, Google API ignores any attempt to affect shipping prices.]]>
-</comment>
+                    </comment>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
                 <field id="methods" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">

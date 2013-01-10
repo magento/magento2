@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -106,7 +106,9 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
 
         $this->_testObsoleteReferences($layoutXml);
 
-        $selectorHeadBlock = '(name()="block" or name()="reference") and (@name="head" or @name="convert_root_head")';
+        $selectorHeadBlock = '
+            (name()="block" or name()="reference") and (@name="head" or @name="convert_root_head" or @name="vde_head")
+        ';
         $this->assertSame(array(),
             $layoutXml->xpath(
                 '//*[' . $selectorHeadBlock . ']/action[@method="addItem"]'

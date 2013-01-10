@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,11 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
         $html = $this->_getHeaderHtml($element);
 
         foreach ($element->getSortedElements() as $field) {
-            $html .= $field->toHtml();
+            if ($field instanceof Varien_Data_Form_Element_Fieldset) {
+                $html .= '<tr><td colspan="4">' . $field->toHtml() . '</td></tr>';
+            } else {
+                $html .= $field->toHtml();
+            }
         }
 
         $html .= $this->_getFooterHtml($element);
@@ -66,11 +70,12 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
     {
         $default = !$this->getRequest()->getParam('website') && !$this->getRequest()->getParam('store');
 
-        $html = '<div  class="entry-edit-head collapseable" ><a id="' . $element->getHtmlId()
+        $html = '<div><div>';
+        $html .= '<div  class="entry-edit-head collapseable" ><a id="' . $element->getHtmlId()
             . '-head" href="#" onclick="Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \''
             . $this->getUrl('*/*/state') . '\'); return false;">' . $element->getLegend() . '</a></div>';
         $html .= '<input id="'.$element->getHtmlId() . '-state" name="config_state[' . $element->getId()
-            . ']" type="hidden" value="' . (int)$this->_getCollapseState($element) . '" />';
+            . ']" type="hidden" value="' . (int)$this->_isCollapseState($element) . '" />';
         $html .= '<fieldset class="' . $this->_getFieldsetCss() . '" id="' . $element->getHtmlId() . '">';
         $html .= '<legend>' . $element->getLegend() . '</legend>';
 
@@ -94,9 +99,10 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     protected function _getFieldsetCss()
     {
+        /** @var Mage_Backend_Model_Config_Structure_Element_Group $group  */
         $group = $this->getGroup();
-        $configCss = isset($group['fieldset_css']) ? $group['fieldset_css'] : null;
-        return 'config collapseable' . ($configCss ? ' ' . $configCss : '');
+        $configCss = $group->getFieldsetCss();
+        return 'config collapseable' . ($configCss ? ' ' . $configCss: '');
     }
 
     /**
@@ -119,6 +125,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
             }
         }
         $html .= '</fieldset>' . $this->_getExtraJs($element, $tooltipsExist);
+        $html .= '</div></div>';
         return $html;
     }
 
@@ -133,27 +140,27 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      */
     protected function _getExtraJs($element, $tooltipsExist = false)
     {
-        $id = $element->getHtmlId();
-        $js = "Fieldset.applyCollapse('{$id}');";
+        $htmlId = $element->getHtmlId();
+        $output = "Fieldset.applyCollapse('{$htmlId}');";
         if ($tooltipsExist) {
-            $js.= "$$('#{$id} table')[0].addClassName('system-tooltip-wrap');
-                   $$('#{$id} table tbody tr').each(function(tr) {
+            $output.= "$$('#{$htmlId} table')[0].addClassName('system-tooltip-wrap');
+                   $$('#{$htmlId} table tbody tr').each(function(tr) {
                        Event.observe(tr, 'mouseover', function (event) {
                            var relatedTarget = $(event.relatedTarget || event.fromElement);
-                           if(relatedTarget && (relatedTarget == this || relatedTarget.descendantOf(this))) {
+                           if (relatedTarget && (relatedTarget == this || relatedTarget.descendantOf(this))) {
                                return;
                            }
                            showTooltip(event);
                        });
                        Event.observe(tr, 'mouseout', function (event) {
                            var relatedTarget = $(event.relatedTarget || event.toElement);
-                           if(relatedTarget && (relatedTarget == this || relatedTarget.childOf(this))) {
+                           if (relatedTarget && (relatedTarget == this || relatedTarget.childOf(this))) {
                                return;
                            }
                            hideTooltip(event);
                        });
                    });
-                   $$('#{$id} table')[0].select('input','select').each(function(field) {
+                   $$('#{$htmlId} table')[0].select('input','select').each(function(field) {
                        Event.observe(field, 'focus', function (event) {
                            showTooltip(event);
                        });
@@ -168,7 +175,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
                        $$('div.system-tooltip-box').invoke('hide');
                        if ($(id)) {
                            $(id).show().setStyle({height : tableHeight});
-                           if(document.viewport.getWidth() < 1200) {
+                           if (document.viewport.getWidth() < 1200) {
                                $(id).addClassName('system-tooltip-small').setStyle({height : 'auto'});
                            } else {
                                $(id).removeClassName('system-tooltip-small');
@@ -183,7 +190,7 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
                        }
                    };";
         }
-        return $this->helper('Mage_Core_Helper_Js')->getScript($js);
+        return $this->helper('Mage_Core_Helper_Js')->getScript($output);
     }
 
     /**
@@ -192,10 +199,10 @@ class Mage_Backend_Block_System_Config_Form_Fieldset
      * @param Varien_Data_Form_Element_Abstract $element
      * @return bool
      */
-    protected function _getCollapseState($element)
+    protected function _isCollapseState($element)
     {
-        if ($element->getExpanded() !== null) {
-            return 1;
+        if ($element->getExpanded()) {
+            return true;
         }
         $extra = Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getUser()->getExtra();
         if (isset($extra['configState'][$element->getId()])) {

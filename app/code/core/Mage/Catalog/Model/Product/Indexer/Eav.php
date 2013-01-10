@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,9 +56,6 @@ class Mage_Catalog_Model_Product_Indexer_Eav extends Mage_Index_Model_Indexer_Ab
         Mage_Catalog_Model_Resource_Eav_Attribute::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE,
         ),
-        Mage_Catalog_Model_Convert_Adapter_Product::ENTITY => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        )
     );
 
     /**
@@ -119,8 +116,6 @@ class Mage_Catalog_Model_Product_Indexer_Eav extends Mage_Index_Model_Indexer_Ab
                     $this->_registerCatalogAttributeSaveEvent($event);
                     break;
             }
-        } else if ($entity == Mage_Catalog_Model_Convert_Adapter_Product::ENTITY) {
-            $event->addNewData('catalog_product_eav_reindex_all', true);
         }
     }
 

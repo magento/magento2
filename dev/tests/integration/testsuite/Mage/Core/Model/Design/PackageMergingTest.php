@@ -21,10 +21,13 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -54,12 +57,13 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        Mage::app()->getConfig()->getOptions()->setDesignDir(
-            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design'
-        );
-
-        $this->_model = Mage::getModel('Mage_Core_Model_Design_Package');
-        $this->_model->setDesignTheme('package/default', 'frontend');
+        /** @var $themeUtility Mage_Core_Utility_Theme */
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design',
+            Mage::getModel('Mage_Core_Model_Design_Package')
+        ));
+        $themeUtility->registerThemes()->setDesignTheme('package/default', 'frontend');;
+        $this->_model = $themeUtility->getDesign();
     }
 
     protected function tearDown()

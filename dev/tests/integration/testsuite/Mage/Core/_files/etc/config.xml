@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -60,14 +60,6 @@
                     </test_router>
                 </routers>
             </test_area3>
-            <test_area4>
-                <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
-                <routers>
-                </routers>
-            </test_area4>
-            <test_area5>
-                <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
-            </test_area5>
         </areas>
     </global>
     <test_area1>

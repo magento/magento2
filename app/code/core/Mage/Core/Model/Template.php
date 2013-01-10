@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,6 +85,8 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
     /**
      * Initialize data
      *
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
      * @param array $data
      */
     public function __construct(
@@ -109,6 +111,7 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
         if (!is_null($storeId)) {
+            /** @var $appEmulation Mage_Core_Model_App_Emulation */
             $appEmulation = Mage::getSingleton('Mage_Core_Model_App_Emulation');
             $this->_initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($storeId, $area);
         }

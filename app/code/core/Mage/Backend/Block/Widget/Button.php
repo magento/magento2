@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -72,17 +72,27 @@ class Mage_Backend_Block_Widget_Button extends Mage_Backend_Block_Widget
      */
     public function getAttributesHtml()
     {
+        $disabled = $this->getDisabled() ? 'disabled' : '';
+        $title = $this->getTitle();
+        if (!$title) {
+            $title = $this->getLabel();
+        }
         $attributes = array(
             'id'        => $this->getId(),
             'name'      => $this->getElementName(),
-            'title'     => $this->getTitle() ? $this->getTitle() : $this->getLabel(),
+            'title'     => $title,
             'type'      => $this->getType(),
-            'class'     => 'scalable ' . $this->getClass() . ($this->getDisabled() ? ' disabled' : ''),
+            'class'     => 'scalable ' . $this->getClass() . ' ' . $disabled,
             'onclick'   => $this->getOnClick(),
             'style'     => $this->getStyle(),
             'value'     => $this->getValue(),
-            'disabled'  => $this->getDisabled() ? 'disabled' : ''
+            'disabled'  => $disabled
         );
+        if ($this->getDataAttr()) {
+            foreach ($this->getDataAttr() as $key => $attr) {
+                $attributes['data-' . $key] = json_encode($attr);
+            }
+        }
 
         $html = '';
         foreach ($attributes as $attributeKey => $attributeValue) {

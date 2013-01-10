@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -37,6 +37,17 @@
             </depends>
         </Mage_DesignEditor>
     </modules>
+    <default>
+        <web>
+            <routers>
+                <vde>
+                    <area>frontend</area>
+                    <class>Mage_DesignEditor_Controller_Varien_Router_Standard</class>
+                    <base_controller>Mage_Core_Controller_Varien_Action</base_controller>
+                </vde>
+            </routers>
+        </web>
+    </default>
     <frontend>
         <layout>
             <updates>
@@ -54,49 +65,6 @@
                 </args>
             </designeditor>
         </routers>
-        <events>
-            <controller_action_predispatch>
-                <observers>
-                    <designeditor>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>preDispatch</method>
-                    </designeditor>
-                </observers>
-            </controller_action_predispatch>
-            <controller_action_layout_generate_blocks_before>
-                <observers>
-                    <designeditor>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>disableBlocksOutputCaching</method>
-                    </designeditor>
-                </observers>
-            </controller_action_layout_generate_blocks_before>
-            <controller_action_layout_load_before>
-                <observers>
-                    <designeditor>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>addToolbar</method>
-                    </designeditor>
-                </observers>
-            </controller_action_layout_load_before>
-            <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <designeditor>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>setDesignEditorFlag</method>
-                    </designeditor>
-                </observers>
-            </controller_action_layout_generate_blocks_after>
-            <core_layout_render_element>
-                <observers>
-                    <designeditor>
-                        <type>singleton</type>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>wrapPageElement</method>
-                    </designeditor>
-                </observers>
-            </core_layout_render_element>
-        </events>
     </frontend>
     <adminhtml>
         <layout>
@@ -106,17 +74,58 @@
                 </designeditor>
             </updates>
         </layout>
-        <events>
-            <backend_auth_user_logout>
-                <observers>
-                    <designeditor>
-                        <class>Mage_DesignEditor_Model_Observer</class>
-                        <method>adminSessionUserLogout</method>
-                    </designeditor>
-                </observers>
-            </backend_auth_user_logout>
-        </events>
     </adminhtml>
+    <vde>
+        <design_editor>
+            <frontName>vde</frontName>
+            <disabledCacheTypes>BLOCK_HTML,LAYOUT_GENERAL_CACHE_TAG,FPC</disabledCacheTypes>
+            <block>
+                <white_list>
+                    <mage_core_block_template>Mage_Core_Block_Template</mage_core_block_template>
+                    <mage_page_block>Mage_Page_Block_</mage_page_block>
+                    <mage_designeditor_block>Mage_DesignEditor_Block_</mage_designeditor_block>
+                    <mage_checkout_block_onepage>Mage_Checkout_Block_Onepage_</mage_checkout_block_onepage>
+                    <mage_customer_block_account_navigation>Mage_Customer_Block_Account_Navigation</mage_customer_block_account_navigation>
+                    <mage_paypal_block_express_review_details>Mage_Paypal_Block_Express_Review_Details</mage_paypal_block_express_review_details>
+                    <mage_poll_block_activepoll>Mage_Poll_Block_ActivePoll</mage_poll_block_activepoll>
+                    <mage_sales_block_guest_links>Mage_Sales_Block_Guest_Links</mage_sales_block_guest_links>
+                    <mage_catalog_block_product_compare_sidebar>Mage_Catalog_Block_Product_Compare_Sidebar</mage_catalog_block_product_compare_sidebar>
+                    <mage_checkout_block_cart_sidebar>Mage_Checkout_Block_Cart_Sidebar</mage_checkout_block_cart_sidebar>
+                    <mage_wishlist_block_customer_sidebar>Mage_Wishlist_Block_Customer_Sidebar</mage_wishlist_block_customer_sidebar>
+                    <mage_reports_block_product_viewed>Mage_Reports_Block_Product_Viewed</mage_reports_block_product_viewed>
+                    <mage_reports_block_product_compared>Mage_Reports_Block_Product_Compared</mage_reports_block_product_compared>
+                    <mage_sales_block_reorder_sidebar>Mage_Sales_Block_Reorder_Sidebar</mage_sales_block_reorder_sidebar>
+                    <mage_paypal_block_express_shortcut>Mage_Paypal_Block_Express_Shortcut</mage_paypal_block_express_shortcut>
+                    <mage_paypaluk_block_express_shortcut>Mage_PaypalUk_Block_Express_Shortcut</mage_paypaluk_block_express_shortcut>
+                </white_list>
+                <black_list>
+                    <mage_page_block_html_pager>Mage_Page_Block_Html_Pager</mage_page_block_html_pager>
+                </black_list>
+            </block>
+            <container>
+                <white_list>
+                    <root>root</root>
+                    <head>head</head>
+                    <after_body_start>after_body_start</after_body_start>
+                    <header>header</header>
+                    <footer>footer</footer>
+                    <before_body_end>before_body_end</before_body_end>
+                    <top_links>top.links</top_links>
+                    <top_menu>top.menu</top_menu>
+                </white_list>
+            </container>
+        </design_editor>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <design_editor_theme>
+                        <class>Mage_DesignEditor_Model_Observer</class>
+                        <method>setTheme</method>
+                    </design_editor_theme>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </vde>
     <admin>
         <routers>
             <adminhtml>

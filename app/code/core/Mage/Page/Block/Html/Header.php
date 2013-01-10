@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Page
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,43 @@
  */
 class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
 {
+    /**
+     * @var Mage_Core_Model_Config_Options
+     */
+    protected $_configOptions;
+
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Core_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Config_Options $configOptions,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $request,
+            $layout,
+            $eventManager,
+            $urlBuilder,
+            $translator,
+            $cache,
+            $designPackage,
+            $session,
+            $storeConfig,
+            $frontController,
+            $helperFactory,
+            $data
+        );
+        $this->_configOptions = $configOptions;
+    }
+
     public function _construct()
     {
         $this->setTemplate('html/header.phtml');
@@ -55,12 +92,17 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         return $this;
     }
 
+    /**
+     * Get logo image URL
+     *
+     * @return string
+     */
     public function getLogoSrc()
     {
         if (empty($this->_data['logo_src'])) {
-            $this->_data['logo_src'] = Mage::getStoreConfig('design/header/logo_src');
+            $this->_data['logo_src'] = $this->_getLogoUrl();
         }
-        return $this->getViewFileUrl($this->_data['logo_src']);
+        return $this->_data['logo_src'];
     }
 
     public function getLogoAlt()
@@ -82,5 +124,45 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         }
 
         return $this->_data['welcome'];
+    }
+
+    /**
+     * Retrieve logo image URL
+     *
+     * @return string
+     */
+    protected function _getLogoUrl()
+    {
+        $folderName = Mage_Backend_Model_Config_Backend_Image_Logo::UPLOAD_DIR;
+        $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
+        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => Mage_Core_Model_Store::URL_TYPE_MEDIA))
+            . $folderName . '/' . $storeLogoPath;
+        $absolutePath = $this->_configOptions->getDir('media') . DIRECTORY_SEPARATOR
+            . $folderName . DIRECTORY_SEPARATOR . $storeLogoPath;
+
+        if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {
+            $url = $logoUrl;
+        } else {
+            $url = $this->getViewFileUrl('images::logo.gif');
+        }
+
+        return $url;
+    }
+
+    /**
+     * If DB file storage is on - find there, otherwise - just file_exists
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function _isFile($filename)
+    {
+        $helper = $this->_helperFactory->get('Mage_Core_Helper_File_Storage_Database');
+
+        if ($helper->checkDbUsage() && !is_file($filename)) {
+            $helper->saveFileToFilesystem($filename);
+        }
+
+        return is_file($filename);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,5 +49,21 @@ class Mage_Eav_Model_Entity_Attribute_Backend_Array extends Mage_Eav_Model_Entit
         }
 
         return parent::beforeSave($object);
+    }
+
+    /**
+     * Implode data for validation
+     *
+     * @param Mage_Catalog_Model_Product $object
+     * @return bool
+     */
+    public function validate($object)
+    {
+        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $data = $object->getData($attributeCode);
+        if (is_array($data)) {
+            $object->setData($attributeCode, implode(',', array_filter($data)));
+        }
+        return parent::validate($object);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -362,5 +362,24 @@ class Mage_Catalog_Model_Product_Type_Grouped extends Mage_Catalog_Model_Product
         $options = array('super_group' => $superGroup);
 
         return $options;
+    }
+
+    /**
+     * Check that product of this type has weight
+     *
+     * @return bool
+     */
+    public function hasWeight()
+    {
+        return false;
+    }
+
+    /**
+     * Delete data specific for Grouped product type
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    public function deleteTypeSpecificData(Mage_Catalog_Model_Product $product)
+    {
     }
 }

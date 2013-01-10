@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,6 +34,17 @@
  */
 class Mage_Reports_Model_Resource_Review_Product_Collection extends Mage_Catalog_Model_Resource_Product_Collection
 {
+    /**
+     * Init Select
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+        $this->_joinReview();
+        return $this;
+    }
+
     protected function _construct()
     {
         parent::_construct();
@@ -44,7 +55,7 @@ class Mage_Reports_Model_Resource_Review_Product_Collection extends Mage_Catalog
      *
      * @return Mage_Reports_Model_Resource_Review_Product_Collection
      */
-    public function joinReview()
+    protected function _joinReview()
     {
         $helper    = Mage::getResourceHelper('Mage_Core');
 

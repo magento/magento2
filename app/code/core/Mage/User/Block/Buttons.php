@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_User
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,8 +42,10 @@ class Mage_User_Block_Buttons extends Mage_Backend_Block_Template
 
         $this->addChild('saveButton', 'Mage_Backend_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_User_Helper_Data')->__('Save Role'),
-            'onclick'   => 'roleForm.submit();return false;',
-            'class' => 'save'
+            'class' => 'save',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#role-edit-form')
+            )
         ));
 
         $this->addChild('deleteButton', 'Mage_Backend_Block_Widget_Button', array(

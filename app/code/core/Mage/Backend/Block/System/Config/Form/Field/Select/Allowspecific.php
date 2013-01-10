@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,7 +57,7 @@ class Mage_Backend_Block_System_Config_Form_Field_Select_Allowspecific extends V
      */
     public function getHtml()
     {
-        if(!$this->getValue() || 1 != $this->getValue()) {
+        if (!$this->getValue() || 1 != $this->getValue()) {
             $element = $this->getForm()->getElement($this->_getSpecificCountryElementId());
             $element->setDisabled('disabled');
         }

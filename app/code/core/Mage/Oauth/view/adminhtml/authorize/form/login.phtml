@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -37,7 +37,7 @@
         <div class="login-form">
             <?php echo $this->getMessagesBlock()->toHtml() ?>
             <?php if (!$this->getHasException()): ?>
-                <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="loginForm">
+                <form method="post" action="<?php echo $this->getPostActionUrl() ?>" id="login-form">
                     <fieldset>
                         <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
                         <h2><?php echo $this->__('Log in to Admin Panel'); ?></h2>
@@ -55,13 +55,11 @@
                     </fieldset>
                 </form>
                 <script type="text/javascript">
-                //<![CDATA[
-                     var loginForm = new varienForm('loginForm');
-                //]]>
+                     jQuery('#login-form').form().validation();
                 </script>
             <?php endif; ?>
         </div>
-        <p class="legal"><?php echo $this->__('Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.', date('Y')) ?></p>
+        <p class="legal"><?php echo $this->__('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.', date('Y')) ?></p>
         <div class="bottom"></div>
     </div>
 </div>

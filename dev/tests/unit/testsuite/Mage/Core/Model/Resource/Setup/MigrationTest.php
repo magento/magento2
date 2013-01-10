@@ -21,7 +21,7 @@
  * @category    Mage
  * @package     Mage_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,11 +69,6 @@ class Mage_Core_Model_Resource_Setup_MigrationTest extends PHPUnit_Framework_Tes
      */
     protected function _getModelDependencies($tableRowsCount = 0, $tableData = array(), $aliasesMap = array())
     {
-        $autoload = $this->getMock('Magento_Autoload', array('classExists'), array(), '', false);
-        $autoload->expects($this->any())
-            ->method('classExists')
-            ->will($this->returnCallback(array($this, 'classExistCallback')));
-
         $this->_selectMock = $this->getMock('Varien_Db_Select', array(), array(), '', false);
         $this->_selectMock->expects($this->any())
                     ->method('from')
@@ -105,20 +100,9 @@ class Mage_Core_Model_Resource_Setup_MigrationTest extends PHPUnit_Framework_Tes
             'base_dir'          => 'not_used',
             'path_to_map_file'  => 'not_used',
             'connection'        => $adapterMock,
-            'autoload'          => $autoload,
             'core_helper'       => new Mage_Core_Helper_Data(),
             'aliases_map'       => $aliasesMap
         );
-    }
-
-    /**
-     * Callback for Magento_Autoload::classExist
-     *
-     * @return bool
-     */
-    public function classExistCallback()
-    {
-        return true;
     }
 
     /**

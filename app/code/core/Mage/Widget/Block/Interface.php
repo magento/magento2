@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,13 +33,6 @@
  */
 interface Mage_Widget_Block_Interface
 {
-    /**
-     * Produce and return widget's html output
-     *
-     * @return string
-     */
-    public function toHtml();
-
     /**
      * Add data to the widget.
      * Retains previous data in the widget.

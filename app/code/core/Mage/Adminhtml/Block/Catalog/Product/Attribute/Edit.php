@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,15 +68,19 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
                 'save_and_edit_button',
                 array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save and Continue Edit'),
-                    'onclick'   => 'saveAndContinueEdit()',
-                    'class'     => 'save'
+                    'class'     => 'save',
+                    'data_attr'  => array(
+                        'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form'),
+                    ),
                 ),
                 100
             );
         }
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute'));
-        $this->_updateButton('save', 'onclick', 'saveAttribute()');
+        $this->_updateButton('save', 'data_attr', array(
+            'widget-button' => array('event' => 'save', 'related' => '#edit_form')
+        ));
 
         if (!Mage::registry('entity_attribute') || !Mage::registry('entity_attribute')->getIsUserDefined()) {
             $this->_removeButton('delete');

@@ -20,10 +20,9 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 
 /**
  * Redirect controller
@@ -32,7 +31,7 @@
  * @package    Mage_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Core_Controller_Varien_Action_Redirect extends Mage_Core_Controller_Varien_Action_RedirectAbstract
+class Mage_Core_Controller_Varien_Action_Redirect extends Mage_Core_Controller_Varien_ActionAbstract
 {
      /**
      * Dispatch controller action

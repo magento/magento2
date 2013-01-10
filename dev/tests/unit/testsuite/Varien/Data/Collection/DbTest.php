@@ -21,7 +21,7 @@
  * @category    Varien
  * @package     Varien_Data
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,11 +114,11 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('prepareSqlCondition'), array(), '', false);
         $adapter->expects($this->at(0))
             ->method('prepareSqlCondition')
-            ->with('weight', array('in' => array(1, 3)))
+            ->with('`weight`', array('in' => array(1, 3)))
             ->will($this->returnValue('weight in (1, 3)'));
         $adapter->expects($this->at(1))
             ->method('prepareSqlCondition')
-            ->with('name', array('like' => 'M%'))
+            ->with('`name`', array('like' => 'M%'))
             ->will($this->returnValue("name like 'M%'"));
         $this->_collection->setConnection($adapter);
         $select = $this->_collection->getSelect()->from("test");
@@ -136,7 +136,7 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         $adapter->expects($this->at(0))
             ->method('prepareSqlCondition')
             ->with(
-                'is_imported',
+                '`is_imported`',
                 $this->anything()
             )
             ->will($this->returnValue('is_imported = 1'));
@@ -158,7 +158,7 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         );
         $adapter->expects($this->once())
             ->method('prepareSqlCondition')
-            ->with('email', array('like' => 'value?'))
+            ->with('`email`', array('like' => 'value?'))
             ->will($this->returnValue('email LIKE \'%value?%\''));
         $adapter->expects($this->once())
             ->method('select')
@@ -168,6 +168,28 @@ class Varien_Data_Collection_DbTest extends PHPUnit_Framework_TestCase
         $select = $this->_collection->getSelect()->from('test');
         $this->_collection->addFieldToFilter('email', array('like' => 'value?'));
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
+    }
+
+    /**
+     * Test that field is quoted when added to SQL via addFieldToFilter()
+     */
+    public function testAddFieldToFilterFieldIsQuoted()
+    {
+        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
+            array('quoteIdentifier', 'prepareSqlCondition'), array(), '', false);
+        $adapter->expects($this->once())
+            ->method('quoteIdentifier')
+            ->with('email')
+            ->will($this->returnValue('`email`'));
+        $adapter->expects($this->any())
+            ->method('prepareSqlCondition')
+            ->with($this->stringContains('`email`'), $this->anything())
+            ->will($this->returnValue('`email` = "foo@example.com"'));
+        $this->_collection->setConnection($adapter);
+        $select = $this->_collection->getSelect()->from('test');
+
+        $this->_collection->addFieldToFilter('email', array('eq' => 'foo@example.com'));
+        $this->assertEquals('SELECT `test`.* FROM `test` WHERE (`email` = "foo@example.com")', $select->assemble());
     }
 
     /**

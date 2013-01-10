@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -198,12 +198,13 @@ GiftOptionsPopup.prototype = {
     },
 
     onOkButton : function() {
-        var giftOptionsForm = new varienForm('gift_options_configuration_form');
-        giftOptionsForm.canShowError = true;
-        if (!giftOptionsForm.validate()) {
+        var giftOptionsForm = jQuery('#gift_options_configuration_form');
+        if (!giftOptionsForm.validate().valid()) {
             return false;
         }
-        giftOptionsForm.validator.reset();
+        if (jQuery.isFunction(giftOptionsForm[0].reset)) {
+            giftOptionsForm[0].reset();
+        }
         this.closeWindow();
         return true;
     },

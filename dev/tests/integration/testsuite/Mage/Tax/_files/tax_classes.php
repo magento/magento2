@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Tax
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,6 +54,8 @@ $taxRate = array(
 );
 $rate = Mage::getModel('Mage_Tax_Model_Calculation_Rate')->setData($taxRate)->save();
 
+Mage::register('_fixture/Mage_Tax_Model_Calculation_Rate', $rate);
+
 $ruleData = array(
     'code' => 'Test Rule',
     'priority' => '0',
@@ -66,3 +68,7 @@ $ruleData = array(
 $taxRule = Mage::getModel('Mage_Tax_Model_Calculation_Rule')->setData($ruleData)->save();
 
 Mage::register('_fixture/Mage_Tax_Model_Calculation_Rule', $taxRule);
+
+$ruleData['code'] = 'Test Rule Duplicate';
+
+Mage::getModel('Mage_Tax_Model_Calculation_Rule')->setData($ruleData)->save();

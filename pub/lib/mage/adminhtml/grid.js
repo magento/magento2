@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var varienGrid = new Class.create();
@@ -166,7 +166,7 @@ varienGrid.prototype = {
         if(this.useAjax){
             new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
                 loaderArea: this.containerId,
-                parameters: this.reloadParams,
+                parameters: jQuery.param(this.reloadParams),
                 evalScripts: true,
                 onFailure: this._processFailure.bind(this),
                 onComplete: this.initGridAjax.bind(this),

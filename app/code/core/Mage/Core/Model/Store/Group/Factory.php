@@ -20,15 +20,20 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Store Group factory
  */
-class Mage_Core_Model_Store_Group_Factory
+class Mage_Core_Model_Store_Group_Factory implements Magento_ObjectManager_Factory
 {
+    /**
+     * Store group model class name
+     */
+    const CLASS_NAME = 'Mage_Core_Model_Store_Group';
+
     /**
      * Object Manager
      *
@@ -36,17 +41,20 @@ class Mage_Core_Model_Store_Group_Factory
      */
     protected $_objectManager;
 
+    /**
+     * @param Magento_ObjectManager $objectManager
+     */
     public function __construct(Magento_ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
 
     /**
-     * @param array $data
-     * @return Mage_Core_Model_Store_Group
+     * @param array $arguments
+     * @return mixed
      */
-    public function create(array $data = array())
+    public function createFromArray(array $arguments = array())
     {
-        return $this->_objectManager->create('Mage_Core_Model_Store_Group', $data);
+        return $this->_objectManager->get(self::CLASS_NAME, $arguments);
     }
 }

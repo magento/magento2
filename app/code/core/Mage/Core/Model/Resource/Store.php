@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,7 @@ class Mage_Core_Model_Resource_Store extends Mage_Core_Model_Resource_Db_Abstrac
     protected function _afterDelete(Mage_Core_Model_Abstract $model)
     {
         $where = array(
-            'scope = ?'    => 'stores',
+            'scope = ?'    => Mage_Core_Model_Config::SCOPE_STORES,
             'scope_id = ?' => $model->getStoreId()
         );
 

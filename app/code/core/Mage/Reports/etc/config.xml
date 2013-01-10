@@ -21,14 +21,14 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Reports>
-            <version>1.6.0.0.1</version>
+            <version>1.6.0.0.2</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
@@ -59,6 +59,13 @@
         </events>
     </global>
     <adminhtml>
+        <layout>
+            <updates>
+                <reports module="Mage_Reports">
+                    <file>layout.xml</file>
+                </reports>
+            </updates>
+        </layout>
         <translate>
             <modules>
                 <Mage_Reports>

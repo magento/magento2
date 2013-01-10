@@ -11,7 +11,6 @@ Disallow: /lib/
 Disallow: /*.php$
 Disallow: /pkginfo/
 Disallow: /report/
-Disallow: /skin/
 Disallow: /var/
 Disallow: /catalog/
 Disallow: /customer/

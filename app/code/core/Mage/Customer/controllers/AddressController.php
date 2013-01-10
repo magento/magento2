@@ -20,10 +20,9 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 
 /**
  * Customer address controller
@@ -97,68 +96,85 @@ class Mage_Customer_AddressController extends Mage_Core_Controller_Front_Action
         $this->renderLayout();
     }
 
+    /**
+     * Process address form save
+     */
     public function formPostAction()
     {
         if (!$this->_validateFormKey()) {
             return $this->_redirect('*/*/');
         }
-        // Save data
-        if ($this->getRequest()->isPost()) {
-            $customer = $this->_getSession()->getCustomer();
-            /* @var $address Mage_Customer_Model_Address */
-            $address  = Mage::getModel('Mage_Customer_Model_Address');
-            $addressId = $this->getRequest()->getParam('id');
-            if ($addressId) {
-                $existsAddress = $customer->getAddressById($addressId);
-                if ($existsAddress->getId() && $existsAddress->getCustomerId() == $customer->getId()) {
-                    $address->setId($existsAddress->getId());
-                }
-            }
 
-            $errors = array();
-
-            /* @var $addressForm Mage_Customer_Model_Form */
-            $addressForm = Mage::getModel('Mage_Customer_Model_Form');
-            $addressForm->setFormCode('customer_address_edit')
-                ->setEntity($address);
-            $addressData    = $addressForm->extractData($this->getRequest());
-            $addressErrors  = $addressForm->validateData($addressData);
-            if ($addressErrors !== true) {
-                $errors = $addressErrors;
-            }
-
-            try {
-                $addressForm->compactData($addressData);
-                $address->setCustomerId($customer->getId())
-                    ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-                    ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
-
-                $addressErrors = $address->validate();
-                if ($addressErrors !== true) {
-                    $errors = array_merge($errors, $addressErrors);
-                }
-
-                if (count($errors) === 0) {
-                    $address->save();
-                    $this->_getSession()->addSuccess($this->__('The address has been saved.'));
-                    $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure'=>true)));
-                    return;
-                } else {
-                    $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-                    foreach ($errors as $errorMessage) {
-                        $this->_getSession()->addError($errorMessage);
-                    }
-                }
-            } catch (Mage_Core_Exception $e) {
-                $this->_getSession()->setAddressFormData($this->getRequest()->getPost())
-                    ->addException($e, $e->getMessage());
-            } catch (Exception $e) {
-                $this->_getSession()->setAddressFormData($this->getRequest()->getPost())
-                    ->addException($e, $this->__('Cannot save address.'));
-            }
+        if (!$this->getRequest()->isPost()) {
+            $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
+            $this->_redirectError(Mage::getUrl('*/*/edit'));
+            return;
         }
 
-        return $this->_redirectError(Mage::getUrl('*/*/edit', array('id' => $address->getId())));
+        try {
+            $address = $this->_extractAddress();
+            $this->_validateAddress($address);
+            $address->save();
+            $this->_getSession()->addSuccess($this->__('The address has been saved.'));
+            $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure'=>true)));
+            return;
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addException($e, $e->getMessage());
+        } catch (Magento_Validator_Exception $e) {
+            foreach ($e->getMessages() as $messages) {
+                foreach ($messages as $message) {
+                    $this->_getSession()->addError($message);
+                }
+            }
+        } catch (Exception $e) {
+            $this->_getSession()->addException($e, $this->__('Cannot save address.'));
+        }
+
+        $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
+        $this->_redirectError(Mage::getUrl('*/*/edit', array('id' => $address->getId())));
+    }
+
+    /**
+     * Do address validation using validate methods in models
+     *
+     * @param Mage_Customer_Model_Address $address
+     * @throws Magento_Validator_Exception
+     */
+    protected function _validateAddress($address)
+    {
+        $addressErrors = $address->validate();
+        if (is_array($addressErrors) && count($addressErrors) > 0) {
+            throw new Magento_Validator_Exception(array($addressErrors));
+        }
+    }
+
+    /**
+     * Extract address from request
+     *
+     * @return Mage_Customer_Model_Address
+     */
+    protected function _extractAddress()
+    {
+        $customer = $this->_getSession()->getCustomer();
+        /* @var Mage_Customer_Model_Address $address */
+        $address  = Mage::getModel('Mage_Customer_Model_Address');
+        $addressId = $this->getRequest()->getParam('id');
+        if ($addressId) {
+            $existsAddress = $customer->getAddressById($addressId);
+            if ($existsAddress->getId() && $existsAddress->getCustomerId() == $customer->getId()) {
+                $address->load($existsAddress->getId());
+            }
+        }
+        /* @var Mage_Customer_Model_Form $addressForm */
+        $addressForm = Mage::getModel('Mage_Customer_Model_Address_Form');
+        $addressForm->setFormCode('customer_address_edit')
+            ->setEntity($address);
+        $addressData = $addressForm->extractData($this->getRequest());
+        $addressForm->compactData($addressData);
+        $address->setCustomerId($customer->getId())
+            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
+            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+        return $address;
     }
 
     public function deleteAction()

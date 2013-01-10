@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -124,8 +124,7 @@ if (!$storeCode && $websiteCode) {
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-
-            freeMethod.insert(new Element('option', {value:''}).update('None'));
+            freeMethod.insert(new Element('option', {value:''}).update('<?php echo $_coreHelper->escapeHtml(Mage::helper('Mage_Shipping_Helper_Data')->__('None')); ?>'));
 
             var code, option;
             for (code in originShipment) {

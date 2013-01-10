@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -249,7 +249,7 @@ class Mage_Core_Model_Url extends Varien_Object
     public function getConfigData($key, $prefix = null)
     {
         if (is_null($prefix)) {
-            $prefix = 'web/' . ($this->getSecure() ? 'secure' : 'unsecure').'/';
+            $prefix = 'web/' . ($this->isSecure() ? 'secure' : 'unsecure').'/';
         }
         $path = $prefix . $key;
 
@@ -305,7 +305,7 @@ class Mage_Core_Model_Url extends Varien_Object
      *
      * @return bool
      */
-    public function getSecure()
+    public function isSecure()
     {
         if ($this->hasData('secure_is_forced')) {
             return (bool)$this->getData('secure');
@@ -364,6 +364,7 @@ class Mage_Core_Model_Url extends Varien_Object
      */
     public function getBaseUrl($params = array())
     {
+        $currentType = $this->getType();
         if (isset($params['_store'])) {
             $this->setStore($params['_store']);
         }
@@ -382,7 +383,9 @@ class Mage_Core_Model_Url extends Varien_Object
             $this->setType(Mage_Core_Model_Store::URL_TYPE_DIRECT_LINK);
         }
 
-        return $this->getStore()->getBaseUrl($this->getType(), $this->getSecure());
+        $result =  $this->getStore()->getBaseUrl($this->getType(), $this->isSecure());
+        $this->setType($currentType);
+        return $result;
     }
 
     /**
@@ -470,7 +473,7 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve route path
      *
-     * @param array $routParams
+     * @param array $routeParams
      * @return string
      */
     public function getRoutePath($routeParams = array())
@@ -538,11 +541,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve route name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getRouteName()
+    public function getRouteName($default = null)
     {
-        return $this->_getData('route_name');
+        return $this->_getData('route_name') ? $this->_getData('route_name') : $default;
     }
 
     /**
@@ -565,11 +569,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve controller name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getControllerName()
+    public function getControllerName($default = null)
     {
-        return $this->_getData('controller_name');
+        return $this->_getData('controller_name') ? $this->_getData('controller_name') : null;
     }
 
     /**
@@ -591,11 +596,12 @@ class Mage_Core_Model_Url extends Varien_Object
     /**
      * Retrieve action name
      *
+     * @param mixed $default
      * @return string|null
      */
-    public function getActionName()
+    public function getActionName($default = null)
     {
-        return $this->_getData('action_name');
+        return $this->_getData('action_name') ? $this->_getData('action_name') : $default;
     }
 
     /**
@@ -722,11 +728,14 @@ class Mage_Core_Model_Url extends Varien_Object
      *
      * @param string $routePath
      * @param array $routeParams
-     *
      * @return string
      */
     public function getRouteUrl($routePath = null, $routeParams = null)
     {
+        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+            return $routePath;
+        }
+
         $this->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
@@ -945,6 +954,10 @@ class Mage_Core_Model_Url extends Varien_Object
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
+        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+            return $routePath;
+        }
+
         $escapeQuery = false;
 
         /**
@@ -1038,7 +1051,7 @@ class Mage_Core_Model_Url extends Varien_Object
 
         $sessionId = $session->getSessionIdForHost($url);
         if (Mage::app()->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->getSecure() ? 'S' : 'U'); // Secure/Unsecure
+            $this->setQueryParam('___SID', $this->isSecure() ? 'S' : 'U'); // Secure/Unsecure
         } else if ($sessionId) {
             $this->setQueryParam($session->getSessionIdQueryParam(), $sessionId);
         }
@@ -1176,7 +1189,7 @@ class Mage_Core_Model_Url extends Varien_Object
     public function isOwnOriginUrl()
     {
         $storeDomains = array();
-        $referer = parse_url(Mage::app()->getFrontController()->getRequest()->getServer('HTTP_REFERER'), PHP_URL_HOST);
+        $referer = parse_url(Mage::app()->getRequest()->getServer('HTTP_REFERER'), PHP_URL_HOST);
         foreach (Mage::app()->getStores() as $store) {
             $storeDomains[] = parse_url($store->getBaseUrl(), PHP_URL_HOST);
             $storeDomains[] = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, true), PHP_URL_HOST);

@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 function setLocation(url){
@@ -323,7 +323,9 @@ var toolbarToggle = {
 
         // Create copy of header, that will serve as floating toolbar docked to top of window
         this.headerCopy = $(document.createElement('div'));
-        this.headerCopy.appendChild(this.header.cloneNode(true));
+        var clone = this.header.clone(true);
+        clone.select('script').invoke('remove');
+        this.headerCopy.appendChild(clone);
         document.body.insertBefore(this.headerCopy, document.body.lastChild)
         this.headerCopy.addClassName('content-header-floating');
 

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,13 +46,25 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit extends Mage_Adminhtml_Block_Widge
         $this->_addButton('save_apply', array(
             'class'   => 'save',
             'label'   => Mage::helper('Mage_CatalogRule_Helper_Data')->__('Save and Apply'),
-            'onclick' => "$('rule_auto_apply').value=1; editForm.submit()",
+            'data_attr' => array(
+                'widget-button' => array(
+                    'event' => 'save',
+                    'related' => '#edit_form',
+                    'eventData' => array(
+                        'action' => array(
+                            'args' => array('auto_apply' => 1),
+                        ),
+                    )
+                ),
+            ),
         ));
 
         $this->_addButton('save_and_continue_edit', array(
             'class'   => 'save',
             'label'   => Mage::helper('Mage_CatalogRule_Helper_Data')->__('Save and Continue Edit'),
-            'onclick' => 'editForm.submit($(\'edit_form\').action + \'back/edit/\')',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form'),
+            ),
         ), 10);
     }
 

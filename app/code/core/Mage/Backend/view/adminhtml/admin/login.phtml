@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -34,26 +34,28 @@
     <link rel="icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Mage_Page::favicon.ico') ?>" type="image/x-icon" />
 
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-1.7.1.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-ui-1.8.18.custom.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-ui.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/loader.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/validation.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/backend/validation.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/backend/form.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate.js') ?>"></script>
 
     <script type="text/javascript" src="<?php echo $this->getViewFileUrl('prototype/prototype.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('prototype/validation.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/adminhtml/form.js') ?>"></script>
     <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
 
     <!--[if IE]> <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('iestyles.css') ?>" type="text/css" media="all" /> <![endif]-->
     <!--[if lt IE 7]> <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('below_ie7.css') ?>" type="text/css" media="all" /> <![endif]-->
     <!--[if IE 7]> <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('ie7.css') ?>" type="text/css" media="all" /> <![endif]-->
 </head>
-<body id="page-login" onload="document.forms.loginForm.username.focus();">
+<body id="page-login" onload="document.forms['login-form'].username.focus();">
 <div class="login-container">
     <div class="login-box">
-        <form method="post" action="" id="loginForm">
+        <form method="post" action="" id="login-form">
             <div class="login-form">
                 <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
                 <h2><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Log in to Admin Panel') ?></h2>
@@ -70,11 +72,11 @@
                     <?php echo $this->getChildHtml('form.buttons'); ?>
                 </div>
             </div>
-            <p class="legal"><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Magento is a trademark of Magento Inc. Copyright &copy; %s Magento Inc.', date('Y')) ?></p>
+            <p class="legal"><?php echo Mage::helper('Mage_Backend_Helper_Data')->__('Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; %s X.commerce, Inc.', date('Y')) ?></p>
         </form>
         <div class="bottom"></div>
         <script type="text/javascript">
-            var loginForm = new varienForm('loginForm');
+            jQuery('#login-form').form().validation();
         </script>
     </div>
 </div>

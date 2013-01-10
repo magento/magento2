@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,12 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         return $this->_destElementId;
     }
 
+    /**
+     * Set destination element id
+     *
+     * @param string $elementId
+     * @return Mage_Backend_Block_Widget_Tabs
+     */
     public function setDestElementId($elementId)
     {
         $this->_destElementId = $elementId;
@@ -97,32 +103,14 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
     {
         if (is_array($tab)) {
             $this->_tabs[$tabId] = new Varien_Object($tab);
-        }
-        elseif ($tab instanceof Varien_Object) {
+        } elseif ($tab instanceof Varien_Object) {
             $this->_tabs[$tabId] = $tab;
             if (!$this->_tabs[$tabId]->hasTabId()) {
                 $this->_tabs[$tabId]->setTabId($tabId);
             }
-        }
-        elseif (is_string($tab)) {
-            if (strpos($tab, '_Block_')) {
-                $this->_tabs[$tabId] = $this->getLayout()->createBlock(
-                    $tab,
-                    $this->getNameInLayout() . '_tab_' . $tabId
-                );
-            }
-            elseif ($this->getChildBlock($tab)) {
-                $this->_tabs[$tabId] = $this->getChildBlock($tab);
-            }
-            else {
-                $this->_tabs[$tabId] = null;
-            }
-
-            if (!($this->_tabs[$tabId] instanceof Mage_Backend_Block_Widget_Tab_Interface)) {
-                throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
-            }
-        }
-        else {
+        } elseif (is_string($tab)) {
+            $this->_addTabByName($tab, $tabId);
+        } else {
             throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
         }
 
@@ -137,10 +125,39 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         $this->_tabs[$tabId]->setId($tabId);
         $this->_tabs[$tabId]->setTabId($tabId);
 
-        if (is_null($this->_activeTab)) $this->_activeTab = $tabId;
-        if (true === $this->_tabs[$tabId]->getActive()) $this->setActiveTab($tabId);
+        if (is_null($this->_activeTab)) {
+            $this->_activeTab = $tabId;
+        }
+        if (true === $this->_tabs[$tabId]->getActive()) {
+            $this->setActiveTab($tabId);
+        }
 
         return $this;
+    }
+
+    /**
+     * Add tab by tab block name
+     *
+     * @param string $tab
+     * @param string $tabId
+     * @throws Exception
+     */
+    protected function _addTabByName($tab, $tabId)
+    {
+        if (strpos($tab, '_Block_')) {
+            $this->_tabs[$tabId] = $this->getLayout()->createBlock(
+                $tab,
+                $this->getNameInLayout() . '_tab_' . $tabId
+            );
+        } elseif ($this->getChildBlock($tab)) {
+            $this->_tabs[$tabId] = $this->getChildBlock($tab);
+        } else {
+            $this->_tabs[$tabId] = null;
+        }
+
+        if (!($this->_tabs[$tabId] instanceof Mage_Backend_Block_Widget_Tab_Interface)) {
+            throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
+        }
     }
 
     public function getActiveTabId()
@@ -196,13 +213,13 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         }
 
         $_new = array();
-        foreach( $this->_tabs  as $key => $tab ) {
-            foreach( $this->_tabs  as $k => $t ) {
-                if( $t->getAfter() == $key ) {
+        foreach ($this->_tabs  as $key => $tab ) {
+            foreach ($this->_tabs  as $k => $t ) {
+                if ( $t->getAfter() == $key ) {
                     $_new[$key] = $tab;
                     $_new[$k] = $t;
                 } else {
-                    if( !$tab->getAfter() || !in_array($tab->getAfter(), array_keys($this->_tabs)) ) {
+                    if ( !$tab->getAfter() || !in_array($tab->getAfter(), array_keys($this->_tabs)) ) {
                         $_new[$key] = $tab;
                     }
                 }
@@ -223,8 +240,10 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
 
     public function getTabsIds()
     {
-        if (empty($this->_tabs))
+        if (empty($this->_tabs)) {
             return array();
+        }
+
         return array_keys($this->_tabs);
     }
 

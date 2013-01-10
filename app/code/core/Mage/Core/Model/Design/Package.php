@@ -20,21 +20,31 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 class Mage_Core_Model_Design_Package
 {
-    const DEFAULT_AREA    = 'frontend';
-    const DEFAULT_PACKAGE = 'default';
-    const DEFAULT_THEME   = 'demo';
+    /**
+     * Default design area
+     */
+    const DEFAULT_AREA = 'frontend';
 
+    /**
+     * Scope separator
+     */
     const SCOPE_SEPARATOR = '::';
 
+    /**#@+
+     * Public directories prefix group
+     */
     const PUBLIC_MERGE_DIR  = '_merged';
     const PUBLIC_MODULE_DIR = '_module';
+    const PUBLIC_VIEW_DIR   = '_view';
+    const PUBLIC_THEME_DIR  = '_theme';
+    /**#@-*/
 
     /**#@+
      * Extensions group for static files
@@ -52,19 +62,16 @@ class Mage_Core_Model_Design_Package
     /**#@-*/
 
     /**
-     * The name of the default theme in the context of a package
-     */
-    const DEFAULT_THEME_NAME = 'default';
-
-    /**
      * Published file cache storage tag
      */
     const PUBLIC_CACHE_TAG = 'design_public';
 
-    /**
+    /**#@+
      * Common node path to theme design configuration
      */
-    const XML_PATH_THEME = 'design/theme/full_name';
+    const XML_PATH_THEME    = 'design/theme/full_name';
+    const XML_PATH_THEME_ID = 'design/theme/theme_id';
+    /**#@-*/
 
     /**
      * Path to configuration node for file duplication
@@ -88,16 +95,9 @@ class Mage_Core_Model_Design_Package
     protected $_area;
 
     /**
-     * Package name
-     *
-     * @var string
-     */
-    protected $_name;
-
-    /**
      * Package theme
      *
-     * @var string
+     * @var Mage_Core_Model_Theme
      */
     protected $_theme;
 
@@ -110,12 +110,10 @@ class Mage_Core_Model_Design_Package
 
     /**
      * Directory of the css file
-     * Using only to transmit additional parametr in callback functions
+     * Using only to transmit additional parameter in callback functions
      * @var string
      */
     protected $_callbackFileDir;
-
-    protected $_config = null;
 
     /**
      * List of theme configuration objects per area
@@ -132,7 +130,7 @@ class Mage_Core_Model_Design_Package
     protected $_viewConfigs = array();
 
     /**
-     * Published file cache storages
+     * Published file cache storage
      *
      * @var array
      */
@@ -147,15 +145,21 @@ class Mage_Core_Model_Design_Package
     protected $_fallback = array();
 
     /**
+     * Array of theme model used for fallback mechanism
+     *
+     * @var array
+     */
+    protected $_themes = array();
+
+    /**
      * Set package area
      *
-     * @param  string $area
+     * @param string $area
      * @return Mage_Core_Model_Design_Package
      */
     public function setArea($area)
     {
         $this->_area = $area;
-        $this->_name = null;
         $this->_theme = null;
         return $this;
     }
@@ -174,93 +178,114 @@ class Mage_Core_Model_Design_Package
     }
 
     /**
-     * Retrieve package name
+     * Load design theme
      *
-     * @return string
+     * @param int|string $themeId
+     * @param string|null $area
+     * @return Mage_Core_Model_Theme
      */
-    public function getPackageName()
+    protected function _getLoadDesignTheme($themeId, $area = self::DEFAULT_AREA)
     {
-        if (!$this->_name) {
-            $this->_setDefaultDesignTheme();
-        }
-        return $this->_name;
-    }
-
-    /**
-     * Package theme getter
-     *
-     * @return string
-     */
-    public function getTheme()
-    {
-        if (!$this->_theme) {
-            $this->_setDefaultDesignTheme();
+        if (isset($this->_themes[$themeId])) {
+            return $this->_themes[$themeId];
         }
 
-        return $this->_theme;
+        if (is_numeric($themeId)) {
+            $themeModel = clone $this->getDesignTheme();
+            $themeModel->load($themeId);
+        } else {
+            /** @var $collection Mage_Core_Model_Resource_Theme_Collection */
+            $collection = $this->getDesignTheme()->getCollection();
+            $themeModel = $collection->getThemeByFullPath($area . '/' . $themeId);
+        }
+        $this->_themes[$themeId] = $themeModel;
+
+        return $themeModel;
     }
 
     /**
-     * Set default theme and package which were loaded from configuration file
+     * Set theme path
      *
-     * @return Mage_Core_Model_Design_Package
-     */
-    protected function _setDefaultDesignTheme()
-    {
-        list($this->_name, $this->_theme) = $this->_getDefaultDesignTheme($this->getArea());
-        return $this;
-    }
-
-    /**
-     * Get default theme and package which were loaded from configuration file
-     *
+     * @param Mage_Core_Model_Theme|int|string $theme
      * @param string $area
      * @return Mage_Core_Model_Design_Package
      */
-    protected function _getDefaultDesignTheme($area)
+    public function setDesignTheme($theme, $area = null)
     {
-        $themeParts = explode('/', (string)Mage::getConfig()->getNode("{$area}/design/theme/full_name"));
-        if (2 !== count($themeParts)) {
-            $themeParts = array(self::DEFAULT_PACKAGE, self::DEFAULT_THEME);
-        }
-        return $themeParts;
-    }
-
-    /**
-     * Set package and theme for current area
-     *
-     * $themePath name must contain package and theme names separated by "/"
-     *
-     * @param string $themePath
-     * @param string $area
-     * @return Mage_Core_Model_Design_Package
-     */
-    public function setDesignTheme($themePath, $area = null)
-    {
-        $parts = explode('/', $themePath);
-        if (2 !== count($parts)) {
-            Mage::throwException(
-                Mage::helper('Mage_Core_Helper_Data')->__('Invalid fully qualified design name: "%s".', $themePath)
-            );
-        }
-        list($package, $theme) = $parts;
         if ($area) {
             $this->setArea($area);
         }
 
-        $this->_name = $package;
-        $this->_theme = $theme;
+        if ($theme instanceof Mage_Core_Model_Theme) {
+            $this->_theme = $theme;
+        } else {
+            $this->_theme = $this->_getLoadDesignTheme($theme, $this->getArea());
+        }
+
         return $this;
     }
 
     /**
-     * Design theme full name getter
+     * Get default theme which declared in configuration
      *
+     * @param string $area
+     * @param array $params
+     * @return string|int
+     */
+    public function getConfigurationDesignTheme($area = null, $params = array())
+    {
+        if (!$area) {
+            $area = $this->getArea();
+        }
+        $useId = isset($params['useId']) ? $params['useId'] : true;
+        $store = isset($params['store']) ? $params['store'] : null;
+
+        $designTheme = (string)Mage::getStoreConfig($this->getConfigPathByArea($area, $useId), $store);
+        if (empty($designTheme)) {
+            $designTheme = (string)Mage::getConfig()->getNode($this->getConfigPathByArea($area, $useId));
+        }
+        return $designTheme;
+    }
+
+
+    /**
+     * Get configuration xml path to current theme for area
+     *
+     * @param string $area
+     * @param bool $useId
      * @return string
+     */
+    public function getConfigPathByArea($area, $useId = true)
+    {
+        $xmlPath = $useId ? self::XML_PATH_THEME_ID : self::XML_PATH_THEME;
+        if ($area !== self::DEFAULT_AREA) {
+            $xmlPath = $area . '/' . $xmlPath;
+        }
+        return $xmlPath;
+    }
+
+    /**
+     * Set default design theme
+     *
+     * @return Mage_Core_Model_Design_Package
+     */
+    public function setDefaultDesignTheme()
+    {
+        $this->setDesignTheme($this->getConfigurationDesignTheme());
+        return $this;
+    }
+
+    /**
+     * Design theme model getter
+     *
+     * @return Mage_Core_Model_Theme
      */
     public function getDesignTheme()
     {
-        return $this->getPackageName() . '/' . $this->getTheme();
+        if ($this->_theme === null) {
+            $this->_theme = Mage::getModel('Mage_Core_Model_Theme');
+        }
+        return $this->_theme;
     }
 
     /**
@@ -271,20 +296,22 @@ class Mage_Core_Model_Design_Package
      */
     protected function _updateParamDefaults(array &$params)
     {
-        if (!empty($params['area']) && $params['area'] !== $this->getArea()
-            && (empty($params['package']) || !array_key_exists('theme', $params))
-        ) {
-            list($params['package'], $params['theme']) = $this->_getDefaultDesignTheme($params['area']);
-        } else {
-            if (empty($params['area'])) {
-                $params['area'] = $this->getArea();
-            }
-            if (empty($params['package'])) {
-                $params['package'] = $this->getPackageName();
-            }
-            if (!array_key_exists('theme', $params)) {
-                $params['theme'] = $this->getTheme();
-            }
+        if (empty($params['area'])) {
+            $params['area'] = $this->getArea();
+        }
+
+        if (!empty($params['themeId'])) {
+            $params['themeModel'] = $this->_getLoadDesignTheme($params['themeId']);
+        } elseif (!empty($params['package']) && isset($params['theme'])) {
+            $themePath = $params['package'] . '/' . $params['theme'];
+            $params['themeModel'] = $this->_getLoadDesignTheme($themePath, $params['area']);
+        } elseif (empty($params['themeModel']) && $params['area'] !== $this->getArea()) {
+            $params['themeModel'] = $this->_getLoadDesignTheme(
+                $this->getConfigurationDesignTheme($params['area']),
+                $params['area']
+            );
+        } elseif (empty($params['themeModel'])) {
+            $params['themeModel'] = $this->getDesignTheme();
         }
 
         if (!array_key_exists('module', $params)) {
@@ -369,7 +396,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _getFallback($params)
     {
-        $cacheKey = "{$params['area']}|{$params['package']}|{$params['theme']}|{$params['locale']}";
+        $cacheKey = "{$params['area']}|{$params['themeModel']->getCacheKey()}|{$params['locale']}";
         if (!isset($this->_fallback[$cacheKey])) {
             $params['canSaveMap'] = (bool) (string) Mage::app()->getConfig()
                 ->getNode('global/dev/design_fallback/allow_map_update');
@@ -395,72 +422,11 @@ class Mage_Core_Model_Design_Package
     }
 
     /**
-     * Design packages list getter
-     *
-     * @return array
-     */
-    public function getPackageList()
-    {
-        $directory = Mage::getBaseDir('design') . DS . 'frontend';
-        return $this->_listDirectories($directory);
-    }
-
-    /**
-     * Retrieve the list of themes available in the system.
-     * Results are grouped by packages themes belong to, if the optional 'package' argument is omitted.
-     *
-     * @param string|null $package
-     * @return array
-     */
-    public function getThemeList($package = null)
-    {
-        $result = array();
-
-        if (is_null($package)){
-            foreach ($this->getPackageList() as $package){
-                $result[$package] = $this->getThemeList($package);
-            }
-        } else {
-            $directory = Mage::getBaseDir('design') . DS . 'frontend' . DS . $package;
-            $result = $this->_listDirectories($directory);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Directories lister utility method
-     *
-     * @param string $path
-     * @param string|false $fullPath
-     * @return array
-     */
-    private function _listDirectories($path, $fullPath = false)
-    {
-        $result = array();
-        $dir = opendir($path);
-        if ($dir) {
-            while ($entry = readdir($dir)) {
-                if (substr($entry, 0, 1) == '.' || !is_dir($path . DS . $entry)){
-                    continue;
-                }
-                if ($fullPath) {
-                    $entry = $path . DS . $entry;
-                }
-                $result[] = $entry;
-            }
-            unset($entry);
-            closedir($dir);
-        }
-
-        return $result;
-    }
-
-    /**
      * Return package name based on design exception rules
      *
      * @param array $rules - design exception rules
      * @param string $regexpsConfigPath
+     * @return bool|string
      */
     public static function getPackageByUserAgent(array $rules, $regexpsConfigPath = 'path_mock')
     {
@@ -485,7 +451,7 @@ class Mage_Core_Model_Design_Package
     /**
      * Remove all merged js/css files
      *
-     * @return  bool
+     * @return bool
      */
     public function cleanMergedJsCss()
     {
@@ -532,16 +498,16 @@ class Mage_Core_Model_Design_Package
     protected function _getPublicFileUrl($file, $isSecure = null)
     {
         $publicDirUrlTypes = array(
-            Mage_Core_Model_Store::URL_TYPE_THEME  => Mage::getBaseDir('media') . DIRECTORY_SEPARATOR . 'theme',
+            Mage_Core_Model_Store::URL_TYPE_THEME  => Mage::getBaseDir('media') . DS . 'theme',
             Mage_Core_Model_Store::URL_TYPE_JS    => Mage::getBaseDir('js'),
         );
         foreach ($publicDirUrlTypes as $publicUrlType => $publicDir) {
-            $publicDir .= DIRECTORY_SEPARATOR;
+            $publicDir .= DS;
             if (strpos($file, $publicDir) !== 0) {
                 continue;
             }
             $url = str_replace($publicDir, '', $file);
-            $url = str_replace(DIRECTORY_SEPARATOR, '/' , $url);
+            $url = str_replace(DS, '/' , $url);
             $url = Mage::getBaseUrl($publicUrlType, $isSecure) . $url;
             return $url;
         }
@@ -618,65 +584,69 @@ class Mage_Core_Model_Design_Package
     protected function _publishViewFile($themeFile, $params)
     {
         $themeFile = $this->_extractScope($themeFile, $params);
-        $file = $this->getViewFile($themeFile, $params);
+        $sourcePath = $this->getViewFile($themeFile, $params);
 
-        $extension = $this->_getExtension($themeFile);
-        if (!Mage::getIsDeveloperMode() && !empty($extension)
-            && in_array($extension, array(self::CONTENT_TYPE_JS, self::CONTENT_TYPE_CSS))
-        ) {
-            $minifiedPath = str_replace('.' . $extension, '.min.' . $extension, $file);
-            if (file_exists($minifiedPath)) {
-                $file = $minifiedPath;
-                $themeFile = str_replace('.' . $extension, '.min.' . $extension, $themeFile);
-            }
+        $minifiedSourcePath = $this->_minifiedPathForStaticFiles($sourcePath);
+        if ($minifiedSourcePath && !Mage::getIsDeveloperMode() && file_exists($minifiedSourcePath)) {
+            $sourcePath = $minifiedSourcePath;
+            $themeFile = $this->_minifiedPathForStaticFiles($themeFile);
         }
 
-        if (!file_exists($file)) {
-            throw new Magento_Exception("Unable to locate theme file '{$file}'.");
+        if (!file_exists($sourcePath)) {
+            throw new Magento_Exception("Unable to locate theme file '{$sourcePath}'.");
+        }
+        if (!$this->_needToProcessFile($sourcePath)) {
+            return $sourcePath;
         }
 
-        if (!$this->_needToProcessFile($file)) {
-            return $file;
-        }
-
-        $isCssFile = $this->_isCssFile($themeFile);
-        $isDuplicationAllowed = (string)Mage::getConfig()->getNode(self::XML_PATH_ALLOW_DUPLICATION);
-        if ($isDuplicationAllowed || $isCssFile) {
-            $publicFile = $this->_buildPublicViewRedundantFilename($themeFile, $params);
+        $allowPublication = (string)Mage::getConfig()->getNode(self::XML_PATH_ALLOW_DUPLICATION);
+        if ($allowPublication || $this->_getExtension($themeFile) == self::CONTENT_TYPE_CSS) {
+            $targetPath = $this->_buildPublicViewRedundantFilename($themeFile, $params);
         } else {
-            $publicFile = $this->_buildPublicViewSufficientFilename($file, $params);
-            $this->_setPublicFileIntoCache($themeFile, $params, $publicFile);
+            $targetPath = $this->_buildPublicViewSufficientFilename($sourcePath, $params);
+            $this->_setPublicFileIntoCache($themeFile, $params, $targetPath);
         }
+        $targetPath = $this->_buildPublicViewFilename($targetPath);
 
         /* Validate whether file needs to be published */
-        $fileMTime = filemtime($file);
-        if (!file_exists($publicFile) || $fileMTime != filemtime($publicFile)) {
-            $publicDir = dirname($publicFile);
+        if ($this->_getExtension($themeFile) == self::CONTENT_TYPE_CSS) {
+            $cssContent = $this->_getPublicCssContent($sourcePath, dirname($targetPath), $themeFile, $params);
+        }
+
+        $fileMTime = filemtime($sourcePath);
+        if (!file_exists($targetPath) || $fileMTime != filemtime($targetPath)) {
+            $publicDir = dirname($targetPath);
             if (!is_dir($publicDir)) {
                 mkdir($publicDir, 0777, true);
             }
 
-            /* Process relative urls for CSS files */
-            if ($isCssFile) {
-                $content = $this->_getPublicCssContent($file, dirname($publicFile), $themeFile, $params);
-                file_put_contents($publicFile, $content);
-            } else {
-                if (is_file($file)) {
-                    copy($file, $publicFile);
-                } elseif (!is_dir($publicFile)) {
-                    mkdir($publicFile, 0777, true);
-                }
+            if (isset($cssContent)) {
+                file_put_contents($targetPath, $cssContent);
+                touch($targetPath, $fileMTime);
+            } elseif (is_file($sourcePath)) {
+                copy($sourcePath, $targetPath);
+                touch($targetPath, $fileMTime);
+            } elseif (!is_dir($targetPath)) {
+                mkdir($targetPath, 0777, true);
             }
-            if (is_file($publicFile)) {
-                touch($publicFile, $fileMTime);
-            }
-        } elseif ($isCssFile) {
-            // Trigger related theme files publication, if CSS file itself has not been changed
-            $this->_getPublicCssContent($file, dirname($publicFile), $themeFile, $params);
         }
 
-        $this->_getFallback($params)->notifyViewFilePublished($publicFile, $themeFile, $params['module']);
-        return $publicFile;
+        $this->_getFallback($params)->notifyViewFilePublished($targetPath, $themeFile, $params['module']);
+        return $targetPath;
+    }
+
+    /**
+     * Get minified filename for static files
+     *
+     * @param string $filePath
+     * @return string|null
+     */
+    protected function _minifiedPathForStaticFiles($filePath)
+    {
+        $extension = $this->_getExtension($filePath);
+        return in_array($extension, array(self::CONTENT_TYPE_JS, self::CONTENT_TYPE_CSS))
+            ? str_replace('.' . $extension, '.min.' . $extension, $filePath)
+            : null;
     }
 
     /**
@@ -689,7 +659,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _needToProcessFile($filePath)
     {
-        $jsPath = Mage::getBaseDir('js') . DIRECTORY_SEPARATOR;
+        $jsPath = Mage::getBaseDir('js') . DS;
         if (strncmp($filePath, $jsPath, strlen($jsPath)) === 0) {
             return false;
         }
@@ -699,23 +669,12 @@ class Mage_Core_Model_Design_Package
             return false;
         }
 
-        $themePath = $this->getPublicDir() . DIRECTORY_SEPARATOR;
+        $themePath = $this->getPublicDir() . DS;
         if (strncmp($filePath, $themePath, strlen($themePath)) !== 0) {
             return true;
         }
 
-        return $this->_isDeveloperMode() && $this->_isCssFile($filePath);
-    }
-
-    /**
-     * Check whether $file is a CSS-file
-     *
-     * @param string $filePath
-     * @return bool
-     */
-    protected function _isCssFile($filePath)
-    {
-        return $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
+        return $this->_isDeveloperMode() && $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
     }
 
     /**
@@ -738,7 +697,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _buildPublicViewFilename($file)
     {
-        return $this->getPublicDir() . DIRECTORY_SEPARATOR . $file;
+        return $this->getPublicDir() . DS . $file;
     }
 
     /**
@@ -748,7 +707,7 @@ class Mage_Core_Model_Design_Package
      */
     public function getPublicDir()
     {
-        return Mage::getBaseDir('media')  . DIRECTORY_SEPARATOR . 'theme';
+        return Mage::getBaseDir('media') . DS . 'theme';
     }
 
     /**
@@ -760,14 +719,17 @@ class Mage_Core_Model_Design_Package
      */
     protected function _buildPublicViewRedundantFilename($file, array $params)
     {
-        $publicFile = $params['area']
-            . DIRECTORY_SEPARATOR . $params['package']
-            . DIRECTORY_SEPARATOR . $params['theme']
-            . DIRECTORY_SEPARATOR . $params['locale']
-            . ($params['module'] ? DIRECTORY_SEPARATOR . $params['module'] : '')
-            . DIRECTORY_SEPARATOR . $file
-        ;
-        $publicFile = $this->_buildPublicViewFilename($publicFile);
+        if ($params['themeModel']->getThemePath()) {
+            $designPath = str_replace('/', DS, $params['themeModel']->getThemePath());
+        } elseif($params['themeModel']->getId()) {
+            $designPath = self::PUBLIC_THEME_DIR . $params['themeModel']->getId();
+        } else {
+            $designPath = self::PUBLIC_VIEW_DIR;
+        }
+
+        $publicFile = $params['area'] . DS . $designPath . DS . $params['locale'] .
+            ($params['module'] ? DS . $params['module'] : '') . DS . $file;
+
         return $publicFile;
     }
 
@@ -780,18 +742,17 @@ class Mage_Core_Model_Design_Package
      */
     protected function _buildPublicViewSufficientFilename($filename, array $params)
     {
-        $designDir = Mage::getBaseDir('design') . DIRECTORY_SEPARATOR;
+        $designDir = Mage::getBaseDir('design') . DS;
         if (0 === strpos($filename, $designDir)) {
             // theme file
             $publicFile = substr($filename, strlen($designDir));
         } else {
             // modular file
             $module = $params['module'];
-            $moduleDir = Mage::getModuleDir('theme', $module) . DIRECTORY_SEPARATOR;
+            $moduleDir = Mage::getModuleDir('theme', $module) . DS;
             $publicFile = substr($filename, strlen($moduleDir));
-            $publicFile = self::PUBLIC_MODULE_DIR . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . $publicFile;
+            $publicFile = self::PUBLIC_MODULE_DIR . DS . $module . DS . $publicFile;
         }
-        $publicFile = $this->_buildPublicViewFilename($publicFile);
         return $publicFile;
     }
 
@@ -853,8 +814,8 @@ class Mage_Core_Model_Design_Package
             /* Check if module file overridden on theme level based on _module property and file path */
             if ($params['module'] && strpos($parentFilePath, Mage::getBaseDir('design')) === 0) {
                 /* Add module directory to relative URL for canonization */
-                $relativeThemeFile = dirname($params['module'] . DIRECTORY_SEPARATOR . $parentFileName)
-                    . DIRECTORY_SEPARATOR . $fileUrl;
+                $relativeThemeFile = dirname($params['module'] . DS . $parentFileName)
+                    . DS . $fileUrl;
                 $relativeThemeFile   = $this->_canonize($relativeThemeFile);
                 if (strpos($relativeThemeFile, $params['module']) === 0) {
                     $relativeThemeFile = str_replace($params['module'], '', $relativeThemeFile);
@@ -862,7 +823,7 @@ class Mage_Core_Model_Design_Package
                     $params['module'] = false;
                 }
             } else {
-                $relativeThemeFile = $this->_canonize(dirname($parentFileName) . DIRECTORY_SEPARATOR . $fileUrl);
+                $relativeThemeFile = $this->_canonize(dirname($parentFileName) . DS . $fileUrl);
             }
         }
         return $this->_publishViewFile($relativeThemeFile, $params);
@@ -876,8 +837,8 @@ class Mage_Core_Model_Design_Package
      *
      * @param string $filename
      * @param bool $isRelative flag that identify that filename is relative
+     * @return string
      * @throws Magento_Exception if file can't be canonized
-     * @return string|false
      */
     protected function _canonize($filename, $isRelative = false)
     {
@@ -911,8 +872,8 @@ class Mage_Core_Model_Design_Package
      *
      * @param array $files list of names relative to the same folder
      * @param string $contentType
-     * @throws Magento_Exception if not existing file requested for merge
      * @return string
+     * @throws Magento_Exception if not existing file requested for merge
      */
     protected function _mergeFiles($files, $contentType)
     {
@@ -926,7 +887,7 @@ class Mage_Core_Model_Design_Package
             $filesToMerge[$file] = $this->_publishViewFile($file, $params);
             $mergedFile[] = str_replace('\\', '/', str_replace(array($jsDir, $publicDir), '', $filesToMerge[$file]));
         }
-        $mergedFile = self::PUBLIC_MERGE_DIR . DIRECTORY_SEPARATOR . md5(implode('|', $mergedFile)) . ".{$contentType}";
+        $mergedFile = self::PUBLIC_MERGE_DIR . DS . md5(implode('|', $mergedFile)) . ".{$contentType}";
         $mergedFile = $this->_buildPublicViewFilename($mergedFile);
         $mergedMTimeFile  = $mergedFile . '.dat';
         $filesMTimeData = '';
@@ -998,10 +959,10 @@ class Mage_Core_Model_Design_Package
      *  pub/theme/frontend/default/default/default/style.css -> img/empty.gif
      *  pub/theme/_merged/hash.css -> ../frontend/default/default/default/img/empty.gif
      *
-     * @throws Magento_Exception
      * @param string $originalFile path to original file
      * @param string $relocationDir path to directory where content will be relocated
      * @return string
+     * @throws Magento_Exception
      */
     protected function _getFilesOffset($originalFile, $relocationDir)
     {
@@ -1016,7 +977,7 @@ class Mage_Core_Model_Design_Package
         }
         $suffix = str_replace($relocationDir, '', dirname($originalFile));
         $offset = rtrim($offset . ltrim($suffix, '\/'), '\/');
-        $offset = str_replace(DIRECTORY_SEPARATOR, '/', $offset);
+        $offset = str_replace(DS, '/', $offset);
         return $offset;
     }
 
@@ -1041,10 +1002,7 @@ class Mage_Core_Model_Design_Package
 
         $result = implode($css);
         if ($imports) {
-            $result = implode("\n", $imports). "\n"
-                . "/* Import directives above popped up. */\n"
-                . $result
-            ;
+            $result = implode("\n", $imports) . "\n" . "/* Import directives above popped up. */\n" . $result;
         }
         return $result;
     }
@@ -1059,7 +1017,7 @@ class Mage_Core_Model_Design_Package
     protected function _getRequestedFileKey($file, $params)
     {
         ksort($params);
-        return md5(implode('_', $params) . '_' . $file);
+        return md5($this->_getRequestedFileCacheKey($params) . '|' . $file);
     }
 
     /**
@@ -1070,7 +1028,7 @@ class Mage_Core_Model_Design_Package
      */
     protected function _getRequestedFileCacheKey($params)
     {
-        return $params['area'] . '/' . $params['package'] . '/' . $params['theme'] . '/' . $params['locale'];
+        return implode('|', array($params['area'], $params['themeModel']->getId(), $params['locale']));
     }
 
     /**
@@ -1079,7 +1037,6 @@ class Mage_Core_Model_Design_Package
      * @param string $file
      * @param array $params
      * @param string $publicFile
-     * @return void
      */
     protected function _setPublicFileIntoCache($file, $params, $publicFile)
     {
@@ -1094,7 +1051,6 @@ class Mage_Core_Model_Design_Package
      * Load published file cache storage from cache
      *
      * @param string $cacheKey
-     * @return void
      */
     protected function _loadPublicCache($cacheKey)
     {
@@ -1108,80 +1064,13 @@ class Mage_Core_Model_Design_Package
     }
 
     /**
-     * Get the structure for area with all possible design combinations
-     *
-     * The format of the result is a multidimensional array with following structure
-     * array (
-     *     'package_name' => array (
-     *         '0' => 'theme_name_1',
-     *         '1' => 'theme_name_2',
-     *     )
-     * )
-     *
-     * @param string $area
-     * @return array
-     */
-    public function getDesignEntitiesStructure($area)
-    {
-        $areaStructure = array();
-
-        /** @var $themeCollection Mage_Core_Model_Theme_Collection */
-        $themeCollection = Mage::getModel('Mage_Core_Model_Theme_Collection');
-        $themeCollection->addDefaultPattern($area);
-
-        /** @var $theme Mage_Core_Model_Theme */
-        foreach ($themeCollection as $theme) {
-            list($package, $theme) = explode('/', $theme->getThemePath());
-            $areaStructure[$package][] = $theme;
-        }
-        return $areaStructure;
-    }
-
-    /**
-     * Get theme configuration for specified area
-     *
-     * @param string $area
-     * @return Magento_Config_Theme
-     */
-    public function getThemeConfig($area)
-    {
-        if (isset($this->_themeConfigs[$area])) {
-            return $this->_themeConfigs[$area];
-        }
-        $configFiles = glob(Mage::getBaseDir('design') . "/{$area}/*/*/theme.xml", GLOB_NOSORT);
-        $config = new Magento_Config_Theme($configFiles);
-        $this->_themeConfigs[$area] = $config;
-        return $config;
-    }
-
-    /**
-     * Check if the theme from the specified area is compatible with specific Magento version
-     *
-     * @param string $area
-     * @param string $package
-     * @param string $theme
-     * @param string $version
-     * @return bool
-     */
-    public function isThemeCompatible($area, $package, $theme, $version)
-    {
-        $versions = $this->getThemeConfig($area)->getCompatibleVersions($package, $theme);
-        if (version_compare($version, $versions['from'], '>=')) {
-            if ($versions['to'] == '*' || version_compare($version, $versions['from'], '<=')) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Render view config object for current package and theme
      *
      * @return Magento_Config_View
      */
     public function getViewConfig()
     {
-        $key = "{$this->_name}/{$this->_theme}";
+        $key = $this->getDesignTheme()->getId();
         if (isset($this->_viewConfigs[$key])) {
             return $this->_viewConfigs[$key];
         }

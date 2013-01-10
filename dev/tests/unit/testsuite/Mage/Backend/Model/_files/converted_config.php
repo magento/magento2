@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  
@@ -32,8 +32,9 @@ return array(
             'tabs' => array(
                 'tab_1' => array(
                     'id' => 'tab_1',
-                    'label' => 'Tab 1 New'
-                )
+                    'label' => 'Tab 1 New',
+                    '_elementType' => 'tab',
+                ),
             ),
             'sections' => array(
                 'section_1' => array(
@@ -41,50 +42,88 @@ return array(
                     'type' => 'text',
                     'label' => 'Section 1 New',
                     'tab' => 'tab_1',
-                    'groups' => array(
+                    'children' => array(
                         'group_1' => array(
                             'id' => 'group_1',
                             'type' => 'text',
                             'label' => 'Group 1 New',
-                            'fields' => array(
+                            'children' => array(
                                 'field_2' => array(
                                     'id' => 'field_2',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 2',
-                                    'backend_model' => 'Mage_Backend_Model_Config_Backend_Encrypted'
-                                )
+                                    'backend_model' => 'Mage_Backend_Model_Config_Backend_Encrypted',
+                                    '_elementType' => 'field',
+                                ),
                             ),
+                            '_elementType' => 'group',
                         ),
-                        'group_2' => array(
-                            'id' => 'group_2',
+                        'group_level_1' => array(
+                            'id' => 'group_level_1',
                             'type' => 'text',
-                            'label' => 'Group 2',
-                            'fields' => array(
+                            'label' => 'Group Level 1',
+                            'children' => array(
                                 'field_3' => array(
                                     'id' => 'field_3',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 3',
-                                )
+                                    '_elementType' => 'field',
+                                ),
+                                'group_level_2' => array(
+                                    'id' => 'group_level_2',
+                                    'type' => 'text',
+                                    'label' => 'Group Level 2',
+                                    'children' => array(
+                                        'field_3.1' => array(
+                                            'id' => 'field_3.1',
+                                            'translate' => 'label',
+                                            'showInWebsite' => '1',
+                                            'type' => 'text',
+                                            'label' => 'Field 3.1',
+                                            '_elementType' => 'field',
+                                        ),
+                                        'group_level_3' => array(
+                                            'id' => 'group_level_3',
+                                            'type' => 'text',
+                                            'label' => 'Group Level 3',
+                                            'children' => array(
+                                                'field_3.1.1' => array(
+                                                    'id' => 'field_3.1.1',
+                                                    'translate' => 'label',
+                                                    'showInWebsite' => '1',
+                                                    'backend_model' => 'Mage_Backend_Model_Config_Backend_Encrypted',
+                                                    'type' => 'text',
+                                                    'label' => 'Field 3.1.1',
+                                                    '_elementType' => 'field',
+                                                ),
+                                            ),
+                                            '_elementType' => 'group',
+                                        ),
+                                    ),
+                                    '_elementType' => 'group',
+                                ),
                             ),
-                        )
+                            '_elementType' => 'group',
+                        ),
                     ),
+                    '_elementType' => 'section',
                 ),
                 'section_2' => array(
                     'id' => 'section_2',
                     'type' => 'text',
                     'label' => 'Section 2',
                     'tab' => 'tab_2',
-                    'groups' => array(
+                    'children' => array(
                         'group_3' => array(
                             'id' => 'group_3',
                             'type' => 'text',
                             'label' => 'Group 3',
                             'comment' => '<a href="test_url">test_link</a>',
-                            'fields' => array(
+                            'children' => array(
                                 'field_3' => array(
                                     'id' => 'field_3',
                                     'translate' => 'label',
@@ -93,21 +132,24 @@ return array(
                                     'label' => 'Field 3',
                                     'attribute_0' => array(
                                         'someArr' => array(
-                                            'someVal' => 1
-                                        )
+                                            'someVal' => '1',
+                                        ),
                                     ),
                                     'depends' => array(
                                         'fields' => array(
                                             'field_4' => array(
                                                 'id' => 'field_4',
-                                                'value' => 'someValue'
+                                                'value' => 'someValue',
+                                                '_elementType' => 'field',
                                             ),
                                             'field_1' => array(
                                                 'id' => 'field_1',
-                                                'value' => 'someValue'
-                                            )
-                                        )
-                                    )
+                                                'value' => 'someValue',
+                                                '_elementType' => 'field',
+                                            ),
+                                        ),
+                                    ),
+                                    '_elementType' => 'field',
                                 ),
                                 'field_4' => array(
                                     'id' => 'field_4',
@@ -121,22 +163,52 @@ return array(
                                     'attribute_text' => '<test_value>',
                                     'attribute_text_in_array' => array(
                                         'var' => '<a href="test_url">test_link</a>',
-                                        'type' => 'someType'
+                                        'type' => 'someType',
                                     ),
                                     'depends' => array(
                                         'fields' => array(
                                             'field_3' => array(
                                                 'id' => 'field_3',
-                                                'value' => 0
-                                            )
-                                        )
-                                    )
+                                                'value' => '0',
+                                                '_elementType' => 'field',
+                                            ),
+                                        ),
+                                    ),
+                                    '_elementType' => 'field',
+                                ),
+                                 'field_5' => array(
+                                    'id' => 'field_5',
+                                    'translate' => 'label',
+                                    'showInWebsite' => '1',
+                                    'type' => 'text',
+                                    'label' => '',
+                                    '_elementType' => 'field',
+                                ),
+                            ),
+                            '_elementType' => 'group',
+                        ),
+                        'group_4' => array(
+                            'id' => 'group_4',
+                            'label' => 'Group 4',
+                            'type' => 'text',
+                            'showInDefault' => 1,
+                            'showInStore' => 1,
+                            'showInWebsite' => 1,
+                            'depends' => array(
+                                'fields' => array(
+                                    'section_2/group_3/field_5' => array(
+                                        'id' => 'section_2/group_3/field_5',
+                                        'value' => 1,
+                                        '_elementType' => 'field'
+                                    ),
                                 )
                             ),
+                            '_elementType' => 'group',
                         )
-                    )
-                )
-            )
-        )
-    )
+                    ),
+                    '_elementType' => 'section',
+                ),
+            ),
+        ),
+    ),
 );

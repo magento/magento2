@@ -1,0 +1,21 @@
+{
+    "name": "zendframework/zend-soap",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "soap"
+    ],
+    "autoload": {
+        "psr-0": {
+            "Zend\\Soap": ""
+        }
+    },
+    "target-dir": "Zend/Soap",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zend-server": "self.version",
+        "zendframework/zend-stdlib": "self.version",
+        "zendframework/zend-uri": "self.version"
+    }
+}

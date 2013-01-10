@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,13 +63,15 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $this->_requestMock = $this->getMock('Mage_Core_Controller_Request_Http', array(), array(), '', false, false);
         $this->_urlModelMock = $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false, false);
         $this->_layoutMock = $this->getMock('Mage_Core_Model_Layout', array(), array(), '', false, false);
+        $groupMock = $this->getMock('Mage_Backend_Model_Config_Structure_Element_Group', array(), array(), '', false);
+        $groupMock->expects($this->once())->method('getFieldsetCss')->will($this->returnValue('test_fieldset_css'));
 
         $data = array(
             'request' => $this->_requestMock,
             'urlBuilder' => $this->_urlModelMock,
             'layout' => $this->_layoutMock,
             'data' => array(
-                'group' => array('fieldset_css' => 'test_fieldset_css')
+                'group' => $groupMock
             )
         );
         $helper = new Magento_Test_Helper_ObjectManager($this);
@@ -115,7 +117,7 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
 
         $this->_elementMock->expects($this->any())->method('getSortedElements')->will($this->returnValue(array()));
 
-        $expected = '<div  class="entry-edit-head collapseable" >';
+        $expected = '<div><div><div  class="entry-edit-head collapseable" >';
 
         $expected .= '<a id="' . $this->_testData['htmlId'] . '-head" href="#"'
             . ' onclick="Fieldset.toggleCollapse(\'' . $this->_testData['htmlId'] . '\', \'\'); '
@@ -135,7 +137,7 @@ class Mage_Backend_Block_System_Config_Form_FieldsetTest extends PHPUnit_Framewo
         $expected .= '<colgroup class="value" />';
         $expected .= '<colgroup class="scope-label" />';
         $expected .= '<colgroup class="" />';
-        $expected .= '<tbody></tbody></table></fieldset>';
+        $expected .= '<tbody></tbody></table></fieldset></div></div>';
 
         $this->assertEquals($expected, $this->_object->render($this->_elementMock));
     }

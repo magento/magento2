@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Catalog_Model_Product_Indexer_Flat extends Mage_Index_Model_Indexer_Abstract
@@ -49,9 +49,6 @@ class Mage_Catalog_Model_Product_Indexer_Flat extends Mage_Index_Model_Indexer_A
             Mage_Index_Model_Event::TYPE_DELETE
         ),
         Mage_Core_Model_Store_Group::ENTITY => array(
-            Mage_Index_Model_Event::TYPE_SAVE
-        ),
-        Mage_Catalog_Model_Convert_Adapter_Product::ENTITY => array(
             Mage_Index_Model_Event::TYPE_SAVE
         ),
         Mage_Catalog_Model_Product_Flat_Indexer::ENTITY => array(
@@ -239,9 +236,6 @@ class Mage_Catalog_Model_Product_Indexer_Flat extends Mage_Index_Model_Indexer_A
         switch ($event->getEntity()) {
             case Mage_Catalog_Model_Product::ENTITY:
                 $this->_registerCatalogProductEvent($event);
-                break;
-            case Mage_Catalog_Model_Convert_Adapter_Product::ENTITY:
-                $event->addNewData('catalog_product_flat_reindex_all', true);
                 break;
             case Mage_Core_Model_Store::ENTITY:
                 if ($event->getType() == Mage_Index_Model_Event::TYPE_DELETE) {

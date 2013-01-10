@@ -22,14 +22,13 @@
  *
  * @category    tests
  * @package     js
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 define('RELATIVE_APP_ROOT', '../../..');
-
-require_once normalize(RELATIVE_APP_ROOT . '/lib/Magento/Autoload.php');
-Magento_Autoload::getInstance()->addIncludePath(normalize(RELATIVE_APP_ROOT . '/lib'));
+require __DIR__ . '/../../../app/autoload.php';
+Magento_Autoload_IncludePath::addIncludePath(realpath(RELATIVE_APP_ROOT . '/lib'));
 
 $userConfig = normalize('jsTestDriver.php');
 $defaultConfig = normalize('jsTestDriver.php.dist');
@@ -139,8 +138,8 @@ Varien_Io_File::rmdirRecursive($testOutput);
 mkdir($testOutput);
 
 $command
-    = 'java -jar ' . $jsTestDriver . ' --config ' . $jsTestDriverConf . ' --port ' . $port .
-    ' --browser "' . $browser . '" --tests all --testOutput ' . $testOutput;
+    = 'java -jar "' . $jsTestDriver . '" --config "' . $jsTestDriverConf . '" --port ' . $port .
+    ' --browser "' . $browser . '" --tests all --testOutput "' . $testOutput . '"';
 
 echo $command . PHP_EOL;
 

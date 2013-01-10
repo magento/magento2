@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Wishlist
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -213,9 +213,9 @@ class Mage_Wishlist_IndexController
              */
             $session->setAddActionReferer($referer);
 
-            Mage::helper('Mage_Wishlist_Helper_Data')->calculate();
-
-            $message = $this->__('%1$s has been added to your wishlist. Click <a href="%2$s">here</a> to continue shopping.', $product->getName(), Mage::helper('Mage_Core_Helper_Data')->escapeUrl($referer));
+            /** @var $helper Mage_Wishlist_Helper_Data */
+            $helper = Mage::helper('Mage_Wishlist_Helper_Data')->calculate();
+            $message = $this->__('%1$s has been added to your wishlist. Click <a href="%2$s">here</a> to continue shopping.', $helper->escapeHtml($product->getName()), Mage::helper('Mage_Core_Helper_Data')->escapeUrl($referer));
             $session->addSuccess($message);
         }
         catch (Mage_Core_Exception $e) {

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,7 +50,8 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 if (Mage::registry('current_customer')->getId()) {
                     $this->addTab('view', array(
                         'label'     => Mage::helper('Mage_Customer_Helper_Data')->__('Customer View'),
-                        'content'   => $this->getLayout()->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View')->toHtml(),
+                        'content'   => $this->getLayout()
+                        ->createBlock('Mage_Adminhtml_Block_Customer_Edit_Tab_View')->toHtml(),
                         'active'    => true
                     ));
                 }
@@ -111,29 +112,18 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
         }
 
         $this->_updateActiveTab();
+        Magento_Profiler::stop('customer/tabs');
         return parent::_beforeToHtml();
     }
 
     protected function _updateActiveTab()
     {
         $tabId = $this->getRequest()->getParam('tab');
-        if( $tabId ) {
+        if ($tabId) {
             $tabId = preg_replace("#{$this->getId()}_#", '', $tabId);
-            if($tabId) {
+            if ($tabId) {
                 $this->setActiveTab($tabId);
             }
         }
-    }
-
-    /**
-     * Processing block html after rendering
-     *
-     * @param   string $html
-     * @return  string
-     */
-    protected function _afterToHtml($html)
-    {
-        Magento_Profiler::stop('customer/tabs');
-        return parent::_afterToHtml($html);
     }
 }

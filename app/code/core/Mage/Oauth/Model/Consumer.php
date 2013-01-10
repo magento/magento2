@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Oauth
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,9 +38,7 @@
  * @method Mage_Oauth_Model_Consumer setName() setName(string $name)
  * @method string getKey()
  * @method Mage_Oauth_Model_Consumer setKey() setKey(string $key)
- * @method string getSecret()
  * @method Mage_Oauth_Model_Consumer setSecret() setSecret(string $secret)
- * @method string getCallbackUrl()
  * @method Mage_Oauth_Model_Consumer setCallbackUrl() setCallbackUrl(string $url)
  * @method string getCreatedAt()
  * @method Mage_Oauth_Model_Consumer setCreatedAt() setCreatedAt(string $date)
@@ -49,7 +47,7 @@
  * @method string getRejectedCallbackUrl()
  * @method Mage_Oauth_Model_Consumer setRejectedCallbackUrl() setRejectedCallbackUrl(string $rejectedCallbackUrl)
  */
-class Mage_Oauth_Model_Consumer extends Mage_Core_Model_Abstract
+abstract class Mage_Oauth_Model_Consumer extends Mage_Core_Model_Abstract implements Mage_Oauth_Model_ConsumerInterface
 {
     /**
      * Key hash length
@@ -128,5 +126,36 @@ class Mage_Oauth_Model_Consumer extends Mage_Core_Model_Abstract
             Mage::throwException(array_shift($messages));
         }
         return true;
+    }
+
+    /**
+     * Load consumer by key.
+     *
+     * @param string $key
+     * @return Mage_Oauth_Model_Consumer
+     */
+    public function loadByKey($key)
+    {
+        return $this->load($key, 'key');
+    }
+
+    /**
+     * Get consumer key.
+     *
+     * @return string
+     */
+    public function getSecret()
+    {
+        return $this->getData('secret');
+    }
+
+    /**
+     * Get consumer callback URL.
+     *
+     * @return string
+     */
+    public function getCallBackUrl()
+    {
+        return $this->getData('callback_url');
     }
 }

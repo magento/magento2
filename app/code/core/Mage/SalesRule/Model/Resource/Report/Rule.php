@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_SalesRule
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,7 +74,7 @@ class Mage_SalesRule_Model_Resource_Report_Rule extends Mage_Reports_Model_Resou
                 new Zend_Db_Expr('DISTINCT rule_name')
             )
             ->where('rule_name IS NOT NULL')
-            ->where('rule_name <> ""')
+            ->where('rule_name <> ?', '')
             ->order('rule_name ASC');
 
         $rulesNames = $adapter->fetchAll($select);

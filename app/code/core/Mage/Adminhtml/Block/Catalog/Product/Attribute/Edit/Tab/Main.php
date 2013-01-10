@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,7 +114,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Main extends Mage_
                 'all'     => Mage::helper('Mage_Catalog_Helper_Data')->__('All Product Types'),
                 'custom'  => Mage::helper('Mage_Catalog_Helper_Data')->__('Selected Product Types')
             ),
-            'required'    => true
+            'required'    => true,
+            'disabled'    => !$attributeObject->getIsUserDefined() && $attributeObject->getId(),
         ), 'frontend_class');
 
         $fieldset->addField('is_configurable', 'select', array(

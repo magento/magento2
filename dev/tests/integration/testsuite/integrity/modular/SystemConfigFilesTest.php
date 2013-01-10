@@ -21,20 +21,24 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group integrity
- */
 class Integrity_Modular_SystemConfigFilesTest extends PHPUnit_Framework_TestCase
 {
     public function testConfiguration()
     {
-        $fileList = glob(Mage::getBaseDir('app') . '/*/*/*/*/etc/adminhtml/system.xml');
         try {
-            new Mage_Backend_Model_Config_Structure(array('sourceFiles' => $fileList));
+            $config = Mage::getConfig();
+            $cacheMock = $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false);
+            $cacheMock->expects($this->any())->method('canUse')->will($this->returnValue(false));
+            $converter = new Mage_Backend_Model_Config_Structure_Converter(
+                new Mage_Backend_Model_Config_Structure_Mapper_Factory(Mage::getObjectManager())
+            );
+            new Mage_Backend_Model_Config_Structure_Reader(
+                $config, $cacheMock, $converter, true
+            );
         } catch (Magento_Exception $exp) {
             $this->fail($exp->getMessage());
         }

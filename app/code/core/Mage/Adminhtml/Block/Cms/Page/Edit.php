@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,8 +49,10 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
             $this->_updateButton('save', 'label', Mage::helper('Mage_Cms_Helper_Data')->__('Save Page'));
             $this->_addButton('saveandcontinue', array(
                 'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save and Continue Edit'),
-                'onclick'   => 'saveAndContinueEdit(\''.$this->_getSaveAndContinueUrl().'\')',
                 'class'     => 'save',
+                'data_attr'  => array(
+                    'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form')
+                )
             ), -100);
         } else {
             $this->_removeButton('save');
@@ -128,17 +130,11 @@ class Mage_Adminhtml_Block_Cms_Page_Edit extends Mage_Adminhtml_Block_Widget_For
                     tinyMCE.execCommand('mceRemoveControl', false, 'page_content');
                 }
             }
-
-            function saveAndContinueEdit(urlTemplate) {
-                var tabsIdValue = " . $tabsBlockJsObject . ".activeTab.id;
-                var tabsBlockPrefix = '" . $tabsBlockPrefix . "';
-                if (tabsIdValue.startsWith(tabsBlockPrefix)) {
-                    tabsIdValue = tabsIdValue.substr(tabsBlockPrefix.length)
-                }
-                var template = new Template(urlTemplate, /(^|.|\\r|\\n)({{(\w+)}})/);
-                var url = template.evaluate({tab_id:tabsIdValue});
-                editForm.submit(url);
-            }
+            jQuery(function() {
+                jQuery(\"#" . $tabsBlock->getId() ."\")
+                    .tabs('option', 'tabsBlockPrefix', '" . $tabsBlockPrefix . "')
+                    .tabs('option', 'tabIdArgument', 'active_tab');
+            });
         ";
         return parent::_prepareLayout();
     }

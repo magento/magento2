@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,7 @@ class Mage_Core_Model_Resource_Website extends Mage_Core_Model_Resource_Db_Abstr
     protected function _afterDelete(Mage_Core_Model_Abstract $model)
     {
         $where = array(
-            'scope = ?'    => 'websites',
+            'scope = ?'    => Mage_Core_Model_Config::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId()
         );
 
@@ -110,7 +110,7 @@ class Mage_Core_Model_Resource_Website extends Mage_Core_Model_Resource_Db_Abstr
     /**
      * Retrieve default stores select object
      * Select fields website_id, store_id
-     * 
+     *
      * @param boolean $withDefault include/exclude default admin website
      * @return Varien_Db_Select
      */

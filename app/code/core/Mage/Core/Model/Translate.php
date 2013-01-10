@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,7 +38,6 @@ class Mage_Core_Model_Translate
     const CONFIG_KEY_AREA   = 'area';
     const CONFIG_KEY_LOCALE = 'locale';
     const CONFIG_KEY_STORE  = 'store';
-    const CONFIG_KEY_DESIGN_PACKAGE = 'package';
     const CONFIG_KEY_DESIGN_THEME   = 'theme';
 
     const XML_PATH_LOCALE_INHERITANCE = 'global/locale/inheritance';
@@ -207,11 +206,8 @@ class Mage_Core_Model_Translate
         if (!isset($this->_config[self::CONFIG_KEY_STORE])) {
             $this->_config[self::CONFIG_KEY_STORE] = Mage::app()->getStore()->getId();
         }
-        if (!isset($this->_config[self::CONFIG_KEY_DESIGN_PACKAGE])) {
-            $this->_config[self::CONFIG_KEY_DESIGN_PACKAGE] = Mage::getDesign()->getPackageName();
-        }
         if (!isset($this->_config[self::CONFIG_KEY_DESIGN_THEME])) {
-            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = Mage::getDesign()->getTheme();
+            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = Mage::getDesign()->getDesignTheme()->getId();
         }
         return $this;
     }
@@ -379,7 +375,6 @@ class Mage_Core_Model_Translate
     {
         if (is_null($this->_data)) {
             return array();
-            //Mage::throwException('Translation data is not initialized. Please contact developers.');
         }
         return $this->_data;
     }
@@ -458,9 +453,6 @@ class Mage_Core_Model_Translate
             $translated = $this->_getTranslatedString($text, $code);
         }
 
-        //array_unshift($args, $translated);
-        //$result = @call_user_func_array('sprintf', $args);
-
         $result = @vsprintf($translated, $args);
         if ($result === false) {
             $result = $translated;
@@ -514,9 +506,6 @@ class Mage_Core_Model_Translate
             }
             if (isset($this->_config[self::CONFIG_KEY_STORE])) {
                 $this->_cacheId.= '_'.$this->_config[self::CONFIG_KEY_STORE];
-            }
-            if (isset($this->_config[self::CONFIG_KEY_DESIGN_PACKAGE])) {
-                $this->_cacheId.= '_'.$this->_config[self::CONFIG_KEY_DESIGN_PACKAGE];
             }
             if (isset($this->_config[self::CONFIG_KEY_DESIGN_THEME])) {
                 $this->_cacheId.= '_'.$this->_config[self::CONFIG_KEY_DESIGN_THEME];

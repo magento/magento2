@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_ImportExport
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -540,7 +540,7 @@ class Mage_ImportExport_Model_Import extends Mage_ImportExport_Model_Abstract
             ->asArray();
         foreach ($entitiesConfig as $entityCode => $entityData) {
             $behaviorToken = isset($entityData['behavior_token']) ? $entityData['behavior_token'] : null;
-            if ($behaviorToken && Magento_Autoload::getInstance()->classExists($behaviorToken)) {
+            if ($behaviorToken && class_exists($behaviorToken)) {
                 /** @var $behaviorModel Mage_ImportExport_Model_Source_Import_BehaviorAbstract */
                 $behaviorModel = Mage::getModel($behaviorToken);
                 $behaviourData[$entityCode] = array(

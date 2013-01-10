@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,20 +48,20 @@ class Mage_Backend_Model_UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @covers Mage_Backend_Model_Url::getSecure
      */
-    public function testGetSecure()
+    public function testIsSecure()
     {
         Mage::app()->getStore()->setConfig('web/secure/use_in_adminhtml', true);
-        $this->assertTrue($this->_model->getSecure());
+        $this->assertTrue($this->_model->isSecure());
 
         Mage::app()->getStore()->setConfig('web/secure/use_in_adminhtml', false);
-        $this->assertFalse($this->_model->getSecure());
+        $this->assertFalse($this->_model->isSecure());
 
         $this->_model->setData('secure_is_forced', true);
         $this->_model->setData('secure', true);
-        $this->assertTrue($this->_model->getSecure());
+        $this->assertTrue($this->_model->isSecure());
 
         $this->_model->setData('secure', false);
-        $this->assertFalse($this->_model->getSecure());
+        $this->assertFalse($this->_model->isSecure());
     }
 
     /**

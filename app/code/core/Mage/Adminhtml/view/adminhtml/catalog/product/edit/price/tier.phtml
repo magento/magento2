@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price_Tier */
@@ -36,7 +36,7 @@
 
 <?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
 <?php $_showWebsite= $this->isMultiWebsites(); ?>
-<tr>
+<tr id="attribute-<?php echo $_htmlId?>-container">
     <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
     <td colspan="10" class="grid tier">
     <table cellspacing="0" class="data border" id="tiers_table">

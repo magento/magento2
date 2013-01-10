@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,14 +47,9 @@ class Mage_Core_Model_Layout_Merge
     private $_area;
 
     /**
-     * @var string
+     * @var int
      */
-    private $_package;
-
-    /**
-     * @var string
-     */
-    private $_theme;
+    private $_themeId;
 
     /**
      * @var int
@@ -111,16 +106,18 @@ class Mage_Core_Model_Layout_Merge
     public function __construct(array $arguments = array())
     {
         /* Default values */
-        $arguments += array(
-            'area'    => Mage::getDesign()->getArea(),
-            'package' => Mage::getDesign()->getPackageName(),
-            'theme'   => Mage::getDesign()->getTheme(),
-            'store'   => null,
-        );
-        $this->_area    = $arguments['area'];
-        $this->_package = $arguments['package'];
-        $this->_theme   = $arguments['theme'];
-        $this->_storeId = Mage::app()->getStore($arguments['store'])->getId();
+        if (isset($arguments['area']) && isset($arguments['themeId'])) {
+            $this->_area = $arguments['area'];
+            $this->_themeId = $arguments['themeId'];
+        } elseif (isset($arguments['area'])) {
+            $this->_area = $arguments['area'];
+            $this->_themeId = Mage::getDesign()->getConfigurationDesignTheme($arguments['area']);
+        } else {
+            $this->_area = Mage::getDesign()->getArea();
+            $this->_themeId = Mage::getDesign()->getDesignTheme()->getId();
+        }
+
+        $this->_storeId = Mage::app()->getStore(empty($arguments['store']) ? null : $arguments['store'])->getId();
         $this->_elementClass = Mage::getConfig()->getModelClassName('Mage_Core_Model_Layout_Element');
 
         foreach (Mage::getConfig()->getPathVars() as $key => $value) {
@@ -557,7 +554,7 @@ class Mage_Core_Model_Layout_Merge
      */
     protected function _getCacheId($suffix = '')
     {
-        return "LAYOUT_{$this->_area}_STORE{$this->_storeId}_{$this->_package}_{$this->_theme}{$suffix}";
+        return "LAYOUT_{$this->_area}_STORE{$this->_storeId}_{$this->_themeId}{$suffix}";
     }
 
     /**
@@ -598,7 +595,7 @@ class Mage_Core_Model_Layout_Merge
      */
     protected function _loadFileLayoutUpdatesXml()
     {
-        $layoutParams = array('area' => $this->_area, 'package' => $this->_package, 'theme' => $this->_theme);
+        $layoutParams = array('area' => $this->_area, 'themeId' => $this->_themeId);
 
         /*
          * Allow to modify declared layout updates.

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Connect
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,11 +53,17 @@ class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit extends Mage_Adminhtml_
             'label'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save Data and Create Package'),
             'class'     => 'save',
             'onclick'   => "createPackage()",
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#edit_form'),
+            ),
         ));
         $this->_addButton('save_as', array(
             'label'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save As...'),
             'title'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save package with custom package file name'),
-            'onclick'   => 'saveAsPackage()'
+            'onclick'   => 'saveAsPackage(event)',
+            'data_attr'  => array(
+                'widget-button' => array('event' => 'save', 'related' => '#edit_form'),
+            ),
         ));
     }
 

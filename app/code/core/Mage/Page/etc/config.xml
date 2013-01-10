@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Page
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -137,7 +137,6 @@ Disallow: /lib/
 Disallow: /*.php$
 Disallow: /pkginfo/
 Disallow: /report/
-Disallow: /skin/
 Disallow: /var/
 Disallow: /catalog/
 Disallow: /customer/
@@ -148,7 +147,6 @@ Disallow: /*SID=
                 </default_custom_instructions>
             </search_engine_robots>
             <header translate="welcome" module="Mage_Page">
-                <logo_src>images/logo.gif</logo_src>
                 <logo_alt>Magento Commerce</logo_alt>
                 <welcome>Default welcome msg!</welcome>
             </header>

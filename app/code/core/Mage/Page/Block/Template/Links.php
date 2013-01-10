@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Page
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,25 +75,25 @@ class Mage_Page_Block_Template_Links extends Mage_Core_Block_Template
      * @param string $afterText
      * @return Mage_Page_Block_Template_Links
      */
-    public function addLink($label, $url='', $title='', $prepare=false, $urlParams=array(),
-        $position=null, $liParams=null, $aParams=null, $beforeText='', $afterText='')
-    {
-        if (is_null($label) || false===$label) {
+    public function addLink($label, $url = '', $title = '', $prepare = true, $urlParams = array(),
+        $position = null, $liParams = null, $aParams = null, $beforeText = '', $afterText = ''
+    ) {
+        if (is_null($label) || false === $label) {
             return $this;
         }
         $link = new Varien_Object(array(
-            'label'         => $label,
-            'url'           => ($prepare ? $this->getUrl($url, (is_array($urlParams) ? $urlParams : array())) : $url),
-            'title'         => $title,
-            'li_params'     => $this->_prepareParams($liParams),
-            'a_params'      => $this->_prepareParams($aParams),
-            'before_text'   => $beforeText,
-            'after_text'    => $afterText,
+            'label'       => $label,
+            'url'         => ($prepare ? $this->getUrl($url, (is_array($urlParams) ? $urlParams : array())) : $url),
+            'title'       => $title,
+            'li_params'   => $this->_prepareParams($liParams),
+            'a_params'    => $this->_prepareParams($aParams),
+            'before_text' => $beforeText,
+            'after_text'  => $afterText,
         ));
 
         $this->_links[$this->_getNewPosition($position)] = $link;
         if (intval($position) > 0) {
-             ksort($this->_links);
+            ksort($this->_links);
         }
 
         return $this;

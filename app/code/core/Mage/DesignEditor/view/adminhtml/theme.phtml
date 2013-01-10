@@ -20,13 +20,27 @@
  *
  * @category    design
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 
-<?php /** @var $this Mage_Backend_Block_Template */ ?>
+<?php /** @var $this Mage_DesignEditor_Block_Adminhtml_Theme */?>
 
-<div style="margin:0 auto; height:200px; width:200px; border:1px solid black;">
-    <img src="<?php echo $this->getTheme()->getPreviewImageUrl() ?>" style="display:block; height:200px; width:200px;" alt="" />
-</div>
+<li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" style="margin:20px; float:left;">
+    <ul class="theme-element">
+        <li class="theme-front">
+            <div style="margin:0 auto; height:350px; width:350px; border:1px solid black;">
+                <img src="<?php echo $this->getTheme()->getPreviewImageUrl() ?>" style="display:block; height:350px; width:350px;" alt="" />
+            </div>
+        </li>
+        <li class="theme-back">
+            <div style="padding: 30px;">
+                <div class="theme-title">
+                    <?php echo $this->getTheme()->getThemeTitle() ?>
+                </div>
+                <?php echo $this->getButtonsHtml() ?>
+            </div>
+        </li>
+    </ul>
+</li>

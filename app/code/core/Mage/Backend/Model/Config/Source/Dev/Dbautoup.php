@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Backend_Model_Config_Source_Dev_Dbautoup implements Mage_Core_Model_Option_ArrayInterface
@@ -28,9 +28,18 @@ class Mage_Backend_Model_Config_Source_Dev_Dbautoup implements Mage_Core_Model_O
     public function toOptionArray()
     {
         return array(
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ALWAYS, 'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Always (during development)')),
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ONCE,   'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Only Once (version upgrade)')),
-            array('value'=>Mage_Core_Model_Resource::AUTO_UPDATE_NEVER,  'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Never (production)')),
+            array(
+                'value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ALWAYS,
+                'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Always (during development)')
+            ),
+            array(
+                'value'=>Mage_Core_Model_Resource::AUTO_UPDATE_ONCE,
+                'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Only Once (version upgrade)')
+            ),
+            array(
+                'value'=>Mage_Core_Model_Resource::AUTO_UPDATE_NEVER,
+                'label' => Mage::helper('Mage_Backend_Helper_Data')->__('Never (production)')
+            ),
         );
     }
 

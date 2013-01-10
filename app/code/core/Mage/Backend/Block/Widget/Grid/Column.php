@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,54 +66,60 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
      *
      * @var array
      */
-    protected $_rendererTypes;
+    protected $_rendererTypes = array(
+        'date' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Date',
+        'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Datetime',
+        'number' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Number',
+        'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency',
+        'price' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Price',
+        'country' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Country',
+        'concat' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Concat',
+        'action' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Action',
+        'options' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Options',
+        'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox',
+        'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Massaction',
+        'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio',
+        'input' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Input',
+        'select' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Select',
+        'text' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Longtext',
+        'store' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Store',
+        'wrapline' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Wrapline',
+        'default' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Text',
+    );
 
     /**
      * Filter types
      *
      * @var array
      */
-    protected $_filterTypes;
+    protected $_filterTypes = array(
+        'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Datetime',
+        'date' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Date',
+        'range' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+        'number' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+        'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
+        'price' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Price',
+        'country' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Country',
+        'options' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Select',
+        'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction',
+        'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox',
+        'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Radio',
+        'store' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Store',
+        'theme' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Theme',
+        'default' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Text',
+    );
+
+    /**
+     * Column is grouped
+     * @var bool
+     */
+    protected $_isGrouped = false;
 
     public function _construct()
     {
-        $this->_rendererTypes = array(
-            'date' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Date',
-            'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Datetime',
-            'number' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Number',
-            'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Currency',
-            'price' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Price',
-            'country' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Country',
-            'concat' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Concat',
-            'action' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Action',
-            'options' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Options',
-            'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Checkbox',
-            'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Massaction',
-            'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio',
-            'input' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Input',
-            'select' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Select',
-            'text' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Longtext',
-            'store' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Store',
-            'wrapline' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Wrapline',
-            'default' => 'Mage_Backend_Block_Widget_Grid_Column_Renderer_Text',
-        );
-
-        $this->_filterTypes = array(
-            'datetime' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Datetime',
-            'date' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Date',
-            'range' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
-            'number' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
-            'currency' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Range',
-            'price' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Price',
-            'country' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Country',
-            'options' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Select',
-            'massaction' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction',
-            'checkbox' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox',
-            'radio' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Radio',
-            'store' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Store',
-            'theme' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Theme',
-            'default' => 'Mage_Backend_Block_Widget_Grid_Column_Filter_Text',
-        );
+        if ($this->hasData('grouped')) {
+            $this->_isGrouped = (bool) $this->getData('grouped');
+        }
 
         parent::_construct();
     }
@@ -479,5 +485,15 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
         $filter = $this->getFilter();
         $output = $filter ? $filter->getHtml() : '&nbsp;';
         return $output;
+    }
+
+    /**
+     * Check if column is grouped
+     *
+     * @return bool
+     */
+    public function isGrouped()
+    {
+        return $this->_isGrouped;
     }
 }

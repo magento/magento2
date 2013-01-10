@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -76,7 +76,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Date
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $format = $this->_getFormat();
             try {
-                if($this->getColumn()->getGmtoffset()) {
+                if ($this->getColumn()->getGmtoffset()) {
                     $data = Mage::app()->getLocale()
                         ->date($data, Varien_Date::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
@@ -86,11 +86,13 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Date
             }
             catch (Exception $e)
             {
-                if($this->getColumn()->getTimezone()) {
+                if ($this->getColumn()->getTimezone()) {
                     $data = Mage::app()->getLocale()
                         ->date($data, Varien_Date::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
-                    $data = Mage::getSingleton('Mage_Core_Model_Locale')->date($data, null, null, false)->toString($format);
+                    $data = Mage::getSingleton('Mage_Core_Model_Locale')
+                        ->date($data, null, null, false)
+                        ->toString($format);
                 }
             }
             return $data;

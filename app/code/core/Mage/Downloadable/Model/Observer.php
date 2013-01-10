@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,6 +34,19 @@
 class Mage_Downloadable_Model_Observer
 {
     const XML_PATH_DISABLE_GUEST_CHECKOUT   = 'catalog/downloadable/disable_guest_checkout';
+
+    /**
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_helper;
+
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->_helper = isset($data['helper']) ? $data['helper'] : Mage::helper('Mage_Core_Helper_Data');
+    }
 
     /**
      * Prepare product to save
@@ -50,6 +63,34 @@ class Mage_Downloadable_Model_Observer
             $product->setDownloadableData($downloadable);
         }
 
+        return $this;
+    }
+    /**
+     * Change product type on the fly depending on selected options
+     *
+     * @param  Varien_Event_Observer $observer
+     * @return Mage_Downloadable_Model_Observer
+     */
+    public function transitionProductType(Varien_Event_Observer $observer)
+    {
+        $request = $observer->getEvent()->getRequest();
+        $product = $observer->getEvent()->getProduct();
+        $downloadable = $request->getPost('downloadable');
+        $isTransitionalType = $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+            || $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
+            || $product->getTypeId() === Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE;
+
+        if ($isTransitionalType) {
+            if ($product->hasIsVirtual()) {
+                if ($downloadable) {
+                    $product->setTypeId(Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE);
+                } else {
+                    $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL);
+                }
+            } else {
+                $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+            }
+        }
         return $this;
     }
 
@@ -70,7 +111,9 @@ class Mage_Downloadable_Model_Observer
         if ($product && $product->getTypeId() != Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
             return $this;
         }
-        if (Mage::getModel('Mage_Downloadable_Model_Link_Purchased')->load($orderItem->getId(), 'order_item_id')->getId()) {
+        $purchasedLink = Mage::getModel('Mage_Downloadable_Model_Link_Purchased')
+            ->load($orderItem->getId(), 'order_item_id');
+        if ($purchasedLink->getId()) {
             return $this;
         }
         if (!$product) {
@@ -253,7 +296,7 @@ class Mage_Downloadable_Model_Observer
     }
 
     /**
-     * Check is allowed guest checkuot if quote contain downloadable product(s)
+     * Check is allowed guest checkout if quote contain downloadable product(s)
      *
      * @param Varien_Event_Observer $observer
      * @return Mage_Downloadable_Model_Observer
@@ -313,27 +356,48 @@ class Mage_Downloadable_Model_Observer
         foreach ($type->getLinks($currentProduct) as $link) {
             $linkData = $link->getData();
             $downloadableData['link'][] = array(
-                'file'                => $linkData['link_file'],
+                'is_delete'           => false,
+                'link_id'             => null,
+                'title'               => $linkData['title'],
                 'is_shareable'        => $linkData['is_shareable'],
+                'sample'              => array(
+                    'type'       => $linkData['sample_type'],
+                    'url'        => $linkData['sample_url'],
+                    'file'       => $this->_helper->jsonEncode(array(array(
+                        'file'   => $linkData['sample_file'],
+                        'name'   => $linkData['sample_file'],
+                        'size'   => 0,
+                        'status' => null,
+                    )))
+                ),
+                'file'       => $this->_helper->jsonEncode(array(array(
+                    'file'   => $linkData['link_file'],
+                    'name'   => $linkData['link_file'],
+                    'size'   => 0,
+                    'status' => null,
+                ))),
+                'type'                => $linkData['link_type'],
                 'link_url'            => $linkData['link_url'],
+                'sort_order'          => $linkData['sort_order'],
                 'number_of_downloads' => $linkData['number_of_downloads'],
                 'price'               => $linkData['price'],
-                'sample'              => array(
-                    'file'            => $linkData['sample_file'],
-                    'type'            => $linkData['sample_type'],
-                    'url'             => $linkData['sample_url']),
-                'sort_order'          => $linkData['sort_order'],
-                'title'               => $linkData['title'],
-                'type'                => $linkData['link_type'],
             );
         }
-        foreach ($type->getSamples($currentProduct)->getData() as $sample) {
+        foreach ($type->getSamples($currentProduct) as $sample) {
+            $sampleData = $sample->getData();
             $downloadableData['sample'][] = array(
-                'file'       => $sample['sample_file'],
-                'sample_url' => $sample['sample_url'],
-                'sort_order' => $sample['sort_order'],
-                'title'      => $sample['title'],
-                'type'       => $sample['sample_type'],
+                'is_delete'  => false,
+                'sample_id'  => null,
+                'title'      => $sampleData['title'],
+                'type'       => $sampleData['sample_type'],
+                'file'       => $this->_helper->jsonEncode(array(array(
+                    'file'   => $sampleData['sample_file'],
+                    'name'   => $sampleData['sample_file'],
+                    'size'   => 0,
+                    'status' => null,
+                ))),
+                'sample_url' => $sampleData['sample_url'],
+                'sort_order' => $sampleData['sort_order'],
             );
         }
         $newProduct->setDownloadableData($downloadableData);

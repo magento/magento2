@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Sales
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,6 +34,13 @@
 class Mage_Sales_Block_Adminhtml_Report_Filter_Form_Coupon extends Mage_Sales_Block_Adminhtml_Report_Filter_Form
 {
     /**
+     * Flag that keep info should we render specific dependent element or not
+     *
+     * @var bool
+     */
+    protected $_renderDependentElement = false;
+
+    /**
      * Prepare form
      *
      * @return Mage_Sales_Block_Adminhtml_Report_Filter_Form_Coupon
@@ -41,9 +48,6 @@ class Mage_Sales_Block_Adminhtml_Report_Filter_Form_Coupon extends Mage_Sales_Bl
     protected function _prepareForm()
     {
         parent::_prepareForm();
-
-        $form = $this->getForm();
-        $htmlIdPrefix = $form->getHtmlIdPrefix();
 
         /** @var Varien_Data_Form_Element_Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
@@ -77,13 +81,39 @@ class Mage_Sales_Block_Adminhtml_Report_Filter_Form_Coupon extends Mage_Sales_Bl
                 'display'   => 'none'
             ), 'price_rule_type');
 
-            $this->setChild('form_after', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Form_Element_Dependence')
-                ->addFieldMap($htmlIdPrefix . 'price_rule_type', 'price_rule_type')
-                ->addFieldMap($htmlIdPrefix . 'rules_list', 'rules_list')
-                ->addFieldDependence('rules_list', 'price_rule_type', '1')
-            );
+            $this->_renderDependentElement = true;
         }
 
         return $this;
+    }
+
+    /**
+     * Processing block html after rendering
+     *
+     * @param   string $html
+     * @return  string
+     */
+    protected function _afterToHtml($html)
+    {
+        if ($this->_renderDependentElement) {
+            $form = $this->getForm();
+            $htmlIdPrefix = $form->getHtmlIdPrefix();
+
+            /**
+             * Form template has possibility to render child block 'form_after', but we can't use it because parent
+             * form creates appropriate child block and uses this alias. In this case we can't use the same alias
+             * without core logic changes, that's why the code below was moved inside method '_afterToHtml'.
+             */
+            /** @var $formAfterBlock Mage_Adminhtml_Block_Widget_Form_Element_Dependence */
+            $formAfterBlock = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Widget_Form_Element_Dependence',
+                'adminhtml.block.widget.form.element.dependence'
+            );
+            $formAfterBlock->addFieldMap($htmlIdPrefix . 'price_rule_type', 'price_rule_type')
+                ->addFieldMap($htmlIdPrefix . 'rules_list', 'rules_list')
+                ->addFieldDependence('rules_list', 'price_rule_type', '1');
+            $html = $html . $formAfterBlock->toHtml();
+        }
+
+        return $html;
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,15 +38,15 @@ class Mage_Reports_Model_Resource_Accounts_Collection extends Mage_Reports_Model
     /**
      * Join created_at and accounts fields
      *
-     * @param string $from
-     * @param string $to
+     * @param string $fromDate
+     * @param string $toDate
      * @return Mage_Reports_Model_Resource_Accounts_Collection
      */
-    protected function _joinFields($from = '', $to = '')
+    protected function _joinFields($fromDate = '', $toDate = '')
     {
 
         $this->getSelect()->reset(Zend_Db_Select::COLUMNS);
-        $this->addAttributeToFilter('created_at', array('from' => $from, 'to' => $to, 'datetime' => true))
+        $this->addAttributeToFilter('created_at', array('from' => $fromDate, 'to' => $toDate, 'datetime' => true))
              ->addExpressionAttributeToSelect('accounts', 'COUNT({{entity_id}})', array('entity_id'));
 
         $this->getSelect()->having("{$this->_joinFields['accounts']['field']} > ?", 0);
@@ -57,14 +57,14 @@ class Mage_Reports_Model_Resource_Accounts_Collection extends Mage_Reports_Model
     /**
      * Set date range
      *
-     * @param string $from
-     * @param string $to
+     * @param string $fromDate
+     * @param string $toDate
      * @return Mage_Reports_Model_Resource_Accounts_Collection
      */
-    public function setDateRange($from, $to)
+    public function setDateRange($fromDate, $toDate)
     {
         $this->_reset()
-             ->_joinFields($from, $to);
+             ->_joinFields($fromDate, $toDate);
         return $this;
     }
 

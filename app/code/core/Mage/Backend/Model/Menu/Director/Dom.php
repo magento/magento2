@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_DirectorAbstract
@@ -32,22 +32,22 @@ class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_Direc
     protected $_extractedData = array();
 
     /**
-     * @var Mage_Backend_Model_Menu_Logger
+     * @var Mage_Core_Model_Logger
      */
     protected $_logger;
 
     /**
      * @param DOMDocument $menuConfig
      * @param Magento_ObjectManager $factory
-     * @param Mage_Backend_Model_Menu_Logger $menuLogger
+     * @param Mage_Core_Model_Logger $logger
      */
     public function __construct(
         DOMDocument $menuConfig,
         Magento_ObjectManager $factory,
-        Mage_Backend_Model_Menu_Logger $menuLogger
+        Mage_Core_Model_Logger $logger
     ) {
         parent::__construct($menuConfig, $factory);
-        $this->_logger = $menuLogger;
+        $this->_logger = $logger;
         $this->_extractData();
     }
 
@@ -106,7 +106,10 @@ class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_Direc
                     'Mage_Backend_Model_Menu_Builder_Command_Update',
                     array('data' => $data)
                 );
-                $this->_logger->log(sprintf('Update on item with id %s was processed', $command->getId()));
+                $this->_logger->logDebug(
+                    sprintf('Update on item with id %s was processed', $command->getId()),
+                    Mage_Backend_Model_Menu::LOGGER_KEY
+                );
                 break;
 
             case 'remove':
@@ -114,7 +117,10 @@ class Mage_Backend_Model_Menu_Director_Dom extends Mage_Backend_Model_Menu_Direc
                     'Mage_Backend_Model_Menu_Builder_Command_Remove',
                     array('data' => $data)
                 );
-                $this->_logger->log(sprintf('Remove on item with id %s was processed', $command->getId()));
+                $this->_logger->logDebug(
+                    sprintf('Remove on item with id %s was processed', $command->getId()),
+                    Mage_Backend_Model_Menu::LOGGER_KEY
+                );
                 break;
 
             default:

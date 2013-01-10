@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 var AdminOrder = new Class.create();
@@ -1056,18 +1056,23 @@ AdminOrder.prototype = {
 
     submit : function()
     {
+        // Temporary solution will be replaced after refactoring order functionality
+        var disableAndSave = function() {
+            disableElements('save');
+            jQuery('#edit_form').on('invalid-form.validate', function() {
+                enableElements('save');
+                jQuery('#edit_form').off('invalid-form.validate');
+            });
+            jQuery('#edit_form').triggerHandler('save');
+        }
         if (this.orderItemChanged) {
             if (confirm('You have item changes')) {
-                if (editForm.submit()) {
-                    disableElements('save');
-                }
+                disableAndSave();
             } else {
                 this.itemsUpdate();
             }
         } else {
-            if (editForm.submit()) {
-                disableElements('save');
-            }
+            disableAndSave();
         }
     },
 

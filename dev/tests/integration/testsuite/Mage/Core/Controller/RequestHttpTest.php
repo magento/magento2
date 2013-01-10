@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -93,12 +93,18 @@ class Mage_Core_Controller_RequestHttpTest extends PHPUnit_Framework_TestCase
     public function testIsDirectAccessFrontendName()
     {
         $this->assertFalse($this->_model->isDirectAccessFrontendName('test'));
-        $this->assertTrue($this->_model->isDirectAccessFrontendName('api'));
+        $this->assertFalse(
+            $this->_model->isDirectAccessFrontendName('api'),
+            "Mage_Core_Controller_RequestHttp should not be used in API area."
+        );
     }
 
     public function testGetDirectFrontNames()
     {
-        $this->assertContains('api', array_keys($this->_model->getDirectFrontNames()));
+        $this->assertEmpty(
+            $this->_model->getDirectFrontNames(),
+            "After API module removal there should not be areas with direct front name."
+        );
     }
 
     public function testGetOriginalRequest()

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tag
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,10 +36,8 @@ class Mage_Tag_Block_Customer_Recent extends Mage_Core_Block_Template
 {
     protected $_collection;
 
-    protected function _construct()
+    protected function _initCollection()
     {
-        parent::_construct();
-
         $this->_collection = Mage::getModel('Mage_Tag_Model_Tag')->getEntityCollection()
             ->addStoreFilter(Mage::app()->getStore()->getId())
             ->addCustomerFilter(Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerId())
@@ -54,11 +52,14 @@ class Mage_Tag_Block_Customer_Recent extends Mage_Core_Block_Template
 
     public function count()
     {
-        return $this->_collection->getSize();
+        return $this->_getCollection()->getSize();
     }
 
     protected function _getCollection()
     {
+        if (!$this->_collection) {
+            $this->_initCollection();
+        }
         return $this->_collection;
     }
 
@@ -79,7 +80,7 @@ class Mage_Tag_Block_Customer_Recent extends Mage_Core_Block_Template
 
     protected function _toHtml()
     {
-        if ($this->_collection->getSize() > 0) {
+        if ($this->_getCollection()->getSize() > 0) {
             return parent::_toHtml();
         }
         return '';

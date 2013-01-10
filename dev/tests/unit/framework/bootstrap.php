@@ -20,35 +20,19 @@
  *
  * @category    Magento
  * @package     unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require __DIR__ . '/../../../../app/code/core/Mage/Core/functions.php';
-
-$includePaths = array(
-    "./framework",
-    './testsuite',
-    '../../../app/',
-    '../../../app/code/core',
-    '../../../lib',
-    get_include_path(),
-);
-set_include_path(implode(PATH_SEPARATOR, $includePaths));
-spl_autoload_register(function($class) {
-    $file = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class) . '.php';
-    foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
-        $fileName = $path . DIRECTORY_SEPARATOR . $file;
-        if (file_exists($fileName)) {
-            include $file;
-            if (class_exists($class, false) || interface_exists($class, false)) {
-                return true;
-            }
-        }
-
-    }
-    return false;
-});
+require __DIR__ . '/../../../../app/autoload.php';
+Magento_Autoload_IncludePath::addIncludePath(array(
+    __DIR__,
+    realpath(__DIR__ . '/../testsuite'),
+    realpath(__DIR__ . '/../../../../app'),
+    realpath(__DIR__ . '/../../../../app/code/core'),
+    realpath(__DIR__ . '/../../../../lib'),
+));
 
 define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
 if (is_dir(TESTS_TEMP_DIR)) {

@@ -20,12 +20,14 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Menu item. Should be used to create nested menu structures with Mage_Backend_Model_Menu
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Mage_Backend_Model_Menu_Item
 {
@@ -191,11 +193,24 @@ class Mage_Backend_Model_Menu_Item
 
         $this->_id = $data['id'];
         $this->_title = $data['title'];
-        $this->_action = isset($data['action']) ? $data['action'] : null;
-        $this->_resource = isset($data['resource']) ? $data['resource'] : null;
-        $this->_dependsOnModule = isset($data['dependsOnModule']) ? $data['dependsOnModule'] : null;
-        $this->_dependsOnConfig = isset($data['dependsOnConfig']) ? $data['dependsOnConfig'] : null;
-        $this->_tooltip = isset($data['toolTip']) ? $data['toolTip'] : '';
+        $this->_action = $this->_getArgument($data, 'action');
+        $this->_resource = $this->_getArgument($data, 'resource');
+        $this->_dependsOnModule = $this->_getArgument($data, 'dependsOnModule');
+        $this->_dependsOnConfig = $this->_getArgument($data, 'dependsOnConfig');
+        $this->_tooltip = $this->_getArgument($data, 'toolTip', '');
+    }
+
+    /**
+     * Retrieve argument element, or default value
+     *
+     * @param array $array
+     * @param mixed $key
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    protected function _getArgument(array $array, $key, $defaultValue = null)
+    {
+        return isset($array[$key]) ? $array[$key] : $defaultValue;
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,10 +59,8 @@ class Mage_Adminhtml_SitemapController extends  Mage_Adminhtml_Controller_Action
     public function indexAction()
     {
         $this->_title($this->__('Catalog'))->_title($this->__('XML Sitemaps'));
-
-        $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Sitemap'))
-            ->renderLayout();
+        $this->_initAction();
+        $this->renderLayout();
     }
 
     /**

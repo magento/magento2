@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_GoogleShopping
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,9 +53,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
      */
     public function indexAction()
     {
-        $this->_initAction()
-            ->_addBreadcrumb(Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Items'), Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Items'))
-            ->_title($this->__('Catalog'))
+        $this->_title($this->__('Catalog'))
             ->_title($this->__('Google Content'))
             ->_title($this->__('Manage Items'));
 
@@ -63,6 +61,9 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
             $this->_redirect('*/*/', array('store' => Mage::app()->getAnyStoreView()->getId(), '_current' => true));
             return;
         }
+
+        $this->_initAction();
+
         $contentBlock = $this->getLayout()
             ->createBlock('Mage_GoogleShopping_Block_Adminhtml_Items')->setStore($this->_getStore());
 
@@ -82,7 +83,8 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_ItemsController extends Mage_
             );
         }
 
-        $this->_addContent($contentBlock)
+        $this->_addBreadcrumb(Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Items'), Mage::helper('Mage_GoogleShopping_Helper_Data')->__('Items'))
+            ->_addContent($contentBlock)
             ->renderLayout();
     }
 

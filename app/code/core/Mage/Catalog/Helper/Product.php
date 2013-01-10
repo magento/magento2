@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     const XML_PATH_AUTO_GENERATE_MASK                = 'catalog/fields_masks';
     const XML_PATH_UNASSIGNABLE_ATTRIBUTES           = 'global/catalog/product/attributes/unassignable';
     const XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION = 'global/catalog/product/attributes/used_in_autogeneration';
-
+    const XML_PATH_PRODUCT_TYPE_SWITCHER_LABEL       = 'global/catalog/product/attributes/weight/type_switcher/label';
 
     /**
      * Flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
@@ -213,7 +213,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
 
     /**
      * Return information array of product attribute input types
-     * Only a small number of settings returned, so we won't break anything in current dataflow
+     * Only a small number of settings returned, so we won't break anything in current data flow
      * As soon as development process goes on we need to add there all possible settings
      *
      * @param string $inputType
@@ -504,5 +504,15 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
     public function getAttributesAllowedForAutogeneration()
     {
         return array_keys(Mage::getConfig()->getNode(self::XML_PATH_ATTRIBUTES_USED_IN_AUTOGENERATION)->asArray());
+    }
+
+    /**
+     * Get label for virtual control
+     *
+     * @return string
+     */
+    public function getTypeSwitcherControlLabel()
+    {
+        return $this->__((string)Mage::getConfig()->getNode(self::XML_PATH_PRODUCT_TYPE_SWITCHER_LABEL));
     }
 }

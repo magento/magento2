@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,14 +37,11 @@
 class Mage_DesignEditor_Block_Template extends Mage_Core_Block_Template
 {
     /**
-     * Check whether highlighting of elements is disabled or not
+     * Path to template file in theme.
      *
-     * @return bool
+     * @var string
      */
-    public function isHighlightingDisabled()
-    {
-        return Mage::getSingleton('Mage_DesignEditor_Model_Session')->isHighlightingDisabled();
-    }
+    protected $_template = 'wrapping.phtml';
 
     /**
      * Get remove button for block/container wrapper

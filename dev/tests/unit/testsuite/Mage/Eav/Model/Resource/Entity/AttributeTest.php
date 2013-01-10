@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Eav
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -65,10 +65,6 @@ class Mage_Eav_Model_Resource_Entity_AttributeTest extends PHPUnit_Framework_Tes
             array('eav_attribute', $attributeData, 1),
         )));
 
-        //this line causes crash on windows environment
-        //$adapter->expects($this->never())->method('update');
-        $adapter->expects($this->never())->method('delete');
-
         $adapter->expects($this->once())
             ->method('fetchRow')
             ->will($this->returnValueMap(array(
@@ -78,6 +74,10 @@ class Mage_Eav_Model_Resource_Entity_AttributeTest extends PHPUnit_Framework_Tes
                     $attributeData
                 ),
             )));
+        $adapter->expects($this->once())
+            ->method('update')
+            ->with('eav_attribute', array('default_value' => 2), array('attribute_id = ?' => null));
+        $adapter->expects($this->never())->method('delete');
 
         $resourceModel->save($model);
     }

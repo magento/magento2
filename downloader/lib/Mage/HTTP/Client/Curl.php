@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_HTTP
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -378,7 +378,7 @@ implements Mage_HTTP_IClient
         }
 
         $this->curlOption(CURLOPT_URL, $uri);
-        $this->curlOption(CURLOPT_SSL_VERIFYPEER, FALSE);
+        $this->curlOption(CURLOPT_SSL_VERIFYPEER, true);
         $this->curlOption(CURLOPT_SSL_VERIFYHOST, 2);
 
         // force method to POST if secured

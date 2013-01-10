@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Downloadable
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -128,7 +128,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     public function getLinksTitle()
     {
-        return Mage::getStoreConfig(Mage_Downloadable_Model_Link::XML_PATH_LINKS_TITLE);
+        return $this->getProduct()->getId() && $this->getProduct()->getTypeId() == 'downloadable'
+            ? $this->getProduct()->getLinksTitle()
+            : Mage::getStoreConfig(Mage_Downloadable_Model_Link::XML_PATH_LINKS_TITLE);
     }
 
     /**
@@ -163,6 +165,9 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
     public function getLinkData()
     {
         $linkArr = array();
+        if ($this->getProduct()->getTypeId() !== Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+            return $linkArr;
+        }
         $links = $this->getProduct()->getTypeInstance()->getLinks($this->getProduct());
         $priceWebsiteScope = $this->getIsPriceWebsiteScope();
         $fileHelper = Mage::helper('Mage_Downloadable_Helper_File');

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,7 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet extends Mage_Adminhtml_Block_Widget_Form
+class Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet extends Mage_Backend_Block_Widget_Form
 {
     protected function _prepareForm()
     {
@@ -54,6 +54,14 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_AttributeSet extends Mage_Adminh
                 ->toOptionArray()
         ));
 
+        $fieldset->addField(
+            'type_id',
+            'hidden',
+            array(
+                'name' => 'type_id',
+                'value' => Mage::registry('product')->getTypeId(),
+            )
+        );
         $this->setForm($form);
     }
 }

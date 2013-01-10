@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,14 +31,14 @@
  * @package    Mage_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction extends Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox
+class Mage_Backend_Block_Widget_Grid_Column_Filter_Massaction
+    extends Mage_Backend_Block_Widget_Grid_Column_Filter_Checkbox
 {
     public function getCondition()
     {
         if ($this->getValue()) {
             return array('in'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
-        }
-        else {
+        } else {
             return array('nin'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
         }
     }

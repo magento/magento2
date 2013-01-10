@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -274,7 +274,6 @@ class Mage_Core_Model_Resource_Setup
     /**
      * Apply data updates to the system after upgrading.
      *
-     * @param string $fromVersion
      * @return Mage_Core_Model_Resource_Setup
      */
     public function applyDataUpdates()
@@ -313,8 +312,8 @@ class Mage_Core_Model_Resource_Setup
 
         // Module is installed
         if ($dbVer !== false) {
-             $status = version_compare($configVer, $dbVer);
-             switch ($status) {
+            $status = version_compare($configVer, $dbVer);
+            switch ($status) {
                 case self::VERSION_COMPARE_LOWER:
                     $this->_rollbackResourceDb($configVer, $dbVer);
                     break;
@@ -324,7 +323,7 @@ class Mage_Core_Model_Resource_Setup
                 default:
                     return true;
                     break;
-             }
+            }
         } elseif ($configVer) {
             $this->_installResourceDb($configVer);
         }
@@ -579,7 +578,8 @@ class Mage_Core_Model_Resource_Setup
             case self::TYPE_DATA_UPGRADE:
                 $this->_getResource()->setDataVersion($this->_resourceName, $version);
                 break;
-
+            default:
+                break;
         }
 
         return $this;
@@ -592,7 +592,7 @@ class Mage_Core_Model_Resource_Setup
      * @param string $fromVersion
      * @param string $toVersion
      * @return string|false
-     * @throws Mage_Core_Exception
+     * @throws Magento_Exception
      */
 
     protected function _modifyResourceDb($actionType, $fromVersion, $toVersion)
@@ -710,6 +710,8 @@ class Mage_Core_Model_Resource_Setup
 
             case self::TYPE_DB_UNINSTALL:
                 break;
+            default:
+                break;
         }
         return $arrRes;
     }
@@ -728,7 +730,7 @@ class Mage_Core_Model_Resource_Setup
      * @param string|integer $parentId
      * @return mixed|boolean
      */
-    public function getTableRow($table, $idField, $id, $field=null, $parentField=null, $parentId=0)
+    public function getTableRow($table, $idField, $id, $field = null, $parentField = null, $parentId = 0)
     {
         $table = $this->getTable($table);
         if (empty($this->_setupCache[$table][$parentId][$id])) {
@@ -839,10 +841,9 @@ class Mage_Core_Model_Resource_Setup
      * @param string $value
      * @param int|string $scope
      * @param int $scopeId
-     * @param int $inherit
      * @return Mage_Core_Model_Resource_Setup
      */
-    public function setConfigData($path, $value, $scope = 'default', $scopeId = 0, $inherit=0)
+    public function setConfigData($path, $value, $scope = Mage_Core_Model_Store::DEFAULT_CODE, $scopeId = 0)
     {
         $table = $this->getTable('core_config_data');
         // this is a fix for mysql 4.1

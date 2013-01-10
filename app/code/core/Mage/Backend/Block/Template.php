@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,6 +30,9 @@
  * @category   Mage
  * @package    Mage_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.numberOfChildren)
  */
 class Mage_Backend_Block_Template extends Mage_Core_Block_Template
 {
@@ -102,7 +105,7 @@ class Mage_Backend_Block_Template extends Mage_Core_Block_Template
      */
     protected function _toHtml()
     {
-        Mage::dispatchEvent('adminhtml_block_html_before', array('block' => $this));
+        $this->_eventManager->dispatch('adminhtml_block_html_before', array('block' => $this));
         return parent::_toHtml();
     }
 }

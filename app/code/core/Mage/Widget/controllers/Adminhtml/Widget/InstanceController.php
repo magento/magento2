@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -73,20 +73,18 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
 
         $instanceId = $this->getRequest()->getParam('instance_id', null);
         $type = $this->getRequest()->getParam('type', null);
-        $packageTheme = $this->getRequest()->getParam('package_theme', null);
-        if ($packageTheme) {
-            $packageTheme = str_replace('-', '/', $packageTheme);
-        }
+        $themeId = $this->getRequest()->getParam('theme_id', null);
 
         if ($instanceId) {
             $widgetInstance->load($instanceId);
             if (!$widgetInstance->getId()) {
-                $this->_getSession()->addError(Mage::helper('Mage_Widget_Helper_Data')->__('Wrong widget instance specified.'));
+                $this->_getSession()->addError(
+                    Mage::helper('Mage_Widget_Helper_Data')->__('Wrong widget instance specified.')
+                );
                 return false;
             }
         } else {
-            $widgetInstance->setType($type)
-                ->setPackageTheme($packageTheme);
+            $widgetInstance->setType($type)->setThemeId($themeId);
         }
         Mage::register('current_widget_instance', $widgetInstance);
         return $widgetInstance;

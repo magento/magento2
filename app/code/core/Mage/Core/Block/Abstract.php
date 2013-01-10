@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,7 @@
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Mage_Core_Block_Abstract extends Varien_Object
+    implements Mage_Core_Block
 {
     /**
      * @var Mage_Core_Model_Design_Package
@@ -74,9 +75,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     protected $_layout;
 
     /**
-     * Request object
-     *
-     * @var Zend_Controller_Request_Http
+     * @var Mage_Core_Controller_Request_Http
      */
     protected $_request;
 
@@ -151,17 +150,17 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
         Mage_Core_Model_Factory_Helper $helperFactory,
         array $data = array()
     ) {
-        $this->_request = $request;
-        $this->_layout = $layout;
-        $this->_eventManager = $eventManager;
-        $this->_urlBuilder = $urlBuilder;
-        $this->_translator = $translator;
-        $this->_cache = $cache;
-        $this->_designPackage = $designPackage;
-        $this->_session = $session;
-        $this->_storeConfig = $storeConfig;
+        $this->_request         = $request;
+        $this->_layout          = $layout;
+        $this->_eventManager    = $eventManager;
+        $this->_urlBuilder      = $urlBuilder;
+        $this->_translator      = $translator;
+        $this->_cache           = $cache;
+        $this->_designPackage   = $designPackage;
+        $this->_session         = $session;
+        $this->_storeConfig     = $storeConfig;
         $this->_frontController = $frontController;
-        $this->_helperFactory = $helperFactory;
+        $this->_helperFactory   = $helperFactory;
 
         parent::__construct($data);
         $this->_construct();
@@ -308,9 +307,6 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
             $this->unsetChild($alias);
         }
         if ($block instanceof self) {
-            if ($block->getIsAnonymous()) {
-                $block->setNameInLayout($this->getNameInLayout() . '.' . $alias);
-            }
             $block = $block->getNameInLayout();
         }
         $layout->setChild($thisName, $block, $alias);
@@ -319,10 +315,10 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
     }
 
     /**
-     * Create block and set as child
+     * Create block with name: {parent}.{alias} and set as child
      *
      * @param string $alias
-     * @param Mage_Core_Block_Abstract $block
+     * @param string $block
      * @param array $data
      * @return Mage_Core_Block_Abstract new block
      */
@@ -647,7 +643,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
          * Check framing options
          */
         if ($this->_frameOpenTag) {
-            $html = '<'.$this->_frameOpenTag.'>'.$html.'<'.$this->_frameCloseTag.'>';
+            $html = '<' . $this->_frameOpenTag . '>' . $html . '<' . $this->_frameCloseTag . '>';
         }
 
         return $html;
@@ -682,7 +678,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     public function getUiId()
     {
-        return ' data-ui-id="' . call_user_func_array(array($this, 'getJsId'), func_get_args()). '" ';
+        return ' data-ui-id="' . call_user_func_array(array($this, 'getJsId'), func_get_args()) . '" ';
     }
 
     /**
@@ -739,10 +735,28 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      * @param string $file path to file in theme
      * @param array $params
      * @return string
+     * @throws Magento_Exception
      */
     public function getViewFileUrl($file = null, array $params = array())
     {
-        return Mage::getDesign()->getViewFileUrl($file, $params);
+        try {
+            return Mage::getDesign()->getViewFileUrl($file, $params);
+        } catch (Magento_Exception $e) {
+            Mage::logException($e);
+            return $this->_getNotFoundUrl();
+        }
+    }
+
+    /**
+     * Get 404 file not found url
+     *
+     * @param string $route
+     * @param array $params
+     * @return string
+     */
+    protected function _getNotFoundUrl($route = '', $params = array('_direct' => 'core/index/notfound'))
+    {
+        return $this->getUrl($route, $params);
     }
 
     /**

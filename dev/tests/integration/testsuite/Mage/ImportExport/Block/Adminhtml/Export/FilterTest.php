@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,10 @@
 class Mage_ImportExport_Block_Adminhtml_Export_FilterTest
     extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @magentoDataFixture Mage/Core/_files/init_adminhtml_design.php
+     * @magentoAppIsolation enabled
+     */
     public function testGetDateFromToHtmlWithValue()
     {
         $block = Mage::getObjectManager()->create('Mage_ImportExport_Block_Adminhtml_Export_Filter');

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Cms
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,8 +34,7 @@ $page//->setId(100) // doesn't work: it triggers update
     ->setIsActive(1)
     ->setContent('<h1>Cms Page 100 Title</h1>')
     ->setRootTemplate('one_column')
-    ->save()
-;
+    ->save();
 
 $page = Mage::getModel('Mage_Cms_Model_Page');
 $page->setTitle('Cms Page Design Modern')
@@ -45,5 +44,4 @@ $page->setTitle('Cms Page Design Modern')
     ->setContent('<h1>Cms Page Design Modern Title</h1>')
     ->setRootTemplate('one_column')
     ->setCustomTheme('default/modern')
-    ->save()
-;
+    ->save();

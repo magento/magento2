@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -128,8 +128,14 @@ function submitShipment(btn){
     var checkbox = $(btn).up('.order-totals').select('#create_shipping_label')[0];
     if (checkbox && checkbox.checked) {
         packaging.showWindow();
-    } else if(editForm.submit()) {
+    } else {
         disableElements('submit-button');
+        // Temporary solution will be replaced after refactoring order functionality
+        jQuery('#edit_form').on('invalid-form.validate', function() {
+            enableElements('submit-button');
+            jQuery('#edit_form').off('invalid-form.validate');
+        });
+        jQuery('#edit_form').triggerHandler('save');
     }
 }
 //]]>

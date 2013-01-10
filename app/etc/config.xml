@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -98,8 +98,8 @@
                 <design>{{app_dir}}/design</design>
                 <locale>{{app_dir}}/locale</locale>
                 <etc>{{app_dir}}/etc</etc>
-                <media>{{root_dir}}/pub/media</media>
-                <upload>{{root_dir}}/pub/media/upload</upload>
+                <media>{{media_dir}}</media>
+                <upload>{{media_dir}}/upload</upload>
                 <var>{{var_dir}}</var>
                 <cache>{{var_dir}}/cache</cache>
                 <session>{{var_dir}}/session</session>

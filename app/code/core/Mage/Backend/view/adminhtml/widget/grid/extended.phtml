@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -40,9 +40,9 @@ $numColumns = sizeof($this->getColumns());
  * @var Mage_Backend_Block_Widget_Grid_Extended $this
  */
 ?>
-<?php if($this->getCollection()): ?>
-    <?php if($this->canDisplayContainer()): ?>
-        <?php if($this->getGridHeader()): ?>
+<?php if ($this->getCollection()): ?>
+    <?php if ($this->canDisplayContainer()): ?>
+        <?php if ($this->getGridHeader()): ?>
         <div class="content-header">
             <table cellspacing="0">
                 <tr>
@@ -56,16 +56,16 @@ $numColumns = sizeof($this->getColumns());
     <?php else: ?>
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
-<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+<?php if ($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
     <table cellspacing="0" class="actions">
         <tr>
-        <?php if($this->getPagerVisibility()): ?>
+        <?php if ($this->getPagerVisibility()): ?>
             <td class="pager">
             <?php echo $this->__('Page') ?>
 
             <?php $_curPage  = $this->getCollection()->getCurPage() ?>
             <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
-            <?php if($_curPage>1): ?>
+            <?php if ($_curPage>1): ?>
                 <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getViewFileUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
             <?php else: ?>
                 <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_left_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
@@ -73,7 +73,7 @@ $numColumns = sizeof($this->getColumns());
 
             <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
 
-            <?php if($_curPage < $_lastPage): ?>
+            <?php if ($_curPage < $_lastPage): ?>
                 <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><img src="<?php echo $this->getViewFileUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
             <?php else: ?>
                 <img src="<?php echo $this->getViewFileUrl('images/pager_arrow_right_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
@@ -83,23 +83,23 @@ $numColumns = sizeof($this->getColumns());
             <span class="separator">|</span>
             <?php echo $this->__('View') ?>
             <select name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
-                <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
-                <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
-                <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
-                <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
-                <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+                <option value="20"<?php if ($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                <option value="30"<?php if ($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                <option value="50"<?php if ($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                <option value="100"<?php if ($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                <option value="200"<?php if ($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
             </select>
             <?php echo $this->__('per page') ?><span class="separator">|</span>
             <?php echo $this->__('Total %d records found', $this->getCollection()->getSize()) ?>
             <span id="<?php echo $this->getHtmlId() ?>-total-count" class="no-display"><?php echo $this->getCollection()->getSize() ?></span>
-            <?php if($this->getRssLists()): ?>
+            <?php if ($this->getRssLists()): ?>
                 <?php foreach ($this->getRssLists() as $_rss): ?>
                 <span class="separator">|</span><a href="<?php echo $_rss->getUrl() ?>" class="link-feed"><?php echo $_rss->getLabel() ?></a>
                 <?php endforeach ?>
             <?php endif; ?>
         </td>
     <?php endif ?>
-    <?php if($this->getExportTypes()): ?>
+    <?php if ($this->getExportTypes()): ?>
         <td class="export a-right">
             <img src="<?php echo $this->getViewFileUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
             <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;">
@@ -116,7 +116,7 @@ $numColumns = sizeof($this->getColumns());
         </tr>
     </table>
 <?php endif; ?>
-<?php if($this->getMassactionBlock()->isAvailable()): ?>
+<?php if ($this->getMassactionBlock()->isAvailable()): ?>
 <?php echo $this->getMassactionBlockHtml() ?>
 <?php endif ?>
 <div class="grid">
@@ -206,23 +206,23 @@ $numColumns = sizeof($this->getColumns());
     </table>
     </div>
 </div>
-<?php if($this->canDisplayContainer()): ?>
+<?php if ($this->canDisplayContainer()): ?>
 </div>
 <script type="text/javascript">
 //<![CDATA[
     <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
     <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
-    <?php if($this->getRowClickCallback()): ?>
+    <?php if ($this->getRowClickCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
     <?php endif; ?>
-    <?php if($this->getCheckboxCheckCallback()): ?>
+    <?php if ($this->getCheckboxCheckCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
     <?php endif; ?>
-    <?php if($this->getRowInitCallback()): ?>
+    <?php if ($this->getRowInitCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
         <?php echo $this->getJsObjectName() ?>.initGridRows();
     <?php endif; ?>
-    <?php if($this->getMassactionBlock()->isAvailable()): ?>
+    <?php if ($this->getMassactionBlock()->isAvailable()): ?>
     <?php echo $this->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
     <?php echo $this->getAdditionalJavaScript(); ?>

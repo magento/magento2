@@ -20,7 +20,7 @@
  *
  * @category    tests
  * @package     static
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,12 +57,15 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
     public function testCodeStyle()
     {
         $reportFile = self::$_reportDir . '/phpcs_report.xml';
-        $cmd = new Inspection_CodeSniffer_Command(realpath(__DIR__ . '/_files/phpcs'), $reportFile);
-        if (!$cmd->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer command is not available.');
+        $wrapper = new CodingStandard_Tool_CodeSniffer_Wrapper();
+        $codeSniffer = new CodingStandard_Tool_CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
+        if (!$codeSniffer->canRun()) {
+            $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
-        $cmd->setExtensions(array('php', 'phtml'));
-        $this->assertTrue($cmd->run(self::$_whiteList, self::$_blackList), $cmd->getLastRunMessage());
+        $result = $codeSniffer->run(self::$_whiteList, self::$_blackList, array('php', 'phtml'));
+        $this->assertEquals(0, $result,
+            "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
+        );
     }
 
     public function testCodeMess()

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,14 +45,8 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
              ->_title($this->__('Manage Tax Zones and Rates'));
 
         $this->_initAction()
-            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'), Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'))
-            ->_addContent(
-                $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Add', 'tax_rate_toolbar')
-                    ->assign('createUrl', $this->getUrl('*/tax_rate/add'))
-                    ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'))
-            )
-            ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid', 'tax_rate_grid'))
-            ->renderLayout();
+            ->_addBreadcrumb(Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'), Mage::helper('Mage_Tax_Helper_Data')->__('Manage Tax Rates'));
+        $this ->renderLayout();
     }
 
     /**
@@ -82,7 +76,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
             ->_addContent(
                 $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Save')
                 ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Add New Tax Rate'))
-                ->assign('form', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form'))
+                ->assign('form',
+                    $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form', 'tax_rate_form')
+                )
             )
             ->renderLayout();
     }
@@ -211,7 +207,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
             ->_addContent(
                 $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Toolbar_Save')
                 ->assign('header', Mage::helper('Mage_Tax_Helper_Data')->__('Edit Tax Rate'))
-                ->assign('form', $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form'))
+                ->assign('form',
+                    $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Form', 'tax_rate_form')
+                )
             )
             ->renderLayout();
     }
@@ -290,11 +288,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
      */
     public function exportCsvAction()
     {
-        $fileName   = 'rates.csv';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid')
-            ->getCsvFile();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->loadLayout(false);
+        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        $this->_prepareDownloadResponse('rates.csv', $content->getCsvFile());
     }
 
     /**
@@ -302,11 +298,9 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
      */
     public function exportXmlAction()
     {
-        $fileName   = 'rates.xml';
-        $content    = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_Grid')
-            ->getExcelFile();
-
-        $this->_prepareDownloadResponse($fileName, $content);
+        $this->loadLayout(false);
+        $content = $this->getLayout()->getChildBlock('adminhtml.tax.rate.grid','grid.export');
+        $this->_prepareDownloadResponse('rates.xml', $content->getExcelFile());
     }
 
     /**
@@ -544,7 +538,7 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
 
             $content .= $rate->toString($template) . "\n";
         }
-
+        $this->loadLayout();
         $this->_prepareDownloadResponse('tax_rates.csv', $content);
     }
 

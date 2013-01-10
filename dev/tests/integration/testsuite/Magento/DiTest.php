@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Di
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -87,7 +87,7 @@ class Magento_DiTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        $magentoDi = new Magento_Di();
+        $magentoDi = new Magento_Di_Zend();
         $magentoDi->instanceManager()->addTypePreference(self::TEST_INTERFACE, self::TEST_INTERFACE_IMPLEMENTATION);
         $magentoDi->instanceManager()->addAlias(self::TEST_CLASS_ALIAS, self::TEST_CLASS);
         self::$_objectManager = new Magento_ObjectManager_Zend(null, $magentoDi);

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -130,8 +130,7 @@ abstract class Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
             $customWidth = $this->getColumn()->getData('width');
             if ((null === $customWidth) || (preg_match('/^[0-9]+%?$/', $customWidth))) {
                 $width = $customWidth;
-            }
-            elseif (preg_match('/^([0-9]+)px$/', $customWidth, $matches)) {
+            } elseif (preg_match('/^([0-9]+)px$/', $customWidth, $matches)) {
                 $width = (int)$matches[1];
             }
         }

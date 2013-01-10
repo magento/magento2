@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -104,13 +104,18 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
             this.currentNodeId = parameters['category_id'];
         }
         this.selectCurrentNode();
+
+        // Temporary solution will be replaced after refactoring of tree functionality
+        jQuery('body').off('tabsactivate.tree').on('tabsactivate.tree', jQuery.proxy(function(e, ui){
+            this.activeTab = jQuery(ui.newTab).find('a').prop('id');
+        }, this))
     },
 
     request : function(url, params)
     {
         if (!params) {
-            if (category_info_tabsJsTabs.activeTab) {
-                var params = {active_tab_id:category_info_tabsJsTabs.activeTab.id};
+            if (this.activeTab) {
+                var params = {active_tab_id:this.activeTab};
             }
             else {
                 var params = {};
@@ -180,8 +185,8 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
             setLocation(url);
             return;
         }
-        if (category_info_tabsJsTabs.activeTab) {
-            var params = {active_tab_id:category_info_tabsJsTabs.activeTab.id};
+        if (this.activeTab) {
+            var params = {active_tab_id:this.activeTab};
         }
         updateContent(url, params);
     }
@@ -440,7 +445,7 @@ function categoryMove(obj)
         try {
             if(o.responseText){
                 if(o.responseText==='SUCCESS'){
-                    categoryForm.refreshPath();
+                    jQuery(obj.tree.container.dom).trigger('categoryMove.tree');
                 } else {
                     alert(o.responseText);
                     location.reload();

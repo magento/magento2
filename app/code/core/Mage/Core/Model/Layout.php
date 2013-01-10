@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -1201,7 +1201,7 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      * Save block in blocks registry
      *
      * @param string $name
-     * @param Mage_Core_Block_abstract $block
+     * @param Mage_Core_Block_Abstract $block
      * @return Mage_Core_Model_Layout
      */
     public function setBlock($name, $block)
@@ -1237,10 +1237,8 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      */
     public function createBlock($type, $name = '', array $attributes = array())
     {
-        $isAnonymousBlock = empty($name);
         $name = $this->_createStructuralElement($name, self::TYPE_BLOCK, $type);
         $block = $this->_createBlock($type, $name, $attributes);
-        $block->setIsAnonymous($isAnonymousBlock);
         return $block;
     }
 
@@ -1336,11 +1334,11 @@ class Mage_Core_Model_Layout extends Varien_Simplexml_Config
      * @param array $attributes
      * @return Mage_Core_Block_Abstract
      */
-    protected function _getBlockInstance($block, array $attributes=array())
+    protected function _getBlockInstance($block, array $attributes = array())
     {
         if ($block && is_string($block)) {
             $block = Mage::getConfig()->getBlockClassName($block);
-            if (Magento_Autoload::getInstance()->classExists($block)) {
+            if (class_exists($block)) {
                 $block = $this->_blockFactory->createBlock($block, $attributes);
             }
         }

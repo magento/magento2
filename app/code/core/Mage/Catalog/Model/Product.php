@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,10 @@
  * @method Mage_Catalog_Model_Resource_Product _getResource()
  * @method Mage_Catalog_Model_Product setHasError(bool $value)
  * @method null|bool getHasError()
+ * @method Mage_Catalog_Model_Product setTypeId(string $typeId)
+ * @method string getTypeId()
+ * @method Mage_Catalog_Model_Product setAssociatedProductIds(array $productIds)
+ * @method array getAssociatedProductIds()
  *
  * @category    Mage
  * @package     Mage_Catalog
@@ -119,7 +123,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
         Mage_Catalog_Model_Resource_Product $resource,
         Mage_Catalog_Model_Resource_Product_Collection $resourceCollection,
         array $data = array()
-    ) {  
+    ) {
         parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
     }
 
@@ -265,7 +269,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     /**
      * Set type instance for the product
      *
-     * @param Mage_Catalog_Model_Product_Type_Abstract $instance  Product type instance
+     * @param Mage_Catalog_Model_Product_Type_Abstract|null $instance  Product type instance
      * @return Mage_Catalog_Model_Product
      */
     public function setTypeInstance($instance)
@@ -327,36 +331,13 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     }
 
     /**
-     * Set assigned category IDs array to product
-     *
-     * @param array|string $ids
-     * @return Mage_Catalog_Model_Product
-     */
-    public function setCategoryIds($ids)
-    {
-        if (is_string($ids)) {
-            $ids = explode(',', $ids);
-        } elseif (!is_array($ids)) {
-            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Invalid category IDs.'));
-        }
-        foreach ($ids as $i => $v) {
-            if (empty($v)) {
-                unset($ids[$i]);
-            }
-        }
-
-        $this->setData('category_ids', $ids);
-        return $this;
-    }
-
-    /**
      * Retrieve assigned category Ids
      *
      * @return array
      */
     public function getCategoryIds()
     {
-        if (! $this->hasData('category_ids')) {
+        if (!$this->hasData('category_ids')) {
             $wasLocked = false;
             if ($this->isLockedAttribute('category_ids')) {
                 $wasLocked = true;
@@ -369,7 +350,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
             }
         }
 
-        return (array) $this->_getData('category_ids');
+        return (array)$this->_getData('category_ids');
     }
 
     /**

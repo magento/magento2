@@ -21,11 +21,11 @@
  * @category    Mage
  * @package     Mage_Widget
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Widget_Adminhtml_WidgetControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Widget_Adminhtml_WidgetControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * Partially covers Mage_Widget_Block_Adminhtml_Widget_Options::_addField()

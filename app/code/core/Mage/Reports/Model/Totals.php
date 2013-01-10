@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ class Mage_Reports_Model_Totals
     /**
      * Retrieve count totals
      *
-     * @param Mage_Adminhtml_Block_Report_Grid $grid
+     * @param Mage_Adminhtml_Block_Widget_Grid $grid
      * @param string $from
      * @param string $to
      * @return Varien_Object

@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -43,6 +43,17 @@
                 </field>
                 <field id="show_cms_breadcrumbs" translate="label" module="Mage_Cms" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Breadcrumbs for CMS Pages</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                </field>
+            </group>
+            <group id="browser_capabilities" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Browser Capabilities Detection</label>
+                <field id="cookies" translate="label" module="Mage_Cms" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redirect to CMS-page if Cookies are Disabled</label>
+                    <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
+                </field>
+                <field id="javascript" translate="label" module="Mage_Cms" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Notice if JavaScript is Disabled</label>
                     <source_model>Mage_Backend_Model_Config_Source_Yesno</source_model>
                 </field>
             </group>

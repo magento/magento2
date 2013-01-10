@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,10 +50,6 @@ class Mage_Adminhtml_Newsletter_ProblemController extends Mage_Adminhtml_Control
         $this->_setActiveMenu('Mage_Newsletter::newsletter_problem');
 
         $this->_addBreadcrumb(Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Problem Reports'), Mage::helper('Mage_Newsletter_Helper_Data')->__('Newsletter Problem Reports'));
-
-        $this->_addContent(
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Problem', 'problem')
-        );
 
         $this->renderLayout();
     }
@@ -93,8 +89,8 @@ class Mage_Adminhtml_Newsletter_ProblemController extends Mage_Adminhtml_Control
         }
                 $this->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('Mage_Adminhtml_Model_Session')->getMessages(true));
 
-        $grid = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Newsletter_Problem_Grid');
-        $this->getResponse()->setBody($grid->toHtml());
+        $this->loadLayout(false);
+        $this->renderLayout();
     }
 
     protected function _isAllowed()

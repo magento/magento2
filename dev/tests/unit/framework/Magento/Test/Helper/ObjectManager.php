@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,7 +53,7 @@ class Magento_Test_Helper_ObjectManager
             'layout'             => 'Mage_Core_Model_Layout',
             'eventManager'       => 'Mage_Core_Model_Event_Manager',
             'urlBuilder'         => 'Mage_Core_Model_Url',
-            'translator'         => 'Mage_Core_Model_Translate',
+            'translator'         => '_getTranslatorMock',
             'cache'              => 'Mage_Core_Model_Cache',
             'designPackage'      => 'Mage_Core_Model_Design_Package',
             'session'            => 'Mage_Core_Model_Session',
@@ -164,6 +164,32 @@ class Magento_Test_Helper_ObjectManager
     }
 
     /**
+     * Retrieve mock of core translator model
+     *
+     * @return Mage_Core_Model_Translate|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getTranslatorMock()
+    {
+        $translator = $this->_testObject->getMockBuilder('Mage_Core_Model_Translate')
+            ->disableOriginalConstructor()
+            ->setMethods(array('translate'))
+            ->getMock();
+        $translateCallback = function ($arguments) {
+            $result = '';
+            if (is_array($arguments) && current($arguments) instanceof Mage_Core_Model_Translate_Expr) {
+                /** @var Mage_Core_Model_Translate_Expr $expression */
+                $expression = array_shift($arguments);
+                $result = vsprintf($expression->getText(), $arguments);
+            }
+            return $result;
+        };
+        $translator->expects($this->_testObject->any())
+            ->method('translate')
+            ->will($this->_testObject->returnCallback($translateCallback));
+        return $translator;
+    }
+
+    /**
      * Sort constructor arguments array as is defined for current class interface
      *
      * @param string $className
@@ -198,6 +224,7 @@ class Magento_Test_Helper_ObjectManager
      */
     protected function _getMockWithoutConstructorCall($className)
     {
+
         return $this->_testObject->getMock($className, array(), array(), '', false);
     }
 

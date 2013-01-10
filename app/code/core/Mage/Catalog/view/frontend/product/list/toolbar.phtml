@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -92,12 +92,12 @@
             <?php if ($this->getCurrentDirection() == 'desc'): ?>
             <a href="<?php echo $this->getOrderUrl(null, 'asc') ?>"
                title="<?php echo $this->__('Set Ascending Direction') ?>"><img
-                src="<?php echo $this->getViewFileUrl('images/i_desc_arrow.gif') ?>"
+                src="<?php echo $this->getViewFileUrl('Mage_Catalog::images/i_desc_arrow.gif') ?>"
                 alt="<?php echo $this->__('Set Ascending Direction') ?>" class="v-middle"/></a>
             <?php else: ?>
             <a href="<?php echo $this->getOrderUrl(null, 'desc') ?>"
                title="<?php echo $this->__('Set Descending Direction') ?>"><img
-                src="<?php echo $this->getViewFileUrl('images/i_asc_arrow.gif') ?>"
+                src="<?php echo $this->getViewFileUrl('Mage_Catalog::images/i_asc_arrow.gif') ?>"
                 alt="<?php echo $this->__('Set Descending Direction') ?>" class="v-middle"/></a>
             <?php endif; ?>
         </div>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Widget
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,11 +85,12 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Grid extends Mage_Adminhtml_Bl
             'options'   => $this->getTypesOptionsArray()
         ));
 
-        $this->addColumn('package_theme', array(
-            'header'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Package/Theme'),
+        $this->addColumn('theme_id', array(
+            'header'    => Mage::helper('Mage_Widget_Helper_Data')->__('Design Theme'),
             'align'     => 'left',
-            'index'     => 'package_theme',
-            'type'      => 'theme',
+            'index'     => 'theme_id',
+            'type'      => 'options',
+            'options'   => Mage::getResourceModel('Mage_Core_Model_Resource_Theme_Collection')->toOptionHash(),
             'with_empty' => true,
         ));
 
@@ -119,29 +120,9 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Grid extends Mage_Adminhtml_Bl
     }
 
     /**
-     * Retrieve design package/theme options array
-     *
-     * @return array
-     */
-    public function getPackageThemeOptionsArray()
-    {
-        $packageThemeArray = array();
-        $packageThemeOptions = Mage::getModel('Mage_Core_Model_Design_Source_Design')->getAllOptions(false);
-        foreach ($packageThemeOptions as $item) {
-            if (is_array($item['value'])) {
-                foreach ($item['value'] as $valueItem) {
-                    $packageThemeArray[$valueItem['value']] = $valueItem['label'];
-                }
-            } else {
-                $packageThemeArray[$item['value']] = $item['label'];
-            }
-        }
-        return $packageThemeArray;
-    }
-
-    /**
      * Row click url
      *
+     * @param Mage_Widget_Model_Widget_Instance $row
      * @return string
      */
     public function getRowUrl($row)

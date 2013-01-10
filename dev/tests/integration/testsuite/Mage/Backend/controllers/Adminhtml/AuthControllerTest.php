@@ -21,13 +21,12 @@
  * @category    Mage
  * @package     Mage_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Mage_Backend_Adminhtml_AuthController.
- *
+ * Test class for Mage_Backend_Adminhtml_AuthController
  */
 class Mage_Backend_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_ControllerAbstract
 {
@@ -91,7 +90,9 @@ class Mage_Backend_Adminhtml_AuthControllerTest extends Magento_Test_TestCase_Co
         $this->_login();
 
         $this->dispatch('backend/admin/auth/login');
-        $expected = Mage::getSingleton('Mage_Backend_Model_Url')->getUrl('adminhtml/dashboard');
+        /** @var $backendUrlModel Mage_Backend_Model_Url */
+        $backendUrlModel = Mage::getObjectManager()->get('Mage_Backend_Model_Url');
+        $expected = $backendUrlModel->getUrl('adminhtml/dashboard');
         $this->assertRedirect($this->stringStartsWith($expected));
 
         $this->_logout();

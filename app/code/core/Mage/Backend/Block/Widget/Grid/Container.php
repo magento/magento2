@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,7 +47,7 @@ class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget
         if (is_null($this->_addButtonLabel)) {
             $this->_addButtonLabel = $this->__('Add New');
         }
-        if(is_null($this->_backButtonLabel)) {
+        if (is_null($this->_backButtonLabel)) {
             $this->_backButtonLabel = $this->__('Back');
         }
 

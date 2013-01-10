@@ -20,14 +20,14 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <div class="entry-edit">
     <?php if (!$this->getIsReadonly()): ?>
     <div class="box-left">
-        <form id="import_form" action="<?php echo $this->getUrl('*/tax_rate/importPost') ?>" method="post" enctype="multipart/form-data">
+        <form id="import-form" action="<?php echo $this->getUrl('*/tax_rate/importPost') ?>" method="post" enctype="multipart/form-data">
             <?php echo $this->getBlockHtml('formkey')?>
             <div class="entry-edit-head">
                 <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Tax_Helper_Data')->__('Import Tax Rates') ?></h4>
@@ -39,7 +39,7 @@
             </fieldset>
         </form>
         <script type="text/javascript">
-            var importForm = new varienForm('import_form');
+            jQuery('#import-form').form().validation();
             (function ($) {
                 $('.import-submit').click(function(){
                     if($(':input[name="import_rates_file"]').val()) {
@@ -55,7 +55,7 @@
                         });
                         loadingMask.toggle();
                         toggleSelectsUnderBlock($('loading-mask'), false);
-                        this.form.submit();
+                        $(this.form).submit();
                     }
                 });
             })(jQuery);

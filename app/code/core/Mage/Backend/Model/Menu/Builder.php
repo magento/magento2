@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -94,8 +94,8 @@ class Mage_Backend_Model_Menu_Builder
 
         // Build menu tree based on "parent" param
         foreach ($items as $id => $item) {
-            $sortOrder = isset($params[$id]['sortOrder']) ? $params[$id]['sortOrder'] : null;
-            $parentId = isset($params[$id]['parent']) ? $params[$id]['parent'] : null;
+            $sortOrder = $this->_getParam($params[$id], 'sortOrder');
+            $parentId = $this->_getParam($params[$id], 'parent');
             $isRemoved = isset($params[$id]['removed']);
 
             if ($isRemoved) {
@@ -115,5 +115,18 @@ class Mage_Backend_Model_Menu_Builder
         }
 
         return $this->_menu;
+    }
+
+    /**
+     * Retrieve param by name or default value
+     *
+     * @param array $params
+     * @param string $paramName
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    protected function _getParam($params, $paramName, $defaultValue = null)
+    {
+        return isset($params[$paramName]) ? $params[$paramName] : $defaultValue;
     }
 }

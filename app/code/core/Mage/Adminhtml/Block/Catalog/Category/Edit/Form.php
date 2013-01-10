@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,6 +47,10 @@ class Mage_Adminhtml_Block_Catalog_Category_Edit_Form extends Mage_Adminhtml_Blo
 
     protected function _prepareLayout()
     {
+        if ($head = $this->getLayout()->getBlock('head')) {
+            $head->addJs('Mage_Adminhtml::catalog/category/edit.js');
+        }
+
         $category = $this->getCategory();
         $categoryId = (int) $category->getId(); // 0 when we create category, otherwise some value for editing category
 

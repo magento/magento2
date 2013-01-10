@@ -21,7 +21,7 @@
  *
  * @category    Phoenix
  * @package     Phoenix_Moneybookers
- * @copyright   Copyright (c) 2012 Phoenix Medien GmbH & Co. KG (http://www.phoenix-medien.de)
+ * @copyright   Copyright (c) 2013 Phoenix Medien GmbH & Co. KG (http://www.phoenix-medien.de)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 -->
@@ -37,7 +37,7 @@
                     <label>Email Address of Your Moneybookers Account</label>
                     <comment>
                         <![CDATA[To have access to the international payment network of Moneybookers please register <a href="http://www.moneybookers.com/partners/magento/" target="_blank">here</a> for a free account if you don't have one yet.]]>
-</comment>
+                    </comment>
                 </field>
                 <field id="customer_id" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Customer ID</label>

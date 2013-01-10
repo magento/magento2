@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Customer
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -617,5 +617,46 @@ class Mage_Customer_Helper_Data extends Mage_Core_Helper_Abstract
     protected function _createVatNumberValidationSoapClient($trace = false)
     {
         return new SoapClient(self::VAT_VALIDATION_WSDL_URL, array('trace' => $trace));
+    }
+
+    /**
+     * Perform customer data filtration based on form code and form object
+     *
+     * @param Zend_Controller_Request_Http $request
+     * @param string $formCode The code of EAV form to take the list of attributes from
+     * @param Mage_Core_Model_Abstract $entity entity model for the form
+     * @param array $additionalAttributes The list of attribute codes to skip filtration for
+     * @param string $scope scope of the request
+     * @param Mage_Eav_Model_Form|null $eavForm EAV form model to use for extraction
+     * @return array Filtered customer data
+     */
+    public function extractCustomerData(Zend_Controller_Request_Http $request, $formCode, $entity,
+        $additionalAttributes = array(), $scope = null, $eavForm = null
+    ) {
+        if (is_null($eavForm)) {
+            $eavForm = Mage::getModel('Mage_Customer_Model_Form');
+        }
+        /** @var Mage_Eav_Model_Form $eavForm */
+        $eavForm->setEntity($entity)
+            ->setFormCode($formCode)
+            ->ignoreInvisible(false);
+        $filteredData = $eavForm->extractData($request, $scope);
+        $requestData = $request->getPost($scope);
+        foreach ($additionalAttributes as $attributeCode) {
+            $filteredData[$attributeCode] = isset($requestData[$attributeCode])
+                ? $requestData[$attributeCode] : false;
+        }
+
+        $formAttributes = $eavForm->getAttributes();
+        /** @var Mage_Customer_Model_Attribute $attribute */
+        foreach ($formAttributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $frontendInput = $attribute->getFrontendInput();
+            if ($frontendInput != 'boolean' && $filteredData[$attributeCode] === false) {
+                unset($filteredData[$attributeCode]);
+            }
+        }
+
+        return $filteredData;
     }
 }

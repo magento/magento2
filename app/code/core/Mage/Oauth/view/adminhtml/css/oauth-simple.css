@@ -19,7 +19,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -114,10 +114,11 @@ ul,ol         { list-style:none; }
 .notification-global a:hover {
     text-decoration: none;
 }
-.error, a.error span, .required, .validation-advice {
+.error, a.error span, .required, .validation-advice, label.mage-error {
     color: #D40707 !important;
     font-weight: bold !important;
 }
+label.mage-error {width: auto !important; display: block;}
 .notice {
     color: #EA7601;
 }

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Reports
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,11 +35,23 @@
 class Mage_Reports_Model_Resource_Review_Customer_Collection extends Mage_Review_Model_Resource_Review_Collection
 {
     /**
+     * Init Select
+     *
+     * @return Mage_Reports_Model_Resource_Review_Customer_Collection
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+        $this->_joinCustomers();
+        return $this;
+    }
+
+    /**
      * Join customers
      *
      * @return Mage_Reports_Model_Resource_Review_Customer_Collection
      */
-    public function joinCustomers()
+    protected function _joinCustomers()
     {
         /**
          * Allow to use analytic function to result select

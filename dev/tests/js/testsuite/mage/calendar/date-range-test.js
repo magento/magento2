@@ -19,7 +19,7 @@
  *
  * @category    mage.calendar
  * @package     test
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 DaterangeTest = TestCase('DaterangeTest');
@@ -29,7 +29,7 @@ DaterangeTest.prototype.testInit = function() {
      */
     var dateRange = jQuery('#date-range').dateRange();
     assertEquals(true, dateRange.is(':mage-dateRange'));
-    dateRange.calendar('destroy');
+    dateRange.dateRange('destroy');
 };
 DaterangeTest.prototype.testInitDateRangeDatepickers = function() {
     /*:DOC +=

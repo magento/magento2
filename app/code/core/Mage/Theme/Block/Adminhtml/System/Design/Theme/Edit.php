@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Theme
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,7 +49,9 @@ class Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit extends Mage_Backend_B
         } else {
             $this->_addButton('save_and_continue', array(
                 'label'   => $this->__('Save and Continue Edit'),
-                'onclick' => "editForm.submit($('edit_form').action+'back/edit/');",
+                'data_attr'  => array(
+                    'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form'),
+                ),
                 'class'   => 'save',
             ), 1);
 

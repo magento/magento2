@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,10 +46,6 @@ class Mage_Adminhtml_Model_Email_Template extends Mage_Core_Model_Email_Template
             return array();
         }
         $paths = array();
-
-        $configSections = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')
-            ->getConfiguration()
-            ->getSections();
 
         // find nodes which are using $templateCode value
         $defaultCfgNodes = Mage::getConfig()->getXpath('default/*/*[*="' . $templateCode . '"]');
@@ -79,9 +75,10 @@ class Mage_Adminhtml_Model_Email_Template extends Mage_Core_Model_Email_Template
             return array();
         }
 
-        $templatePaths = Mage::getSingleton('Mage_Backend_Model_Config_Structure_Reader')
-            ->getConfiguration()
-            ->getFieldsByAttribute('source_model', 'Mage_Backend_Model_Config_Source_Email_Template');
+        /** @var Mage_Backend_Model_Config_Structure $configStructure  */
+        $configStructure = Mage::getSingleton('Mage_Backend_Model_Config_Structure');
+        $templatePaths = $configStructure
+            ->getFieldPathsByAttribute('source_model', 'Mage_Backend_Model_Config_Source_Email_Template');
 
         if (!count($templatePaths)) {
             return array();

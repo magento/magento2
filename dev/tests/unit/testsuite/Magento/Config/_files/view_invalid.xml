@@ -22,15 +22,12 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <view>
-    <vars module="Namespace_Module">
-        <var name="var1">Value1</var>
-    </vars>
-    <vars module="Namespace_Module"><!-- duplicate vars module -->
+   <vars module="Namespace_Module1">
         <var name="var1">Value1</var>
         <var name="var1">Value1</var><!-- duplicate var name -->
     </vars>

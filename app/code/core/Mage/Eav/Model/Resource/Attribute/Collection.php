@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -226,8 +226,11 @@ abstract class Mage_Eav_Model_Resource_Attribute_Collection
      */
     public function addSystemHiddenFilter()
     {
-        $field = '(CASE WHEN additional_table.is_system = 1 AND additional_table.is_visible = 0 THEN 1 ELSE 0 END)';
-        return $this->addFieldToFilter($field, 0);
+        $connection = $this->getConnection();
+        $expression = $connection->getCheckSql('additional_table.is_system = 1 AND additional_table.is_visible = 0',
+            '1', '0');
+        $this->getSelect()->where($connection->quoteInto($expression . ' = ?', 0));
+        return $this;
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -51,7 +51,7 @@
                             <label><?php echo $this->__('Actions') ?></label>
                             <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation"<?php echo $this->getUiId('select') ?>>
                                 <option value=""></option>
-                                <?php foreach($this->getItems() as $_item):?>
+                                <?php foreach ($this->getItems() as $_item):?>
                                     <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -68,7 +68,7 @@
             </div>
 
             <div class="no-display">
-            <?php foreach($this->getItems() as $_item): ?>
+            <?php foreach ($this->getItems() as $_item): ?>
                 <div id="<?php echo $this->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
                     <?php if ('' != $_item->getBlockName()):?>
                         <?php echo $this->getChildHtml($_item->getBlockName());?>
@@ -80,7 +80,7 @@
     </td>
 </tr>
 </table>
-<?php if(!$this->getParentBlock()->canDisplayContainer()): ?>
+<?php if (!$this->getParentBlock()->canDisplayContainer()): ?>
 <script type="text/javascript">
     <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
 </script>

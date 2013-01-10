@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,7 +44,9 @@ abstract class Mage_Backend_Model_Config_Backend_Currency_Abstract extends Mage_
     protected function _getAllowedCurrencies()
     {
         if ($this->getData('groups/options/fields/allow/inherit')) {
-            return explode(',', Mage::getConfig()->getNode('currency/options/allow', $this->getScope(), $this->getScopeId()));
+            return explode(
+                ',', Mage::getConfig()->getNode('currency/options/allow', $this->getScope(), $this->getScopeId())
+            );
         }
         return $this->getData('groups/options/fields/allow/value');
     }

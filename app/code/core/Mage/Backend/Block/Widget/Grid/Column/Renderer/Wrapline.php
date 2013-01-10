@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,8 +54,9 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Wrapline
         $lineLength = $this->getColumn()->getData('lineLength')
             ? $this->getColumn()->getData('lineLength')
             : $this->_defaultMaxLineLength;
-        for($i = 0, $n = floor(Mage::helper('Mage_Core_Helper_String')->strlen($line) / $lineLength); $i <= $n; $i++) {
-            $wrappedLine .= Mage::helper('Mage_Core_Helper_String')->substr($line, ($lineLength * $i), $lineLength) . "<br />";
+        for ($i = 0, $n = floor(Mage::helper('Mage_Core_Helper_String')->strlen($line) / $lineLength); $i <= $n; $i++) {
+            $wrappedLine .= Mage::helper('Mage_Core_Helper_String')->substr($line, ($lineLength * $i), $lineLength)
+                . "<br />";
         }
         return $wrappedLine;
     }

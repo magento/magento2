@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -63,4 +63,5 @@ return array(
     $this->_getRule('HASH_ALGO'),
     $this->_getRule('SEESION_MAX_COOKIE_LIFETIME'),
     $this->_getRule('URL_TYPE_SKIN'),
+    $this->_getRule('DEFAULT_THEME_NAME', 'Mage_Core_Model_Design_Package'),
 );

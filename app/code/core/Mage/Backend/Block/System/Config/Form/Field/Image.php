@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,9 +47,9 @@ class Mage_Backend_Block_System_Config_Form_Field_Image extends Varien_Data_Form
         $config = $this->getFieldConfig();
         /* @var $config array */
         if (array_key_exists('base_url', $config)) {
-            $el = $config['base_url'];
-            $urlType = empty($el['type']) ? 'link' : (string)$el['type'];
-            $url = Mage::getBaseUrl($urlType) . $el['value'] . '/' . $url;
+            $element = $config['base_url'];
+            $urlType = empty($element['type']) ? 'link' : (string)$element['type'];
+            $url = Mage::getBaseUrl($urlType) . $element['value'] . '/' . $url;
         }
 
         return $url;

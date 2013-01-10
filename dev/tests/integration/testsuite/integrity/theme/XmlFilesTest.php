@@ -21,13 +21,10 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * @group integrity
- */
 class Integrity_Theme_XmlFilesTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -36,7 +33,7 @@ class Integrity_Theme_XmlFilesTest extends PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $this->_validateConfigFile($file, Mage::getBaseDir('lib') . '/Magento/Config/view.xsd');
+        $this->_validateConfigFile($file, Mage::getBaseDir('lib') . '/Magento/Config/etc/view.xsd');
     }
 
     /**
@@ -78,7 +75,7 @@ class Integrity_Theme_XmlFilesTest extends PHPUnit_Framework_TestCase
      */
     public function testThemeConfigFileSchema($file)
     {
-        $this->_validateConfigFile($file, Mage::getBaseDir('lib') . '/Magento/Config/theme.xsd');
+        $this->_validateConfigFile($file, Mage::getBaseDir('lib') . '/Magento/Config/etc/theme.xsd');
     }
 
     /**

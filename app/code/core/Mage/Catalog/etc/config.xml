@@ -21,19 +21,18 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <modules>
         <Mage_Catalog>
-            <version>1.6.0.0.17</version>
+            <version>1.6.0.0.20</version>
             <active>true</active>
             <codePool>core</codePool>
             <depends>
                 <Mage_Eav/>
-                <Mage_Dataflow/>
                 <Mage_Cms/>
                 <Mage_Index/>
                 <Mage_Customer/>
@@ -88,6 +87,14 @@
                     </catalog_add_topmenu_items>
                 </observers>
             </page_block_html_topmenu_gethtml_before>
+            <catalog_product_transition_product_type>
+                <observers>
+                    <type_transition>
+                        <class>Mage_Catalog_Model_Observer</class>
+                        <method>transitionProductType</method>
+                    </type_transition>
+                </observers>
+            </catalog_product_transition_product_type>
         </events>
         <catalog>
             <product>
@@ -211,6 +218,7 @@
                 </flat>
                 <attributes>
                     <unassignable>
+                        <image/>
                         <name/>
                         <description/>
                         <short_description/>
@@ -219,17 +227,27 @@
                         <status/>
                         <visibility/>
                         <weight/>
+                        <category_ids/>
+                        <quantity_and_stock_status/>
                     </unassignable>
                     <used_in_autogeneration>
                         <name/>
                         <description/>
                         <sku/>
                     </used_in_autogeneration>
+                    <weight>
+                        <type_switcher translate="label">
+                            <label>Virtual</label>
+                        </type_switcher>
+                    </weight>
                 </attributes>
             </product>
             <content>
                 <tempate_filter>Mage_Catalog_Model_Template_Filter</tempate_filter>
             </content>
+            <suggested_categories>
+                <limit>10</limit>
+            </suggested_categories>
         </catalog>
         <eav_attributes>
             <catalog_product>

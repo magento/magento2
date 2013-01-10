@@ -1,3 +1,185 @@
+2.0.0.0-dev38
+=============
+* Changed application initialization procedure
+  * Application can be started with specific initial configuration data. `Mage_Core_Model_Config::loadBase()` merges this configuration with the highest priority
+  * `Mage` class is no longer responsible for application installation status. `Mage_Core_Model_App` has this responsibility (`Mage_Core_Model_App::isInstalled()`)
+* Implemented new library component `Magento_Filesystem` for working with file system
+  * New component has more abstract layer of interaction with file system, better path isolation
+  * Introduced interface Magento_Filesystem_AdapterInterface for file operations. Added concrete implementation in `Magento_Filesystem_Adapter_Local`
+  * Introduced interface Magento_Filesystem_StreamInterface for stream operations with content. Added concrete implementation in `Magento_Filesystem_Stream_Local`
+  * Added special class `Magento_Filesystem_Stream_Mode` to set parameters of stream on opening (read-only, write-only etc.)
+* Added an ability to skip some service functions for lighter launch of application in `app/bootstrap.php`
+* Improved batch tool for launching automated tests. Tool has an ability to run specified test types. Tool was moved from `dev/tools/batch_tests` to `dev/tools/tests.php`
+* Improved integration test Mage_Adminhtml_DashboardControllerTest to skip test case when Google service is unavailable
+* Improved url building process in new jQuery form widget to have it more secure
+* Removed obsolete `@group module::<Namespace_Module>` annotation from integration tests, restricted its further usage
+* Updated jQuery library used in application, used unified file name instead of version-based one
+* Relocated XSD files for System Configuration, Menu Configuration, ACL Configuration, ACL Configuration for WebApi, Theme Configuration, View Configuration, Validator Configuration to `etc` subfolders of corresponding modules
+* Bug fixes
+  * Fixed bug with placing order in backend using Authorize.Net Direct Post payment method
+  * Changed `Mage_Core_Model_Url` to fix bug with incorrect links on frontend (My Wishlist, Go to Shopping Cart, Continue button at first checkout step)
+  * Fixed several bugs after converting backend grids to layout declaration. Changes were made in EAV Attributes, Design, Newsletter, Backup modules
+  * Fixed incorrect current working directory behavior on application isolation in tests
+
+2.0.0.0-dev37
+=============
+* Refactored a variety of grids in backend (admin) to make them configurable through layout, rather than hard-coded. The following classes were affected (converted): `Mage_User_Block_User_Grid`, `Mage_User_Block_Role_Grid`, `Mage_Adminhtml_Block_System_Design_Grid`, `Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid`, `Mage_Adminhtml_Block_Newsletter_Problem_Grid`, `Mage_Adminhtml_Block_Backup_Grid`, `Mage_Adminhtml_Block_Tax_Rate_Grid`, `Mage_Adminhtml_Block_System_Store_Grid`, `Mage_Adminhtml_Block_System_Email_Template_Grid`, `Mage_Adminhtml_Block_Sitemap_Grid`, `Mage_Adminhtml_Block_Catalog_Search_Grid`, `Mage_Adminhtml_Block_Urlrewrite_Grid`, `Mage_Adminhtml_Block_System_Variable_Grid`, `Mage_Adminhtml_Block_Report_Review_Customer_Grid`, `Mage_Adminhtml_Block_Report_Review_Product_Grid`
+* Modified behavior of configuration merging. Each config file can be separately validated against DOM schema.
+* Moved `Mage_Adminhtml_Utility_Controller` to `Backend` and changed all child classes
+* Changes in Profiler system:
+  * Created separate component for handling Profiler Driver selection logic
+  * Extended `Magento_Profiler::start()` calls with tags as second argument
+* Bug fix - Added additional validation into `Mage_Adminhtml_Catalog_CategoryController` to prevent saving new category with any id using firebug
+
+2.0.0.0-dev36
+=============
+* Visual design editor refactored
+  * VDE controls and VDE actions moved to backend area
+  * Added IFRAME that allows to navigate through frontend pages in Navigation Mode and to modify blocks position in Design Mode
+  * Inline JavaScript code is disabled in Design Mode
+  * Store selection is performed on saving instead of reviewing the theme. List of all available stores is shown during assigning the theme to a store
+  * `System -> Design -> Editor` page divided into two tabs:
+    * "Available Themes" tab contains all available themes
+    * "My Customizations" tab contains themes customized by the store administrator and consists of area with themes assigned to stores and area with unassigned themes
+  * Added `vde` area code and `Mage_DesignEditor_Controller_Varien_Router_Standard` to handle requests from design editor
+  * Added ability to use custom layout instance in controllers to use specific layout, when design editor is launched
+* JavaScript updates
+  * Replaced `varienTabs` class with an analogous jQuery widget
+  * Displaying of loader during AJAX requests became optional
+* Removed `dev/api-tests` directory added by mistake
+* Bug fixes
+  * Impossible to login to backend with APC enabled. Added call of `session_write_close()` in the session model destructor
+  * Unnecessary regions shown when no country is selected in `System -> Sales -> Shipping Settings -> Origin`
+  * Fixed various bugs caused by virtual themes implementation and other themes improvements
+
+2.0.0.0-dev35
+=============
+* Enhancements of System Configuration:
+  * Introduced new items that can be configured in the similar to Magento 1.x way, using xml files: nested groups in System Configuration form, group dependencies, intersected dependencies
+  * Enhanced handling of field dependencies, required fields functionality
+  * Changed Configuration structure to be represented as an object model
+  * Improved performance of configuration rendering
+* Implemented new API in `Mage_Webapi` module
+  * Removed `Mage_Api` and `Mage_Api2` modules as obsolete API implementation
+  * Added support of REST and SOAP 1.2 [WS-I 2.0](http://ws-i.org/Profiles/BasicProfile-2.0-2010-11-09.html) APIs
+  * Introduced versioning per API resource. The application will support old version(s) of API after upgrading to not make old API requests fail
+  * Unified implementation for all API types
+  * Significantly simplified coverage of new API resources
+  * Added two-legged `OAuth` 1.0 for REST authentication
+  * Added WS-Security for SOAP authentication
+  * Added automatic generation of REST routes and SOAP WSDL on the basis of API class interface and annotations
+  * Introduced generation of API reference from annotated WSDL (for SOAP API)
+* Introduced service layer. Business logic should be implemented once on service layer and could be utilized from different types of controller (e.g., general or API)
+  * Business logic is implemented on service layer to be utilized from different types of controller (e.g., general or API)
+  * Implemented abstract service layer class - `Mage_Core_Service_ServiceAbstract`
+  * Implemented concrete service layers for customers, orders and quotes. Appropriate duplicate logic has been eliminated from controllers and API
+* Improved validation approach:
+  * Added support of describing validation rules in a module's configuration file - `validation.xml` in the module's `etc` directory
+  * Added `Mage_Core_Model_Validator_Factory`
+  * Added new validators to Magento Validator library
+  * Added `Magento_Translate_Adapter` as a translator for the validators
+  * New approach is utilized in `Mage_Customer`, `Mage_Eav` and `Mage_Webapi` modules
+* Added profiling of DB and cache requests
+* Minor Improvements:
+  * Added an ability to choose the image for logo and upload it from backend web-interface
+  * Added notification in backend in case of product SKU change
+* Bug fixes:
+  * Fixed bug in `Mage_Adminhtml_Sales_Order_CreditmemoController` that changed item’s stock status after each comment
+  * Removed `Debug` section in `System -> Configuration -> Advanced -> Developer` for default configuration scope
+  * Fixed bug in `Mage_Tax_Model_Resource_Calculation` that prevented placing order with two tax rules having the same rate
+  * Removed `Url Options` section in `System -> Configuration -> General -> Web` for website and store configuration scope
+  * Changed backend template for UPS shipping provider to fix translation issue
+* Fixed security issue - set `CURLOPT_SSL_VERIFYPEER` to `true` by default in cUrl calls
+* Added `Zend/Escaper`, `Zend/I18`, `Zend/Validator` ZF2 libraries
+* Updated `Zend/Server` and `Zend/Soap` libraries to ZF2 versions
+
+2.0.0.0-dev34
+=============
+* Test Framework:
+  * Created `CodingStandard_ToolInterface` - new interface for coding standard static tests. Refactored `CodeSniffer` class as an implementation of the interface
+  * Fixed DB isolation in integration tests after themes refactoring
+  * Minor test fixes
+* Changes in product creation process
+  * Added ability to change product type "on the fly" depending on selected options
+  * Added ability of new category creation on "General" tab
+  * Moved "Associated Products" tab contents to collapsible block on "General" tab for configurable products
+  * Visual enhancement made for base image and Virtual/Downloadable checkbox
+  * Refactored implementation of associated products in backend (admin) to make them configurable through grid layout, rather than hard-coded.
+  * Enhanced product variation matrix for configurable products
+  * Changed "Apply To" feature in product attributes management due to changes in product creation process
+* Fixed XSS vulnerabilities in `Mage_Wishlist_IndexController`, `Mage_Adminhtml_Block_Review_Edit_Form`, `Mage_Catalog_Product_CompareController`
+* Bug fixes
+  * Fixed error on `Catalog -> Google Content -> Manage Items page`
+  * Fixed bug with "Update Attributes" mass action for products on backend caused by setting incorrect inheritance of `Mage_Adminhtml_Helper_Catalog_Product_Edit_Action_Attribute`
+  * Added additional validation of "quantity" field to fix issues with inventory during product saving
+  * Added additional validation into `EAV` models to forbid creation of two products with the same unique multi-select attribute
+
+2.0.0.0-dev33
+=============
+* Improved Themes functionality to meet the following requirements:
+  * Magento instance doesn’t crash in case there’re no themes at all
+  * Features like selection of themes in system configuration, custom theme selection in Custom Design, CMS pages, Products and Categories can work without themes. They use base view files only.
+  * Virtual themes work in the same way as the non-virtual (which are present in file system) though they additionally have inheritance property. Changes were made in theme switcher, in fallback mechanism, in widgets etc.
+  * Non-virtual themes are being added to DB during installation
+  * Application framework uses theme id as identifier instead of theme code
+* Refactored a variety of report grids in backend (admin) to make them configurable through layout, rather than hard-coded.
+* Removed obsolete modules:
+  * `Mage_XmlConnect`
+  * `Mage_Dataflow`
+* Significantly changed Logging subsystem:
+  * `Mage_Core_Model_Logger` class is responsible for logging
+  * Changes are made to comply with DI paradigm
+  * Custom logger in `Mage_Backend_Menu` subsystem is removed due to usage of regular one
+* Changes made in autoload process
+  * Fixed autoload to prevent `class_exists()` from causing fatal error
+  * The `Magento_Autoload` library was divided into 2 classes: `Magento_Autoload_IncludePath` is responsible for loading from include path, `Magento_Autoload_ClassMap` from a class map. Stacked "class map" loader on top of "include path" loader in application bootstrap.
+* Implemented new jQuery form widget. Its responsibility is to prepare form for submission (change form attributes if needed)
+  * Replaced usage of different instances of `varienForm` with a new form widget (`productForm`, `categoryForm`, instances of type "onclick declaration", "as child component", "instantiation only")
+  * Replaced prototype validation with jQuery analog
+  * Additionally implemented form widget in different modules (CMS, Customer, Backend, Sitemap, DesignEditor, Tags, SystemEmail, Newsletters, ImportExport, Connect, Authorize.net)
+* Minor improvements
+  * Fixed css styles for validation messages in different parts of the system
+  * Removed usage of `jquery-ui-1.8.21.custom.css`
+  * Updated versions of jQuery and jQuery-UI on backend
+  * Updated Magento trademark and copyright labels at the bottom of pages: changed legal entity name to X.Commerce, Inc, made translation engine pick them up
+  * Improvements made in indexers to stabilize tests. Fixed wrong initialization order of indexers that sometimes caused failure of reindexing all at once
+* Bugfixes:
+  * Set correct order's data change state during voiding the order
+  * Set translator to pick up status labels in drop-down in "Shopping cart price rule" admin grid
+  * Fixed an issue in console installer that initialized application in such a way, that it could not load certain event area.
+  * Fixed incorrect loader image source in backend during new tax rule creation
+  * Fixed JS error in IE with creating products via floating toolbar
+  * Fixed image save url during uploading product's images
+  * Added permission check for editing shipping and billing addresses during viewing the order
+  * Changed saving of order comments from backend. Comment is saved even without status change
+  * Added additional validation into `quickCreateAction` of `Mage_Adminhtml_Catalog_ProductController` to prevent saving new product with any id using firebug
+  * Fixed JS errors in Authorize.net Direct Post submodule
+  * Fixed JS errors in split button on creating product
+  * Fixed errors in poll's list template in backend
+
+2.0.0.0-dev32
+=============
+* Improved product edit workflow:
+  * Introduced Category Assignment control on "General" tab
+  * Eliminated attribute preselection screen
+  * Base image assignment control moved to "General" tab
+  * Base inventory attributes controls displayed on "General" tab. Values of the attributes are synchronized between "General" and "Inventory" tabs
+* Improved static code analysis tests to verify existence of paths specified in white/black lists
+* Reduced memory usage by integration tests by automatic cleaning properties of test classes
+* Added migration tool `dev/tools/migration/themes_view.php` for replacing old `{{skin}}` with new `{{view}}` placeholders
+* Changed handling of exceptions, produced by non-existing view files, to not break whole page
+* Removed empty locale files
+* Bug fixes:
+  * Page with tracking information absent, if shipping labels integration is used
+  * Category is not displayed on frontend with "Use Flat Catalog Category" option enabled
+  * Exception on "Coupons Usage Report" page after upgrade from Magento 1.x
+  * Exception on "Most Viewed Products" page after upgrade from Magento 1.x
+  * Quick search produces error, if searching for a product with an attribute that has "Use In Search Results Layered Navigation" option set to "Yes"
+  * Exception on "Add/Edit Customer" page when Magento profiler with html output is enabled
+  * Can't duplicate downloadable product with sample file attached
+  * Product Type dropdown on "Add Product" page doesn't work in IE9
+  * Various issues related to adding/editing product
+
 2.0.0.0-dev31
 =============
 * Themes:
@@ -78,11 +260,10 @@
 
 2.0.0.0-dev29
 =============
-* Added scripts that allow upgrading database from CE 1.7 (EE 1.12) to 2.x
+* Implemented and verified ability to upgrade DB from CE 1.7 (EE 1.12) to 2.x
 * Replaced calendar UI component with jQuery calendar
-* Removed store scope selector from backend customers management
-* Renamed `pub/js` (was known as `js` in Magento 1.x) into `pub/lib`
 * Restored back the public access to `pub/cron.php` entry point (in the previous patch it was denied by mistake)
+* Fixed typo in label of "Catalog Search" index in UI
 
 2.0.0.0-dev28
 =============
@@ -530,7 +711,7 @@
 =============
 * Implemented a tool for migrating factory table names from 1.x to 2.x. The tool replaces table names by list of names associations
 * Changed Unit tests suite running from usage AllTests.php in each directory to configuration in phpunit.xml.dist. Now all tests in `testsuite` directory are launched, there is no necessity to add new tests to the config
-* Implemented in Visual Desig Editor:
+* Implemented in Visual Design Editor:
   * Containers highlighting
   * Dropping of elements
 * Fixed some issues:
@@ -604,10 +785,10 @@
 2.0.0.0-dev02
 =============
 Deprecated code & minor fixes update:
-* eliminated remnants of `htmlescape` implementation
-* eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
-* disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
-* minor refactoring of data fixtures rollback capability in integration testing framework
+* Eliminated remnants of `htmlescape` implementation
+* Eliminated usage of `pub/js/index.php` entry point (used to be `js/index.php`)
+* Disbanded the shell root directory: moved scripts into `dev/shell` and classes into app
+* Minor refactoring of data fixtures rollback capability in integration testing framework
 
 2.0.0.0-dev01
 =============

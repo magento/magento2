@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_ImportExport
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ class Mage_ImportExport_Block_Adminhtml_Export_Edit_Form extends Mage_Backend_Bl
             'title'    => $helper->__('Entity Type'),
             'label'    => $helper->__('Entity Type'),
             'required' => false,
-            'onchange' => 'editForm.getFilter();',
+            'onchange' => 'varienExport.getFilter();',
             'values'   => $entitySourceModel->toOptionArray()
         ));
         /** @var $formatSourceModel Mage_ImportExport_Model_Source_Export_Format */

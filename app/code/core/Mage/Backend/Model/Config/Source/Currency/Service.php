@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Mage_Backend_Model_Config_Source_Currency_Service implements Mage_Core_Mod
         if (!$this->_options) {
             $services = Mage::getConfig()->getNode('global/currency/import/services')->asArray();
             $this->_options = array();
-            foreach( $services as $_code => $_options ) {
+            foreach ($services as $_code => $_options ) {
                 $this->_options[] = array(
                     'label' => $_options['name'],
                     'value' => $_code,

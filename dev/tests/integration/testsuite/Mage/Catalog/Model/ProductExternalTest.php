@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -96,20 +96,6 @@ class Mage_Catalog_Model_ProductExternalTest extends PHPUnit_Framework_TestCase
         $categoryTwo = new StdClass;
         $this->_model->setCategory($categoryTwo);
         $this->assertSame($categoryTwo, $this->_model->getCategory());
-    }
-
-    public function testSetCategoryIds()
-    {
-        $this->_model->setCategoryIds('1,2,,3');
-        $this->assertEquals(array(0 => 1, 1 => 2, 3 => 3), $this->_model->getData('category_ids'));
-    }
-
-    /**
-     * @expectedException Mage_Core_Exception
-     */
-    public function testSetCategoryIdsException()
-    {
-        $this->_model->setCategoryIds(1);
     }
 
     public function testGetCategoryIds()

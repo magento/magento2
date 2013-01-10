@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,17 +38,11 @@ class Mage_Backend_Model_Config_Backend_Currency_Cron extends Mage_Core_Model_Co
 
     protected function _afterSave()
     {
-        $enabled = $this->getData('groups/import/fields/enabled/value');
-        $service = $this->getData('groups/import/fields/service/value');
         $time = $this->getData('groups/import/fields/time/value');
         $frequency = $this->getData('groups/import/fields/frequency/value');
-        $errorEmail = $this->getData('groups/import/fields/error_email/value');
 
-        $frequencyDaily = Mage_Cron_Model_Config_Source_Frequency::CRON_DAILY;
         $frequencyWeekly = Mage_Cron_Model_Config_Source_Frequency::CRON_WEEKLY;
         $frequencyMonthly = Mage_Cron_Model_Config_Source_Frequency::CRON_MONTHLY;
-
-        $cronDayOfWeek = date('N');
 
         $cronExprArray = array(
             intval($time[1]),                                   # Minute

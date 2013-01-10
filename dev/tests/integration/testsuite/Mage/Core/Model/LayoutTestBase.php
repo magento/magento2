@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,20 +35,18 @@ class Mage_Core_Model_LayoutTestBase extends PHPUnit_Framework_TestCase
      */
     protected $_layout;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        /* Point application to predefined layout fixtures */
-        Mage::getConfig()->setOptions(array(
-            'design_dir' => dirname(__FILE__) . '/_files/design',
+        /** @var $themeUtility Mage_Core_Utility_Theme */
+        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design',
+            Mage::getDesign()
         ));
-        Mage::getDesign()->setDesignTheme('test/default');
+        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
 
         /* Disable loading and saving layout cache */
         Mage::app()->getCacheInstance()->banUse('layout');
-    }
 
-    protected function setUp()
-    {
         $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         $this->_layout->getUpdate()->addHandle('layout_test_handle_main');
         $this->_layout->getUpdate()->load('layout_test_handle_extra');

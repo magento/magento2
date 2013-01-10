@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Tax
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -338,7 +338,16 @@ class Mage_Tax_Model_Resource_Calculation extends Mage_Core_Model_Resource_Db_Ab
                    ->order('tax_postcode ' . Varien_Db_Select::SQL_DESC)
                    ->order('value ' . Varien_Db_Select::SQL_DESC);
 
-            $this->_ratesCache[$cacheKey] = $this->_getReadAdapter()->fetchAll($select);
+            $fetchResult = $this->_getReadAdapter()->fetchAll($select);
+            $filteredRates = array();
+            if ($fetchResult) {
+                foreach ($fetchResult as $rate) {
+                    if (!isset($filteredRates[$rate['tax_calculation_rate_id']])) {
+                        $filteredRates[$rate['tax_calculation_rate_id']] = $rate;
+                    }
+                }
+            }
+            $this->_ratesCache[$cacheKey] = array_values($filteredRates);
         }
 
         return $this->_ratesCache[$cacheKey];

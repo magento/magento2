@@ -21,14 +21,14 @@
  * @category    Mage
  * @package     Mage_Connect
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Test Mage_Connect_Adminhtml_Extension_LocalController
  */
-class Mage_Connect_Adminhtml_Extension_LocalControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Connect_Adminhtml_Extension_LocalControllerTest extends Mage_Backend_Utility_Controller
 {
     public function testIndexAction()
     {

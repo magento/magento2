@@ -22,34 +22,43 @@
  * @category    Magento
  * @package     Magento_Validator
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <validation>
-    <entity name="test_entity">
+    <entity name="test_entity_a">
         <rules>
-            <rule name="test_rule_zend">
-                <constraints>
-                    <constraint class="Zend_Validate_Alnum" field="test_field"/>
-                </constraints>
+            <rule name="check_alnum_and_int_not_empty_and_have_valid_value">
+                <property_constraints >
+                    <property name="alnum">
+                        <constraint class="Magento_Validator_Test_NotEmpty"/>
+                        <constraint class="Magento_Validator_Test_Alnum"/>
+                    </property>
+                    <property name="int">
+                        <constraint class="Magento_Validator_Test_Int"/>
+                    </property>
+                </property_constraints>
+                <entity_constraints>
+                    <constraint class="Magento_Validator_Test_True"/>
+                </entity_constraints>
             </rule>
-            <rule name="test_rule_constraint">
-                <constraints>
-                    <constraint class="Magento_Validator_Test"/>
-                </constraints>
+            <rule name="always_true">
+                <entity_constraints>
+                    <constraint alias="alias" class="Magento_Validator_Test_True"/>
+                </entity_constraints>
             </rule>
         </rules>
         <groups>
-            <group name="test_group_a">
+            <group name="check_alnum_and_int_not_empty_and_have_valid_value">
                 <uses>
-                    <use rule="test_rule_zend"/>
-                    <use rule="test_rule_constraint"/>
+                    <use rule="check_alnum_and_int_not_empty_and_have_valid_value"/>
+                    <use rule="always_true"/>
                 </uses>
             </group>
-            <group name="test_group_b">
+            <group name="check_alnum">
                 <uses>
-                    <use rule="test_rule_constraint"/>
+                    <use rule="always_true"/>
                 </uses>
             </group>
         </groups>

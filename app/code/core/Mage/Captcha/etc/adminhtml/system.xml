@@ -21,7 +21,7 @@
  *
  * @category    Mage
  * @package     Mage_Captcha
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -83,7 +83,7 @@
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
                         <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
-</comment>
+                    </comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
@@ -155,7 +155,7 @@
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
                         <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
-</comment>
+                    </comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>

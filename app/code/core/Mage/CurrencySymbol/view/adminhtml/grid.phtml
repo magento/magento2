@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_CurrencySymbol
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -44,7 +44,7 @@
 
 <?php $this->getCurrencySymbolsData();?>
 
-<form id="currency_symbols_form" action="<?php echo $this->getFormActionUrl() ?>" method="post">
+<form id="currency-symbols-form" action="<?php echo $this->getFormActionUrl() ?>" method="post">
     <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
 
     <div class="entry-edit">
@@ -83,7 +83,7 @@
     </div>
 </form>
 <script type="text/javascript">
-    var currencySymbolsForm = new varienForm('currency_symbols_form');
+    jQuery('#currency-symbols-form').form().validation();
 
     function toggleUseDefault(code, value)
     {

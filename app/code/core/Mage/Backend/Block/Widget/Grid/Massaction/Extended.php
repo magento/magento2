@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -84,7 +84,7 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
             ->setMassaction($this)
             ->setId($itemId);
 
-        if($this->_items[$itemId]->getAdditional()) {
+        if ($this->_items[$itemId]->getAdditional()) {
             $this->_items[$itemId]->setAdditionalActionBlock($this->_items[$itemId]->getAdditional());
             $this->_items[$itemId]->unsAdditional();
         }
@@ -100,7 +100,7 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
      */
     public function getItem($itemId)
     {
-        if(isset($this->_items[$itemId])) {
+        if (isset($this->_items[$itemId])) {
             return $this->_items[$itemId];
         }
 
@@ -199,7 +199,7 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
      */
     public function getSelectedJson()
     {
-        if($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
+        if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return join(',', $selected);
         } else {
@@ -214,7 +214,7 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
      */
     public function getSelected()
     {
-        if($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
+        if ($selected = $this->getRequest()->getParam($this->getFormFieldNameInternal())) {
             $selected = explode(',', $selected);
             return $selected;
         } else {
@@ -252,7 +252,7 @@ class Mage_Backend_Block_Widget_Grid_Massaction_Extended extends Mage_Backend_Bl
 
         $gridIds = $this->getParentBlock()->getCollection()->getAllIds();
 
-        if(!empty($gridIds)) {
+        if (!empty($gridIds)) {
             return join(",", $gridIds);
         }
         return '';

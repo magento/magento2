@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -65,9 +65,11 @@ class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Value Three', $this->_model->getVarValue('Three', 'three'));
     }
 
+    /**
+     * @expectedException Magento_Exception
+     */
     public function testInvalidXml()
     {
-        $this->markTestIncomplete('Bug: invalid XML-document is bypassed in Magento_Config_Dom::_mergeNode()');
         new Magento_Config_View(array(__DIR__ . '/_files/view_invalid.xml'));
     }
 }

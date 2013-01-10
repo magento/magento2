@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Cms
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -117,12 +117,7 @@ class Mage_Cms_Model_Wysiwyg_Config extends Varien_Object
      */
     public function isEnabled()
     {
-        $storeId = $this->getStoreId();
-        if (!is_null($storeId)) {
-            $wysiwygState = Mage::getStoreConfig('cms/wysiwyg/enabled', $storeId);
-        } else {
-            $wysiwygState = Mage::getStoreConfig('cms/wysiwyg/enabled');
-        }
+        $wysiwygState = Mage::getStoreConfig('cms/wysiwyg/enabled', $this->getStoreId());
         return in_array($wysiwygState, array(self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN));
     }
 

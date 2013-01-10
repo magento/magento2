@@ -20,13 +20,13 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Backend_Model_Menu_Factory
 {
     /**
-     * @var Mage_Backend_Model_Menu_Logger
+     * @var Mage_Core_Model_Logger
      */
     protected $_logger;
 
@@ -37,12 +37,12 @@ class Mage_Backend_Model_Menu_Factory
 
     /**
      * @param Magento_ObjectManager $factory
-     * @param Mage_Backend_Model_Menu_Logger $menuLogger
+     * @param Mage_Core_Model_Logger $logger
      */
-    public function __construct(Magento_ObjectManager $factory, Mage_Backend_Model_Menu_Logger $menuLogger)
+    public function __construct(Magento_ObjectManager $factory, Mage_Core_Model_Logger $logger)
     {
         $this->_factory = $factory;
-        $this->_logger = $menuLogger;
+        $this->_logger = $logger;
     }
 
     /**

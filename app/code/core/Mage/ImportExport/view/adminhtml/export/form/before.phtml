@@ -20,83 +20,81 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <script type="text/javascript">
 //<![CDATA[
+    // Temporary Class will be replaced after refactoring of import/export functionality
+    VarienExport = Class.create();
+    VarienExport.prototype = {
+        initialize: function() {
+            /**
+             * Previous selected entity for grid
+             * @type {string}
+             */
+            this.previousGridEntity = '';
+        },
 
-    /**
-     * Previous selected entity for grid
-     *
-     * @var string
-     */
-    varienForm.prototype.previousGridEntity = '';
+        /**
+         *  Handle value change in entity type selector
+         */
+        modifyFilterGrid: function() {
+            if ($('entity') && $F('entity') && $F('entity') != 'catalog_product') {
+                if ($F('entity') == 'customer') {
+                    $$('col:first-child').each(function(el) {
+                        el.show();
+                    });
+                    $$('th.no-link:first-child').each(function(el) {
+                        el.show();
+                    });
+                    $$('td.a-center').each(function(el) {
+                        el.show();
+                    });
+                } else {
+                    $$('col:first-child').each(function(el) {
+                        el.hide();
+                    });
+                    $$('th.no-link:first-child').each(function(el) {
+                        el.hide();
+                    });
+                    $$('td.a-center').each(function(el) {
+                        el.hide();
+                    });
+                }
+            }
+        },
 
-    /**
-     *  Handle value change in entity type selector
-     *
-     * @return void
-     */
-    varienForm.prototype.modifyFilterGrid = function()
-    {
-        if ($('entity') && $F('entity') && $F('entity') != 'catalog_product') {
-            if ($F('entity') == 'customer') {
-                $$('col:first-child').each(function(el) {
-                    el.show();
-                });
-                $$('th.no-link:first-child').each(function(el) {
-                    el.show();
-                });
-                $$('td.a-center').each(function(el) {
-                    el.show();
-                });
+        /**
+         * Post form data and process response via AJAX
+         */
+        getFilter: function() {
+            if ($('entity') && $F('entity')) {
+                var url    = "<?php echo $this->getUrl('*/*/getFilter') ?>";
+                var entity = $F('entity');
+                if (entity != 'catalog_product') {
+                    entity = 'customer';
+                }
+                if (entity != this.previousGridEntity) {
+                    this.previousGridEntity = entity;
+                    url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + entity;
+                    new Ajax.Request(url, {
+                        method:      'post',
+                        evalScripts: true,
+                        onComplete:  function(transport) {
+                            var responseText = transport.responseText.replace(/>\s+</g, '><');
+                            $('export_filter_grid_container').update(responseText);
+                            this.modifyFilterGrid();
+                            $('export_filter_container').show();
+                        }.bind(this)
+                    });
+                } else {
+                    this.modifyFilterGrid();
+                }
             } else {
-                $$('col:first-child').each(function(el) {
-                    el.hide();
-                });
-                $$('th.no-link:first-child').each(function(el) {
-                    el.hide();
-                });
-                $$('td.a-center').each(function(el) {
-                    el.hide();
-                });
+                $('export_filter_container').hide();
             }
-        }
-    };
-
-    /**
-     * Post form data and process response via AJAX
-     *
-     * @return void
-     */
-    varienForm.prototype.getFilter = function()
-    {
-        if ($('entity') && $F('entity')) {
-            var url    = "<?php echo $this->getUrl('*/*/getFilter') ?>";
-            var entity = $F('entity');
-            if (entity != 'catalog_product') {
-                entity = 'customer';
-            }
-            if (entity != this.previousGridEntity) {
-                this.previousGridEntity = entity;
-                url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + entity;
-                new Ajax.Request(url, {
-                    method:      'post',
-                    evalScripts: true,
-                    onComplete:  function(transport) {
-                        var responseText = transport.responseText.replace(/>\s+</g, '><');
-                        $('export_filter_grid_container').update(responseText);
-                        this.modifyFilterGrid();
-                        $('export_filter_container').show();
-                    }.bind(this)
-                });
-            } else {
-                this.modifyFilterGrid();
-            }
-        } else {
-            $('export_filter_container').hide();
         }
     };
 
@@ -105,8 +103,7 @@
      *
      * return void
      */
-    function getFile()
-    {
+    function getFile() {
         if ($('entity') && $F('entity')) {
             var form      = $('export_filter_form');
             var oldAction = form.action;
@@ -118,6 +115,8 @@
         } else {
             alert('Invalid data');
         }
-    }
+    };
+
+    varienExport = new VarienExport();
 //]]>
 </script>

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Review
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,16 +41,14 @@ class Mage_Review_Block_Customer_List extends Mage_Customer_Block_Account_Dashbo
      */
     protected $_collection;
 
-    /**
-     * Initializes collection
-     */
-    protected function _construct()
+    protected function _initCollection()
     {
         $this->_collection = Mage::getModel('Mage_Review_Model_Review')->getProductCollection();
         $this->_collection
             ->addStoreFilter(Mage::app()->getStore()->getId())
             ->addCustomerFilter(Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerId())
             ->setDateOrder();
+        return $this;
     }
 
     /**
@@ -60,7 +58,7 @@ class Mage_Review_Block_Customer_List extends Mage_Customer_Block_Account_Dashbo
      */
     public function count()
     {
-        return $this->_collection->getSize();
+        return $this->_getCollection()->getSize();
     }
 
     /**
@@ -94,6 +92,9 @@ class Mage_Review_Block_Customer_List extends Mage_Customer_Block_Account_Dashbo
      */
     protected function _getCollection()
     {
+        if (!$this->_collection) {
+            $this->_initCollection();
+        }
         return $this->_collection;
     }
 

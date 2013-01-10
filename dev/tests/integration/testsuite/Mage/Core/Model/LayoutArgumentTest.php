@@ -21,15 +21,20 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Layout integration tests
+ *
+ * @magentoDbIsolation enabled
  */
 class Mage_Core_Model_LayoutArgumentTest extends Mage_Core_Model_LayoutTestBase
 {
+    /**
+     * @magentoConfigFixture default_store design/theme/full_name test/default
+     */
     public function testLayoutArgumentsDirective()
     {
         $this->_layout->getUpdate()->load(array('layout_test_handle_arguments'));
@@ -39,6 +44,9 @@ class Mage_Core_Model_LayoutArgumentTest extends Mage_Core_Model_LayoutTestBase
         $this->assertEquals('3', $this->_layout->getBlock('block_with_args')->getThree());
     }
 
+    /**
+     * @magentoConfigFixture default_store design/theme/full_name test/default
+     */
     public function testLayoutArgumentsDirectiveIfComplexValues()
     {
         $this->_layout->getUpdate()->load(array('layout_test_handle_arguments_complex_values'));
@@ -53,6 +61,9 @@ class Mage_Core_Model_LayoutArgumentTest extends Mage_Core_Model_LayoutTestBase
             $this->_layout->getBlock('block_with_args_complex_values')->getThree());
     }
 
+    /**
+     * @magentoConfigFixture default_store design/theme/full_name test/default
+     */
     public function testLayoutObjectArgumentsDirective()
     {
         $this->_layout->getUpdate()->load(array('layout_test_handle_arguments_object_type'));
@@ -64,6 +75,9 @@ class Mage_Core_Model_LayoutArgumentTest extends Mage_Core_Model_LayoutTestBase
         $this->assertEquals(3, $this->_layout->getBlock('block_with_object_args')->getThree());
     }
 
+    /**
+     * @magentoConfigFixture default_store design/theme/full_name test/default
+     */
     public function testLayoutUrlArgumentsDirective()
     {
         $this->_layout->getUpdate()->load(array('layout_test_handle_arguments_url_type'));
@@ -73,6 +87,9 @@ class Mage_Core_Model_LayoutArgumentTest extends Mage_Core_Model_LayoutTestBase
         $this->assertContains('customer_id/3', $this->_layout->getBlock('block_with_url_args')->getTwo());
     }
 
+    /**
+     * @magentoConfigFixture default_store design/theme/full_name test/default
+     */
     public function testLayoutObjectArgumentUpdatersDirective()
     {
         $this->_layout->getUpdate()->load(array('layout_test_handle_arguments_object_type_updaters'));

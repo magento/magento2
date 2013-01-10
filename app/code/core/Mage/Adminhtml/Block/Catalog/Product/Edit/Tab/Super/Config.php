@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -83,6 +83,16 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
     }
 
     /**
+     * Get configurable product type
+     *
+     * @return Mage_Catalog_Model_Product_Type_Configurable
+     */
+    protected function _getProductType()
+    {
+        return Mage::getModel('Mage_Catalog_Model_Product_Type_Configurable');
+    }
+
+    /**
      * Check whether prices of configurable products can be editable
      *
      * @return boolean
@@ -100,16 +110,12 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
      */
     protected function _prepareLayout()
     {
-        $this->setChild('grid',
-            $this->getLayout()->createBlock('Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Grid',
-                'admin.product.edit.tab.super.config.grid')
-        );
-
         $this->addChild('create_empty', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Create Empty'),
             'class' => 'add',
             'onclick' => 'superProduct.createEmptyProduct()'
         ));
+        $this->addChild('super_settings', 'Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings');
 
         if ($this->_getProduct()->getId()) {
             $this->setChild('simple',
@@ -138,32 +144,26 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
     }
 
     /**
-     * Retrieve attributes data in JSON format
+     * Retrieve attributes data
      *
-     * @return string
+     * @return array
      */
-    public function getAttributesJson()
+    public function getAttributes()
     {
-        $attributes = $this->_getProduct()->getTypeInstance()
-            ->getConfigurableAttributesAsArray($this->_getProduct());
-        if(!$attributes) {
-            return '[]';
-        } else {
-            // Hide price if needed
-            foreach ($attributes as &$attribute) {
-                if (isset($attribute['values']) && is_array($attribute['values'])) {
-                    foreach ($attribute['values'] as &$attributeValue) {
-                        if (!$this->getCanReadPrice()) {
-                            $attributeValue['pricing_value'] = '';
-                            $attributeValue['is_percent'] = 0;
-                        }
-                        $attributeValue['can_edit_price'] = $this->getCanEditPrice();
-                        $attributeValue['can_read_price'] = $this->getCanReadPrice();
+        $attributes = (array)$this->_getProductType()->getConfigurableAttributesAsArray($this->_getProduct());
+        foreach ($attributes as &$attribute) {
+            if (isset($attribute['values']) && is_array($attribute['values'])) {
+                foreach ($attribute['values'] as &$attributeValue) {
+                    if (!$this->getCanReadPrice()) {
+                        $attributeValue['pricing_value'] = '';
+                        $attributeValue['is_percent'] = 0;
                     }
+                    $attributeValue['can_edit_price'] = $this->getCanEditPrice();
+                    $attributeValue['can_read_price'] = $this->getCanReadPrice();
                 }
             }
         }
-        return Mage::helper('Mage_Core_Helper_Data')->jsonEncode($attributes);
+        return $attributes;
     }
 
     /**
@@ -173,7 +173,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
      */
     public function getLinksJson()
     {
-        $products = $this->_getProduct()->getTypeInstance()
+        $products = $this->_getProductType()
             ->getUsedProducts($this->_getProduct());
         if(!$products) {
             return '{}';
@@ -193,7 +193,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
      */
     public function getConfigurableSettings($product) {
         $data = array();
-        $attributes = $this->_getProduct()->getTypeInstance()
+        $attributes = $this->_getProductType()
             ->getUsedProductAttributes($this->_getProduct());
         foreach ($attributes as $attribute) {
             $data[] = array(
@@ -296,17 +296,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
     }
 
     /**
-     * Escape JavaScript string
-     *
-     * @param string $string
-     * @return string
-     */
-    public function escapeJs($string)
-    {
-        return addcslashes($string, "'\r\n\\");
-    }
-
-    /**
      * Retrieve Tab label
      *
      * @return string
@@ -355,5 +344,64 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config extends Mage_Ad
     {
         return !Mage::helper('Mage_Catalog_Helper_Data')->isPriceGlobal()
             && $this->_getProduct()->getStoreId();
+    }
+
+    /**
+     * Get list of used attributes
+     *
+     * @return array
+     */
+    public function getSelectedAttributes()
+    {
+        return $this->_getProduct()->isConfigurable()
+            ? array_filter($this->_getProductType()->getUsedProductAttributes($this->_getProduct()))
+            : array();
+    }
+
+    /**
+     * Retrieve all possible attribute values combinations
+     *
+     * @return array
+     */
+    public function getVariations()
+    {
+        $attributesCount = 0;
+        $variationalAttributes = array();
+        $usedProductAttributes = $this->getSelectedAttributes();
+        foreach ($usedProductAttributes as $attribute) {
+            /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+            $variationalAttributes[] = array(
+                'id' => $attribute->getId(),
+                'values' => $attribute->getSource()->getAllOptions(false),
+            );
+            $attributesCount++;
+        }
+
+        $variations = array();
+        $currentVariation = array_fill(0, $attributesCount, 0);
+        $variationalAttributes = array_reverse($variationalAttributes);
+        $lastAttribute = $attributesCount - 1;
+        do {
+            for ($attributeIndex = 0; $attributeIndex < $attributesCount - 1; ++$attributeIndex) {
+                if ($currentVariation[$attributeIndex] >= count($variationalAttributes[$attributeIndex]['values'])) {
+                    $currentVariation[$attributeIndex] = 0;
+                    ++$currentVariation[$attributeIndex + 1];
+                }
+            }
+            if ($currentVariation[$lastAttribute] >= count($variationalAttributes[$lastAttribute]['values'])) {
+                break;
+            }
+
+            $filledVariation = array();
+            for ($attributeIndex = $attributesCount; $attributeIndex--;) {
+                $currentAttribute = $variationalAttributes[$attributeIndex];
+                $filledVariation[$currentAttribute['id']] =
+                    $currentAttribute['values'][$currentVariation[$attributeIndex]];
+            }
+
+            $variations[] = $filledVariation;
+            $currentVariation[0]++;
+        } while (1);
+        return $variations;
     }
 }

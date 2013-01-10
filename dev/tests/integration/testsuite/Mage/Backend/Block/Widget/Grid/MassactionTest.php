@@ -21,10 +21,15 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/**
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ * @magentoDataFixture Mage/Backend/Block/_files/theme_registration.php
+ */
 class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -36,18 +41,6 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      * @var Mage_Core_Model_Layout
      */
     protected $_layout;
-
-    public static function setUpBeforeClass()
-    {
-        /* Point application to predefined layout fixtures */
-        Mage::getConfig()->setOptions(array(
-            'design_dir' => realpath( __DIR__ . '/../../_files/design'),
-        ));
-        Mage::getDesign()->setDesignTheme('test/default', 'adminhtml');
-
-        /* Disable loading and saving layout cache */
-        Mage::app()->getCacheInstance()->banUse('layout');
-    }
 
     protected function setUp()
     {
@@ -66,10 +59,11 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
     }
 
     /**
-     * @covers getItems
-     * @covers getCount
-     * @covers getItemsJson
-     * @covers isAvailable
+     * @covers Mage_Backend_Block_Widget_Grid_Massaction::getItems
+     * @covers Mage_Backend_Block_Widget_Grid_Massaction::getCount
+     * @covers Mage_Backend_Block_Widget_Grid_Massaction::getItemsJson
+     * @covers Mage_Backend_Block_Widget_Grid_Massaction::isAvailable
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
      */
     public function testMassactionDefaultValues()
     {
@@ -82,21 +76,27 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $this->assertFalse($blockEmpty->isAvailable());
     }
 
+    /**
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
+     */
     public function testJavascript()
     {
         $javascript = $this->_block->getJavaScript();
 
-        $expectedItem1 =  '#"option_id1":{"label":"Option One",'
+        $expectedItemFirst = '#"option_id1":{"label":"Option One",'
             . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
             . '"complete":"Test","id":"option_id1"}#';
-        $this->assertRegExp($expectedItem1, $javascript);
+        $this->assertRegExp($expectedItemFirst, $javascript);
 
-        $expectedItem2 =  '#"option_id2":{"label":"Option Two",'
+        $expectedItemSecond = '#"option_id2":{"label":"Option Two",'
             . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
             . '"confirm":"Are you sure\?","id":"option_id2"}#';
-        $this->assertRegExp($expectedItem2, $javascript);
+        $this->assertRegExp($expectedItemSecond, $javascript);
     }
 
+    /**
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
+     */
     public function testJavascriptWithAddedItem()
     {
         $input = array(
@@ -113,6 +113,9 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $this->assertRegExp($expected, $this->_block->getJavaScript());
     }
 
+    /**
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
+     */
     public function testItemsCount()
     {
         $this->assertEquals(2, count($this->_block->getItems()));
@@ -123,6 +126,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      * @param $itemId
      * @param $expectedItem
      * @dataProvider itemsDataProvider
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
      */
     public function testItems($itemId, $expectedItem)
     {
@@ -137,6 +141,9 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $this->assertEquals($expectedItem['blockname'], $actualItem->getBlockName());
     }
 
+    /**
+     * @return array
+     */
     public function itemsDataProvider()
     {
         return array(
@@ -163,6 +170,9 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         );
     }
 
+    /**
+     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
+     */
     public function testGridContainsMassactionColumn()
     {
         $this->_layout->getBlock('admin.test.grid')->toHtml();

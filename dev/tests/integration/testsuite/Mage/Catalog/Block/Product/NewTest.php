@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,21 +61,19 @@ class Mage_Catalog_Block_Product_NewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Mage::app()->getStore()->getId(), $info[1]);
 
         $this->assertSame(2, array_shift($keys));
-        $this->assertEquals(Mage::getDesign()->getPackageName(), $info[2]);
-        $this->assertSame(3, array_shift($keys));
-        $this->assertEquals(Mage::getDesign()->getTheme(), $info[3]);
+        $this->assertEquals(Mage_Core_Model_Theme::CACHE_TAG_NO_THEME, $info[2]);
 
-        $this->assertSame(4, array_shift($keys));
-        $this->assertNotEquals('', $info[4]);
+        $this->assertSame(3, array_shift($keys));
+        $this->assertEquals(Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId(), $info[3]);
 
         $this->assertSame('template', array_shift($keys));
+
         /**
          * This block is implemented without template by default (invalid).
          * Having the cache key fragment with empty value can potentially lead to caching bugs
          */
-
-        $this->assertSame(5, array_shift($keys));
-        $this->assertNotEquals('', $info[5]);
+        $this->assertSame(4, array_shift($keys));
+        $this->assertNotEquals('', $info[4]);
     }
 
     public function testSetGetProductsCount()

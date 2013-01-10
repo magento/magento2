@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Catalog
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -276,5 +276,36 @@ class Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute extends Ma
         );
 
         return $adapter->fetchCol($select, $bind);
+    }
+
+    /**
+     * Get configurable attribute id by product id and attribute id
+     *
+     * @param Mage_Catalog_Model_Product_Type_Configurable_Attribute $attribute
+     * @param $productId
+     * @param $attributeId
+     *
+     * @return string
+     */
+    public function getIdByProductIdAndAttributeId($attribute, $productId, $attributeId)
+    {
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable(), $this->getIdFieldName())
+            ->where('product_id = ?', $productId)
+            ->where('attribute_id = ?', $attributeId);
+        return $this->_getReadAdapter()->fetchOne($select);
+    }
+
+    /**
+     * Delete configurable attributes by product id
+     *
+     * @param $productId
+     */
+    public function deleteAttributesByProductId($productId)
+    {
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable(), $this->getIdFieldName())
+            ->where('product_id = ?', $productId);
+        $this->_getWriteAdapter()->query($this->_getReadAdapter()->deleteFromSelect($select, $this->getMainTable()));
     }
 }

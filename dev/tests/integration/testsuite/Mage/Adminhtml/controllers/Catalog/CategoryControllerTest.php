@@ -18,11 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @category    Magento
+ * @package     Mage_Adminhtml
+ * @subpackage  integration_tests
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utility_Controller
+class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Backend_Utility_Controller
 {
     /**
      * @magentoDataFixture Mage/Core/_files/store.php
@@ -73,6 +76,77 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
         }
 
         $this->assertEmpty($errors, "\n" . join("\n", $errors));
+    }
+
+    /**
+     * @param array $postData
+     * @dataProvider categoryCreatedFromProductCreationPageDataProvider
+     */
+    public function testSaveActionFromProductCreationPage($postData)
+    {
+        $this->getRequest()->setPost($postData);
+
+        $this->dispatch('backend/admin/catalog_category/save');
+        $body = $this->getResponse()->getBody();
+
+        if (empty($postData['return_session_messages_only'])) {
+            $this->assertRegExp(
+                '~<script type="text/javascript">parent\.updateContent\("[^"]+/backend/admin/catalog_category/edit/'
+                    . 'id/\d+/key/[0-9a-f]+/", {}, true\);</script>~',
+                $body
+            );
+        } else {
+            $result = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($body);
+            $this->assertArrayHasKey('messages', $result);
+            $this->assertFalse($result['error']);
+            $category = $result['category'];
+            $this->assertEquals('Category Created From Product Creation Page', $category['name']);
+            $this->assertEquals(1, $category['is_active']);
+            $this->assertEquals(0, $category['include_in_menu']);
+            $this->assertEquals(2, $category['parent_id']);
+            $this->assertNull($category['available_sort_by']);
+            $this->assertNull($category['default_sort_by']);
+        }
+    }
+
+    /**
+     * @static
+     * @return array
+     */
+    public static function categoryCreatedFromProductCreationPageDataProvider()
+    {
+        /* Keep in sync with /app/code/core/Mage/Adminhtml/view/adminhtml/catalog/product/edit/category/new/js.phtml */
+        $postData = array(
+            'general' => array (
+                'name' => 'Category Created From Product Creation Page',
+                'is_active' => 1,
+                'include_in_menu' => 0,
+            ),
+            'parent' => 2,
+            'use_config' => array('available_sort_by', 'default_sort_by'),
+        );
+
+        return array(
+            array($postData),
+            array($postData + array('return_session_messages_only' => 1)),
+        );
+    }
+
+    public function testSuggestCategoriesActionDefaultCategoryFound()
+    {
+        $this->getRequest()->setParam('name_part', 'Default');
+        $this->dispatch('backend/admin/catalog_category/suggestCategories');
+        $this->assertEquals(
+            '[{"id":"2","children":[],"is_active":"1","name":"Default Category"}]',
+            $this->getResponse()->getBody()
+        );
+    }
+
+    public function testSuggestCategoriesActionNoSuggestions()
+    {
+        $this->getRequest()->setParam('name_part', strrev('Default'));
+        $this->dispatch('backend/admin/catalog_category/suggestCategories');
+        $this->assertEquals('[]', $this->getResponse()->getBody());
     }
 
     /**
@@ -206,5 +280,26 @@ class Mage_Adminhtml_Catalog_CategoryControllerTest extends Mage_Adminhtml_Utili
                 ),
             ),
         );
+    }
+
+    public function testSaveActionCategoryWithDangerRequest()
+    {
+        $this->getRequest()->setPost(array(
+            'general' => array(
+                'path' => '1',
+                'name' => 'test',
+                'is_active' => '1',
+                'entity_id' => 1500,
+                'include_in_menu' => '1',
+                'available_sort_by' => 'name',
+                'default_sort_by' => 'name',
+            ),
+        ));
+        $this->dispatch('backend/admin/catalog_category/save');
+        /** @var Mage_Backend_Model_Session $session */
+        $session = Mage::getSingleton('Mage_Backend_Model_Session');
+        $errorMessages = $session->getMessages()->getErrors();
+        $this->assertCount(1, $errorMessages);
+        $this->assertEquals('Unable to save the category', $errorMessages[0]->getCode());
     }
 }

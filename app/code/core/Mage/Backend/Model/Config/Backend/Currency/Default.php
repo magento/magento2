@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,11 +45,17 @@ class Mage_Backend_Model_Config_Backend_Currency_Default extends Mage_Backend_Mo
     protected function _afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Selected default display currency is not available in installed currencies.'));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Selected default display currency is not available in installed currencies.')
+            );
         }
 
         if (!in_array($this->getValue(), $this->_getAllowedCurrencies())) {
-            Mage::throwException(Mage::helper('Mage_Backend_Helper_Data')->__('Selected default display currency is not available in allowed currencies.'));
+            Mage::throwException(
+                Mage::helper('Mage_Backend_Helper_Data')
+                    ->__('Selected default display currency is not available in allowed currencies.')
+            );
         }
 
         return $this;

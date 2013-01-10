@@ -20,7 +20,7 @@
  *
  * @category   Varien
  * @package    Varien_Data
- * @copyright  Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -411,7 +411,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     protected function _translateCondition($field, $condition)
     {
         $field = $this->_getMappedField($field);
-        return $this->_getConditionSql($field, $condition);
+        return $this->_getConditionSql($this->getConnection()->quoteIdentifier($field), $condition);
     }
 
     /**

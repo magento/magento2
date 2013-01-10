@@ -20,12 +20,15 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * EAV attribute resource model (Using Forms)
+ *
+ * @method Mage_Eav_Model_Attribute_Data_Abstract|null getDataModel() Get data model linked to attribute or null.
+ * @method string|null getFrontendInput() Get attribute type for user interface form or null
  *
  * @category   Mage
  * @package    Mage_Eav

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,10 +30,11 @@
  *
  * @category   Mage
  * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Catalog_Category_Abstract
 {
+    const XML_PATH_SUGGESTED_CATEGORIES_LIMIT = 'global/catalog/suggested_categories/limit';
 
     protected $_withProductCount;
 
@@ -102,6 +103,59 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
             $this->setData('category_collection', $collection);
         }
         return $collection;
+    }
+
+    /**
+     * Retrieve list of categories with name containing $namePart and their parents
+     *
+     * @param string $namePart
+     * @return string
+     */
+    public function getSuggestedCategoriesJson($namePart)
+    {
+        $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
+
+        /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+        $collection = Mage::getModel('Mage_Catalog_Model_Category')->getCollection();
+
+        $matchingNamesCollection = clone $collection;
+        $matchingNamesCollection->addAttributeToFilter('name', array('like' => "%{$namePart}%"))
+            ->addAttributeToFilter('entity_id', array('neq' => Mage_Catalog_Model_Category::TREE_ROOT_ID))
+            ->addAttributeToSelect('path')
+            ->setPageSize((string)Mage::getConfig()->getNode(self::XML_PATH_SUGGESTED_CATEGORIES_LIMIT))
+            ->setStoreId($storeId);
+
+        $shownCategoriesIds = array();
+        foreach ($matchingNamesCollection as $category) {
+            foreach (explode('/', $category->getPath()) as $parentId) {
+                $shownCategoriesIds[$parentId] = 1;
+            }
+        }
+
+        $collection->addAttributeToFilter('entity_id', array('in' => array_keys($shownCategoriesIds)))
+            ->addAttributeToSelect(array('name', 'is_active', 'parent_id'))
+            ->setStoreId($storeId);
+
+        $categoryById = array(
+            Mage_Catalog_Model_Category::TREE_ROOT_ID => array(
+                'id' => Mage_Catalog_Model_Category::TREE_ROOT_ID,
+                'children' => array()
+            )
+        );
+        foreach ($collection as $category) {
+            foreach (array($category->getId(), $category->getParentId()) as $categoryId) {
+                if (!isset($categoryById[$categoryId])) {
+                    $categoryById[$categoryId] = array('id' => $categoryId, 'children' => array());
+                }
+            }
+            $categoryById[$category->getId()]['is_active'] = $category->getIsActive();
+            $categoryById[$category->getId()]['name'] = $category->getName();
+            $categoryById[$category->getParentId()]['children'][] = &$categoryById[$category->getId()];
+        }
+
+        return Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+            $categoryById[Mage_Catalog_Model_Category::TREE_ROOT_ID]['children']
+        );
     }
 
     public function getAddRootButtonHtml()
@@ -173,7 +227,9 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
     public function getTreeJson($parenNodeCategory=null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $json = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(isset($rootArray['children']) ? $rootArray['children'] : array());
+        $json = Mage::helper('Mage_Core_Helper_Data')->jsonEncode(
+            isset($rootArray['children']) ? $rootArray['children'] : array()
+        );
         return $json;
     }
 

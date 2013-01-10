@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -42,69 +42,45 @@
             <?php echo $this->getDuplicateButtonHtml() ?>
         <?php endif; ?>
     <?php endif; ?>
-    <?php if($this->getProductSetId() && $this->getIsConfigured()): ?>
+    <?php if ($this->getProductSetId()): ?>
         <?php echo $this->getChangeAttributeSetButtonHtml() ?>
         <?php echo $this->getSaveButtonHtml() ?>
         <?php echo $this->getSaveAndEditButtonHtml() ?>
     <?php endif; ?>
     </p>
 </div>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product_edit_form" enctype="multipart/form-data">
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
-    <div style="display:none"></div>
+    <div id="product-edit-form-tabs"></div>
+    <?php echo $this->getChildHtml('product-type-tabs') ?>
 </form>
 <script type="text/javascript">
 //<![CDATA[
     var productTemplateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
-    var productForm = new varienForm('product_edit_form', '<?php echo $this->getValidationUrl() ?>');
-    productForm._processValidationResult = function(transport) {
-        var response = transport.responseText.evalJSON();
-        if (response.error){
-            if (response.attribute && $(response.attribute)) {
-                $(response.attribute).setHasError(true, productForm);
-                Validation.ajaxError($(response.attribute), response.message);
-                if (!Prototype.Browser.IE){
-                    $(response.attribute).focus();
-                }
-            }
-            else if ($('messages')) {
-                $('messages').innerHTML = '<ul class="messages"><li class="error-msg"><ul><li>' + response.message + '</li></ul></li></ul>';
-            }
-        }
-        else{
-            productForm._submit();
-        }
-    };
-    function saveAndContinueEdit(urlTemplate) {
-        var template = new Template(urlTemplate, productTemplateSyntax);
-        var url = template.evaluate({tab_id:product_info_tabsJsTabs.activeTab.id});
-        productForm.submit(url);
-    }
+    jQuery('#product-edit-form').form().validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
     function setSettings(urlTemplate, setElement, typeElement) {
         var template = new Template(urlTemplate, productTemplateSyntax);
         setLocation(template.evaluate({attribute_set:$F(setElement),type:$F(typeElement)}));
     }
 
-     function setSuperSettings(urlTemplate, attributesClass, validateField) {
+    function setSuperSettings(urlTemplate, attributesClass, validateField) {
         var attributesFields = $$('.' + attributesClass);
         var attributes = Form.serializeElements(attributesFields, true).attribute;
-        if(typeof attributes == 'string') {
+        if (typeof attributes == 'string') {
             attributes = [attributes];
         }
 
-        if(!attributes) {
+        if (!attributes) {
             $(validateField).value = 'no-attributes';
         } else {
             $(validateField).value = 'has-attributes';
         }
 
-        if (productForm.validator.validate()) {
-            var template = new Template(urlTemplate, productTemplateSyntax);
-            var url = template.evaluate({
-                attributes: encode_base64(attributes.join(',')).replace(new RegExp('/','g'),'%2F').replace(new RegExp('=','g'),'%3D')
-            });
-            setLocation(url);
-        }
+        var template = new Template(urlTemplate, productTemplateSyntax);
+        var url = template.evaluate({
+            attributes: encode_base64(attributes.join(',')).replace(new RegExp('/', 'g'), '%2F').replace(new RegExp('=', 'g'), '%3D')
+        });
+        jQuery('#product-edit-form').attr('action', url + '&active_tab=configurable').submit();
     }
 
     function checkMaxLength(Object, MaxLen)
@@ -115,15 +91,15 @@
         return 1;
     }
 
-Event.observe(window, 'load', function() {
-    var objName = '<?php echo $this->getSelectedTabId() ?>';
-    if (objName) {
-        obj = $(objName);
-        //IE fix (bubbling event model)
-        product_info_tabsJsTabs.setSkipDisplayFirstTab();
-        product_info_tabsJsTabs.showTabContent(obj);
+jQuery(function() {
+    <?php if ($this->getSelectedTabId()): ?>
+    if(jQuery('#<?php echo $this->getSelectedTabId() ?>').length) {
+        jQuery('#<?php echo $this->getSelectedTabId() ?>').trigger('click');
     }
-    Product.AttributesBridge.setTabsObject(product_info_tabsJsTabs);
+    <?php endif; ?>
+    jQuery(window).on('tabsbeforeactivate', function(e, ui){
+        jQuery('#config_super_product')[ui.newTab.index() ? 'hide' : 'show']();
+    }).triggerHandler('tabsbeforeactivate', [{newTab: jQuery('#<?php echo $this->getSelectedTabId() ?>').closest('li')}]);
 
     (function ($) {
 
@@ -202,10 +178,10 @@ Event.observe(window, 'load', function() {
     })(jQuery);
 });
 
-Validation.addAllThese([
-    ['validate-super-product-attributes', '<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Please select one or more attributes.') ?>', function(v) {
-        return (v != "no-attributes");
-    }]
-]);
+jQuery(function($) {
+    var data = <?php echo $this->getTypeSwitcherData();?>;
+    new TypeSwitcher(data).bindAll();
+});
+
 //]]>
 </script>

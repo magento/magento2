@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -383,7 +383,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
     {
         $this->setChild('massaction', $this->getLayout()->createBlock($this->getMassactionBlockName()));
         $this->_prepareMassaction();
-        if($this->getMassactionBlock()->isAvailable()) {
+        if ($this->getMassactionBlock()->isAvailable()) {
             $this->_prepareMassactionColumn();
         }
         return $this;
@@ -574,7 +574,8 @@ class Mage_Backend_Block_Widget_Grid_Extended
      *
      * @return array
      */
-    public function getSubTotalColumns() {
+    public function getSubTotalColumns()
+    {
         return $this->getColumns();
     }
 
@@ -660,7 +661,8 @@ class Mage_Backend_Block_Widget_Grid_Extended
      * @param Varien_Object $item
      * @return boolean
      */
-    public function shouldRenderSubTotal($item) {
+    public function shouldRenderSubTotal($item)
+    {
         return ($this->_countSubTotals && count($this->_subtotals) > 0 && count($this->getMultipleRows($item)) > 0);
     }
 
@@ -1026,8 +1028,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
             $csv.= implode(',', $data)."\n";
         }
 
-        if ($this->getCountTotals())
-        {
+        if ($this->getCountTotals()) {
             $data = array();
             foreach ($this->getColumns() as $column) {
                 if (!$column->getIsSystem()) {
@@ -1065,8 +1066,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
         foreach ($this->getCollection() as $item) {
             $xml.= $item->toXml($indexes);
         }
-        if ($this->getCountTotals())
-        {
+        if ($this->getCountTotals()) {
             $xml.= $this->getTotals()->toXml($indexes);
         }
         $xml.= '</items>';
@@ -1163,8 +1163,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
             $data[] = $row;
         }
 
-        if ($this->getCountTotals())
-        {
+        if ($this->getCountTotals()) {
             $row = array();
             foreach ($this->getColumns() as $column) {
                 if (!$column->getIsSystem()) {
@@ -1259,7 +1258,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
     public function getMainButtonsHtml()
     {
         $html = '';
-        if($this->getFilterVisibility()) {
+        if ($this->getFilterVisibility()) {
             $html.= $this->getResetFilterButtonHtml();
             $html.= $this->getSearchButtonHtml();
         }
