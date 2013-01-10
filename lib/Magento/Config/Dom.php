@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -95,12 +95,7 @@ class Magento_Config_Dom
      */
     protected function _mergeNode(DOMElement $node, $parentPath)
     {
-        /* Identify node path based on parent path and node attributes */
-        $path = $parentPath . '/' . $node->tagName;
-        $idAttribute = $this->_findIdAttribute($path);
-        if ($idAttribute && $id = $node->getAttribute($idAttribute)) {
-            $path .= "[@{$idAttribute}='{$id}']";
-        }
+        $path = $this->_getNodePathByParent($node, $parentPath);
 
         $matchedNode = $this->_getMatchedNode($path);
 
@@ -128,6 +123,23 @@ class Magento_Config_Dom
             $newNode = $this->_dom->importNode($node, true);
             $parentMatchedNode->appendChild($newNode);
         }
+    }
+
+    /**
+     * Identify node path based on parent path and node attributes
+     *
+     * @param DOMElement $node
+     * @param string $parentPath
+     * @return string
+     */
+    protected function _getNodePathByParent(DOMElement $node, $parentPath)
+    {
+        $path = $parentPath . '/' . $node->tagName;
+        $idAttribute = $this->_findIdAttribute($path);
+        if ($idAttribute && $value = $node->getAttribute($idAttribute)) {
+            $path .= "[@{$idAttribute}='{$value}']";
+        }
+        return $path;
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    tools
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,7 +66,7 @@ class Tools_Migration_System_Configuration_Generator
 
         $this->_basePath = realpath(dirname(__FILE__) . '/../../../../../');
         $this->_fileSchemaPath = $this->_basePath
-            . '/app/code/core/Mage/Backend/Model/Config/Structure/system_file.xsd';
+            . '/app/code/core/Mage/Backend/etc/system_file.xsd';
     }
 
     /**

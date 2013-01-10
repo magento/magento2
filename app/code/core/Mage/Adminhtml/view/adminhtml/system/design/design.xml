@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  -->
@@ -70,8 +70,8 @@
                             <header translate='true' module='Mage_Catalog'>Store</header>
                             <width>100px</width>
                             <type>store</type>
-                            <store_view>true</store_view>
-                            <sortable>false</sortable>
+                            <store_view>1</store_view>
+                            <sortable>0</sortable>
                             <index>store_id</index>
                         </arguments>
                     </block>

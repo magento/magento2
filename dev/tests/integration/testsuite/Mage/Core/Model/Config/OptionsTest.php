@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -95,7 +95,6 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getEtcDir
      * @covers Mage_Core_Model_Config_Options::getLibDir
      * @covers Mage_Core_Model_Config_Options::getMediaDir
-     * @covers Mage_Core_Model_Config_Options::getSysTmpDir
      * @covers Mage_Core_Model_Config_Options::getVarDir
      * @covers Mage_Core_Model_Config_Options::getTmpDir
      * @covers Mage_Core_Model_Config_Options::getCacheDir
@@ -105,11 +104,11 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
      * @covers Mage_Core_Model_Config_Options::getExportDir
      * @dataProvider getGettersDataProvider
      * @param string $method
-     * @param string $message
      */
-    public function testGetters($method, $message)
+    public function testGetters($method)
     {
-        $this->assertTrue(is_dir($this->_model->$method()), sprintf($message, $this->_model->$method()));
+        $dir = $this->_model->$method();
+        $this->assertFileExists($dir, "Method '{$method}()' returned directory that doesn't exist: '{$dir}'");
     }
 
     /**
@@ -118,21 +117,20 @@ class Mage_Core_Model_Config_OptionsTest extends PHPUnit_Framework_TestCase
     public function getGettersDataProvider()
     {
         return array(
-            array('getAppDir', 'App directory %s does not exist.'),
-            array('getBaseDir', 'Base directory %s does not exist.'),
-            array('getCodeDir', 'Code directory %s does not exist.'),
-            array('getDesignDir', 'Design directory %s does not exist.'),
-            array('getEtcDir', 'Etc directory %s does not exist.'),
-            array('getLibDir', 'Lib directory %s does not exist.'),
-            array('getMediaDir', 'Media directory %s does not exist.'),
-            array('getSysTmpDir', 'System temporary directory %s does not exist.'),
-            array('getVarDir', 'Var directory %s does not exist.'),
-            array('getTmpDir', 'Temporary directory %s does not exist.'),
-            array('getCacheDir', 'Cache directory %s does not exist.'),
-            array('getLogDir', 'Log directory does %s not exist.'),
-            array('getSessionDir', 'Session directory %s does not exist.'),
-            array('getUploadDir', 'Upload directory %s does not exist.'),
-            array('getExportDir', 'Export directory %s does not exist.'),
+            array('getAppDir'),
+            array('getBaseDir'),
+            array('getCodeDir'),
+            array('getDesignDir'),
+            array('getEtcDir'),
+            array('getLibDir'),
+            array('getMediaDir'),
+            array('getVarDir'),
+            array('getTmpDir'),
+            array('getCacheDir'),
+            array('getLogDir'),
+            array('getSessionDir'),
+            array('getUploadDir'),
+            array('getExportDir'),
         );
     }
 

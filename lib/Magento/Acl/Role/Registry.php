@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Acl
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,7 +50,7 @@ class Magento_Acl_Role_Registry extends Zend_Acl_Role_Registry
         } catch (Zend_Acl_Role_Registry_Exception $e) {
             throw new Zend_Acl_Role_Registry_Exception("Child Role id '$roleId' does not exist");
         }
-        
+
         if (!is_array($parents)) {
             $parents = array($parents);
         }

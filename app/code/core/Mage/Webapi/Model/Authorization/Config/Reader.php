@@ -20,11 +20,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Webapi_Model_Authorization_Config_Reader extends Magento_Acl_Config_Reader
 {
+    /**
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    /**
+     * @param Mage_Core_Model_Config $config
+     * @param array $configFiles
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        Mage_Core_Model_Config $config,
+        array $configFiles
+    ) {
+        parent::__construct($configFiles);
+        $this->_config = $config;
+    }
+
     /**
      * Get absolute path to the XML-schema file.
      *
@@ -32,7 +50,7 @@ class Mage_Webapi_Model_Authorization_Config_Reader extends Magento_Acl_Config_R
      */
     public function getSchemaFile()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'acl.xsd';
+        return $this->_config->getModuleDir('etc', 'Mage_Webapi') . DIRECTORY_SEPARATOR . 'acl.xsd';
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,6 +45,16 @@ class Mage_Backend_Model_Config_Structure_Reader extends Magento_Config_XmlAbstr
     protected $_runtimeValidation;
 
     /**
+     * @var Mage_Backend_Model_Config_Structure_Converter
+     */
+    protected $_converter;
+
+    /**
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    /**
      * @param Mage_Core_Model_Config $config
      * @param Mage_Core_Model_Cache $cache
      * @param Mage_Backend_Model_Config_Structure_Converter $structureConverter
@@ -58,12 +68,13 @@ class Mage_Backend_Model_Config_Structure_Reader extends Magento_Config_XmlAbstr
     ) {
         $this->_runtimeValidation = $runtimeValidation;
         $this->_converter = $structureConverter;
+        $this->_config = $config;
 
         if ($cache->canUse('config')
             && ($cachedData = $cache->load(self::CACHE_SYSTEM_CONFIGURATION_STRUCTURE))) {
             $this->_data = unserialize($cachedData);
         } else {
-            $fileNames = $config
+            $fileNames = $this->_config
                 ->getModuleConfigurationFiles('adminhtml' . DIRECTORY_SEPARATOR . 'system.xml');
             parent::__construct($fileNames);
 
@@ -84,7 +95,7 @@ class Mage_Backend_Model_Config_Structure_Reader extends Magento_Config_XmlAbstr
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/system.xsd';
+        return $this->_config->getModuleDir('etc', 'Mage_Backend') . DIRECTORY_SEPARATOR . 'system.xsd';
     }
 
     /**
@@ -94,7 +105,7 @@ class Mage_Backend_Model_Config_Structure_Reader extends Magento_Config_XmlAbstr
      */
     public function getPerFileSchemaFile()
     {
-        return __DIR__ . '/system_file.xsd';
+        return $this->_config->getModuleDir('etc', 'Mage_Backend') . DIRECTORY_SEPARATOR . 'system_file.xsd';
     }
 
     /**

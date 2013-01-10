@@ -21,14 +21,12 @@
  * @category    Magento
  * @package     Magento_User
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Test class for Mage_User_Adminhtml_User_RoleController.
- *
- * @group module:Mage_User
  */
 class Mage_User_Adminhtml_User_RoleControllerTest extends Mage_Backend_Utility_Controller
 {

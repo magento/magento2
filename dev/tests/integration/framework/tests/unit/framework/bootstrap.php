@@ -21,19 +21,12 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $rootDir = realpath(__DIR__ . '/../../../../../../../');
 require_once $rootDir . '/app/bootstrap.php';
+Magento_Autoload_IncludePath::addIncludePath($rootDir . '/dev/tests/integration/framework');
 
-$codeDirs = array(
-    $rootDir . '/lib/',
-    $rootDir . '/app/code/core/',
-    $rootDir . '/dev/tests/integration/framework/',
-);
-set_include_path(implode(PATH_SEPARATOR, $codeDirs) . PATH_SEPARATOR . get_include_path());
-
-Mage::setRoot();
 Mage::initializeObjectManager(null, new Magento_Test_ObjectManager());

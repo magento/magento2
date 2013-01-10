@@ -1,3 +1,26 @@
+2.0.0.0-dev38
+=============
+* Changed application initialization procedure
+  * Application can be started with specific initial configuration data. `Mage_Core_Model_Config::loadBase()` merges this configuration with the highest priority
+  * `Mage` class is no longer responsible for application installation status. `Mage_Core_Model_App` has this responsibility (`Mage_Core_Model_App::isInstalled()`)
+* Implemented new library component `Magento_Filesystem` for working with file system
+  * New component has more abstract layer of interaction with file system, better path isolation
+  * Introduced interface Magento_Filesystem_AdapterInterface for file operations. Added concrete implementation in `Magento_Filesystem_Adapter_Local`
+  * Introduced interface Magento_Filesystem_StreamInterface for stream operations with content. Added concrete implementation in `Magento_Filesystem_Stream_Local`
+  * Added special class `Magento_Filesystem_Stream_Mode` to set parameters of stream on opening (read-only, write-only etc.)
+* Added an ability to skip some service functions for lighter launch of application in `app/bootstrap.php`
+* Improved batch tool for launching automated tests. Tool has an ability to run specified test types. Tool was moved from `dev/tools/batch_tests` to `dev/tools/tests.php`
+* Improved integration test Mage_Adminhtml_DashboardControllerTest to skip test case when Google service is unavailable
+* Improved url building process in new jQuery form widget to have it more secure
+* Removed obsolete `@group module::<Namespace_Module>` annotation from integration tests, restricted its further usage
+* Updated jQuery library used in application, used unified file name instead of version-based one
+* Relocated XSD files for System Configuration, Menu Configuration, ACL Configuration, ACL Configuration for WebApi, Theme Configuration, View Configuration, Validator Configuration to `etc` subfolders of corresponding modules
+* Bug fixes
+  * Fixed bug with placing order in backend using Authorize.Net Direct Post payment method
+  * Changed `Mage_Core_Model_Url` to fix bug with incorrect links on frontend (My Wishlist, Go to Shopping Cart, Continue button at first checkout step)
+  * Fixed several bugs after converting backend grids to layout declaration. Changes were made in EAV Attributes, Design, Newsletter, Backup modules
+  * Fixed incorrect current working directory behavior on application isolation in tests
+
 2.0.0.0-dev37
 =============
 * Refactored a variety of grids in backend (admin) to make them configurable through layout, rather than hard-coded. The following classes were affected (converted): `Mage_User_Block_User_Grid`, `Mage_User_Block_Role_Grid`, `Mage_Adminhtml_Block_System_Design_Grid`, `Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid`, `Mage_Adminhtml_Block_Newsletter_Problem_Grid`, `Mage_Adminhtml_Block_Backup_Grid`, `Mage_Adminhtml_Block_Tax_Rate_Grid`, `Mage_Adminhtml_Block_System_Store_Grid`, `Mage_Adminhtml_Block_System_Email_Template_Grid`, `Mage_Adminhtml_Block_Sitemap_Grid`, `Mage_Adminhtml_Block_Catalog_Search_Grid`, `Mage_Adminhtml_Block_Urlrewrite_Grid`, `Mage_Adminhtml_Block_System_Variable_Grid`, `Mage_Adminhtml_Block_Report_Review_Customer_Grid`, `Mage_Adminhtml_Block_Report_Review_Product_Grid`

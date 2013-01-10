@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -385,6 +385,28 @@ class Mage_Core_Model_App
     }
 
     /**
+     * Whether the application has been installed or not
+     *
+     * @return bool
+     */
+    public function isInstalled()
+    {
+        return (bool)$this->_config->getInstallDate();
+    }
+
+    /**
+     * Throw an exception, if the application has not been installed yet
+     *
+     * @throws Magento_Exception
+     */
+    public function requireInstalledInstance()
+    {
+        if (!$this->isInstalled()) {
+            throw new Magento_Exception('Application is not installed yet, please complete the installation first.');
+        }
+    }
+
+    /**
      * Initialize PHP environment
      *
      * @return Mage_Core_Model_App
@@ -515,13 +537,13 @@ class Mage_Core_Model_App
             $scopeType = 'website';
         }
         switch ($scopeType) {
-            case 'store':
+            case Mage_Core_Model_App_Options::APP_RUN_TYPE_STORE:
                 $this->_currentStore = $scopeCode;
                 break;
-            case 'group':
+            case Mage_Core_Model_App_Options::APP_RUN_TYPE_GROUP:
                 $this->_currentStore = $this->_getStoreByGroup($scopeCode);
                 break;
-            case 'website':
+            case Mage_Core_Model_App_Options::APP_RUN_TYPE_WEBSITE:
                 $this->_currentStore = $this->_getStoreByWebsite($scopeCode);
                 break;
             default:

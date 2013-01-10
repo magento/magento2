@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -54,7 +54,7 @@
                     <arguments>
                         <massaction_id_field>id</massaction_id_field>
                         <form_field_name>ids</form_field_name>
-                        <use_select_all>0</use_select_all>
+                        <use_select_all>1</use_select_all>
                         <options>
                             <delete>
                                 <label translate='true' module='Mage_Adminhtml'>Delete</label>

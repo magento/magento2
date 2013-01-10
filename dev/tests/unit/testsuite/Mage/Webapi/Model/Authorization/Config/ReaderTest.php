@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Webapi_Model_Authorization_Config_ReaderTest extends PHPUnit_Framework_TestCase
@@ -31,13 +31,26 @@ class Mage_Webapi_Model_Authorization_Config_ReaderTest extends PHPUnit_Framewor
     protected $_reader;
 
     /**
+     * @var PHPUnit_Framework_MockObject_MockObject|Mage_Core_Model_Config
+     */
+    protected $_configMock;
+
+    /**
      * Initialize reader instance
      */
     protected function setUp()
     {
         $path = array(__DIR__, '..', '..', '_files', 'acl.xml');
         $path = realpath(implode(DIRECTORY_SEPARATOR, $path));
-        $this->_reader = new Mage_Webapi_Model_Authorization_Config_Reader(array($path));
+        $this->_configMock = $this->getMock('Mage_Core_Model_Config', array(), array(), '', false);
+        $this->_configMock->expects($this->any())
+            ->method('getModuleDir')
+            ->with('etc', 'Mage_Webapi')
+            ->will($this->returnValue(
+                realpath(__DIR__ . '/../../../../../../../../../app/code/core/Mage/Webapi/etc'))
+        );
+
+        $this->_reader = new Mage_Webapi_Model_Authorization_Config_Reader($this->_configMock, array($path));
     }
 
     /**
@@ -46,6 +59,7 @@ class Mage_Webapi_Model_Authorization_Config_ReaderTest extends PHPUnit_Framewor
     protected function tearDown()
     {
         unset($this->_reader);
+        unset($this->_configMock);
     }
 
     /**

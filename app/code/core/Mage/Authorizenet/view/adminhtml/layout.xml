@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -32,4 +32,9 @@
             <action method="addJs"><file>mage/directpost.js</file></action>
         </reference>
     </adminhtml_sales_order_create_index>
+    <adminhtml_authorizenet_directpost_payment_redirect>
+        <container name="root" label="Root" output="1">
+            <block type="Mage_Authorizenet_Block_Directpost_Iframe" name="iframe" template="directpost/iframe.phtml"/>
+        </container>
+    </adminhtml_authorizenet_directpost_payment_redirect>
 </layout>

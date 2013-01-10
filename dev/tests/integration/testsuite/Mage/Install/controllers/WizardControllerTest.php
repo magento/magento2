@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Install
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,9 @@ class Mage_Install_WizardControllerTest extends Magento_Test_TestCase_Controller
     public function setUp()
     {
         parent::setUp();
-        $this->_runOptions['is_installed'] = false;
+        // emulate non-installed application
+        $this->_runOptions[Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA]
+            = sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid');
     }
 
     public function tearDown()

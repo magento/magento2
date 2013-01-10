@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_Driver_Standard_OutputAbstract
@@ -65,6 +65,7 @@ class Magento_Profiler_Driver_Standard_Output_Csvfile extends Magento_Profiler_D
     protected function _parseFilePath(array $config = null)
     {
         $result = isset($config['filePath']) ? $config['filePath'] : self::DEFAULT_FILEPATH;
+        $result = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $result);
 
         if (isset($config['baseDir'])) {
             $result = rtrim($config['baseDir'], DIRECTORY_SEPARATOR)

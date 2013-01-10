@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Shell
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class Magento_Shell
      *
      * @return bool
      */
-    public function getVerbose()
+    public function isVerbose()
     {
         return $this->_isVerbose;
     }
@@ -81,17 +81,27 @@ class Magento_Shell
         $arguments = array_map('escapeshellarg', $arguments);
         $command = vsprintf("$command 2>&1", $arguments); // Output errors to STDOUT instead of STDERR
         if ($this->_isVerbose) {
-            echo $command . PHP_EOL;
+            $this->output($command);
         }
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         if ($this->_isVerbose) {
-            echo $output . PHP_EOL;
+            $this->output($output);
         }
         if ($exitCode) {
             $commandError = new Exception($output, $exitCode);
             throw new Magento_Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
+    }
+
+    /**
+     * Echo the specified message
+     *
+     * @param string $message
+     */
+    public function output($message)
+    {
+        echo $message . PHP_EOL;
     }
 }

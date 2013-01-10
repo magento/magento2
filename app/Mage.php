@@ -20,7 +20,7 @@
  *
  * @category   Mage
  * @package    Mage_Core
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -100,13 +100,6 @@ final class Mage
     public static $headersSentThrowsException   = true;
 
     /**
-     * Is installed flag
-     *
-     * @var bool
-     */
-    static private $_isInstalled;
-
-    /**
      * Logger entities
      *
      * @var array
@@ -170,7 +163,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '37',
+            'number'    => '38',
         );
     }
 
@@ -200,7 +193,6 @@ final class Mage
         self::$_objects         = null;
         self::$_isDownloader    = false;
         self::$_isDeveloperMode = false;
-        self::$_isInstalled     = null;
         self::$_loggers         = array();
         self::$_design          = null;
         // do not reset $headersSentThrowsException
@@ -268,38 +260,20 @@ final class Mage
     }
 
     /**
-     * Set application root absolute path
-     *
-     * @param string $appRoot
-     * @throws Mage_Core_Exception
-     */
-    public static function setRoot($appRoot = '')
-    {
-        if (self::$_appRoot) {
-            return ;
-        }
-
-        if ('' === $appRoot) {
-            // automatically find application root by dirname of Mage.php
-            $appRoot = dirname(__FILE__);
-        }
-
-        $appRoot = realpath($appRoot);
-
-        if (is_dir($appRoot) && is_readable($appRoot)) {
-            self::$_appRoot = $appRoot;
-        } else {
-            self::throwException($appRoot . ' is not a directory or not readable by this user');
-        }
-    }
-
-    /**
      * Retrieve application root absolute path
      *
      * @return string
+     * @throws Magento_Exception
      */
     public static function getRoot()
     {
+        if (!self::$_appRoot) {
+            $appRootDir = __DIR__;
+            if (!is_readable($appRootDir)) {
+                throw new Magento_Exception("Application root directory '$appRootDir' is not readable.");
+            }
+            self::$_appRoot = $appRootDir;
+        }
         return self::$_appRoot;
     }
 
@@ -654,11 +628,8 @@ final class Mage
     public static function app($code = '', $type = 'store', $options = array())
     {
         if (null === self::$_app) {
-            self::setRoot();
             self::$_app = self::getObjectManager()->get('Mage_Core_Model_App');
             self::$_events = new Varien_Event_Collection();
-            self::_setIsInstalled($options);
-            self::_setConfigModel($options);
 
             Magento_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
@@ -686,10 +657,7 @@ final class Mage
     public static function init($code = '', $type = 'store', $options = array(), $modules = array())
     {
         try {
-            self::setRoot();
-            self::$_app     = self::getObjectManager()->create('Mage_Core_Model_App');
-            self::_setIsInstalled($options);
-            self::_setConfigModel($options);
+            self::$_app = self::getObjectManager()->create('Mage_Core_Model_App');
 
             if (!empty($modules)) {
                 self::$_app->initSpecified($code, $type, $options, $modules);
@@ -719,7 +687,6 @@ final class Mage
     {
         try {
             Magento_Profiler::start('mage');
-            self::setRoot();
             if (isset($options['edition'])) {
                 self::$_currentEdition = $options['edition'];
             }
@@ -731,7 +698,6 @@ final class Mage
                 self::$_app->setResponse($options['response']);
             }
             self::$_events = new Varien_Event_Collection();
-            self::_setIsInstalled($options);
             self::$_app->run(array(
                 'scope_code' => $code,
                 'scope_type' => $type,
@@ -748,70 +714,19 @@ final class Mage
     }
 
     /**
-     * Set application isInstalled flag based on given options
+     * Shortcut for the application "is installed" getter
      *
-     * @param array $options
-     */
-    protected static function _setIsInstalled($options = array())
-    {
-        if (isset($options['is_installed'])) {
-            self::$_isInstalled = (bool) $options['is_installed'];
-        }
-    }
-
-    /**
-     * Set application Config model
-     *
-     * @param array $options
-     */
-    protected static function _setConfigModel($options = array())
-    {
-        if (isset($options['config_model']) && class_exists($options['config_model'])) {
-            $alternativeConfigModelName = $options['config_model'];
-            unset($options['config_model']);
-            $alternativeConfigModel = new $alternativeConfigModelName($options);
-        } else {
-            $alternativeConfigModel = null;
-        }
-
-        if (!is_null($alternativeConfigModel) && ($alternativeConfigModel instanceof Mage_Core_Model_Config)) {
-            self::$_config = $alternativeConfigModel;
-        } else {
-            self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
-        }
-    }
-
-    /**
-     * Retrieve application installation flag
-     *
-     * @param string|array $options
      * @return bool
+     * @throws Magento_Exception
+     *
+     * @todo Remove in favour of Mage_Core_Model_App::isInstalled() as soon as dependencies on application are injected
      */
-    public static function isInstalled($options = array())
+    public static function isInstalled()
     {
-        if (self::$_isInstalled === null) {
-            self::setRoot();
-
-            if (is_string($options)) {
-                $options = array('etc_dir' => $options);
-            }
-            $etcDir = self::getRoot() . DS . 'etc';
-            if (!empty($options['etc_dir'])) {
-                $etcDir = $options['etc_dir'];
-            }
-            $localConfigFile = $etcDir . DS . 'local.xml';
-
-            self::$_isInstalled = false;
-
-            if (is_readable($localConfigFile)) {
-                $localConfig = simplexml_load_file($localConfigFile);
-                date_default_timezone_set('UTC');
-                if (($date = $localConfig->global->install->date) && strtotime($date)) {
-                    self::$_isInstalled = true;
-                }
-            }
+        if (!self::$_app) {
+            throw new Magento_Exception('Application instance has not been initialized yet.');
         }
-        return self::$_isInstalled;
+        return self::$_app->isInstalled();
     }
 
     /**

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,25 +30,6 @@
  */
 class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Test resource value
-     */
-    const TEST_RESOURCE = 'test_resource';
-
-    /**
-     * ObjectManager mock for tests
-     *
-     * @var Magento_Test_ObjectManager
-     */
-    protected $_model;
-
-    /**
-     * List of classes to call __destruct() on
-     *
-     * @var array
-     */
-    protected $_classesToDestruct = array();
-
     /**
      * Expected instance manager parametrized cache after clear
      *
@@ -59,88 +40,37 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
         'hashLong'  => array()
     );
 
-    protected function tearDown()
+    public function testClearCache()
     {
-        unset($this->_model);
-        unset($this->_classesToDestruct);
-    }
+        $object = $this->getMock('stdClass', array('__destruct'));
+        $object
+            ->expects($this->once())
+            ->method('__destruct')
+        ;
 
-    /**
-     * @param bool $shared
-     * @dataProvider clearCacheDataProvider
-     */
-    public function testClearCache($shared)
-    {
-        $this->_prepareObjectManagerForClearCache($shared);
-        $this->_model->clearCache();
-    }
+        $resource = $this->getMock('stdClass', array('__destruct'));
+        $object
+            ->expects($this->once())
+            ->method('__destruct')
+        ;
 
-    /**
-     * @return array
-     */
-    public function clearCacheDataProvider()
-    {
-        return array(
-            'noSharedInstances' => array(false),
-            'withSharedInstances' => array(true),
-        );
-    }
+        $instanceManager = new Magento_Di_InstanceManager_Zend();
+        $instanceManager->addSharedInstance($object, 'sharedInstance');
+        $instanceManager->addSharedInstance($resource, 'Mage_Core_Model_Resource');
 
-    /**
-     * Prepare all required mocks for clearCache
-     * @param $shared
-     */
-    protected function _prepareObjectManagerForClearCache($shared)
-    {
-        $diInstance      = $this->getMock('Magento_Di_Zend', array('get', 'instanceManager', 'setInstanceManager'));
-        $instanceManager = $this->getMock(
-            'Magento_Di_InstanceManager_Zend', array('addSharedInstance', 'hasSharedInstance'), array(), '', false
-        );
+        $diInstance = new Magento_Di_Zend();
+        $model = new Magento_Test_ObjectManager(null, $diInstance);
 
-        $diInstance->expects($this->exactly(7))
-            ->method('instanceManager')
-            ->will($this->returnValue($instanceManager));
+        // Reflection is the only way to setup fixture input data in place of the hard-coded property value
+        $reflectionClass = new ReflectionProperty(get_class($model), '_classesToDestruct');
+        $reflectionClass->setAccessible(true);
+        $reflectionClass->setValue($model, array('sharedInstance', 'nonRegisteredInstance'));
 
-        $instanceManager->expects($this->any())
-            ->method('hasSharedInstance')
-            ->will($this->returnValue($shared));
-
-        $getCallCount = $shared ? 5 : 1;
-        $diInstance->expects($this->exactly($getCallCount))
-            ->method('get')
-            ->will($this->returnCallback(array($this, 'getCallback')));
-        $diInstance->expects($this->any())
-            ->method('setInstanceManager')
-            ->will($this->returnSelf());
-
-        $this->_model = new Magento_Test_ObjectManager(null, $diInstance);
-
-        $instanceManager->expects($this->exactly(2))
-            ->method('addSharedInstance');
-        $instanceManager->expects($this->at(4))
-            ->method('addSharedInstance')
-            ->with($this->_model, 'Magento_ObjectManager');
-        $instanceManager->expects($this->at(5))
-            ->method('addSharedInstance')
-            ->with(self::TEST_RESOURCE, 'Mage_Core_Model_Resource');
-    }
-
-    /**
-     * Callback method for Magento_Di_Zend::get
-     *
-     * @param string $className
-     * @return PHPUnit_Framework_MockObject_MockObject|string
-     */
-    public function getCallback($className)
-    {
-        if ($className != 'Mage_Core_Model_Resource') {
-            $this->_classesToDestruct[] = $className;
-            $mock = $this->getMock($className, array('__destruct'), array(), '', false);
-            $mock->expects($this->once())
-                ->method('__destruct');
-            return $mock;
-        } else {
-            return self::TEST_RESOURCE;
-        }
+        $diInstance->setInstanceManager($instanceManager);
+        $this->assertSame($model, $model->clearCache());
+        $this->assertNotSame($instanceManager, $diInstance->instanceManager());
+        $this->assertSame($model, $diInstance->instanceManager()->getSharedInstance('Magento_ObjectManager'));
+        $this->assertSame($resource, $diInstance->instanceManager()->getSharedInstance('Mage_Core_Model_Resource'));
+        $this->assertFalse($diInstance->instanceManager()->hasSharedInstance('sharedInstance'));
     }
 }

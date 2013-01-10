@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,10 +56,13 @@ class Magento_Test_ObjectManager extends Magento_ObjectManager_Zend
             }
         }
 
-        $resource = $this->get('Mage_Core_Model_Resource');
-        $this->_di->setInstanceManager(new Magento_Di_InstanceManager_Zend());
-        $this->addSharedInstance($this, 'Magento_ObjectManager');
-        $this->addSharedInstance($resource, 'Mage_Core_Model_Resource');
+        $instanceManagerNew = new Magento_Di_InstanceManager_Zend();
+        $instanceManagerNew->addSharedInstance($this, 'Magento_ObjectManager');
+        if ($this->_di->instanceManager()->hasSharedInstance('Mage_Core_Model_Resource')) {
+            $resource = $this->_di->instanceManager()->getSharedInstance('Mage_Core_Model_Resource');
+            $instanceManagerNew->addSharedInstance($resource, 'Mage_Core_Model_Resource');
+        }
+        $this->_di->setInstanceManager($instanceManagerNew);
 
         return $this;
     }

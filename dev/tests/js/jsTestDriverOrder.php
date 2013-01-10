@@ -23,14 +23,14 @@
  *
  * @category    tests
  * @package     js
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  * @return array
  */
 return array(
     '/pub/lib/globalize/globalize.js',
-    '/pub/lib/jquery/jquery-1.8.2.min.js',
+    '/pub/lib/jquery/jquery.min.js',
     '/pub/lib/jquery/jquery.cookie.js',
     '/pub/lib/jquery/head.js',
     '/pub/lib/mage/mage.js',

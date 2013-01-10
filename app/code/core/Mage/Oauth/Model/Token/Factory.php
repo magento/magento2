@@ -2,7 +2,7 @@
 /**
  * Token builder factory.
  *
- * @copyright Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 class Mage_Oauth_Model_Token_Factory
 {

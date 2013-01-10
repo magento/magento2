@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Authorizenet
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -109,7 +109,7 @@ class Mage_Authorizenet_Helper_Data extends Mage_Core_Helper_Abstract
             case 'sales_order_create':
             case 'sales_order_edit':
                 $route = 'adminhtml/authorizenet_directpost_payment/redirect';
-                break;
+                return $this->getAdminUrl($route, $params);
 
             default:
                 $route = 'authorizenet/directpost_payment/redirect';

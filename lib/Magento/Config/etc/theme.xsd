@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Framework
+ * @subpackage  Config
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Magento Design Themes Configuration File
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="design">
+        <xs:annotation>
+            <xs:documentation>
+                Package codes are unique and theme codes are unique under package as well
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element name="package" type="package">
+                    <xs:unique name="unique_theme_code">
+                        <xs:selector xpath="theme"/>
+                        <xs:field xpath="@code"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="unique_package_code">
+            <xs:selector xpath="package"/>
+            <xs:field xpath="@code"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="package">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element name="theme" type="theme"/>
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="code" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="theme">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="requirements" type="requirements"/>
+            <xs:element name="media" type="media" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="version" type="version" use="required"/>
+        <xs:attribute name="code" type="xs:string" use="required"/>
+        <xs:attribute name="featured" type="xs:boolean"/>
+        <xs:attribute name="parent" type="parent_theme"/>
+    </xs:complexType>
+
+    <!-- Short theme name: '<theme>'. Fully-qualified theme name: '<package>/<theme>'. -->
+    <xs:simpleType name="parent_theme">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([^/]+/)?[^/]+"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="version">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(\d+.\d+.\d+.\d+(\-[a-zA-Z0-9]+)?)|\*"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="requirements">
+        <xs:sequence>
+            <xs:element name="magento_version" type="magento_version"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="magento_version">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="from" type="version" use="required"/>
+                <xs:attribute name="to" type="version" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="media">
+        <xs:sequence>
+            <xs:element name="preview_image" type="preview_image" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="preview_image">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="order" type="xs:integer" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>

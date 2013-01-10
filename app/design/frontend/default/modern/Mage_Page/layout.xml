@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     default_modern
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -35,7 +35,7 @@ Default layout, loads most of the pages
         <block type="Mage_Page_Block_Html" name="root" output="1" template="2columns-left.phtml">
 
             <block type="Mage_Page_Block_Html_Head" name="head" as="head">
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>lib/ccard.js</file></action>
@@ -92,7 +92,7 @@ Default layout, loads most of the pages
         <block type="Mage_Page_Block_Html" name="root" output="1" template="print.phtml">
 
             <block type="Mage_Page_Block_Html_Head" name="head" as="head">
-                <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>mage/translate.js</file></action>

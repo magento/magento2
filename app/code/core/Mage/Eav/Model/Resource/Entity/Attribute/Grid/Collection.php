@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Eav
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,24 +41,24 @@ class Mage_Eav_Model_Resource_Entity_Attribute_Grid_Collection
 
     /**
      * @param Mage_Core_Model_Resource_Db_Abstract $resource
-     * @param Mage_Core_Model_Registry $registry
+     * @param Mage_Core_Model_Registry $registryManager
      */
     public function __construct(
-        Mage_Core_Model_Registry $registry, Mage_Core_Model_Resource_Db_Abstract $resource = null
+        Mage_Core_Model_Registry $registryManager, Mage_Core_Model_Resource_Db_Abstract $resource = null
     ) {
+        $this->_registryManager = $registryManager;
         parent::__construct($resource);
-        $this->_registryManager = $registry;
     }
 
     /**
-     * Prepare select for load
+     *  Add filter by entity type id to collection
      *
-     * @param Varien_Db_select $select
-     * @return string
+     * @return Mage_Core_Model_Resource_Db_Collection_Abstract|Mage_Eav_Model_Resource_Entity_Attribute_Grid_Collection
      */
-    protected function _prepareSelect(Varien_Db_Select $select)
+    protected function _initSelect()
     {
+        parent::_initSelect();
         $this->setEntityTypeFilter($this->_registryManager->registry('entityType'));
-        return parent::_prepareSelect($select);
+        return $this;
     }
 }

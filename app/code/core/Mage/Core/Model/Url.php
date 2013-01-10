@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Core
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -364,6 +364,7 @@ class Mage_Core_Model_Url extends Varien_Object
      */
     public function getBaseUrl($params = array())
     {
+        $currentType = $this->getType();
         if (isset($params['_store'])) {
             $this->setStore($params['_store']);
         }
@@ -382,7 +383,9 @@ class Mage_Core_Model_Url extends Varien_Object
             $this->setType(Mage_Core_Model_Store::URL_TYPE_DIRECT_LINK);
         }
 
-        return $this->getStore()->getBaseUrl($this->getType(), $this->isSecure());
+        $result =  $this->getStore()->getBaseUrl($this->getType(), $this->isSecure());
+        $this->setType($currentType);
+        return $result;
     }
 
     /**

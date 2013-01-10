@@ -22,11 +22,11 @@
  * @category    Magento
  * @package     performance_tests
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<phpunit bootstrap="../../bootstrap.php">
+<phpunit bootstrap="framework/bootstrap.php">
     <testsuites>
         <testsuite name="Unit Tests for Performance Testing Framework">
             <directory suffix="Test.php">testsuite</directory>

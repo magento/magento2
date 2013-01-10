@@ -1,5 +1,7 @@
 <?php
 /**
+ * Public alias for the application entry point
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,20 +22,8 @@
  *
  * @category   Mage
  * @package    Mage
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once '../app/bootstrap.php';
-
-/* Store or website code */
-$mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
-/* Run store or run website */
-$mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
-/* Additional local.xml file from environment variable */
-$options = array();
-if (!empty($_SERVER['MAGE_LOCAL_CONFIG'])) {
-    $options['local_config'] = $_SERVER['MAGE_LOCAL_CONFIG'];
-}
-
-Mage::run($mageRunCode, $mageRunType, $options);
+require __DIR__ . '/../index.php';

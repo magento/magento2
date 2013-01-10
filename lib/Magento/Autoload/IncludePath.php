@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Magento_Autoload_IncludePath
@@ -46,18 +46,22 @@ class Magento_Autoload_IncludePath
     }
 
     /**
-     * Append specified path(s) to include_path
+     * Add specified path(s) to the current include_path
      *
      * @param string|array $path
+     * @param bool $prepend Whether to prepend paths or to append them
      */
-    public static function addIncludePath($path)
+    public static function addIncludePath($path, $prepend = true)
     {
-        $result = implode(PATH_SEPARATOR, (array)$path);
+        $includePathExtra = implode(PATH_SEPARATOR, (array)$path);
         $includePath = get_include_path();
-        if ($includePath) {
-            $result = $result . PATH_SEPARATOR . $includePath;
+        $pathSeparator = $includePath && $includePathExtra ? PATH_SEPARATOR : '';
+        if ($prepend) {
+            $includePath = $includePathExtra . $pathSeparator . $includePath;
+        } else {
+            $includePath = $includePath . $pathSeparator . $includePathExtra;
         }
-        set_include_path($result);
+        set_include_path($includePath);
     }
 
     /**

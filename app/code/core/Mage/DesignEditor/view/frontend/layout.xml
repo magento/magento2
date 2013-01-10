@@ -21,7 +21,7 @@
  *
  * @category    design
  * @package     Mage_DesignEditor
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -33,13 +33,13 @@
         </reference>
 
         <reference name="vde_head">
-            <action method="addJs"><file>jquery/jquery-1.7.1.min.js</file></action>
+            <action method="addJs"><file>jquery/jquery.min.js</file></action>
+            <action method="addJs"><file>jquery/jquery-ui.custom.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
             <action method="addJs"><file>jquery/head.js</file></action>
             <action method="addJs"><file>mage/mage.js</file></action>
             <action method="addJs"><file>mage/decorate.js</file></action>
             <action method="addJs"><file>mage/translate.js</file></action>
-            <action method="addJs"><file>jquery/ui/jquery-ui.js</file></action>
             <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/change/layout.js</file></action>

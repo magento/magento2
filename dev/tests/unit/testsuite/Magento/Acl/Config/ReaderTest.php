@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Mage_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -65,5 +65,10 @@ class Magento_Acl_Config_ReaderTest extends PHPUnit_Framework_TestCase
         $this->assertNotEmpty($actualResources);
         $this->assertEqualXMLStructure($expectedResources->documentElement, $actualResources->documentElement, true);
         $this->assertEquals($expectedResources, $actualResources);
+    }
+
+    public function testGetSchemaFile()
+    {
+        $this->assertFileExists($this->_model->getSchemaFile());
     }
 }

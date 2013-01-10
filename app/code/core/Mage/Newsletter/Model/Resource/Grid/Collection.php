@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Newsletter
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,15 +35,15 @@
 class Mage_Newsletter_Model_Resource_Grid_Collection extends Mage_Newsletter_Model_Resource_Problem_Collection
 {
     /**
-     * Prepare select for load
+     * Adds queue info to grid
      *
-     * @param Varien_Db_Select $select
-     * @return string
+     * @return Mage_Core_Model_Resource_Db_Collection_Abstract|Mage_Newsletter_Model_Resource_Grid_Collection
      */
-    protected function _prepareSelect(Varien_Db_Select $select)
+    protected function _initSelect()
     {
+        parent::_initSelect();
         $this->addSubscriberInfo()
             ->addQueueInfo();
-        return parent::_prepareSelect($select);
+        return $this;
     }
 }

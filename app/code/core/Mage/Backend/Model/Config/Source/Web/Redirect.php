@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Mage_Backend
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 class Mage_Backend_Model_Config_Source_Web_Redirect implements Mage_Core_Model_Option_ArrayInterface

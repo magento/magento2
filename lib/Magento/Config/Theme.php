@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2012 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/theme.xsd';
+        return __DIR__ . '/etc/theme.xsd';
     }
 
     /**
@@ -192,7 +192,7 @@ class Magento_Config_Theme extends Magento_Config_XmlAbstract
      * @param string $theme
      * @return bool
      */
-    public function getFeatured($package, $theme)
+    public function isFeatured($package, $theme)
     {
         $this->_ensureThemeExists($package, $theme);
         return $this->_data[$package]['themes'][$theme]['featured'];
