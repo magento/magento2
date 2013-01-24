@@ -53,6 +53,7 @@ class Mage_DesignEditor_PageControllerTest extends Mage_Backend_Utility_Controll
     protected $_testHandles = array(
         'incorrect'    => '123!@#',
         'not_existing' => 'not_existing_handle',
+        'default'      => 'default',
         'correct'      => 'cms_index_index',
     );
 
@@ -78,63 +79,36 @@ class Mage_DesignEditor_PageControllerTest extends Mage_Backend_Utility_Controll
     /**
      * Exception cases in typeAction method
      *
-     * @param string $url
-     * @param string $handle
-     * @param string $expectedMessage
-     *
-     * @dataProvider typeActionErrorsDataProvider
      * @magentoConfigFixture vde/design_editor/frontName vde_front_name
      */
-    public function testTypeActionErrors($url, $handle, $expectedMessage)
+    public function testTypeActionIncorrectLayout()
     {
-        $this->getRequest()->setParam('handle', $handle);
-        $this->dispatch($url);
+        $this->getRequest()->setParam('handle', $this->_testHandles['correct']);
+        $this->dispatch(self::PAGE_TYPE_URL);
 
         $response = $this->getResponse();
         $this->assertEquals(503, $response->getHttpResponseCode());
-        $this->assertEquals($expectedMessage, $response->getBody());
+        $this->assertEquals('Incorrect Design Editor layout.', $response->getBody());
     }
 
     /**
-     * Data provider for testTypeActionErrors
+     * @param $actualHandle
+     * @param $expectedHandle
      *
-     * @return array
-     */
-    public function typeActionErrorsDataProvider()
-    {
-        return array(
-            'invalid_handle' => array(
-                '$url'             => self::PAGE_TYPE_URL,
-                '$handle'          => $this->_testHandles['incorrect'],
-                '$expectedMessage' => 'Invalid page handle specified.',
-            ),
-            'incorrect_layout' => array(
-                '$url'             => self::PAGE_TYPE_URL,
-                '$handle'          => $this->_testHandles['correct'],
-                '$expectedMessage' => 'Incorrect Design Editor layout.',
-            ),
-            'not_existing_handle' => array(
-                '$url'             => self::VDE_FRONT_NAME . '/' . self::PAGE_TYPE_URL,
-                '$handle'          => $this->_testHandles['not_existing'],
-                '$expectedMessage' => 'Specified page type or page fragment type doesn\'t exist: "'
-                    . $this->_testHandles['not_existing'] . '".',
-            ),
-        );
-    }
-
-    /**
+     * @dataProvider typeActionDataProvider
      * @magentoConfigFixture vde/design_editor/frontName vde_front_name
+     * @magentoConfigFixture vde/design_editor/defaultHandle default
      */
-    public function testTypeAction()
+    public function testTypeAction($actualHandle, $expectedHandle)
     {
-        $this->getRequest()->setParam('handle', $this->_testHandles['correct']);
+        $this->getRequest()->setParam('handle', $actualHandle);
         $this->dispatch(self::VDE_FRONT_NAME . '/' . self::PAGE_TYPE_URL);
 
         // assert layout data
         /** @var $layout Mage_Core_Model_Layout */
         $layout = $this->_objectManager->get('Mage_Core_Model_Layout');
         $handles = $layout->getUpdate()->getHandles();
-        $this->assertContains($this->_testHandles['correct'], $handles);
+        $this->assertContains($expectedHandle, $handles);
         $this->assertContains('designeditor_page_type', $handles);
         $this->assertAttributeSame(true, '_sanitationEnabled', $layout);
         $this->assertAttributeSame(true, '_wrappingEnabled', $layout);
@@ -143,5 +117,28 @@ class Mage_DesignEditor_PageControllerTest extends Mage_Backend_Utility_Controll
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('class="vde_element_wrapper', $responseBody); // enabled wrapper
         $this->assertContains('/css/design.css', $responseBody);            // included wrapper CSS
+    }
+
+    /**
+     * Data provider for testTypeAction
+     *
+     * @return array
+     */
+    public function typeActionDataProvider()
+    {
+        return array(
+            'invalid_handle' => array(
+                '$actualHandle'   => $this->_testHandles['incorrect'],
+                '$expectedHandle' => $this->_testHandles['default'],
+            ),
+            'not_existing_handle' => array(
+                '$actualHandle'   => $this->_testHandles['not_existing'],
+                '$expectedHandle' => $this->_testHandles['default'],
+            ),
+            'correct_handle' => array(
+                '$actualHandle'   => $this->_testHandles['correct'],
+                '$expectedHandle' => $this->_testHandles['correct'],
+            ),
+        );
     }
 }

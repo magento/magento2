@@ -33,10 +33,12 @@ class Mage_DesignEditor_Helper_Data extends Mage_Core_Helper_Abstract
      * XML paths to VDE settings
      */
     const XML_PATH_FRONT_NAME           = 'vde/design_editor/frontName';
+    const XML_PATH_DEFAULT_HANDLE       = 'vde/design_editor/defaultHandle';
     const XML_PATH_DISABLED_CACHE_TYPES = 'vde/design_editor/disabledCacheTypes';
     const XML_PATH_BLOCK_WHITE_LIST     = 'vde/design_editor/block/white_list';
     const XML_PATH_BLOCK_BLACK_LIST     = 'vde/design_editor/block/black_list';
     const XML_PATH_CONTAINER_WHITE_LIST = 'vde/design_editor/container/white_list';
+    const XML_PATH_DAYS_TO_EXPIRE       = 'vde/design_editor/layout_update/days_to_expire';
     /**#@-*/
 
     /**
@@ -63,19 +65,24 @@ class Mage_DesignEditor_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Get VDE default handle name
+     *
+     * @return string
+     */
+    public function getDefaultHandle()
+    {
+        return (string)$this->_configuration->getNode(self::XML_PATH_DEFAULT_HANDLE);
+    }
+
+    /**
      * Get disabled cache types in VDE mode
      *
      * @return array
      */
     public function getDisabledCacheTypes()
     {
-        $cacheTypes = explode(',', $this->_configuration->getNode(self::XML_PATH_DISABLED_CACHE_TYPES));
-        $resultCacheTypes = array();
-        foreach ($cacheTypes as $cacheType) {
-            $resultCacheTypes[] = trim($cacheType);
-        }
-
-        return $resultCacheTypes;
+        $cacheTypes = $this->_configuration->getNode(self::XML_PATH_DISABLED_CACHE_TYPES)->asArray();
+        return array_keys($cacheTypes);
     }
 
     /**
@@ -127,4 +134,13 @@ class Mage_DesignEditor_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->_getElementsList(self::XML_PATH_CONTAINER_WHITE_LIST);
     }
 
+    /**
+     * Get expiration days count
+     *
+     * @return string
+     */
+    public function getDaysToExpire()
+    {
+        return (int)$this->_configuration->getNode(self::XML_PATH_DAYS_TO_EXPIRE);
+    }
 }

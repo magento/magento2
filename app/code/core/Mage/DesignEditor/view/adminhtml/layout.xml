@@ -38,15 +38,15 @@
                 <action method="addTab"><name>customizations</name><block>customizations.themes.tab</block></action>
                 <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Available" name="available.themes.tab">
                     <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
-                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="available.theme.item" as="item" template="Mage_DesignEditor::theme.phtml"/>
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="available.theme.item" as="item" template="Mage_DesignEditor::theme/available.phtml" />
                     </block>
                 </block>
-                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Customizations" name="customizations.themes.tab" template="Mage_DesignEditor::theme/selector/myCustomizationsTab.phtml">
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_Tab_Customizations" name="customizations.themes.tab" template="Mage_DesignEditor::theme/selector/my_customizations_tab.phtml">
                     <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Assigned" name="assigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
-                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="assigned.theme" as="theme" template="Mage_DesignEditor::theme_customizations.phtml"/>
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="assigned.theme" as="theme" template="Mage_DesignEditor::theme/customized.phtml" />
                     </block>
                     <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Unassigned" name="unassigned.theme.list" template="Mage_DesignEditor::theme/list/customized.phtml">
-                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="unassigned.theme" as="theme" template="Mage_DesignEditor::theme_customizations.phtml" />
+                        <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="unassigned.theme" as="theme" template="Mage_DesignEditor::theme/customized.phtml" />
                     </block>
                 </block>
             </block>
@@ -61,9 +61,9 @@
             <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>
         </reference>
         <reference name="content">
-            <block type="Mage_Backend_Block_Template" name="available.theme.list.container" as="theme_container" template="Mage_DesignEditor::theme/selector/firstEntrance.phtml">
+            <block type="Mage_Backend_Block_Template" name="available.theme.list.container" as="theme_container" template="Mage_DesignEditor::theme/selector/first_entrance.phtml">
                 <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available.phtml">
-                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme.phtml" />
+                    <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme/available.phtml" />
                 </block>
             </block>
             <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView" name="theme.selector.storeview" template="Mage_DesignEditor::theme/selector/storeview.phtml" />
@@ -73,7 +73,7 @@
     <adminhtml_system_design_editor_loadthemelist>
         <container name="root" label="Root" output="1">
             <block type="Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Available" name="available.theme.list" template="Mage_DesignEditor::theme/list/available_ajax.phtml">
-                <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme.phtml"/>
+                <block type="Mage_DesignEditor_Block_Adminhtml_Theme" name="design.editor.theme" as="theme" template="Mage_DesignEditor::theme/available.phtml"/>
             </block>
         </container>
     </adminhtml_system_design_editor_loadthemelist>
@@ -86,7 +86,6 @@
             <action method="addJs"><file>Mage_DesignEditor::js/theme-selector.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/base.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
-            <action method="addJs"><file>jquery/jquery.iframe-auto-height.plugin.1.9.0.js</file></action>
             <action method="addJs"><file>jquery/jstree/jquery.jstree.js</file></action>
             <action method="addJs"><file>jquery/slimScroll/slimScroll.min.js</file></action>
             <action method="addCss"><file>Mage_DesignEditor::css/styles.css</file></action>

@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Extension model
  *
@@ -35,18 +34,33 @@
 class Mage_Connect_Model_Extension extends Varien_Object
 {
     /**
-    * Cache for targets
-    *
-    * @var array
-    */
+     * Cache for targets
+     *
+     * @var array
+     */
     protected $_targets;
 
     /**
-    * Internal cache for package
-    *
-    * @var Mage_Connect_Package
-    */
+     * Internal cache for package
+     *
+     * @var Mage_Connect_Package
+     */
     protected $_package;
+
+    /**
+     * @var Magento_Filesystem $filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     * @param array $data
+     */
+    public function __construct(Magento_Filesystem $filesystem, array $data = array())
+    {
+        parent::__construct($data);
+        $this->_filesystem = $filesystem;
+    }
 
     /**
      * Return package object
@@ -62,10 +76,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set package object.
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set package object.
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     public function generatePackageXml()
     {
         Mage::getSingleton('Mage_Connect_Model_Session')
@@ -85,10 +99,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set general information.
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set general information.
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     protected function _setPackage()
     {
         $this->getPackage()
@@ -101,10 +115,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set release information
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set release information
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     protected function _setRelease()
     {
         $this->getPackage()
@@ -117,10 +131,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set authors
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set authors
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     protected function _setAuthors()
     {
         $authors = $this->getData('authors');
@@ -132,17 +146,16 @@ class Mage_Connect_Model_Extension extends Varien_Object
         return $this;
     }
 
-
     protected function packageFilesToArray($filesString)
     {
         $packageFiles = array();
-        if($filesString) {
+        if ($filesString) {
             $filesArray = preg_split("/[\n\r]+/", $filesString);
-            foreach($filesArray as $file) {
+            foreach ($filesArray as $file) {
                 $file = trim($file, "/");
                 $res = explode(DIRECTORY_SEPARATOR, $file, 2);
                 array_map('trim', $res);
-                if(2 == count($res)) {
+                if (2 == count($res)) {
                     $packageFiles[] = array('target'=>$res[0], 'path'=>$res[1]);
                 }
             }
@@ -151,10 +164,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set php, php extensions, another packages dependencies
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set php, php extensions, another packages dependencies
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     protected function _setDependencies()
     {
         $this->getPackage()
@@ -193,10 +206,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Set contents. Add file or entire directory.
-    *
-    * @return Mage_Connect_Model_Extension
-    */
+     * Set contents. Add file or entire directory.
+     *
+     * @return Mage_Connect_Model_Extension
+     */
     protected function _setContents()
     {
         $this->getPackage()->clearContents();
@@ -223,10 +236,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Save package file to var/connect.
-    *
-    * @return boolean
-    */
+     * Save package file to var/connect.
+     *
+     * @return boolean
+     */
     public function savePackage()
     {
         if ($this->getData('file_name') != '') {
@@ -243,42 +256,40 @@ class Mage_Connect_Model_Extension extends Varien_Object
         if (!$this->getPackageXml()) {
             $this->generatePackageXml();
         }
+
         if (!$this->getPackageXml()) {
             return false;
         }
 
-        $path = Mage::helper('Mage_Connect_Helper_Data')->getLocalPackagesPath();
-        if (!@file_put_contents($path . 'package.xml', $this->getPackageXml())) {
-            return false;
-        }
+        try {
+            $path = Mage::helper('Mage_Connect_Helper_Data')->getLocalPackagesPath();
+            $this->_filesystem->write($path . 'package.xml', $this->getPackageXml());
 
-        $this->unsPackageXml();
-        $this->unsTargets();
-        $xml = Mage::helper('Mage_Core_Helper_Data')->assocToXml($this->getData());
-        $xml = new Varien_Simplexml_Element($xml->asXML());
+            $this->unsPackageXml();
+            $this->unsTargets();
+            $xml = Mage::helper('Mage_Core_Helper_Data')->assocToXml($this->getData());
+            $xml = new Varien_Simplexml_Element($xml->asXML());
 
-        // prepare dir to save
-        $parts = explode(DS, $fileName);
-        array_pop($parts);
-        $newDir = implode(DS, $parts);
-        if ((!empty($newDir)) && (!is_dir($path . $newDir))) {
-            if (!@mkdir($path . $newDir, 0777, true)) {
-                return false;
+            // prepare dir to save
+            $parts = explode(DS, $fileName);
+            array_pop($parts);
+            $newDir = implode(DS, $parts);
+
+            if (!empty($newDir) && !$this->_filesystem->isDirectory($path . $newDir)) {
+                $this->_filesystem->ensureDirectoryExists($path, $newDir, 0777);
             }
-        }
-
-        if (!@file_put_contents($path . $fileName . '.xml', $xml->asNiceXml())) {
+            $this->_filesystem->write($path . $fileName . '.xml', $xml->asNiceXml());
+        } catch (Magento_Filesystem_Exception $e) {
             return false;
         }
-
         return true;
     }
 
     /**
-    * Create package file
-    *
-    * @return boolean
-    */
+     * Create package file
+     *
+     * @return boolean
+     */
     public function createPackage()
     {
         $path = Mage::helper('Mage_Connect_Helper_Data')->getLocalPackagesPath();
@@ -293,10 +304,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Create package file compatible with previous version of Magento Connect Manager
-    *
-    * @return boolean
-    */
+     * Create package file compatible with previous version of Magento Connect Manager
+     *
+     * @return boolean
+     */
     public function createPackageV1x()
     {
         $path = Mage::helper('Mage_Connect_Helper_Data')->getLocalPackagesPathV1x();
@@ -311,10 +322,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Retrieve stability value and name for options
-    *
-    * @return array
-    */
+     * Retrieve stability value and name for options
+     *
+     * @return array
+     */
     public function getStabilityOptions()
     {
         return array(
@@ -326,10 +337,10 @@ class Mage_Connect_Model_Extension extends Varien_Object
     }
 
     /**
-    * Retrieve targets
-    *
-    * @return array
-    */
+     * Retrieve targets
+     *
+     * @return array
+     */
     public function getLabelTargets()
     {
         if (!is_array($this->_targets)) {

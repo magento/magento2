@@ -63,7 +63,9 @@ if (empty($args)) {
 define('BARE_BOOTSTRAP', 1);
 require_once __DIR__ . '/../../app/bootstrap.php';
 
-$installer = new Mage_Install_Model_Installer_Console();
+$installer = new Mage_Install_Model_Installer_Console(
+    new Magento_Filesystem(new Magento_Filesystem_Adapter_Local())
+);
 if (isset($args['show_locales'])) {
     var_export($installer->getAvailableLocales());
 } else if (isset($args['show_currencies'])) {

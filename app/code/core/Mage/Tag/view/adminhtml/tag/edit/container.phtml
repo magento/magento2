@@ -46,7 +46,8 @@
     </div>
 <?php endif; ?>
 <script type="text/javascript">
-    jQuery('#edit_form').form().validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+    jQuery('#edit_form').mage('form')
+        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
 </script>
 <?php echo $this->getFormScripts() ?>
 <?php echo $this->getAcordionsHtml() ?>

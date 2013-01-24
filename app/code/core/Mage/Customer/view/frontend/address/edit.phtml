@@ -108,11 +108,6 @@
                         <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
                            <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                         </select>
-                        <script type="text/javascript">
-                        //<![CDATA[
-                            $('region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                        //]]>
-                        </script>
                         <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" />
                     </div>
                 </div>
@@ -158,8 +153,23 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('form-validate', true);
-    new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, 'zip');
-//]]>
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
+            function() {
+                $('#country').regionUpdater({
+                    regionListId: '#region_id',
+                    regionInputId: '#region',
+                    postcodeId: '#zip',
+                    form: $('#form-validate').validation(),
+                    regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
+                    defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+                    countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>
+                });
+            });
+    })(jQuery);
 </script>

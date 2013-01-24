@@ -55,14 +55,6 @@
             .addClass('validate-parent-category') // adjusting validation rules order
             .bind('ajaxSend ajaxComplete', function(e) {
                 e.stopPropagation();
-                switch (e.type) {
-                    case 'ajaxSend':
-                        $('#new_category_parent').addClass('parent-category-selector-active');
-                        break;
-                    case 'ajaxComplete':
-                        $('#new_category_parent').removeClass('parent-category-selector-active');
-                        break;
-                }
             })
             .autocomplete({
                 source: function(request, response) {

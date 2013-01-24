@@ -62,14 +62,15 @@ class Mage_Core_Model_Design_PackageMergingTest extends PHPUnit_Framework_TestCa
             dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design',
             Mage::getModel('Mage_Core_Model_Design_Package')
         ));
-        $themeUtility->registerThemes()->setDesignTheme('package/default', 'frontend');;
+        $themeUtility->registerThemes()->setDesignTheme('package/default', 'frontend');
         $this->_model = $themeUtility->getDesign();
     }
 
     protected function tearDown()
     {
-        Varien_Io_File::rmdirRecursive(self::$_themePublicDir);
-        $this->_model = null;
+        $filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+        $filesystem->delete(self::$_themePublicDir . '/frontend');
+        $filesystem->delete(self::$_viewPublicMergedDir);
     }
 
     /**

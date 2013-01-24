@@ -33,6 +33,13 @@
             <codePool>core</codePool>
         </Mage_Theme>
     </modules>
+    <global>
+        <theme>
+            <css>
+                <upload_limit>2M</upload_limit>
+            </css>
+        </theme>
+    </global>
     <admin>
         <routers>
             <adminhtml>

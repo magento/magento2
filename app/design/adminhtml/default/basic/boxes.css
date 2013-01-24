@@ -281,9 +281,11 @@ ul.tabs .ui-state-active a span,
 ul.tabs .ui-state-active a:hover span { background:#fff; font-weight:bold; }
 ul.tabs a.subitem               { padding-left:2.2em; }
 ul.tabs span.changed,
-ul.tabs span.error              { float:right; background:0; padding:0; }
+ul.tabs span.error,
+ul.tabs span.loading            { float:right; background:0; padding:0; }
 ul.tabs a.changed span.changed  { background:url(images/fam_bullet_disk.gif) 0 0 no-repeat !important; width:16px; height:16px; }
 ul.tabs a.error span.error      { background:url(Mage_Adminhtml::images/fam_bullet_error.gif) 0 0 no-repeat !important; width:16px; height:16px; }
+ul.tabs a.ui-tabs-loading span.loading { background:url(images/loader-small.gif) 0 0 no-repeat !important; width:16px; height:16px; }
 ul.tabs a.changed               { font-style:italic; }
 
 /* Horizontal Tabs */
@@ -829,6 +831,62 @@ div.autocomplete ul { margin:0; padding:0; }
 div.autocomplete ul li.selected { background-color:#dcebf0; }
 div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; text-align:left; color:#2f2f2f; line-height:1.3em; }
 
+/* Mage suggest */
+/*.mage-suggest { position:relative; display: inline-block; background: #fff; border-radius: 5px; box-shadow: 1px 0 2px #ddd; }
+.mage-suggest .input-text { border-radius: 5px; margin: 7px; border: 1px solid #ddd; height: 20px; padding: 3px 25px 3px 10px; line-height: 26px; background: url(images/bkg_search-magnifier.png) 98% 50% no-repeat; }
+.mage-suggest-dropdown { overflow-x: hidden; position: absolute; top: 100%; margin-top:-4px; left: 0; min-width: 100%; background: #fff; border: solid #ddd; border-width: 0 1px 1px; padding: 10px 0; box-sizing: border-box; border-radius: 0 0 5px 5px; box-shadow: 1px 1px 2px #ddd; }
+.mage-suggest-dropdown.overflow-y { overflow-y: scroll; }
+.mage-suggest-dropdown .ui-menu-item a { display:block; padding: 0 10px; text-decoration: none; font:normal 12px/26px Arial, sans-serif; text-align: left; border-bottom: 1px solid #f2f2f2; color:#2d2d2d; }
+.mage-suggest-dropdown .ui-state-active,
+.mage-suggest-dropdown .ui-state-focus { background: #f2f2f2; color:#000; }*/
+.mage-suggest-inner {padding: 5px 0;}
+.mage-suggest {position: relative;}
+.mage-suggest-inner {position: absolute; background: #fff; top:0px; left:0px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 1px 1px 2px #ddd;}
+.mage-suggest-inner > input {
+    height: 22px;
+    margin: 0 5px;
+}
+.mage-suggest-dropdown > h2 {
+    font-size:0.8em;
+    text-transform: uppercase;
+    font-family:Arial, Helvetica, sans-serif;
+    color: #555555;
+    font-weight: normal;
+    padding: 0 8px;
+}
+.mage-suggest-dropdown .ui-menu-item a { display:block; padding: 0 10px; text-decoration: none; font:normal 12px/26px Arial, sans-serif; text-align: left; border-bottom: 1px solid #f2f2f2; color:#2d2d2d; }
+.mage-suggest-dropdown .ui-state-active,
+.mage-suggest-dropdown .ui-state-focus { background: #f2f2f2; color:#000; }
+.mage-suggest-dropdown .ui-corner-all {
+    border-radius: 0px;
+}
+.mage-suggest-dropdown .ui-widget-content, .mage-suggest-dropdown .ui-menu .ui-menu-item a, .mage-suggest-dropdown .ui-menu .ui-menu-item a.ui-state-focus {
+    background: #ffffff;
+    border: none;
+    color: #000000;
+}
+.mage-suggest-dropdown .ui-menu .ui-menu-item a, .mage-suggest-dropdown .ui-menu .ui-menu-item a.ui-state-focus {
+    border-top: 1px solid #efefef;
+    margin: 0;
+    padding: 3px 8px;
+}
+.mage-suggest-dropdown .ui-menu {
+    padding: 0px;
+}
+.mage-suggest-dropdown .ui-menu .ui-menu-item a.ui-state-focus {
+    background: #ebebeb;
+}
+.mage-suggest-dropdown .show-all {
+    padding: 5px 8px;
+    color: #555555;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 0.8em;
+}
+.mage-suggest-dropdown {
+    overflow: auto;
+    max-height: 500px;
+}
+
 /* Footer */
 .footer .bug-report                     { float:left; width:35%; text-align:left; }
 .footer .legality                       { float:right; width:35%; min-height:19px; padding-left:22px; text-align:right; }
@@ -846,11 +904,7 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 ********************************************************************************************/
 
 /* Content Header */
-.content-header {
-    margin-bottom:18px;
-    border-bottom:4px solid #dfdfdf;
-    padding-bottom:.25em;
-    }
+.content-header { margin-bottom:18px; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; border-bottom:4px solid #dfdfdf; padding-bottom:.25em; padding-top: 6px; }
 .content-header table           { width:100%; }
 .content-header h3              { float:left; margin:.3em .5em 0 0; color:#eb5e00; font-size:1.25em; line-height:1.2em; }
 .content-header .head h3        { float:none; }
@@ -865,16 +919,12 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 
 .left-col-block { width:200px; }
 
-/* Floating Content Header */ /* Used to make action buttons always within reach */
-.content-header-floating { display:none; position:fixed; left:0; top:0; width:100%; border-bottom:solid 1px #988753; z-index:100; z-index:auto\9; background:#fdfaa4; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"/* IE8 */; opacity:.85; }
-.content-header-floating .content-header { padding:6px 8px 4px 8px; margin-bottom:0; border:0; }
-.content-header-floating td     { padding-right:20px; }
-.content-header-floating button { margin-top:3px; }
-.content-header-floating .content-buttons { float:right; /* margin:12px 25px 0 0;*/ }
+.content-header.fixed { padding:6px 8px; margin-bottom:0; border:0; position:fixed; left:0; top:0; width:100%; border-bottom:solid 1px #988753; z-index:100; z-index:auto\9; background:#fdfaa4; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; opacity:.85; z-index: 100; }
+.content-header.fixed button { margin-top:3px; }
+.content-header.fixed .content-buttons { float:right; }
 .content-buttons { margin-bottom:5px; float:right; display:inline; white-space:nowrap; }
-.content-header-floating .form-buttons {padding-right:20px; }
-.content-header-floating h3 {margin-left:20px; display:inline; }
-
+.content-header.fixed .form-buttons { padding-right:20px; }
+.content-header.fixed h3 { margin: 0 0 0 20px; display:inline; }
 
 
 /* Box Head */

@@ -46,10 +46,9 @@
 //<![CDATA[
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
             "<?php echo $this->getViewFileUrl('Mage_Checkout::js/discount-codes.js')?>", function() {
                 $('#discount-coupon-form').discountCode({
                     couponCodeSelector: '#coupon_code', removeCouponSelector: '#remove-coupon',

@@ -30,6 +30,11 @@
 class Mage_DesignEditor_Model_Change_Factory
 {
     /**
+     * Default
+     */
+    const DEFAULT_TYPE = 'layout';
+
+    /**
      * Create instance of change by given type
      *
      * @static
@@ -51,11 +56,15 @@ class Mage_DesignEditor_Model_Change_Factory
      * Build change class using given type
      *
      * @static
-     * @param Varien_Object|array $change
+     * @param Varien_Object|Varien_Simplexml_Element|array $change
      * @return string
      */
     public static function getClass($change)
     {
+        if ($change instanceof Varien_Simplexml_Element) {
+            $change = self::_getAttributes($change);
+        }
+
         $type = self::_getChangeType($change);
         if ($type == Mage_DesignEditor_Model_Change_LayoutAbstract::CHANGE_TYPE) {
             $directive = self::_getChangeLayoutDirective($change);
@@ -111,5 +120,21 @@ class Mage_DesignEditor_Model_Change_Factory
         }
 
         return $directive;
+    }
+
+    /**
+     * Load layout update attributes
+     *
+     * @param Varien_Simplexml_Element $layoutUpdate
+     * @return array
+     */
+    protected static function _getAttributes(Varien_Simplexml_Element $layoutUpdate)
+    {
+        $attributes = array(
+            'type'        => $layoutUpdate->getAttribute('type') ?: self::DEFAULT_TYPE,
+            'action_name' => $layoutUpdate->getName()
+        );
+
+        return $attributes;
     }
 }

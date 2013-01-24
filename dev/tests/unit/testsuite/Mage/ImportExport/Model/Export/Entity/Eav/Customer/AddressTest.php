@@ -131,7 +131,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
             ->method('getEntityTypeCode')
             ->will($this->returnValue('customer_address'));
         foreach ($this->_attributes as $attributeData) {
-            $arguments = $this->_objectManager->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
+            $arguments = $this->_objectManager->getConstructArguments(
+                Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
+                'Mage_Eav_Model_Entity_Attribute_Abstract'
+            );
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass('Mage_Eav_Model_Entity_Attribute_Abstract',
                 $arguments, '', true, true, true, array('_construct')
@@ -207,7 +210,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
      */
     public function iterate(Varien_Data_Collection_Db $collection, $pageSize, array $callbacks)
     {
-        $arguments = $this->_objectManager->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
+        $arguments = $this->_objectManager->getConstructArguments(
+            Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
+            'Mage_Customer_Model_Customer'
+        );
         $arguments['data'] = $this->_customerData;
         /** @var $customer Mage_Customer_Model_Customer */
         $customer = $this->getMock('Mage_Customer_Model_Customer', array('_construct'), $arguments);
@@ -235,7 +241,10 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
         $this->_model->setWriter($writer);
         $this->_model->setParameters(array());
 
-        $arguments = $this->_objectManager->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY);
+        $arguments = $this->_objectManager->getConstructArguments(
+            Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
+            'Mage_Core_Model_Abstract'
+        );
         $arguments['data'] = $this->_addressData;
         $item = $this->getMockForAbstractClass('Mage_Core_Model_Abstract', $arguments);
         $this->_model->exportItem($item);

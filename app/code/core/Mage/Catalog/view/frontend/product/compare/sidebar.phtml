@@ -50,20 +50,20 @@ $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
         </ol>
         <div class="actions">
             <a id='compare-clear-all' href="<?php echo $_helper->getClearListUrl() ?>" ><?php echo $this->__('Clear All') ?></a>
-            <button type="button" title="<?php echo $this->__('Compare') ?>" class="button" data-mage-popwin="{windowURL:'<?php echo $_helper->getListUrl() ?>',windowName:'compare',resizable:1,scrollbars:1,width:820,height:600}"><span><span><?php echo $this->__('Compare') ?></span></span></button>
+            <button type="button" title="<?php echo $this->__('Compare') ?>" class="button" data-mage-popwin="{windowURL:'<?php echo $_helper->getListUrl() ?>',windowName:'compare',centerScreen:1,resizable:1,scrollbars:1,width:820,height:600}"><span><span><?php echo $this->__('Compare') ?></span></span></button>
         </div>
         <script type="text/javascript">
             (function($) {
-                $.mage.event.observe('mage.compare.initialize', function (e, o) {
-                    o.listSelector = '#compare-items',
-                    o.removeConfirmMessage = '<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>',
-                    o.removeSelector = '#compare-items .btn-remove',
-                    o.clearAllConfirmMessage = '<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>',
-                    o.clearAllSelector = '#compare-clear-all'
-                });
-                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('jquery/jquery.popupwindow.js') ?>");
-                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('mage/popup-window.js') ?>");
-                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/compare.js') ?>");
+                head.js("<?php echo $this->getViewFileUrl('jquery/jquery.popupwindow.js') ?>",
+                    "<?php echo $this->getViewFileUrl('mage/popup-window.js') ?>",
+                    "<?php echo $this->getViewFileUrl('Mage_Catalog::js/compare.js') ?>", function() {
+                        $('#compare-items').compareItems({
+                            removeConfirmMessage: '<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>',
+                            removeSelector: '#compare-items a.btn-remove',
+                            clearAllConfirmMessage: '<?php echo $this->__('Are you sure you would like to remove all products from your comparison?') ?>',
+                            clearAllSelector: '#compare-clear-all'
+                        });
+                    });
             })(jQuery);
         </script>
         <?php else: ?>

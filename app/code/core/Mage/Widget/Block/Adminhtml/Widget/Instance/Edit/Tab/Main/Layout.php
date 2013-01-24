@@ -27,9 +27,7 @@
 /**
  * Widget Instance page groups (predefined layouts group) to display on
  *
- * @category    Mage
- * @package     Mage_Widget
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @method Mage_Widget_Model_Widget_Instance getWidgetInstance()
  */
 class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
     extends Mage_Adminhtml_Block_Template implements Varien_Data_Form_Element_Renderer_Interface
@@ -249,8 +247,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Tab_Main_Layout
             ->setExtraParams("onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', "
                 . "this.up(\'div.pages\'), this.value)\"")
             ->setArea($this->getWidgetInstance()->getArea())
-            ->setPackage($this->getWidgetInstance()->getPackage())
-            ->setTheme($this->getWidgetInstance()->getTheme())
+            ->setTheme($this->getWidgetInstance()->getThemeId())
         ;
         return $chooserBlock->toHtml();
     }

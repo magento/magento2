@@ -37,7 +37,7 @@ class Mage_Downloadable_Model_Product_TypeTest extends PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->_model = new Mage_Downloadable_Model_Product_Type();
+        $this->_model = Mage::getObjectManager()->create('Mage_Downloadable_Model_Product_Type');
     }
 
     /**

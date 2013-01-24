@@ -61,13 +61,6 @@ class Mage_DesignEditor_PageController extends Mage_Core_Controller_Front_Action
     public function typeAction()
     {
         try {
-            $handle = $this->getRequest()->getParam('handle');
-
-            // check page type format
-            if (!$handle || !preg_match('/^[a-z][a-z\d]*(_[a-z][a-z\d]*)*$/i', $handle)) {
-                throw new InvalidArgumentException($this->__('Invalid page handle specified.'));
-            }
-
             /** @var $layout Mage_DesignEditor_Model_Layout */
             $layout = $this->getLayout();
             $layoutClassName = Mage_DesignEditor_Model_State::LAYOUT_DESIGN_CLASS_NAME;
@@ -75,11 +68,19 @@ class Mage_DesignEditor_PageController extends Mage_Core_Controller_Front_Action
                 throw new InvalidArgumentException($this->__('Incorrect Design Editor layout.'));
             }
 
-            // whether such page type exists
-            if (!$this->getLayout()->getUpdate()->pageHandleExists($handle)) {
-                throw new InvalidArgumentException(
-                    $this->__('Specified page type or page fragment type doesn\'t exist: "%s".', $handle)
-                );
+            $handle = $this->getRequest()->getParam('handle');
+
+            if (!$handle || !preg_match('/^[a-z][_a-z\d]*$/i', $handle)
+                || !$this->getLayout()->getUpdate()->pageHandleExists($handle)
+            ) {
+                /** @var $helper Mage_DesignEditor_Helper_Data */
+                $helper = $this->_objectManager->get('Mage_DesignEditor_Helper_Data');
+                $handle = $helper->getDefaultHandle();
+
+                /** @var $backendSession Mage_Backend_Model_Session */
+                $backendSession = $this->_objectManager->get('Mage_Backend_Model_Session');
+                $backendSession->unsetData('vde_current_handle');
+                $backendSession->unsetData('vde_current_url');
             }
 
             // required layout handle

@@ -33,7 +33,7 @@
             <input type="text" name="email" id="newsletter"
                    title="<?php echo $this->__('Sign up for our newsletter') ?>"
                    value="<?php echo $this->__('Enter your email address') ?>"
-                   class="input-text" data-validate="{required:true,validateEmail:true}"/>
+                   class="input-text" data-validate="{required:true, 'validate-email':true}"/>
         </div>
         <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button">
             <span><span><?php echo $this->__('Submit') ?></span></span></button>
@@ -43,10 +43,9 @@
     //<![CDATA[
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
             "<?php echo $this->getViewFileUrl('Mage_Newsletter::newsletter.js')?>", function() {
                 $('#newsletter').newsletter({
                     formSelector: '#newsletter-validate-detail',

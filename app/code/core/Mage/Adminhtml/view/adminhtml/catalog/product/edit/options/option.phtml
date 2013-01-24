@@ -353,12 +353,16 @@ window.productOptionScope.bindScopeCheckbox();
 (function($) {
     $(function(){
         $('#import_new_defined_option').click(function (){
-            $('#import-container').load("<?php echo $this->getProductGridUrl()?>", function() {
-                $('#productGrid_massaction-form button').click(function (){
-                    $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
-                });
-                $('#import-container').dialog('open');
-            });
+            $('#import-container').load(
+                "<?php echo $this->getProductGridUrl()?>",
+                {form_key: '<?php echo $this->getFormKey()?>'},
+                function() {
+                    $('#productGrid_massaction-form button').click(function() {
+                        $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                    });
+                    $('#import-container').dialog('open');
+                }
+            );
         });
 
         $('#import-container').dialog({

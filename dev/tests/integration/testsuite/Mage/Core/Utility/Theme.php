@@ -90,9 +90,10 @@ class Mage_Core_Utility_Theme
     {
         /** @var $packageMock Mage_Core_Model_Design_Package|PHPUnit_Framework_MockObject_MockObject */
         $packageMock = PHPUnit_Framework_MockObject_Generator::getMock(
-            'Mage_Core_Model_Design_Package', array('getConfigurationDesignTheme')
+            'Mage_Core_Model_Design_Package', array('getConfigurationDesignTheme'),
+            array(self::_createFilesystem())
         );
-        $package = Mage::getModel('Mage_Core_Model_Design_Package');
+        $package = Mage::getModel('Mage_Core_Model_Design_Package', array('filesystem' => self::_createFilesystem()));
 
         $callBackFixture = function ($area, $params) use ($package, $packageMock) {
             $area = $area ? $area : $packageMock->getArea();
@@ -113,6 +114,15 @@ class Mage_Core_Utility_Theme
         /** @var $objectManager Magento_Test_ObjectManager */
         $objectManager = Mage::getObjectManager();
         $objectManager->addSharedInstance($packageMock, 'Mage_Core_Model_Design_Package');
+    }
+
+
+    /**
+     * @return Magento_Filesystem
+     */
+    protected static function _createFilesystem()
+    {
+        return new Magento_Filesystem(new Magento_Filesystem_Adapter_Local());
     }
 
     /**

@@ -82,9 +82,11 @@ class Mage_CurrencySymbol_Block_Adminhtml_System_Currencysymbol extends Mage_Adm
         $block->setData(array(
             'label'     => Mage::helper('Mage_CurrencySymbol_Helper_Data')->__('Save Currency Symbols'),
             'class'     => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#currency-symbols-form')
-            )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#currency-symbols-form'),
+                ),
+            ),
         ));
 
         return $block->toHtml();

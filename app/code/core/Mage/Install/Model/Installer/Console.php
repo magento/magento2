@@ -73,11 +73,19 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     protected $_dataModel;
 
     /**
-     * Constructor
+     * @var Magento_Filesystem
      */
-    public function __construct()
+    protected $_filesystem;
+
+    /**
+     * Constructor
+     *
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
     {
         Mage::app();
+        $this->_filesystem = $filesystem;
         $this->_getInstaller()->setDataModel($this->_getDataModel());
     }
 
@@ -327,10 +335,8 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             /**
              * Change directories mode to be writable by apache user
              */
-            Varien_Io_File::chmodRecursive(Mage::getBaseDir('var'), 0777);
-
+            $this->_filesystem->changePermissions(Mage::getBaseDir('var'), 0777, true);
             return $encryptionKey;
-
         } catch (Exception $e) {
             $this->addError('ERROR: ' . $e->getMessage());
             return false;
@@ -392,11 +398,11 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
             $configOptions->getVarDir() . '/report',
         );
         foreach ($dirsToRemove as $dir) {
-            Varien_Io_File::rmdirRecursive($dir);
+            $this->_filesystem->delete($dir);
         }
 
         /* Remove local configuration */
-        unlink($configOptions->getEtcDir() . '/local.xml');
+        $this->_filesystem->delete($configOptions->getEtcDir() . '/local.xml');
         return true;
     }
 

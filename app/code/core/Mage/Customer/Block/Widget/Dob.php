@@ -101,19 +101,21 @@ class Mage_Customer_Block_Widget_Dob extends Mage_Customer_Block_Widget_Abstract
      */
     public function getSortedDateInputs()
     {
-        $strtr = array(
-            '%b' => '%1$s',
-            '%B' => '%1$s',
-            '%m' => '%1$s',
-            '%d' => '%2$s',
-            '%e' => '%2$s',
-            '%Y' => '%3$s',
-            '%y' => '%3$s'
+        $mapping = array(
+            '/[^medy]/i' => '\\1',
+            '/m{1,5}/i' => '%1$s',
+            '/e{1,5}/i' => '%2$s',
+            '/d{1,5}/i' => '%2$s',
+            '/y{1,5}/i' => '%3$s',
         );
 
-        $dateFormat = preg_replace('/[^\%\w]/', '\\1', $this->getDateFormat());
+        $dateFormat = preg_replace(
+            array_keys($mapping),
+            array_values($mapping),
+            $this->getDateFormat()
+        );
 
-        return sprintf(strtr($dateFormat, $strtr),
+        return sprintf($dateFormat,
             $this->_dateInputs['m'], $this->_dateInputs['d'], $this->_dateInputs['y']);
     }
 }

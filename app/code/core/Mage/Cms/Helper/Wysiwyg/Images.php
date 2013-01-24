@@ -49,6 +49,24 @@ class Mage_Cms_Helper_Wysiwyg_Images extends Mage_Core_Helper_Abstract
      */
     protected $_storeId = null;
 
+    /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * Constructor
+     *
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->ensureDirectoryExists($this->getStorageRoot());
+        $this->_filesystem->setWorkingDirectory($this->getStorageRoot());
+    }
+
 
     /**
      * Set a specified store ID value
@@ -204,13 +222,16 @@ class Mage_Cms_Helper_Wysiwyg_Images extends Mage_Core_Helper_Abstract
             $path = $this->_getRequest()->getParam($this->getTreeNodeName());
             if ($path) {
                 $path = $this->convertIdToPath($path);
-                if (is_dir($path)) {
+                if ($this->_filesystem->isDirectory($path)) {
                     $currentPath = $path;
                 }
             }
-            $io = new Varien_Io_File();
-            if (!$io->isWriteable($currentPath) && !$io->mkdir($currentPath)) {
-                $message = Mage::helper('Mage_Cms_Helper_Data')->__('The directory %s is not writable by server.',$currentPath);
+            try {
+                if (!$this->_filesystem->isWritable($currentPath)) {
+                    $this->_filesystem->createDirectory($currentPath);
+                }
+            } catch (Magento_Filesystem_Exception $e) {
+                $message = Mage::helper('Mage_Cms_Helper_Data')->__('The directory %s is not writable by server.', $currentPath);
                 Mage::throwException($message);
             }
             $this->_currentPath = $currentPath;

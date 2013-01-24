@@ -376,25 +376,25 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
      */
     public function getAttribute($attribute)
     {
+        /** @var $config Mage_Eav_Model_Config */
+        $config = Mage::getSingleton('Mage_Eav_Model_Config');
         if (is_numeric($attribute)) {
             $attributeId = $attribute;
 
             if (isset($this->_attributesById[$attributeId])) {
                 return $this->_attributesById[$attributeId];
             }
-            $attributeInstance = Mage::getSingleton('Mage_Eav_Model_Config')->getAttribute($this->getEntityType(), $attributeId);
+            $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeId);
             if ($attributeInstance) {
                 $attributeCode = $attributeInstance->getAttributeCode();
             }
-
-        } else if (is_string($attribute)) {
+        } elseif (is_string($attribute)) {
             $attributeCode = $attribute;
 
             if (isset($this->_attributesByCode[$attributeCode])) {
                 return $this->_attributesByCode[$attributeCode];
             }
-            $attributeInstance = Mage::getSingleton('Mage_Eav_Model_Config')
-                ->getAttribute($this->getEntityType(), $attributeCode);
+            $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeCode);
             if (!$attributeInstance->getAttributeCode() && in_array($attribute, $this->getDefaultAttributes())) {
                 $attributeInstance
                     ->setAttributeCode($attribute)
@@ -404,8 +404,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
                     ->setEntityType($this->getEntityType())
                     ->setEntityTypeId($this->getEntityType()->getId());
             }
-        } else if ($attribute instanceof Mage_Eav_Model_Entity_Attribute_Abstract) {
-
+        } elseif ($attribute instanceof Mage_Eav_Model_Entity_Attribute_Abstract) {
             $attributeInstance = $attribute;
             $attributeCode = $attributeInstance->getAttributeCode();
             if (isset($this->_attributesByCode[$attributeCode])) {
@@ -612,15 +611,18 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
      *
      * Returns array with results for each attribute
      *
-     * if $method is in format "part/method" will run method on specified part
+     * if $partMethod is in format "part/method" will run method on specified part
      * for example: $this->walkAttributes('backend/validate');
      *
-     * @param string $method
+     * @param string $partMethod
      * @param array $args
-     * @param array $part attribute, backend, frontend, source
+     * @param null|bool $collectExceptionMessages
+     *
+     * @throws Mage_Eav_Model_Entity_Attribute_Exception
+     *
      * @return array
      */
-    public function walkAttributes($partMethod, array $args = array())
+    public function walkAttributes($partMethod, array $args = array(), $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
         switch (sizeof($methodArr)) {
@@ -666,11 +668,21 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
             try {
                 $results[$attrCode] = call_user_func_array(array($instance, $method), $args);
             } catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
-                throw $e;
+                if ($collectExceptionMessages) {
+                    $results[$attrCode] = $e->getMessage();
+                } else {
+                    throw $e;
+                }
             } catch (Exception $e) {
-                $e = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Exception', array('message' => $e->getMessage()));
-                $e->setAttributeCode($attrCode)->setPart($part);
-                throw $e;
+                if ($collectExceptionMessages) {
+                    $results[$attrCode] = $e->getMessage();
+                } else {
+                    $e = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Exception',
+                        array('message' => $e->getMessage())
+                    );
+                    $e->setAttributeCode($attrCode)->setPart($part);
+                    throw $e;
+                }
             }
         }
 
@@ -837,7 +849,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
     public function validate($object)
     {
         $this->loadAllAttributes($object);
-        $result = $this->walkAttributes('backend/validate', array($object));
+        $result = $this->walkAttributes('backend/validate', array($object), $object->getCollectExceptionMessages());
         $errors = array();
         foreach ($result as $attributeCode => $error) {
             if ($error === false) {
@@ -1320,7 +1332,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
         /**
          * Import variables into the current symbol table from save data array
          *
-         * @see Mage_Eav_Model_Entity_Attribute_Abstract::_collectSaveData()
+         * @see Mage_Eav_Model_Entity_Abstract::_collectSaveData()
          *
          * @var array $entityRow
          * @var Mage_Core_Model_Abstract $newObject

@@ -58,11 +58,11 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_LayoutTest extend
         )));
         $this->_block = $this->getMock(
             'Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout',
-            array('_getLayoutUpdate'), $args
+            array('_getLayoutMerge'), $args
         );
         $this->_block
             ->expects($this->any())
-            ->method('_getLayoutUpdate')
+            ->method('_getLayoutMerge')
             ->will($this->returnValue($layoutUtility->getLayoutUpdateFromFixture(
             $pageTypesFixture,
             $layoutUtility->getLayoutDependencies()

@@ -42,9 +42,11 @@ class Mage_Adminhtml_Block_System_Currency extends Mage_Adminhtml_Block_Template
         $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Save Currency Rates'),
             'class'     => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#rate-form')
-            )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#rate-form'),
+                ),
+            ),
         ));
 
         $this->addChild('reset_button', 'Mage_Adminhtml_Block_Widget_Button', array(

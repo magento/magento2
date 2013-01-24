@@ -183,8 +183,8 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
     public function __wakeup()
     {
         if (Mage::getIsSerializable()) {
-            $this->_eventDispatcher = Mage::getModel('Mage_Core_Model_Event_Manager');
-            $this->_cacheManager    = Mage::getModel('Mage_Core_Model_Cache');
+            $this->_eventDispatcher = Mage::getObjectManager()->get('Mage_Core_Model_Event_Manager');
+            $this->_cacheManager    = Mage::getObjectManager()->get('Mage_Core_Model_Cache');
         }
     }
 
@@ -216,7 +216,7 @@ abstract class Mage_Core_Model_Abstract extends Varien_Object
             Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Resource is not set.'));
         }
 
-        return $this->_resource ? $this->_resource : Mage::getResourceSingleton($this->_resourceName);
+        return $this->_resource ?: Mage::getResourceSingleton($this->_resourceName);
     }
 
     /**

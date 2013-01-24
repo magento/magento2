@@ -286,13 +286,21 @@ class Mage_Catalog_Model_Observer
     public function transitionProductType(Varien_Event_Observer $observer)
     {
         $product = $observer->getProduct();
-        $isTransitionalType = $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
-            || $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL;
-        if ($isTransitionalType) {
-            $product->setTypeId($product->hasIsVirtual()
-                ? Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
-                : Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
-            );
+        $attributes = $observer->getRequest()->getParam('attributes');
+        if (!empty($attributes)) {
+            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
+        } elseif ($product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL);
+            $product->setTypeInstance(null);
+        } else {
+            $isTransitionalType = $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+                || $product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL;
+            if ($isTransitionalType) {
+                $product->setTypeId($product->hasIsVirtual()
+                    ? Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
+                    : Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+                );
+            }
         }
     }
 }

@@ -34,6 +34,19 @@
 class Mage_Captcha_Model_Observer
 {
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Check Captcha On Forgot Password Page
      *
      * @param Varien_Event_Observer $observer
@@ -252,14 +265,15 @@ class Mage_Captcha_Model_Observer
      */
     public function deleteExpiredImages()
     {
-        foreach (Mage::app()->getWebsites(true) as $website){
-            $expire = time() - Mage::helper('Mage_Captcha_Helper_Data')->getConfigNode('timeout', $website->getDefaultStore())*60;
+        foreach (Mage::app()->getWebsites(true) as $website) {
+            $expire = time() - Mage::helper('Mage_Captcha_Helper_Data')
+                ->getConfigNode('timeout', $website->getDefaultStore()) * 60;
             $imageDirectory = Mage::helper('Mage_Captcha_Helper_Data')->getImgDir($website);
-            foreach (new DirectoryIterator($imageDirectory) as $file) {
-                if ($file->isFile() && pathinfo($file->getFilename(), PATHINFO_EXTENSION) == 'png') {
-                    if ($file->getMTime() < $expire) {
-                        unlink($file->getPathname());
-                    }
+            foreach ($this->_filesystem->getNestedKeys($imageDirectory) as $filePath) {
+                if ($this->_filesystem->isFile($filePath)
+                    && pathinfo($filePath, PATHINFO_EXTENSION) == 'png'
+                    && $this->_filesystem->getMTime($filePath) < $expire) {
+                    $this->_filesystem->delete($filePath);
                 }
             }
         }

@@ -31,7 +31,7 @@
 </div>
 <?php $_total=$this->getItems()->getSize() ?>
 <?php if($_total): ?>
-<table class="data-table compare-table" id="product_comparison">
+<table class="data-table compare-table" id="product-comparison">
     <?php $_i=0 ?>
     <?php foreach($this->getItems() as $_item): ?>
     <?php if($_i++%10==0): ?>
@@ -140,18 +140,20 @@
 </div>
 <script type="text/javascript">
     (function($) {
-        $.mage.event.observe('mage.compare-list.initialize', function (e, o) {
-                o.productSelector = 'h2.product-name > a',
-                o.productImageSelector = '.product-image'
-                o.productAddToCartSelector = '.btn-cart',
-                o.productWishListSelector = '.link-wishlist',
-                o.productRemoveSelector = '.btn-remove',
-                o.productFormSelector = '#product_comparison',
-                o.ajaxSpinner ='#compare-list-please-wait',
-                o.windowCloseSelector = '#window-close',
-                o.printSelector = '.link-print'
+        head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/list.js')?>", function() {
+            $('#product-comparison').compareList({
+                productRemoveSelector: 'a.btn-remove',
+                ajaxSpinner: '#compare-list-please-wait',
+                windowCloseSelector: '#window-close',
+                windowPrintSelector: 'a.link-print',
+                selectors: {
+                    productSelector: 'h2.product-name > a',
+                    productImageSelector: 'a.product-image',
+                    productAddToCartSelector: 'button.btn-cart',
+                    productWishListSelector: 'a.link-wishlist'
+                }
+            });
         });
-        $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/list.js')?>");
     })(jQuery);
 </script>
 <?php else: ?>

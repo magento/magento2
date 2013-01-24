@@ -60,6 +60,19 @@ class Mage_Core_Helper_File_Storage_Database extends Mage_Core_Helper_Abstract
     protected $_mediaBaseDirectory;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Check if we use DB storage
      * Note: Disabled as not completed feature
      *
@@ -268,9 +281,8 @@ class Mage_Core_Helper_File_Storage_Database extends Mage_Core_Helper_Abstract
             $uniqueResultFile = $this->getUniqueFilename($path, $file);
 
             if ($uniqueResultFile !== $file) {
-                $ioFile = new Varien_Io_File();
-                $ioFile->open(array('path' => $path));
-                $ioFile->mv($path . $file, $path . $uniqueResultFile);
+                $this->_filesystem->setWorkingDirectory($path);
+                $this->_filesystem->rename($path . $file, $path . $uniqueResultFile);
             }
             $this->saveFile($path . $uniqueResultFile);
 

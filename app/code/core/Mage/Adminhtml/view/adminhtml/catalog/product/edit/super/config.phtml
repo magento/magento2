@@ -25,283 +25,138 @@
  */
  /** @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config */
 ?>
-
-<div id="<?php echo $this->getId()?>">
-<input type="checkbox" id="<?php echo $this->getId()?>-checkbox" name="attributes"
-       value=""
-<?php if ($this->_getProduct()->isConfigurable() || $this->getRequest()->has('attributes')) {
-    echo ' checked="checked" ';
-}?>
-/>
-<label for="<?php echo $this->getId()?>-checkbox">
-    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Does this product have variations?') ?>
-</label>
-<fieldset>
-<?php
-echo $this->getChildHtml('super_settings');
-if (count($this->getSelectedAttributes())) {
-?>
-<div class="entry-edit">
+<div class="entry-edit" id="<?php echo $this->getId() ?>">
     <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Super product attributes configuration') ?></h4>
-    </div>
-    <fieldset id="<?php echo $this->getHtmlId() ?>">
-        <legend><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Super product attributes configuration') ?></legend>
-        <input type="hidden" id="<?php echo $this->getHtmlId() ?>_save_attributes" name="configurable_attributes_data" />
-
-        <ul class="messages">
-            <li class="notice-msg">
-                <ul><li><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price values for options should be specified in system base currency.')?></li></ul>
-                <ul><li><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute names can be specified per store.')?></li></ul>
-            </li>
-        </ul>
-        <ul id="<?php echo $this->getHtmlId() ?>_attributes" class="super-attributes">
-        </ul>
-    </fieldset>
-</div>
-<div class="no-display" id="<?php echo $this->getHtmlId() ?>_attribute_template">
-    <div class="<?php if (!$this->isReadonly()):?>attribute-name-container <?php endif;?>left">
-        '{{frontend_label}}'
-    </div>
-    <div class="values-container right">
-        <label for="__id___label" class="bold"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Attribute Name:') ?></label>
-        <input id="__id___label" type="text" <?php if ($this->isAttributesConfigurationReadonly()): ?> disabled="disabled" <?php endif;?> class="input-text attribute-label required-entry template no-display" value="'{{label}}'" readonly="label" />
-        <input id="__id___label_use_default" type="checkbox" value="1" " checked="use_default" class="attribute-use-default-label">
-        <label for="__id___label_use_default"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use default')?> ('{{store_label}}')</label>
-        <ul class="attribute-values">
-        </ul>
-    </div>
-</div>
-<div class="no-display" id="<?php echo $this->getHtmlId() ?>_value_template">
-    <div class="attribute-value-label-container left">
-    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Option:') ?> <strong>'{{label}}'</strong>
-</div>
-<?php if ($this->getCanReadPrice() !== false) : ?>
-<div class="attribute-values-container-main">
-    <div class="attribute-values-container left">
-    <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price:') ?>
-    <input id="__id___pricing" type="text" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?> class="input-text attribute-price validate-number template no-display" value="'{{pricing_value}}'"/>
-</div>
-<div class="attribute-values-container left">
-    &nbsp;<select class="attribute-price-type" id="__id___price_type" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?>>
-        <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Fixed') ?></option>
-        <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Percentage') ?></option>
-    </select>
-</div>
-<?php if ($this->getShowUseDefaultPrice()):?>
-<div class="attribute-values-container">
-    &nbsp;<input id="__id___default" type="checkbox" <?php if ($this->isAttributesPricesReadonly() || $this->getCanEditPrice() === false): ?> disabled="disabled" <?php endif;?> class="attribute-use-default-value"> <label for="__id___default" class="normal"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Use Default Value') ?></label>
-</div>
-<?php endif;?>
-<?php else : ?>
-<div class="attribute-values-container-main">
-    <div class="attribute-values-container left">
-    <input id="__id___pricing" type="hidden"  class="attribute-price template no-display" value="0" />
-</div>
-<div class="attribute-values-container left">
-    <input type="hidden" class="attribute-price-type" id="__id___price_type" value="0" />
-</div>
-<?php if ($this->getShowUseDefaultPrice()) : ?>
-<div class="attribute-values-container no-display">
-    <input id="__id___default" type="checkbox" <?php if ($this->isReadonly() || $this->getCanEditPrice() === false):?> disabled="disabled" <?php endif;?> class="attribute-use-default-value">
-</div>
-<?php endif; ?>
-<?php endif; ?>
-</div>
-</div>
-<div class="template no-display" id="<?php echo $this->getHtmlId() ?>_simple_pricing">
-    <?php if ($this->getCanReadPrice() !== false) : ?>
-        <div class="attribute-values-container left v-middle">
-            &nbsp;<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price:') ?>
-            <input type="text" class="input-text attribute-price validate-number"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled" <?php endif; ?>/>
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Variations') ?>
+        </h4>
+        <div style="float:right">
+            <input type="checkbox" id="<?php echo $this->getId()?>-checkbox" name="attributes"
+                value=""
+                <?php if ($this->_getProduct()->isConfigurable() || $this->getRequest()->has('attributes')) {
+                    echo ' checked="checked" ';
+                }?>
+            />
+            <label for="<?php echo $this->getId()?>-checkbox">
+                <?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Does this product have variations?') ?>
+            </label>
         </div>
-        <div class="attribute-values-container left v-middle">
-            &nbsp;<select class="attribute-price-type"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled" <?php endif; ?>>
-                <option value="0"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Fixed') ?></option>
-                <option value="1"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Percentage') ?></option>
-            </select>
+    </div>
+    <fieldset>
+        <input id="attribute-selector"
+            placeholder="start typing to search attribute"
+            title="Select Attribute" type="text"
+            style="width: 100%; margin: 0px 0px 20px; padding: 5px; box-sizing: border-box; font-size: 1.5em;"
+            class="input-text" autocomplete="off">
+        <div id="attributes-container">
+        <?php echo $this->getChildHtml('template'); ?>
+        <?php
+        foreach ($this->getAttributes() as $attribute) {
+            echo $this->getChildBlock('attribute-renderer')->render(array(
+                'attribute' => $attribute,
+            ));
+        } ?>
         </div>
-    <?php else : ?>
-        <input type="hidden" class="attribute-price" />
-        <input type="hidden" class="attribute-price-type" />
-    <?php endif; ?>
-</div>
-<div class="template no-display" id="<?php echo $this->getHtmlId() ?>_simple_pricing_view">
-    &nbsp;<?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Price') ?> <strong>'{{value}}'</strong>
-</div>
-
-<div id="product-variations-matrix" class="grid" style="margin:20px 0">
-<?php
-    $variations = $this->getVariations();
-    $usedProductAttributes = $this->getSelectedAttributes();
-?>
-    <table cellspacing="0">
-        <thead>
-        <tr class="headings">
-            <th width="180">Product Name</th>
-            <th width="180">Price</th>
-            <th width="220">SKU</th>
-            <th width="180">Quantity</th>
-            <th width="180">Weight</th>
-<?php
-    foreach ($usedProductAttributes as $attribute) {
-        /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-        echo '<th>', $attribute->getStoreLabel(), '</th>', PHP_EOL;
-    }
-?>
-            <th class="a-center" width="55">Include</th>
-        </tr>
-        </thead>
-        <tbody>
-<?php
-    $isEven = true;
-
-    $productByUsedAttributes = array();
-    foreach ($this->_getProduct()->getTypeInstance()->getUsedProducts($this->_getProduct()) as $product) {
-       $keys = array();
-       foreach ($usedProductAttributes as $attribute) {
-           /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-           $keys[] = $product->getData($attribute->getAttributeCode());
-       }
-       $productByUsedAttributes[implode('-', $keys)] = $product;
-    }
-
-    foreach ($variations as $variation) {
-        $attributeValues = array();
-        $attributeLabels = array();
-        foreach ($usedProductAttributes as $attribute) {
-            /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-            $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
-            $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
-        }
-        $key = implode('-', $attributeValues);
-        if (isset($productByUsedAttributes[$key])) {
-            $product = $productByUsedAttributes[$key];
-?>
-        <tr class="<?php echo $isEven ? 'even' : '' ?>">
-            <td class="associated-matrix-product-name"><?php echo $product->getName()?></td>
-            <td class="associated-matrix-product-price"><?php echo $product->getPrice()?></td>
-            <td><span class="associated-matrix-product-sku"><?php echo $product->getSku()?></span>
-                <button class="choose-product"
-                    data-attributes="<?php echo $this->escapeHtml($this->helper('Mage_Core_Helper_Data')->jsonEncode($attributeValues)); ?>"
-                    style="float:right">
-                    Choose
-                </button>
-            </td>
-            <td class="associated-matrix-product-qty"><?php echo $product->getStockItem()->getQty()?></td>
-            <td class="associated-matrix-product-weight"><?php echo $product->getWeight()?></td>
-            <td><?php echo implode('</td><td>', $attributeLabels)?></td>
-            <td class="a-center"><input type="checkbox" name="associated_product_ids[]" value="<?php echo $product->getId()?>" class="checkbox associated-matrix-product-id" checked="checked"></td>
-        </tr>
-<?php
-        } else {
-?>
-        <tr class="<?php echo $isEven ? 'even' : '' ?>">
-            <td class="associated-matrix-product-name"></td>
-            <td class="associated-matrix-product-price"></td>
-            <td><span class="associated-matrix-product-sku"></span>
-                <button class="choose-product"
-                        data-attributes="<?php echo $this->escapeHtml($this->helper('Mage_Core_Helper_Data')->jsonEncode($attributeValues)); ?>"
-                        style="float:right">
-                    Choose
-                </button>
-            </td>
-            <td class="associated-matrix-product-qty"></td>
-            <td class="associated-matrix-product-weight"></td>
-<!--            <td><input class="associated-matrix-product-name" value="--><?php //echo $this->_getProduct()->getName(), ' ', implode(' ', $attributeValues)?><!--"></td>-->
-<!--            <td><input class="associated-matrix-product-price" value=""></td>-->
-<!--            <td><input class="associated-matrix-product-sku" value="--><?php //echo $this->_getProduct()->getSku(), '-', implode('-', $attributeValues)?><!--">-->
-<!--                <button class="choose-product"-->
-<!--                    data-attributes="--><?php //echo $this->escapeHtml($this->helper('Mage_Core_Helper_Data')->jsonEncode($attributeValues)); ?><!--"-->
-<!--                    style="float:right">-->
-<!--                    Choose-->
-<!--                </button>-->
-<!--            </td>-->
-<!--            <td><input class="associated-matrix-product-qty" value=""></td>-->
-<!--            <td><input class="associated-matrix-product-weight" value=""></td>-->
-            <td><?php echo implode('</td><td>', $attributeLabels)?></td>
-            <td class="a-center"><input type="checkbox" name="associated_product_ids[]" value="" class="checkbox associated-matrix-product-id" disabled="disabled"></td>
-        </tr>
-<?php
-        }
-        $isEven = !$isEven;
-    }
-?>
-        </tbody>
-    </table>
-</div>
-
-<div id="associated-products-container"  data-used-attributes="<?php echo $this->escapeHtml($this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getAttributes())); ?>" style="display: none;">
-    <?php echo $this->getGridHtml(); ?>
-</div>
-<script type="text/javascript">
-    var superProduct = new Product.Configurable(jQuery('#associated-products-container').data('usedAttributes'), <?php echo $this->getLinksJson() ?>,'<?php echo $this->getHtmlId() ?>_',<?php echo $this->getGridJsObject() ?>, <?php echo ( $this->isReadonly() ? 'true' : 'false'); ?>);
-</script>
-
-<div><input type="hidden" name="affect_configurable_product_attributes" value="1" /></div>
-<?php } ?>
+        <?php echo $this->getChildHtml('generate'); ?>
+        <div id="product-variations-matrix" class="grid" style="margin:20px 0">
+            <?php echo $this->getChildHtml('matrix'); ?>
+        </div>
+        <div id="associated-products-container" style="display: none;">
+            <?php echo $this->getGridHtml(); ?>
+        </div>
+        <input type="hidden" name="affect_configurable_product_attributes" value="1" />
 </fieldset>
-</div>
+
 <script type="text/javascript">
 jQuery(function($) {
-    var usedAttributes = jQuery('#associated-products-container').data('usedAttributes') || [];
+    var $variationsContainer = $("#<?php echo $this->getId()?>");
+    $('#attributes-container').variationsAttributes();
+
     $("#<?php echo $this->getId()?>-checkbox").on('click change', function() {
         var $fieldset = $("#<?php echo $this->getId()?> > fieldset");
         if ($(this).is(':checked')) {
             $fieldset.show();
-            $("#<?php echo $this->getId()?> input[name='attributes[]']").removeAttr('disabled');
+            $('#change-attribute-set-button').attr('disabled', true).addClass('disabled');
+            $variationsContainer.find("input[name='attributes[]']").removeAttr('disabled');
             $('#qty').attr('disabled', true);
-            $.each(usedAttributes, function() {
-                $('#attribute-' + this.attribute_code + '-container select').attr('disabled', true);
-            });
+            $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
+                $('#attribute-' + this.code + '-container select').attr('disabled', true);
+            })
         } else {
+            $('#change-attribute-set-button').removeAttr('disabled').removeClass('disabled');
             $('#qty').removeAttr('disabled');
-            $("#<?php echo $this->getId()?> input[name='attributes[]']").attr('disabled', true);
-            $.each(usedAttributes, function() {
-                $('#attribute-' + this.attribute_code + '-container select').removeAttr('disabled');
+            $variationsContainer.find('.entry-edit').remove();
+            $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
+                $('#attribute-' + this.code + '-container select').removeAttr('disabled');
             });
+            $('#product-variations-matrix').trigger('disable');
             $fieldset.hide();
         }
     }).trigger('change');
 
     var $gridDialog = $('#associated-products-container').dialog({
-        title:'Select Associated Product',
-        autoOpen:false,
-        minWidth:980,
-        modal:true,
-        resizable:true
+        title: 'Select Associated Product',
+        autoOpen: false,
+        minWidth: 980,
+        modal: true,
+        resizable: true
     });
 
-    $('#product-variations-matrix').on('click', '.choose-product', function(event) {
-        event.preventDefault();
-        var grid = window.<?php echo $this->getGridJsObject() ?>;
-        var $button = $(this);
-        grid.reloadParams = {
-            'filter': $button.data('attributes'),
-            'attributes[]': usedAttributes.map(function(el) { return el.attribute_id; })
-        };
-        grid.reload(null, function() {
-            $gridDialog.dialog('open')
-        });
-
-        grid.rowClickCallback = function(grid, event) {
-            if (!this.rows || !this.rows.length) {
-                return;
-            }
-            var $matrixRow = $button.parents('tr');
-            var $gridRow = $(event.target).parents('tr');
-            var matrixClass = '.associated-matrix-product-';
-            var associatedClass = '.associated-product-';
-            var productFields = ['name', 'price', 'sku', 'qty', 'weight', 'id'];
-
-            $.each(productFields, function() {
-                var target = $matrixRow.find(matrixClass + this),
-                    value = $.trim($gridRow.find(associatedClass + this).text());
-                target[target.is('input') ? 'val' : 'html'](value);
+    $('#product-variations-matrix')
+        .on('generate', function(event, data) {
+            $.ajax({
+                url: data.url,
+                data: $('#product-edit-form').serialize(),
+                dataType: 'html',
+                context: $variationsContainer,
+                showLoader: true
+            }).success(function(data) {
+                $('#product-variations-matrix').html(data);
             });
-            $matrixRow.find(matrixClass + 'id').attr('checked', true).removeAttr('disabled');
-            $gridDialog.dialog('close');
-        };
-    });
+        })
+        .on('disable', function() {
+            $(this).html('');
+        })
+        .on('click', 'input.associated-matrix-product-id', function() {
+            $(this).closest('tr').find('input[type!=checkbox]').prop('disabled', !$(this).is(':checked'));
+        })
+        .on('click', '.choose-product', function(event) {
+            event.preventDefault();
+            var grid = window.<?php echo $this->getGridJsObject() ?>;
+            var $button = $(this);
+            var attributeIds = [];
+            $variationsContainer.find("input[name='attributes[]']").each(function () {
+                attributeIds.push($(this).val());
+            });
+
+            grid.reloadParams = {
+                'filter': $button.data('attributes'),
+                'attributes[]': attributeIds
+            };
+            grid.reload(null, function() {
+                $gridDialog.dialog('open')
+            });
+
+            grid.rowClickCallback = function(grid, event) {
+                if (!this.rows || !this.rows.length) {
+                    return;
+                }
+                var $gridRow = $(event.target).parents('tr'),
+                    associatedClass = '.associated-product-';
+                if ($gridRow.find(associatedClass + 'id').length) {
+                    var $matrixRow = $button.parents('tr'),
+                        matrixClass = '.associated-matrix-product-';
+                    $.each('name,sku,qty,weight,id'.split(','), function () {
+                        var target = $matrixRow.find(matrixClass + this),
+                            value = $.trim($gridRow.find(associatedClass + this).text()),
+                            button = target.find('button.choose-product');
+                        target[target.is('input[type=checkbox]') ? 'val' : 'text'](value).append(button);
+                    });
+                    $matrixRow.find(matrixClass + 'id').attr('checked', true).removeAttr('disabled');
+                }
+                $gridDialog.dialog('close');
+            };
+        });
 });
 </script>
+</div>

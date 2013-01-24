@@ -1214,9 +1214,9 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_International
     {
         $rawRequest = $this->_request;
 
-        $originRegion = (string)$this->getCountryParams(
+        $originRegion = $this->getCountryParams(
             Mage::getStoreConfig(Mage_Shipping_Model_Shipping::XML_PATH_STORE_COUNTRY_ID, $this->getStore())
-        )->region;
+        )->getRegion();
 
         if (!$originRegion) {
             Mage::throwException(Mage::helper('Mage_Usa_Helper_Data')->__('Wrong Region.'));
@@ -1288,7 +1288,7 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_International
         $nodeConsignee->addChild('PostalCode', $rawRequest->getRecipientAddressPostalCode());
         $nodeConsignee->addChild('CountryCode', $rawRequest->getRecipientAddressCountryCode());
         $nodeConsignee->addChild('CountryName',
-            (string)$this->getCountryParams($rawRequest->getRecipientAddressCountryCode())->name
+            $this->getCountryParams($rawRequest->getRecipientAddressCountryCode())->getName()
         );
         $nodeContact = $nodeConsignee->addChild('Contact');
         $nodeContact->addChild('PersonName', substr($rawRequest->getRecipientContactPersonName(), 0, 34));
@@ -1347,7 +1347,7 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_International
         $nodeShipper->addChild('PostalCode', $rawRequest->getShipperAddressPostalCode());
         $nodeShipper->addChild('CountryCode', $rawRequest->getShipperAddressCountryCode());
         $nodeShipper->addChild('CountryName',
-            (string)$this->getCountryParams($rawRequest->getShipperAddressCountryCode())->name
+            $this->getCountryParams($rawRequest->getShipperAddressCountryCode())->getName()
         );
         $nodeContact = $nodeShipper->addChild('Contact', '', '');
         $nodeContact->addChild('PersonName', substr($rawRequest->getShipperContactPersonName(), 0, 34));

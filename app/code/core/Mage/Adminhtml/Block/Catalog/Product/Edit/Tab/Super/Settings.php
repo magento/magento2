@@ -70,45 +70,37 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Settings extends Mage_
     {
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('settings', array(
-            'legend'=>Mage::helper('Mage_Catalog_Helper_Data')->__('Select Configurable Attributes')
+            'legend' => Mage::helper('Mage_Catalog_Helper_Data')->__('Select Configurable Attributes')
         ));
 
-        $product    = $this->_getProduct();
-        $attributes = $product->getTypeInstance()
-            ->getSetAttributes($product);
+        $fieldset->addField('attribute-selector', 'text', array(
+            'label' => 'Select Attribute',
+            'title' => 'Select Attribute',
+        ));
 
-        $hasAttributes = false;
-        $usedAttributes = $product->isConfigurable()
-            ? $this->_getProduct()->getTypeInstance()->getUsedProductAttributeIds($this->_getProduct())
-            : array();
-
+        $product = $this->_getProduct();
+        /** @var $configurableType Mage_Catalog_Model_Product_Type_Configurable */
         $configurableType = Mage::getSingleton('Mage_Catalog_Model_Product_Type_Configurable');
-
-        foreach ($attributes as $attribute) {
+        $usedAttributes = $product->isConfigurable()
+            ? $configurableType->getUsedProductAttributes($product)
+            : array();
+        foreach ($usedAttributes as $attribute) {
+            /** @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
             if ($configurableType->canUseAttribute($attribute, $product)) {
-                $hasAttributes = true;
                 $fieldset->addField('attribute_' . $attribute->getAttributeId(), 'checkbox', array(
-                    'label' => $attribute->getFrontend()->getLabel(),
-                    'title' => $attribute->getFrontend()->getLabel(),
+                    'label' => $attribute->getFrontendLabel(),
+                    'title' => $attribute->getFrontendLabel(),
                     'name'  => 'attributes[]',
                     'class' => 'configurable-attribute-checkbox',
                     'value' => $attribute->getAttributeId(),
-                    'checked' => in_array($attribute->getAttributeId(), $usedAttributes)
+                    'checked' => true
                 ));
             }
         }
 
-        if ($hasAttributes) {
-            $fieldset->addField('continue_button', 'note', array(
-                'text' => $this->getChildHtml('continue_button'),
-            ));
-        } else {
-            $fieldset->addField('note_text', 'note', array(
-                'text' => $this->__('This attribute set does not have attributes which we can use for configurable product')
-            ));
-        }
-
-
+        $fieldset->addField('continue_button', 'note', array(
+            'text' => $this->getChildHtml('continue_button'),
+        ));
         $this->setForm($form);
 
         return parent::_prepareForm();

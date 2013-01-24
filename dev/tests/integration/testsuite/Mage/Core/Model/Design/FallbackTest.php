@@ -58,7 +58,7 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
             'themeModel' => $themeModel,
         );
 
-        return new Mage_Core_Model_Design_Fallback($params);
+        return Mage::getObjectManager()->create('Mage_Core_Model_Design_Fallback', array('data' => $params));
     }
 
     /**

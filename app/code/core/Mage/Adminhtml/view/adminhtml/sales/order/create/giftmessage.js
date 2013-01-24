@@ -69,12 +69,10 @@ var giftMessagesController = {
         } else {
             $(container).toogleGiftMessage = false;
             $(this.getFieldId(container, 'message')).formObj = $(this.getFieldId(container, 'form'));
+            var form = jQuery('#' + this.getFieldId(container, 'form'));
+            jQuery('#' + this.getFieldId(container, 'form')).validation();
 
-            if(!$(this.getFieldId(container, 'form')).validator) {
-                $(this.getFieldId(container, 'form')).validator = new Validation(this.getFieldId(container, 'form'));
-            }
-
-            if(!$(this.getFieldId(container, 'form')).validator.validate()) {
+            if(!form.valid()) {
                 return false;
             }
 
@@ -104,11 +102,10 @@ var giftMessagesController = {
     saveGiftMessage: function(container) {
         $(this.getFieldId(container, 'message')).formObj = $(this.getFieldId(container, 'form'));
 
-        if(!$(this.getFieldId(container, 'form')).validator) {
-            $(this.getFieldId(container, 'form')).validator = new Validation(this.getFieldId(container, 'form'));
-        }
+        var form = jQuery('#' + this.getFieldId(container, 'form'));
+        form.validation();
 
-        if(!$(this.getFieldId(container, 'form')).validator.validate()) {
+        if(!form.valid()) {
             return;
         }
 
@@ -199,7 +196,7 @@ GiftOptionsPopup.prototype = {
 
     onOkButton : function() {
         var giftOptionsForm = jQuery('#gift_options_configuration_form');
-        if (!giftOptionsForm.validate().valid()) {
+        if (!giftOptionsForm.validation().valid()) {
             return false;
         }
         if (jQuery.isFunction(giftOptionsForm[0].reset)) {

@@ -30,11 +30,9 @@
  */
 ?>
 
-
-
 <div class="content-header">
     <h3 class="icon-head head-products"><?php echo $this->getHeader() ?></h3>
-    <p class="content-buttons form-buttons"><?php echo $this->getBackButtonHtml() ?>
+    <div class="content-buttons form-buttons"><?php echo $this->getBackButtonHtml() ?>
     <?php echo $this->getCancelButtonHtml() ?>
     <?php if($this->getProductId()): ?>
         <?php echo $this->getDeleteButtonHtml() ?>
@@ -44,10 +42,9 @@
     <?php endif; ?>
     <?php if ($this->getProductSetId()): ?>
         <?php echo $this->getChangeAttributeSetButtonHtml() ?>
-        <?php echo $this->getSaveButtonHtml() ?>
-        <?php echo $this->getSaveAndEditButtonHtml() ?>
+        <?php echo $this->getSaveSplitButtonHtml(); ?>
     <?php endif; ?>
-    </p>
+    </div>
 </div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="product-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
@@ -55,9 +52,9 @@
     <?php echo $this->getChildHtml('product-type-tabs') ?>
 </form>
 <script type="text/javascript">
-//<![CDATA[
     var productTemplateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
-    jQuery('#product-edit-form').form().validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+    jQuery('#product-edit-form').mage('form')
+        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
     function setSettings(urlTemplate, setElement, typeElement) {
         var template = new Template(urlTemplate, productTemplateSyntax);
         setLocation(template.evaluate({attribute_set:$F(setElement),type:$F(typeElement)}));
@@ -91,97 +88,111 @@
         return 1;
     }
 
-jQuery(function() {
+jQuery(function($) {
     <?php if ($this->getSelectedTabId()): ?>
-    if(jQuery('#<?php echo $this->getSelectedTabId() ?>').length) {
-        jQuery('#<?php echo $this->getSelectedTabId() ?>').trigger('click');
+    if($('#<?php echo $this->getSelectedTabId() ?>').length) {
+        $('#<?php echo $this->getSelectedTabId() ?>').trigger('click');
     }
     <?php endif; ?>
-    jQuery(window).on('tabsbeforeactivate', function(e, ui){
-        jQuery('#config_super_product')[ui.newTab.index() ? 'hide' : 'show']();
-    }).triggerHandler('tabsbeforeactivate', [{newTab: jQuery('#<?php echo $this->getSelectedTabId() ?>').closest('li')}]);
 
-    (function ($) {
+    $('#product_info_tabs').on('tabsbeforeactivate', function (event, ui) {
+        $('#config_super_product')[$(ui.newPanel).find('#attribute-name-container').length ? 'show' : 'hide']();
+    });
 
-        var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
-        var availablePlaceholders = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getAttributesAllowedForAutogeneration())?>;
-        var Autogenerator = function(masks) {
-            this._masks = masks || {};
-            this._fieldReverseIndex = this._buildReverseIndex(this._masks);
-        };
+    var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
+    var availablePlaceholders = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getAttributesAllowedForAutogeneration())?>;
+    var Autogenerator = function(masks) {
+        this._masks = masks || {};
+        this._fieldReverseIndex = this._buildReverseIndex(this._masks);
+    };
 
-        $.extend(Autogenerator.prototype, {
-            varRegexp: /{{([\w_]+?)}}/,
-            varsRegexp: new RegExp('{{(' + availablePlaceholders.join('|') + ')}}', 'g'),
-            data: {
-                disabled: 'autogenerator-disabled'
-            },
-            bindAll: function(events) {
-                var self = this;
+    $.extend(Autogenerator.prototype, {
+        varRegexp: /{{([\w_]+?)}}/,
+        varsRegexp: new RegExp('{{(' + availablePlaceholders.join('|') + ')}}', 'g'),
+        data: {
+            disabled: 'autogenerator-disabled'
+        },
+        bindAll: function(events) {
+            var self = this;
 
-                $.each(self._masks, function(field, mask) {
-                    var disabler = function() {
-                        $(this).data(self.data.disabled, $(this).val().replace(/\s/g, '') != '');
-                    };
-                    var $field = $('#' + field);
-                    if (!$field.val() && mask.length > 0 && !self.varRegexp.test(mask)) {
-                        $field.val(mask);
-                    }
-                    if ($field.length) {
-                        disabler.call($field);
-                        $field.bind('focus blur change keyup click', disabler);
-                    }
-                });
+            $.each(self._masks, function(field, mask) {
+                var disabler = function() {
+                    $(this).data(self.data.disabled, $(this).val().replace(/\s/g, '') != '');
+                };
+                var $field = $('#' + field);
+                if (!$field.val() && mask.length > 0 && !self.varRegexp.test(mask)) {
+                    $field.val(mask);
+                }
+                if ($field.length) {
+                    disabler.call($field);
+                    $field.bind('focus blur change keyup click', disabler);
+                }
+            });
 
-                $.each(self._fieldReverseIndex, function(field) {
-                    var fields = this, $field = $('#' + field);
-                    var filler = function(onlyText) {
-                        $.each(fields, function() {
-                            var $el = $('#' + this);
-                            if ($el.data(self.data.disabled)) {
-                                return;
-                            }
-                            if (onlyText === true && self.varRegexp.test(self._masks[this])) {
-                                return;
-                            }
-                            var value = self._masks[this].replace(self.varsRegexp, function(maskfieldName) {
-                                return $('#' + maskfieldName.slice(2, -2)).val();
-                            });
-                            $el.val(value);
-
-                        });
-                    };
-                    if ($field.length) {
-                        $field.bind(events || 'keyup change blur click', filler);
-                        filler.call($field, true);
-                    }
-
-                });
-            },
-            _buildReverseIndex: function(masks) {
-                var self = this;
-                var fieldReverseIndex = {};
-                $.each(masks, function(field, mask) {
-                    $.each(mask.toString().match(self.varsRegexp) || [], function(key, maskName) {
-                        var fieldName = maskName.slice(2, -2);
-                        if (!(fieldName in fieldReverseIndex)) {
-                            fieldReverseIndex[fieldName] = [];
+            $.each(self._fieldReverseIndex, function(field) {
+                var fields = this, $field = $('#' + field);
+                var filler = function(onlyText) {
+                    $.each(fields, function() {
+                        var $el = $('#' + this);
+                        if ($el.data(self.data.disabled)) {
+                            return;
                         }
-                        fieldReverseIndex[fieldName].push(field);
-                    })
-                });
-                return fieldReverseIndex;
-            }
-        });
+                        if (onlyText === true && self.varRegexp.test(self._masks[this])) {
+                            return;
+                        }
+                        var value = self._masks[this].replace(self.varsRegexp, function(maskfieldName) {
+                            return $('#' + maskfieldName.slice(2, -2)).val();
+                        });
+                        $el.val(value);
 
-        new Autogenerator(masks).bindAll();
-    })(jQuery);
-});
+                    });
+                };
+                if ($field.length) {
+                    $field.bind(events || 'keyup change blur click', filler);
+                    filler.call($field, true);
+                }
 
-jQuery(function($) {
+            });
+        },
+        _buildReverseIndex: function(masks) {
+            var self = this;
+            var fieldReverseIndex = {};
+            $.each(masks, function(field, mask) {
+                $.each(mask.toString().match(self.varsRegexp) || [], function(key, maskName) {
+                    var fieldName = maskName.slice(2, -2);
+                    if (!(fieldName in fieldReverseIndex)) {
+                        fieldReverseIndex[fieldName] = [];
+                    }
+                    fieldReverseIndex[fieldName].push(field);
+                })
+            });
+            return fieldReverseIndex;
+        }
+    });
+
+    new Autogenerator(masks).bindAll();
+
     var data = <?php echo $this->getTypeSwitcherData();?>;
     new TypeSwitcher(data).bindAll();
-});
 
-//]]>
+    $('.widget-button-save .item-default, #save-split-button-duplicate-button[onclick=""]').parent().hide();
+    var $form = $('#product-edit-form'),
+        fieldSelector = '.required-entry, .required-option-select';
+    $form.on('focus change keyup click', fieldSelector + ',:checkbox,button', function () {
+        var disabled = false;
+        $.each($form.find(fieldSelector), function () {
+            if (!$.trim($(this).val()) && !$(this).closest('.ignore-validate').length
+                && $(this).is('input, select, textarea') && !$(this).prop('disabled')
+            ) {
+                disabled = true;
+                return false;
+            }
+        });
+        $('.widget-button-save, .widget-button-save > *').toggleClass('disabled', disabled).prop('disabled', disabled);
+    });
+
+    $(window).load(function() {
+        $('#name').focus().val($('#name').val());
+    });
+});
 </script>

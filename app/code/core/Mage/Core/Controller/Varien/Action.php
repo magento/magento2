@@ -1120,6 +1120,8 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
         $contentType = 'application/octet-stream',
         $contentLength = null)
     {
+        /** @var Magento_Filesystem $filesystem */
+        $filesystem = $this->_objectManager->create('Magento_Filesystem');
         $isFile = false;
         $file   = null;
         if (is_array($content)) {
@@ -1129,7 +1131,7 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
             if ($content['type'] == 'filename') {
                 $isFile         = true;
                 $file           = $content['value'];
-                $contentLength  = filesize($file);
+                $contentLength  = $filesystem->getFileSize($file);
             }
         }
 
@@ -1147,18 +1149,16 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
                 $this->getResponse()->clearBody();
                 $this->getResponse()->sendHeaders();
 
-                $ioAdapter = new Varien_Io_File();
-                if (!$ioAdapter->fileExists($file)) {
+                if (!$filesystem->isFile($file)) {
                     Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('File not found'));
                 }
-                $ioAdapter->open(array('path' => $ioAdapter->dirname($file)));
-                $ioAdapter->streamOpen($file, 'r');
-                while ($buffer = $ioAdapter->streamRead()) {
+                $stream = $filesystem->createAndOpenStream($file, 'r');
+                while ($buffer = $stream->read(1024)) {
                     print $buffer;
                 }
-                $ioAdapter->streamClose();
+                $stream->close();
                 if (!empty($content['rm'])) {
-                    $ioAdapter->rm($file);
+                    $filesystem->delete($file);
                 }
 
                 exit(0);

@@ -41,6 +41,9 @@
     <tr>
         <td width="360" style="border-right:1px solid #ddd; padding:0 23px 23px 0;" class="edit-attribute-set">
             <?php echo $this->getSetFormHtml() ?>
+            <script type="text/javascript">
+                jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
+            </script>
         </td>
         <td width="320" style="border-right:1px solid #ddd; padding:0 23px 23px 23px;">
             <div class="content-header skip-header">
@@ -336,8 +339,7 @@
                     save : function() {
                         $('messages').update();
                         TreePanels.rebuildTrees();
-                        var _validator = new Validation('set-prop-form', {onSubmit:false});
-                        if( !_validator.validate() ) {
+                        if(!jQuery('#set-prop-form').valid()) {
                             return;
                         }
                         editSet.req.attribute_set_name = $('attribute_set_name').value;

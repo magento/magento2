@@ -104,22 +104,17 @@ class Mage_Catalog_Model_Resource_Product_Collection_AssociatedProduct
      */
     public function _prepareSelect(Varien_Db_Select $select)
     {
-        $allowProductTypes = array();
+        $allowedProductTypes = array();
         foreach ($this->_configurationHelper->getConfigurableAllowedTypes() as $type) {
-            $allowProductTypes[] = $type->getName();
+            $allowedProductTypes[] = $type->getName();
         }
 
-        $product = $this->getProduct();
-
         $this->addAttributeToSelect('name')
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('attribute_set_id')
-            ->addAttributeToSelect('type_id')
             ->addAttributeToSelect('price')
+            ->addAttributeToSelect('sku')
             ->addAttributeToSelect('weight')
-            ->addFieldToFilter('attribute_set_id', $product->getAttributeSetId())
-            ->addFieldToFilter('type_id', $allowProductTypes)
-            ->addFieldToFilter($product->getIdFieldName(), array('neq' => $product->getId()))
+            ->addFieldToFilter('type_id', $allowedProductTypes)
+            ->addFieldToFilter('entity_id', array('neq' => $this->getProduct()->getId()))
             ->addFilterByRequiredOptions()
             ->joinAttribute('name', 'catalog_product/name', 'entity_id', null, 'inner');
 

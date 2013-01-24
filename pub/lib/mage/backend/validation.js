@@ -107,11 +107,18 @@
          * @param {Object} The jQuery XMLHttpRequest object returned by $.ajax()
          */
         _onSuccess: function(response) {
+            var attributes = response.attributes || {};
             if (response.attribute) {
-                $('#' + response.attribute)
-                    .addClass('validate-ajax-error')
-                    .data('msg-validate-ajax-error', response.message);
-                this.validate.element( "#" + response.attribute);
+                attributes[response.attribute] = response.message;
+            }
+
+            for (var attributeCode in attributes) {
+                if (attributes.hasOwnProperty(attributeCode)) {
+                    $('#' + attributeCode)
+                        .addClass('validate-ajax-error')
+                        .data('msg-validate-ajax-error', attributes[attributeCode]);
+                    this.validate.element("#" + attributeCode);
+                }
             }
             if (!response.error) {
                 this.element[0].submit();

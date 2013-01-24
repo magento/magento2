@@ -33,25 +33,43 @@ $options = $this->getChildBlock('customer.wishlist.item.options')
     ->getConfiguredOptions();
 ?>
 <div class="cart-cell">
-<?php echo $this->getPriceHtml($product, empty($options));?>
-<div class="add-to-cart-alt">
-<?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
-    <input type="text" class="input-text qty validate-not-negative-number" name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>" />
-<?php endif; ?>
-<?php if ($product->isSaleable()): ?>
-    <button type="button" title="<?php echo $this->__('Add to Cart') ?>" onclick="addWItemToCart(<?php echo $item->getId()?>);" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
-<?php else: ?>
-    <?php if ($product->getIsSalable()): ?>
-        <p class="availability in-stock"><span><?php echo $this->__('In stock') ?></span></p>
-    <?php else: ?>
-        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
-    <?php endif; ?>
-<?php endif; ?>
+    <?php echo $this->getPriceHtml($product, empty($options));?>
+    <div class="add-to-cart-alt">
+        <?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
+        <input type="text" class="input-text qty" data-validate="{'validate-greater-than-zero':true}" name="qty[<?php echo $item->getId() ?>]"
+            value="<?php echo $this->getAddToCartQty($item) * 1 ?>"/>
+        <?php endif; ?>
+        <?php if ($product->isSaleable()): ?>
+        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="button btn-cart"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+        <?php else: ?>
+            <?php if ($product->getIsSalable()): ?>
+            <p class="availability in-stock"><span><?php echo $this->__('In stock') ?></span></p>
+            <?php else: ?>
+            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?php foreach ($this->getChildNames() as $childName): ?>
+    <?php echo $this->getLayout()->renderElement($childName, false); ?>
+    <?php endforeach;?>
+    <?php if ($product->isVisibleInSiteVisibility()): ?>
+    <p><a class="link-edit" href="<?php echo $this->getItemConfigureUrl($item) ?>"><?php echo $this->__('Edit') ?></a>
+    </p>
+    <?php endif ?>
 </div>
-<?php foreach($this->getChildNames() as $childName):?>
-    <?php echo $this->getLayout()->renderElement($childName, false);?>
-<?php endforeach;?>
-<?php if ($product->isVisibleInSiteVisibility()): ?>
-    <p><a class="link-edit" href="<?php echo $this->getItemConfigureUrl($item) ?>"><?php echo $this->__('Edit') ?></a></p>
-<?php endif ?>
-</div>
+<script>
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('Mage_Wishlist::cart.js')?>", function() {
+            $.mage.addWishListToCart({
+                addToCartUrl: '<?php echo $this->getItemAddToCartUrl('%item%');?>' ,
+                confirmRemoveMessage: '<?php echo $this->__('Are you sure you want to remove this product from your wishlist?') ?>',
+                addAllToCartUrl : '<?php echo $this->getUrl('*/*/allcart', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>',
+                commentString : '<?php echo $this->helper('Mage_Wishlist_Helper_Data')->defaultCommentString()?>'
+            });
+        });
+    })(jQuery);
+</script>

@@ -30,12 +30,12 @@ LoaderTest.prototype.testInit = function() {
     loader.loader('destroy');
 };
 // @TODO Need to be fixed to avoid errors on the bamboo server in context of MAGETWO-5085 ticket
-LoaderTest.prototype._testCreateOnBeforeSend = function() {
+/*LoaderTest.prototype._testCreateOnBeforeSend = function() {
     /*:DOC += <div id="loader"></div> */
-    var loader = jQuery('#loader').trigger('ajaxSend');
+/*  var loader = jQuery('#loader').trigger('ajaxSend');
     assertEquals(true, loader.is(':mage-loader'));
     loader.loader('destroy');
-};
+};*/
 LoaderTest.prototype.testLoaderOnBody = function() {
     jQuery('body').loader();
     assertEquals(true, jQuery('body div:first').is('.loading-mask'));

@@ -42,17 +42,26 @@
 
     <adminhtml_system_design_theme_edit>
         <reference name="head">
-            <action method="addJs"><file>Mage_Theme::system/design/form.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.iframe-transport.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload.js</file></action>
+
+            <action method="addJs"><file>Mage_Theme::js/form.js</file></action>
         </reference>
         <reference name="content">
             <block type="Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit" name="theme_edit"/>
         </reference>
         <reference name="left">
             <block type="Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tabs" name="theme_edit_tabs">
+                <block template="tabs/css.phtml" type="Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_Css"
+                       name="theme_edit_tabs_tab_css_tab" />
+
                 <action method="addTab">
                     <name>general_section</name>
                     <block>Mage_Theme_Block_Adminhtml_System_Design_Theme_Edit_Tab_General</block>
                 </action>
+                <action method="addTab">
+                    <name>css_tab</name>
+                    <block>theme_edit_tabs_tab_css_tab</block></action>
             </block>
         </reference>
     </adminhtml_system_design_theme_edit>

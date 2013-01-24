@@ -28,9 +28,10 @@
 class Mage_Backend_Model_Config_DataTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @covers Mage_Backend_Model_Config::save
      * @param array $groups
      * @magentoDbIsolation enabled
-     * @dataProvider saveDataProvider
+     * @dataProvider saveWithSingleStoreModeEnabledDataProvider
      * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      */
     public function testSaveWithSingleStoreModeEnabled($groups)
@@ -67,8 +68,41 @@ class Mage_Backend_Model_Config_DataTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
     }
 
-    public function saveDataProvider()
+    public function saveWithSingleStoreModeEnabledDataProvider()
     {
         return require(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config_groups.php');
+    }
+
+    /**
+     * @covers Mage_Backend_Model_Config::save
+     * @param string $section
+     * @param array $groups
+     * @param array $expected
+     * @magentoDbIsolation enabled
+     * @dataProvider saveDataProvider
+     */
+    public function testSave($section, $groups, $expected)
+    {
+        /** @var $_configDataObject Mage_Backend_Model_Config */
+        $_configDataObject = Mage::getModel('Mage_Backend_Model_Config');
+        $_configDataObject->setSection($section)
+            ->setGroups($groups)
+            ->save();
+
+        $_configDataObject = Mage::getModel('Mage_Backend_Model_Config');
+        foreach ($expected as $group => $expectedData) {
+            $_configData = $_configDataObject->setSection($group)
+                ->load();
+            if (array_key_exists('payment/payflow_link/pwd', $_configData)) {
+                $_configData['payment/payflow_link/pwd'] = Mage::helper('Mage_Core_Helper_Data')
+                    ->decrypt($_configData['payment/payflow_link/pwd']);
+            }
+            $this->assertEquals($expectedData, $_configData);
+        }
+    }
+
+    public function saveDataProvider()
+    {
+        return require(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'config_section.php');
     }
 }

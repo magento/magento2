@@ -138,7 +138,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Action
                     break;
 
                 case 'url':
-                    if (is_array($action['url'])) {
+                    if (is_array($action['url']) && isset($action['field'])) {
                         $params = array($action['field']=>$this->_getValue($row));
                         if (isset($action['url']['params'])) {
                             $params = array_merge($action['url']['params'], $params);

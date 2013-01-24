@@ -57,16 +57,15 @@ Supported layout update handles (special):
                 <action method="setTitle" translate="title"><title>Magento Admin</title></action>
                 <action method="addJs"><file>jquery/jquery.min.js</file></action>
                 <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-                <action method="addJs"><file>jquery/jquery-ui.min.js</file></action>
+                <action method="addJs"><file>jquery/jquery-ui.custom.min.js</file></action>
+                <action method="addJs"><file>head.load.min.js</file></action>
+                <action method="addJs"><file>mage/mage.js</file></action>
+                <action method="addJs"><file>mage/backend/button.js</file></action>
                 <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
-                <action method="addJs"><file>jquery/jquery.validate.js</file></action>
                 <action method="addJs"><file>mage/translate.js</file></action>
-                <action method="addJs"><file>mage/validation.js</file></action>
-                <action method="addJs"><file>mage/backend/validation.js</file></action>
-                <action method="addJs"><file>mage/backend/notification.js</file></action>
                 <action method="addJs"><file>mage/backend/bootstrap.js</file></action>
-                <action method="addJs"><file>mage/backend/form.js</file></action>
-                <action method="addJs"><file>mage/loader.js</file></action>
+                <action method="addJs"><file>mage/backend/floating-header.js</file></action>
+
                 <action method="addJs"><file>prototype/prototype.js</file></action>
                 <action method="addJs"><file>mage/adminhtml/fix-extjs-defer.js</file><params/><if/><condition>can_load_ext_js</condition></action>
                 <action method="addJs"><file>mage/adminhtml/fix-extjs-defer-before.js</file><params/><if/><condition>can_load_ext_js</condition></action>
@@ -106,6 +105,7 @@ Supported layout update handles (special):
 
                 <action method="addJs"><file>mage/adminhtml/wysiwyg/tiny_mce/setup.js</file><params/><if/><condition>can_load_tiny_mce</condition></action>
 
+                <block type="Mage_Core_Block_Template" name="head.components" as="components" template="Mage_Adminhtml::page/js/components.phtml"/>
                 <block type="Mage_Core_Block_Html_Calendar" name="head.calendar" as="calendar" template="Mage_Adminhtml::page/js/calendar.phtml"/>
             </block>
 

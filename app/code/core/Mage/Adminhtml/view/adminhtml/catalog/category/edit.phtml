@@ -72,7 +72,7 @@
             params.form_key = FORM_KEY;
         }
 
-        toolbarToggle.stop();
+        jQuery('.content-header').floatingHeader('destroy');
 
        /*if(params.node_name)
        {
@@ -96,7 +96,7 @@
                         if (refreshTree) {
                             thisObj.refreshTreeArea();
                         }
-                        toolbarToggle.start();
+                        jQuery('.content-header').floatingHeader();
                     } catch (e) {
                         alert(e.message);
                     };

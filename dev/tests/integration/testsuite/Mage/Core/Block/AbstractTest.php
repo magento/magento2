@@ -424,11 +424,11 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     public function testGetChildData()
     {
         $parent = $this->_createBlockWithLayout('parent', 'parent');
-        $block = $this->_createBlockWithLayout('block', 'block', 'Mage_Core_Block_Template');
+        $block = $this->_createBlockWithLayout('block', 'block', 'Mage_Core_Block_Text');
         $block->setSomeValue('value');
         $parent->setChild('block1', $block);
         $this->assertEquals(
-            array('type' => 'Mage_Core_Block_TemplateMock', 'some_value' => 'value'),
+            array('type' => 'Mage_Core_Block_TextMock', 'some_value' => 'value'),
             $parent->getChildData('block1')
         );
         $this->assertEquals('value', $parent->getChildData('block1', 'some_value'));

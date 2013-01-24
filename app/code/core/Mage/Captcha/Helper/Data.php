@@ -54,6 +54,11 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_CAPTCHA_FONTS = 'default/captcha/fonts';
 
     /**
+     * Default captcha type
+     */
+    const DEFAULT_CAPTCHA_TYPE = 'Zend';
+
+    /**
      * List uses Models of Captcha
      * @var array
      */
@@ -65,110 +70,33 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_option;
 
     /**
-     * @var Mage_Core_Model_Store
-     */
-    protected $_store;
-
-    /**
      * @var Mage_Core_Model_Config
      */
     protected $_config;
 
     /**
-     * @var Mage_Core_Model_Website
+     * @var Magento_Filesystem
      */
-    protected $_website;
+    protected $_filesystem;
 
     /**
-     * Get Config
-     * @return Mage_Core_Model_Config
+     * @var Mage_Core_Model_App
      */
-    public function getConfig()
-    {
-        if (empty($this->_config)) {
-            $this->_config = Mage::getConfig();
-        }
-        return $this->_config;
-    }
+    protected $_app;
 
     /**
-     * Set config
-     *
+     * @param Mage_Core_Model_App $app
      * @param Mage_Core_Model_Config $config
+     * @param Magento_Filesystem $filesystem
      */
-    public function setConfig($config)
-    {
+    public function __construct(
+        Mage_Core_Model_App $app,
+        Mage_Core_Model_Config $config,
+        Magento_Filesystem $filesystem
+    ) {
+        $this->_app = $app;
         $this->_config = $config;
-    }
-
-    /**
-     * Set store
-     *
-     * @param Mage_Core_Model_Store $store
-     */
-    public function setStore($store)
-    {
-        $this->_store = $store;
-    }
-
-    /**
-     * Get store
-     *
-     * @param null|string|bool|int|Mage_Core_Model_Store $storeName
-     * @return Mage_Core_Model_Store
-     * @throws Mage_Core_Model_Store_Exception
-     */
-    public function getStore($storeName = null)
-    {
-        if (empty($this->_store)) {
-            $this->_store = Mage::app()->getStore($storeName);
-        }
-        return $this->_store;
-    }
-
-    /**
-     * Set option
-     *
-     * @param Mage_Core_Model_Config_Options $option
-     */
-    public function setOption($option)
-    {
-        $this->_option = $option;
-    }
-
-    /**
-     * Get option
-     *
-     * @return Mage_Core_Model_Config_Options
-     */
-    public function getOption()
-    {
-        if (empty($this->_option)) {
-            $this->_option = $this->getConfig()->getOptions();
-        }
-        return $this->_option;
-    }
-
-    /**
-     * Set website
-     * @param Mage_Core_Model_Website $website
-     */
-    public function setWebsite($website)
-    {
-        $this->_website = $website;
-    }
-
-    /**
-     * Get website
-     * @param string $websiteCode
-     * @return Mage_Core_Model_Website
-     */
-    public function getWebsite($websiteCode)
-    {
-        if (empty($this->_website)) {
-            $this->_website =  Mage::app()->getWebsite($websiteCode);
-        }
-        return $this->_website;
+        $this->_filesystem = $filesystem;
     }
 
     /**
@@ -181,7 +109,10 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if (!array_key_exists($formId, $this->_captcha)) {
             $type = ucfirst($this->getConfigNode('type'));
-            $this->_captcha[$formId] = $this->getConfig()->getModelInstance(
+            if (!$type) {
+                $type = self::DEFAULT_CAPTCHA_TYPE;
+            }
+            $this->_captcha[$formId] = $this->_config->getModelInstance(
                 'Mage_Captcha_Model_' . $type,
                 array(
                     'params' => array('formId' => $formId, 'helper' => $this)
@@ -200,14 +131,14 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getConfigNode($id, $store = null)
     {
-        $areaCode = $this->getStore($store)->isAdmin() ? 'admin' : 'customer';
-        return $this->getStore($store)->getConfig( $areaCode . '/captcha/' . $id, $store);
+        $store = $this->_app->getStore($store);
+        $areaCode = $store->isAdmin() ? 'admin' : 'customer';
+        return $store->getConfig($areaCode . '/captcha/' . $id, $store);
     }
 
-
-
     /**
-     * Get list of available fonts
+     * Get list of available fonts.
+     *
      * Return format:
      * [['arial'] => ['label' => 'Arial', 'path' => '/www/magento/fonts/arial.ttf']]
      *
@@ -215,14 +146,14 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getFonts()
     {
-        $node = $this->getConfig()->getNode(Mage_Captcha_Helper_Data::XML_PATH_CAPTCHA_FONTS);
+        $node = $this->_config->getNode(Mage_Captcha_Helper_Data::XML_PATH_CAPTCHA_FONTS);
         $fonts = array();
         if ($node) {
             foreach ($node->children() as $fontName => $fontNode) {
-               $fonts[$fontName] = array(
-                   'label' => (string)$fontNode->label,
-                   'path' => $this->getOption()->getDir('base') . DIRECTORY_SEPARATOR . $fontNode->path
-               );
+                $fonts[$fontName] = array(
+                    'label' => (string)$fontNode->label,
+                    'path' => $this->_config->getOptions()->getDir('base') . DIRECTORY_SEPARATOR . $fontNode->path
+                );
             }
         }
         return $fonts;
@@ -236,11 +167,13 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getImgDir($website = null)
     {
-        $captchaDir = $this->getOption()->getDir('media') . DIRECTORY_SEPARATOR . 'captcha' . DIRECTORY_SEPARATOR
-            . $this->getWebsite($website)->getCode() . DIRECTORY_SEPARATOR;
-        $io = new Varien_Io_File();
-        $io->checkAndCreateFolder($captchaDir, 0755);
-        return $captchaDir;
+        $mediaDir = $this->_config->getOptions()->getDir('media');
+        $captchaDir = Magento_Filesystem::getPathFromArray(array($mediaDir, 'captcha',
+            $this->_app->getWebsite($website)->getCode()));
+        $this->_filesystem->setWorkingDirectory($mediaDir);
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->ensureDirectoryExists($captchaDir, 0755);
+        return $captchaDir . Magento_Filesystem::DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -251,6 +184,7 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getImgUrl($website = null)
     {
-        return $this->getStore()->getBaseUrl('media') . 'captcha' . '/' . $this->getWebsite($website)->getCode() . '/';
+        return $this->_app->getStore()->getBaseUrl('media') . 'captcha'
+            . '/' . $this->_app->getWebsite($website)->getCode() . '/';
     }
 }

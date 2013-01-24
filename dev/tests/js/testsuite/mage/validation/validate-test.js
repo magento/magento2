@@ -25,277 +25,380 @@
 MageValidationTest = TestCase('MageValidationTest');
 
 MageValidationTest.prototype.testValidateNoHtmlTags = function () {
-    assertEquals(true, $.validator.methods.validateNoHtmlTags(""));
-    assertEquals(true, $.validator.methods.validateNoHtmlTags(null));
-    assertEquals(true, $.validator.methods.validateNoHtmlTags("abc"));
-    assertEquals(false, $.validator.methods.validateNoHtmlTags("<div>abc</div>"));
+    assertEquals(true, $.validator.methods['validate-no-html-tags'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-no-html-tags'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-no-html-tags'].call(this, "abc"));
+    assertEquals(false, $.validator.methods['validate-no-html-tags'].call(this, "<div>abc</div>"));
 };
 
 MageValidationTest.prototype.testAllowContainerClassName = function () {
     /*:DOC radio = <input type="radio" class="change-container-classname"/>*/
-    assertEquals(true, $.validator.methods.allowContainerClassName(this.radio));
+    assertEquals(true, $.validator.methods['allow-container-className'].call(this, this.radio));
     /*:DOC checkbox = <input type="checkbox" class="change-container-classname"/>*/
-    assertEquals(true, $.validator.methods.allowContainerClassName(this.checkbox));
+    assertEquals(true, $.validator.methods['allow-container-className'].call(this, this.checkbox));
     /*:DOC radio2 = <input type="radio"/>*/
-    assertEquals(false, $.validator.methods.allowContainerClassName(this.radio2));
+    assertEquals(false, $.validator.methods['allow-container-className'].call(this, this.radio2));
     /*:DOC checkbox2 = <input type="checkbox"/>*/
-    assertEquals(false, $.validator.methods.allowContainerClassName(this.checkbox2));
+    assertEquals(false, $.validator.methods['allow-container-className'].call(this, this.checkbox2));
 };
 
 MageValidationTest.prototype.testValidateSelect = function () {
-    assertEquals(false, $.validator.methods.validateSelect(""));
-    assertEquals(false, $.validator.methods.validateSelect("none"));
-    assertEquals(false, $.validator.methods.validateSelect(null));
-    assertEquals(false, $.validator.methods.validateSelect(undefined));
-    assertEquals(true, $.validator.methods.validateSelect("abc"));
+    assertEquals(false, $.validator.methods['validate-select'].call(this, ""));
+    assertEquals(false, $.validator.methods['validate-select'].call(this, "none"));
+    assertEquals(false, $.validator.methods['validate-select'].call(this, null));
+    assertEquals(false, $.validator.methods['validate-select'].call(this, undefined));
+    assertEquals(true, $.validator.methods['validate-select'].call(this, "abc"));
 };
 
-MageValidationTest.prototype.testIsEmpty = function () {
-    assertEquals(true, $.validator.methods.isEmpty(""));
-    assertEquals(true, $.validator.methods.isEmpty(null));
-    assertEquals(true, $.validator.methods.isEmpty(undefined));
-    assertEquals(true, $.validator.methods.isEmpty("   "));
+MageValidationTest.prototype.testValidateNotEmpty = function () {
+    assertEquals(true, $.validator.methods['validate-no-empty'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-no-empty'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-no-empty'].call(this, undefined));
+    assertEquals(true, $.validator.methods['validate-no-empty'].call(this, "   "));
 };
 
 MageValidationTest.prototype.testValidateAlphanumWithSpaces = function () {
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces(""));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces(null));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces(undefined));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces("   "));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces("abc   "));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces(" 123  "));
-    assertEquals(true, $.validator.methods.validateAlphanumWithSpaces("  abc123 "));
-    assertEquals(false, $.validator.methods.validateAlphanumWithSpaces("  !@# "));
-    assertEquals(false, $.validator.methods.validateAlphanumWithSpaces("  abc.123 "));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, undefined));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, "abc   "));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, " 123  "));
+    assertEquals(true, $.validator.methods['validate-alphanum-with-spaces'].call(this, "  abc123 "));
+    assertEquals(false, $.validator.methods['validate-alphanum-with-spaces'].call(this, "  !@# "));
+    assertEquals(false, $.validator.methods['validate-alphanum-with-spaces'].call(this, "  abc.123 "));
 };
 
 MageValidationTest.prototype.testValidateStreet = function () {
-    assertEquals(true, $.validator.methods.validateStreet(""));
-    assertEquals(true, $.validator.methods.validateStreet(null));
-    assertEquals(true, $.validator.methods.validateStreet(undefined));
-    assertEquals(false, $.validator.methods.validateStreet("   "));
-    assertEquals(true, $.validator.methods.validateStreet("1234 main st"));
-    assertEquals(true, $.validator.methods.validateStreet("7700 w parmer ln"));
-    assertEquals(true, $.validator.methods.validateStreet("7700 w parmer ln #125"));
-    assertEquals(false, $.validator.methods.validateStreet("!@# w parmer ln $125"));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-street'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, "1234 main st"));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, "7700 w parmer ln"));
+    assertEquals(true, $.validator.methods['validate-street'].call(this, "7700 w parmer ln #125"));
+    assertEquals(false, $.validator.methods['validate-street'].call(this, "!@# w parmer ln $125"));
 };
 
 MageValidationTest.prototype.testValidatePhoneStrict = function () {
-    assertEquals(true, $.validator.methods.validatePhoneStrict(""));
-    assertEquals(true, $.validator.methods.validatePhoneStrict(null));
-    assertEquals(true, $.validator.methods.validatePhoneStrict(undefined));
-    assertEquals(false, $.validator.methods.validatePhoneStrict("   "));
-    assertEquals(false, $.validator.methods.validatePhoneStrict("5121231234"));
-    assertEquals(false, $.validator.methods.validatePhoneStrict("512.123.1234"));
-    assertEquals(true, $.validator.methods.validatePhoneStrict("512-123-1234"));
-    assertEquals(true, $.validator.methods.validatePhoneStrict("(512)123-1234"));
-    assertEquals(true, $.validator.methods.validatePhoneStrict("(512) 123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-phoneStrict'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-phoneStrict'].call(this, "5121231234"));
+    assertEquals(false, $.validator.methods['validate-phoneStrict'].call(this, "512.123.1234"));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, "512-123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, "(512)123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneStrict'].call(this, "(512) 123-1234"));
 };
 
 MageValidationTest.prototype.testValidatePhoneLax = function () {
-    assertEquals(true, $.validator.methods.validatePhoneLax(""));
-    assertEquals(true, $.validator.methods.validatePhoneLax(null));
-    assertEquals(true, $.validator.methods.validatePhoneLax(undefined));
-    assertEquals(false, $.validator.methods.validatePhoneLax("   "));
-    assertEquals(true, $.validator.methods.validatePhoneLax("5121231234"));
-    assertEquals(true, $.validator.methods.validatePhoneLax("512.123.1234"));
-    assertEquals(true, $.validator.methods.validatePhoneLax("512-123-1234"));
-    assertEquals(true, $.validator.methods.validatePhoneLax("(512)123-1234"));
-    assertEquals(true, $.validator.methods.validatePhoneLax("(512) 123-1234"));
-    assertEquals(true, $.validator.methods.validatePhoneLax("(512)1231234"));
-    assertEquals(false, $.validator.methods.validatePhoneLax("(512)_123_1234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-phoneLax'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "5121231234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "512.123.1234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "512-123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "(512)123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "(512) 123-1234"));
+    assertEquals(true, $.validator.methods['validate-phoneLax'].call(this, "(512)1231234"));
+    assertEquals(false, $.validator.methods['validate-phoneLax'].call(this, "(512)_123_1234"));
 };
 
 MageValidationTest.prototype.testValidateFax = function () {
-    assertEquals(true, $.validator.methods.validateFax(""));
-    assertEquals(true, $.validator.methods.validateFax(null));
-    assertEquals(true, $.validator.methods.validateFax(undefined));
-    assertEquals(false, $.validator.methods.validateFax("   "));
-    assertEquals(false, $.validator.methods.validateFax("5121231234"));
-    assertEquals(false, $.validator.methods.validateFax("512.123.1234"));
-    assertEquals(true, $.validator.methods.validateFax("512-123-1234"));
-    assertEquals(true, $.validator.methods.validateFax("(512)123-1234"));
-    assertEquals(true, $.validator.methods.validateFax("(512) 123-1234"));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-fax'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-fax'].call(this, "5121231234"));
+    assertEquals(false, $.validator.methods['validate-fax'].call(this, "512.123.1234"));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, "512-123-1234"));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, "(512)123-1234"));
+    assertEquals(true, $.validator.methods['validate-fax'].call(this, "(512) 123-1234"));
 };
 
 MageValidationTest.prototype.testValidateEmail = function () {
-    assertEquals(true, $.validator.methods.validateEmail(""));
-    assertEquals(true, $.validator.methods.validateEmail(null));
-    assertEquals(true, $.validator.methods.validateEmail(undefined));
-    assertEquals(false, $.validator.methods.validateEmail("   "));
-    assertEquals(true, $.validator.methods.validateEmail("123@123.com"));
-    assertEquals(true, $.validator.methods.validateEmail("abc@124.en"));
-    assertEquals(true, $.validator.methods.validateEmail("abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmail("abc.abc.abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmail("abc.abc-abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmail("abc.abc_abc@abc.commmmm"));
-    assertEquals(false, $.validator.methods.validateEmail("abc.abc_abc@abc"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-email'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "123@123.com"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "abc@124.en"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "abc.abc.abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "abc.abc-abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-email'].call(this, "abc.abc_abc@abc.commmmm"));
+    assertEquals(false, $.validator.methods['validate-email'].call(this, "abc.abc_abc@abc"));
 };
 
 MageValidationTest.prototype.testValidateEmailSender = function () {
-    assertEquals(true, $.validator.methods.validateEmailSender(""));
-    assertEquals(true, $.validator.methods.validateEmailSender(null));
-    assertEquals(true, $.validator.methods.validateEmailSender(undefined));
-    assertEquals(true, $.validator.methods.validateEmailSender("   "));
-    assertEquals(true, $.validator.methods.validateEmailSender("123@123.com"));
-    assertEquals(true, $.validator.methods.validateEmailSender("abc@124.en"));
-    assertEquals(true, $.validator.methods.validateEmailSender("abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmailSender("abc.abc.abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmailSender("abc.abc-abc@abc.commmmm"));
-    assertEquals(true, $.validator.methods.validateEmailSender("abc.abc_abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call(null));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call(undefined));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("   "));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("123@123.com"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("abc@124.en"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("abc.abc.abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("abc.abc-abc@abc.commmmm"));
+    assertEquals(true, $.validator.methods['validate-emailSender'].call("abc.abc_abc@abc.commmmm"));
 };
 
 MageValidationTest.prototype.testValidatePassword = function () {
-    assertEquals(true, $.validator.methods.validatePassword(""));
-    assertEquals(false, $.validator.methods.validatePassword(null));
-    assertEquals(false, $.validator.methods.validatePassword(undefined));
-    assertEquals(true, $.validator.methods.validatePassword("   "));
-    assertEquals(true, $.validator.methods.validatePassword("123@123.com"));
-    assertEquals(false, $.validator.methods.validatePassword("abc"));
-    assertEquals(false, $.validator.methods.validatePassword("abc       "));
-    assertEquals(false, $.validator.methods.validatePassword("     abc      "));
-    assertEquals(false, $.validator.methods.validatePassword("dddd"));
+    assertEquals(true, $.validator.methods['validate-password'].call(this, ""));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, null));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, undefined));
+    assertEquals(true, $.validator.methods['validate-password'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-password'].call(this, "123@123.com"));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, "abc"));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, "abc       "));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, "     abc      "));
+    assertEquals(false, $.validator.methods['validate-password'].call(this, "dddd"));
 };
 
 MageValidationTest.prototype.testValidateAdminPassword = function () {
-    assertEquals(true, $.validator.methods.validateAdminPassword(""));
-    assertEquals(false, $.validator.methods.validateAdminPassword(null));
-    assertEquals(false, $.validator.methods.validateAdminPassword(undefined));
-    assertEquals(true, $.validator.methods.validateAdminPassword("   "));
-    assertEquals(true, $.validator.methods.validateAdminPassword("123@123.com"));
-    assertEquals(false, $.validator.methods.validateAdminPassword("abc"));
-    assertEquals(false, $.validator.methods.validateAdminPassword("abc       "));
-    assertEquals(false, $.validator.methods.validateAdminPassword("     abc      "));
-    assertEquals(false, $.validator.methods.validateAdminPassword("dddd"));
+    assertEquals(true, $.validator.methods['validate-admin-password'].call(this, ""));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, null));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, undefined));
+    assertEquals(true, $.validator.methods['validate-admin-password'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-admin-password'].call(this, "123@123.com"));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, "abc"));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, "abc       "));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, "     abc      "));
+    assertEquals(false, $.validator.methods['validate-admin-password'].call(this, "dddd"));
 };
 
 MageValidationTest.prototype.testValidateUrl = function () {
-    assertEquals(true, $.validator.methods.validateUrl(""));
-    assertEquals(true, $.validator.methods.validateUrl(null));
-    assertEquals(true, $.validator.methods.validateUrl(undefined));
-    assertEquals(false, $.validator.methods.validateUrl("   "));
-    assertEquals(true, $.validator.methods.validateUrl("http://www.google.com"));
-    assertEquals(true, $.validator.methods.validateUrl("http://127.0.0.1:8080/index.php"));
-    assertEquals(true, $.validator.methods.validateUrl("http://app-spot.com/index.php"));
-    assertEquals(true, $.validator.methods.validateUrl("http://app-spot_space.com/index.php"));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-url'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, "http://www.google.com"));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, "http://127.0.0.1:8080/index.php"));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, "http://app-spot.com/index.php"));
+    assertEquals(true, $.validator.methods['validate-url'].call(this, "http://app-spot_space.com/index.php"));
 };
 
 MageValidationTest.prototype.testValidateCleanUrl = function () {
-    assertEquals(true, $.validator.methods.validateCleanUrl(""));
-    assertEquals(true, $.validator.methods.validateCleanUrl(null));
-    assertEquals(true, $.validator.methods.validateCleanUrl(undefined));
-    assertEquals(false, $.validator.methods.validateCleanUrl("   "));
-    assertEquals(true, $.validator.methods.validateCleanUrl("http://www.google.com"));
-    assertEquals(false, $.validator.methods.validateCleanUrl("http://127.0.0.1:8080/index.php"));
-    assertEquals(false, $.validator.methods.validateCleanUrl("http://127.0.0.1:8080"));
-    assertEquals(false, $.validator.methods.validateCleanUrl("http://127.0.0.1"));
+    assertEquals(true, $.validator.methods['validate-clean-url'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-clean-url'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-clean-url'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-clean-url'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-clean-url'].call(this, "http://www.google.com"));
+    assertEquals(false, $.validator.methods['validate-clean-url'].call(this, "http://127.0.0.1:8080/index.php"));
+    assertEquals(false, $.validator.methods['validate-clean-url'].call(this, "http://127.0.0.1:8080"));
+    assertEquals(false, $.validator.methods['validate-clean-url'].call(this, "http://127.0.0.1"));
 };
 
 MageValidationTest.prototype.testValidateXmlIdentifier = function () {
-    assertEquals(true, $.validator.methods.validateXmlIdentifier(""));
-    assertEquals(true, $.validator.methods.validateXmlIdentifier(null));
-    assertEquals(true, $.validator.methods.validateXmlIdentifier(undefined));
-    assertEquals(false, $.validator.methods.validateXmlIdentifier("   "));
-    assertEquals(true, $.validator.methods.validateXmlIdentifier("abc"));
-    assertEquals(true, $.validator.methods.validateXmlIdentifier("abc_123"));
-    assertEquals(true, $.validator.methods.validateXmlIdentifier("abc-123"));
-    assertEquals(false, $.validator.methods.validateXmlIdentifier("123-abc"));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-xml-identifier'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, "abc"));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, "abc_123"));
+    assertEquals(true, $.validator.methods['validate-xml-identifier'].call(this, "abc-123"));
+    assertEquals(false, $.validator.methods['validate-xml-identifier'].call(this, "123-abc"));
 };
 
 MageValidationTest.prototype.testValidateSsn = function () {
-    assertEquals(true, $.validator.methods.validateSsn(""));
-    assertEquals(true, $.validator.methods.validateSsn(null));
-    assertEquals(true, $.validator.methods.validateSsn(undefined));
-    assertEquals(false, $.validator.methods.validateSsn("   "));
-    assertEquals(false, $.validator.methods.validateSsn("abc"));
-    assertEquals(true, $.validator.methods.validateSsn("123-13-1234"));
-    assertEquals(true, $.validator.methods.validateSsn("012-12-1234"));
-    assertEquals(false, $.validator.methods.validateSsn("23-12-1234"));
+    assertEquals(true, $.validator.methods['validate-ssn'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-ssn'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-ssn'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-ssn'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-ssn'].call(this, "abc"));
+    assertEquals(true, $.validator.methods['validate-ssn'].call(this, "123-13-1234"));
+    assertEquals(true, $.validator.methods['validate-ssn'].call(this, "012-12-1234"));
+    assertEquals(false, $.validator.methods['validate-ssn'].call(this, "23-12-1234"));
 };
 
 MageValidationTest.prototype.testValidateZip = function () {
-    assertEquals(true, $.validator.methods.validateZip(""));
-    assertEquals(true, $.validator.methods.validateZip(null));
-    assertEquals(true, $.validator.methods.validateZip(undefined));
-    assertEquals(false, $.validator.methods.validateZip("   "));
-    assertEquals(true, $.validator.methods.validateZip("12345-1234"));
-    assertEquals(true, $.validator.methods.validateZip("02345"));
-    assertEquals(false, $.validator.methods.validateZip("1234"));
-    assertEquals(false, $.validator.methods.validateZip("1234-1234"));
+    assertEquals(true, $.validator.methods['validate-zip'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-zip'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-zip'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-zip'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-zip'].call(this, "12345-1234"));
+    assertEquals(true, $.validator.methods['validate-zip'].call(this, "02345"));
+    assertEquals(false, $.validator.methods['validate-zip'].call(this, "1234"));
+    assertEquals(false, $.validator.methods['validate-zip'].call(this, "1234-1234"));
 };
 
 MageValidationTest.prototype.testValidateDateAu = function () {
-    assertEquals(true, $.validator.methods.validateDateAu(""));
-    assertEquals(true, $.validator.methods.validateDateAu(null));
-    assertEquals(true, $.validator.methods.validateDateAu(undefined));
-    assertEquals(false, $.validator.methods.validateDateAu("   "));
-    assertEquals(true, $.validator.methods.validateDateAu("01/01/2012"));
-    assertEquals(true, $.validator.methods.validateDateAu("30/01/2012"));
-    assertEquals(false, $.validator.methods.validateDateAu("01/30/2012"));
-    assertEquals(false, $.validator.methods.validateDateAu("1/1/2012"));
+    assertEquals(true, $.validator.methods['validate-date-au'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-date-au'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-date-au'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-date-au'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-date-au'].call(this, "01/01/2012"));
+    assertEquals(true, $.validator.methods['validate-date-au'].call(this, "30/01/2012"));
+    assertEquals(false, $.validator.methods['validate-date-au'].call(this, "01/30/2012"));
+    assertEquals(false, $.validator.methods['validate-date-au'].call(this, "1/1/2012"));
 };
 
 MageValidationTest.prototype.testValidateCurrencyDollar = function () {
-    assertEquals(true, $.validator.methods.validateCurrencyDollar(""));
-    assertEquals(true, $.validator.methods.validateCurrencyDollar(null));
-    assertEquals(true, $.validator.methods.validateCurrencyDollar(undefined));
-    assertEquals(false, $.validator.methods.validateCurrencyDollar("   "));
-    assertEquals(true, $.validator.methods.validateCurrencyDollar("$123"));
-    assertEquals(true, $.validator.methods.validateCurrencyDollar("$1,123.00"));
-    assertEquals(true, $.validator.methods.validateCurrencyDollar("$1234"));
-    assertEquals(false, $.validator.methods.validateCurrencyDollar("$1234.1234"));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-currency-dollar'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, "$123"));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, "$1,123.00"));
+    assertEquals(true, $.validator.methods['validate-currency-dollar'].call(this, "$1234"));
+    assertEquals(false, $.validator.methods['validate-currency-dollar'].call(this, "$1234.1234"));
 };
 
 MageValidationTest.prototype.testValidateNotNegativeNumber = function () {
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber(""));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber(null));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber(undefined));
-    assertEquals(false, $.validator.methods.validateNotNegativeNumber("   "));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber("0"));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber("1"));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber("1234"));
-    assertEquals(true, $.validator.methods.validateNotNegativeNumber("1,234.1234"));
-    assertEquals(false, $.validator.methods.validateNotNegativeNumber("-1"));
-    assertEquals(false, $.validator.methods.validateNotNegativeNumber("-1e"));
-    assertEquals(false, $.validator.methods.validateNotNegativeNumber("-1,234.1234"));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-not-negative-number'].call(this, "   "));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, "0"));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, "1"));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, "1234"));
+    assertEquals(true, $.validator.methods['validate-not-negative-number'].call(this, "1,234.1234"));
+    assertEquals(false, $.validator.methods['validate-not-negative-number'].call(this, "-1"));
+    assertEquals(false, $.validator.methods['validate-not-negative-number'].call(this, "-1e"));
+    assertEquals(false, $.validator.methods['validate-not-negative-number'].call(this, "-1,234.1234"));
 };
 
 MageValidationTest.prototype.testValidateGreaterThanZero = function () {
-    assertEquals(true, $.validator.methods.validateGreaterThanZero(""));
-    assertEquals(true, $.validator.methods.validateGreaterThanZero(null));
-    assertEquals(true, $.validator.methods.validateGreaterThanZero(undefined));
-    assertEquals(false, $.validator.methods.validateGreaterThanZero("   "));
-    assertEquals(false, $.validator.methods.validateGreaterThanZero("0"));
-    assertEquals(true, $.validator.methods.validateGreaterThanZero("1"));
-    assertEquals(true, $.validator.methods.validateGreaterThanZero("1234"));
-    assertEquals(true, $.validator.methods.validateGreaterThanZero("1,234.1234"));
-    assertEquals(false, $.validator.methods.validateGreaterThanZero("-1"));
-    assertEquals(false, $.validator.methods.validateGreaterThanZero("-1e"));
-    assertEquals(false, $.validator.methods.validateGreaterThanZero("-1,234.1234"));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-greater-than-zero'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-greater-than-zero'].call(this, "0"));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, "1"));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, "1234"));
+    assertEquals(true, $.validator.methods['validate-greater-than-zero'].call(this, "1,234.1234"));
+    assertEquals(false, $.validator.methods['validate-greater-than-zero'].call(this, "-1"));
+    assertEquals(false, $.validator.methods['validate-greater-than-zero'].call(this, "-1e"));
+    assertEquals(false, $.validator.methods['validate-greater-than-zero'].call(this, "-1,234.1234"));
 };
 
 MageValidationTest.prototype.testValidateCssLength = function () {
-    assertEquals(true, $.validator.methods.validateCssLength(""));
-    assertEquals(true, $.validator.methods.validateCssLength(null));
-    assertEquals(true, $.validator.methods.validateCssLength(undefined));
-    assertEquals(false, $.validator.methods.validateCssLength("   "));
-    assertEquals(false, $.validator.methods.validateCssLength("0"));
-    assertEquals(true, $.validator.methods.validateCssLength("1"));
-    assertEquals(true, $.validator.methods.validateCssLength("1234"));
-    assertEquals(true, $.validator.methods.validateCssLength("1,234.1234"));
-    assertEquals(false, $.validator.methods.validateCssLength("-1"));
-    assertEquals(false, $.validator.methods.validateCssLength("-1e"));
-    assertEquals(false, $.validator.methods.validateCssLength("-1,234.1234"));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-css-length'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-css-length'].call(this, "0"));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, "1"));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, "1234"));
+    assertEquals(true, $.validator.methods['validate-css-length'].call(this, "1,234.1234"));
+    assertEquals(false, $.validator.methods['validate-css-length'].call(this, "-1"));
+    assertEquals(false, $.validator.methods['validate-css-length'].call(this, "-1e"));
+    assertEquals(false, $.validator.methods['validate-css-length'].call(this, "-1,234.1234"));
 };
 
 MageValidationTest.prototype.testValidateData = function () {
-    assertEquals(true, $.validator.methods.validateData(""));
-    assertEquals(true, $.validator.methods.validateData(null));
-    assertEquals(true, $.validator.methods.validateData(undefined));
-    assertEquals(false, $.validator.methods.validateData("   "));
-    assertEquals(false, $.validator.methods.validateData("123abc"));
-    assertEquals(true, $.validator.methods.validateData("abc"));
-    assertEquals(false, $.validator.methods.validateData(" abc"));
-    assertEquals(true, $.validator.methods.validateData("abc123"));
-    assertEquals(false, $.validator.methods.validateData("abc-123"));
+    assertEquals(true, $.validator.methods['validate-data'].call(this, ""));
+    assertEquals(true, $.validator.methods['validate-data'].call(this, null));
+    assertEquals(true, $.validator.methods['validate-data'].call(this, undefined));
+    assertEquals(false, $.validator.methods['validate-data'].call(this, "   "));
+    assertEquals(false, $.validator.methods['validate-data'].call(this, "123abc"));
+    assertEquals(true, $.validator.methods['validate-data'].call(this, "abc"));
+    assertEquals(false, $.validator.methods['validate-data'].call(this, " abc"));
+    assertEquals(true, $.validator.methods['validate-data'].call(this, "abc123"));
+    assertEquals(false, $.validator.methods['validate-data'].call(this, "abc-123"));
+};
+
+MageValidationTest.prototype.testValidateOneRequiredByName = function () {
+    /*:DOC += <input type="radio" name="radio" id="radio"/> */
+    /*:DOC += <input type="radio" name="radio"/> */
+    assertFalse($.validator.methods['validate-one-required-by-name'].call(this,
+        null, document.getElementById('radio')));
+    /*:DOC += <input type="radio" name="radio" checked/> */
+    assertTrue($.validator.methods['validate-one-required-by-name'].call(this,
+        null, document.getElementById('radio')));
+
+    /*:DOC += <input type="checkbox" name="checkbox" id="checkbox"/> */
+    /*:DOC += <input type="checkbox" name="checkbox"/> */
+    assertFalse($.validator.methods['validate-one-required-by-name'].call(this,
+        null, document.getElementById('checkbox')));
+    /*:DOC += <input type="checkbox" name="checkbox" checked/> */
+    assertTrue($.validator.methods['validate-one-required-by-name'].call(this,
+        null, document.getElementById('checkbox')));
+};
+
+MageValidationTest.prototype.testLessThanEqualsTo = function () {
+    /*:DOC += <input type="text" value=6  id="element1" />*/
+    /*:DOC += <input type="text" value=5 id="element2" />*/
+    var element1 = document.getElementById('element1');
+    assertFalse($.validator.methods['less-than-equals-to'].call(this, element1.value,
+        element1, '#element2'));
+    element1.value = 4;
+    assertTrue($.validator.methods['less-than-equals-to'].call(this, element1.value,
+        element1, '#element2'));
+
+    /*:DOC += <input type="text" id="element3" />*/
+    /*:DOC += <input type="text" value=5 id="element4" />*/
+    var element3 = document.getElementById('element3');
+    assertTrue($.validator.methods['less-than-equals-to'].call(this, element3.value,
+        element3, '#element4'));
+
+    /*:DOC += <input type="text" value=6  id="element5" />*/
+    /*:DOC += <input type="text" id="element6" />*/
+    var element5 = document.getElementById('element5');
+    assertTrue($.validator.methods['less-than-equals-to'].call(this, element5.value,
+        element5, '#element6'));
+};
+
+MageValidationTest.prototype.testGreaterThanEqualsTo = function () {
+    /*:DOC += <input type="text" value=6  id="element1" />*/
+    /*:DOC += <input type="text" value=7 id="element2" />*/
+    var element1 = document.getElementById('element1');
+    assertFalse($.validator.methods['greater-than-equals-to'].call(this, element1.value,
+        element1, '#element2'));
+    element1.value = 9;
+    assertTrue($.validator.methods['greater-than-equals-to'].call(this, element1.value,
+        element1, '#element2'));
+
+    /*:DOC += <input type="text" id="element3" />*/
+    /*:DOC += <input type="text" value=5 id="element4" />*/
+    var element3 = document.getElementById('element3');
+    assertTrue($.validator.methods['greater-than-equals-to'].call(this, element3.value,
+        element3, '#element4'));
+
+    /*:DOC += <input type="text" value=6  id="element5" />*/
+    /*:DOC += <input type="text" id="element6" />*/
+    var element5 = document.getElementById('element5');
+    assertTrue($.validator.methods['greater-than-equals-to'].call(this, element5.value,
+        element5, '#element6'));
+};
+
+MageValidationTest.prototype.testValidateGroupedQty = function () {
+    /*:DOC += <div id="div1">
+     <input type="text" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text"/>
+     </div>
+     */
+    assertFalse($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div1'));
+    /*:DOC += <div id="div2">
+     <input type="text" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text" value="a" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text"/>
+     </div>
+     */
+    assertFalse($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div2'));
+    /*:DOC += <div id="div3">
+     <input type="text" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text" value="-6" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text"/>
+     </div>
+     */
+    assertFalse($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div3'));
+    /*:DOC += <div id="div4">
+     <input type="text" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text" value="6" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text"/>
+     </div>
+     */
+    assertTrue($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div4'));
+    /*:DOC += <div id="div5">
+     <input type="text" value="1" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text" value="6" data-validate="{'validate-grouped-qty':'#super-product-table'}"/>
+     <input type="text"/>
+     </div>
+     */
+    assertTrue($.validator.methods['validate-grouped-qty'].call(this, null, null, '#div5'));
+
 };

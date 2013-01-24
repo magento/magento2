@@ -129,15 +129,21 @@ class Mage_DesignEditor_Model_History_Compact_Layout extends Mage_DesignEditor_M
             $lastMove = array_pop($moveItem);
             $lastMoveElement = $lastMove['change'];
 
-            $firstMove = $moveItem[0]['change'];
-            $originContainer = $firstMove->getData('origin_container');
-            $originOrder = $firstMove->getData('origin_order');
+            $firstMove = array_shift($moveItem);
+            $firstMoveElement = $firstMove['change'];
+            $originContainer = $firstMoveElement->getData('origin_container');
+            $originOrder = $firstMoveElement->getData('origin_order');
             $hasContainerChanged = $lastMoveElement->getData('destination_container') != $originContainer;
             if (!$hasContainerChanged) {
                 $hasOrderChanged = $lastMoveElement->getData('destination_order') != $originOrder;
                 if (!$hasOrderChanged) {
                     $arrayToRemove = array($lastMove);
                 }
+            }
+
+            if (empty($arrayToRemove)
+                || $firstMoveElement->getData(Mage_DesignEditor_Model_History::SYSTEM_LAYOUT_UPDATE_FLAG) != true) {
+                array_unshift($moveItem, $firstMove);
             }
 
             $this->_removeElements(array_merge($arrayToRemove, $moveItem));

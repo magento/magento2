@@ -85,7 +85,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function allowsRead()
+    public function isReadAllowed()
     {
         if ($this->_plus) {
             return true;
@@ -99,7 +99,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function allowsWrite()
+    public function isWriteAllowed()
     {
         if ($this->_plus) {
             return true;
@@ -113,7 +113,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function allowsExistingFileOpening()
+    public function isExistingFileOpenAllowed()
     {
         return 'x' !== $this->_base;
     }
@@ -123,7 +123,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function allowsNewFileOpening()
+    public function isNewFileOpenAllowed()
     {
         return 'r' !== $this->_base;
     }
@@ -133,7 +133,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function impliesExistingContentDeletion()
+    public function isExistingContentDeletionImplied()
     {
         return 'w' === $this->_base;
     }
@@ -143,7 +143,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function impliesPositioningCursorAtTheBeginning()
+    public function isPositioningCursorAtTheBeginningImplied()
     {
         return 'a' !== $this->_base;
     }
@@ -153,7 +153,7 @@ class Magento_Filesystem_Stream_Mode
      *
      * @return bool
      */
-    public function impliesPositioningCursorAtTheEnd()
+    public function isPositioningCursorAtTheEndImplied()
     {
         return 'a' === $this->_base;
     }

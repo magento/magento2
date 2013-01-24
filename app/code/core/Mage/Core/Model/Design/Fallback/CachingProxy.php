@@ -95,14 +95,21 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     protected $_basePath;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * Constructor.
      * Following entries in $params are required: 'area', 'package', 'theme', 'locale', 'canSaveMap',
      * 'mapDir', 'baseDir'.
      *
+     * @param Magento_Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(Magento_Filesystem $filesystem, array $data = array())
     {
+        $this->_filesystem = $filesystem;
         $this->_area = $data['area'];
         $this->_theme = $data['themeModel'];
         $this->_locale = $data['locale'];
@@ -112,16 +119,18 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
 
         $this->_mapFile =
             "{$this->_mapDir}/{$this->_area}_{$this->_theme->getId()}_{$this->_locale}.ser";
-        $this->_map = file_exists($this->_mapFile) ? unserialize(file_get_contents($this->_mapFile)) : array();
+        $this->_map = $this->_filesystem->isFile($this->_mapFile)
+            ? unserialize($this->_filesystem->read($this->_mapFile))
+            : array();
     }
 
     public function __destruct()
     {
         if ($this->_isMapChanged && $this->_canSaveMap) {
-            if (!is_dir($this->_mapDir)) {
-                mkdir($this->_mapDir, 0777, true);
+            if (!$this->_filesystem->isDirectory($this->_mapDir)) {
+                $this->_filesystem->createDirectory($this->_mapDir, 0777);
             }
-            file_put_contents($this->_mapFile, serialize($this->_map), LOCK_EX);
+            $this->_filesystem->write($this->_mapFile, serialize($this->_map));
         }
     }
 

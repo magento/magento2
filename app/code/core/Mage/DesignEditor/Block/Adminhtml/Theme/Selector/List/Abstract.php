@@ -29,10 +29,59 @@
  *
  * @method Mage_Core_Model_Resource_Theme_Collection getCollection()
  * @method Mage_Backend_Block_Abstract setCollection(Mage_Core_Model_Resource_Theme_Collection $collection)
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
     extends Mage_Backend_Block_Abstract
 {
+    /**
+     * Application model
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected $_app;
+
+    /**
+     * @param Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Model_Layout $layout
+     * @param Mage_Core_Model_Event_Manager $eventManager
+     * @param Mage_Backend_Model_Url $urlBuilder
+     * @param Mage_Core_Model_Translate $translator
+     * @param Mage_Core_Model_Cache $cache
+     * @param Mage_Core_Model_Design_Package $designPackage
+     * @param Mage_Core_Model_Session $session
+     * @param Mage_Core_Model_Store_Config $storeConfig
+     * @param Mage_Core_Controller_Varien_Front $frontController
+     * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_App $app
+     * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Mage_Core_Controller_Request_Http $request,
+        Mage_Core_Model_Layout $layout,
+        Mage_Core_Model_Event_Manager $eventManager,
+        Mage_Backend_Model_Url $urlBuilder,
+        Mage_Core_Model_Translate $translator,
+        Mage_Core_Model_Cache $cache,
+        Mage_Core_Model_Design_Package $designPackage,
+        Mage_Core_Model_Session $session,
+        Mage_Core_Model_Store_Config $storeConfig,
+        Mage_Core_Controller_Varien_Front $frontController,
+        Mage_Core_Model_Factory_Helper $helperFactory,
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_App $app,
+        array $data = array()
+    ) {
+        $this->_app = $app;
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $filesystem, $data
+        );
+    }
+
     /**
      * Get tab title
      *
@@ -79,7 +128,7 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      * Get assign to storeview button
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return string
+     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      */
     protected function _addAssignButtonHtml($themeBlock)
     {
@@ -88,13 +137,15 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
         $assignButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
         $assignButton->setData(array(
             'label'   => $this->__('Assign to a Storeview'),
-            'data_attr'  => array(
-                'widget-button' => array(
-                    'event' => 'assign',
-                    'related' => 'body',
-                    'eventData' => array(
-                        'theme_id' => $themeId
-                    )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array(
+                        'event' => 'assign',
+                        'target' => 'body',
+                        'eventData' => array(
+                            'theme_id' => $themeId
+                        )
+                    ),
                 ),
             ),
             'class'   => 'save action-theme-assign',
@@ -109,7 +160,7 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      * Get preview button
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return string
+     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      */
     protected function _addPreviewButtonHtml($themeBlock)
     {
@@ -118,13 +169,15 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
         $previewButton->setData(array(
             'label'     => $this->__('Preview Theme'),
             'class'     => 'preview-default',
-            'data_attr' => array(
-                'widget-button' => array(
-                    'event' => 'preview',
-                    'related' => 'body',
-                    'eventData' => array(
-                        'preview_url' => $this->_getPreviewUrl($themeBlock->getTheme()->getId())
-                    )
+            'data_attribute' => array(
+                'mage-init' => array(
+                    'button' => array(
+                        'event' => 'preview',
+                        'target' => 'body',
+                        'eventData' => array(
+                            'preview_url' => $this->_getPreviewUrl($themeBlock->getTheme()->getId())
+                        )
+                    ),
                 ),
             )
         ));
@@ -137,27 +190,29 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      * Get edit button
      *
      * @param Mage_DesignEditor_Block_Adminhtml_Theme $themeBlock
-     * @return string
+     * @return Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      */
     protected function _addEditButtonHtml($themeBlock)
     {
-        /** @var $previewButton Mage_Backend_Block_Widget_Button */
-        $previewButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
-        $previewButton->setData(array(
+        /** @var $editButton Mage_Backend_Block_Widget_Button */
+        $editButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        $editButton->setData(array(
             'label'     => $this->__('Edit Theme'),
             'class'     => 'add edit-theme',
-            'data_attr' => array(
-                'widget-button' => array(
-                    'event' => 'preview',
-                    'related' => 'body',
-                    'eventData' => array(
-                        'preview_url' => $this->_getEditUrl($themeBlock->getTheme()->getId())
-                    )
+            'data_attribute' => array(
+                'mage-init' => array(
+                    'button' => array(
+                        'event' => 'preview',
+                        'target' => 'body',
+                        'eventData' => array(
+                            'preview_url' => $this->_getEditUrl($themeBlock->getTheme()->getId())
+                        )
+                    ),
                 ),
             )
         ));
 
-        $themeBlock->addButton($previewButton);
+        $themeBlock->addButton($editButton);
         return $this;
     }
 

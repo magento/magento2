@@ -171,15 +171,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Simple
             ));
         }
 
-
-        $fieldset->addField('create_button', 'note', array(
-            'text' => $this->getButtonHtml(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Quick Create'),
-                'superProduct.quickCreateNewProduct()',
-                'save'
-            )
-        ));
-
         $this->setForm($form);
     }
 

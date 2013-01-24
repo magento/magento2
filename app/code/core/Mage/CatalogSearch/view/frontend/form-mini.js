@@ -63,14 +63,27 @@
             this.searchForm.on('submit', $.proxy(this._onSubmit, this));
         },
 
+        /**
+         * @return {Element} The first element in the suggestion list.
+         * @private
+         */
         _getFirstVisibleElement: function() {
             return this.responseList.indexList ? this.responseList.indexList.first() : false;
         },
 
+        /**
+         * @return {Element} The last element in the suggestion list.
+         * @private
+         */
         _getLastElement: function() {
             return this.responseList.indexList ? this.responseList.indexList.last() : false;
         },
 
+        /**
+         * Clears the item selected from the suggestion list and resets the suggestion list.
+         * @param {boolean} all Controls whether to clear the suggestion list.
+         * @private
+         */
         _resetResponseList: function(all) {
             this.responseList.selected = null;
             if (all === true) {
@@ -78,6 +91,12 @@
             }
         },
 
+        /**
+         * Executes when the search box is submitted. Sets the search input field to the
+         * value of the selected item.
+         * @param {Event} e The submit event
+         * @private
+         */
         _onSubmit: function(e) {
             if (this.element.val() === this.options.placeholder || this.element.val() === '') {
                 e.preventDefault();
@@ -87,6 +106,13 @@
             }
         },
 
+        /**
+         * Executes when keys are pressed in the search input field. Performs specific actions
+         * depending on which keys are pressed.
+         * @param {Event} e The key down event
+         * @return {Boolean} Default return type for any unhandled keys
+         * @private
+         */
         _onKeyDown: function (e) {
             var keyCode = e.keyCode || e.which;
             switch (keyCode) {
@@ -129,6 +155,12 @@
             }
         },
 
+        /**
+         * Executes when the value of the search input field changes. Executes a GET request
+         * to populate a suggestion list based on entered text. Handles click (select), hover,
+         * and mouseout events on the populated suggestion list dropdown.
+         * @private
+         */
         _onPropertyChange: function () {
             var searchField = this.element;
             var clonePosition = {

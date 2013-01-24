@@ -29,9 +29,9 @@
             var data = eval("(" + $(this).attr('data-mage-redirect') + ")");
             $(this).on(data.event, function () {
                 if (data.url) {
-                    $(location).attr('href', data.url);
+                    location.href = data.url;
                 } else {
-                    $(location).attr('href', $(this).val());
+                    location.href = $(this).val();
                 }
             });
         });

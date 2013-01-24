@@ -25,43 +25,54 @@
  */
 ?>
 <?php
-/**
- * Template for Mage_Backend_Block_Widget_Button_Split
- */
+/** @var $this Mage_Backend_Block_Widget_Button_Split */
+/** @var $_helper Mage_Core_Helper_Data */
+$_helper = $this->helper('Mage_Core_Helper_Data');
 ?>
-<div id="<?php echo $this->getId(); ?>" class="buttons-group widget-button-split">
-    <div id="<?php echo $this->getId(); ?>_main_control" class="main-control button <?php echo $this->getClass() ?: '' ?>"<?php echo $this->getUiId(); ?>>
-        <span><?php echo $this->getLabel(); ?></span>
+<div id="<?php echo $this->getId(); ?>" class="buttons-group widget-button-split <?php echo $this->getButtonClass() ?: '' ?>">
+    <div id="<?php echo $this->getId(); ?>-main-button" class="main-control button <?php echo $this->getClass() ?: '' ?>"<?php echo $this->getUiId(); ?>>
+        <span><?php echo $this->escapeHtml($this->getLabel()); ?></span>
     </div>
-    <div class="button btn-toggle" data-toggle="dropdown" <?php echo $this->getUiId("dropdown"); ?>><span>Select</span></div>
+    <div class="button btn-toggle" data-toggle="dropdown" <?php echo $this->getUiId('dropdown'); ?>><span>Select</span></div>
     <ul class="dropdown-menu" <?php echo $this->getUiId("dropdown-menu"); ?>>
         <?php foreach ($this->getOptions() as $key => $option): ?>
         <li>
-            <span class="item<?php if ($option['default']):?> item-default<?php endif; ?>" onclick="<?php echo $option['onclick']?>", <?php echo $this->getUiId("item", $key)?>>
-                <?php echo $option['label']?>
+            <span class="item<?php if (!empty($option['default'])):?> item-default<?php endif; ?>"
+            <?php
+                echo isset($option['id']) ? ' id="' . $this->getId() . '-' . $option['id'] . '"' : '',
+                    isset($option['onclick']) ? 'onclick="' . $option['onclick'] . '"' : '',
+                    $this->getUiId(isset($option['id']) ? $option['id'] : 'item' . '-' . $key);
+                if (isset($option['data_attribute'])) {
+                    foreach ($option['data_attribute'] as $dataKey => $data) {
+                        echo ' data-', $dataKey, '="', $_helper->escapeHtml($_helper->jsonEncode($data)), '"';
+                    }
+                }
+            ?>>
+                <?php echo $this->escapeHtml($option['label']); ?>
             </span>
             <?php if (isset($option['hint'])): ?>
-            <div class="tooltip" <?php echo $this->getUiId("item", $key, "tooltip"); ?>>
-                <a href="<?php echo $option['hint']['href'] ?>" class="help"><?php echo $option['hint']['label'] ?></a>
+            <div class="tooltip" <?php echo $this->getUiId('item', $key, 'tooltip'); ?>>
+                <a href="<?php echo $this->escapeHtml($option['hint']['href']) ?>" class="help">
+                    <?php echo $this->escapeHtml($option['hint']['label']) ?>
+                </a>
             </div>
             <?php endif; ?>
         </li>
         <?php endforeach; ?>
     </ul>
 </div>
-<script type="text/javascript">
-(function($, window) {
-    $(document).on('click.splitButtonToggle', '.widget-button-split .btn-toggle', function(e) {
-        $(this).toggleClass('active')
-            .parent()
-            .toggleClass('active');
-    });
-
-    $(document).on('click.splitButtonDefault', '.widget-button-split .main-control', function(e) {
-        $(this)
-            .siblings('.dropdown-menu')
-            .find('.item-default')
-                .trigger('click');
-    });
-})(jQuery);
+<script>
+jQuery(function($) {
+    $('.widget-button-split')
+        .on('click.splitToggle', '.btn-toggle', function(event) {
+            if (!$(event.target).is('.disabled')) {
+                $(this).toggleClass('active').parent().toggleClass('active');
+            }
+        })
+        .on('click.splitDefault', '.main-control', function(event) {
+            if (!$(event.target).is('.disabled')) {
+                $(this).siblings('.dropdown-menu').find('.item-default').trigger('click');
+            }
+        });
+});
 </script>

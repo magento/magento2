@@ -36,12 +36,13 @@
             <action method="addJs"><file>jquery/jquery.min.js</file></action>
             <action method="addJs"><file>jquery/jquery-ui.custom.min.js</file></action>
             <action method="addJs"><file>mage/jquery-no-conflict.js</file></action>
-            <action method="addJs"><file>jquery/head.js</file></action>
+            <action method="addJs"><file>head.load.min.js</file></action>
             <action method="addJs"><file>mage/mage.js</file></action>
             <action method="addJs"><file>mage/decorate.js</file></action>
             <action method="addJs"><file>mage/translate.js</file></action>
             <action method="addJs"><file>jquery/jquery.tmpl.min.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/design_editor.js</file></action>
+            <action method="addJs"><file>Mage_DesignEditor::js/form_deactivation.js</file></action>
             <action method="addJs"><file>Mage_DesignEditor::js/change/layout.js</file></action>
             <action method="addCss"><file>Mage_DesignEditor::css/design.css</file></action>
         </reference>

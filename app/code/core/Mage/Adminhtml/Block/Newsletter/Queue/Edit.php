@@ -92,23 +92,27 @@ class Mage_Adminhtml_Block_Newsletter_Queue_Edit extends Mage_Adminhtml_Block_Te
         $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save Newsletter'),
             'class'     => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#queue_edit_form'),
-            )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#queue_edit_form'),
+                ),
+            ),
         ));
 
         $this->addChild('save_and_resume', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Newsletter_Helper_Data')->__('Save and Resume'),
             'class'     => 'save',
-            'data_attr' => array(
-                'widget-button' => array(
-                    'event' => 'save',
-                    'related' => '#queue_edit_form',
-                    'eventData' => array(
-                        'action' => array(
-                            'args' => array('_resume' => 1),
+            'data_attribute' => array(
+                'mage-init' => array(
+                    'button' => array(
+                        'event' => 'save',
+                        'target' => '#queue_edit_form',
+                        'eventData' => array(
+                            'action' => array(
+                                'args' => array('_resume' => 1),
+                            ),
                         ),
-                    )
+                    ),
                 ),
             ),
         ));

@@ -181,6 +181,7 @@ class Magento_Convert_Excel
     /**
      * Convert Data to Excel XML Document
      *
+     * @param string $sheetName
      * @return string
      */
     public function convert($sheetName = '')
@@ -197,14 +198,17 @@ class Magento_Convert_Excel
 
     /**
      * Write Converted XML Data to Temporary File
+     *
+     * @param Magento_Filesystem_StreamInterface $stream
+     * @param string $sheetName
      */
-    public function write(Varien_Io_Abstract $ioStream, $sheetName = '')
+    public function write(Magento_Filesystem_StreamInterface $stream, $sheetName = '')
     {
-        $ioStream->streamWrite($this->_getXmlHeader($sheetName));
+        $stream->write($this->_getXmlHeader($sheetName));
 
         foreach ($this->_iterator as $dataRow) {
-            $ioStream->streamWrite($this->_getXmlRow($dataRow, true));
+            $stream->write($this->_getXmlRow($dataRow, true));
         }
-        $ioStream->streamWrite($this->_getXmlFooter());
+        $stream->write($this->_getXmlFooter());
     }
 }

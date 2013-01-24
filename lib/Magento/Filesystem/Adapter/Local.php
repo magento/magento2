@@ -86,6 +86,22 @@ class Magento_Filesystem_Adapter_Local implements
     }
 
     /**
+     * Calculates the MD5 hash of the file specified
+     *
+     * @param $key
+     * @return string
+     * @throws Magento_Filesystem_Exception
+     */
+    public function getFileMd5($key)
+    {
+        $hash = @md5_file($key);
+        if (false === $hash) {
+            throw new Magento_Filesystem_Exception('Unable to get file hash');
+        }
+        return $hash;
+    }
+
+    /**
      * Deletes the file or directory recursively.
      *
      * @param string $key
@@ -120,14 +136,20 @@ class Magento_Filesystem_Adapter_Local implements
     protected function _deleteNestedKeys($key)
     {
         foreach ($this->getNestedKeys($key) as $nestedKey) {
-            if (is_dir($nestedKey) && !is_link($nestedKey) && true !== @rmdir($nestedKey)) {
-                throw new Magento_Filesystem_Exception(sprintf('Failed to remove directory %s', $nestedKey));
+            if (is_dir($nestedKey) && !is_link($nestedKey)) {
+                if (true !== @rmdir($nestedKey)) {
+                    throw new Magento_Filesystem_Exception(sprintf('Failed to remove directory %s', $nestedKey));
+                }
             } else {
                 // https://bugs.php.net/bug.php?id=52176
-                if (defined('PHP_WINDOWS_VERSION_MAJOR') && is_dir($nestedKey) && true !== @rmdir($nestedKey)) {
-                    throw new Magento_Filesystem_Exception(sprintf('Failed to remove file %s', $nestedKey));
-                } elseif (true !== @unlink($nestedKey)) {
-                    throw new Magento_Filesystem_Exception(sprintf('Failed to remove file %s', $nestedKey));
+                if (defined('PHP_WINDOWS_VERSION_MAJOR') && is_dir($nestedKey)) {
+                    if (true !== @rmdir($nestedKey)) {
+                        throw new Magento_Filesystem_Exception(sprintf('Failed to remove file %s', $nestedKey));
+                    }
+                } else {
+                    if (true !== @unlink($nestedKey)) {
+                        throw new Magento_Filesystem_Exception(sprintf('Failed to remove file %s', $nestedKey));
+                    }
                 }
             }
         }
@@ -187,6 +209,18 @@ class Magento_Filesystem_Adapter_Local implements
         }
 
         return $result;
+    }
+
+    /**
+     * Gets list of all matched keys
+     *
+     * @param string $pattern
+     * @return array
+     * @throws Magento_Filesystem_Exception
+     */
+    public function searchKeys($pattern)
+    {
+        return glob($pattern);
     }
 
     /**
@@ -251,13 +285,46 @@ class Magento_Filesystem_Adapter_Local implements
      * Touches a file
      *
      * @param string $key
+     * @param int|null $fileModificationTime
      * @throws Magento_Filesystem_Exception
      */
-    public function touch($key)
+    public function touch($key, $fileModificationTime = null)
     {
-        if (!@touch($key)) {
+        if (!@touch($key, $fileModificationTime)) {
             throw new Magento_Filesystem_Exception(sprintf('Failed to touch %s', $key));
         }
+    }
+
+    /**
+     * Get file modification time.
+     *
+     * @param string $key
+     * @return int
+     * @throws Magento_Filesystem_Exception
+     */
+    public function getMTime($key)
+    {
+        $mtime = filemtime($key);
+        if (false === $mtime) {
+            throw new Magento_Filesystem_Exception(sprintf('Failed to get modification time %s', $key));
+        }
+        return $mtime;
+    }
+
+    /**
+     * Get file size.
+     *
+     * @param string $key
+     * @return int
+     * @throws Magento_Filesystem_Exception
+     */
+    public function getFileSize($key)
+    {
+        $size = @filesize($key);
+        if (!$size) {
+            throw new Magento_Filesystem_Exception(sprintf('Failed to get file size %s', $key));
+        }
+        return $size;
     }
 
     /**

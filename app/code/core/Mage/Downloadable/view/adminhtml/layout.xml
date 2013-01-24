@@ -27,7 +27,6 @@
 -->
 
 <layout>
-
     <adminhtml_catalog_product_downloadable>
         <update handle="adminhtml_catalog_product_superconfig_config"/>
         <reference name="product_tabs">
@@ -35,7 +34,17 @@
         </reference>
         <reference name="product-type-tabs">
             <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config"
-                   name="admin.product.edit.tab.super.config.grid.container"></block>
+                   name="admin.product.edit.tab.super.config.grid.container">
+                <block type="Mage_Core_Block_Template" name="attribute-block-template"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-js-template.phtml"
+                       as="template"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Attribute"
+                       template="Mage_Adminhtml::catalog/product/edit/super/attribute-template.phtml"
+                       as="attribute-renderer"/>
+                <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Matrix"
+                       template="Mage_Adminhtml::catalog/product/edit/super/matrix.phtml"
+                       as="matrix"/>
+            </block>
         </reference>
     </adminhtml_catalog_product_downloadable>
 

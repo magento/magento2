@@ -29,15 +29,12 @@
  * @return array
  */
 return array(
-    '/pub/lib/globalize/globalize.js',
     '/pub/lib/jquery/jquery.min.js',
+    '/pub/lib/jquery/jquery-ui.custom.min.js',
     '/pub/lib/jquery/jquery.cookie.js',
-    '/pub/lib/jquery/head.js',
+    '/pub/lib/head.load.min.js',
     '/pub/lib/mage/mage.js',
     '/pub/lib/mage/decorate.js',
     '/pub/lib/jquery/jquery.validate.js',
-    '/pub/lib/jquery/jquery.metadata.js',
-    '/pub/lib/jquery/additional-methods.js',
-    '/pub/lib/jquery/jquery.hook.js',
-    '/pub/lib/mage/translate.js'
+    '/pub/lib/jquery/jquery.metadata.js'
 );

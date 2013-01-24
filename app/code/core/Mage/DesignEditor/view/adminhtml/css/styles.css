@@ -49,6 +49,35 @@
 .theme-title {
     color: white;
     font-size: 20px;
+    line-height: 24px;
+}
+.theme-title input {
+    font-size: 20px;
+    line-height: 24px;
+}
+.theme-control-title {
+    position: relative;
+    margin: 0;
+    min-height: 40px;
+}
+.theme-title.text-field {
+    padding: 5px 0 5px 10px;
+}
+.theme-title.input-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+.theme-title.input-field input {
+    padding: 5px 0 5px 10px;
+    width: 250px;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+.theme-title.input-field .control {
+    float: left;
 }
 
 .theme-back:hover {
@@ -189,79 +218,6 @@ span.back-to-selected-theme {
     border-color: red;
     color: red;
 }
-
-.vde_element_wrapper {
-    margin-bottom: 3px;
-    padding: 0px 2px 2px 2px;
-    border: 2px solid #69a8cf;
-    border-radius: 4px;
-}
-.vde_element_title {
-    font-family:Arial, Helvetica, sans-serif;
-    margin: -2px 0 0 -4px;
-    padding: 0;
-    border-width: 2px 5px 6px 7px;
-    border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
-    border-image-outset: fill;
-    -webkit-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
-    -moz-border-image: url(../images/block.png) 2 5 6 7 stretch stretch;
-    color: black;
-    font-size: 8pt;
-    font-weight: bold;
-    max-width: 150px;
-    height: 18px;
-    overflow: hidden;
-    text-align: left;
-    line-height: 17px;
-    cursor: default;
-}
-.vde_element_remove {
-    margin: -26px -6px 0px -4px;
-    padding: 0px;
-    border-width: 2px 5px 6px 7px;
-    border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-    border-image-outset: fill;
-    -webkit-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-    -moz-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-    max-width: 20px;
-    height: 18px;
-    overflow: hidden;
-    text-align: right;
-    line-height: 17px;
-    cursor: default;
-    float: right;
-}
-.vde_element_wrapper.vde_container {
-    border: 2px solid #7bc361;
-}
-.vde_container > .vde_element_title {
-    border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
-    -webkit-border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
-    -moz-border-image: url(../images/container.png) 2 5 6 7 stretch stretch;
-}
-.vde_element_wrapper.vde_stub {
-    border: 2px solid #92978d;
-}
-.vde_stub > .vde_element_title {
-    border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-    -webkit-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-    -moz-border-image: url(../images/stub.png) 2 5 6 7 stretch stretch;
-}
-.vde_container.vde_container_hover {
-    border-color: #006400;
-}
-.vde_container.vde_container_hover > .vde_element_title {
-    border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
-    -webkit-border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
-    -moz-border-image: url(../images/container_hover.png) 2 5 6 7 stretch stretch;
-}
-.vde_placeholder {
-    background-color: #F5F5DC;
-}
-.vde_wrapper_hidden, .vde_wrapper_hidden .vde_element_title {
-    display: none;
-}
-
 .vde_toolbar_cell_title {
     font-weight: bold;
     cursor: pointer;
@@ -320,23 +276,16 @@ span.back-to-selected-theme {
     text-decoration: none;
     color: #2483c7;
 }
-
 .vde_breadcrumbs a:hover {
     text-decoration: underline;
 }
-
 .vde_breadcrumbs .vde_breadcrumbs_separator {
     margin:0 0.3em;
 }
-
 #visual_design_editor_theme a {
     display:block;
     text-decoration:none;
 }
-.ui-sortable-helper {
-    opacity: 0.9;
-}
-
 #vde_handles_hierarchy .vde_toolbar_cell_content {
     padding: 1em .5em 1em 0;
 }
@@ -366,26 +315,6 @@ span.back-to-selected-theme {
 }
 #vde_handles_tree .vde_option_fragment a {
     color: #eea243;
-}
-
-.vde_history_toolbar {
-    position: fixed;
-    left:0; top:150px;
-    width:220px;
-    background: #f0efe9;
-    border-bottom: 1pt solid #dddcd8;
-    box-shadow: 0 0 4pt 1pt #cbcbcb;
-    padding: 0 3pt;
-    line-height: 13pt;
-}
-.vde_history_toolbar ul {}
-.vde_history_toolbar ul li {
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.vde_element_remove {
-    display: none;
 }
 .vde_container_frame {
     border: none;

@@ -44,6 +44,7 @@ class Mage_Wishlist_Block_AbstractTest extends PHPUnit_Framework_TestCase
         'Mage_Core_Model_Store_Config',
         'Mage_Core_Controller_Varien_Front',
         'Mage_Core_Model_Factory_Helper',
+        'Magento_Filesystem',
     );
 
     protected function setUp()

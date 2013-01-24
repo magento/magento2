@@ -34,7 +34,8 @@ class Mage_Catalog_Model_Product_Type_SimpleTest extends PHPUnit_Framework_TestC
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_Simple();
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Catalog_Model_Product_Type_Simple($filesystem);
     }
 
     public function testHasWeightTrue()

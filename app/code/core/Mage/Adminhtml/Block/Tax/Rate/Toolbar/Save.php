@@ -84,8 +84,10 @@ class Mage_Adminhtml_Block_Tax_Rate_Toolbar_Save extends Mage_Adminhtml_Block_Te
     {
         $formId = $this->getLayout()->getBlock('tax_rate_form')->getDestElementId();
         $button = $this->getChildBlock('saveButton');
-        $button->setDataAttr(array(
-            'widget-button' => array('event' => 'save', 'related' => '#' . $formId)
+        $button->setDataAttribute(array(
+            'mage-init' => array(
+                'button' => array('event' => 'save', 'target' => '#' . $formId),
+            ),
         ));
         return $this->getChildHtml('saveButton');
     }

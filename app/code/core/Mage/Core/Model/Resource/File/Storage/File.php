@@ -42,14 +42,56 @@ class Mage_Core_Model_Resource_File_Storage_File
     protected $_mediaBaseDirectory = null;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @var Mage_Core_Helper_File_Storage_Database
+     */
+    protected $_dbHelper;
+
+    /**
+     * @var Mage_Core_Helper_Data
+     */
+    protected $_helper;
+
+    /**
+     * @var Mage_Core_Model_Logger
+     */
+    protected $_logger;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Helper_File_Storage_Database $dbHelper
+     * @param Mage_Core_Helper_Data $helper
+     * @param Mage_Core_Model_Logger $log
+     */
+    public function __construct(
+        Magento_Filesystem $filesystem,
+        Mage_Core_Helper_File_Storage_Database $dbHelper,
+        Mage_Core_Helper_Data $helper,
+        Mage_Core_Model_Logger $log
+    ) {
+        $this->_dbHelper = $dbHelper;
+        $this->_helper = $helper;
+        $this->_logger = $log;
+
+        $this->_filesystem = $filesystem;
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->ensureDirectoryExists($this->getMediaBaseDirectory());
+        $this->_filesystem->setWorkingDirectory($this->getMediaBaseDirectory());
+    }
+
+    /**
      * Files at storage
      *
-     * @var array
+     * @return string
      */
     public function getMediaBaseDirectory()
     {
         if (is_null($this->_mediaBaseDirectory)) {
-            $this->_mediaBaseDirectory = Mage::helper('Mage_Core_Helper_File_Storage_Database')->getMediaBaseDir();
+            $this->_mediaBaseDirectory = $this->_dbHelper->getMediaBaseDir();
         }
 
         return $this->_mediaBaseDirectory;
@@ -58,7 +100,7 @@ class Mage_Core_Model_Resource_File_Storage_File
     /**
      * Collect files and directories recursively
      *
-     * @param  string$dir
+     * @param string $dir
      * @return array
      */
     public function getStorageData($dir = '')
@@ -67,30 +109,22 @@ class Mage_Core_Model_Resource_File_Storage_File
         $directories    = array();
         $currentDir     = $this->getMediaBaseDirectory() . $dir;
 
-        if (is_dir($currentDir)) {
-            $dh = opendir($currentDir);
-            if ($dh) {
-                while (($file = readdir($dh)) !== false) {
-                    if ($file == '.' || $file == '..' || $file == '.svn' || $file == '.htaccess') {
-                        continue;
-                    }
-
-                    $fullPath = $currentDir . DS . $file;
-                    $relativePath = $dir . DS . $file;
-                    if (is_dir($fullPath)) {
-                        $directories[] = array(
-                            'name' => $file,
-                            'path' => str_replace(DS, '/', ltrim($dir, DS))
-                        );
-
-                        $data = $this->getStorageData($relativePath);
-                        $directories = array_merge($directories, $data['directories']);
-                        $files = array_merge($files, $data['files']);
-                    } else {
-                        $files[] = $relativePath;
-                    }
+        if ($this->_filesystem->isDirectory($currentDir)) {
+            foreach ($this->_filesystem->getNestedKeys($currentDir) as $fullPath) {
+                $itemName = basename($fullPath);
+                if ($itemName == '.svn' || $itemName == '.htaccess') {
+                    continue;
                 }
-                closedir($dh);
+
+                $relativePath = $this->_getRelativePath($fullPath);
+                if ($this->_filesystem->isDirectory($fullPath)) {
+                    $directories[] = array(
+                        'name' => $itemName,
+                        'path' => dirname($relativePath)
+                    );
+                } else {
+                    $files[] = $relativePath;
+                }
             }
         }
 
@@ -100,30 +134,18 @@ class Mage_Core_Model_Resource_File_Storage_File
     /**
      * Clear files and directories in storage
      *
-     * @param  string $dir
+     * @param string $dir
      * @return Mage_Core_Model_Resource_File_Storage_File
      */
     public function clear($dir = '')
     {
-        $currentDir = $this->getMediaBaseDirectory() . $dir;
+        if (strpos($dir, $this->getMediaBaseDirectory()) !== 0) {
+            $dir = $this->getMediaBaseDirectory() . $dir;
+        }
 
-        if (is_dir($currentDir)) {
-            $dh = opendir($currentDir);
-            if ($dh) {
-                while (($file = readdir($dh)) !== false) {
-                    if ($file == '.' || $file == '..') {
-                        continue;
-                    }
-
-                    $fullPath = $currentDir . DS . $file;
-                    if (is_dir($fullPath)) {
-                        $this->clear($dir . DS . $file);
-                    } else {
-                        @unlink($fullPath);
-                    }
-                }
-                closedir($dh);
-                @rmdir($currentDir);
+        if ($this->_filesystem->isDirectory($dir)) {
+            foreach ($this->_filesystem->getNestedKeys($dir) as $path) {
+                $this->_filesystem->delete($path);
             }
         }
 
@@ -133,26 +155,25 @@ class Mage_Core_Model_Resource_File_Storage_File
     /**
      * Save directory to storage
      *
-     * @param  array $dir
+     * @param array $dir
      * @return bool
      */
     public function saveDir($dir)
     {
-        if (!isset($dir['name']) || !strlen($dir['name'])
-            || !isset($dir['path'])
-        ) {
+        if (!isset($dir['name']) || !strlen($dir['name']) || !isset($dir['path'])) {
             return false;
         }
 
         $path = (strlen($dir['path']))
             ? $dir['path'] . DS . $dir['name']
             : $dir['name'];
-        $path = Mage::helper('Mage_Core_Helper_File_Storage_Database')->getMediaBaseDir() . DS . str_replace('/', DS, $path);
+        $path = $this->getMediaBaseDirectory() . DS . $path;
 
-        if (!file_exists($path) || !is_dir($path)) {
-            if (!@mkdir($path, 0777, true)) {
-                Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Unable to create directory: %s', $path));
-            }
+        try {
+            $this->_filesystem->ensureDirectoryExists($path);
+        } catch (Exception $e) {
+            $this->_logger->log($e->getMessage());
+            Mage::throwException($this->_helper->__('Unable to create directory: %s', $path));
         }
 
         return true;
@@ -161,37 +182,38 @@ class Mage_Core_Model_Resource_File_Storage_File
     /**
      * Save file to storage
      *
-     * @param  string $filePath
-     * @param  string $content
-     * @param  bool $overwrite
+     * @param string $filePath
+     * @param string $content
+     * @param bool $overwrite
      * @return bool
      */
     public function saveFile($filePath, $content, $overwrite = false)
     {
-        $filename = basename($filePath);
-        $path = $this->getMediaBaseDirectory() . DS . str_replace('/', DS ,dirname($filePath));
-
-        if (!file_exists($path) || !is_dir($path)) {
-            @mkdir($path, 0777, true);
+        if (strpos($filePath, $this->getMediaBaseDirectory()) !== 0) {
+            $filePath = $this->getMediaBaseDirectory() . DS . $filePath;
         }
 
-        $ioFile = new Varien_Io_File();
-        $ioFile->cd($path);
-
-        if (!$ioFile->fileExists($filename) || ($overwrite && $ioFile->rm($filename))) {
-            $ioFile->streamOpen($filename);
-            $ioFile->streamLock(true);
-            $result = $ioFile->streamWrite($content);
-            $ioFile->streamUnlock();
-            $ioFile->streamClose();
-
-            if ($result) {
+        try {
+            if (!$this->_filesystem->isFile($filePath) || ($overwrite && $this->_filesystem->delete($filePath))) {
+                $this->_filesystem->write($filePath, $content);
                 return true;
             }
-
-            Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Unable to save file: %s', $filePath));
+        } catch (Magento_Filesystem_Exception $e) {
+            $this->_logger->log($e->getMessage());
+            Mage::throwException($this->_helper->__('Unable to save file: %s', $filePath));
         }
 
         return false;
+    }
+
+    /**
+     * Get path relative to media base directory
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function _getRelativePath($path)
+    {
+        return ltrim(str_replace($this->getMediaBaseDirectory(), '', $path), Magento_Filesystem::DIRECTORY_SEPARATOR);
     }
 }

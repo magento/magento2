@@ -55,16 +55,24 @@ abstract class Mage_Core_Model_ShellAbstract
     protected $_entryPoint = null;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * Initializes application and parses input parameters
      *
-     * @var string $entryPoint
+     * @param Magento_Filesystem $filesystem
+     * @param string $entryPoint
+     * @throws Exception
      */
-    public function __construct($entryPoint)
+    public function __construct(Magento_Filesystem $filesystem, $entryPoint)
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             throw new Exception('This script cannot be run from Browser. This is the shell script.');
         }
 
+        $this->_filesystem = $filesystem;
         $this->_entryPoint = $entryPoint;
         $this->_rawArgs = $_SERVER['argv'];
         $this->_applyPhpVariables();
@@ -92,7 +100,7 @@ abstract class Mage_Core_Model_ShellAbstract
      */
     protected function _getRootPath()
     {
-        return Mage::getBaseDir() . '/../';
+        return Mage::getBaseDir();
     }
 
     /**
@@ -103,9 +111,9 @@ abstract class Mage_Core_Model_ShellAbstract
     protected function _applyPhpVariables()
     {
         $htaccess = $this->_getRootPath() . '.htaccess';
-        if (file_exists($htaccess)) {
+        if ($this->_filesystem->isFile($htaccess)) {
             // parse htaccess file
-            $data = file_get_contents($htaccess);
+            $data = $this->_filesystem->read($htaccess);
             $matches = array();
             preg_match_all('#^\s+?php_value\s+([a-z_]+)\s+(.+)$#siUm', $data, $matches, PREG_SET_ORDER);
             if ($matches) {

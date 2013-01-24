@@ -42,11 +42,6 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
 
     public function _initAction()
     {
-        $act = $this->getRequest()->getActionName();
-        if(!$act) {
-            $act = 'default';
-        }
-
         $this->loadLayout()
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Reports'), Mage::helper('Mage_Reports_Helper_Data')->__('Reports'))
             ->_addBreadcrumb(Mage::helper('Mage_Reports_Helper_Data')->__('Statistics'), Mage::helper('Mage_Reports_Helper_Data')->__('Statistics'));

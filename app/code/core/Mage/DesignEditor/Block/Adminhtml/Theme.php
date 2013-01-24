@@ -35,7 +35,7 @@ class Mage_DesignEditor_Block_Adminhtml_Theme extends Mage_Backend_Block_Templat
     /**
      * Buttons array
      *
-     * @var array()
+     * @var array
      */
     protected $_buttons = array();
 
@@ -90,5 +90,39 @@ class Mage_DesignEditor_Block_Adminhtml_Theme extends Mage_Backend_Block_Templat
             $storesTitles[] = $store->getName();
         }
         return $storesTitles;
+    }
+
+    /**
+     * Get options for JS widget vde.themeControl
+     *
+     * @return string
+     */
+    public function getOptionsJson()
+    {
+        $theme = $this->getTheme();
+        $options = array(
+            'theme_id'    => $theme->getId(),
+            'theme_title' => $theme->getThemeTitle()
+        );
+
+        /** @var $helper Mage_Core_Helper_Data */
+        $helper = $this->helper('Mage_Core_Helper_Data');
+        return $helper->jsonEncode($options);
+    }
+
+    /**
+     * Get quick save button
+     *
+     * @return Mage_Backend_Block_Widget_Button
+     */
+    public function getQuickSaveButton()
+    {
+        /** @var $saveButton Mage_Backend_Block_Widget_Button */
+        $saveButton = $this->getLayout()->createBlock('Mage_Backend_Block_Widget_Button');
+        $saveButton->setData(array(
+            'label'     => $this->__('Save'),
+            'class'     => 'save',
+        ));
+        return $saveButton;
     }
 }

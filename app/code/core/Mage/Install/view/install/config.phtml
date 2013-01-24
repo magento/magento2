@@ -49,7 +49,7 @@
                 <label for="base_url"><?php echo $this->__('Base URL') ?> <span class="required">*</span></label><br/>
                 <input type="text" name="config[unsecure_base_url]" id="base_url"
                        value="<?php echo $this->getFormData()->getUnsecureBaseUrl() ?>"
-                       title="<?php echo $this->__('Base URL') ?>" data-validate="{required:true,validateUrl:true}"
+                       title="<?php echo $this->__('Base URL') ?>" data-validate="{required:true,'validate-url':true}"
                        class="input-text"/>
             </li>
             <li>
@@ -57,7 +57,7 @@
                     class="required">*</span></label><br/>
                 <input type="text" name="config[backend_frontname]" id="backend_frontname"
                        value="<?php echo $this->getFormData()->getBackendFrontname() ?>"
-                       title="<?php echo $this->__('Admin Path') ?>" data-validate="{required:true,validateData:true}"
+                       title="<?php echo $this->__('Admin Path') ?>" data-validate="{required:true,'validate-data':true}"
                        class="input-text"/>
 
                 <p style="margin-top:4px; line-height:1.3em; color:#666;">
@@ -112,7 +112,7 @@
                 <input type="text" name="config[secure_base_url]" id="secure_base_url"
                        value="<?php echo $this->getFormData()->getSecureBaseUrl() ?>"
                        title="<?php echo $this->__('Secure Base URL') ?>"
-                       data-validate="{required:true,validateUrl:true}" class="required-entry validate-url input-text"/>
+                       data-validate="{required:true,'validate-url':true}" class="input-text"/>
 
                 <p style="margin-top:4px; line-height:1.3em; color:#666;">
                     <small><?php echo $this->__('Provide a complete base URL for SSL connection. For example: %s', '<strong>https://www.mydomain.com/magento/</strong>') ?></small>
@@ -157,15 +157,11 @@
 <script type="text/javascript">
     (function ($) {
         head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
             "<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
-                $('#form-validate').configure({
-                    useSecureSelector: '#use_secure',
-                    useSecureOptionsSelector: '#use_secure_options'
-                });
+                $.mage.install.configureForm('#form-validate', '#use_secure', '#use_secure_options');
             });
     })(jQuery);
 </script>
@@ -177,9 +173,9 @@
     <script type="text/javascript">
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('Mage_Install::js/install.js')?>", function() {
-            $('#btn-continue').configure({
-                url: '<?php echo $this->getUrl('*/*/*', array('_current' => true)) ?>'
-            });
+            $.mage.install.configureContinue(
+                '#btn-continue', '<?php echo $this->getUrl('*/*/*', array('_current' => true)) ?>'
+            );
         });
     })(jQuery);
     </script>

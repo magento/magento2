@@ -29,7 +29,8 @@
     // mage.tabs base functionality
     $.widget('mage.tabs', $.ui.tabs, {
         options: {
-            spinner: false
+            spinner: false,
+            groups: null
         },
 
         /**
@@ -40,6 +41,19 @@
             var activeIndex = this._getTabIndex(this.options.active);
             this.options.active = activeIndex >= 0 ? activeIndex : 0;
             this._super();
+        },
+
+        /**
+         * @override
+         * @private
+         * @return {Array} Array of DOM-elements
+         */
+        _getList: function() {
+            if(this.options.groups) {
+                return this.element.find(this.options.groups);
+            } else {
+                return this._super();
+            }
         },
 
         /**
@@ -148,17 +162,11 @@
             },
 
             /**
-             * Trigger event 'processStart' before tab is loaded
-             */
-            beforeLoad: function() {$('body').trigger('processStart');},
-
-            /**
-             * Trigger event 'processStop' after tab is loaded
+             * Replacing href attribute with loaded panel id
              * @param {Object} event - event object
              * @param {Object}
              */
             load: function(event, ui) {
-                $('body').trigger('processStop');
                 $(ui.tab).prop('href', '#' + $(ui.panel).prop('id'));
             }
         }

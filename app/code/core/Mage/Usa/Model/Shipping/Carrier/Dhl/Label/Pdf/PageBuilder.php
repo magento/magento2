@@ -114,7 +114,7 @@ class Mage_Usa_Model_Shipping_Carrier_Dhl_Label_Pdf_PageBuilder
         $y = $this->_y(0);
 
         $image = new Zend_Pdf_Resource_Image_Jpeg(
-            Mage::getDesign()->getViewFile('dhl/logo.jpg', array('area' => 'adminhtml'))
+            Mage::getDesign()->getViewFile('Mage_Usa::dhl/logo.jpg', array('theme' => false))
         );
         $this->_page->drawImage($image, $x + 191, $this->_y(27), $x + 287, $this->_y(1));
 

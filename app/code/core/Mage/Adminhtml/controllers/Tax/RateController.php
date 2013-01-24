@@ -330,7 +330,7 @@ class Mage_Adminhtml_Tax_RateController extends Mage_Adminhtml_Controller_Action
         $this->_title($this->__('Import and Export Tax Rates'));
 
         $this->loadLayout()
-            ->_setActiveMenu('Mage_Tax::sales_tax_import_export')
+            ->_setActiveMenu('Mage_Tax::system_convert_tax')
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_ImportExportHeader'))
             ->_addContent($this->getLayout()->createBlock('Mage_Adminhtml_Block_Tax_Rate_ImportExport'))
             ->renderLayout();

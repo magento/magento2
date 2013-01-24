@@ -26,11 +26,6 @@
  */
 -->
 <layout>
-    <adminhtml_report_statistics_index>
-        <reference name="content">
-            <block type="Mage_Adminhtml_Block_Report_Refresh_Statistics" template="report/refresh/statistics.phtml" name="sales.report.refreshstatistics" />
-        </reference>
-    </adminhtml_report_statistics_index>
     <adminhtml_report_product_viewed>
         <reference name="messages">
             <action method="addNotice" translate="message">

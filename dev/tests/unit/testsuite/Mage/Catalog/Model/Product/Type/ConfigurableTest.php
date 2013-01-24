@@ -34,7 +34,8 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_Configurable();
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Catalog_Model_Product_Type_Configurable($filesystem);
     }
 
     public function testHasWeightFalse()

@@ -24,26 +24,18 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
-    $(document).ready(function () {
-        var _data = {
-            cookieBlockSelector: undefined,
-            cookieAllowButtonSelector: undefined,
-            cookieName: undefined,
-            cookieValue: undefined,
-            cookieExpires: undefined,
-            noCookiesUrl: undefined
-        };
-
-        $.mage.event.trigger('mage.nocookies.initialize', _data);
-
-        $(_data.cookieBlockSelector).show();
-        $(_data.cookieAllowButtonSelector).on('click', function () {
-            $.mage.cookies.set(_data.cookieName, _data.cookieValue, _data.cookieExpires);
-            if ($.mage.cookies.get(_data.cookieName)) {
-                window.location.reload();
-            } else {
-                window.location.href = _data.noCookiesUrl;
-            }
-        });
+    $.widget('mage.cookieBlock', {
+        _create: function() {
+            this.element.show();
+            $(this.options.cookieAllowButtonSelector).on('click', $.proxy(function() {
+                var cookieExpires = new Date(new Date().getTime() + this.options.cookieLifetime * 1000);
+                $.mage.cookies.set(this.options.cookieName, this.options.cookieValue, {expires: cookieExpires});
+                if ($.mage.cookies.get(this.options.cookieName)) {
+                    window.location.reload();
+                } else {
+                    window.location.href = this.options.noCookiesUrl;
+                }
+            }, this));
+        }
     });
 })(jQuery);

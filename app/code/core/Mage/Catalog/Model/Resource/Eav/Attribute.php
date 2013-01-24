@@ -68,6 +68,7 @@
  * @method int setIsUsedForCustomerSegment(int $value)
  * @method Mage_Catalog_Model_Resource_Eav_Attribute getIsUsedForTargetRules()
  * @method int setIsUsedForTargetRules(int $value)
+ * @method string getFrontendLabel()
  *
  * @category    Mage
  * @package     Mage_Catalog
@@ -292,16 +293,6 @@ class Mage_Catalog_Model_Resource_Eav_Attribute extends Mage_Eav_Model_Entity_At
             'weight',
         );
         return $this->getIsVisible() && in_array($this->getFrontendInput(), $allowedInputTypes);
-    }
-
-    /**
-     * Retrieve don't translated frontend label
-     *
-     * @return string
-     */
-    public function getFrontendLabel()
-    {
-        return $this->_getData('frontend_label');
     }
 
     /**

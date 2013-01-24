@@ -25,6 +25,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+// Copy images to tmp media path
+/** @var Mage_Catalog_Model_Product_Media_Config $config */
+$config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');
+$baseTmpMediaPath = $config->getBaseTmpMediaPath();
+
+/** @var Magento_Filesystem $filesystem */
+$filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+$filesystem->setIsAllowCreateDirectories(true);
+$filesystem->copy(dirname(__FILE__) . '/magento_image_sitemap.png', $baseTmpMediaPath . '/magento_image_sitemap.png');
+$filesystem->copy(dirname(__FILE__) . '/second_image.png', $baseTmpMediaPath . '/second_image.png');
+
 $product = Mage::getModel('Mage_Catalog_Model_Product');
 $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setId(1)
@@ -78,8 +89,8 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setImage('/s/e/second_image.png')
     ->setSmallImage('/m/a/magento_image_sitemap.png')
     ->setThumbnail('/m/a/magento_image_sitemap.png')
-    ->addImageToMediaGallery(dirname(__FILE__) . '/magento_image_sitemap.png', null, false, false)
-    ->addImageToMediaGallery(dirname(__FILE__) . '/second_image.png', null, false, false)
+    ->addImageToMediaGallery($baseTmpMediaPath . '/magento_image_sitemap.png', null, false, false)
+    ->addImageToMediaGallery($baseTmpMediaPath . '/second_image.png', null, false, false)
     ->setWebsiteIds(array(1))
     ->setStockData(array('qty' => 100, 'is_in_stock' => 1))
     ->setRelatedLinkData(array(1 => array('position' => 1)))
@@ -97,7 +108,7 @@ $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
     ->setImage('no_selection')
     ->setSmallImage('/m/a/magento_image_sitemap.png')
     ->setThumbnail('no_selection')
-    ->addImageToMediaGallery(dirname(__FILE__) . '/second_image.png', null, false, false)
+    ->addImageToMediaGallery($baseTmpMediaPath . '/second_image.png', null, false, false)
     ->setWebsiteIds(array(1))
     ->setStockData(array('qty' => 100, 'is_in_stock' => 1))
     ->setRelatedLinkData(array(1 => array('position' => 1)))

@@ -35,6 +35,19 @@
 class Mage_Catalog_Helper_Product_Options extends Mage_Core_Helper_Abstract
 {
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Fetches and outputs file to user browser
      * $info is array with following indexes:
      *  - 'path' - full file path
@@ -59,7 +72,7 @@ class Mage_Catalog_Helper_Product_Options extends Mage_Core_Helper_Abstract
                 ->clearBody();
             $response->sendHeaders();
 
-            readfile($filePath);
+            echo $this->_filesystem->read($filePath);
         } catch (Exception $e) {
             return false;
         }

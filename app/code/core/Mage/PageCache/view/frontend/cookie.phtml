@@ -28,15 +28,13 @@
 <script type="text/javascript">
     //<![CDATA[
     (function($) {
-        $.mage.event.observe('mage.nocachecookie.initialize', function(e, o) {
-            o.cookieName = '<?php echo Mage_PageCache_Helper_Data::NO_CACHE_COOKIE ?>'
-            o.cookieLifetime = <?php echo Mage::helper('Mage_PageCache_Helper_Data')->getNoCacheCookieLifetime() ?>;
-            o.cookieExpireAt = $.cookie.defaults.expires;
+        head.js("<?php echo $this->getViewFileUrl('mage/cookies.js')?>", function() {
+            $.mage.cookies.set(
+                '<?php echo Mage_PageCache_Helper_Data::NO_CACHE_COOKIE ?>',
+                1,
+                {lifetime: <?php echo Mage::helper('Mage_PageCache_Helper_Data')->getNoCacheCookieLifetime() ?>}
+            )
         });
-        $.mage.load.jsSync(
-            "<?php echo $this->getViewFileUrl('Mage_Page::js/cookies.js')?>",
-            "<?php echo $this->getViewFileUrl('Mage_PageCache::js/cookie.js')?>"
-        );
     })(jQuery);
     //]]>
 </script>

@@ -26,6 +26,11 @@
 
 /**
  * A chooser for container for widget instances
+ *
+ * @method getTheme()
+ * @method getArea()
+ * @method Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container setTheme($theme)
+ * @method Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container setArea($area)
  */
 class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container extends Mage_Core_Block_Html_Select
 {
@@ -48,17 +53,16 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container extends
     protected function _beforeToHtml()
     {
         if (!$this->getOptions()) {
-            $layoutUpdateParams = array(
+            $layoutMergeParams = array(
                 'area'    => $this->getArea(),
-                'package' => $this->getPackage(),
                 'theme'   => $this->getTheme(),
             );
-            /** @var $layoutUpdate Mage_Core_Model_Layout_Merge */
-            $layoutUpdate = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $layoutUpdateParams));
-            $layoutUpdate->addPageHandles(array($this->getLayoutHandle()));
-            $layoutUpdate->load();
+            /** @var $layoutMerge Mage_Core_Model_Layout_Merge */
+            $layoutMerge = Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $layoutMergeParams));
+            $layoutMerge->addPageHandles(array($this->getLayoutHandle()));
+            $layoutMerge->load();
 
-            $containers = $layoutUpdate->getContainers();
+            $containers = $layoutMerge->getContainers();
             if ($this->getAllowedContainers()) {
                 foreach (array_keys($containers) as $containerName) {
                     if (!in_array($containerName, $this->getAllowedContainers())) {

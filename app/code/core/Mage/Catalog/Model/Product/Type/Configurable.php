@@ -138,10 +138,10 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     /**
      * Check attribute availability for super product creation
      *
-     * @param   Mage_Eav_Model_Entity_Attribute $attribute
-     * @return  bool
+     * @param  Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+     * @return bool
      */
-    public function canUseAttribute(Mage_Eav_Model_Entity_Attribute $attribute)
+    public function canUseAttribute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute)
     {
         return $attribute->getIsGlobal() == Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
             && $attribute->getIsVisible()
@@ -245,17 +245,19 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     {
         $res = array();
         foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            $eavAttribute = $attribute->getProductAttribute();
             /* @var $attribute Mage_Catalog_Model_Product_Type_Configurable_Attribute */
-            $res[] = array(
+            $res[$eavAttribute->getId()] = array(
                 'id'             => $attribute->getId(),
                 'label'          => $attribute->getLabel(),
                 'use_default'    => $attribute->getUseDefault(),
                 'position'       => $attribute->getPosition(),
                 'values'         => $attribute->getPrices() ? $attribute->getPrices() : array(),
-                'attribute_id'   => $attribute->getProductAttribute()->getId(),
-                'attribute_code' => $attribute->getProductAttribute()->getAttributeCode(),
-                'frontend_label' => $attribute->getProductAttribute()->getFrontend()->getLabel(),
-                'store_label'    => $attribute->getProductAttribute()->getStoreLabel(),
+                'attribute_id'   => $eavAttribute->getId(),
+                'attribute_code' => $eavAttribute->getAttributeCode(),
+                'frontend_label' => $eavAttribute->getFrontend()->getLabel(),
+                'store_label'    => $eavAttribute->getStoreLabel(),
+                'options'        => $eavAttribute->getSource()->getAllOptions(false),
             );
         }
         return $res;
@@ -402,12 +404,12 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
             foreach ($data as $attributeData) {
                 /** @var $configurableAttribute Mage_Catalog_Model_Product_Type_Configurable_Attribute */
                 $configurableAttribute = Mage::getModel('Mage_Catalog_Model_Product_Type_Configurable_Attribute');
-                if (isset($attributeData['id'])) {
+                if (!empty($attributeData['id'])) {
                     $configurableAttribute->load($attributeData['id']);
                 } else {
                     $configurableAttribute->loadByProductAndAttribute(
                         $product,
-                        $product->getTypeInstance()->getAttributeById($attributeData['attribute_id'], $product)
+                        $this->getAttributeById($attributeData['attribute_id'], $product)
                     );
                 }
                 unset($attributeData['id']);
@@ -417,6 +419,17 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
                    ->setProductId($product->getId())
                    ->save();
             }
+            /** @var $configurableAttributesCollection Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection  */
+            $configurableAttributesCollection = Mage::getResourceModel(
+                'Mage_Catalog_Model_Resource_Product_Type_Configurable_Attribute_Collection'
+            );
+            $configurableAttributesCollection->setProductFilter($product);
+            $configurableAttributesCollection->addFieldToFilter(
+                'attribute_id',
+                array('nin'=> $this->getUsedProductAttributeIds($product))
+            );
+            $configurableAttributesCollection->walk('delete');
+
         }
 
         /* Save product relations */
@@ -468,7 +481,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
 
     /**
      * Retrieve used product by attribute values
-     *  $attrbutesInfo = array(
+     *  $attributesInfo = array(
      *      $attributeId => $attributeValue
      *  )
      *
@@ -874,5 +887,136 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
         /** @var $configurableAttribute Mage_Catalog_Model_Product_Type_Configurable_Attribute */
         $configurableAttribute = Mage::getModel('Mage_Catalog_Model_Product_Type_Configurable_Attribute');
         $configurableAttribute->deleteByProduct($product);
+    }
+
+    /**
+     * Retrieve product attribute by identifier
+     * Difference from abstract: any attribute is available, not just the ones from $product's attribute set
+     *
+     * @param  int $attributeId
+     * @param  Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Resource_Eav_Attribute
+     */
+    public function getAttributeById($attributeId, $product)
+    {
+        $attribute = parent::getAttributeById($attributeId, $product);
+        return $attribute ?: Mage::getModel('Mage_Catalog_Model_Resource_Eav_Attribute')->load($attributeId);
+    }
+
+    /**
+     * Generate simple products to link with configurable
+     *
+     * @param Mage_Catalog_Model_Product $parentProduct
+     * @param array $productsData
+     * @return array
+     */
+    public function generateSimpleProducts($parentProduct, $productsData)
+    {
+        $this->_prepareAttributeSetToBeBaseForNewVariations($parentProduct);
+        $generatedProductIds = array();
+        foreach ($productsData as $simpleProductData) {
+            $newSimpleProduct = Mage::getModel('Mage_Catalog_Model_Product');
+            $configurableAttribute = Mage::helper('Mage_Core_Helper_Data')->jsonDecode(
+                $simpleProductData['configurable_attribute']
+            );
+            unset($simpleProductData['configurable_attribute']);
+
+            $this->_fillSimpleProductData(
+                $newSimpleProduct,
+                $parentProduct,
+                array_merge($simpleProductData, $configurableAttribute)
+            );
+            $newSimpleProduct->save();
+
+            $generatedProductIds[] = $newSimpleProduct->getId();
+        }
+        return $generatedProductIds;
+    }
+
+    /**
+     * Set image for product without image if possible
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product_Type_Configurable
+     */
+    public function setImageFromChildProduct(Mage_Catalog_Model_Product $product)
+    {
+        if (!$product->getData('image') || $product->getData('image') === 'no_selection') {
+            foreach ($this->getUsedProducts($product) as $childProduct) {
+                if ($childProduct->getData('image') && $childProduct->getData('image') !== 'no_selection') {
+                    $product->setImage($childProduct->getData('image'));
+                    break;
+                }
+            }
+        }
+        return parent::setImageFromChildProduct($product);
+    }
+
+    /**
+     * Prepare attribute set comprising all selected configurable attributes
+     *
+     * @param Mage_Catalog_Model_Product $product
+     */
+    protected function _prepareAttributeSetToBeBaseForNewVariations(Mage_Catalog_Model_Product $product)
+    {
+        $attributes = $this->getUsedProductAttributes($product);
+        $attributeSetId = $product->getNewVariationsAttributeSetId();
+        /** @var $attributeSet Mage_Eav_Model_Entity_Attribute_Set */
+        $attributeSet = Mage::getModel('Mage_Eav_Model_Entity_Attribute_Set')->load($attributeSetId);
+        $attributeSet->addSetInfo(
+            Mage::getModel('Mage_Eav_Model_Entity')->setType(Mage_Catalog_Model_Product::ENTITY)->getTypeId(),
+            $attributes
+        );
+        foreach ($attributes as $attribute) {
+            /* @var $attribute Mage_Catalog_Model_Entity_Attribute */
+            if (!$attribute->isInSet($attributeSetId)) {
+                $attribute->setAttributeSetId($attributeSetId)
+                    ->setAttributeGroupId($attributeSet->getDefaultGroupId($attributeSetId))
+                    ->save();
+            }
+        }
+    }
+
+    /**
+     * Fill simple product data during generation
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @param Mage_Catalog_Model_Product $parentProduct
+     * @param array $postData
+     */
+    protected function _fillSimpleProductData(
+        Mage_Catalog_Model_Product $product,
+        Mage_Catalog_Model_Product $parentProduct,
+        $postData
+    ) {
+        $product->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
+            ->setTypeId($postData['weight']
+                ? Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+                : Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL
+            )->setAttributeSetId($parentProduct->getNewVariationsAttributeSetId());
+
+        foreach ($product->getTypeInstance()->getEditableAttributes($product) as $attribute) {
+            if ($attribute->getIsUnique()
+                || $attribute->getAttributeCode() == 'url_key'
+                || $attribute->getFrontend()->getInputType() == 'gallery'
+                || $attribute->getFrontend()->getInputType() == 'media_image'
+                || !$attribute->getIsVisible()
+            ) {
+                continue;
+            }
+
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $parentProduct->getData($attribute->getAttributeCode())
+            );
+        }
+
+        if (!isset($postData['stock_data']['use_config_manage_stock'])) {
+            $postData['stock_data']['use_config_manage_stock'] = 0;
+        }
+        $product->addData($postData)
+            ->setWebsiteIds($parentProduct->getWebsiteIds())
+            ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+            ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE);
     }
 }

@@ -209,9 +209,12 @@ varienLoaderHandler.handler = {
             //Element.show('loading-process');
         }
     },
-
+    onException : function(transport) {
+        toggleSelectsUnderBlock($('loading-mask'), true);
+        Element.hide('loading-mask');
+    },
     onComplete: function(transport) {
-        if(Ajax.activeRequestCount == 0) {
+        if (Ajax.activeRequestCount == 0) {
             //Element.hide('loading-process');
             toggleSelectsUnderBlock($('loading-mask'), true);
             Element.hide('loading-mask');

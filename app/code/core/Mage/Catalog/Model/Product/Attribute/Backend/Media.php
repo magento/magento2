@@ -43,21 +43,45 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
     protected $_resourceModel;
 
     /**
+     * @var Magento_Filesystem $filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @var string
+     */
+    protected $_baseMediaPath;
+
+    /**
+     * @var string
+     */
+    protected $_baseTmpMediaPath;
+
+    /**
      * Constructor to inject dependencies
      *
-     * @var array $data
+     * @param Magento_Filesystem $filesystem
+     * @param array $data
      */
-    public function __construct($data = array())
+    public function __construct(Magento_Filesystem $filesystem, $data = array())
     {
         if (isset($data['resourceModel'])) {
             $this->_resourceModel = $data['resourceModel'];
         }
+        $this->_filesystem = $filesystem;
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->setWorkingDirectory(Mage::getBaseDir('media'));
+        $this->_baseMediaPath = $this->_getConfig()->getBaseMediaPath();
+        $this->_baseTmpMediaPath = $this->_getConfig()->getBaseTmpMediaPath();
+        $this->_filesystem->ensureDirectoryExists($this->_baseMediaPath);
+        $this->_filesystem->ensureDirectoryExists($this->_baseTmpMediaPath);
     }
 
     /**
      * Load attribute data after product loaded
      *
      * @param Mage_Catalog_Model_Product $object
+     * @return Mage_Eav_Model_Entity_Attribute_Backend_Abstract
      */
     public function afterLoad($object)
     {
@@ -77,6 +101,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         }
 
         $object->setData($attrCode, $value);
+        return $this;
     }
 
     protected function _getDefaultValue($key, &$image)
@@ -100,7 +125,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         if ($this->getAttribute()->getIsRequired()) {
             $value = $object->getData($this->getAttribute()->getAttributeCode());
             if ($this->getAttribute()->isValueEmpty($value)) {
-                if ( !(is_array($value) && count($value)>0) ) {
+                if (!(is_array($value) && count($value) > 0)) {
                     return false;
                 }
             }
@@ -108,7 +133,9 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('The value of attribute "%s" must be unique.', $label));
+                Mage::throwException(
+                    Mage::helper('Mage_Eav_Helper_Data')->__('The value of attribute "%s" must be unique.', $label)
+                );
             }
         }
 
@@ -123,12 +150,12 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
             return;
         }
 
-        if(!is_array($value['images']) && strlen($value['images']) > 0) {
-           $value['images'] = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($value['images']);
+        if (!is_array($value['images']) && strlen($value['images']) > 0) {
+            $value['images'] = Mage::helper('Mage_Core_Helper_Data')->jsonDecode($value['images']);
         }
 
         if (!is_array($value['images'])) {
-           $value['images'] = array();
+            $value['images'] = array();
         }
 
 
@@ -138,9 +165,9 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $existImages = array();
         if ($object->getIsDuplicate()!=true) {
             foreach ($value['images'] as &$image) {
-                if(!empty($image['removed'])) {
+                if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
-                } else if (!isset($image['value_id'])) {
+                } elseif (!isset($image['value_id'])) {
                     $newFile                   = $this->_moveImageFromTmp($image['file']);
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
@@ -238,14 +265,14 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         $toDelete = array();
         $filesToValueIds = array();
         foreach ($value['images'] as &$image) {
-            if(!empty($image['removed'])) {
-                if(isset($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+            if (!empty($image['removed'])) {
+                if (isset($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
                     $toDelete[] = $image['value_id'];
                 }
                 continue;
             }
 
-            if(!isset($image['value_id'])) {
+            if (!isset($image['value_id'])) {
                 $data = array();
                 $data['entity_id']      = $object->getId();
                 $data['attribute_id']   = $this->getAttribute()->getId();
@@ -282,11 +309,9 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
      * @return string
      */
     public function addImage(Mage_Catalog_Model_Product $product, $file,
-        $mediaAttribute = null, $move = false, $exclude = true)
-    {
-        $file = realpath($file);
-
-        if (!$file || !file_exists($file)) {
+        $mediaAttribute = null, $move = false, $exclude = true
+    ) {
+        if (!$this->_filesystem->isFile($file, $this->_baseTmpMediaPath)) {
             Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Image does not exist.'));
         }
 
@@ -304,31 +329,26 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
 
         $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
 
-        $ioAdapter = new Varien_Io_File();
-        $ioAdapter->setAllowCreateFolders(true);
-        $distanationDirectory = dirname($this->_getConfig()->getTmpMediaPath($fileName));
+        $destinationFile = $this->_getConfig()->getTmpMediaPath($fileName);
 
         try {
-            $ioAdapter->open(array(
-                'path'=>$distanationDirectory
-            ));
-
             /** @var $storageHelper Mage_Core_Helper_File_Storage_Database */
             $storageHelper = Mage::helper('Mage_Core_Helper_File_Storage_Database');
             if ($move) {
-                $ioAdapter->mv($file, $this->_getConfig()->getTmpMediaPath($fileName));
+                $this->_filesystem->rename($file, $destinationFile, $this->_baseTmpMediaPath);
 
                 //If this is used, filesystem should be configured properly
                 $storageHelper->saveFile($this->_getConfig()->getTmpMediaShortUrl($fileName));
             } else {
-                $ioAdapter->cp($file, $this->_getConfig()->getTmpMediaPath($fileName));
+                $this->_filesystem->copy($file, $destinationFile, $this->_baseTmpMediaPath);
 
                 $storageHelper->saveFile($this->_getConfig()->getTmpMediaShortUrl($fileName));
-                $ioAdapter->chmod($this->_getConfig()->getTmpMediaPath($fileName), 0777);
+                $this->_filesystem->changePermissions($destinationFile, 0777, false, $this->_baseTmpMediaPath);
             }
-        }
-        catch (Exception $e) {
-            Mage::throwException(Mage::helper('Mage_Catalog_Helper_Data')->__('Failed to move file: %s', $e->getMessage()));
+        } catch (Exception $e) {
+            Mage::throwException(
+                Mage::helper('Mage_Catalog_Helper_Data')->__('Failed to move file: %s', $e->getMessage())
+            );
         }
 
         $fileName = str_replace(DS, '/', $fileName);
@@ -377,8 +397,8 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
      * @return array array of parallel arrays with original and renamed files
      */
     public function addImagesWithDifferentMediaAttributes(Mage_Catalog_Model_Product $product,
-        $fileAndAttributesArray, $filePath = '', $move = false, $exclude = true) {
-
+        $fileAndAttributesArray, $filePath = '', $move = false, $exclude = true
+    ) {
         $alreadyAddedFiles = array();
         $alreadyAddedFilesNames = array();
 
@@ -405,7 +425,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
      * Update image in gallery
      *
      * @param Mage_Catalog_Model_Product $product
-     * @param sting $file
+     * @param string $file
      * @param array $data
      * @return Mage_Catalog_Model_Product_Attribute_Backend_Media
      */
@@ -574,19 +594,10 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
      */
     protected function _moveImageFromTmp($file)
     {
-        $ioObject = new Varien_Io_File();
-        $destDirectory = dirname($this->_getConfig()->getMediaPath($file));
-        try {
-            $ioObject->open(array('path'=>$destDirectory));
-        } catch (Exception $e) {
-            $ioObject->mkdir($destDirectory, 0777, true);
-            $ioObject->open(array('path'=>$destDirectory));
-        }
-
         if (strrpos($file, '.tmp') == strlen($file)-4) {
             $file = substr($file, 0, strlen($file)-4);
         }
-        $destFile = $this->_getUniqueFileName($file, $ioObject->dirsep());
+        $destinationFile = $this->_getUniqueFileName($file);
 
         /** @var $storageHelper Mage_Core_Helper_File_Storage_Database */
         $storageHelper = Mage::helper('Mage_Core_Helper_File_Storage_Database');
@@ -594,28 +605,31 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
         if ($storageHelper->checkDbUsage()) {
             $storageHelper->renameFile(
                 $this->_getConfig()->getTmpMediaShortUrl($file),
-                $this->_getConfig()->getMediaShortUrl($destFile));
+                $this->_getConfig()->getMediaShortUrl($destinationFile)
+            );
 
-            $ioObject->rm($this->_getConfig()->getTmpMediaPath($file));
-            $ioObject->rm($this->_getConfig()->getMediaPath($destFile));
+            $this->_filesystem->delete($this->_getConfig()->getTmpMediaPath($file), $this->_baseTmpMediaPath);
+            $this->_filesystem->delete($this->_getConfig()->getMediaPath($destinationFile), $this->_baseMediaPath);
         } else {
-            $ioObject->mv(
+            $this->_filesystem->rename(
                 $this->_getConfig()->getTmpMediaPath($file),
-                $this->_getConfig()->getMediaPath($destFile)
+                $this->_getConfig()->getMediaPath($destinationFile),
+                $this->_baseTmpMediaPath,
+                $this->_baseMediaPath
             );
         }
 
-        return str_replace($ioObject->dirsep(), '/', $destFile);
+        return str_replace(DS, '/', $destinationFile);
     }
 
     /**
      * Check whether file to move exists. Getting unique name
      *
      * @param <type> $file
-     * @param <type> $dirsep
      * @return string
      */
-    protected function _getUniqueFileName($file, $dirsep) {
+    protected function _getUniqueFileName($file)
+    {
         if (Mage::helper('Mage_Core_Helper_File_Storage_Database')->checkDbUsage()) {
             $destFile = Mage::helper('Mage_Core_Helper_File_Storage_Database')
                 ->getUniqueFilename(
@@ -623,7 +637,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
                     $file
                 );
         } else {
-            $destFile = dirname($file) . $dirsep
+            $destFile = dirname($file) . DS
                 . Mage_Core_Model_File_Uploader::getNewFileName($this->_getConfig()->getMediaPath($file));
         }
 
@@ -639,37 +653,34 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
     protected function _copyImage($file)
     {
         try {
-            $ioObject = new Varien_Io_File();
-            $destDirectory = dirname($this->_getConfig()->getMediaPath($file));
-            $ioObject->open(array('path'=>$destDirectory));
+            $destinationFile = $this->_getUniqueFileName($file);
 
-            $destFile = $this->_getUniqueFileName($file, $ioObject->dirsep());
-
-            if (!$ioObject->fileExists($this->_getConfig()->getMediaPath($file),true)) {
+            if (!$this->_filesystem->isFile($this->_getConfig()->getMediaPath($file), $this->_baseMediaPath)) {
                 throw new Exception();
             }
 
             if (Mage::helper('Mage_Core_Helper_File_Storage_Database')->checkDbUsage()) {
                 Mage::helper('Mage_Core_Helper_File_Storage_Database')
                     ->copyFile($this->_getConfig()->getMediaShortUrl($file),
-                               $this->_getConfig()->getMediaShortUrl($destFile));
+                               $this->_getConfig()->getMediaShortUrl($destinationFile));
 
-                $ioObject->rm($this->_getConfig()->getMediaPath($destFile));
+                $this->_filesystem->delete($this->_getConfig()->getMediaPath($destinationFile), $this->_baseMediaPath);
             } else {
-                $ioObject->cp(
+                $this->_filesystem->copy(
                     $this->_getConfig()->getMediaPath($file),
-                    $this->_getConfig()->getMediaPath($destFile)
+                    $this->_getConfig()->getMediaPath($destinationFile),
+                    $this->_baseMediaPath
                 );
             }
 
+            return str_replace(DS, '/', $destinationFile);
         } catch (Exception $e) {
             $file = $this->_getConfig()->getMediaPath($file);
             Mage::throwException(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('Failed to copy file %s. Please, delete media with non-existing images and try again.', $file)
+                Mage::helper('Mage_Catalog_Helper_Data')
+                    ->__('Failed to copy file %s. Please, delete media with non-existing images and try again.', $file)
             );
         }
-
-        return str_replace($ioObject->dirsep(), '/', $destFile);
     }
 
     public function duplicate($object)

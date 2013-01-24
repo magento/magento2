@@ -39,7 +39,7 @@
             <li>
                 <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                 <div class="input-box">
-                    <input type="text" name="email" id="email" value="<?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text required-entry validate-email" />
+                    <input type="text" name="email" id="email" value="<?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}"/>
                 </div>
             </li>
         <?php $_dob = $this->getLayout()->createBlock('Mage_Customer_Block_Widget_Dob') ?>
@@ -55,7 +55,7 @@
             <li><?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?></li>
         <?php endif ?>
             <li class="control">
-                <input type="checkbox" name="change_password" id="change_password" value="1" onclick="setPasswordForm(this.checked)" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change_password"><?php echo $this->__('Change Password') ?></label>
+                <input type="checkbox" name="change_password" id="change-password" value="1" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change-password"><?php echo $this->__('Change Password') ?></label>
             </li>
         </ul>
     </div>
@@ -63,22 +63,22 @@
         <h2 class="legend"><?php echo $this->__('Change Password') ?></h2>
         <ul class="form-list">
             <li>
-                <label for="current_password" class="required"><em>*</em><?php echo $this->__('Current Password') ?></label>
+                <label for="current-password" class="required"><em>*</em><?php echo $this->__('Current Password') ?></label>
                 <div class="input-box">
-                    <input type="password" title="<?php echo $this->__('Current Password') ?>" class="input-text" name="current_password" id="current_password" />
+                    <input type="password" title="<?php echo $this->__('Current Password') ?>" class="input-text" name="current_password" id="current-password" />
                 </div>
             </li>
             <li class="fields">
                 <div class="field">
                     <label for="password" class="required"><em>*</em><?php echo $this->__('New Password') ?></label>
                     <div class="input-box">
-                        <input type="password" title="<?php echo $this->__('New Password') ?>" class="input-text validate-password" name="password" id="password" />
+                        <input type="password" title="<?php echo $this->__('New Password') ?>" class="input-text" name="password" id="password" />
                     </div>
                 </div>
                 <div class="field">
                     <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm New Password') ?></label>
                     <div class="input-box">
-                        <input type="password" title="<?php echo $this->__('Confirm New Password') ?>" class="input-text validate-cpassword" name="confirmation" id="confirmation" />
+                        <input type="password" title="<?php echo $this->__('Confirm New Password') ?>" class="input-text" name="confirmation" id="confirmation" />
                     </div>
                 </div>
             </li>
@@ -91,24 +91,41 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('form-validate', true);
-    function setPasswordForm(arg){
-        if(arg){
-            $('current_password').up(3).show();
-            $('current_password').addClassName('required-entry');
-            $('password').addClassName('required-entry');
-            $('confirmation').addClassName('required-entry');
-
-        }else{
-            $('current_password').up(3).hide();
-            $('current_password').removeClassName('required-entry');
-            $('password').removeClassName('required-entry');
-            $('confirmation').removeClassName('required-entry');
-        }
-    }
-    <?php if($this->getCustomer()->getChangePassword()): ?>
-        setPasswordForm(true);
-    <?php endif; ?>
-//]]>
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            "<?php echo $this->getViewFileUrl('Mage_Customer::set-password.js') ?>",
+            <?php if ($_dob->isEnabled()): ?>
+                "<?php echo $this->getViewFileUrl('mage/validation/dob-rule.js') ?>",
+            <?php endif ?>
+            function() {
+                $('#change-password').setPassword({
+                    currentPasswordId: '#current-password',
+                    passwordId: '#password',
+                    confirmationId: '#confirmation',
+                    passwordContainer: 'div.fieldset',
+                    showOnDefault: <?php echo $this->getCustomer()->getChangePassword() ? 'true' : 'false' ?>
+                });
+                $('#form-validate').validation({
+                <?php if ($_dob->isEnabled()): ?>
+                    errorPlacement: function(error, element) {
+                        if (element.prop('id') === 'dob') {
+                            var dobElement = $('.customer-dob'),
+                                errorClass = error.prop('class');
+                            error.insertAfter(element.parent());
+                            dobElement.find('.validate-custom').addClass(errorClass)
+                                .after('<div class="' + errorClass + '"></div>');
+                        }
+                        else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    ignore: ':hidden:not(#dob)'
+                    <?php endif ?>
+                });
+            });
+    })(jQuery);
 </script>

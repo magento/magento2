@@ -54,10 +54,9 @@ class Mage_Install_Block_Download extends Mage_Install_Block_Abstract
     public function hasLocalCopy()
     {
         $dir = Mage::getConfig()->getModuleDir('etc', 'Mage_Adminhtml');
-        if ($dir && file_exists($dir)) {
+        if ($dir && $this->_filesystem->isDirectory($dir)) {
             return true;
         }
         return false;
     }
 }
-

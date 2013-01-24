@@ -8,3 +8,9 @@ app/code/core/Mage/Poll
 app/code/core/Mage/CatalogSearch
 app/code/core/Mage/Checkout
 app/code/core/Mage/Captcha
+app/code/core/Mage/Customer
+app/code/core/Mage/Downloadable
+app/code/core/Mage/Persistent
+app/code/core/Mage/Wishlist
+app/code/core/Mage/Bundle
+app/code/core/Mage/Adminhtml

@@ -87,10 +87,8 @@ class Mage_Backend_Model_Config_Backend_Email_Logo extends Mage_Backend_Model_Co
         $fileTmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
 
         if ($this->getOldValue() && ($fileTmpName || $deleteFlag)) {
-            $ioService = new Varien_Io_File();
-            $ioService->rm(
-                $this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN) . DS . self::UPLOAD_DIR . DS . $this->getOldValue()
-            );
+            $uploadPath = $this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN) . DS . self::UPLOAD_DIR;
+            $this->_filesystem->delete($uploadPath . DS . $this->getOldValue(), $uploadPath);
         }
         return parent::_beforeSave();
     }

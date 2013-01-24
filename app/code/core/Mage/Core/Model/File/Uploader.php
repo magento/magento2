@@ -99,4 +99,25 @@ class Mage_Core_Model_File_Uploader extends Varien_File_Uploader
 
         return parent::checkAllowedExtension($extension);
     }
+
+    /**
+     * Get file size
+     *
+     * @return int
+     */
+    public function getFileSize()
+    {
+        return $this->_file['size'];
+    }
+
+    /**
+     * Validate file
+     *
+     * @return array
+     */
+    public function validateFile()
+    {
+        $this->_validateFile();
+        return $this->_file;
+    }
 }

@@ -29,9 +29,21 @@
 
 <?php if($_product->isSaleable()): ?>
 <script type="text/javascript">
-//<![CDATA[
-    var bundle = new Product.Bundle(<?php echo $this->getJsonConfig() ?>);
-//]]>
+    (function ($) {
+        head.js("<?php echo $this->getViewFileUrl('Mage_Bundle::/bundle.js') ?>", function() {
+            $('#product_addtocart_form').bundleOption({
+                "bundleConfig": <?php echo $this->getJsonConfig() ?>,
+                "bundleOptionQtyPrefix": "#bundle-option-",
+                "bundleOptionQtySuffix": "-qty-input",
+                "priceSelectors": {
+                    "product-price": "#product-price-<?php echo $_product->getId()?>",
+                    "bundle-price": "#bundle-price-<?php echo $_product->getId()?>",
+                    "price-including-tax": "#price-including-tax-<?php echo $_product->getId()?>",
+                    "price-excluding-tax": "#price-excluding-tax-<?php echo $_product->getId()?>"
+                }
+            });
+        });
+    })(jQuery);
 </script>
 <?php endif; ?>
 <?php if ($this->displayProductStockStatus()): ?>

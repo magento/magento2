@@ -29,6 +29,13 @@
 <?php $_options = Mage::helper('Mage_Core_Helper_Data')->decorateArray($this->getOptions()); ?>
 <?php if ($_product->isSaleable()):?>
     <?php if (count($_options)): ?>
+    <script type="text/javascript">
+        (function ($) {
+            head.js("<?php echo $this->getViewFileUrl('Mage_Bundle::bundle.js') ?>", function () {
+                $('#product_addtocart_form').bundleOption({'optionConfig':<?php echo $this->getJsonConfig()?>}).trigger('changeSelection');
+            });
+        })(jQuery);
+    </script>
         <dl>
         <?php foreach ($_options as $_option): ?>
             <?php if (!$_option->getSelections()): ?>

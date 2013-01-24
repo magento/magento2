@@ -46,15 +46,17 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit extends Mage_Adminhtml_Block_Widge
         $this->_addButton('save_apply', array(
             'class'   => 'save',
             'label'   => Mage::helper('Mage_CatalogRule_Helper_Data')->__('Save and Apply'),
-            'data_attr' => array(
-                'widget-button' => array(
-                    'event' => 'save',
-                    'related' => '#edit_form',
-                    'eventData' => array(
-                        'action' => array(
-                            'args' => array('auto_apply' => 1),
+            'data_attribute' => array(
+                'mage-init' => array(
+                    'button' => array(
+                        'event' => 'save',
+                        'target' => '#edit_form',
+                        'eventData' => array(
+                            'action' => array(
+                                'args' => array('auto_apply' => 1),
+                            ),
                         ),
-                    )
+                    ),
                 ),
             ),
         ));
@@ -62,8 +64,10 @@ class Mage_Adminhtml_Block_Promo_Catalog_Edit extends Mage_Adminhtml_Block_Widge
         $this->_addButton('save_and_continue_edit', array(
             'class'   => 'save',
             'label'   => Mage::helper('Mage_CatalogRule_Helper_Data')->__('Save and Continue Edit'),
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form'),
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
+                ),
             ),
         ), 10);
     }

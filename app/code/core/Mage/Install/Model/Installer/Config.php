@@ -44,8 +44,17 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
 
     protected $_configData = array();
 
-    public function __construct()
+    /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
     {
+        $this->_filesystem = $filesystem;
         $this->_localConfigFile = Mage::getBaseDir('etc') . DS . 'local.xml';
     }
 
@@ -100,12 +109,12 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
 
         $this->_getInstaller()->getDataModel()->setConfigData($data);
 
-        $template = file_get_contents(Mage::getBaseDir('etc') . DS . 'local.xml.template');
+        $template = $this->_filesystem->read(Mage::getBaseDir('etc') . DS . 'local.xml.template');
         foreach ($data as $index => $value) {
             $template = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $template);
         }
-        file_put_contents($this->_localConfigFile, $template);
-        chmod($this->_localConfigFile, 0777);
+        $this->_filesystem->write($this->_localConfigFile, $template);
+        $this->_filesystem->changePermissions($this->_localConfigFile, 0777);
     }
 
     public function getFormData()
@@ -175,9 +184,9 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
     public function replaceTmpInstallDate($date = null)
     {
         $stamp    = strtotime((string) $date);
-        $localXml = file_get_contents($this->_localConfigFile);
+        $localXml = $this->_filesystem->read($this->_localConfigFile);
         $localXml = str_replace(self::TMP_INSTALL_DATE_VALUE, date('r', $stamp ? $stamp : time()), $localXml);
-        file_put_contents($this->_localConfigFile, $localXml);
+        $this->_filesystem->write($this->_localConfigFile, $localXml);
 
         return $this;
     }
@@ -187,9 +196,9 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
         if (!$key) {
             $key = md5(Mage::helper('Mage_Core_Helper_Data')->getRandomString(10));
         }
-        $localXml = file_get_contents($this->_localConfigFile);
+        $localXml = $this->_filesystem->read($this->_localConfigFile);
         $localXml = str_replace(self::TMP_ENCRYPT_KEY_VALUE, $key, $localXml);
-        file_put_contents($this->_localConfigFile, $localXml);
+        $this->_filesystem->write($this->_localConfigFile, $localXml);
 
         return $this;
     }

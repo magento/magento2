@@ -426,6 +426,13 @@ class Mage_Authorizenet_Model_Directpost extends Mage_Paygate_Model_Authorizenet
         if ($orderIncrementId) {
             /* @var $order Mage_Sales_Model_Order */
             $order = Mage::getModel('Mage_Sales_Model_Order')->loadByIncrementId($orderIncrementId);
+            //check payment method
+            $payment = $order->getPayment();
+            if (!$payment || $payment->getMethod() != $this->getCode()) {
+                Mage::throwException(
+                    Mage::helper('Mage_Authorizenet_Helper_Data')->__('Payment error. Order was not found.')
+                );
+            }
             if ($order->getId() &&  $order->getState() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
                 //operate with order
                 $this->_authOrder($order);

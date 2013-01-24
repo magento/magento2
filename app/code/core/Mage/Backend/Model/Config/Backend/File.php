@@ -46,9 +46,15 @@ class Mage_Backend_Model_Config_Backend_File extends Mage_Core_Model_Config_Data
     protected $_maxFileSize = 0;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * @param Mage_Core_Model_Event_Manager $eventDispatcher
      * @param Mage_Core_Model_Cache $cacheManager
      * @param Mage_Backend_Model_Config_Backend_File_RequestData $requestData
+     * @param Magento_Filesystem $filesystem
      * @param Mage_Core_Model_Resource_Abstract $resource
      * @param Varien_Data_Collection_Db $resourceCollection
      * @param array $data
@@ -57,15 +63,15 @@ class Mage_Backend_Model_Config_Backend_File extends Mage_Core_Model_Config_Data
         Mage_Core_Model_Event_Manager $eventDispatcher,
         Mage_Core_Model_Cache $cacheManager,
         Mage_Backend_Model_Config_Backend_File_RequestData $requestData,
+        Magento_Filesystem $filesystem,
         Mage_Core_Model_Resource_Abstract $resource = null,
         Varien_Data_Collection_Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
         $this->_requestData = $requestData;
+        $this->_filesystem = $filesystem;
     }
-
-
 
     /**
      * Save uploaded file before saving config value
@@ -120,7 +126,8 @@ class Mage_Backend_Model_Config_Backend_File extends Mage_Core_Model_Config_Data
      */
     public function validateMaxSize($filePath)
     {
-        if ($this->_maxFileSize > 0 && filesize($filePath) > ($this->_maxFileSize * 1024)) {
+        if ($this->_maxFileSize > 0
+            && $this->_filesystem->getFileSize($filePath, dirname($filePath)) > ($this->_maxFileSize * 1024)) {
             throw Mage::exception('Mage_Core',
                 Mage::helper('Mage_Backend_Helper_Data')
                     ->__('Uploaded file is larger than %.2f kilobytes allowed by server', $this->_maxFileSize)

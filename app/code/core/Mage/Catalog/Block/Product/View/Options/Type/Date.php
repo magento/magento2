@@ -185,6 +185,8 @@ class Mage_Catalog_Block_Product_View_Options_Type_Date extends Mage_Catalog_Blo
     {
         $option = $this->getOption();
 
+        $this->setSkipJsReloadPrice(1);
+
         // $require = $this->getOption()->getIsRequire() ? ' required-entry' : '';
         $require = '';
         $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')

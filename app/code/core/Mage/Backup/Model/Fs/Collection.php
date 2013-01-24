@@ -41,26 +41,31 @@ class Mage_Backup_Model_Fs_Collection extends Varien_Data_Collection_Filesystem
     protected $_baseDir;
 
     /**
-     * Set collection specific parameters and make sure backups folder will exist
+     * @var Magento_Filesystem
      */
-    public function __construct()
+    protected $_filesystem;
+
+    /**
+     * Set collection specific parameters and make sure backups folder will exist
+     *
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
     {
         parent::__construct();
 
         $this->_baseDir = Mage::getBaseDir('var') . DS . 'backups';
+        $this->_filesystem = $filesystem;
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem->ensureDirectoryExists($this->_baseDir);
+        $this->_filesystem->setWorkingDirectory($this->_baseDir);
 
-        // check for valid base dir
-        $ioProxy = new Varien_Io_File();
-        $ioProxy->mkdir($this->_baseDir);
-        if (!is_file($this->_baseDir . DS . '.htaccess')) {
-            $ioProxy->open(array('path' => $this->_baseDir));
-            $ioProxy->write('.htaccess', 'deny from all', 0644);
-        }
+        $this->_hideBackupsForApache();
 
         // set collection specific params
         $extensions = Mage::helper('Mage_Backup_Helper_Data')->getExtensions();
 
-        foreach ($extensions as $key => $value) {
+        foreach ($extensions as $value) {
             $extensions[] = '(' . preg_quote($value, '/') . ')';
         }
         $extensions = implode('|', $extensions);
@@ -71,6 +76,18 @@ class Mage_Backup_Model_Fs_Collection extends Varien_Data_Collection_Filesystem
             ->setFilesFilter('/^[a-z0-9\-\_]+\.' . $extensions . '$/')
             ->setCollectRecursively(false)
         ;
+    }
+
+    /**
+     * Create .htaccess file and deny backups directory access from web
+     */
+    protected function _hideBackupsForApache()
+    {
+        $htaccessPath = $this->_baseDir . DS . '.htaccess';
+        if (!$this->_filesystem->isFile($htaccessPath)) {
+            $this->_filesystem->write($htaccessPath, 'deny from all');
+            $this->_filesystem->changePermissions($htaccessPath, 0644);
+        }
     }
 
     /**
@@ -86,7 +103,7 @@ class Mage_Backup_Model_Fs_Collection extends Varien_Data_Collection_Filesystem
             ->getData() as $key => $value) {
             $row[$key] = $value;
         }
-        $row['size'] = filesize($filename);
+        $row['size'] = $this->_filesystem->getFileSize($filename);
         $row['id'] = $row['time'] . '_' . $row['type'];
         return $row;
     }

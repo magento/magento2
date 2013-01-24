@@ -34,7 +34,8 @@ interface Mage_DesignEditor_Model_History_RendererInterface
      *
      * @abstract
      * @param Mage_DesignEditor_Model_Change_Collection $collection
+     * @param null $handle
      * @return string
      */
-    public function render(Mage_DesignEditor_Model_Change_Collection $collection);
+    public function render(Mage_DesignEditor_Model_Change_Collection $collection, $handle = null);
 }

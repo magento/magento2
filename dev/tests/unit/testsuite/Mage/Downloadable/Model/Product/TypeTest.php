@@ -34,7 +34,8 @@ class Mage_Downloadable_Model_Product_TypeTest extends PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->_model = new Mage_Downloadable_Model_Product_Type();
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Downloadable_Model_Product_Type($filesystem);
     }
 
     public function testHasWeightFalse()

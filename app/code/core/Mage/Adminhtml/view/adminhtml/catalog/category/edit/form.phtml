@@ -54,14 +54,16 @@
     <div id="category_tab_content"></div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    jQuery('#category_edit_form').categoryForm({
-        refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'
-    }).validation({submitHandler: function(form){
-        form.submit();
-        displayLoadingMask();
-    }});
-
+    (function($) {
+        $.mage.extend('categoryForm', 'form',
+            '<?php echo $this->getViewFileUrl('Mage_Adminhtml::catalog/category/form.js') ?>');
+        $('#category_edit_form')
+            .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
+            .mage('validation', {submitHandler: function(form){
+                form.submit();
+                displayLoadingMask();
+            }});
+    })(jQuery);
 <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
 
     var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
@@ -131,5 +133,4 @@
     }
     $('active_tab_id').tabsJsObject = jQuery('#<?php echo $tabsBlock->getId() ?>');
 <?php endif; ?>
-//]]>
 </script>

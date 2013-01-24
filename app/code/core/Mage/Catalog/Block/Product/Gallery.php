@@ -40,6 +40,7 @@ class Mage_Catalog_Block_Product_Gallery extends Mage_Core_Block_Template
         }
         return parent::_prepareLayout();
     }
+
     public function getProduct()
     {
         return Mage::registry('product');
@@ -82,7 +83,7 @@ class Mage_Catalog_Block_Product_Gallery extends Mage_Core_Block_Template
     public function getImageWidth()
     {
         $file = $this->getCurrentImage()->getPath();
-        if (file_exists($file)) {
+        if ($this->_filesystem->isFile($file)) {
             $size = getimagesize($file);
             if (isset($size[0])) {
                 if ($size[0] > 600) {

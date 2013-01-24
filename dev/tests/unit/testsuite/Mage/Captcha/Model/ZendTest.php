@@ -231,10 +231,10 @@ class Mage_Captcha_Model_ZendTest extends PHPUnit_Framework_TestCase
      */
     protected function _getHelperStub()
     {
-        $helper = $this->getMock(
-            'Mage_Captcha_Helper_Data',
-            array('getConfigNode', 'getFonts', '_getWebsiteCode', 'getImgUrl')
-        );
+        $helper = $this->getMockBuilder('Mage_Captcha_Helper_Data')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getConfigNode', 'getFonts', '_getWebsiteCode', 'getImgUrl'))
+            ->getMock();
 
         $helper->expects($this->any())
             ->method('getConfigNode')

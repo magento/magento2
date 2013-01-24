@@ -66,7 +66,7 @@
 <script type="text/javascript">
     (function($) {
         head.js("<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
-            $('#locale').setLocale({url: '<?php echo $this->getChangeUrl();?>'});
+            $.mage.install.changeLocale('#locale', '<?php echo $this->getChangeUrl();?>');
         });
     })(jQuery);
 </script>

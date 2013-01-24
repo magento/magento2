@@ -37,12 +37,25 @@ class Mage_Install_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_varSubFolders;
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Delete all service folders from var directory
      */
     public function cleanVarFolder()
     {
         foreach ($this->getVarSubFolders() as $folder) {
-            Varien_Io_File::rmdirRecursive($folder);
+            try {
+                $this->_filesystem->delete($folder);
+            } catch (Magento_Filesystem_Exception $e) {
+            }
         }
     }
 

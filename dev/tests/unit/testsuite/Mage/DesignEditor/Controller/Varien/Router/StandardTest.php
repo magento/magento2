@@ -183,7 +183,8 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
     ) {
         // default mocks - not affected on method functionality
         $controllerFactory  = $this->getMock('Mage_Core_Controller_Varien_Action_Factory', array(), array(), '', false);
-        $objectManager      = $this->getMock('Magento_ObjectManager', array(), array(), '', false);
+        $filesystem         = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $app                = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
         $testArea           = 'frontend';
         $testBaseController = 'Mage_Core_Controller_Varien_Action';
 
@@ -242,7 +243,8 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
 
         $router = new Mage_DesignEditor_Controller_Varien_Router_Standard(
             $controllerFactory,
-            $objectManager,
+            $filesystem,
+            $app,
             $testArea,
             $testBaseController,
             $backendSession,

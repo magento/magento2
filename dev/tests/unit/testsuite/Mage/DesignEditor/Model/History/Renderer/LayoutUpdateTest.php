@@ -35,6 +35,30 @@ class Mage_DesignEditor_Model_History_Renderer_LayoutUpdateTest extends PHPUnit_
     protected $_layoutRenderer;
 
     /**
+     * Test changes data
+     *
+     * @var array
+     */
+    protected $_testChanges = array(
+        0 => array(
+            'handle'                => 'catalog_category_view',
+            'type'                  => 'layout',
+            'element_name'          => 'category.products',
+            'action_name'           => 'move',
+            'destination_container' => 'right',
+            'destination_order'     => '-',
+            'origin_container'      => 'content',
+            'origin_order'          => '-'
+        ),
+        1 => array(
+            'handle'                => 'customer_account',
+            'type'                  => 'layout',
+            'element_name'          => 'customer_account_navigation',
+            'action_name'           => 'remove',
+        ),
+    );
+
+    /**
      * Init test environment
      */
     protected function setUp()
@@ -42,18 +66,36 @@ class Mage_DesignEditor_Model_History_Renderer_LayoutUpdateTest extends PHPUnit_
         $this->_layoutRenderer = new Mage_DesignEditor_Model_History_Renderer_LayoutUpdate;
     }
 
+    protected function tearDown()
+    {
+        unset($this->_layoutRenderer);
+    }
+
     /**
      * Test renderer
      *
      * @param array $changes
-     * @dataProvider getChanges
+     * @dataProvider renderDataProvider
      */
-    public function testRenderer($changes)
+    public function testRender($changes)
     {
         $collection = $this->_mockCollection($changes);
 
+        // assert render all changes
         $this->assertXmlStringEqualsXmlFile(
-            realpath(__DIR__) . '/../../_files/history/layout_renderer.xml', $this->_layoutRenderer->render($collection)
+            realpath(__DIR__) . '/../../_files/history/layout_renderer.xml',
+            $this->_layoutRenderer->render($collection)
+        );
+
+        // assert render specified handle
+        $handleIndex = 0;
+        $expectedXml = '<move element="'
+            . $this->_testChanges[$handleIndex]['element_name'] . '" after="'
+            . $this->_testChanges[$handleIndex]['destination_order'] . '" destination="'
+            . $this->_testChanges[$handleIndex]['destination_container'] . '"/>';
+        $this->assertXmlStringEqualsXmlString(
+            $expectedXml,
+            $this->_layoutRenderer->render($collection, $this->_testChanges[$handleIndex]['handle'])
         );
     }
 
@@ -89,25 +131,8 @@ class Mage_DesignEditor_Model_History_Renderer_LayoutUpdateTest extends PHPUnit_
      *
      * @return array
      */
-    public function getChanges()
+    public function renderDataProvider()
     {
-        return array(array(array(
-            array(
-                'handle'                => 'catalog_category_view',
-                'type'                  => 'layout',
-                'element_name'          => 'category.products',
-                'action_name'           => 'move',
-                'destination_container' => 'right',
-                'destination_order'     => '-',
-                'origin_container'      => 'content',
-                'origin_order'          => '-'
-            ),
-            array(
-                'handle'                => 'customer_account',
-                'type'                  => 'layout',
-                'element_name'          => 'customer_account_navigation',
-                'action_name'           => 'remove',
-            ),
-        )));
+        return array(array($this->_testChanges));
     }
 }

@@ -1,4 +1,16 @@
-<input id="%htmlId%_upload" type="file" name="image" data-url="%uploadImage%" style="display: none;" />
-<input id="%htmlId%" name="%htmlId%" data-ui-id="form-element-%htmlId%" value="%imageValue%" type="hidden"/>
-<img align="left" src="%imageUrl%" id="%htmlId%_image" title="%imageUrl%" alt="%imageUrl%" class="base-image-uploader" onclick="jQuery('#%htmlId%_upload').trigger('click')"/>
-<script>/* <![CDATA[ */jQuery(function(){BaseImageUploader(%htmlId%, 999); });/*]]>*/</script>
+<input id="%htmlId%-upload" type="file" name="image" data-url="%uploadImage%" style="display:none" />
+<input id="%htmlId%" type="hidden" name="%htmlId%" />
+<div id="%htmlId%-container" data-main="%imageValue%" data-images="[]">
+    <span id="%htmlId%-upload-placeholder"></span>
+    <script id="%htmlId%-template" type="text/x-jquery-tmpl">
+        <span class="container">
+            <span class="main-sticker">"Main"</span>
+            <span class="close">&amp;times;</span>
+            <img class="base-image-uploader" src="${url}" data-position="${position}" alt="${label}" />
+            <div class="drag-zone">
+                <button class="make-main" type="button">"Make Main"</button>
+            </div>
+        </span>
+    </script>
+</div>
+<script>/* <![CDATA[ */jQuery(function(){BaseImageUploader("%htmlId%", "999"); });/*]]>*/</script>

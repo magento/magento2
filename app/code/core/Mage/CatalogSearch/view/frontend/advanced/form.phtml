@@ -47,16 +47,16 @@
                 <?php switch($this->getAttributeInputType($_attribute)):
                     case 'number': ?>
                     <div class="input-range">
-                        <input type="text" name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text validate-number" maxlength="<?php echo $maxQueryLength;?>" />
+                        <input type="text" name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
                         <span class="separator">-</span>
-                        <input type="text" name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text validate-number" maxlength="<?php echo $maxQueryLength;?>" />
+                        <input type="text" name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
                     </div>
                     <?php break;
                     case 'price': ?>
                     <div class="input-range">
-                        <input name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text validate-number" type="text" maxlength="<?php echo $maxQueryLength;?>" />
+                        <input name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text" type="text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'less-than-equals-to':'#<?php echo $_code ?>_to'}" />
                         <span class="separator">-</span>
-                        <input name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text validate-number" type="text" maxlength="<?php echo $maxQueryLength;?>" />
+                        <input name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text" type="text" maxlength="<?php echo $maxQueryLength;?>" data-validate="{number:true, 'greater-than-equals-to':'#<?php echo $_code ?>'}" />
                         <small>(<?php echo $this->getCurrency($_attribute); ?>)</small>
                     </div>
                     <?php break;
@@ -90,7 +90,27 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('form-validate', true);
-//]]>
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            function() {
+                $('#form-validate').validation({
+                    errorPlacement: function (error, element) {
+                        var parent = element.parent();
+                        if (parent.hasClass('input-range')) {
+                            parent.find(this.errorElement + '.' + this.errorClass).remove().end().append(error);
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    messages: {
+                        'price[to]': {'greater-than-equals-to': 'Please enter a valid price range.'},
+                        'price[from]': {'less-than-equals-to': 'Please enter a valid price range.'}
+                    }
+                });
+            });
+    })(jQuery);
 </script>

@@ -32,7 +32,7 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
      */
     const FRONT_NAME = 'vde';
     const ROUTE_PATH = 'design';
-    const VALID_URL = 'http://test.com';
+    const BASE_URL   = 'http://test.com';
     /**#@-*/
 
     /**
@@ -41,7 +41,7 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
     protected $_model;
 
     /**
-     * @var Mage_DesignEditor_Helper_Data
+     * @var Mage_DesignEditor_Helper_Data|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_helper;
 
@@ -62,18 +62,24 @@ class Mage_DesignEditor_Model_Url_NavigationModeTest extends PHPUnit_Framework_T
         $this->assertAttributeEquals($this->_testData, '_data', $this->_model);
     }
 
-    public function testGetRoutePath()
+    public function testGetRouteUrl()
     {
-        $this->_helper->expects($this->once())
+        $this->_helper->expects($this->any())
             ->method('getFrontName')
             ->will($this->returnValue(self::FRONT_NAME));
 
-        $this->_model->setData('route_path', self::ROUTE_PATH);
-        $this->assertEquals(self::FRONT_NAME . '/' . self::ROUTE_PATH, $this->_model->getRoutePath());
-    }
+        $store = $this->getMock('Mage_Core_Model_Store', array('getBaseUrl'), array(), '', false);
+        $store->expects($this->any())
+            ->method('getBaseUrl')
+            ->will($this->returnValue(self::BASE_URL));
 
-    public function testGetRouteUrl()
-    {
-        $this->assertEquals(self::VALID_URL, $this->_model->getRouteUrl(self::VALID_URL));
+        $this->_model->setData('store', $store);
+        $this->_model->setData('type', null);
+
+        $sourceUrl   = self::BASE_URL . '/' . self::ROUTE_PATH;
+        $expectedUrl = self::BASE_URL . '/' . self::FRONT_NAME . '/' . self::ROUTE_PATH;
+
+        $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($sourceUrl));
+        $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($expectedUrl));
     }
 }

@@ -30,7 +30,7 @@
         },
         _create: function() {
             $(this.options.formSelector)
-                .mage().validate({ errorClass: this.options.errorClass });
+                .validation({errorClass: this.options.errorClass});
             this.element.on('click', $.proxy(function(e) {
                if ($(e.target).val() === this.options.placeholder) {
                    $(e.target).val('');

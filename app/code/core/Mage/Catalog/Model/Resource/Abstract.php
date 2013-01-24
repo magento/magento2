@@ -401,7 +401,7 @@ abstract class Mage_Catalog_Model_Resource_Abstract extends Mage_Eav_Model_Entit
                 $storeAttributes[] = (int)$itemData['attribute_id'];
             } elseif ($attribute->isScopeWebsite()) {
                 $websiteAttributes[] = (int)$itemData['attribute_id'];
-            } else {
+            } elseif ($itemData['value_id'] !== null) {
                 $globalValues[] = (int)$itemData['value_id'];
             }
         }

@@ -137,7 +137,7 @@ class Mage_Core_Block_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_block->setLayout($layout);
         $this->assertTrue($this->_block->getDirectOutput());
 
-        $this->assertEmpty($this->_block->fetchView(uniqid('invalid_filename.phtml')));
+        $this->assertEmpty($this->_block->fetchView(__DIR__ . DS . uniqid('invalid_filename.phtml')));
     }
 
     /**

@@ -30,6 +30,11 @@
 class Mage_DesignEditor_Model_History
 {
     /**
+     * Name of flag that shows where exists layout update
+     */
+    const SYSTEM_LAYOUT_UPDATE_FLAG = 'system';
+
+    /**
      * Base class for all change instances
      */
     const BASE_CHANGE_CLASS = 'Mage_DesignEditor_Model_ChangeAbstract';
@@ -77,12 +82,30 @@ class Mage_DesignEditor_Model_History
     }
 
     /**
-     * Load changes from DB. To be able to effectively compact changes they should be all loaded first.
+     * Add xml layout updates directives
      *
+     * @param string $xmlLayoutUpdates
      * @return Mage_DesignEditor_Model_History
      */
-    public function loadChanges()
+    public function addXmlChanges($xmlLayoutUpdates)
     {
+        /** @var $xml Varien_Simplexml_Element */
+        $xml = simplexml_load_string(
+            '<?xml version="1.0" encoding="UTF-8"?><layout>' . $xmlLayoutUpdates . '</layout>',
+            'Varien_Simplexml_Element'
+        );
+        /** @var $node Varien_Simplexml_Element */
+        foreach ($xml->children() as $node) {
+            $item = $this->_getChangeItem($node);
+            $itemId = $item->getData('element_name');
+            if ($this->_collection->getItemById($itemId) !== null) {
+                $this->_collection->removeItemByKey($itemId);
+            }
+            $item->setId($itemId)
+                ->setData(self::SYSTEM_LAYOUT_UPDATE_FLAG, true);
+            $this->_collection->addItem($item);
+        }
+
         return $this;
     }
 
@@ -151,10 +174,11 @@ class Mage_DesignEditor_Model_History
      * Render all types of output
      *
      * @param Mage_DesignEditor_Model_History_RendererInterface $renderer
+     * @param string $handle
      * @return Mage_DesignEditor_Model_History_RendererInterface
      */
-    public function output(Mage_DesignEditor_Model_History_RendererInterface $renderer)
+    public function output(Mage_DesignEditor_Model_History_RendererInterface $renderer, $handle = null)
     {
-        return $renderer->render($this->_collection);
+        return $renderer->render($this->_collection, $handle);
     }
 }

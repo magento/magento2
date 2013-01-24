@@ -38,11 +38,23 @@ class Magento_Autoload_IncludePath
      */
     public static function getFile($class)
     {
+        $relativePath = self::getFilePath($class);
+        return stream_resolve_include_path($relativePath);
+    }
+
+    /**
+     * Get relative file path for specified class
+     *
+     * @static
+     * @param string $class
+     * @return string
+     */
+    public static function getFilePath($class)
+    {
         if (strpos($class, self::NS_SEPARATOR) !== false) {
             $class = ltrim(str_replace(self::NS_SEPARATOR, '_', $class), '_');
         }
-        $relativePath = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-        return stream_resolve_include_path($relativePath);
+        return str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
     }
 
     /**

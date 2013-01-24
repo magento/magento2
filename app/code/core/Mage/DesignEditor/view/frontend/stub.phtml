@@ -24,7 +24,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="vde_element_wrapper vde_stub">
-    <div class="vde_element_title"><?php echo $this->getNameInLayout() ?></div>
-    <div><?php echo $this->getChildHtml() ?></div>
-</div>
+<?php /** @var $this Mage_Core_Block_Template */ ?>
+<?php $childHtml = $this->getChildHtml(); ?>
+<?php if ($childHtml) : ?>
+    <div><?php echo $childHtml ?></div>
+<?php else : ?>
+    <div class="vde_placeholder_content">
+        <img src="<?php echo $this->getViewFileUrl('Mage_DesignEditor::images/block-placeholder.png') ?>"
+             alt="<?php echo $this->__('Placeholder')?>" />
+    </div>
+<?php endif ?>

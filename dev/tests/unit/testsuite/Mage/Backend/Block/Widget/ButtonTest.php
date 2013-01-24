@@ -57,10 +57,21 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
             ->method('helper')
             ->will($this->returnValue($this->_helperMock));
 
+        $coreHelperMock = $this->getMockBuilder('Mage_Core_Helper_Data')->disableOriginalConstructor()->getMock();
+
+        $helperFactoryMock = $this->getMockBuilder('Mage_Core_Model_Factory_Helper')
+            ->disableOriginalConstructor()->getMock();
+
+        $helperFactoryMock->expects($this->any())
+            ->method('get')
+            ->with('Mage_Core_Helper_Data')
+            ->will($this->returnValue($coreHelperMock));
+
         $arguments = array(
             'urlBuilder' =>
                 $this->getMock('Mage_Backend_Model_Url', array(), array(), '', false),
-            'layout' => $this->_layoutMock
+            'layout' => $this->_layoutMock,
+            'helperFactory' => $helperFactoryMock
         );
 
         $objectManagerHelper = new Magento_Test_Helper_ObjectManager($this);
@@ -91,28 +102,34 @@ class Mage_Backend_Block_Widget_ButtonTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    'data_attr' => array(
-                        'widget-button' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'validation' => array(
+                            'required' => true
+                        ),
                     ),
                 ),
-                '/data-widget-button="[^"]*" /'
+                '/data-validation="[^"]*" /'
             ),
             array(
                 array(
-                    'data_attr' => array(
-                        'mage-init' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('someKey' => 'someValue')
+                        ),
                     ),
                 ),
                 '/data-mage-init="[^"]*" /'
             ),
             array(
                 array(
-                    'data_attr' => array(
-                        'mage-init' => array('someKey' => 'someValue'),
-                        'widget-button' => array('someKey' => 'someValue'),
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('someKey' => 'someValue')
+                        ),
+                        'validation' => array('required' => true),
                     ),
                 ),
-                '/data-mage-init="[^"]*" data-widget-button="[^"]*" /'
+                '/data-mage-init="[^"]*" data-validation="[^"]*" /'
             ),
         );
     }

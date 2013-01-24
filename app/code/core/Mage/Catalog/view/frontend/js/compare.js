@@ -25,25 +25,24 @@
 /*jshint browser:true jquery:true*/
 /*global confirm:true*/
 (function ($) {
-    $(document).ready(function () {
-        var _compare = {
-            listSelector: null,
-            removeConfirmMessage: null,
-            removeSelector: null,
-            clearAllConfirmMessage: null,
-            clearAllSelector: null
-        };
+    $.widget('mage.compareItems', {
+        _create: function() {
+            this.element.decorate('list', true);
+            this._confirm(this.options.removeSelector, this.options.removeConfirmMessage);
+            this._confirm(this.options.clearAllSelector, this.options.clearAllConfirmMessage);
+        },
 
-        $.mage.event.trigger('mage.compare.initialize', _compare);
-        $(_compare.listSelector).decorate('list', true);
-
-        function _confirmMessage(selector, message) {
-            $(selector).on('click', function () {
+        /**
+         * Set up a click event on the given selector to display a confirmation request message
+         * and ask for that confirmation.
+         * @param selector Selector for the confirmation on click event
+         * @param message Message to display asking for confirmation to perform action
+         * @private
+         */
+        _confirm: function(selector, message) {
+            $(selector).on('click', function() {
                 return confirm(message);
             });
         }
-
-        _confirmMessage(_compare.removeSelector, _compare.removeConfirmMessage);
-        _confirmMessage(_compare.clearAllSelector, _compare.clearAllConfirmMessage);
     });
 })(jQuery);

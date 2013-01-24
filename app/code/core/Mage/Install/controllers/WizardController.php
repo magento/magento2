@@ -53,15 +53,16 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
      */
     protected  function _verifyTheme()
     {
+        /** @var Magento_Filesystem $filesystem */
         $pubTheme = Mage::getDesign()->getPublicDir();
 
-        if (is_dir($pubTheme)) {
-            $isWritable = is_writable($pubTheme);
-        } else {
-            $isWritable = @mkdir($pubTheme, 0777, true);
-            if ($isWritable) {
-                rmdir($pubTheme);
-            }
+        try {
+            $filesystem = $this->_objectManager->get('Magento_Filesystem');
+            $filesystem->setIsAllowCreateDirectories(true);
+            $filesystem->ensureDirectoryExists($pubTheme, 0777);
+            $isWritable = $filesystem->isWritable($pubTheme);
+        } catch (Magento_Filesystem_Exception $e) {
+            $isWritable = false;
         }
 
         if (!$isWritable) {

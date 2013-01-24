@@ -93,40 +93,19 @@ class Js_LiveCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $filename
-     *
-     * @throws Exception
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    protected function _verifyTestRunnable($filename)
-    {
-        $command = 'which rhino';
-        if ($this->_isOsWin()) {
-            $command = 'cscript';
-        }
-        exec($command, $output, $retVal);
-        if ($retVal != 0) {
-            throw new Exception($command . ' does not exist.');
-        }
-        if (!file_exists($filename)) {
-            throw new Exception($filename . ' does not exist.');
-        }
-    }
-
-    /**
      * @dataProvider codeJsHintDataProvider
      */
     public function testCodeJsHint($filename)
     {
-        try{
-            $this->_verifyTestRunnable($filename);
+        $cmd = new Inspection_JsHint_Command($filename, self::$_reportFile);
+        $result = false;
+        try {
+            $result = $cmd->canRun();
         } catch (Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
-        $result = $this->_executeJsHint($filename);
-        if (!$result) {
-            $this->fail("Failed JSHint.");
+        if ($result) {
+            $this->assertTrue($cmd->run(array()), $cmd->getLastRunMessage());
         }
     }
 
@@ -142,44 +121,6 @@ class Js_LiveCodeTest extends PHPUnit_Framework_TestCase
             return array($value);
         };
         return array_map($map, self::$_whiteListJsFiles);
-    }
-
-    /**
-     * Returns cscript for windows and rhino for linux
-     * @return string
-     */
-    protected function _getCommand()
-    {
-        if ($this->_isOsWin()) {
-            return 'cscript ' . TESTS_JSHINT_PATH;
-        } else {
-            return 'rhino ' . TESTS_JSHINT_PATH;
-        }
-    }
-
-    protected function _isOsWin()
-    {
-        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-    }
-
-    /**
-     * Run jsHint against js file; if failed output error to report file
-     * @param $filename - js file name with full path
-     * @return bool
-     */
-    protected function _executeJsHint($filename)
-    {
-        $command = $this->_getCommand() . ' "' . $filename . '" ' . TESTS_JSHINT_OPTIONS;
-        exec($command, $output, $retVal);
-        if ($retVal == 0) {
-            return true;
-        }
-        if ($this->_isOsWin()) {
-            $output = array_slice($output, 2);
-        }
-        $output[] = ''; //empty line to separate each file output
-        file_put_contents(self::$_reportFile, implode(PHP_EOL, $output), FILE_APPEND);
-        return false;
     }
 
     /**

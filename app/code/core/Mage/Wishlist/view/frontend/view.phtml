@@ -52,22 +52,6 @@
             </fieldset>
         </form>
 
-        <script type="text/javascript">
-        //<![CDATA[
-        var wishlistForm = new Validation($('wishlist-view-form'));
-        function addAllWItemsToCart() {
-            var url = '<?php echo $this->getUrl('*/*/allcart', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>';
-            var separator = (url.indexOf('?') >= 0) ? '&' : '?';
-            $$('#wishlist-view-form .qty').each(
-                function (input, index) {
-                    url += separator + input.name + '=' + encodeURIComponent(input.value);
-                    separator = '&';
-                }
-            );
-            setLocation(url);
-        }
-        //]]>
-        </script>
     </div>
     <?php echo $this->getChildHtml('bottom'); ?>
     <div class="buttons-set">

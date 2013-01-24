@@ -96,6 +96,7 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
     public function testGetData()
     {
+        $this->markTestIncomplete('Bug MAGETWO-6986');
         $expectedData = include(dirname(__FILE__) . '/Translate/_files/_translation_data.php');
         $this->assertEquals($expectedData, $this->_model->getData());
     }

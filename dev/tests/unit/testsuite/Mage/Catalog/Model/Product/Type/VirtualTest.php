@@ -34,7 +34,8 @@ class Mage_Catalog_Model_Product_Type_VirtualTest extends PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->_model = new Mage_Catalog_Model_Product_Type_Virtual();
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Catalog_Model_Product_Type_Virtual($filesystem);
     }
 
     public function testHasWeightFalse()

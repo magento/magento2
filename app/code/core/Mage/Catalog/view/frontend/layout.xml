@@ -161,6 +161,7 @@ Product view
         <reference name="head">
             <action method="addJs"><file>varien/product.js</file></action>
             <action method="addJs"><file>varien/configurable.js</file></action>
+            <action method="addCss"><file>Mage_Catalog::zoom.css</file></action>
         </reference>
         <update handle="page_calendar"/>
         <reference name="content">
@@ -195,7 +196,6 @@ Product view
                 <block type="Mage_Core_Block_Template" name="product.info.container" as="options_container">
                     <block type="Mage_Catalog_Block_Product_View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml" translate="label">
                         <label>Info Column Options Wrapper</label>
-                        <block type="Mage_Core_Block_Template" name="options_js" template="Mage_Catalog::product/view/options/js.phtml"/>
                         <block type="Mage_Catalog_Block_Product_View_Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
                             <action method="addOptionRenderer"><type>text</type><block>Mage_Catalog_Block_Product_View_Options_Type_Text</block><template>product/view/options/type/text.phtml</template></action>
                             <action method="addOptionRenderer"><type>file</type><block>Mage_Catalog_Block_Product_View_Options_Type_File</block><template>product/view/options/type/file.phtml</template></action>

@@ -44,7 +44,14 @@ class Mage_Core_Model_Email_TemplateTest extends PHPUnit_Framework_TestCase
         $this->_mail = $this->getMock(
             'Zend_Mail', array('send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'), array('utf-8')
         );
-        $this->_model = $this->getMock('Mage_Core_Model_Email_Template', array('_getMail'), array(), '', false);
+        $this->_model = $this->getMockBuilder('Mage_Core_Model_Email_Template')
+            ->setMethods(array('_getMail'))
+            ->setConstructorArgs(array(
+                $this->getMockBuilder('Mage_Core_Model_Event_Manager')->disableOriginalConstructor()->getMock(),
+                $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock(),
+                Mage::getObjectManager()->create('Magento_Filesystem')
+            ))
+            ->getMock();
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }

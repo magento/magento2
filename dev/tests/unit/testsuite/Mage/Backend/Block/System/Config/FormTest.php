@@ -61,7 +61,12 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     protected $_backendConfigMock;
-    
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_coreConfigMock;
+
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
@@ -105,7 +110,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $this->_fieldFactoryMock = $this->getMock('Mage_Backend_Block_System_Config_Form_Field_Factory',
             array(), array(), '', false, false
         );
-        $coreConfigMock = $this->getMock('Mage_Core_Model_Config',
+        $this->_coreConfigMock = $this->getMock('Mage_Core_Model_Config',
             array(), array(), '', false, false
         );
 
@@ -133,7 +138,7 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
             'cloneModelFactory' => $cloneFactoryMock,
             'fieldsetFactory' => $this->_fieldsetFactoryMock,
             'fieldFactory' => $this->_fieldFactoryMock,
-            'coreConfig' => $coreConfigMock,
+            'coreConfig' => $this->_coreConfigMock,
         );
 
         $helper = new Magento_Test_Helper_ObjectManager($this);
@@ -212,7 +217,10 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $this->_object->initForm();
     }
 
-    public function testInitFields()
+    /**
+     * @dataProvider initFieldsDataProvider
+     */
+    public function testInitFields($backendConfigValue, $xmlConfig, $configPath, $inherit, $expectedValue)
     {
         // Parameters initialization
         $fieldsetMock = $this->getMock('Varien_Data_Form_Element_Fieldset', array(), array(), '', false, false);
@@ -234,15 +242,18 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
 
         $this->_backendConfigMock->expects($this->once())->method('extendConfig')
             ->with('some/config/path', false, array('section1/group1/field1' => 'some_value'))
-            ->will($this->returnArgument(2));
+            ->will($this->returnValue($backendConfigValue));
 
-        
+        $this->_coreConfigMock->expects($this->any())->method('getNode')->will($this->returnValue($xmlConfig));
+
         // Field mock configuration
         $fieldMock = $this->getMock('Mage_Backend_Model_Config_Structure_Element_Field',
             array(), array(), '', false, false
         );
         $fieldMock->expects($this->any())->method('getPath')
             ->will($this->returnValue('section1/group1/field1'));
+        $fieldMock->expects($this->any())->method('getConfigPath')
+            ->will($this->returnValue($configPath));
         $fieldMock->expects($this->any())->method('getGroupPath')->will($this->returnValue('some/config/path'));
         $fieldMock->expects($this->once())->method('getSectionId')->will($this->returnValue('some_section'));
 
@@ -275,8 +286,8 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
             'comment' => 'comment',
             'tooltip' => 'tooltip',
             'hint' => 'hint',
-            'value' => 'some_value',
-            'inherit' => false,
+            'value' => $expectedValue,
+            'inherit' => $inherit,
             'class' => 'frontClass',
             'field_config' => 'fieldData',
             'scope' => 'stores',
@@ -295,5 +306,26 @@ class Mage_Backend_Block_System_Config_FormTest extends PHPUnit_Framework_TestCa
         $fieldMock->expects($this->once())->method('populateInput');
 
         $this->_object->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
+    }
+
+    /**
+     * @return array
+     */
+    public function initFieldsDataProvider()
+    {
+        $xmlConfig = new Mage_Core_Model_Config_Element('
+            <default>
+                <some>
+                    <config>
+                        <path>Config Value</path>
+                    </config>
+                </some>
+            </default>
+        ');
+
+        return array(
+            array(array('section1/group1/field1' => 'some_value'), false, null, false, 'some_value'),
+            array(array(), $xmlConfig, 'some/config/path', true, $xmlConfig->descend('some/config/path')),
+        );
     }
 }

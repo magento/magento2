@@ -51,7 +51,7 @@
                 <li>
                     <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                     <div class="input-box">
-                        <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                        <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
                     </div>
                 </li>
                 <?php if ($this->isNewsletterEnabled()): ?>
@@ -125,11 +125,7 @@
                             <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
                                 <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                             </select>
-                            <script type="text/javascript">
-                            //<![CDATA[
-                                $('region_id').setAttribute('defaultValue', "<?php echo $this->getFormData()->getRegionId() ?>");
-                            //]]>
-                            </script>
+
                             <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('Mage_Customer_Helper_Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
                         </div>
                     </div>
@@ -160,13 +156,13 @@
                     <div class="field">
                         <label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" />
+                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text" data-validate="{required:true, 'validate-password':true}" />
                         </div>
                     </div>
                     <div class="field">
                         <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" />
+                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}" />
                         </div>
                     </div>
                 </li>
@@ -180,11 +176,46 @@
         </div>
     </form>
     <script type="text/javascript">
-    //<![CDATA[
-        var dataForm = new VarienForm('form-validate', true);
-        <?php if($this->getShowAddressFields()): ?>
-        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>, undefined, 'zip');
-        <?php endif; ?>
-    //]]>
+        (function($) {
+            head.js(
+                "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+                "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+                "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+                "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
+                <?php if ($_dob->isEnabled()): ?>
+                "<?php echo $this->getViewFileUrl('mage/validation/dob-rule.js') ?>",
+                <?php endif ?>
+                function() {
+                    var dataForm = $('#form-validate').validation({
+                        <?php if ($_dob->isEnabled()): ?>
+                        errorPlacement: function(error, element) {
+                            if (element.prop('id') === 'dob') {
+                                var dobElement = $('.customer-dob'),
+                                    errorClass = error.prop('class');
+                                error.insertAfter(element.parent());
+                                dobElement.find('.validate-custom').addClass(errorClass)
+                                    .after('<div class="' + errorClass + '"></div>');
+                            }
+                            else {
+                                error.insertAfter(element);
+                            }
+                        },
+                        ignore: ':hidden:not(#dob)'
+                        <?php endif ?>
+                    });
+                    <?php if($this->getShowAddressFields()): ?>
+                    $('#country').regionUpdater({
+                        regionListId: '#region_id',
+                        regionInputId: '#region',
+                        postcodeId: '#zip',
+                        form: dataForm,
+                        regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
+                        defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+                        countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>
+                    });
+                    <?php endif; ?>
+                });
+        })(jQuery);
     </script>
 </div>

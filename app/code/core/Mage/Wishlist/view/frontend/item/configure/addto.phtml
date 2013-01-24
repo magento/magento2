@@ -29,7 +29,7 @@
 <?php $_wishlistSubmitUrl = $this->helper('Mage_Wishlist_Helper_Data')->getUpdateUrl($_wishlistItem); ?>
 <ul class="add-to-links">
 <?php if ($this->helper('Mage_Wishlist_Helper_Data')->isAllow()) : ?>
-    <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-compare"><?php echo $this->__('Update Wishlist') ?></a></li>
+    <li><a href="<?php echo $_wishlistSubmitUrl ?>" class="link-compare"><?php echo $this->__('Update Wishlist') ?></a></li>
 <?php endif; ?>
 <?php $_product = $this->getProduct(); ?>
 <?php $_compareUrl = $this->helper('Mage_Catalog_Helper_Product_Compare')->getAddUrl($_product); ?>

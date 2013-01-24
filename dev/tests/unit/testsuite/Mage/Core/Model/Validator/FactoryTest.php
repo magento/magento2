@@ -85,7 +85,7 @@ class Mage_Core_Model_Validator_FactoryTest extends PHPUnit_Framework_TestCase
 
         // Translate adapter mock
         $this->_translateAdapter = $this->getMockBuilder('Mage_Core_Model_Translate')
-            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
             ->setMethods(array('_getTranslatedString'))
             ->getMock();
         $this->_translateAdapter->expects($this->any())

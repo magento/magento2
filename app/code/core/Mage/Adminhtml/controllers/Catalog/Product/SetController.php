@@ -152,10 +152,22 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
         }
 
         if ($isNewSet) {
-            if ($hasError) {
-                $this->_redirect('*/*/add');
+            if ($this->getRequest()->getPost('return_session_messages_only')) {
+                /** @var $block Mage_Core_Block_Messages */
+                $block = $this->_objectManager->get('Mage_Core_Block_Messages');
+                $block->setMessages($this->_getSession()->getMessages(true));
+                $body = $this->_objectManager->get('Mage_Core_Helper_Data')->jsonEncode(array(
+                    'messages' => $block->getGroupedHtml(),
+                    'error'    => $hasError,
+                    'id'       => $model->getId(),
+                ));
+                $this->getResponse()->setBody($body);
             } else {
-                $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                if ($hasError) {
+                    $this->_redirect('*/*/add');
+                } else {
+                    $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                }
             }
         } else {
             $response = array();

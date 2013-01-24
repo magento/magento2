@@ -93,7 +93,6 @@ class CodingStandard_Tool_CodeSniffer implements CodingStandard_ToolInterface
             return preg_quote(str_replace('/', DIRECTORY_SEPARATOR, $item));
         }, $blackList);
 
-
         $this->_wrapper->checkRequirements();
         $settings = $this->_wrapper->getDefaults();
         $settings['files'] = $whiteList;

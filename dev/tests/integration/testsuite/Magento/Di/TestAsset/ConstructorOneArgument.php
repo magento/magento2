@@ -47,4 +47,3 @@ class Magento_Di_TestAsset_ConstructorOneArgument
         $this->_one = $one;
     }
 }
-

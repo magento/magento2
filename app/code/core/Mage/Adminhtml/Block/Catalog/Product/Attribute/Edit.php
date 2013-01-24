@@ -69,8 +69,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
                 array(
                     'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save and Continue Edit'),
                     'class'     => 'save',
-                    'data_attr'  => array(
-                        'widget-button' => array('event' => 'saveAndContinueEdit', 'related' => '#edit_form'),
+                    'data_attribute'  => array(
+                        'mage-init' => array(
+                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
+                        ),
                     ),
                 ),
                 100
@@ -78,8 +80,10 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit extends Mage_Adminhtml
         }
 
         $this->_updateButton('save', 'label', Mage::helper('Mage_Catalog_Helper_Data')->__('Save Attribute'));
-        $this->_updateButton('save', 'data_attr', array(
-            'widget-button' => array('event' => 'save', 'related' => '#edit_form')
+        $this->_updateButton('save', 'data_attribute', array(
+            'mage-init' => array(
+                'button' => array('event' => 'save', 'target' => '#edit_form'),
+            ),
         ));
 
         if (!Mage::registry('entity_attribute') || !Mage::registry('entity_attribute')->getIsUserDefined()) {

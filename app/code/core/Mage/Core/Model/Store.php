@@ -1088,6 +1088,10 @@ class Mage_Core_Model_Store extends Mage_Core_Model_Abstract
             ? $this->getUrl('', array('_secure' => true))
             : $this->getUrl('');
 
+        if (!filter_var($storeUrl, FILTER_VALIDATE_URL)) {
+            return $storeUrl;
+        }
+
         $storeParsedUrl = parse_url($storeUrl);
 
         $storeParsedQuery = array();

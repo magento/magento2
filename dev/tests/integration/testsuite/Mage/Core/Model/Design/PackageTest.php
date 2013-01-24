@@ -39,7 +39,10 @@ class Mage_Core_Model_Design_PackageTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        Varien_Io_File::rmdirRecursive(Mage::app()->getConfig()->getOptions()->getMediaDir() . '/theme');
+        $mediaDir = Mage::app()->getConfig()->getOptions()->getMediaDir();
+        $filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+        $filesystem->delete($mediaDir . '/theme/frontend');
+        $filesystem->delete($mediaDir . '/theme/_merged');
 
         $ioAdapter = new Varien_Io_File();
         $ioAdapter->cp(

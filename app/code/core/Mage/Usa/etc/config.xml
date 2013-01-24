@@ -216,7 +216,7 @@
                 <gateway_url>https://xmlpi-ea.dhl.com/XMLShippingServlet</gateway_url>
                 <id backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
                 <password backend_model="Mage_Backend_Model_Config_Backend_Encrypted"/>
-                <shipment_type>N</shipment_type>
+                <content_type>N</content_type>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>
                 <unit_of_measure>K</unit_of_measure>

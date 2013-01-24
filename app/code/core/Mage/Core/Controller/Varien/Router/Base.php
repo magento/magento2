@@ -58,24 +58,27 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
     /**
      * @var Magento_ObjectManager
      */
-    protected $_objectManager;
+    protected $_app;
 
     /**
      * @param Mage_Core_Controller_Varien_Action_Factory $controllerFactory
-     * @param Magento_ObjectManager $objectManager
+     * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_App $app
      * @param string $areaCode
      * @param string $baseController
      * @throws InvalidArgumentException
      */
     public function __construct(
         Mage_Core_Controller_Varien_Action_Factory $controllerFactory,
-        Magento_ObjectManager $objectManager,
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_App $app,
         $areaCode,
         $baseController
     ) {
         parent::__construct($controllerFactory);
 
-        $this->_objectManager  = $objectManager;
+        $this->_app            = $app;
+        $this->_filesystem     = $filesystem;
         $this->_areaCode       = $areaCode;
         $this->_baseController = $baseController;
 
@@ -175,7 +178,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
             return null;
         }
 
-        $this->_objectManager->loadAreaConfiguration($this->_areaCode);
+        $this->_app->loadDiConfiguration($this->_areaCode);
 
         return $this->_matchController($request, $params);
     }
@@ -483,7 +486,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
     protected function _includeControllerClass($controllerFileName, $controllerClassName)
     {
         if (!class_exists($controllerClassName, false)) {
-            if (!file_exists($controllerFileName)) {
+            if (!$this->_filesystem->isFile($controllerFileName)) {
                 return false;
             }
             include $controllerFileName;
@@ -527,7 +530,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
     {
         foreach ($modules as $module) {
             if ($moduleName === $module || (is_array($module)
-                    && $this->getModuleByName($moduleName, $module))) {
+                && $this->getModuleByName($moduleName, $module))) {
                 return true;
             }
         }
@@ -561,7 +564,11 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
 
     public function validateControllerFileName($fileName)
     {
-        if ($fileName && is_readable($fileName) && false===strpos($fileName, '//')) {
+        if ($fileName
+            && $this->_filesystem->isFile($fileName)
+            && $this->_filesystem->isReadable($fileName)
+            && false === strpos($fileName, '//')
+        ) {
             return true;
         }
         return false;

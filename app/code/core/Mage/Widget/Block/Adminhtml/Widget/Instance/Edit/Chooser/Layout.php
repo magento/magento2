@@ -26,6 +26,9 @@
 
 /**
  * Widget Instance layouts chooser
+ *
+ * @method getArea()
+ * @method getTheme()
  */
 class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Mage_Core_Block_Html_Select
 {
@@ -38,18 +41,17 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Ma
     {
         if (!$this->getOptions()) {
             $this->addOption('', Mage::helper('Mage_Widget_Helper_Data')->__('-- Please Select --'));
-            $layoutUpdateParams = array(
+            $layoutMergeParams = array(
                 'area'    => $this->getArea(),
-                'package' => $this->getPackage(),
                 'theme'   => $this->getTheme(),
             );
             $pageTypes = array();
-            $pageTypesAll = $this->_getLayoutUpdate($layoutUpdateParams)->getPageHandlesHierarchy();
+            $pageTypesAll = $this->_getLayoutMerge($layoutMergeParams)->getPageHandlesHierarchy();
             foreach ($pageTypesAll as $pageTypeName => $pageTypeInfo) {
-                $layoutUpdate = $this->_getLayoutUpdate($layoutUpdateParams);
-                $layoutUpdate->addPageHandles(array($pageTypeName));
-                $layoutUpdate->load();
-                if (!$layoutUpdate->getContainers()) {
+                $layoutMerge = $this->_getLayoutMerge($layoutMergeParams);
+                $layoutMerge->addPageHandles(array($pageTypeName));
+                $layoutMerge->load();
+                if (!$layoutMerge->getContainers()) {
                     continue;
                 }
                 $pageTypes[$pageTypeName] = $pageTypeInfo;
@@ -60,12 +62,12 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Layout extends Ma
     }
 
     /**
-     * Retrieve new layout update model instance
+     * Retrieve new layout merge model instance
      *
      * @param array $arguments
      * @return Mage_Core_Model_Layout_Merge
      */
-    protected function _getLayoutUpdate(array $arguments)
+    protected function _getLayoutMerge(array $arguments)
     {
         return Mage::getModel('Mage_Core_Model_Layout_Merge', array('arguments' => $arguments));
     }

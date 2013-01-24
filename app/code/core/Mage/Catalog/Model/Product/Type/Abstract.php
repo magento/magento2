@@ -112,6 +112,11 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
     const OPTION_PREFIX = 'option_';
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * Delete data specific for this product type
      *
      * @param Mage_Catalog_Model_Product $product
@@ -121,10 +126,12 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
     /**
      * Initialize data
      *
+     * @param Magento_Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(Magento_Filesystem $filesystem, array $data = array())
     {
+        $this->_filesystem = $filesystem;
         $this->_helpers = isset($data['helpers']) ? $data['helpers'] : array();
     }
 
@@ -232,14 +239,17 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
     /**
      * Retrieve product attribute by identifier
      *
-     * @param   int $attributeId
-     * @return  Mage_Eav_Model_Entity_Attribute_Abstract
+     * @param  int $attributeId
+     * @param  Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Resource_Eav_Attribute|null
      */
     public function getAttributeById($attributeId, $product)
     {
-        foreach ($this->getSetAttributes($product) as $attribute) {
-            if ($attribute->getId() == $attributeId) {
-                return $attribute;
+        if ($attributeId) {
+            foreach ($this->getSetAttributes($product) as $attribute) {
+                if ($attribute->getId() == $attributeId) {
+                    return $attribute;
+                }
             }
         }
         return null;
@@ -410,9 +420,14 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
                         $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
 
                         $path = dirname($dst);
-                        $io = new Varien_Io_File();
-                        if (!$io->isWriteable($path) && !$io->mkdir($path, 0777, true)) {
-                            Mage::throwException($this->_helper('Mage_Catalog_Helper_Data')->__("Cannot create writeable directory '%s'.", $path));
+
+                        try {
+                            $this->_filesystem->createDirectory($path, 0777);
+                        } catch (Magento_Filesystem_Exception $e) {
+                            Mage::throwException(
+                                $this->_helper('Mage_Catalog_Helper_Data')
+                                    ->__("Cannot create writeable directory '%s'.", $path)
+                            );
                         }
 
                         $uploader->setDestination($path);
@@ -978,5 +993,16 @@ abstract class Mage_Catalog_Model_Product_Type_Abstract
     public function hasWeight()
     {
         return true;
+    }
+
+    /**
+     * Set image for product without image if possible
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return Mage_Catalog_Model_Product_Type_Abstract
+     */
+    public function setImageFromChildProduct(Mage_Catalog_Model_Product $product)
+    {
+        return $this;
     }
 }

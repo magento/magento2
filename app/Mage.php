@@ -163,7 +163,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '38',
+            'number'    => '39',
         );
     }
 
@@ -636,15 +636,6 @@ final class Mage
             Magento_Profiler::stop('self::app::init');
         }
         return self::$_app;
-    }
-
-    /**
-     * @static
-     * @param string $areaCode
-     */
-    public static function setCurrentArea($areaCode)
-    {
-        self::getObjectManager()->loadAreaConfiguration($areaCode);
     }
 
     /**

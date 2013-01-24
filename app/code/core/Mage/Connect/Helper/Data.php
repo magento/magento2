@@ -34,6 +34,19 @@
 class Mage_Connect_Helper_Data extends Mage_Core_Helper_Data
 {
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Retrieve file system path for local extension packages
      * Return path with last directory separator
      *
@@ -127,16 +140,16 @@ class Mage_Connect_Helper_Data extends Mage_Core_Helper_Data
         $xmlFile = $path . $packageName . '.xml';
         $serFile = $path . $packageName . '.ser';
 
-        if (file_exists($xmlFile) && is_readable($xmlFile)) {
-            $xml  = simplexml_load_file($xmlFile);
+        if ($this->_filesystem->isFile($xmlFile) && $this->_filesystem->isReadable($xmlFile)) {
+            $xml  = simplexml_load_string($this->_filesystem->read($xmlFile));
             $data = Mage::helper('Mage_Core_Helper_Data')->xmlToAssoc($xml);
             if (!empty($data)) {
                 return $data;
             }
         }
 
-        if (file_exists($serFile) && is_readable($xmlFile)) {
-            $data = unserialize(file_get_contents($serFile));
+        if ($this->_filesystem->isFile($serFile) && $this->_filesystem->isReadable($xmlFile)) {
+            $data = unserialize($this->_filesystem->read($serFile));
             if (!empty($data)) {
                 return $data;
             }

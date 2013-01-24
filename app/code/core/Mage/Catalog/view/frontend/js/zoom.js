@@ -22,176 +22,190 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*jshint evil:true browser:true jquery:true*/
-(function ($) {
-    $(document).ready(function () {
-        // Default zoom variables
-        var zoomInit = {
-            imageSelector: '#image',
-            sliderSelector: '#slider',
-            sliderSpeed: 10,
-            zoomNoticeSelector: '#track_hint',
-            zoomInSelector: '#zoom_in',
-            zoomOutSelector: '#zoom_out'
-        };
-        $.mage.event.trigger("mage.zoom.initialize", zoomInit);
+/*jshint evil:true browser:true jquery:true expr:true*/
+(function($) {
+    $.widget('mage.zoom', {
+        options: {
+            sliderSpeed: 10
+        },
 
-        var slider, intervalId = null;
-        var sliderMax = $(zoomInit.sliderSelector).width();
-        var image = $(zoomInit.imageSelector);
-        var imageWidth = image.width();
-        var imageHeight = image.height();
-        var imageParent = image.parent();
-        var imageParentWidth = imageParent.width();
-        var imageParentHeight = imageParent.height();
-        var ceilingZoom, imageInitTop, imageInitLeft;
-        var showFullImage = false;
+        _create: function() {
+            this.sliderMax = $(this.options.sliderSelector).width();
+            this.image = this.element;
+            this.imageWidth = this.image.width();
+            this.imageHeight = this.image.height();
+            this.imageParent = this.image.parent();
+            this.imageParentWidth = this.imageParent.width();
+            this.imageParentHeight = this.imageParent.height();
+            this.showFullImage = false;
 
-        // Image is small than parent container, no need to see full picutre or zoom slider
-        if (imageWidth < imageParentWidth && imageHeight < imageParentHeight) {
-            $(zoomInit.sliderSelector).parent().hide();
-            $(zoomInit.zoomNoticeSelector).hide();
-            return;
-        }
-        // Resize Image to fit parent container
-        if (imageWidth > imageHeight) {
-            ceilingZoom = imageWidth / imageParentWidth;
-            image.width(imageParentWidth);
-            image.css('top', ((imageParentHeight - image.height()) / 2) + 'px');
-        } else {
-            ceilingZoom = imageHeight / imageParentHeight;
-            image.height(imageParentHeight);
-            image.css('left', ((imageParentWidth - image.width()) / 2) + 'px');
-        }
-        // Remember Image original position
-        imageInitTop = image.position().top;
-        imageInitLeft = image.position().left;
+            if (!this._isZoomable()) {
+                return;
+            }
+            this._initialResize();
 
-        // Make Image Draggable
-        function draggableImage() {
-            var topX = image.offset().left,
-                topY = image.offset().top,
-                bottomX = image.offset().left,
-                bottomY = image.offset().top;
+            // Slide slider to zoom in or out the picture
+            this.slider = $(this.options.sliderSelector).slider({
+                value: 0,
+                min: 0,
+                max: this.sliderMax,
+                slide: $.proxy(function(event, ui) {
+                    this._zoom(ui.value, this.sliderMax);
+                }, this),
+                change: $.proxy(function(event, ui) {
+                    this._zoom(ui.value, this.sliderMax);
+                }, this)
+            });
+
+            // Mousedown on zoom in icon to zoom in picture
+            $(this.options.zoomInSelector).on('mousedown', $.proxy(function() {
+                this.intervalId = setInterval($.proxy(function() {
+                    this.slider.slider('value', this.slider.slider('value') + 1);
+                }, this), this.options.sliderSpeed);
+            }, this)).on('mouseup mouseleave', $.proxy(function() {
+                clearInterval(this.intervalId);
+            }, this));
+
+            // Mousedown on zoom out icon to zoom out picture
+            $(this.options.zoomOutSelector).on('mousedown', $.proxy(function() {
+                this.intervalId = setInterval($.proxy(function() {
+                    this.slider.slider('value', this.slider.slider('value') - 1);
+                }, this), this.options.sliderSpeed);
+            }, this)).on('mouseup mouseleave', $.proxy(function() {
+                clearInterval(this.intervalId);
+            }, this));
+
+            // Double-click image to see full picture
+            this.element.on('dblclick', $.proxy(function() {
+                this.showFullImage = !this.showFullImage;
+                var ratio = this.showFullImage ? this.sliderMax : this.slider.slider('value');
+                this._zoom(ratio, this.sliderMax);
+                if (this.showFullImage) {
+                    $(this.options.sliderSelector).hide();
+                    $(this.options.zoomInSelector).hide();
+                    $(this.options.zoomOutSelector).hide();
+                    this.imageParent.css({'overflow': 'visible', 'zIndex': '1000'});
+                } else {
+                    $(this.options.sliderSelector).show();
+                    $(this.options.zoomInSelector).show();
+                    $(this.options.zoomOutSelector).show();
+                    this.imageParent.css({'overflow': 'hidden', 'zIndex': '9'});
+                }
+            }, this));
+
+            // Window resize will change offset for draggable
+            $(window).resize(this._draggableImage());
+        },
+
+        /**
+         * If image dimension is smaller than parent container, disable zoom
+         * @private
+         */
+        _isZoomable: function() {
+            if (this.imageWidth <= this.imageParentWidth && this.imageHeight <= this.imageParentHeight) {
+                $(this.options.sliderSelector).parent().hide();
+                $(this.options.zoomNoticeSelector).hide();
+                return false;
+            }
+            return true;
+        },
+
+        /**
+         * Resize image to fit parent container and set initial image dimension
+         * @private
+         */
+        _initialResize: function() {
+            if (this.imageWidth > this.imageHeight) {
+                this.ceilingZoom = this.imageWidth / this.imageParentWidth;
+                this.image.width(this.imageParentWidth);
+                this.image.css('top', ((this.imageParentHeight - this.image.height()) / 2) + 'px');
+            } else {
+                this.ceilingZoom = this.imageHeight / this.imageParentHeight;
+                this.image.height(this.imageParentHeight);
+                this.image.css('left', ((this.imageParentWidth - this.image.width()) / 2) + 'px');
+            }
+            // Remember Image original position
+            this.imageInitTop = this.image.position().top;
+            this.imageInitLeft = this.image.position().left;
+        },
+
+        /**
+         * Make Image draggable inside parent container dimension
+         * @private
+         */
+        _draggableImage: function() {
+            var topX = this.image.offset().left,
+                topY = this.image.offset().top,
+                bottomX = this.image.offset().left,
+                bottomY = this.image.offset().top;
             // Calculate x offset if image width is greater than image container width
-            if (image.width() > imageParentWidth) {
-                topX = image.width() - (imageParent.offset().left - image.offset().left) - imageParentWidth;
-                topX = image.offset().left - topX;
-                bottomX = imageParent.offset().left - image.offset().left;
-                bottomX = image.offset().left + bottomX;
+            if (this.image.width() > this.imageParentWidth) {
+                topX = this.image.width() - (this.imageParent.offset().left -
+                    this.image.offset().left) - this.imageParentWidth;
+                topX = this.image.offset().left - topX;
+                bottomX = this.imageParent.offset().left - this.image.offset().left;
+                bottomX = this.image.offset().left + bottomX;
             }
             // Calculate y offset if image height is greater than image container height
-            if (image.height() > imageParentHeight) {
-                topY = image.height() - (imageParent.offset().top - image.offset().top) - imageParentHeight;
-                topY = image.offset().top - topY;
-                bottomY = imageParent.offset().top - image.offset().top;
-                bottomY = image.offset().top + bottomY;
+            if (this.image.height() > this.imageParentHeight) {
+                topY = this.image.height() - (this.imageParent.offset().top -
+                    this.image.offset().top) - this.imageParentHeight;
+                topY = this.image.offset().top - topY;
+                bottomY = this.imageParent.offset().top - this.image.offset().top;
+                bottomY = this.image.offset().top + bottomY;
             }
             // containment field is used because image is larger than parent container
-            $(zoomInit.imageSelector).draggable({
+            this.element.draggable({
                 containment: [topX, topY, bottomX, bottomY],
                 scroll: false
             });
-        }
+        },
 
-        // Image zooming bases on slider position
-        function zoom(sliderPosition, sliderLength) {
+        /**
+         * Resize image based on slider position
+         * @param sliderPosition - current slider position (0 to slider track max length)
+         * @param sliderLength - slider track max length
+         * @private
+         */
+        _zoom: function(sliderPosition, sliderLength) {
             var ratio = sliderPosition / sliderLength;
             ratio = ratio > 1 ? 1 : ratio;
-            var imageOldLeft = image.position().left;
-            var imageOldTop = image.position().top;
-            var imageOldWidth = image.width();
-            var imageOldHeight = image.height();
-            var overSize = (imageWidth > imageParentWidth || imageHeight > imageParentHeight);
+            var imageOldLeft = this.image.position().left;
+            var imageOldTop = this.image.position().top;
+            var imageOldWidth = this.image.width();
+            var imageOldHeight = this.image.height();
+            var overSize = (this.imageWidth > this.imageParentWidth || this.imageHeight > this.imageParentHeight);
             var floorZoom = 1;
-            var imageZoom = floorZoom + (ratio * (ceilingZoom - floorZoom));
+            var imageZoom = floorZoom + (ratio * (this.ceilingZoom - floorZoom));
             // Zoomed image is larger than container, and resize image based on zoom ratio
             if (overSize) {
-                if (imageWidth > imageHeight) {
-                    image.width(imageZoom * imageParentWidth);
-                } else {
-                    image.height(imageZoom * imageParentHeight);
-                }
+                this.imageWidth > this.imageHeight ? this.image.width(imageZoom * this.imageParentWidth) :
+                    this.image.height(imageZoom * this.imageParentHeight);
             } else {
-                $(zoomInit.sliderSelector).hide();
+                $(this.options.sliderSelector).hide();
             }
             // Position zoomed image properly
-            var imageNewLeft = imageOldLeft - (image.width() - imageOldWidth) / 2;
-            var imageNewTop = imageOldTop - (image.height() - imageOldHeight) / 2;
+            var imageNewLeft = imageOldLeft - (this.image.width() - imageOldWidth) / 2;
+            var imageNewTop = imageOldTop - (this.image.height() - imageOldHeight) / 2;
             // Image can't be positioned more left than original left
-            if (imageNewLeft > imageInitLeft || image.width() < imageParentWidth) {
-                imageNewLeft = imageInitLeft;
+            if (imageNewLeft > this.imageInitLeft || this.image.width() < this.imageParentWidth) {
+                imageNewLeft = this.imageInitLeft;
             }
             // Image can't be positioned more right than the difference between parent width and image current width
-            if (Math.abs(imageNewLeft) > Math.abs(imageParentWidth - image.width())) {
-                imageNewLeft = imageParentWidth - image.width();
+            if (Math.abs(imageNewLeft) > Math.abs(this.imageParentWidth - this.image.width())) {
+                imageNewLeft = this.imageParentWidth - this.image.width();
             }
             // Image can't be positioned more down than original top
-            if (imageNewTop > imageInitTop || image.height() < imageParentHeight) {
-                imageNewTop = imageInitTop;
+            if (imageNewTop > this.imageInitTop || this.image.height() < this.imageParentHeight) {
+                imageNewTop = this.imageInitTop;
             }
             // Image can't be positioned more top than the difference between parent height and image current height
-            if (Math.abs(imageNewTop) > Math.abs(imageParentHeight - image.height())) {
-                imageNewTop = imageParentHeight - image.height();
+            if (Math.abs(imageNewTop) > Math.abs(this.imageParentHeight - this.image.height())) {
+                imageNewTop = this.imageParentHeight - this.image.height();
             }
-            image.css('left', imageNewLeft + 'px');
-            image.css('top', imageNewTop + 'px');
-            // Because image size and position changed, we need to call recalculate draggable image containment
-            draggableImage();
+            this.image.css({'left': imageNewLeft + 'px', 'top': imageNewTop + 'px'});
+            // Because image size and position changed, we need to recalculate draggable image containment
+            this._draggableImage();
         }
-
-        // Slide slider to zoom in or out the picture
-        slider = $(zoomInit.sliderSelector).slider({
-            value: 0,
-            min: 0,
-            max: sliderMax,
-            slide: function (event, ui) {
-                zoom(ui.value, sliderMax);
-            },
-            change: function (event, ui) {
-                zoom(ui.value, sliderMax);
-            }
-        });
-
-        // Mousedown on zoom in icon to zoom in picture
-        $(zoomInit.zoomInSelector).on('mousedown',function () {
-            intervalId = setInterval(function () {
-                slider.slider('value', slider.slider('value') + 1);
-            }, zoomInit.sliderSpeed);
-        }).on('mouseup mouseleave', function () {
-                clearInterval(intervalId);
-            });
-
-        // Mousedown on zoom out icon to zoom out picture
-        $(zoomInit.zoomOutSelector).on('mousedown',function () {
-            intervalId = setInterval(function () {
-                slider.slider('value', slider.slider('value') - 1);
-            }, zoomInit.sliderSpeed);
-        }).on('mouseup mouseleave', function () {
-                clearInterval(intervalId);
-            });
-
-        // Double-click image to see full picture
-        $(zoomInit.imageSelector).on('dblclick', function () {
-            showFullImage = !showFullImage;
-            var ratio = showFullImage ? sliderMax : slider.slider('value');
-            zoom(ratio, sliderMax);
-            if (showFullImage) {
-                $(zoomInit.sliderSelector).hide();
-                $(zoomInit.zoomInSelector).hide();
-                $(zoomInit.zoomOutSelector).hide();
-                imageParent.css('overflow', 'visible');
-                imageParent.css('zIndex', '1000');
-            } else {
-                $(zoomInit.sliderSelector).show();
-                $(zoomInit.zoomInSelector).show();
-                $(zoomInit.zoomOutSelector).show();
-                imageParent.css('overflow', 'hidden');
-                imageParent.css('zIndex', '9');
-            }
-        });
-
-        // Window resize will change offset for draggable
-        $(window).resize(draggableImage);
     });
 }(jQuery));

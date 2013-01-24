@@ -55,10 +55,12 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      * 'themeConfig' may contain application config and theme config, respectively. If these these entries are not
      * present or null, then they will be retrieved from global application instance.
      *
+     * @param Magento_Filesystem $filesystem
      * @param array $data
      */
-    public function __construct($data)
+    public function __construct(Magento_Filesystem $filesystem, $data)
     {
+        $this->_filesystem = $filesystem;
         $this->_area = $data['area'];
         $this->_locale = $data['locale'];
         $this->_theme = $data['themeModel'];
@@ -128,12 +130,17 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
             $themeModel = $themeModel->getParentTheme();
         }
 
+        $extraDirs = array(
+            $this->_appConfig->getOptions()->getJsDir(),
+            Mage::getDesign()->getCustomizationDir()
+        );
+
         return $this->_fallback(
             $file,
             $dirs,
             $module,
             array("{$moduleDir}/{$this->_area}/locale/{$this->_locale}", "{$moduleDir}/{$this->_area}"),
-            array($this->_appConfig->getOptions()->getJsDir())
+            $extraDirs
         );
     }
 
@@ -164,7 +171,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         $tryFile = '';
         foreach ($dirs as $dir) {
             $tryFile = str_replace('/', DIRECTORY_SEPARATOR, "{$dir}/{$file}");
-            if (file_exists($tryFile)) {
+            if ($this->_filesystem->has($tryFile)) {
                 break;
             }
         }

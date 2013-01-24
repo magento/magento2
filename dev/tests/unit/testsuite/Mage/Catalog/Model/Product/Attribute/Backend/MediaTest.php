@@ -39,9 +39,11 @@ class Mage_Catalog_Model_Product_Attribute_Backend_MediaTest extends PHPUnit_Fra
             ->method('getMainTable')
             ->will($this->returnValue('table'));
 
-        $this->_model = new Mage_Catalog_Model_Product_Attribute_Backend_Media(array(
-            'resourceModel' => $resource
-        ));
+        $filesystem = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
+        $this->_model = new Mage_Catalog_Model_Product_Attribute_Backend_Media(
+            $filesystem,
+            array('resourceModel' => $resource)
+        );
     }
 
     public function testGetAffectedFields()

@@ -52,10 +52,12 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        /** @var $config Mage_Catalog_Model_Product_Media_Config */
+        /** @var Mage_Catalog_Model_Product_Media_Config $config */
         $config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');
-        Varien_Io_File::rmdirRecursive($config->getBaseMediaPath());
-        Varien_Io_File::rmdirRecursive($config->getBaseTmpMediaPath());
+
+        $filesystem = Mage::getObjectManager()->get('Magento_Filesystem');
+        $filesystem->delete($config->getBaseMediaPath());
+        $filesystem->delete($config->getBaseTmpMediaPath());
     }
 
     public function testCanAffectOptions()
@@ -92,14 +94,39 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
 
     public function testAddImageToMediaGallery()
     {
-            $this->_model->addImageToMediaGallery(dirname(dirname(__FILE__)) . '/_files/magento_image.jpg');
-            $gallery = $this->_model->getData('media_gallery');
-            $this->assertNotEmpty($gallery);
-            $this->assertTrue(isset($gallery['images'][0]['file']));
-            $this->assertStringStartsWith('/m/a/magento_image', $gallery['images'][0]['file']);
-            $this->assertTrue(isset($gallery['images'][0]['position']));
-            $this->assertTrue(isset($gallery['images'][0]['disabled']));
-            $this->assertArrayHasKey('label', $gallery['images'][0]);
+        // Model accepts only files in tmp media path, we need to copy fixture file there
+        $mediaFile = $this->_copyFileToBaseTmpMediaPath(dirname(dirname(__FILE__)) . '/_files/magento_image.jpg');
+
+        $this->_model->addImageToMediaGallery($mediaFile);
+        $gallery = $this->_model->getData('media_gallery');
+        $this->assertNotEmpty($gallery);
+        $this->assertTrue(isset($gallery['images'][0]['file']));
+        $this->assertStringStartsWith('/m/a/magento_image', $gallery['images'][0]['file']);
+        $this->assertTrue(isset($gallery['images'][0]['position']));
+        $this->assertTrue(isset($gallery['images'][0]['disabled']));
+        $this->assertArrayHasKey('label', $gallery['images'][0]);
+    }
+
+    /**
+     * Copy file to media tmp directory and return it's name
+     *
+     * @param string $sourceFile
+     * @return string
+     */
+    protected function _copyFileToBaseTmpMediaPath($sourceFile)
+    {
+        /** @var Mage_Catalog_Model_Product_Media_Config $config */
+        $config = Mage::getSingleton('Mage_Catalog_Model_Product_Media_Config');
+        $baseTmpMediaPath = $config->getBaseTmpMediaPath();
+
+        $targetFile = $baseTmpMediaPath . DS . basename($sourceFile);
+
+        /** @var Magento_Filesystem $filesystem */
+        $filesystem = Mage::getObjectManager()->create('Magento_Filesystem');
+        $filesystem->setIsAllowCreateDirectories(true);
+        $filesystem->copy($sourceFile, $targetFile);
+
+        return $targetFile;
     }
 
     /**
@@ -387,5 +414,22 @@ class Mage_Catalog_Model_ProductTest extends PHPUnit_Framework_TestCase
         $result = $this->_model->processBuyRequest($request);
         $this->assertInstanceOf('Varien_Object', $result);
         $this->assertArrayHasKey('errors', $result->getData());
+    }
+
+    public function testValidate()
+    {
+        $this->_model->setTypeId('simple')->setAttributeSetId(4)->setName('Simple Product')
+            ->setSku(uniqid('', true) . uniqid('', true) . uniqid('', true))->setPrice(10)->setMetaTitle('meta title')
+            ->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
+            ->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)
+            ->setStatus(Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+            ->setCollectExceptionMessages(true)
+        ;
+        $validationResult = $this->_model->validate();
+        $this->assertEquals('SKU length should be 64 characters maximum.', $validationResult['sku']);
+        unset($validationResult['sku']);
+        foreach ($validationResult as $error) {
+            $this->assertTrue($error);
+        }
     }
 }

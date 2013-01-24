@@ -193,7 +193,7 @@
     margin-top:4px;
 }
 
-.category-selector-search input.category-selector-active, input.input-text.parent-category-selector-active {
+.category-selector-search input.ui-autocomplete-loading, input.input-text.ui-autocomplete-loading {
     background:#fff url('images/spinner.gif') no-repeat 100%;
     background:url('images/spinner.gif') no-repeat 100%, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
     background:url('images/spinner.gif') no-repeat 100%, -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
@@ -298,7 +298,7 @@
 .category-selector-results .category-selector-disabled {
     display:none;
 }
-.category-selector-more-results.category-selector-active {
+.category-selector-more-results.ui-autocomplete-loading {
     background:#f4f4f4 url('images/spinner.gif') no-repeat 100%;
 }
 
@@ -370,7 +370,7 @@
     box-shadow:none;
 }
 
-.category-selector-container-multi .category-selector-choices .category-selector-search-field input.category-selector-active {
+.category-selector-container-multi .category-selector-choices .category-selector-search-field input.ui-autocomplete-loading {
     background:#fff url('images/spinner.gif') no-repeat 100% !important;
 }
 
@@ -546,7 +546,6 @@
 }
 
 .button:hover {
-    color: #333;
     text-decoration: none;
     background: #f9f9f9;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y5ZjlmOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNmU2ZTYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);

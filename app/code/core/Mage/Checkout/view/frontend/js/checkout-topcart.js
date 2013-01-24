@@ -24,44 +24,45 @@
  */
 /*jshint browser:true jquery:true*/
 (function ($) {
-    $(document).ready(function () {
+    $.widget('mage.topCart', {
+        options: {
+            intervalDuration: 4000
+        },
 
-        var topCartInit = {
-            // Default values
-            intervalDuration: 4000,
-            // Filled in initialization event
-            container: null,
-            closeButton: null
-        };
+        _create: function(){
+            this.element.find(this.options.closeSelector)
+                .on('click', $.proxy(this.hide, this));
+            this.element.parent()
+                .on('mouseleave', $.proxy(this._onMouseleave, this))
+                .on('mouseenter', $.proxy(this._stopTimer, this));
+            this.element.prev().on('click', $.proxy(function () {
+                this.element.slideToggle('slow');
+            }, this));
+        },
 
-        $.mage.event.trigger('mage.checkout.initialize', topCartInit);
+        /**
+         * Hide (slide up) the checkout top-cart.
+         */
+        hide: function(){
+            this.element.slideUp('slow', $.proxy(this._stopTimer, this));
+        },
 
-        topCartInit.container = $(topCartInit.container);
-        topCartInit.closeButton = $(topCartInit.closeButton);
+        /**
+         * Clear (stop) the timer that controls the show/hide of the checkout top-cart.
+         * @private
+         */
+        _stopTimer: function() {
+            clearTimeout(this.timer);
+        },
 
-        var topCartSettings = {
-            element: topCartInit.container.parent(),
-            elementHeader: topCartInit.container.prev(),
-            interval: null
-        };
-
-        topCartInit.closeButton.on('click', function () {
-            topCartInit.container.slideUp('slow', function () {
-                clearTimeout(topCartInit.interval);
-            });
-        });
-
-        topCartSettings.element.on('mouseleave',function () {
-            topCartInit.interval = setTimeout(function () {
-                topCartInit.closeButton.trigger('click');
-            }, topCartInit.intervalDuration);
-        }).on('mouseenter', function () {
-            clearTimeout(topCartSettings.interval);
-        });
-
-        topCartSettings.elementHeader.on('click', function () {
-            $(topCartInit.container).slideToggle('slow');
-        });
-
+        /**
+         * Executes when the mouse leaves the top-cart area. Initiates hiding of the top-cart
+         * after a set interval duration.
+         * @private
+         */
+        _onMouseleave: function() {
+            this._stopTimer();
+            this.timer = setTimeout($.proxy(this.hide, this), this.options.intervalDuration);
+        }
     });
 })(jQuery);

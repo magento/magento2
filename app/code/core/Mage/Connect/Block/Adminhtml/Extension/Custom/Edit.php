@@ -53,16 +53,20 @@ class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit extends Mage_Adminhtml_
             'label'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save Data and Create Package'),
             'class'     => 'save',
             'onclick'   => "createPackage()",
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#edit_form'),
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#edit_form'),
+                ),
             ),
         ));
         $this->_addButton('save_as', array(
             'label'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save As...'),
             'title'     => Mage::helper('Mage_Connect_Helper_Data')->__('Save package with custom package file name'),
             'onclick'   => 'saveAsPackage(event)',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#edit_form'),
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#edit_form'),
+                ),
             ),
         ));
     }

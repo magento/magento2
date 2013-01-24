@@ -1,3 +1,53 @@
+2.0.0.0-dev39
+=============
+* Visual design editor improvements:
+  * VDE changes can be saved to DB for current store and theme. Layout updates composed by VDE are combined into one record
+  * Introduced temporary layout changes which should store non-applied modifications made during VDE functioning. Added new column `updated_at` to `core_layout_update` table for this, added observers and cron jobs to clean outdated layout updates
+  * Added `vde/` prefix to all links inside VDE frame
+  * Disabled caching (layout, blocks HTML, etc) in Design mode
+  * Reviewed and improved "Quit" action to properly cleanup session, cache and cookies
+  * Visual enhancements added when block is being dragged (block display, highlighting, cursor shape)
+  * Added ability to set placeholder for a draggable block in VDE canvas
+  * Fixed sorting of items within container
+  * Improved logic of VDE canvas iframe sizing according to window size to have one scroll bar and static toolbar at the bottom of the page
+* Improved themes management:
+  * New separate tab on theme edit page which allows to view and download CSS files used on frontend. Files are divided to framework files, library files and theme files
+  * Added an ability to upload and store custom CSS file which can be applied on frontend
+  * Improved renaming of virtual themes, restricted modifying of physical themes
+* Implemented changes in product creation process in admin interface:
+  * Added "Variations" block with configurable product attributes in "General" tab. With this block all final prices of configurable product variations can be easily added and configured in one place. Easy sorting mechanism helps understand the order of applying price modifications. "Variations" block can be reloaded itself without reloading all product creation page. All product variations are being created automatically with saving the parent configurable product
+  * Improved image management control. Multiple image control is placed in General tab. It provides easier upload and basic management of product's images than image gallery does.
+  * Changed Save button on product edit page. Save button is implemented as a split-button with the following options: "Save & New", "Save & Duplicate", "Save & Close"
+* Changed representation of a configurable product's image on frontend to use product's variation image instead of parent product's one
+* Implemented js-plugin `mage` to give an ability to extend Magento js-code and modify initializing parameters during the runtime. Replaced instantiation of `form` and `validation` instances with `mage` widget
+* Implemented autocomplete js-component on backend based on jQuery-ui
+* Refactored frontend design theme to use jQuery library instead of Prototype for the following frontend components:
+  * Varien Product class – class handles product price calculations on the client side as product price options are changed: `Product.Config`, `Product.Zoom`, `Product.Super`, `Product.OptionsPrice`
+  * `RegionUpdater` & `ZipUpdater` classes – classes handle dynamically changing State/Province field from drop down to text field depending on selected country. They also handle "required" setting for State/Province and Zip/Postal Code fields.
+  * `Varien.searchForm` – class handles quick search autocomplete functionality
+* `VarienForm` class is deprecated
+* Improved floating toolbar in backend
+* Refactored the following grids in backend to make them configurable through layout, rather than hard-coded: `Mage_Adminhtml_Block_Newsletter_Queue_Grid`, `Mage_Adminhtml_Block_Report_Refresh_Statistics`
+* Dependency injection improvements:
+  * Added ability to generate proxy and factory classes on-the-fly for use with DI implementations. Generators can be managed in DI configuration
+  * Implemented tools (shell scripts) that allow generating skeletons of factory and proxy classes for use with DI implementations
+  * Added ability to set preferences to object manager and specify them through configuration
+* Refactored the following modules to utilize `Magento_Filesystem` library instead of using built-in PHP core functions directly: `Mage_Adminhtml`, `Mage_Backend`, `Mage_Backup`, `Mage_Captcha`, `Mage_Catalog`, `Mage_Cms`, `Mage_Connect`, `Mage_Core`, `Mage_Install`
+* Bug fixes:
+  * Fixed bug with incorrect order processing in `Mage_Authorizenet_Model_Directpost`
+  * Fixed bug with unnecessary "loading" image on Category field during product editing in backend
+  * Fixed bug in `Mage_Adminhtml_CustomerController` with error message during subscription to newsletter
+  * Fixed bug in custom option template with incorrect import of custom option during product creation
+  * Fixed JavaScript bug with image uploader control on product edit page on backend in IE9
+  * Fixed bug with incorrect CSS directives in `app/code/core/Mage/Adminhtml/view/adminhtml/catalog.xml`
+  * Replaced usages of Validation Prototype class with jQuery analog in modules `Manage Attributes Sets`, `Reports` and `Order`
+  * Fixed bug with Javascript errors in "accordion" tabs and incorrect tab content during product creation.
+  * Fixed XSS vulnerability in configurable product on backend product page
+  * Fixed inability to update values in PayPal system configuration
+  * Fixed "The command line is too long" error triggered by static code analysis CLI tools when the lists become too large
+  * Fixed inability to create shipping label for DHL caused by wrong logo image path
+  * Fixed inactive navigation menu item of "Import/Export Tax Rates" page
+
 2.0.0.0-dev38
 =============
 * Changed application initialization procedure

@@ -39,27 +39,30 @@ class Php_Exemplar_CodeStyleTest extends PHPUnit_Framework_TestCase
      */
     protected static $_cmd = null;
 
+    private static $_reportFile = null;
+
     public static function setUpBeforeClass()
     {
-        $reportFile = __DIR__ . '/../../../tmp/phpcs_report.xml';
-        self::$_cmd = new Inspection_CodeSniffer_Command(realpath(__DIR__ . '/../_files/phpcs'), $reportFile);
+        self::$_reportFile = __DIR__ . '/../../../tmp/phpcs_report.xml';
+        $wrapper = new CodingStandard_Tool_CodeSniffer_Wrapper();
+        self::$_cmd = new CodingStandard_Tool_CodeSniffer(
+            realpath(__DIR__ . '/../_files/phpcs'), self::$_reportFile, $wrapper
+        );
     }
 
     protected function setUp()
     {
-        $reportFile = self::$_cmd->getReportFile();
-        if (!is_dir(dirname($reportFile))) {
-            mkdir(dirname($reportFile), 0777);
+        if (!is_dir(dirname(self::$_reportFile))) {
+            mkdir(dirname(self::$_reportFile), 0777);
         }
     }
 
     protected function tearDown()
     {
-        $reportFile = self::$_cmd->getReportFile();
-        if (file_exists($reportFile)) {
-            unlink($reportFile);
+        if (file_exists(self::$_reportFile)) {
+            unlink(self::$_reportFile);
         }
-        rmdir(dirname($reportFile));
+        rmdir(dirname(self::$_reportFile));
     }
 
     public function testPhpCsAvailability()
@@ -92,7 +95,7 @@ class Php_Exemplar_CodeStyleTest extends PHPUnit_Framework_TestCase
         }
 
         self::$_cmd->run(array($inputFile));
-        $resultXml = simplexml_load_file(self::$_cmd->getReportFile());
+        $resultXml = simplexml_load_file(self::$_reportFile);
         $this->_assertTotalErrorsAndWarnings($resultXml, $expectedXml);
         $this->_assertErrors($resultXml, $expectedXml);
         $this->_assertWarnings($resultXml, $expectedXml);

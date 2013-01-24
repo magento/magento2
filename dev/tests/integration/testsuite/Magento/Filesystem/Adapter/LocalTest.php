@@ -169,6 +169,9 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
 
     public function testChangePermissionsDir()
     {
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            $this->markTestSkipped("chmod may not work for Windows");
+        }
         $fileName = $this->_getFixturesPath() . 'new_directory2' . DS . 'tempFile3.css';
         $dirName = $this->_getFixturesPath() . 'new_directory2';
         $this->_deleteFiles[] = $fileName;
@@ -178,6 +181,21 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         $this->_adapter->changePermissions($dirName, 0755, true);
         $this->assertEquals(0755, fileperms($dirName) & 0777);
         $this->assertEquals(0755, fileperms($fileName) & 0777);
+    }
+
+    public function testGetFileMd5()
+    {
+        $this->assertEquals('e5f30e10b8965645d5f8ed5999d88600',
+            $this->_adapter->getFileMd5($this->_getFixturesPath() . 'popup.csv'));
+    }
+
+    /**
+     * @expectedException Magento_Filesystem_Exception
+     * @expectedExceptionMessage Unable to get file hash
+     */
+    public function testGetFileMd5Exception()
+    {
+        $this->_adapter->getFileMd5($this->_getFixturesPath() . 'invalid.csv');
     }
 
     public function testIsFile()
@@ -297,5 +315,97 @@ class Magento_Filesystem_Adapter_LocalTest extends PHPUnit_Framework_TestCase
         $this->assertFileExists($sourceName);
         $this->assertEquals($testData, file_get_contents($targetName));
         $this->assertEquals($testData, file_get_contents($targetName));
+    }
+
+    public function testGetMTime()
+    {
+        $filePath = $this->_getFixturesPath() . 'mtime.txt';
+        $this->_deleteFiles[] = $filePath;
+        $this->_adapter->write($filePath, 'Test');
+        $this->assertFileExists($filePath);
+        $this->assertGreaterThan(0, $this->_adapter->getMTime($filePath));
+    }
+
+    public function testGetFileSize()
+    {
+        $filePath = $this->_getFixturesPath() . 'filesize.txt';
+        $this->_deleteFiles[] = $filePath;
+        $this->_adapter->write($filePath, '1234');
+        $this->assertFileExists($filePath);
+        $this->assertEquals(4, $this->_adapter->getFileSize($filePath));
+    }
+
+    /**
+     * @dataProvider getNestedKeysDataProvider
+     * @param string $path
+     * @param array $expectedKeys
+     */
+    public function testGetNestedKeys($path, $expectedKeys)
+    {
+        $this->assertEquals($expectedKeys, $this->_adapter->getNestedKeys($path));
+    }
+
+    /**
+     * @return array
+     */
+    public function getNestedKeysDataProvider()
+    {
+        return array(
+            array(
+                $this->_getFixturesPath() . 'foo',
+                array(
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'baz' . DS . 'file_one.txt',
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'baz',
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'file_two.txt',
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar',
+                    $this->_getFixturesPath() . 'foo' . DS . 'file_three.txt',
+                )
+            ),
+            array(
+                $this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'baz',
+                array($this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'baz' . DS . 'file_one.txt')
+            )
+        );
+    }
+
+    /**
+     * @expectedException Magento_Filesystem_Exception
+     * @expectedExceptionMessage The directory "/unknown_directory" does not exist.
+     */
+    public function testGetNestedKeysInUnknownDirectory()
+    {
+        $this->_adapter->getNestedKeys('/unknown_directory');
+    }
+
+    /**
+     * @dataProvider getNestedFilesDataProvider
+     * @param string $pattern
+     * @param array $expectedKeys
+     */
+    public function testSearchKeys($pattern, $expectedKeys)
+    {
+        $this->assertEquals($expectedKeys, $this->_adapter->searchKeys($pattern));
+    }
+
+    /**
+     * @return array
+     */
+    public function getNestedFilesDataProvider()
+    {
+        return array(
+            array(
+                $this->_getFixturesPath() . 'foo/*',
+                array(
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar',
+                    $this->_getFixturesPath() . 'foo' . DS . 'file_three.txt',
+                )
+            ),
+            array(
+                $this->_getFixturesPath() . 'foo/*/file_*',
+                array(
+                    $this->_getFixturesPath() . 'foo' . DS . 'bar' . DS . 'file_two.txt',
+                )
+            )
+        );
     }
 }

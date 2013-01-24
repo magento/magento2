@@ -75,5 +75,6 @@
         $( document ).ready(function( ) {
             $( 'body' ).themeSelector(<?php echo $this->getOptionsJson(); ?>);
         });
+        $('.theme-element-customizations').themeControl({url: '<?php echo $this->getUrl('*/*/quickEdit') ?>'});
     })(jQuery);
 </script>

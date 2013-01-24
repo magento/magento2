@@ -57,7 +57,7 @@
 <li>
     <div class="input-box">
         <label for="prefix"><?php echo $this->__('Tables Prefix') ?></label><br />
-        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_prefix]" id="prefix" value="<?php echo $this->getFormData()->getDbPrefix() ?>" title="<?php echo $this->__('Tables Prefix') ?>" data-validate="{validateData:true}" class="input-text" />
+        <input type="text" name="connection[<?php echo $this->getIdPrefix()?>][db_prefix]" id="prefix" value="<?php echo $this->getFormData()->getDbPrefix() ?>" title="<?php echo $this->__('Tables Prefix') ?>" data-validate="{'validate-data':true}" class="input-text" />
         <p style="margin-top:4px; line-height:1.3em; color:#666;">
             <small><?php echo $this->__('(Optional. Leave blank for no prefix)') ?></small>
         </p>

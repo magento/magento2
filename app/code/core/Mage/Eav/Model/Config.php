@@ -113,6 +113,7 @@ class Mage_Eav_Model_Config
         $this->_references            = null;
         $this->_preloadedAttributes   = array();
         $this->_initializedAttributes = array();
+        $this->_attributeCodes        = array();
         return $this;
     }
 

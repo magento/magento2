@@ -88,8 +88,8 @@ class Mage_Backend_Block_Widget_Button extends Mage_Backend_Block_Widget
             'value'     => $this->getValue(),
             'disabled'  => $disabled
         );
-        if ($this->getDataAttr()) {
-            foreach ($this->getDataAttr() as $key => $attr) {
+        if ($this->getDataAttribute()) {
+            foreach ($this->getDataAttribute() as $key => $attr) {
                 $attributes['data-' . $key] = json_encode($attr);
             }
         }

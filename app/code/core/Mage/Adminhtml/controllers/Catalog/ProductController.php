@@ -339,6 +339,17 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
     }
 
     /**
+     * Get variations matrix block
+     *
+     */
+    public function variationsMatrixAction()
+    {
+        $this->_initProductSave($this->_initProduct());
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
      * Get categories fieldset block
      *
      */
@@ -517,7 +528,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $attributes = $product->getAttributes();
             foreach ($attributes as $attrKey => $attribute) {
                 if ($attribute->getBackend()->getType() == 'datetime') {
-                    if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != ''){
+                    if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
                         $dateFields[] = $attrKey;
                     }
                 }
@@ -534,6 +545,14 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             $resource->getAttribute('custom_design_from')
                 ->setMaxValue($product->getCustomDesignTo());
 
+            if ($products = $this->getRequest()->getPost('variations-matrix')) {
+                $validationResult = $this->_validateProductVariations($product, $products);
+                if (!empty($validationResult)) {
+                    $response->setError(true)
+                        ->setMessage(Mage::helper('Mage_Catalog_Helper_Data')->__('Some product variations fields are not valid.'))
+                        ->setAttributes($validationResult);
+                }
+            }
             $product->validate();
             /**
              * @todo implement full validation process with errors returning which are ignoring now
@@ -564,6 +583,40 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         }
 
         $this->getResponse()->setBody($response->toJson());
+    }
+
+    /**
+     * Product variations attributes validation
+     *
+     * @param Mage_Catalog_Model_Product $parentProduct
+     * @param array $products
+     *
+     * @return array
+     */
+    protected function _validateProductVariations($parentProduct, $products)
+    {
+        $validationResult = array();
+        foreach ($products as $productData) {
+            $product = $this->_objectManager->create('Mage_Catalog_Model_Product');
+            $product->setData('_edit_mode', true);
+            if ($storeId = $this->getRequest()->getParam('store')) {
+                $product->setStoreId($storeId);
+            }
+            $product->setAttributeSetId($parentProduct->getAttributeSetId());
+
+            $product->addData($productData);
+            $product->setCollectExceptionMessages(true);
+            $configurableAttribute = Mage::helper('Mage_Core_Helper_Data')
+                ->jsonDecode($productData['configurable_attribute']);
+            $configurableAttribute = implode('-', $configurableAttribute);
+            foreach ($product->validate() as $attributeCode => $result) {
+                if (is_string($result)) {
+                    $validationResult['variations-matrix-' . $configurableAttribute . '-' . $attributeCode] = $result;
+                }
+            }
+        }
+
+        return $validationResult;
     }
 
     /**
@@ -650,25 +703,23 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
 
         $attributes = $this->getRequest()->getParam('attributes');
         if (!empty($attributes)) {
-            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE);
             $this->_objectManager->get('Mage_Catalog_Model_Product_Type_Configurable')->setUsedProductAttributeIds(
                 $attributes,
                 $product
             );
 
-            $product->setAssociatedProductIds($this->getRequest()->getPost('associated_product_ids', array()));
-
-            $data = $this->getRequest()->getPost('configurable_attributes_data');
-            if ($data) {
-                $product->setConfigurableAttributesData(Mage::helper('Mage_Core_Helper_Data')->jsonDecode($data));
+            $product->setNewVariationsAttributeSetId($this->getRequest()->getPost('new-variations-attribute-set-id'));
+            $associatedProductIds = $this->getRequest()->getPost('associated_product_ids', array());
+            if ($this->getRequest()->getActionName() != 'variationsMatrix') {
+                $generatedProductIds = $this->_objectManager->get('Mage_Catalog_Model_Product_Type_Configurable')
+                    ->generateSimpleProducts($product, $this->getRequest()->getPost('variations-matrix', array()));
+                $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
             }
+            $product->setAssociatedProductIds(array_filter($associatedProductIds));
 
             $product->setCanSaveConfigurableAttributes(
                 (bool)$this->getRequest()->getPost('affect_configurable_product_attributes')
             );
-        } elseif ($product->getTypeId() === Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
-            $product->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL);
-            $product->setTypeInstance(null);
         }
 
         /**
@@ -774,10 +825,15 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
             }
         }
 
-        if ($redirectBack) {
+        if ($redirectBack === 'new') {
+            $this->_redirect('*/*/new', array(
+                'set'  => $product->getAttributeSetId(),
+                'type' => $product->getTypeId()
+            ));
+        } elseif ($redirectBack) {
             $this->_redirect('*/*/edit', array(
                 'id'       => $productId,
-                '_current' =>true
+                '_current' => true
             ));
         } elseif ($this->getRequest()->getParam('popup')) {
             $this->_redirect('*/*/created', array(
@@ -941,133 +997,6 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
                 );
             }
         }
-    }
-
-    public function quickCreateAction()
-    {
-        $result = array();
-
-        /* @var $configurableProduct Mage_Catalog_Model_Product */
-        $configurableProduct = $this->_objectManager->create('Mage_Catalog_Model_Product')
-            ->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
-            ->load($this->getRequest()->getParam('product'));
-
-        if (!$configurableProduct->isConfigurable()) {
-            // If invalid parent product
-            $this->_redirect('*/*/');
-            return;
-        }
-
-        /* @var $product Mage_Catalog_Model_Product */
-
-        $product = $this->_objectManager->create('Mage_Catalog_Model_Product')
-            ->setStoreId(0)
-            ->setTypeId(Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
-            ->setAttributeSetId($configurableProduct->getAttributeSetId());
-
-
-        foreach ($product->getTypeInstance()->getEditableAttributes($product) as $attribute) {
-            if ($attribute->getIsUnique()
-                || $attribute->getAttributeCode() == 'url_key'
-                || $attribute->getFrontend()->getInputType() == 'gallery'
-                || $attribute->getFrontend()->getInputType() == 'media_image'
-                || !$attribute->getIsVisible()) {
-                continue;
-            }
-
-            $product->setData(
-                $attribute->getAttributeCode(),
-                $configurableProduct->getData($attribute->getAttributeCode())
-            );
-        }
-        $requestData = $this->getRequest()->getParam('simple_product', array());
-        $product->addData($requestData);
-        $product->setWebsiteIds($configurableProduct->getWebsiteIds());
-
-        $autogenerateOptions = array();
-        $result['attributes'] = array();
-
-        $configurableAttributes = $configurableProduct->getTypeInstance()
-            ->getConfigurableAttributes($configurableProduct);
-        foreach ($configurableAttributes as $attribute) {
-            $value = $product->getAttributeText($attribute->getProductAttribute()->getAttributeCode());
-            $autogenerateOptions[] = $value;
-            $result['attributes'][] = array(
-                'label'         => $value,
-                'value_index'   => $product->getData($attribute->getProductAttribute()->getAttributeCode()),
-                'attribute_id'  => $attribute->getProductAttribute()->getId()
-            );
-        }
-
-        if ($product->getNameAutogenerate()) {
-            $product->setName($configurableProduct->getName() . '-' . implode('-', $autogenerateOptions));
-        }
-
-        if ($product->getSkuAutogenerate()) {
-            $product->setSku($configurableProduct->getSku() . '-' . implode('-', $autogenerateOptions));
-        }
-
-        if (is_array($product->getPricing())) {
-            $result['pricing'] = $product->getPricing();
-            $additionalPrice = 0;
-            foreach ($product->getPricing() as $pricing) {
-                if (empty($pricing['value'])) {
-                    continue;
-                }
-
-                if (!empty($pricing['is_percent'])) {
-                    $pricing['value'] = ($pricing['value']/100)*$product->getPrice();
-                }
-
-                $additionalPrice += $pricing['value'];
-            }
-
-            $product->setPrice($product->getPrice() + $additionalPrice);
-            $product->unsPricing();
-        }
-
-        try {
-            /**
-             * @todo implement full validation process with errors returning which are ignoring now
-             */
-//            if (is_array($errors = $product->validate())) {
-//                $strErrors = array();
-//                foreach($errors as $code=>$error) {
-//                    $codeLabel = $product->getResource()->getAttribute($code)->getFrontend()->getLabel();
-//                    $strErrors[] = ($error === true) ?
-//                    Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid.', $codeLabel) :
-//                    Mage::helper('Mage_Catalog_Helper_Data')->__('Value for "%s" is invalid: %s', $codeLabel, $error);
-//                }
-//                Mage::throwException('data_invalid', implode("\n", $strErrors));
-//            }
-            if (isset($requestData[$product->getIdFieldName()])) {
-                throw new Mage_Core_Exception($this->__('Unable to create product'));
-            }
-
-            $product->validate();
-            $product->save();
-            $result['product_id'] = $product->getId();
-            $this->_getSession()->addSuccess(
-                Mage::helper('Mage_Catalog_Helper_Data')->__('The product has been created.'));
-            $this->_initLayoutMessages('Mage_Adminhtml_Model_Session');
-            $result['messages']  = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
-        } catch (Mage_Core_Exception $e) {
-            $result['error'] = array(
-                'message' =>  $e->getMessage(),
-                'fields'  => array(
-                    'sku'  =>  $product->getSku()
-                )
-            );
-
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $result['error'] = array(
-                'message'   =>  $this->__('An error occurred while saving the product. ') . $e->getMessage()
-             );
-        }
-
-        $helper = $this->_objectManager->get('Mage_Core_Helper_Data');
-        $this->getResponse()->setBody($helper->jsonEncode($result));
     }
 
     /**

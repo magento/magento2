@@ -61,7 +61,7 @@
                 <input type="text" name="admin[email]" id="email_address"
                        value="<?php echo $this->getFormData()->getEmail() ?>"
                        title="<?php echo $this->__('Email Address') ?>"
-                       data-validate="{required:true,validateEmail:true}" class="input-text"/>
+                       data-validate="{required:true,'validate-email':true}" class="input-text"/>
             </li>
         </ul>
     </fieldset>
@@ -81,7 +81,7 @@
                         class="required">*</span></label><br/>
                     <input type="password" name="admin[new_password]" id="password"
                            title="<?php echo $this->__('Password') ?>"
-                           data-validate="{required:true,validateAdminPassword:true}" class="input-text"/>
+                           data-validate="{required:true,'validate-admin-password':true}" class="input-text"/>
                 </div>
                 <div class="input-box">
                     <label for="confirmation"><?php echo $this->__('Confirm Password') ?> <span
@@ -116,12 +116,11 @@
 <script type="text/javascript">
     (function ($) {
         head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/additional-methods.js')?>",
             "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
-            "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>",
-            "<?php echo $this->getViewFileUrl('mage/validation/validate.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>",
             "<?php echo $this->getViewFileUrl('Mage_Install::js/install.js') ?>", function() {
-                $('#form-validate').createAdmin();
+                $.mage.install.createAdmin('#form-validate');
             });
     })(jQuery);
 </script>

@@ -38,29 +38,60 @@
             revert: true,
             connectWithSelector: '.vde_element_wrapper.vde_container',
             placeholder: 'vde_placeholder',
+            forcePlaceholderSize: true,
             hoverClass: 'vde_container_hover',
             items: '.vde_element_wrapper.vde_draggable',
             helper: 'clone',
             appendTo: 'body',
-            containerSelector: '.vde_container'
+            containerSelector: '.vde_container',
+            highlightClass: 'vde_highlight',
+            opacityClass: 'vde_opacity_enabled'
         },
         _create: function() {
             var self = this;
             this.element.data('sortable', this);
             self.options =  $.extend({}, self.options, {
-                start: function( event, ui ) {
-                    ui.placeholder.css({ height: $(ui.helper).outerHeight(true) });
+                start: function(event, ui) {
+                    self._highlightEmptyContainers(ui.helper);
                     self.element.vde_container('option', 'connectWith', $(self.options.connectWithSelector)
                         .not(ui.item)).vde_container('refresh');
+
+                    self.element.addClass(self.options.hoverClass).addClass(self.options.highlightClass);
+                    $(self.options.items).addClass(self.options.opacityClass);
+                    ui.helper.removeClass(self.options.opacityClass);
                 },
                 over: function(event, ui) {
+                    $(self.options.containerSelector).removeClass(self.options.hoverClass);
                     self.element.addClass(self.options.hoverClass);
+
+                    self._highlightEmptyContainers(ui.helper);
                 },
-                out: function(event, ui) {
-                    self.element.removeClass(self.options.hoverClass);
+                stop: function(event, ui) {
+                    $(self.options.containerSelector).removeClass(self.options.hoverClass);
+                    $('.' + self.options.highlightClass).removeClass(self.options.highlightClass);
+                    $(self.options.items).removeClass(self.options.opacityClass);
+
+                    self._disableEmptyContainers();
                 }
             });
             $.ui.sortable.prototype._create.apply(this, arguments);
+        },
+        _highlightEmptyContainers: function(originalElement) {
+            var self = this;
+            $(this.options.containerSelector).each(function (index, element) {
+                if ($(element).find(self.options.items + ':visible').length == 0) {
+                    $(element).addClass(self.options.highlightClass)
+                        .css('min-height', originalElement.outerHeight(true));
+                }
+            })
+        },
+        _disableEmptyContainers: function(originalElement) {
+            var self = this;
+            $(this.options.containerSelector).each(function (index, element) {
+                if ($(element).find(':visible').length == 0) {
+                    $(element).removeClass(self.options.highlightClass).css('min-height', '0px');
+                }
+            })
         }
     });
 
@@ -87,9 +118,9 @@
         _onDragElementStop: function(event, ui) {
             var block = ui.item;
             var originContainer = this.element.data('name');
-            var originPosition = event.data.position;
+            var originPosition = event.data.position - 1;
             var destinationContainer = this._getContainer(block).data('name');
-            var destinationPosition = block.index();
+            var destinationPosition = block.index() - 1;
 
             var containerChanged = destinationContainer != originContainer;
             var sortingOrderChanged = destinationPosition != originPosition;

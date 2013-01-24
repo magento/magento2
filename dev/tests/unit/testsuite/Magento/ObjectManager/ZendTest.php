@@ -31,11 +31,6 @@
 class Magento_ObjectManager_ZendTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Area code
-     */
-    const AREA_CODE = 'global';
-
-    /**
      * Class name
      */
     const CLASS_NAME = 'TestClassName';
@@ -55,16 +50,6 @@ class Magento_ObjectManager_ZendTest extends PHPUnit_Framework_TestCase
     protected $_arguments = array(
         'argument_1' => 'value_1',
         'argument_2' => 'value_2',
-    );
-
-    /**
-     * Expected instance manager parametrized cache after clear
-     *
-     * @var array
-     */
-    protected $_instanceCache = array(
-        'hashShort' => array(),
-        'hashLong'  => array()
     );
 
     /**
@@ -116,21 +101,6 @@ class Magento_ObjectManager_ZendTest extends PHPUnit_Framework_TestCase
         $this->assertAttributeInstanceOf(get_class($diInstance), '_di', $model);
     }
 
-    /**
-     * @dataProvider loadAreaConfigurationDataProvider
-     * @param string $expectedAreaCode
-     * @param string $actualAreaCode
-     */
-    public function testLoadAreaConfiguration($expectedAreaCode, $actualAreaCode)
-    {
-        $this->_prepareObjectManagerForLoadAreaConfigurationTests($expectedAreaCode);
-        if ($actualAreaCode) {
-            $this->_objectManager->loadAreaConfiguration($actualAreaCode);
-        } else {
-            $this->_objectManager->loadAreaConfiguration();
-        }
-    }
-
     public function testCreate()
     {
         $this->_prepareObjectManagerForGetCreateTests(true);
@@ -143,48 +113,6 @@ class Magento_ObjectManager_ZendTest extends PHPUnit_Framework_TestCase
         $this->_prepareObjectManagerForGetCreateTests(false);
         $actualObject = $this->_objectManager->get(self::CLASS_NAME, $this->_arguments);
         $this->assertEquals(self::OBJECT_GET, $actualObject);
-    }
-
-    /**
-     * Create Magento_ObjectManager_Zend instance for testLoadAreaConfiguration
-     *
-     * @param string $expectedAreaCode
-     */
-    protected function _prepareObjectManagerForLoadAreaConfigurationTests($expectedAreaCode)
-    {
-        /** @var $modelConfigMock Mage_Core_Model_Config */
-        $this->_magentoConfig = $this->getMock('Mage_Core_Model_Config', array('getNode', 'loadBase'),
-            array(), '', false
-        );
-
-        $nodeMock = $this->getMock('Varien_Object', array('asArray'), array(), '', false);
-        $nodeArrayValue = array('alias' => array(1));
-        $nodeMock->expects($this->once())
-            ->method('asArray')
-            ->will($this->returnValue($nodeArrayValue));
-
-        $expectedConfigPath = $expectedAreaCode . '/' . Magento_ObjectManager_Zend::CONFIGURATION_DI_NODE;
-        $this->_magentoConfig->expects($this->once())
-            ->method('getNode')
-            ->with($expectedConfigPath)
-            ->will($this->returnValue($nodeMock));
-
-        /** @var $instanceManagerMock Zend\Di\InstanceManager */
-        $this->_instanceManager = $this->getMock('Magento_Di_InstanceManager_Zend',
-            array('addSharedInstance', 'addAlias'), array(), '', false);
-        $this->_instanceManager->expects($this->once())
-            ->method('addAlias');
-
-        $this->_diInstance = $this->getMock('Magento_Di_Zend',
-            array('instanceManager', 'get'), array(), '', false);
-        $this->_diInstance->expects($this->exactly(2))
-            ->method('instanceManager')
-            ->will($this->returnValue($this->_instanceManager));
-        $this->_diInstance->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($this->_magentoConfig));
-
-        $this->_objectManager = new Magento_ObjectManager_Zend(null, $this->_diInstance);
     }
 
     /**
@@ -220,25 +148,6 @@ class Magento_ObjectManager_ZendTest extends PHPUnit_Framework_TestCase
         }
 
         $this->_objectManager = new Magento_ObjectManager_Zend(null, $this->_diInstance);
-    }
-
-    /**
-     * Data provider for testLoadAreaConfiguration
-     *
-     * @return array
-     */
-    public function loadAreaConfigurationDataProvider()
-    {
-        return array(
-            'specified area' => array(
-                '$expectedAreaCode' => self::AREA_CODE,
-                '$actualAreaCode'   => self::AREA_CODE,
-            ),
-            'default area' => array(
-                '$expectedAreaCode' => Magento_ObjectManager_Zend::CONFIGURATION_AREA,
-                '$actualAreaCode'   => null,
-            ),
-        );
     }
 
     /**

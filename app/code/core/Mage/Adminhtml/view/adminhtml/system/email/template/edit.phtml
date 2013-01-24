@@ -111,8 +111,9 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-    jQuery('#email_template_edit_form').form().validation();
-    jQuery('#email_template_preview_form').form().validation();
+    jQuery('#email_template_edit_form').mage('form').mage('validation');
+    jQuery('#email_template_preview_form').mage('form').mage('validation');
+    jQuery('#email_template_load_form').mage('validation');
     var templateControl = {
         unconvertedText: '',
         typeChange: false,
@@ -183,9 +184,7 @@
 
         load: function() {
             // Temporary solution will be replaced after refactoring of email templates functionality
-            var form = jQuery('#email_template_load_form').validation();
-
-            if (!form.valid()) {
+            if (!jQuery('#email_template_load_form').valid()) {
                 return;
             }
 

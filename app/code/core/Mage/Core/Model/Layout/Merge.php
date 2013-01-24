@@ -49,7 +49,7 @@ class Mage_Core_Model_Layout_Merge
     /**
      * @var int
      */
-    private $_themeId;
+    private $_theme;
 
     /**
      * @var int
@@ -106,15 +106,15 @@ class Mage_Core_Model_Layout_Merge
     public function __construct(array $arguments = array())
     {
         /* Default values */
-        if (isset($arguments['area']) && isset($arguments['themeId'])) {
+        if (isset($arguments['area']) && isset($arguments['theme'])) {
             $this->_area = $arguments['area'];
-            $this->_themeId = $arguments['themeId'];
+            $this->_theme = $arguments['theme'];
         } elseif (isset($arguments['area'])) {
             $this->_area = $arguments['area'];
-            $this->_themeId = Mage::getDesign()->getConfigurationDesignTheme($arguments['area']);
+            $this->_theme = Mage::getDesign()->getConfigurationDesignTheme($arguments['area']);
         } else {
             $this->_area = Mage::getDesign()->getArea();
-            $this->_themeId = Mage::getDesign()->getDesignTheme()->getId();
+            $this->_theme = Mage::getDesign()->getDesignTheme()->getId();
         }
 
         $this->_storeId = Mage::app()->getStore(empty($arguments['store']) ? null : $arguments['store'])->getId();
@@ -554,7 +554,7 @@ class Mage_Core_Model_Layout_Merge
      */
     protected function _getCacheId($suffix = '')
     {
-        return "LAYOUT_{$this->_area}_STORE{$this->_storeId}_{$this->_themeId}{$suffix}";
+        return "LAYOUT_{$this->_area}_STORE{$this->_storeId}_{$this->_theme}{$suffix}";
     }
 
     /**
@@ -595,7 +595,7 @@ class Mage_Core_Model_Layout_Merge
      */
     protected function _loadFileLayoutUpdatesXml()
     {
-        $layoutParams = array('area' => $this->_area, 'themeId' => $this->_themeId);
+        $layoutParams = array('area' => $this->_area, 'themeId' => $this->_theme);
 
         /*
          * Allow to modify declared layout updates.

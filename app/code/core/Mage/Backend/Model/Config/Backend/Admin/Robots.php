@@ -34,17 +34,47 @@
 class Mage_Backend_Model_Config_Backend_Admin_Robots extends Mage_Core_Model_Config_Data
 {
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @var string
+     */
+    protected $_filePath;
+
+    /**
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
+     * @param Magento_Filesystem $filesystem
+     * @param Mage_Core_Model_Resource_Abstract $resource
+     * @param Varien_Data_Collection_Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Magento_Filesystem $filesystem,
+        Mage_Core_Model_Resource_Abstract $resource = null,
+        Varien_Data_Collection_Db $resourceCollection = null,
+        array $data = array()
+    ) {
+        parent::__construct($eventDispatcher, $cacheManager, $resource, $resourceCollection, $data);
+        $this->_filesystem = $filesystem;
+        $this->_filePath = Magento_Filesystem::getAbsolutePath(Mage::getBaseDir() . DS . 'robots.txt');
+    }
+
+
+    /**
      * Return content of default robot.txt
      *
      * @return bool|string
      */
     protected function _getDefaultValue()
     {
-        $fileIo = $this->_getFileObject();
-        $file = $this->_getRobotsTxtFilePath();
-        if ($fileIo->fileExists($file)) {
-            $fileIo->open(array('path' => $fileIo->getDestinationFolder($file)));
-            return $fileIo->read($file);
+        $file = $this->_filePath;
+        if ($this->_filesystem->isFile($file)) {
+            return $this->_filesystem->read($file);
         }
         return false;
     }
@@ -71,32 +101,9 @@ class Mage_Backend_Model_Config_Backend_Admin_Robots extends Mage_Core_Model_Con
     protected function _afterSave()
     {
         if ($this->getValue()) {
-            $file = $this->_getRobotsTxtFilePath();
-            $fileIo = $this->_getFileObject();
-            $fileIo->open(array('path' => $fileIo->getDestinationFolder($file)));
-            $fileIo->write($file, $this->getValue());
+            $this->_filesystem->write($this->_filePath, $this->getValue());
         }
 
         return parent::_afterSave();
-    }
-
-    /**
-     * Get path to robots.txt
-     *
-     * @return string
-     */
-    protected function _getRobotsTxtFilePath()
-    {
-        return $this->_getFileObject()->getCleanPath(Mage::getBaseDir() . DS . 'robots.txt');
-    }
-
-    /**
-     * Get file io
-     *
-     * @return Varien_Io_File
-     */
-    protected function _getFileObject()
-    {
-        return new Varien_Io_File();
     }
 }

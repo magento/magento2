@@ -35,14 +35,16 @@
 <script type="text/javascript">
     //<![CDATA[
     (function($) {
-        $.mage.event.observe('mage.cookie.initialize', function (e, o) {
-            o.path = '<?php echo $this->getPath()?>',
-            o.domain = '<?php echo $this->getDomain()?>'
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.cookie.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/cookies.js') ?>", function() {
+            $.extend($.mage.cookies.defaults, {
+                expires: null,
+                path: '<?php echo $this->getPath()?>',
+                domain: '<?php echo $this->getDomain()?>',
+                secure: false
+            });
+            $.extend($.cookie.defaults, $.mage.cookies.defaults);
         });
-        $.mage.load.jsSync(
-            "<?php echo $this->getViewFileUrl('jquery/jquery.cookie.js') ?>",
-            "<?php echo $this->getViewFileUrl('Mage_Page::js/cookie.js') ?>"
-        );
     })(jQuery);
     //]]>
 </script>

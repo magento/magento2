@@ -89,7 +89,30 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
      */
     protected $_sendingException = null;
 
+    /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
     static protected $_defaultTemplates;
+
+    /**
+     * Initialize data
+     *
+     * @param Mage_Core_Model_Event_Manager $eventDispatcher
+     * @param Mage_Core_Model_Cache $cacheManager
+     * @param Magento_Filesystem $filesystem
+     * @param array $data
+     */
+    public function __construct(
+        Mage_Core_Model_Event_Manager $eventDispatcher,
+        Mage_Core_Model_Cache $cacheManager,
+        Magento_Filesystem $filesystem,
+        array $data = array()
+    ) {
+        $this->_filesystem = $filesystem;
+        parent::__construct($eventDispatcher, $cacheManager);
+    }
 
     /**
      * Initialize email template model
@@ -113,7 +136,7 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
         if ($fileName) {
             $uploadDir = Mage_Backend_Model_Config_Backend_Email_Logo::UPLOAD_DIR;
             $fullFileName = Mage::getBaseDir('media') . DS . $uploadDir . DS . $fileName;
-            if (file_exists($fullFileName)) {
+            if ($this->_filesystem->isFile($fullFileName)) {
                 return Mage::getBaseUrl('media') . $uploadDir . '/' . $fileName;
             }
         }
@@ -241,7 +264,7 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
     public function loadBaseContents($module, $filename)
     {
         $includeFilename = Mage::getConfig()->getModuleDir('view', $module) . DIRECTORY_SEPARATOR . $filename;
-        $contents = file_get_contents($includeFilename);
+        $contents = $this->_filesystem->read($includeFilename);
         if (!$contents) {
             throw new Exception(sprintf('Failed to include file "%s".', $includeFilename));
         }

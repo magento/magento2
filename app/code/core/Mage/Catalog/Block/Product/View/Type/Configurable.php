@@ -141,6 +141,7 @@ class Mage_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_Blo
 
         foreach ($this->getAllowProducts() as $product) {
             $productId  = $product->getId();
+            $image = $this->helper('Mage_Catalog_Helper_Image')->init($product, 'image');
 
             foreach ($this->getAllowAttributes() as $attribute) {
                 $productAttribute   = $attribute->getProductAttribute();
@@ -154,6 +155,9 @@ class Mage_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_Blo
                     $options[$productAttributeId][$attributeValue] = array();
                 }
                 $options[$productAttributeId][$attributeValue][] = $productId;
+                !$product->getImage() || $product->getImage() === 'no_selection'
+                    ? $options['images'][$productAttributeId][$attributeValue][$productId] = null
+                    : $options['images'][$productAttributeId][$attributeValue][$productId] = (string)$image;
             }
         }
 
@@ -254,7 +258,8 @@ class Mage_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_Blo
             'oldPrice'          => $this->_registerJsPrice($this->_convertPrice($currentProduct->getPrice())),
             'productId'         => $currentProduct->getId(),
             'chooseText'        => Mage::helper('Mage_Catalog_Helper_Data')->__('Choose an Option...'),
-            'taxConfig'         => $taxConfig
+            'taxConfig'         => $taxConfig,
+            'images'            => $options['images'],
         );
 
         if ($preconfiguredFlag && !empty($defaultValues)) {
@@ -269,7 +274,7 @@ class Mage_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_Blo
     /**
      * Validating of super product option value
      *
-     * @param array $attributeId
+     * @param int $attributeId
      * @param array $value
      * @param array $options
      * @return boolean

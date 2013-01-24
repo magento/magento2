@@ -45,47 +45,30 @@
         <?php endif; ?>
         <?php $helpLinkId = 'msrp-click-' . $_product->getId() . $this->helper('Mage_Core_Helper_Data')->getRandomString(20); ?>
         <a href="#" id="<?php echo($helpLinkId);?>"><?php echo $this->__('Click for price') ?></a>
-        <script type="text/javascript">
-            //<![CDATA[
-            (function ($) {
-            <?php if ($this->helper('Mage_Catalog_Helper_Data')->isShowPriceOnGesture($_product)): ?>
-                $.mage.event.observe('mage.price.helplink', function (event, clickForPrice) {
-                    var helpLink = {
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        (function ($) {
+            head.js("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>", function () {
+                <?php if ($this->helper('Mage_Catalog_Helper_Data')->isShowPriceOnGesture($_product)): ?>
+                    $('#<?php echo($helpLinkId);?>').addToCart({
                         popupId: "#<?php echo($helpLinkId);?>",
                         productName: '<?php echo $_product->getName() ?>',
                         realPrice: '<?php echo $this->getRealPriceJs($_product) ?>',
                         msrpPrice: '<?php echo $_msrpPrice ?>',
-                        priceElementId: '<?php echo $priceElementId ?>'
-                    };
-                    clickForPrice.helpLink.push(helpLink);
-                });
-
-                $.mage.event.observe('map.popup.button', function (event, popupCartData) {
-                    var initData = {
-                        cartButtonId: "#map-popup-button",
+                        priceElementId: '<?php echo $priceElementId ?>',
+                        closeButtonId: '#map-popup-close',
+                        popupCartButtonId: "#map-popup-button",
                         addToCartUrl: "<?php echo $this->getAddToCartUrl($_product) ?>"
-                    };
-                    popupCartData.cartData.push(initData);
-                });
-                $.mage.event.observe('map.popup.close', function (event, initData) {
-                    initData.closeButtonId = '#map-popup-close';
-                });
-                <?php else: ?>
-
-                $.mage.event.observe('mage.price.helplink', function (event, clickForPrice) {
-                    var helpLink = {
+                    });
+                    <?php else: ?>
+                    $('#<?php echo($popupId);?>').addToCart({
                         popupId: "#<?php echo($helpLinkId);?>",
                         submitUrl: "<?php echo $_product->getProductUrl() ?>"
-                    };
-                    clickForPrice.helpLink.push(helpLink);
+                    });
+                    <?php endif; ?>
                 });
-                <?php endif; ?>
-
-                $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>");
-                $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>");
-                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>");
-
-            })(jQuery);
-            //]]>
-        </script>
-    </div>
+        })(jQuery);
+        //]]>
+    </script>

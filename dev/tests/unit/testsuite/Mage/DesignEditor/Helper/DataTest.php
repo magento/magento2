@@ -33,14 +33,24 @@ class Mage_DesignEditor_Helper_DataTest extends PHPUnit_Framework_TestCase
     const TEST_FRONT_NAME = 'test_front_name';
 
     /**
+     * Test default handle
+     */
+    const TEST_DEFAULT_HANDLE = 'test_default_handle';
+
+    /**
      * Test disabled cache types
      */
-    const TEST_DISABLED_CACHE_TYPES = 'type1, type2 ';
+    const TEST_DISABLED_CACHE_TYPES = '<type1 /><type2 />';
 
     /**
      * Test data for blocks and containers
      */
     const TEST_ELEMENT_DATA = '<node_1>value_1</node_1><node_2>value_2</node_2><node_3>value_3</node_3>';
+
+    /**
+     * Test data for date to expire
+     */
+    const TEST_DATE_TO_EXPIRE = 123;
 
     /**
      * @var array
@@ -74,6 +84,20 @@ class Mage_DesignEditor_Helper_DataTest extends PHPUnit_Framework_TestCase
 
         $this->_model = new Mage_DesignEditor_Helper_Data($configurationMock);
         $this->assertEquals(self::TEST_FRONT_NAME, $this->_model->getFrontName());
+    }
+
+    public function testGetDefaultHandle()
+    {
+        $defaultHandleNode = new Mage_Core_Model_Config_Element('<test>' . self::TEST_DEFAULT_HANDLE . '</test>');
+
+        $configurationMock = $this->getMock('Mage_Core_Model_Config', array('getNode'), array(), '', false);
+        $configurationMock->expects($this->once())
+            ->method('getNode')
+            ->with(Mage_DesignEditor_Helper_Data::XML_PATH_DEFAULT_HANDLE)
+            ->will($this->returnValue($defaultHandleNode));
+
+        $this->_model = new Mage_DesignEditor_Helper_Data($configurationMock);
+        $this->assertEquals(self::TEST_DEFAULT_HANDLE, $this->_model->getDefaultHandle());
     }
 
     public function testGetDisabledCacheTypes()
@@ -136,5 +160,19 @@ class Mage_DesignEditor_Helper_DataTest extends PHPUnit_Framework_TestCase
                 '$xmlPath' => Mage_DesignEditor_Helper_Data::XML_PATH_CONTAINER_WHITE_LIST,
             ),
         );
+    }
+
+    public function testGetDateToExpire()
+    {
+        $frontNameNode = new Mage_Core_Model_Config_Element('<test>' . self::TEST_DATE_TO_EXPIRE . '</test>');
+
+        $configurationMock = $this->getMock('Mage_Core_Model_Config', array('getNode'), array(), '', false);
+        $configurationMock->expects($this->once())
+            ->method('getNode')
+            ->with(Mage_DesignEditor_Helper_Data::XML_PATH_DAYS_TO_EXPIRE)
+            ->will($this->returnValue($frontNameNode));
+
+        $this->_model = new Mage_DesignEditor_Helper_Data($configurationMock);
+        $this->assertEquals(self::TEST_DATE_TO_EXPIRE, $this->_model->getDaysToExpire());
     }
 }

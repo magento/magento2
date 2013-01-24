@@ -50,4 +50,21 @@ interface Magento_Di_InstanceManager
      * @return Magento_Di_InstanceManager
      */
     public function removeSharedInstance($classOrAlias);
+
+    /**
+     * Add type preference
+     *
+     * @param string $interfaceOrAbstract
+     * @param string $implementation
+     * @return Zend\Di\InstanceManager
+     */
+    public function addTypePreference($interfaceOrAbstract, $implementation);
+
+    /**
+     * Set parameters
+     *
+     * @param string $aliasOrClass
+     * @param array $parameters
+     */
+    public function setParameters($aliasOrClass, array $parameters);
 }

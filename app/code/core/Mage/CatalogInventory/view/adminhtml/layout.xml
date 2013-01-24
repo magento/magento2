@@ -36,7 +36,7 @@
             <reference name="admin.product.edit.tab.super.config.grid.columnSet">
                 <block type="Mage_Backend_Block_Widget_Grid_Column" as="inventory_in_stock" after="admin.product.edit.tab.super.config.grid.sku">
                     <arguments>
-                        <header translate="true" module="Mage_Core">Inventory</header>
+                        <header translate="true" module="Mage_Core">Stock Availability</header>
                         <type>text</type>
                         <index>inventory_in_stock</index>
                         <id>inventory_in_stock</id>

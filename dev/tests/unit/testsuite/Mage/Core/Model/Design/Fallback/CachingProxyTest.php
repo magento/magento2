@@ -70,6 +70,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
 
     public function setUp()
     {
+        // TODO This test should be either refactored to use mock filesystem or moved to integration
         $this->_baseDir = DIRECTORY_SEPARATOR . 'base' . DIRECTORY_SEPARATOR . 'dir';
 
         $this->_theme = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
@@ -87,14 +88,13 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
         $this->_fallback = $this->getMock(
             'Mage_Core_Model_Design_Fallback',
             array('getFile', 'getLocaleFile', 'getViewFile'),
-            array($params)
+            array($this->_createFilesystem(), $params)
         );
 
-        $this->_model = $this->getMock(
-            'Mage_Core_Model_Design_Fallback_CachingProxy',
-            array('_getFallback'),
-            array($params)
-        );
+        $this->_model = $this->getMockBuilder('Mage_Core_Model_Design_Fallback_CachingProxy')
+            ->setMethods(array('_getFallback'))
+            ->setConstructorArgs(array($this->_createFilesystem(), $params))
+            ->getMock();
         $this->_model->expects($this->any())
             ->method('_getFallback')
             ->will($this->returnValue($this->_fallback));
@@ -200,7 +200,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
             'mapDir'     => self::$_tmpDir,
             'baseDir'    => ''
         );
-        $model = new Mage_Core_Model_Design_Fallback_CachingProxy($params);
+        $model = new Mage_Core_Model_Design_Fallback_CachingProxy($this->_createFilesystem(), $params);
         $model->notifyViewFilePublished($expectedPublicFile, $file, $module);
 
         $globPath = self::$_tmpDir . DIRECTORY_SEPARATOR . '*.*';
@@ -212,12 +212,17 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
         $model = $this->getMock(
             'Mage_Core_Model_Design_Fallback_CachingProxy',
             array('_getFallback'),
-            array($params)
+            array($this->_createFilesystem(), $params)
         );
         $model->expects($this->never())
             ->method('_getFallback');
 
         $actualPublicFile = $model->getViewFile($file, $module);
         $this->assertEquals($expectedPublicFile, $actualPublicFile);
+    }
+
+    protected function _createFilesystem()
+    {
+        return new Magento_Filesystem(new Magento_Filesystem_Adapter_Local());
     }
 }

@@ -43,14 +43,14 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
+    jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
     function filterFormSubmit() {
         var filters = $$('#filter_form input', '#filter_form select');
         var elements = [];
         for(var i in filters){
             if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
         }
-        var validator  = new Validation('filter_form');
-        if (validator.validate()) {
+        if (jQuery('#filter_form').valid()) {
             setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+encode_base64(Form.serializeElements(elements))+'/');
         }
     }

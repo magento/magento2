@@ -46,6 +46,16 @@
         },
 
         /**
+         * Loader initialisation
+         * @private
+         */
+        _init: function() {
+            if (this.options.showOnInit) {
+                this.show();
+            }
+        },
+
+        /**
          * Bind on ajax complete event
          * @protected
          */

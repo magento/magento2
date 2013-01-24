@@ -30,24 +30,37 @@
 class Mage_DesignEditor_Model_History_Renderer_LayoutUpdate implements Mage_DesignEditor_Model_History_RendererInterface
 {
     /**
+     * Name of default handle
+     */
+    const DEFAULT_HANDLE = 'current_handle';
+
+    /**
      * Get Layout update out of collection of changes
      *
      * @param Mage_DesignEditor_Model_Change_Collection $collection
+     * @param string|null $handle
      * @return string
      */
-    public function render(Mage_DesignEditor_Model_Change_Collection $collection)
+    public function render(Mage_DesignEditor_Model_Change_Collection $collection, $handle = null)
     {
-        $dom = new DOMDocument();
-        $dom->formatOutput = true;
-        $dom->loadXML($this->_getInitialXml());
+        $element = new Varien_Simplexml_Element($this->_getInitialXml());
 
         foreach ($collection as $item) {
             if ($item instanceof Mage_DesignEditor_Model_Change_LayoutAbstract) {
-                $this->_render($dom, $item);
+                $this->_render($element, $item);
             }
         }
 
-        $layoutUpdate = $dom->saveXML();
+        if ($handle && $collection->count() > 0) {
+            $layoutUpdate = '';
+            $element = $element->$handle;
+            /** @var $node Varien_Simplexml_Element */
+            foreach ($element->children() as $node) {
+                $layoutUpdate .= $node->asNiceXml();
+            }
+        } else {
+            $layoutUpdate = $element->asNiceXml();
+        }
 
         return $layoutUpdate;
     }
@@ -65,19 +78,18 @@ class Mage_DesignEditor_Model_History_Renderer_LayoutUpdate implements Mage_Desi
     /**
      * Render layout update for single layout change
      *
-     * @param DOMDocument $dom
+     * @param SimpleXMLElement $element
      * @param Mage_DesignEditor_Model_Change_LayoutAbstract $item
      * @return DOMElement
      */
-    protected function _render(DOMDocument $dom, $item)
+    protected function _render(SimpleXMLElement $element, $item)
     {
-        $handle = $this->_getHandleNode($dom, $item->getData('handle'));
-
-        $directive = $dom->createElement($item->getLayoutDirective());
-        $handle->appendChild($directive);
+        $handleName = $item->getData('handle') ?: self::DEFAULT_HANDLE;
+        $handle = $this->_getHandleNode($element, $handleName);
+        $directive = $handle->addChild($item->getLayoutDirective());
 
         foreach ($item->getLayoutUpdateData() as $attribute => $value) {
-            $directive->setAttribute($attribute, $value);
+            $directive->addAttribute($attribute, $value);
         }
         return $handle;
     }
@@ -85,16 +97,15 @@ class Mage_DesignEditor_Model_History_Renderer_LayoutUpdate implements Mage_Desi
     /**
      * Create or get existing handle node
      *
-     * @param DOMDocument $dom
+     * @param SimpleXMLElement $element
      * @param string $handle
-     * @return DOMElement
+     * @return SimpleXMLElement
      */
-    protected function _getHandleNode($dom, $handle)
+    protected function _getHandleNode(SimpleXMLElement $element, $handle)
     {
-        $node = $dom->getElementsByTagName($handle)->item(0);
+        $node = $element->$handle;
         if (!$node) {
-            $node = $dom->createElement($handle);
-            $dom->documentElement->appendChild($node);
+            $node = $element->addChild($handle);
         }
 
         return $node;

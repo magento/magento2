@@ -46,4 +46,3 @@ class Magento_Di_TestAsset_ConstructorTwoArguments extends Magento_Di_TestAsset_
         $this->_two = $two;
     }
 }
-

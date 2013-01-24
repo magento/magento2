@@ -33,15 +33,10 @@ class Mage_Core_Model_ShellAbstractTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass(
-            'Mage_Core_Model_ShellAbstract',
-            array(array()),
-            '',
-            true,
-            true,
-            true,
-            array('_applyPhpVariables')
-        );
+        $this->_model = $this->getMockBuilder('Mage_Core_Model_ShellAbstract')
+            ->disableOriginalConstructor()
+            ->setMethods(array('_applyPhpVariables'))
+            ->getMockForAbstractClass();
     }
 
     public function tearDown()

@@ -25,11 +25,29 @@
  */
 
 use Zend\Di\Exception,
-    Zend\Code\Reflection;
+    Zend\Code\Reflection,
+    Zend\Di\Definition\IntrospectionStrategy;
 
 class Magento_Di_Definition_CompilerDefinition_Zend extends Zend\Di\Definition\CompilerDefinition
     implements Magento_Di_Definition_CompilerDefinition
 {
+    /**
+     * @var Magento_Di_Generator_Class
+     */
+    protected $_classGenerator;
+
+    /**
+     * @param Magento_Di_Generator_Class $classGenerator
+     * @param Zend\Di\Definition\IntrospectionStrategy $strategy
+     */
+    public function __construct(
+        IntrospectionStrategy $strategy = null,
+        Magento_Di_Generator_Class $classGenerator = null
+    ) {
+        parent::__construct($strategy);
+        $this->_classGenerator = $classGenerator ?: new Magento_Di_Generator_Class();
+    }
+
     /**
      * Process class method parameters
      *
@@ -77,5 +95,14 @@ class Magento_Di_Definition_CompilerDefinition_Zend extends Zend\Di\Definition\C
         return new Magento_Di_Definition_ArrayDefinition_Zend(
             $this->classes
         );
+    }
+
+    /**
+     * @param string $class
+     */
+    protected function processClass($class)
+    {
+        $this->_classGenerator->generateForConstructor($class);
+        parent::processClass($class);
     }
 }

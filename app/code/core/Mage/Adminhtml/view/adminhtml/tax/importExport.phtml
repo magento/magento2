@@ -39,7 +39,7 @@
             </fieldset>
         </form>
         <script type="text/javascript">
-            jQuery('#import-form').form().validation();
+            jQuery('#import-form').mage('form').mage('validation');
             (function ($) {
                 $('.import-submit').click(function(){
                     if($(':input[name="import_rates_file"]').val()) {

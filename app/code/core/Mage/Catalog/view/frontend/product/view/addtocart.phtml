@@ -33,25 +33,55 @@
     <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>"
            title="<?php echo $this->__('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
     <?php endif; ?>
-    <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-addtocart-button">
+    <button type="submit" title="<?php echo $buttonTitle ?>" class="button btn-cart" id="product-addtocart-button">
         <span><span><?php echo $buttonTitle ?></span></span></button>
     <?php echo $this->getChildHtml('', true) ?>
 </div>
 <?php endif; ?>
 
 <script type="text/javascript">
-    //<![CDATA[
     (function ($) {
-        $.mage.event.observe('product.addtocart.button', function (event, cartData) {
-            var initData = {
-                cartButtonId: "#product-addtocart-button",
-                cartForm: "#product_addtocart_form"
-            };
-            cartData.cartFormData.push(initData);
-        });
-        $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>");
-        $.mage.load.js("<?php echo $this->getViewFileUrl('jquery/jquery.hook.js')?>");
-        $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Catalog::js/msrp.js') ?>");
+        head.js("<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>", function () {
+                $('#product_addtocart_form').validation({
+                    errorPlacement: function (error, element) {
+                        if (element.attr('data-validate') && element.attr('data-validate').indexOf('validate-one-checkbox-required-by-name') > 0) {
+                            error.appendTo('#links-advice-container');
+                        } else if (element.attr('data-validate')&& element.attr('data-validate').indexOf('validate-grouped-qty') > 0) {
+                            $('#super-product-table').siblings(this.errorElement + '.' + this.errorClass).remove();
+                            $('#super-product-table').after(error);
+                        } else if (element.is(':radio, :checkbox')) {
+                            element.closest('ul').after(error);
+                        } else {
+                            element.after(error);
+                        }
+                    },
+                    highlight: function (element, errorClass) {
+                        if ($(element).attr('data-validate') && $(element).attr('data-validate').indexOf('validate-required-datetime') > 0) {
+                            $(element).parent().find('.datetime-picker').each(function() {
+                                $(this).removeClass(errorClass);
+                                if ($(this).val().length === 0) {
+                                    $(this).addClass(errorClass);
+                                }
+                            });
+                        } else if ($(element).is(':radio, :checkbox')) {
+                            $(element).closest('ul').addClass(errorClass);
+                        } else {
+                            $(element).addClass(errorClass);
+                        }
+                    },
+                    unhighlight: function (element, errorClass) {
+                        if ($(element).attr('data-validate') && $(element).attr('data-validate').indexOf('validate-required-datetime') > 0) {
+                            $(element).parent().find('.datetime-picker').removeClass(errorClass);
+                        } else if ($(element).is(':radio, :checkbox')) {
+                            $(element).closest('ul').removeClass(errorClass);
+                        } else {
+                            $(element).removeClass(errorClass);
+                        }
+                    }
+                });
+            });
     })(jQuery);
-    //]]>
 </script>

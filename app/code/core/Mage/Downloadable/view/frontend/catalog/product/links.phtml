@@ -34,32 +34,26 @@
         <dd>
             <ul id="downloadable-links-list" class="options-list">
             <?php foreach ($_links as $_link): ?>
-                <li>
-                    <?php if ($_linksPurchasedSeparately): ?>
-                        <input type="checkbox" class="checkbox<?php if($_isRequired):?> validate-one-required-by-name<?php endif; ?> product-downloadable-link" onclick="dConfig.reloadPrice()" name="links[]" id="links_<?php echo $_link->getId() ?>" value="<?php echo $_link->getId(); ?>" <?php echo $this->getLinkCheckedValue($_link); ?> />
-                    <?php endif; ?>
-                    <span class="label">
+            <li>
+                <?php if ($_linksPurchasedSeparately): ?>
+                <input type="checkbox" <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
+                       class="checkbox" name="links[]" id="links_<?php echo $_link->getId() ?>"
+                       value="<?php echo $_link->getId(); ?>" <?php echo $this->getLinkCheckedValue($_link); ?> />
+                <?php endif; ?>
+                <span class="label">
                         <label for="links_<?php echo $_link->getId() ?>">
                             <?php echo $this->escapeHtml($_link->getTitle()); ?>
                         </label>
-                            <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                                &nbsp;(<a href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('sample') ?></a>)
-                            <?php endif; ?>
-                            <?php if ($_linksPurchasedSeparately): ?>
-                                <?php echo $this->getFormattedLinkPrice($_link); ?>
-                            <?php endif; ?>
-                    </span>
-                    <?php if ($_isRequired): ?>
-                        <script type="text/javascript">
-                        //<![CDATA[
-                            $('links_<?php echo $_link->getId() ?>').advaiceContainer = 'links-advice-container';
-                            $('links_<?php echo $_link->getId() ?>').callbackFunction = 'validateDownloadableCallback';
-                        //]]>
-                        </script>
+                    <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
+                        &nbsp;(<a href="<?php echo $this->getLinkSamlpeUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>><?php echo Mage::helper('Mage_Downloadable_Helper_Data')->__('sample') ?></a>)
                     <?php endif; ?>
-                </li>
+                    <?php if ($_linksPurchasedSeparately): ?>
+                    <?php echo $this->getFormattedLinkPrice($_link); ?>
+                    <?php endif; ?>
+                </span>
+            </li>
             <?php endforeach; ?>
-            </ul>
+        </ul>
 
             <?php if ($_isRequired): ?>
                 <span id="links-advice-container"></span>
@@ -67,47 +61,13 @@
         </dd>
     </dl>
     <script type="text/javascript">
-    //<![CDATA[
-        Product.Downloadable = Class.create();
-        Product.Downloadable.prototype = {
-            config : {},
-            initialize : function(config){
-                this.config = config;
-                this.reloadPrice();
-                document.observe("dom:loaded", this.reloadPrice.bind(this));
-            },
-            reloadPrice : function(){
-                var price = 0;
-                config = this.config;
-                $$('.product-downloadable-link').each(function(elm){
-                    if (config[elm.value] && elm.checked) {
-                        price += parseFloat(config[elm.value]);
-                    }
+        (function ($) {
+            head.js("<?php echo $this->getViewFileUrl('Mage_Downloadable::downloadable.js') ?>", function () {
+                $('#downloadable-links-list').downloadable({
+                    linkElement: 'input:checkbox',
+                    config: <?php echo $this->getJsonConfig() ?>
                 });
-                try {
-                    var _displayZeroPrice = optionsPrice.displayZeroPrice;
-                    optionsPrice.displayZeroPrice = false;
-                    optionsPrice.changePrice('downloadable', price);
-                    optionsPrice.reload();
-                    optionsPrice.displayZeroPrice = _displayZeroPrice;
-                } catch (e) {
-
-                }
-            }
-        };
-
-        function validateDownloadableCallback(elmId, result) {
-            var container = $('downloadable-links-list');
-            if (result == 'failed') {
-                container.removeClassName('validation-passed');
-                container.addClassName('validation-failed');
-            } else {
-                container.removeClassName('validation-failed');
-                container.addClassName('validation-passed');
-            }
-        }
-
-        var dConfig = new Product.Downloadable(<?php echo $this->getJsonConfig() ?>);
-    //]]>
-    </script>
-<?php endif;?>
+            });
+    })(jQuery);
+</script>
+<?php endif; ?>

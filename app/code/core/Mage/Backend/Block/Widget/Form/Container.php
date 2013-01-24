@@ -71,9 +71,11 @@ class Mage_Backend_Block_Widget_Form_Container extends Mage_Backend_Block_Widget
         $this->_addButton('save', array(
             'label'     => $this->__('Save'),
             'class'     => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#edit_form')
-            )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#edit_form'),
+                ),
+            ),
         ), 1);
     }
 

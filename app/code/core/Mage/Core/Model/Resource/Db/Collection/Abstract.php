@@ -402,7 +402,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
      * Standard resource collection initialization
      *
      * @param string $model
-     * @param Mage_Core_Model_Resource_Db_Abstract $resourceModel
+     * @param string $resourceModel
      * @return Mage_Core_Model_Resource_Db_Collection_Abstract
      */
     protected function _init($model, $resourceModel)
@@ -439,7 +439,7 @@ abstract class Mage_Core_Model_Resource_Db_Collection_Abstract extends Varien_Da
     }
 
     /**
-     *  Set resource model name for collection items
+     * Set resource model name for collection items
      *
      * @param string $model
      */

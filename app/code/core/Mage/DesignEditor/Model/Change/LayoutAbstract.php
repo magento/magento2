@@ -70,7 +70,7 @@ abstract class Mage_DesignEditor_Model_Change_LayoutAbstract extends Mage_Design
      */
     protected function _getRequiredFields()
     {
-        return array('type', 'handle', 'element_name', 'action_name');
+        return array('type', 'element_name', 'action_name');
     }
 
     /**
@@ -79,4 +79,22 @@ abstract class Mage_DesignEditor_Model_Change_LayoutAbstract extends Mage_Design
      * @return string
      */
     abstract public function getLayoutDirective();
+
+    /**
+     * Get attributes from XML layout update
+     *
+     * @param Varien_Simplexml_Element $layoutUpdate
+     * @return array
+     */
+    protected function _getAttributes(Varien_Simplexml_Element $layoutUpdate)
+    {
+        $attributes = array();
+        $attributes['type']        = $layoutUpdate->getAttribute('type') ?: 'layout';
+        $attributes['action_name'] = $layoutUpdate->getName();
+        foreach ($layoutUpdate->attributes() as $attributeName => $attributeValue) {
+            $attributes[$attributeName] = (string) $attributeValue;
+        }
+
+        return $attributes;
+    }
 }

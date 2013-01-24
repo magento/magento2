@@ -102,9 +102,16 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
     protected function _getThumbnail()
     {
         if (is_null($this->_productThumbnail)) {
-            $thumbnail = $this->helper('Mage_Catalog_Helper_Image')->init($this->getProduct(), 'thumbnail');
+            $product = $this->getProduct();
+            if ($this->getProduct()->isConfigurable()) {
+                $children = $this->getItem()->getChildren();
+                if (isset($children[0]) && $children[0]->getProduct()->getThumbnail() != 'no_selection') {
+                    $product = $children[0]->getProduct();
+                }
+            }
+            $thumbnail = $this->helper('Mage_Catalog_Helper_Image')->init($product, 'thumbnail');
         } else {
-            $thumbnail =$this->_productThumbnail;
+            $thumbnail = $this->_productThumbnail;
         }
         return $thumbnail;
     }

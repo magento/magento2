@@ -149,13 +149,15 @@ class Magento_Di_ZendTest extends PHPUnit_Framework_TestCase
         if (!self::$_isClassMocks) {
             $this->getMockForAbstractClass(
                 self::PARENT_CLASS_MODEL,
-                $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
+                $objectManagerHelper->getConstructArguments(
+                    Magento_Test_Helper_ObjectManager::MODEL_ENTITY,
                     self::PARENT_CLASS_MODEL
                 ),
                 self::TEST_CLASS_MODEL, false
             );
             $this->getMockForAbstractClass(self::PARENT_CLASS_BLOCK,
-                $objectManagerHelper->getConstructArguments(Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
+                $objectManagerHelper->getConstructArguments(
+                    Magento_Test_Helper_ObjectManager::BLOCK_ENTITY,
                     self::PARENT_CLASS_BLOCK
                 ),
                 self::TEST_CLASS_BLOCK, false

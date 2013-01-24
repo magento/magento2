@@ -64,24 +64,23 @@
                 </li>
             </ul>
             <div class="buttons-set">
-                <button type="button" title="<?php echo $this->__('Get a Quote') ?>" class="button"><span><span><?php echo $this->__('Get a Quote') ?></span></span></button>
+                <button type="submit" title="<?php echo $this->__('Get a Quote') ?>" class="button"><span><span><?php echo $this->__('Get a Quote') ?></span></span></button>
             </div>
         </form>
         <script type="text/javascript">
-            (function ($) {
+            (function($) {
                 head.js(
                     "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
-                    "<?php echo $this->getViewFileUrl('jquery/additional-methods.js') ?>",
                     "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
-                    "<?php echo $this->getViewFileUrl('jquery/jquery.hook.js') ?>",
-                    "<?php echo $this->getViewFileUrl('mage/validation/validate.js') ?>",
+                    "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+                    "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
                     "<?php echo $this->getViewFileUrl('Mage_Checkout::js/region-updater.js') ?>",
                     function() {
                         $('#country').regionUpdater({
                             regionListId: '#region_id',
                             regionInputId: '#region',
                             postcodeId: '#postcode',
-                            formId: '#shipping-zip-form',
+                            form: $('#shipping-zip-form').validation(),
                             regionJson: <?php echo $this->helper('Mage_Directory_Helper_Data')->getRegionJson() ?>,
                             defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
                             countriesWithOptionalZip: <?php echo $this->helper('Mage_Directory_Helper_Data')->getCountriesWithOptionalZip(true) ?>

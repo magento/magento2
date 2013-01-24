@@ -40,8 +40,14 @@ class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Install
     const MODE_READ  = 'read';
     /**#@- */
 
-    public function __construct()
+    /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    public function __construct(Magento_Filesystem $filesystem)
     {
+        $this->_filesystem = $filesystem;
     }
 
     /**
@@ -102,26 +108,35 @@ class Mage_Install_Model_Installer_Filesystem extends Mage_Install_Model_Install
      */
     protected function _checkFullPath($fullPath, $recursive, $existence)
     {
-        $res = true;
-        $setError = $existence && (is_dir($fullPath) && !is_dir_writeable($fullPath) || !is_writable($fullPath))
-            || !$existence && file_exists($fullPath) && !is_writable($fullPath);
+        $result = true;
 
-        if ($setError) {
-            $this->_getInstaller()->getDataModel()->addError(
-                Mage::helper('Mage_Install_Helper_Data')->__('Path "%s" must be writable.', $fullPath)
-            );
-            $res = false;
+        if ($recursive && $this->_filesystem->isDirectory($fullPath)) {
+            $pathsToCheck = $this->_filesystem->getNestedKeys($fullPath);
+            array_unshift($pathsToCheck, $fullPath);
+        } else {
+            $pathsToCheck = array($fullPath);
         }
 
-        if ($recursive && is_dir($fullPath)) {
-            $skipFileNames = array('.svn', '.htaccess');
-            foreach (new DirectoryIterator($fullPath) as $file) {
-                $fileName = $file->getFilename();
-                if (!$file->isDot() && !in_array($fileName, $skipFileNames)) {
-                    $res = $this->_checkFullPath($fullPath . DS . $fileName, $recursive, $existence) && $res;
-                }
+        $skipFileNames = array('.svn', '.htaccess');
+        foreach ($pathsToCheck as $pathToCheck) {
+            if (in_array(basename($pathToCheck), $skipFileNames)) {
+                continue;
+            }
+
+            if ($existence) {
+                $setError = !$this->_filesystem->isWritable($fullPath);
+            } else {
+                $setError = $this->_filesystem->has($fullPath) && !$this->_filesystem->isWritable($fullPath);
+            }
+
+            if ($setError) {
+                $this->_getInstaller()->getDataModel()->addError(
+                    Mage::helper('Mage_Install_Helper_Data')->__('Path "%s" must be writable.', $pathToCheck)
+                );
+                $result = false;
             }
         }
-        return $res;
+
+        return $result;
     }
 }

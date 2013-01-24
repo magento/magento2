@@ -51,9 +51,11 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Action_Attribute extends Mage_Ad
         $this->addChild('save_button', 'Mage_Adminhtml_Block_Widget_Button', array(
             'label'     => Mage::helper('Mage_Catalog_Helper_Data')->__('Save'),
             'class'     => 'save',
-            'data_attr'  => array(
-                'widget-button' => array('event' => 'save', 'related' => '#attributes-edit-form')
-            )
+            'data_attribute'  => array(
+                'mage-init' => array(
+                    'button' => array('event' => 'save', 'target' => '#attributes-edit-form'),
+                ),
+            ),
         ));
     }
 

@@ -109,7 +109,7 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
      * Decode filter string
      *
      * @param string $filterString
-     * @return data
+     * @return array
      */
     public function prepareFilterString($filterString)
     {

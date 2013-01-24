@@ -64,7 +64,7 @@
         <?php if ($_cartQty && $this->isPossibleOnepageCheckout()): ?>
         <div class="actions">
             <?php echo $this->getChildHtml('extra_actions') ?>
-            <button type="button" title="<?php echo $this->__('Checkout') ?>" class="button">
+            <button id="sidebar-btn-checkout" type="button" title="<?php echo $this->__('Checkout') ?>" class="button">
                 <span><span><?php echo $this->__('Checkout') ?></span></span></button>
         </div>
         <?php endif ?>
@@ -78,15 +78,14 @@
         </ol>
         <script type="text/javascript">
             (function($) {
-                $.mage.event.observe('mage.checkout.initialize', function (e, o) {
-                    o.cartSelector = '#cart-sidebar',
-                    o.isRecursive = true,
-                    o.url = '<?php echo $this->getCheckoutUrl();?>',
-                    o.button = ':button[title=' + '<?php echo $this->__('Checkout') ?>' + ']',
-                    o.confirmMessage = '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>',
-                    o.closeList = '#cart-sidebar  a.btn-remove'
+                head.js("<?php echo $this->getViewFileUrl('Mage_Checkout::js/sidebar.js') ?>", function() {
+                    $('#cart-sidebar').sidebar({
+                        checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
+                        checkoutButton: '#sidebar-btn-checkout',
+                        removeButton: '#cart-sidebar a.btn-remove',
+                        confirmMessage: '<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>'
+                    });
                 });
-                $.mage.load.jsSync("<?php echo $this->getViewFileUrl('Mage_Checkout::js/sidebar.js') ?>");
             })(jQuery);
         </script>
         <?php else: ?>

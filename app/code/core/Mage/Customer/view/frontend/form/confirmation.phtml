@@ -36,7 +36,7 @@
             <li>
                 <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                 <div class="input-box">
-                    <input type="text" name="email" id="email_address" title="<?php echo $this->__('Email Address') ?>" class="input-text required-entry validate-email" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" />
+                    <input type="text" name="email" id="email_address" title="<?php echo $this->__('Email Address') ?>" class="input-text" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}"/>
                 </div>
             </li>
         </ul>
@@ -48,7 +48,14 @@
     </div>
 </form>
 <script type="text/javascript">
-//<![CDATA[
-    var dataForm = new VarienForm('form-validate', true);
-//]]>
+    (function($) {
+        head.js(
+            "<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>",
+            "<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>",
+            "<?php echo $this->getViewFileUrl('mage/validation.js')?>",
+            "<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>",
+            function() {
+                $('#form-validate').validation();
+            });
+    })(jQuery);
 </script>

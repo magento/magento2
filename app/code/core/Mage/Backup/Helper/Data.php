@@ -55,6 +55,19 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     const TYPE_SNAPSHOT_WITHOUT_MEDIA = 'nomedia';
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * @param Magento_Filesystem $filesystem
+     */
+    public function __construct(Magento_Filesystem $filesystem)
+    {
+        $this->_filesystem = $filesystem;
+    }
+
+    /**
      * Get all possible backup type values with descriptive title
      *
      * @return array
@@ -149,7 +162,8 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return boolean
      */
-    public function isRollbackAllowed(){
+    public function isRollbackAllowed()
+    {
         return Mage::getSingleton('Mage_Core_Model_Authorization')->isAllowed('Mage_Backup::rollback' );
     }
 
@@ -161,6 +175,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     public function getBackupIgnorePaths()
     {
         return array(
+            '.git',
             '.svn',
             'maintenance.flag',
             Mage::getBaseDir('var') . DS . 'session',
@@ -181,6 +196,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return array(
             '.svn',
+            '.git',
             'maintenance.flag',
             Mage::getBaseDir('var') . DS . 'session',
             Mage::getBaseDir('var') . DS . 'locks',
@@ -200,7 +216,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     public function turnOnMaintenanceMode()
     {
         $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
-        $result = file_put_contents($maintenanceFlagFile, 'maintenance');
+        $result = $this->_filesystem->write($maintenanceFlagFile, 'maintenance', Mage::getBaseDir());
 
         return $result !== false;
     }
@@ -211,7 +227,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
     public function turnOffMaintenanceMode()
     {
         $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
-        @unlink($maintenanceFlagFile);
+        $this->_filesystem->delete($maintenanceFlagFile, Mage::getBaseDir());
     }
 
     /**
@@ -248,6 +264,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * Invalidate Cache
+     *
      * @return Mage_Backup_Helper_Data
      */
     public function invalidateCache()
@@ -266,7 +283,7 @@ class Mage_Backup_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function invalidateIndexer()
     {
-        foreach (Mage::getResourceModel('Mage_Index_Model_Resource_Process_Collection') as $process){
+        foreach (Mage::getResourceModel('Mage_Index_Model_Resource_Process_Collection') as $process) {
             $process->changeStatus(Mage_Index_Model_Process::STATUS_REQUIRE_REINDEX);
         }
         return $this;

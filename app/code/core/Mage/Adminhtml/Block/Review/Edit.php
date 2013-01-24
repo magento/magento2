@@ -57,13 +57,15 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
             $this->addButton('save_and_previous', array(
                 'label'   => Mage::helper('Mage_Review_Helper_Data')->__('Save and Previous'),
                 'class'   => 'save',
-                'data_attr'  => array(
-                    'widget-button' => array(
-                        'event' => 'save',
-                        'related' => '#edit_form',
-                        'eventData' => array(
-                            'action' => array(
-                                'args' => array('next_item' => $prevId),
+                'data_attribute'  => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => array(
+                                'action' => array(
+                                    'args' => array('next_item' => $prevId),
+                                ),
                             ),
                         ),
                     ),
@@ -74,13 +76,15 @@ class Mage_Adminhtml_Block_Review_Edit extends Mage_Adminhtml_Block_Widget_Form_
             $this->addButton('save_and_next', array(
                 'label'   => Mage::helper('Mage_Review_Helper_Data')->__('Save and Next'),
                 'class'   => 'save',
-                'data_attr'  => array(
-                    'widget-button' => array(
-                        'event' => 'save',
-                        'related' => '#edit_form',
-                        'eventData' => array(
-                            'action' => array(
-                                'args' => array('next_item' => $nextId),
+                'data_attribute'  => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => array(
+                                'action' => array(
+                                    'args' => array('next_item' => $nextId),
+                                ),
                             ),
                         ),
                     ),

@@ -271,8 +271,7 @@ class Mage_Widget_Adminhtml_Widget_InstanceController extends Mage_Adminhtml_Con
             ->createBlock('Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Container')
             ->setValue($selected)
             ->setArea($widgetInstance->getArea())
-            ->setPackage($widgetInstance->getPackage())
-            ->setTheme($widgetInstance->getTheme())
+            ->setTheme($widgetInstance->getThemeId())
             ->setLayoutHandle($layout)
             ->setAllowedContainers($widgetInstance->getWidgetSupportedContainers());
         $this->setBody($blocksChooser->toHtml());

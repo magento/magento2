@@ -168,12 +168,21 @@ class Mage_Backend_Block_Widget_Grid_Extended
      */
     protected $_subtotals = array();
 
+    /**
+     * @var string
+     */
     protected $_template = 'Mage_Backend::widget/grid/extended.phtml';
+
+    /**
+     * @var string
+     */
+    protected $_exportPath;
 
     protected function _construct()
     {
         parent::_construct();
         $this->_emptyText = Mage::helper('Mage_Backend_Helper_Data')->__('No records found.');
+        $this->_exportPath = Mage::getBaseDir('var') . DS . 'export';
     }
 
     /**
@@ -862,10 +871,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
      */
     protected function _getFileContainerContent(array $fileData)
     {
-        $io = new Varien_Io_File();
-        $path = $io->dirname($fileData['value']);
-        $io->open(array('path' => $path));
-        return $io->read($fileData['value']);
+        return $this->_filesystem->read($fileData['value'], $this->_exportPath);
     }
 
     /**
@@ -941,9 +947,9 @@ class Mage_Backend_Block_Widget_Grid_Extended
      * Write item data to csv export file
      *
      * @param Varien_Object $item
-     * @param Varien_Io_File $adapter
+     * @param Magento_Filesystem_StreamInterface $stream
      */
-    protected function _exportCsvItem(Varien_Object $item, Varien_Io_File $adapter)
+    protected function _exportCsvItem(Varien_Object $item, Magento_Filesystem_StreamInterface $stream)
     {
         $row = array();
         foreach ($this->getColumns() as $column) {
@@ -951,7 +957,7 @@ class Mage_Backend_Block_Widget_Grid_Extended
                 $row[] = $column->getRowFieldExport($item);
             }
         }
-        $adapter->streamWriteCsv($row);
+        $stream->writeCsv($row);
     }
 
     /**
@@ -966,26 +972,22 @@ class Mage_Backend_Block_Widget_Grid_Extended
         $this->_isExport = true;
         $this->_prepareGrid();
 
-        $io = new Varien_Io_File();
-
-        $path = Mage::getBaseDir('var') . DS . 'export' . DS;
         $name = md5(microtime());
-        $file = $path . DS . $name . '.csv';
+        $file = $this->_exportPath . DS . $name . '.csv';
 
-        $io->setAllowCreateFolders(true);
-        $io->open(array('path' => $path));
-        $io->streamOpen($file, 'w+');
-        $io->streamLock(true);
-        $io->streamWriteCsv($this->_getExportHeaders());
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $stream = $this->_filesystem->createAndOpenStream($file, 'w+', $this->_exportPath);
+        $stream->lock(true);
+        $stream->writeCsv($this->_getExportHeaders());
 
-        $this->_exportIterateCollection('_exportCsvItem', array($io));
+        $this->_exportIterateCollection('_exportCsvItem', array($stream));
 
         if ($this->getCountTotals()) {
-            $io->streamWriteCsv($this->_getExportTotals());
+            $stream->writeCsv($this->_getExportTotals());
         }
 
-        $io->streamUnlock();
-        $io->streamClose();
+        $stream->unlock();
+        $stream->close();
 
         return array(
             'type'  => 'filename',
@@ -1103,26 +1105,23 @@ class Mage_Backend_Block_Widget_Grid_Extended
         $this->_isExport = true;
         $this->_prepareGrid();
 
-        $convert    = new Magento_Convert_Excel($this->getCollection()->getIterator(), array($this, 'getRowRecord'));
-        $io      = new Varien_Io_File();
+        $convert = new Magento_Convert_Excel($this->getCollection()->getIterator(), array($this, 'getRowRecord'));
 
-        $path = Mage::getBaseDir('var') . DS . 'export' . DS;
         $name = md5(microtime());
-        $file = $path . DS . $name . '.xml';
+        $file = $this->_exportPath . DS . $name . '.xml';
 
-        $io->setAllowCreateFolders(true);
-        $io->open(array('path' => $path));
-        $io->streamOpen($file, 'w+');
-        $io->streamLock(true);
+        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $stream = $this->_filesystem->createAndOpenStream($file, 'w+', $this->_exportPath);
+        $stream->lock(true);
 
         $convert->setDataHeader($this->_getExportHeaders());
         if ($this->getCountTotals()) {
             $convert->setDataFooter($this->_getExportTotals());
         }
 
-        $convert->write($io, $sheetName);
-        $io->streamUnlock();
-        $io->streamClose();
+        $convert->write($stream, $sheetName);
+        $stream->unlock();
+        $stream->close();
 
         return array(
             'type'  => 'filename',

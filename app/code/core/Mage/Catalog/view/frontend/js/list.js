@@ -23,64 +23,43 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
+(function ($, window) {
+    $.widget('mage.compareList', {
+        _create: function() {
+            this.element.decorate('table');
 
-(function ($) {
-    $(document).ready(function () {
-        var _compareList = {
-            productSelector: null,
-            productImageSelector: null,
-            productAddToCartSelector: null,
-            productWishListSelector: null,
-            productRemoveSelector: null,
-            productFormSelector: null,
-            ajaxSpinner: null,
-            windowCloseSelector: null,
-            printSelector: null
-        };
+            $(this.options.windowCloseSelector).on('click', function() {
+                window.close();
+            });
 
-        $.mage.event.trigger('mage.compare-list.initialize', _compareList);
-        $(_compareList.productFormSelector).decorate('table');
-
-        function _setParentWindow(selector) {
-            $(selector).on('click', function (e) {
+            $(this.options.windowPrintSelector).on('click', function(e) {
                 e.preventDefault();
-                window.opener.focus();
-                window.opener.location.href = $(this).data('url');
+                window.print();
+            });
+
+            var ajaxSpinner = $(this.options.ajaxSpinner);
+            $(this.options.productRemoveSelector).on('click', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(e.target).data('url'),
+                    type: 'POST',
+                    beforeSend: function() {
+                        ajaxSpinner.show();
+                    }
+                }).done(function() {
+                    ajaxSpinner.hide();
+                    window.location.reload();
+                    window.opener.location.reload();
+                });
+            });
+
+            $.each(this.options.selectors, function(i, selector) {
+                $(selector).on('click', function(e) {
+                    e.preventDefault();
+                    window.opener.focus();
+                    window.opener.location.href = $(this).data('url');
+                });
             });
         }
-
-        // Window close
-        $(_compareList.windowCloseSelector).on('click', function () {
-            window.close();
-        });
-        // Window print
-        $(_compareList.printSelector).on('click', function (e) {
-            e.preventDefault();
-            window.print();
-        });
-
-        $(_compareList.productRemoveSelector).on('click', function (e) {
-            e.preventDefault();
-            // Send remove item request, after that reload windows
-            $.ajax({
-                url: $(_compareList.productRemoveSelector).data('url'),
-                type: 'POST',
-                beforeSend: function () {
-                    $(_compareList.ajaxSpinner).show();
-                }
-            }).done(function () {
-                $(_compareList.ajaxSpinner).hide();
-                window.location.reload();
-                window.opener.location.reload();
-            });
-        });
-
-        $.each(_compareList, function (index, prop) {
-            // Removed properties that doesn't need to call _setParentWindow
-            var notAllowedProp = ['windowCloseSelector', 'printSelector', 'productRemoveSelector', 'ajaxSpinner','productFormSelector'];
-            if ($.inArray(index, notAllowedProp) === -1) {
-                _setParentWindow(prop);
-            }
-        });
     });
-})(jQuery);
+})(jQuery, window);

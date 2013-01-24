@@ -32,9 +32,11 @@
  * @method Mage_Catalog_Model_Product setHasError(bool $value)
  * @method null|bool getHasError()
  * @method Mage_Catalog_Model_Product setTypeId(string $typeId)
- * @method string getTypeId()
+ * @method string Mage_Catalog_Model_Product getTypeId()
  * @method Mage_Catalog_Model_Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
+ * @method Mage_Catalog_Model_Product setNewVariationsAttributeSetId(int $value)
+ * @method int getNewVariationsAttributeSetId()
  *
  * @category    Mage
  * @package     Mage_Catalog
@@ -178,19 +180,14 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      *
      * @todo implement full validation process with errors returning which are ignoring now
      *
-     * @return Mage_Catalog_Model_Product
+     * @return array
      */
     public function validate()
     {
-//        $this->getAttributes();
-//        Mage::dispatchEvent($this->_eventPrefix.'_validate_before', array($this->_eventObject=>$this));
-//        $result = $this->_getResource()->validate($this);
-//        Mage::dispatchEvent($this->_eventPrefix.'_validate_after', array($this->_eventObject=>$this));
-//        return $result;
         Mage::dispatchEvent($this->_eventPrefix.'_validate_before', array($this->_eventObject=>$this));
-        $this->_getResource()->validate($this);
+        $result = $this->_getResource()->validate($this);
         Mage::dispatchEvent($this->_eventPrefix.'_validate_after', array($this->_eventObject=>$this));
-        return $this;
+        return $result;
     }
 
     /**
@@ -1965,5 +1962,16 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     public function isDisabled()
     {
         return $this->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
+    }
+
+    /**
+     * Sets product image from it's child if possible
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        $this->getTypeInstance()->setImageFromChildProduct($this);
+        return parent::getImage();
     }
 }

@@ -49,13 +49,20 @@ class Mage_DesignEditor_Model_Url_NavigationMode extends Mage_Core_Model_Url
     }
 
     /**
-     * Retrieve route path
+     * Retrieve route URL
      *
+     * @param string $routePath
      * @param array $routeParams
      * @return string
      */
-    public function getRoutePath($routeParams = array())
+    public function getRouteUrl($routePath = null, $routeParams = null)
     {
-        return $this->_helper->getFrontName() . '/' . parent::getRoutePath($routeParams);
+        $url = parent::getRouteUrl($routePath, $routeParams);
+        $baseUrl = trim($this->getBaseUrl(), '/');
+        $vdeBaseUrl = $baseUrl . '/' . $this->_helper->getFrontName();
+        if (strpos($url, $baseUrl) === 0 && strpos($url, $vdeBaseUrl) === false) {
+            $url = str_replace($baseUrl, $vdeBaseUrl, $url);
+        }
+        return $url;
     }
 }

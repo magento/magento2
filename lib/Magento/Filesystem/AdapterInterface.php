@@ -96,6 +96,15 @@ interface Magento_Filesystem_AdapterInterface
     public function getNestedKeys($key);
 
     /**
+     * Gets list of all matched keys
+     *
+     * @param string $pattern
+     * @return array
+     * @throws Magento_Filesystem_Exception
+     */
+    public function searchKeys($pattern);
+
+    /**
      * Check if key is directory.
      *
      * @param string $key
@@ -128,6 +137,15 @@ interface Magento_Filesystem_AdapterInterface
     public function isReadable($key);
 
     /**
+     * Calculates the MD5 hash of the file specified
+     *
+     * @param $key
+     * @return string
+     * @throws Magento_Filesystem_Exception
+     */
+    public function getFileMd5($key);
+
+    /**
      * Creates new directory
      *
      * @param string $key
@@ -140,7 +158,24 @@ interface Magento_Filesystem_AdapterInterface
      * Touches a file
      *
      * @param string $key
+     * @param int|null $fileModificationTime
      * @throws Magento_Filesystem_Exception
      */
-    public function touch($key);
+    public function touch($key, $fileModificationTime = null);
+
+    /**
+     * Get file modification time.
+     *
+     * @param string $key
+     * @return int
+     */
+    public function getMTime($key);
+
+    /**
+     * Get file size.
+     *
+     * @param string $key
+     * @return int
+     */
+    public function getFileSize($key);
 }

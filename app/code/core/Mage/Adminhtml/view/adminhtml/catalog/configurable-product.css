@@ -22,7 +22,51 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
 #configurable_associated_products_grid .filter-actions,
 #configurable_associated_products_grid .filter {
     display: none;
+}
+
+input.ui-autocomplete-loading {
+    background:#fff url('images/spinner.gif') no-repeat 100%;
+    background:url('images/spinner.gif') no-repeat 100%, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
+    background:url('images/spinner.gif') no-repeat 100%, -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background:url('images/spinner.gif') no-repeat 100%, -moz-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background:url('images/spinner.gif') no-repeat 100%, -o-linear-gradient(bottom, white 85%, #eeeeee 99%);
+    background:url('images/spinner.gif') no-repeat 100%, -ms-linear-gradient(top, #ffffff 85%, #eeeeee 99%);
+    background:url('images/spinner.gif') no-repeat 100%, linear-gradient(top, #ffffff 85%, #eeeeee 99%);
+}
+
+#attributes-container {
+    padding-bottom: 15px;
+}
+
+#attributes-container .entry-edit > fieldset {
+    margin-bottom: 0;
+}
+#attributes-container  .column-price {
+    visibility: hidden;
+}
+
+#attributes-container .have-price .column-price {
+    visibility: visible;
+}
+
+#attributes-container .ui-icon-circle-triangle-s, #attributes-container .ui-icon-circle-close {
+    cursor: pointer;
+    float: right;
+    margin-left: 4px;
+}
+
+#attributes-container tr:hover {
+    outline: 1px dotted rgba(128, 128, 128, 0.2);
+}
+
+#affected-attribute-set-new-container, #affected-attribute-set-new-name-container {
+    margin-top: 10px;
+}
+
+#affected-attribute-set-new-name-container input {
+    width: 99%;
 }
