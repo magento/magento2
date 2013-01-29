@@ -1391,7 +1391,7 @@ END;
                     $author['name'] = $authorRawData['name'];
                     $author['user'] = $authorRawData['user'];
                     $author['email'] = $authorRawData['email'];
-                    array_push($authors, $author);
+                    $authors[] = $author;
                 }
             }
         }
@@ -1420,7 +1420,7 @@ END;
                             $extension['name'] = $extensionRawData['name'];
                             $extension['min_version'] = isset($extensionRawData['min']) ? $extensionRawData['min'] : null;
                             $extension['max_version'] = isset($extensionRawData['max']) ? $extensionRawData['max'] : null;
-                            array_push($extensions, $extension);
+                            $extensions[] = $extension;
                         }
                     }
                     // Handle packages
@@ -1435,7 +1435,7 @@ END;
                             $package['channel'] = $this->convertChannelFromV1x($packageRawData['channel']);
                             $package['min_version'] = isset($packageRawData['min']) ? $packageRawData['min'] : null;
                             $package['max_version'] = isset($packageRawData['max']) ? $packageRawData['max'] : null;
-                            array_push($packages, $package);
+                            $packages[] = $package;
                         }
                     }
                 }

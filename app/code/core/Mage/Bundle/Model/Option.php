@@ -75,7 +75,7 @@ class Mage_Bundle_Model_Option extends Mage_Core_Model_Abstract
         if (!$selections = $this->getData('selections')) {
             $selections = array();
         }
-        array_push($selections, $selection);
+        $selections[] = $selection;
         $this->setSelections($selections);
         return $this;
     }

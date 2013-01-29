@@ -390,9 +390,9 @@ class PEAR
     function expectError($code = '*')
     {
         if (is_array($code)) {
-            array_push($this->_expected_errors, $code);
+            $this->_expected_errors[] = $code;
         } else {
-            array_push($this->_expected_errors, array($code));
+            $this->_expected_errors[] = array($code);
         }
         return sizeof($this->_expected_errors);
     }

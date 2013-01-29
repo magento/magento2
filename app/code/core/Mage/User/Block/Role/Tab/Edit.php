@@ -103,7 +103,7 @@ class Mage_User_Block_Role_Tab_Edit extends Mage_Backend_Block_Widget_Form
         foreach ($rulesSet->getItems() as $item) {
             $itemResourceId = $item->getResource_id();
             if ($acl->has($itemResourceId) && $item->getPermission() == 'allow') {
-                array_push($selectedResourceIds, $itemResourceId);
+                $selectedResourceIds[] = $itemResourceId;
             }
         }
 

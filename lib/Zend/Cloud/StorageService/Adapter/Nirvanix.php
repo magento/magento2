@@ -319,12 +319,12 @@ class Zend_Cloud_StorageService_Adapter_Nirvanix
                //more than one, but doesn't return an array if there is only one.
             if ($numFolders == 1) {
                 $folderPath = $response->ListFolder->Folder->Path;
-                array_push($resultArray, $folderPath);
+                $resultArray[] = $folderPath;
                 $this->getAllFolders('/' . $folderPath, $resultArray);
             } else {
                 foreach ($response->ListFolder->Folder as $arrayElem) {
                     $folderPath = $arrayElem->Path;
-                    array_push($resultArray, $folderPath);
+                    $resultArray[] = $folderPath;
                     $this->getAllFolders('/' . $folderPath, $resultArray);
                 }
             }

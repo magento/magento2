@@ -92,7 +92,7 @@ class Magento_Di_Zend extends Zend\Di\Di implements Magento_Di
         $definitions = $this->definitions;
 
         if (!$this->definitions()->hasClass($name)) {
-            array_push($this->instanceContext, array('NEW', $name, $name));
+            $this->instanceContext[] = array('NEW', $name, $name);
 
             if ($this->_isArrayHasDataKey($parameters)) {
                 $parameters = reset($parameters);
@@ -141,7 +141,7 @@ class Magento_Di_Zend extends Zend\Di\Di implements Magento_Di
             $alias = null;
         }
 
-        array_push($this->instanceContext, array('NEW', $class, $alias));
+        $this->instanceContext[] = array('NEW', $class, $alias);
 
         if (!$definitions->hasClass($class)) {
             $aliasMsg = ($alias) ? '(specified by alias ' . $alias . ') ' : '';
@@ -542,7 +542,7 @@ class Magento_Di_Zend extends Zend\Di\Di implements Magento_Di
                         "Circular dependency detected: $class depends on {$value[1]} and vice versa"
                     );
                 }
-                array_push($this->currentDependencies, $class);
+                $this->currentDependencies[] = $class;
                 $dConfig = $this->instanceManager->getConfig($computedParams['required'][$fqParamPos][0]);
                 if ($dConfig['shared'] === false) {
                     $resolvedParams[$index]

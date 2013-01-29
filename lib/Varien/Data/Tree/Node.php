@@ -256,7 +256,7 @@ class Varien_Data_Tree_Node extends Varien_Object
     public function getPath(&$prevNodes = array())
     {
         if ($this->_parent) {
-            array_push($prevNodes, $this);
+            $prevNodes[] = $this;
             $this->_parent->getPath($prevNodes);
         }
         return $prevNodes;

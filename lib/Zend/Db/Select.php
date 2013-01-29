@@ -970,12 +970,12 @@ class Zend_Db_Select
 
             // apply current values to current stack
             foreach ($columnValues as $columnValue) {
-                array_push($this->_parts[self::COLUMNS], $columnValue);
+                $this->_parts[self::COLUMNS][] = $columnValue;
             }
 
             // finish ensuring that all previous values are applied (if they exist)
             while ($tmpColumns) {
-                array_push($this->_parts[self::COLUMNS], array_shift($tmpColumns));
+                $this->_parts[self::COLUMNS][] = array_shift($tmpColumns);
             }
         }
     }

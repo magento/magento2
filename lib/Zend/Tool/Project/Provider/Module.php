@@ -99,7 +99,7 @@ class Zend_Tool_Project_Provider_Module
 
             if ($depthDifference === 1) {
                 // if we went down into a child, make note
-                array_push($parentResources, $currentResource);
+                $parentResources[] = $currentResource;
                 // this will have always been set previously by another loop
                 $currentResource = $currentChildResource;
             } elseif ($depthDifference < 0) {

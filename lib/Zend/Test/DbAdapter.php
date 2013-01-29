@@ -94,7 +94,7 @@ class Zend_Test_DbAdapter extends Zend_Db_Adapter_Abstract
      */
     public function appendStatementToStack(Zend_Test_DbStatement $stmt)
     {
-        array_push($this->_statementStack, $stmt);
+        $this->_statementStack[] = $stmt;
         return $this;
     }
 
@@ -106,7 +106,7 @@ class Zend_Test_DbAdapter extends Zend_Db_Adapter_Abstract
      */
     public function appendLastInsertIdToStack($id)
     {
-        array_push($this->_lastInsertIdStack, $id);
+        $this->_lastInsertIdStack[] = $id;
         return $this;
     }
 

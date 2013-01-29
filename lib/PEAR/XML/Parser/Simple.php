@@ -220,10 +220,10 @@ class XML_Parser_Simple extends XML_Parser
      */
     function startHandler($xp, $elem, &$attribs)
     {
-        array_push($this->_elStack, array(
+        $this->_elStack[] = array(
             'name'    => $elem,
             'attribs' => $attribs
-        ));
+        );
         $this->_depth++;
         $this->_data[$this->_depth] = '';
     }

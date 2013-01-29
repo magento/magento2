@@ -176,7 +176,7 @@ class Zend_Tool_Project_Context_Zf_ApplicationConfigFile extends Zend_Tool_Proje
             $lastDepth = $rii->getDepth();
             
             if (is_array($value)) {
-                array_push($configKeyNames, $name);
+                $configKeyNames[] = $name;
             } else {
                 $stringItems[] = implode('.', $configKeyNames) . '.' . $name;
                 $stringValues[] = $value;
@@ -236,7 +236,7 @@ class Zend_Tool_Project_Context_Zf_ApplicationConfigFile extends Zend_Tool_Proje
             $lastDepth = $rii->getDepth();
             
             if (is_array($value)) {
-                array_push($configKeyNames, $name);
+                $configKeyNames[] = $name;
             } else {
                 $stringItems[] = implode('.', $configKeyNames) . '.' . $name;
                 $stringValues[] = $value;

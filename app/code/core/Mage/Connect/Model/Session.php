@@ -65,9 +65,9 @@ class Mage_Connect_Model_Session extends Mage_Core_Model_Session_Abstract
                     ) {
                         continue;
                     }
-                    array_push($data['authors']['name'], $data['maintainers']['name'][$i]);
-                    array_push($data['authors']['user'], $data['maintainers']['handle'][$i]);
-                    array_push($data['authors']['email'], $data['maintainers']['email'][$i]);
+                    $data['authors']['name'][] = $data['maintainers']['name'][$i];
+                    $data['authors']['user'][] = $data['maintainers']['handle'][$i];
+                    $data['authors']['email'][] = $data['maintainers']['email'][$i];
                 }
                 // Convert channel from previous version for entire package
                 $helper = Mage::helper('Mage_Connect_Helper_Data');

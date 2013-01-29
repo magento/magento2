@@ -124,7 +124,7 @@ class Zend_Filter_RealPath implements Zend_Filter_Interface
                 if ($dir == '..') {
                     array_pop($stack);
                 } else {
-                    array_push($stack, $dir);
+                    $stack[] = $dir;
                 }
             }
         }

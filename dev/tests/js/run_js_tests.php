@@ -94,7 +94,7 @@ if (file_exists($fileOrder)) {
             }
         }
         if (!$found) {
-            array_push($sortedFiles, $loadFile);
+            $sortedFiles[] = $loadFile;
         }
     }
 }
@@ -226,7 +226,7 @@ function listFiles($dirs)
         $path = $baseDir . $dir;
         if (is_file($path)) {
             $path = substr_replace($path, RELATIVE_APP_ROOT, 0, strlen($baseDir));
-            array_push($result, $path);
+            $result[] = $path;
         } else {
             $paths = glob($path . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
             $paths = substr_replace($paths, '', 0, strlen($baseDir));

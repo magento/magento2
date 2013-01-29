@@ -87,7 +87,7 @@ class Zend_Tool_Project_Profile_Resource_SearchConstraints
 
         $constraint = $this->_makeConstraint($name, $params);
 
-        array_push($this->_constraints, $constraint);
+        $this->_constraints[] = $constraint;
         return $this;
     }
 

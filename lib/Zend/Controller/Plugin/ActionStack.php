@@ -189,7 +189,7 @@ class Zend_Controller_Plugin_ActionStack extends Zend_Controller_Plugin_Abstract
     public function pushStack(Zend_Controller_Request_Abstract $next)
     {
         $stack = $this->getStack();
-        array_push($stack, $next);
+        $stack[] = $next;
         return $this->_saveStack($stack);
     }
 

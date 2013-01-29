@@ -150,7 +150,7 @@ class MethodReflection extends PhpReflectionMethod implements ReflectionInterfac
         $lastLine = array_pop($lines);
 
         if (trim($lastLine) !== '}') {
-            array_push($lines, $lastLine);
+            $lines[] = $lastLine;
         }
 
         // just in case we had code on the bracket lines

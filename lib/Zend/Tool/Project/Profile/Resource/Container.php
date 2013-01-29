@@ -320,7 +320,7 @@ class Zend_Tool_Project_Profile_Resource_Container implements RecursiveIterator,
         if (!$this->isAppendable()) {
             throw new Exception('Resource by name ' . (string) $this . ' is not appendable');
         }
-        array_push($this->_subResources, $resource);
+        $this->_subResources[] = $resource;
         $resource->setParentResource($this);
 
         return $this;
