@@ -132,7 +132,7 @@ class Di implements DependencyInjectionInterface
      */
     public function get($name, array $params = array())
     {
-        $this->instanceContext = array('GET', $name, null);
+        $this->instanceContext[] = array('GET', $name, null);
 
         $im = $this->instanceManager;
 
