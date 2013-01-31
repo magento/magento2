@@ -459,7 +459,7 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
     {
         if ($this->_filter === null) {
             $filterClass = $this->getData('filter');
-            if (false === (bool) $filterClass && false === $filterClass === null) {
+            if (false === (bool) $filterClass && false === ($filterClass === null)) {
                 return false;
             }
             if (!$filterClass) {

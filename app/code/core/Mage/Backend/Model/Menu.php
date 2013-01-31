@@ -205,7 +205,7 @@ class Mage_Backend_Model_Menu extends ArrayObject
             if ($item->isAllowed() && !$item->isDisabled()) {
                 if ($item->hasChildren()) {
                     $result = $item->getChildren()->getFirstAvailable();
-                    if (false == $result === null) {
+                    if (false === ($result === null)) {
                         break;
                     }
                 } else {
