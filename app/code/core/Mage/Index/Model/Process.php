@@ -551,7 +551,7 @@ class Mage_Index_Model_Process extends Mage_Core_Model_Abstract
     public function getDepends()
     {
         $depends = $this->getData('depends');
-        if (is_null($depends)) {
+        if ($depends === null) {
             $depends = array();
             $path = self::XML_PATH_INDEXER_DATA . '/' . $this->getIndexerCode();
             $node = Mage::getConfig()->getNode($path);

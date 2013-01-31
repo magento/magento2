@@ -105,7 +105,7 @@ class Mage_CatalogSearch_Model_Resource_Fulltext extends Mage_Core_Model_Resourc
      */
     public function rebuildIndex($storeId = null, $productIds = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeIds = array_keys(Mage::app()->getStores());
             foreach ($storeIds as $storeId) {
                 $this->_rebuildStoreIndex($storeId, $productIds);
@@ -387,7 +387,7 @@ class Mage_CatalogSearch_Model_Resource_Fulltext extends Mage_Core_Model_Resourc
      */
     protected function _getSearchableAttributes($backendType = null)
     {
-        if (is_null($this->_searchableAttributes)) {
+        if ($this->_searchableAttributes === null) {
             $this->_searchableAttributes = array();
 
             $productAttributeCollection = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Attribute_Collection');

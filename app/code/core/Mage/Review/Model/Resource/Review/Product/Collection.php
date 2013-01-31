@@ -95,7 +95,7 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
      */
     public function addStoreFilter($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->getStoreId();
         }
 
@@ -149,7 +149,7 @@ class Mage_Review_Model_Resource_Review_Product_Collection extends Mage_Catalog_
     {
         $adapter = $this->getConnection();
         $storesIds = $this->_storesIds;
-        if (is_null($select)){
+        if ($select === null){
             $select = $this->getSelect();
         }
 

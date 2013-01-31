@@ -33,7 +33,7 @@ class Mage_Backend_Model_Config_Backend_Admin_Observer
      */
     public function afterCustomUrlChanged()
     {
-        if (is_null(Mage::registry('custom_admin_path_redirect'))) {
+        if (Mage::registry('custom_admin_path_redirect') === null) {
             return;
         }
 

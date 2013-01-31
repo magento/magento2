@@ -74,7 +74,7 @@ class Mage_Core_Controller_Varien_Front extends Varien_Object implements Mage_Co
 
     public function getDefault($key=null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             return $this->_defaults;
         } elseif (isset($this->_defaults[$key])) {
             return $this->_defaults[$key];

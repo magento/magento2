@@ -36,7 +36,7 @@ class Mage_Centinel_Model_State_Jcb extends Mage_Centinel_Model_StateAbstract
      */
     public function isAuthenticateAllowed()
     {
-        return $this->_isLookupStrictSuccessful() && is_null($this->getAuthenticateEciFlag());
+        return $this->_isLookupStrictSuccessful() && $this->getAuthenticateEciFlag() === null;
     }
 
     /**

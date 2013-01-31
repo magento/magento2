@@ -96,7 +96,7 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends 
     public function getStores()
     {
         $stores = $this->getData('stores');
-        if (is_null($stores)) {
+        if ($stores === null) {
             $stores = Mage::getModel('Mage_Core_Model_Store')
                 ->getResourceCollection()
                 ->setLoadDefault(true)
@@ -278,7 +278,7 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends 
     public function getStoreOptionValues($storeId)
     {
         $values = $this->getData('store_option_values_'.$storeId);
-        if (is_null($values)) {
+        if ($values === null) {
             $values = array();
             $valuesCollection = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection')
                 ->setAttributeFilter($this->getAttributeObject()->getId())

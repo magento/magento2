@@ -67,7 +67,7 @@ class Mage_Customer_Block_Address_Renderer_Default
 
     public function getFormat(Mage_Customer_Model_Address_Abstract $address=null)
     {
-        $countryFormat = is_null($address)
+        $countryFormat = $address === null
             ? false
             : $address->getCountryModel()->getFormat($this->getType()->getCode());
         $format = $countryFormat ? $countryFormat->getFormat() : $this->getType()->getDefaultFormat();

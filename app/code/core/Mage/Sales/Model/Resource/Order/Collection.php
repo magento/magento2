@@ -68,7 +68,7 @@ class Mage_Sales_Model_Resource_Order_Collection extends Mage_Sales_Model_Resour
      */
     public function addItemCountExpr()
     {
-        if (is_null($this->_fieldsToSelect)) {
+        if ($this->_fieldsToSelect === null) {
             // If we select all fields from table, we need to add column alias
             $this->getSelect()->columns(array('items_count'=>'total_item_count'));
         } else {

@@ -83,7 +83,7 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
      */
     protected function _getResource()
     {
-        if (is_null($this->_resource)) {
+        if ($this->_resource === null) {
             $this->_resource = Mage::getResourceModel('Mage_Catalog_Model_Resource_Layer_Filter_Price');
         }
         return $this->_resource;
@@ -135,7 +135,7 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     public function getMaxPriceInt()
     {
         $maxPrice = $this->getData('max_price_int');
-        if (is_null($maxPrice)) {
+        if ($maxPrice === null) {
             $maxPrice = $this->getLayer()->getProductCollection()->getMaxPrice();
             $maxPrice = floor($maxPrice);
             $this->setData('max_price_int', $maxPrice);
@@ -154,7 +154,7 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     {
         $rangeKey = 'range_item_counts_' . $range;
         $items = $this->getData($rangeKey);
-        if (is_null($items)) {
+        if ($items === null) {
             $items = $this->_getResource()->getCount($this, $range);
             // checking max number of intervals
             $i = 0;
@@ -422,7 +422,7 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     public function getCustomerGroupId()
     {
         $customerGroupId = $this->_getData('customer_group_id');
-        if (is_null($customerGroupId)) {
+        if ($customerGroupId === null) {
             $customerGroupId = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId();
         }
         return $customerGroupId;
@@ -447,7 +447,7 @@ class Mage_Catalog_Model_Layer_Filter_Price extends Mage_Catalog_Model_Layer_Fil
     public function getCurrencyRate()
     {
         $rate = $this->_getData('currency_rate');
-        if (is_null($rate)) {
+        if ($rate === null) {
             $rate = Mage::app()->getStore($this->getStoreId())->getCurrentCurrencyRate();
         }
         if (!$rate) {

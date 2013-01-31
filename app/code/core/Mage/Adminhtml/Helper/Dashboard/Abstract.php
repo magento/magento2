@@ -50,7 +50,7 @@
 
         public function getCollection()
         {
-            if(is_null($this->_collection)) {
+            if($this->_collection === null) {
                 $this->_initCollection();
             }
             return $this->_collection;

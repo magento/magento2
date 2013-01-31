@@ -248,7 +248,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
 
     public function getShowTemplateHints()
     {
-        if (is_null(self::$_showTemplateHints)) {
+        if (self::$_showTemplateHints === null) {
             self::$_showTemplateHints = Mage::getStoreConfig(self::XML_PATH_DEBUG_TEMPLATE_HINTS)
                 && Mage::helper('Mage_Core_Helper_Data')->isDevAllowed();
             self::$_showTemplateHintsBlocks = Mage::getStoreConfig(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS)
@@ -397,7 +397,7 @@ HTML;
      */
     protected function _getAllowSymlinks()
     {
-        if (is_null($this->_allowSymlinks)) {
+        if ($this->_allowSymlinks === null) {
             $this->_allowSymlinks = $this->_storeConfig->getConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
         }
         return $this->_allowSymlinks;

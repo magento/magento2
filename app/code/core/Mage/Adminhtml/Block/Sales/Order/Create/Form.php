@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
     public function getCustomerSelectorDisplay()
     {
         $customerId = $this->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             return 'block';
         }
         return 'none';

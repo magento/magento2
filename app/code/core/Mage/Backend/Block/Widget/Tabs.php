@@ -114,7 +114,7 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
             throw new Exception(Mage::helper('Mage_Backend_Helper_Data')->__('Wrong tab configuration.'));
         }
 
-        if (is_null($this->_tabs[$tabId]->getUrl())) {
+        if ($this->_tabs[$tabId]->getUrl() === null) {
             $this->_tabs[$tabId]->setUrl('#');
         }
 
@@ -125,7 +125,7 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         $this->_tabs[$tabId]->setId($tabId);
         $this->_tabs[$tabId]->setTabId($tabId);
 
-        if (is_null($this->_activeTab)) {
+        if ($this->_activeTab === null) {
             $this->_activeTab = $tabId;
         }
         if (true === $this->_tabs[$tabId]->getActive()) {
@@ -177,7 +177,7 @@ class Mage_Backend_Block_Widget_Tabs extends Mage_Backend_Block_Widget
         if (isset($this->_tabs[$tabId]) && $this->canShowTab($this->_tabs[$tabId])
             && !$this->getTabIsHidden($this->_tabs[$tabId])) {
             $this->_activeTab = $tabId;
-            if (!(is_null($this->_activeTab)) && ($tabId !== $this->_activeTab)) {
+            if (!($this->_activeTab === null) && ($tabId !== $this->_activeTab)) {
                 foreach ($this->_tabs as $id => $tab) {
                     $tab->setActive($id === $tabId);
                 }

@@ -182,7 +182,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tabs extends Mage_Adminhtml_Bloc
      */
     public function getAttributeTabBlock()
     {
-        if (is_null(Mage::helper('Mage_Adminhtml_Helper_Catalog')->getAttributeTabBlock())) {
+        if (Mage::helper('Mage_Adminhtml_Helper_Catalog')->getAttributeTabBlock() === null) {
             return $this->_attributeTabBlock;
         }
         return Mage::helper('Mage_Adminhtml_Helper_Catalog')->getAttributeTabBlock();

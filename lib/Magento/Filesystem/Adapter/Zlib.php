@@ -119,7 +119,7 @@ class Magento_Filesystem_Adapter_Zlib extends Magento_Filesystem_Adapter_Local
      */
     protected function _isCompressionAvailable()
     {
-        if (is_null($this->_hasCompression)) {
+        if ($this->_hasCompression === null) {
             $this->_hasCompression = extension_loaded("zlib");
         }
         return $this->_hasCompression;

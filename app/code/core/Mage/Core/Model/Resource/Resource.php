@@ -69,8 +69,8 @@ class Mage_Core_Model_Resource_Resource extends Mage_Core_Model_Resource_Db_Abst
      */
     protected function _loadVersionData($needType)
     {
-        if ((($needType == 'db') && is_null(self::$_versions))
-            || (($needType == 'data') && is_null(self::$_dataVersions))) {
+        if ((($needType == 'db') && self::$_versions === null)
+            || (($needType == 'data') && self::$_dataVersions === null)) {
             self::$_versions     = array(); // Db version column always exists
             self::$_dataVersions = null; // Data version array will be filled only if Data column exist
 
@@ -81,7 +81,7 @@ class Mage_Core_Model_Resource_Resource extends Mage_Core_Model_Resource_Db_Abst
                 foreach ($rowset as $row) {
                     self::$_versions[$row['code']] = $row['version'];
                     if (array_key_exists('data_version', $row)) {
-                        if (is_null(self::$_dataVersions)) {
+                        if (self::$_dataVersions === null) {
                             self::$_dataVersions = array();
                         }
                         self::$_dataVersions[$row['code']] = $row['data_version'];

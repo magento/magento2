@@ -358,7 +358,7 @@ class Mage_Sales_Model_Quote_Address extends Mage_Customer_Model_Address_Abstrac
      */
     public function getItemsCollection()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = Mage::getModel('Mage_Sales_Model_Quote_Address_Item')->getCollection()
                 ->setAddressFilter($this->getId());
 
@@ -657,7 +657,7 @@ class Mage_Sales_Model_Quote_Address extends Mage_Customer_Model_Address_Abstrac
      */
     public function getShippingRatesCollection()
     {
-        if (is_null($this->_rates)) {
+        if ($this->_rates === null) {
             $this->_rates = Mage::getModel('Mage_Sales_Model_Quote_Address_Rate')->getCollection()
                 ->setAddressFilter($this->getId());
             if ($this->getQuote()->hasNominalItems(false)) {

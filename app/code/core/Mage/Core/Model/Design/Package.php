@@ -194,7 +194,7 @@ class Mage_Core_Model_Design_Package
      */
     public function getArea()
     {
-        if (is_null($this->_area)) {
+        if ($this->_area === null) {
             $this->_area = self::DEFAULT_AREA;
         }
         return $this->_area;

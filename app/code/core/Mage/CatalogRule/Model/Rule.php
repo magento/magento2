@@ -185,7 +185,7 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
      */
     public function getMatchingProductIds()
     {
-        if (is_null($this->_productIds)) {
+        if ($this->_productIds === null) {
             $this->_productIds = array();
             $this->setCollectedAttributes(array());
 
@@ -241,7 +241,7 @@ class Mage_CatalogRule_Model_Rule extends Mage_Rule_Model_Abstract
         if (is_numeric($product)) {
             $product = Mage::getModel('Mage_Catalog_Model_Product')->load($product);
         }
-        if (is_null($websiteIds)) {
+        if ($websiteIds === null) {
             $websiteIds = $this->getWebsiteIds();
         }
         $this->getResource()->applyToProduct($this, $product, $websiteIds);

@@ -302,7 +302,7 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
      */
     protected function _getMenu()
     {
-        if (is_null($this->_menu)) {
+        if ($this->_menu === null) {
             $this->_menu = $this->_menuConfig->getMenu();
         }
         return $this->_menu;

@@ -68,7 +68,7 @@ class Mage_Sales_Block_Billing_Agreements extends Mage_Core_Block_Template
      */
     public function getBillingAgreements()
     {
-        if (is_null($this->_billingAgreements)) {
+        if ($this->_billingAgreements === null) {
             $this->_billingAgreements = Mage::getResourceModel('Mage_Sales_Model_Resource_Billing_Agreement_Collection')
                 ->addFieldToFilter('customer_id', Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerId())
                 ->setOrder('agreement_id', 'desc');

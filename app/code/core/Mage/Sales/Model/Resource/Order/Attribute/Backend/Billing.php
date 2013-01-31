@@ -42,7 +42,7 @@ class Mage_Sales_Model_Resource_Order_Attribute_Backend_Billing extends Mage_Eav
     public function beforeSave($object)
     {
         $billingAddressId = $object->getBillingAddressId();
-        if (is_null($billingAddressId)) {
+        if ($billingAddressId === null) {
             $object->unsetBillingAddressId();
         }
     }

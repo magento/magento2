@@ -202,7 +202,7 @@ class Mage_Adminhtml_Block_Customer_Form_Element_File extends Varien_Data_Form_E
             return false;
         }
         $value = $this->getValue();
-        if (is_array($value) && is_null($index)) {
+        if (is_array($value) && $index === null) {
             $index = 'value';
         }
 

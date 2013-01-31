@@ -593,7 +593,7 @@ class Mage_Core_Model_Cache
      */
     public function canUse($typeCode)
     {
-        if (is_null($this->_allowedCacheOptions)) {
+        if ($this->_allowedCacheOptions === null) {
             $this->_initOptions();
         }
 

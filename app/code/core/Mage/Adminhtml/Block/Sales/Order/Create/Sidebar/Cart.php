@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Sidebar_Cart
     public function getItemCollection()
     {
         $collection = $this->getData('item_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCreateOrderModel()->getCustomerCart()->getAllVisibleItems();
             $this->setData('item_collection', $collection);
         }

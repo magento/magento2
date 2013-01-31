@@ -139,7 +139,7 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
 
         if (is_array($translations)) {
             foreach ($translations as $storeId => $translate) {
-                if (is_null($translate) || $translate=='') {
+                if ($translate === null || $translate=='') {
                      $where = array(
                         'store_id = ?'    => $storeId,
                         'string = ?'      => $object->getString()
@@ -176,7 +176,7 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
      */
     public function deleteTranslate($string, $locale = null, $storeId = null)
     {
-        if (is_null($locale)) {
+        if ($locale === null) {
             $locale = Mage::app()->getLocale()->getLocaleCode();
         }
 
@@ -210,11 +210,11 @@ class Mage_Core_Model_Resource_Translate_String extends Mage_Core_Model_Resource
         $write = $this->_getWriteAdapter();
         $table = $this->getMainTable();
 
-        if (is_null($locale)) {
+        if ($locale === null) {
             $locale = Mage::app()->getLocale()->getLocaleCode();
         }
 
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = Mage::app()->getStore()->getId();
         }
 

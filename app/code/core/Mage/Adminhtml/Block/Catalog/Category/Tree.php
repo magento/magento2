@@ -90,7 +90,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
     {
         $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
         $collection = $this->getData('category_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = Mage::getModel('Mage_Catalog_Model_Category')->getCollection();
 
             /* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
@@ -187,7 +187,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
     {
         $params = array('_current'=>true, 'id'=>null,'store'=>null);
         if (
-            (is_null($expanded) && Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getIsTreeWasExpanded())
+            ($expanded === null && Mage::getSingleton('Mage_Backend_Model_Auth_Session')->getIsTreeWasExpanded())
             || $expanded == true) {
             $params['expand_all'] = true;
         }

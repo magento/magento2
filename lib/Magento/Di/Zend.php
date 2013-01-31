@@ -51,7 +51,7 @@ class Magento_Di_Zend extends Zend\Di\Di implements Magento_Di
         Zend\Di\Config $config = null,
         $definitionsFile = null
     ) {
-        if (is_null($definitions)) {
+        if ($definitions === null) {
             if (is_string($definitionsFile) && is_file($definitionsFile) && is_readable($definitionsFile)) {
                 $definitionProvider = new Magento_Di_Definition_ArrayDefinition_Zend(
                     unserialize(file_get_contents($definitionsFile))

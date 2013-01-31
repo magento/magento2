@@ -221,7 +221,7 @@ abstract class Mage_Rule_Model_Abstract extends Mage_Core_Model_Abstract
      */
     protected function _resetConditions($conditions = null)
     {
-        if (is_null($conditions)) {
+        if ($conditions === null) {
             $conditions = $this->getConditionsInstance();
         }
         $conditions->setRule($this)->setId('1')->setPrefix('conditions');
@@ -239,7 +239,7 @@ abstract class Mage_Rule_Model_Abstract extends Mage_Core_Model_Abstract
      */
     protected function _resetActions($actions = null)
     {
-        if (is_null($actions)) {
+        if ($actions === null) {
             $actions = $this->getActionsInstance();
         }
         $actions->setRule($this)->setId('1')->setPrefix('actions');

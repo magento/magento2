@@ -81,7 +81,7 @@ abstract class Mage_Adminhtml_Block_Sales_Order_Create_Form_Abstract
      */
     public function getForm()
     {
-        if (is_null($this->_form)) {
+        if ($this->_form === null) {
             $this->_form = new Varien_Data_Form();
             $this->_prepareForm();
         }

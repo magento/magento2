@@ -170,7 +170,7 @@ class Mage_Weee_Helper_Data extends Mage_Core_Helper_Abstract
                 break;
         }
 
-        if (is_null($compareTo)) {
+        if ($compareTo === null) {
             return $type;
         } else {
             if (is_array($compareTo)) {

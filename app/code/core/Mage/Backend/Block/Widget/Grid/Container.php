@@ -44,10 +44,10 @@ class Mage_Backend_Block_Widget_Grid_Container extends Mage_Backend_Block_Widget
 
     protected function _construct()
     {
-        if (is_null($this->_addButtonLabel)) {
+        if ($this->_addButtonLabel === null) {
             $this->_addButtonLabel = $this->__('Add New');
         }
-        if (is_null($this->_backButtonLabel)) {
+        if ($this->_backButtonLabel === null) {
             $this->_backButtonLabel = $this->__('Back');
         }
 

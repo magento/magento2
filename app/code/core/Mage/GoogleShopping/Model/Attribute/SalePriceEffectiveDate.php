@@ -63,12 +63,12 @@ class Mage_GoogleShopping_Model_Attribute_SalePriceEffectiveDate extends Mage_Go
         }
 
         // if we have only "from" date, send "from" day
-        if (!is_null($from) && is_null($to)) {
+        if (!is_null($from) && $to === null) {
             $dateString = $from->toString('YYYY-MM-dd');
         }
 
         // if we have only "to" date, use "now" date for "from"
-        if (is_null($from) && !is_null($to)) {
+        if ($from === null && !is_null($to)) {
             $from = new Zend_Date();
             // if "now" date is earlier than "to" date
             if ($from->isEarlier($to)) {

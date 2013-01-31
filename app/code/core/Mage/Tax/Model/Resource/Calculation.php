@@ -123,7 +123,7 @@ class Mage_Tax_Model_Resource_Calculation extends Mage_Core_Model_Resource_Db_Ab
      */
     public function getCalculationProcess($request, $rates = null)
     {
-        if (is_null($rates)) {
+        if ($rates === null) {
             $rates = $this->_getRates($request);
         }
 

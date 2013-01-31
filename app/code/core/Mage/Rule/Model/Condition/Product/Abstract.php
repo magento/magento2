@@ -484,7 +484,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
                 }
             }
 
-            if (is_null($oldAttrValue)) {
+            if ($oldAttrValue === null) {
                 $object->unsetData($attrCode);
             } else {
                 $object->setData($attrCode, $oldAttrValue);

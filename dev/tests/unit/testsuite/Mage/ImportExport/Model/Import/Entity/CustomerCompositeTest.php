@@ -172,7 +172,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
      */
     protected function _getCustomerEntityMock(array $mockedMethods = null)
     {
-        if (is_null($mockedMethods)) {
+        if ($mockedMethods === null) {
             $mockedMethods = $this->_entityMockedMethods;
         }
         $mockedMethods[] = 'getAttributeCollection';
@@ -203,7 +203,7 @@ class Mage_ImportExport_Model_Import_Entity_CustomerCompositeTest extends PHPUni
      */
     protected function _getAddressEntityMock(array $mockedMethods = null)
     {
-        if (is_null($mockedMethods)) {
+        if ($mockedMethods === null) {
             $mockedMethods = $this->_entityMockedMethods;
         }
         $mockedMethods[] = 'getAttributeCollection';

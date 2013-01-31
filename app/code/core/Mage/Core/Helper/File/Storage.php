@@ -56,7 +56,7 @@ class Mage_Core_Helper_File_Storage extends Mage_Core_Helper_Abstract
      */
     public function getCurrentStorageCode()
     {
-        if (is_null($this->_currentStorage)) {
+        if ($this->_currentStorage === null) {
             $this->_currentStorage = (int) Mage::app()
                 ->getConfig()->getNode(Mage_Core_Model_File_Storage::XML_PATH_STORAGE_MEDIA);
         }

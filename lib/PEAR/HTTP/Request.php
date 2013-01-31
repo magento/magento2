@@ -1256,10 +1256,10 @@ class HTTP_Response
             } else {
                 $this->_toRead = $this->_headers['content-length'];
             }
-            while (!$this->_sock->eof() && (is_null($this->_toRead) || 0 < $this->_toRead)) {
+            while (!$this->_sock->eof() && ($this->_toRead === null || 0 < $this->_toRead)) {
                 if ($chunked) {
                     $data = $this->_readChunked();
-                } elseif (is_null($this->_toRead)) {
+                } elseif ($this->_toRead === null) {
                     $data = $this->_sock->read(4096);
                 } else {
                     $data = $this->_sock->read(min(4096, $this->_toRead));

@@ -46,7 +46,7 @@ class Mage_Payment_Block_Info_Instructions extends Mage_Payment_Block_Info
      */
     public function getInstructions()
     {
-        if (is_null($this->_instructions)) {
+        if ($this->_instructions === null) {
             $this->_instructions = $this->getInfo()->getAdditionalInformation('instructions')
                 ?: $this->getMethod()->getInstructions();
         }

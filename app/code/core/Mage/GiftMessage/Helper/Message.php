@@ -151,7 +151,7 @@ class Mage_GiftMessage_Helper_Message extends Mage_Core_Helper_Data
     protected function _getDependenceFromStoreConfig($productGiftMessageAllow, $store=null)
     {
         $result = Mage::getStoreConfig(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, $store);
-        if ($productGiftMessageAllow === '' || is_null($productGiftMessageAllow)) {
+        if ($productGiftMessageAllow === '' || $productGiftMessageAllow === null) {
             return $result;
         } else {
             return $productGiftMessageAllow;

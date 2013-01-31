@@ -151,7 +151,7 @@ class Mage_Catalog_Model_Product_Url extends Varien_Object
     {
         $path = $product->getData('url_path');
 
-        if (is_null($category)) {
+        if ($category === null) {
             /** @todo get default category */
             return $path;
         } elseif (!$category instanceof Mage_Catalog_Model_Category) {

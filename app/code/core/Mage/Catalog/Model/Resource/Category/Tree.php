@@ -132,7 +132,7 @@ class Mage_Catalog_Model_Resource_Category_Tree extends Varien_Data_Tree_Dbp
     public function addCollectionData($collection = null, $sorted = false, $exclude = array(), $toLoad = true,
         $onlyActive = false)
     {
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCollection($sorted);
         } else {
             $this->setCollection($collection);
@@ -267,7 +267,7 @@ class Mage_Catalog_Model_Resource_Category_Tree extends Varien_Data_Tree_Dbp
     protected function _getIsActiveAttributeId()
     {
         $resource = Mage::getSingleton('Mage_Core_Model_Resource');
-        if (is_null($this->_isActiveAttributeId)) {
+        if ($this->_isActiveAttributeId === null) {
             $bind = array(
                 'entity_type_code' => Mage_Catalog_Model_Category::ENTITY,
                 'attribute_code'   => 'is_active'
@@ -341,7 +341,7 @@ class Mage_Catalog_Model_Resource_Category_Tree extends Varien_Data_Tree_Dbp
      */
     public function getCollection($sorted = false)
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = $this->_getDefaultCollection($sorted);
         }
         return $this->_collection;

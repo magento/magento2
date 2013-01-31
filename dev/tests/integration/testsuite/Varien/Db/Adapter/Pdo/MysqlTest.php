@@ -105,7 +105,7 @@ class Varien_Db_Adapter_Pdo_MysqlTest extends PHPUnit_Framework_TestCase
      */
     protected function _getConnection()
     {
-        if (is_null($this->_connection)) {
+        if ($this->_connection === null) {
             /** @var $coreResource Mage_Core_Model_Resource */
             $coreResource = Mage::getSingleton('Mage_Core_Model_Resource');
             $this->_connection = $coreResource->getConnection(Mage_Core_Model_Resource::DEFAULT_WRITE_RESOURCE);

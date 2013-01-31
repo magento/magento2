@@ -78,7 +78,7 @@ class Mage_Adminhtml_Model_Session_Quote extends Mage_Core_Model_Session_Abstrac
      */
     public function getQuote()
     {
-        if (is_null($this->_quote)) {
+        if ($this->_quote === null) {
             $this->_quote = Mage::getModel('Mage_Sales_Model_Quote');
             if ($this->getStoreId() && $this->getQuoteId()) {
                 $this->_quote->setStoreId($this->getStoreId())
@@ -118,7 +118,7 @@ class Mage_Adminhtml_Model_Session_Quote extends Mage_Core_Model_Session_Abstrac
      */
     public function getCustomer($forceReload=false, $useSetStore=false)
     {
-        if (is_null($this->_customer) || $forceReload) {
+        if ($this->_customer === null || $forceReload) {
             $this->_customer = Mage::getModel('Mage_Customer_Model_Customer');
             if ($useSetStore && $this->getStore()->getId()) {
                 $this->_customer->setStore($this->getStore());
@@ -137,7 +137,7 @@ class Mage_Adminhtml_Model_Session_Quote extends Mage_Core_Model_Session_Abstrac
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = Mage::app()->getStore($this->getStoreId());
             if ($currencyId = $this->getCurrencyId()) {
                 $this->_store->setCurrentCurrencyCode($currencyId);
@@ -153,7 +153,7 @@ class Mage_Adminhtml_Model_Session_Quote extends Mage_Core_Model_Session_Abstrac
      */
     public function getOrder()
     {
-        if (is_null($this->_order)) {
+        if ($this->_order === null) {
             $this->_order = Mage::getModel('Mage_Sales_Model_Order');
             if ($this->getOrderId()) {
                 $this->_order->load($this->getOrderId());

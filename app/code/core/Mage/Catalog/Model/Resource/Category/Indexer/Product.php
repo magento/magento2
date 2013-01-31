@@ -1028,7 +1028,7 @@ class Mage_Catalog_Model_Resource_Category_Indexer_Product extends Mage_Index_Mo
      */
     protected function _getStoresInfo()
     {
-        if (is_null($this->_storesInfo)) {
+        if ($this->_storesInfo === null) {
             $adapter = $this->_getReadAdapter();
             $select = $adapter->select()
                 ->from(array('s' => $this->getTable('core_store')), array('store_id', 'website_id'))

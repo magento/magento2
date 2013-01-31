@@ -64,7 +64,7 @@ class Mage_Core_Model_Resource_Design_Collection extends Mage_Core_Model_Resourc
      */
     public function addDateFilter($date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = $this->formatDate(true);
         } else {
             $date = $this->formatDate($date);

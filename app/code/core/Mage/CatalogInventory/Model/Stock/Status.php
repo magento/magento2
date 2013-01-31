@@ -80,7 +80,7 @@ class Mage_CatalogInventory_Model_Stock_Status extends Mage_Core_Model_Abstract
      */
     public function getProductTypeInstances()
     {
-        if (is_null($this->_productTypes)) {
+        if ($this->_productTypes === null) {
             $this->_productTypes = array();
             $productEmulator     = new Varien_Object();
 
@@ -115,7 +115,7 @@ class Mage_CatalogInventory_Model_Stock_Status extends Mage_Core_Model_Abstract
      */
     public function getWebsites($websiteId = null)
     {
-        if (is_null($this->_websites)) {
+        if ($this->_websites === null) {
             $this->_websites = $this->getResource()->getWebsiteStores();
         }
 
@@ -204,7 +204,7 @@ class Mage_CatalogInventory_Model_Stock_Status extends Mage_Core_Model_Abstract
      */
     public function assignProduct(Mage_Catalog_Model_Product $product, $stockId = 1, $stockStatus = null)
     {
-        if (is_null($stockStatus)) {
+        if ($stockStatus === null) {
             $websiteId = $product->getStore()->getWebsiteId();
             $status = $this->getProductStatus($product->getId(), $websiteId, $stockId);
             $stockStatus = isset($status[$product->getId()]) ? $status[$product->getId()] : null;
@@ -249,7 +249,7 @@ class Mage_CatalogInventory_Model_Stock_Status extends Mage_Core_Model_Abstract
      */
     public function updateStatus($productId, $productType = null, $websiteId = null)
     {
-        if (is_null($productType)) {
+        if ($productType === null) {
             $productType = $this->getProductType($productId);
         }
 

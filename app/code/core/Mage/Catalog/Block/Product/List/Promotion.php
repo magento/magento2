@@ -27,7 +27,7 @@ class Mage_Catalog_Block_Product_List_Promotion extends Mage_Catalog_Block_Produ
 {
     protected function _getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             $collection = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection');
             Mage::getModel('Mage_Catalog_Model_Layer')->prepareProductCollection($collection);
 // your custom filter

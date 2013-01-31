@@ -161,7 +161,7 @@ class Mage_Directory_Model_Currency extends Mage_Core_Model_Abstract
      */
     public function convert($price, $toCurrency=null)
     {
-        if (is_null($toCurrency)) {
+        if ($toCurrency === null) {
             return $price;
         }
         elseif ($rate = $this->getRate($toCurrency)) {

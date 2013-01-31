@@ -91,7 +91,7 @@ class Mage_Downloadable_Helper_Download extends Mage_Core_Helper_Abstract
             Mage::throwException(Mage::helper('Mage_Downloadable_Helper_Data')->__('Please set resource file and link type.'));
         }
 
-        if (is_null($this->_handle)) {
+        if ($this->_handle === null) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
                 $port = 80;
 

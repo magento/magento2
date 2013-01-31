@@ -57,7 +57,7 @@ abstract class Mage_Backend_Model_Menu_Builder_CommandAbstract
     public function __construct(array $data = array())
     {
         foreach ($this->_requiredParams as $param) {
-            if (!isset($data[$param]) || is_null($data[$param])) {
+            if (!isset($data[$param]) || $data[$param] === null) {
                 throw new InvalidArgumentException("Missing required param " . $param);
             }
         }
@@ -83,7 +83,7 @@ abstract class Mage_Backend_Model_Menu_Builder_CommandAbstract
      */
     public function chain(Mage_Backend_Model_Menu_Builder_CommandAbstract $command)
     {
-        if (is_null($this->_next)) {
+        if ($this->_next === null) {
             $this->_next = $command;
         } else {
             $this->_next->chain($command);

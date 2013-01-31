@@ -32,7 +32,7 @@ class Mage_Checkout_Block_Cart_Totals extends Mage_Checkout_Block_Cart_Abstract
 
     public function getTotals()
     {
-        if (is_null($this->_totals)) {
+        if ($this->_totals === null) {
             return parent::getTotals();
         }
         return $this->_totals;
@@ -73,7 +73,7 @@ class Mage_Checkout_Block_Cart_Totals extends Mage_Checkout_Block_Cart_Abstract
         return $this->_getTotalRenderer($code)
             ->setTotal($total)
             ->setColspan($colspan)
-            ->setRenderingArea(is_null($area) ? -1 : $area)
+            ->setRenderingArea($area === null ? -1 : $area)
             ->toHtml();
     }
 

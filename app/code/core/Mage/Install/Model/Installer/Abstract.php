@@ -48,7 +48,7 @@ class Mage_Install_Model_Installer_Abstract
      */
     protected function _getInstaller()
     {
-        if (is_null($this->_installer)) {
+        if ($this->_installer === null) {
             $this->_installer = Mage::getSingleton('Mage_Install_Model_Installer');
         }
         return $this->_installer;

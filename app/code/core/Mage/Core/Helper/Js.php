@@ -134,7 +134,7 @@ class Mage_Core_Helper_Js extends Mage_Core_Helper_Abstract
      */
     protected function _getXmlConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $canUsaCache = Mage::app()->useCache('config');
             $cachedXml = Mage::app()->loadCache(self::JAVASCRIPT_TRANSLATE_CONFIG_KEY);
             if ($canUsaCache && $cachedXml) {

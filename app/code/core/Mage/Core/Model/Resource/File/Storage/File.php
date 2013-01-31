@@ -90,7 +90,7 @@ class Mage_Core_Model_Resource_File_Storage_File
      */
     public function getMediaBaseDirectory()
     {
-        if (is_null($this->_mediaBaseDirectory)) {
+        if ($this->_mediaBaseDirectory === null) {
             $this->_mediaBaseDirectory = $this->_dbHelper->getMediaBaseDir();
         }
 

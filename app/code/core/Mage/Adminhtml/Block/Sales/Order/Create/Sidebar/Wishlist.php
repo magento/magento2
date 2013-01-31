@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Sidebar_Wishlist
     public function getItemCollection()
     {
         $collection = $this->getData('item_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCreateOrderModel()->getCustomerWishlist(true);
             if ($collection) {
                 $collection = $collection->getItemCollection()->load();

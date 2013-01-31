@@ -43,7 +43,7 @@ class Varien_Data_Form_Element_Hidden extends Varien_Data_Form_Element_Abstract
     public function getDefaultHtml()
     {
         $html = $this->getData('default_html');
-        if (is_null($html)) {
+        if ($html === null) {
             $html = $this->getElementHtml();
         }
         return $html;

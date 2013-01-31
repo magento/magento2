@@ -43,7 +43,7 @@ class Mage_Downloadable_Model_Product_Type extends Mage_Catalog_Model_Product_Ty
      */
     public function getLinks($product)
     {
-        if (is_null($product->getDownloadableLinks())) {
+        if ($product->getDownloadableLinks() === null) {
             $_linkCollection = Mage::getModel('Mage_Downloadable_Model_Link')->getCollection()
                 ->addProductToFilter($product->getId())
                 ->addTitleToResult($product->getStoreId())
@@ -120,7 +120,7 @@ class Mage_Downloadable_Model_Product_Type extends Mage_Catalog_Model_Product_Ty
      */
     public function getSamples($product)
     {
-        if (is_null($product->getDownloadableSamples())) {
+        if ($product->getDownloadableSamples() === null) {
             $_sampleCollection = Mage::getModel('Mage_Downloadable_Model_Sample')->getCollection()
                 ->addProductToFilter($product->getId())
                 ->addTitleToResult($product->getStoreId());

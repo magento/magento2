@@ -224,7 +224,7 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      */
     public function getSize()
     {
-        if (is_null($this->_totalRecords)) {
+        if ($this->_totalRecords === null) {
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
@@ -691,11 +691,11 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
         if ($printQuery) {
-            echo is_null($sql) ? $this->getSelect()->__toString() : $sql;
+            echo $sql === null ? $this->getSelect()->__toString() : $sql;
         }
 
         if ($logQuery) {
-            Mage::log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
+            Mage::log($sql === null ? $this->getSelect()->__toString() : $sql);
         }
         return $this;
     }
@@ -829,9 +829,9 @@ class Varien_Data_Collection_Db extends Varien_Data_Collection
      */
     public function addFilterToMap($filter, $alias, $group = 'fields')
     {
-        if (is_null($this->_map)) {
+        if ($this->_map === null) {
             $this->_map = array($group => array());
-        } elseif (is_null($this->_map[$group])) {
+        } elseif ($this->_map[$group] === null) {
             $this->_map[$group] = array();
         }
         $this->_map[$group][$filter] = $alias;

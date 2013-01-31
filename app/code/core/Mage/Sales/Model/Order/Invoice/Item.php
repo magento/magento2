@@ -156,7 +156,7 @@ class Mage_Sales_Model_Order_Invoice_Item extends Mage_Core_Model_Abstract
      */
     public function getOrderItem()
     {
-        if (is_null($this->_orderItem)) {
+        if ($this->_orderItem === null) {
             if ($this->getInvoice()) {
                 $this->_orderItem = $this->getInvoice()->getOrder()->getItemById($this->getOrderItemId());
             }

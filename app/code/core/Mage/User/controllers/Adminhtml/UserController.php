@@ -100,7 +100,7 @@ class Mage_User_Adminhtml_UserController extends Mage_Backend_Controller_ActionA
 
         $model = $this->_prepareUserForSave($userId, $data);
 
-        if (is_null($model)) {
+        if ($model === null) {
             return;
         }
 

@@ -83,7 +83,7 @@ class Mage_Sales_Block_Items_Abstract extends Mage_Core_Block_Template
             $type = 'default';
         }
 
-        if (is_null($this->_itemRenders[$type]['renderer'])) {
+        if ($this->_itemRenders[$type]['renderer'] === null) {
             $this->_itemRenders[$type]['renderer'] = $this->getLayout()
                 ->createBlock($this->_itemRenders[$type]['block'])
                 ->setTemplate($this->_itemRenders[$type]['template'])

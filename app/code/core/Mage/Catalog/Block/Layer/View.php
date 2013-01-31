@@ -147,7 +147,7 @@ class Mage_Catalog_Block_Layer_View extends Mage_Core_Block_Template
     protected function _getFilterableAttributes()
     {
         $attributes = $this->getData('_filterable_attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $attributes = $this->getLayer()->getFilterableAttributes();
             $this->setData('_filterable_attributes', $attributes);
         }

@@ -79,7 +79,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     public function getPurchasedSeparatelyAttribute()
     {
-        if (is_null($this->_purchasedSeparatelyAttribute)) {
+        if ($this->_purchasedSeparatelyAttribute === null) {
             $_attributeCode = 'links_purchased_separately';
 
             $this->_purchasedSeparatelyAttribute = Mage::getModel('Mage_Eav_Model_Entity_Attribute')
@@ -332,7 +332,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = new Varien_Object();
         }
 

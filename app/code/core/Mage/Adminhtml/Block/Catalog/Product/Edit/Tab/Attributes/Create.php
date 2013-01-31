@@ -47,7 +47,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes_Create extends Ma
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
            $this->_config = new Varien_Object();
         }
 

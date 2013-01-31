@@ -92,7 +92,7 @@ class Mage_Wishlist_Block_Customer_Sidebar extends Mage_Wishlist_Block_Abstract
      */
     public function getWishlistItems()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = clone $this->_createWishlistItemCollection();
             $this->_collection->clear();
             $this->_prepareCollection($this->_collection);

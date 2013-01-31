@@ -58,7 +58,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
      */
     protected function _getAddressForm()
     {
-        if (is_null($this->_addressForm)) {
+        if ($this->_addressForm === null) {
             $this->_addressForm = Mage::getModel('Mage_Customer_Model_Form')
                 ->setFormCode('adminhtml_customer_address')
                 ->setStore($this->getStore());
@@ -166,7 +166,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
                 }
             }
         }
-        if (is_null($this->_form->getElement('country_id')->getValue())) {
+        if ( $this->_form->getElement('country_id')->getValue() === null) {
             $this->_form->getElement('country_id')->setValue(
                 Mage::helper('Mage_Core_Helper_Data')->getDefaultCountry($this->getStore())
             );

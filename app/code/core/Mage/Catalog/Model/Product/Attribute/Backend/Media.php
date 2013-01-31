@@ -93,7 +93,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
 
         foreach ($this->_getResource()->loadGallery($object, $this) as $image) {
             foreach ($localAttributes as $localAttribute) {
-                if (is_null($image[$localAttribute])) {
+                if ($image[$localAttribute] === null) {
                     $image[$localAttribute] = $this->_getDefaultValue($localAttribute, $image);
                 }
             }

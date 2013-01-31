@@ -101,7 +101,7 @@ class Mage_Checkout_Block_Cart_Item_Renderer extends Mage_Core_Block_Template
      */
     protected function _getThumbnail()
     {
-        if (is_null($this->_productThumbnail)) {
+        if ($this->_productThumbnail === null) {
             $product = $this->getProduct();
             if ($this->getProduct()->isConfigurable()) {
                 $children = $this->getItem()->getChildren();

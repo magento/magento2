@@ -240,7 +240,7 @@ class Mage_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Contro
      */
     protected function _getEntityTypeId()
     {
-        if (is_null(Mage::registry('entityType'))) {
+        if (Mage::registry('entityType') === null) {
             $this->_setTypeId();
         }
         return Mage::registry('entityType');

@@ -328,7 +328,7 @@ abstract class Mage_Catalog_Block_Product_Abstract extends Mage_Core_Block_Templ
      */
     public function getTierPriceHtml($product = null)
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
         return $this->_getPriceBlock($product->getTypeId())
@@ -346,7 +346,7 @@ abstract class Mage_Catalog_Block_Product_Abstract extends Mage_Core_Block_Templ
      */
     public function getTierPrices($product = null)
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
         $prices  = $product->getFormatedTierPrice();
@@ -429,7 +429,7 @@ abstract class Mage_Catalog_Block_Product_Abstract extends Mage_Core_Block_Templ
      */
     public function getImageLabel($product=null, $mediaAttributeCode='image')
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
 

@@ -36,7 +36,7 @@ class Mage_Catalog_Block_Product_List_Random extends Mage_Catalog_Block_Product_
 {
     protected function _getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             $collection = Mage::getResourceModel('Mage_Catalog_Model_Resource_Product_Collection');
             Mage::getModel('Mage_Catalog_Model_Layer')->prepareProductCollection($collection);
             $collection->getSelect()->order('rand()');

@@ -98,7 +98,7 @@ class Mage_Backend_Model_Auth_Session
      */
     public function refreshAcl($user = null)
     {
-        if (is_null($user)) {
+        if ($user === null) {
             $user = $this->getUser();
         }
         if (!$user) {
@@ -174,7 +174,7 @@ class Mage_Backend_Model_Auth_Session
      */
     public function isFirstPageAfterLogin()
     {
-        if (is_null($this->_isFirstAfterLogin)) {
+        if ($this->_isFirstAfterLogin === null) {
             $this->_isFirstAfterLogin = $this->getData('is_first_visit', true);
         }
         return $this->_isFirstAfterLogin;

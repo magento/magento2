@@ -44,7 +44,7 @@ class Mage_Install_Block_Locale extends Mage_Install_Block_Abstract
     public function getLocale()
     {
         $locale = $this->getData('locale');
-        if (is_null($locale)) {
+        if ($locale === null) {
             $locale = Mage::app()->getLocale()->getLocale();
             $this->setData('locale', $locale);
         }
@@ -157,7 +157,7 @@ class Mage_Install_Block_Locale extends Mage_Install_Block_Abstract
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
+        if ($data === null) {
             $data = new Varien_Object();
             $this->setData('form_data', $data);
         }

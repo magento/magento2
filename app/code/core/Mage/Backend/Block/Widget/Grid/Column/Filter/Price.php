@@ -83,7 +83,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
 
     protected function _getCurrencyModel()
     {
-        if (is_null($this->_currencyModel)) {
+        if ($this->_currencyModel === null) {
             $this->_currencyModel = Mage::getModel('Mage_Directory_Model_Currency');
         }
 
@@ -109,7 +109,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Price extends Mage_Backend_Bl
 
     protected function _getCurrencyList()
     {
-        if (is_null($this->_currencyList)) {
+        if ($this->_currencyList === null) {
             $this->_currencyList = $this->_getCurrencyModel()->getConfigAllowCurrencies();
         }
         return $this->_currencyList;

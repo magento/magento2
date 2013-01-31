@@ -41,7 +41,7 @@ abstract class Mage_Checkout_Model_Type_Abstract extends Varien_Object
     public function getCheckoutSession()
     {
         $checkout = $this->getData('checkout_session');
-        if (is_null($checkout)) {
+        if ($checkout === null) {
             $checkout = Mage::getSingleton('Mage_Checkout_Model_Session');
             $this->setData('checkout_session', $checkout);
         }
@@ -76,7 +76,7 @@ abstract class Mage_Checkout_Model_Type_Abstract extends Varien_Object
     public function getCustomerSession()
     {
         $customer = $this->getData('customer_session');
-        if (is_null($customer)) {
+        if ($customer === null) {
             $customer = Mage::getSingleton('Mage_Customer_Model_Session');
             $this->setData('customer_session', $customer);
         }
@@ -101,7 +101,7 @@ abstract class Mage_Checkout_Model_Type_Abstract extends Varien_Object
     public function getCustomerDefaultShippingAddress()
     {
         $address = $this->getData('customer_default_shipping_address');
-        if (is_null($address)) {
+        if ($address === null) {
             $address = $this->getCustomer()->getDefaultShippingAddress();
             if (!$address) {
                 foreach ($this->getCustomer()->getAddresses() as $address) {
@@ -123,7 +123,7 @@ abstract class Mage_Checkout_Model_Type_Abstract extends Varien_Object
     public function getCustomerDefaultBillingAddress()
     {
         $address = $this->getData('customer_default_billing_address');
-        if (is_null($address)) {
+        if ($address === null) {
             $address = $this->getCustomer()->getDefaultBillingAddress();
             if (!$address) {
                 foreach ($this->getCustomer()->getAddresses() as $address) {

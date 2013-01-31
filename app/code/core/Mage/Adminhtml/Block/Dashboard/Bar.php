@@ -93,7 +93,7 @@ class Mage_Adminhtml_Block_Dashboard_Bar extends Mage_Adminhtml_Block_Dashboard_
      */
     public function getCurrency()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             if ($this->getRequest()->getParam('store')) {
                 $this->_currentCurrencyCode = Mage::app()->getStore($this->getRequest()->getParam('store'))->getBaseCurrency();
             } else if ($this->getRequest()->getParam('website')){

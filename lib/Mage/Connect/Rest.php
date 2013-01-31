@@ -100,7 +100,7 @@ class Mage_Connect_Rest
      */
     protected function getLoader()
     {
-        if(is_null($this->_loader)) {
+        if($this->_loader === null) {
             $this->_loader = Mage_Connect_Loader::getInstance($this->_protocol);
         }
         return $this->_loader;
@@ -114,7 +114,7 @@ class Mage_Connect_Rest
      */
     protected function getParser()
     {
-        if(is_null($this->_parser)) {
+        if($this->_parser === null) {
             $this->_parser = new Mage_Xml_Parser();
         }
         return $this->_parser;
@@ -217,15 +217,15 @@ class Mage_Connect_Rest
             }
             $return = $output;
         }
-        
+
         $out = array();
         foreach($return as $name=>$package) {
             $stabilities = array_map(array($this, 'shortStateToLong'), array_keys($package));
-            $versions = array_map('trim', array_values($package));                
+            $versions = array_map('trim', array_values($package));
             $package = array_combine($versions, $stabilities);
             ksort($package);
             $out[$name] = $package;
-        }        
+        }
         return $out;
     }
 
@@ -335,8 +335,8 @@ class Mage_Connect_Rest
                 }
             }
         }
-        
-        
+
+
         $out = $this->loadChannelUri($package."/".$version."/".$package."-".$version.".".self::EXT);
 
         $statusCode = $this->getLoader()->getStatus();
@@ -353,12 +353,12 @@ class Mage_Connect_Rest
     }
 
     protected $states = array('b'=>'beta', 'd'=>'dev', 's'=>'stable', 'a'=>'alpha');
-    
+
     public function shortStateToLong($s)
     {
         return isset($this->states[$s]) ? $this->states[$s] : 'dev';
     }
-            
-    
+
+
 }
 

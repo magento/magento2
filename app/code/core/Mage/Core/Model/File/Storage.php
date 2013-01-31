@@ -98,7 +98,7 @@ class Mage_Core_Model_File_Storage extends Mage_Core_Model_Abstract
      */
     public function getStorageModel($storage = null, $params = array())
     {
-        if (is_null($storage)) {
+        if ($storage === null) {
             $storage = Mage::helper('Mage_Core_Helper_File_Storage')->getCurrentStorageCode();
         }
 

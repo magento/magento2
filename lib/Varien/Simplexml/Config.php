@@ -108,7 +108,7 @@ class Varien_Simplexml_Config
      * @param string $sourceType
      */
     public function __construct($sourceData=null) {
-        if (is_null($sourceData)) {
+        if ($sourceData === null) {
             return;
         }
         if ($sourceData instanceof Varien_Simplexml_Element) {
@@ -291,7 +291,7 @@ class Varien_Simplexml_Config
      */
     public function setCacheChecksum($data)
     {
-        if (is_null($data)) {
+        if ($data === null) {
             $this->_cacheChecksum = null;
         } elseif (false===$data || 0===$data) {
             $this->_cacheChecksum = false;
@@ -361,7 +361,7 @@ class Varien_Simplexml_Config
         if (false===$newChecksum) {
             return false;
         }
-        if (is_null($newChecksum)) {
+        if ($newChecksum === null) {
             return true;
         }
         $cachedChecksum = $this->getCache()->load($this->getCacheChecksumId());
@@ -405,7 +405,7 @@ class Varien_Simplexml_Config
             return $this;
         }
 
-        if (is_null($tags)) {
+        if ($tags === null) {
             $tags = $this->_cacheTags;
         }
 

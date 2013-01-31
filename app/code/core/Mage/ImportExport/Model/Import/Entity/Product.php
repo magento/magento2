@@ -1035,10 +1035,10 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
                     if(!is_null($previousAttributeSet)) {
                         $rowData[Mage_ImportExport_Model_Import_Entity_Product::COL_ATTR_SET] = $previousAttributeSet;
                     }
-                    if(is_null($productType) && !is_null($previousType)) {
+                    if($productType === null && !is_null($previousType)) {
                         $productType = $previousType;
                     }
-                    if(is_null($productType)) {
+                    if($productType === null) {
                         continue;
                     }
                 }
@@ -1190,7 +1190,7 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
      */
     protected function _getUploader()
     {
-        if (is_null($this->_fileUploader)) {
+        if ($this->_fileUploader === null) {
             $this->_fileUploader    = new Mage_ImportExport_Model_Import_Uploader();
 
             $this->_fileUploader->init();

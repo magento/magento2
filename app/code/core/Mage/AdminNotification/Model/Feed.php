@@ -60,7 +60,7 @@ class Mage_AdminNotification_Model_Feed extends Mage_Core_Model_Abstract
      */
     public function getFeedUrl()
     {
-        if (is_null($this->_feedUrl)) {
+        if ($this->_feedUrl === null) {
             $this->_feedUrl = (Mage::getStoreConfigFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://')
                 . Mage::getStoreConfig(self::XML_FEED_URL_PATH);
         }

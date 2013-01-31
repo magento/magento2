@@ -82,7 +82,7 @@ class Magento_Acl_Config_Reader extends Magento_Config_XmlAbstract
      */
     protected function _getDomConfigModel()
     {
-        if (is_null($this->_domConfig)) {
+        if ($this->_domConfig === null) {
             $this->_domConfig = new Magento_Acl_Config_Reader_Dom(
                 $this->_getInitialXml(),
                 $this->_getIdAttributes()

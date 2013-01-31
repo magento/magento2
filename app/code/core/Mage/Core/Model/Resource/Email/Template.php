@@ -70,7 +70,7 @@ class Mage_Core_Model_Resource_Email_Template extends Mage_Core_Model_Resource_D
      */
     public function checkCodeUsage(Mage_Core_Model_Email_Template $template)
     {
-        if ($template->getTemplateActual() != 0 || is_null($template->getTemplateActual())) {
+        if ($template->getTemplateActual() != 0 || $template->getTemplateActual() === null) {
             $select = $this->_getReadAdapter()->select()
                 ->from($this->getMainTable(), 'COUNT(*)')
                 ->where('template_code = :template_code');

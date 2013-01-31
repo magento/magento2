@@ -59,7 +59,7 @@ class Mage_Checkout_Block_Multishipping_Shipping extends Mage_Sales_Block_Items_
     public function getAddressCount()
     {
         $count = $this->getData('address_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getAddresses());
             $this->setData('address_count', $count);
         }

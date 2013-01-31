@@ -119,7 +119,7 @@ class Mage_Backend_Model_Menu_Item_Validator
      */
     public function validateParam($param, $value)
     {
-        if (in_array($param, $this->_required) && is_null($value)) {
+        if (in_array($param, $this->_required) && $value === null) {
             throw new InvalidArgumentException('Param ' . $param . ' is required');
         }
 

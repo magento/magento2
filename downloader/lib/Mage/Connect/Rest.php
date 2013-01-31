@@ -115,7 +115,7 @@ class Mage_Connect_Rest
      */
     public function getLoader()
     {
-        if (is_null($this->_loader)) {
+        if ($this->_loader === null) {
             $this->_loader = Mage_Connect_Loader::getInstance($this->_protocol);
         }
         return $this->_loader;
@@ -128,7 +128,7 @@ class Mage_Connect_Rest
      */
     protected function getParser()
     {
-        if (is_null($this->_parser)) {
+        if ($this->_parser === null) {
             $this->_parser = new Mage_Xml_Parser();
         }
         return $this->_parser;

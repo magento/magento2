@@ -128,18 +128,18 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
             $dateConditions[] = 'date_to IS NULL';
         }
 
-        if (is_null($dateFrom) && !is_null($dateTo)) {
+        if ($dateFrom === null && !is_null($dateTo)) {
             $dateConditions[] = 'date_to <= :date_to OR date_from <= :date_to';
         }
 
-        if (!is_null($dateFrom) && is_null($dateTo)) {
+        if (!is_null($dateFrom) && $dateTo === null) {
             $dateConditions[] = 'date_to >= :date_from OR date_from >= :date_from';
         }
 
         if (!is_null($dateFrom) && !is_null($dateTo)) {
             $dateConditions[] = 'date_from BETWEEN :date_from AND :date_to';
             $dateConditions[] = 'date_to BETWEEN :date_from AND :date_to';
-        } elseif (is_null($dateFrom) && is_null($dateTo)) {
+        } elseif ($dateFrom === null && $dateTo === null) {
             $dateConditions = array();
         }
 

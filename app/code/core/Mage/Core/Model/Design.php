@@ -73,7 +73,7 @@ class Mage_Core_Model_Design extends Mage_Core_Model_Abstract
      */
     public function loadChange($storeId, $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = Varien_Date::formatDate(Mage::app()->getLocale()->storeTimeStamp($storeId), false);
         }
 

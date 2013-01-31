@@ -609,7 +609,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     public function sendPasswordReminderEmail()
     {
         $storeId = $this->getStoreId();
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->_getWebsiteStoreId();
         }
 

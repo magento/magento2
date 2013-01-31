@@ -44,7 +44,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Radio
      */
     public function getValues()
     {
-        if (is_null($this->_values)) {
+        if ($this->_values === null) {
             $this->_values = $this->getColumn()->getData('values') ? $this->getColumn()->getData('values') : array();
         }
         return $this->_values;

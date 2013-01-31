@@ -180,7 +180,7 @@ class Mage_Payment_Model_Method_Cc extends Mage_Payment_Model_Method_Abstract
     public function hasVerification()
     {
         $configData = $this->getConfigData('useccv');
-        if(is_null($configData)){
+        if($configData === null){
             return true;
         }
         return (bool) $configData;
