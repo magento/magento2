@@ -298,7 +298,7 @@ final class Mage
         if (!self::$_objects) {
             self::$_objects = new Varien_Object_Cache;
         }
-        if (is_null($key)) {
+        if ($key === null) {
             return self::$_objects;
         } else {
             return self::$_objects->load($key);
@@ -730,7 +730,7 @@ final class Mage
      */
     public static function log($message, $level = null, $file = 'system.log', $forceLog = false)
     {
-        $level = is_null($level) ? Zend_Log::DEBUG : $level;
+        $level = $level === null ? Zend_Log::DEBUG : $level;
         if (empty($file) || $file == 'system.log') {
             $file = 'system.log';
             $key = Mage_Core_Model_Logger::LOGGER_SYSTEM;
@@ -865,7 +865,7 @@ final class Mage
             }
         }
 
-        if (is_null($baseUrl)) {
+        if ($baseUrl === null) {
             $errorMessage = "Unable detect system directory: $folder";
             if ($exitIfNot) {
                 // exit because of infinity loop

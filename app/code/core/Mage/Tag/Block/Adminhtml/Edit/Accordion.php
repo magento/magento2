@@ -40,7 +40,7 @@ class Mage_Tag_Block_Adminhtml_Edit_Accordion extends Mage_Adminhtml_Block_Widge
      */
     protected function _prepareLayout()
     {
-        if (is_null(Mage::registry('current_tag')->getId())) {
+        if (Mage::registry('current_tag')->getId() === null) {
             return $this;
         }
 

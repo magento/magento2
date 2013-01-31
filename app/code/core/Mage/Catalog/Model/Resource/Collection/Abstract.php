@@ -76,7 +76,7 @@ class Mage_Catalog_Model_Resource_Collection_Abstract extends Mage_Eav_Model_Ent
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             $this->setStoreId(Mage::app()->getStore()->getId());
         }
         return $this->_storeId;

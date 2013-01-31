@@ -343,7 +343,7 @@ class Mage_Sales_Model_Order_Shipment extends Mage_Sales_Model_Abstract
 
     public function getCommentsCollection($reload=false)
     {
-        if (is_null($this->_comments) || $reload) {
+        if ($this->_comments === null || $reload) {
             $this->_comments = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Shipment_Comment_Collection')
                 ->setShipmentFilter($this->getId())
                 ->setCreatedAtOrder();

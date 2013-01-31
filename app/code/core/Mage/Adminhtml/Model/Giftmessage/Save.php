@@ -138,7 +138,7 @@ class Mage_Adminhtml_Model_Giftmessage_Save extends Varien_Object
      */
     protected function _deleteOne($entityModel, $giftmessageModel=null)
     {
-        if(is_null($giftmessageModel)) {
+        if($giftmessageModel === null) {
             $giftmessageModel = Mage::getModel('Mage_GiftMessage_Model_Message')
                 ->load($entityModel->getGiftMessageId());
         }

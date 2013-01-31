@@ -48,7 +48,7 @@ class Mage_Core_Model_Source_Urlrewrite_Options
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = array(
                 ''              => Mage::helper('Mage_Adminhtml_Helper_Data')->__('No'),
                 self::TEMPORARY => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Temporary (302)'),

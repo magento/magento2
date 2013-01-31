@@ -81,7 +81,7 @@ class Mage_Connect_Package_Reader
     */
     protected function _getArchivator()
     {
-        if (is_null($this->_archivator)) {
+        if ($this->_archivator === null) {
             $this->_archivator = new Mage_Archive();
         }
         return $this->_archivator;

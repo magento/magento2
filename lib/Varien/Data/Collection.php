@@ -252,7 +252,7 @@ class Varien_Data_Collection implements IteratorAggregate, Countable
     public function getSize()
     {
         $this->load();
-        if (is_null($this->_totalRecords)) {
+        if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
         return intval($this->_totalRecords);

@@ -383,7 +383,7 @@ class Error_Processor
      */
     protected function _getFilePath($file, $directories = null)
     {
-        if (is_null($directories)) {
+        if ($directories === null) {
             $directories = array();
 
             if (!$this->_root) {

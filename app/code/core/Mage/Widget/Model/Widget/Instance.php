@@ -244,7 +244,7 @@ class Mage_Widget_Model_Widget_Instance extends Mage_Core_Model_Abstract
     {
         if (is_string($this->getData('widget_parameters'))) {
             return unserialize($this->getData('widget_parameters'));
-        } else if (is_null($this->getData('widget_parameters'))) {
+        } else if ($this->getData('widget_parameters') === null) {
             return array();
         }
         return (is_array($this->getData('widget_parameters'))) ? $this->getData('widget_parameters') : array();

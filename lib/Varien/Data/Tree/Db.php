@@ -133,7 +133,7 @@ class Varien_Data_Tree_Db extends Varien_Data_Tree
      */
     public function load($parentNode=null, $recursionLevel=100)
     {
-        if (is_null($parentNode)) {
+        if ($parentNode === null) {
             $this->_loadFullTree();
             return $this;
         }
@@ -204,7 +204,7 @@ class Varien_Data_Tree_Db extends Varien_Data_Tree
         $data[$this->_parentField]  = $parentNode->getId();
         $data[$this->_levelField]   = $parentNode->getData($this->_levelField)+1;
         // New node order
-        if (is_null($prevNode) || is_null($prevNode->getData($this->_orderField))) {
+        if ($prevNode === null || $prevNode->getData($this->_orderField) === null) {
             $data[$this->_orderField] = 1;
         }
         else {

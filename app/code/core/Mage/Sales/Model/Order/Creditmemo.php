@@ -374,7 +374,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
             /**
              * If we not retrieve negative answer from payment yet
              */
-            if (is_null($canVoid)) {
+            if ($canVoid === null) {
                 $canVoid = $this->getOrder()->getPayment()->canVoid($this);
                 if ($canVoid === false) {
                     $this->setCanVoidFlag(false);
@@ -549,7 +549,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
         );
 
         $state = $this->getState();
-        if (is_null($state)) {
+        if ($state === null) {
             $this->setState(self::STATE_OPEN);
         }
         return $this;
@@ -562,7 +562,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
      */
     public static function getStates()
     {
-        if (is_null(self::$_states)) {
+        if (self::$_states === null) {
             self::$_states = array(
                 self::STATE_OPEN       => Mage::helper('Mage_Sales_Helper_Data')->__('Pending'),
                 self::STATE_REFUNDED   => Mage::helper('Mage_Sales_Helper_Data')->__('Refunded'),
@@ -580,11 +580,11 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 
-        if (is_null(self::$_states)) {
+        if (self::$_states === null) {
             self::getStates();
         }
         if (isset(self::$_states[$stateId])) {
@@ -673,7 +673,7 @@ class Mage_Sales_Model_Order_Creditmemo extends Mage_Sales_Model_Abstract
 
     public function getCommentsCollection($reload=false)
     {
-        if (is_null($this->_comments) || $reload) {
+        if ($this->_comments === null || $reload) {
             $this->_comments = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Creditmemo_Comment_Collection')
                 ->setCreditmemoFilter($this->getId())
                 ->setCreatedAtOrder();

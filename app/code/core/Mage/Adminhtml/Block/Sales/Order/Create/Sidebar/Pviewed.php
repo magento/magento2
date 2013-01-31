@@ -54,7 +54,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Sidebar_Pviewed extends Mage_Admin
     public function getItemCollection()
     {
         $productCollection = $this->getData('item_collection');
-        if (is_null($productCollection)) {
+        if ($productCollection === null) {
             $stores = array();
             $website = Mage::app()->getStore($this->getStoreId())->getWebsite();
             foreach ($website->getStores() as $store) {

@@ -81,7 +81,7 @@ abstract class Magento_Validator_ValidatorAbstract implements Magento_Validator_
      */
     public function getTranslator()
     {
-        if (is_null($this->_translator)) {
+        if ($this->_translator === null) {
             return self::getDefaultTranslator();
         }
         return $this->_translator;

@@ -147,7 +147,7 @@ class Mage_Persistent_Model_Session extends Mage_Core_Model_Abstract
      */
     public function loadByCookieKey($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             $key = Mage::getSingleton('Mage_Core_Model_Cookie')->get(Mage_Persistent_Model_Session::COOKIE_NAME);
         }
         if ($key) {
@@ -203,7 +203,7 @@ class Mage_Persistent_Model_Session extends Mage_Core_Model_Abstract
      */
     public function deleteExpired($websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = Mage::app()->getStore()->getWebsiteId();
         }
 

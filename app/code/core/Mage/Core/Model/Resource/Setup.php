@@ -746,7 +746,7 @@ class Mage_Core_Model_Resource_Setup
             $this->_setupCache[$table][$parentId][$id] = $adapter->fetchRow($select, $bind);
         }
 
-        if (is_null($field)) {
+        if ($field === null) {
             return $this->_setupCache[$table][$parentId][$id];
         }
         return isset($this->_setupCache[$table][$parentId][$id][$field])

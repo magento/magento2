@@ -66,7 +66,7 @@ class Mage_Catalog_Model_Resource_Layer_Filter_Price extends Mage_Core_Model_Res
      */
     protected function _replaceTableAlias($conditionString)
     {
-        if (is_null($conditionString)) {
+        if ($conditionString === null) {
             return null;
         }
         $adapter = $this->_getReadAdapter();

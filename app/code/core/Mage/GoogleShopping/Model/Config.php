@@ -186,7 +186,7 @@ class Mage_GoogleShopping_Model_Config extends Varien_Object
         $countries = $this->getAllowedCountries($storeId);
         $country = isset($countries[$iso]) ? $countries[$iso] : null;
         $data = isset($country[$field]) ? $country[$field] : null;
-        return is_null($field) ? $country : $data;
+        return $field === null ? $country : $data;
     }
 
     /**

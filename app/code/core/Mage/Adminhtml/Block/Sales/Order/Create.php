@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create extends Mage_Adminhtml_Block_Widge
         $this->_updateButton('save', 'label', Mage::helper('Mage_Sales_Helper_Data')->__('Submit Order'));
         $this->_updateButton('save', 'onclick', "order.submit()");
         $this->_updateButton('save', 'id', 'submit_order_top_button');
-        if (is_null($customerId) || !$storeId) {
+        if ($customerId === null || !$storeId) {
             $this->_updateButton('save', 'style', 'display:none');
         }
 
@@ -60,7 +60,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create extends Mage_Adminhtml_Block_Widge
 
         $this->_updateButton('reset', 'id', 'reset_order_top_button');
 
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             $this->_updateButton('reset', 'style', 'display:none');
         } else {
             $this->_updateButton('back', 'style', 'display:none');

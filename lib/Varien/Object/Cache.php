@@ -162,7 +162,7 @@ class Varien_Object_Cache
             return $this->_hashes[$hash];
         }
 
-        if (is_null($idx)) {
+        if ($idx === null) {
             $idx = '#'.(++$this->_idx);
         }
 

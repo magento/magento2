@@ -292,7 +292,7 @@ class Mage_Customer_Model_Address_Abstract extends Mage_Core_Model_Abstract
      */
     public function getRegionModel($region=null)
     {
-        if(is_null($region)) {
+        if($region === null) {
             $region = $this->getRegionId();
         }
 

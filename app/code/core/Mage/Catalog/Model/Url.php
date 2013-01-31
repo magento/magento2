@@ -162,7 +162,7 @@ class Mage_Catalog_Model_Url
      */
     public function getResource()
     {
-        if (is_null($this->_resourceModel)) {
+        if ($this->_resourceModel === null) {
             $this->_resourceModel = Mage::getResourceModel('Mage_Catalog_Model_Resource_Url');
         }
         return $this->_resourceModel;
@@ -243,7 +243,7 @@ class Mage_Catalog_Model_Url
      */
     public function refreshRewrites($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             foreach ($this->getStores() as $store) {
                 $this->refreshRewrites($store->getId());
             }
@@ -439,7 +439,7 @@ class Mage_Catalog_Model_Url
      */
     public function refreshCategoryRewrite($categoryId, $storeId = null, $refreshProducts = true)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             foreach ($this->getStores() as $store) {
                 $this->refreshCategoryRewrite($categoryId, $store->getId(), $refreshProducts);
             }
@@ -476,7 +476,7 @@ class Mage_Catalog_Model_Url
      */
     public function refreshProductRewrite($productId, $storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             foreach ($this->getStores() as $store) {
                 $this->refreshProductRewrite($productId, $store->getId());
             }
@@ -586,7 +586,7 @@ class Mage_Catalog_Model_Url
      */
     public function clearStoreInvalidRewrites($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             foreach ($this->getStores() as $store) {
                 $this->clearStoreInvalidRewrites($store->getId());
             }

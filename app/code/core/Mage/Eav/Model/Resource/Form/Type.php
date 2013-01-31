@@ -57,7 +57,7 @@ class Mage_Eav_Model_Resource_Form_Type extends Mage_Core_Model_Resource_Db_Abst
      */
     public function load(Mage_Core_Model_Abstract $object, $value, $field = null)
     {
-        if (is_null($field) && !is_numeric($value)) {
+        if ($field === null && !is_numeric($value)) {
             $field = 'code';
         }
         return parent::load($object, $value, $field);

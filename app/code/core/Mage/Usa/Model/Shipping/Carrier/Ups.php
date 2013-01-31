@@ -1796,7 +1796,7 @@ XMLAuth;
      * @return int|null
      */
     protected function _getDeliveryConfirmationLevel($countyDest = null) {
-        if (is_null($countyDest)) {
+        if ($countyDest === null) {
             return null;
         }
 

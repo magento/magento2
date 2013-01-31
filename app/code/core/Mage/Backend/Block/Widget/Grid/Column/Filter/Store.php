@@ -107,7 +107,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Store
      */
     public function getCondition()
     {
-        if (is_null($this->getValue())) {
+        if ($this->getValue() === null) {
             return null;
         }
         if ($this->getValue() == '_deleted_') {

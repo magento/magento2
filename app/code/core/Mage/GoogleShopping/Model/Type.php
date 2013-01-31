@@ -206,7 +206,7 @@ class Mage_GoogleShopping_Model_Type extends Mage_Core_Model_Abstract
      */
     protected function _getAttributesCollection()
     {
-        if (is_null($this->_attributesCollection)) {
+        if ($this->_attributesCollection === null) {
             $this->_attributesCollection = Mage::getResourceModel(
                     'Mage_GoogleShopping_Model_Resource_Attribute_Collection'
                 )

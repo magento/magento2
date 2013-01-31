@@ -217,7 +217,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
      */
     public function getDirectFrontNames()
     {
-        if (is_null($this->_directFrontNames)) {
+        if ($this->_directFrontNames === null) {
             $names = Mage::getConfig()->getNode(self::XML_NODE_DIRECT_FRONT_NAMES);
             if ($names) {
                 $this->_directFrontNames = $names->asArray();
@@ -492,7 +492,7 @@ class Mage_Core_Controller_Request_Http extends Zend_Controller_Request_Http
      */
     public function getBeforeForwardInfo($name = null)
     {
-        if (is_null($name)) {
+        if ($name === null) {
             return $this->_beforeForwardInfo;
         } elseif (isset($this->_beforeForwardInfo[$name])) {
             return $this->_beforeForwardInfo[$name];

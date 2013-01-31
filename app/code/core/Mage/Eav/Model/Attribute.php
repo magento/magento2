@@ -75,7 +75,7 @@ abstract class Mage_Eav_Model_Attribute extends Mage_Eav_Model_Entity_Attribute
      */
     public function getWebsite()
     {
-        if (is_null($this->_website)) {
+        if ($this->_website === null) {
             $this->_website = Mage::app()->getWebsite();
         }
 
@@ -101,7 +101,7 @@ abstract class Mage_Eav_Model_Attribute extends Mage_Eav_Model_Entity_Attribute
     public function getUsedInForms()
     {
         $forms = $this->getData('used_in_forms');
-        if (is_null($forms)) {
+        if ($forms === null) {
             $forms = $this->_getResource()->getUsedInForms($this);
             $this->setData('used_in_forms', $forms);
         }

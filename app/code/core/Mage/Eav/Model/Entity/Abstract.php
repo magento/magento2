@@ -1196,7 +1196,7 @@ abstract class Mage_Eav_Model_Entity_Abstract extends Mage_Core_Model_Resource_A
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = array();
             }
 

@@ -537,7 +537,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
         $result = array();
         $lastCount = 0;
         $intervalFirstPrice = $this->_minPrice;
-        $lastSeparator = is_null($this->_lowerLimit) ? 0 : $this->_lowerLimit;
+        $lastSeparator = $this->_lowerLimit === null ? 0 : $this->_lowerLimit;
 
         for ($i = 1; $i < $this->getIntervalsNumber(); ++$i) {
             $separator = $this->_findPriceSeparator($i);
@@ -600,7 +600,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             $isEqualPrice = ($intervalFirstPrice == $this->_maxPrice) ? $intervalFirstPrice : false;
             $result[$this->getIntervalsNumber()] = array(
                 'from'  => $isEqualPrice ? $isEqualPrice : $lastSeparator,
-                'to'    => $isEqualPrice ? $isEqualPrice : (is_null($this->_upperLimit) ? '' : $this->_upperLimit),
+                'to'    => $isEqualPrice ? $isEqualPrice : ($this->_upperLimit === null ? '' : $this->_upperLimit),
                 'count' => $this->_count - $lastCount,
             );
         }

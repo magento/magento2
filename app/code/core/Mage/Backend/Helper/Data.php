@@ -59,7 +59,7 @@ class Mage_Backend_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function setPageHelpUrl($url=null)
     {
-        if (is_null($url)) {
+        if ($url === null) {
             $request = Mage::app()->getRequest();
             $frontModule = $request->getControllerModule();
             if (!$frontModule) {

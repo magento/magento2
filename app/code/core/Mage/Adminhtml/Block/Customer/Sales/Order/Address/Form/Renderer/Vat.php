@@ -50,7 +50,7 @@ class Mage_Adminhtml_Block_Customer_Sales_Order_Address_Form_Renderer_Vat
      */
     public function getValidateButton()
     {
-        if (is_null($this->_validateButton)) {
+        if ($this->_validateButton === null) {
             /** @var $form Varien_Data_Form */
             $form = $this->_element->getForm();
 

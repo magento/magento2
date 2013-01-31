@@ -286,7 +286,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     public function getResourceModel()
     {
-        if (is_null($this->_resourceModel)) {
+        if ($this->_resourceModel === null) {
             $this->_resourceModel = Mage::getResourceModel('Mage_Core_Model_Resource_Config');
         }
         return $this->_resourceModel;
@@ -1681,7 +1681,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
      */
     public function getAreas()
     {
-        if (is_null($this->_allowedAreas) ) {
+        if ($this->_allowedAreas === null ) {
             $this->_loadAreas();
         }
 

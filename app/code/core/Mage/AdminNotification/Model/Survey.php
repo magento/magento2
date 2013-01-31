@@ -107,7 +107,7 @@ class Mage_AdminNotification_Model_Survey
     public static function saveSurveyViewed($viewed)
     {
         $flagData = self::_getFlagModel()->getFlagData();
-        if (is_null($flagData)) {
+        if ($flagData === null) {
             $flagData = array();
         }
         $flagData = array_merge($flagData, array('survey_viewed' => (bool)$viewed));

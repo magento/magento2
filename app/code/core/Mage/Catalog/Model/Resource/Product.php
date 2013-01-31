@@ -391,11 +391,11 @@ class Mage_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Ab
         $condition = array();
 
         $indexTable = $this->getTable('catalog_product_enabled_index');
-        if (is_null($store) && is_null($product)) {
+        if ($store === null && $product === null) {
             Mage::throwException(
                 Mage::helper('Mage_Catalog_Helper_Data')->__('To reindex the enabled product(s), the store or product must be specified')
             );
-        } elseif (is_null($product) || is_array($product)) {
+        } elseif ($product === null || is_array($product)) {
             $storeId    = $store->getId();
             $websiteId  = $store->getWebsiteId();
 

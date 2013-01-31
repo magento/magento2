@@ -296,7 +296,7 @@ class Mage_Core_Model_Resource_Helper_Mysql4 extends Mage_Core_Model_Resource_He
                         $preparedColumns[strtoupper($col)] = array($correlationName, $col, null);
                     }
                 } else {
-                    $columnKey = is_null($alias) ? $column : $alias;
+                    $columnKey = $alias === null ? $column : $alias;
                     $preparedColumns[strtoupper($columnKey)] = array($correlationName, $column, $alias);
                 }
             }

@@ -362,7 +362,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Admin
     public function getIsCurrentSetDefault()
     {
         $isDefault = $this->getData('is_current_set_default');
-        if (is_null($isDefault)) {
+        if ($isDefault === null) {
             $defaultSetId = Mage::getModel('Mage_Eav_Model_Entity_Type')
                 ->load(Mage::registry('entityType'))
                 ->getDefaultAttributeSetId();

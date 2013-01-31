@@ -226,7 +226,7 @@ class Mage_Oauth_Model_Server
      */
     protected function _fetchParams($authHeaderValue = null)
     {
-        if (is_null($authHeaderValue)) {
+        if ($authHeaderValue === null) {
             $authHeaderValue = $this->_request->getHeader('Authorization');
         }
 

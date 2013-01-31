@@ -114,7 +114,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_Xml implements
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)
     {
-        if (is_null($this->_errorMessage)) {
+        if ($this->_errorMessage === null) {
             $this->_errorMessage = $errorMessage;
         } else {
             $this->_errorMessage .= $errorMessage;

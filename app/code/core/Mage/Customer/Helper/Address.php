@@ -172,7 +172,7 @@ class Mage_Customer_Helper_Address extends Mage_Core_Helper_Abstract
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes = array();
             /* @var $config Mage_Eav_Model_Config */
             $config = Mage::getSingleton('Mage_Eav_Model_Config');

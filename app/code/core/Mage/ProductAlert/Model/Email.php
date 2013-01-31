@@ -200,7 +200,7 @@ class Mage_ProductAlert_Model_Email extends Mage_Core_Model_Abstract
      */
     protected function _getPriceBlock()
     {
-        if (is_null($this->_priceBlock)) {
+        if ($this->_priceBlock === null) {
             $this->_priceBlock = Mage::helper('Mage_ProductAlert_Helper_Data')
                 ->createBlock('Mage_ProductAlert_Block_Email_Price');
         }
@@ -214,7 +214,7 @@ class Mage_ProductAlert_Model_Email extends Mage_Core_Model_Abstract
      */
     protected function _getStockBlock()
     {
-        if (is_null($this->_stockBlock)) {
+        if ($this->_stockBlock === null) {
             $this->_stockBlock = Mage::helper('Mage_ProductAlert_Helper_Data')
                 ->createBlock('Mage_ProductAlert_Block_Email_Stock');
         }
@@ -228,7 +228,7 @@ class Mage_ProductAlert_Model_Email extends Mage_Core_Model_Abstract
      */
     public function send()
     {
-        if (is_null($this->_website) || is_null($this->_customer)) {
+        if ($this->_website === null || $this->_customer === null) {
             return false;
         }
         if (($this->_type == 'price' && count($this->_priceProducts) == 0)

@@ -154,7 +154,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
 
     public function getStatuses()
     {
-        if(is_null($this->_statuses)) {
+        if($this->_statuses === null) {
             $this->_statuses = array();//Mage::getModel('Mage_Catalog_Model_Product_Status')->getResourceCollection()->load();
         }
 
@@ -190,7 +190,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
      */
     public function getProductUrlSuffix($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = Mage::app()->getStore()->getId();
         }
 
@@ -233,7 +233,7 @@ class Mage_Catalog_Helper_Product extends Mage_Core_Helper_Url
             )
         );
 
-        if (is_null($inputType)) {
+        if ($inputType === null) {
             return $inputTypes;
         } else if (isset($inputTypes[$inputType])) {
             return $inputTypes[$inputType];

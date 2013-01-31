@@ -46,7 +46,7 @@ class Mage_Newsletter_Model_Problem extends Mage_Core_Model_Abstract
 {
     /**
      * Current Subscriber
-     * 
+     *
      * @var Mage_Newsletter_Model_Subscriber
      */
     protected  $_subscriber = null;
@@ -107,7 +107,7 @@ class Mage_Newsletter_Model_Problem extends Mage_Core_Model_Abstract
             return null;
         }
 
-        if(is_null($this->_subscriber)) {
+        if($this->_subscriber === null) {
             $this->_subscriber = Mage::getModel('Mage_Newsletter_Model_Subscriber')
                 ->load($this->getSubscriberId());
         }

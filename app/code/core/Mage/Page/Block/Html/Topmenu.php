@@ -87,7 +87,7 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
 
         $children = $menuTree->getChildren();
         $parentLevel = $menuTree->getLevel();
-        $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+        $childLevel = $parentLevel === null ? 0 : $parentLevel + 1;
 
         $counter = 1;
         $childrenCount = $children->count();

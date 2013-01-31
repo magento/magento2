@@ -43,7 +43,7 @@ class Mage_Authorizenet_Block_Directpost_Iframe extends Mage_Core_Block_Template
     protected function _prepareLayout()
     {
         $params = Mage::registry('authorizenet_directpost_form_params');
-        if (is_null($params)) {
+        if ($params === null) {
             $params = array();
         }
         $this->setParams($params);

@@ -51,7 +51,7 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
 
     public function getCollection()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->setCollection(Mage::getModel('Mage_Reports_Model_Grouped_Collection'));
         }
         return $this->_collection;
@@ -59,7 +59,7 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
 
     protected function _getAggregatedColumns()
     {
-        if (is_null($this->_aggregatedColumns)) {
+        if ($this->_aggregatedColumns === null) {
             foreach ($this->getColumns() as $column) {
                 if (!is_array($this->_aggregatedColumns)) {
                     $this->_aggregatedColumns = array();
@@ -255,7 +255,7 @@ class Mage_Adminhtml_Block_Report_Grid_Abstract extends Mage_Adminhtml_Block_Wid
 
     public function getCurrentCurrencyCode()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             $this->_currentCurrencyCode = (count($this->_storeIds) > 0)
                 ? Mage::app()->getStore(array_shift($this->_storeIds))->getBaseCurrencyCode()
                 : Mage::app()->getStore()->getBaseCurrencyCode();

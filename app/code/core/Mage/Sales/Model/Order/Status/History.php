@@ -88,7 +88,7 @@ class Mage_Sales_Model_Order_Status_History extends Mage_Sales_Model_Abstract
      */
     public function setIsCustomerNotified($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             $flag = self::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
         }
 

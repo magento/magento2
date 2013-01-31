@@ -106,7 +106,7 @@ class Mage_Tax_Model_Observer
 
         foreach ($taxes as $id => $row) {
             foreach ($row['rates'] as $tax) {
-                if (is_null($row['percent'])) {
+                if ($row['percent'] === null) {
                     $baseRealAmount = $row['base_amount'];
                 } else {
                     if ($row['percent'] == 0 || $tax['percent'] == 0) {

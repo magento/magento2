@@ -142,7 +142,7 @@ class Mage_Tax_Model_Calculation_Rule extends Mage_Core_Model_Abstract
 
     public function getCalculationModel()
     {
-        if (is_null($this->_calculationModel)) {
+        if ($this->_calculationModel === null) {
             $this->_calculationModel = Mage::getSingleton('Mage_Tax_Model_Calculation');
         }
         return $this->_calculationModel;

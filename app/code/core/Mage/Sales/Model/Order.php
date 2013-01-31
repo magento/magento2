@@ -422,7 +422,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     public function unsetData($key=null)
     {
         parent::unsetData($key);
-        if (is_null($key)) {
+        if ($key === null) {
             $this->_items = null;
         }
         return $this;
@@ -1194,7 +1194,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     public function getShippingCarrier()
     {
         $carrierModel = $this->getData('shipping_carrier');
-        if (is_null($carrierModel)) {
+        if ($carrierModel === null) {
             $carrierModel = false;
             /**
              * $method - carrier_method
@@ -1381,7 +1381,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getAddressesCollection()
     {
-        if (is_null($this->_addresses)) {
+        if ($this->_addresses === null) {
             $this->_addresses = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Address_Collection')
                 ->setOrderFilter($this);
 
@@ -1421,7 +1421,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getItemsCollection($filterByTypes = array(), $nonChildrenOnly = false)
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Item_Collection')
                 ->setOrderFilter($this);
 
@@ -1571,7 +1571,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getPaymentsCollection()
     {
-        if (is_null($this->_payments)) {
+        if ($this->_payments === null) {
             $this->_payments = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Payment_Collection')
                 ->setOrderFilter($this);
 
@@ -1634,7 +1634,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getStatusHistoryCollection($reload = false)
     {
-        if (is_null($this->_statusHistory) || $reload) {
+        if ($this->_statusHistory === null || $reload) {
             $this->_statusHistory = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Status_History_Collection')
                 ->setOrderFilter($this)
                 ->setOrder('created_at', 'desc')
@@ -1719,7 +1719,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     public function getRealOrderId()
     {
         $id = $this->getData('real_order_id');
-        if (is_null($id)) {
+        if ($id === null) {
             $id = $this->getIncrementId();
         }
         return $id;
@@ -1732,7 +1732,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getOrderCurrency()
     {
-        if (is_null($this->_orderCurrency)) {
+        if ($this->_orderCurrency === null) {
             $this->_orderCurrency = Mage::getModel('Mage_Directory_Model_Currency');
             $this->_orderCurrency->load($this->getOrderCurrencyCode());
         }
@@ -1774,7 +1774,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getBaseCurrency()
     {
-        if (is_null($this->_baseCurrency)) {
+        if ($this->_baseCurrency === null) {
             $this->_baseCurrency = Mage::getModel('Mage_Directory_Model_Currency')->load($this->getBaseCurrencyCode());
         }
         return $this->_baseCurrency;
@@ -1837,7 +1837,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
      */
     public function getInvoiceCollection()
     {
-        if (is_null($this->_invoices)) {
+        if ($this->_invoices === null) {
             $this->_invoices = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Invoice_Collection')
                 ->setOrderFilter($this);
 
@@ -2129,7 +2129,7 @@ class Mage_Sales_Model_Order extends Mage_Sales_Model_Abstract
     public function getStoreGroupName()
     {
         $storeId = $this->getStoreId();
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             return $this->getStoreName(1); // 0 - website name, 1 - store group name, 2 - store name
         }
         return $this->getStore()->getGroup()->getName();

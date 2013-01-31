@@ -92,7 +92,7 @@ class Mage_Connect_Channel_VO implements Iterator
 
     private function validator()
     {
-        if(is_null($this->_validator)) {
+        if($this->_validator === null) {
             $this->_validator = new Mage_Connect_Validator();
         }
         return $this->_validator;

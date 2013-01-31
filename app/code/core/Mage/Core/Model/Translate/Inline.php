@@ -138,14 +138,14 @@ class Mage_Core_Model_Translate_Inline
      */
     public function isAllowed($store = null)
     {
-        if (is_null($store)) {
+        if ($store === null) {
             $store = Mage::app()->getStore();
         }
         if (!$store instanceof Mage_Core_Model_Store) {
             $store = Mage::app()->getStore($store);
         }
 
-        if (is_null($this->_isAllowed)) {
+        if ($this->_isAllowed === null) {
             if (Mage::getDesign()->getArea() == 'adminhtml') {
                 $active = Mage::getStoreConfigFlag('dev/translate_inline/active_admin', $store);
             } else {

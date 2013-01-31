@@ -592,7 +592,7 @@ final class Maged_Controller
             return $this->_singletons[$model];
         }
 
-        if (is_null($model)) {
+        if ($model === null) {
             $class = 'Maged_Model';
         } else {
             $class = 'Maged_Model_' . str_replace(' ', '_', ucwords(str_replace('_', ' ', $model)));
@@ -663,7 +663,7 @@ final class Maged_Controller
      */
     public function setAction($action=null)
     {
-        if (is_null($action)) {
+        if ($action === null) {
             if (!empty($this->_action)) {
                 return $this;
             }
@@ -798,7 +798,7 @@ final class Maged_Controller
      */
     public function isWritable()
     {
-        if (is_null($this->_writable)) {
+        if ($this->_writable === null) {
             $this->_writable = is_writable($this->getMageDir() . DIRECTORY_SEPARATOR)
                 && is_writable($this->filepath())
                 && (!file_exists($this->filepath('config.ini') || is_writable($this->filepath('config.ini'))));
@@ -843,7 +843,7 @@ final class Maged_Controller
      */
     protected function _getMaintenanceFlag()
     {
-        if (is_null($this->_maintenance)) {
+        if ($this->_maintenance === null) {
             $this->_maintenance = !empty($_REQUEST['maintenance']) && $_REQUEST['maintenance'] == '1' ? true : false;
         }
         return $this->_maintenance;
@@ -856,7 +856,7 @@ final class Maged_Controller
      */
     protected function _getMaintenanceFilePath()
     {
-        if (is_null($this->_maintenanceFile)) {
+        if ($this->_maintenanceFile === null) {
             $path = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR;
             $this->_maintenanceFile = $path . 'maintenance.flag';
         }

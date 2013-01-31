@@ -242,7 +242,7 @@ class Mage_Connect_Command
      */
     public function validator()
     {
-        if(is_null(self::$_validator)) {
+        if(self::$_validator === null) {
             self::$_validator = new Mage_Connect_Validator();
         }
         return self::$_validator;
@@ -255,7 +255,7 @@ class Mage_Connect_Command
      */
     public function rest()
     {
-        if(is_null(self::$_rest)) {
+        if(self::$_rest === null) {
             self::$_rest = new Mage_Connect_Rest(self::config()->protocol);
         }
         return self::$_rest;

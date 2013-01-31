@@ -305,8 +305,8 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     {
         Magento_Profiler::start('CONFIGURABLE:'.__METHOD__, array('group' => 'CONFIGURABLE', 'method' => __METHOD__));
         if (!$product->hasData($this->_usedProducts)) {
-            if (is_null($requiredAttributeIds)
-                and is_null($product->getData($this->_configurableAttributes))) {
+            if ($requiredAttributeIds === null
+                && $product->getData($this->_configurableAttributes) === null) {
                 // If used products load before attributes, we will load attributes.
                 $this->getConfigurableAttributes($product);
                 // After attributes loading products loaded too.

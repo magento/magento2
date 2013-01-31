@@ -77,7 +77,7 @@ class Mage_Customer_Block_Account_Dashboard extends Mage_Core_Block_Template
 
     public function getSubscriptionObject()
     {
-        if(is_null($this->_subscription)) {
+        if($this->_subscription === null) {
             $this->_subscription = Mage::getModel('Mage_Newsletter_Model_Subscriber')->loadByCustomer($this->getCustomer());
         }
 

@@ -110,7 +110,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
 /*
     public function addAttribute($name, $value=null, $namespace=null)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return parent::addAttribute($name);
         } else {
             if (!is_null($value)) {
@@ -126,7 +126,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
 
     public function addChild($name, $value=null, $namespace=null)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return parent::addChild($name);
         } else {
             if (!is_null($value)) {
@@ -332,7 +332,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
      */
     public function xmlentities($value = null)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             $value = $this;
         }
         $value = (string)$value;
@@ -448,7 +448,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
             $targetChild = $this->$sourceName;
         }
 
-        if (is_null($targetChild)) {
+        if ($targetChild === null) {
             // if child target is not found create new and descend
             $targetChild = $this->addChild($sourceName);
             $targetChild->setParent($this);
@@ -576,7 +576,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
             }
         }
 
-        if (is_null($targetChild)) {
+        if ($targetChild === null) {
             // if child target is not found create new and descend
             $targetChild = $this->addChild($sourceName);
             foreach ($source->attributes() as $key=>$value) {
@@ -642,7 +642,7 @@ class Varien_Simplexml_Element extends SimpleXMLElement
             }
         }
 
-        if (is_null($targetChild)) {
+        if ($targetChild === null) {
             // if child target is not found create new and descend
             $targetChild = $this->addChild($sourceName);
             foreach ($source->attributes() as $key=>$value) {

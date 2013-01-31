@@ -75,7 +75,7 @@ class Mage_Core_Model_File_Uploader extends Varien_File_Uploader
      */
     public function skipDbProcessing($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             return $this->_skipDbProcessing;
         }
         $this->_skipDbProcessing = (bool)$flag;

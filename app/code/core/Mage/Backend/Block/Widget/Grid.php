@@ -309,7 +309,7 @@ class Mage_Backend_Block_Widget_Grid extends Mage_Backend_Block_Widget
             $dir      = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
             $filter   = $this->getParam($this->getVarNameFilter(), null);
 
-            if (is_null($filter)) {
+            if ($filter === null) {
                 $filter = $this->_defaultFilter;
             }
 

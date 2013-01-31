@@ -373,7 +373,7 @@ class Mage_Core_Model_Translate
      */
     public function getData()
     {
-        if (is_null($this->_data)) {
+        if ($this->_data === null) {
             return array();
         }
         return $this->_data;
@@ -386,7 +386,7 @@ class Mage_Core_Model_Translate
      */
     public function getLocale()
     {
-        if (is_null($this->_locale)) {
+        if ($this->_locale === null) {
             $this->_locale = Mage::app()->getLocale()->getLocaleCode();
         }
         return $this->_locale;
@@ -415,7 +415,7 @@ class Mage_Core_Model_Translate
      */
     public function getTranslate()
     {
-        if (is_null($this->_translate)) {
+        if ($this->_translate === null) {
             $this->_translate = new Zend_Translate('array', $this->getData(), $this->getLocale());
         }
         return $this->_translate;
@@ -432,7 +432,7 @@ class Mage_Core_Model_Translate
         $text = array_shift($args);
 
         if (is_string($text) && '' == $text
-            || is_null($text)
+            || $text === null
             || is_bool($text) && false === $text
             || is_object($text) && '' == $text->getText()) {
             return '';
@@ -496,7 +496,7 @@ class Mage_Core_Model_Translate
      */
     public function getCacheId()
     {
-        if (is_null($this->_cacheId)) {
+        if ($this->_cacheId === null) {
             $this->_cacheId = 'translate';
             if (isset($this->_config[self::CONFIG_KEY_LOCALE])) {
                 $this->_cacheId.= '_'.$this->_config[self::CONFIG_KEY_LOCALE];

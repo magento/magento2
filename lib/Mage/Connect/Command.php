@@ -134,22 +134,22 @@ class Mage_Connect_Command
         return new $currentCommand['class']();
     }
 
-    
+
     public static function setSconfig($obj)
     {
         self::$_sconfig = $obj;
     }
-    
+
     /**
-     * 
+     *
      * @return Mage_Connect_Singleconfig
      */
     public function getSconfig()
     {
         return self::$_sconfig;
     }
-    
-    
+
+
     /**
      * Sets frontend object for all commands
      *
@@ -172,7 +172,7 @@ class Mage_Connect_Command
         self::$_config = $obj;
     }
 
-  
+
     /**
      * Non-static getter for config
      * @return Mage_Connect_Config
@@ -198,7 +198,7 @@ class Mage_Connect_Command
      */
     public function validator()
     {
-        if(is_null(self::$_validator)) {
+        if(self::$_validator === null) {
             self::$_validator = new Mage_Connect_Validator();
         }
         return self::$_validator;
@@ -210,7 +210,7 @@ class Mage_Connect_Command
      */
     public function rest()
     {
-        if(is_null(self::$_rest)) {
+        if(self::$_rest === null) {
             self::$_rest = new Mage_Connect_Rest(self::config()->protocol);
         }
         return self::$_rest;
@@ -374,17 +374,17 @@ class Mage_Connect_Command
         }
     }
 
-    
+
     /**
      * Get packager instance
      * @return Mage_Connect_Pacakger
      */
-    public function getPackager() 
+    public function getPackager()
     {
         if(!self::$_packager) {
             self::$_packager = new Mage_Connect_Packager();
         }
-        return self::$_packager;    
+        return self::$_packager;
     }
-    
+
 }

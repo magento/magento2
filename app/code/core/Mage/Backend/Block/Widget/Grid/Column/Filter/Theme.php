@@ -112,7 +112,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Theme
      */
     public function getCondition()
     {
-        if (is_null($this->getValue())) {
+        if ($this->getValue() === null) {
             return null;
         }
         $value = $this->getValue();

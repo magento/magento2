@@ -82,7 +82,7 @@ class Mage_Connect_Packager
      */
     public function getArchiver()
     {
-        if(is_null($this->_archiver)) {
+        if($this->_archiver === null) {
             $this->_archiver = new Mage_Archive();
         }
         return $this->_archiver;
@@ -94,7 +94,7 @@ class Mage_Connect_Packager
      */
     public function getDownloader()
     {
-        if(is_null($this->_http)) {
+        if($this->_http === null) {
             $this->_http = Mage_HTTP_Client::getInstance();
         }
         return $this->_http;

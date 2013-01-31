@@ -101,7 +101,7 @@ class Mage_GoogleOptimizer_Model_Code extends Mage_Core_Model_Abstract
      */
     public function loadScripts($storeId)
     {
-        if (is_null($this->getEntity()) || is_null($this->getEntityType())) {
+        if ($this->getEntity() === null || $this->getEntityType() === null) {
             return $this;
         }
 
@@ -150,7 +150,7 @@ class Mage_GoogleOptimizer_Model_Code extends Mage_Core_Model_Abstract
      */
     public function saveScripts($storeId)
     {
-        if (is_null($this->getEntity()) || is_null($this->getEntityType())) {
+        if ($this->getEntity() === null || $this->getEntityType() === null) {
             return $this;
         }
         if (!$this->getEntity()->getGoogleOptimizerScripts()) {
@@ -191,7 +191,7 @@ class Mage_GoogleOptimizer_Model_Code extends Mage_Core_Model_Abstract
      */
     public function deleteScripts($storeId)
     {
-        if (is_null($this->getEntity()) || is_null($this->getEntityType())) {
+        if ($this->getEntity() === null || $this->getEntityType() === null) {
             return $this;
         }
         $this->getResource()->deleteByEntityType($this, $storeId);

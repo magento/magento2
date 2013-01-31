@@ -664,7 +664,7 @@ class Mage_Core_Model_Resource_Setup_Migration extends Mage_Core_Model_Resource_
      */
     protected function _getAliasesMap()
     {
-        if (is_null($this->_aliasesMap)) {
+        if ($this->_aliasesMap === null) {
             $this->_aliasesMap = array();
 
             $map = $this->_loadMap($this->_pathToMapFile);

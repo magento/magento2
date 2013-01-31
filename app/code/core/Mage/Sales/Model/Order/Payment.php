@@ -357,7 +357,7 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
      */
     public function capture($invoice)
     {
-        if (is_null($invoice)) {
+        if ($invoice === null) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
             return $this; // @see Mage_Sales_Model_Order_Invoice::capture()
@@ -1518,7 +1518,7 @@ class Mage_Sales_Model_Order_Payment extends Mage_Payment_Model_Info
      */
     public function getTransactionAdditionalInfo($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             return $this->_transactionAdditionalInfo;
         }
         return isset($this->_transactionAdditionalInfo[$key]) ? $this->_transactionAdditionalInfo[$key] : null;

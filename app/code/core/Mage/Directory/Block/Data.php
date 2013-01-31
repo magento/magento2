@@ -41,7 +41,7 @@ class Mage_Directory_Block_Data extends Mage_Core_Block_Template
     public function getCountryCollection()
     {
         $collection = $this->getData('country_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = Mage::getModel('Mage_Directory_Model_Country')->getResourceCollection()
                 ->loadByStore();
             $this->setData('country_collection', $collection);
@@ -53,7 +53,7 @@ class Mage_Directory_Block_Data extends Mage_Core_Block_Template
     public function getCountryHtmlSelect($defValue=null, $name='country_id', $id='country', $title='Country')
     {
         Magento_Profiler::start('TEST: '.__METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
-        if (is_null($defValue)) {
+        if ($defValue === null) {
             $defValue = $this->getCountryId();
         }
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_'.Mage::app()->getStore()->getCode();
@@ -81,7 +81,7 @@ class Mage_Directory_Block_Data extends Mage_Core_Block_Template
     public function getRegionCollection()
     {
         $collection = $this->getData('region_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = Mage::getModel('Mage_Directory_Model_Region')->getResourceCollection()
                 ->addCountryFilter($this->getCountryId())
                 ->load();
@@ -119,7 +119,7 @@ class Mage_Directory_Block_Data extends Mage_Core_Block_Template
     public function getCountryId()
     {
         $countryId = $this->getData('country_id');
-        if (is_null($countryId)) {
+        if ($countryId === null) {
             $countryId = Mage::helper('Mage_Core_Helper_Data')->getDefaultCountry();
         }
         return $countryId;

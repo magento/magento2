@@ -130,7 +130,7 @@ class Mage_Cms_Model_Resource_Block extends Mage_Core_Model_Resource_Db_Abstract
      */
     public function load(Mage_Core_Model_Abstract $object, $value, $field = null)
     {
-        if (!is_numeric($value) && is_null($field)) {
+        if (!is_numeric($value) && $field === null) {
             $field = 'identifier';
         }
 

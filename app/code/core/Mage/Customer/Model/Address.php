@@ -121,7 +121,7 @@ class Mage_Customer_Model_Address extends Mage_Customer_Model_Address_Abstract
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $attributes = $this->_getResource()
                 ->loadAllAttributes($this)
                 ->getSortedAttributes();

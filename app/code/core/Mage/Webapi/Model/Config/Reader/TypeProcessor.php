@@ -166,7 +166,7 @@ class Mage_Webapi_Model_Config_Reader_TypeProcessor
 
         $this->_types[$typeName]['parameters'][$propertyName] = array(
             'type' => $this->process($varType),
-            'required' => !$isOptional && is_null($defaultProperties[$propertyName]),
+            'required' => !$isOptional && $defaultProperties[$propertyName] === null,
             'default' => $defaultProperties[$propertyName],
             'documentation' => $varInlineDoc . $this->_getDescription($propertyDocBlock)
         );

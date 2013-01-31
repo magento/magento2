@@ -143,7 +143,7 @@ class Varien_Pear_Package
     public function getPfm($package=null)
     {
         if (!$this->_pfm) {
-            if (is_null($package)) {
+            if ($package === null) {
                 $this->_pfm = new PEAR_PackageFileManager2;
                 $this->_pfm->setOptions($this->get('options'));
             } else {

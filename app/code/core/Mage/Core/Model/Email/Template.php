@@ -278,7 +278,7 @@ class Mage_Core_Model_Email_Template extends Mage_Core_Model_Template
      */
     static public function getDefaultTemplates()
     {
-        if (is_null(self::$_defaultTemplates)) {
+        if (self::$_defaultTemplates === null) {
             self::$_defaultTemplates = Mage::getConfig()->getNode(self::XML_PATH_TEMPLATE_EMAIL)->asArray();
         }
 

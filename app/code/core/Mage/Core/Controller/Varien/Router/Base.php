@@ -82,7 +82,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
         $this->_areaCode       = $areaCode;
         $this->_baseController = $baseController;
 
-        if (is_null($this->_areaCode) || is_null($this->_baseController)) {
+        if ($this->_areaCode === null || $this->_baseController === null) {
             throw new InvalidArgumentException("Not enough options to initialize router.");
         }
     }
@@ -412,7 +412,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
          */
         if (false == $found) {
             $controllerInstance = $this->_getNotFoundControllerInstance($currentModuleName, $request);
-            if (is_null($controllerInstance)) {
+            if ($controllerInstance === null) {
                 return null;
             }
         }

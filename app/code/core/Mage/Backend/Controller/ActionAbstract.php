@@ -208,7 +208,7 @@ abstract class Mage_Backend_Controller_ActionAbstract extends Mage_Core_Controll
         if ($this->_isUrlChecked()) {
             $this->setFlag('', self::FLAG_IS_URLS_CHECKED, true);
         }
-        if (is_null(Mage::getSingleton('Mage_Backend_Model_Session')->getLocale())) {
+        if (Mage::getSingleton('Mage_Backend_Model_Session')->getLocale() === null) {
             Mage::getSingleton('Mage_Backend_Model_Session')->setLocale(Mage::app()->getLocale()->getLocaleCode());
         }
 

@@ -169,7 +169,7 @@ class Mage_Index_Model_Event extends Mage_Core_Model_Abstract
                 if (!is_string($key) || is_array($current[$key])) {
                     $current[$key] = $this->_mergeNewDataRecursive($previous[$key], $current[$key]);
                 }
-            } elseif (!array_key_exists($key, $current) || is_null($current[$key])) {
+            } elseif (!array_key_exists($key, $current) || $current[$key] === null) {
                 $current[$key] = $previous[$key];
             } elseif (!is_array($previous[$key]) && !is_string($key)) {
                 $current[] = $previous[$key];

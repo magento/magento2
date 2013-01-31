@@ -48,7 +48,7 @@ abstract class Mage_Adminhtml_Controller_Report_Abstract extends Mage_Adminhtml_
      */
     protected function _getSession()
     {
-        if (is_null($this->_adminSession)) {
+        if ($this->_adminSession === null) {
             $this->_adminSession = Mage::getSingleton('Mage_Backend_Model_Auth_Session');
         }
         return $this->_adminSession;

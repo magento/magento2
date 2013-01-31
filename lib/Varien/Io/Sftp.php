@@ -167,7 +167,7 @@ class Varien_Io_Sftp extends Varien_Io_Abstract implements Varien_Io_Interface
      */
     public function read($filename, $dest=null)
     {
-        if (is_null($dest)) {
+        if ($dest === null) {
             $dest = false;
         }
         return $this->_connection->get($filename, $dest);

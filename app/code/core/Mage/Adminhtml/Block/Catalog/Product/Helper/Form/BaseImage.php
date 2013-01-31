@@ -88,7 +88,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_BaseImage extends Varien_
     public function getDefaultHtml()
     {
         $html = $this->getData('default_html');
-        if (is_null($html)) {
+        if ($html === null) {
             $html = ($this->getNoSpan() === true) ? '' : '<span class="field-row">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();

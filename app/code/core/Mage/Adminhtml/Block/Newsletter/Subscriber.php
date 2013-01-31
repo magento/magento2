@@ -64,7 +64,7 @@ class Mage_Adminhtml_Block_Newsletter_Subscriber extends Mage_Adminhtml_Block_Te
      */
     public function getQueueCollection()
     {
-        if(is_null($this->_queueCollection)) {
+        if($this->_queueCollection === null) {
             /** @var $this->_queueCollection Mage_Newsletter_Model_Resource_Queue_Collection */
             $this->_queueCollection = Mage::getResourceSingleton('Mage_Newsletter_Model_Resource_Queue_Collection')
                 ->addTemplateInfo()

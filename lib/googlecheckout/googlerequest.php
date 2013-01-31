@@ -716,7 +716,7 @@
         case '200':
           $parsed = $this->parse_headers(substr($message,
                                              $head_end + strlen(DOUBLE_ENTER)));
-          return is_null($parsed)?$headers:$parsed;
+          return $parsed === null?$headers:$parsed;
         break;
         default:
           return $headers;

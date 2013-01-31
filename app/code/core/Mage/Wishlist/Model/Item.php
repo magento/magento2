@@ -264,12 +264,12 @@ class Mage_Wishlist_Model_Item extends Mage_Core_Model_Abstract
         $this->validate();
 
         // set current store id if it is not defined
-        if (is_null($this->getStoreId())) {
+        if ($this->getStoreId() === null) {
             $this->setStoreId(Mage::app()->getStore()->getId());
         }
 
         // set current date if added at data is not defined
-        if (is_null($this->getAddedAt())) {
+        if ($this->getAddedAt() === null) {
             $this->setAddedAt(Mage::getSingleton('Mage_Core_Model_Date')->gmtDate());
         }
 
@@ -303,7 +303,7 @@ class Mage_Wishlist_Model_Item extends Mage_Core_Model_Abstract
     public function getProduct()
     {
         $product = $this->_getData('product');
-        if (is_null($product)) {
+        if ($product === null) {
             if (!$this->getProductId()) {
                 Mage::throwException(Mage::helper('Mage_Wishlist_Helper_Data')->__('Cannot specify product.'));
             }

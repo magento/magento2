@@ -318,7 +318,7 @@ class Mage_Paypal_Model_Payflowpro extends  Mage_Payment_Model_Method_Cc
      */
     protected function _getTransactionUrl($testMode = null)
     {
-        $testMode = is_null($testMode) ? $this->getConfigData('sandbox_flag') : (bool)$testMode;
+        $testMode = $testMode === null ? $this->getConfigData('sandbox_flag') : (bool)$testMode;
         if ($testMode) {
             return self::TRANSACTION_URL_TEST_MODE;
         }

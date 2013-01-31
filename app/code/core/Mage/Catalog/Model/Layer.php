@@ -147,7 +147,7 @@ class Mage_Catalog_Model_Layer extends Varien_Object
     public function getCurrentCategory()
     {
         $category = $this->getData('current_category');
-        if (is_null($category)) {
+        if ($category === null) {
             if ($category = Mage::registry('current_category')) {
                 $this->setData('current_category', $category);
             }
@@ -254,7 +254,7 @@ class Mage_Catalog_Model_Layer extends Varien_Object
     public function getState()
     {
         $state = $this->getData('state');
-        if (is_null($state)) {
+        if ($state === null) {
             Magento_Profiler::start(__METHOD__);
             $state = Mage::getModel('Mage_Catalog_Model_Layer_State');
             $this->setData('state', $state);

@@ -263,7 +263,7 @@ class Mage_Core_Model_Theme_Service
      */
     public function getAssignedThemeCustomizations()
     {
-        if (is_null($this->_assignedThemeCustomizations)) {
+        if ($this->_assignedThemeCustomizations === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_assignedThemeCustomizations;
@@ -277,7 +277,7 @@ class Mage_Core_Model_Theme_Service
      */
     public function getUnassignedThemeCustomizations()
     {
-        if (is_null($this->_unassignedThemeCustomizations)) {
+        if ($this->_unassignedThemeCustomizations === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_unassignedThemeCustomizations;

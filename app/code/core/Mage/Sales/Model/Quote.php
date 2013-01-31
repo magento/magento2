@@ -236,7 +236,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function getSharedStoreIds()
     {
         $ids = $this->_getData('shared_store_ids');
-        if (is_null($ids) || !is_array($ids)) {
+        if ($ids === null || !is_array($ids)) {
             if ($website = $this->getWebsite()) {
                 return $website->getStoreIds();
             }
@@ -402,7 +402,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
                 }
             }
 
-            if (is_null($shippingAddress)) {
+            if ($shippingAddress === null) {
                 $defaultShippingAddress = $customer->getDefaultShippingAddress();
                 if ($defaultShippingAddress && $defaultShippingAddress->getId()) {
                     $shippingAddress = Mage::getModel('Mage_Sales_Model_Quote_Address')
@@ -438,7 +438,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function getCustomer()
     {
-        if (is_null($this->_customer)) {
+        if ($this->_customer === null) {
             $this->_customer = Mage::getModel('Mage_Customer_Model_Customer');
             if ($customerId = $this->getCustomerId()) {
                 $this->_customer->load($customerId);
@@ -487,7 +487,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
      */
     public function getAddressesCollection()
     {
-        if (is_null($this->_addresses)) {
+        if ($this->_addresses === null) {
             $this->_addresses = Mage::getModel('Mage_Sales_Model_Quote_Address')->getCollection()
                 ->setQuoteFilter($this->getId());
 
@@ -713,7 +713,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         if ($this->hasItemsCollection()) {
             return $this->getData('items_collection');
         }
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = Mage::getModel('Mage_Sales_Model_Quote_Item')->getCollection();
             $this->_items->setQuote($this);
         }
@@ -878,7 +878,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function removeAllItems()
     {
         foreach ($this->getItemsCollection() as $itemId => $item) {
-            if (is_null($item->getId())) {
+            if ($item->getId() === null) {
                 $this->getItemsCollection()->removeItemByKey($itemId);
             } else {
                 $item->isDeleted(true);
@@ -1157,7 +1157,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function getItemsSummaryQty()
     {
         $qty = $this->getData('all_items_qty');
-        if (is_null($qty)) {
+        if ($qty === null) {
             $qty = 0;
             foreach ($this->getAllItems() as $item) {
                 if ($item->getParentItem()) {
@@ -1180,7 +1180,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function getItemVirtualQty()
     {
         $qty = $this->getData('virtual_items_qty');
-        if (is_null($qty)) {
+        if ($qty === null) {
             $qty = 0;
             foreach ($this->getAllItems() as $item) {
                 if ($item->getParentItem()) {
@@ -1207,7 +1207,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     /*********************** PAYMENTS ***************************/
     public function getPaymentsCollection()
     {
-        if (is_null($this->_payments)) {
+        if ($this->_payments === null) {
             $this->_payments = Mage::getModel('Mage_Sales_Model_Quote_Payment')->getCollection()
                 ->setQuoteFilter($this->getId());
 
@@ -1411,7 +1411,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function addMessage($message, $index = 'error')
     {
         $messages = $this->getData('messages');
-        if (is_null($messages)) {
+        if ($messages === null) {
             $messages = array();
         }
 
@@ -1436,7 +1436,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function getMessages()
     {
         $messages = $this->getData('messages');
-        if (is_null($messages)) {
+        if ($messages === null) {
             $messages = array();
             $this->setData('messages', $messages);
         }
@@ -1586,7 +1586,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
     public function removeMessageByText($type = 'error', $text)
     {
         $messages = $this->getData('messages');
-        if (is_null($messages)) {
+        if ($messages === null) {
             $messages = array();
         }
 

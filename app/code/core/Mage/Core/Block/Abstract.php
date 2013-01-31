@@ -766,7 +766,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     public function getMessagesBlock()
     {
-        if (is_null($this->_messagesBlock)) {
+        if ($this->_messagesBlock === null) {
             return $this->getLayout()->getMessagesBlock();
         }
         return $this->_messagesBlock;
@@ -1034,7 +1034,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     protected function _loadCache()
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cache->canUse(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cache->canUse(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1057,7 +1057,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     protected function _saveCache($data)
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cache->canUse(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cache->canUse(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1079,7 +1079,7 @@ abstract class Mage_Core_Block_Abstract extends Varien_Object
      */
     protected function _getSidPlaceholder($cacheKey = null)
     {
-        if (is_null($cacheKey)) {
+        if ($cacheKey === null) {
             $cacheKey = $this->getCacheKey();
         }
 

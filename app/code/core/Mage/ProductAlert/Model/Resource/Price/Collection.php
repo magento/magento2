@@ -70,7 +70,7 @@ class Mage_ProductAlert_Model_Resource_Price_Collection extends Mage_Core_Model_
      */
     public function addWebsiteFilter($website)
     {
-        if (is_null($website) || $website == 0) {
+        if ($website === null || $website == 0) {
             return $this;
         }
         if (is_array($website)) {

@@ -238,7 +238,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
      */
     protected function _getSessionData()
     {
-        if (is_null($this->_sessionData)) {
+        if ($this->_sessionData === null) {
             $this->_sessionData = Mage::getModel('Mage_Adminhtml_Model_Session')->getData('urlrewrite_data', true);
         }
         return $this->_sessionData;
@@ -264,7 +264,7 @@ class Mage_Adminhtml_Block_Urlrewrite_Edit_Form extends Mage_Adminhtml_Block_Wid
      */
     protected function _getAllStores()
     {
-        if (is_null($this->_allStores)) {
+        if ($this->_allStores === null) {
             $this->_allStores = Mage::getSingleton('Mage_Core_Model_System_Store')->getStoreValuesForForm();
         }
 

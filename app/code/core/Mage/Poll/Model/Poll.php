@@ -104,7 +104,7 @@ class Mage_Poll_Model_Poll extends Mage_Core_Model_Abstract
      */
     public function getPollId($pollId = null)
     {
-        if (is_null($pollId)) {
+        if ($pollId === null) {
             $pollId = $this->getId();
         }
         return $pollId;
@@ -267,7 +267,7 @@ class Mage_Poll_Model_Poll extends Mage_Core_Model_Abstract
     public function getStoreIds()
     {
         $ids = $this->_getData('store_ids');
-        if (is_null($ids)) {
+        if ($ids === null) {
             $this->loadStoreIds();
             $ids = $this->getData('store_ids');
         }

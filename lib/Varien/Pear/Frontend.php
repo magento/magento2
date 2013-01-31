@@ -57,7 +57,7 @@ class Varien_Pear_Frontend// extends PEAR_Frontend
 
     public function log($msg, $append_crlf = true)
     {
-        if (is_null($msg) || false===$msg or ''===$msg) {
+        if ($msg === null || false===$msg or ''===$msg) {
             return;
         }
 

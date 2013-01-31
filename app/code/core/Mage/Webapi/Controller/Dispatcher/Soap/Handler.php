@@ -113,7 +113,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_Handler
             $this->_processSoapHeader($operation, $arguments);
         } else {
             try {
-                if (is_null($this->_usernameToken)) {
+                if ($this->_usernameToken === null) {
                     throw new Mage_Webapi_Exception(
                         $this->_helper->__('WS-Security UsernameToken is not found in SOAP-request.'),
                         Mage_Webapi_Exception::HTTP_UNAUTHORIZED

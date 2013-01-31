@@ -589,7 +589,7 @@ class Mage_Core_Model_Session_Abstract extends Varien_Object
     public function setSessionId($id=null)
     {
 
-        if (is_null($id)
+        if ($id === null
             && (Mage::app()->getStore()->isAdmin() || Mage::getStoreConfig(self::XML_PATH_USE_FRONTEND_SID))) {
             $_queryParam = $this->getSessionIdQueryParam();
             if (isset($_GET[$_queryParam]) && Mage::getSingleton('Mage_Core_Model_Url')->isOwnOriginUrl()) {

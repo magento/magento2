@@ -122,7 +122,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
         if (!isset($this->_itemRenders[$type])) {
             $type = 'default';
         }
-        if (is_null($this->_itemRenders[$type]['renderer'])) {
+        if ($this->_itemRenders[$type]['renderer'] === null) {
             $this->_itemRenders[$type]['renderer'] = $this->getLayout()
                 ->createBlock($this->_itemRenders[$type]['block'])
                 ->setTemplate($this->_itemRenders[$type]['template']);
@@ -148,7 +148,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
         if (!isset($this->_columnRenders[$column])) {
             return false;
         }
-        if (is_null($this->_columnRenders[$column]['renderer'])) {
+        if ($this->_columnRenders[$column]['renderer'] === null) {
             $this->_columnRenders[$column]['renderer'] = $this->getLayout()
                 ->createBlock($this->_columnRenders[$column]['block'])
                 ->setTemplate($this->_columnRenders[$column]['template'])
@@ -269,7 +269,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
     public function getPriceDataObject()
     {
         $obj = $this->getData('price_data_object');
-        if (is_null($obj)) {
+        if ($obj === null) {
             return $this->getOrder();
         }
         return $obj;
@@ -577,7 +577,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
      */
     public function canShipPartially($order = null)
     {
-        if (is_null($order) || !$order instanceof Mage_Sales_Model_Order) {
+        if ($order === null || !$order instanceof Mage_Sales_Model_Order) {
             $order = Mage::registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartially();
@@ -595,7 +595,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
      */
     public function canShipPartiallyItem($order = null)
     {
-        if (is_null($order) || !$order instanceof Mage_Sales_Model_Order) {
+        if ($order === null || !$order instanceof Mage_Sales_Model_Order) {
             $order = Mage::registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartiallyItem();
