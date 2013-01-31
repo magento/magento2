@@ -133,7 +133,7 @@ class Mage_Customer_Block_Address_Renderer_Default
 
         $formater->setVariables($data);
 
-        $format = !is_null($format) ? $format : $this->getFormat($address);
+        $format = $format !== null ? $format : $this->getFormat($address);
 
         return $formater->filter($format);
     }

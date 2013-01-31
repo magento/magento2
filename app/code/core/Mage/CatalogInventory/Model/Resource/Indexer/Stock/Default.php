@@ -191,7 +191,7 @@ class Mage_CatalogInventory_Model_Resource_Indexer_Stock_Default
 
         $select->columns(array('status' => $statusExpr));
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

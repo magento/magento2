@@ -388,7 +388,7 @@ abstract class Mage_Shipping_Model_Carrier_Abstract extends Varien_Object
         /**
          * if we did not get our free shipping method in response we must use its old price
          */
-        if (!is_null($price)) {
+        if ($price !== null) {
             $this->_result->getRateById($freeRateId)->setPrice($price);
         }
     }

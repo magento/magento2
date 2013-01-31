@@ -201,7 +201,7 @@ class Mage_Customer_Service_Customer extends Mage_Core_Service_ServiceAbstract
      */
     protected function _beforeSave($customer, array $customerData, array $addressesData = null)
     {
-        if (!is_null($addressesData)) {
+        if ($addressesData !== null) {
             $this->_prepareCustomerAddressesForSave($customer, $addressesData);
         }
         if (is_callable($this->_beforeSaveCallback)) {
@@ -233,7 +233,7 @@ class Mage_Customer_Service_Customer extends Mage_Core_Service_ServiceAbstract
     protected function _preparePasswordForSave($customer, array $customerData)
     {
         $password = $this->_getCustomerPassword($customer, $customerData);
-        if (!is_null($password)) {
+        if ($password !== null) {
             // 'force_confirmed' should be set in admin area only
             if ($this->_isAdminStore) {
                 $customer->setForceConfirmed(true);

@@ -93,7 +93,7 @@ class Mage_Rss_OrderController extends Mage_Core_Controller_Front_Action
     public function statusAction()
     {
         $order = Mage::helper('Mage_Rss_Helper_Order')->getOrderByStatusUrlKey((string)$this->getRequest()->getParam('data'));
-        if (!is_null($order)) {
+        if ($order !== null) {
             Mage::register('current_order', $order);
             $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
             $this->loadLayout(false);

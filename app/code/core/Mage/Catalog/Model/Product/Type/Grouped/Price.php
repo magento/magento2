@@ -42,7 +42,7 @@ class Mage_Catalog_Model_Product_Type_Grouped_Price extends Mage_Catalog_Model_P
      */
     public function getFinalPrice($qty=null, $product)
     {
-        if ($qty === null && !is_null($product->getCalculatedFinalPrice())) {
+        if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
 

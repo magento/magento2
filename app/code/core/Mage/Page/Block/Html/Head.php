@@ -169,7 +169,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
         $lines = array();
         $meta = array();
         foreach ($this->_data['items'] as $item) {
-            if (!is_null($item['cond']) && !$this->getData($item['cond'])) {
+            if ($item['cond'] !== null && !$this->getData($item['cond'])) {
                 continue;
             }
             $contentType = $item['type'];
@@ -403,7 +403,7 @@ class Mage_Page_Block_Html_Head extends Mage_Core_Block_Template
         $faviconFile = Mage::getBaseUrl('media') . $folderName . '/' . $storeConfig;
         $absolutePath = Mage::getBaseDir('media') . '/' . $folderName . '/' . $storeConfig;
 
-        if (!is_null($storeConfig) && $this->_isFile($absolutePath)) {
+        if ($storeConfig !== null && $this->_isFile($absolutePath)) {
             $url = $faviconFile;
         } else {
             $url = $this->getViewFileUrl('Mage_Page::favicon.ico');

@@ -298,7 +298,7 @@ class SOAP_Base extends SOAP_Base_Object
     function SOAPENVPrefix($prefix = null)
     {
         static $_soapenv_prefix = 'SOAP-ENV';
-        if (!is_null($prefix)) {
+        if ($prefix !== null) {
             $_soapenv_prefix = $prefix;
         }
         return $_soapenv_prefix;
@@ -316,7 +316,7 @@ class SOAP_Base extends SOAP_Base_Object
     function SOAPENCPrefix($prefix = null)
     {
         static $_soapenv_prefix = 'SOAP-ENC';
-        if (!is_null($prefix)) {
+        if ($prefix !== null) {
             $_soapenv_prefix = $prefix;
         }
         return $_soapenv_prefix;

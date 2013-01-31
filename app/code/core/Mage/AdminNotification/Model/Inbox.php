@@ -74,7 +74,7 @@ class Mage_AdminNotification_Model_Inbox extends Mage_Core_Model_Abstract
             self::SEVERITY_NOTICE   => Mage::helper('Mage_AdminNotification_Helper_Data')->__('notice'),
         );
 
-        if (!is_null($severity)) {
+        if ($severity !== null) {
             if (isset($severities[$severity])) {
                 return $severities[$severity];
             }

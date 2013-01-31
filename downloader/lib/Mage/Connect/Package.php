@@ -165,7 +165,7 @@ class Mage_Connect_Package
     protected function _init($definition=null)
     {
 
-        if (!is_null($definition)) {
+        if ($definition !== null) {
             $this->_packageXml = simplexml_load_string($definition);
         } else {
             $packageXmlStub = <<<END

@@ -636,7 +636,7 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
 
         if ($status->getLoaded() !== true
             || $status->getForwarded() === true
-            || !is_null($coreRoute)
+            || $coreRoute !== null
         ) {
             $this->loadLayout(array('default', 'noRoute'));
             $this->renderLayout();
@@ -1144,7 +1144,7 @@ abstract class Mage_Core_Controller_Varien_Action extends Mage_Core_Controller_V
             ->setHeader('Content-Disposition', 'attachment; filename="'.$fileName.'"', true)
             ->setHeader('Last-Modified', date('r'), true);
 
-        if (!is_null($content)) {
+        if ($content !== null) {
             if ($isFile) {
                 $this->getResponse()->clearBody();
                 $this->getResponse()->sendHeaders();

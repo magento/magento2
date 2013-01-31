@@ -140,7 +140,7 @@ class Mage_User_Model_User
             $data['password'] = $this->_getEncodedPassword($this->getPassword());
         }
 
-        if (!is_null($this->getIsActive())) {
+        if ($this->getIsActive() !== null) {
             $data['is_active'] = intval($this->getIsActive());
         }
 
@@ -446,7 +446,7 @@ class Mage_User_Model_User
     protected function _getEncodedPassword($password)
     {
         return Mage::helper('Mage_Core_Helper_Data')->getHash($password, 2);
-    }    
+    }
 
     /**
      * Validate user attribute values.

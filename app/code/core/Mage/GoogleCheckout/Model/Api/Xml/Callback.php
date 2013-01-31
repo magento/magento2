@@ -1080,7 +1080,7 @@ class Mage_GoogleCheckout_Model_Api_Xml_Callback extends Mage_GoogleCheckout_Mod
     protected function _orderStateChangeFulfillmentDelivered()
     {
         $shipment = $this->_createShipment();
-        if (!is_null($shipment))
+        if ($shipment !== null)
             $shipment->save();
     }
 

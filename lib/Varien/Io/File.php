@@ -265,7 +265,7 @@ class Varien_Io_File extends Varien_Io_Abstract
             return false;
         }
         $stat = @fstat($this->_streamHandler);
-        if (!is_null($part)) {
+        if ($part !== null) {
             return isset($stat[$part]) ? $stat[$part] : $default;
         }
         return $stat;
@@ -462,7 +462,7 @@ class Varien_Io_File extends Varien_Io_Abstract
     public function read($filename, $dest = null)
     {
         $this->_cwd();
-        if (!is_null($dest)) {
+        if ($dest !== null) {
             $result = @copy($filename, $dest);
         } else {
             $result = @file_get_contents($filename);
@@ -508,7 +508,7 @@ class Varien_Io_File extends Varien_Io_Abstract
         } else {
             $result = @file_put_contents($filename, $src);
         }
-        if (!is_null($mode) && $result) {
+        if ($mode !== null && $result) {
             @chmod($filename, $mode);
         }
         $this->_iwd();

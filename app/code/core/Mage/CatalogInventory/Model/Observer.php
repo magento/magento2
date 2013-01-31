@@ -193,23 +193,23 @@ class Mage_CatalogInventory_Model_Observer
             ->setProduct($product)
             ->setProductId($product->getId())
             ->setStockId($item->getStockId());
-        if (!is_null($product->getData('stock_data/min_qty'))
+        if ($product->getData('stock_data/min_qty') !== null
             && $product->getData('stock_data/use_config_min_qty') === null) {
             $item->setData('use_config_min_qty', false);
         }
-        if (!is_null($product->getData('stock_data/min_sale_qty'))
+        if ($product->getData('stock_data/min_sale_qty') !== null
             && $product->getData('stock_data/use_config_min_sale_qty') === null) {
             $item->setData('use_config_min_sale_qty', false);
         }
-        if (!is_null($product->getData('stock_data/max_sale_qty'))
+        if ($product->getData('stock_data/max_sale_qty') !== null
             && $product->getData('stock_data/use_config_max_sale_qty') === null) {
             $item->setData('use_config_max_sale_qty', false);
         }
-        if (!is_null($product->getData('stock_data/backorders'))
+        if ($product->getData('stock_data/backorders') !== null
             && $product->getData('stock_data/use_config_backorders') === null) {
             $item->setData('use_config_backorders', false);
         }
-        if (!is_null($product->getData('stock_data/notify_stock_qty'))
+        if ($product->getData('stock_data/notify_stock_qty') !== null
             && $product->getData('stock_data/use_config_notify_stock_qty') === null) {
             $item->setData('use_config_notify_stock_qty', false);
         }
@@ -217,11 +217,11 @@ class Mage_CatalogInventory_Model_Observer
         if (strlen($originalQty)>0) {
             $item->setQtyCorrection($item->getQty()-$originalQty);
         }
-        if (!is_null($product->getData('stock_data/enable_qty_increments'))
+        if ($product->getData('stock_data/enable_qty_increments') !== null
             && $product->getData('stock_data/use_config_enable_qty_inc') === null) {
             $item->setData('use_config_enable_qty_inc', false);
         }
-        if (!is_null($product->getData('stock_data/qty_increments'))
+        if ($product->getData('stock_data/qty_increments') !== null
             && $product->getData('stock_data/use_config_qty_increments') === null) {
             $item->setData('use_config_qty_increments', false);
         }
@@ -394,7 +394,7 @@ class Mage_CatalogInventory_Model_Observer
 
                 $result = $stockItem->checkQuoteItemQty($optionQty, $qtyForCheck, $optionValue);
 
-                if (!is_null($result->getItemIsQtyDecimal())) {
+                if ($result->getItemIsQtyDecimal() !== null) {
                     $option->setIsQtyDecimal($result->getItemIsQtyDecimal());
                 }
 
@@ -407,11 +407,11 @@ class Mage_CatalogInventory_Model_Observer
                      */
                     $quoteItem->setData('qty', intval($qty));
                 }
-                if (!is_null($result->getMessage())) {
+                if ($result->getMessage() !== null) {
                     $option->setMessage($result->getMessage());
                     $quoteItem->setMessage($result->getMessage());
                 }
-                if (!is_null($result->getItemBackorders())) {
+                if ($result->getItemBackorders() !== null) {
                     $option->setBackorders($result->getItemBackorders());
                 }
 
@@ -467,7 +467,7 @@ class Mage_CatalogInventory_Model_Observer
             }
 
             $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
-            if (!is_null($productTypeCustomOption)) {
+            if ($productTypeCustomOption !== null) {
                 // Check if product related to current item is a part of grouped product
                 if ($productTypeCustomOption->getValue() == Mage_Catalog_Model_Product_Type_Grouped::TYPE_CODE) {
                     $stockItem->setProductName($quoteItem->getProduct()->getName());
@@ -481,7 +481,7 @@ class Mage_CatalogInventory_Model_Observer
                 $stockItem->unsIsChildItem();
             }
 
-            if (!is_null($result->getItemIsQtyDecimal())) {
+            if ($result->getItemIsQtyDecimal() !== null) {
                 $quoteItem->setIsQtyDecimal($result->getItemIsQtyDecimal());
                 if ($quoteItem->getParentItem()) {
                     $quoteItem->getParentItem()->setIsQtyDecimal($result->getItemIsQtyDecimal());
@@ -502,14 +502,14 @@ class Mage_CatalogInventory_Model_Observer
                 $quoteItem->setData('qty', $result->getOrigQty());
             }
 
-            if (!is_null($result->getItemUseOldQty())) {
+            if ($result->getItemUseOldQty() !== null) {
                 $quoteItem->setUseOldQty($result->getItemUseOldQty());
             }
-            if (!is_null($result->getMessage())) {
+            if ($result->getMessage() !== null) {
                 $quoteItem->setMessage($result->getMessage());
             }
 
-            if (!is_null($result->getItemBackorders())) {
+            if ($result->getItemBackorders() !== null) {
                 $quoteItem->setBackorders($result->getItemBackorders());
             }
 

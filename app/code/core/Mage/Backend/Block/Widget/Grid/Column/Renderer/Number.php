@@ -45,7 +45,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Number
     protected function _getValue(Varien_Object $row)
     {
         $data = parent::_getValue($row);
-        if (!is_null($data)) {
+        if ($data !== null) {
             $value = $data * 1;
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && ($value > 0) ? '+' : '';
             if ($sign) {

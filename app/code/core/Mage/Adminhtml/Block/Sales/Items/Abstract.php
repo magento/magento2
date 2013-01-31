@@ -100,7 +100,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
      */
     public function addColumnRender($column, $block, $template, $type=null)
     {
-        if (!is_null($type)) {
+        if ($type !== null) {
             $column .= '_' . $type;
         }
         $this->_columnRenders[$column] = array(
@@ -212,7 +212,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
 
         if ($block) {
             $block->setItem($item);
-            if (!is_null($field)) {
+            if ($field !== null) {
                 $block->setField($field);
             }
             return $block->toHtml();
@@ -465,7 +465,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
         /**
          * If parent block has set
          */
-        if (!is_null($this->_canEditQty)) {
+        if ($this->_canEditQty !== null) {
             return $this->_canEditQty;
         }
 
@@ -537,7 +537,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
      */
     public function canReturnItemToStock($item=null) {
         $canReturnToStock = Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_CAN_SUBTRACT);
-        if (!is_null($item)) {
+        if ($item !== null) {
             if (!$item->hasCanReturnToStock()) {
                 $product = Mage::getModel('Mage_Catalog_Model_Product')->load($item->getOrderItem()->getProductId());
                 if ( $product->getId() && $product->getStockItem()->getManageStock() ) {
@@ -559,7 +559,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
     public function canParentReturnToStock($item = null)
     {
         $canReturnToStock = Mage::getStoreConfig(Mage_CatalogInventory_Model_Stock_Item::XML_PATH_CAN_SUBTRACT);
-        if (!is_null($item)) {
+        if ($item !== null) {
             if ( $item->getCreditmemo()->getOrder()->hasCanReturnToStock() ) {
                 $canReturnToStock = $item->getCreditmemo()->getOrder()->getCanReturnToStock();
             }
@@ -581,7 +581,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
             $order = Mage::registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartially();
-        if (!is_null($value) && !$value) {
+        if ($value !== null && !$value) {
             return false;
         }
         return true;
@@ -599,7 +599,7 @@ class  Mage_Adminhtml_Block_Sales_Items_Abstract extends Mage_Adminhtml_Block_Te
             $order = Mage::registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartiallyItem();
-        if (!is_null($value) && !$value) {
+        if ($value !== null && !$value) {
             return false;
         }
         return true;

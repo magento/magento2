@@ -108,7 +108,7 @@ class Mage_Tag_Model_Tag_Relation extends Mage_Core_Model_Abstract
         $this->setProductId($productId);
         $this->setTagId($tagId);
         $this->setCustomerId($customerId);
-        if(!is_null($storeId)) {
+        if($storeId !== null) {
             $this->setStoreId($storeId);
         }
         $this->_getResource()->loadByTagCustomer($this);

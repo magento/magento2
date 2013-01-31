@@ -175,7 +175,7 @@ class Mage_GoogleShopping_Model_Item extends Mage_Core_Model_Abstract
      */
     public function getProduct()
     {
-        if ($this->getData('product') === null && !is_null($this->getProductId())) {
+        if ($this->getData('product') === null && $this->getProductId() !== null) {
             $product = Mage::getModel('Mage_Catalog_Model_Product')
                 ->setStoreId($this->getStoreId())
                 ->load($this->getProductId());

@@ -204,7 +204,7 @@ abstract class Mage_Rule_Model_Condition_Product_Abstract extends Mage_Rule_Mode
     public function getValueOption($option=null)
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_option'.(!is_null($option) ? '/'.$option : ''));
+        return $this->getData('value_option'.($option !== null ? '/'.$option : ''));
     }
 
     /**

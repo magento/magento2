@@ -1631,7 +1631,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         if ($columnData['PRIMARY'] === true) {
             $options['primary'] = true;
         }
-        if (!is_null($columnData['DEFAULT'])
+        if ($columnData['DEFAULT'] !== null
             && $type != Varien_Db_Ddl_Table::TYPE_TEXT
         ) {
             $options['default'] = $this->quote($columnData['DEFAULT']);

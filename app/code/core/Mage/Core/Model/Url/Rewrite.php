@@ -123,7 +123,7 @@ class Mage_Core_Model_Url_Rewrite extends Mage_Core_Model_Abstract
             }
             $search->addTagsFilter($t);
         }
-        if (!is_null($this->getStoreId())) {
+        if ($this->getStoreId() !== null) {
             $search->addStoreFilter($this->getStoreId());
         }
 

@@ -102,7 +102,7 @@ class Mage_Bundle_Model_Resource_Indexer_Stock extends Mage_CatalogInventory_Mod
                 'status'    => $status
             ));
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('bo.parent_id IN(?)', $entityIds);
         }
 
@@ -181,7 +181,7 @@ class Mage_Bundle_Model_Resource_Indexer_Stock extends Mage_CatalogInventory_Mod
             new Zend_Db_Expr('MIN(' . $statusExpr . ')'),
         ))));
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

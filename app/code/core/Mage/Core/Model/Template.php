@@ -110,7 +110,7 @@ abstract class Mage_Core_Model_Template extends Mage_Core_Model_Abstract
         $store = $designConfig->getStore();
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             /** @var $appEmulation Mage_Core_Model_App_Emulation */
             $appEmulation = Mage::getSingleton('Mage_Core_Model_App_Emulation');
             $this->_initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($storeId, $area);

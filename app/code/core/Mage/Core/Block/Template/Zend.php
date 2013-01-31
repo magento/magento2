@@ -55,7 +55,7 @@ class Mage_Core_Block_Template_Zend extends Mage_Core_Block_Template
             foreach ($key as $k=>$v) {
                 $this->assign($k, $v);
             }
-        } elseif (!is_null($value)) {
+        } elseif ($value !== null) {
             $this->_view->assign($key, $value);
         }
         return $this;

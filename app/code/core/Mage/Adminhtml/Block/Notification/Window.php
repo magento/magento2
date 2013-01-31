@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
      */
     public function canShow()
     {
-        if (!is_null($this->_available)) {
+        if ($this->_available !== null) {
             return $this->_available;
         }
 

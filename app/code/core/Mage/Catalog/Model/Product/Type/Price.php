@@ -73,7 +73,7 @@ class Mage_Catalog_Model_Product_Type_Price
      */
     public function getFinalPrice($qty = null, $product)
     {
-        if ($qty === null && !is_null($product->getCalculatedFinalPrice())) {
+        if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
 
@@ -189,7 +189,7 @@ class Mage_Catalog_Model_Product_Type_Price
         }
 
         if ($prices === null || !is_array($prices)) {
-            if (!is_null($qty)) {
+            if ($qty !== null) {
                 return $product->getPrice();
             }
             return array(array(
@@ -407,7 +407,7 @@ class Mage_Catalog_Model_Product_Type_Price
     public static function calculateSpecialPrice($finalPrice, $specialPrice, $specialPriceFrom, $specialPriceTo,
             $store = null)
     {
-        if (!is_null($specialPrice) && $specialPrice != false) {
+        if ($specialPrice !== null && $specialPrice != false) {
             if (Mage::app()->getLocale()->isStoreDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
                 $finalPrice     = min($finalPrice, $specialPrice);
             }

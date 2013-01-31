@@ -91,7 +91,7 @@ class Mage_GoogleShopping_Helper_Data extends Mage_Core_Helper_Abstract
 
             if (strip_tags($row) == $row) {
                 $row = preg_replace('/@ (.*)/', $this->__("See '\\1'"), $row);
-                if (!is_null($product)) {
+                if ($product !== null) {
                     $row .= ' ' . $this->__("for product '%s' (in '%s' store)", $product->getName(), Mage::app()->getStore($product->getStoreId())->getName());
                 }
                 $result[] = $row;

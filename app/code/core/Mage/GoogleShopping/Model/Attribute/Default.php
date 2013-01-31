@@ -60,7 +60,7 @@ class Mage_GoogleShopping_Model_Attribute_Default extends Mage_GoogleShopping_Mo
         $type = $this->getGcontentAttributeType($productAttribute);
         $value = $this->getProductAttributeValue($product);
 
-        if (!is_null($value)) {
+        if ($value !== null) {
             $entry = $this->_setAttribute($entry, $this->getName(), $type, $value);
         }
         return $entry;
@@ -140,7 +140,7 @@ class Mage_GoogleShopping_Model_Attribute_Default extends Mage_GoogleShopping_Mo
         if ($attribute instanceof Varien_Gdata_Gshopping_Extension_Attribute) {
             $attribute->text = (string) $value;
             $attribute->type = $type;
-            if (!is_null($unit)) {
+            if ($unit !== null) {
                 $attribute->unit = $unit;
             }
         } else {

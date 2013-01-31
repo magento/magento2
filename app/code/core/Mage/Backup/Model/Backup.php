@@ -333,7 +333,7 @@ class Mage_Backup_Model_Backup extends Varien_Object
      */
     public function getSize()
     {
-        if (!is_null($this->getData('size'))) {
+        if ($this->getData('size') !== null) {
             return $this->getData('size');
         }
 

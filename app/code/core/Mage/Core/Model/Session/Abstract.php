@@ -598,7 +598,7 @@ class Mage_Core_Model_Session_Abstract extends Varien_Object
         }
 
         $this->_addHost();
-        if (!is_null($id) && preg_match('#^[0-9a-zA-Z,-]+$#', $id)) {
+        if ($id !== null && preg_match('#^[0-9a-zA-Z,-]+$#', $id)) {
             session_id($id);
         }
         return $this;

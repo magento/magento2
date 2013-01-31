@@ -115,7 +115,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Price_Grouped
             ->group(array('e.entity_id', 'cg.customer_group_id', 'cw.website_id'))
             ->where('e.type_id=?', $this->getTypeId());
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('l.product_id IN(?)', $entityIds);
         }
 

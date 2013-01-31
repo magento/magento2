@@ -1026,7 +1026,7 @@ class XML_Serializer extends PEAR
         }
 
         $string = '';
-        if (!is_null($_comment)) {
+        if ($_comment !== null) {
             $string .= XML_Util::createComment($_comment);
             $string .= $this->options[XML_SERIALIZER_OPTION_LINEBREAKS];
             if ($this->options[XML_SERIALIZER_OPTION_INDENT]!==null

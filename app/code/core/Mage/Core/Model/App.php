@@ -538,7 +538,7 @@ class Mage_Core_Model_App
         $this->_initStores();
         Magento_Profiler::stop('init_stores');
 
-        if (empty($scopeCode) && !is_null($this->_website)) {
+        if (empty($scopeCode) && $this->_website !== null) {
             $scopeCode = $this->_website->getCode();
             $scopeType = 'website';
         }

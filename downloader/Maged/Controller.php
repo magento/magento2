@@ -743,7 +743,7 @@ final class Maged_Controller
      */
     public function getActionMethod($action = null)
     {
-        $method = (!is_null($action) ? $action : $this->_action) . 'Action';
+        $method = ($action !== null ? $action : $this->_action) . 'Action';
         return $method;
     }
 

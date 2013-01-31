@@ -1286,10 +1286,10 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
             $websiteId       = Mage::app()->getStore($this->getStoreId())->getWebsiteId();
         }
 
-        if (!is_null($customerGroupId)) {
+        if ($customerGroupId !== null) {
             $this->_productLimitationFilters['customer_group_id'] = $customerGroupId;
         }
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             $this->_productLimitationFilters['website_id'] = $websiteId;
         }
 

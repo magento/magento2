@@ -53,7 +53,7 @@ class Mage_Newsletter_Model_Resource_Template extends Mage_Core_Model_Resource_D
     public function loadByCode(Mage_Newsletter_Model_Template $object, $templateCode)
     {
         $read = $this->_getReadAdapter();
-        if ($read && !is_null($templateCode)) {
+        if ($read && $templateCode !== null) {
             $select = $this->_getLoadSelect('template_code', $templateCode, $object)
                 ->where('template_actual = :template_actual');
             $data = $read->fetchRow($select, array('template_actual'=>1));

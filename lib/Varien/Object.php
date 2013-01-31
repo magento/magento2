@@ -98,7 +98,7 @@ class Varien_Object implements ArrayAccess
     public function isDeleted($isDeleted = null)
     {
         $result = $this->_isDeleted;
-        if (!is_null($isDeleted)) {
+        if ($isDeleted !== null) {
             $this->_isDeleted = $isDeleted;
         }
         return $result;

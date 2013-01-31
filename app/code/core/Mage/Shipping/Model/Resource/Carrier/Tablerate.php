@@ -281,7 +281,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
      */
     protected function _loadDirectoryCountries()
     {
-        if (!is_null($this->_importIso2Countries) && !is_null($this->_importIso3Countries)) {
+        if ($this->_importIso2Countries !== null && $this->_importIso3Countries !== null) {
             return $this;
         }
 
@@ -305,7 +305,7 @@ class Mage_Shipping_Model_Resource_Carrier_Tablerate extends Mage_Core_Model_Res
      */
     protected function _loadDirectoryRegions()
     {
-        if (!is_null($this->_importRegions)) {
+        if ($this->_importRegions !== null) {
             return $this;
         }
 

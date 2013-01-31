@@ -1011,7 +1011,7 @@ class Mage_Core_Model_Url extends Varien_Object
             $this->unsetData('query_params');
         }
 
-        if (!is_null($fragment)) {
+        if ($fragment !== null) {
             $url .= '#' . $fragment;
         }
 

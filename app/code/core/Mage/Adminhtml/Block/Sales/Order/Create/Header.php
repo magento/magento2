@@ -43,13 +43,13 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Header extends Mage_Adminhtml_Bloc
         if ($customerId && $storeId) {
             $out.= Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order for %s in %s', $this->getCustomer()->getName(), $this->getStore()->getName());
         }
-        elseif (!is_null($customerId) && $storeId){
+        elseif ($customerId !== null && $storeId){
             $out.= Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order for New Customer in %s', $this->getStore()->getName());
         }
         elseif ($customerId) {
             $out.= Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order for %s', $this->getCustomer()->getName());
         }
-        elseif (!is_null($customerId)){
+        elseif ($customerId !== null){
             $out.= Mage::helper('Mage_Sales_Helper_Data')->__('Create New Order for New Customer');
         }
         else {

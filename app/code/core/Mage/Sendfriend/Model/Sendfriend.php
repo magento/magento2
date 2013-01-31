@@ -436,7 +436,7 @@ class Mage_Sendfriend_Model_Sendfriend extends Mage_Core_Model_Abstract
      */
     public function getSentCount($useCache = true)
     {
-        if ($useCache && !is_null($this->_sentCount)) {
+        if ($useCache && $this->_sentCount !== null) {
             return $this->_sentCount;
         }
 

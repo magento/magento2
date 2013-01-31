@@ -64,7 +64,7 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
             $object->setDateTo(null);
         }
 
-        if (!is_null($object->getDateFrom()) && !is_null($object->getDateTo())
+        if ($object->getDateFrom() !== null && $object->getDateTo() !== null
                 && Varien_Date::toTimestamp($object->getDateFrom()) > Varien_Date::toTimestamp($object->getDateTo())) {
             Mage::throwException(Mage::helper('Mage_Core_Helper_Data')->__('Start date cannot be greater than end date.'));
         }
@@ -112,7 +112,7 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
 
         $dateConditions = array('date_to IS NULL AND date_from IS NULL');
 
-        if (!is_null($dateFrom)) {
+        if ($dateFrom !== null) {
             $dateConditions[] = ':date_from BETWEEN date_from AND date_to';
             $dateConditions[] = ':date_from >= date_from and date_to IS NULL';
             $dateConditions[] = ':date_from <= date_to and date_from IS NULL';
@@ -120,7 +120,7 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
             $dateConditions[] = 'date_from IS NULL';
         }
 
-        if (!is_null($dateTo)) {
+        if ($dateTo !== null) {
             $dateConditions[] = ':date_to BETWEEN date_from AND date_to';
             $dateConditions[] = ':date_to >= date_from AND date_to IS NULL';
             $dateConditions[] = ':date_to <= date_to AND date_from IS NULL';
@@ -128,15 +128,15 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
             $dateConditions[] = 'date_to IS NULL';
         }
 
-        if ($dateFrom === null && !is_null($dateTo)) {
+        if ($dateFrom === null && $dateTo !== null) {
             $dateConditions[] = 'date_to <= :date_to OR date_from <= :date_to';
         }
 
-        if (!is_null($dateFrom) && $dateTo === null) {
+        if ($dateFrom !== null && $dateTo === null) {
             $dateConditions[] = 'date_to >= :date_from OR date_from >= :date_from';
         }
 
-        if (!is_null($dateFrom) && !is_null($dateTo)) {
+        if ($dateFrom !== null && $dateTo !== null) {
             $dateConditions[] = 'date_from BETWEEN :date_from AND :date_to';
             $dateConditions[] = 'date_to BETWEEN :date_from AND :date_to';
         } elseif ($dateFrom === null && $dateTo === null) {
@@ -154,10 +154,10 @@ class Mage_Core_Model_Resource_Design extends Mage_Core_Model_Resource_Db_Abstra
             'current_id' => (int)$currentId,
         );
 
-        if (!is_null($dateTo)) {
+        if ($dateTo !== null) {
             $bind['date_to'] = $dateTo;
         }
-        if (!is_null($dateFrom)) {
+        if ($dateFrom !== null) {
             $bind['date_from'] = $dateFrom;
         }
 

@@ -63,7 +63,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Filter_Select extends Mage_Backend_B
      */
     protected function _renderOption($option, $value)
     {
-        $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '' );
+        $selected = (($option['value'] == $value && ($value !== null)) ? ' selected="selected"' : '' );
         return '<option value="'
             . $this->escapeHtml($option['value']).'"'.$selected.'>'
             . $this->escapeHtml($option['label']) . '</option>';

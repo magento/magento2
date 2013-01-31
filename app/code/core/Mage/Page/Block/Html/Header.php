@@ -160,7 +160,7 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         $absolutePath = $this->_configOptions->getDir('media') . DIRECTORY_SEPARATOR
             . $folderName . DIRECTORY_SEPARATOR . $storeLogoPath;
 
-        if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {
+        if ($storeLogoPath !== null && $this->_isFile($absolutePath)) {
             $url = $logoUrl;
         } else {
             $url = $this->getViewFileUrl('images::logo.gif');

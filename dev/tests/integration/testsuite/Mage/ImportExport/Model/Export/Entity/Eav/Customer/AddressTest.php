@@ -218,7 +218,7 @@ class Mage_ImportExport_Model_Export_Entity_Eav_Customer_AddressTest extends PHP
                 $data['header'] = str_getcsv($line);
             } else {
                 $row = array_combine($data['header'], str_getcsv($line));
-                if (!is_null($entityId) && !empty($row[$entityId])) {
+                if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
                     $data['data'][] = $row;

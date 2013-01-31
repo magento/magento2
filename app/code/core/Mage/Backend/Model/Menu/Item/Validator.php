@@ -97,7 +97,7 @@ class Mage_Backend_Model_Menu_Item_Validator
         }
 
         foreach ($data as $param => $value) {
-            if (!is_null($data[$param])
+            if ($data[$param] !== null
                 && isset($this->_validators[$param])
                 && !$this->_validators[$param]->isValid($value)
             ) {
@@ -123,7 +123,7 @@ class Mage_Backend_Model_Menu_Item_Validator
             throw new InvalidArgumentException('Param ' . $param . ' is required');
         }
 
-        if (!is_null($value) && isset($this->_validators[$param]) && !$this->_validators[$param]->isValid($value)) {
+        if ($value !== null && isset($this->_validators[$param]) && !$this->_validators[$param]->isValid($value)) {
             throw new InvalidArgumentException(
                 'Param ' . $param . ' doesn\'t pass validation: '
                     . implode('; ', $this->_validators[$param]->getMessages())

@@ -236,7 +236,7 @@ class Mage_CatalogRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abst
         $cond = $write->quoteInto('rule_date between ?', $this->formatDate($fromDate));
         $cond = $write->quoteInto($cond.' and ?', $this->formatDate($toDate));
         $conds[] = $cond;
-        if (!is_null($productId)) {
+        if ($productId !== null) {
             $conds[] = $write->quoteInto('product_id=?', $productId);
         }
 
@@ -273,7 +273,7 @@ class Mage_CatalogRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abst
         $write = $this->_getWriteAdapter();
         $conds = array();
         $conds[] = $write->quoteInto('rule_date<?', $this->formatDate($date));
-        if (!is_null($productId)) {
+        if ($productId !== null) {
             $conds[] = $write->quoteInto('product_id=?', $productId);
         }
         $write->delete($this->getTable('catalogrule_product_price'), $conds);
@@ -309,7 +309,7 @@ class Mage_CatalogRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abst
             . ' OR ' . $read->quoteInto('rp.to_time = 0 or rp.to_time >= ?', $fromDate))
             ->order(array('rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id'));
 
-        if (!is_null($productId)) {
+        if ($productId !== null) {
             $select->where('rp.product_id=?', $productId);
         }
 

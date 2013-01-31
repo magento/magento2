@@ -1409,7 +1409,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
             $this->_storesRootCategories = $this->_getWriteAdapter()->fetchPairs($select);
         }
 
-        if (!is_null($storeIds)) {
+        if ($storeIds !== null) {
             if (!is_array($storeIds)) {
                 $storeIds = array($storeIds);
             }

@@ -138,7 +138,7 @@ class Mage_Core_Model_Cookie
      */
     public function getLifetime()
     {
-        if (!is_null($this->_lifetime)) {
+        if ($this->_lifetime !== null) {
             $lifetime = $this->_lifetime;
         } else {
             $lifetime = Mage::getStoreConfig(self::XML_PATH_COOKIE_LIFETIME, $this->getStore());

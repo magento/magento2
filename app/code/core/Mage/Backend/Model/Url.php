@@ -265,7 +265,7 @@ class Mage_Backend_Model_Url extends Mage_Core_Model_Url
     public function getStartupPageUrl()
     {
         $menuItem = $this->_getMenu()->get($this->_startupMenuItemId);
-        if (!is_null($menuItem)) {
+        if ($menuItem !== null) {
             if ($menuItem->isAllowed() && $menuItem->getAction()) {
                 return $menuItem->getAction();
             }

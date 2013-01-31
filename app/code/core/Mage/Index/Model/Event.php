@@ -158,14 +158,14 @@ class Mage_Index_Model_Event extends Mage_Core_Model_Abstract
     protected function _mergeNewDataRecursive($previous, $current)
     {
         if (!is_array($current)) {
-            if (!is_null($current)) {
+            if ($current !== null) {
                 $previous[] = $current;
             }
             return $previous;
         }
 
         foreach ($previous as $key => $value) {
-            if (array_key_exists($key, $current) && !is_null($current[$key]) && is_array($previous[$key])) {
+            if (array_key_exists($key, $current) && $current[$key] !== null && is_array($previous[$key])) {
                 if (!is_string($key) || is_array($current[$key])) {
                     $current[$key] = $this->_mergeNewDataRecursive($previous[$key], $current[$key]);
                 }

@@ -391,7 +391,7 @@ class Mage_Sales_Model_Quote extends Mage_Core_Model_Abstract
         if ($customer->getId()) {
             $this->setCustomer($customer);
 
-            if (!is_null($billingAddress)) {
+            if ($billingAddress !== null) {
                 $this->setBillingAddress($billingAddress);
             } else {
                 $defaultBillingAddress = $customer->getDefaultBillingAddress();

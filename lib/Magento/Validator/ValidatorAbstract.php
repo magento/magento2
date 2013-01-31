@@ -94,7 +94,7 @@ abstract class Magento_Validator_ValidatorAbstract implements Magento_Validator_
      */
     public function hasTranslator()
     {
-        return !is_null($this->_translator);
+        return $this->_translator !== null;
     }
 
     /**

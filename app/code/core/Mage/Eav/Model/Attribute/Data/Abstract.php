@@ -196,7 +196,7 @@ abstract class Mage_Eav_Model_Attribute_Data_Abstract
      */
     public function getExtractedData($index = null)
     {
-        if (!is_null($index)) {
+        if ($index !== null) {
             if (isset($this->_extractedData[$index])) {
                 return $this->_extractedData[$index];
             }

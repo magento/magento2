@@ -355,7 +355,7 @@ class Mage_Catalog_Model_Resource_Category_Tree extends Varien_Data_Tree_Dbp
      */
     public function setCollection($collection)
     {
-        if (!is_null($this->_collection)) {
+        if ($this->_collection !== null) {
             destruct($this->_collection);
         }
         $this->_collection = $collection;

@@ -378,7 +378,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
 
         $product->setData($attrCode, $mediaGalleryData);
 
-        if (!is_null($mediaAttribute)) {
+        if ($mediaAttribute !== null) {
             $this->setMediaAttribute($product, $mediaAttribute, $fileName);
         }
 
@@ -412,7 +412,7 @@ class Mage_Catalog_Model_Product_Attribute_Backend_Media extends Mage_Eav_Model_
                 $savedFileName = $alreadyAddedFilesNames[$keyInAddedFiles];
             }
 
-            if (!is_null($value['mediaAttribute'])) {
+            if ($value['mediaAttribute'] !== null) {
                 $this->setMediaAttribute($product, $value['mediaAttribute'], $savedFileName);
             }
 

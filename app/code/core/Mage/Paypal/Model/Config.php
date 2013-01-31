@@ -852,7 +852,7 @@ class Mage_Paypal_Model_Config
             self::PAYMENT_ACTION_AUTH => Mage::helper('Mage_Paypal_Helper_Data')->__('Authorization'),
             self::PAYMENT_ACTION_SALE => Mage::helper('Mage_Paypal_Helper_Data')->__('Sale')
         );
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = Mage::helper('Mage_Paypal_Helper_Data')->__('Order');
         }
         return $paymentActions;

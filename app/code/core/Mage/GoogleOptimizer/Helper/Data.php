@@ -66,7 +66,7 @@ class Mage_GoogleOptimizer_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isOptimizerActiveForCms()
     {
-        if (!is_null($this->_activeForCmsFlag)) {
+        if ($this->_activeForCmsFlag !== null) {
             return $this->_activeForCmsFlag;
         }
         $stores = array_merge(

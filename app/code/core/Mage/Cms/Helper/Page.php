@@ -64,7 +64,7 @@ class Mage_Cms_Helper_Page extends Mage_Core_Helper_Abstract
     {
 
         $page = Mage::getSingleton('Mage_Cms_Model_Page');
-        if (!is_null($pageId) && $pageId!==$page->getId()) {
+        if ($pageId !== null && $pageId!==$page->getId()) {
             $delimeterPosition = strrpos($pageId, '|');
             if ($delimeterPosition) {
                 $pageId = substr($pageId, 0, $delimeterPosition);
@@ -160,7 +160,7 @@ class Mage_Cms_Helper_Page extends Mage_Core_Helper_Abstract
     public function getPageUrl($pageId = null)
     {
         $page = Mage::getModel('Mage_Cms_Model_Page');
-        if (!is_null($pageId) && $pageId !== $page->getId()) {
+        if ($pageId !== null && $pageId !== $page->getId()) {
             $page->setStoreId(Mage::app()->getStore()->getId());
             if (!$page->load($pageId)) {
                 return null;

@@ -121,7 +121,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source
             )
             ->where('s.store_id != 0');
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $subSelect->where('d.entity_id IN(?)', $entityIds);
         }
 
@@ -218,7 +218,7 @@ class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source
         $statusCond = $adapter->quoteInto('=?', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pvd.entity_id', 'cs.store_id', $statusCond);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('pvd.entity_id IN(?)', $entityIds);
         }
 

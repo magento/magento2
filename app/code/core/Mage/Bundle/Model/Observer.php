@@ -102,7 +102,7 @@ class Mage_Bundle_Model_Observer
         $resource   = Mage::getResourceSingleton('Mage_Bundle_Model_Resource_Selection');
 
         $productIds = array_keys($collection->getItems());
-        if (!is_null($limit) && $limit <= count($productIds)) {
+        if ($limit !== null && $limit <= count($productIds)) {
             return $this;
         }
 
@@ -124,7 +124,7 @@ class Mage_Bundle_Model_Observer
             ->addTaxPercents()
             ->setVisibility(Mage::getSingleton('Mage_Catalog_Model_Product_Visibility')->getVisibleInCatalogIds());
 
-        if (!is_null($limit)) {
+        if ($limit !== null) {
             $bundleCollection->setPageSize($limit);
         }
         $bundleCollection->addFieldToFilter('entity_id', array('in' => $bundleIds))

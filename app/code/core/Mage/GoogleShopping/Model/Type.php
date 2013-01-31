@@ -93,7 +93,7 @@ class Mage_GoogleShopping_Model_Type extends Mage_Core_Model_Abstract
             $productAttribute = Mage::helper('Mage_GoogleShopping_Helper_Product')
                 ->getProductAttribute($product, $attribute->getAttributeId());
 
-            if (!is_null($productAttribute)) {
+            if ($productAttribute !== null) {
                 // define final attribute name
                 if ($attribute->getGcontentAttribute()) {
                     $name = $attribute->getGcontentAttribute();
@@ -101,7 +101,7 @@ class Mage_GoogleShopping_Model_Type extends Mage_Core_Model_Abstract
                     $name = Mage::helper('Mage_GoogleShopping_Helper_Product')->getAttributeLabel($productAttribute, $product->getStoreId());
                 }
 
-                if (!is_null($name)) {
+                if ($name !== null) {
                     $name = Mage::helper('Mage_GoogleShopping_Helper_Data')->normalizeName($name);
                     if (isset($group[$name])) {
                         // if attribute is in the group

@@ -300,7 +300,7 @@ class Net_URL
                     foreach ($value as $k => $v) {
                         $querystring[] = $this->useBrackets ? sprintf('%s[%s]=%s', $name, $k, $v) : ($name . '=' . $v);
                     }
-                } elseif (!is_null($value)) {
+                } elseif ($value !== null) {
                     $querystring[] = $name . '=' . $value;
                 } else {
                     $querystring[] = $name;

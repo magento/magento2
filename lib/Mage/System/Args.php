@@ -94,7 +94,7 @@ class Mage_System_Args
                     $this->flags[$str[1]] = $argv[$i + 1];
                     $argv[$i + 1] = null;
                 }
-            } else if(!is_null($str)) {
+            } else if($str !== null) {
                 $this->filtered[] = $str;
             }
         }

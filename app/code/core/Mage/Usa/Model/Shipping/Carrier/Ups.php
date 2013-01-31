@@ -1511,7 +1511,7 @@ XMLAuth;
                     $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
                     break;
             }
-            if (!is_null($serviceOptionsNode)) {
+            if ($serviceOptionsNode !== null) {
                 $serviceOptionsNode
                     ->addChild('DeliveryConfirmation')
                     ->addChild('DCISType', $packageParams->getDeliveryConfirmation());

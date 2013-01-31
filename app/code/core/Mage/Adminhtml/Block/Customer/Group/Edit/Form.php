@@ -72,7 +72,7 @@ class Mage_Adminhtml_Block_Customer_Group_Edit_Form extends Mage_Adminhtml_Block
             )
         );
 
-        if (!is_null($customerGroup->getId())) {
+        if ($customerGroup->getId() !== null) {
             // If edit add id
             $form->addField('id', 'hidden',
                 array(

@@ -113,10 +113,10 @@ class Varien_Simplexml_Element extends SimpleXMLElement
         if ($value === null) {
             return parent::addAttribute($name);
         } else {
-            if (!is_null($value)) {
+            if ($value !== null) {
                 $value = $this->xmlentities($value);
             }
-            if (!is_null($namespace)) {
+            if ($namespace !== null) {
                 return parent::addAttribute($name, $value, $namespace);
             } else {
                 return parent::addAttribute($name, $value);
@@ -129,10 +129,10 @@ class Varien_Simplexml_Element extends SimpleXMLElement
         if ($value === null) {
             return parent::addChild($name);
         } else {
-            if (!is_null($value)) {
+            if ($value !== null) {
                 $value = $this->xmlentities($value);
             }
-            if (!is_null($namespace)) {
+            if ($namespace !== null) {
                 return parent::addChild($name, $value, $namespace);
             } else {
                 return parent::addChild($name, $value);

@@ -129,7 +129,7 @@ class Mage_CatalogSearch_Model_Resource_Advanced_Collection extends Mage_Catalog
                         $select->where($conn->prepareSqlCondition($field, $data));
                     }
 
-                    if (!is_null($previousSelect)) {
+                    if ($previousSelect !== null) {
                         $select->where('t1.entity_id IN (?)', new Zend_Db_Expr($previousSelect));
                     }
                     $previousSelect = $select;

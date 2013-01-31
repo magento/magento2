@@ -239,7 +239,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
      */
     public function getIntervalsNumber()
     {
-        if (!is_null($this->_intervalsNumber)) {
+        if ($this->_intervalsNumber !== null) {
             return $this->_intervalsNumber;
         }
 
@@ -339,7 +339,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
         $quantileInterval = $this->_getQuantileInterval($quantileNumber);
         $intervalPricesCount = $quantileInterval[1] - $quantileInterval[0] + 1;
         $offset = $quantileInterval[0];
-        if (!is_null($this->_lastPriceLimiter[0])) {
+        if ($this->_lastPriceLimiter[0] !== null) {
             $offset -= $this->_lastPriceLimiter[0];
         }
         if ($offset < 0) {
@@ -352,7 +352,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
             $offset = 0;
         }
         $lowerPrice = $this->_lastPriceLimiter[1];
-        if (!is_null($this->_lowerLimit)) {
+        if ($this->_lowerLimit !== null) {
             $lowerPrice = max($lowerPrice, $this->_lowerLimit);
         }
         if ($intervalPricesCount >= 0) {
@@ -449,7 +449,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_Algorithm
         $lowerPrice = round($lowerPrice, 3);
         $upperPrice = round($upperPrice, 3);
 
-        if (!is_null($roundingFactor)) {
+        if ($roundingFactor !== null) {
             // Can't separate if prices are equal
             if ($lowerPrice >= $upperPrice) {
                 if ($lowerPrice > $upperPrice || $returnEmpty) {

@@ -60,7 +60,7 @@ class Mage_ImportExport_Adminhtml_ExportControllerTest extends Mage_Backend_Util
 
     protected function tearDown()
     {
-        if (!is_null($this->_httpXRequestedWith)) {
+        if ($this->_httpXRequestedWith !== null) {
             $_SERVER['HTTP_X_REQUESTED_WITH'] = $this->_httpXRequestedWith;
         }
 

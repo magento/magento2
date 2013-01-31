@@ -417,7 +417,7 @@ class Mage_PaypalUk_Model_Api_Nvp extends Mage_Paypal_Model_Api_Nvp
     protected function _addMethodToRequest($methodName, $request)
     {
         $request['TRXTYPE'] = $this->_mapPaypalMethodName($methodName);
-        if (!is_null($this->_getPaypalUkActionName($methodName))) {
+        if ($this->_getPaypalUkActionName($methodName) !== null) {
             $request['ACTION'] = $this->_getPaypalUkActionName($methodName);
         }
         return $request;

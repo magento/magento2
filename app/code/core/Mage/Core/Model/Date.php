@@ -77,7 +77,7 @@ class Mage_Core_Model_Date
         $result = true;
         $offset = 0;
 
-        if (!is_null($timezone)){
+        if ($timezone !== null){
             $oldzone = @date_default_timezone_get();
             $result = date_default_timezone_set($timezone);
         }
@@ -86,7 +86,7 @@ class Mage_Core_Model_Date
             $offset = gmmktime(0, 0, 0, 1, 2, 1970) - mktime(0, 0, 0, 1, 2, 1970);
         }
 
-        if (!is_null($timezone)){
+        if ($timezone !== null){
             date_default_timezone_set($oldzone);
         }
 

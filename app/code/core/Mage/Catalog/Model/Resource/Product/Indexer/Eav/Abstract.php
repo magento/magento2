@@ -195,7 +195,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract
             ->group(array(
                 'l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value'
             ));
-        if (!is_null($parentIds)) {
+        if ($parentIds !== null) {
             $select->where('l.parent_id IN(?)', $parentIds);
         }
 

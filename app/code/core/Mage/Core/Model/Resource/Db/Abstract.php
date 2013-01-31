@@ -252,7 +252,7 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
             $entitySuffix = null;
         }
 
-        if (!is_null($entitySuffix)) {
+        if ($entitySuffix !== null) {
             $tableName .= '_' . $entitySuffix;
         }
 
@@ -332,7 +332,7 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
         }
 
         $read = $this->_getReadAdapter();
-        if ($read && !is_null($value)) {
+        if ($read && $value !== null) {
             $select = $this->_getLoadSelect($field, $value, $object);
             $data = $read->fetchRow($select);
 
@@ -379,7 +379,7 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
         $this->_serializeFields($object);
         $this->_beforeSave($object);
         $this->_checkUnique($object);
-        if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
+        if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
             $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName().'=?', $object->getId());
             /**
              * Not auto increment primary key support

@@ -100,7 +100,7 @@ abstract class Mage_Backend_Model_Menu_Builder_CommandAbstract
     public function execute(array $itemParams = array())
     {
         $itemParams = $this->_execute($itemParams);
-        if (!is_null($this->_next)) {
+        if ($this->_next !== null) {
             $itemParams = $this->_next->execute($itemParams);
         }
         return $itemParams;

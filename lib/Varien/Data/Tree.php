@@ -111,7 +111,7 @@ class Varien_Data_Tree
     {
         $this->_nodes->add($node);
         $node->setParent($parent);
-        if (!is_null($parent) && ($parent instanceof Varien_Data_Tree_Node) ) {
+        if ($parent !== null && ($parent instanceof Varien_Data_Tree_Node) ) {
             $parent->addChild($node);
         }
         return $node;

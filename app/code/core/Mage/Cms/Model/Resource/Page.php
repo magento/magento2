@@ -231,7 +231,7 @@ class Mage_Cms_Model_Resource_Page extends Mage_Core_Model_Resource_Db_Abstract
             ->where('cp.identifier = ?', $identifier)
             ->where('cps.store_id IN (?)', $store);
 
-        if (!is_null($isActive)) {
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 
