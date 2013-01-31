@@ -48,7 +48,7 @@ class Varien_Debug
      */
     public static function getRootPath()
     {
-        if (is_null(self::$_filePath)) {
+        if (self::$_filePath === null) {
             if (defined('BP')) {
                 self::$_filePath = BP;
             } else {
@@ -185,7 +185,7 @@ class Varien_Debug
             } else {
                 $out .= 'array(' . join(', ', $args) . ')';
             }
-        } else if (is_null($arg)) {
+        } else if ($arg === null) {
             $out .= 'NULL';
         } else if (is_numeric($arg) || is_float($arg)) {
             $out .= $arg;

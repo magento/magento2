@@ -288,7 +288,7 @@ implements Mage_HTTP_IClient
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if(is_null($val)) {
+            if($val === null) {
                 continue;
             }
             $out[trim($key)] = trim($val);
@@ -315,7 +315,7 @@ implements Mage_HTTP_IClient
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if(is_null($val)) {
+            if($val === null) {
                 continue;
             }
             $out[trim($key)] = array('value'=>trim($val));
@@ -376,7 +376,7 @@ implements Mage_HTTP_IClient
             }
             $this->curlOption(CURLOPT_COOKIE, implode(";", $cookies));
         }
-         
+
         if($this->_timeout) {
             $this->curlOption(CURLOPT_TIMEOUT, $this->_timeout);
         }
@@ -388,7 +388,7 @@ implements Mage_HTTP_IClient
         //$this->curlOption(CURLOPT_HEADER, 1);
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, array($this,'parseHeaders'));
-         
+
 
         if(count($this->_curlUserOptions)) {
             foreach($this->_curlUserOptions as $k=>$v) {
@@ -455,7 +455,7 @@ implements Mage_HTTP_IClient
 
         }
         $this->_headerCount++;
-         
+
 
         return strlen($data);
     }

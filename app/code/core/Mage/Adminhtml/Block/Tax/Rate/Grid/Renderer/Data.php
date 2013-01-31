@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Tax_Rate_Grid_Renderer_Data extends Mage_Adminhtml_Bl
         if (intval($data) == $data) {
             return (string) number_format($data, 2);
         }
-        if (!is_null($data)) {
+        if ($data !== null) {
             return $data * 1;
         }
         return $this->getColumn()->getDefault();

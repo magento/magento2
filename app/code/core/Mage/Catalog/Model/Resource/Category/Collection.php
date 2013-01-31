@@ -172,7 +172,7 @@ class Mage_Catalog_Model_Resource_Category_Collection extends Mage_Catalog_Model
      */
     public function getProductStoreId()
     {
-        if (is_null($this->_productStoreId)) {
+        if ($this->_productStoreId === null) {
             $this->_productStoreId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
         }
         return $this->_productStoreId;

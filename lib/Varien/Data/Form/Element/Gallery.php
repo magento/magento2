@@ -63,7 +63,7 @@ class Varien_Data_Form_Element_Gallery extends Varien_Data_Form_Element_Abstract
         $html .= '<tbody class="gallery">';
 
         $i = 0;
-        if (!is_null($this->getValue())) {
+        if ($this->getValue() !== null) {
             foreach ($this->getValue() as $image) {
                 $i++;
                 $html .= '<tr class="gallery">';

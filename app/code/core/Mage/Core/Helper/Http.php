@@ -125,7 +125,7 @@ class Mage_Core_Helper_Http extends Mage_Core_Helper_Abstract
      */
     public function getRemoteAddr($ipToLong = false)
     {
-        if (is_null($this->_remoteAddr)) {
+        if ($this->_remoteAddr === null) {
             $headers = $this->getRemoteAddrHeaders();
             foreach ($headers as $var) {
                 if ($this->_getRequest()->getServer($var, false)) {

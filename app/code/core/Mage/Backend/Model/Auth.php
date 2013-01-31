@@ -194,7 +194,7 @@ class Mage_Backend_Model_Auth
      */
     public static function throwException($msg = null, $code = null)
     {
-        if (is_null($msg)) {
+        if ($msg === null) {
             $msg = Mage::helper('Mage_Backend_Helper_Data')->__('Authentication error occurred.');
         }
         throw new Mage_Backend_Model_Auth_Exception($msg, $code);

@@ -335,13 +335,13 @@ class Mage_Backend_Model_Config extends Varien_Object
      */
     protected function _validate()
     {
-        if (is_null($this->getSection())) {
+        if ($this->getSection() === null) {
             $this->setSection('');
         }
-        if (is_null($this->getWebsite())) {
+        if ($this->getWebsite() === null) {
             $this->setWebsite('');
         }
-        if (is_null($this->getStore())) {
+        if ($this->getStore() === null) {
             $this->setStore('');
         }
     }

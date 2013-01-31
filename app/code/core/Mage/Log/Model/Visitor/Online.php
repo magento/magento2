@@ -100,7 +100,7 @@ class Mage_Log_Model_Visitor_Online extends Mage_Core_Model_Abstract
      */
     public function setPrepareAt($time = null)
     {
-        if (is_null($time)) {
+        if ($time === null) {
             $time = time();
         }
         Mage::app()->saveCache($time, 'log_visitor_online_prepare_at');

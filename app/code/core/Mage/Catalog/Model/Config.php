@@ -251,7 +251,7 @@ class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
      */
     public function getProductAttributes()
     {
-        if (is_null($this->_productAttributes)) {
+        if ($this->_productAttributes === null) {
             $this->_productAttributes = array_keys($this->getAttributesUsedInProductListing());
         }
         return $this->_productAttributes;
@@ -286,7 +286,7 @@ class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
      * @return array
      */
     public function getAttributesUsedInProductListing() {
-        if (is_null($this->_usedInProductListing)) {
+        if ($this->_usedInProductListing === null) {
             $this->_usedInProductListing = array();
             $entityType = Mage_Catalog_Model_Product::ENTITY;
             $attributesData = $this->_getResource()
@@ -309,7 +309,7 @@ class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
      * @return array
      */
     public function getAttributesUsedForSortBy() {
-        if (is_null($this->_usedForSortBy)) {
+        if ($this->_usedForSortBy === null) {
             $this->_usedForSortBy = array();
             $entityType     = Mage_Catalog_Model_Product::ENTITY;
             $attributesData = $this->_getResource()

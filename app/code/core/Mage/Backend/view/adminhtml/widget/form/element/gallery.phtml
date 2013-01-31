@@ -45,7 +45,7 @@
 
 <tbody class="gallery">
 
-<?php $i = 0; if (!is_null($this->getValues())): ?>
+<?php $i = 0; if ($this->getValues() !== null): ?>
     <?php foreach ($this->getValues() as $image): $i++; ?>
         <tr id="<?php echo $this->getElement()->getHtmlId() ?>_tr_<?php echo $image->getValueId() ?>" class="gallery">
         <?php foreach ($this->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>

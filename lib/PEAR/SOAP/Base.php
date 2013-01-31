@@ -298,7 +298,7 @@ class SOAP_Base extends SOAP_Base_Object
     function SOAPENVPrefix($prefix = null)
     {
         static $_soapenv_prefix = 'SOAP-ENV';
-        if (!is_null($prefix)) {
+        if ($prefix !== null) {
             $_soapenv_prefix = $prefix;
         }
         return $_soapenv_prefix;
@@ -316,7 +316,7 @@ class SOAP_Base extends SOAP_Base_Object
     function SOAPENCPrefix($prefix = null)
     {
         static $_soapenv_prefix = 'SOAP-ENC';
-        if (!is_null($prefix)) {
+        if ($prefix !== null) {
             $_soapenv_prefix = $prefix;
         }
         return $_soapenv_prefix;
@@ -598,7 +598,7 @@ class SOAP_Base extends SOAP_Base_Object
             if ($xmlout_type) {
                 $xmlout_type = " xsi:type=\"$xmlout_type\"";
             }
-            if (is_null($xmlout_value)) {
+            if ($xmlout_value === null) {
                 $xml = "\r\n<$xmlout_name$xmlout_type$xmlns$xmlout_arrayType" .
                     "$xml_attr xsi:nil=\"true\"/>";
             } else {
@@ -608,7 +608,7 @@ class SOAP_Base extends SOAP_Base_Object
         } elseif ($type->name == 'Array' && !empty($options['keep_arrays_flat'])) {
             $xml = $xmlout_value;
         } else {
-            if (is_null($xmlout_value)) {
+            if ($xmlout_value === null) {
                 $xml = "\r\n<$xmlout_name$xmlns$xml_attr/>";
             } else {
                 $xml = "\r\n<$xmlout_name$xmlns$xml_attr>" .

@@ -51,7 +51,7 @@ class Mage_ProductAlert_Model_Resource_Price extends Mage_ProductAlert_Model_Res
      */
     protected function _beforeSave(Mage_Core_Model_Abstract $object)
     {
-        if (is_null($object->getId()) && $object->getCustomerId()
+        if ($object->getId() === null && $object->getCustomerId()
                 && $object->getProductId() && $object->getWebsiteId()) {
             if ($row = $this->_getAlertRow($object)) {
                 $price = $object->getPrice();
@@ -62,7 +62,7 @@ class Mage_ProductAlert_Model_Resource_Price extends Mage_ProductAlert_Model_Res
                 $object->setStatus(0);
             }
         }
-        if (is_null($object->getAddDate())) {
+        if ($object->getAddDate() === null) {
             $object->setAddDate(Mage::getModel('Mage_Core_Model_Date')->gmtDate());
         }
         return parent::_beforeSave($object);

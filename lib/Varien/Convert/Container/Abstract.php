@@ -53,7 +53,7 @@ abstract class Varien_Convert_Container_Abstract
 
     public function setVar($key, $value=null)
     {
-        if (is_array($key) && is_null($value)) {
+        if (is_array($key) && $value === null) {
             $this->_vars = $key;
         } else {
             $this->_vars[$key] = $value;
@@ -74,7 +74,7 @@ abstract class Varien_Convert_Container_Abstract
 
     public function validateDataString($data=null)
     {
-        if (is_null($data)) {
+        if ($data === null) {
             $data = $this->getData();
         }
         if (!is_string($data)) {
@@ -85,7 +85,7 @@ abstract class Varien_Convert_Container_Abstract
 
     public function validateDataGrid($data=null)
     {
-        if (is_null($data)) {
+        if ($data === null) {
             $data = $this->getData();
         }
         if (!is_array($data) || !is_array(current($data))) {
@@ -113,7 +113,7 @@ abstract class Varien_Convert_Container_Abstract
     public function addException($error, $level=null)
     {
         $exception = new Varien_Convert_Exception($error);
-        $exception->setLevel(!is_null($level) ? $level : Varien_Convert_Exception::NOTICE);
+        $exception->setLevel($level !== null ? $level : Varien_Convert_Exception::NOTICE);
         $exception->setContainer($this);
         $exception->setPosition($this->getPosition());
 

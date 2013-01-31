@@ -279,7 +279,7 @@ class PEAR
     public static function isError($data, $code = null)
     {
         if ($data instanceof PEAR_Error) {
-            if (is_null($code)) {
+            if ($code === null) {
                 return true;
             } elseif (is_string($code)) {
                 return $data->getMessage() == $code;
@@ -885,7 +885,7 @@ class PEAR_Error
             $this->callback = null;
         }
         if ($this->mode & PEAR_ERROR_PRINT) {
-            if (is_null($options) || is_int($options)) {
+            if ($options === null || is_int($options)) {
                 $format = "%s";
             } else {
                 $format = $options;
@@ -897,7 +897,7 @@ class PEAR_Error
         }
         if ($this->mode & PEAR_ERROR_DIE) {
             $msg = $this->getMessage();
-            if (is_null($options) || is_int($options)) {
+            if ($options === null || is_int($options)) {
                 $format = "%s";
                 if (substr($msg, -1) != "\n") {
                     $msg .= "\n";

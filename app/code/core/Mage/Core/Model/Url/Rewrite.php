@@ -123,7 +123,7 @@ class Mage_Core_Model_Url_Rewrite extends Mage_Core_Model_Abstract
             }
             $search->addTagsFilter($t);
         }
-        if (!is_null($this->getStoreId())) {
+        if ($this->getStoreId() !== null) {
             $search->addStoreFilter($this->getStoreId());
         }
 
@@ -197,13 +197,13 @@ class Mage_Core_Model_Url_Rewrite extends Mage_Core_Model_Abstract
         if (!Mage::isInstalled()) {
             return false;
         }
-        if (is_null($request)) {
+        if ($request === null) {
             $request = Mage::app()->getFrontController()->getRequest();
         }
-        if (is_null($response)) {
+        if ($response === null) {
             $response = Mage::app()->getFrontController()->getResponse();
         }
-        if (is_null($this->getStoreId()) || false===$this->getStoreId()) {
+        if ($this->getStoreId() === null || false===$this->getStoreId()) {
             $this->setStoreId(Mage::app()->getStore()->getId());
         }
 

@@ -93,7 +93,7 @@ class Mage_Core_Model_Resource_Config extends Mage_Core_Model_Resource_Db_Abstra
         // load all configuration records from database, which are not inherited
         $select = $read->select()
             ->from($this->getMainTable(), array('scope', 'scope_id', 'path', 'value'));
-        if (!is_null($condition)) {
+        if ($condition !== null) {
             $select->where($condition);
         }
         $rowset = $read->fetchAll($select);

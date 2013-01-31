@@ -327,10 +327,10 @@ class Net_Socket extends PEAR {
             return $this->raiseError('not connected');
         }
 
-        if (is_null($blocksize) && !OS_WINDOWS) {
+        if ($blocksize === null && !OS_WINDOWS) {
             return @fwrite($this->fp, $data);
         } else {
-            if (is_null($blocksize)) {
+            if ($blocksize === null) {
                 $blocksize = 1024;
             }
 

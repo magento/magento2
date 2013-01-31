@@ -149,7 +149,7 @@ class Mage_Connect_Package
             }
         } elseif (is_resource($source)) {
             $this->_loadResource($source);
-        } elseif (is_null($source)) {
+        } elseif ($source === null) {
             $this->_init();
         } else {
             throw new Mage_Exception('Invalid package source');
@@ -165,7 +165,7 @@ class Mage_Connect_Package
     protected function _init($definition=null)
     {
 
-        if (!is_null($definition)) {
+        if ($definition !== null) {
             $this->_packageXml = simplexml_load_string($definition);
         } else {
             $packageXmlStub = <<<END
@@ -201,7 +201,7 @@ END;
      */
     protected function _loadFile($filename='')
     {
-        if (is_null($this->_reader)) {
+        if ($this->_reader === null) {
             $this->_reader = new Mage_Connect_Package_Reader($filename);
         }
         $content = $this->_reader->load();
@@ -232,7 +232,7 @@ END;
     protected function _savePackage($path)
     {
         $fileName = $this->getReleaseFilename();
-        if (is_null($this->_writer)) {
+        if ($this->_writer === null) {
             $this->_writer = new Mage_Connect_Package_Writer($this->getContents(), $path.$fileName);
         }
         $this->_writer
@@ -1060,7 +1060,7 @@ END;
      */
     protected function validator()
     {
-        if(is_null($this->_validator)) {
+        if($this->_validator === null) {
             $this->_validator = new Mage_Connect_Validator();
         }
         return $this->_validator;

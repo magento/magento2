@@ -151,7 +151,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost('selected_products');
-        if (is_null($products)) {
+        if ($products === null) {
             $products = $this->getCategory()->getProductsPosition();
             return array_keys($products);
         }

@@ -78,7 +78,7 @@ class Mage_Page_Block_Template_Links extends Mage_Core_Block_Template
     public function addLink($label, $url = '', $title = '', $prepare = true, $urlParams = array(),
         $position = null, $liParams = null, $aParams = null, $beforeText = '', $afterText = ''
     ) {
-        if (is_null($label) || false === $label) {
+        if ($label === null || false === $label) {
             return $this;
         }
         $link = new Varien_Object(array(
@@ -156,7 +156,7 @@ class Mage_Page_Block_Template_Links extends Mage_Core_Block_Template
      */
     public function getCacheKeyInfo()
     {
-        if (is_null($this->_cacheKeyInfo)) {
+        if ($this->_cacheKeyInfo === null) {
             $links = array();
             if (!empty($this->_links)) {
                 foreach ($this->_links as $position => $link) {

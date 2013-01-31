@@ -81,11 +81,11 @@ class Mage_Adminhtml_Block_Catalog_Category_Abstract extends Mage_Adminhtml_Bloc
 
     public function getRoot($parentNodeCategory=null, $recursionLevel=3)
     {
-        if (!is_null($parentNodeCategory) && $parentNodeCategory->getId()) {
+        if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {
             return $this->getNode($parentNodeCategory, $recursionLevel);
         }
         $root = Mage::registry('root');
-        if (is_null($root)) {
+        if ($root === null) {
             $storeId = (int) $this->getRequest()->getParam('store');
 
             if ($storeId) {
@@ -191,7 +191,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Abstract extends Mage_Adminhtml_Bloc
     public function getRootIds()
     {
         $ids = $this->getData('root_ids');
-        if (is_null($ids)) {
+        if ($ids === null) {
             $ids = array();
             foreach (Mage::app()->getGroups() as $store) {
                 $ids[] = $store->getRootCategoryId();

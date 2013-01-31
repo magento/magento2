@@ -95,7 +95,7 @@ class Mage_Paygate_Helper_Data extends Mage_Core_Helper_Abstract
         $pattern = '%s %s %s - %s.';
         $texts = array($card, $amount, $operation, $result);
 
-        if (!is_null($lastTransactionId)) {
+        if ($lastTransactionId !== null) {
             $pattern .= ' %s.';
             $texts[] = $this->__('Authorize.Net Transaction ID %s', $lastTransactionId);
         }

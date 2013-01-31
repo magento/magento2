@@ -328,7 +328,7 @@ class Mage_Sitemap_Model_Resource_Catalog_Product extends Mage_Core_Model_Resour
      */
     protected function _getMediaGalleryModel()
     {
-        if (is_null($this->_mediaGalleryModel)) {
+        if ($this->_mediaGalleryModel === null) {
             /** @var $eavConfig Mage_Eav_Model_Config */
             $eavConfig = Mage::getModel('Mage_Eav_Model_Config');
             /** @var $eavConfig Mage_Eav_Model_Attribute */

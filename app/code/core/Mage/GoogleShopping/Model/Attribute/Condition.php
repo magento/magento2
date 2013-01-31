@@ -56,7 +56,7 @@ class Mage_GoogleShopping_Model_Attribute_Condition extends Mage_GoogleShopping_
         );
 
         $mapValue = $this->getProductAttributeValue($product);
-        if (!is_null($mapValue) && in_array($mapValue, $availableConditions)) {
+        if ($mapValue !== null && in_array($mapValue, $availableConditions)) {
             $condition = $mapValue;
         } else {
             $condition = self::CONDITION_NEW;

@@ -143,7 +143,7 @@ class Mage_Tag_Model_Resource_Product_Collection extends Mage_Catalog_Model_Reso
      */
     public function addStoreFilter($store = null)
     {
-        if (!is_null($store)) {
+        if ($store !== null) {
             $this->getSelect()->where('relation.store_id IN (?)', $store);
         }
         return $this;
@@ -222,7 +222,7 @@ class Mage_Tag_Model_Resource_Product_Collection extends Mage_Catalog_Model_Reso
             'prelation.product_id=e.entity_id'
         );
 
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $condition[] = $this->getConnection()->quoteInto('prelation.store_id = ?', $storeId);
         }
         $condition = join(' AND ', $condition);
@@ -303,7 +303,7 @@ class Mage_Tag_Model_Resource_Product_Collection extends Mage_Catalog_Model_Reso
         foreach ($this->getItems() as $item) {
             $tagsCollection = Mage::getModel('Mage_Tag_Model_Tag')->getResourceCollection();
 
-            if (!is_null($storeId)) {
+            if ($storeId !== null) {
                 $tagsCollection->addStoreFilter($storeId);
             }
 

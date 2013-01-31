@@ -62,7 +62,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Attribute_Backend_Groupprice_
 
         $this->_loadPriceDataSelect($select);
 
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             if ($websiteId == '0') {
                 $select->where('website_id = ?', $websiteId);
             } else {
@@ -111,11 +111,11 @@ abstract class Mage_Catalog_Model_Resource_Product_Attribute_Backend_Groupprice_
             $adapter->quoteInto('entity_id = ?', $productId)
         );
 
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             $conds[] = $adapter->quoteInto('website_id = ?', $websiteId);
         }
 
-        if (!is_null($priceId)) {
+        if ($priceId !== null) {
             $conds[] = $adapter->quoteInto($this->getIdFieldName() . ' = ?', $priceId);
         }
 

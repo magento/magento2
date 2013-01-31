@@ -37,7 +37,7 @@ class Mage_Adminhtml_Block_Report_Grid_Column_Renderer_Blanknumber extends Mage_
     protected function _getValue(Varien_Object $row)
     {
         $data = parent::_getValue($row);
-        if (!is_null($data)) {
+        if ($data !== null) {
             $value = $data * 1;
             return $value ? $value: ''; // fixed for showing blank cell in grid
             /**

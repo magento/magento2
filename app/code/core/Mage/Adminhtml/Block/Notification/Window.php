@@ -91,7 +91,7 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
      */
     public function canShow()
     {
-        if (!is_null($this->_available)) {
+        if ($this->_available !== null) {
             return $this->_available;
         }
 
@@ -105,7 +105,7 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
             return false;
         }
 
-        if (is_null($this->_available)) {
+        if ($this->_available === null) {
             $this->_available = $this->isShow();
         }
         return $this->_available;
@@ -139,7 +139,7 @@ class Mage_Adminhtml_Block_Notification_Window extends Mage_Adminhtml_Block_Noti
      */
     public function getSeverityIconsUrl()
     {
-        if (is_null($this->_severityIconsUrl)) {
+        if ($this->_severityIconsUrl === null) {
             $this->_severityIconsUrl =
                 (Mage::app()->getFrontController()->getRequest()->isSecure() ? 'https://' : 'http://')
                 . sprintf(Mage::getStoreConfig(self::XML_SEVERITY_ICONS_URL_PATH), Mage::getVersion(),

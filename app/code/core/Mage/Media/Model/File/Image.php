@@ -163,7 +163,7 @@ class Mage_Media_Model_File_Image extends Mage_Core_Model_Resource_Abstract
      */
     public function saveAs(Mage_Media_Model_Image $object, $extension=null)
     {
-        if(is_null($extension)) {
+        if($extension === null) {
             $extension = $object->getExtension();
         }
 

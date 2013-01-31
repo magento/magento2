@@ -363,7 +363,7 @@ class Mage_Wishlist_IndexController
                 if (isset($post['qty'][$itemId])) {
                     $qty = $this->_processLocalizedQty($post['qty'][$itemId]);
                 }
-                if (is_null($qty)) {
+                if ($qty === null) {
                     $qty = $item->getQty();
                     if (!$qty) {
                         $qty = 1;

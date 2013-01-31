@@ -72,7 +72,7 @@ class Mage_Review_Helper_Action_Pager extends Mage_Core_Helper_Abstract
      */
     protected function _loadItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = (array) $this->_getSession()->getData($this->_getStorageKey());
         }
     }

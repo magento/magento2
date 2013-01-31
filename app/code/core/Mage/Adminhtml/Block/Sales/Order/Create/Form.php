@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
     public function getCustomerSelectorDisplay()
     {
         $customerId = $this->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             return 'block';
         }
         return 'none';
@@ -71,7 +71,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
     {
         $storeId    = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if (!is_null($customerId) && !$storeId) {
+        if ($customerId !== null && !$storeId) {
             return 'block';
         }
         return 'none';
@@ -81,7 +81,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
     {
         $storeId    = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if (!is_null($customerId) && $storeId) {
+        if ($customerId !== null && $storeId) {
             return 'block';
         }
         return 'none';
@@ -90,7 +90,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
     public function getOrderDataJson()
     {
         $data = array();
-        if (!is_null($this->getCustomerId())) {
+        if ($this->getCustomerId() !== null) {
             $data['customer_id'] = $this->getCustomerId();
             $data['addresses'] = array();
 
@@ -103,7 +103,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Form extends Mage_Adminhtml_Block_
                     ->outputData(Mage_Customer_Model_Attribute_Data::OUTPUT_FORMAT_JSON);
             }
         }
-        if (!is_null($this->getStoreId())) {
+        if ($this->getStoreId() !== null) {
             $data['store_id'] = $this->getStoreId();
             $currency = Mage::app()->getLocale()->currency($this->getStore()->getCurrentCurrencyCode());
             $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();

@@ -79,7 +79,7 @@ class Mage_Checkout_Block_Multishipping_Billing extends Mage_Payment_Block_Form_
     public function getAddress()
     {
         $address = $this->getData('address');
-        if (is_null($address)) {
+        if ($address === null) {
             $address = Mage::getSingleton('Mage_Checkout_Model_Type_Multishipping')->getQuote()->getBillingAddress();
             $this->setData('address', $address);
         }

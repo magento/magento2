@@ -50,7 +50,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Date
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            if (is_null(self::$_format)) {
+            if (self::$_format === null) {
                 try {
                     self::$_format = Mage::app()->getLocale()->getDateFormat(
                         Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM

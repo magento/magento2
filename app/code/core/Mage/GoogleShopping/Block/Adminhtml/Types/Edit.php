@@ -69,7 +69,7 @@ class Mage_GoogleShopping_Block_Adminhtml_Types_Edit extends Mage_Adminhtml_Bloc
      */
     public function getHeaderText()
     {
-        if(!is_null(Mage::registry('current_item_type')->getId())) {
+        if(Mage::registry('current_item_type')->getId() !== null) {
             return $this->__('Edit attribute set mapping');
         } else {
             return $this->__('New attribute set mapping');

@@ -98,7 +98,7 @@ class Varien_Object implements ArrayAccess
     public function isDeleted($isDeleted = null)
     {
         $result = $this->_isDeleted;
-        if (!is_null($isDeleted)) {
+        if ($isDeleted !== null) {
             $this->_isDeleted = $isDeleted;
         }
         return $result;
@@ -213,7 +213,7 @@ class Varien_Object implements ArrayAccess
      */
     public function unsetData($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             $this->setData(array());
         } elseif (is_string($key)) {
             if (array_key_exists($key, $this->_data)) {
@@ -602,7 +602,7 @@ class Varien_Object implements ArrayAccess
      */
     public function setOrigData($key = null, $data = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             $this->_origData = $this->_data;
         } else {
             $this->_origData[$key] = $data;
@@ -618,7 +618,7 @@ class Varien_Object implements ArrayAccess
      */
     public function getOrigData($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             return $this->_origData;
         }
         return isset($this->_origData[$key]) ? $this->_origData[$key] : null;
@@ -658,7 +658,7 @@ class Varien_Object implements ArrayAccess
      */
     public function debug($data = null, &$objects = array())
     {
-        if (is_null($data)) {
+        if ($data === null) {
             $hash = spl_object_hash($this);
             if (!empty($objects[$hash])) {
                 return '*** RECURSION ***';

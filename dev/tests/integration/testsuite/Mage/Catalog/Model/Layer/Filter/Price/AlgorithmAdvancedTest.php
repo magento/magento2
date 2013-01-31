@@ -64,7 +64,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmAdvancedTest extends PHPUni
         /** @var $filter Mage_Catalog_Model_Layer_Filter_Price */
         $filter = Mage::getModel('Mage_Catalog_Model_Layer_Filter_Price');
         $filter->setLayer($layer)->setAttributeModel(new Varien_Object(array('attribute_code' => 'price')));
-        if (!is_null($request)) {
+        if ($request !== null) {
             $filter->apply($request, Mage::app()->getLayout()->createBlock('Mage_Core_Block_Text'));
             $interval = $filter->getInterval();
             if ($interval) {

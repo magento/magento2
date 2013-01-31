@@ -121,7 +121,7 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchyTest exte
         if ($selectedHandle) {
             $this->_model->setSelectedHandle($this::HANDLE_NAME);
         }
-        if (!is_null($hierarchy)) {
+        if ($hierarchy !== null) {
             $this->_model->setHierarchy($hierarchy);
         }
 

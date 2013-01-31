@@ -783,7 +783,7 @@ class Mage_Paypal_Model_Express_Checkout
             }
         }
 
-        if ($mayReturnEmpty && is_null($userSelectedOption)) {
+        if ($mayReturnEmpty && $userSelectedOption === null) {
             $options[] = new Varien_Object(array(
                 'is_default' => true,
                 'name'       => Mage::helper('Mage_Paypal_Helper_Data')->__('N/A'),
@@ -793,7 +793,7 @@ class Mage_Paypal_Model_Express_Checkout
             if ($calculateTax) {
                 $options[$i]->setTaxAmount($address->getTaxAmount());
             }
-        } elseif (is_null($userSelectedOption) && isset($options[$iMin])) {
+        } elseif ($userSelectedOption === null && isset($options[$iMin])) {
             $options[$iMin]->setIsDefault(true);
         }
 
@@ -802,7 +802,7 @@ class Mage_Paypal_Model_Express_Checkout
             usort($options, array(get_class($this),'cmpShippingOptions'));
             array_splice($options, 10);
             // User selected option will be always included in options list
-            if (!is_null($userSelectedOption) && !in_array($userSelectedOption, $options)) {
+            if ($userSelectedOption !== null && !in_array($userSelectedOption, $options)) {
                 $options[9] = $userSelectedOption;
             }
         }

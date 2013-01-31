@@ -60,7 +60,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Composite_Fieldset_Options extends Ma
         $renderer = $this->getOptionRender(
             $this->getGroupOfOption($option->getType())
         );
-        if (is_null($renderer['renderer'])) {
+        if ($renderer['renderer'] === null) {
             $renderer['renderer'] = $this->getLayout()->createBlock($renderer['block'])
                 ->setTemplate($renderer['template'])
                 ->setSkipJsReloadPrice(1);

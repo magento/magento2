@@ -77,7 +77,7 @@
      * @param string $headers the headers from the request
      */
     function HttpAuthentication($headers=null, $die=true) {
-      if(!is_null($headers)) {
+      if($headers !== null) {
         $_SERVER = $headers;
       }
       // moshe's fix for CGI
@@ -224,7 +224,7 @@
      * @access private
      */
     function GetParsedXML($request=null){
-      if(!is_null($request)) {
+      if($request !== null) {
         $this->log->LogRequest($request);
         $this->response = $request;
         #ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.'.');

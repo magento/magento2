@@ -155,7 +155,7 @@ class Mage_Core_Block_Html_Select extends Mage_Core_Block_Abstract
         $values = $this->getValue();
 
         if (!is_array($values)){
-            if (!is_null($values)) {
+            if ($values !== null) {
                 $values = array($values);
             } else {
                 $values = array();

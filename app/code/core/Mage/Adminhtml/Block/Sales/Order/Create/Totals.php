@@ -83,7 +83,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Totals extends Mage_Adminhtml_Bloc
         return $this->_getTotalRenderer($total->getCode())
             ->setTotal($total)
             ->setColspan($colspan)
-            ->setRenderingArea(is_null($area) ? -1 : $area)
+            ->setRenderingArea($area === null ? -1 : $area)
             ->toHtml();
     }
 

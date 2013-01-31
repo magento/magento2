@@ -60,7 +60,7 @@ class Mage_GoogleShopping_Model_Item extends Mage_Core_Model_Abstract
      */
     public function getServiceItem()
     {
-        if (is_null($this->_serviceItem)) {
+        if ($this->_serviceItem === null) {
             $this->_serviceItem = Mage::getModel('Mage_GoogleShopping_Model_Service_Item')
                 ->setStoreId($this->getStoreId());
         }
@@ -175,7 +175,7 @@ class Mage_GoogleShopping_Model_Item extends Mage_Core_Model_Abstract
      */
     public function getProduct()
     {
-        if (is_null($this->getData('product')) && !is_null($this->getProductId())) {
+        if ($this->getData('product') === null && $this->getProductId() !== null) {
             $product = Mage::getModel('Mage_Catalog_Model_Product')
                 ->setStoreId($this->getStoreId())
                 ->load($this->getProductId());

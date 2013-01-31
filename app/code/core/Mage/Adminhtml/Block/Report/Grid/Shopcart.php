@@ -62,7 +62,7 @@ class Mage_Adminhtml_Block_Report_Grid_Shopcart extends Mage_Adminhtml_Block_Wid
      */
     public function getCurrentCurrencyCode()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             reset($this->_storeIds);
             $this->_currentCurrencyCode = (count($this->_storeIds) > 0)
                 ? Mage::app()->getStore(current($this->_storeIds))->getBaseCurrencyCode()

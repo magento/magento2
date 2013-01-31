@@ -103,7 +103,7 @@ class Mage_Backend_Model_Menu_Config_Menu extends Magento_Config_XmlAbstract
      */
     protected function _getDomConfigModel()
     {
-        if (is_null($this->_domConfig)) {
+        if ($this->_domConfig === null) {
             $this->_domConfig = new Mage_Backend_Model_Menu_Config_Menu_Dom(
                 $this->_getInitialXml(),
                 $this->_getIdAttributes()

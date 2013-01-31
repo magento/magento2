@@ -242,7 +242,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
      */
     public function getStatus()
     {
-        if (is_null($this->_getData('status'))) {
+        if ($this->_getData('status') === null) {
             $this->setData('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
         }
         return $this->_getData('status');
@@ -320,7 +320,7 @@ class Mage_Catalog_Model_Product extends Mage_Catalog_Model_Abstract
     public function getCategory()
     {
         $category = $this->getData('category');
-        if (is_null($category) && $this->getCategoryId()) {
+        if ($category === null && $this->getCategoryId()) {
             $category = Mage::getModel('Mage_Catalog_Model_Category')->load($this->getCategoryId());
             $this->setCategory($category);
         }

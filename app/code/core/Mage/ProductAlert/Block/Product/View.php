@@ -95,7 +95,7 @@ class Mage_ProductAlert_Block_Product_View extends Mage_Core_Block_Template
      */
     protected function _getHelper()
     {
-        if (is_null($this->_helper)) {
+        if ($this->_helper === null) {
             $this->_helper = Mage::helper('Mage_ProductAlert_Helper_Data');
         }
         return $this->_helper;

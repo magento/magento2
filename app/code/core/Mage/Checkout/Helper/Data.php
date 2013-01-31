@@ -68,7 +68,7 @@ class Mage_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getRequiredAgreementIds()
     {
-        if (is_null($this->_agreements)) {
+        if ($this->_agreements === null) {
             if (!Mage::getStoreConfigFlag('checkout/options/enable_agreements')) {
                 $this->_agreements = array();
             } else {

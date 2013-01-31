@@ -85,7 +85,7 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmBaseTest extends PHPUnit_Fr
             $collection->getPriceStandardDeviation(),
             $collection->getSize()
         );
-        if (!is_null($intervalsNumber)) {
+        if ($intervalsNumber !== null) {
             $this->assertEquals($intervalsNumber, $this->_model->getIntervalsNumber());
         }
 

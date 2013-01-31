@@ -403,7 +403,7 @@ class SOAP_Client extends SOAP_Client_Overload
      */
     function setOpt($category, $option, $value = null)
     {
-        if (!is_null($value)) {
+        if ($value !== null) {
             if (!isset($this->_options[$category])) {
                 $this->_options[$category] = array();
             }

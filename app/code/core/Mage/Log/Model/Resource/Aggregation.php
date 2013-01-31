@@ -26,7 +26,7 @@
 
 
 /**
- * Log aggregation resource model 
+ * Log aggregation resource model
  *
  * @category    Mage
  * @package     Mage_Log
@@ -109,7 +109,7 @@ class Mage_Log_Model_Resource_Aggregation extends Mage_Core_Model_Resource_Db_Ab
     public function saveLog($data, $id = null)
     {
         $adapter = $this->_getWriteAdapter();
-        if (is_null($id)) {
+        if ($id === null) {
             $adapter->insert($this->getTable('log_summary'), $data);
         } else {
             $condition = $adapter->quoteInto('summary_id = ?', $id);
@@ -129,7 +129,7 @@ class Mage_Log_Model_Resource_Aggregation extends Mage_Core_Model_Resource_Db_Ab
             'add_date < ?' => $date,
             'customer_count = 0',
             'visitor_count = 0'
-        ); 
+        );
         $adapter->delete($this->getTable('log_summary'), $condition);
     }
 

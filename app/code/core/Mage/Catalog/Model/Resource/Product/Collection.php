@@ -255,7 +255,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getPriceExpression($select)
     {
-        if (is_null($this->_priceExpression)) {
+        if ($this->_priceExpression === null) {
             $this->_preparePriceExpressionParameters($select);
         }
         return $this->_priceExpression;
@@ -269,7 +269,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getAdditionalPriceExpression($select)
     {
-        if (is_null($this->_additionalPriceExpression)) {
+        if ($this->_additionalPriceExpression === null) {
             $this->_preparePriceExpressionParameters($select);
         }
         return $this->_additionalPriceExpression;
@@ -876,7 +876,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
-        $countSelect = (is_null($select)) ?
+        $countSelect = ($select === null) ?
             $this->_getClearSelect() :
             $this->_buildClearSelect($select);
         $countSelect->columns('COUNT(DISTINCT e.entity_id)');
@@ -930,7 +930,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     protected function _buildClearSelect($select = null)
     {
-        if (is_null($select)) {
+        if ($select === null) {
             $select = clone $this->getSelect();
         }
         $select->reset(Zend_Db_Select::ORDER);
@@ -1248,7 +1248,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
             $ids = $this->_allIdsCache;
         }
 
-        if (is_null($ids)) {
+        if ($ids === null) {
             $ids = $this->getAllIds();
             $this->setAllIdsCache($ids);
         }
@@ -1279,17 +1279,17 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     {
         $this->_productLimitationFilters['use_price_index'] = true;
 
-        if (!isset($this->_productLimitationFilters['customer_group_id']) && is_null($customerGroupId)) {
+        if (!isset($this->_productLimitationFilters['customer_group_id']) && $customerGroupId === null) {
             $customerGroupId = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId();
         }
-        if (!isset($this->_productLimitationFilters['website_id']) && is_null($websiteId)) {
+        if (!isset($this->_productLimitationFilters['website_id']) && $websiteId === null) {
             $websiteId       = Mage::app()->getStore($this->getStoreId())->getWebsiteId();
         }
 
-        if (!is_null($customerGroupId)) {
+        if ($customerGroupId !== null) {
             $this->_productLimitationFilters['customer_group_id'] = $customerGroupId;
         }
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             $this->_productLimitationFilters['website_id'] = $websiteId;
         }
 
@@ -2016,7 +2016,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getMaxPrice()
     {
-        if (is_null($this->_maxPrice)) {
+        if ($this->_maxPrice === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2030,7 +2030,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getMinPrice()
     {
-        if (is_null($this->_minPrice)) {
+        if ($this->_minPrice === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2044,7 +2044,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getPriceStandardDeviation()
     {
-        if (is_null($this->_priceStandardDeviation)) {
+        if ($this->_priceStandardDeviation === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2059,7 +2059,7 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     public function getPricesCount()
     {
-        if (is_null($this->_pricesCount)) {
+        if ($this->_pricesCount === null) {
             $this->_prepareStatisticsData();
         }
 

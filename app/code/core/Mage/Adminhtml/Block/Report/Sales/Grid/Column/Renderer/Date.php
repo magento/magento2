@@ -44,7 +44,7 @@ class Mage_Adminhtml_Block_Report_Sales_Grid_Column_Renderer_Date
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            if (is_null(self::$_format)) {
+            if (self::$_format === null) {
                 try {
                     $localeCode = Mage::app()->getLocale()->getLocaleCode();
                     $localeData = new Zend_Locale_Data;

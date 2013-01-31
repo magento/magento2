@@ -362,7 +362,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
      */
     public function hashPassword($password, $salt = null)
     {
-        return Mage::helper('Mage_Core_Helper_Data')->getHash($password, !is_null($salt) ? $salt : 2);
+        return Mage::helper('Mage_Core_Helper_Data')->getHash($password, $salt !== null ? $salt : 2);
     }
 
     /**
@@ -609,7 +609,7 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
     public function sendPasswordReminderEmail()
     {
         $storeId = $this->getStoreId();
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->_getWebsiteStoreId();
         }
 

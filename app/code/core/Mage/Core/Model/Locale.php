@@ -457,7 +457,7 @@ class Mage_Core_Model_Locale
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true)
     {
-        if (is_null($locale)) {
+        if ($locale === null) {
             $locale = $this->getLocale();
         }
 
@@ -584,7 +584,7 @@ class Mage_Core_Model_Locale
      */
     public function getNumber($value)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

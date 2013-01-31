@@ -72,7 +72,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View_Sales extends Mage_Adminhtml_B
         $this->_groupedCollection = array();
 
         foreach ($this->_collection as $sale) {
-            if (!is_null($sale->getStoreId())) {
+            if ($sale->getStoreId() !== null) {
                 $store      = Mage::app()->getStore($sale->getStoreId());
                 $websiteId  = $store->getWebsiteId();
                 $groupId    = $store->getGroupId();

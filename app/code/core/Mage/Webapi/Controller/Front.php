@@ -118,7 +118,7 @@ class Mage_Webapi_Controller_Front implements Mage_Core_Controller_FrontInterfac
      */
     protected function _getDispatcher()
     {
-        if (is_null($this->_dispatcher)) {
+        if ($this->_dispatcher === null) {
             $this->_dispatcher = $this->_dispatcherFactory->get($this->determineApiType());
         }
         return $this->_dispatcher;
@@ -146,7 +146,7 @@ class Mage_Webapi_Controller_Front implements Mage_Core_Controller_FrontInterfac
      */
     public function determineApiType()
     {
-        if (is_null($this->_apiType)) {
+        if ($this->_apiType === null) {
             $request = $this->_application->getRequest();
             $apiRoute = $this->_routeFactory->createRoute(
                 'Mage_Webapi_Controller_Router_Route_Webapi',

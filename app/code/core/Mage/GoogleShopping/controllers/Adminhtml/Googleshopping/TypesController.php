@@ -59,7 +59,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_TypesController extends Mage_
 
         Mage::register('current_item_type', Mage::getModel('Mage_GoogleShopping_Model_Type'));
         $typeId = $this->getRequest()->getParam('id');
-        if (!is_null($typeId)) {
+        if ($typeId !== null) {
             Mage::registry('current_item_type')->load($typeId);
         }
         return $this;
@@ -167,7 +167,7 @@ class Mage_GoogleShopping_Adminhtml_Googleshopping_TypesController extends Mage_
         /** @var $typeModel Mage_GoogleShopping_Model_Type */
         $typeModel = Mage::getModel('Mage_GoogleShopping_Model_Type');
         $id = $this->getRequest()->getParam('type_id');
-        if (!is_null($id)) {
+        if ($id !== null) {
             $typeModel->load($id);
         }
 

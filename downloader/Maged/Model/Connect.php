@@ -352,7 +352,7 @@ class Maged_Model_Connect extends Maged_Model
      */
     public function getPreferredState()
     {
-        if (is_null($this->get('preferred_state'))) {
+        if ($this->get('preferred_state') === null) {
             $connectConfig = $this->connect()->getConfig();
             $this->set('preferred_state', $connectConfig->__get('preferred_state'));
         }
@@ -366,7 +366,7 @@ class Maged_Model_Connect extends Maged_Model
      */
     public function getProtocol()
     {
-        if (is_null($this->get('protocol'))) {
+        if ($this->get('protocol') === null) {
             $connectConfig = $this->connect()->getConfig();
             $this->set('protocol', $connectConfig->__get('protocol'));
         }

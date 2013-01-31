@@ -217,10 +217,10 @@ class Varien_Db_Adapter_Mysqli extends Zend_Db_Adapter_Mysqli
 
         $sql = 'ALTER TABLE `'.$tableName.'` ADD CONSTRAINT `'.$fkName.'`'
             . 'FOREIGN KEY (`'.$keyName.'`) REFERENCES `'.$refTableName.'` (`'.$refKeyName.'`)';
-        if (!is_null($onDelete)) {
+        if ($onDelete !== null) {
             $sql .= ' ON DELETE ' . strtoupper($onDelete);
         }
-        if (!is_null($onUpdate)) {
+        if ($onUpdate !== null) {
             $sql .= ' ON UPDATE ' . strtoupper($onUpdate);
         }
 

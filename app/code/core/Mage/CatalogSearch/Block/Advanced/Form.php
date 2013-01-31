@@ -110,7 +110,7 @@ class Mage_CatalogSearch_Block_Advanced_Form extends Mage_Core_Block_Template
     public function getAvailableCurrencies()
     {
         $currencies = $this->getData('_currencies');
-        if (is_null($currencies)) {
+        if ($currencies === null) {
             $currencies = array();
             $codes = Mage::app()->getStore()->getAvailableCurrencyCodes(true);
             if (is_array($codes) && count($codes)) {
@@ -250,7 +250,7 @@ class Mage_CatalogSearch_Block_Advanced_Form extends Mage_Core_Block_Template
     protected function _getSelectBlock()
     {
         $block = $this->getData('_select_block');
-        if (is_null($block)) {
+        if ($block === null) {
             $block = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select');
             $this->setData('_select_block', $block);
         }
@@ -260,7 +260,7 @@ class Mage_CatalogSearch_Block_Advanced_Form extends Mage_Core_Block_Template
     protected function _getDateBlock()
     {
         $block = $this->getData('_date_block');
-        if (is_null($block)) {
+        if ($block === null) {
             $block = $this->getLayout()->createBlock('Mage_Core_Block_Html_Date');
             $this->setData('_date_block', $block);
         }

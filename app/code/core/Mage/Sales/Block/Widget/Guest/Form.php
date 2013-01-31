@@ -72,7 +72,7 @@ class Mage_Sales_Block_Widget_Guest_Form
     protected function _getFormOptions()
     {
         $options = $this->getData('identifymeby_options');
-        if (is_null($options)) {
+        if ($options === null) {
             $options = array();
             $options[] = array(
                 'value' => 'email',

@@ -1677,7 +1677,7 @@ class Mage_Usa_Model_Shipping_Carrier_Usps
      */
     public function getContainerTypes(Varien_Object $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             return $this->_getAllowedContainers();
         }
         return $this->_isUSCountry($params->getCountryRecipient()) ? array() : $this->_getAllowedContainers($params);

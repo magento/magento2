@@ -220,7 +220,7 @@ class Mage_Catalog_Model_Resource_Product_Compare_Item_Collection
      */
     public function getComparableAttributes()
     {
-        if (is_null($this->_comparableAttributes)) {
+        if ($this->_comparableAttributes === null) {
             $this->_comparableAttributes = array();
             $setIds = $this->_getAttributeSetIds();
             if ($setIds) {

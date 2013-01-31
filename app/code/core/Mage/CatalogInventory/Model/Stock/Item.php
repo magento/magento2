@@ -233,7 +233,7 @@ class Mage_CatalogInventory_Model_Stock_Item extends Mage_Core_Model_Abstract
     public function getStoreId()
     {
         $storeId = $this->getData('store_id');
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = Mage::app()->getStore()->getId();
             $this->setData('store_id', $storeId);
         }
@@ -854,7 +854,7 @@ class Mage_CatalogInventory_Model_Stock_Item extends Mage_Core_Model_Abstract
                             $qty += $childProduct->getStockItem()->getStockQty();
                         }
                     }
-                    if (is_null($stockQty) || $qty < $stockQty) {
+                    if ($stockQty === null || $qty < $stockQty) {
                         $stockQty = $qty;
                     }
                 }

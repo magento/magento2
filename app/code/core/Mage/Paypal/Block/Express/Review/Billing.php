@@ -40,7 +40,7 @@ class Mage_Paypal_Block_Express_Review_Billing extends Mage_Checkout_Block_Onepa
      */
     public function getAddress()
     {
-        if (is_null($this->_address)) {
+        if ($this->_address === null) {
             if ($this->isCustomerLoggedIn() || $this->getQuote()->getBillingAddress()) {
                 $this->_address = $this->getQuote()->getBillingAddress();
                 if (!$this->_address->getFirstname()) {

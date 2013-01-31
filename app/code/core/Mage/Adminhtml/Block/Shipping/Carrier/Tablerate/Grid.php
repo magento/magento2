@@ -79,7 +79,7 @@ class Mage_Adminhtml_Block_Shipping_Carrier_Tablerate_Grid extends Mage_Adminhtm
      */
     public function getWebsiteId()
     {
-        if (is_null($this->_websiteId)) {
+        if ($this->_websiteId === null) {
             $this->_websiteId = Mage::app()->getWebsite()->getId();
         }
         return $this->_websiteId;

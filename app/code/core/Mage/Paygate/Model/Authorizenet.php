@@ -977,10 +977,10 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
      */
     public function getCardsStorage($payment = null)
     {
-        if (is_null($payment)) {
+        if ($payment === null) {
             $payment = $this->getInfoInstance();
         }
-        if (is_null($this->_cardsStorage)) {
+        if ($this->_cardsStorage === null) {
             $this->_initCardsStorage($payment);
         }
         return $this->_cardsStorage;
@@ -994,7 +994,7 @@ class Mage_Paygate_Model_Authorizenet extends Mage_Payment_Model_Method_Cc
      */
     public function isPartialAuthorization($payment = null)
     {
-        if (is_null($payment)) {
+        if ($payment === null) {
             $payment = $this->getInfoInstance();
         }
         return $payment->getAdditionalInformation($this->_splitTenderIdKey);

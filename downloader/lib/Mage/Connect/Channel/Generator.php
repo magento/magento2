@@ -44,7 +44,7 @@ class Mage_Connect_Channel_Generator extends Mage_Xml_Generator
 
     public function getGenerator()
     {
-        if (is_null($this->_generator)) {
+        if ($this->_generator === null) {
             $this->_generator = new Mage_Xml_Generator();
         }
         return $this->_generator;

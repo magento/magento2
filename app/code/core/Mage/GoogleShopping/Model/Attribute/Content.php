@@ -44,11 +44,11 @@ class Mage_GoogleShopping_Model_Attribute_Content extends Mage_GoogleShopping_Mo
     {
         $mapValue = $this->getProductAttributeValue($product);
         $description = $this->getGroupAttributeDescription();
-        if (!is_null($description)) {
+        if ($description !== null) {
             $mapValue = $description->getProductAttributeValue($product);
         }
 
-        if (!is_null($mapValue)) {
+        if ($mapValue !== null) {
             $descrText = $mapValue;
         } elseif ($product->getDescription()) {
             $descrText = $product->getDescription();

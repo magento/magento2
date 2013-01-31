@@ -85,7 +85,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Store
         $skipEmptyStoresLabel = $this->_getShowEmptyStoresLabelFlag();
         $origStores = $row->getData($this->getColumn()->getIndex());
 
-        if (is_null($origStores) && $row->getStoreName()) {
+        if ($origStores === null && $row->getStoreName()) {
             $scopes = array();
             foreach (explode("\n", $row->getStoreName()) as $k => $label) {
                 $scopes[] = str_repeat('&nbsp;', $k * 3) . $label;
@@ -134,7 +134,7 @@ class Mage_Backend_Block_Widget_Grid_Column_Renderer_Store
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
         $origStores = $row->getData($this->getColumn()->getIndex());
 
-        if (is_null($origStores) && $row->getStoreName()) {
+        if ($origStores === null && $row->getStoreName()) {
             $scopes = array();
             foreach (explode("\n", $row->getStoreName()) as $k => $label) {
                 $scopes[] = str_repeat(' ', $k * 3) . $label;

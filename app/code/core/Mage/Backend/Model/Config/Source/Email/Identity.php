@@ -56,7 +56,7 @@ class Mage_Backend_Model_Config_Source_Email_Identity implements Mage_Core_Model
      */
     public function toOptionArray()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = array();
             /** @var $section Mage_Backend_Model_Config_Structure_Element_Section */
             $section = $this->_configStructure->getElement('trans_email');

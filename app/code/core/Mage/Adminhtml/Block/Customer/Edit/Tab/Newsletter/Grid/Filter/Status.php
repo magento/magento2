@@ -61,7 +61,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Newsletter_Grid_Filter_Status exten
 
     public function getCondition()
     {
-        if(is_null($this->getValue())) {
+        if($this->getValue() === null) {
             return null;
         }
 

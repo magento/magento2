@@ -178,7 +178,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
         if (!($date instanceof Zend_Date) && $date && !strtotime($date)) {
             return '';
         }
-        if (is_null($date)) {
+        if ($date === null) {
             $date = Mage::app()->getLocale()->date(
                 Mage::getSingleton('Mage_Core_Model_Date')->gmtTimestamp(),
                 null,
@@ -211,7 +211,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
             return $time;
         }
 
-        if (is_null($time)) {
+        if ($time === null) {
             $date = Mage::app()->getLocale()->date(time());
         } else if ($time instanceof Zend_Date) {
             $date = $time;
@@ -263,7 +263,7 @@ class Mage_Core_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getRandomString($len, $chars = null)
     {
-        if (is_null($chars)) {
+        if ($chars === null) {
             $chars = self::CHARS_LOWERS . self::CHARS_UPPERS . self::CHARS_DIGITS;
         }
         mt_srand(10000000*(double)microtime());

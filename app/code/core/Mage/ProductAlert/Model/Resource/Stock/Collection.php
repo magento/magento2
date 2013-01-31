@@ -72,7 +72,7 @@ class Mage_ProductAlert_Model_Resource_Stock_Collection extends Mage_Core_Model_
     public function addWebsiteFilter($website)
     {
         $adapter = $this->getConnection();
-        if (is_null($website) || $website == 0) {
+        if ($website === null || $website == 0) {
             return $this;
         }
         if (is_array($website)) {

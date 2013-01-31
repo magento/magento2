@@ -219,7 +219,7 @@ class Mage_Eav_Model_Resource_Entity_Attribute extends Mage_Core_Model_Resource_
     {
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
-            if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
+            if (!isset($frontendLabel[0]) || $frontendLabel[0] === null || $frontendLabel[0] == '') {
                 Mage::throwException($this->_helper('Mage_Eav_Helper_Data')->__('Frontend label is not defined'));
             }
             $object->setFrontendLabel($frontendLabel[0])

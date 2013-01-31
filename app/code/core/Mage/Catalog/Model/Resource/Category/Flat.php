@@ -134,7 +134,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             return (int)Mage::app()->getStore()->getId();
         }
         return $this->_storeId;
@@ -414,7 +414,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
      */
     public function getNodeById($nodeId, $nodes = null)
     {
-        if (is_null($nodes)) {
+        if ($nodes === null) {
             $nodes = $this->getNodes($nodeId);
         }
         if (isset($nodes[$nodeId])) {
@@ -902,7 +902,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
      */
     public function synchronize($category = null, $storeIds = array())
     {
-        if (is_null($category)) {
+        if ($category === null) {
             if (empty($storeIds)) {
                 $storeIds = null;
             }
@@ -1398,7 +1398,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
      */
     public function getStoresRootCategories($storeIds = null)
     {
-        if (is_null($this->_storesRootCategories)) {
+        if ($this->_storesRootCategories === null) {
             $select = $this->_getWriteAdapter()->select()
                 ->from(array('cs' => $this->getTable('core_store')), array('store_id'))
                 ->join(
@@ -1409,7 +1409,7 @@ class Mage_Catalog_Model_Resource_Category_Flat extends Mage_Index_Model_Resourc
             $this->_storesRootCategories = $this->_getWriteAdapter()->fetchPairs($select);
         }
 
-        if (!is_null($storeIds)) {
+        if ($storeIds !== null) {
             if (!is_array($storeIds)) {
                 $storeIds = array($storeIds);
             }

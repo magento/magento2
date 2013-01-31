@@ -185,7 +185,7 @@ class Mage_Reports_Model_Resource_Report_Product_Viewed extends Mage_Sales_Model
         );
 
         $havingPart = array($adapter->prepareSqlCondition($viewsNumExpr, array('gt' => 0)));
-        if (!is_null($subSelect)) {
+        if ($subSelect !== null) {
             $subSelectHavingPart = $this->_makeConditionFromDateRangeSelect($subSelect, 'period');
             if ($subSelectHavingPart) {
                 $havingPart[] = '(' . $subSelectHavingPart . ')';

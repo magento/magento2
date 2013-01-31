@@ -102,7 +102,7 @@ class Mage_Webapi_Helper_Data extends Mage_Core_Helper_Abstract
      */
     protected function _formatParamData($data, $dataType, Mage_Webapi_Model_ConfigAbstract $apiConfig)
     {
-        if ($this->_configHelper->isTypeSimple($dataType) || is_null($data)) {
+        if ($this->_configHelper->isTypeSimple($dataType) || $data === null) {
             $formattedData = $data;
         } elseif ($this->_configHelper->isArrayType($dataType)) {
             $formattedData = $this->_formatArrayData($data, $dataType, $apiConfig);

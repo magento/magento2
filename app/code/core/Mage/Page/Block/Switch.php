@@ -150,7 +150,7 @@ class Mage_Page_Block_Switch extends Mage_Core_Block_Template
 
     public function isStoreInUrl()
     {
-        if (is_null($this->_storeInUrl)) {
+        if ($this->_storeInUrl === null) {
             $this->_storeInUrl = Mage::getStoreConfigFlag(Mage_Core_Model_Store::XML_PATH_STORE_IN_URL);
         }
         return $this->_storeInUrl;

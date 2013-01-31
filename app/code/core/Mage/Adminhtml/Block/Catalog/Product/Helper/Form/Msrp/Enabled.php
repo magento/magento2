@@ -40,7 +40,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Helper_Form_Msrp_Enabled extends Vari
      */
     public function getElementHtml()
     {
-        if (is_null($this->getValue())) {
+        if ($this->getValue() === null) {
             $this->setValue(Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type_Enabled::MSRP_ENABLE_USE_CONFIG);
         }
         return parent::getElementHtml();

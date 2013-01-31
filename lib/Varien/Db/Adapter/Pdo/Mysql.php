@@ -1631,7 +1631,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         if ($columnData['PRIMARY'] === true) {
             $options['primary'] = true;
         }
-        if (!is_null($columnData['DEFAULT'])
+        if ($columnData['DEFAULT'] !== null
             && $type != Varien_Db_Ddl_Table::TYPE_TEXT
         ) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
@@ -1733,7 +1733,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
     {
         $definition = array_change_key_case($definition, CASE_UPPER);
         $definition['COLUMN_TYPE'] = $this->_getColumnTypeByDdl($definition);
-        if (array_key_exists('DEFAULT', $definition) && is_null($definition['DEFAULT'])) {
+        if (array_key_exists('DEFAULT', $definition) && $definition['DEFAULT'] === null) {
             unset($definition['DEFAULT']);
         }
 
@@ -2317,7 +2317,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
             } else {
                 $cDefault = false;
             }
-        } else if (is_null($cDefault) && $cNullable) {
+        } else if ($cDefault === null && $cNullable) {
             $cDefault = new Zend_Db_Expr('NULL');
         }
 
@@ -2769,7 +2769,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         }
 
         // return null
-        if (is_null($value) && $column['NULLABLE']) {
+        if ($value === null && $column['NULLABLE']) {
             return null;
         }
 
@@ -3032,7 +3032,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     public function getSubstringSql($stringExpression, $pos, $len = null)
     {
-        if (is_null($len)) {
+        if ($len === null) {
             return new Zend_Db_Expr(sprintf('SUBSTRING(%s, %s)', $stringExpression, $pos));
         }
         return new Zend_Db_Expr(sprintf('SUBSTRING(%s, %s, %s)', $stringExpression, $pos, $len));

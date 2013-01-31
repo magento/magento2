@@ -48,7 +48,7 @@ class Mage_Core_Model_Source_Urlrewrite_Types
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = array(
                 self::SYSTEM => Mage::helper('Mage_Adminhtml_Helper_Data')->__('System'),
                 self::CUSTOM => Mage::helper('Mage_Adminhtml_Helper_Data')->__('Custom')

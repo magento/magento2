@@ -69,7 +69,7 @@ class Mage_Backend_Model_Menu extends ArrayObject
      */
     public function add(Mage_Backend_Model_Menu_Item $item, $parentId = null, $index = null)
     {
-        if (!is_null($parentId)) {
+        if ($parentId !== null) {
             $parentItem = $this->get($parentId);
             if ($parentItem === null) {
                 throw new InvalidArgumentException("Item with identifier {$parentId} does not exist");
@@ -205,7 +205,7 @@ class Mage_Backend_Model_Menu extends ArrayObject
             if ($item->isAllowed() && !$item->isDisabled()) {
                 if ($item->hasChildren()) {
                     $result = $item->getChildren()->getFirstAvailable();
-                    if (false == is_null($result)) {
+                    if (false === ($result === null)) {
                         break;
                     }
                 } else {

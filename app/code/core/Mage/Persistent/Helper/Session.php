@@ -62,7 +62,7 @@ class Mage_Persistent_Helper_Session extends Mage_Core_Helper_Data
      */
     public function getSession()
     {
-        if (is_null($this->_sessionModel)) {
+        if ($this->_sessionModel === null) {
             $this->_sessionModel = Mage::getModel('Mage_Persistent_Model_Session');
             $this->_sessionModel->loadByCookieKey();
         }
@@ -98,10 +98,10 @@ class Mage_Persistent_Helper_Session extends Mage_Core_Helper_Data
      */
     public function isRememberMeChecked()
     {
-        if (is_null($this->_isRememberMeChecked)) {
+        if ($this->_isRememberMeChecked === null) {
             //Try to get from checkout session
             $isRememberMeChecked = Mage::getSingleton('Mage_Checkout_Model_Session')->getRememberMeChecked();
-            if (!is_null($isRememberMeChecked)) {
+            if ($isRememberMeChecked !== null) {
                 $this->_isRememberMeChecked = $isRememberMeChecked;
                 Mage::getSingleton('Mage_Checkout_Model_Session')->unsRememberMeChecked();
                 return $isRememberMeChecked;
@@ -132,7 +132,7 @@ class Mage_Persistent_Helper_Session extends Mage_Core_Helper_Data
      */
     public function getCustomer()
     {
-        if (is_null($this->_customer)) {
+        if ($this->_customer === null) {
             $customerId = $this->getSession()->getCustomerId();
             $this->_customer = Mage::getModel('Mage_Customer_Model_Customer')->load($customerId);
         }

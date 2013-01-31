@@ -77,7 +77,7 @@ class Mage_Core_Model_Date
         $result = true;
         $offset = 0;
 
-        if (!is_null($timezone)){
+        if ($timezone !== null){
             $oldzone = @date_default_timezone_get();
             $result = date_default_timezone_set($timezone);
         }
@@ -86,7 +86,7 @@ class Mage_Core_Model_Date
             $offset = gmmktime(0, 0, 0, 1, 2, 1970) - mktime(0, 0, 0, 1, 2, 1970);
         }
 
-        if (!is_null($timezone)){
+        if ($timezone !== null){
             date_default_timezone_set($oldzone);
         }
 
@@ -102,7 +102,7 @@ class Mage_Core_Model_Date
      */
     public function gmtDate($format = null, $input = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
 
@@ -126,7 +126,7 @@ class Mage_Core_Model_Date
      */
     public function date($format = null, $input = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
 
@@ -142,7 +142,7 @@ class Mage_Core_Model_Date
      */
     public function gmtTimestamp($input = null)
     {
-        if (is_null($input)) {
+        if ($input === null) {
             return gmdate('U');
         } else if (is_numeric($input)) {
             $result = $input;
@@ -172,7 +172,7 @@ class Mage_Core_Model_Date
      */
     public function timestamp($input = null)
     {
-        if (is_null($input)) {
+        if ($input === null) {
             $result = $this->gmtTimestamp();
         } else if (is_numeric($input)) {
             $result = $input;

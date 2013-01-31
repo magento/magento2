@@ -328,7 +328,7 @@ class Mage_Sales_Model_Quote_Item extends Mage_Sales_Model_Quote_Item_Abstract
     public function getQtyOptions()
     {
         $qtyOptions = $this->getData('qty_options');
-        if (is_null($qtyOptions)) {
+        if ($qtyOptions === null) {
             $productIds = array();
             $qtyOptions = array();
             foreach ($this->getOptions() as $option) {

@@ -192,7 +192,7 @@ class Mage_Catalog_Block_Product_View_Options extends Mage_Core_Block_Template
         $renderer = $this->getOptionRender(
             $this->getGroupOfOption($option->getType())
         );
-        if (is_null($renderer['renderer'])) {
+        if ($renderer['renderer'] === null) {
             $renderer['renderer'] = $this->getLayout()->createBlock($renderer['block'])
                 ->setTemplate($renderer['template']);
         }

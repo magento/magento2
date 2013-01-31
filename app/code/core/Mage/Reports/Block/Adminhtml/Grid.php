@@ -109,7 +109,7 @@ class Mage_Reports_Block_Adminhtml_Grid extends Mage_Backend_Block_Widget_Grid
     {
         $filter = $this->getParam($this->getVarNameFilter(), null);
 
-        if (is_null($filter)) {
+        if ($filter === null) {
             $filter = $this->_defaultFilter;
         }
 

@@ -47,7 +47,7 @@ $_fullInfo  = $this->getFullTaxInfo();
 
             <?php foreach ($rates as $rate): ?>
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                <?php if (!is_null($rate['percent'])): ?>
+                <?php if ($rate['percent'] !== null): ?>
                     <td class="label"><?php echo $rate['title']; ?> (<?php echo (float)$rate['percent']; ?>%)<br /></td>
                 <?php else: ?>
                     <td class="label"><?php echo $rate['title']; ?><br /></td>
@@ -72,7 +72,7 @@ $_fullInfo  = $this->getFullTaxInfo();
             ?>
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                <?php if (!is_null($info['percent'])): ?>
+                <?php if ($info['percent'] !== null): ?>
                     <td class="label"><?php echo $this->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
                 <?php else: ?>
                     <td class="label"><?php echo $this->escapeHtml($info['title']); ?><br /></td>

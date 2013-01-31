@@ -56,7 +56,7 @@ class Mage_Connect_Package_Target
     */
     protected function _getTargetMap()
     {
-        if (is_null($this->_targetMap)) {
+        if ($this->_targetMap === null) {
             $this->_targetMap = array();
             $this->_targetMap[] = array('name'=>"magelocal" ,'label'=>"Magento Local module file" , 'uri'=>"./app/code/local");
             $this->_targetMap[] = array('name'=>"magecommunity" ,'label'=>"Magento Community module file" , 'uri'=>"./app/code/community");
@@ -70,7 +70,7 @@ class Mage_Connect_Package_Target
             $this->_targetMap[] = array('name'=>"mageweb" ,'label'=>"Magento Other web accessible file" , 'uri'=>".");
             $this->_targetMap[] = array('name'=>"magetest" ,'label'=>"Magento PHPUnit test" , 'uri'=>"./tests");
             $this->_targetMap[] = array('name'=>"mage" ,'label'=>"Magento other" , 'uri'=>".");
-        }        
+        }
         return $this->_targetMap;
     }
 
@@ -81,9 +81,9 @@ class Mage_Connect_Package_Target
     */
     public function getTargets()
     {
-        if (!is_array($this->_targets)) {            
+        if (!is_array($this->_targets)) {
             $this->_targets = array();
-            if($this->_getTargetMap()) {           
+            if($this->_getTargetMap()) {
                 foreach ($this->_getTargetMap() as $_target) {
                     $this->_targets[$_target['name']] = (string)$_target['uri'];
                 }

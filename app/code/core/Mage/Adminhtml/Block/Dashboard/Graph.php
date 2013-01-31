@@ -532,7 +532,7 @@ class Mage_Adminhtml_Block_Dashboard_Graph extends Mage_Adminhtml_Block_Dashboar
      */
     protected function _prepareData()
     {
-        if (!is_null($this->getDataHelperName())) {
+        if ($this->getDataHelperName() !== null) {
             $availablePeriods = array_keys($this->helper('Mage_Adminhtml_Helper_Dashboard_Data')->getDatePeriods());
             $period = $this->getRequest()->getParam('period');
             $this->getDataHelper()->setParam('period',

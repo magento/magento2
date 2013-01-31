@@ -126,7 +126,7 @@ class Mage_Tag_Model_Resource_Tag_Collection extends Mage_Core_Model_Resource_Db
              */
             $this->_useAnalyticFunction = true;
 
-            if (!is_null($limit)) {
+            if ($limit !== null) {
                 $this->getSelect()->limit($limit);
             }
 

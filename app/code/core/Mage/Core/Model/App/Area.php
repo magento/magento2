@@ -73,7 +73,7 @@ class Mage_Core_Model_App_Area
      */
     public function load($part=null)
     {
-        if (is_null($part)) {
+        if ($part === null) {
             $this->_loadPart(self::PART_CONFIG)
                 ->_loadPart(self::PART_EVENTS)
                 ->_loadPart(self::PART_DESIGN)

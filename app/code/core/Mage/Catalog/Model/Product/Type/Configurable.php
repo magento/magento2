@@ -204,7 +204,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
             $usedProductAttributes = array();
             $usedAttributes        = array();
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
-                if (!is_null($attribute->getProductAttribute())) {
+                if ($attribute->getProductAttribute() !== null) {
                     $id = $attribute->getProductAttribute()->getId();
                     $usedProductAttributes[$id] = $attribute->getProductAttribute();
                     $usedAttributes[$id]        = $attribute;
@@ -305,8 +305,8 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     {
         Magento_Profiler::start('CONFIGURABLE:'.__METHOD__, array('group' => 'CONFIGURABLE', 'method' => __METHOD__));
         if (!$product->hasData($this->_usedProducts)) {
-            if (is_null($requiredAttributeIds)
-                and is_null($product->getData($this->_configurableAttributes))) {
+            if ($requiredAttributeIds === null
+                && $product->getData($this->_configurableAttributes) === null) {
                 // If used products load before attributes, we will load attributes.
                 $this->getConfigurableAttributes($product);
                 // After attributes loading products loaded too.
@@ -322,7 +322,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
             if (is_array($requiredAttributeIds)) {
                 foreach ($requiredAttributeIds as $attributeId) {
                     $attribute = $this->getAttributeById($attributeId, $product);
-                    if (!is_null($attribute))
+                    if ($attribute !== null)
                         $collection->addAttributeToFilter($attribute->getAttributeCode(), array('notnull'=>1));
                 }
             }
@@ -349,7 +349,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
             ->setFlag('require_stock_items', true)
             ->setFlag('product_children', true)
             ->setProductFilter($product);
-        if (!is_null($this->getStoreFilter($product))) {
+        if ($this->getStoreFilter($product) !== null) {
             $collection->addStoreFilter($this->getStoreFilter($product));
         }
 
@@ -453,7 +453,7 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
 
         if ($salable !== false) {
             $salable = false;
-            if (!is_null($product)) {
+            if ($product !== null) {
                 $this->setStoreFilter($product->getStoreId(), $product);
             }
             foreach ($this->getUsedProducts($product) as $child) {

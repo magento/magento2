@@ -121,7 +121,7 @@ class Mage_Backup_Snapshot extends Mage_Backup_Filesystem
      */
     protected function _getDbBackupManager()
     {
-        if (is_null($this->_dbBackupManager)) {
+        if ($this->_dbBackupManager === null) {
             $this->_dbBackupManager = $this->_createDbBackupInstance();
         }
 

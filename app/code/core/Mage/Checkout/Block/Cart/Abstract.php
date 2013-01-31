@@ -89,7 +89,7 @@ abstract class Mage_Checkout_Block_Cart_Abstract extends Mage_Core_Block_Templat
         if (!isset($this->_itemRenders[$type])) {
             $type = 'default';
         }
-        if (is_null($this->_itemRenders[$type]['blockInstance'])) {
+        if ($this->_itemRenders[$type]['blockInstance'] === null) {
              $this->_itemRenders[$type]['blockInstance'] = $this->getLayout()
                 ->createBlock($this->_itemRenders[$type]['block'])
                     ->setTemplate($this->_itemRenders[$type]['template'])

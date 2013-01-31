@@ -184,7 +184,7 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
      */
     public function getCssClass()
     {
-        if (is_null($this->_cssClass)) {
+        if ($this->_cssClass === null) {
             if ($this->getAlign()) {
                 $this->_cssClass .= 'a-'.$this->getAlign();
             }
@@ -402,7 +402,7 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
      */
     public function getRenderer()
     {
-        if (is_null($this->_renderer)) {
+        if ($this->_renderer === null) {
             $rendererClass = $this->getData('renderer');
             if (empty($rendererClass)) {
                 $rendererClass = $this->_getRendererByType();
@@ -457,9 +457,9 @@ class Mage_Backend_Block_Widget_Grid_Column extends Mage_Backend_Block_Widget
      */
     public function getFilter()
     {
-        if (is_null($this->_filter)) {
+        if ($this->_filter === null) {
             $filterClass = $this->getData('filter');
-            if (false === (bool) $filterClass && false === is_null($filterClass)) {
+            if (false === (bool) $filterClass && false === ($filterClass === null)) {
                 return false;
             }
             if (!$filterClass) {

@@ -219,7 +219,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = Mage::app()->getStore();
         }
         return $this->_store;
@@ -247,7 +247,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getEntityType()
     {
-        if (is_null($this->_entityType)) {
+        if ($this->_entityType === null) {
             $this->setEntityType($this->_entityTypeCode);
         }
         return $this->_entityType;
@@ -261,7 +261,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getEntity()
     {
-        if (is_null($this->_entity)) {
+        if ($this->_entity === null) {
             Mage::throwException(Mage::helper('Mage_Eav_Helper_Data')->__('Entity instance is not defined'));
         }
         return $this->_entity;
@@ -274,7 +274,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes      = array();
             $this->_userAttributes  = array();
             /** @var $attribute Mage_Eav_Model_Attribute */
@@ -315,7 +315,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getUserAttributes()
     {
-        if (is_null($this->_userAttributes)) {
+        if ($this->_userAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -329,7 +329,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getSystemAttributes()
     {
-        if (is_null($this->_systemAttributes)) {
+        if ($this->_systemAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -343,7 +343,7 @@ abstract class Mage_Eav_Model_Form
      */
     public function getAllowedAttributes()
     {
-        if (is_null($this->_allowedAttributes)) {
+        if ($this->_allowedAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -409,7 +409,7 @@ abstract class Mage_Eav_Model_Form
      */
     protected function _getValidator(array $data)
     {
-        if (is_null($this->_validator)) {
+        if ($this->_validator === null) {
             $configFiles = Mage::getConfig()->getModuleConfigurationFiles('validation.xml');
             $validatorFactory = new Magento_Validator_Config($configFiles);
             $builder = $validatorFactory->createValidatorBuilder('eav_entity', 'form');

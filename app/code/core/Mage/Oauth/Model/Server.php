@@ -226,7 +226,7 @@ class Mage_Oauth_Model_Server
      */
     protected function _fetchParams($authHeaderValue = null)
     {
-        if (is_null($authHeaderValue)) {
+        if ($authHeaderValue === null) {
             $authHeaderValue = $this->_request->getHeader('Authorization');
         }
 
@@ -544,7 +544,7 @@ class Mage_Oauth_Model_Server
             array_merge($this->_params, $this->_protocolParams),
             $this->_protocolParams['oauth_signature_method'],
             $this->_consumer->getSecret(),
-            !is_null($this->_token) ? $this->_token->getSecret() : null,
+            $this->_token !== null ? $this->_token->getSecret() : null,
             $this->_request->getMethod(),
             $this->_request->getScheme() . '://' . $this->_request->getHttpHost() . $this->_request->getRequestUri()
         );

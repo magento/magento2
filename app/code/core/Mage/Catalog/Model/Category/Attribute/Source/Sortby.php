@@ -51,7 +51,7 @@ class Mage_Catalog_Model_Category_Attribute_Source_Sortby
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = array(array(
                 'label' => Mage::helper('Mage_Catalog_Helper_Data')->__('Best Value'),
                 'value' => 'position'

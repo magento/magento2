@@ -40,7 +40,7 @@ class Mage_Paypal_Block_Express_Review_Shipping extends Mage_Checkout_Block_Onep
      */
     public function getAddress()
     {
-        if (is_null($this->_address)) {
+        if ($this->_address === null) {
             if ($this->isCustomerLoggedIn() || $this->getQuote()->getShippingAddress()) {
                 $this->_address = $this->getQuote()->getShippingAddress();
             } else {

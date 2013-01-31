@@ -349,7 +349,7 @@ abstract class Mage_Reports_Model_Resource_Report_Abstract extends Mage_Core_Mod
     {
         $column = $this->_getWriteAdapter()->quoteIdentifier($column);
 
-        if (is_null($from)) {
+        if ($from === null) {
             $selectOldest = $this->_getWriteAdapter()->select()
                 ->from(
                     $table,

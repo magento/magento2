@@ -62,7 +62,7 @@ class Mage_Customer_Block_Form_Register extends Mage_Directory_Block_Data
     public function getBackUrl()
     {
         $url = $this->getData('back_url');
-        if (is_null($url)) {
+        if ($url === null) {
             $url = $this->helper('Mage_Customer_Helper_Data')->getLoginUrl();
         }
         return $url;
@@ -76,7 +76,7 @@ class Mage_Customer_Block_Form_Register extends Mage_Directory_Block_Data
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
+        if ($data === null) {
             $formData = Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerFormData(true);
             $data = new Varien_Object();
             if ($formData) {
@@ -137,7 +137,7 @@ class Mage_Customer_Block_Form_Register extends Mage_Directory_Block_Data
      */
     public function getAddress()
     {
-        if (is_null($this->_address)) {
+        if ($this->_address === null) {
             $this->_address = Mage::getModel('Mage_Customer_Model_Address');
         }
 

@@ -88,7 +88,7 @@ class Mage_Page_Block_Html_Breadcrumbs extends Mage_Core_Block_Template
      */
     public function getCacheKeyInfo()
     {
-        if (is_null($this->_cacheKeyInfo)) {
+        if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + array(
                 'crumbs' => base64_encode(serialize($this->_crumbs)),
                 'name'   => $this->getNameInLayout()

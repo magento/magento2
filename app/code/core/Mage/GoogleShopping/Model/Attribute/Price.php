@@ -60,10 +60,10 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
         $salePriceAttribute = $this->getGroupAttributeSalePrice();
         $salePriceMapValue = null;
         $finalPrice = null;
-        if (!is_null($salePriceAttribute)) {
+        if ($salePriceAttribute !== null) {
             $salePriceMapValue = $salePriceAttribute->getProductAttributeValue($product);
         }
-        if (!is_null($salePriceMapValue) && floatval($salePriceMapValue) > .0001) {
+        if ($salePriceMapValue !== null && floatval($salePriceMapValue) > .0001) {
             $finalPrice = $salePriceMapValue;
         } else if ($isSalePriceAllowed) {
             $finalPrice = Mage::helper('Mage_GoogleShopping_Helper_Price')->getCatalogPrice($product, $store, $inclTax);
@@ -75,7 +75,7 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
         // calculate price attribute value
         $priceMapValue = $this->getProductAttributeValue($product);
         $price = null;
-        if (!is_null($priceMapValue) && floatval($priceMapValue) > .0001) {
+        if ($priceMapValue !== null && floatval($priceMapValue) > .0001) {
             $price = $priceMapValue;
         } else if ($isSalePriceAllowed) {
             $price = Mage::helper('Mage_GoogleShopping_Helper_Price')->getCatalogRegularPrice($product, $store);
@@ -94,7 +94,7 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
                 $this->_setAttributePrice($entry, $product, $targetCountry, $finalPrice, 'sale_price');
 
                 $effectiveDate = $this->getGroupAttributeSalePriceEffectiveDate();
-                if (!is_null($effectiveDate)) {
+                if ($effectiveDate !== null) {
                     $effectiveDate->setGroupAttributeSalePriceEffectiveDateFrom(
                             $this->getGroupAttributeSalePriceEffectiveDateFrom()
                         )
@@ -109,7 +109,7 @@ class Mage_GoogleShopping_Model_Attribute_Price extends Mage_GoogleShopping_Mode
 
             // calculate taxes
             $tax = $this->getGroupAttributeTax();
-            if (!$inclTax && !is_null($tax)) {
+            if (!$inclTax && $tax !== null) {
                 $tax->convertAttribute($product, $entry);
             }
         } else {

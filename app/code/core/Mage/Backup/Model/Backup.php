@@ -217,7 +217,7 @@ class Mage_Backup_Model_Backup extends Varien_Object
      */
     public function open($write = false)
     {
-        if (is_null($this->getPath())) {
+        if ($this->getPath() === null) {
             Mage::exception('Mage_Backup', $this->_helper->__('Backup file path was not specified.'));
         }
 
@@ -253,7 +253,7 @@ class Mage_Backup_Model_Backup extends Varien_Object
      */
     protected function _getStream()
     {
-        if (is_null($this->_stream)) {
+        if ($this->_stream === null) {
             Mage::exception('Mage_Backup', $this->_helper->__('Backup file handler was unspecified.'));
         }
         return $this->_stream;
@@ -333,7 +333,7 @@ class Mage_Backup_Model_Backup extends Varien_Object
      */
     public function getSize()
     {
-        if (!is_null($this->getData('size'))) {
+        if ($this->getData('size') !== null) {
             return $this->getData('size');
         }
 

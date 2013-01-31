@@ -54,7 +54,7 @@ class Mage_Adminhtml_Block_Sales_Order_View_Info extends Mage_Adminhtml_Block_Sa
     {
         if ($this->getOrder()) {
             $storeId = $this->getOrder()->getStoreId();
-            if (is_null($storeId)) {
+            if ($storeId === null) {
                 $deleted = Mage::helper('Mage_Adminhtml_Helper_Data')->__(' [deleted]');
                 return nl2br($this->getOrder()->getStoreName()) . $deleted;
             }

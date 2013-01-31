@@ -84,7 +84,7 @@ class Mage_Checkout_Block_Multishipping_Addresses extends Mage_Sales_Block_Items
     public function getAddressOptions()
     {
         $options = $this->getData('address_options');
-        if (is_null($options)) {
+        if ($options === null) {
             $options = array();
             foreach ($this->getCustomer()->getAddresses() as $address) {
                 $options[] = array(

@@ -98,7 +98,7 @@ class Mage_Core_Model_App_Emulation extends Varien_Object
      */
     protected function _emulateInlineTranslation($storeId = null, $area = Mage_Core_Model_App_Area::AREA_FRONTEND)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $newTranslateInline = false;
         } else {
             if ($area == Mage_Core_Model_App_Area::AREA_ADMIN) {

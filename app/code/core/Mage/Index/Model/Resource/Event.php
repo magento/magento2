@@ -86,7 +86,7 @@ class Mage_Index_Model_Resource_Event extends Mage_Core_Model_Resource_Db_Abstra
                 $this->_getWriteAdapter()->delete($processTable);
             } else {
                 foreach ($processIds as $processId => $processStatus) {
-                    if (is_null($processStatus) || $processStatus == Mage_Index_Model_Process::EVENT_STATUS_DONE) {
+                    if ($processStatus === null || $processStatus == Mage_Index_Model_Process::EVENT_STATUS_DONE) {
                         $this->_getWriteAdapter()->delete($processTable, array(
                             'process_id = ?' => $processId,
                             'event_id = ?'   => $object->getId(),

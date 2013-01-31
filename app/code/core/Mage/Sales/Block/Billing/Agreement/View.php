@@ -59,7 +59,7 @@ class Mage_Sales_Block_Billing_Agreement_View extends Mage_Core_Block_Template
      */
     public function getRelatedOrders()
     {
-        if (is_null($this->_relatedOrders)) {
+        if ($this->_relatedOrders === null) {
             $this->_relatedOrders = Mage::getResourceModel('Mage_Sales_Model_Resource_Order_Collection')
                 ->addFieldToSelect('*')
                 ->addFieldToFilter('customer_id', Mage::getSingleton('Mage_Customer_Model_Session')->getCustomer()->getId())
@@ -117,7 +117,7 @@ class Mage_Sales_Block_Billing_Agreement_View extends Mage_Core_Block_Template
      */
     protected function _prepareLayout()
     {
-        if (is_null($this->_billingAgreementInstance)) {
+        if ($this->_billingAgreementInstance === null) {
             $this->_billingAgreementInstance = Mage::registry('current_billing_agreement');
         }
         parent::_prepareLayout();

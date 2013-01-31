@@ -57,7 +57,7 @@ class Mage_ImportExport_Model_Import_Entity_Product_Type_Grouped
      */
     public function getBehavior()
     {
-        if (is_null($this->_behavior)) {
+        if ($this->_behavior === null) {
             $this->_behavior = Mage_ImportExport_Model_Import::getDataSourceModel()->getBehavior();
         }
         return $this->_behavior;

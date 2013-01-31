@@ -63,7 +63,7 @@ class Mage_ProductAlert_Model_Stock extends Mage_Core_Model_Abstract
 
     public function loadByParam()
     {
-        if (!is_null($this->getProductId()) && !is_null($this->getCustomerId()) && !is_null($this->getWebsiteId())) {
+        if ($this->getProductId() !== null && $this->getCustomerId() !== null && $this->getWebsiteId() !== null) {
             $this->getResource()->loadByParam($this);
         }
         return $this;

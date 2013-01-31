@@ -58,17 +58,17 @@ class Mage_GoogleShopping_Model_Attribute_SalePriceEffectiveDate extends Mage_Go
 
         $dateString = null;
         // if we have from an to dates, and if these dates are correct
-        if (!is_null($from) && !is_null($to) && $from->isEarlier($to)) {
+        if ($from !== null && $to !== null && $from->isEarlier($to)) {
             $dateString = $from->toString(Zend_Date::ATOM) . '/' . $to->toString(Zend_Date::ATOM);
         }
 
         // if we have only "from" date, send "from" day
-        if (!is_null($from) && is_null($to)) {
+        if ($from !== null && $to === null) {
             $dateString = $from->toString('YYYY-MM-dd');
         }
 
         // if we have only "to" date, use "now" date for "from"
-        if (is_null($from) && !is_null($to)) {
+        if ($from === null && $to !== null) {
             $from = new Zend_Date();
             // if "now" date is earlier than "to" date
             if ($from->isEarlier($to)) {
@@ -76,7 +76,7 @@ class Mage_GoogleShopping_Model_Attribute_SalePriceEffectiveDate extends Mage_Go
             }
         }
 
-        if (!is_null($dateString)) {
+        if ($dateString !== null) {
             $this->_setAttribute($entry, 'sale_price_effective_date', self::ATTRIBUTE_TYPE_TEXT, $dateString);
         }
 

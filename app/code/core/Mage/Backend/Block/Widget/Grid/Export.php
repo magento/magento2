@@ -242,7 +242,7 @@ class Mage_Backend_Block_Widget_Grid_Export
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $originalCollection->getSize();
                 $lPage = $originalCollection->getLastPageNumber();
             }

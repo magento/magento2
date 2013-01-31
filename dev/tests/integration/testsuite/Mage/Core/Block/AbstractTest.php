@@ -704,7 +704,7 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
                 $type . 'Mock'
             );
         }
-        if (is_null($this->_layout)) {
+        if ($this->_layout === null) {
             $this->_layout = Mage::getModel('Mage_Core_Model_Layout');
         }
         $block = $this->_layout->addBlock($mockClass, $name, '', $alias);

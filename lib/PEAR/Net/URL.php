@@ -300,7 +300,7 @@ class Net_URL
                     foreach ($value as $k => $v) {
                         $querystring[] = $this->useBrackets ? sprintf('%s[%s]=%s', $name, $k, $v) : ($name . '=' . $v);
                     }
-                } elseif (!is_null($value)) {
+                } elseif ($value !== null) {
                     $querystring[] = $name . '=' . $value;
                 } else {
                     $querystring[] = $name;
@@ -438,7 +438,7 @@ class Net_URL
     function setProtocol($protocol, $port = null)
     {
         $this->protocol = $protocol;
-        $this->port     = is_null($port) ? $this->getStandardPort($protocol) : $port;
+        $this->port     = $port === null ? $this->getStandardPort($protocol) : $port;
     }
 
     /**

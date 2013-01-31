@@ -258,7 +258,7 @@ class Mage_Adminhtml_Block_Sales_Order_Create_Giftmessage_Form extends Mage_Admi
      */
     public function getMessage()
     {
-        if(is_null($this->_giftMessage)) {
+        if($this->_giftMessage === null) {
             $this->_initMessage();
         }
 

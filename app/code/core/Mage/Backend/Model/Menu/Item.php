@@ -230,7 +230,7 @@ class Mage_Backend_Model_Menu_Item
      */
     public function hasChildren()
     {
-        return !is_null($this->_submenu) && (bool) $this->_submenu->count();
+        return $this->_submenu !== null && (bool) $this->_submenu->count();
     }
 
     /**

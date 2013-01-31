@@ -326,7 +326,7 @@ class Mage_HTTP_Client_Socket
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if(is_null($val)) {
+            if($val === null) {
                 continue;
             }
             $out[trim($key)] = trim($val);
@@ -353,7 +353,7 @@ class Mage_HTTP_Client_Socket
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if(is_null($val)) {
+            if($val === null) {
                 continue;
             }
             $out[trim($key)] = array('value'=>trim($val));

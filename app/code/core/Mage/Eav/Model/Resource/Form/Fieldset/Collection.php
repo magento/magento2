@@ -83,7 +83,7 @@ class Mage_Eav_Model_Resource_Form_Fieldset_Collection extends Mage_Core_Model_R
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             return Mage::app()->getStore()->getId();
         }
         return $this->_storeId;
@@ -121,7 +121,7 @@ class Mage_Eav_Model_Resource_Form_Fieldset_Collection extends Mage_Core_Model_R
                 ->getIfNullSql('store_label.label', 'default_label.label');
             $joinCondition = $this->getConnection()
                 ->quoteInto(
-                    'main_table.fieldset_id = store_label.fieldset_id AND store_label.store_id = ?', 
+                    'main_table.fieldset_id = store_label.fieldset_id AND store_label.store_id = ?',
                     (int)$this->getStoreId());
             $select->joinLeft(
                 array('store_label' => $this->getTable('eav_form_fieldset_label')),

@@ -207,7 +207,7 @@ abstract class Mage_Webapi_Model_ConfigAbstract
      */
     public function getTypeToClassMap()
     {
-        return !is_null($this->_data['type_to_class_map']) ? $this->_data['type_to_class_map'] : array();
+        return $this->_data['type_to_class_map'] !== null ? $this->_data['type_to_class_map'] : array();
     }
 
     /**

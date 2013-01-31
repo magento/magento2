@@ -255,7 +255,7 @@ class XML_Parser extends PEAR
     function setMode($mode)
     {
         if ($mode != 'func' && $mode != 'event') {
-            $this->raiseError('Unsupported mode given', 
+            $this->raiseError('Unsupported mode given',
                 XML_PARSER_ERROR_UNSUPPORTED_MODE);
         }
 
@@ -304,7 +304,7 @@ class XML_Parser extends PEAR
 
         case 'func':
             xml_set_object($this->parser, $this->_handlerObj);
-            xml_set_element_handler($this->parser, 
+            xml_set_element_handler($this->parser,
                 array(&$this, 'funcStartHandler'), array(&$this, 'funcEndHandler'));
             break;
 
@@ -313,7 +313,7 @@ class XML_Parser extends PEAR
             xml_set_element_handler($this->parser, 'startHandler', 'endHandler');
             break;
         default:
-            return $this->raiseError('Unsupported mode given', 
+            return $this->raiseError('Unsupported mode given',
                 XML_PARSER_ERROR_UNSUPPORTED_MODE);
             break;
         }
@@ -355,10 +355,10 @@ class XML_Parser extends PEAR
         }
         if (is_resource($xp)) {
             if ($this->tgtenc !== null) {
-                if (!@xml_parser_set_option($xp, XML_OPTION_TARGET_ENCODING, 
+                if (!@xml_parser_set_option($xp, XML_OPTION_TARGET_ENCODING,
                     $this->tgtenc)
                 ) {
-                    return $this->raiseError('invalid target encoding', 
+                    return $this->raiseError('invalid target encoding',
                         XML_PARSER_ERROR_INVALID_ENCODING);
                 }
             }
@@ -371,10 +371,10 @@ class XML_Parser extends PEAR
             return true;
         }
         if (!in_array(strtoupper($this->srcenc), $this->_validEncodings)) {
-            return $this->raiseError('invalid source encoding', 
+            return $this->raiseError('invalid source encoding',
                 XML_PARSER_ERROR_INVALID_ENCODING);
         }
-        return $this->raiseError('Unable to create XML parser resource.', 
+        return $this->raiseError('Unable to create XML parser resource.',
             XML_PARSER_ERROR_NO_RESOURCE);
     }
 
@@ -430,7 +430,7 @@ class XML_Parser extends PEAR
             $this->fp = $fp;
             return $fp;
         }
-        return $this->raiseError('File could not be opened.', 
+        return $this->raiseError('File could not be opened.',
             XML_PARSER_ERROR_FILE_NOT_READABLE);
     }
 
@@ -486,7 +486,7 @@ class XML_Parser extends PEAR
             return true;
         }
 
-        return $this->raiseError('Illegal input format', 
+        return $this->raiseError('Illegal input format',
             XML_PARSER_ERROR_INVALID_INPUT);
     }
 
@@ -555,7 +555,7 @@ class XML_Parser extends PEAR
      * Parses a string.
      *
      * @param string  $data XML data
-     * @param boolean $eof  If set and TRUE, data is the last piece 
+     * @param boolean $eof  If set and TRUE, data is the last piece
      *                      of data sent in this parser
      *
      * @return bool|PEAR_Error true on success or a PEAR Error
@@ -612,7 +612,7 @@ class XML_Parser extends PEAR
      **/
     function &raiseError($msg = null, $ecode = 0)
     {
-        $msg = !is_null($msg) ? $msg : $this->parser;
+        $msg = $msg !== null ? $msg : $this->parser;
         $err = &new XML_Parser_Error($msg, $ecode);
         return parent::raiseError($err);
     }
@@ -636,7 +636,7 @@ class XML_Parser extends PEAR
         if (method_exists($this->_handlerObj, $func)) {
             call_user_func(array(&$this->_handlerObj, $func), $xp, $elem, $attribs);
         } elseif (method_exists($this->_handlerObj, 'xmltag')) {
-            call_user_func(array(&$this->_handlerObj, 'xmltag'), 
+            call_user_func(array(&$this->_handlerObj, 'xmltag'),
                 $xp, $elem, $attribs);
         }
     }

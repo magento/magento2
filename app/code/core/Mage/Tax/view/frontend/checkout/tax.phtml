@@ -46,7 +46,7 @@
         <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
             <td class="a-right" style="<?php echo $_style ?>" colspan="<?php echo $this->getColspan(); ?>">
                 <?php echo $this->escapeHtml($rate['title']); ?>
-                <?php if (!is_null($rate['percent'])): ?>
+                <?php if ($rate['percent'] !== null): ?>
                     (<?php echo (float)$rate['percent']; ?>%)
                 <?php endif; ?>
                 <br />

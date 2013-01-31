@@ -64,7 +64,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Abstract extends Mage
         $attributeId    = $attribute->getAttributeId();
         $attributeTable = $attribute->getBackend()->getTable();
         $adapter        = $this->_getReadAdapter();
-        $joinType       = !is_null($condition) || $required ? 'join' : 'joinLeft';
+        $joinType       = $condition !== null || $required ? 'join' : 'joinLeft';
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attrCode;
@@ -95,7 +95,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Abstract extends Mage
                 "{$sAlias}.value", "{$dAlias}.value");
         }
 
-        if (!is_null($condition)) {
+        if ($condition !== null) {
             $select->where("{$expression}{$condition}");
         }
 
@@ -117,7 +117,7 @@ abstract class Mage_Catalog_Model_Resource_Product_Indexer_Abstract extends Mage
      */
     protected function _addWebsiteJoinToSelect($select, $store = true, $joinCondition = null)
     {
-        if (!is_null($joinCondition)) {
+        if ($joinCondition !== null) {
             $joinCondition = 'cw.website_id = ' . $joinCondition;
         }
 

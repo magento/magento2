@@ -117,7 +117,7 @@ class HTTP
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $match = HTTP::_matchAccept($_SERVER['HTTP_ACCEPT_LANGUAGE'],
                                         $supp);
-            if (!is_null($match)) {
+            if ($match !== null) {
                 return $match;
             }
         }
@@ -171,7 +171,7 @@ class HTTP
         if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) {
             $match = HTTP::_matchAccept($_SERVER['HTTP_ACCEPT_CHARSET'],
                                         $supp);
-            if (!is_null($match)) {
+            if ($match !== null) {
                 return $match;
             }
         }
@@ -263,7 +263,7 @@ class HTTP
                 return $supported[$key];
             }
         }
-        // If any (i.e. "*") is acceptable, return the first supported format 
+        // If any (i.e. "*") is acceptable, return the first supported format
         if (isset($matches['*'])) {
             return array_shift($supported);
         }
@@ -298,7 +298,7 @@ class HTTP
                 }
             }
             // Unweighted values, get high weight by their position in the
-            // list 
+            // list
             $matches[$l] = isset($q) ? $q : 1000 - count($matches);
         }
         arsort($matches, SORT_NUMERIC);
