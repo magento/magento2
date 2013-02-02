@@ -1,6 +1,6 @@
 <?php
 /**
- * File with unit tests for REST routes generator class: Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator
+ * File with unit tests for REST routes generator class: Mage_Webapi_Model_Config_Reader_Rest_RouteGenerator.
  *
  * Magento
  *
@@ -204,7 +204,7 @@ class Mage_Webapi_Model_Config_Reader_Rest_RouteGeneratorTest extends PHPUnit_Fr
     }
 
     /**
-     * Check if list of REST routes are equal.
+     * Check if list of REST routes is equal.
      *
      * @param array $expectedRoutes
      * @param array $actualRoutes

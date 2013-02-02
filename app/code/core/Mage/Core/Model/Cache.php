@@ -37,9 +37,9 @@ class Mage_Core_Model_Cache
     const XML_PATH_TYPES    = 'global/cache/types';
 
     /**
-     * @var Mage_Core_Model_Config
+     * Inject custom cache settings in application initialization
      */
-    protected $_config;
+    const APP_INIT_PARAM = 'cache';
 
     /**
      * @var Mage_Core_Helper_Abstract
@@ -108,16 +108,24 @@ class Mage_Core_Model_Cache
     protected $_allowedCacheOptions = null;
 
     /**
+     * @var Magento_ObjectManager
+     */
+    protected $_objectManager;
+
+    /**
      * Class constructor. Initialize cache instance based on options
      *
+     * @param Mage_Core_Model_App $app
+     * @param Mage_Core_Model_Dir $dirs
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(Magento_ObjectManager $objectManager, array $options = array())
     {
-        $this->_config = isset($options['config']) ? $options['config'] : Mage::getConfig();
+        $this->_objectManager = $objectManager;
         $this->_helper = isset($options['helper']) ? $options['helper'] : Mage::helper('Mage_Core_Helper_Data');
 
-        $this->_defaultBackendOptions['cache_dir'] = $this->_config->getOptions()->getDir('cache');
+        $dirs = $objectManager->get('Mage_Core_Model_Dir');
+        $this->_defaultBackendOptions['cache_dir'] = $dirs->getDir(Mage_Core_Model_Dir::CACHE);
         /**
          * Initialize id prefix
          */
@@ -126,7 +134,7 @@ class Mage_Core_Model_Cache
             $this->_idPrefix = $options['prefix'];
         }
         if (empty($this->_idPrefix)) {
-            $this->_idPrefix = substr(md5($this->_config->getOptions()->getEtcDir()), 0, 3).'_';
+            $this->_idPrefix = substr(md5($dirs->getDir(Mage_Core_Model_Dir::CONFIG)), 0, 3) . '_';
         }
 
         $backend = $this->_getBackendOptions($options);
@@ -563,7 +571,7 @@ class Mage_Core_Model_Cache
             $this->_allowedCacheOptions = unserialize($options);
         }
 
-        if ($this->_config->getOptions()->getData('global_ban_use_cache')) {
+        if ($this->_objectManager->get('Mage_Core_Model_App')->getInitParam('global_ban_use_cache')) {
             foreach ($this->_allowedCacheOptions as $key => $val) {
                 $this->_allowedCacheOptions[$key] = false;
             }
@@ -641,7 +649,7 @@ class Mage_Core_Model_Cache
     public function getTagsByType($type)
     {
         $path = self::XML_PATH_TYPES.'/'.$type.'/tags';
-        $tagsConfig = $this->_config->getNode($path);
+        $tagsConfig = $this->_objectManager->get('Mage_Core_Model_Config')->getNode($path);
         if ($tagsConfig) {
             $tags = (string) $tagsConfig;
             $tags = explode(',', $tags);
@@ -659,7 +667,7 @@ class Mage_Core_Model_Cache
     public function getTypes()
     {
         $types = array();
-        $config = $this->_config->getNode(self::XML_PATH_TYPES);
+        $config = $this->_objectManager->get('Mage_Core_Model_Config')->getNode(self::XML_PATH_TYPES);
         if ($config) {
             foreach ($config->children() as $type=>$node) {
                 $types[$type] = new Varien_Object(array(

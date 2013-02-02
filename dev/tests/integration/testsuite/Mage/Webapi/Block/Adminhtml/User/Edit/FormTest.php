@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Form block
+ * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Form block.
  *
  * Magento
  *

@@ -41,7 +41,7 @@ class Mage_Oauth_Adminhtml_Oauth_ConsumerController extends Mage_Adminhtml_Contr
     protected function  _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('Mage_Oauth::system_api_oauth_consumer');
+            ->_setActiveMenu('Mage_Oauth::system_legacy_api_oauth_consumer');
         return $this;
     }
     /**

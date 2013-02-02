@@ -276,11 +276,10 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoConfigFixture               install/design/theme/full_name   default/basic
-     * @magentoConfigFixture               adminhtml/design/theme/full_name default/basic
-     * @magentoConfigFixture current_store design/theme/full_name           default/demo
-     * @magentoAppIsolation  enabled
-     *
+     * @magentoConfigFixture install/design/theme/full_name default/basic
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo
+     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
+     * @magentoAppIsolation enabled
      * @dataProvider controllerAreaDesignDataProvider
      *
      * @param string $controllerClass
@@ -291,6 +290,7 @@ class Mage_Core_Controller_Varien_ActionTest extends PHPUnit_Framework_TestCase
     public function testPreDispatch($controllerClass, $expectedArea, $expectedStore, $expectedDesign)
     {
         Mage::getConfig()->setCurrentAreaCode($expectedArea);
+
         /** @var $controller Mage_Core_Controller_Varien_Action */
         $controller = Mage::getObjectManager()->create($controllerClass,
             array(

@@ -25,7 +25,7 @@
  */
 ?>
 <div class="entry-edit custom-options product-custom-options">
-    <div id="dynamic-price-warrning" style="display:none">
+    <div id="dynamic-price-warning" style="display:none">
         <ul class="messages">
             <li class="error-msg">
                 <ul>
@@ -53,8 +53,8 @@
 varienWindowOnload(true);
 //show error message
 if ($('price_type')) {
-    if ($('price_type').value == '0' && $('dynamic-price-warrning')) {
-        $('dynamic-price-warrning').show();
+    if ($('price_type').value == '0' && $('dynamic-price-warning')) {
+        $('dynamic-price-warning').show();
     }
 }
 </script>

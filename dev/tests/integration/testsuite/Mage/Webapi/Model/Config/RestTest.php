@@ -1,6 +1,6 @@
 <?php
 /**
- * File with unit tests for API configuration class: Mage_Webapi_Model_Config_Rest
+ * File with unit tests for API configuration class: Mage_Webapi_Model_Config_Rest.
  *
  * Magento
  *
@@ -37,18 +37,28 @@ require_once __DIR__ . '/../_files/resource_with_invalid_name.php';
 
 
 /**
- * Test of API configuration class: Mage_Webapi_Model_Config
+ * Test of API configuration class: Mage_Webapi_Model_Config.
  */
 class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
 {
+    const WEBAPI_AREA_FRONT_NAME = 'webapi';
+
     /**
      * @var Mage_Webapi_Model_Config_Rest
      */
     protected static $_apiConfig;
 
+    /**
+     * App mock clone usage helps to improve performance. It is required because mock will be removed in tear down.
+     *
+     * @var Mage_Core_Model_App
+     */
+    protected static $_appClone;
+
     public static function tearDownAfterClass()
     {
         self::$_apiConfig = null;
+        self::$_appClone = null;
         parent::tearDownAfterClass();
     }
 
@@ -96,9 +106,9 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
         /**
          * Vendor_Module_Controller_Webapi_Resource fixture contains two methods getV2 and deleteV3 that have
          * different names of ID param.
-         * If there will be two different routes generated for these methods with different ID param names,
+         * If there are two different routes generated for these methods with different ID param names,
          * it will be impossible to identify which route should be used as they both will match the same requests.
-         * E.g. DELETE /resource/:deleteId and GET /resource/:getId will match same requests.
+         * E.g. DELETE /resource/:deleteId and GET /resource/:getId will match the same requests.
          */
         $this->assertNotCount(
             $expectedRoutesCount + 1,
@@ -106,7 +116,7 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
             "Some resource methods seem to have different routes, in case when should have the same ones."
         );
 
-        $this->assertCount($expectedRoutesCount, $actualRoutes, "Routes quantity does not equal to expected one.");
+        $this->assertCount($expectedRoutesCount, $actualRoutes, "Routes quantity is not equal to expected one.");
         /** @var $actualRoute Mage_Webapi_Controller_Router_Route_Rest */
         foreach ($actualRoutes as $actualRoute) {
             $this->assertInstanceOf('Mage_Webapi_Controller_Router_Route_Rest', $actualRoute);
@@ -161,12 +171,22 @@ class Mage_Webapi_Model_Config_RestTest extends PHPUnit_Framework_TestCase
         /** Prepare arguments for SUT constructor. */
         /** @var Mage_Core_Model_Cache $cache */
         $cache = $this->getMockBuilder('Mage_Core_Model_Cache')->disableOriginalConstructor()->getMock();
+        $configMock = $this->getMockBuilder('Mage_Core_Model_Config')->disableOriginalConstructor()->getMock();
+        $configMock->expects($this->any())->method('getAreaFrontName')->will(
+            $this->returnValue(self::WEBAPI_AREA_FRONT_NAME)
+        );
+        $appMock = $this->getMockBuilder('Mage_Core_Model_App')->disableOriginalConstructor()->getMock();
+        $appMock->expects($this->any())->method('getConfig')->will($this->returnValue($configMock));
+        self::$_appClone = clone $appMock;
         /** @var Mage_Webapi_Model_Config_Reader_Rest $reader */
         $reader = $objectManager->get('Mage_Webapi_Model_Config_Reader_Rest', array('cache' => $cache));
         $reader->setDirectoryScanner(new Zend\Code\Scanner\DirectoryScanner($pathToResources));
 
         /** Initialize SUT. */
-        $apiConfig = $objectManager->create('Mage_Webapi_Model_Config_Rest', array('reader' => $reader));
+        $apiConfig = $objectManager->create(
+            'Mage_Webapi_Model_Config_Rest',
+            array('reader' => $reader, 'application' => self::$_appClone)
+        );
         return $apiConfig;
     }
 

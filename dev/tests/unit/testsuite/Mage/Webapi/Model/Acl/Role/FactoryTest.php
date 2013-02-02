@@ -1,6 +1,6 @@
 <?php
 /**
- * Test class for Mage_Webapi_Model_Acl_Role_Factory
+ * Test class for Mage_Webapi_Model_Acl_Role_Factory.
  *
  * Magento
  *
@@ -59,7 +59,7 @@ class Mage_Webapi_Model_Acl_Role_FactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create method
+     * Test create method.
      */
     public function testCreate()
     {

@@ -38,18 +38,41 @@ class Mage_Core_Model_Encryption
      */
     protected $_crypt;
     /**
-     * @var Mage_Core_Helper_Data
+     * @var string
      */
     protected $_helper;
 
     /**
+     * @var Magento_ObjectManager|null
+     */
+    protected $_objectManager = null;
+
+    /**
+     * @param Magento_ObjectManager $objectManager
+     */
+    public function __construct(Magento_ObjectManager $objectManager)
+    {
+        $this->_objectManager = $objectManager;
+    }
+
+    /**
      * Set helper instance
      *
-     * @param Mage_Core_Helper_Data $helper
+     * @param Mage_Core_Helper_Data|string $helper
      * @return Mage_Core_Model_Encryption
+     * @throws InvalidArgumentException
      */
     public function setHelper($helper)
     {
+        if (!is_string($helper)) {
+            if ($helper instanceof Mage_Core_Helper_Data) {
+                $helper = get_class($helper);
+            } else {
+                throw new InvalidArgumentException(
+                    'Input parameter "$helper" must be either "string" or instance of "Mage_Core_Helper_Data"'
+                );
+            }
+        }
         $this->_helper = $helper;
         return $this;
     }
@@ -69,7 +92,7 @@ class Mage_Core_Model_Encryption
     public function getHash($password, $salt = false)
     {
         if (is_integer($salt)) {
-            $salt = $this->_helper->getRandomString($salt);
+            $salt = $this->_objectManager->get($this->_helper)->getRandomString($salt);
         }
         return $salt === false ? $this->hash($password) : $this->hash($salt . $password) . ':' . $salt;
     }

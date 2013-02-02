@@ -27,11 +27,11 @@
 -->
 <config>
     <menu>
-        <add id="Mage_Webapi::system_api" title="Web Services" module="Mage_Webapi" sortOrder="25"
+        <add id="Mage_Webapi::system_webapi" title="Web Services" module="Mage_Webapi" sortOrder="26"
              parent="Mage_Adminhtml::system" resource="Mage_Webapi::webapi"/>
         <add id="Mage_Webapi::system_api_webapi_users" title="API Users" module="Mage_Webapi" sortOrder="1"
-             parent="Mage_Webapi::system_api" action="adminhtml/webapi_user" resource="Mage_Webapi::webapi_users"/>
+             parent="Mage_Webapi::system_webapi" action="adminhtml/webapi_user" resource="Mage_Webapi::webapi_users"/>
         <add id="Mage_Webapi::system_api_webapi_roles" title="API Roles" module="Mage_Webapi" sortOrder="2"
-             parent="Mage_Webapi::system_api" action="adminhtml/webapi_role" resource="Mage_Webapi::webapi_roles"/>
+             parent="Mage_Webapi::system_webapi" action="adminhtml/webapi_role" resource="Mage_Webapi::webapi_roles"/>
     </menu>
 </config>

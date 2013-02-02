@@ -160,20 +160,20 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test handle method with loading wsdl from cache.
+     * Test handle method with loading WSDL from cache.
      */
     public function testHandleLoadWsdlFromCache()
     {
         /** Mock cache canUse method to return true. */
         $this->_cacheMock->expects($this->once())->method('canUse')->will($this->returnValue(true));
-        /** Mock cache load method to return cache Id. */
+        /** Mock cache load method to return cache ID. */
         $this->_cacheMock->expects($this->once())->method('load')->will($this->returnArgument(0));
         $requestedResources = array(
             'res1' => 'v1',
             'res2' => 'v2'
         );
         $result = $this->_autoDiscover->handle($requestedResources, 'http://magento.host');
-        /** Assert handle method will return string that starts with WSDL. */
+        /** Assert that handle method will return string that starts with WSDL. */
         $this->assertStringStartsWith(
             Mage_Webapi_Model_Soap_AutoDiscover::WSDL_CACHE_ID,
             $result,
@@ -202,7 +202,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for generate() test
+     * Data provider for generate() test.
      *
      * @return array
      */
@@ -274,7 +274,7 @@ class Mage_Webapi_Model_Soap_AutoDiscoverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create mock for DOMElement
+     * Create mock for DOMElement.
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */

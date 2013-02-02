@@ -117,7 +117,12 @@ class Magento_ObjectManager_Zend implements Magento_ObjectManager
     }
 
     /**
-     * Add shared instance
+     * A proxy for adding shared instance
+     *
+     * Normally Di object manager determines a hash based on the class name and incoming arguments.
+     * But in client code it is inconvenient (or nearly impossible) to "know" arguments for the objects you depend on.
+     * This is a dirty hack that allows bypassing "hash checking" by Di object manager and therefore referring
+     * to an instance using class name (or alias), but not specifying its non-injectable arguments.
      *
      * @param object $instance
      * @param string $classOrAlias

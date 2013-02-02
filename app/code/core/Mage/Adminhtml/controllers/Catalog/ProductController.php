@@ -444,27 +444,21 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
     }
 
     /**
-     * Get associated grouped products grid and serializer block
+     * Get associated grouped products grid
      */
     public function superGroupAction()
     {
-        $this->_initProduct();
-        $this->loadLayout();
-        $this->getLayout()->getBlock('catalog.product.edit.tab.super.group')
-            ->setProductsGrouped($this->getRequest()->getPost('products_grouped', null));
+        $this->loadLayout(false);
         $this->renderLayout();
     }
 
     /**
-     * Get associated grouped products grid only
-     *
+     * Get associated grouped products grid popup
      */
-    public function superGroupGridOnlyAction()
+    public function superGroupPopupAction()
     {
         $this->_initProduct();
-        $this->loadLayout();
-        $this->getLayout()->getBlock('catalog.product.edit.tab.super.group')
-            ->setProductsGrouped($this->getRequest()->getPost('products_grouped', null));
+        $this->loadLayout(false);
         $this->renderLayout();
     }
 
@@ -693,7 +687,7 @@ class Mage_Adminhtml_Catalog_ProductController extends Mage_Adminhtml_Controller
         }
         if (isset($links['grouped']) && !$product->getGroupedReadonly()) {
             $product->setGroupedLinkData(
-                Mage::helper('Mage_Adminhtml_Helper_Js')->decodeGridSerializedInput($links['grouped'])
+                Mage::helper('Mage_Core_Helper_Data')->jsonDecode($links['grouped'])
             );
         }
 

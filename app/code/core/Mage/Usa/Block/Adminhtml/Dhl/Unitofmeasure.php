@@ -77,6 +77,6 @@ class Mage_Usa_Block_Adminhtml_Dhl_Unitofmeasure extends Mage_Backend_Block_Syst
      */
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
-        return parent::_getElementHtml($element) . $this->renderView();
+        return parent::_getElementHtml($element) . $this->_toHtml();
     }
 }

@@ -146,7 +146,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_HandlerTest extends PHPUnit_Framewo
             ->method('maskException')
             ->with($exception)
             ->will($this->returnValue($exception));
-        /** Model situation: authenticate() method throw Exception(). */
+        /** Model situation: authenticate() method throws Exception(). */
         $this->_authenticationMock->expects($this->once())
             ->method('authenticate')
             ->will($this->throwException($exception));

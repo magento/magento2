@@ -42,11 +42,6 @@ class Mage_Page_Block_Html_HeaderTest extends PHPUnit_Framework_TestCase
             ->method('getBaseUrl')
             ->will($this->returnValue('http://localhost/pub/media/'));
 
-        $configOptions = $this->getMock('Mage_Core_Model_Config_Options', array('getDir'));
-        $configOptions->expects($this->once())
-            ->method('getDir')
-            ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR . '_files'));
-
         $helper = $this->getMockBuilder('Mage_Core_Helper_File_Storage_Database')
             ->setMethods(array('checkDbUsage'))
             ->disableOriginalConstructor()
@@ -60,16 +55,22 @@ class Mage_Page_Block_Html_HeaderTest extends PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($helper));
 
+        $dirsMock = $this->getMock('Mage_Core_Model_Dir', array('getDir'), array(), '', false);
+        $dirsMock->expects($this->any())
+            ->method('getDir')
+            ->with(Mage_Core_Model_Dir::MEDIA)
+            ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR . '_files'));
+
         $objectManager = new Magento_Test_Helper_ObjectManager($this);
 
         $arguments = array(
             'storeConfig' => $storeConfig,
             'urlBuilder' => $urlBuilder,
-            'configOptions' => $configOptions,
-            'helperFactory' => $helperFactory
+            'helperFactory' => $helperFactory,
+            'dirs' => $dirsMock
         );
-        $this->_block = $objectManager->getBlock('Mage_Page_Block_Html_Header', $arguments);
+        $block = $objectManager->getBlock('Mage_Page_Block_Html_Header', $arguments);
 
-        $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $this->_block->getLogoSrc());
+        $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
     }
 }

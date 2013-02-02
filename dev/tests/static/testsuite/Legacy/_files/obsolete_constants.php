@@ -1,5 +1,9 @@
 <?php
 /**
+ * Obsolete constants
+ *
+ * Format: array(<constant_name>[, <class_scope> = ''[, <replacement>]])
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,50 +22,48 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
-    $this->_getRule('GALLERY_IMAGE_TABLE', 'Mage_Catalog_Model_Resource_Product_Attribute_Backend_Media'),
-    $this->_getRule('DEFAULT_VALUE_TABLE_PREFIX'),
-    $this->_getRule('CATEGORY_APPLY_CATEGORY_AND_PRODUCT_RECURSIVE'),
-    $this->_getRule('CATEGORY_APPLY_CATEGORY_ONLY'),
-    $this->_getRule('CATEGORY_APPLY_CATEGORY_AND_PRODUCT_ONLY'),
-    $this->_getRule('CATEGORY_APPLY_CATEGORY_RECURSIVE'),
-    $this->_getRule('BACKORDERS_BELOW'),
-    $this->_getRule('BACKORDERS_YES'),
-    $this->_getRule('XML_PATH_DEFAULT_COUNTRY', 'Mage_Core_Model_Locale'),
-    $this->_getRule('XML_PATH_SENDING_SET_RETURN_PATH', 'Mage_Newsletter_Model_Subscriber'),
-    $this->_getRule('CHECKSUM_KEY_NAME'),
-    $this->_getRule('XML_PATH_COUNTRY_DEFAULT', 'Mage_Paypal_Model_System_Config_Backend_MerchantCountry'),
-    $this->_getRule('ENTITY_PRODUCT', 'Mage_Review_Model_Review'),
-    $this->_getRule('CHECKOUT_METHOD_REGISTER'),
-    $this->_getRule('CHECKOUT_METHOD_GUEST'),
-    $this->_getRule('CONFIG_XML_PATH_SHOW_IN_CATALOG'),
-    $this->_getRule('CONFIG_XML_PATH_DEFAULT_PRODUCT_TAX_GROUP'),
-    $this->_getRule('CONFIG_XML_PATH_DISPLAY_TAX_COLUMN'),
-    $this->_getRule('CONFIG_XML_PATH_DISPLAY_FULL_SUMMARY'),
-    $this->_getRule('CONFIG_XML_PATH_DISPLAY_ZERO_TAX'),
-    $this->_getRule('EXCEPTION_CODE_IS_GROUPED_PRODUCT'),
-    $this->_getRule('Mage_Rss_Block_Catalog_NotifyStock::CACHE_TAG'),
-    $this->_getRule('Mage_Rss_Block_Catalog_Review::CACHE_TAG'),
-    $this->_getRule('Mage_Rss_Block_Order_New::CACHE_TAG'),
-    $this->_getRule('REGISTRY_FORM_PARAMS_KEY', null, 'direct value'),
-    $this->_getRule('TYPE_TINYINT', null, 'Varien_Db_Ddl_Table::TYPE_SMALLINT'),
-    $this->_getRule('TYPE_CHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
-    $this->_getRule('TYPE_VARCHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
-    $this->_getRule('TYPE_LONGVARCHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
-    $this->_getRule('TYPE_CLOB', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
-    $this->_getRule('TYPE_DOUBLE', null, 'Varien_Db_Ddl_Table::TYPE_FLOAT'),
-    $this->_getRule('TYPE_REAL', null, 'Varien_Db_Ddl_Table::TYPE_FLOAT'),
-    $this->_getRule('TYPE_TIME', null, 'Varien_Db_Ddl_Table::TYPE_TIMESTAMP'),
-    $this->_getRule('TYPE_BINARY', null, 'Varien_Db_Ddl_Table::TYPE_BLOB'),
-    $this->_getRule('TYPE_LONGVARBINARY', null, 'Varien_Db_Ddl_Table::TYPE_BLOB'),
-    $this->_getRule('HASH_ALGO'),
-    $this->_getRule('SEESION_MAX_COOKIE_LIFETIME'),
-    $this->_getRule('URL_TYPE_SKIN'),
-    $this->_getRule('DEFAULT_THEME_NAME', 'Mage_Core_Model_Design_Package'),
+    array('GALLERY_IMAGE_TABLE', 'Mage_Catalog_Model_Resource_Product_Attribute_Backend_Media'),
+    array('DEFAULT_VALUE_TABLE_PREFIX'),
+    array('CATEGORY_APPLY_CATEGORY_AND_PRODUCT_RECURSIVE'),
+    array('CATEGORY_APPLY_CATEGORY_ONLY'),
+    array('CATEGORY_APPLY_CATEGORY_AND_PRODUCT_ONLY'),
+    array('CATEGORY_APPLY_CATEGORY_RECURSIVE'),
+    array('BACKORDERS_BELOW'),
+    array('BACKORDERS_YES'),
+    array('XML_PATH_DEFAULT_COUNTRY', 'Mage_Core_Model_Locale'),
+    array('XML_PATH_SENDING_SET_RETURN_PATH', 'Mage_Newsletter_Model_Subscriber'),
+    array('CHECKSUM_KEY_NAME'),
+    array('XML_PATH_COUNTRY_DEFAULT', 'Mage_Paypal_Model_System_Config_Backend_MerchantCountry'),
+    array('ENTITY_PRODUCT', 'Mage_Review_Model_Review'),
+    array('CHECKOUT_METHOD_REGISTER'),
+    array('CHECKOUT_METHOD_GUEST'),
+    array('CONFIG_XML_PATH_SHOW_IN_CATALOG'),
+    array('CONFIG_XML_PATH_DEFAULT_PRODUCT_TAX_GROUP'),
+    array('CONFIG_XML_PATH_DISPLAY_TAX_COLUMN'),
+    array('CONFIG_XML_PATH_DISPLAY_FULL_SUMMARY'),
+    array('CONFIG_XML_PATH_DISPLAY_ZERO_TAX'),
+    array('EXCEPTION_CODE_IS_GROUPED_PRODUCT'),
+    array('Mage_Rss_Block_Catalog_NotifyStock::CACHE_TAG'),
+    array('Mage_Rss_Block_Catalog_Review::CACHE_TAG'),
+    array('Mage_Rss_Block_Order_New::CACHE_TAG'),
+    array('REGISTRY_FORM_PARAMS_KEY', null, 'direct value'),
+    array('TYPE_TINYINT', null, 'Varien_Db_Ddl_Table::TYPE_SMALLINT'),
+    array('TYPE_CHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
+    array('TYPE_VARCHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
+    array('TYPE_LONGVARCHAR', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
+    array('TYPE_CLOB', null, 'Varien_Db_Ddl_Table::TYPE_TEXT'),
+    array('TYPE_DOUBLE', null, 'Varien_Db_Ddl_Table::TYPE_FLOAT'),
+    array('TYPE_REAL', null, 'Varien_Db_Ddl_Table::TYPE_FLOAT'),
+    array('TYPE_TIME', null, 'Varien_Db_Ddl_Table::TYPE_TIMESTAMP'),
+    array('TYPE_BINARY', null, 'Varien_Db_Ddl_Table::TYPE_BLOB'),
+    array('TYPE_LONGVARBINARY', null, 'Varien_Db_Ddl_Table::TYPE_BLOB'),
+    array('HASH_ALGO'),
+    array('SEESION_MAX_COOKIE_LIFETIME'),
+    array('URL_TYPE_SKIN'),
+    array('INSTALLER_HOST_RESPONSE', 'Mage_Install_Model_Installer'),
+    array('DEFAULT_THEME_NAME', 'Mage_Core_Model_Design_Package'),
 );

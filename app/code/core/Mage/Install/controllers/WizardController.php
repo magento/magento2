@@ -466,22 +466,4 @@ class Mage_Install_WizardController extends Mage_Install_Controller_Action
         $this->renderLayout();
         Mage::getSingleton('Mage_Install_Model_Session')->clear();
     }
-
-    /**
-     * Host validation response
-     */
-    public function checkHostAction()
-    {
-        $this->getResponse()->setHeader('Transfer-encoding', '', true);
-        $this->getResponse()->setBody(Mage_Install_Model_Installer::INSTALLER_HOST_RESPONSE);
-    }
-
-    /**
-     * Host validation response
-     */
-    public function checkSecureHostAction()
-    {
-        $this->getResponse()->setHeader('Transfer-encoding', '', true);
-        $this->getResponse()->setBody(Mage_Install_Model_Installer::INSTALLER_HOST_RESPONSE);
-    }
 }

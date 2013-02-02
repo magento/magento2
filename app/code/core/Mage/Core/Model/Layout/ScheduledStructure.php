@@ -339,19 +339,4 @@ class Mage_Core_Model_Layout_ScheduledStructure
         $this->_scheduledElements = array();
         $this->_scheduledStructure = array();
     }
-
-    /**
-     * Cleanup circular references
-     *
-     * Destructor should be called explicitly in order to work around the PHP bug
-     * https://bugs.php.net/bug.php?id=62468
-     */
-    public function  __destruct()
-    {
-        $this->_scheduledStructure = array();
-        $this->_scheduledElements = array();
-        $this->_scheduledMoves = array();
-        $this->_scheduledRemoves = array();
-        $this->_scheduledPaths = array();
-    }
 }

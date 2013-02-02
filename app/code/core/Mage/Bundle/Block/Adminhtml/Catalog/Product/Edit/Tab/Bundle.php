@@ -63,7 +63,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle extends Mage_A
     protected function _prepareLayout()
     {
         $this->addChild('add_button', 'Mage_Adminhtml_Block_Widget_Button', array(
-            'label' => Mage::helper('Mage_Bundle_Helper_Data')->__('Add New Option'),
+            'label' => Mage::helper('Mage_Bundle_Helper_Data')->__('Create New Option'),
             'class' => 'add',
             'id'    => 'add_new_option',
             'on_click' => 'bOption.add()'

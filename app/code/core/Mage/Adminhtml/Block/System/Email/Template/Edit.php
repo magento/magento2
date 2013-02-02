@@ -61,6 +61,8 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit extends Mage_Adminhtml_Blo
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
      * @param Mage_Core_Model_Registry $registry
      * @param Mage_Backend_Model_Menu_Config $menuConfig
@@ -81,6 +83,8 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit extends Mage_Adminhtml_Blo
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
         Mage_Core_Model_Registry $registry,
         Mage_Backend_Model_Menu_Config $menuConfig,
@@ -89,7 +93,8 @@ class Mage_Adminhtml_Block_System_Email_Template_Edit extends Mage_Adminhtml_Blo
     )
     {
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache,
-            $designPackage, $session, $storeConfig, $frontController, $helperFactory, $filesystem, $data);
+            $designPackage, $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $data
+        );
         $this->_registryManager = $registry;
         $this->_menuConfig = $menuConfig;
         $this->_configStructure = $configStructure;

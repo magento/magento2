@@ -52,6 +52,12 @@
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
             <action method="addCss"><file>Mage_Adminhtml::catalog/category-selector.css</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/category-selector.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::json2.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/suggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/multisuggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.hotkeys.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/tree-suggest.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/type-switcher.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/product-variation.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/base-image-uploader.js</file></action>
@@ -100,6 +106,12 @@
             <action method="addJs"><file>Mage_Adminhtml::jquery/fileUploader/jquery.fileupload-fp.js</file></action>
             <action method="addCss"><file>Mage_Adminhtml::catalog/category-selector.css</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/category-selector.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::json2.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/suggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/multisuggest.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.hotkeys.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::jquery/jstree/jquery.jstree.js</file></action>
+            <action method="addJs"><file>Mage_Adminhtml::mage/backend/tree-suggest.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/type-switcher.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/product-variation.js</file></action>
             <action method="addJs"><file>Mage_Adminhtml::catalog/base-image-uploader.js</file></action>
@@ -377,36 +389,186 @@ Layout handle for virtual products
 Layout handle for grouped products
 -->
     <adminhtml_catalog_product_grouped>
-        <reference name="product_tabs">
-            <action method="addTab"><name>super</name><block>Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group</block></action>
+        <update handle="adminhtml_catalog_product_grouped_grid"/>
+        <update handle="adminhtml_catalog_product_grouped_grid_popup"/>
+        <reference name="product-type-tabs">
+            <block type="Mage_Catalog_Block_Product_Grouped_AssociatedProducts" name="catalog.product.edit.grouped.container" template="Mage_Catalog::product/grouped/container.phtml">
+                <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.container" template="Mage_Catalog::product/grouped/grouped.phtml">
+                    <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.grid.container" as="catalog.product.group.grid.container"/>
+                    <block type="Mage_Core_Block_Template" name="catalog.product.edit.tab.super.grid.popup.container" as="catalog.product.group.grid.popup.container"/>
+                    </block>
+            </block>
         </reference>
     </adminhtml_catalog_product_grouped>
 
-    <adminhtml_catalog_product_supergroup>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group" name="catalog.product.edit.tab.super.group" />
-            <block type="Mage_Adminhtml_Block_Widget_Grid_Serializer" name="grouped_grid_serializer">
-                <reference name="grouped_grid_serializer">
-                    <action method="initSerializerBlock">
-                        <grid_block_name>catalog.product.edit.tab.super.group</grid_block_name>
-                        <data_callback>getSelectedGroupedProducts</data_callback>
-                        <hidden_input_name>links[grouped]</hidden_input_name>
-                        <reload_param_name>products_grouped</reload_param_name>
-                    </action>
-                    <action method="addColumnInputName">
+    <adminhtml_catalog_product_grouped_grid>
+        <reference name="catalog.product.edit.tab.super.grid.container">
+            <block type="Mage_Catalog_Block_Product_Grouped_AssociatedProducts_Grid" name="catalog.product.edit.tab.super.group" as="catalog.product.group.grid">
+                <arguments>
+                    <id>grouped_grid</id>
+                    <dataSource type="object">Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollection</dataSource>
+                    <use_ajax>1</use_ajax>
+                    <default_sort>id</default_sort>
+                    <default_dir>DESC</default_dir>
+                    <save_parameters_in_session>0</save_parameters_in_session>
+                    <pager_visibility>0</pager_visibility>
+                    <grid_url type="url">
+                        <path>*/*/superGroup</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" name="catalog.product.edit.tab.super.group.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <id>grouped_grid</id>
+                        <filter_visibility>0</filter_visibility>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="info">
+                        <arguments>
+                            <type>grip</type>
+                            <index>entity_id</index>
+                            <width>5px</width>
+                            <sortable>0</sortable>
+                            <inline_css>ui-icon ui-icon-grip-dotted-vertical</inline_css>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Name</header>
+                            <type>text</type>
+                            <index>name</index>
+                            <editable>1</editable>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">SKU</header>
+                            <type>text</type>
+                            <index>sku</index>
+                            <width>80px</width>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Price</header>
+                            <type>currency</type>
+                            <index>price</index>
+                            <width>110px</width>
+                            <align>right</align>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="qty">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Default Qty</header>
+                            <type>number</type>
+                            <index>qty</index>
+                            <width>110px</width>
+                            <align>right</align>
+                            <editable>1</editable>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="delete">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Delete</header>
+                            <type>button</type>
+                            <button_type>button</button_type>
+                            <column_css_class>product-delete</column_css_class>
+                            <width>60px</width>
+                            <renderer>Mage_Backend_Block_Widget_Grid_Column_Renderer_Button</renderer>
+                            <align>right</align>
+                            <sortable>0</sortable>
+                        </arguments>
+                    </block>
+                </block>
+                <action method="setGridData">
+                    <hidden_input_name>links[grouped]</hidden_input_name>
+                    <fields_to_save>
                         <input_name>qty</input_name>
-                        <input_name>position</input_name>
-                    </action>
-                </reference>
+                        <input_name2>position</input_name2>
+                    </fields_to_save>
+                </action>
             </block>
-        </container>
+        </reference>
+    </adminhtml_catalog_product_grouped_grid>
+
+    <adminhtml_catalog_product_grouped_grid_popup>
+        <reference name="catalog.product.edit.tab.super.grid.popup.container">
+            <block type="Mage_Backend_Block_Widget_Grid" name="catalog.product.edit.tab.super.group.popup" as="catalog.product.group.grid.popup">
+                <arguments>
+                    <id>grouped_grid_popup</id>
+                    <dataSource type="object">Mage_Catalog_Model_Resource_Product_Type_Grouped_AssociatedProductsCollection</dataSource>
+                    <use_ajax>1</use_ajax>
+                    <default_sort>id</default_sort>
+                    <default_dir>ASC</default_dir>
+                    <save_parameters_in_session>1</save_parameters_in_session>
+                    <grid_url type="url">
+                        <path>*/*/superGroupPopup</path>
+                        <params>
+                            <_current>1</_current>
+                        </params>
+                    </grid_url>
+                </arguments>
+                <block type="Mage_Backend_Block_Widget_Grid_ColumnSet" name="catalog.product.edit.tab.super.group.popup.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <id>grouped_grid_popup</id>
+                    </arguments>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="in_products">
+                        <arguments>
+                            <type>checkbox</type>
+                            <header_css_class>a-center</header_css_class>
+                            <column_css_class>selected-products</column_css_class>
+                            <width>60px</width>
+                            <align>center</align>
+                            <index>entity_id</index>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="name">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Name</header>
+                            <column_css_class>associated-product-name</column_css_class>
+                            <type>text</type>
+                            <index>name</index>
+                            <editable>1</editable>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="sku">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">SKU</header>
+                            <column_css_class>associated-product-sku</column_css_class>
+                            <type>text</type>
+                            <index>sku</index>
+                            <width>80px</width>
+                        </arguments>
+                    </block>
+                    <block type="Mage_Backend_Block_Widget_Grid_Column" as="price">
+                        <arguments>
+                            <header translate="true" module="Mage_Sales">Price</header>
+                            <column_css_class>associated-product-price</column_css_class>
+                            <type>currency</type>
+                            <index>price</index>
+                            <width>110px</width>
+                            <align>right</align>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_catalog_product_grouped_grid_popup>
+
+    <adminhtml_catalog_product_supergroup>
+        <update handle="adminhtml_catalog_product_grouped"/>
+        <container output="1" name="catalog.product.edit.tab.super.grid.container" label="grid"></container>
     </adminhtml_catalog_product_supergroup>
 
-    <adminhtml_catalog_product_supergroupgridonly>
-        <container name="root" label="Root" output="1">
-            <block type="Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group" name="catalog.product.edit.tab.super.group" />
-        </container>
-    </adminhtml_catalog_product_supergroupgridonly>
+    <adminhtml_catalog_product_supergrouppopup>
+        <update handle="adminhtml_catalog_product_grouped"/>
+        <container output="1" name="catalog.product.edit.tab.super.grid.popup.container" label="grid"></container>
+    </adminhtml_catalog_product_supergrouppopup>
 
     <adminhtml_catalog_product_variationsmatrix>
         <container name="root" label="Root" output="1">

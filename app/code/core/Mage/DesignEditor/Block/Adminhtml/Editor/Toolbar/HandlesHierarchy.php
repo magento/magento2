@@ -61,6 +61,8 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchy
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
      * @param Mage_DesignEditor_Model_Url_Handle $vdeUrlBuilder
      * @param array $data
@@ -79,6 +81,8 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchy
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
         Mage_DesignEditor_Model_Url_Handle $vdeUrlBuilder,
         array $data = array()
@@ -86,7 +90,8 @@ class Mage_DesignEditor_Block_Adminhtml_Editor_Toolbar_HandlesHierarchy
         $this->_vdeUrlBuilder = $vdeUrlBuilder;
 
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
-            $session, $storeConfig, $frontController, $helperFactory, $filesystem, $data);
+            $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $data
+        );
     }
 
     /**

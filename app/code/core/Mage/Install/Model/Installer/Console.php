@@ -29,6 +29,13 @@
  */
 class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_Abstract
 {
+    /**#@+
+     * Installation options for application initialization
+     */
+    const OPTION_URIS = 'install_option_uris';
+    const OPTION_DIRS = 'install_option_dirs';
+    /**#@- */
+
     /**
      * Available installation options
      *
@@ -66,6 +73,11 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     );
 
     /**
+     * @var Magento_Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * Installer data model to store data between installations steps
      *
      * @var Mage_Install_Model_Installer_Data|Mage_Install_Model_Session
@@ -73,20 +85,35 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
     protected $_dataModel;
 
     /**
-     * @var Magento_Filesystem
-     */
-    protected $_filesystem;
-
-    /**
-     * Constructor
+     * Initialize application and "data model"
      *
      * @param Magento_Filesystem $filesystem
+     * @param array $installArgs
      */
-    public function __construct(Magento_Filesystem $filesystem)
+    public function __construct(Magento_Filesystem $filesystem, array $installArgs)
     {
-        Mage::app();
         $this->_filesystem = $filesystem;
+        $params = $this->_buildInitParams($installArgs);
+        Mage::app($params);
         $this->_getInstaller()->setDataModel($this->_getDataModel());
+    }
+
+    /**
+     * Customize application init parameters
+     *
+     * @param array $args
+     * @return array
+     */
+    protected function _buildInitParams(array $args)
+    {
+        $result = array();
+        if (!empty($args[self::OPTION_URIS])) {
+            $result[Mage_Core_Model_App::INIT_OPTION_URIS] = unserialize(base64_decode($args[self::OPTION_URIS]));
+        }
+        if (!empty($args[self::OPTION_DIRS])) {
+            $result[Mage_Core_Model_App::INIT_OPTION_DIRS] = unserialize(base64_decode($args[self::OPTION_DIRS]));
+        }
+        return $result;
     }
 
     /**
@@ -388,21 +415,11 @@ class Mage_Install_Model_Installer_Console extends Mage_Install_Model_Installer_
 
         $this->_cleanUpDatabase();
 
-        /* Remove temporary directories */
-        $configOptions = Mage::app()->getConfig()->getOptions();
-        $dirsToRemove = array(
-            $configOptions->getCacheDir(),
-            $configOptions->getSessionDir(),
-            $configOptions->getExportDir(),
-            $configOptions->getLogDir(),
-            $configOptions->getVarDir() . '/report',
-        );
-        foreach ($dirsToRemove as $dir) {
+        /* Remove temporary directories and local.xml */
+        foreach (glob(Mage::getBaseDir(Mage_Core_Model_Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
             $this->_filesystem->delete($dir);
         }
-
-        /* Remove local configuration */
-        $this->_filesystem->delete($configOptions->getEtcDir() . '/local.xml');
+        $this->_filesystem->delete(Mage::getBaseDir(Mage_Core_Model_Dir::CONFIG) . DIRECTORY_SEPARATOR . '/local.xml');
         return true;
     }
 

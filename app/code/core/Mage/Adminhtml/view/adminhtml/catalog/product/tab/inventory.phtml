@@ -55,7 +55,7 @@
             <?php endif; ?>
         </tr>
 
-<?php if (!$this->getProduct()->isComposite() || $this->getProduct()->isConfigurable()): ?>
+<?php if (!$this->getProduct()->isComposite()): ?>
         <tr>
             <td class="label"><label for="inventory_qty"><?php echo Mage::helper('Mage_Catalog_Helper_Data')->__('Qty') ?></label></td>
             <td class="value">

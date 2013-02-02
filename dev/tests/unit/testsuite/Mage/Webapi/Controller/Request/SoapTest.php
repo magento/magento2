@@ -1,6 +1,6 @@
 <?php
 /**
- * Soap API Request Test.
+ * SOAP API Request Test.
  *
  * Magento
  *
@@ -60,7 +60,7 @@ class Mage_Webapi_Controller_Request_SoapTest extends PHPUnit_Framework_TestCase
             'param_1' => 'foo',
             'param_2' => 'bar',
             $wsdlParam => true,
-            Mage_Webapi_Controller_Router_Route_Webapi::PARAM_API_TYPE => true,
+            Mage_Webapi_Controller_Request::PARAM_API_TYPE => true,
             $resourcesParam => true
         );
         $this->_soapRequest->setParams($requestParams);
@@ -106,7 +106,7 @@ class Mage_Webapi_Controller_Request_SoapTest extends PHPUnit_Framework_TestCase
         $requestParams = array(
             Mage_Webapi_Model_Soap_Server::REQUEST_PARAM_WSDL => true,
             Mage_Webapi_Model_Soap_Server::REQUEST_PARAM_RESOURCES => $resources,
-            Mage_Webapi_Controller_Router_Route_Webapi::PARAM_API_TYPE => 'soap'
+            Mage_Webapi_Controller_Request::PARAM_API_TYPE => 'soap'
         );
         $this->_soapRequest->setParams($requestParams);
         /** Execute SUT. */

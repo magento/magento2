@@ -88,7 +88,7 @@ class Mage_Paypal_Adminhtml_Paypal_ReportsController extends Mage_Adminhtml_Cont
             }
             foreach ($credentials as $config) {
                 try {
-                    $fetched = $reports->fetchAndSave($config);
+                    $fetched = $reports->fetchAndSave(Mage_Paypal_Model_Report_Settlement::createConnection($config));
                     $this->_getSession()->addSuccess(
                         Mage::helper('Mage_Paypal_Helper_Data')->__("Fetched %s report rows from '%s@%s'.", $fetched, $config['username'], $config['hostname'])
                     );

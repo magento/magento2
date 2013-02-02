@@ -49,10 +49,9 @@ class Mage_Captcha_Model_Zend extends Zend_Captcha_Image implements Mage_Captcha
     const DEFAULT_WORD_LENGTH_TO   = 5;
 
     /**
-     * Helper Instance
-     * @var Mage_Captcha_Helper_Data
+     * @var Magento_ObjectManager|null
      */
-    protected $_helper = null;
+    protected $_objectManager = null;
 
     /**
      * Captcha expire time
@@ -87,16 +86,18 @@ class Mage_Captcha_Model_Zend extends Zend_Captcha_Image implements Mage_Captcha
     /**
      * Zend captcha constructor
      *
-     * @param array $params
+     * @param Magento_ObjectManager $objectManager
+     * @param $params
+     * @throws Exception
      */
-    public function __construct($params)
+    public function __construct(Magento_ObjectManager $objectManager, $params)
     {
         if (!is_array($params) || !isset($params['formId'])) {
             throw new Exception('formId is mandatory');
         }
 
         $this->_formId = $params['formId'];
-        $this->_helper = isset($params['helper']) ? $params['helper'] : null;
+        $this->_objectManager = $objectManager;
         $this->_resourceModel = isset($params['resourceModel']) ? $params['resourceModel'] : null;
         $this->_session = isset($params['session']) ? $params['session'] : null;
     }
@@ -355,10 +356,7 @@ class Mage_Captcha_Model_Zend extends Zend_Captcha_Image implements Mage_Captcha
      */
     protected function _getHelper()
     {
-        if (empty($this->_helper)) {
-            $this->_helper = Mage::helper('Mage_Captcha_Helper_Data');
-        }
-        return $this->_helper;
+        return $this->_objectManager->get('Mage_Captcha_Helper_Data');
     }
 
     /**

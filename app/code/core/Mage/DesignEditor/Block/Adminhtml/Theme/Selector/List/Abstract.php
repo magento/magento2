@@ -28,12 +28,12 @@
  * Abstract theme list
  *
  * @method Mage_Core_Model_Resource_Theme_Collection getCollection()
- * @method Mage_Backend_Block_Abstract setCollection(Mage_Core_Model_Resource_Theme_Collection $collection)
+ * @method Mage_Core_Block_Template setCollection(Mage_Core_Model_Resource_Theme_Collection $collection)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
-    extends Mage_Backend_Block_Abstract
+    extends Mage_Core_Block_Template
 {
     /**
      * Application model
@@ -54,6 +54,8 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
      * @param Mage_Core_Model_App $app
      * @param array $data
@@ -72,13 +74,15 @@ abstract class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_List_Abstract
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
         Mage_Core_Model_App $app,
         array $data = array()
     ) {
         $this->_app = $app;
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
-            $session, $storeConfig, $frontController, $helperFactory, $filesystem, $data
+            $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $data
         );
     }
 

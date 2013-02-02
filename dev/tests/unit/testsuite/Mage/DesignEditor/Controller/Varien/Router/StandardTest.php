@@ -183,20 +183,26 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
     ) {
         // default mocks - not affected on method functionality
         $controllerFactory  = $this->getMock('Mage_Core_Controller_Varien_Action_Factory', array(), array(), '', false);
+        $objectManager      = $this->getMock('Magento_ObjectManager_Zend', array('get'), array(), '', false);
         $filesystem         = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor()->getMock();
         $app                = $this->getMock('Mage_Core_Model_App', array(), array(), '', false);
-        $testArea           = 'frontend';
-        $testBaseController = 'Mage_Core_Controller_Varien_Action';
 
-        $helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'), array(), '', false);
-        $helper->expects($this->atLeastOnce())
-            ->method('getFrontName')
-            ->will($this->returnValue(self::VDE_FRONT_NAME));
-
-        $backendSession = $this->getMock('Mage_Backend_Model_Auth_Session', array('isLoggedIn'), array(), '', false);
-        $backendSession->expects($isVde ? $this->once() : $this->never())
-            ->method('isLoggedIn')
-            ->will($this->returnValue($isLoggedIn));
+        $helper         = $this->_getHelperMock();
+        $backendSession = $this->_getBackendSessionMock($isVde, $isLoggedIn);
+        $stateModel     = $this->_getStateModelMock($routers);
+        $configuration  = $this->_getConfigurationMock($isVde, $isLoggedIn, $isConfiguration);
+        $callback = function ($name) use ($helper, $backendSession, $stateModel, $configuration) {
+            switch ($name) {
+                case 'Mage_DesignEditor_Helper_Data': return $helper;
+                case 'Mage_Backend_Model_Auth_Session': return $backendSession;
+                case 'Mage_DesignEditor_Model_State': return $stateModel;
+                case 'Mage_Core_Model_Config': return $configuration;
+                default: return null;
+            }
+        };
+        $objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback($callback));
 
         $frontController = $this->getMock('Mage_Core_Controller_Varien_Front',
             array('applyRewrites', 'getRouters'), array(), '', false
@@ -210,13 +216,68 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
                 ->will($this->returnValue($routers));
         }
 
+        $router = new Mage_DesignEditor_Controller_Varien_Router_Standard(
+            $controllerFactory,
+            $objectManager,
+            $filesystem,
+            $app,
+            'frontend',
+            'Mage_Core_Controller_Varien_Action'
+        );
+        $router->setFront($frontController);
+        return $router;
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getHelperMock()
+    {
+        $helper = $this->getMock('Mage_DesignEditor_Helper_Data', array('getFrontName'), array(), '', false);
+        $helper->expects($this->atLeastOnce())
+            ->method('getFrontName')
+            ->will($this->returnValue(self::VDE_FRONT_NAME));
+        return $helper;
+    }
+
+    /**
+     * @param bool $isVde
+     * @param bool $isLoggedIn
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getBackendSessionMock($isVde, $isLoggedIn)
+    {
+        $backendSession = $this->getMock('Mage_Backend_Model_Auth_Session', array('isLoggedIn'), array(), '', false);
+        $backendSession->expects($isVde ? $this->once() : $this->never())
+            ->method('isLoggedIn')
+            ->will($this->returnValue($isLoggedIn));
+        return $backendSession;
+    }
+
+    /**
+     * @param array $routers
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getStateModelMock(array $routers)
+    {
         $stateModel = $this->getMock('Mage_DesignEditor_Model_State', array('update'), array(), '', false);
         if (array_key_exists('matched', $routers)) {
             $stateModel->expects($this->once())
                 ->method('update')
                 ->with(self::AREA_CODE);
+            return $stateModel;
         }
+        return $stateModel;
+    }
 
+    /**
+     * @param bool $isVde
+     * @param bool $isLoggedIn
+     * @param bool $isConfiguration
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getConfigurationMock($isVde, $isLoggedIn, $isConfiguration)
+    {
         $configuration = $this->getMock('Mage_Core_Model_Config', array('getNode'), array(), '', false);
         if ($isVde && $isLoggedIn) {
             $configurationData = null;
@@ -240,19 +301,6 @@ class Mage_DesignEditor_Controller_Varien_Router_StandardTest extends PHPUnit_Fr
                     ->will($this->returnValue($elementMock));
             }
         }
-
-        $router = new Mage_DesignEditor_Controller_Varien_Router_Standard(
-            $controllerFactory,
-            $filesystem,
-            $app,
-            $testArea,
-            $testBaseController,
-            $backendSession,
-            $helper,
-            $stateModel,
-            $configuration
-        );
-        $router->setFront($frontController);
-        return $router;
+        return $configuration;
     }
 }

@@ -44,6 +44,8 @@ class Mage_Wishlist_Block_AbstractTest extends PHPUnit_Framework_TestCase
         'Mage_Core_Model_Store_Config',
         'Mage_Core_Controller_Varien_Front',
         'Mage_Core_Model_Factory_Helper',
+        'Mage_Core_Model_Dir',
+        'Mage_Core_Model_Logger',
         'Magento_Filesystem',
     );
 
@@ -81,7 +83,7 @@ class Mage_Wishlist_Block_AbstractTest extends PHPUnit_Framework_TestCase
     {
         $arguments = array();
         foreach ($this->_blockInjections as $injectionClass) {
-            $arguments[] = Mage::getModel($injectionClass);
+            $arguments[] = Mage::getObjectManager()->get($injectionClass);
         }
         return $arguments;
     }

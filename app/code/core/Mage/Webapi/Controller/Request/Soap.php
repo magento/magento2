@@ -51,7 +51,7 @@ class Mage_Webapi_Controller_Request_Soap extends Mage_Webapi_Controller_Request
         $wsdlParam = Mage_Webapi_Model_Soap_Server::REQUEST_PARAM_WSDL;
         $resourcesParam = Mage_Webapi_Model_Soap_Server::REQUEST_PARAM_RESOURCES;
         $requestParams = array_keys($this->getParams());
-        $allowedParams = array(Mage_Webapi_Controller_Router_Route_Webapi::PARAM_API_TYPE, $wsdlParam, $resourcesParam);
+        $allowedParams = array(Mage_Webapi_Controller_Request::PARAM_API_TYPE, $wsdlParam, $resourcesParam);
         $notAllowedParameters = array_diff($requestParams, $allowedParams);
         if (count($notAllowedParameters)) {
             $message = $this->_helper->__('Not allowed parameters: %s. ', implode(', ', $notAllowedParameters))

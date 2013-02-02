@@ -53,7 +53,6 @@ class Mage_Catalog_Model_Layer_Filter_Price_AlgorithmAdvancedTest extends PHPUni
      * Prepare price filter model
      *
      * @param Magento_Test_Request|null $request
-     * @return void
      */
     protected function _prepareFilter($request = null)
     {

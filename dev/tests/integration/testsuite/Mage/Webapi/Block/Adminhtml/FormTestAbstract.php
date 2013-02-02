@@ -78,11 +78,11 @@ class Mage_Webapi_Block_Adminhtml_FormTestAbstract extends PHPUnit_Framework_Tes
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      */
     public function testPrepareForm()
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         $this->assertEmpty($this->_block->getForm());
 
         $this->_urlBuilder->expects($this->once())

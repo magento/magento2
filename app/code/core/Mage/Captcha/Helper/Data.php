@@ -65,11 +65,6 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_captcha = array();
 
     /**
-     * @var Mage_Core_Model_Config_Options
-     */
-    protected $_option;
-
-    /**
      * @var Mage_Core_Model_Config
      */
     protected $_config;
@@ -80,20 +75,28 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_filesystem;
 
     /**
+     * @var Mage_Core_Model_Dir
+     */
+    protected $_dirs = null;
+
+    /**
      * @var Mage_Core_Model_App
      */
     protected $_app;
 
     /**
+     * @param Mage_Core_Model_Dir $dirs
      * @param Mage_Core_Model_App $app
      * @param Mage_Core_Model_Config $config
      * @param Magento_Filesystem $filesystem
      */
     public function __construct(
+        Mage_Core_Model_Dir $dirs,
         Mage_Core_Model_App $app,
         Mage_Core_Model_Config $config,
         Magento_Filesystem $filesystem
     ) {
+        $this->_dirs = $dirs;
         $this->_app = $app;
         $this->_config = $config;
         $this->_filesystem = $filesystem;
@@ -133,7 +136,7 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $store = $this->_app->getStore($store);
         $areaCode = $store->isAdmin() ? 'admin' : 'customer';
-        return $store->getConfig($areaCode . '/captcha/' . $id, $store);
+        return $store->getConfig($areaCode . '/captcha/' . $id);
     }
 
     /**
@@ -149,10 +152,11 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
         $node = $this->_config->getNode(Mage_Captcha_Helper_Data::XML_PATH_CAPTCHA_FONTS);
         $fonts = array();
         if ($node) {
+            $libDir = $this->_dirs->getDir(Mage_Core_Model_Dir::LIB);
             foreach ($node->children() as $fontName => $fontNode) {
                 $fonts[$fontName] = array(
                     'label' => (string)$fontNode->label,
-                    'path' => $this->_config->getOptions()->getDir('base') . DIRECTORY_SEPARATOR . $fontNode->path
+                    'path' => $libDir . DIRECTORY_SEPARATOR . $fontNode->path
                 );
             }
         }
@@ -167,7 +171,7 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getImgDir($website = null)
     {
-        $mediaDir = $this->_config->getOptions()->getDir('media');
+        $mediaDir =  $this->_dirs->getDir(Mage_Core_Model_Dir::MEDIA);
         $captchaDir = Magento_Filesystem::getPathFromArray(array($mediaDir, 'captcha',
             $this->_app->getWebsite($website)->getCode()));
         $this->_filesystem->setWorkingDirectory($mediaDir);
@@ -184,7 +188,7 @@ class Mage_Captcha_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getImgUrl($website = null)
     {
-        return $this->_app->getStore()->getBaseUrl('media') . 'captcha'
+        return $this->_app->getStore()->getBaseUrl(Mage_Core_Model_Dir::MEDIA) . 'captcha'
             . '/' . $this->_app->getWebsite($website)->getCode() . '/';
     }
 }

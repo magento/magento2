@@ -41,7 +41,7 @@
     <global>
         <areas>
             <webapi>
-                <frontName>api</frontName>
+                <frontName>webapi</frontName>
                 <front_controller>Mage_Webapi_Controller_Front</front_controller>
                 <!--TODO: Utilize base action controller from config, not constant-->
                 <base_controller>Mage_Webapi_Controller_ActionAbstract</base_controller>
@@ -125,10 +125,9 @@
             </rest>
         </webapi>
         <di>
-            <!--<Zend/Server/Reflection><shared>0</shared></Zend/Server/Reflection>-->
-            <Mage_Webapi_Controller_Router_Route_Webapi>
+            <Mage_Webapi_Controller_Router_Route>
                 <shared>0</shared>
-            </Mage_Webapi_Controller_Router_Route_Webapi>
+            </Mage_Webapi_Controller_Router_Route>
             <Mage_Xml_Generator>
                 <shared>0</shared>
             </Mage_Xml_Generator>

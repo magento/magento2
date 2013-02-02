@@ -290,7 +290,12 @@ class Magento_Filesystem_Adapter_Local implements
      */
     public function touch($key, $fileModificationTime = null)
     {
-        if (!@touch($key, $fileModificationTime)) {
+        if ($fileModificationTime === null) {
+            $success = @touch($key);
+        } else {
+            $success = @touch($key, $fileModificationTime);
+        }
+        if (!$success) {
             throw new Magento_Filesystem_Exception(sprintf('Failed to touch %s', $key));
         }
     }

@@ -33,16 +33,16 @@ class Mage_Webapi_Model_Config_Rest extends Mage_Webapi_Model_ConfigAbstract
      *
      * @param Mage_Webapi_Model_Config_Reader_Rest $reader
      * @param Mage_Webapi_Helper_Config $helper
-     * @param Mage_Core_Model_App $app
+     * @param Mage_Core_Model_App $application
      * @param Magento_Controller_Router_Route_Factory $routeFactory
      */
     public function __construct(
         Mage_Webapi_Model_Config_Reader_Rest $reader,
         Mage_Webapi_Helper_Config $helper,
-        Mage_Core_Model_App $app,
+        Mage_Core_Model_App $application,
         Magento_Controller_Router_Route_Factory $routeFactory
     ) {
-        parent::__construct($reader, $helper, $app);
+        parent::__construct($reader, $helper, $application);
         $this->_routeFactory = $routeFactory;
     }
 
@@ -124,7 +124,7 @@ class Mage_Webapi_Model_Config_Rest extends Mage_Webapi_Model_ConfigAbstract
      */
     protected function _createRoute($routePath, $resourceName, $actionType)
     {
-        $apiTypeRoutePath = Mage_Webapi_Controller_Router_Route_Webapi::API_AREA_NAME
+        $apiTypeRoutePath = $this->_application->getConfig()->getAreaFrontName()
             . '/:' . Mage_Webapi_Controller_Front::API_TYPE_REST;
         $fullRoutePath = $apiTypeRoutePath . $routePath;
         /** @var $route Mage_Webapi_Controller_Router_Route_Rest */

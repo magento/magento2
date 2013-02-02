@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Model_Acl_Rule model
+ * Test for Mage_Webapi_Model_Acl_Rule model.
  *
  * Magento
  *
@@ -49,7 +49,7 @@ class Mage_Webapi_Model_Acl_RuleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Cleanup model instance
+     * Cleanup model instance.
      */
     protected function tearDown()
     {
@@ -57,7 +57,7 @@ class Mage_Webapi_Model_Acl_RuleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Web API Rule CRUD
+     * Test Web API Role CRUD.
      */
     public function testCRUD()
     {
@@ -72,7 +72,7 @@ class Mage_Webapi_Model_Acl_RuleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test method Mage_Webapi_Model_Acl_Rule::saveResources()
+     * Test Mage_Webapi_Model_Acl_Rule::saveResources() method.
      */
     public function testSaveResources()
     {

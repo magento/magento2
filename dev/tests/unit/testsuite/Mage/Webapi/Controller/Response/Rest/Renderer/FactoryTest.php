@@ -71,7 +71,7 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_FactoryTest extends PHPUnit_
     }
 
     /**
-     * Test get method.
+     * Test GET method.
      */
     public function testGet()
     {
@@ -96,7 +96,7 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_FactoryTest extends PHPUnit_
 
     protected function _createConfigElementForRenders()
     {
-        /** Xml with the list of renders types and models. */
+        /** XML with the list of renders types and models. */
         $rendersXml = <<<XML
         <renders>
             <default>
@@ -114,7 +114,7 @@ XML;
     }
 
     /**
-     * Test get method with wrong Accept Http Header.
+     * Test GET method with wrong Accept HTTP Header.
      */
     public function testGetWithWrongAcceptHttpHeader()
     {
@@ -129,7 +129,7 @@ XML;
     }
 
     /**
-     * Test get method with wrong Renderer class.
+     * Test GET method with wrong Renderer class.
      */
     public function testGetWithWrongRendererClass()
     {

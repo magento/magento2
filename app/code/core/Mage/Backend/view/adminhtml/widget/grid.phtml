@@ -134,6 +134,10 @@ $numColumns = sizeof($this->getColumns());
     <?php if ($this->getCheckboxCheckCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
     <?php endif; ?>
+    <?php if ($this->getSortableUpdateCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.sortableUpdateCallback = <?php echo $this->getSortableUpdateCallback()?>;
+    <?php endif; ?>
+    <?php echo $this->getJsObjectName() ?>.bindSortable();
     <?php if ($this->getRowInitCallback()): ?>
         <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
         <?php echo $this->getJsObjectName() ?>.initGridRows();

@@ -77,7 +77,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_XmlTest extends PHPUnit_Fr
 
     public function testInterpretInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid data type "boolean". String is expected.');
+        $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
         $this->_xmlInterpreter->interpret(false);
     }
 
@@ -93,7 +93,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_XmlTest extends PHPUnit_Fr
         $this->assertEquals(
             $expectedArray,
             $this->_xmlInterpreter->interpret($validInputXml),
-            'Request xml body was parsed incorrectly into array of params'
+            'Request XML body was parsed incorrectly into array of params.'
         );
     }
 

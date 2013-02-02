@@ -125,10 +125,9 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
     protected function _prepareLayout()
     {
         $this->addChild('add_selection_button', 'Mage_Adminhtml_Block_Widget_Button', array(
-            'id'    => $this->getFieldId().'_{{index}}_add_button',
-            'label'     => Mage::helper('Mage_Bundle_Helper_Data')->__('Add Selection'),
-            'on_click'   => 'bSelection.showSearch(event)',
-            'class' => 'add'
+            'id'    => $this->getFieldId() . '_{{index}}_add_button',
+            'label' => Mage::helper('Mage_Bundle_Helper_Data')->__('Add Products to Option'),
+            'class' => 'add add-selection'
         ));
 
         $this->addChild('close_search_button', 'Mage_Adminhtml_Block_Widget_Button', array(
@@ -144,7 +143,10 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
             'on_click' => 'bOption.remove(event)'
         ));
 
-        $this->addChild('selection_template', 'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection');
+        $this->addChild(
+            'selection_template',
+            'Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selection'
+        );
 
         return parent::_prepareLayout();
     }
@@ -217,7 +219,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
 
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_type',
                 'class' => 'select select-product-option-type required-option-select',
@@ -231,7 +233,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
 
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_required',
                 'class' => 'select'
@@ -244,6 +246,6 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option extends
 
     public function isDefaultStore()
     {
-        return ($this->getProduct()->getStoreId() == '0');
+        return $this->getProduct()->getStoreId() == '0';
     }
 }

@@ -57,8 +57,7 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
     {
         /** @var $website Mage_Core_Model_Website */
         $website = Mage::getModel('Mage_Core_Model_Website');
-        Mage::app()->getStore()->setWebsiteId(0)->setWebsite($website);
-
+        Mage::app()->getStore()->setWebsiteId(0);
 
         $templates = array();
         foreach (Utility_Classes::collectModuleClasses('Block') as $blockClass => $module) {
@@ -85,7 +84,8 @@ class Integrity_Modular_TemplateFilesTest extends Magento_Test_TestCase_Integrit
             $block = Mage::getModel($blockClass);
             $template = $block->getTemplate();
             if ($template) {
-                $templates[] = array($module, $template, $blockClass, $area);
+                $templates[$module . ', ' . $template . ', ' . $blockClass . ', ' . $area] =
+                    array($module, $template, $blockClass, $area);
             }
         }
         return $templates;

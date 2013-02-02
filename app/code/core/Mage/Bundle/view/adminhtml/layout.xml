@@ -29,7 +29,7 @@
 <layout>
 
 <!--
-Layout handle for budle products
+Layout handle for bundle products
 -->
 
     <!--<default>
@@ -39,9 +39,11 @@ Layout handle for budle products
     </default>-->
 
     <adminhtml_catalog_product_bundle>
-        <reference name="product_tabs">
-            <action method="addTab"><name>bundle_items</name><block>Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle</block></action>
-            <action method="bindShadowTabs"><first>bundle_items</first><second>customer_options</second></action>
+        <reference name="head">
+            <action method="addCss"><file>Mage_Bundle::css/bundle-product.css</file></action>
+        </reference>
+        <reference name="product-type-tabs">
+            <block type="Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle" name="bundle_items" />
         </reference>
     </adminhtml_catalog_product_bundle>
 

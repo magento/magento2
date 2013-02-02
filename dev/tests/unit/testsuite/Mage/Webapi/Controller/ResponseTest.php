@@ -59,16 +59,16 @@ class Mage_Webapi_Controller_ResponseTest extends PHPUnit_Framework_TestCase
             ),
         );
         $actualHeader = $this->_response->setMimeType('application/xml')->getHeaders();
-        /** Assert headers are equal */
+        /** Assert that headers are equal */
         $this->assertEquals($expectedHeader, $actualHeader, 'Mime type is not set.');
     }
 
     /**
-     * Test addMessage, hasMessage, getMessage and clearMessages methods.
+     * Test addMessage, hasMessage, getMessage, and clearMessages methods.
      */
     public function testMessagesCrud()
     {
-        /** Test new object does not contain any messages. */
+        /** Test that new object does not contain any messages. */
         $this->assertFalse($this->_response->hasMessages(), 'New object contains messages.');
 
         /** Test message adding functionality. */
@@ -78,7 +78,7 @@ class Mage_Webapi_Controller_ResponseTest extends PHPUnit_Framework_TestCase
             array('key' => 'value'),
             Mage_Webapi_Controller_Response::MESSAGE_TYPE_SUCCESS
         );
-        $this->assertTrue($this->_response->hasMessages(), 'New message is not added right.');
+        $this->assertTrue($this->_response->hasMessages(), 'New message is not added correctly.');
 
         /** Test message getting functionality. */
         $expectedMessage = array(
@@ -86,7 +86,7 @@ class Mage_Webapi_Controller_ResponseTest extends PHPUnit_Framework_TestCase
                 array('key' => 'value', 'message' => 'Message text', 'code' => 200)
             )
         );
-        $this->assertEquals($expectedMessage, $this->_response->getMessages(), 'Message is got wrong.');
+        $this->assertEquals($expectedMessage, $this->_response->getMessages(), 'Message is got incorrectly.');
 
         /** Test message clearing functionality. */
         $this->_response->clearMessages();

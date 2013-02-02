@@ -28,6 +28,7 @@
 class Mage_Catalog_Model_Config extends Mage_Eav_Model_Config
 {
     const XML_PATH_LIST_DEFAULT_SORT_BY     = 'catalog/frontend/default_sort_by';
+    const XML_PATH_GROUPED_ALLOWED_PRODUCT_TYPES = 'global/catalog/product/type/grouped/allow_product_types';
 
     protected $_attributeSetsById;
     protected $_attributeSetsByName;

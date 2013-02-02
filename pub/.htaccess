@@ -135,11 +135,6 @@
     RewriteRule .* - [L,R=405]
 
 ############################################
-## always send 404 on missing files in these folders
-
-    RewriteCond %{REQUEST_URI} !^/(media|js)/
-
-############################################
 ## never rewrite for existing files, directories and links
 
     RewriteCond %{REQUEST_FILENAME} !-f

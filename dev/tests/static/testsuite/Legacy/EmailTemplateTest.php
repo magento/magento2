@@ -36,11 +36,10 @@ class Legacy_EmailTemplateTest extends PHPUnit_Framework_TestCase
      */
     public function testObsoleteDirectives($file)
     {
-        $suggestion = sprintf(Legacy_ObsoleteCodeTest::SUGGESTION_MESSAGE, '{{escapehtml}}');
         $this->assertNotRegExp(
             '/\{\{htmlescape.*?\}\}/i',
             file_get_contents($file),
-            'Directive {{htmlescape}} is obsolete. ' . $suggestion
+            'Directive {{htmlescape}} is obsolete. Use {{escapehtml}} instead.'
         );
     }
 

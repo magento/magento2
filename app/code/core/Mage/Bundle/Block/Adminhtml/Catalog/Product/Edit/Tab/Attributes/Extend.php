@@ -85,8 +85,8 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Attributes_Extend
                             $('" . $this->getAttribute()->getAttributeCode() . "').removeClassName('required-entry');
                         }
 
-                        if ($('dynamic-price-warrning')) {
-                            $('dynamic-price-warrning').show();
+                        if ($('dynamic-price-warning')) {
+                            $('dynamic-price-warning').show();
                         }
                     } else {
                         if ($('" . $this->getAttribute()->getAttributeCode() . "')) {";
@@ -105,8 +105,8 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Attributes_Extend
 
             $html .= "}
 
-                        if ($('dynamic-price-warrning')) {
-                            $('dynamic-price-warrning').hide();
+                        if ($('dynamic-price-warning')) {
+                            $('dynamic-price-warning').hide();
                         }
                     }
                 }";

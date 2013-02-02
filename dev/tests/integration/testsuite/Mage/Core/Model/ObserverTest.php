@@ -38,24 +38,28 @@ class Mage_Core_Model_ObserverTest extends PHPUnit_Framework_TestCase
      */
     public function testThemeRegistration()
     {
+        $baseDir = 'base_dir';
+        $pattern = 'path_pattern';
+
         $eventObserver = $this->_createEventObserverForThemeRegistration();
-        $eventObserver->getEvent()->setBaseDir(dirname(__FILE__) . DS . '_files' . DS . 'design');
+        $eventObserver->getEvent()->setBaseDir($baseDir);
+        $eventObserver->getEvent()->setPathPattern($pattern);
+
+        /** @var $objectManager Magento_Test_ObjectManager */
+        $objectManager = Mage::getObjectManager();
+        $themeRegistration = $this->getMock(
+            'Mage_Core_Model_Theme_Registration',
+            array('register'),
+            array($objectManager->create('Mage_Core_Model_Theme'))
+        );
+        $themeRegistration->expects($this->once())
+            ->method('register')
+            ->with($baseDir, $pattern);
+        $objectManager->addSharedInstance($themeRegistration, 'Mage_Core_Model_Theme_Registration');
 
         /** @var $observer Mage_Core_Model_Observer */
         $observer = Mage::getModel('Mage_Core_Model_Observer');
         $observer->themeRegistration($eventObserver);
-
-        $defaultModel = $this->_getThemeModel();
-        $defaultModel->load('default/default', 'theme_path');
-
-        $iphoneModel = $this->_getThemeModel();
-        $iphoneModel->load('default/default_iphone', 'theme_path');
-
-        $this->assertEquals('Default', $defaultModel->getThemeTitle());
-        $this->assertEquals(null, $defaultModel->getParentId());
-
-        $this->assertEquals('Iphone', $iphoneModel->getThemeTitle());
-        $this->assertEquals($defaultModel->getId(), $iphoneModel->getParentId());
     }
 
     /**

@@ -1,2 +1,0 @@
-app/code/core/Enterprise/Cms/view/adminhtml/cms.js
-app/code/core/Enterprise/Rma/view/adminhtml/rma.js

@@ -58,26 +58,18 @@
     <check>
         <filesystem>
             <writeable>
-                <app_etc>
-                    <path>/app/etc</path>
+                <etc>
                     <existence>1</existence>
                     <recursive>0</recursive>
-                </app_etc>
+                </etc>
                 <var>
-                    <path>/var</path>
                     <existence>1</existence>
                     <recursive>1</recursive>
                 </var>
                 <media>
-                    <path>/pub/media</path>
                     <existence>1</existence>
                     <recursive>1</recursive>
                 </media>
-                <theme>
-                    <path>/pub/media/theme</path>
-                    <existence>0</existence>
-                    <recursive>0</recursive>
-                </theme>
             </writeable>
         </filesystem>
         <php>

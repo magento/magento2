@@ -29,6 +29,8 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test crud operations for theme model using valid data
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCrud()
     {
@@ -42,22 +44,17 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
 
     /**
      * Load from configuration
-     *
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testLoadFromConfiguration()
     {
         $designPath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'design';
-        /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array($designPath));
-        $themeUtility->registerThemes()->setDesignTheme('default/default', 'frontend');
-
         $themePath = implode(DS, array('frontend', 'default', 'default', 'theme.xml'));
 
         /** @var $themeModel Mage_Core_Model_Theme */
         $themeModel = Mage::getObjectManager()->create('Mage_Core_Model_Theme');
-        $theme = $themeModel->getCollectionFromFilesystem()->setBaseDir($designPath)->addTargetPattern($themePath)
+        $theme = $themeModel->getCollectionFromFilesystem()
+            ->setBaseDir($designPath)
+            ->addTargetPattern($themePath)
             ->getFirstItem();
 
         $this->assertEquals($this->_expectedThemeDataFromConfiguration(), $theme->getData());

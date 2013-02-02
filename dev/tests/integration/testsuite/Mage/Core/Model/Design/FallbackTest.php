@@ -28,6 +28,53 @@
 class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructException()
+    {
+        $dirs = new Mage_Core_Model_Dir(__DIR__);
+        Mage::getObjectManager()->create(
+            'Mage_Core_Model_Design_Fallback',
+            array(
+                'dirs' => $dirs,
+                'params' => array()
+            )
+        );
+    }
+
+    /**
+     * @covers Mage_Core_Model_Design_Fallback::getArea
+     * @covers Mage_Core_Model_Design_Fallback::getTheme
+     * @covers Mage_Core_Model_Design_Fallback::getLocale
+     */
+    public function testGetters()
+    {
+        $theme = 't';
+        $themeModel = $this->getMock('Mage_Core_Model_Theme', array('getThemeCode'), array(), '', false);
+        $themeModel->expects($this->any())
+            ->method('getThemeCode')
+            ->will($this->returnValue($theme));
+
+        $dirs = new Mage_Core_Model_Dir(__DIR__);
+        $stub = array(
+            'themeConfig' => 'stub',
+            'area' => 'a',
+            'themeModel' => $themeModel,
+            'locale' => 'l',
+        );
+        $model = Mage::getObjectManager()->create(
+            'Mage_Core_Model_Design_Fallback',
+            array(
+                'dirs' => $dirs,
+                'params' => $stub
+            )
+        );
+        $this->assertEquals('a', $model->getArea());
+        $this->assertEquals($theme, $model->getTheme());
+        $this->assertEquals('l', $model->getLocale());
+    }
+
+    /**
      * Build a model to test
      *
      * @param string $area
@@ -37,15 +84,14 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
      */
     protected function _buildModel($area, $themePath, $locale)
     {
-        $testDir = implode(DS, array(dirname( __DIR__), '_files', 'fallback'));
-        Mage::getConfig()->getOptions()->addData(array(
-            'js_dir'     => implode(DS, array($testDir, 'pub', 'js')),
-            'design_dir' => $testDir . DIRECTORY_SEPARATOR .  'design'
-        ));
+        // Prepare config with directories
+        $baseDir = dirname(__DIR__) . DIRECTORY_SEPARATOR .  '_files' . DIRECTORY_SEPARATOR . 'fallback';
+        $viewDir = $baseDir . DIRECTORY_SEPARATOR . 'design';
+        $dirs = new Mage_Core_Model_Dir($baseDir, array(), array(Mage_Core_Model_Dir::THEMES => $viewDir));
 
         /** @var $collection Mage_Core_Model_Theme_Collection */
         $collection = Mage::getModel('Mage_Core_Model_Theme_Collection');
-        $themeModel = $collection->setBaseDir($testDir . DIRECTORY_SEPARATOR .  'design')
+        $themeModel = $collection->setBaseDir($viewDir)
             ->addDefaultPattern()
             ->addFilter('theme_path', $themePath)
             ->addFilter('area', $area)
@@ -58,7 +104,8 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
             'themeModel' => $themeModel,
         );
 
-        return Mage::getObjectManager()->create('Mage_Core_Model_Design_Fallback', array('data' => $params));
+        return Mage::getObjectManager()->create('Mage_Core_Model_Design_Fallback',
+            array('dirs' => $dirs, 'params' => $params));
     }
 
     /**
@@ -311,7 +358,7 @@ class Mage_Core_Model_Design_FallbackTest extends PHPUnit_Framework_TestCase
             ),
             'lib file in js lib' => array(
                 'mage/script.js', 'frontend', 'package/custom_theme',
-                '%s/pub/js/mage/script.js',
+                '%s/pub/lib/mage/script.js',
             ),
         );
     }

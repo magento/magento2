@@ -35,6 +35,34 @@
  */
 class Mage_Core_Model_App
 {
+    /**
+     * Scope code initialization option
+     */
+    const INIT_OPTION_SCOPE_CODE = 'MAGE_RUN_CODE';
+
+    /**
+     * Scope type initialization option
+     */
+    const INIT_OPTION_SCOPE_TYPE = 'MAGE_RUN_TYPE';
+
+    /**
+     * Custom directory paths initialization option
+     */
+    const INIT_OPTION_URIS = 'app_uris';
+
+    /**
+     * Custom directory absolute paths initialization option
+     */
+    const INIT_OPTION_DIRS = 'app_dirs';
+
+    /**#@+
+     * Available scope types
+     */
+    const SCOPE_TYPE_STORE   = 'store';
+    const SCOPE_TYPE_GROUP   = 'group';
+    const SCOPE_TYPE_WEBSITE = 'website';
+    /**#@-*/
+
     const XML_PATH_INSTALL_DATE = 'global/install/date';
 
     const XML_PATH_SKIP_PROCESS_MODULES_UPDATES = 'global/skip_process_modules_updates';
@@ -74,10 +102,6 @@ class Mage_Core_Model_App
      */
     const ADMIN_STORE_ID = 0;
 
-    /**
-     * Dependency injection configuration node name
-     */
-    const CONFIGURATION_DI_NODE = 'di';
 
     /**
      * Application loaded areas array
@@ -120,6 +144,13 @@ class Mage_Core_Model_App
      * @var Mage_Core_Model_Design_Package
      */
     protected $_design;
+
+    /**
+     * Initialization parameters
+     *
+     * @var array
+     */
+    protected $_initParams = null;
 
     /**
      * Application configuration object
@@ -210,7 +241,6 @@ class Mage_Core_Model_App
      */
     protected $_response;
 
-
     /**
      * Events cache
      *
@@ -268,32 +298,32 @@ class Mage_Core_Model_App
     /**
      * Initialize application without request processing
      *
-     * @param  string|array $code
-     * @param  string $type
-     * @param  string|array $options
+     * @param  array $params
      * @return Mage_Core_Model_App
      */
-    public function init($code, $type = null, $options = array())
+    public function init(array $params)
     {
         $this->_initEnvironment();
-        if (is_string($options)) {
-            $options = array('etc_dir'=>$options);
-        }
+        $this->_initParams = $params;
+        $this->_initFilesystem();
+        $logger = $this->_initLogger();
 
         Magento_Profiler::start('init_config');
-        $this->_config = Mage::getConfig();
-        $this->_config->setOptions($options);
+        /** @var $config Mage_Core_Model_Config */
+        $config = $this->_objectManager->create('Mage_Core_Model_Config');
+        $this->_config = $config;
         $this->_initBaseConfig();
-        $logger = $this->_initLogger();
         $this->_initCache();
-        $this->_config->init($options);
+        $this->_config->init();
         $this->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
-        $this->loadDiConfiguration();
         Magento_Profiler::stop('init_config');
 
-        if (Mage::isInstalled($options)) {
-            $this->_initCurrentStore($code, $type);
-            $logger->initForStore($this->_store);
+        if (Mage::isInstalled()) {
+            $this->_initCurrentStore(
+                $this->getInitParam(self::INIT_OPTION_SCOPE_CODE),
+                $this->getInitParam(self::INIT_OPTION_SCOPE_TYPE) ?: self::SCOPE_TYPE_STORE
+            );
+            $logger->initForStore($this->_store, $this->_config);
             $this->_initRequest();
         }
         return $this;
@@ -302,19 +332,21 @@ class Mage_Core_Model_App
     /**
      * Common logic for all run types
      *
-     * @param  string|array $options
+     * @param  array $params
      * @return Mage_Core_Model_App
      */
-    public function baseInit($options)
+    public function baseInit(array $params)
     {
         $this->_initEnvironment();
+        $this->_initParams = $params;
+        $this->_initFilesystem();
+        $this->_initLogger();
 
-        $this->_config = Mage::getConfig();
-        $this->_config->setOptions($options);
-
+        /** @var $config Mage_Core_Model_Config */
+        $config = $this->_objectManager->get('Mage_Core_Model_Config');
+        $this->_config = $config;
         $this->_initBaseConfig();
-        $cacheInitOptions = is_array($options) && array_key_exists('cache', $options) ? $options['cache'] : array();
-        $this->_initCache($cacheInitOptions);
+        $this->_initCache($this->getInitParam(Mage_Core_Model_Cache::APP_INIT_PARAM) ?: array());
 
         return $this;
     }
@@ -324,43 +356,37 @@ class Mage_Core_Model_App
      *
      * @see Mage_Core_Model_App->run()
      *
-     * @param  string|array $scopeCode
-     * @param  string $scopeType
-     * @param  string|array $options
+     * @param  array $params
      * @param  string|array $modules
      * @return Mage_Core_Model_App
      */
-    public function initSpecified($scopeCode, $scopeType = null, $options = array(), $modules = array())
+    public function initSpecified(array $params, $modules = array())
     {
-        $this->baseInit($options);
+        $this->baseInit($params);
 
         if (!empty($modules)) {
             $this->_config->addAllowedModules($modules);
         }
         $this->_initModules();
-        $this->_initCurrentStore($scopeCode, $scopeType);
+        $this->_initCurrentStore(
+            $this->getInitParam(self::INIT_OPTION_SCOPE_CODE),
+            $this->getInitParam(self::INIT_OPTION_SCOPE_TYPE) ?: self::SCOPE_TYPE_STORE
+        );
 
         return $this;
     }
 
     /**
      * Run application. Run process responsible for request processing and sending response.
-     * List of supported parameters:
-     *  scope_code - code of default scope (website/store_group/store code)
-     *  scope_type - type of default scope (website/group/store)
-     *  options    - configuration options
      *
-     * @param  array $params application run parameters
+     * @param array $params
      * @return Mage_Core_Model_App
      */
-    public function run($params)
+    public function run(array $params)
     {
-        $options = isset($params['options']) ? $params['options'] : array();
-
         Magento_Profiler::start('init');
 
-        $this->baseInit($options);
-        Mage::register('application_params', $params);
+        $this->baseInit($params);
 
         Magento_Profiler::stop('init');
 
@@ -368,16 +394,18 @@ class Mage_Core_Model_App
             $this->getResponse()->sendResponse();
         } else {
             Magento_Profiler::start('init');
-            $logger = $this->_initLogger();
+
             $this->_initModules();
             $this->loadAreaPart(Mage_Core_Model_App_Area::AREA_GLOBAL, Mage_Core_Model_App_Area::PART_EVENTS);
-            $this->loadDiConfiguration();
 
             if ($this->_config->isLocalConfigLoaded()) {
-                $scopeCode = isset($params['scope_code']) ? $params['scope_code'] : '';
-                $scopeType = isset($params['scope_type']) ? $params['scope_type'] : 'store';
-                $this->_initCurrentStore($scopeCode, $scopeType);
-                $logger->initForStore($this->_store);
+                $this->_initCurrentStore(
+                    $this->getInitParam(self::INIT_OPTION_SCOPE_CODE),
+                    $this->getInitParam(self::INIT_OPTION_SCOPE_TYPE) ?: self::SCOPE_TYPE_STORE
+                );
+                /** @var $logger Mage_Core_Model_Logger */
+                $logger = $this->_objectManager->get('Mage_Core_Model_Logger');
+                $logger->initForStore($this->_store, $this->_config);
                 $this->_initRequest();
                 Mage_Core_Model_Resource_Setup::applyAllDataUpdates();
             }
@@ -387,6 +415,19 @@ class Mage_Core_Model_App
             $controllerFront->dispatch();
         }
         return $this;
+    }
+
+    /**
+     * Get initialization parameter
+     *
+     * Returns false if key does not exist in array or the value is null
+     *
+     * @param string $key
+     * @return mixed|bool
+     */
+    public function getInitParam($key)
+    {
+        return isset($this->_initParams[$key]) ? $this->_initParams[$key] : false;
     }
 
     /**
@@ -421,6 +462,23 @@ class Mage_Core_Model_App
         $this->setErrorHandler(self::DEFAULT_ERROR_HANDLER);
         date_default_timezone_set(Mage_Core_Model_Locale::DEFAULT_TIMEZONE);
         return $this;
+    }
+
+    /**
+     * Create necessary directories in the file system
+     */
+    protected function _initFileSystem()
+    {
+        $customDirs = $this->getInitParam(self::INIT_OPTION_URIS) ?: array();
+        $customPaths = $this->getInitParam(self::INIT_OPTION_DIRS) ?: array();
+        $dirs = new Mage_Core_Model_Dir(BP, $customDirs, $customPaths);
+        $this->_objectManager->addSharedInstance($dirs, 'Mage_Core_Model_Dir');
+        foreach (Mage_Core_Model_Dir::getWritableDirCodes() as $code) {
+            $path = $dirs->getDir($code);
+            if ($path && !is_dir($path)) {
+                mkdir($path);
+            }
+        }
     }
 
     /**
@@ -488,7 +546,7 @@ class Mage_Core_Model_App
     protected function _initLogger()
     {
         /** @var $logger Mage_Core_Model_Logger */
-        $logger = $this->_objectManager->get('Mage_Core_Model_Logger');
+        $logger = $this->_objectManager->create('Mage_Core_Model_Logger');
         $logger->addStreamLog(Mage_Core_Model_Logger::LOGGER_SYSTEM)
             ->addStreamLog(Mage_Core_Model_Logger::LOGGER_EXCEPTION);
         return $logger;
@@ -540,16 +598,16 @@ class Mage_Core_Model_App
 
         if (empty($scopeCode) && !is_null($this->_website)) {
             $scopeCode = $this->_website->getCode();
-            $scopeType = 'website';
+            $scopeType = self::SCOPE_TYPE_WEBSITE;
         }
         switch ($scopeType) {
-            case Mage_Core_Model_App_Options::APP_RUN_TYPE_STORE:
+            case self::SCOPE_TYPE_STORE:
                 $this->_currentStore = $scopeCode;
                 break;
-            case Mage_Core_Model_App_Options::APP_RUN_TYPE_GROUP:
+            case self::SCOPE_TYPE_GROUP:
                 $this->_currentStore = $this->_getStoreByGroup($scopeCode);
                 break;
-            case Mage_Core_Model_App_Options::APP_RUN_TYPE_WEBSITE:
+            case self::SCOPE_TYPE_WEBSITE:
                 $this->_currentStore = $this->_getStoreByWebsite($scopeCode);
                 break;
             default:
@@ -1109,7 +1167,7 @@ class Mage_Core_Model_App
     public function getGroup($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getStore()->getGroup()->getId();
+            $id = $this->getStore()->getGroupId();
         } elseif ($id instanceof Mage_Core_Model_Store_Group) {
             return $id;
         }
@@ -1611,19 +1669,5 @@ class Mage_Core_Model_App
     public function isDeveloperMode()
     {
         return Mage::getIsDeveloperMode();
-    }
-
-    /**
-     * Load di configuration for given area
-     *
-     * @param string $areaCode
-     */
-    public function loadDiConfiguration($areaCode = Mage_Core_Model_App_Area::AREA_GLOBAL)
-    {
-        $configurationNode = $this->_config->getNode($areaCode . '/' . self::CONFIGURATION_DI_NODE);
-        if ($configurationNode) {
-            $configuration = $configurationNode->asArray();
-            $this->_objectManager->setConfiguration($configuration);
-        }
     }
 }

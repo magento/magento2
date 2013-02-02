@@ -64,19 +64,12 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
 
     /**
      * Bootstrap application before eny test
-     *
-     * @return void
      */
     protected function setUp()
     {
         $this->_objectManager = Mage::getObjectManager();
-
-        /**
-         * Use run options from bootstrap
-         */
-        $this->_runOptions = $this->_getBootstrap()->getAppOptions();
-        $this->_runOptions['request']   = $this->getRequest();
-        $this->_runOptions['response']  = $this->getResponse();
+        $this->_runOptions[Mage::INIT_OPTION_REQUEST]  = $this->getRequest();
+        $this->_runOptions[Mage::INIT_OPTION_RESPONSE] = $this->getResponse();
     }
 
     protected function tearDown()
@@ -95,7 +88,7 @@ abstract class Magento_Test_TestCase_ControllerAbstract extends PHPUnit_Framewor
     public function dispatch($uri)
     {
         $this->getRequest()->setRequestUri($uri);
-        Mage::run($this->_runCode, $this->_runScope, $this->_runOptions);
+        $this->_getBootstrap()->runApp($this->_runOptions);
     }
 
     /**

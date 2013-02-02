@@ -40,6 +40,9 @@
         <word>system/convert/profiles</word>
         <word>Mage_Adminhtml::gui</word>
         <word>Mage_Adminhtml::profiles</word>
+        <word>secure_base_url}}js/</word>
+        <word>secure_base_url}}skin/</word>
+        <word>secure_base_url}}media/</word>
     </words>
     <whitelist>
         <item>

@@ -37,20 +37,18 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Mage::getConfig()->setOptions(array(
-            'locale_dir' => dirname(__FILE__) . '/_files/locale',
-        ));
+        $pathChunks = array(dirname(__FILE__), '_files', 'design', 'frontend', 'test', 'default', 'locale', 'en_US',
+            'translate.csv');
 
-        /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
-            dirname(__FILE__) . '/_files/design',
-            Mage::getDesign()
-        ));
-        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
+        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
+        $design = $this->getMock('Mage_Core_Model_Design_Package', array('getLocaleFileName'), array($filesystem));
+        $design->expects($this->any())
+            ->method('getLocaleFileName')
+            ->will($this->returnValue(implode(DS, $pathChunks)));
 
         Mage::getConfig()->setModuleDir('Mage_Core', 'locale', dirname(__FILE__) . '/_files/Mage/Core/locale');
         Mage::getConfig()->setModuleDir('Mage_Catalog', 'locale', dirname(__FILE__) . '/_files/Mage/Catalog/locale');
-        $this->_model = Mage::getModel('Mage_Core_Model_Translate');
+        $this->_model = Mage::getModel('Mage_Core_Model_Translate', array($design));
         $this->_model->init('frontend');
     }
 
@@ -153,6 +151,10 @@ class Mage_Core_Model_TranslateTest extends PHPUnit_Framework_TestCase
             array(
                 Mage::getModel('Mage_Core_Model_Translate_Expr', array('text' => 'text_with_no_translation')),
                 'text_with_no_translation'
+            ),
+            array(
+                'Design value to translate',
+                'Design translated value'
             )
         );
     }

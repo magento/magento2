@@ -175,7 +175,7 @@ class Mage_Webapi_Helper_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expectedParts,
             $this->_helper->getResourceNameParts($className),
-            "Resource parts for rest route were identified incorrectly."
+            "Resource parts for REST route were identified incorrectly."
         );
     }
 

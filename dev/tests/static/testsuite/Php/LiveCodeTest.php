@@ -100,7 +100,7 @@ class Php_LiveCodeTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($copyPasteDetector->run(array(), $blackList),
-            "PHP Code Mess has found error(s): See detailed report in $reportFile"
+            "PHP Copy/Paste Detector has found error(s): See detailed report in $reportFile"
         );
     }
 

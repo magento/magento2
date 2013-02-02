@@ -39,11 +39,6 @@ class Mage_Core_Model_Layout_Argument_Processor
     protected $_handlerFactory;
 
     /**
-     * @var Mage_Core_Model_Config
-     */
-    protected $_objectFactory;
-
-    /**
      * @var Mage_Core_Model_Layout_Argument_Updater
      */
     protected $_argumentUpdater;

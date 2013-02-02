@@ -1,6 +1,6 @@
 <?php
 /**
- * Two-legged oAuth server test.
+ * Two-legged OAuth server test.
  *
  * Magento
  *
@@ -66,14 +66,14 @@ class Mage_Webapi_Model_Rest_Oauth_ServerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test two legged authentication
+     * Test two-legged authentication
      */
     public function testAuthenticateTwoLegged()
     {
         $testUserKey = 'foo_user';
         $testUserSecret = 'bar_secret';
         $testUrl = 'http://foo.bar/api/rest/v1/baz';
-        // Prepare signature and oAuth parameters
+        // Prepare signature and OAuth parameters.
         $utility = new Zend_Oauth_Http_Utility();
         $params = array(
             'oauth_consumer_key' => $testUserKey,

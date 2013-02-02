@@ -29,6 +29,7 @@
  */
 include_once __DIR__ . '/../_files/data_types/Customer/AddressData.php';
 include_once __DIR__ . '/../_files/data_types/CustomerData.php';
+include_once __DIR__ . '/../_files/autodiscovery/resource_class_fixture.php';
 include_once __DIR__ . '/../_files/autodiscovery/subresource_class_fixture.php';
 /**#@-*/
 
@@ -59,7 +60,12 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
             /** Prepare arguments for SUT constructor. */
             $pathToFixtures = __DIR__ . '/../_files/autodiscovery';
             /** @var Mage_Webapi_Model_Config_Reader_Soap $reader */
-            $reader = $objectManager->get('Mage_Webapi_Model_Config_Reader_Soap');
+            $reader = $objectManager->get(
+                'Mage_Webapi_Model_Config_Reader_Soap',
+                array(
+                    'cache' => $this->getMock('Mage_Core_Model_Cache', array(), array(), '', false)
+                )
+            );
             $reader->setDirectoryScanner(new Zend\Code\Scanner\DirectoryScanner($pathToFixtures));
             /** Initialize SUT. */
             self::$_apiConfig = $objectManager->create('Mage_Webapi_Model_Config_Soap', array('reader' => $reader));
@@ -111,49 +117,49 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
         $optionalNotSetOutput->password = "123123q";
 
         return array(
-            // Test valid data that does not need transformations
+            // Test valid data that does not need transformations.
             array(
                 'Vendor_Module_Controller_Webapi_Resource_Subresource',
                 'createV1',
                 array('param1' => 1, 'param2' => 2, 'param3' => array($customerDataObject), 'param4' => 4),
                 array('param1' => 1, 'param2' => 2, 'param3' => array($customerDataObject), 'param4' => 4),
             ),
-            // Test filtering unnecessary data
+            // Test filtering unnecessary data.
             array(
                 'Vendor_Module_Controller_Webapi_Resource_Subresource',
                 'createV2',
                 array('param1' => 1, 'param2' => 2, 'param3' => array($customerDataObject), 'param4' => 4),
                 array('param1' => 1, 'param2' => 2),
             ),
-            // Test parameters sorting
+            // Test parameters sorting.
             array(
                 'Vendor_Module_Controller_Webapi_Resource_Subresource',
                 'createV1',
                 array('param4' => 4, 'param2' => 2, 'param3' => array($customerDataObject), 'param1' => 1),
                 array('param1' => 1, 'param2' => 2, 'param3' => array($customerDataObject), 'param4' => 4),
             ),
-            // Test default values setting
+            // Test default values setting.
             array(
                 'Vendor_Module_Controller_Webapi_Resource_Subresource',
                 'createV1',
                 array('param1' => 1, 'param2' => 2),
                 array('param1' => 1, 'param2' => 2, 'param3' => array(), 'param4' => 'default_value'),
             ),
-            // Test with object instead of class name
+            // Test with object instead of class name.
             array(
                 new Vendor_Module_Controller_Webapi_Resource_Subresource(),
                 'createV2',
                 array('param2' => 2, 'param1' => 1),
                 array('param1' => 1, 'param2' => 2),
             ),
-            // Test passing of partially formatted objects
+            // Test passing of partially formatted objects.
             array(
                 new Vendor_Module_Controller_Webapi_Resource_Subresource(),
                 'updateV1',
                 array('param1' => 1, 'param2' => get_object_vars($customerDataObject)),
                 array('param1' => 1, 'param2' => $customerDataObject),
             ),
-            // Test passing of complex type parameter with optional field not set
+            // Test passing of complex type parameter with optional field not set.
             array(
                 new Vendor_Module_Controller_Webapi_Resource_Subresource(),
                 'updateV1',
@@ -225,7 +231,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
             'email' => "test_email@example.com"
         );
         return array(
-            // Test exception in case of missing required parameter
+            // Test exception in case of missing required parameter.
             array(
                 'Vendor_Module_Controller_Webapi_Resource_Subresource',
                 'createV1',
@@ -233,7 +239,7 @@ class Mage_Webapi_Helper_DataTest extends PHPUnit_Framework_TestCase
                 'Mage_Webapi_Exception',
                 'Required parameter "param1" is missing.'
             ),
-            // Test passing of complex type parameter with not specified required field
+            // Test passing of complex type parameter with not specified required field.
             array(
                 new Vendor_Module_Controller_Webapi_Resource_Subresource(),
                 'updateV1',

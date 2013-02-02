@@ -30,9 +30,9 @@
 class Mage_Index_Model_Lock_Storage
 {
     /**
-     * @var Mage_Core_Model_Config
+     * @var Mage_Core_Model_Dir
      */
-    protected $_configuration;
+    protected $_dirs;
 
     /**
      * @var Mage_Index_Model_Process_FileFactory
@@ -47,14 +47,14 @@ class Mage_Index_Model_Lock_Storage
     protected $_fileHandlers = array();
 
     /**
-     * @param Mage_Core_Model_Config $configuration
+     * @param Mage_Core_Model_Dir $dirs
      * @param Mage_Index_Model_Process_FileFactory $fileFactory
      */
     public function __construct(
-        Mage_Core_Model_Config $configuration,
+        Mage_Core_Model_Dir $dirs,
         Mage_Index_Model_Process_FileFactory $fileFactory
     ) {
-        $this->_configuration = $configuration;
+        $this->_dirs = $dirs;
         $this->_fileFactory   = $fileFactory;
     }
 
@@ -68,8 +68,9 @@ class Mage_Index_Model_Lock_Storage
     {
         if (!isset($this->_fileHandlers[$processId])) {
             $file = $this->_fileFactory->createFromArray();
-            $varDirectory = $this->_configuration->getVarDir('locks');
+            $varDirectory = $this->_dirs->getDir(Mage_Core_Model_Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
             $file->setAllowCreateFolders(true);
+
             $file->open(array('path' => $varDirectory));
             $fileName = 'index_process_' . $processId . '.lock';
             $file->streamOpen($fileName);

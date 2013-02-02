@@ -39,13 +39,6 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     const XML_PATH_TEMPLATE_ALLOW_SYMLINK       = 'dev/template/allow_symlink';
 
     /**
-     * View scripts directory
-     *
-     * @var string
-     */
-    protected $_viewDir = '';
-
-    /**
      * Assigned variables for view
      *
      * @var array
@@ -67,11 +60,14 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     protected static $_showTemplateHintsBlocks;
 
     /**
-     * Path to template file in theme.
-     *
-     * @var string
+     * @var Mage_Core_Model_Dir
      */
-    protected $_template;
+    protected $_dirs;
+
+    /**
+     * @var Mage_Core_Model_Logger
+     */
+    protected $_logger;
 
     /**
      * @var Magento_Filesystem
@@ -79,6 +75,14 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
     protected $_filesystem;
 
     /**
+     * Path to template file in theme.
+     *
+     * @var string
+     */
+    protected $_template;
+
+    /**
+     * Constructor
      * @param Mage_Core_Controller_Request_Http $request
      * @param Mage_Core_Model_Layout $layout
      * @param Mage_Core_Model_Event_Manager $eventManager
@@ -90,6 +94,8 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
      * @param array $data
      *
@@ -107,24 +113,16 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
         array $data = array()
     ) {
-        parent::__construct(
-            $request,
-            $layout,
-            $eventManager,
-            $urlBuilder,
-            $translator,
-            $cache,
-            $designPackage,
-            $session,
-            $storeConfig,
-            $frontController,
-            $helperFactory,
-            $data
-        );
+        $this->_dirs = $dirs;
+        $this->_logger = $logger;
         $this->_filesystem = $filesystem;
+        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
+            $session, $storeConfig, $frontController, $helperFactory, $data);
     }
 
     /**
@@ -179,7 +177,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
         if ($area) {
             $params['area'] = $area;
         }
-        $templateName = Mage::getDesign()->getFilename($this->getTemplate(), $params);
+        $templateName = $this->_designPackage->getFilename($this->getTemplate(), $params);
         return $templateName;
     }
 
@@ -211,24 +209,6 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
             }
         } else {
             $this->_viewVars[$key] = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * Set template location directory
-     *
-     * @param string $dir
-     * @return Mage_Core_Block_Template
-     */
-    public function setScriptPath($dir)
-    {
-        if (Magento_Filesystem::isPathInDirectory($dir, Mage::getBaseDir('design'))
-            || $this->_getAllowSymlinks()
-        ) {
-            $this->_viewDir = $dir;
-        } else {
-            Mage::log('Not valid script path:' . $dir, Zend_Log::CRIT, null, true);
         }
         return $this;
     }
@@ -266,7 +246,7 @@ class Mage_Core_Block_Template extends Mage_Core_Block_Abstract
      */
     public function fetchView($fileName)
     {
-        $viewShortPath = str_replace(Mage::getBaseDir(), '', $fileName);
+        $viewShortPath = str_replace($this->_dirs->getDir(Mage_Core_Model_Dir::ROOT), '', $fileName);
         Magento_Profiler::start('TEMPLATE:' . $fileName, array('group' => 'TEMPLATE', 'file_name' => $viewShortPath));
 
         // EXTR_SKIP protects from overriding
@@ -295,13 +275,13 @@ HTML;
         }
 
         try {
-            if ((Magento_Filesystem::isPathInDirectory($fileName, Mage::getBaseDir('app'))
-                || Magento_Filesystem::isPathInDirectory($fileName, $this->_viewDir)
+            if ((Magento_Filesystem::isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::APP))
+                || Magento_Filesystem::isPathInDirectory($fileName, $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES))
                 || $this->_getAllowSymlinks()) && $this->_filesystem->isFile($fileName)
             ) {
                 include $fileName;
             } else {
-                Mage::log("Invalid template file: '{$fileName}'", Zend_Log::CRIT, null, true);
+                $this->_logger->log("Invalid template file: '{$fileName}'", Zend_Log::CRIT);
             }
 
         } catch (Exception $e) {
@@ -325,29 +305,16 @@ HTML;
     }
 
     /**
-     * Render block
-     *
-     * @return string
-     */
-    public function renderView()
-    {
-        if (!$this->getTemplate()) {
-            return '';
-        }
-        $this->setScriptPath(Mage::getBaseDir('design'));
-        $html = $this->fetchView($this->getTemplateFile());
-        return $html;
-    }
-
-    /**
      * Render block HTML
      *
      * @return string
      */
     protected function _toHtml()
     {
-        $html = $this->renderView();
-        return $html;
+        if (!$this->getTemplate()) {
+            return '';
+        }
+        return $this->fetchView($this->getTemplateFile());
     }
 
     /**

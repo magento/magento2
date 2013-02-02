@@ -40,6 +40,7 @@ varienGrid.prototype = {
         this.initCallback = false;
         this.initRowCallback = false;
         this.doFilterCallback = false;
+        this.sortableUpdateCallback = false;
 
         this.reloadParams = false;
 
@@ -278,6 +279,22 @@ varienGrid.prototype = {
         var dataElements = $(this.containerId+this.tableSufix).down('tbody').select('input', 'select');
         for(var i=0; i<dataElements.length;i++){
             Event.observe(dataElements[i], 'change', dataElements[i].setHasChanges.bind(dataElements[i]));
+        }
+    },
+    bindSortable: function(){
+        if (jQuery('#' + this.containerId).find('.ui-icon-grip-dotted-vertical').length) {
+            jQuery('#' + this.containerId).find('tbody').sortable({
+                axis: 'y',
+                handle: '.ui-icon-grip-dotted-vertical',
+                helper: function(event, ui) {
+                    ui.children().each(function() {
+                        jQuery(this).width(jQuery(this).width());
+                    });
+                    return ui;
+                },
+                update: this.sortableUpdateCallback ? this.sortableUpdateCallback : function(){},
+                tolerance: 'pointer'
+            });
         }
     },
     filterKeyPress:function (event) {

@@ -77,7 +77,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_Xml implements
     {
         if (!is_string($xmlRequestBody)) {
             throw new InvalidArgumentException(
-                sprintf('Invalid data type "%s". String is expected.', gettype($xmlRequestBody))
+                sprintf('"%s" data type is invalid. String is expected.', gettype($xmlRequestBody))
             );
         }
         /** Disable external entity loading to prevent possible vulnerability */

@@ -58,7 +58,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_Json implements
     {
         if (!is_string($encodedBody)) {
             throw new InvalidArgumentException(sprintf(
-                'Invalid data type "%s". String is expected.',
+                '"%s" data type is invalid. String is expected.',
                 gettype($encodedBody)
             ));
         }

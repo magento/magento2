@@ -44,7 +44,6 @@ class Mage_Backend_Block_System_Config_FormStub extends Mage_Backend_Block_Syste
      * Sets stub config data
      *
      * @param array $configData
-     * @return void
      */
     public function setStubConfigData(array $configData = array())
     {

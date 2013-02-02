@@ -26,7 +26,7 @@
 class Mage_Webapi_Model_Resource_Acl_UserTest extends Mage_Webapi_Model_Resource_Acl_TestAbstract
 {
     /**
-     * Create resource model
+     * Create resource model.
      *
      * @param Varien_Db_Select $selectMock
      * @return Mage_Webapi_Model_Resource_Acl_User
@@ -75,7 +75,7 @@ class Mage_Webapi_Model_Resource_Acl_UserTest extends Mage_Webapi_Model_Resource
     }
 
     /**
-     * Test constructor
+     * Test constructor.
      */
     public function testConstructor()
     {
@@ -86,7 +86,7 @@ class Mage_Webapi_Model_Resource_Acl_UserTest extends Mage_Webapi_Model_Resource
     }
 
     /**
-     * Test _initUniqueFields()
+     * Test _initUniqueFields().
      */
     public function testGetUniqueFields()
     {
@@ -97,7 +97,7 @@ class Mage_Webapi_Model_Resource_Acl_UserTest extends Mage_Webapi_Model_Resource
     }
 
     /**
-     * Test getRoleUsers()
+     * Test getRoleUsers().
      */
     public function testGetRoleUsers()
     {

@@ -26,9 +26,7 @@
  */
 
 /**
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
- * @magentoDataFixture Mage/Backend/Block/_files/theme_registration.php
+ * @magentoDataFixture Mage/Backend/Block/_files/backend_theme.php
  */
 class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_TestCase
 {
@@ -44,12 +42,33 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
+        $this->_setFixtureTheme();
+
         $this->_layout = Mage::getModel('Mage_Core_Model_Layout', array('area' => 'adminhtml'));
         $this->_layout->getUpdate()->load('layout_test_grid_handle');
         $this->_layout->generateXml();
         $this->_layout->generateElements();
 
         $this->_block = $this->_layout->getBlock('admin.test.grid.massaction');
+    }
+
+    /**
+     * Set fixture theme for admin backend area
+     */
+    protected function _setFixtureTheme()
+    {
+        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+            Mage_Core_Model_App::INIT_OPTION_SCOPE_TYPE => 'store',
+            Mage_Core_Model_App::INIT_OPTION_SCOPE_CODE => 'admin',
+            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+                Mage_Core_Model_Dir::THEMES => __DIR__ . '/../../_files/design'
+            ),
+        ));
+
+        Mage::app()->getConfig()->setNode(
+            'adminhtml/' . Mage_Core_Model_Design_Package::XML_PATH_THEME,
+            'test/default'
+        );
     }
 
     protected function tearDown()
@@ -63,7 +82,6 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
      * @covers Mage_Backend_Block_Widget_Grid_Massaction::getCount
      * @covers Mage_Backend_Block_Widget_Grid_Massaction::getItemsJson
      * @covers Mage_Backend_Block_Widget_Grid_Massaction::isAvailable
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
      */
     public function testMassactionDefaultValues()
     {
@@ -76,28 +94,22 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $this->assertFalse($blockEmpty->isAvailable());
     }
 
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
-     */
-    public function testJavascript()
+    public function testGetJavaScript()
     {
         $javascript = $this->_block->getJavaScript();
 
         $expectedItemFirst = '#"option_id1":{"label":"Option One",'
-            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
+            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",'
             . '"complete":"Test","id":"option_id1"}#';
         $this->assertRegExp($expectedItemFirst, $javascript);
 
         $expectedItemSecond = '#"option_id2":{"label":"Option Two",'
-            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
+            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",'
             . '"confirm":"Are you sure\?","id":"option_id2"}#';
         $this->assertRegExp($expectedItemSecond, $javascript);
     }
 
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
-     */
-    public function testJavascriptWithAddedItem()
+    public function testGetJavaScriptWithAddedItem()
     {
         $input = array(
             'id' => 'option_id3',
@@ -106,31 +118,27 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
             'block_name' => 'admin.test.grid.massaction.option3'
         );
         $expected = '#"option_id3":{"id":"option_id3","label":"Option Three",'
-            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/key\\\/([\w\d]+)\\\/",'
+            . '"url":"http:\\\/\\\/localhost\\\/index\.php\\\/(?:key\\\/([\w\d]+)\\\/)?",'
             . '"block_name":"admin.test.grid.massaction.option3"}#';
 
         $this->_block->addItem($input['id'], $input);
         $this->assertRegExp($expected, $this->_block->getJavaScript());
     }
 
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
-     */
-    public function testItemsCount()
+    public function testGetCount()
     {
-        $this->assertEquals(2, count($this->_block->getItems()));
         $this->assertEquals(2, $this->_block->getCount());
     }
 
     /**
      * @param $itemId
      * @param $expectedItem
-     * @dataProvider itemsDataProvider
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
+     * @dataProvider getItemsDataProvider
      */
-    public function testItems($itemId, $expectedItem)
+    public function testGetItems($itemId, $expectedItem)
     {
         $items = $this->_block->getItems();
+        $this->assertCount(2, $items);
         $this->assertArrayHasKey($itemId, $items);
 
         $actualItem = $items[$itemId];
@@ -144,7 +152,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
     /**
      * @return array
      */
-    public function itemsDataProvider()
+    public function getItemsDataProvider()
     {
         return array(
             array(
@@ -152,7 +160,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
                 array(
                     'id' => 'option_id1',
                     'label' => 'Option One',
-                    'url' => '#http:\/\/localhost\/index\.php\/key\/([\w\d]+)\/#',
+                    'url' => '#http:\/\/localhost\/index\.php\/(?:key\/([\w\d]+)\/)?#',
                     'selected' => false,
                     'blockname' => ''
                 )
@@ -162,7 +170,7 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
                 array(
                     'id' => 'option_id2',
                     'label' => 'Option Two',
-                    'url' => '#http:\/\/localhost\/index\.php\/key\/([\w\d]+)\/#',
+                    'url' => '#http:\/\/localhost\/index\.php\/(?:key\/([\w\d]+)\/)?#',
                     'selected' => false,
                     'blockname' => ''
                 )
@@ -170,9 +178,6 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         );
     }
 
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name test/default
-     */
     public function testGridContainsMassactionColumn()
     {
         $this->_layout->getBlock('admin.test.grid')->toHtml();
@@ -180,11 +185,11 @@ class Mage_Backend_Block_Widget_Grid_MassactionTest extends PHPUnit_Framework_Te
         $gridMassactionColumn = $this->_layout->getBlock('admin.test.grid')
             ->getColumnSet()
             ->getChildBlock('massaction');
-        $this->assertNotNull($gridMassactionColumn, 'Massaction column is not existed in grid column set');
+        $this->assertNotNull($gridMassactionColumn, 'Massaction column does not exist in the grid column set');
         $this->assertInstanceOf(
             'Mage_Backend_Block_Widget_Grid_Column',
             $gridMassactionColumn,
-            'Massaction column is not instance of Mage_Backend_Block_Widget_Column'
+            'Massaction column is not an instance of Mage_Backend_Block_Widget_Column'
         );
     }
 }

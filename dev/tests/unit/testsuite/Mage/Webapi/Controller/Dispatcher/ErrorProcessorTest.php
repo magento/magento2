@@ -64,12 +64,12 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
     }
 
     /**
-     * Test render method in Json format.
+     * Test render method in JSON format.
      */
     public function testRenderJson()
     {
         $_SERVER['HTTP_ACCEPT'] = 'json';
-        /** Assert jsonEncode method will be executed once. */
+        /** Assert that jsonEncode method will be executed once. */
         $this->_helperMock->expects($this->once())->method('jsonEncode')->will(
             $this->returnCallback(array($this, 'callbackJsonEncode'), $this->returnArgument(0))
         );
@@ -80,13 +80,13 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         $actualResult = ob_get_contents();
         ob_end_clean();
         $expectedResult = '{"messages":{"error":[{"code":500,"message":"Message"}]}}';
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong rendering in Json.');
+        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in JSON.');
     }
 
     /**
      * Callback function for RenderJson and RenderJsonInDeveloperMode tests.
      *
-     * Method encode data to Json and return it.
+     * Method encodes data to JSON and returns it.
      *
      * @param $data
      * @return string
@@ -97,14 +97,14 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
     }
 
     /**
-     * Test render method in Json format with turned on developer mode.
+     * Test render method in JSON format with turned on developer mode.
      */
     public function testRenderJsonInDeveloperMode()
     {
         $_SERVER['HTTP_ACCEPT'] = 'json';
         /** Mock app to return enabled developer mode flag. */
         $this->_appMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(true));
-        /** Assert jsonEncode method will be executed once. */
+        /** Assert that jsonEncode method will be executed once. */
         $this->_helperMock->expects($this->once())->method('jsonEncode')->will(
             $this->returnCallback(array($this, 'callbackJsonEncode'), $this->returnArgument(0))
         );
@@ -113,7 +113,7 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         $actualResult = ob_get_contents();
         ob_end_clean();
         $expectedResult = '{"messages":{"error":[{"code":401,"message":"Message","trace":"Message trace."}]}}';
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong rendering in Json.');
+        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in JSON.');
     }
 
     /**
@@ -130,7 +130,7 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         ob_end_clean();
         $expectedResult = '<?xml version="1.0"?><error><messages><error><data_item><code>500</code>'
             . '<message>Message</message></data_item></error></messages></error>';
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong rendering in XML.');
+        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in XML.');
     }
 
     /**
@@ -149,17 +149,17 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         ob_end_clean();
         $expectedResult = '<?xml version="1.0"?><error><messages><error><data_item><code>401</code><message>'
             . 'Message</message><trace><![CDATA[Trace message.]]></trace></data_item></error></messages></error>';
-        $this->assertEquals($expectedResult, $actualResult, 'Wrong rendering in XML with turned on developer mode.');
+        $this->assertEquals($expectedResult, $actualResult, 'Invalid rendering in XML with turned on developer mode.');
     }
 
     /**
-     * Test default render format is Json.
+     * Test default render format is JSON.
      */
     public function testRenderDefaultFormat()
     {
         /** Set undefined rendering format. */
         $_SERVER['HTTP_ACCEPT'] = 'undefined';
-        /** Assert jsonEncode method will be executed at least once. */
+        /** Assert that jsonEncode method will be executed at least once. */
         $this->_helperMock->expects($this->atLeastOnce())->method('jsonEncode');
         $this->_errorProcessor->render('Message');
     }
@@ -173,13 +173,13 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         $_SERVER['HTTP_ACCEPT'] = 'json';
         /** Init Mage_Webapi_Exception. */
         $apiException = new Mage_Webapi_Exception('Exception message', 500);
-        /** Assert jsonEncode will be executed once. */
+        /** Assert that jsonEncode will be executed once. */
         $this->_helperMock->expects($this->once())->method('jsonEncode');
         $this->_errorProcessor->renderException($apiException);
     }
 
     /**
-     * Test renderException method with turned on Developer mode.
+     * Test renderException method with turned on developer mode.
      */
     public function testRenderExecutionInDeveloperMode()
     {
@@ -189,7 +189,7 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         $exception = new Exception('Message');
         /** Mock app to return enabled developer mode flag. */
         $this->_appMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(true));
-        /** Assert jsonEncode will be executed once. */
+        /** Assert that jsonEncode will be executed once. */
         $this->_helperMock->expects($this->once())->method('jsonEncode');
         $this->_errorProcessor->renderException($exception);
     }
@@ -201,7 +201,7 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
     {
         /** Init mage_webapi_Exception. */
         $apiException = new Mage_Webapi_Exception('Message', 400);
-        /** Asser Webapi exception was not masked. */
+        /** Assert that Webapi exception was not masked. */
         $this->assertEquals(
             $this->_errorProcessor->maskException($apiException),
             $apiException,
@@ -218,7 +218,7 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
         $this->_appMock->expects($this->once())->method('isDeveloperMode')->will($this->returnValue(true));
         /** Init Logical exception. */
         $logicalException = new LogicException();
-        /** Asser Webapi exception was not masked. */
+        /** Assert that Webapi exception was not masked. */
         $this->assertEquals(
             $this->_errorProcessor->maskException($logicalException),
             $logicalException,
@@ -231,22 +231,22 @@ class Mage_Webapi_Controller_Dispatcher_ErrorProcessorTest extends PHPUnit_Frame
      */
     public function testMaskNonWebapiException()
     {
-        /** Assert exception was logged. */
+        /** Assert that exception was logged. */
         $this->_loggerMock->expects($this->once())->method('logException');
         $maskedException = $this->_errorProcessor->maskException(new LogicException());
-        /** Assert masked exception type is Mage_Webapi_Exception. */
+        /** Assert that masked exception type is Mage_Webapi_Exception. */
         $this->assertInstanceOf('Mage_Webapi_Exception', $maskedException, 'Masked exception type is not Webapi.');
-        /** Asser masked exception code is 500. */
+        /** Assert that masked exception code is 500. */
         $this->assertEquals(
             Mage_Webapi_Exception::HTTP_INTERNAL_ERROR,
             $maskedException->getCode(),
-            'Masked exception code is wrong.'
+            'Masked exception code is invalid.'
         );
         /** Assert masked exception message. */
         $this->assertEquals(
             'Internal Error. Details are available in Magento log file. Report ID: "%s"',
             $maskedException->getMessage(),
-            'Masked exception message is wrong.'
+            'Masked exception message is invalid.'
         );
     }
 }

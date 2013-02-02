@@ -25,6 +25,8 @@
  */
 class Mage_Webapi_Controller_Request extends Zend_Controller_Request_Http
 {
+    const PARAM_API_TYPE = 'api_type';
+
     /**#@+
      * Name of query ($_GET) parameters to use in navigation and so on.
      */

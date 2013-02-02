@@ -39,7 +39,6 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
      */
     protected function _getThemeModel($designDir, $targetPath)
     {
-        Mage::getConfig()->getOptions()->setData('design_dir', $designDir);
         $objectManager = Mage::getObjectManager();
 
         /** @var $themeCollection Mage_Core_Model_Resource_Theme_Collection */
@@ -57,31 +56,11 @@ class Mage_Core_Model_ThemeTest extends PHPUnit_Framework_TestCase
         );
         /** @var $themeMock Mage_Core_Model_Theme */
         $themeMock = $this->getMock('Mage_Core_Model_Theme', array('_init'), $arguments, '', true);
-        $filesystemMock = $this->getMockBuilder('Magento_Filesystem')->disableOriginalConstructor(true)->getMock();
-        $filesystemMock->expects($this->any())->method('searchKeys')
-            ->will($this->returnValueMap(array(
-                array(
-                    $designDir, 'frontend/default/iphone/theme.xml',
-                    array(
-                        str_replace('/', DIRECTORY_SEPARATOR, $designDir . '/frontend/default/iphone/theme.xml')
-                    )
-                ),
-                array(
-                    $designDir, 'frontend/default/iphone/theme_invalid.xml',
-                    array(
-                        str_replace(
-                            '/',
-                            DIRECTORY_SEPARATOR,
-                            $designDir . '/frontend/default/iphone/theme_invalid.xml'
-                        )
-                    )
-                ),
-            )
-        ));
+        $filesystem = new Magento_Filesystem(new Magento_Filesystem_Adapter_Local);
 
         /** @var $collectionMock Mage_Core_Model_Theme_Collection|PHPUnit_Framework_MockObject_MockObject */
         $collectionMock = $this->getMock('Mage_Core_Model_Theme_Collection', array('getNewEmptyItem'),
-            array($filesystemMock));
+            array($filesystem));
         $collectionMock->expects($this->any())
             ->method('getNewEmptyItem')
             ->will($this->returnValue($themeMock));

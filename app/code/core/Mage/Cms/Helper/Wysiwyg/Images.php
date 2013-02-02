@@ -86,7 +86,7 @@ class Mage_Cms_Helper_Wysiwyg_Images extends Mage_Core_Helper_Abstract
      */
     public function getStorageRoot()
     {
-        return Mage::getConfig()->getOptions()->getMediaDir() . DS . Mage_Cms_Model_Wysiwyg_Config::IMAGE_DIRECTORY
+        return Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA) . DS . Mage_Cms_Model_Wysiwyg_Config::IMAGE_DIRECTORY
             . DS;
     }
 
@@ -247,7 +247,7 @@ class Mage_Cms_Helper_Wysiwyg_Images extends Mage_Core_Helper_Abstract
     public function getCurrentUrl()
     {
         if (!$this->_currentUrl) {
-            $path = str_replace(Mage::getConfig()->getOptions()->getMediaDir(), '', $this->getCurrentPath());
+            $path = str_replace(Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA), '', $this->getCurrentPath());
             $path = trim($path, DS);
             $this->_currentUrl = Mage::app()->getStore($this->_storeId)->getBaseUrl('media') .
                                  $this->convertPathToUrl($path) . '/';

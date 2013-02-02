@@ -71,7 +71,6 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Image extends Mage_Eav_Model
             if ($e->getCode() != Mage_Core_Model_File_Uploader::TMP_NAME_EMPTY) {
                 Mage::logException($e);
             }
-            /** @TODO ??? */
         }
         return $this;
     }

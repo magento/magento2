@@ -36,13 +36,15 @@ class Mage_Adminhtml_Block_Notification_Baseurl extends Mage_Adminhtml_Block_Tem
         $defaultUnsecure= (string) Mage::getConfig()->getNode('default/'.Mage_Core_Model_Store::XML_PATH_UNSECURE_BASE_URL);
         $defaultSecure  = (string) Mage::getConfig()->getNode('default/'.Mage_Core_Model_Store::XML_PATH_SECURE_BASE_URL);
 
-        if ($defaultSecure == '{{base_url}}' || $defaultUnsecure == '{{base_url}}') {
+        if ($defaultSecure == Mage_Core_Model_Store::BASE_URL_PLACEHOLDER
+            || $defaultUnsecure == Mage_Core_Model_Store::BASE_URL_PLACEHOLDER
+        ) {
             return $this->getUrl('adminhtml/system_config/edit', array('section'=>'web'));
         }
 
         $configData = Mage::getModel('Mage_Core_Model_Config_Data');
         $dataCollection = $configData->getCollection()
-            ->addValueFilter('{{base_url}}');
+            ->addValueFilter(Mage_Core_Model_Store::BASE_URL_PLACEHOLDER);
 
         $url = false;
         foreach ($dataCollection as $data) {

@@ -60,6 +60,8 @@ class Magento_Test_Helper_ObjectManager
             'storeConfig'        => 'Mage_Core_Model_Store_Config',
             'frontController'    => 'Mage_Core_Controller_Varien_Front',
             'helperFactory'      => 'Mage_Core_Model_Factory_Helper',
+            'dirs'               => 'Mage_Core_Model_Dir',
+            'logger'             => 'Mage_Core_Model_Logger',
             'filesystem'         => 'Magento_Filesystem',
         ),
         self::MODEL_ENTITY => array(

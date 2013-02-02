@@ -62,7 +62,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends PHPUnit_Framewo
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      *
      * @dataProvider prepareFormDataProvider
      * @param Varien_Object $apiRole
@@ -70,7 +70,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends PHPUnit_Framewo
      */
     public function testPrepareForm($apiRole, array $formElements)
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete
         $this->assertEmpty($this->_block->getForm());
 
         $this->_block->setApiRole($apiRole);
@@ -84,7 +84,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_MainTest extends PHPUnit_Framewo
         $elements = $fieldset->getElements();
         foreach ($formElements as $elementId) {
             $element = $elements->searchById($elementId);
-            $this->assertNotEmpty($element, "Element '$elementId' not found in form fieldset");
+            $this->assertNotEmpty($element, "Element '$elementId' is not found in form fieldset");
             $this->assertEquals($apiRole->getData($elementId), $element->getValue());
         }
     }

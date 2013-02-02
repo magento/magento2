@@ -93,13 +93,6 @@ class Mage_Core_Model_Store_Group extends Mage_Core_Model_Abstract
     protected $_defaultStore;
 
     /**
-     * Website model
-     *
-     * @var Mage_Core_Model_Website
-     */
-    protected $_website;
-
-    /**
      * @var bool
      */
     private $_isReadOnly = false;
@@ -268,29 +261,26 @@ class Mage_Core_Model_Store_Group extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Set website model
+     * Set relation to the website
      *
      * @param Mage_Core_Model_Website $website
      */
     public function setWebsite(Mage_Core_Model_Website $website)
     {
-        $this->_website = $website;
+        $this->setWebsiteId($website->getId());
     }
 
     /**
      * Retrieve website model
      *
-     * @return Mage_Core_Model_Website
+     * @return Mage_Core_Model_Website|bool
      */
     public function getWebsite()
     {
         if (is_null($this->getWebsiteId())) {
             return false;
         }
-        if (is_null($this->_website)) {
-            $this->_website = Mage::app()->getWebsite($this->getWebsiteId());
-        }
-        return $this->_website;
+        return Mage::app()->getWebsite($this->getWebsiteId());
     }
 
     /**

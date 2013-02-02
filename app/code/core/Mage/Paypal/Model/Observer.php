@@ -44,7 +44,7 @@ class Mage_Paypal_Model_Observer
             $credentials = $reports->getSftpCredentials(true);
             foreach ($credentials as $config) {
                 try {
-                    $reports->fetchAndSave($config);
+                    $reports->fetchAndSave(Mage_Paypal_Model_Report_Settlement::createConnection($config));
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }

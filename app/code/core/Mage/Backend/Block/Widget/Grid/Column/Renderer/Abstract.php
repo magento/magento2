@@ -33,7 +33,7 @@
  */
 
 abstract class Mage_Backend_Block_Widget_Grid_Column_Renderer_Abstract
-    extends Mage_Backend_Block_Abstract implements Mage_Backend_Block_Widget_Grid_Column_Renderer_Interface
+    extends Mage_Core_Block_Template implements Mage_Backend_Block_Widget_Grid_Column_Renderer_Interface
 {
     protected $_defaultWidth;
     protected $_column;

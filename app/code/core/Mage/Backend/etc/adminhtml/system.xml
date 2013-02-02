@@ -126,6 +126,7 @@
                     <label>Design Theme</label>
                     <source_model>Mage_Core_Model_Theme::getLabelsCollectionForSystemConfiguration</source_model>
                     <backend_model>Mage_Core_Model_Design_Backend_Theme</backend_model>
+                    <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
                 <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>User-Agent Exceptions</label>
@@ -498,45 +499,51 @@
                 </field>
             </group>
             <group id="unsecure" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Unsecure</label>
-                <field id="base_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Base URLs</label>
+                <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/</comment>
+                <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>Specify URL or {{base_url}} placeholder.</comment>
                 </field>
                 <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base Link URL</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>May start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_public_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base URL for Public Static Files</label>
+                <field id="base_lib_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Base URL for Library Files</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
-                    <comment>&lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
+                    <comment>May be empty or start with {{unsecure_base_url}} placeholder. &lt;br/&gt; &lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
                 </field>
                 <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base Media URL</label>
+                    <label>Base URL for Media Files</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
             </group>
             <group id="secure" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Secure</label>
+                <label>Base URLs (Secure)</label>
+                <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base URL</label>
+                    <label>Secure Base URL</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
-                    <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
+                    <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base Link URL</label>
+                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Secure Base Link URL</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
-                    <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
+                    <comment>May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_public_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base URL for Public Static Files</label>
+                <field id="base_lib_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Secure Base URL for Library Files</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
-                    <comment>&lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
+                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base Media URL</label>
+                    <label>Secure Base URL for Media Files</label>
                     <backend_model>Mage_Backend_Model_Config_Backend_Baseurl</backend_model>
+                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
                 <field id="use_in_frontend" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Secure URLs in Frontend</label>

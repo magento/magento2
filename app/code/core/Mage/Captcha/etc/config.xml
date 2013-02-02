@@ -226,7 +226,7 @@
             <fonts>
                 <linlibertine>
                     <label>LinLibertine</label>
-                    <path>lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf</path>
+                    <path>LinLibertineFont/LinLibertine_Bd-2.8.1.ttf</path>
                 </linlibertine>
             </fonts>
             <frontend>

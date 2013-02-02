@@ -74,7 +74,7 @@ class Mage_Webapi_Model_Soap_Wsdl_ComplexTypeStrategy_ConfigBasedTest extends PH
     }
 
     /**
-     * Test that addComplexType returns type wsdl name
+     * Test that addComplexType returns type WSDL name
      * if it has already been processed (registered at includedTypes in WSDL)
      */
     public function testCheckTypeName()
@@ -124,7 +124,7 @@ class Mage_Webapi_Model_Soap_Wsdl_ComplexTypeStrategy_ConfigBasedTest extends PH
     }
 
     /**
-     * Data provider for testAddComplexTypeSimpleParameters()
+     * Data provider for testAddComplexTypeSimpleParameters().
      *
      * @return array
      */
@@ -279,7 +279,7 @@ class Mage_Webapi_Model_Soap_Wsdl_ComplexTypeStrategy_ConfigBasedTest extends PH
     }
 
     /**
-     * Create mock for DOMElement
+     * Create mock for DOMElement.
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */

@@ -424,14 +424,19 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
     public function testGetChildData()
     {
         $parent = $this->_createBlockWithLayout('parent', 'parent');
-        $block = $this->_createBlockWithLayout('block', 'block', 'Mage_Core_Block_Text');
-        $block->setSomeValue('value');
+        $block = $this->_createBlockWithLayout('block', 'block');
+        $block->setSomeProperty('some_value');
         $parent->setChild('block1', $block);
-        $this->assertEquals(
-            array('type' => 'Mage_Core_Block_TextMock', 'some_value' => 'value'),
-            $parent->getChildData('block1')
-        );
-        $this->assertEquals('value', $parent->getChildData('block1', 'some_value'));
+
+        // all child data
+        $actualChildData = $parent->getChildData('block1');
+        $this->assertArrayHasKey('some_property', $actualChildData);
+        $this->assertEquals('some_value', $actualChildData['some_property']);
+
+        // specific child data key
+        $this->assertEquals('some_value', $parent->getChildData('block1', 'some_property'));
+
+        // non-existing child block
         $this->assertNull($parent->getChildData('unknown_block'));
     }
 
@@ -635,27 +640,6 @@ class Mage_Core_Block_AbstractTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->_block->getCacheLifetime());
         $this->_block->setCacheLifetime(1800);
         $this->assertEquals(1800, $this->_block->getCacheLifetime());
-    }
-
-    /**
-     * App isolation is enabled, because config options object is affected
-     *
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     */
-    public function testGetVar()
-    {
-        /** @var $themeUtility Mage_Core_Utility_Theme */
-        $themeUtility = Mage::getModel('Mage_Core_Utility_Theme', array(
-            dirname(__DIR__) . '/Model/_files/design/'
-        ));
-        $themeUtility->registerThemes()->setDesignTheme('test/default', 'frontend');
-
-        $this->assertEquals('Core Value1', $this->_block->getVar('var1'));
-        $this->assertEquals('value1', $this->_block->getVar('var1', 'Namespace_Module'));
-        $this->_block->setModuleName('Namespace_Module');
-        $this->assertEquals('value1', $this->_block->getVar('var1'));
-        $this->assertEquals(false, $this->_block->getVar('unknown_var'));
     }
 
     /**

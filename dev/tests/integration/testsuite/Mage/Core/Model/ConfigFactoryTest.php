@@ -33,20 +33,13 @@
  */
 class Mage_Core_Model_ConfigFactoryTest extends PHPUnit_Framework_TestCase
 {
-    protected static $_options = array();
-
     /** @var Mage_Core_Model_Config */
     protected $_model;
-
-    public static function setUpBeforeClass()
-    {
-        self::$_options = Magento_Test_Bootstrap::getInstance()->getAppOptions();
-    }
 
     public function setUp()
     {
         $this->_model = Mage::getModel('Mage_Core_Model_Config');
-        $this->_model->init(self::$_options);
+        $this->_model->init();
     }
 
     protected function tearDown()

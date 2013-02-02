@@ -52,34 +52,6 @@
     <?php echo $this->getChildHtml('product-type-tabs') ?>
 </form>
 <script type="text/javascript">
-    var productTemplateSyntax = /(^|.|\r|\n)({{(\w+)}})/;
-    jQuery('#product-edit-form').mage('form')
-        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
-    function setSettings(urlTemplate, setElement, typeElement) {
-        var template = new Template(urlTemplate, productTemplateSyntax);
-        setLocation(template.evaluate({attribute_set:$F(setElement),type:$F(typeElement)}));
-    }
-
-    function setSuperSettings(urlTemplate, attributesClass, validateField) {
-        var attributesFields = $$('.' + attributesClass);
-        var attributes = Form.serializeElements(attributesFields, true).attribute;
-        if (typeof attributes == 'string') {
-            attributes = [attributes];
-        }
-
-        if (!attributes) {
-            $(validateField).value = 'no-attributes';
-        } else {
-            $(validateField).value = 'has-attributes';
-        }
-
-        var template = new Template(urlTemplate, productTemplateSyntax);
-        var url = template.evaluate({
-            attributes: encode_base64(attributes.join(',')).replace(new RegExp('/', 'g'), '%2F').replace(new RegExp('=', 'g'), '%3D')
-        });
-        jQuery('#product-edit-form').attr('action', url + '&active_tab=configurable').submit();
-    }
-
     function checkMaxLength(Object, MaxLen)
     {
         if (Object.value.length > MaxLen-1) {
@@ -89,6 +61,10 @@
     }
 
 jQuery(function($) {
+    $('#product-edit-form')
+        .mage('form')
+        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+
     <?php if ($this->getSelectedTabId()): ?>
     if($('#<?php echo $this->getSelectedTabId() ?>').length) {
         $('#<?php echo $this->getSelectedTabId() ?>').trigger('click');
@@ -96,7 +72,8 @@ jQuery(function($) {
     <?php endif; ?>
 
     $('#product_info_tabs').on('tabsbeforeactivate', function (event, ui) {
-        $('#config_super_product')[$(ui.newPanel).find('#attribute-name-container').length ? 'show' : 'hide']();
+        var action = $(ui.newPanel).find('#attribute-name-container').length ? 'show' : 'hide';
+        $('#config_super_product, #grouped_product_container')[action]();
     });
 
     var masks = <?php echo $this->helper('Mage_Core_Helper_Data')->jsonEncode($this->getFieldsAutogenerationMasks())?>;
@@ -172,27 +149,30 @@ jQuery(function($) {
 
     new Autogenerator(masks).bindAll();
 
-    var data = <?php echo $this->getTypeSwitcherData();?>;
-    new TypeSwitcher(data).bindAll();
+    new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll();
 
     $('.widget-button-save .item-default, #save-split-button-duplicate-button[onclick=""]').parent().hide();
     var $form = $('#product-edit-form'),
-        fieldSelector = '.required-entry, .required-option-select';
-    $form.on('focus change keyup click', fieldSelector + ',:checkbox,button', function () {
-        var disabled = false;
-        $.each($form.find(fieldSelector), function () {
-            if (!$.trim($(this).val()) && !$(this).closest('.ignore-validate').length
-                && $(this).is('input, select, textarea') && !$(this).prop('disabled')
-            ) {
-                disabled = true;
-                return false;
-            }
-        });
-        $('.widget-button-save, .widget-button-save > *').toggleClass('disabled', disabled).prop('disabled', disabled);
-    });
-
+        fieldSelector = '.required-entry, .required-option-select',
+        updateSaveSplitButtonAvailability = function () {
+            var disabled = false;
+            $.each($form.find(fieldSelector), function () {
+                if (!$.trim($(this).val()) && !$(this).closest('.ignore-validate').length
+                    && $(this).is('input, select, textarea') && !$(this).prop('disabled')
+                ) {
+                    disabled = true;
+                    return false;
+                }
+            });
+            $('.widget-button-save, .widget-button-save > *').toggleClass('disabled', disabled).prop('disabled', disabled);
+        };
+    $form.on('focus change keyup click', fieldSelector + ',:checkbox,button', updateSaveSplitButtonAvailability);
     $(window).load(function() {
-        $('#name').focus().val($('#name').val());
+        if ($.trim($('#name').val()) == '') {
+            $('#name').focus();
+        } else {
+            updateSaveSplitButtonAvailability();
+        }
     });
 });
 </script>

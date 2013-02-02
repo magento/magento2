@@ -1,6 +1,6 @@
 <?php
 /**
- * Test Json Renderer for REST.
+ * Test JSON Renderer for REST.
  *
  * Magento
  *
@@ -50,18 +50,18 @@ class Mage_Webapi_Controller_Response_Rest_Renderer_JsonTest extends PHPUnit_Fra
     }
 
     /**
-     * Test render method
+     * Test render method.
      */
     public function testRender()
     {
         $arrayToRender = array('key' => 'value');
-        /** Assert jsonEncode method in mocked helper will run once */
+        /** Assert that jsonEncode method in mocked helper will run once */
         $this->_helperMock->expects($this->once())->method('jsonEncode');
         $this->_restJsonRenderer->render($arrayToRender);
     }
 
     /**
-     * Test GetMimeType method
+     * Test GetMimeType method.
      */
     public function testGetMimeType()
     {

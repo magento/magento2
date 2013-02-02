@@ -1,6 +1,6 @@
 <?php
 /**
- * File with unit tests for API configuration class: Mage_Webapi_Model_Config_Soap
+ * File with unit tests for API configuration class: Mage_Webapi_Model_Config_Soap.
  *
  * Magento
  *
@@ -42,7 +42,7 @@ require_once __DIR__ . '/../_files/autodiscovery/reference_to_invalid_type/class
 /**#@-*/
 
 /**
- * Test of API configuration class: Mage_Webapi_Model_Config
+ * Test of API configuration class: Mage_Webapi_Model_Config.
  */
 class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
 {
@@ -137,8 +137,13 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
     public function dataProviderTestGetResourceNameByOperationNegative()
     {
         return array(
-            array('customerUpdate', 'v1', false, "In case when resource not found 'false' is expected."),
-            array('vendorModuleResourceCreate', 'v100', false, "In case when version not found 'false' is expected."),
+            array('customerUpdate', 'v1', false, "In case when resource is not found, 'false' is expected."),
+            array(
+                'vendorModuleResourceCreate',
+                'v100',
+                false,
+                "In case when version is not found, 'false' is expected."
+            ),
         );
     }
 
@@ -160,7 +165,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('customerMultiDeleteExcessiveSuffix', 'v2', 'Excessive suffix is ignored.'),
-            array('customerInvalid', 'v1', "In case when operation not found 'false' is expected."),
+            array('customerInvalid', 'v1', "In case when operation is not found, 'false' is expected."),
         );
     }
 
@@ -189,7 +194,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
                 'vendorModuleResourceMultiUpdate',
                 'v2',
                 'multiUpdate',
-                'Compound method names seem be be identified incorrectly or version processing is broken.'
+                'Compound method names seem to be identified incorrectly or version processing is broken.'
             ),
             array(
                 'vendorModuleResourceSubresourceMultiDelete',
@@ -197,7 +202,12 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
                 'multiDelete',
                 "If version is not set - no check must be performed for operation existence in resource."
             ),
-            array('vendorModuleResourceUpdate', 'v100', false, "In case when version not found 'false' is expected."),
+            array(
+                'vendorModuleResourceUpdate',
+                'v100',
+                false,
+                "In case when version is not found, 'false' is expected."
+            ),
         );
     }
 
@@ -219,7 +229,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('vendorModuleResourceMultiUpdateExcessiveSuffix', 'v2', 'Excessive suffix is ignored.'),
-            array('vendorModuleResourceInvalid', 'v1', "In case when operation not found 'false' is expected."),
+            array('vendorModuleResourceInvalid', 'v1', "In case when operation is not found, 'false' is expected."),
         );
     }
 
@@ -247,7 +257,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('customerMultiDeleteExcessiveSuffix', 'Excessive suffix is ignored.'),
-            array('customerInvalid', "In case when operation not found 'false' is expected."),
+            array('customerInvalid', "In case when operation is not found, 'false' is expected."),
         );
     }
 
@@ -270,7 +280,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expectedMaxVersion,
             $this->_getModel()->getResourceMaxVersion($resourceName),
-            "Resource Maximum available version was identified incorrectly."
+            "Resource maximum available version was identified incorrectly."
         );
     }
 
@@ -457,7 +467,7 @@ class Mage_Webapi_Model_Config_SoapTest extends PHPUnit_Framework_TestCase
                 ),
                 '@apiDeprecated vendorModuleResource::listV3'
             ),
-            array('vendorModuleResource', 'list', 3, false, 'No policy defined.'),
+            array('vendorModuleResource', 'list', 3, false, 'No policy is defined.'),
             array(
                 'vendorModuleResource',
                 'delete',

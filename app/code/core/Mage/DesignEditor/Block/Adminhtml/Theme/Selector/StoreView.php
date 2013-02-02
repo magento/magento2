@@ -55,6 +55,8 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView extends Mage_Ba
      * @param Mage_Core_Model_Store_Config $storeConfig
      * @param Mage_Core_Controller_Varien_Front $frontController
      * @param Mage_Core_Model_Factory_Helper $helperFactory
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Mage_Core_Model_Logger $logger
      * @param Magento_Filesystem $filesystem
      * @param Mage_Core_Model_Resource_Website_Collection $websiteCollection
      * @param Mage_Core_Model_Theme_Service $serviceModel
@@ -74,6 +76,8 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView extends Mage_Ba
         Mage_Core_Model_Store_Config $storeConfig,
         Mage_Core_Controller_Varien_Front $frontController,
         Mage_Core_Model_Factory_Helper $helperFactory,
+        Mage_Core_Model_Dir $dirs,
+        Mage_Core_Model_Logger $logger,
         Magento_Filesystem $filesystem,
         Mage_Core_Model_Resource_Website_Collection $websiteCollection,
         Mage_Core_Model_Theme_Service $serviceModel,
@@ -83,7 +87,8 @@ class Mage_DesignEditor_Block_Adminhtml_Theme_Selector_StoreView extends Mage_Ba
         $this->_serviceModel = $serviceModel;
 
         parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $designPackage,
-            $session, $storeConfig, $frontController, $helperFactory, $filesystem, $data);
+            $session, $storeConfig, $frontController, $helperFactory, $dirs, $logger, $filesystem, $data
+        );
     }
 
     /**

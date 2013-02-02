@@ -30,7 +30,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Adminhtml_Block_Customer_Edit_Renderer_Region
-    extends Mage_Adminhtml_Block_Abstract
+    extends Mage_Core_Block_Template
     implements Varien_Data_Form_Element_Renderer_Interface
 {
     /**

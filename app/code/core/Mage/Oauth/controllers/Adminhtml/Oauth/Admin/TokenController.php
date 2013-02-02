@@ -43,7 +43,7 @@ class Mage_Oauth_Adminhtml_Oauth_Admin_TokenController extends Mage_Adminhtml_Co
     protected function  _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('Mage_Oauth::system_api_oauth_admin_token');
+            ->_setActiveMenu('Mage_Oauth::system_legacy_api_oauth_admin_token');
         return $this;
     }
 

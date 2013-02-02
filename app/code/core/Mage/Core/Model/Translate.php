@@ -113,12 +113,19 @@ class Mage_Core_Model_Translate
     protected $_localeHierarchy = array();
 
     /**
+     * @var Mage_Core_Model_Design_Package
+     */
+    protected $_designPackage;
+
+    /**
      * Initialize translate model
      *
+     * @param Mage_Core_Model_Design_Package $designPackage
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(Mage_Core_Model_Design_Package $designPackage, array $data = array())
     {
+        $this->_designPackage = $designPackage;
         if (isset($data['locale_hierarchy']) && is_array($data['locale_hierarchy'])) {
             $this->_localeHierarchy = $data['locale_hierarchy'];
         } else {
@@ -207,7 +214,7 @@ class Mage_Core_Model_Translate
             $this->_config[self::CONFIG_KEY_STORE] = Mage::app()->getStore()->getId();
         }
         if (!isset($this->_config[self::CONFIG_KEY_DESIGN_THEME])) {
-            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = Mage::getDesign()->getDesignTheme()->getId();
+            $this->_config[self::CONFIG_KEY_DESIGN_THEME] = $this->_designPackage->getDesignTheme()->getId();
         }
         return $this;
     }
@@ -266,6 +273,7 @@ class Mage_Core_Model_Translate
      *
      * @param array $data
      * @param string $scope
+     * @param boolean $forceReload
      * @return Mage_Core_Model_Translate
      */
     protected function _addData($data, $scope, $forceReload=false)
@@ -313,7 +321,7 @@ class Mage_Core_Model_Translate
     {
         $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
         foreach ($requiredLocaleList as $locale) {
-            $file = Mage::getDesign()->getLocaleFileName('translate.csv', array('locale' => $locale));
+            $file = $this->_designPackage->getLocaleFileName('translate.csv', array('locale' => $locale));
             $this->_addData($this->_getFileData($file), false, $forceReload);
         }
         return $this;
@@ -322,6 +330,7 @@ class Mage_Core_Model_Translate
     /**
      * Loading current store translation from DB
      *
+     * @param boolean $forceReload
      * @return Mage_Core_Model_Translate
      */
     protected function _loadDbTranslation($forceReload = false)
@@ -517,7 +526,6 @@ class Mage_Core_Model_Translate
     /**
      * Loading data cache
      *
-     * @param   string $area
      * @return  array | false
      */
     protected function _loadCache()
@@ -533,7 +541,6 @@ class Mage_Core_Model_Translate
     /**
      * Saving data cache
      *
-     * @param   string $area
      * @return  Mage_Core_Model_Translate
      */
     protected function _saveCache()

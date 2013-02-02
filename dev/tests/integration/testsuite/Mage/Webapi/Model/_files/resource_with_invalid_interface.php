@@ -33,17 +33,17 @@ class Vendor_Module_Controller_Webapi_Invalid_Interface
      */
     public function updateV1($resourceId)
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 
     public function updateV2()
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 
     public function emptyInterfaceV2()
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 
     /**
@@ -51,6 +51,6 @@ class Vendor_Module_Controller_Webapi_Invalid_Interface
      */
     public function invalidMethodNameV2($resourceId)
     {
-        // Body is intentionally left empty
+        // Body is intentionally left empty.
     }
 }

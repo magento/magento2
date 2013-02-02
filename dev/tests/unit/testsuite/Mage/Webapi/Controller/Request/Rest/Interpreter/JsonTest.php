@@ -1,6 +1,6 @@
 <?php
 /**
- * Test Webapi Json Interpreter Request Rest Controller
+ * Test Webapi Json Interpreter Request Rest Controller.
  *
  * Magento
  *
@@ -68,7 +68,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_JsonTest extends PHPUnit_F
 
     public function testInterpretInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Invalid data type "boolean". String is expected.');
+        $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
         $this->_jsonInterpreter->interpret(false);
     }
 
@@ -91,7 +91,7 @@ class Mage_Webapi_Controller_Request_Rest_Interpreter_JsonTest extends PHPUnit_F
         $this->assertEquals(
             $expectedDecodedJson,
             $this->_jsonInterpreter->interpret($inputEncodedJson),
-            'Invalid interpretation from json to array.'
+            'Interpretation from JSON to array is invalid.'
         );
     }
 

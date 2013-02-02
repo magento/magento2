@@ -32,7 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Connect_Block_Adminhtml_Extension_Custom_Edit_Tab_Local
-    extends Mage_Adminhtml_Block_Abstract
+    extends Mage_Core_Block_Template
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
     /**

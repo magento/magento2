@@ -27,7 +27,7 @@
         _create: function () {
             this.element.sortable({
                 axis: 'y',
-                handle: '.entry-edit-head',
+                handle: '.ui-icon-grip-dotted-vertical',
                 update: function () {
                     $(this).find('[name$="[position]"]').each(function (index) {
                         $(this).val(index);

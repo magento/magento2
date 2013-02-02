@@ -29,6 +29,26 @@
  */
 final class Mage
 {
+    /**#@+
+     * Application initialization options to inject custom request/response objects
+     */
+    const INIT_OPTION_REQUEST  = 'request';
+    const INIT_OPTION_RESPONSE = 'response';
+    /**#@-*/
+
+    /**
+     * Application initialization option to specify custom product edition label
+     */
+    const INIT_OPTION_EDITION = 'edition';
+
+    /**
+     * Product edition labels
+     */
+    const EDITION_COMMUNITY    = 'Community';
+    const EDITION_ENTERPRISE   = 'Enterprise';
+    const EDITION_PROFESSIONAL = 'Professional';
+    const EDITION_GO           = 'Go';
+
     /**
      * Registry collection
      *
@@ -114,14 +134,6 @@ final class Mage
     protected static $_design;
 
     /**
-     * Magento edition constants
-     */
-    const EDITION_COMMUNITY    = 'Community';
-    const EDITION_ENTERPRISE   = 'Enterprise';
-    const EDITION_PROFESSIONAL = 'Professional';
-    const EDITION_GO           = 'Go';
-
-    /**
      * Current Magento edition.
      *
      * @var string
@@ -163,7 +175,7 @@ final class Mage
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '39',
+            'number'    => '40',
         );
     }
 
@@ -311,9 +323,11 @@ final class Mage
      * @param string $type
      * @return string
      */
-    public static function getBaseDir($type = 'base')
+    public static function getBaseDir($type = Mage_Core_Model_Dir::ROOT)
     {
-        return self::getConfig()->getOptions()->getDir($type);
+        /** @var $dirs Mage_Core_Model_Dir */
+        $dirs = self::$_objectManager->get('Mage_Core_Model_Dir');
+        return $dirs->getDir($type);
     }
 
     /**
@@ -398,14 +412,23 @@ final class Mage
     /**
      * Retrieve a config instance
      *
+     * This method doesn't suit Magento 2 anymore, it is left only until refactoring, when all calls
+     * to Mage::getConfig() will be removed in favor of config dependency injection.
+     *
      * @return Mage_Core_Model_Config
      */
     public static function getConfig()
     {
-        if (!self::$_config) {
-            self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
+        if (self::$_app) {
+            // Usual workflow - act as a proxy, retrieve config from the application
+            return self::$_app->getConfig();
+        } else {
+            // Temp workaround for unit tests only, so there is no urgent need to check and refactor them all
+            if (!self::$_config) {
+                self::$_config = self::getObjectManager()->get('Mage_Core_Model_Config');
+            }
+            return self::$_config;
         }
-        return self::$_config;
     }
 
     /**
@@ -620,19 +643,17 @@ final class Mage
     /**
      * Get initialized application object.
      *
-     * @param string $code
-     * @param string $type
-     * @param string|array $options
+     * @param array $params
      * @return Mage_Core_Model_App
      */
-    public static function app($code = '', $type = 'store', $options = array())
+    public static function app(array $params = array())
     {
         if (null === self::$_app) {
             self::$_app = self::getObjectManager()->get('Mage_Core_Model_App');
             self::$_events = new Varien_Event_Collection();
 
             Magento_Profiler::start('self::app::init');
-            self::$_app->init($code, $type, $options);
+            self::$_app->init($params);
             Magento_Profiler::stop('self::app::init');
         }
         return self::$_app;
@@ -640,26 +661,25 @@ final class Mage
 
     /**
      * @static
-     * @param string $code
-     * @param string $type
-     * @param array $options
+     * @param array $params
      * @param string|array $modules
      */
-    public static function init($code = '', $type = 'store', $options = array(), $modules = array())
+    public static function init(array $params, $modules = array())
     {
         try {
-            self::$_app = self::getObjectManager()->create('Mage_Core_Model_App');
-
+            /** @var $app Mage_Core_Model_App */
+            $app = self::getObjectManager()->create('Mage_Core_Model_App');
+            self::$_app = $app;
             if (!empty($modules)) {
-                self::$_app->initSpecified($code, $type, $options, $modules);
+                self::$_app->initSpecified($params, $modules);
             } else {
-                self::$_app->init($code, $type, $options);
+                self::$_app->init($params);
             }
         } catch (Mage_Core_Model_Session_Exception $e) {
             header('Location: ' . self::getBaseUrl());
             die;
         } catch (Mage_Core_Model_Store_Exception $e) {
-            require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . '404.php');
+            require_once(self::getBaseDir(Mage_Core_Model_Dir::PUB) . DS . 'errors' . DS . '404.php');
             die;
         } catch (Exception $e) {
             self::printException($e);
@@ -670,30 +690,26 @@ final class Mage
     /**
      * Front end main entry point
      *
-     * @param string $code
-     * @param string $type
-     * @param string|array $options
+     * @param array $params
      */
-    public static function run($code = '', $type = 'store', $options = array())
+    public static function run(array $params)
     {
         try {
             Magento_Profiler::start('mage');
-            if (isset($options['edition'])) {
-                self::$_currentEdition = $options['edition'];
+            if (isset($params[self::INIT_OPTION_EDITION])) {
+                self::$_currentEdition = $params[self::INIT_OPTION_EDITION];
             }
-            self::$_app    = self::getObjectManager()->get('Mage_Core_Model_App');
-            if (isset($options['request'])) {
-                self::$_app->setRequest($options['request']);
+            /** @var $app Mage_Core_Model_App */
+            $app = self::getObjectManager()->create('Mage_Core_Model_App');
+            self::$_app = $app;
+            if (isset($params[self::INIT_OPTION_REQUEST])) {
+                self::$_app->setRequest($params[self::INIT_OPTION_REQUEST]);
             }
-            if (isset($options['response'])) {
-                self::$_app->setResponse($options['response']);
+            if (isset($params[self::INIT_OPTION_RESPONSE])) {
+                self::$_app->setResponse($params[self::INIT_OPTION_RESPONSE]);
             }
             self::$_events = new Varien_Event_Collection();
-            self::$_app->run(array(
-                'scope_code' => $code,
-                'scope_type' => $type,
-                'options'    => $options,
-            ));
+            self::$_app->run($params);
             Magento_Profiler::stop('mage');
         } catch (Mage_Core_Model_Session_Exception $e) {
             header('Location: ' . self::getBaseUrl());
@@ -822,7 +838,7 @@ final class Mage
             } catch (Exception $e) {
             }
 
-            require_once(self::getBaseDir() . DS . 'pub' . DS . 'errors' . DS . 'report.php');
+            require_once(self::getBaseDir(Mage_Core_Model_Dir::PUB) . DS . 'errors' . DS . 'report.php');
         }
 
         die();

@@ -31,21 +31,6 @@
 class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_Design_FallbackInterface
 {
     /**
-     * @var string
-     */
-    protected $_area;
-
-    /**
-     * @var Mage_Core_Model_Theme
-     */
-    protected $_theme;
-
-    /**
-     * @var string|null
-     */
-    protected $_locale;
-
-    /**
      * Whether object can save map changes upon destruction
      *
      * @var bool
@@ -71,7 +56,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
      *
      * @var array
      */
-    protected $_map;
+    protected $_map = array();
 
     /**
      * Proxied fallback model
@@ -81,76 +66,60 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     protected $_fallback;
 
     /**
-     * Directory to keep map file
-     *
-     * @var string
+     * @var Magento_Filesystem
      */
-    protected $_mapDir;
+    protected $_filesystem;
 
     /**
      * Path to Magento base directory
      *
      * @var string
      */
-    protected $_basePath;
+    protected $_baseDir;
 
     /**
-     * @var Magento_Filesystem
-     */
-    protected $_filesystem;
-
-    /**
-     * Constructor.
-     * Following entries in $params are required: 'area', 'package', 'theme', 'locale', 'canSaveMap',
-     * 'mapDir', 'baseDir'.
+     * Read the class map according to provided fallback model and parameters
      *
+     * @param Mage_Core_Model_Design_Fallback $fallback
      * @param Magento_Filesystem $filesystem
-     * @param array $data
+     * @param string $mapDir directory where to look the map files in
+     * @param string $baseDir base directory path to prepend to file paths
+     * @param bool $canSaveMap whether to update map file in destructor
+     * @throws InvalidArgumentException
      */
-    public function __construct(Magento_Filesystem $filesystem, array $data = array())
-    {
+    public function __construct(
+        Mage_Core_Model_Design_Fallback $fallback,
+        Magento_Filesystem $filesystem,
+        $mapDir,
+        $baseDir,
+        $canSaveMap = true
+    ) {
+        $this->_fallback = $fallback;
         $this->_filesystem = $filesystem;
-        $this->_area = $data['area'];
-        $this->_theme = $data['themeModel'];
-        $this->_locale = $data['locale'];
-        $this->_canSaveMap = $data['canSaveMap'];
-        $this->_mapDir = $data['mapDir'];
-        $this->_basePath = $data['baseDir'] ? $data['baseDir'] . DIRECTORY_SEPARATOR : '';
-
-        $this->_mapFile =
-            "{$this->_mapDir}/{$this->_area}_{$this->_theme->getId()}_{$this->_locale}.ser";
-        $this->_map = $this->_filesystem->isFile($this->_mapFile)
-            ? unserialize($this->_filesystem->read($this->_mapFile))
-            : array();
+        if (!$filesystem->isDirectory($baseDir)) {
+            throw new InvalidArgumentException("Wrong base directory specified: '{$baseDir}'");
+        }
+        $this->_baseDir = $baseDir;
+        $this->_canSaveMap = $canSaveMap;
+        $this->_mapFile = $mapDir . DIRECTORY_SEPARATOR
+            . "{$fallback->getArea()}_{$fallback->getTheme()}_{$fallback->getLocale()}.ser";
+        if ($this->_filesystem->isFile($this->_mapFile)) {
+            $this->_map = unserialize($this->_filesystem->read($this->_mapFile));
+        }
     }
 
+    /**
+     * Write the serialized class map to the file
+     */
     public function __destruct()
     {
         if ($this->_isMapChanged && $this->_canSaveMap) {
-            if (!$this->_filesystem->isDirectory($this->_mapDir)) {
-                $this->_filesystem->createDirectory($this->_mapDir, 0777);
+            $dir = dirname($this->_mapFile);
+            if (!$this->_filesystem->isDirectory($dir)) {
+                $this->_filesystem->createDirectory($dir, 0777);
             }
             $this->_filesystem->write($this->_mapFile, serialize($this->_map));
         }
-    }
-
-    /**
-     * Return instance of fallback model. Create it, if it has not been created yet.
-     *
-     * @return Mage_Core_Model_Design_Fallback
-     */
-    protected function _getFallback()
-    {
-        if (!$this->_fallback) {
-            $this->_fallback = Mage::getModel('Mage_Core_Model_Design_Fallback', array(
-                'data' => array(
-                    'area'       => $this->_area,
-                    'themeModel' => $this->_theme,
-                    'locale'     => $this->_locale
-                )
-            ));
-        }
-        return $this->_fallback;
     }
 
     /**
@@ -167,7 +136,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
         if (isset($this->_map[$mapKey])) {
             $value =  $this->_map[$mapKey];
             if ((string) $value !== '') {
-                return $this->_basePath . $value;
+                return $this->_baseDir . DIRECTORY_SEPARATOR . $value;
             } else {
                 return $value;
             }
@@ -183,26 +152,23 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
      * @param string $file
      * @param string|null $module
      * @param string $filePath
-     * @return Mage_Core_Model_Design_Fallback_CachingProxy
-     * @throws Mage_Core_Exception
+     * @throws Magento_Exception
      */
     protected function _setToMap($prefix, $file, $module, $filePath)
     {
-        $basePathLen = strlen($this->_basePath);
-        if (((string)$filePath !== '') && strncmp($filePath, $this->_basePath, $basePathLen)) {
-            throw new Mage_Core_Exception(
-                "Attempt to store fallback path '{$filePath}', which is not within '{$this->_basePath}'"
+        $pattern = $this->_baseDir . DIRECTORY_SEPARATOR;
+        if (0 !== strpos($filePath, $pattern, 0)) {
+            throw new Magento_Exception(
+                "Attempt to store fallback path '{$filePath}', which is not within '{$pattern}'"
             );
         }
-
         $mapKey = "$prefix|$file|$module";
-        $this->_map[$mapKey] = substr($filePath, $basePathLen);
+        $this->_map[$mapKey] = substr($filePath, strlen($pattern));
         $this->_isMapChanged = true;
-        return $this;
     }
 
     /**
-     * Get existing file name, using map and fallback mechanism
+     * Proxy to Mage_Core_Model_Design_Fallback::getFile()
      *
      * @param string $file
      * @param string|null $module
@@ -212,14 +178,14 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         $result = $this->_getFromMap('theme', $file, $module);
         if (!$result) {
-            $result = $this->_getFallback()->getFile($file, $module);
+            $result = $this->_fallback->getFile($file, $module);
             $this->_setToMap('theme', $file, $module, $result);
         }
         return $result;
     }
 
     /**
-     * Get locale file name, using map and fallback mechanism
+     * Proxy to Mage_Core_Model_Design_Fallback::getLocaleFile()
      *
      * @param string $file
      * @return string
@@ -228,14 +194,14 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         $result = $this->_getFromMap('locale', $file);
         if (!$result) {
-            $result = $this->_getFallback()->getLocaleFile($file);
+            $result = $this->_fallback->getLocaleFile($file);
             $this->_setToMap('locale', $file, null, $result);
         }
         return $result;
     }
 
     /**
-     * Get Theme file name, using map and fallback mechanism
+     * Proxy to Mage_Core_Model_Design_Fallback::getViewFile()
      *
      * @param string $file
      * @param string|null $module
@@ -245,22 +211,23 @@ class Mage_Core_Model_Design_Fallback_CachingProxy implements Mage_Core_Model_De
     {
         $result = $this->_getFromMap('view', $file, $module);
         if (!$result) {
-            $result = $this->_getFallback()->getViewFile($file, $module);
+            $result = $this->_fallback->getViewFile($file, $module);
             $this->_setToMap('view', $file, $module, $result);
         }
         return $result;
     }
 
     /**
-     * Object notified, that theme file was published, thus it can return published file name on next calls
+     * Object notified, that view file was published, thus it can return published file name on next calls
      *
      * @param string $publicFilePath
      * @param string $file
      * @param string|null $module
-     * @return Mage_Core_Model_Design_FallbackInterface
+     * @return Mage_Core_Model_Design_Fallback_CachingProxy
      */
     public function notifyViewFilePublished($publicFilePath, $file, $module = null)
     {
-        return $this->_setToMap('view', $file, $module, $publicFilePath);
+        $this->_setToMap('view', $file, $module, $publicFilePath);
+        return $this;
     }
 }

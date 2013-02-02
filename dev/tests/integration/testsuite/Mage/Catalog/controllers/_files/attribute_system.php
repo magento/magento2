@@ -26,8 +26,8 @@
  */
 
 $model = new Mage_Catalog_Model_Resource_Eav_Attribute(
-    new Mage_Core_Model_Event_Manager(),
-    new Mage_Core_Model_Cache()
+    Mage::getModel('Mage_Core_Model_Event_Manager'),
+    Mage::getModel('Mage_Core_Model_Cache')
 );
 $model->setName('system_attribute')
     ->setId(2)

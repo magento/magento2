@@ -235,8 +235,7 @@ class Mage_DesignEditor_Model_State
     {
         $themeId = $this->_backendSession->getData('theme_id');
         if ($themeId !== null) {
-            $path = $this->_designPackage->getConfigPathByArea(Mage_Core_Model_App_Area::AREA_FRONTEND);
-            $this->_application->getStore()->setConfig($path, $themeId);
+            $this->_application->getStore()->setConfig(Mage_Core_Model_Design_Package::XML_PATH_THEME_ID, $themeId);
         }
     }
 

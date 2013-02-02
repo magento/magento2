@@ -32,14 +32,7 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
      *
      * @var string
      */
-    protected static $_tmpDir;
-
-    /**
-     * Base dir as passed to the model
-     *
-     * @var string
-     */
-    protected $_baseDir;
+    protected $_tmpDir;
 
     /**
      * Mock of the model to be tested. Operates the mocked fallback object.
@@ -55,170 +48,103 @@ class Mage_Core_Model_Design_Fallback_CachingProxyTest extends PHPUnit_Framework
      */
     protected $_fallback;
 
-    /**
-     * Mocked theme object
-     *
-     * @var Mage_Core_Model_Theme
-     */
-    protected $_theme;
-
-    public static function setUpBeforeClass()
-    {
-        self::$_tmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'fallback';
-        mkdir(self::$_tmpDir);
-    }
-
     public function setUp()
     {
-        // TODO This test should be either refactored to use mock filesystem or moved to integration
-        $this->_baseDir = DIRECTORY_SEPARATOR . 'base' . DIRECTORY_SEPARATOR . 'dir';
-
-        $this->_theme = $this->getMock('Mage_Core_Model_Theme', array(), array(), '', false);
-
-        $params = array(
-            'area'       => 'frontend',
-            'themeModel' => $this->_theme,
-            'locale'     => 'en_US',
-            'appConfig'  => false,
-            'canSaveMap' => false,
-            'mapDir'     => self::$_tmpDir,
-            'baseDir'    => $this->_baseDir
-        );
-
+        $this->_tmpDir = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . 'fallback';
+        mkdir($this->_tmpDir);
         $this->_fallback = $this->getMock(
             'Mage_Core_Model_Design_Fallback',
-            array('getFile', 'getLocaleFile', 'getViewFile'),
-            array($this->_createFilesystem(), $params)
+            array('getFile', 'getLocaleFile', 'getViewFile', 'getArea', 'getPackage', 'getTheme', 'getLocale'),
+            array(),
+            '',
+            false
         );
+        $this->_fallback->expects($this->any())->method('getArea')->will($this->returnValue('a'));
+        $this->_fallback->expects($this->any())->method('getPackage')->will($this->returnValue('p'));
+        $this->_fallback->expects($this->any())->method('getTheme')->will($this->returnValue('t'));
+        $this->_fallback->expects($this->any())->method('getLocale')->will($this->returnValue('l'));
+        $this->_model = new Mage_Core_Model_Design_Fallback_CachingProxy(
+            $this->_fallback, $this->_createFilesystem(), $this->_tmpDir, __DIR__, true
+        );
+    }
 
-        $this->_model = $this->getMockBuilder('Mage_Core_Model_Design_Fallback_CachingProxy')
-            ->setMethods(array('_getFallback'))
-            ->setConstructorArgs(array($this->_createFilesystem(), $params))
-            ->getMock();
-        $this->_model->expects($this->any())
-            ->method('_getFallback')
-            ->will($this->returnValue($this->_fallback));
+    protected function tearDown()
+    {
+        Varien_Io_File::rmdirRecursive($this->_tmpDir);
     }
 
     /**
-     * Calls are repeated twice to verify, that fallback is used only once, and next time a proper value is returned
-     * via cached map.
+     * @expectedException InvalidArgumentException
      */
-    public function testGetFile()
+    public function testConstructInvalidDir()
     {
-        $module = 'Some_Module';
-        $expected = $this->_baseDir . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'theme_file.ext';
-        $expected = str_replace('/', DIRECTORY_SEPARATOR, $expected);
+        new Mage_Core_Model_Design_Fallback_CachingProxy($this->_fallback, $this->_createFilesystem(), $this->_tmpDir,
+            __DIR__ . '/invalid_dir');
+    }
+
+    public function testDestruct()
+    {
         $this->_fallback->expects($this->once())
             ->method('getFile')
-            ->with('file.ext', $module)
-            ->will($this->returnValue($expected));
-
-        $actual = $this->_model->getFile('file.ext', $module);
-        $this->assertEquals($expected, $actual);
-        $actual = $this->_model->getFile('file.ext', $module);
-        $this->assertEquals($expected, $actual);
+            ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR . 'test.txt'));
+        $suffix = uniqid();
+        $model = new Mage_Core_Model_Design_Fallback_CachingProxy(
+            $this->_fallback,
+            $this->_createFilesystem(),
+            $this->_tmpDir . DIRECTORY_SEPARATOR . $suffix,
+            __DIR__,
+            true
+        );
+        $expectedFile = $this->_tmpDir . DIRECTORY_SEPARATOR . $suffix . DIRECTORY_SEPARATOR . 'a_t_l.ser';
+        $model->getFile('does not matter');
+        $this->assertFileNotExists($expectedFile);
+        unset($model);
+        $this->assertFileExists($expectedFile);
+        $contents = unserialize(file_get_contents($expectedFile));
+        $this->assertContains('test.txt', $contents);
     }
 
     /**
-     * Calls are repeated twice to verify, that fallback is used only once, and next time a proper value is returned
-     * via cached map.
+     * @covers Mage_Core_Model_Design_Fallback_CachingProxy::getFile
+     * @covers Mage_Core_Model_Design_Fallback_CachingProxy::getLocaleFile
+     * @covers Mage_Core_Model_Design_Fallback_CachingProxy::getViewFile
      */
-    public function testGetLocaleFile()
+    public function testProxyMethods()
     {
-        $expected = $this->_baseDir . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'locale_file.ext';
+        $fileArg = 'file.txt';
+        $moduleArg = 'module';
+        $path = __DIR__ . DIRECTORY_SEPARATOR;
         $this->_fallback->expects($this->once())
-            ->method('getLocaleFile')
-            ->with('file.ext')
-            ->will($this->returnValue($expected));
-
-        $actual = $this->_model->getLocaleFile('file.ext');
-        $this->assertEquals($expected, $actual);
-        $actual = $this->_model->getLocaleFile('file.ext');
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Calls are repeated twice to verify, that fallback is used only once, and next time a proper value is returned
-     * via cached map.
-     */
-    public function testGetViewFile()
-    {
-        $module = 'Some_Module';
-        $expected = $this->_baseDir . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'view_file.ext';
+            ->method('getFile')->with($fileArg, $moduleArg)->will($this->returnValue("{$path}one"));
         $this->_fallback->expects($this->once())
-            ->method('getViewFile')
-            ->with('file.ext', $module)
-            ->will($this->returnValue($expected));
+            ->method('getLocaleFile')->with($fileArg)->will($this->returnValue("{$path}two"));
+        $this->_fallback->expects($this->once())
+            ->method('getViewFile')->with($fileArg, $moduleArg)->will($this->returnValue("{$path}three"));
 
-        $actual = $this->_model->getViewFile('file.ext', $module);
-        $this->assertEquals($expected, $actual);
-        $actual = $this->_model->getViewFile('file.ext', $module);
-        $this->assertEquals($expected, $actual);
+        // Call each method twice to ensure the proxied method is called once
+        $this->assertEquals("{$path}one", $this->_model->getFile($fileArg, $moduleArg));
+        $this->assertEquals("{$path}one", $this->_model->getFile($fileArg, $moduleArg));
+        $this->assertEquals("{$path}two", $this->_model->getLocaleFile($fileArg));
+        $this->assertEquals("{$path}two", $this->_model->getLocaleFile($fileArg));
+        $this->assertEquals("{$path}three", $this->_model->getViewFile($fileArg, $moduleArg));
+        $this->assertEquals("{$path}three", $this->_model->getViewFile($fileArg, $moduleArg));
     }
 
     /**
      * Test that proxy caches published skin path, and further calls do not use fallback model
      */
-    public function testNotifySkinFilePublished()
+    public function testNotifyViewFilePublished()
     {
-        $module = 'Some_Module';
-        $file = $this->_baseDir . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'file.ext';
+        $moduleArg = '...';
+        $fixture = __DIR__ . DIRECTORY_SEPARATOR . uniqid();
+        $anotherFixture = __DIR__ . DIRECTORY_SEPARATOR . uniqid();
 
-        $this->_fallback->expects($this->once())
-            ->method('getViewFile')
-            ->with($file, $module)
-            ->will($this->returnValue(null));
-
-        // Empty at first
-        $this->assertNull($this->_model->getViewFile($file, $module));
-
-        // Store something
-        $publicFilePath = $this->_baseDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'file.ext';
-        $result = $this->_model->notifyViewFilePublished($publicFilePath, $file, $module);
-        $this->assertSame($this->_model, $result);
-
-        // Stored successfully
-        $storedFilePath = $this->_model->getViewFile($file, $module);
-        $this->assertEquals($publicFilePath, $storedFilePath);
-    }
-
-    /**
-     * Tests that proxy saves data between instantiations
-     */
-    public function testSaving()
-    {
-        $module = 'Some_Module';
-        $file = 'internal/path/to/view_file.ext';
-        $expectedPublicFile = 'public/path/to/view_file.ext';
-
-        $params = array(
-            'area'       => 'frontend',
-            'themeModel' => $this->_theme,
-            'locale'     => 'en_US',
-            'canSaveMap' => true,
-            'mapDir'     => self::$_tmpDir,
-            'baseDir'    => ''
+        $this->_fallback->expects($this->once())->method('getViewFile')->will($this->returnValue($fixture));
+        $this->assertEquals($fixture, $this->_model->getViewFile('file.txt', $moduleArg));
+        $this->assertSame(
+            $this->_model, $this->_model->notifyViewFilePublished($anotherFixture, 'file.txt', $moduleArg)
         );
-        $model = new Mage_Core_Model_Design_Fallback_CachingProxy($this->_createFilesystem(), $params);
-        $model->notifyViewFilePublished($expectedPublicFile, $file, $module);
-
-        $globPath = self::$_tmpDir . DIRECTORY_SEPARATOR . '*.*';
-        $this->assertEmpty(glob($globPath));
-        unset($model);
-        $this->assertNotEmpty(glob($globPath));
-
-        /** @var $model Mage_Core_Model_Design_Fallback_CachingProxy */
-        $model = $this->getMock(
-            'Mage_Core_Model_Design_Fallback_CachingProxy',
-            array('_getFallback'),
-            array($this->_createFilesystem(), $params)
-        );
-        $model->expects($this->never())
-            ->method('_getFallback');
-
-        $actualPublicFile = $model->getViewFile($file, $module);
-        $this->assertEquals($expectedPublicFile, $actualPublicFile);
+        $this->assertEquals($anotherFixture, $this->_model->getViewFile('file.txt', $moduleArg));
     }
 
     protected function _createFilesystem()

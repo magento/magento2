@@ -51,7 +51,7 @@ abstract class Mage_Webapi_Model_ConfigAbstract
     protected $_helper;
 
     /** @var Mage_Core_Model_App */
-    protected $_app;
+    protected $_application;
 
     /**
      * Resources configuration data.
@@ -65,16 +65,16 @@ abstract class Mage_Webapi_Model_ConfigAbstract
      *
      * @param Mage_Webapi_Model_Config_ReaderAbstract $reader
      * @param Mage_Webapi_Helper_Config $helper
-     * @param Mage_Core_Model_App $app
+     * @param Mage_Core_Model_App $application
      */
     public function __construct(
         Mage_Webapi_Model_Config_ReaderAbstract $reader,
         Mage_Webapi_Helper_Config $helper,
-        Mage_Core_Model_App $app
+        Mage_Core_Model_App $application
     ) {
         $this->_reader = $reader;
         $this->_helper = $helper;
-        $this->_app = $app;
+        $this->_application = $application;
         $this->_data = $this->_reader->getData();
     }
 
@@ -288,7 +288,7 @@ abstract class Mage_Webapi_Model_ConfigAbstract
                     $resourceName
                 );
                 throw new Mage_Webapi_Exception($removalMessage . ' ' . $messageUseMethod, $badRequestCode);
-            } elseif (isset($deprecationPolicy['deprecated']) && $this->_app->isDeveloperMode()) {
+            } elseif (isset($deprecationPolicy['deprecated']) && $this->_application->isDeveloperMode()) {
                 $deprecationMessage = $this->_helper
                     ->__('Version "%s" of "%s" method in "%s" resource is deprecated.',
                     $resourceVersion,

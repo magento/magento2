@@ -101,7 +101,6 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
      */
     public function testLayoutFile($layoutFile)
     {
-        $suggestion = sprintf(Legacy_ObsoleteCodeTest::SUGGESTION_MESSAGE, 'addCss/addJss');
         $layoutXml = simplexml_load_file($layoutFile);
 
         $this->_testObsoleteReferences($layoutXml);
@@ -113,7 +112,7 @@ class Legacy_LayoutTest extends PHPUnit_Framework_TestCase
             $layoutXml->xpath(
                 '//*[' . $selectorHeadBlock . ']/action[@method="addItem"]'
             ),
-            "Mage_Page_Block_Html_Head::addItem is obsolete. $suggestion"
+            'Mage_Page_Block_Html_Head::addItem is obsolete. Use addCss()/addJs() instead.'
         );
         $this->assertSame(array(),
             $layoutXml->xpath(

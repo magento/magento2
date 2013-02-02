@@ -42,29 +42,13 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
 
     public function testClearCache()
     {
-        $object = $this->getMock('stdClass', array('__destruct'));
-        $object
-            ->expects($this->once())
-            ->method('__destruct')
-        ;
-
-        $resource = $this->getMock('stdClass', array('__destruct'));
-        $object
-            ->expects($this->once())
-            ->method('__destruct')
-        ;
+        $resource = new stdClass;
 
         $instanceManager = new Magento_Di_InstanceManager_Zend();
-        $instanceManager->addSharedInstance($object, 'sharedInstance');
         $instanceManager->addSharedInstance($resource, 'Mage_Core_Model_Resource');
 
         $diInstance = new Magento_Di_Zend();
         $model = new Magento_Test_ObjectManager(null, $diInstance);
-
-        // Reflection is the only way to setup fixture input data in place of the hard-coded property value
-        $reflectionClass = new ReflectionProperty(get_class($model), '_classesToDestruct');
-        $reflectionClass->setAccessible(true);
-        $reflectionClass->setValue($model, array('sharedInstance', 'nonRegisteredInstance'));
 
         $diInstance->setInstanceManager($instanceManager);
         $this->assertSame($model, $model->clearCache());

@@ -28,14 +28,24 @@
 class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var Mage_Core_Model_Dir
+     */
+    protected static $_dirs;
+
+    /**
      * @var Mage_Core_Model_Cache
      */
     protected $_model;
 
     /**
-     * @var Mage_Core_Model_Config
+     * @var Mage_Core_Model_App|PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_config;
+    protected $_app;
+
+    /**
+     * @var Magento_ObjectManager_Zend|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_objectManager;
 
     /**
      * @var Mage_Core_Helper_Abstract
@@ -52,62 +62,107 @@ class Mage_Core_Model_CacheTest extends PHPUnit_Framework_TestCase
      */
     protected $_requestProcessor;
 
-    public function setUp()
+    public static function setUpBeforeClass()
     {
-        $objectManagerMock = $this->getMock('Magento_ObjectManager_Zend', array('create', 'get'), array(), '', false);
-        $objectManagerMock->expects($this->any())
+        self::$_dirs = new Mage_Core_Model_Dir(TESTS_TEMP_DIR);
+        mkdir(self::$_dirs->getDir(Mage_Core_Model_Dir::CACHE), 0777, true);
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$_dirs = null;
+    }
+
+    protected function setUp()
+    {
+        $this->_prepareApp('global_ban_use_cache', false);
+        $this->_objectManager = $this->getMock(
+            'Magento_ObjectManager_Zend', array('create', 'get'), array(), '', false
+        );
+        $this->_objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(array($this, 'getInstance')));
+        $this->_objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback(array($this, 'getObject')));
 
-        $this->_config = new Mage_Core_Model_Config($objectManagerMock, <<<XML
-            <config>
-                <global>
-                    <cache>
-                        <types>
-                            <single_tag>
-                                <label>Tag One</label>
-                                <description>This is Tag One</description>
-                                <tags>tag_one</tags>
-                            </single_tag>
-                            <multiple_tags>
-                                <label>Tags One and Two</label>
-                                <description>These are Tags One and Two</description>
-                                <tags>tag_one,tag_two</tags>
-                            </multiple_tags>
-                        </types>
-                    </cache>
-                </global>
-            </config>
-XML
-        );
         $this->_helper = $this->getMock('Mage_Core_Helper_Data', array('__'));
         $this->_helper
             ->expects($this->any())
             ->method('__')
             ->will($this->returnArgument(0))
         ;
-        $this->_config->setOptions(array(
-            'cache_dir' => __DIR__,
-            'etc_dir' => __DIR__,
-        ));
         $this->_cacheFrontend = $this->getMock(
             'Zend_Cache_Core', array('load', 'test', 'save', 'remove', 'clean', '_getHelper')
         );
         $this->_requestProcessor = $this->getMock('stdClass', array('extractContent'));
-        $this->_model = new Mage_Core_Model_Cache(array(
-            'config'   => $this->_config,
-            'helper'   => $this->_helper,
-            'frontend' => $this->_cacheFrontend,
-            'backend'  => 'BlackHole',
-            'request_processors' => array($this->_requestProcessor),
+        $this->_model = new Mage_Core_Model_Cache(
+            $this->_objectManager,
+            array(
+                'helper'   => $this->_helper,
+                'frontend' => $this->_cacheFrontend,
+                'backend'  => 'BlackHole',
+                'request_processors' => array($this->_requestProcessor),
         ));
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
-        $this->_config = null;
+        $this->_objectManager = null;
         $this->_cacheFrontend = null;
         $this->_model = null;
+    }
+
+    /**
+     * Create application mock
+     *
+     * @param string $initParam
+     * @param mixed $initValue
+     */
+    protected function _prepareApp($initParam, $initValue)
+    {
+        $this->_app = $this->getMock('Mage_Core_Model_App', array('getInitParam'), array(), '', false);
+        $this->_app->expects($this->any())
+            ->method('getInitParam')
+            ->with($initParam)
+            ->will($this->returnValue($initValue));
+    }
+
+    /**
+     * Callback for getter of the object manager
+     *
+     * @param string $className
+     * @return object|null|PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getObject($className)
+    {
+        switch ($className) {
+            case 'Mage_Core_Model_Config':
+                return new Mage_Core_Model_Config($this->_objectManager, <<<XML
+                    <config>
+                        <global>
+                            <cache>
+                                <types>
+                                    <single_tag>
+                                        <label>Tag One</label>
+                                        <description>This is Tag One</description>
+                                        <tags>tag_one</tags>
+                                    </single_tag>
+                                    <multiple_tags>
+                                        <label>Tags One and Two</label>
+                                        <description>These are Tags One and Two</description>
+                                        <tags>tag_one,tag_two</tags>
+                                    </multiple_tags>
+                                </types>
+                            </cache>
+                        </global>
+                    </config>
+XML
+                );
+            case 'Mage_Core_Model_App': return $this->_app;
+            case 'Mage_Core_Model_Dir': return self::$_dirs;
+            default: return null;
+        }
     }
 
     /**
@@ -132,8 +187,8 @@ XML
      */
     public function testConstructor(array $options, $expectedBackendClass)
     {
-        $options += array('config' => $this->_config, 'helper' => $this->_helper);
-        $model = new Mage_Core_Model_Cache($options);
+        $options += array('helper' => $this->_helper);
+        $model = new Mage_Core_Model_Cache($this->_objectManager, $options);
 
         $backend = $model->getFrontend()->getBackend();
         $this->assertInstanceOf($expectedBackendClass, $backend);
@@ -209,8 +264,7 @@ XML
 
     public function testSaveDisallowed()
     {
-        $model = new Mage_Core_Model_Cache(array(
-            'config'   => $this->_config,
+        $model = new Mage_Core_Model_Cache($this->_objectManager, array(
             'helper'   => $this->_helper,
             'frontend' => $this->_cacheFrontend,
             'backend'  => 'BlackHole',
@@ -309,6 +363,15 @@ XML
         $this->_emulateCacheTypeOptions();
         $this->assertEquals(array('config' => true), $this->_model->canUse(''));
         $this->assertTrue($this->_model->canUse('config'));
+        return $this->_model;
+    }
+
+    public function testCanUseBanCache()
+    {
+        $this->_prepareApp('global_ban_use_cache', true);
+        $this->_emulateCacheTypeOptions();
+        $this->assertEquals(array('config' => false), $this->_model->canUse(''));
+        $this->assertFalse($this->_model->canUse('config'));
         return $this->_model;
     }
 
@@ -436,8 +499,7 @@ XML
     public function testProcessRequestFalse()
     {
         $response = new Zend_Controller_Response_Http();
-        $this->_model = new Mage_Core_Model_Cache(array(
-            'config'   => $this->_config,
+        $this->_model = new Mage_Core_Model_Cache($this->_objectManager, array(
             'helper'   => $this->_helper,
             'frontend' => $this->_cacheFrontend,
             'backend'  => 'BlackHole',

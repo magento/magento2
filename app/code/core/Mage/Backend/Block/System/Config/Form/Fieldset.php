@@ -33,7 +33,7 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Mage_Backend_Block_System_Config_Form_Fieldset
-    extends Mage_Backend_Block_Abstract
+    extends Mage_Core_Block_Template
     implements Varien_Data_Form_Element_Renderer_Interface
 {
 

@@ -73,18 +73,25 @@ jQuery(function($) {
     $('#attributes-container').variationsAttributes();
 
     $("#<?php echo $this->getId()?>-checkbox").on('click change', function() {
-        var $fieldset = $("#<?php echo $this->getId()?> > fieldset");
+        var $fieldset = $("#<?php echo $this->getId()?> > fieldset"),
+            stockAvailabilityField = $('#quantity_and_stock_status'),
+            qtyField = $('#qty');
         if ($(this).is(':checked')) {
             $fieldset.show();
             $('#change-attribute-set-button').attr('disabled', true).addClass('disabled');
             $variationsContainer.find("input[name='attributes[]']").removeAttr('disabled');
-            $('#qty').attr('disabled', true);
+            qtyField.prop('disabled', true).trigger('change');
+            stockAvailabilityField.prop('disabled', false);
             $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
                 $('#attribute-' + this.code + '-container select').attr('disabled', true);
             })
         } else {
             $('#change-attribute-set-button').removeAttr('disabled').removeClass('disabled');
-            $('#qty').removeAttr('disabled');
+            qtyField.prop('disabled', false).trigger('change');
+            if (qtyField.val() == '') {
+                stockAvailabilityField.val(0).trigger('change');
+                stockAvailabilityField.prop('disabled', true);
+            }
             $variationsContainer.find('.entry-edit').remove();
             $.each($('#attributes-container').variationsAttributes('getAttributes'), function() {
                 $('#attribute-' + this.code + '-container select').removeAttr('disabled');

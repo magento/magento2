@@ -149,7 +149,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tree extends Mage_Adminhtml_Block_Ca
                 }
             }
             $categoryById[$category->getId()]['is_active'] = $category->getIsActive();
-            $categoryById[$category->getId()]['name'] = $category->getName();
+            $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['children'][] = &$categoryById[$category->getId()];
         }
 

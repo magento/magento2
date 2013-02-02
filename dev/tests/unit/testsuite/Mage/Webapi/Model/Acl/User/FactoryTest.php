@@ -59,7 +59,7 @@ class Mage_Webapi_Model_Acl_User_FactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create method
+     * Test create method.
      */
     public function testCreate()
     {

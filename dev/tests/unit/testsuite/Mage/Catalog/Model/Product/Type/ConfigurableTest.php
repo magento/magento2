@@ -38,8 +38,8 @@ class Mage_Catalog_Model_Product_Type_ConfigurableTest extends PHPUnit_Framework
         $this->_model = new Mage_Catalog_Model_Product_Type_Configurable($filesystem);
     }
 
-    public function testHasWeightFalse()
+    public function testHasWeightTrue()
     {
-        $this->assertFalse($this->_model->hasWeight(), 'This product has weight, but it should not');
+        $this->assertTrue($this->_model->hasWeight(), 'This product has not weight, but it should');
     }
 }

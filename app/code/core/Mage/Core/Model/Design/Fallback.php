@@ -50,21 +50,74 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
     protected $_appConfig;
 
     /**
+     * @var Mage_Core_Model_Dir
+     */
+    protected $_dirs = null;
+
+    /**
+     * @var Magento_ObjectManager|null
+     */
+    protected $_objectManager = null;
+
+    /**
      * Constructor.
      * Following entries in $params are required: 'area', 'package', 'theme', 'locale'. The 'appConfig' and
      * 'themeConfig' may contain application config and theme config, respectively. If these these entries are not
      * present or null, then they will be retrieved from global application instance.
      *
+     * @param Mage_Core_Model_Dir $dirs
+     * @param Magento_ObjectManager $objectManager
      * @param Magento_Filesystem $filesystem
-     * @param array $data
+     * @param array $params
+     * @throws InvalidArgumentException
      */
-    public function __construct(Magento_Filesystem $filesystem, $data)
-    {
+    public function __construct(
+        Mage_Core_Model_Dir $dirs,
+        Magento_ObjectManager $objectManager,
+        Magento_Filesystem $filesystem,
+        $params
+    ) {
+        $this->_dirs = $dirs;
+        $this->_objectManager = $objectManager;
         $this->_filesystem = $filesystem;
-        $this->_area = $data['area'];
-        $this->_locale = $data['locale'];
-        $this->_theme = $data['themeModel'];
-        $this->_appConfig = isset($data['appConfig']) ? $data['appConfig'] : Mage::getConfig();
+        if (!array_key_exists('area', $params) || !array_key_exists('themeModel', $params)
+            || !array_key_exists('locale', $params)
+        ) {
+            throw new InvalidArgumentException("Missing one of the param keys: 'area', 'themeModel', 'locale'.");
+        }
+        $this->_area = $params['area'];
+        $this->_theme = $params['themeModel'];
+        $this->_locale = $params['locale'];
+    }
+
+    /**
+     * Get area code
+     *
+     * @return string
+     */
+    public function getArea()
+    {
+        return $this->_area;
+    }
+
+    /**
+     * Get theme code
+     *
+     * @return string
+     */
+    public function getTheme()
+    {
+        return $this->_theme->getThemeCode();
+    }
+
+    /**
+     * Get locale code
+     *
+     * @return null|string
+     */
+    public function getLocale()
+    {
+        return $this->_locale;
     }
 
     /**
@@ -76,7 +129,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      */
     public function getFile($file, $module = null)
     {
-        $dir = $this->_appConfig->getOptions()->getDesignDir();
+        $dir = $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES);
         $dirs = array();
         $themeModel = $this->_theme;
         while ($themeModel) {
@@ -85,7 +138,12 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
             $themeModel = $themeModel->getParentTheme();
         }
 
-        $moduleDir = $module ? array($this->_appConfig->getModuleDir('view', $module) . "/{$this->_area}") : array();
+        if ($module) {
+            $moduleDir = array($this->_objectManager->get('Mage_Core_Model_Config')->getModuleDir('view', $module)
+                . "/{$this->_area}");
+        } else {
+            $moduleDir = array();
+        }
         return $this->_fallback($file, $dirs, $module, $moduleDir);
     }
 
@@ -97,7 +155,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      */
     public function getLocaleFile($file)
     {
-        $dir = $this->_appConfig->getOptions()->getDesignDir();
+        $dir = $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES);
         $dirs = array();
         $themeModel = $this->_theme;
         while ($themeModel) {
@@ -118,8 +176,8 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
      */
     public function getViewFile($file, $module = null)
     {
-        $dir = $this->_appConfig->getOptions()->getDesignDir();
-        $moduleDir = $module ? $this->_appConfig->getModuleDir('view', $module) : '';
+        $dir = $this->_dirs->getDir(Mage_Core_Model_Dir::THEMES);
+        $moduleDir = $module ? $this->_objectManager->get('Mage_Core_Model_Config')->getModuleDir('view', $module) : '';
 
         $dirs = array();
         $themeModel = $this->_theme;
@@ -131,7 +189,7 @@ class Mage_Core_Model_Design_Fallback implements Mage_Core_Model_Design_Fallback
         }
 
         $extraDirs = array(
-            $this->_appConfig->getOptions()->getJsDir(),
+            $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB),
             Mage::getDesign()->getCustomizationDir()
         );
 

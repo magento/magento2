@@ -331,8 +331,11 @@ abstract class Mage_Backend_Block_Widget_Grid_Massaction_Abstract extends Mage_B
             ->setGrid($gridBlock)
             ->setId($columnId);
 
+        /** @var $columnSetBlock Mage_Backend_Block_Widget_Grid_ColumnSet */
         $columnSetBlock = $gridBlock->getColumnSet();
-        $columnSetBlock->insert($massactionColumn, count($columnSetBlock->getColumns()) + 1, false, $columnId);
+        $childNames = $columnSetBlock->getChildNames();
+        $siblingElement = count($childNames) ? current($childNames) : 0;
+        $columnSetBlock->insert($massactionColumn, $siblingElement, false, $columnId);
         return $this;
     }
 }

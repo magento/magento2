@@ -79,7 +79,7 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
         /** Init Mage_Webapi_Exception */
         $apiException = new Mage_Webapi_Exception('Exception message.', 401);
         $this->_responseRest->setException($apiException);
-        /** Assert Mage_Webapi_Exception was set and presented in the list. */
+        /** Assert that Mage_Webapi_Exception was set and presented in the list. */
         $this->assertTrue(
             $this->_responseRest->hasExceptionOfType('Mage_Webapi_Exception'),
             'Mage_Webapi_Exception was not set.'
@@ -97,7 +97,7 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
         $this->_rendererMock->expects($this->any())->method('getMimeType')->will(
             $this->throwException($logicException)
         );
-        /** Assert renderException method will be executed once with specified parameters. */
+        /** Assert that renderException method will be executed once with specified parameters. */
         $this->_errorProcessorMock->expects($this->once())->method('renderException')->with(
             $logicException,
             Mage_Webapi_Exception::HTTP_INTERNAL_ERROR
@@ -108,7 +108,7 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
     }
 
     /**
-     * Test sendResponse method with Http Not Acceptable error exception during messages rendering.
+     * Test sendResponse method with HTTP Not Acceptable error exception during messages rendering.
      */
     public function testSendResponseRenderMessagesHttpNotAcceptable()
     {
@@ -118,7 +118,7 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
         $this->_rendererMock->expects($this->any())->method('getMimeType')->will(
             $this->throwException($logicException)
         );
-        /** Assert renderException method will be executed once with specified parameters. */
+        /** Assert that renderException method will be executed once with specified parameters. */
         $this->_errorProcessorMock->expects($this->once())->method('renderException')->with(
             $logicException,
             Mage_Webapi_Exception::HTTP_NOT_ACCEPTABLE
@@ -199,12 +199,12 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
             'Mage_Webapi_Exception' => array(
                 new Mage_Webapi_Exception('Message', 400),
                 '{"messages":{"error":[{"code":400,"message":"Message"}]}}',
-                'Wrong response sending with Mage_Webapi_Exception'
+                'Response sending with Mage_Webapi_Exception is invalid'
             ),
             'Logical Exception' => array(
                 new LogicException('Message', 100),
                 '{"messages":{"error":[{"code":500,"message":"Message"}]}}',
-                'Wrong response sending with Logical Exception'
+                'Response sending with Logical Exception is invalid'
             ),
         );
     }
@@ -220,12 +220,12 @@ class Mage_Webapi_Controller_Response_RestTest extends PHPUnit_Framework_TestCas
             'Mage_Webapi_Exception' => array(
                 new Mage_Webapi_Exception('Message', 400),
                 '{"messages":{"error":[{"code":400,"message":"Message","trace":"',
-                'Wrong response sending with Mage_Webapi_Exception in developer mode'
+                'Response sending with Mage_Webapi_Exception in developer mode is invalid'
             ),
             'Logical Exception' => array(
                 new LogicException('Message'),
                 '{"messages":{"error":[{"code":500,"message":"Message","trace":"',
-                'Wrong response sending with Logical Exception in developer mode'
+                'Response sending with Logical Exception in developer mode is invalid'
             ),
         );
     }

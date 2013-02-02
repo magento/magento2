@@ -97,11 +97,16 @@ class Mage_Widget_Model_WidgetTest extends PHPUnit_Framework_TestCase
     /**
      * Tests, that theme file is found anywhere in theme folders, not only in module directory.
      *
+     * @magentoDataFixture Mage/Widget/_files/themes.php
      * @magentoAppIsolation enabled
      */
     public function testGetPlaceholderImageUrlAtTheme()
     {
-        Mage::getConfig()->getOptions()->setDesignDir(dirname(__DIR__) . '/_files/design');
+        Magento_Test_Bootstrap::getInstance()->reinitialize(array(
+            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+                Mage_Core_Model_Dir::THEMES => dirname(__DIR__) . '/_files/design'
+            )
+        ));
         $actualFile = $this->testGetPlaceholderImageUrl(
             'Mage_Catalog_Block_Product_Widget_New',
             'Mage_Catalog/images/product_widget_new.gif'

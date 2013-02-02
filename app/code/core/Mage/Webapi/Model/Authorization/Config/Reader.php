@@ -39,7 +39,10 @@ class Mage_Webapi_Model_Authorization_Config_Reader extends Magento_Acl_Config_R
         Mage_Core_Model_Config $config,
         array $configFiles
     ) {
-        parent::__construct($configFiles);
+        // TODO: Remove temporary workaround, that allows to avoid exception if no ACL files are available
+        if (!empty($configFiles)) {
+            parent::__construct($configFiles);
+        }
         $this->_config = $config;
     }
 

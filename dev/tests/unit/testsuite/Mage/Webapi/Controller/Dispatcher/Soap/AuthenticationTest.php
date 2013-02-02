@@ -133,7 +133,7 @@ class Mage_Webapi_Controller_Dispatcher_Soap_AuthenticationTest extends PHPUnit_
     }
 
     /**
-     * Exception data provider for authenticate() method
+     * Exception data provider for authenticate() method.
      *
      * @return array
      */

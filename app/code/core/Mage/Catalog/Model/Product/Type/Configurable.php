@@ -866,16 +866,6 @@ class Mage_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_Pr
     }
 
     /**
-     * Check that product of this type has weight
-     *
-     * @return bool
-     */
-    public function hasWeight()
-    {
-        return false;
-    }
-
-    /**
      * Delete data specific for Configurable product type
      *
      * @param Mage_Catalog_Model_Product $product

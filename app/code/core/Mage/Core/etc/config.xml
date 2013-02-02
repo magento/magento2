@@ -71,6 +71,11 @@
                 </collections>
             </types>
         </cache>
+        <design>
+            <theme>
+                <allow_view_files_duplication>1</allow_view_files_duplication>
+            </theme>
+        </design>
         <session>
             <validation>
                 <http_user_agent_skip>
@@ -116,6 +121,11 @@
         </di>
     </global>
     <frontend>
+        <design>
+            <theme>
+                <full_name>default/demo</full_name>
+            </theme>
+        </design>
         <events>
             <controller_action_layout_generate_blocks_after>
                 <observers>
@@ -217,10 +227,6 @@
     </install>
     <default>
         <design>
-            <theme>
-                <full_name>default/demo</full_name>
-                <allow_view_files_duplication>1</allow_view_files_duplication>
-            </theme>
             <pagination>
                 <list_allow_all>1</list_allow_all>
                 <pagination_frame>5</pagination_frame>
@@ -308,15 +314,11 @@
                 <base_url>{{base_url}}</base_url>
                 <base_web_url>{{unsecure_base_url}}</base_web_url>
                 <base_link_url>{{unsecure_base_url}}</base_link_url>
-                <base_public_url>{{unsecure_public_url}}</base_public_url>
-                <base_media_url>{{unsecure_public_url}}media/</base_media_url>
             </unsecure>
             <secure>
-                <base_url>{{base_url}}</base_url>
+                <base_url>{{unsecure_base_url}}</base_url>
                 <base_web_url>{{secure_base_url}}</base_web_url>
                 <base_link_url>{{secure_base_url}}</base_link_url>
-                <base_public_url>{{secure_public_url}}</base_public_url>
-                <base_media_url>{{secure_public_url}}media/</base_media_url>
                 <use_in_frontend>0</use_in_frontend>
                 <use_in_adminhtml>0</use_in_adminhtml>
                 <offloader_header>SSL_OFFLOADED</offloader_header>

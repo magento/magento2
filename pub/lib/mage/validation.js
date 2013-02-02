@@ -785,12 +785,6 @@
              },
             'Please select a file'
         ],
-        'validate-super-product-attributes': [
-            function(v) {
-                return (v !== "no-attributes");
-            },
-            'Please select one or more attributes.'
-        ],
         "validate-ajax-error": [
             function(v, element) {
                 element = $(element);

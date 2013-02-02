@@ -34,11 +34,9 @@
  */
 class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 {
-    protected static $_options = array();
-
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        self::$_options = Magento_Test_Bootstrap::getInstance()->getAppOptions();
+        Mage::app()->getCacheInstance()->banUse('config');
     }
 
     public function testGetResourceModel()
@@ -46,24 +44,11 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mage_Core_Model_Resource_Config', $this->_createModel(true)->getResourceModel());
     }
 
-    public function testGetOptions()
-    {
-        $this->assertInstanceOf('Mage_Core_Model_Config_Options', $this->_createModel(true)->getOptions());
-    }
-
-    public function testSetOptions()
-    {
-        $model = $this->_createModel();
-        $key = uniqid('key');
-        $model->setOptions(array($key  => 'value'));
-        $this->assertEquals('value', $model->getOptions()->getData($key));
-    }
-
     public function testInit()
     {
         $model = $this->_createModel();
         $this->assertFalse($model->getNode());
-        $model->init(self::$_options);
+        $model->init();
         $this->assertInstanceOf('Varien_Simplexml_Element', $model->getNode());
     }
 
@@ -71,7 +56,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $model = $this->_createModel();
         $this->assertFalse($model->getNode());
-        $model->setOptions(self::$_options);
         $model->loadBase();
         $this->assertInstanceOf('Varien_Simplexml_Element', $model->getNode('global'));
     }
@@ -79,16 +63,18 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $etcDir
      * @param array $configOptions
-     * @param string $expectedNode
      * @param string $expectedValue
+     * @param string $expectedNode
      * @dataProvider loadBaseLocalConfigDataProvider
      */
-    public function testLoadBaseLocalConfig($etcDir, array $configOptions, $expectedNode, $expectedValue)
-    {
-        $configOptions['etc_dir'] = __DIR__ . "/_files/local_config/{$etcDir}";
-        /** @var $model Mage_Core_Model_Config */
-        $model = Mage::getModel('Mage_Core_Model_Config');
-        $model->setOptions($configOptions);
+    public function testLoadBaseLocalConfig($etcDir, array $configOptions, $expectedValue,
+        $expectedNode = 'global/resources/core_setup/connection/model'
+    ) {
+        $configOptions[Mage_Core_Model_App::INIT_OPTION_DIRS] = array(
+            Mage_Core_Model_Dir::CONFIG => __DIR__ . "/_files/local_config/{$etcDir}",
+        );
+        $model = $this->_createModelWithApp($configOptions);
+
         $model->loadBase();
         $this->assertInstanceOf('Varien_Simplexml_Element', $model->getNode($expectedNode));
         $this->assertEquals($expectedValue, (string)$model->getNode($expectedNode));
@@ -99,53 +85,61 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function loadBaseLocalConfigDataProvider()
     {
+        $extraConfigData = '
+            <root>
+                <global>
+                    <resources>
+                        <core_setup>
+                            <connection>
+                                <model>overridden</model>
+                            </connection>
+                        </core_setup>
+                    </resources>
+                </global>
+            </root>
+        ';
         return array(
             'no local config file & no custom config file' => array(
-                'no_local_config_no_custom_config',
-                array(Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => ''),
-                'a/value',
+                'no_local_config',
+                array(),
                 'b',
             ),
             'no local config file & custom config file' => array(
-                'no_local_config_custom_config',
-                array(Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => 'custom/local.xml'),
-                'a',
-                '',
+                'no_local_config',
+                array(Mage_Core_Model_Config::INIT_OPTION_EXTRA_FILE => 'custom/local.xml'),
+                'b',
             ),
             'no local config file & custom config data' => array(
-                'no_local_config_no_custom_config',
-                array(
-                    Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA
-                        => '<root><a><value>overridden</value></a></root>'
-                ),
-                'a/value',
+                'no_local_config',
+                array(Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA => $extraConfigData),
                 'overridden',
             ),
             'local config file & no custom config file' => array(
-                'local_config_no_custom_config',
-                array(Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => ''),
-                'value',
+                'local_config',
+                array(),
                 'local',
             ),
             'local config file & custom config file' => array(
-                'local_config_custom_config',
-                array(Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => 'custom/local.xml'),
-                'value',
+                'local_config',
+                array(Mage_Core_Model_Config::INIT_OPTION_EXTRA_FILE => 'custom/local.xml'),
                 'custom',
             ),
-            'local config file & invalid custom config file' => array(
-                'local_config_custom_config',
-                array(Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => 'custom/invalid.pattern.xml'),
-                'value',
+            'local config file & prohibited custom config file' => array(
+                'local_config',
+                array(Mage_Core_Model_Config::INIT_OPTION_EXTRA_FILE => 'custom/prohibited.filename.xml'),
                 'local',
             ),
             'local config file & custom config data' => array(
-                'local_config_custom_config',
+                'local_config',
+                array(Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA => $extraConfigData),
+                'overridden',
+            ),
+            'local config file & custom config file & custom config data' => array(
+                'local_config',
                 array(
-                    Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_FILE => 'custom/local.xml',
-                    Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA => '<root><value>overridden</value></root>',
+                    Mage_Core_Model_Config::INIT_OPTION_EXTRA_FILE => 'custom/local.xml',
+                    Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA => $extraConfigData,
                 ),
-                'value',
                 'overridden',
             ),
         );
@@ -156,45 +150,56 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         if (date_default_timezone_get() != 'UTC') {
             $this->markTestSkipped('Test requires "UTC" to be the default timezone.');
         }
-        /** @var $model Mage_Core_Model_Config */
-        $model = Mage::getModel('Mage_Core_Model_Config');
-        $model->setOptions(array(
-            Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA
+
+        $options = array(
+            Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA
                 => sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'Fri, 21 Dec 2012 00:00:00 +0000')
-        ));
+        );
+        $model = $this->_createModelWithApp($options);
+
         $model->loadBase();
         $this->assertEquals(1356048000, $model->getInstallDate());
     }
 
     public function testLoadBaseInstallDateInvalid()
     {
-        /** @var $model Mage_Core_Model_Config */
-        $model = Mage::getModel('Mage_Core_Model_Config');
-        $model->setOptions(array(
-            Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA
+        $options = array(
+            Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA
                 => sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'invalid')
-        ));
+        );
+        $model = $this->_createModelWithApp($options);
+
         $model->loadBase();
         $this->assertEmpty($model->getInstallDate());
     }
 
     public function testLoadLocales()
     {
-        $model = Mage::getModel('Mage_Core_Model_Config');
-        $model->init(array(
-            'locale_dir' => dirname(__FILE__) . '/_files/locale'
-        ));
+        $options = array(
+            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+                Mage_Core_Model_Dir::LOCALE => __DIR__ . '/_files/locale',
+            )
+        );
+        $model = $this->_createModelWithApp($options);
+
+        $model->loadBase();
         $model->loadLocales();
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode('global/locale'));
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testLoadModulesCache()
     {
-        $model = $this->_createModel();
-        $model->setOptions(array(
-            Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA
+        $options = array(
+            Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA
                 => sprintf(Mage_Core_Model_Config::CONFIG_TEMPLATE_INSTALL_DATE, 'Wed, 21 Nov 2012 03:26:00 +0000')
-        ));
+        );
+        $model = $this->_createModelWithApp($options);
+
+        Mage::app()->getCacheInstance()->allowUse('config');
+
         $model->loadBase();
         $this->assertTrue($model->loadModulesCache());
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode());
@@ -203,7 +208,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     public function testLoadModules()
     {
         $model = $this->_createModel();
-        $model->setOptions(self::$_options);
         $model->loadBase();
         $this->assertFalse($model->getNode('modules'));
         $model->loadModules();
@@ -214,11 +218,12 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testLoadModulesLocalConfigPrevails()
     {
-        $model = $this->_createModel();
-        $model->setOptions(array(
-            Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA
+        $options = array(
+            Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA
                 => '<config><modules><Mage_Core><active>false</active></Mage_Core></modules></config>'
-        ));
+        );
+        $model = $this->_createModelWithApp($options);
+
         $model->loadBase();
         $model->loadModules();
 
@@ -231,7 +236,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $model = $this->_createModel();
         $this->assertFalse($model->isLocalConfigLoaded());
-        $model->setOptions(self::$_options);
         $model->loadBase();
         $this->assertTrue($model->isLocalConfigLoaded());
     }
@@ -246,7 +250,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
         try {
             $model = $this->_createModel();
-            $model->setOptions(self::$_options);
             $model->loadBase();
             $model->loadModules();
 
@@ -262,15 +265,21 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testReinitBaseConfig()
     {
-        $model = $this->_createModel();
-        $options = self::$_options;
-        $options[Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA] = '<config><test>old_value</test></config>';
-        $model->setOptions($options);
+        $options = Magento_Test_Bootstrap::getInstance()->getInitParams();
+        $options[Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA] = '<config><test>old_value</test></config>';
+
+        $objectManager = new Magento_Test_ObjectManager();
+        $model = $this->_createModelWithApp($options, $objectManager);
+
+        /** @var $app Mage_Core_Model_App */
+        $app = $objectManager->get('Mage_Core_Model_App');
+
         $model->loadBase();
         $this->assertEquals('old_value', $model->getNode('test'));
 
-        $options[Mage_Core_Model_Config::OPTION_LOCAL_CONFIG_EXTRA_DATA] = '<config><test>new_value</test></config>';
-        $model->setOptions($options);
+        $options[Mage_Core_Model_Config::INIT_OPTION_EXTRA_DATA] = '<config><test>new_value</test></config>';
+        $app->init($options);
+
         $model->reinit();
         $this->assertEquals('new_value', $model->getNode('test'));
     }
@@ -280,8 +289,13 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Varien_Cache_Core', $this->_createModel()->getCache());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testSaveCache()
     {
+        Mage::app()->getCacheInstance()->allowUse('config');
+
         $model = $this->_createModel(true);
         $model->removeCache();
         $this->assertFalse($model->loadCache());
@@ -291,8 +305,13 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testRemoveCache()
     {
+        Mage::app()->getCacheInstance()->allowUse('config');
+
         $model = $this->_createModel();
         $model->removeCache();
         $this->assertFalse($model->loadCache());
@@ -309,7 +328,7 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $model = $this->_createModel();
         $this->assertFalse($model->getNode());
-        $model->init(self::$_options);
+        $model->init();
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode());
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode(null, 'store', 1));
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getNode(null, 'website', 1));
@@ -317,8 +336,7 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testSetNode()
     {
-        $model = $this->_createModel();
-        $model->init(self::$_options);
+        $model = $this->_createModel(true);
         /* some existing node should be used */
         $model->setNode('admin/routers/adminhtml/use', 'test');
         $this->assertEquals('test', (string) $model->getNode('admin/routers/adminhtml/use'));
@@ -344,26 +362,11 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetTempVarDir()
-    {
-        $this->assertTrue(is_dir($this->_createModel()->getTempVarDir()));
-    }
-
-    public function testGetDistroServerVars()
+    public function testGetDistroBaseUrl()
     {
         $_SERVER['SCRIPT_NAME'] = __FILE__;
         $_SERVER['HTTP_HOST'] = 'example.com';
-        $vars = $this->_createModel()->getDistroServerVars();
-        $this->assertArrayHasKey('root_dir', $vars);
-        $this->assertArrayHasKey('app_dir', $vars);
-        $this->assertArrayHasKey('var_dir', $vars);
-        $this->assertArrayHasKey('base_url', $vars);
-        $this->assertEquals('http://example.com/', $vars['base_url']);
-    }
-
-    public function testSubstDistroServerVars()
-    {
-        $this->assertEquals('http://localhost/', $this->_createModel()->substDistroServerVars('{{base_url}}'));
+        $this->assertEquals('http://example.com/', $this->_createModel()->getDistroBaseUrl());
     }
 
     public function testGetModuleConfig()
@@ -371,27 +374,6 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
         $model = $this->_createModel(true);
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getModuleConfig());
         $this->assertInstanceOf('Mage_Core_Model_Config_Element', $model->getModuleConfig('Mage_Core'));
-    }
-
-    public function testGetVarDir()
-    {
-        $dir = $this->_createModel()->getVarDir();
-        $this->assertTrue(is_dir($dir));
-        $this->assertTrue(is_writable($dir));
-    }
-
-    public function testCreateDirIfNotExists()
-    {
-        $model = $this->_createModel();
-        $dir = $model->getVarDir() . DIRECTORY_SEPARATOR . uniqid('dir');
-        try {
-            $this->assertFalse(is_dir($dir));
-            $this->assertTrue($model->createDirIfNotExists($dir));
-            rmdir($dir);
-        } catch (Exception $e) {
-            rmdir($dir);
-            throw $e;
-        }
     }
 
     public function testGetModuleDir()
@@ -532,16 +514,36 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Creates Mage_Core_Model_Config model with initialized Mage_Core_Model_App
+     *
+     * @param array $appOptions
+     * @param Magento_Test_ObjectManager $objectManager
+     * @return Mage_Core_Model_Config
+     */
+    protected function _createModelWithApp(array $appOptions, Magento_Test_ObjectManager $objectManager = null)
+    {
+        $baseOptions = Magento_Test_Bootstrap::getInstance()->getInitParams();
+        $appOptions = array_replace_recursive($baseOptions, $appOptions);
+        $objectManager = $objectManager ?: new Magento_Test_ObjectManager();
+        /** @var $app Mage_Core_Model_App */
+        $app = $objectManager->get('Mage_Core_Model_App');
+        $app->init($appOptions);
+        return $objectManager->create('Mage_Core_Model_Config');
+    }
+
+    /**
      * Instantiate Mage_Core_Model_Config and initialize (load configuration) if needed
      *
      * @param bool $initialize
+     * @param array $arguments
      * @return Mage_Core_Model_Config
      */
-    protected function _createModel($initialize = false)
+    protected function _createModel($initialize = false, array $arguments = array())
     {
-        $model = Mage::getModel('Mage_Core_Model_Config');
+        /** @var $model Mage_Core_Model_Config */
+        $model = Mage::getModel('Mage_Core_Model_Config', $arguments);
         if ($initialize) {
-            $model->init(self::$_options);
+            $model->init();
         }
         return $model;
     }
@@ -557,13 +559,12 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     /**
      * Check if areas loaded correctly from configuration
-     *
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Mage/Core/_files/load_configuration.php
      */
     public function testGetAreas()
     {
-        $allowedAreas = Mage::app()->getConfig()->getAreas();
+        $model = $this->_createModel(true, array('sourceData' => __DIR__ . '/../_files/etc/config.xml'));
+
+        $allowedAreas = $model->getAreas();
         $this->assertNotEmpty($allowedAreas, 'Areas are not initialized');
 
         $this->assertArrayHasKey('test_area1', $allowedAreas, 'Test area #1 is not loaded');
@@ -590,13 +591,12 @@ class Mage_Core_Model_ConfigTest extends PHPUnit_Framework_TestCase
 
     /**
      * Check if routers loaded correctly from configuration
-     *
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Mage/Core/_files/load_configuration.php
      */
     public function testGetRouters()
     {
-        $loadedRouters = Mage::app()->getConfig()->getRouters();
+        $model = $this->_createModel(true, array('sourceData' => __DIR__ . '/../_files/etc/config.xml'));
+
+        $loadedRouters = $model->getRouters();
         $this->assertArrayHasKey('test_router1', $loadedRouters, 'Test router #1 is not initialized in test area.');
         $this->assertArrayHasKey('test_router2', $loadedRouters, 'Test router #2 is not initialized in test area.');
 

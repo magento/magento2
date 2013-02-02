@@ -96,7 +96,7 @@ class Mage_Downloadable_Block_Adminhtml_Catalog_Product_Edit_Tab_Downloadable_Li
      */
     public function getPurchasedSeparatelySelect()
     {
-        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
             ->setName('product[links_purchased_separately]')
             ->setId('downloadable_link_purchase_type')
             ->setOptions(Mage::getSingleton('Mage_Backend_Model_Config_Source_Yesno')->toOptionArray())

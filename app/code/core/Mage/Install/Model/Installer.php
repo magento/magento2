@@ -36,12 +36,6 @@ class Mage_Install_Model_Installer extends Varien_Object
 {
 
     /**
-     * Installer host response used to check urls
-     *
-     */
-    const INSTALLER_HOST_RESPONSE   = 'MAGENTO';
-
-    /**
      * Installer data model used to store data between installation steps
      *
      * @var Varien_Object
@@ -61,7 +55,7 @@ class Mage_Install_Model_Installer extends Varien_Object
     /**
      * Get data model
      *
-     * @return Varien_Object
+     * @return Mage_Install_Model_Session
      */
     public function getDataModel()
     {

@@ -162,20 +162,34 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
     {
         return "
             <script>
-            //<![CDATA[
                 jQuery(function($) {
-                    var qty = $('#$quantityFieldId'),
-                        isInStock = $('#$inStockFieldId'),
-                        manageStock = $('#inventory_manage_stock').removeClass('disabled').removeAttr('disabled'),
-                        useConfigManageStock = $('#inventory_use_config_manage_stock');
+                    var qty = $('#{$quantityFieldId}'),
+                        productType = $('#type_id').val(),
+                        stockAvailabilityField = $('#{$inStockFieldId}'),
+                        manageStockField = $('#inventory_manage_stock'),
+                        useConfigManageStockField = $('#inventory_use_config_manage_stock');
 
                     var disabler = function() {
-                        if ('' === qty.val()) {
-                            isInStock.attr('disabled', 'disabled');
-                            manageStock.val(0);
+                        var hasVariation = $('#config_super_product-checkbox').is(':checked');
+                        if ((productType == 'configurable' && hasVariation)
+                            || productType == 'grouped'
+                            || productType == 'bundle'//@TODO move this check to Mage_Bundle after refactoring as widget
+                            || hasVariation
+                        ) {
+                            return;
+                        }
+                        var manageStockValue = (qty.val() === '') ? 0 : 1;
+                        if (manageStockValue) {
+                            stockAvailabilityField.prop('disabled', false);
                         } else {
-                            isInStock.removeAttr('disabled');
-                            manageStock.val(1);
+                            stockAvailabilityField.prop('disabled', true).val(0);
+                        }
+                        if (manageStockField.val() != manageStockValue) {
+                            if (useConfigManageStockField.val() == 1) {
+                                useConfigManageStockField.removeAttr('checked').val(0);
+                            }
+                            manageStockField.toggleClass('disabled', false).prop('disabled', false);
+                            manageStockField.val(manageStockValue);
                         }
                     };
 
@@ -212,7 +226,6 @@ class Mage_CatalogInventory_Block_Adminhtml_Form_Field_Stock extends Varien_Data
                     });
                     disabler();
                 });
-            //]]>
             </script>
         ";
     }

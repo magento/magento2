@@ -160,7 +160,6 @@ class Mage_Sitemap_Model_Resource_Catalog_ProductTest extends PHPUnit_Framework_
      * @param array $products
      * @param int $expectedCount
      * @param array $expectedKeys
-     * @return void
      */
     protected function _checkProductCollection(array $products, $expectedCount, array $expectedKeys)
     {

@@ -28,7 +28,7 @@
 class Mage_Sales_Model_OrderTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoConfigFixture current_store design/theme/full_name default/demo
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo
      * @magentoDataFixture Mage/Sales/_files/order.php
      */
     public function testSendNewOrderEmail()

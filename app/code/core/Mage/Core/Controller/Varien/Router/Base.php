@@ -56,7 +56,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
     protected $_baseController;
 
     /**
-     * @var Magento_ObjectManager
+     * @var Mage_Core_Model_App
      */
     protected $_app;
 
@@ -90,11 +90,11 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
     public function collectRoutes($configArea, $useRouterName)
     {
         $routers = array();
-        $routersConfigNode = Mage::getConfig()->getNode($configArea.'/routers');
+        $routersConfigNode = Mage::getConfig()->getNode($configArea . '/routers');
         if ($routersConfigNode) {
             $routers = $routersConfigNode->children();
         }
-        foreach ($routers as $routerName=>$routerConfig) {
+        foreach ($routers as $routerName => $routerConfig) {
             $use = (string)$routerConfig->use;
             if ($use == $useRouterName) {
                 $modules = array((string)$routerConfig->args->module);
@@ -178,7 +178,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
             return null;
         }
 
-        $this->_app->loadDiConfiguration($this->_areaCode);
+        $this->_app->getConfig()->loadDiConfiguration($this->_areaCode);
 
         return $this->_matchController($request, $params);
     }
@@ -212,7 +212,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
         }
 
         for ($i = 0, $l = sizeof($params); $i < $l; $i += 2) {
-            $output['variables'][$params[$i]] = isset($params[$i+1]) ? urldecode($params[$i+1]) : '';
+            $output['variables'][$params[$i]] = isset($params[$i+1]) ? urldecode($params[$i + 1]) : '';
         }
         return $output;
     }
@@ -386,7 +386,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
             $action = $this->_matchActionName($request, $params['actionName']);
 
             //checking if this place should be secure
-            $this->_checkShouldBeSecure($request, '/'.$moduleFrontName.'/'.$controller.'/'.$action);
+            $this->_checkShouldBeSecure($request, '/' . $moduleFrontName . '/' . $controller . '/' . $action);
 
             $controllerClassName = $this->_validateControllerClassName($moduleName, $controller);
             if (false == $controllerClassName) {
@@ -558,7 +558,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
         if (count($parts)) {
             $file .= DS . implode(DS, $parts);
         }
-        $file .= DS.uc_words($controller, DS).'Controller.php';
+        $file .= DS . uc_words($controller, DS) . 'Controller.php';
         return $file;
     }
 
@@ -576,7 +576,7 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
 
     public function getControllerClassName($realModule, $controller)
     {
-        $class = $realModule.'_'.uc_words($controller).'Controller';
+        $class = $realModule . '_' . uc_words($controller) . 'Controller';
         return $class;
     }
 
@@ -641,11 +641,12 @@ class Mage_Core_Controller_Varien_Router_Base extends Mage_Core_Controller_Varie
 
     protected function _getCurrentSecureUrl($request)
     {
-        if ($alias = $request->getAlias(Mage_Core_Model_Url_Rewrite::REWRITE_REQUEST_PATH_ALIAS)) {
-            return Mage::getBaseUrl('link', true).ltrim($alias, '/');
+        $alias = $request->getAlias(Mage_Core_Model_Url_Rewrite::REWRITE_REQUEST_PATH_ALIAS);
+        if ($alias) {
+            return Mage::getBaseUrl('link', true) . ltrim($alias, '/');
         }
 
-        return Mage::getBaseUrl('link', true).ltrim($request->getPathInfo(), '/');
+        return Mage::getBaseUrl('link', true) . ltrim($request->getPathInfo(), '/');
     }
 
     /**

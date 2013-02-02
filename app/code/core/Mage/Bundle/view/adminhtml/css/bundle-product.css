@@ -1,0 +1,84 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Bundle
+ * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+#bundle_product_container {
+    padding-bottom: 15px;
+}
+
+#bundle_product_container .entry-edit > fieldset {
+    margin-bottom: 0;
+}
+
+#bundle_product_container .ui-icon-grip-dotted-vertical {
+    float: left;
+}
+
+#bundle_product_container .ui-icon-circle-triangle-s,
+#bundle_product_container .ui-icon-circle-close {
+    cursor: pointer;
+    float: right;
+    margin-left: 4px;
+}
+
+#bundle_product_container .option-box {
+    padding: 0;
+}
+
+#bundle_product_container .option-box .entry-edit-head .input-text {
+    width: 300px;
+}
+
+#bundle_product_container .option-box .option-header .select-product-option-type {
+    width: 120px;
+}
+
+#bundle_product_container .option-box .entry-edit-head .is-required {
+    margin-left: 4px;
+}
+
+#bundle_product_container .qty-box {
+    text-align: center;
+}
+
+#bundle_product_container .option-header .opt-input-type {
+    width: 130px;
+}
+
+#bundle_product_container .selection .product-sku {
+    width: 250px;
+}
+
+#add_new_option {
+    font-size: 18px;
+}
+
+#bundle_product_container .no-products-message {
+    border: #dadfe0 1px solid;
+    background: #fff;
+    margin: 10px 30px 0;
+    padding: 20px 40px;
+    text-align: center;
+    vertical-align: middle;
+}

@@ -886,6 +886,51 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
     overflow: auto;
     max-height: 500px;
 }
+.mage-suggest.category-select .mage-suggest-inner {background: transparent; position: static; border: none; border-radius: 0px; box-shadow: none;}
+.mage-suggest.category-select .category-selector-choices {background: #fff; border: 1px solid #ddd; border-radius: 5px; box-shadow: none; overflow: hidden;}
+.mage-suggest.category-select .category-selector-choices li {float: left; margin: 5px 0 5px 7px;}
+.mage-suggest.category-select .category-selector-search-field input {
+    background: none repeat scroll 0 0 transparent !important;
+    border: 0 none;
+    box-shadow: none;
+    font-family: sans-serif;
+    font-size: 100%;
+    height: 22px;
+    margin: 1px 0;
+    outline: 0 none;
+    padding: 0 5;
+}
+.mage-suggest.category-select .mage-suggest-dropdown {
+    position: absolute;
+    width: 100%;
+    background: #fff; border: 1px solid #ddd; border-radius: 5px;
+    margin-top: 2px;
+}
+.mage-suggest-dropdown .jstree-default.jstree-focused {
+    background: #ffffff;
+}
+.mage-suggest-dropdown .jstree li {
+    margin-left: 18px;
+}
+.mage-suggest-dropdown .jstree > ul > li {
+    margin-left: 0px;
+}
+.mage-suggest-dropdown .jstree a {
+    padding: 2px 3px;
+}
+.mage-suggest-dropdown .jstree .jstree-hovered {
+    border: none;
+    background: #efefef;
+}
+.mage-suggest-dropdown .jstree .jstree-clicked {
+    border: none;
+    background: #e5e5e5;
+}
+.mage-suggest-dropdown .category-path {
+    color: #777777;
+    margin-left: 7px;
+    font-size: 11px;
+}
 
 /* Footer */
 .footer .bug-report                     { float:left; width:35%; text-align:left; }

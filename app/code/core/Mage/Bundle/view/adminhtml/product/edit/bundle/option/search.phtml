@@ -23,13 +23,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<div class="entry-edit">
-    <div class="entry-edit-head">
-        <div style="float: right;"><?php echo $this->getButtonsHtml() ?></div>
-        <h4 class="fieldset-legend <?php echo ($this->getHeaderCssClass()) ? $this->getHeaderCssClass().' icon-head' : '' ?>"><?php echo $this->getHeaderText() ?></h4>
-    </div>
-    <fieldset>
-        <?php echo $this->getChildHtml() ?>
-    </fieldset>
-</div>
+
+/** @var $this Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search */
+echo $this->getChildHtml();

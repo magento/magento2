@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Tab_Main block
+ * Test for Mage_Webapi_Block_Adminhtml_User_Edit_Tab_Main block.
  *
  * Magento
  *
@@ -61,7 +61,7 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_Tab_MainTest extends PHPUnit_Framewo
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      *
      * @dataProvider prepareFormDataProvider
      * @param Varien_Object $apiUser
@@ -69,7 +69,7 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_Tab_MainTest extends PHPUnit_Framewo
      */
     public function testPrepareForm($apiUser, array $formElements)
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         $this->assertEmpty($this->_block->getForm());
 
         $this->_block->setApiUser($apiUser);
@@ -83,7 +83,7 @@ class Mage_Webapi_Block_Adminhtml_User_Edit_Tab_MainTest extends PHPUnit_Framewo
         $elements = $fieldset->getElements();
         foreach ($formElements as $elementId) {
             $element = $elements->searchById($elementId);
-            $this->assertNotEmpty($element, "Element '$elementId' not found in form fieldset");
+            $this->assertNotEmpty($element, "Element '$elementId' is not found in form fieldset");
             $this->assertEquals($apiUser->getData($elementId), $element->getValue());
         }
     }

@@ -29,13 +29,16 @@ class Mage_Newsletter_Model_QueueTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Mage/Newsletter/_files/queue.php
-     * @magentoConfigFixture current_store design/theme/full_name default/demo_blue
-     * @magentoConfigFixture fixturestore_store design/theme/full_name default/demo
+     * @magentoConfigFixture frontend/design/theme/full_name default/demo_blue
      * @magentoConfigFixture fixturestore_store general/locale/code  de_DE
      * @magentoAppIsolation enabled
      */
     public function testSendPerSubscriber()
     {
+        $collection = new Mage_Core_Model_Resource_Theme_Collection;
+        $themeId = $collection->getThemeByFullPath('frontend/default/demo')->getId();
+        Mage::app()->getStore('fixturestore')->setConfig('design/theme/theme_id', $themeId);
+
         $subscriberOne = $this->getMock('Zend_Mail', array('send', 'setBodyHTML'), array('utf-8'));
         $subscriberOne->expects($this->any())->method('send');
         $subscriberTwo = clone $subscriberOne;

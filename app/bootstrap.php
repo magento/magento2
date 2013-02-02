@@ -43,6 +43,22 @@ umask(0);
 require_once BP . '/app/code/core/Mage/Core/functions.php';
 require_once BP . '/app/Mage.php';
 
+require_once __DIR__ . '/autoload.php';
+Magento_Autoload_IncludePath::addIncludePath(array(
+    BP . DS . 'app' . DS . 'code' . DS . 'local',
+    BP . DS . 'app' . DS . 'code' . DS . 'community',
+    BP . DS . 'app' . DS . 'code' . DS . 'core',
+    BP . DS . 'lib',
+    BP . DS . 'var' . DS . 'generation',
+));
+$classMapPath = BP . DS . 'var/classmap.ser';
+if (file_exists($classMapPath)) {
+    require_once BP . '/lib/Magento/Autoload/ClassMap.php';
+    $classMap = new Magento_Autoload_ClassMap(BP);
+    $classMap->addMap(unserialize(file_get_contents($classMapPath)));
+    spl_autoload_register(array($classMap, 'load'));
+}
+
 if (!defined('BARE_BOOTSTRAP')) {
     /* PHP version validation */
     if (version_compare(phpversion(), '5.3.0', '<') === true) {
@@ -92,22 +108,6 @@ HTML;
         }
         Magento_Profiler::applyConfig($profilerConfig);
     }
-}
-
-require_once __DIR__ . '/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(array(
-    BP . DS . 'app' . DS . 'code' . DS . 'local',
-    BP . DS . 'app' . DS . 'code' . DS . 'community',
-    BP . DS . 'app' . DS . 'code' . DS . 'core',
-    BP . DS . 'lib',
-    BP . DS . 'var' . DS . 'generation',
-));
-$classMapPath = BP . DS . 'var/classmap.ser';
-if (file_exists($classMapPath)) {
-    require_once BP . '/lib/Magento/Autoload/ClassMap.php';
-    $classMap = new Magento_Autoload_ClassMap(BP);
-    $classMap->addMap(unserialize(file_get_contents($classMapPath)));
-    spl_autoload_register(array($classMap, 'load'));
 }
 
 $definitionsFile = BP . DS . 'var/di/definitions.php';

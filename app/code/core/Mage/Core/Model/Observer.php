@@ -117,7 +117,7 @@ class Mage_Core_Model_Observer
         $baseDir = $observer->getEvent()->getBaseDir();
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
-            Mage::getModel('Mage_Core_Model_Theme_Registration')->register($baseDir, $pathPattern);
+            Mage::getObjectManager()->get('Mage_Core_Model_Theme_Registration')->register($baseDir, $pathPattern);
         } catch (Mage_Core_Exception $e) {
             Mage::logException($e);
         }

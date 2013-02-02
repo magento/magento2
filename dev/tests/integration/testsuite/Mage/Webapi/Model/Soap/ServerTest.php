@@ -1,6 +1,6 @@
 <?php
 /**
- * Test Soap server model.
+ * Test SOAP server model.
  *
  * Magento
  *
@@ -61,38 +61,38 @@ class Mage_Webapi_Model_Soap_ServerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Soap server construction with WSDL cache enabling.
+     * Test SOAP server construction with WSDL cache enabling.
      */
     public function testConstructEnableWsdlCache()
     {
         /** Mock getConfig method to return true. */
         $this->_storeMock->expects($this->any())->method('getConfig')->will($this->returnValue(true));
-        /** Create Soap server object. */
+        /** Create SOAP server object. */
         $server = new Mage_Webapi_Model_Soap_Server(
             $this->_applicationMock,
             $this->_requestMock,
             $this->_domDocumentFactory
         );
         $server->initWsdlCache();
-        /** Assert soap wsdl caching option was enabled after soap server initialization. */
+        /** Assert that SOAP WSDL caching option was enabled after SOAP server initialization. */
         $this->assertTrue((bool)ini_get('soap.wsdl_cache_enabled'), 'WSDL caching was not enabled.');
     }
 
     /**
-     * Test Soap server construction with WSDL cache disabling.
+     * Test SOAP server construction with WSDL cache disabling.
      */
     public function testConstructDisableWsdlCache()
     {
         /** Mock getConfig method to return false. */
         $this->_storeMock->expects($this->any())->method('getConfig')->will($this->returnValue(false));
-        /** Create Soap server object. */
+        /** Create SOAP server object. */
         $server = new Mage_Webapi_Model_Soap_Server(
             $this->_applicationMock,
             $this->_requestMock,
             $this->_domDocumentFactory
         );
         $server->initWsdlCache();
-        /** Assert soap wsdl caching option was disabled after soap server initialization. */
+        /** Assert that SOAP WSDL caching option was disabled after SOAP server initialization. */
         $this->assertFalse((bool)ini_get('soap.wsdl_cache_enabled'), 'WSDL caching was not disabled.');
     }
 }

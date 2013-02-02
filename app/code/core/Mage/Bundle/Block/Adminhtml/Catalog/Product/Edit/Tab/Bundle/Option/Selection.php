@@ -97,7 +97,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selecti
      */
     public function getPriceTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
             ->setData(array(
                 'id'    => $this->getFieldId() . '_{{index}}_price_type',
                 'class' => 'select select-product-option-type required-option-select'
@@ -117,7 +117,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selecti
      */
     public function getQtyTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Mage_Adminhtml_Block_Html_Select')
+        $select = $this->getLayout()->createBlock('Mage_Core_Block_Html_Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_can_change_qty',
                 'class' => 'select'
@@ -135,7 +135,7 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Selecti
      */
     public function getSelectionSearchUrl()
     {
-        return $this->getUrl('*/bundle_selection/search');
+        return $this->getUrl('*/bundle_selection/grid');
     }
 
     /**

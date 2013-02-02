@@ -80,7 +80,8 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         $this->_bootstrap = $this->getMock(
             'Magento_Test_Bootstrap',
             array(
-                'initialize',
+                '_initialize',
+                '_resetApp',
                 '_verifyDirectories',
                 '_instantiateDb',
                 '_isInstalled',
@@ -203,7 +204,7 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
         ;
         $this->_bootstrap
             ->expects($this->once())
-            ->method('initialize')
+            ->method('_initialize')
         ;
         $this->_callBootstrapConstructor();
     }
@@ -269,33 +270,64 @@ class Magento_Test_BootstrapTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider cleanupDirExceptionDataProvider
-     * @expectedException Magento_Exception
+     * @param $origParams
+     * @param $customParams
+     * @param $expectedResult
+     * @dataProvider reinitializeDataProvider
      */
-    public function testCleanupDirException($optionCode)
+    public function testReinitialize($origParams, $customParams, $expectedResult)
     {
-        $this->_bootstrap->cleanupDir($optionCode);
+
+        $property = new ReflectionProperty(get_class($this->_bootstrap), '_initParams');
+        $property->setAccessible(true);
+        $property->setValue($this->_bootstrap, $origParams);
+
+        $this->_bootstrap->expects($this->once())->method('_resetApp');
+        $this->_bootstrap->expects($this->once())->method('_initialize')->with($expectedResult);
+
+        $this->_bootstrap->reinitialize($customParams);
     }
 
     /**
      * @return array
      */
-    public function cleanupDirExceptionDataProvider()
+    public function reinitializeDataProvider()
     {
+        $origParams = array('one' => array('two' => 'three'));
         return array(
-            'etc'   => array('etc_dir'),
-            'var'   => array('var_dir'),
-            'media' => array('media_dir'),
+            array(
+                $origParams,
+                array(),
+                $origParams
+            ),
+            array(
+                $origParams,
+                array('one' => array('four' => 'five')),
+                array('one' => array('two' => 'three', 'four' => 'five'))
+            ),
+            array(
+                $origParams,
+                array('one' => array('two' => 'five')),
+                array('one' => array('two' => 'five'))
+            ),
         );
-    }
-
-    public function testGetTmpDir()
-    {
-        $this->assertEquals(self::$_tmpDir, $this->_bootstrap->getTmpDir());
     }
 
     public function testGetTestsDir()
     {
         $this->assertEquals(self::$_testsDir, $this->_bootstrap->getTestsDir());
+    }
+
+    public function testGetInitParams()
+    {
+        $initParams = $this->_bootstrap->getInitParams();
+        $this->_bootstrap->expects($this->once())
+            ->method('_initialize')
+            ->with($initParams);
+        $this->_bootstrap->expects($this->once())
+            ->method('_isInstalled')
+            ->will($this->returnValue(true));
+
+        $this->_callBootstrapConstructor();
     }
 }

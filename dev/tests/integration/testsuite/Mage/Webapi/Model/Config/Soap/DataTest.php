@@ -44,7 +44,7 @@ class Mage_Webapi_Model_Config_Soap_DataTest extends PHPUnit_Framework_TestCase
     protected $_config;
 
     /**
-     * Set up config with fixture controllers directory scanner
+     * Set up config with fixture controllers directory scanner.
      */
     protected function setUp()
     {

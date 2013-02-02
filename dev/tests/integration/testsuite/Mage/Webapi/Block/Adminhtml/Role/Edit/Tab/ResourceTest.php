@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource block
+ * Test for Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_Resource block.
  *
  * Magento
  *
@@ -84,7 +84,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
     }
 
     /**
-     * Test _prepareForm method
+     * Test _prepareForm method.
      *
      * @dataProvider prepareFormDataProvider
      * @param array $originResTree
@@ -93,7 +93,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_Tab_ResourceTest extends PHPUnit_Fra
      */
     public function testPrepareForm($originResTree, $selectedRes, $expectedRes)
     {
-        // TODO Move to unit tests after MAGETWO-4015 complete
+        // TODO: Move to unit tests after MAGETWO-4015 complete.
         $apiRole = new Varien_Object(array(
             'role_id' => 1
         ));

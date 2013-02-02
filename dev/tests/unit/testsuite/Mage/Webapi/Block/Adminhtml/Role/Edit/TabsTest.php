@@ -69,7 +69,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_TabsTest extends PHPUnit_Framework_T
     }
 
     /**
-     * Test _construct method
+     * Test _construct method.
      */
     public function testConstruct()
     {
@@ -79,7 +79,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_TabsTest extends PHPUnit_Framework_T
     }
 
     /**
-     * Test for _beforeToHtml method
+     * Test for _beforeToHtml method.
      *
      * @dataProvider beforeToHtmlDataProvider
      * @param object $apiRole
@@ -105,7 +105,7 @@ class Mage_Webapi_Block_Adminhtml_Role_Edit_TabsTest extends PHPUnit_Framework_T
             array('active_tab', null, 'main_section')
         )));
 
-        // todo: do checks using toHtml() when DI is implemented for abstract blocks
+        // TODO: do checks using toHtml() when DI is implemented for abstract blocks
         $toHtmlMethod = new ReflectionMethod($this->_block, '_beforeToHtml');
         $toHtmlMethod->setAccessible(true);
         $toHtmlMethod ->invoke($this->_block);

@@ -26,4 +26,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require __DIR__ . '/../index.php';
+require __DIR__ . '/../app/bootstrap.php';
+$params = $_SERVER;
+$params[Mage_Core_Model_App::INIT_OPTION_URIS][Mage_Core_Model_Dir::PUB] = '';
+Mage::run($params);

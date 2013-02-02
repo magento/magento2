@@ -42,20 +42,39 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
      */
     protected $_localConfigFile;
 
+    /**
+     * @var Mage_Core_Model_Config
+     */
+    protected $_config;
+
+    /**
+     * @var Mage_Core_Model_Dir
+     */
+    protected $_dirs;
+
     protected $_configData = array();
 
     /**
-     * @var Magento_Filesystem
-     */
+    * @var Magento_Filesystem
+    */
     protected $_filesystem;
 
     /**
+     * Inject dependencies on config and directories
+     *
+     * @param Mage_Core_Model_Config $config
+     * @param Mage_Core_Model_Dir $dirs
      * @param Magento_Filesystem $filesystem
      */
-    public function __construct(Magento_Filesystem $filesystem)
-    {
+    public function __construct(
+            Mage_Core_Model_Config $config,
+            Mage_Core_Model_Dir $dirs,
+            Magento_Filesystem $filesystem
+    ) {
+        $this->_localConfigFile = $dirs->getDir(Mage_Core_Model_Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml';
+        $this->_config = $config;
+        $this->_dirs = $dirs;
         $this->_filesystem = $filesystem;
-        $this->_localConfigFile = Mage::getBaseDir('etc') . DS . 'local.xml';
     }
 
     public function setConfigData($data)
@@ -71,10 +90,20 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
         return $this->_configData;
     }
 
+    /**
+     * Generate installation data and record them into local.xml using local.xml.template
+     */
     public function install()
     {
         $data = $this->getConfigData();
-        foreach (Mage::getModel('Mage_Core_Model_Config')->getDistroServerVars() as $index=>$value) {
+
+        $defaults = array(
+            'root_dir' => $this->_dirs->getDir(Mage_Core_Model_Dir::ROOT),
+            'app_dir'  => $this->_dirs->getDir(Mage_Core_Model_Dir::APP),
+            'var_dir'  => $this->_dirs->getDir(Mage_Core_Model_Dir::VAR_DIR),
+            'base_url' => $this->_config->getDistroBaseUrl(),
+        );
+        foreach ($defaults as $index => $value) {
             if (!isset($data[$index])) {
                 $data[$index] = $value;
             }
@@ -109,11 +138,13 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
 
         $this->_getInstaller()->getDataModel()->setConfigData($data);
 
-        $template = $this->_filesystem->read(Mage::getBaseDir('etc') . DS . 'local.xml.template');
+        $path = $this->_dirs->getDir(Mage_Core_Model_Dir::CONFIG) . DIRECTORY_SEPARATOR . 'local.xml.template';
+        $contents = $this->_filesystem->read($path);
         foreach ($data as $index => $value) {
-            $template = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $template);
+            $contents = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $contents);
         }
-        $this->_filesystem->write($this->_localConfigFile, $template);
+
+        $this->_filesystem->write($this->_localConfigFile, $contents);
         $this->_filesystem->changePermissions($this->_localConfigFile, 0777);
     }
 
@@ -129,7 +160,7 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
             $baseSecureUrl = $uri->getUri();
         }
 
-        $connectDefault = Mage::getConfig()
+        $connectDefault = $this->_config
                 ->getResourceConnectionConfig(Mage_Core_Model_Resource::DEFAULT_SETUP_RESOURCE);
 
         $data = new Varien_Object();
@@ -146,39 +177,65 @@ class Mage_Install_Model_Installer_Config extends Mage_Install_Model_Installer_A
         return $data;
     }
 
-    protected function _checkHostsInfo($data)
+    /**
+     * Check validity of a base URL
+     *
+     * @param string $baseUrl
+     * @throws Exception
+     */
+    protected function _checkUrl($baseUrl)
     {
-        $url  = $data['protocol'] . '://' . $data['host'] . ':' . $data['port'] . $data['base_path'];
-        $surl = $data['secure_protocol'] . '://' . $data['secure_host'] . ':' . $data['secure_port']
-            . $data['secure_base_path'];
-
-        $this->_checkUrl($url);
-        $this->_checkUrl($surl, true);
-
-        return $this;
-    }
-
-    protected function _checkUrl($url, $secure = false)
-    {
-        $prefix = $secure ? 'install/wizard/checkSecureHost/' : 'install/wizard/checkHost/';
         try {
-            $client = new Varien_Http_Client($url . 'index.php/' . $prefix);
+            $pubLibDir = $this->_dirs->getDir(Mage_Core_Model_Dir::PUB_LIB);
+            $staticFile = $this->_findFirstFileRelativePath($pubLibDir, '/.+\.(html?|js|css|gif|jpe?g|png)$/');
+            $staticUrl = $baseUrl . $this->_dirs->getUri(Mage_Core_Model_Dir::PUB_LIB) . '/' . $staticFile;
+            $client = new Varien_Http_Client($staticUrl);
             $response = $client->request('GET');
-            /* @var $responce Zend_Http_Response */
-            $body = $response->getBody();
         }
         catch (Exception $e){
-            $this->_getInstaller()->getDataModel()
-                ->addError(Mage::helper('Mage_Install_Helper_Data')->__('The URL "%s" is not accessible.', $url));
+            $this->_getInstaller()->getDataModel()->addError(
+                Mage::helper('Mage_Install_Helper_Data')->__('The URL "%s" is not accessible.', $baseUrl)
+            );
             throw $e;
         }
-
-        if ($body != Mage_Install_Model_Installer::INSTALLER_HOST_RESPONSE) {
-            $this->_getInstaller()->getDataModel()
-                ->addError(Mage::helper('Mage_Install_Helper_Data')->__('The URL "%s" is invalid.', $url));
-            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('Response from server isn\'t valid.'));
+        if ($response->getStatus() != 200) {
+            $this->_getInstaller()->getDataModel()->addError(
+                Mage::helper('Mage_Install_Helper_Data')->__('The URL "%s" is invalid.', $baseUrl)
+            );
+            Mage::throwException(Mage::helper('Mage_Install_Helper_Data')->__('Response from the server is invalid.'));
         }
-        return $this;
+    }
+
+    /**
+     * Find a relative path to a first file located in a directory or its descendants
+     *
+     * @param string $dir Directory to search for a file within
+     * @param string $pattern PCRE pattern a file name has to match
+     * @return string|null
+     */
+    protected function _findFirstFileRelativePath($dir, $pattern = '/.*/')
+    {
+        $childDirs = array();
+        foreach (scandir($dir) as $itemName) {
+            if ($itemName == '.' || $itemName == '..') {
+                continue;
+            }
+            $itemPath = $dir . DIRECTORY_SEPARATOR . $itemName;
+            if (is_file($itemPath)) {
+                if (preg_match($pattern, $itemName)) {
+                    return $itemName;
+                }
+            } else {
+                $childDirs[$itemName] = $itemPath;
+            }
+        }
+        foreach ($childDirs as $dirName => $dirPath) {
+            $filePath = $this->_findFirstFileRelativePath($dirPath, $pattern);
+            if ($filePath) {
+                return $dirName . '/' . $filePath;
+            }
+        }
+        return null;
     }
 
     public function replaceTmpInstallDate($date = null)

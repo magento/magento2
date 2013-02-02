@@ -853,6 +853,7 @@
 
 .ui-icon-grip-dotted-vertical {
     background-position: 0 -224px;
+    cursor: n-resize;
 }
 
 .ui-icon-grip-dotted-horizontal {
@@ -1052,4 +1053,12 @@
     font: bold 12px arial,helvetica,sans-serif;
     filter: none;
     text-shadow: none;
+}
+#grouped-product-container .no-products-message {
+    border: #dadfe0 1px solid;
+    background: #fff;
+    margin: 0 30px 10px;
+    padding: 20px 40px;
+    text-align: center;
+    vertical-align: middle;
 }

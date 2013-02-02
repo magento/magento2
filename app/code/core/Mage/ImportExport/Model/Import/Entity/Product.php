@@ -1195,13 +1195,17 @@ class Mage_ImportExport_Model_Import_Entity_Product extends Mage_ImportExport_Mo
 
             $this->_fileUploader->init();
 
-            $tmpDir     = Mage::getConfig()->getOptions()->getMediaDir() . '/import';
-            $destDir    = Mage::getConfig()->getOptions()->getMediaDir() . '/catalog/product';
-            if (!is_writable($destDir)) {
-                @mkdir($destDir, 0777, true);
+            $mediaDir = Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA);
+            if (!$mediaDir) {
+                throw new Magento_Exception('Media directory is unavailable.');
             }
+            $tmpDir = "{$mediaDir}/import";
             if (!$this->_fileUploader->setTmpDir($tmpDir)) {
                 Mage::throwException("File directory '{$tmpDir}' is not readable.");
+            }
+            $destDir = "{$mediaDir}/catalog/product";
+            if (!is_dir($destDir)) {
+                mkdir($destDir, 0777, true);
             }
             if (!$this->_fileUploader->setDestDir($destDir)) {
                 Mage::throwException("File directory '{$destDir}' is not writable.");

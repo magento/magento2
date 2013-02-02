@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require_once __DIR__ . '/../../../../../../lib/Varien/Simplexml/Element.php';
 
 /**
  * Tests entry point. Implements application installation, initialization and uninstall
@@ -106,18 +105,11 @@ class Magento_Test_Bootstrap
     protected $_installEtcDir;
 
     /**
-     * Temporary directory
-     *
-     * @var string
-     */
-    protected $_tmpDir;
-
-    /**
-     * Application initialization options
+     * Application initialization parameters
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_initParams = array();
 
     /**
      * DB vendor name
@@ -204,24 +196,22 @@ class Magento_Test_Bootstrap
         $this->_globalEtcFiles = $this->_exposeFiles($globalEtcFiles);
         $this->_moduleEtcFiles = $this->_exposeFiles($moduleEtcFiles);
         $this->_customXmlFile  = $customXmlFile;
-        $this->_tmpDir         = $tmpDir;
 
         $this->_readLocalXml();
-        $this->_verifyDirectories();
+        $this->_verifyDirectories($tmpDir);
 
         $sandboxUniqueId = md5(sha1_file($this->_localXmlFile) . '_' . $globalEtcFiles . '_' . $moduleEtcFiles);
-        $this->_installDir = "{$tmpDir}/sandbox-{$this->_dbVendorName}-{$sandboxUniqueId}";
-        $this->_installEtcDir = $this->_installDir . '/etc';
+        $installDir = "{$tmpDir}/sandbox-{$this->_dbVendorName}-{$sandboxUniqueId}";
+        $this->_ensureDirExists($installDir);
+        $this->_installDir = $installDir;
+        $this->_installEtcDir = "{$installDir}/etc";
 
-        $this->_options = array(
-            'etc_dir'     => $this->_installEtcDir,
-            'var_dir'     => $this->_installDir,
-            'tmp_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'tmp',
-            'cache_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'cache',
-            'log_dir'     => $this->_installDir . DIRECTORY_SEPARATOR . 'log',
-            'session_dir' => $this->_installDir . DIRECTORY_SEPARATOR . 'session',
-            'media_dir'   => $this->_installDir . DIRECTORY_SEPARATOR . 'media',
-            'upload_dir'  => $this->_installDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'upload',
+        $this->_initParams = array(
+            Mage_Core_Model_App::INIT_OPTION_DIRS => array(
+                Mage_Core_Model_Dir::CONFIG => $this->_installEtcDir,
+                Mage_Core_Model_Dir::VAR_DIR => $installDir,
+                Mage_Core_Model_Dir::MEDIA => "{$installDir}/media",
+            ),
         );
 
         $this->_db = $this->_instantiateDb($shell);
@@ -229,17 +219,24 @@ class Magento_Test_Bootstrap
         if ($isCleanupEnabled) {
             $this->_cleanup();
         }
-        $this->_ensureDirExists($this->_installDir);
 
         $this->_isDeveloperMode = $isDeveloperMode;
 
         $this->_emulateEnvironment();
 
         if ($this->_isInstalled()) {
-            $this->initialize();
+            $this->_initialize($this->_initParams);
         } else {
             $this->_install();
         }
+    }
+
+    /**
+     * Get directory path with application instance custom data (cache, temporary directory, etc...)
+     */
+    public function getInstallDir()
+    {
+        return $this->_installDir;
     }
 
     /**
@@ -254,53 +251,52 @@ class Magento_Test_Bootstrap
 
     /**
      * Initialize an already installed Magento application
+     *
+     * @param array $initParams
      */
-    public function initialize()
+    protected function _initialize($initParams)
     {
         Mage::setIsDeveloperMode($this->_isDeveloperMode);
-        Mage_Core_Utility_Theme::registerDesignMock();
         Mage::$headersSentThrowsException = false;
-        Mage::app('', 'store', $this->_options);
+        Mage::app($initParams);
     }
 
     /**
      * Initialize an already installed Magento application
+     *
+     * @param array $additionalParams
      */
-    public function reinitialize()
+    public function reinitialize(array $additionalParams = array())
     {
-        $this->resetApp();
-        $this->initialize();
+        $this->_resetApp();
+        $this->_initialize($this->_customizeParams($additionalParams));
     }
 
     /**
-     * Re-create empty temporary dir by specified
+     * Run application normally, but with encapsulated initialization options
      *
-     * @param string $optionCode
-     * @throws Magento_Exception if one of protected directories specified
+     * @param array $additionalParams
      */
-    public function cleanupDir($optionCode)
+    public function runApp(array $additionalParams)
     {
-        if (in_array($optionCode, array('etc_dir', 'var_dir', 'media_dir'))) {
-            throw new Magento_Exception("Directory '{$optionCode}' must not be cleaned up while running tests.");
-        }
-        $dir = $this->_options[$optionCode];
-        $this->_removeDirectory($dir, false);
+        Mage::run($this->_customizeParams($additionalParams));
     }
 
     /**
-     * Get application initialization options
+     * Sub-routine for merging custom parameters with the ones defined in object state
      *
+     * @param array $params
      * @return array
      */
-    public function getAppOptions()
+    private function _customizeParams($params)
     {
-        return $this->_options;
+        return array_replace_recursive($this->_initParams, $params);
     }
 
     /**
      * Reset application global state
      */
-    public function resetApp()
+    protected function _resetApp()
     {
         /** @var $objectManager Magento_Test_ObjectManager */
         $objectManager = Mage::getObjectManager();
@@ -360,17 +356,18 @@ class Magento_Test_Bootstrap
     /**
      * Check all required directories contents and permissions
      *
+     * @param string $tmpDir
      * @throws Magento_Exception when any of required directories is not eligible
      */
-    protected function _verifyDirectories()
+    protected function _verifyDirectories($tmpDir)
     {
         /* Magento application dir */
         if (!is_file($this->_magentoDir . '/app/bootstrap.php')) {
             throw new Magento_Exception('Unable to locate Magento root folder and bootstrap.php.');
         }
         /* Temporary directory */
-        if (!is_dir($this->_tmpDir) || !is_writable($this->_tmpDir)) {
-            throw new Magento_Exception("The '{$this->_tmpDir}' is not a directory or not writable.");
+        if (!is_dir($tmpDir) || !is_writable($tmpDir)) {
+            throw new Magento_Exception("The '{$tmpDir}' is not a directory or not writable.");
         }
     }
 
@@ -502,7 +499,7 @@ class Magento_Test_Bootstrap
         $this->_localXml->asNiceXml($targetLocalXml);
 
         /* Initialize an application in non-installed mode */
-        $this->initialize();
+        $this->_initialize($this->_initParams);
 
         /* Run all install and data-install scripts */
         Mage_Core_Model_Resource_Setup::applyAllUpdates();
@@ -523,7 +520,7 @@ class Magento_Test_Bootstrap
         $this->_createAdminUser();
 
         /* Switch an application to installed mode */
-        $this->initialize();
+        $this->_initialize($this->_initParams);
     }
 
     /**
@@ -585,17 +582,7 @@ class Magento_Test_Bootstrap
         ));
         $roleUser->save();
     }
-
-    /**
-     * Returns path to framework's temporary directory
-     *
-     * @return string
-     */
-    public function getTmpDir()
-    {
-        return $this->_tmpDir;
-    }
-
+    
     /**
      * Returns path to integration tests root directory
      *
@@ -604,5 +591,15 @@ class Magento_Test_Bootstrap
     public function getTestsDir()
     {
         return $this->_testsDir;
+    }
+
+    /**
+     * Get application initialization parameters
+     *
+     * @return array
+     */
+    public function getInitParams()
+    {
+        return $this->_initParams;
     }
 }

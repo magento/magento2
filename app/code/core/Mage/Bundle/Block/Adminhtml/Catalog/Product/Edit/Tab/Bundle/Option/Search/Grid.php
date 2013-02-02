@@ -31,9 +31,9 @@
  * @package     Mage_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_Grid
+    extends Mage_Adminhtml_Block_Widget_Grid
 {
-
     protected function _construct()
     {
         parent::_construct();
@@ -45,18 +45,31 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
         $this->setUseAjax(true);
     }
 
+    /**
+     * Prepare grid filter buttons
+     */
+    protected function _prepareFilterButtons()
+    {
+        $this->getChildBlock('reset_filter_button')->setData(
+            'onclick',
+            $this->getJsObjectName() . '.resetFilter(bSelection.gridUpdateCallback)'
+        );
+        $this->getChildBlock('search_button')->setData(
+            'onclick',
+            $this->getJsObjectName() . '.doFilter(bSelection.gridUpdateCallback)'
+        );
+    }
+
     protected function _beforeToHtml()
     {
-        $this->setId($this->getId().'_'.$this->getIndex());
-        $this->getChildBlock('reset_filter_button')->setData('onclick', $this->getJsObjectName().'.resetFilter()');
-        $this->getChildBlock('search_button')->setData('onclick', $this->getJsObjectName().'.doFilter()');
-
+        $this->setId($this->getId() . '_' . $this->getIndex());
         return parent::_beforeToHtml();
     }
 
     protected function _prepareCollection()
     {
         $collection = Mage::getModel('Mage_Catalog_Model_Product')->getCollection()
+            ->setOrder('id')
             ->setStore($this->getStore())
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
@@ -65,10 +78,6 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
             ->addAttributeToFilter('type_id', array('in' => $this->getAllowedSelectionTypes()))
             ->addFilterByRequiredOptions()
             ->addStoreFilter();
-
-        if ($products = $this->_getProducts()) {
-            $collection->addIdFilter($this->_getProducts(), true);
-        }
 
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
@@ -82,32 +91,19 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
 
     protected function _prepareColumns()
     {
-        $this->addColumn('id', array(
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('ID'),
-            'sortable'  => true,
-            'width'     => '60px',
-            'index'     => 'entity_id'
+        $this->addColumn('is_selected', array(
+            'header_css_class' => 'a-center',
+            'type'      => 'checkbox',
+            'name'      => 'in_selected',
+            'align'     => 'center',
+            'values'    => $this->_getSelectedProducts(),
+            'index'     => 'entity_id',
         ));
         $this->addColumn('name', array(
             'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Product Name'),
             'index'     => 'name',
             'column_css_class'=> 'name'
         ));
-
-        $sets = Mage::getResourceModel('Mage_Eav_Model_Resource_Entity_Attribute_Set_Collection')
-            ->setEntityTypeFilter(Mage::getModel('Mage_Catalog_Model_Product')->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
-
-        $this->addColumn('set_name',
-            array(
-                'header'=> Mage::helper('Mage_Catalog_Helper_Data')->__('Attrib. Set Name'),
-                'width' => '100px',
-                'index' => 'attribute_set_id',
-                'type'  => 'options',
-                'options' => $sets,
-        ));
-
         $this->addColumn('sku', array(
             'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('SKU'),
             'width'     => '80px',
@@ -122,29 +118,6 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
             'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
             'index'     => 'price'
         ));
-
-        $this->addColumn('is_selected', array(
-            'header_css_class' => 'a-center',
-            'type'      => 'checkbox',
-            'name'      => 'in_selected',
-            'align'     => 'center',
-            'values'    => $this->_getSelectedProducts(),
-            'index'     => 'entity_id',
-        ));
-
-        $this->addColumn('qty', array(
-            'filter'    => false,
-            'sortable'  => false,
-            'header'    => Mage::helper('Mage_Sales_Helper_Data')->__('Qty to Add'),
-            'name'      => 'qty',
-            'inline_css'=> 'qty',
-            'align'     => 'right',
-            'type'      => 'input',
-            'validate_class' => 'validate-number',
-            'index'     => 'qty',
-            'width'     => '130px',
-        ));
-
         return parent::_prepareColumns();
     }
 
@@ -155,7 +128,10 @@ class Mage_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search_
 
     protected function _getSelectedProducts()
     {
-        $products = $this->getRequest()->getPost('selected_products', array());
+        $products = $this->getRequest()->getPost(
+            'selected_products',
+            explode(',', $this->getRequest()->getParam('productss'))
+        );
         return $products;
     }
 

@@ -34,6 +34,8 @@
 <script type="text/javascript">
     (function($) {
         "use strict";
+        $.mage.isDevMode(<?php echo Mage::getIsDeveloperMode() ?>);
+
         /**
          * Declaration of resources needed for defined components
          */
@@ -44,6 +46,9 @@
             ],
             button: [
                 '<?php echo $this->getViewFileUrl('mage/backend/button.js') ?>'
+            ],
+            actionLink: [
+                '<?php echo $this->getViewFileUrl('mage/backend/action-link.js') ?>'
             ],
             validation: [
                 '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>',
@@ -62,8 +67,28 @@
             ],
             floatingHeader: [
                 '<?php echo $this->getViewFileUrl('mage/backend/floating-header.js') ?>',
+            ],
+            suggest: [
+                '<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>',
+                '<?php echo $this->getViewFileUrl('json2.js') ?>',
+                '<?php echo $this->getViewFileUrl('mage/backend/suggest.js') ?>'
             ]
-        }).load('loader');
+        })
+        /**
+         * Declaration of resources for components (based on previously defined components)
+         */
+        .extend('multisuggest', 'suggest',
+            '<?php echo $this->getViewFileUrl('mage/backend/multisuggest.js') ?>'
+        )
+        .extend('treeSuggest', 'multisuggest', [
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.hotkeys.js') ?>',
+            '<?php echo $this->getViewFileUrl('jquery/jstree/jquery.jstree.js') ?>',
+            '<?php echo $this->getViewFileUrl('mage/backend/tree-suggest.js') ?>'
+        ])
+        /**
+         * Load resources in advance for components which needed to be instantiated without delay.
+         */
+        .load('loader');
     })(jQuery);
 </script>
 <?php echo $this->getChildHtml() ?>

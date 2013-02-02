@@ -28,7 +28,7 @@
  * Date range promo widget chooser
  * Currently works without localized format
  */
-class Mage_Adminhtml_Block_Promo_Widget_Chooser_Daterange extends Mage_Adminhtml_Block_Abstract
+class Mage_Adminhtml_Block_Promo_Widget_Chooser_Daterange extends Mage_Core_Block_Template
 {
     /**
      * HTML ID of the element that will obtain the joined chosen values

@@ -26,6 +26,7 @@
 
 /** @var Mage_Customer_Model_Address $customerAddress */
 $customerAddress = Mage::getModel('Mage_Customer_Model_Address');
+$customerAddress->isObjectNew(true);
 $customerAddress->setCustomerId(1)
     ->setData(array(
         'entity_id' => 1,
@@ -36,7 +37,6 @@ $customerAddress->setCustomerId(1)
         'street' => 'Green str, 67',
         'lastname' => 'Smith',
         'firstname' => 'John',
-        'parent_id' => 1,
-        'created_at' => date('YYY-MM-DD hh:mm:ss')
+        'parent_id' => 1
     ));
 $customerAddress->save();

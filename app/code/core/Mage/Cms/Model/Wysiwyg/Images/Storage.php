@@ -430,7 +430,7 @@ class Mage_Cms_Model_Wysiwyg_Images_Storage extends Varien_Object
      */
     public function getThumbsPath($filePath = false)
     {
-        $mediaRootDir = Mage::getConfig()->getOptions()->getMediaDir();
+        $mediaRootDir = Mage::getBaseDir(Mage_Core_Model_Dir::MEDIA);
         $thumbnailDir = $this->getThumbnailRoot();
 
         if ($filePath && strpos($filePath, $mediaRootDir) === 0) {

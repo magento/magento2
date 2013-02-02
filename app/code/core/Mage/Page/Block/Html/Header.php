@@ -33,63 +33,6 @@
  */
 class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
 {
-    /**
-     * @var Mage_Core_Model_Config_Options
-     */
-    protected $_configOptions;
-
-    /**
-     * @param Mage_Core_Controller_Request_Http $request
-     * @param Mage_Core_Model_Layout $layout
-     * @param Mage_Core_Model_Event_Manager $eventManager
-     * @param Mage_Core_Model_Url $urlBuilder
-     * @param Mage_Core_Model_Translate $translator
-     * @param Mage_Core_Model_Cache $cache
-     * @param Mage_Core_Model_Design_Package $designPackage
-     * @param Mage_Core_Model_Session $session
-     * @param Mage_Core_Model_Store_Config $storeConfig
-     * @param Mage_Core_Controller_Varien_Front $frontController
-     * @param Mage_Core_Model_Factory_Helper $helperFactory
-     * @param Magento_Filesystem $filesystem
-     * @param Mage_Core_Model_Config_Options $configOptions
-     * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        Mage_Core_Controller_Request_Http $request,
-        Mage_Core_Model_Layout $layout,
-        Mage_Core_Model_Event_Manager $eventManager,
-        Mage_Core_Model_Url $urlBuilder,
-        Mage_Core_Model_Translate $translator,
-        Mage_Core_Model_Cache $cache,
-        Mage_Core_Model_Design_Package $designPackage,
-        Mage_Core_Model_Session $session,
-        Mage_Core_Model_Store_Config $storeConfig,
-        Mage_Core_Controller_Varien_Front $frontController,
-        Mage_Core_Model_Factory_Helper $helperFactory,
-        Magento_Filesystem $filesystem,
-        Mage_Core_Model_Config_Options $configOptions,
-        array $data = array()
-    ) {
-        parent::__construct(
-            $request,
-            $layout,
-            $eventManager,
-            $urlBuilder,
-            $translator,
-            $cache,
-            $designPackage,
-            $session,
-            $storeConfig,
-            $frontController,
-            $helperFactory,
-            $filesystem,
-            $data
-        );
-        $this->_configOptions = $configOptions;
-    }
-
     public function _construct()
     {
         $this->setTemplate('html/header.phtml');
@@ -157,7 +100,7 @@ class Mage_Page_Block_Html_Header extends Mage_Core_Block_Template
         $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
         $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => Mage_Core_Model_Store::URL_TYPE_MEDIA))
             . $folderName . '/' . $storeLogoPath;
-        $absolutePath = $this->_configOptions->getDir('media') . DIRECTORY_SEPARATOR
+        $absolutePath = $this->_dirs->getDir(Mage_Core_Model_Dir::MEDIA) . DIRECTORY_SEPARATOR
             . $folderName . DIRECTORY_SEPARATOR . $storeLogoPath;
 
         if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {

@@ -121,8 +121,7 @@ class Mage_Core_Model_Theme_Service
     public function assignThemeToStores(
         $themeId,
         array $stores = array(),
-        $scope = Mage_Core_Model_Config::SCOPE_STORES,
-        $area = Mage_Core_Model_App_Area::AREA_FRONTEND
+        $scope = Mage_Core_Model_Config::SCOPE_STORES
     ) {
         /** @var $theme Mage_Core_Model_Theme */
         $theme = $this->_themeFactory->create()->load($themeId);
@@ -132,7 +131,7 @@ class Mage_Core_Model_Theme_Service
 
         $themeCustomization = $theme->isVirtual() ? $theme : $this->createThemeCustomization($theme);
 
-        $configPath = $this->_design->getConfigPathByArea($area);
+        $configPath = Mage_Core_Model_Design_Package::XML_PATH_THEME_ID;
 
         // Unassign given theme from stores that were unchecked
         /** @var $config Mage_Core_Model_Config_Data */
@@ -158,7 +157,6 @@ class Mage_Core_Model_Theme_Service
                 'themeId'            => $themeId,
                 'stores'             => $stores,
                 'scope'              => $scope,
-                'area'               => $area,
                 'theme'              => $theme,
                 'themeCustomization' => $themeCustomization,
             )

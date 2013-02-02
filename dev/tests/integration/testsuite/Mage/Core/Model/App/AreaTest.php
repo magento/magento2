@@ -60,30 +60,6 @@ class Mage_Core_Model_App_AreaTest extends PHPUnit_Framework_TestCase
         $this->assertSame($design, Mage::getDesign());
     }
 
-    /**
-     * @magentoConfigFixture adminhtml/design/theme/full_name default/basic
-     * @magentoAppIsolation enabled
-     */
-    public function testDetectDesignGlobalConfig()
-    {
-        /** @var $model Mage_Core_Model_App_Area */
-        $model = Mage::getModel('Mage_Core_Model_App_Area', array('areaCode' => 'adminhtml'));
-        $model->detectDesign();
-        $theme = Mage::getDesign()->getConfigurationDesignTheme('adminhtml', array('useId' => false));
-        $this->assertEquals('default/basic', $theme);
-    }
-
-    /**
-     * @magentoConfigFixture current_store design/theme/full_name default/blank
-     * @magentoAppIsolation enabled
-     */
-    public function testDetectDesignStoreConfig()
-    {
-        $this->_model->detectDesign();
-        $theme = Mage::getDesign()->getConfigurationDesignTheme('frontend', array('useId' => false));
-        $this->assertEquals('default/blank', $theme);
-    }
-
     // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:14:"default/modern";}}
