@@ -105,7 +105,7 @@ abstract class Varien_Io_Abstract implements Varien_Io_Interface
                 }
             }
 
-            array_push($realPathParts, $pathParts[$i]);
+            $realPathParts[] = $pathParts[$i];
         }
 
         return $pathTokR . implode('/', $realPathParts);

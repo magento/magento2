@@ -421,11 +421,11 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
                     }
                     $selectable = !$data['flags'] || !in_array('\\Noselect', $data['flags']);
 
-                    array_push($stack, $parent);
+                    $stack[] = $parent;
                     $parent = $globalName . $data['delim'];
                     $folder = new Zend_Mail_Storage_Folder($localName, $globalName, $selectable);
                     $parentFolder->$localName = $folder;
-                    array_push($folderStack, $parentFolder);
+                    $folderStack[] = $parentFolder;
                     $parentFolder = $folder;
                     break;
                 } else if ($stack) {

@@ -668,7 +668,7 @@ class Zend_Wildfire_Plugin_FirePhp implements Zend_Wildfire_Plugin_Interface
                     return '** Recursion ('.get_class($object).') **';
                 }
             }
-            array_push($this->_objectStack, $object);
+            $this->_objectStack[] = $object;
 
             $return['__className'] = $class = get_class($object);
 

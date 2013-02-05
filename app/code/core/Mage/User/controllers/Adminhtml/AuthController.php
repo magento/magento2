@@ -132,10 +132,7 @@ class Mage_User_Adminhtml_AuthController extends Mage_Backend_Controller_ActionA
 
         $errorMessages = array();
         if (iconv_strlen($password) <= 0) {
-            array_push(
-                $errorMessages,
-                Mage::helper('Mage_User_Helper_Data')->__('New password field cannot be empty.')
-            );
+            $errorMessages[] = Mage::helper('Mage_User_Helper_Data')->__('New password field cannot be empty.');
         }
         /** @var $user Mage_User_Model_User */
         $user = Mage::getModel('Mage_User_Model_User')->load($userId);

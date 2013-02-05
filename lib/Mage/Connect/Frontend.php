@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Mage_Connect_Frontend
 {
 
@@ -120,7 +119,7 @@ class Mage_Connect_Frontend
      */
     public function pushCapture()
     {
-        array_push($this->_captureSaved, $this->_capture);
+        $this->_captureSaved[] = $this->_capture;
         return $this;
     }
 
@@ -204,7 +203,7 @@ class Mage_Connect_Frontend
      */
     public function pushSilent()
     {
-        array_push($this->_silentSaved, $this->_silent);
+        $this->_silentSaved[] = $this->_silent;
         return $this;
     }
 

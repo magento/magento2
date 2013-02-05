@@ -148,7 +148,7 @@ class Zend_Service_Amazon_Item
             foreach ($result as $v) {
                 if (isset($this->{$v->parentNode->tagName})) {
                     if (is_array($this->{$v->parentNode->tagName})) {
-                        array_push($this->{$v->parentNode->tagName}, (string) $v->data);
+                        $this->{$v->parentNode->tagName}[] = (string) $v->data;
                     } else {
                         $this->{$v->parentNode->tagName} = array($this->{$v->parentNode->tagName}, (string) $v->data);
                     }

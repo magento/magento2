@@ -471,7 +471,7 @@ class Zend_Tool_Framework_Client_Console_ArgumentParser implements Zend_Tool_Fra
         $wordStack = array();
         while (($wordOnTop = array_shift($this->_argumentsWorking))) {
             if (substr($wordOnTop, 0, 1) != '-') {
-                array_push($wordStack, $wordOnTop);
+                $wordStack[] = $wordOnTop;
             } else {
                 // put word back on stack and move on
                 array_unshift($this->_argumentsWorking, $wordOnTop);

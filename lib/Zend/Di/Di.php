@@ -132,7 +132,7 @@ class Di implements DependencyInjectionInterface
      */
     public function get($name, array $params = array())
     {
-        array_push($this->instanceContext, array('GET', $name, null));
+        $this->instanceContext[] = array('GET', $name, null);
 
         $im = $this->instanceManager;
 
@@ -183,7 +183,7 @@ class Di implements DependencyInjectionInterface
             $alias = null;
         }
 
-        array_push($this->instanceContext, array('NEW', $class, $alias));
+        $this->instanceContext[] = array('NEW', $class, $alias);
 
         if (!$definitions->hasClass($class)) {
             $aliasMsg = ($alias) ? '(specified by alias ' . $alias . ') ' : '';
@@ -663,7 +663,7 @@ class Di implements DependencyInjectionInterface
                         "Circular dependency detected: $class depends on {$value[1]} and viceversa"
                     );
                 }
-                array_push($this->currentDependencies, $class);
+                $this->currentDependencies[] = $class;
                 $dConfig = $this->instanceManager->getConfig($computedParams['required'][$fqParamPos][0]);
                 if ($dConfig['shared'] === false) {
                     $resolvedParams[$index] = $this->newInstance($computedParams['required'][$fqParamPos][0], $callTimeUserParams, false);

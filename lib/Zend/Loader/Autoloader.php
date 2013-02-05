@@ -394,13 +394,13 @@ class Zend_Loader_Autoloader
     public function pushAutoloader($callback, $namespace = '')
     {
         $autoloaders = $this->getAutoloaders();
-        array_push($autoloaders, $callback);
+        $autoloaders[] = $callback;
         $this->setAutoloaders($autoloaders);
 
         $namespace = (array) $namespace;
         foreach ($namespace as $ns) {
             $autoloaders = $this->getNamespaceAutoloaders($ns);
-            array_push($autoloaders, $callback);
+            $autoloaders[] = $callback;
             $this->_setNamespaceAutoloaders($autoloaders, $ns);
         }
 

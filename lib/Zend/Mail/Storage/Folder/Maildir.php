@@ -155,11 +155,11 @@ class Zend_Mail_Storage_Folder_Maildir extends Zend_Mail_Storage_Maildir impleme
                         #require_once 'Zend/Mail/Storage/Exception.php';
                         throw new Zend_Mail_Storage_Exception('error while reading maildir');
                     }
-                    array_push($stack, $parent);
+                    $stack[] = $parent;
                     $parent = $dir . $this->_delim;
                     $folder = new Zend_Mail_Storage_Folder($local, substr($dir, 1), true);
                     $parentFolder->$local = $folder;
-                    array_push($folderStack, $parentFolder);
+                    $folderStack[] = $parentFolder;
                     $parentFolder = $folder;
                     break;
                 } else if ($stack) {

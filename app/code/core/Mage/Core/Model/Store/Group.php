@@ -254,7 +254,7 @@ class Mage_Core_Model_Store_Group extends Mage_Core_Model_Abstract
         foreach ($this->getStores() as $store) {
             /* @var $store Mage_Core_Model_Store */
             if ($store->getLocaleCode() == $locale) {
-                array_push($stores, $store);
+                $stores[] = $store;
             }
         }
         return $stores;

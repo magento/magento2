@@ -159,7 +159,7 @@ class Zend_Reflection_Method extends ReflectionMethod
         $lastLine = array_pop($lines);
 
         if (trim($lastLine) !== '}') {
-            array_push($lines, $lastLine);
+            $lines[] = $lastLine;
         }
 
         // just in case we had code on the bracket lines

@@ -126,7 +126,7 @@ class Mage_Core_Model_Theme_Registration
             Mage::throwException(Mage::helper('Mage_Core_Helper_Data')
                 ->__('Circular-reference in theme inheritance detected for "%s"', $tempId));
         }
-        array_push($inheritanceChain, $tempId);
+        $inheritanceChain[] = $tempId;
         $parentTheme = $theme->getParentTheme();
         if ($parentTheme) {
             $this->_registerThemeRecursively($parentTheme, $inheritanceChain);

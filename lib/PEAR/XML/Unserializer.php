@@ -709,7 +709,7 @@ class XML_Unserializer extends PEAR
                 $attribs[$this->options[XML_UNSERIALIZER_OPTION_ATTRIBUTE_CLASS]];
         }
 
-        array_push($this->_valStack, $val);
+        $this->_valStack[] = $val;
     }
 
     /**
@@ -903,17 +903,17 @@ class XML_Unserializer extends PEAR
                         } else {
                             $parent['children'][$value['name']] = array();
                         }
-                        array_push($parent['aggregKeys'], $value['name']);
+                        $parent['aggregKeys'][] = $value['name'];
                     }
-                    array_push($parent['children'][$value['name']], $value['value']);
+                    $parent['children'][$value['name']][] = $value['value'];
                 } else {
                     $parent['children'][$value['name']] = &$value['value'];
-                    array_push($parent['childrenKeys'], $value['name']);
+                    $parent['childrenKeys'][] = $value['name'];
                 }
             } else {
-                array_push($parent['children'], $value['value']);
+                $parent['children'][] = $value['value'];
             }
-            array_push($this->_valStack, $parent);
+            $this->_valStack[] = $parent;
         }
 
         $this->_depth--;

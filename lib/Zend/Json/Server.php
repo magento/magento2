@@ -385,7 +385,7 @@ class Zend_Json_Server extends Zend_Server_Abstract
             if (array_key_exists('default', $param)) {
                 $value = $param['default'];
             }
-            array_push($args, $value);
+            $args[] = $value;
         }
         return $args;
     }
@@ -425,7 +425,7 @@ class Zend_Json_Server extends Zend_Server_Abstract
                 } elseif (in_array($newType, $params[$key]['type'])) {
                     continue;
                 }
-                array_push($params[$key]['type'], $parameter->getType());
+                $params[$key]['type'][] = $parameter->getType();
             }
         }
         return $params;

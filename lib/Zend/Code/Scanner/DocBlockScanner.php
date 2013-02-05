@@ -137,8 +137,10 @@ class DocBlockScanner implements ScannerInterface
                     goto SCANNER_CONTINUE;
                 }
             case 'DOCBLOCK_TAG':
-                array_push($this->tags, array('name'  => $token[1],
-                                              'value' => ''));
+                $this->tags[] = array(
+                    'name'  => $token[1],
+                    'value' => ''
+                );
                 end($this->tags);
                 $tagIndex = key($this->tags);
                 $mode     = 3;

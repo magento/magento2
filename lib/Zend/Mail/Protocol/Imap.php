@@ -204,7 +204,7 @@ class Zend_Mail_Protocol_Imap
         while (($pos = strpos($line, ' ')) !== false) {
             $token = substr($line, 0, $pos);
             while ($token[0] == '(') {
-                array_push($stack, $tokens);
+                $stack[] = $tokens;
                 $tokens = array();
                 $token = substr($token, 1);
             }
