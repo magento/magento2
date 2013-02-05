@@ -217,7 +217,7 @@ class Mage_Connect_Frontend
      */
     public function pushSilent()
     {
-        $this->_silentSaved = $this->_silent;
+        $this->_silentSaved[] = $this->_silent;
         return $this;
     }
 
