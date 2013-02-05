@@ -140,7 +140,7 @@ class DocBlockScanner implements ScannerInterface
                 $this->tags[] = array(
                     'name'  => $token[1],
                     'value' => ''
-				);
+                );
                 end($this->tags);
                 $tagIndex = key($this->tags);
                 $mode     = 3;
